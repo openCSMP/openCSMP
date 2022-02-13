@@ -124,7 +124,7 @@ std::string AP_Timer::AsString()
     UpdateTimes();
   }
 
-  size_t uTotalSeconds(static_cast<size_t>(fabs(m_fElapsedTime)));
+  size_t uTotalSeconds(static_cast<uint32_t>(fabs(m_fElapsedTime)));
   size_t uHours(uTotalSeconds/60/60);
   size_t uMinutes(uTotalSeconds/60%60);
   double fSeconds(fabs(m_fElapsedTime) - uTotalSeconds + uTotalSeconds%60);
@@ -145,7 +145,7 @@ std::string AP_Timer::AverageTimeAsString(size_t uSteps)
     UpdateTimes();
   }
   double fAverageElapsedTime(m_fElapsedTime/static_cast<double>(uSteps));
-  size_t uTotalSeconds(static_cast<size_t>(fabs(fAverageElapsedTime)));
+  size_t uTotalSeconds(static_cast<uint32_t>(fabs(fAverageElapsedTime)));
   size_t uHours(uTotalSeconds/60/60);
   size_t uMinutes(uTotalSeconds/60%60);
   double fSeconds(fabs(fAverageElapsedTime) - uTotalSeconds + uTotalSeconds%60);

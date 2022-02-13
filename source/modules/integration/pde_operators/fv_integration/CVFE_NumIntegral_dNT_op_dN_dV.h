@@ -7,10 +7,10 @@
 
 namespace csmp {
 
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class TwoPhaseModel;
 
 /// PDE operator:  oper div^2 N
-template<size_t dim,class SIMPLEX>
+template<uint32_t dim,class CELL>
 class CVFE_NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     CVFE_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
@@ -19,8 +19,8 @@ class CVFE_NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                                    const char*, 
                                    const char* );
 
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
 
   private:
     DenseMatrix<DM_MIN>  DN_, LK_, FN_; 

@@ -269,7 +269,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
         area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
 
         // second loop to calculate and scale nodal flux
-        for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i = 0; i<(*eit)->Nodes(); i++ ) {
             // read existing flux at node i
             double tf = (*eit)->N(i)->Read( tf_key );
             // read existing source at node i

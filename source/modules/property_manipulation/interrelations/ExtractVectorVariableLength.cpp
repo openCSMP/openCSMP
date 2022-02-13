@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractVectorVariableLength<dim>::ExtractVectorVariableLength( const PropertyDatabase<dim>& p,
                                                           const char* vec_var, 
                                                           const char* to_scalar_var )
@@ -35,7 +35,7 @@ ExtractVectorVariableLength<dim>::ExtractVectorVariableLength( const PropertyDat
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractVectorVariableLength<dim>::~ExtractVectorVariableLength() {}
 
 

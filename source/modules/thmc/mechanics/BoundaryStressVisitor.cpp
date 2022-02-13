@@ -32,7 +32,7 @@ namespace csmp {
     calculated by integration of the sediment column dry density 
     up to the earth' surface.
 */
-template<size_t dim>
+template<uint32_t dim>
 BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
                                                    const char* SV_variable,
                                                    bool overwrite_force_vector )
@@ -63,7 +63,7 @@ BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
                                                    BOUNDARY_STRESS stress_computation,
                                                    bool overwrite_force_vector )
@@ -87,7 +87,7 @@ BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 BoundaryStressVisitor<dim>::~BoundaryStressVisitor()
 {
 }
@@ -100,7 +100,7 @@ BoundaryStressVisitor<dim>::~BoundaryStressVisitor()
     (optionally) zeros out the initial force values assigned to 
     this boundary.
 */
-template<size_t dim>
+template<uint32_t dim>
 void BoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
 {
    if ( overwrite_previous_forces_ ) {
@@ -135,14 +135,14 @@ void BoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
     we get non-uniform stresses)
  
 */
-template<size_t dim>
+template<uint32_t dim>
 void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 {
    bool Neumann_condition(false);
 
    // in the case of body forces
    if ( stress_computation_ == BOUNDARY_STRESS::DEPTH_DEPENDENT ) {
-         for ( size_t i=0U; i<dim; ++i )
+         for ( auto i{0}; i<dim; ++i )
            if ( SHmax_.Flag() == NEUMANN or Shmin_.Flag() == NEUMANN ) {
                  Neumann_condition = true;
                  break;
@@ -155,7 +155,7 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
   
    // when body forces are not turned on
    if ( stress_computation_ == BOUNDARY_STRESS::SINGLE_VALUED ) {
-       for ( size_t i=0U; i<dim; ++i )
+       for ( auto i{0}; i<dim; ++i )
          if ( bstress_.Flag(i) == NEUMANN ) {
                Neumann_condition = true;
                break;
@@ -176,11 +176,11 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 /** 
     no vertical variation
 */
-template<size_t dim>
+template<uint32_t dim>
 void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim>* f )
  {
    bool Neumann_condition(false);
-   for ( size_t i=0U; i<dim; ++i )
+   for ( auto i{0}; i<dim; ++i )
      if ( bstress_.Flag(i) == NEUMANN ) {
            Neumann_condition = true;
            break;
@@ -192,7 +192,7 @@ void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim
    force_ = bstress_ * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
-   for ( size_t i=0U; i<face_nodes; i++ ) {
+   for ( auto i{0}; i<face_nodes; i++ ) {
         // the status of the variable is not touched
         f->N(i)->Read( F_key_, vc_ );
         vc_ += force_;
@@ -205,7 +205,7 @@ void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim
 /**
     variation with depth due to the action of body force = gravity
 */
-template<size_t dim>
+template<uint32_t dim>
 void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim>* f )
  {
    ScalarVariable Sv;
@@ -249,7 +249,7 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
    faceStressVector = faceStressVector * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
-   for ( size_t i=0U; i<face_nodes; i++ ) {
+   for ( auto i{0}; i<face_nodes; i++ ) {
         // the status of the variable is not touched
         f->N(i)->Read( F_key_, vc_ );
         vc_ += faceStressVector;
@@ -277,7 +277,7 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
      boundary only the first parent is assigned.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection( Face<dim>* f, VectorVariable<dim>& nrml )
  {
     f->UnitNormal( nrml );
@@ -291,7 +291,7 @@ void BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection( Face<dim>* 
           // normalizing a copy of the unit normal with the distance between the 2 barycenters
           const double face_parent_ctr_distance(parent_ctr.DistanceTo(face_ctr));
           Point<dim> pnrml;
-          for ( size_t i=0U; i<dim; i++ ) pnrml[i] = nrml[i];
+          for ( auto i{0}; i<dim; i++ ) pnrml[i] = nrml[i];
           pnrml /= face_parent_ctr_distance;
           const double face_parent_nrml_tip_distance(parent_ctr.DistanceTo(face_ctr + pnrml));
           // now normal is added to face center, if this gets a point closer to parent center

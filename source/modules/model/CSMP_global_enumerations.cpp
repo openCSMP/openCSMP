@@ -165,7 +165,7 @@ VARIABLE_TYPE variableType<csmp::FlaggedArrayVariable>()
 // VARIABLE PLACEMENT
 
 
-template<size_t dim, template<size_t> class PLACE>
+template<uint32_t dim, template<uint32_t> class PLACE>
 PLACEMENT parsePlacement() {
     return UNDEFINED;
  }

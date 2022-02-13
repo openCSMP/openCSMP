@@ -7,9 +7,9 @@
 
 namespace csmp {
 
-template<size_t> class MathOperatorLHS;
-template<size_t> class Element;
-template<size_t> class Model;
+template<uint32_t> class MathOperatorLHS;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
 
 /**
  
@@ -74,7 +74,7 @@ post-processing operator. The nodal averaging and following operations
 are done in a second cycle.  
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
   public:
     VelocityAndVolumeFlux( const Model<dim>&, 
@@ -120,38 +120,38 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( SIMPLEX& );
-    virtual void WriteOperands( SIMPLEX& );
+    virtual void GetOperands( CELL& );
+    virtual void WriteOperands( CELL& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( SIMPLEX& );
-    virtual VelocityAndVolumeFlux<dim,SIMPLEX>* clone() const { return new VelocityAndVolumeFlux<dim,SIMPLEX> (*this); }
+    virtual void ComputeContribution( CELL& );
+    virtual VelocityAndVolumeFlux<dim,CELL>* clone() const { return new VelocityAndVolumeFlux<dim,CELL> (*this); }
   private:
 
-    void ExtractVelocity( const DenseMatrix<DM_MIN>& INP, size_t col, VectorVariable<dim>& );
-    void ExtractVolumeFlux( const DenseMatrix<DM_MIN>& INP, size_t col, ScalarVariable& );
-    void ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP, size_t col, VectorVariable<dim>& );
+    void ExtractVelocity( const DenseMatrix<DM_MIN>& INP, uint32_t col, VectorVariable<dim>& );
+    void ExtractVolumeFlux( const DenseMatrix<DM_MIN>& INP, uint32_t col, ScalarVariable& );
+    void ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP, uint32_t col, VectorVariable<dim>& );
     void TestRangeOfOutputVariables() const;
     bool WithLowerDimensionalElements( const Model<dim>& ) const;
 
-    const size_t components_;
+    const uint32_t components_;
     
     csmp::Index  velo_key_, ivelo_key_, nvelo_key_, nivelo_key_,
                  flux_key_, nflux_key_, rhor_key_, mult_key_;
                
-    std::pair<double,double>  minmaxV_, minmaxF_;
-    DenseMatrix<DM_MIN>           DERIV_, RESULT_;
-    std::vector<double>         VELOFLUX_, IVELOFLUX_;
-    std::vector<double>         IPVF_, NVF_, veloflux_;
-    std::vector<double>         IPOL_;
+    std::pair<double,double>     minmaxV_, minmaxF_;
+    DenseMatrix<DM_MIN>          DERIV_, RESULT_;
+    std::vector<double>          VELOFLUX_, IVELOFLUX_;
+    std::vector<double>          IPVF_, NVF_, veloflux_;
+    std::vector<double>          IPOL_;
     std::vector<ScalarVariable > PF_, mult_vec_, rho_vec_;
-    VectorVariable<dim>           velo_, ivelo_;
+    VectorVariable<dim>          velo_, ivelo_;
     ScalarVariable               phi_, flux_, rhor_;
     bool                         verbose_, nodal_averaging_, with_gravity_, with_multiplier_;
-    double                     sum_, ac_gravity_, rho_fac_, mult_fac_;
+    double                       sum_, ac_gravity_, rho_fac_, mult_fac_;
     std::vector<bool>            node_output_;
     std::vector<std::list<std::vector<double> > >  temp_veloflux_;
-    const size_t                  VERTICAL_AXIS_;
+    const uint32_t               VERTICAL_AXIS_;
 };
  
 } // end csmp

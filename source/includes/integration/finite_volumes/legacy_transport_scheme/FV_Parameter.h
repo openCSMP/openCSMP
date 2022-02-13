@@ -10,14 +10,14 @@ namespace csmp {
 class FV_Parameter {
   public:
     FV_Parameter() {};
-    FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with_normals=false );
+    FV_Parameter( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
     FV_Parameter( const FV_Parameter& );
     FV_Parameter& operator=( const FV_Parameter& );
     FV_Parameter( FV_Parameter&& );
     FV_Parameter& operator=( FV_Parameter&& );
   
     // mutators
-    void Resize( size_t sectors, size_t facets, size_t dim, bool with_normals=false );
+    void Resize( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
     void SectorVolume( size_t sector, double vol );
     void FacetArea( size_t facet, double area );
     void FacetNormal( size_t facet, const std::vector<double>& fnxyz );

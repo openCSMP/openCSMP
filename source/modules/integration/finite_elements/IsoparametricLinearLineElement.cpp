@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 
-IsoparametricLinearLineElement::IsoparametricLinearLineElement( size_t dimensions, size_t ips )
+IsoparametricLinearLineElement::IsoparametricLinearLineElement( uint32_t dimensions, uint32_t ips )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_BAR, true, true, 1U ),
     current_detJ(std::numeric_limits<double>::quiet_NaN())
@@ -63,7 +63,7 @@ IsoparametricLinearLineElement::~IsoparametricLinearLineElement()
  {
  }
 
-inline CSMP_FEM_TYPE  IsoparametricLinearLineElement::ElementTypeOfFace( size_t ) const
+inline CSMP_FEM_TYPE  IsoparametricLinearLineElement::ElementTypeOfFace( uint32_t ) const
  {
     return ZERO_DIMENSIONAL_FACE;
  }
@@ -94,7 +94,7 @@ void IsoparametricLinearLineElement::dNr( double, std::vector<double>& dnr ) con
 
 
 // tested: OK1
-double IsoparametricLinearLineElement::JacobianFor( const std::vector<double>& DNR, size_t coord ) const
+double IsoparametricLinearLineElement::JacobianFor( const std::vector<double>& DNR, uint32_t coord ) const
  {
     assert( coord < dim );
     return DNR[0] * XY(0,coord) + DNR[1] * XY(1,coord);
@@ -138,7 +138,7 @@ double IsoparametricLinearLineElement::Jacobian3D( const std::vector<double>& DN
 // return determinant J for values of previous function
 double IsoparametricLinearLineElement::JacobianInverse() { return current_detJ; }
 
-void IsoparametricLinearLineElement::JacobianAtIntegrationPoint( size_t ipoint )
+void IsoparametricLinearLineElement::JacobianAtIntegrationPoint( uint32_t ipoint )
  {
     if ( ipoint > 1U ) {
          std::cout <<"\nIsoparametricLinearLineElement::JacobianAtIntegrationPoint: ";
@@ -156,7 +156,7 @@ void IsoparametricLinearLineElement::JacobianAtIntegrationPoint( size_t ipoint )
 
 
 
-double IsoparametricLinearLineElement::WeightAtIntegrationPoint( size_t i ) const
+double IsoparametricLinearLineElement::WeightAtIntegrationPoint( uint32_t i ) const
  {
 
     if(gpe==1) {
@@ -172,7 +172,7 @@ double IsoparametricLinearLineElement::WeightAtIntegrationPoint( size_t i ) cons
 
 
 // tested:
-void IsoparametricLinearLineElement::N_AtIntegrationPoint( size_t gauss_point, std::vector<double>& N )
+void IsoparametricLinearLineElement::N_AtIntegrationPoint( uint32_t gauss_point, std::vector<double>& N )
  {
     assert( gauss_point < gpe );
 
@@ -190,7 +190,7 @@ void IsoparametricLinearLineElement::N_AtBaryCenter( std::vector<double>& N )
 
 
 
-void  IsoparametricLinearLineElement::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearLineElement::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -198,27 +198,27 @@ void  IsoparametricLinearLineElement::CounterClockwiseNodes( std::vector<size_t>
  }
 
 
-void  IsoparametricLinearLineElement::CornerNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearLineElement::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
     ids[1] = 1;
  }
 
-size_t    IsoparametricLinearLineElement::CornerNodes() const { return 2U; }
+uint32_t    IsoparametricLinearLineElement::CornerNodes() const { return 2U; }
 
-size_t    IsoparametricLinearLineElement::MidSideNodes() const { return 0U; }
+uint32_t    IsoparametricLinearLineElement::MidSideNodes() const { return 0U; }
 
 
 
-void  IsoparametricLinearLineElement::MidSideNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearLineElement::MidSideNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(1);
     std::cout <<"\nIsoparametricLinearLineElement::MidSideNodes No midside nodes present"<<std::endl;
  }
 
 // segments are numbered like faces
-void IsoparametricLinearLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     if ( segm_id > 1U )
       std::cout <<"\nIsoparametricLinearLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
@@ -235,8 +235,8 @@ void IsoparametricLinearLineElement::NodesOfSegment( size_t segm_id, std::vector
        - node 0 corresponds to first face 0
        - node 1 corresponds to second face 1
 */
-void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id, 
-                                                   vector<size_t>& fnids ) const
+void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
+                                                   vector<uint32_t>& fnids ) const
  {
     assert( face_id <= 1U );
     fnids.resize(1U);
@@ -245,24 +245,24 @@ void  IsoparametricLinearLineElement::NodesOfFace( size_t face_id,
 
 
 
-vector<size_t>  IsoparametricLinearLineElement::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
-    return vector<size_t>{face_id};
+    return vector<uint32_t>{face_id};
  }
 
 
 
-vector<size_t>  IsoparametricLinearLineElement::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  IsoparametricLinearLineElement::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1};
-        case 1: return vector<size_t>{0};
+        case 0: return vector<uint32_t>{1};
+        case 1: return vector<uint32_t>{0};
         default:
           cerr <<"\nIsoparametricLinearLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
@@ -322,14 +322,14 @@ double IsoparametricLinearLineElement::Volume()
 
    // 2-dimensional models
    if ( dim == 2U )
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( auto i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian2D( DNR );
        }
 
    // 3-dimensional models
    else if ( dim == 3U )
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( auto i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian3D( DNR );
        }
@@ -337,7 +337,7 @@ double IsoparametricLinearLineElement::Volume()
    // in this case the length of the element is equivalent to
    // the sum of the Jacobian determinants at the integration points
    else if ( dim == 1U )
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( auto i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian1D( DNR );
        }
@@ -474,10 +474,10 @@ void IsoparametricLinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
      // using M matrix for temporary storage
      dN_AtNode( M, 0 );
      // creating entries for first column of DN
-     for ( size_t i=0; i<dim; i++ ) DN(i,0) = M(i,0);
+     for ( auto i=0; i<dim; i++ ) DN(i,0) = M(i,0);
      dN_AtNode( M, 1 );
      // creating entries for first column of DN
-     for ( size_t i=0; i<dim; i++ ) DN(i,1) = M(i,1);
+     for ( auto i=0; i<dim; i++ ) DN(i,1) = M(i,1);
 
   } // end dN
 
@@ -496,7 +496,7 @@ void IsoparametricLinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
 //
 // tested: OK2
 double IsoparametricLinearLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DN,
-                                                                 size_t gauss_point )
+                                                                 uint32_t gauss_point )
  {
      DN.Resize(dim,npe);
 
@@ -561,7 +561,7 @@ double IsoparametricLinearLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN
 
 /**
 
-  double IsoparametricLinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd );                                       int dof )
+  double IsoparametricLinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd );                                       int dof )
 
 
 
@@ -591,7 +591,7 @@ procedures.
 @test ok
 
 */
-double IsoparametricLinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t nd )
+double IsoparametricLinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, uint32_t nd )
  {
      DN.Resize(dim,npe);
 
@@ -776,7 +776,7 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double>& vc ) const
     
     @note convention: face 1 is located at the first node.
 */
-void  IsoparametricLinearLineElement::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearLineElement::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
    
@@ -878,8 +878,8 @@ void  IsoparametricLinearLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
         M *= EPROP;
 
         EPROP.Resize(dim,npe);
-        for ( size_t i=0; i<dim; i++ )
-          for ( size_t j=0; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
+        for ( auto i=0; i<dim; i++ )
+          for ( auto j=0; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
 
         return;
      }
@@ -894,7 +894,7 @@ void  IsoparametricLinearLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
 
  // not tested yet !!!
  // OK1
-void  IsoparametricLinearLineElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+void  IsoparametricLinearLineElement::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR,
                                                                   std::vector<double>& NVAR ) const
 {
@@ -914,7 +914,7 @@ void  IsoparametricLinearLineElement::ExtrapolateIntegrationPointVariableToNodes
      //    and use these to extrapolate the values of the variables at the nodes.
         // compute interpolation function values at node i
      // node 1
-     for ( size_t k=0; k<nvars; k++ ) {
+     for ( auto k=0; k<nvars; k++ ) {
           // compute the slope of the interpolation function
           double m = (IVAR[1*nvars + k] - IVAR[0*nvars + k]) / dx;
           // extrapolate value from IP1 to node 1
@@ -934,7 +934,7 @@ void  IsoparametricLinearLineElement::ExtrapolateIntegrationPointVariableToNodes
 
 // integration point location transformed into global coordinates
 // NB: the matrix XYZ must be uptodate
-void  IsoparametricLinearLineElement::IntegrationPoint( size_t i,
+void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
                                                         vector<double>& xyz ) const
  {
     assert( i < gpe );
@@ -946,7 +946,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( size_t i,
 
     // 1D
     if ( dim == 1U ) {
-         for( size_t i=0U; i<npe; i++ )
+         for( auto i{0}; i<npe; i++ )
            xyz[0] += XY(i,0) * NRST[i];
          return;
       }
@@ -954,7 +954,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( size_t i,
     // 2D
     if ( dim == 2U ) {
          xyz[1]=0.;
-         for( size_t i=0U; i<npe; i++ ) {
+         for( auto i{0}; i<npe; i++ ) {
               xyz[0] += XY(i,0) * NRST[i];
               xyz[1] += XY(i,1) * NRST[i];
            }
@@ -963,7 +963,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( size_t i,
 
     // 3D case
     xyz[1]=xyz[2]=0.;
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -976,8 +976,8 @@ void  IsoparametricLinearLineElement::IntegrationPoint( size_t i,
 
 
 // tested OK1
-void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                                  vector<size_t>& fnids )
+void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                                  vector<uint32_t>& fnids )
  {
      fnids.resize(bnodes.size());
 
@@ -1023,8 +1023,8 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ ) {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+     for ( auto i=0; i<npe; i++ ) {
+          for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -1054,7 +1054,7 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( size_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( auto i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1062,8 +1062,8 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( auto i=0; i<DATA.Cols(); i++ ) {
+               for ( auto j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

@@ -12,7 +12,7 @@ namespace csmp {
 @date 2014
 
 */
-template< size_t dim >
+template< uint32_t dim >
 class StraightLineMeshInterface {
 
   public:

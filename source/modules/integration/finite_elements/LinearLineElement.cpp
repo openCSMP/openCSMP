@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 
-LinearLineElement::LinearLineElement( size_t dimensions )
+LinearLineElement::LinearLineElement( uint32_t dimensions )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( LINEAR_BAR, false, false, 1U )
  {
@@ -35,7 +35,7 @@ LinearLineElement::~LinearLineElement()
 
 
 
-void  LinearLineElement::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  LinearLineElement::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -44,7 +44,7 @@ void  LinearLineElement::CounterClockwiseNodes( std::vector<size_t>& ids ) const
 
 
 
-void  LinearLineElement::CornerNodes( std::vector<size_t>& ids ) const
+void  LinearLineElement::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -53,7 +53,7 @@ void  LinearLineElement::CornerNodes( std::vector<size_t>& ids ) const
 
 
 /// segments are numbered like faces
-void LinearLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+void LinearLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     if ( segm_id > 1 )
       std::cerr <<"\nLinearLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
@@ -64,7 +64,7 @@ void LinearLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& sni
 
 
 /// SKM fixed 10/6/2014
-void  LinearLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void  LinearLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     if ( face_id > 1U )
       std::cerr <<"\nLinearLineElement::NodesOfFace: There are only 2 faces present, corresponding to the nodes."<< std::endl;
@@ -73,23 +73,23 @@ void  LinearLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids
  }
 
 
-vector<size_t>  LinearLineElement::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  LinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
-    return vector<size_t>{face_id};
+    return vector<uint32_t>{face_id};
  }
 
 
-vector<size_t>  LinearLineElement::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  LinearLineElement::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1};
-        case 1: return vector<size_t>{0};
+        case 0: return vector<uint32_t>{1};
+        case 1: return vector<uint32_t>{0};
         default:
           cerr <<"\nLinearLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
@@ -330,7 +330,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double LinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t )
+double LinearLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, uint32_t )
  {
     dN( DN );
 /*
@@ -374,7 +374,7 @@ void LinearLineElement::N_AtBaryCenter(std::vector<double>& N)
 {
 	vector<double> p;
 	p.resize(dim);
-	for (size_t i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
+	for (auto i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
 	LinearLineElement::N(N, p);
 }
 
@@ -434,7 +434,7 @@ void  LinearLineElement::IntegralNN( DenseMatrix<DM_MIN>& M )
     
     @note convention: face 1 is located at the first node.
 */
-void  LinearLineElement::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  LinearLineElement::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
    
@@ -543,8 +543,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ ) {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+     for ( uint32_t i=0; i<npe; i++ ) {
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -574,7 +574,7 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( size_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -582,8 +582,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

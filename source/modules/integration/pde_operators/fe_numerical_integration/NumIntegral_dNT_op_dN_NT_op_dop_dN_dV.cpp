@@ -3,12 +3,13 @@
 #include "Exception.h"
 #include "Element.h"
 #include "Face.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_NT_op_dop_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  grad_prop,
@@ -28,7 +29,7 @@ NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_NT_op_dop
     NT3(3,DenseMatrix<DM_MIN>(3,dim)),
     NGRAD(3),
     with_gravity(false),
-    gravity(9.80665),
+    gravity(ACC_GRAVITY),
     xyz(2)
 {
     MathOperatorLHS<dim>::Name("NumIntegral_dNT_op_dN_NT_op_dop_dN_dV", oper, basic, test );
@@ -65,7 +66,7 @@ NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_NT_op_dop
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_NT_op_dop_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  grad_prop,
@@ -136,7 +137,7 @@ nodal and element variables, respectively.
 
 The operand is read
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -152,20 +153,20 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               ScalarVariable  sc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), sc );
-              for ( size_t i=0; i<dim; i++ )
+              for ( auto i=0; i<dim; i++ )
                 MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-              for ( size_t i=0; i<dim; i++ ) 
+              for ( auto i=0; i<dim; i++ )
                 MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-              for ( size_t i=0; i<dim; i++ ) 
-                for ( size_t j=0; j<dim; j++ ) 
+              for ( auto i=0; i<dim; i++ )
+                for ( auto j=0; j<dim; j++ )
                   MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
            }
       }
@@ -176,31 +177,30 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       
-         for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
            MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
                                                                 i, MathOperatorLHS<dim>::MTRL[i] );
       }
    
     // 2. if body force operand 'gravity' was specified
     // -------------------------------------------------
-    size_t  j;
     if ( with_gravity ) {
          e.NodePropertyVector( rrho_key, rrho_vec );
          RDENS.resize(e.FE()->IntegrationPoints());
-         for ( j=0; j<e.FE()->IntegrationPoints(); j++ ) RDENS[j] = 0.0;
+         for ( auto j=0; j<e.FE()->IntegrationPoints(); j++ ) RDENS[j] = 0.0;
       }
 
     // 3. read node variable which must be a scalar
     // --------------------------------------------
     NT3.resize(e.FE()->IntegrationPoints());
 
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          NT3[i].Resize(e.Nodes(),dim);
-         for ( j=0; j<e.Nodes(); j++ ) 
+         for ( auto j=0; j<e.Nodes(); j++ )
            {
               // initializing vector of NT3 matrices at integration points
-              for ( size_t k=0; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
+              for ( auto k=0; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
               // gravity operand if so specified
               if ( with_gravity ) RDENS[i] += rrho_vec[j]() * IPOL[j]; 
            }
@@ -210,7 +210,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e
     // -------------------------------------------------
     NGRAD.resize(e.Nodes());
     e.NodePropertyVector( grad_key, sc_prop_vec );
-    for ( size_t i=0; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
+    for ( auto i=0; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
     
    // 5. get conductivity multiplier for gradient property
    // ----------------------------------------------------
@@ -230,7 +230,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL& e
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     double detJ;
@@ -244,7 +244,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       {
          // 1. Compute "diffusion" matrix DNT_K_DN_DV
          // -----------------------------------------
@@ -277,11 +277,11 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const
          VIP.Zero();
          econd() *= emult();
          // establish pressure gradients
-         for ( size_t j=0; j<dim; j++ ) {
+         for ( auto j=0; j<dim; j++ ) {
               //                                x,y,z-component  d/dx,y,z  grad_prop at node
-              for ( size_t k=0; k<e.Nodes(); k++ ) VIP(j,j)         += -DN(j,k) * NGRAD[k] * econd();
+              for ( auto k=0; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k] * econd();
               // if gravity is turned on velocities are corrected correspondingly
-              if ( with_gravity )                     VIP(xyz-1,xyz-1) -= gravity * RDENS[i] * econd(); 
+              if ( with_gravity )  VIP(xyz-1,xyz-1) -= gravity * RDENS[i] * econd(); 
            }
 
 // cout <<"\nEMULT at ip "<< i << endl;
@@ -316,8 +316,8 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const
 
 
 
-template<size_t dim,class CELL>
-void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
+template<uint32_t dim,class CELL>
+void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::SpatialDerivative( uint32_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
     xyz = num_xyz;

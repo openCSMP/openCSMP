@@ -7,12 +7,12 @@
 
 namespace csmp {
 
-  template<size_t> class PropertyDatabase;
+  template<uint32_t> class PropertyDatabase;
   class ScalarVariable;
-  template<size_t> class Model;
+  template<uint32_t> class Model;
 
   /// effective- and mean stress, by post-processing of a diagonalized stress tensor with fluid pressure as input.
-  template<size_t dim>
+  template<uint32_t dim>
   class EffectiveStressVisitor : public Visitor<dim> {
   public:
     EffectiveStressVisitor( Model<dim>& model, 

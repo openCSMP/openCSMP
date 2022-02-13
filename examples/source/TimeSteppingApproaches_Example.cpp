@@ -70,7 +70,7 @@ void TimeSteppingApproaches_Example::Run()
    // making a rock and a fracture region of elements
    vector<size_t>  elms;
    for ( size_t i=0; i<mesh_container.Elements(); i++ ) elms.push_back(i);
-   mesh_topology.AddRegion( "ROCK", fem_types, elms );
+   mesh_topology.AddDomain( "ROCK", fem_types, elms );
    elms.erase( elms.begin(), elms.end() );
 
    mesh_container.Out();

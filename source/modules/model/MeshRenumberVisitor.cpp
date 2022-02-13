@@ -6,21 +6,21 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 MeshRenumberVisitor<dim>::MeshRenumberVisitor()
     : e_counter_(0U), n_counter_(0U)
   { 
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 MeshRenumberVisitor<dim>::~MeshRenumberVisitor() 
  {  
  }
 
 // MeshRenumberVisitor Methods ====================
 
-template<size_t dim>
+template<uint32_t dim>
 void MeshRenumberVisitor<dim>::Visit( Element<dim>* eptr ) 
  { 
     eptr->Idx( e_counter_++ );
@@ -35,17 +35,17 @@ void MeshRenumberVisitor<dim>::Visit( Element<dim>* eptr )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t MeshRenumberVisitor<dim>::VisitedElements() const
  { return e_counter_; }
  
 
-template<size_t dim>
+template<uint32_t dim>
 size_t MeshRenumberVisitor<dim>::VisitedNodes() const
  { return n_counter_; }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void MeshRenumberVisitor<dim>::Reset()
  { e_counter_=0U; n_counter_=0U; node_ptrs_.clear(); }
 

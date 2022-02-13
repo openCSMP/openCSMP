@@ -26,7 +26,7 @@ Steps:
   accumulation is complete).
 
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 IntegrationPointToNodePropertyVisitor<Var,dim>::IntegrationPointToNodePropertyVisitor( const PropertyDatabase<dim>& p, 
                                                                                      const char* cpoint_prop,
                                                                                      const char* node_prop,
@@ -43,7 +43,7 @@ IntegrationPointToNodePropertyVisitor<Var,dim>::IntegrationPointToNodePropertyVi
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void IntegrationPointToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
  {
      
@@ -59,14 +59,14 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolate
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 IntegrationPointToNodePropertyVisitor<Var,dim>::~IntegrationPointToNodePropertyVisitor() 
  {  
  }
 
 
 /// first application cycle (extrapolation)
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr ) 
  { 
     // storing the constraint point property into a vector
@@ -76,7 +76,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     cp_vars_.resize( eptr->IntegrationPoints() * vcomponents );
     nd_vars_.resize( eptr->Nodes() * vcomponents );
     
-    for ( size_t i=0U; i<vars_vector_.size(); i++ )
+    for ( auto i{0}; i<vars_vector_.size(); i++ )
       for ( size_t j=0U; j<vcomponents; j++ ) 
         cp_vars_[ i * vcomponents + j ] = vars_vector_[i].Component(j);
     
@@ -87,7 +87,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     csmp::Point<dim>  bc = eptr->BaryCenter();
     
     // accumulating results into nodes vector for later averaging
-    for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
+    for ( auto i{0}; i<eptr->Nodes(); i++ ) {
          eptr->N(i)->Read( nprop_key_, variable_ );
          
          // using 1 / (distance from barycenter to node)  as a weight
@@ -107,7 +107,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
 
 
 /// second application cycle (weighting)
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Node<dim>* nptr ) 
  { 
     if ( !weighting_completed_.GetBit( nptr->Idx() ) ) {

@@ -66,7 +66,7 @@ Capillary diffusion will not correctly model transport across material
 interfaces unless these are split.
  
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseExplicitNodeCenteredFVTransport( // 2-phase
                                                                                 const char* group_name,
                                                                                 Model<dim>& sg,
@@ -98,7 +98,7 @@ TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseExplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
     
@@ -106,7 +106,7 @@ TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseExplicitNodeCenteredFV
 
 
 /// reports whether an element stencil has a face at the boundary of the advection region
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 inline bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
                                                       const Element<dim>* const eptr ) const
  {
@@ -114,7 +114,7 @@ inline bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
  }
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::~TwoPhaseExplicitNodeCenteredFVTransport()
  {
  }
@@ -126,31 +126,31 @@ TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::~TwoPhaseExplicitNodeCenteredF
     Capillary spreading is modelled by default.
     This method disables it speeding up computation for large-scale models.
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DisableCapillarySpreading()
   {
      with_capillary_spreading_ = false;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::EnableCapillarySpreading()
   {
      with_capillary_spreading_ = true;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DisableGravitationalForces()
   {
      with_gravitational_forces_ = false;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::EnableGravitationalForces()
   {
      with_gravitational_forces_ = true;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::SetNoFlowBoundaryConditionKey(Model<dim>& sg,const char* no_flow_bc)
   {
      no_flow_bc_key_ = sg.Database().StorageKey(no_flow_bc);
@@ -197,7 +197,7 @@ input max_time_increment which may be the case if there is no flow at all
 in the domain. Equally, the user is informed if the CFL increment is
 less than a millisecond (usually a prohibitively small increment).
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
                                                                                         double max_time_increment )
  {
@@ -252,12 +252,12 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
                {
                    fill( gradPc.begin(), gradPc.end(), 0. );
                    (*(*eit)).dN_AtBaryCenter( DN );
-                   for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
+                   for ( auto j=0U; j<(*eit)->Nodes(); j++ ) {
                        double sn = (*eit)->N(j)->Read( this->adv1_key_ );
                        relperm.SaturationWettingPhase( 1. - sn );
                        relperm.EffectiveSaturation();
                        double pc = relperm.pc_Phase( );
-                       for ( size_t k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
+                       for ( auto k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                    }
                    // getting the maximum capillary flux (G= lambda overbar)
                    double  magnitude_grad_pc(gradPc[0]); // 1D
@@ -311,7 +311,7 @@ onset of the advection.
 
 @attention After every sub-CFL transport step, the method prints a dot on the screen. 
   */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPhaseModel<dim>& relperm, 
                                                                             double time_interval )
  {
@@ -360,7 +360,7 @@ double  TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPha
 
 
 /// Copies the result vector to model performing range checks against the PropertyDatabase.
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv_key,
                                                                           bool show_range ) const
  {
@@ -372,7 +372,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
     ScalarVariable   sc;
 
     this->pref_.RangeOf( this->pref_.Name(adv_key), rmin, rmax );
-    for ( size_t i=0U; i<RESULT.size(); i++ ) {
+    for ( auto i{0}; i<RESULT.size(); i++ ) {
          // recording output range
          amin = std::min( amin, RESULT[i] );
          amax = std::max( amax, RESULT[i] );
@@ -415,7 +415,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
 
 
 /// Copies the result vector and the saturation of the other phase to model performing range checks against the PropertyDatabase.
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const csmp::Index& adv1_key,
                                                                           const csmp::Index& adv2_key,
                                                                           bool show_range,
@@ -429,7 +429,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
     ScalarVariable  sc;
 
     this->pref_.RangeOf( this->pref_.Name(adv2_key), rmin, rmax );
-      for ( size_t i=0U; i<RESULT.size(); i++ )
+      for ( auto i{0}; i<RESULT.size(); i++ )
          {
             // recording output range
             amin = std::min( amin, RESULT[i] );
@@ -481,7 +481,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
@@ -490,7 +490,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
          // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
-        for ( size_t i=0U; i<(*nit)->Neighbors(); i++ ) {
+        for ( auto i{0}; i<(*nit)->Neighbors(); i++ ) {
              const double adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
              // if element value is smaller the current minimum is assigned etc.
              (*sit).first  = std::min( (*sit).first,  adv_var );
@@ -501,11 +501,11 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
  } // end MinMaxAdvectedProperty
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExceptTheCurrentNode()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
-   size_t  current_n_id,global_neighb_el_id;
+   size_t  current_n_id, global_neighb_el_id;
    for ( typename vector<Node<dim>*>::const_iterator
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
 
@@ -514,12 +514,12 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
          (*sit).first =std::numeric_limits<double>::max();
          (*sit).second = std::numeric_limits<double>::min();
 
-         for(  size_t p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
-               global_neighb_el_id = (*nit)->Parent( p)->Idx();
+               global_neighb_el_id = (*nit)->Parent(p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el->Nodes();i++){
+               for(auto i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -534,7 +534,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
  } // end MinMaxAdvectedPropertyExceptTheCurrentNode
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyIncludingTheCurrentNode()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
@@ -546,12 +546,12 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
          // 1. the advected property value at the current node is assigned to min-max pair
          (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
 
-         for(  size_t p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el->Nodes();i++){
+               for(auto i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -591,7 +591,7 @@ this is an explicit transport scheme.
 
 This method is used by the higher order-in space accurate transport scheme.  
  */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::Compose2PhaseSolution(
                                                                TwoPhaseModel<dim>& relperm,
                                                                double time_interval,
@@ -608,8 +608,8 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::Compose2PhaseSolution(
               // computing the average fractional flow for the current finite volume
               double fn_avg = static_cast<double>(0.);
               // for each finite volume, f is evaluated on a sector by sector basis
-              for ( size_t t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
-                   const size_t nid(this->gref_.N(nidx)->ParentNodeNumber(t));
+              for ( auto t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
+                   const auto nid(this->gref_.N(nidx)->ParentNodeNumber(t));
                    // the relperm model is initialised for the saturation of the current finite volume
                    relperm.Initialize( *this->gref_.N(nidx)->Parent(t) );
                    relperm.InitializeForNode( *this->gref_.N(nidx)->Parent(t), nid );
@@ -669,7 +669,7 @@ used. In this case the method returns true, else false.
 of the computational domain.
 
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoundaryFiniteVolume(
                                                            const Node<dim>* nd_ptr,
                                                            TwoPhaseModel<dim>& relperm,
@@ -678,9 +678,9 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
     inflow = flux_balance = static_cast<double>(0.);
 
     // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-    for ( size_t t=0U; t<nd_ptr->Parents(); t++ ) {
+    for ( auto t=0U; t<nd_ptr->Parents(); t++ ) {
          Element<dim>* const eptr(nd_ptr->Parent(t));
-         const size_t nid(nd_ptr->ParentNodeNumber(t));
+         const auto nid(nd_ptr->ParentNodeNumber(t));
          double  flux(0.);
 
          // k, swr, snr initialisation precedes all other steps
@@ -690,10 +690,10 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          relperm.EffectiveSaturation();
 
          // for all FACETS per SECTOR surrounding the finite volume at the boundary
-         for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ )
+         for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ )
            {
-              size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
-              size_t inside_node = eptr->FV()->InsideNode( iFacet );
+              auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
+              uint32_t inside_node = eptr->FV()->InsideNode( iFacet );
               // get velocity across FV facet
               double velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *
                               this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
@@ -724,7 +724,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
 
 
 /// Compensation of in- and outflows for finite volumes that are truncated by region or model boundaries.
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignFractionalFlowBoundaryConditions( TwoPhaseModel<dim>& relperm )
  {
     double        inflow, flux_balance;
@@ -758,7 +758,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignFractionalFlowBound
 
 
 /// Compensation of in- and outflows for finite volumes that are truncated by region or model boundaries
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundaryConditions(TwoPhaseModel<dim>& relperm )
  {
     double        flux_balance,inflow;
@@ -780,11 +780,11 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
              inflow = static_cast<double>(0.);
 
              // for all SECTORS of the FE_FV-stencils which contribute to boundary finite volume (surrounding the node)
-             for ( size_t t=0U; t<nd_ptr->Parents(); t++ )
+             for ( auto t=0U; t<nd_ptr->Parents(); t++ )
                  {
                       double  flux(0.);
                       Element<dim>* e(nd_ptr->Parent(t));
-                      const size_t pnid(nd_ptr->ParentNodeNumber(t));
+                      const auto pnid(nd_ptr->ParentNodeNumber(t));
                       // k, swr, snr initialisation precedes all other steps
                       relperm.Initialize( *e );
                       relperm.InitializeForNode( *e, pnid );
@@ -794,19 +794,19 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                           e->dN_AtBaryCenter( DN );
                           dsdn = 0.;
-                          for ( size_t j=0U; j<e->Nodes(); j++ ) {
+                          for ( auto j=0U; j<e->Nodes(); j++ ) {
                                const double sn = e->N(j)->Read( this->adv1_key_);
-                               for ( size_t k=0U; k<dim; k++ ) dsdn[k] += DN(k,j) * sn;
+                               for ( auto k=0U; k<dim; k++ ) dsdn[k] += DN(k,j) * sn;
                           }
 
                       }
 
                       // now the saturation dependent properties are computed
                       // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                      for ( size_t i=0U; i<e->FV()->FacetsPerSector(pnid); i++ )
+                      for ( auto i{0}; i<e->FV()->FacetsPerSector(pnid); i++ )
                         {
-                           size_t iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
-                           size_t inside_node,outside_node;
+                           auto     iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
+                           uint32_t inside_node,outside_node;
                            e->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
                            // get velocity across FV facet
@@ -906,7 +906,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
  } // end AssignGenericFlowBoundaryConditions
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                                                                TwoPhaseModel<dim>& relperm,
                                                                double time_interval )
@@ -919,18 +919,18 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
           {
               double div(0.0);
               // for each finite volume, f is evaluated on a sector by sector basis
-              for ( size_t t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
+              for ( auto t=0U; t<this->gref_.N(nidx)->Parents(); t++ ) {
                    Element<dim>* const eptr(nd_ptr->Parent(t));
-                   const size_t nid(nd_ptr->ParentNodeNumber(t));
+                   const auto nid(nd_ptr->ParentNodeNumber(t));
                    relperm.Initialize( *eptr );
                    // now the saturation dependent properties are computed
                    relperm.InitializeForNode( *eptr, nid );
                    relperm.EffectiveSaturation();
 
                    // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                   for ( size_t i=0U; i<eptr->FV()->FacetsPerSector(nid); i++ ){
-                        size_t iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
-                        size_t inside_node,outside_node;
+                   for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ ){
+                        auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
+                        uint32_t inside_node,outside_node;
                         eptr->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
 
                         double velo = this->STENCIL_DATA[eptr->Idx()].FacetNormalVelocity(iFacet) *this->STENCIL_DATA[eptr->Idx()].FacetArea(iFacet);
@@ -966,7 +966,7 @@ non-wetting phase only, is treated as a source - sink term that is
 compensated for in each FV. Transient flow -related sources and sinks
 are also considered.
  */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable1stOrder( TwoPhaseModel<dim>& relperm,
                                                                                double time_increment )
  {
@@ -1041,7 +1041,7 @@ when the velocity field needs to be updated in very short time-intervals
 so that little is gained from large transport steps that can be performed
 using the implicit scheme.
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( TwoPhaseModel<dim>& relperm,
                                                                                double time_increment )
  {
@@ -1057,14 +1057,12 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( T
     if ( !this->with_gravitational_forces_ && !this->with_capillary_spreading_ ){
 
         if(!this->with_lsmgrad_limiter_)
-            for ( typename vector<Element<dim>*>::const_iterator
-            eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
                 stencil_.AccumulateExplicitTwoPhaseSolution2_Visc( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT);
         else{
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-            this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
-            for ( typename vector<Element<dim>*>::const_iterator
-            eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+            this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
+            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
                 stencil_.AccumulateExplicitTwoPhaseSolution2_Visc( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);
         }
 
@@ -1079,15 +1077,13 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( T
             this->gref_.Accept(ElmToNode);
             */
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-            this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
-            for ( typename vector<Element<dim>*>::const_iterator
-            eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
+            this->grad_advprop_limiter_->CalculateSlopeLimiter(this->gref_, this->SMINMAX );
+            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
                 stencil_.AccumulateExplicitTwoPhaseSolution2( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->with_gravitational_forces_,this->with_capillary_spreading_,this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);
 
         }else{
 
-            for ( typename vector<Element<dim>*>::const_iterator
-            eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
+            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
                 stencil_.AccumulateExplicitTwoPhaseSolution2( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->with_gravitational_forces_, this->with_capillary_spreading_);
 
         }

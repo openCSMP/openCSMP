@@ -61,22 +61,14 @@ VectorVariable<2U>&  VectorVariable<2U>::operator=( const VectorVariable<2U>& v 
 }
 
 
-double& VectorVariable<2U>::operator()( size_t i )
+double& VectorVariable<2U>::operator()( uint32_t i )
 {
   if ( i == 0U ) return data[0];
   return              data[1];
 }
 
 
-const double& VectorVariable<2U>::operator()( size_t i ) const
-{
-  if ( i == 0U ) return data[0];
-  return              data[1];
-}
-
-
-
-double  VectorVariable<2U>::operator[]( size_t i ) const
+const double& VectorVariable<2U>::operator()( uint32_t i ) const
 {
   if ( i == 0U ) return data[0];
   return              data[1];
@@ -84,7 +76,15 @@ double  VectorVariable<2U>::operator[]( size_t i ) const
 
 
 
-void  VectorVariable<2U>::Component( size_t i, double val )
+double  VectorVariable<2U>::operator[]( uint32_t i ) const
+{
+  if ( i == 0U ) return data[0];
+  return              data[1];
+}
+
+
+
+void  VectorVariable<2U>::Component( uint32_t i, double val )
 {
   if ( i == 0U ) data[0] = val;
   else         data[1] = val;
@@ -92,27 +92,21 @@ void  VectorVariable<2U>::Component( size_t i, double val )
 
 
 
-double  VectorVariable<2U>::Component( size_t i ) const
+double  VectorVariable<2U>::Component( uint32_t i ) const
 {
   if ( i == 0U ) return data[0];
   return              data[1];
 }
 
 
-size_t VectorVariable<2U>::Size() const
+uint32_t VectorVariable<2U>::Size() const
 {
   return 2U;
 }
 
-void VectorVariable<2U>::Resize( size_t, double newValue )
-{
-  data[0] = newValue;
-  data[1] = newValue;
-}
-
 VectorVariable<2U>  VectorVariable<2U>::operator+( const VectorVariable<2U>& v ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] + v.data[0], data[1] + v.data[1] ) );
+  return VectorVariable( flag[0], flag[1], data[0] + v.data[0], data[1] + v.data[1] );
 }
 
 
@@ -120,49 +114,49 @@ VectorVariable<2U>  VectorVariable<2U>::operator+( const VectorVariable<2U>& v )
 
 VectorVariable<2U>  VectorVariable<2U>::operator-( const VectorVariable<2U>& v ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] - v.data[0], data[1] - v.data[1] ) );
+  return VectorVariable( flag[0], flag[1], data[0] - v.data[0], data[1] - v.data[1] );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator*( const VectorVariable<2U>& v ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] * v.data[0], data[1] * v.data[1] ) );
+  return VectorVariable( flag[0], flag[1], data[0] * v.data[0], data[1] * v.data[1] );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator/( const VectorVariable<2U>& v ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] / v.data[0], data[1] / v.data[1] ) );
+  return VectorVariable( flag[0], flag[1], data[0] / v.data[0], data[1] / v.data[1] );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator+( double val ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] + val, data[1] + val ) );
+  return VectorVariable( flag[0], flag[1], data[0] + val, data[1] + val );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator-( double val ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] - val, data[1] - val ) );
+  return VectorVariable( flag[0], flag[1], data[0] - val, data[1] - val );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator*( double val ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] * val, data[1] * val ) );
+  return VectorVariable( flag[0], flag[1], data[0] * val, data[1] * val );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::operator/( double val ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], data[0] / val, data[1] / val ) );
+  return VectorVariable( flag[0], flag[1], data[0] / val, data[1] / val );
 }
 
 
@@ -170,7 +164,7 @@ VectorVariable<2U>  VectorVariable<2U>::operator/( double val ) const
 
 VectorVariable<2U>  VectorVariable<2U>::operator^( double val ) const
 {
-  return std::move( VectorVariable( flag[0], flag[1], std::pow( data[0], val ), std::pow( data[1], val ) ) );
+  return VectorVariable( flag[0], flag[1], std::pow( data[0], val ), std::pow( data[1], val ) );
 }
 
 
@@ -394,12 +388,12 @@ double VectorVariable<2U>::DotProduct( const VectorVariable& v ) const
 
 VectorVariable<2U> VectorVariable<2U>::CrossProduct( const csmp::Point<2U>& p ) const
 {
-  return std::move( VectorVariable<2U>( flag[0], flag[1], 0., data[0] * p[1] - data[1] * p[0] ) );
+  return VectorVariable<2U>( flag[0], flag[1], 0., data[0] * p[1] - data[1] * p[0] );
 }
 
 VectorVariable<2U> VectorVariable<2U>::CrossProduct( const VectorVariable& v ) const
 {
-  return std::move( VectorVariable<2U>( flag[0], flag[1], 0., data[0] * v[1] - data[1] * v[0] ) );
+  return VectorVariable<2U>( flag[0], flag[1], 0., data[0] * v[1] - data[1] * v[0] );
 }
 
 
@@ -410,14 +404,14 @@ double  VectorVariable<2U>::Length() const
 
 
 
-VARIABLE_FLAG&  VectorVariable<2U>::Flag( const size_t& i )
+VARIABLE_FLAG&  VectorVariable<2U>::Flag( uint32_t i )
 {
   if ( i == 0U ) return flag[0];
   return flag[1];
 }
 
 
-VARIABLE_FLAG  VectorVariable<2U>::Flag( const size_t& i ) const
+VARIABLE_FLAG  VectorVariable<2U>::Flag( uint32_t i ) const
 {
   if ( i == 0U ) return flag[0];
   return flag[1];
@@ -503,7 +497,7 @@ VectorVariable<2U>  VectorVariable<2U>::Flip()
   temp.data[0] = data[1];
   temp.data[1] = data[0];
 
-  return std::move( temp );
+  return temp;
 }
 
 /// Multiplies by negative unity vector
@@ -515,20 +509,18 @@ void  VectorVariable<2U>::Invert()
 
 VectorVariable<2U>  VectorVariable<2U>::ProjectOnto( const std::vector<double>& v ) const
 {
-  double ratio( (data[0] * v[0] + data[1] * v[1]) / (v[0] * v[0] + v[1] * v[1]) );
+  const double ratio( (data[0] * v[0] + data[1] * v[1]) / (v[0] * v[0] + v[1] * v[1]) );
 
-  return std::move( VectorVariable<2U>( flag[0], flag[1],
-                    v[0] * ratio, v[1] * ratio ) );
+  return VectorVariable<2U>( flag[0], flag[1], v[0] * ratio, v[1] * ratio );
 }
 
 
 
 VectorVariable<2U>  VectorVariable<2U>::ProjectOnto( const VectorVariable<2U>& v ) const
 {
-  double ratio( (data[0] * v.data[0] + data[1] * v.data[1]) / (v.data[0] * v.data[0] + v.data[1] * v.data[1]) );
+  const double ratio( (data[0] * v.data[0] + data[1] * v.data[1]) / (v.data[0] * v.data[0] + v.data[1] * v.data[1]) );
 
-  return std::move( VectorVariable<2U>( flag[0], flag[1],
-                    v.data[0] * ratio, v.data[1] * ratio ) );
+  return VectorVariable<2U>( flag[0], flag[1], v.data[0] * ratio, v.data[1] * ratio );
 }
 
 
@@ -538,7 +530,7 @@ void  VectorVariable<2U>::In()
   string  status;
 
   cout.flush();
-  for ( size_t i = 0; i<2U; i++ )
+  for ( auto i = 0; i<2U; i++ )
   {
     if ( i == 0 ) cout << "\nEnter status for x-component of variable: ";
     else          cout << "\nEnter status for y-component of variable: ";
@@ -549,7 +541,7 @@ void  VectorVariable<2U>::In()
 
   cout << "\nEnter x=0 and y=1 vector variable elements: ";
   cout.flush();
-  for ( size_t i = 0; i<2U; i++ ) cin >> data[i];
+  for ( auto i = 0; i<2U; i++ ) cin >> data[i];
 
 } // end In
 
@@ -561,10 +553,10 @@ void  VectorVariable<2U>::Out() const
   string  status;
 
   cout << "\nStatus: " << endl;
-  for ( size_t i = 0; i<2U; i++ )
+  for ( auto i = 0; i<2U; i++ )
     cout << (status = parseStatus( flag[i] )) << "\t\t";
   cout << endl;
-  for ( size_t i = 0; i<2U; i++ ) cout << data[i] << "\t\t";
+  for ( auto i = 0; i<2U; i++ ) cout << data[i] << "\t\t";
   cout << endl;
 
 } // end Out

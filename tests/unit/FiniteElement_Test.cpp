@@ -73,12 +73,8 @@ void FiniteElement_Test::run()
 
   // .) NODES PER FACE
   if ( verbose_ ) cout << "Testing nodes per faces...\n";
-  for( size_t i = 0; i < femPtr_->Faces(); ++ i )
+  for( auto i = 0; i < femPtr_->Faces(); ++ i )
     _test( femData_.NodesPerFace( i ) == femPtr_->NodesPerFace( i ) );
-
-  // .) CONSTRAINT POINT NEIGHBORS
-  if ( verbose_ ) cout << "Testing constraint points...\n";
-  _test( femData_.IntegrationPointNeighborCount() == femPtr_->IntegrationPointNeighbors() );
 
   // .) INTEGRATION POINTS
   if ( verbose_ ) cout << "Testing Integration points...\n";
@@ -116,7 +112,7 @@ void FiniteElement_Test::run()
   //    INITIALIZING NODES/COORDINATE MATRIX
   if ( verbose_ ) cout << "Initializing nodes...\n";
   femPtr_->XY.Resize( femData_.NodeCount(), 3 );
-  for ( size_t i = 0; i < femData_.NodeCount(); ++i )
+  for ( auto i = 0; i < femData_.NodeCount(); ++i )
     femPtr_->XY.AssignRow( i, femData_.NodePtr( i )->Coordinate() );
 
   // .) VOLUME
@@ -136,13 +132,13 @@ void FiniteElement_Test::run()
   vector<double> edgeLengths;
   femPtr_->EdgeLengths( edgeLengths );
   _test( edgeLengths.size() == femData_.EdgeCount() );
-  for( size_t i = 0; i < edgeLengths.size(); ++i )
+  for( auto i = 0; i < edgeLengths.size(); ++i )
     _equal( edgeLengths.at( i ),  femData_.EdgeLength( i ), femData_.Tolerance() );
 
   // .) SEGMENT NODES
   if ( verbose_ ) cout << "Testing segment nodes...\n";
-  vector<size_t> segmentNodes;
-  for( size_t i = 0; i < femPtr_->Segments(); ++i )
+  vector<uint32_t> segmentNodes;
+  for( auto i = 0; i < femPtr_->Segments(); ++i )
   {
     femPtr_->NodesOfSegment( i, segmentNodes );
     if( global_verbose )
@@ -157,8 +153,8 @@ void FiniteElement_Test::run()
 
   // .) FACE NODES
   if ( verbose_ ) cout << "Testing face nodes...\n";
-  vector<size_t> faceNodes;
-  for( size_t i = 0; i < femPtr_->Faces(); ++i )
+  vector<uint32_t> faceNodes;
+  for( auto i = 0; i < femPtr_->Faces(); ++i )
   {
     femPtr_->NodesOfFace( i, faceNodes );
     if( global_verbose )
@@ -173,9 +169,9 @@ void FiniteElement_Test::run()
 
   // .) CORNER NODES
   if ( verbose_ ) cout << "Testing corner nodes...\n";
-  vector<size_t> cornerNodes;
+  vector<uint32_t> cornerNodes;
   femPtr_->CornerNodes( cornerNodes );
-  for( size_t i = 0; i < cornerNodes.size(); ++i )
+  for( auto i = 0; i < cornerNodes.size(); ++i )
   {
     _test( cornerNodes.at( i ) == femData_.NodeAtCorner( i ) );
     if( global_verbose )
@@ -188,9 +184,9 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing midside nodes...\n";
   if( femData_.MidsideNodeCount() != 0 )
   {
-    vector<size_t> midsideNodes;
+    vector<uint32_t> midsideNodes;
     femPtr_->MidSideNodes( midsideNodes );
-    for( size_t i = 0; i < midsideNodes.size(); ++i )
+    for( auto i = 0; i < midsideNodes.size(); ++i )
     {
       _test( midsideNodes.at( i ) == femData_.NodeAtMidside( i ) );
       if( global_verbose )
@@ -204,9 +200,9 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing interior nodes...\n";
   if( femData_.InteriorNodeCount() != 0 )
   {
-    vector<size_t> interiorNodes;
+    vector<uint32_t> interiorNodes;
     femPtr_->InteriorNodes( interiorNodes );
-    for( size_t i = 0; i < interiorNodes.size(); ++i )
+    for( auto i = 0; i < interiorNodes.size(); ++i )
     {
       _test( interiorNodes.at( i ) == femData_.NodeAtInterior( i ) );
       if( global_verbose )
@@ -218,7 +214,7 @@ void FiniteElement_Test::run()
 
   // .) FACE ELEMENT TYPES
   if ( verbose_ ) cout << "Testing face element types...\n";
-  for( size_t i = 0; i < femPtr_->Faces(); ++i )
+  for( auto i = 0; i < femPtr_->Faces(); ++i )
     _test( femPtr_->ElementTypeOfFace( i ) == femData_.FaceElementType( i ) );
 
   // .) UNIT NORMAL
@@ -228,7 +224,7 @@ void FiniteElement_Test::run()
     std::vector<double> unitNormal;
     std::vector<double> unitNormalTest( femData_.UnitNormal() );
     femPtr_->UnitNormal( unitNormal );
-    for( size_t i = 0; i < femData_.Dim(); ++i )
+    for( auto i = 0; i < femData_.Dim(); ++i )
       _equal( unitNormal.at( i ), unitNormalTest.at( i ) ,femData_.Tolerance());
   }
 
@@ -236,7 +232,7 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing coordinate matrix...\n";
   for( size_t row = 0; row < femPtr_->Nodes(); ++row )
   {
-    for( size_t dim = 0; dim < femPtr_->Dim(); ++dim )
+    for( uint32_t dim = 0; dim < femPtr_->Dim(); ++dim )
     {
       _test( femPtr_->XYZ( row, dim ) == femData_.NodePtr( row )->operator []( dim ) );
     }
@@ -290,7 +286,7 @@ void FiniteElement_Test::run()
 
   // .) COUNTER CLOCK WISE NODES
   if ( verbose_ ) cout << "Testing counter clock wise nodes...\n";
-  std::vector<size_t> counterNodes;
+  std::vector<uint32_t> counterNodes;
   femPtr_->CounterClockwiseNodes( counterNodes );
   for( size_t n = 0; n < counterNodes.size(); ++n )
     _test( counterNodes.at( n ) == femData_.CounterClockWiseNode( n ) );
@@ -391,7 +387,7 @@ void FiniteElement_Test::run()
 
   // .) JACOBIAN AT IP
   if ( verbose_ ) cout << "Testing jacobian at integration points...\n";
-  size_t dim_volume=1.0;
+  uint32_t dim_volume=1.0;
 
   if (femPtr_->IsSurfaceElement())
          dim_volume=2.0;
@@ -422,9 +418,9 @@ void FiniteElement_Test::run()
 
     femPtr_->JacobianAt( var_v );
 
-    for( size_t column = 0; column < femPtr_->Dim(); ++column )
+    for( auto column = 0; column < femPtr_->Dim(); ++column )
     {
-      for( size_t row = 0; row < dim_volume; ++row )
+      for( auto row = 0; row < dim_volume; ++row )
         _equal( femPtr_->JAC( row, column ), femData_.JACOBIANatRST( row, column ), femData_.Tolerance() );
     }
   }
@@ -439,7 +435,7 @@ void FiniteElement_Test::run()
       femPtr_->dN_AtIntegrationPoint( denseMatrixIP, ip );
       _test( denseMatrix.Rows() == denseMatrixIP.Rows() );
       _test( denseMatrix.Cols() == denseMatrixIP.Cols() );
-      for (size_t i = 0; i < denseMatrix.Cols(); ++i) {
+      for (auto i = 0; i < denseMatrix.Cols(); ++i) {
         for (size_t j = 0; j < denseMatrix.Rows(); ++j) {
           _test( approximatelyEqual( denseMatrix(j,i), denseMatrixIP(j,i) ));
         }

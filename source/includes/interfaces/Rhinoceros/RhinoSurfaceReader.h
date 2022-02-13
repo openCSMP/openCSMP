@@ -8,7 +8,7 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 /**
     Reads triangulated render meshes of surfaces output from Rhinoceros (McNeel&Associates) and

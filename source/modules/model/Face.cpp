@@ -41,12 +41,12 @@ namespace csmp {
     @date   1/4/2016
     
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( Element<dim>& elmt,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
-                 size_t inner_parent_face_id,
-                 size_t outer_parent_face_id,
+                 uint32_t inner_parent_face_id,
+                 uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(elmt.FE()),
@@ -102,7 +102,7 @@ Face<dim>::Face( Element<dim>& elmt,
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
     const size_t nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
-    for ( size_t i=0U; i<nodes; ++i ) {
+    for ( auto i{0}; i<nodes; ++i ) {
          // assignig the node
          assert( elmt.N(i) != nullptr );
          Assign( i, elmt.N(i) );
@@ -124,7 +124,7 @@ Face<dim>::Face( Element<dim>& elmt,
     @author SKM
     @date 22/10.2021
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( const FiniteElementManager& fem_manager,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
                  Element<dim>* const inner_parent,
@@ -153,7 +153,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // --------------------------------
     bool  matching_face_found{false};
     const size_t n_faces_inner{innerParent_->Faces()};
-    for ( size_t i{0}; i<n_faces_inner; ++i )
+    for ( auto i{0}; i<n_faces_inner; ++i )
       // if the faces match
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
@@ -164,14 +164,14 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            node_connector_.resize(this->FE()->Nodes(),nullptr);
            face_connector_.resize(this->FE()->Faces(),nullptr);
            // assigning the nodes
-           vector<size_t> fnids;
+           vector<uint32_t> fnids;
            inner_parent->FE()->NodesOfFace( i, fnids );
            const size_t n_face_nodes{fnids.size()};
            for ( size_t k{0}; k < n_face_nodes; ++k )
              node_connector_[k] = inner_parent->N( fnids[k] );
            // finding the number of the shared face in the outer element
-           const size_t n_faces_outer{outerParent_->Faces()};
-           for ( size_t j{0}; j<n_faces_outer; ++j )
+           const auto n_faces_outer{outerParent_->Faces()};
+           for ( auto j{0}; j<n_faces_outer; ++j )
              if ( outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
@@ -213,13 +213,13 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 /**
     @note used by MeshManager::AddFace
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( const FiniteElementManager& fem_manager,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
-                 size_t inner_parent_face_id,
-                 size_t outer_parent_face_id,
+                 uint32_t inner_parent_face_id,
+                 uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
   : idx_(NULL_IDX),
@@ -245,7 +245,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // --------------------------------
     bool  matching_face_found{false};
     const size_t n_faces_inner{innerParent_->Faces()};
-    for ( size_t i{0}; i<n_faces_inner; ++i )
+    for ( auto i{0}; i<n_faces_inner; ++i )
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
            // assigning the finite element
@@ -255,10 +255,10 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            node_connector_.resize(this->FE()->Nodes(),nullptr);
            face_connector_.resize(this->FE()->Faces(),nullptr);
            // assigning the nodes
-           vector<size_t> fnids;
+           vector<uint32_t> fnids;
            inner_parent->FE()->NodesOfFace( i, fnids );
-           const size_t n_face_nodes{fnids.size()};
-           for ( size_t k{0}; k < n_face_nodes; ++k )
+           const auto n_face_nodes{fnids.size()};
+           for ( auto k{0}; k < n_face_nodes; ++k )
              node_connector_[k] = inner_parent->N( fnids[k] );
            // finding the number of the shared face in the outer element
            const size_t n_faces_outer{outerParent_->Faces()};
@@ -318,11 +318,11 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 
     @note used by MeshManager::AddBoundaryFace
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( Element<dim>& e,
                  csmp::FiniteElement* FE_type_for_face,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
-                 size_t boundary_face,
+                 uint32_t boundary_face,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(FE_type_for_face),
@@ -347,11 +347,11 @@ Face<dim>::Face( Element<dim>& e,
 
     // 2. assigning nodes to face in the same order as the face nodes
     //    of the inner parent element
-    vector<size_t> fnids;
+    vector<uint32_t> fnids;
     // nodes of the Element object from wich this Face is constructed
     e.FE()->NodesOfFace( boundary_face, fnids );
-    const size_t n_nodes{fnids.size()};
-    for ( size_t j=0U; j<n_nodes; ++j ) {
+    const auto n_nodes{fnids.size()};
+    for ( auto j=0U; j<n_nodes; ++j ) {
          assert( e.N( fnids[j] ) != nullptr );
          node_connector_[j] = e.N( fnids[j] );
       }
@@ -377,13 +377,13 @@ Face<dim>::Face( Element<dim>& e,
 
     @note used by MeshManager::AddEdgeFace
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                  const FiniteVolumeStencilManager<dim>& fvm_manager,
                  Element<dim>* const parent_of_face1,
                  Element<dim>* const parent_of_face2,
-                 size_t parent_elmt1_segm_id,
-                 size_t parent_elmt2_segm_id,
+                 uint32_t parent_elmt1_segm_id,
+                 uint32_t parent_elmt2_segm_id,
                  const std::vector<Node<dim>*>&  edge_nodes,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
@@ -418,7 +418,7 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
     
     @note used to reconstruct model from VSet::VData / native binary file (MeshManager::Initialise)
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( size_t index,
                  csmp::FiniteElement* f,
                  const csmp::FiniteVolumeStencil<dim>* fvs,
@@ -442,7 +442,7 @@ Face<dim>::Face( size_t index,
 
 
 /// copy constructor
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( const Face<dim>& fc )
   : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
     FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
@@ -464,7 +464,7 @@ Face<dim>::Face( const Face<dim>& fc )
 
 
 /// move constructor
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::Face( Face<dim>&& fc )
   : FiniteElementPolicy<dim,csmp::Face>(fc.FE()),
     FiniteVolumePolicy<dim,csmp::Face>(fc.FV()),
@@ -493,7 +493,7 @@ Face<dim>::Face( Face<dim>&& fc )
         if ( it != nullptr  && !it->face_connector_.empty() )
           it->Unassign( this );
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>::~Face()
  {
  }
@@ -507,7 +507,7 @@ Face<dim>::~Face()
     
     @note assignment operator is used in container::find(Face) operations; why?
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
  {
     if ( &fc != this ) {
@@ -534,7 +534,7 @@ Face<dim>&  Face<dim>::operator=( const Face<dim>& fc )
 /**
     @note a temporary value cannot be equivalent to lvalue.
 */
-template<size_t dim>
+template<uint32_t dim>
 Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
  {
     if ( &fc != this ) {
@@ -563,8 +563,8 @@ Face<dim>&  Face<dim>::operator=( Face<dim>&& fc )
 /**
     Connect Face object with its nodes.
 */
-template<size_t dim>
-void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
+template<uint32_t dim>
+void Face<dim>::Assign( uint32_t i, csmp::Node<dim>* const nd_ptr )
  {
     assert( i < node_connector_.size() );
     node_connector_[i] = nd_ptr;
@@ -572,8 +572,8 @@ void Face<dim>::Assign( size_t i, csmp::Node<dim>* const nd_ptr )
 
 
 
-template<size_t dim>
-void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
+template<uint32_t dim>
+void Face<dim>::Assign( uint32_t i, csmp::Face<dim>* const f_ptr )
  {
     assert( i < face_connector_.size() );
     face_connector_[i] = f_ptr;
@@ -588,11 +588,11 @@ void Face<dim>::Assign( size_t i, csmp::Face<dim>* const f_ptr )
       
       @note if called with a nullptr argument method will return false.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 {
   if ( f_ptr == nullptr ) return false;
-	for ( size_t i{0}; i < face_connector_.size(); ++i )
+	for ( auto i{0}; i < face_connector_.size(); ++i )
 		if ( f_ptr == face_connector_[i] )
       {
          face_connector_[i] = nullptr;
@@ -604,35 +604,35 @@ bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 
 
 
-template<size_t dim>
-size_t  Face<dim>::Nodes() const
+template<uint32_t dim>
+uint32_t  Face<dim>::Nodes() const
 {
-	return node_connector_.size();
+	return static_cast<uint32_t>(node_connector_.size());
 }
 
 
 
-template<size_t dim>
-size_t  Face<dim>::Neighbors() const
+template<uint32_t dim>
+uint32_t  Face<dim>::Neighbors() const
 {
-	return face_connector_.size();
+	return static_cast<uint32_t>(face_connector_.size());
 }
 
 
-template<size_t dim>
-size_t  Face<dim>::ConnectedNeighbors() const
+template<uint32_t dim>
+uint32_t  Face<dim>::ConnectedNeighbors() const
 {
 	size_t nulls(0);
 	for (auto& f : face_connector_)
 		if ( f == nullptr ) nulls++;
-	return (face_connector_.size() - nulls);
+	return static_cast<uint32_t>(face_connector_.size() - nulls);
 }
 
 
-template<size_t dim>
-size_t  Face<dim>::Faces() const
+template<uint32_t dim>
+uint32_t  Face<dim>::Faces() const
 {
-	return face_connector_.size();
+	return static_cast<uint32_t>(face_connector_.size());
 }
 
 
@@ -649,7 +649,7 @@ size_t  Face<dim>::Faces() const
     of the Face with regard to the outward pointing normal and the second element is on
     the outside. It follows that the node sequences are the same.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const outerElement )
   {
     // 1. argument checks and assignments
@@ -670,7 +670,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // creating a search key for Face
     set<Node<dim>*>  face_nds;
     const size_t face_nodes(Nodes());
-    for ( size_t i=0U; i<face_nodes; ++i ) {
+    for ( auto i{0}; i<face_nodes; ++i ) {
          // are the nodes there?
          assert( this->N(i) != nullptr );
          face_nds.insert( this->N(i) );
@@ -684,11 +684,11 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);
          const size_t     faces(innerParent_->Faces());
-         vector<size_t>   nodes_of_face;
+         vector<uint32_t>   nodes_of_face;
          set<Node<dim>*>  parent_nds;
         
          // inner parent
-         for ( size_t i=0U; i<faces; ++i ) {
+         for ( auto i{0}; i<faces; ++i ) {
               innerParent_->FE()->NodesOfFace( i, nodes_of_face );
               for ( size_t j=0U; j<nodes_of_face.size(); ++j )
                 parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
@@ -703,7 +703,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
          // outer parent if any
          if ( outerElement != nullptr ) {
-             for ( size_t i=0U; i<faces; ++i ) {
+             for ( auto i{0}; i<faces; ++i ) {
                   outerParent_->FE()->NodesOfFace( i, nodes_of_face );
                   for ( size_t j=0U; j<nodes_of_face.size(); ++j )
                     parent_nds.insert( outerParent_->N( nodes_of_face[j] ) );
@@ -727,11 +727,11 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // searching for the matching Segment (Edge) of the inner parent element
     bool             matching_segment_found(false);
     const size_t     segments(innerParent_->Segments());
-    vector<size_t>   nodes_of_segm;
+    vector<uint32_t>   nodes_of_segm;
     set<Node<dim>*>  parent_nds;
     
     // inner parent
-    for ( size_t i=0U; i<segments; ++i ) {
+    for ( auto i{0}; i<segments; ++i ) {
          innerParent_->FE()->NodesOfSegment( i, nodes_of_segm );
          for ( size_t j=0U; j<nodes_of_segm.size(); ++j )
            parent_nds.insert( innerParent_->N( nodes_of_segm[j] ) );
@@ -746,7 +746,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // outer parent
     if ( outerElement != nullptr ) {
-        for ( size_t i=0U; i<segments; ++i ) {
+        for ( auto i{0}; i<segments; ++i ) {
              outerParent_->FE()->NodesOfSegment( i, nodes_of_segm );
              for ( size_t j=0U; j<nodes_of_segm.size(); ++j )
                parent_nds.insert( outerParent_->N( nodes_of_segm[j] ) );
@@ -765,11 +765,11 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
     if ( nd_ptr == nullptr ) return;
-    for ( size_t i = 0U; i < node_connector_.size(); i++ )
+    for ( auto i = 0U; i < node_connector_.size(); i++ )
         if ( nd_ptr == node_connector_[i] ) {
             node_connector_[i] = nullptr;
             break;
@@ -780,25 +780,25 @@ void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
 
 
 /// iterator to the element nodes
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesBegin() const
 {
   return node_connector_.begin();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() const
 {
   return node_connector_.end();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsBegin() const
 {
   return face_connector_.begin();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() const
 {
   return face_connector_.end();
@@ -810,7 +810,7 @@ typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() cons
 // VISITOR
 
 /// SKM temporary patch to get Visitor objects to work on boundaries
-template<size_t dim>
+template<uint32_t dim>
 void Face<dim>::Accept( csmp::Visitor<dim>& vis )
  {
     if ( vis.ApplicationTarget() == FACE ) {
@@ -819,7 +819,7 @@ void Face<dim>::Accept( csmp::Visitor<dim>& vis )
       }
     if ( vis.ApplicationTarget() == NODE ) {
          size_t n_nodes(this->Nodes());
-         for ( size_t i = 0U; i< n_nodes; i++ )
+         for ( auto i = 0U; i< n_nodes; i++ )
              this->N(i)->Accept( vis );
          return;
       }
@@ -837,35 +837,35 @@ void Face<dim>::Accept( csmp::Visitor<dim>& vis )
 
 
 /// returns the current index of this face assuming that a meaningful value was assigned earlier
-template<size_t dim>
+template<uint32_t dim>
 void  Face<dim>::Idx( size_t idx_to_assign ) const
   {
     idx_ = idx_to_assign;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t   Face<dim>::Idx() const
   {
     return idx_;
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
   {
     return face_connector_;
   }
 
 
-template<size_t dim>
-csmp::Node<dim>*  Face<dim>::N( size_t n )
+template<uint32_t dim>
+csmp::Node<dim>*  Face<dim>::N( uint32_t n )
   {
      assert( n < Nodes() );
      return node_connector_[n];
   }
 
-template<size_t dim>
-const csmp::Node<dim>*  Face<dim>::N( size_t n ) const
+template<uint32_t dim>
+const csmp::Node<dim>*  Face<dim>::N( uint32_t n ) const
   {
      assert( n < Nodes() );
      return node_connector_[n];
@@ -876,15 +876,15 @@ const csmp::Node<dim>*  Face<dim>::N( size_t n ) const
 /**
     watch out if there is no neighbor this returns a NULL pointer
 */
-template<size_t dim>
-csmp::Face<dim>*  Face<dim>::Neighbor( size_t n )
+template<uint32_t dim>
+csmp::Face<dim>*  Face<dim>::Neighbor( uint32_t n )
  {
     assert( n < Neighbors() );
     return face_connector_[n];
  }
 
-template<size_t dim>
-const csmp::Face<dim>*  Face<dim>::Neighbor( size_t n ) const
+template<uint32_t dim>
+const csmp::Face<dim>*  Face<dim>::Neighbor( uint32_t n ) const
  {
     assert( n < Neighbors() );
     return face_connector_[n];
@@ -895,7 +895,7 @@ const csmp::Face<dim>*  Face<dim>::Neighbor( size_t n ) const
     Returns either the INSIDE or OUTSIDE elements
     connected to this face if they exist.
 */
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  Face<dim>::Parent( INTERFACE_SIDE side ) const
  {
     assert( side != MIDDLE );
@@ -908,7 +908,7 @@ Element<dim>*  Face<dim>::Parent( INTERFACE_SIDE side ) const
 /**
     inner parent is always initialised for a valid face
 */
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  Face<dim>::InnerParent() const
  {
     assert( innerParent_ != nullptr );
@@ -919,7 +919,7 @@ Element<dim>*  Face<dim>::InnerParent() const
 /**
     @attention outer parent will not be initialised if the Face lies on the outside boundary of the model
 */
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  Face<dim>::OuterParent() const
  {
     return outerParent_;
@@ -929,8 +929,8 @@ Element<dim>*  Face<dim>::OuterParent() const
 
 
 /// return face ID of inner parent element
-template<size_t dim>
-size_t  Face<dim>::InnerParentFaceID() const
+template<uint32_t dim>
+uint32_t  Face<dim>::InnerParentFaceID() const
 {
   if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
@@ -940,8 +940,8 @@ size_t  Face<dim>::InnerParentFaceID() const
 
 
 /// return face ID of outer parent element
-template<size_t dim>
-size_t  Face<dim>::OuterParentFaceID() const
+template<uint32_t dim>
+uint32_t  Face<dim>::OuterParentFaceID() const
 {
   if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;
@@ -951,8 +951,8 @@ size_t  Face<dim>::OuterParentFaceID() const
 
 
 /// return face ID of inner or outer parent element depending on index
-template<size_t dim>
-size_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
+template<uint32_t dim>
+uint32_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 {
   if ( side == INSIDE )
   {
@@ -975,8 +975,8 @@ size_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 
 
 /// assign face ID of inner or outer parent element depending on their local face numbering
-template<size_t dim>
-void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
+template<uint32_t dim>
+void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
 {
   if ( side == INSIDE ) {
       assert( innerParent_ != nullptr );
@@ -1010,7 +1010,7 @@ void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
      Returns a vector (not a unit normal) connecting the barycenter of the Face
      with that of the higher-dimensional parent element on its inside.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Face<dim>::VectorToInnerElementBaryCenter( VectorVariable<dim>& vectorToInner ) const
 {
    assert( Parent(INSIDE) != nullptr );
@@ -1019,7 +1019,7 @@ void Face<dim>::VectorToInnerElementBaryCenter( VectorVariable<dim>& vectorToInn
 
 
 /// returns area (3D) or length (2D) of face
-template<size_t dim>
+template<uint32_t dim>
 double Face<dim>::Area() const
  {
     return this->Volume();
@@ -1042,7 +1042,7 @@ also vary from element to element.
 resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
-@return void - The node coordinates are returned into the supplied matrix.
+The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
@@ -1052,12 +1052,12 @@ global solution matrix. If the element uses local coordinates, the global
 node coordinates will still be required to compute Jacobian (coordinate-
 transformation) matrix.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Face<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
   {
-    const size_t n_nodes( Nodes());
+    const auto n_nodes{ Nodes() };
     XY.Resize( n_nodes, dim );
-    for ( size_t i=0U; i<n_nodes; ++i )
+    for ( auto i{0}; i<n_nodes; ++i )
         XY.AssignRow( i, N(i)->Coordinate() );
 
   } // end CoordinateMatrix
@@ -1093,12 +1093,12 @@ BaryCentre().
 @test O.K. SKM25/8/14 after refactoring loop
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  Face<dim>::BaryCenter() const
   {
-    Point<dim>    pt(N(0U)->Coordinate());
-    const size_t  n_nodes(Nodes());
-    for ( size_t i=1U; i<n_nodes; ++i )
+    Point<dim>  pt(N(0U)->Coordinate());
+    const auto  n_nodes{ Nodes() };
+    for ( auto i=1U; i<n_nodes; ++i )
       pt += N(i)->Coordinate();
 
     return pt / static_cast<double>(Nodes());
@@ -1130,7 +1130,7 @@ when evaluating the quality of a certain mesh.
 @todo this method could be optimised if only the corner nodes would be used
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
   {
     double fMinTemp( static_cast<double>( DBL_MAX) );
@@ -1142,8 +1142,8 @@ double  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) 
     // avoid division by zero
     assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
-    const size_t n_nodes(Nodes());
-    for ( size_t i=0; i<n_nodes; ++i ) {
+    const auto n_nodes{ Nodes() };
+    for ( auto i=0; i<n_nodes; ++i ) {
         // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
         double fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
         fTemp /= fMagnitudeOfDirection;
@@ -1164,7 +1164,7 @@ double  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) 
 /** 
     returns property values at the nodes
 */
-template<size_t dim>
+template<uint32_t dim>
 template< class Var>
 void  Face<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V ) const
  {
@@ -1177,10 +1177,10 @@ void  Face<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V
       }
 
     // resizing V if necessary
-    const size_t  n_nodes(Nodes());
+    const auto  n_nodes{ Nodes() };
     V.resize(n_nodes);
 
-    for ( size_t i=0U; i<n_nodes; i++ )
+    for ( auto i{0}; i<n_nodes; i++ )
       N(i)->Read( idx, V[i] );
  }
 
@@ -1212,7 +1212,7 @@ template void  Face<3U>::NodePropertyVector( const csmp::Index&, std::vector<Fla
 // OUTPUT
 
 ///  outputs local variables of Face(Element) overriding corresponding method of base class
-template<size_t dim>
+template<uint32_t dim>
 void  Face<dim>::Out() const
  {
     cout <<"\n\n\nFace<"<< dim <<">::Out: number: "<< idx_;
@@ -1225,14 +1225,14 @@ void  Face<dim>::Out() const
     cout <<"\nInternal data: "<< endl;
 
     cout <<"\n\tconnected nodes with boundary flags:  ";
-    for ( size_t i=0U; i<this->Nodes(); i++ ) {
+    for ( auto i{0}; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
          cout << N(i)->Idx() <<":"<< str <<"  ";
       }
     cout << endl;
 
     cout <<"\n\tconnected neighbor Face types / boundary flags:\n";
-    for ( size_t i=0U; i<this->Neighbors(); i++ )
+    for ( auto i{0}; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
            cout <<"\t\t"<< Idx() <<":";
            cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
@@ -1282,7 +1282,7 @@ void  Face<dim>::Out() const
 /**
   SKM revised 8/02/22
 */
-template<size_t dim>
+template<uint32_t dim>
 bool  Face<dim>::operator==( const Face<dim>& fc ) const
  {
 	 if (&fc != this) {
@@ -1302,7 +1302,7 @@ bool  Face<dim>::operator==( const Face<dim>& fc ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void* Face<dim>::operator new( size_t size )
   {
 //      std::cout<< "\nFace<"<< dim <<">: called overloaded new operator.\n";
@@ -1311,7 +1311,7 @@ void* Face<dim>::operator new( size_t size )
   }
  
 
-template<size_t dim>
+template<uint32_t dim>
 void Face<dim>::operator delete( void* p )
   {
 //     std::cout<< "\nFace<"<< dim <<">: called overloaded delete operator.\n";
@@ -1323,7 +1323,7 @@ void Face<dim>::operator delete( void* p )
 // DEPRECATED
 
 /*  RECREATE IF NEEDED USING THE NODE TO PARENT ELEMENT CAPABILITY
-template<size_t dim>
+template<uint32_t dim>
 size_t  Face<dim>::ParentNodeNumber( size_t n ) const
  {
     assert( n < parent_element_node_ids_.size() );
@@ -1344,7 +1344,7 @@ size_t  Face<dim>::ParentNodeNumber( size_t n ) const
      @attention assumes that the Face has valid nodes and its inner parent element is connected
 */
 /*
-template<size_t dim>
+template<uint32_t dim>
 size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
  {
 
@@ -1362,7 +1362,7 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
     assert( !node_connector_.empty() );
    
      // 1. creating a unique key from the nodes of the Face
-    set<size_t>  face_key;
+    set<uint32_t>  face_key;
     for ( auto nit=node_connector_.begin(); nit!=node_connector_.end(); ++nit ) {
          assert( (*nit) != nullptr );
          face_key.insert( (*nit)->Idx() );
@@ -1370,10 +1370,10 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
     
     // 2. creating face keys for the inner parent element and trying to match them
     //    with the one created for the current face
-    vector<size_t> fnids;
-    set<size_t>    face_key_n;
+    vector<uint32_t> fnids;
+    set<uint32_t>    face_key_n;
     const size_t faces(parent->Faces());
-    for ( size_t i=0U; i<faces; ++i ) {
+    for ( auto i{0}; i<faces; ++i ) {
          parent->FE()->NodesOfFace( i, fnids );
          for ( size_t j=0U; j<fnids.size(); ++j )
            face_key_n.insert( parent->N( fnids[j] )->Idx() );
@@ -1382,7 +1382,7 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
          else face_key_n.clear();
       }
 
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
  }
 */
 

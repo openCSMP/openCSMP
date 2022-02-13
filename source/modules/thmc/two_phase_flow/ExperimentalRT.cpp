@@ -5,7 +5,7 @@
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 ExperimentalRT<dim>::ExperimentalRT( const PropertyDatabase<dim>& database,
                                      const char* rt_file_name,
                                      const char* rt_number,
@@ -24,7 +24,7 @@ ExperimentalRT<dim>::ExperimentalRT( const PropertyDatabase<dim>& database,
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ExperimentalRT<dim>::ExperimentalRT( const PropertyDatabase<dim>& database,
                                      const char* rt_file_name,
                                      const char* rt_number,
@@ -47,13 +47,13 @@ ExperimentalRT<dim>::ExperimentalRT( const PropertyDatabase<dim>& database,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 ExperimentalRT<dim>::~ExperimentalRT()
 {
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
 {
     std::cout << "\nExperimentalRT::ConstructRTs()\n";
@@ -131,7 +131,7 @@ void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
 
 
 /*
-template<size_t dim>
+template<uint32_t dim>
 void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
 {
     std::cout << "\nExperimentalRT::ConstructRTs()\n";
@@ -256,7 +256,7 @@ void ExperimentalRT<dim>::ConstructRTs(const char* rt_file_name)
 */
 
 
-template<size_t dim>
+template<uint32_t dim>
 void ExperimentalRT<dim>::Initialize(const Element<dim>& e)
 {
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -284,7 +284,7 @@ void ExperimentalRT<dim>::Initialize(const Element<dim>& e)
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::krn_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krn_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
@@ -293,7 +293,7 @@ double ExperimentalRT<dim>::krn_Phase() const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::krw_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krw_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
@@ -302,7 +302,7 @@ double ExperimentalRT<dim>::krw_Phase() const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::pc_Phase( ) const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return pc_[rt_number_].Value(TwoPhaseModel<dim>::swr_);
@@ -311,7 +311,7 @@ double ExperimentalRT<dim>::pc_Phase( ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::dkrnds_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krn_[rt_number_].Derivative(TwoPhaseModel<dim>::swr_);
@@ -320,7 +320,7 @@ double ExperimentalRT<dim>::dkrnds_Phase() const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::dkrwds_Phase() const
 {
     if (TwoPhaseModel<dim>::sat_ <= TwoPhaseModel<dim>::swr_) return krw_[rt_number_].Derivative(TwoPhaseModel<dim>::swr_);
@@ -329,7 +329,7 @@ double ExperimentalRT<dim>::dkrwds_Phase() const
 }
 
 // capillary pressure derivatives
-template<size_t dim>
+template<uint32_t dim>
 double ExperimentalRT<dim>::dpcds_Phase() const
 {
     return pc_[rt_number_].Derivative( TwoPhaseModel<dim>::sat_);

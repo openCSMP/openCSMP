@@ -217,7 +217,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -228,7 +228,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double ms(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
            }
@@ -304,7 +304,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -315,7 +315,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double ms(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -395,7 +395,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -406,7 +406,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmax(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -482,7 +482,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -493,7 +493,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmax(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -573,7 +573,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -584,7 +584,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmaxy(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -661,7 +661,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -672,7 +672,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmaxy(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }

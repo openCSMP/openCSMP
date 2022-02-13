@@ -181,7 +181,7 @@ void SumOfProducts::Erase()
 
 void SumOfProducts::Out() const
  {
-    size_t n=1U;
+    auto n=1U;
     cout <<"\nSumOfProducts:: = ";
     for ( vector<map<int32_t,double> >::const_iterator
           it1=sumproducts.begin(); it1!=sumproducts.end(); it1++, n++ )

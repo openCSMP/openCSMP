@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// PDE operator:  oper div^2 N - interpolation functions squared.
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 

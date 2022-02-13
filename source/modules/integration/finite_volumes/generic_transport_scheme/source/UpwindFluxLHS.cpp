@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 UpwindFluxLHS<dim>::UpwindFluxLHS( const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& vol_flow_across_facet )
  : ff_key_(vol_flow_across_facet)
 {
@@ -17,7 +17,7 @@ UpwindFluxLHS<dim>::UpwindFluxLHS( const csmp::INDEX<SCALAR,FACET_INTEGRATION_PO
 /**
        Upwinded first-order in space and time.
 */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& mat ) const
 {
     const size_t facets(fe.Facets());
@@ -50,7 +50,7 @@ void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void UpwindFluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& mat ) const
  {
     const size_t node_parent_elements(fv.Parents());
@@ -59,7 +59,7 @@ void UpwindFluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatr
       Element<dim>* const eptr(fv.Parent(t));   
       const size_t pnid(fv.ParentNodeNumber(t)); 
       const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-      for ( size_t i=0U; i<sector_facets; i++ )
+      for ( auto i{0}; i<sector_facets; i++ )
       {
           const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
           const size_t inside_node(eptr->FV()->InsideNode(iFacet));

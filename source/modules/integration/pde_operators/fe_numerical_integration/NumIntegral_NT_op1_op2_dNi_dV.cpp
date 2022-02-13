@@ -14,7 +14,7 @@ namespace csmp {
 The operand defines the fluid density, and the mtrl variable would for
 instance be the hydraulic conductivity.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                           const char* oper, 
                                                                           const char* mtrl1, 
@@ -53,7 +53,7 @@ NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::NumIntegral_NT_op1_op2_dNi_dV( const Pr
 
 
 // true is the default
-//template<size_t dim,class CELL>
+//template<uint32_t dim,class CELL>
 //void NumIntegral_NT_op1_op2_dNi_dV<dim>::MultiplyMaterialPropertyWithTime( int mtrl_prop )
 //  {
 //     multiply_mtrl1_with_time_increment = (mtrl_prop==1) ? true : false;
@@ -67,7 +67,7 @@ Reads the Operand from either the element or the nodes. Reads the material
 property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -107,7 +107,7 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
@@ -116,7 +116,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
     // get the vertical density gradient 
     // if fluid density is an element property
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
-      for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) 
+      for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            // get dN = interpolation function derivate value at integration point
            double ip_value =  oper_eprop(); // fluid density
@@ -124,13 +124,13 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
            ip_value   *=  e.WeightAtIntegrationPoint(i);
            ip_value   *=  e.dN_AtIntegrationPoint( DN, i ); // det_J
 
-           for ( size_t j=0; j<e.Nodes(); j++ )
+           for ( auto j=0; j<e.Nodes(); j++ )
              MathOperatorRHS<dim>::RHS[j] += ip_value * DN(xyz,j);
         }
 
     // if fluid density is a node property
     else
-      for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) 
+      for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            e.N_AtIntegrationPoint( i, IPOL );
            const double detJ = e.dN_AtIntegrationPoint( DN, i );
@@ -145,7 +145,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
            ip_value *=  e.WeightAtIntegrationPoint(i);
            ip_value *=  detJ;
            
-           for ( size_t j=0; j<e.Nodes(); j++ ) 
+           for ( auto j=0; j<e.Nodes(); j++ ) 
              MathOperatorRHS<dim>::RHS[j] += ip_value * DN(xyz,j);
       }
 
@@ -156,7 +156,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
 
 
 // now everything is assembled (using the  hydraulic diffusivity kappa = k / (S mu)
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double dt )
  {
     for ( typename vector<double>::iterator 

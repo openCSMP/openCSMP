@@ -121,11 +121,11 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
 
     //------------------------------------
     // VERIFICATION SECTION
-    csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
-    vector<Node<DIM>*>::iterator nodes_end=model.Region("Model").NodesEnd();
-    vector<Node<DIM>*>::iterator nodes_begin=model.Region("Model").NodesBegin();
+    const csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
+    auto nodes_end=model.Region("Model").NodesEnd();
+    auto nodes_begin=model.Region("Model").NodesBegin();
     double press;
-    for (vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++)
+    for (auto npit= nodes_begin; npit!=nodes_end;npit++)
     {
       press=(*npit)->Read(p_key);
       //if(verbose_)

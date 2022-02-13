@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 class ModelTopology;
 
 /// interface to import GeoModeller / CGAL tetra/triangle meshes; superseded by VTK connection

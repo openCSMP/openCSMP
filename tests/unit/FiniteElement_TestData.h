@@ -22,7 +22,7 @@ public:
   std::string FemName() const { return femName_; }
   void        FemName( std::string femName ) { femName_ = femName; }
   size_t Dim() const { return dim_; }
-  void   Dim( size_t dim ) {
+  void   Dim( uint32_t dim ) {
                              dim_ = dim; shapeFunctionXYZ_.assign( dim, 999. );
                              jacobianAtRST_.assign( dim, std::vector<double>( Dim(), 999. ) );
                              RST_.assign( dim, 999. );
@@ -44,7 +44,7 @@ public:
   size_t FaceCount() const { return nodesPerFace_.size(); }
   void   FaceCount( size_t faceCount ) {
                                          nodesPerFace_.assign( faceCount, 0 );
-                                         nodesOfFace_.assign( faceCount, std::vector<size_t>() );
+                                         nodesOfFace_.assign( faceCount, std::vector<uint32_t>() );
                                          faceElementTypes_.assign( faceCount, UNKNOWN );
                                        }
   size_t NeighborCount() const { return neighborCount_; }
@@ -97,7 +97,7 @@ public:
   double EdgeLength( size_t i ) const { return edgeLengths_.at( i ); }
   void   EdgeLength( size_t i, double length ) { edgeLengths_.at( i ) = length; }
   size_t NodesPerSegment() const { return nodesOfSegment_.at( 0 ).size(); }
-  void   NodesPerSegment( size_t nodesPerSegment ) { nodesOfSegment_.assign( SegmentCount(), std::vector<size_t>( nodesPerSegment, 999 ) ); }
+  void   NodesPerSegment( size_t nodesPerSegment ) { nodesOfSegment_.assign( SegmentCount(), std::vector<uint32_t>( nodesPerSegment, 999 ) ); }
   size_t NodeOfSegment( size_t segment, size_t segmentNode ) const { return nodesOfSegment_.at( segment ).at( segmentNode ); }
   void   NodeOfSegment( size_t segment, size_t segmentNode , size_t femNode ) { nodesOfSegment_.at( segment ).at( segmentNode ) = femNode; }
   size_t CornerNodeCount() const { return cornerNodes_.size(); }
@@ -167,7 +167,7 @@ public:
 
 private:
   std::string femName_;
-  size_t dim_;
+  uint32_t dim_;
   size_t segmentCount_;
   size_t neighborCount_;
   size_t constraintPointNeighborCount_;
@@ -190,11 +190,11 @@ private:
   double aspectRatio_;
   double innerRadius_;
   CSMP_FEM_TYPE elementType_;
-  std::vector<size_t> nodesPerFace_;
-  std::vector<size_t> cornerNodes_;
-  std::vector<size_t> midsideNodes_;
-  std::vector<size_t> interiorNodes_;
-  std::vector<size_t> counterNodes_;
+  std::vector<uint32_t> nodesPerFace_;
+  std::vector<uint32_t> cornerNodes_;
+  std::vector<uint32_t> midsideNodes_;
+  std::vector<uint32_t> interiorNodes_;
+  std::vector<uint32_t> counterNodes_;
   std::vector<Node<3U>*> nodes_;
   std::vector<double> edgeLengths_;
   std::vector<double> unitNormal_;
@@ -214,8 +214,8 @@ private:
   std::vector<std::vector<std::vector<double> > > shapeFunctionDNatIP_;
   std::vector<std::vector<std::vector<double> > > shapeFunctionDNatNode_;
   std::vector<std::vector<std::vector<double> > > jacobianAtIP_;
-  std::vector<std::vector<size_t> > nodesOfSegment_;
-  std::vector<std::vector<size_t> > nodesOfFace_;
+  std::vector<std::vector<uint32_t> > nodesOfSegment_;
+  std::vector<std::vector<uint32_t> > nodesOfFace_;
   std::vector<CSMP_FEM_TYPE> faceElementTypes_;
   const bool verbose_;
 

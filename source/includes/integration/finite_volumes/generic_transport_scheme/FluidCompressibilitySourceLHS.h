@@ -12,7 +12,7 @@ namespace csmp {
      
      @note fluid pressure is either taken from the node(FV) or interpolated with the finite-element interpolation to sector integration points.
 */
-template<size_t dim>
+template<uint32_t dim>
 class FluidCompressibilitySourceLHS : public MatrixOperator<dim> {
   public:
     FluidCompressibilitySourceLHS( const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& key_SPV,

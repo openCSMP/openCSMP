@@ -8,8 +8,8 @@
 namespace csmp {
 
 class ScalarVariable;
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 /** 
      Evaluates Mohr-Coulomb shear and tensile failure criteria that are output 
@@ -24,7 +24,7 @@ template<size_t> class Model;
      @todo SKM: this visitor should include the influence of pore pressure.
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class MohrCoulombFailure_Visitor : public Visitor<dim> {
   public:
     explicit MohrCoulombFailure_Visitor( Model<dim>&,

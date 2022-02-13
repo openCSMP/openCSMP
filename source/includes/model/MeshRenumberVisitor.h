@@ -6,8 +6,8 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
 
 /**
     Node and Element visitor that applies
@@ -16,7 +16,7 @@ template<size_t> class Element;
     @author S.K. Matthai 
     @date 2006
 */
-template<size_t dim>
+template<uint32_t dim>
 class MeshRenumberVisitor : public Visitor<dim> {
   public:
     MeshRenumberVisitor();

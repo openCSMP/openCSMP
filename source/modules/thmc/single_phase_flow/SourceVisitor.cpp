@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 SourceVisitor<dim>::SourceVisitor( Model<dim>& model, std::vector<std::string>* to_initialize_keys):
     Visitor<dim>( MODEL, ELEMENT ),
     model_ (model),
@@ -35,7 +35,7 @@ SourceVisitor<dim>::SourceVisitor( Model<dim>& model, std::vector<std::string>* 
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 SourceVisitor<dim>::SourceVisitor(Model<dim>& model,
                                   Index porosityKey,
                                   Index densityDiffKey,
@@ -52,12 +52,12 @@ SourceVisitor<dim>::SourceVisitor(Model<dim>& model,
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 SourceVisitor<dim>::~SourceVisitor()
 {
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SourceVisitor<dim>::Visit( Model<dim>* model )
 {
 
@@ -68,7 +68,7 @@ void SourceVisitor<dim>::Visit( Model<dim>* model )
         timestep()=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SourceVisitor<dim>::Visit( Element<dim>* e )
 {
     e->Read( porosityKey_, phi);
@@ -76,7 +76,7 @@ void SourceVisitor<dim>::Visit( Element<dim>* e )
     //! if lower dimension elements are included in transport calculation thickness needs to be taken into account
     /// @todo need to find a more efficient way to perform this calculation. Julian 19.02.2016
 
-    for (size_t i=0;i< e->Nodes (); i++)
+    for (auto i=0;i< e->Nodes (); i++)
     {
         e->N(i)->Read(nfvsKey_, nfvs);
         nfvs() += e->N(i)->Read(densityDiffKey_) * e->SectorVolume(i) * phi() * thickness() / timestep();

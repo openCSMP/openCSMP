@@ -41,14 +41,14 @@ void stiffnessMatrix( const std::vector<ScalarVariable >& E,
 void sortEigenVectorsAndValues( VectorVariable<2U>& vc, TensorVariable<2U>& ts );
 void sortEigenVectorsAndValues( VectorVariable<3U>& vc, TensorVariable<3U>& ts );
 
-void convertColumnTo( const DenseMatrix<DM_MIN>& INP, size_t column, TensorVariable<2U>& ts );
-void convertColumnTo( const DenseMatrix<DM_MIN>& INP, size_t column, TensorVariable<3U>& ts );
+void convertColumnTo( const DenseMatrix<DM_MIN>& INP, uint32_t column, TensorVariable<2U>& ts );
+void convertColumnTo( const DenseMatrix<DM_MIN>& INP, uint32_t column, TensorVariable<3U>& ts );
 
-void convertTo( const std::vector<double>& INP, size_t entry, TensorVariable<2U>& ts );
-void convertTo( const std::vector<double>& INP, size_t entry, TensorVariable<3U>& ts );
+void convertTo( const std::vector<double>& INP, uint32_t entry, TensorVariable<2U>& ts );
+void convertTo( const std::vector<double>& INP, uint32_t entry, TensorVariable<3U>& ts );
 
-void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<2U>& vc );
-void extractRowTo( const DenseMatrix<DM_MIN>& INP, size_t row, VectorVariable<3U>& vc );
+void extractRowTo( const DenseMatrix<DM_MIN>& INP, uint32_t row, VectorVariable<2U>& vc );
+void extractRowTo( const DenseMatrix<DM_MIN>& INP, uint32_t row, VectorVariable<3U>& vc );
 
 
 // various utile functions
@@ -74,14 +74,14 @@ void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
 /** Extracts row of DenseMatrix into VectorVariable.
 */
 inline void extractRowTo( const DenseMatrix<DM_MIN>& INP, 
-                          size_t row, VectorVariable<2U>& vc )
+                          uint32_t row, VectorVariable<2U>& vc )
  {
     vc(0) = INP(row,0); 
     vc(1) = INP(row,1); 
  }
 
 inline void extractRowTo( const DenseMatrix<DM_MIN>& INP, 
-                          size_t row, VectorVariable<3U>& vc )
+                          uint32_t row, VectorVariable<3U>& vc )
  {
     vc(0) = INP(row,0); 
     vc(1) = INP(row,1); 
@@ -92,7 +92,7 @@ inline void extractRowTo( const DenseMatrix<DM_MIN>& INP,
 /** Extracts column of DenseMatrix into TensorVariable.
 */
 inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP, 
-                             size_t column, TensorVariable<2U>& ts ) 
+                             uint32_t column, TensorVariable<2U>& ts )
  {
      // building symmetric 2D tensor
      ts(0,0) = INP(0,column);
@@ -101,7 +101,7 @@ inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP,
  }
 
 inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP, 
-                             size_t column, TensorVariable<3U>& ts ) 
+                             uint32_t column, TensorVariable<3U>& ts )
  {
      // building symmetric 3D tensor
      ts(0,0) = INP(0,column);
@@ -117,7 +117,7 @@ inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP,
 /** Extracts linearily stored tensor from vector into TensorVariable.
 */
 inline void convertTo( const std::vector<double>& INP, 
-                       size_t ip, TensorVariable<2U>& ts ) 
+                       uint32_t ip, TensorVariable<2U>& ts )
  {
     const uint32_t components(3U);
     // diagonal elements
@@ -129,7 +129,7 @@ inline void convertTo( const std::vector<double>& INP,
 
 
 inline void convertTo( const std::vector<double>& INP, 
-                       size_t ip, TensorVariable<3U>& ts ) 
+                       uint32_t ip, TensorVariable<3U>& ts )
  {
     const uint32_t components(6U);
     // diagonal elements

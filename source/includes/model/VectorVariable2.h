@@ -21,11 +21,11 @@ class VectorVariable<2U> {
     explicit VectorVariable( const csmp::Point<2U>& );
     ~VectorVariable();
     
-    double&        operator()( size_t i );
-    const double&  operator()( size_t i ) const;
-    double         operator[]( size_t i ) const;
-    void             Component( size_t, double );
-    double         Component( size_t i ) const;
+    double&        operator()( uint32_t i );
+    const double&  operator()( uint32_t i ) const;
+    double         operator[]( uint32_t i ) const;
+    void           Component( uint32_t, double );
+    double         Component( uint32_t i ) const;
 
     VectorVariable   operator+( double val ) const; 
     VectorVariable   operator-( double val ) const;
@@ -66,12 +66,11 @@ class VectorVariable<2U> {
     bool             operator<(  const VectorVariable& ) const;
   
     // Normal Methods
-    VARIABLE_FLAG&   Flag( const size_t& i=0 );
-    VARIABLE_FLAG    Flag( const size_t& i=0 ) const;
-    size_t           Size() const;
-    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
-    double         Length() const;
-    double         AngleTo( const VectorVariable& v ) const;
+    VARIABLE_FLAG&   Flag( uint32_t i=0 );
+    VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
+    uint32_t         Size() const;
+    double           Length() const;
+    double           AngleTo( const VectorVariable& v ) const;
     Point<2U>        P() const;
     bool             IsWithinRange( double vmin, double vmax ) const;
     VectorVariable   Flip();
@@ -80,8 +79,8 @@ class VectorVariable<2U> {
     void             Invert();
   
     void			       EuclideanNormalize();
-    double         DotProduct( const csmp::Point<2U>& p ) const;
-    double         DotProduct( const VectorVariable& v ) const;
+    double           DotProduct( const csmp::Point<2U>& p ) const;
+    double           DotProduct( const VectorVariable& v ) const;
     VectorVariable   CrossProduct( const csmp::Point<2U>& p ) const;
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
 

@@ -394,7 +394,7 @@ computed if the velocity is below a minimum threshold (1.0e-15 m/s).
 - The maximum time increment (in sec).
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim>& sg, 
                                                                  double log_velocity_change,
                                                                  double current_delta_t,

@@ -20,7 +20,7 @@ namespace csmp {
   //my_o_b_in = Viscosity of oil at bubble point
   //rho_o_b_in = density of oil at bubble point psia
   //salinity_in = Salinity in  wt%
-  template<size_t dim>
+  template<uint32_t dim>
   TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::TwoPhaseUndersaturatedFluidPropertyVisitor( Model<dim>& model,
                                                                                               const FluidPropertyVisitorConfiguration& config )
   : Visitor<dim>(MODEL, NODE),
@@ -111,7 +111,7 @@ namespace csmp {
 
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::CalculateConstantVariables()
   {
     double log_API, log_spGr_SP, log_pB, log_Rsb;
@@ -130,7 +130,7 @@ namespace csmp {
     //cout << log(my_o_b) << " " << my_o_b << " " << Z1 << " " << Z2 << " " << Z3 << " " << Z5 << " " << A << endl;
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyOilCompressibilityCorrelation(double P, double T)
   {
     
@@ -158,25 +158,25 @@ namespace csmp {
     
     co = cofb + (P-Pb)*dcofb_dp;
   }
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::DensityOilGreaterPb(double P)
   {
     rho_o = rho_o_b*exp(cofb*(P-Pb));
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::PetroskyFarshadOilViscosityGreaterPb(double P)
   {
     my_o = my_o_b + 1.3449E-3*(P-Pb)*pow(10, A);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   double TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyA(const double ai[], double T) const
   {
     return (ai[0]*pow(T/100,2)+ai[1]*(T/100)+ai[2])/(ai[3]*pow(T/100,2)+ai[4]*(T/100)+1);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineAFactors(double T)
   {
     rho_w_pure_p_ref = SpiveyA(Ew_coeffs, T);
@@ -196,14 +196,14 @@ namespace csmp {
     //cout << rho_w_pure_p_ref << " " << Ew << " " << Fw << " " <<  dm_2 << " " <<  dm_3_2 << " " <<  dm_1 << " " <<  dm_1_2 << " " <<  Em << " " <<  Fm_3_2 << " " <<  Fm_1 << " " <<  Fm_1_2 <<endl;
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibilityPure(double P)
   {
     c_w_pure = (1.0/70.0)*1.0/(Ew*(P/70.0)+Fw);
     //cout << c_w_pure << endl;
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensityPure(double P)
   {
     Iw_p_ref = (1.0/Ew)*log(fabs(Ew+Fw));
@@ -211,13 +211,13 @@ namespace csmp {
     rho_w_pure = rho_w_pure_p_ref*exp(Iw-Iw_p_ref);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrindeDensityPRef(double m)
   {
     rho_b_p_ref = rho_w_pure_p_ref + dm_2*pow(m, 2) + dm_3_2*pow(m, 1.5) + dm_1*m + dm_1_2*sqrt(m);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineCompressibility(double P, double m)
   {
     Eb = Ew + Em;
@@ -226,7 +226,7 @@ namespace csmp {
     //cout << c_b << endl;
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SpiveyBrineDensity(double P)
   {
     Ib_p_ref = 1.0/Eb * log(fabs(Eb+Fb));
@@ -234,7 +234,7 @@ namespace csmp {
     rho_b = rho_b_p_ref*exp(Ib - Ib_p_ref);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanWaterViscosityPure(double T)
   {
     double a = 0;
@@ -251,7 +251,7 @@ namespace csmp {
     my_w_pure = exp(log_my_w_pure);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::MaoDuanBrineRelativeViscosity( double T, double m ) {
     const double Tsquared(T*T);
     const double A = -0.21319213+0.13651589E-2*T - 0.12191756E-5*Tsquared;
@@ -263,7 +263,7 @@ namespace csmp {
     my_b = my_b_rel * my_w_pure;
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::Visit( Node<dim>* node )
   {
     const double Pw = node->Read(water_pressure_key_ );
@@ -309,7 +309,7 @@ namespace csmp {
     node->Store(water_density_key_, brine_density);
   }
   
-  template<size_t dim>
+  template<uint32_t dim>
   void TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::Visit(Model<dim>* model)
   {
     std::cout << "\nTwoPhaseUndersaturatedFluidPropertyVisitor::Visit(Model): Visiting model.\n";

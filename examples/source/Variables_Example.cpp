@@ -114,7 +114,7 @@ void Variables_Example::Run()
       {
         (*it)->Store( elementScalarKey, scalarVariable );
 
-        for( size_t ip(0); ip < (*it)->IntegrationPoints(); ++ip )
+        for( auto ip(0); ip < (*it)->IntegrationPoints(); ++ip )
           (*it)->Store( ip, elementIpVectorKey, vectorVariable );
       }
 
@@ -129,17 +129,17 @@ void Variables_Example::Run()
       (*it)->Store( elementScalarKey, scalarVariable );
 
       // element ip
-      for( size_t ip(0); ip < (*it)->IntegrationPoints(); ++ip )
+      for( auto ip(0); ip < (*it)->IntegrationPoints(); ++ip )
         (*it)->Store( ip, elementIpVectorKey, vectorVariable );
 
       // fv facets ip
-      for( size_t fc(0); fc < (*it)->Facets(); ++fc )
-        for( size_t fcip(0); fcip < (*it)->IntegrationPointsPerFacet(); ++fcip )
+      for( auto fc(0); fc < (*it)->Facets(); ++fc )
+        for( auto fcip(0); fcip < (*it)->IntegrationPointsPerFacet(); ++fcip )
           (*it)->Store( fc, fcip, elementFaipScalarKey, scalarVariable );
 
       // fv sector ip
-      for( size_t se(0); se < (*it)->Sectors(); ++se )
-        for( size_t seip(0); seip < (*it)->IntegrationPointsPerSector(); ++seip )
+      for( auto se(0); se < (*it)->Sectors(); ++se )
+        for( auto seip(0); seip < (*it)->IntegrationPointsPerSector(); ++seip )
           (*it)->Store( se, seip, elementSeipArrayKey, seipArray );
       }
 

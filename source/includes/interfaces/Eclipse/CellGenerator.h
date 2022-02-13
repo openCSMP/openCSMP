@@ -270,7 +270,7 @@ public:
 
 	bool ConstructHexahedron(ColumnCell& cell) {
 		//std::cerr << "hexa: \n";				
-		for (size_t i = 0; i < 8; ++i) {
+		for (auto i = 0; i < 8; ++i) {
 			vertexIDs[i] = i;
 			auto p = getNodeCoord(cell, vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -308,7 +308,7 @@ public:
 		vertexIDs[4] = apex;
 
 		//std::cerr << "pyramid: \n";
-		for (size_t i = 0; i < 5; ++i) {
+		for (auto i = 0; i < 5; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -346,7 +346,7 @@ public:
 		vertexIDs[3] = apex;
 
 		//std::cerr << "tetra: \n";
-		for (size_t i = 0; i < 4; ++i) {
+		for (auto i = 0; i < 4; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -386,7 +386,7 @@ public:
 		vertexIDs[5] = getNodeID(cell, face5);
 
 		//std::cerr << "prism: \n";
-		for (size_t i = 0; i < 6; ++i) {
+		for (auto i = 0; i < 6; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
 			prism.XYZ(i, 0, p[0]);

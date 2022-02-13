@@ -6,10 +6,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Node;
 
 /**
 
@@ -27,7 +27,7 @@ TODO: perhaps chain operations like mathematic expressions
 TODO: perhaps perform multiple sequential operations in an element by element fashion
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class MatrixOperator {
   public:
     MatrixOperator() : factor_(1.) {}

@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Model;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
 
 /**
 @file Box.h
@@ -97,7 +97,7 @@ are identified by BOX_BOUNDARY flags.
 */
 class Box {
 public:
-  void UnitNormalTo( BOX_BOUNDARY bdry, size_t dim,
+  void UnitNormalTo( BOX_BOUNDARY bdry, uint32_t dim,
                      std::vector<double>& nrml ) const;
 
 };
@@ -139,15 +139,15 @@ bool isFRONT( BOX_BOUNDARY );
 bool isBACK( BOX_BOUNDARY );
 
 /// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const, size_t boundary_face );
 
 /// returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const );
 
 /// prints a summary of the current flags of the nodes and elements to screen.
-template<size_t dim> void printBoxBoundaryFlags( const Model<dim>& );
+template<uint32_t dim> void printBoxBoundaryFlags( const Model<dim>& );
 
 /// gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) - 1D model
 void boundaryMinMaxCoordinates( BOX_BOUNDARY,
@@ -175,7 +175,7 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& );
 void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& );
 
 /// permits to create variables values from BOX_BOUNDARY flag enumeration values
-template<size_t dim>
+template<uint32_t dim>
 void boxFlagsToVariable( Model<dim>&, const char* node_variable, const char* elmt_variable );
 
 /// returns true if the model contains some box boundary identifiers, but also irregular boundaries
@@ -197,7 +197,7 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 );
 
 
 /// reports the range of property values on the nodes flagged with the BOX_BOUNDARY identifier
-template<size_t dim>
+template<uint32_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
                                const char* node_property, double& bmin, double& bmax );
 

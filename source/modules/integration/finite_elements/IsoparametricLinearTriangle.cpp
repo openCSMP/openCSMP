@@ -17,8 +17,8 @@ and a four-point integration scheme where the Gauss points are located
 inside quad at convergence points . The weights of the integration points
 are set to 1 such that the integrated contributions add up to 1.  .
 */
-IsoparametricLinearTriangle::IsoparametricLinearTriangle( size_t dimensions,
-                                                          size_t ipoints )
+IsoparametricLinearTriangle::IsoparametricLinearTriangle( uint32_t dimensions,
+                                                          uint32_t ipoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_TRIANGLE, true, true, 1U ),
    use2Dto3Djacobi( !(dimensions==2) ),
@@ -206,7 +206,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 void
-IsoparametricLinearTriangle::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+IsoparametricLinearTriangle::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
 
@@ -220,7 +220,7 @@ IsoparametricLinearTriangle::N_AtIntegrationPoint( size_t ip, std::vector<double
 
 /// segments are numbered like faces
 void
-IsoparametricLinearTriangle::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricLinearTriangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -260,8 +260,8 @@ When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
 void
-IsoparametricLinearTriangle::NodesOfFace( size_t face_id,
-                                          std::vector<size_t>& fnids ) const
+IsoparametricLinearTriangle::NodesOfFace( uint32_t face_id,
+                                          std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
 
@@ -286,29 +286,29 @@ IsoparametricLinearTriangle::NodesOfFace( size_t face_id,
 
 
 
-vector<size_t>  IsoparametricLinearTriangle::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearTriangle::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nIsoparametricLinearTriangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<size_t>  IsoparametricLinearTriangle::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  IsoparametricLinearTriangle::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nIsoparametricLinearTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
@@ -321,7 +321,7 @@ for the element (These integers are germane to all quadratic triangular
 elements in the mesh).
 */
 void
-IsoparametricLinearTriangle::CornerNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearTriangle::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -341,7 +341,7 @@ elements in the mesh).
 
 @todo (3) Check what should be assigned
 */
-void  IsoparametricLinearTriangle::MidSideNodes( std::vector<size_t>& ) const
+void  IsoparametricLinearTriangle::MidSideNodes( std::vector<uint32_t>& ) const
  {
      std::cerr <<"\nIsoparametricLinearTriangle::MidSideNodes Not present..."<<std::endl;
  }
@@ -349,7 +349,7 @@ void  IsoparametricLinearTriangle::MidSideNodes( std::vector<size_t>& ) const
 
 
 
-void  IsoparametricLinearTriangle::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -358,13 +358,13 @@ void  IsoparametricLinearTriangle::CounterClockwiseNodes( std::vector<size_t>& i
  }
 
 
-CSMP_FEM_TYPE IsoparametricLinearTriangle::ElementTypeOfFace( size_t )  const
+CSMP_FEM_TYPE IsoparametricLinearTriangle::ElementTypeOfFace( uint32_t )  const
  {
     return ISOPARAMETRIC_LINEAR_BAR;
  }
 
 
-double IsoparametricLinearTriangle::WeightAtIntegrationPoint( size_t i )
+double IsoparametricLinearTriangle::WeightAtIntegrationPoint( uint32_t i )
 const { return W[i]; }
 
 
@@ -376,7 +376,7 @@ void  IsoparametricLinearTriangle::N_AtBaryCenter( std::vector<double>& N )
 
 
 
-void IsoparametricLinearTriangle::Dimensions( size_t dimensions )
+void IsoparametricLinearTriangle::Dimensions( uint32_t dimensions )
  {
    dim = dimensions;
    if ( dim == 3 ) use2Dto3Djacobi = true;
@@ -407,7 +407,7 @@ IsoparametricLinearTriangle::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
+   for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()),
              segm2 = (*segms.rbegin());
@@ -473,7 +473,7 @@ double  IsoparametricLinearTriangle::InnerRadius()
     double  sum(0.);
 
     EdgeLengths( NRST );
-    for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
+    for ( uint32_t i=0; i<spe; i++ ) sum += NRST[i];
 
     if(AspectRatio()>4.)
      cerr<<"\nIsoparametricLinearTriangle::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
@@ -564,13 +564,12 @@ the area is computed.
 */
 double  IsoparametricLinearTriangle::Volume()
 {
-    double  area;
-    size_t  i;
+    double  area{0.};
 
     // numerical integration:
     // looping over the Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          // getting interpolation function derivatives
          RS[0] = rr[i];
@@ -618,7 +617,7 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN3 )
           vector<double> EFG(dim);
           double det_inverse;
 
-          for ( size_t i=0; i<npe; i++ ) {
+          for ( uint32_t i=0; i<npe; i++ ) {
                 RS[0] = NXY(i,0);
                 RS[1] = NXY(i,1);
                 // generate the 2 x 3 shape function derivative matrix
@@ -636,7 +635,7 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN3 )
 
      // if the triangle 2D
      DenseMatrix<DM_MIN> TEMP(dim,1);
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
            dNr( NXY(i,0), NXY(i,1), DNR );
            dNs( NXY(i,0), NXY(i,1), DNS );
@@ -667,12 +666,12 @@ IsoparametricLinearTriangle::ParametricToPhysical(std::vector<double> &rst,
     vector<double> N(npe);
     Nrs(rst[0],rst[1], N );
 
-    for(size_t i=0; i<dim; i++)
+    for(uint32_t i=0; i<dim; i++)
         xyz[i]=0.0;
 
     if(dim==2)
     {
-        for(size_t i=0; i<npe; i++)
+        for(uint32_t i=0; i<npe; i++)
         {
             xyz[0]+=XY(i,0)*N[i];
             xyz[1]+=XY(i,1)*N[i];
@@ -680,7 +679,7 @@ IsoparametricLinearTriangle::ParametricToPhysical(std::vector<double> &rst,
     }
     else if(dim==3)
     {
-        for(size_t i=0; i<npe; i++)
+        for(uint32_t i=0; i<npe; i++)
         {
             xyz[0]+=XY(i,0)*N[i];
             xyz[1]+=XY(i,1)*N[i];
@@ -887,7 +886,7 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN2,
      vector<double> EFG(dim);
      double det_inverse;
 
-       for ( size_t i=0; i<npe; i++ ) {
+       for ( uint32_t i=0; i<npe; i++ ) {
               detJ = Jacobi( rst, EFG, JMAT );
               det_inverse = 1.0 / ( detJ * detJ );
               DN2(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
@@ -958,8 +957,8 @@ IsoparametricLinearTriangle::Jacobi(    const vector<double>& rs,
     // compute 2x3 Jacobian matrix (expects 6x3 x-y-z coordinate matrix)
     J.Resize(2,dim);
     J.Zero();
-    for ( size_t i=0; i<XY.Cols(); i++ )
-      for ( size_t j=0; j<XY.Rows(); j++ ) {
+    for ( uint32_t i=0; i<XY.Cols(); i++ )
+      for ( uint32_t j=0; j<XY.Rows(); j++ ) {
            J(0,i) += DNR[j] * XY(j,i);
            J(1,i) += DNS[j] * XY(j,i);
         }
@@ -970,7 +969,7 @@ IsoparametricLinearTriangle::Jacobi(    const vector<double>& rs,
     EFG.resize(3);
     fill( EFG.begin(), EFG.end(), 0.0 );
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( uint32_t i=0; i<dim; i++ ) {
         EFG[0] += J(0,i) * J(0,i);
         EFG[1] += J(0,i) * J(1,i);
         EFG[2] += J(1,i) * J(1,i);
@@ -992,8 +991,8 @@ double IsoparametricLinearTriangle::Jacobi( const vector<double>& rs )
     JMAT.Resize(2,dim);
     JMAT.Zero();
 
-    for ( size_t i=0; i<XY.Cols(); i++ )
-      for ( size_t j=0; j<XY.Rows(); j++ ) {
+    for ( uint32_t i=0; i<XY.Cols(); i++ )
+      for ( uint32_t j=0; j<XY.Rows(); j++ ) {
            JMAT(0,i) += DNR[j] * XY(j,i);
            JMAT(1,i) += DNS[j] * XY(j,i);
         }
@@ -1003,7 +1002,7 @@ double IsoparametricLinearTriangle::Jacobi( const vector<double>& rs )
     // compute E, F, and g
     double E(0.0), F(0.0), G(0.0);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( uint32_t i=0; i<dim; i++ ) {
          E += JMAT(0,i) * JMAT(0,i);
          F += JMAT(0,i) * JMAT(1,i);
          G += JMAT(1,i) * JMAT(1,i);
@@ -1090,7 +1089,7 @@ procedures.
 */
 double
 IsoparametricLinearTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
-                                                    size_t gauss_point )
+                                                    uint32_t gauss_point )
  {
     double det;
 
@@ -1106,7 +1105,7 @@ IsoparametricLinearTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
 
          B.Resize(dim,npe);
 
-         for ( size_t i=0; i<npe; i++ )
+         for ( uint32_t i=0; i<npe; i++ )
            {
              B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
              B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1165,7 +1164,7 @@ procedures.
 double
 IsoparametricLinearTriangle::dN_AtNode(
                                         DenseMatrix<DM_MIN>& B,
-                                        size_t nd
+                                        uint32_t nd
                                       )
 {
   double  det;
@@ -1181,7 +1180,7 @@ IsoparametricLinearTriangle::dN_AtNode(
 
        B.Resize(dim,npe);
 
-        for ( size_t i=0; i<npe; i++ ){
+        for ( uint32_t i=0; i<npe; i++ ){
           B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
           B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
           B(1,i)  = det_inverse * JMAT(0,1) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
@@ -1229,7 +1228,7 @@ double IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
      B.Resize(dim,npe);
 
-       for ( size_t i=0; i<npe; i++ ){
+       for ( uint32_t i=0; i<npe; i++ ){
          B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
          B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
          B(1,i)  = det_inverse * JMAT(0,1) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
@@ -1287,8 +1286,8 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
 void
-IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                         vector<size_t>& fnids )
+IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                         vector<uint32_t>& fnids )
 {
    fnids.resize(3);
 
@@ -1354,15 +1353,15 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ ){
+     for ( uint32_t i=0; i<npe; i++ ){
        if(dim==2){
-        for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+        for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
            ofs<<0.0;
            ofs << endl;
         }
         else
         if(dim==3){
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
         }
      }
@@ -1391,7 +1390,7 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
       ofs <<"SCALARS "<< var_name <<" float"<< endl;
       ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
       // matrix DATA is 1x9
-         for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+         for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
       ofs << endl;
     }
      else {
@@ -1399,15 +1398,15 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
        // variables have always 3 components since view screen is 3D
        // matrix DATA is vec-dim x 10
        if(dim==2) {
-         for ( size_t i=0; i<DATA.Cols(); i++ ) {
-           for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+         for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+           for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
               ofs<<0.0<<" ";
               ofs << endl;
          }
        }
        else {
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-            for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+            for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
             ofs << endl;
           }
        }
@@ -1432,7 +1431,7 @@ to the nodes.  This involves the steps:
    and use these to extrapolate the values of the variables at the nodes.
 */
 void
-IsoparametricLinearTriangle::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+IsoparametricLinearTriangle::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                         const vector<double>& IVAR,
                                                               vector<double>& NVAR )
 const
@@ -1473,19 +1472,19 @@ const
 
    // 2. For each node point compute the values of the interpolation functions
    //    and use these to extrapolate the values of the variables at the nodes.
-   for ( size_t i=0; i<npe; i++ )
+   for ( uint32_t i=0; i<npe; i++ )
      {
         // compute interpolation function values at node i
-        for ( size_t j=0; j<gpe; j++ )
+        for ( uint32_t j=0; j<gpe; j++ )
           intpol[j] = ae2 * (a[j] + b[j] * NXY(i,0) + c[j] * NXY(i,1));
 
         // carry out extrapolation
-        for ( size_t k=0; k<nvars; k++ ) sum[k] = 0.0;
-        for ( size_t j=0; j<gpe; j++ )
-          for ( size_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
+        for ( uint32_t k=0; k<nvars; k++ ) sum[k] = 0.0;
+        for ( uint32_t j=0; j<gpe; j++ )
+          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
         // store result in output vector
-        for ( size_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
@@ -1503,7 +1502,7 @@ double  IsoparametricLinearTriangle::JacobianInverse()
           vector<double> EFG(dim);
           fill( EFG.begin(), EFG.end(), 0.0 );
 
-             for ( size_t i=0; i<dim; i++ ) {
+             for ( uint32_t i=0; i<dim; i++ ) {
                  EFG[0] += JAC(0,i) * JAC(0,i);
                  EFG[1] += JAC(0,i) * JAC(1,i);
                  EFG[2] += JAC(1,i) * JAC(1,i);
@@ -1601,7 +1600,7 @@ void IsoparametricLinearTriangle::UnitNormal( std::vector<double>& vc ) const
     
     @test OK - for 3D version
 */
-void  IsoparametricLinearTriangle::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      // if this is a planar element in a 2D model
@@ -1681,7 +1680,7 @@ void  IsoparametricLinearTriangle::UnitNormalToFace( size_t face, std::vector<do
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be updated
-void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double>& xyz ) const
+void  IsoparametricLinearTriangle::IntegrationPoint( uint32_t ip, vector<double>& xyz ) const
  {
     assert( ip < gpe );
     xyz.resize(NXY.Cols());
@@ -1692,7 +1691,7 @@ void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double>& 
 
     // 2D
     if ( NXY.Cols() == 2U ) {
-          for( size_t i=0U; i<npe; i++ ) {
+          for( auto i{0}; i<npe; i++ ) {
                xyz[0] += XY(i,0) * NRST[i];
                xyz[1] += XY(i,1) * NRST[i];
             }
@@ -1701,7 +1700,7 @@ void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double>& 
 
     // 3D case
     xyz[2]=0.;
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -1713,7 +1712,7 @@ void  IsoparametricLinearTriangle::IntegrationPoint( size_t ip, vector<double>& 
 
 
 void
-IsoparametricLinearTriangle::JacobianAtIntegrationPoint( size_t gauss_point )
+IsoparametricLinearTriangle::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     if ( !use2Dto3Djacobi ) {
          dNr( rr[gauss_point], ss[gauss_point], DNR );
@@ -1737,13 +1736,13 @@ IsoparametricLinearTriangle::IntegrationPointsFromParToPhys(DenseMatrix<DM_MIN>&
  {
     IPPHYS.Resize(gpe,dim);
     vector<double> outxyz(dim);
-    const size_t numberOfParametricDims=2;
+    const uint32_t numberOfParametricDims=2;
     vector<double> rst(numberOfParametricDims);
 
-    for(size_t i=0;i<gpe;i++){
+    for(uint32_t i=0;i<gpe;i++){
         rst[0]=rr[i];rst[1]=ss[i];
         ParametricToPhysical( rst, outxyz);
-        for(size_t j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
+        for(uint32_t j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
     }
 }
 
@@ -1770,7 +1769,7 @@ double  IsoparametricLinearTriangle::JacobianDeterminant()
       std::vector<double> EFG(3);
       fill( EFG.begin(), EFG.end(), 0.0 );
 
-      for ( size_t i=0; i<dim; i++ )
+      for ( uint32_t i=0; i<dim; i++ )
        {
          EFG[0] += JAC(0,i) * JAC(0,i);
          EFG[1] += JAC(0,i) * JAC(1,i);

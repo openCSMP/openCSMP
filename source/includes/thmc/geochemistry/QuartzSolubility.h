@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class QuartzSolubility : public Interrelation<dim> {
     Operand<dim>&        T; /// < temperature (oC)
     Operand<dim>&        R; /// < nodal fluid density (kg m-3)

@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-template<size_t> class Boundary;
-template<size_t> class SplitBoundary;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 
 /**
     Creation, management and deletion of SplitBoundary objects.
@@ -15,7 +15,7 @@ template<size_t> class SplitBoundary;
       1. internal model boundaries
       2. node-matched disconnected boundaries of the mesh
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 class SplitBoundaryInterface {
   public:
     SplitBoundaryInterface() {}

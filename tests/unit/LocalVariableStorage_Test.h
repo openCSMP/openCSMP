@@ -12,7 +12,7 @@ namespace csmp
     public:
       virtual void run();
     private:
-      template<size_t dim>
+      template<uint32_t dim>
       void runTest();
 
       void run3D();

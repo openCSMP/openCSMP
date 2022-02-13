@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-	template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+	template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 	SteadyStateDiffusor<dim, COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                      const char* diffusivity,
                                                                      const char* diffusing_variable,
@@ -66,7 +66,7 @@ namespace csmp {
 
 	} // end constructor
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                   const char* diffusivity,
                                                                   const char* diffusing_variable,
@@ -125,7 +125,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg, 
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
@@ -190,7 +190,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
@@ -245,7 +245,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
@@ -315,7 +315,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 // discerning lhs and rhs diffusivity terms
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* lhs_diffusivity,
                                                                                 const char* rhs_diffusivity,
@@ -391,7 +391,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::~SteadyStateDiffusor()
  {
     delete source_;
@@ -411,7 +411,7 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::~SteadyStateDiffusor()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// From the SAMG solver profile brought here because many users have no clue that profile exists
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves()
  {
     assert ( firstCall_ );
@@ -489,7 +489,7 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolve
 
 /// Apply PDE integrator to entire model
 /* does not work with the explicit template instantiations
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( Model<dim>& sg, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -520,7 +520,7 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( Model<dim>
 
 
 /// Apply PDE integrator to Region / Boundary / SplitBoundary
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( COMPUTATION_DOMAIN<dim>& sd, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -552,7 +552,7 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( COMPUTATIO
 
 
 /// empirically established best settings for fluid pressure diffusion
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -581,7 +581,7 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// returns a reference to the current settings of the SAMG Solver used by the SteadyStateDiffusor
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SAMG_Settings& SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
  { return settings_; }
 #else

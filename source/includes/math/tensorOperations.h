@@ -13,11 +13,11 @@
 namespace csmp {
 
 /// recovers scalar value, vector length, or average of tensor eigenvalues for variable with given csmp::Index
-template<size_t dim,template<size_t> class PLACE>
+template<uint32_t dim,template<uint32_t> class PLACE>
 double magnitude( const PLACE<dim>&, const csmp::Index& );
 
 /// returns magnitude of tensor in the direction (transect) given by the supplied vector variable
-template<size_t dim>
+template<uint32_t dim>
 inline double tensorMagnitudeInDirection( const TensorVariable<dim>& ts, const VectorVariable<dim>& vc ) {
     VectorVariable<dim>  prod(ts * vc);
     return prod.Length();

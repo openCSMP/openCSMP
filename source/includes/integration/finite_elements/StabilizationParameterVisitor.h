@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// for Stokes-lubrication equation where the same basis functions are used for pressure and velocity
-template<size_t dim>
+template<uint32_t dim>
 class StabilizationParameterVisitor : public Visitor<dim> {
   public:
     /// constant viscosity version

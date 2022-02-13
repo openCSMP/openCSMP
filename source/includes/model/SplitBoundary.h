@@ -7,11 +7,11 @@
 namespace csmp {
 
 class FiniteElementManager;
-template<size_t> class PropertyDatabase;
-template<size_t> class MeshManager;
-template<size_t> class Boundary;
-template<size_t> class Element;
-template<size_t> class Region;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class MeshManager;
+template<uint32_t> class Boundary;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
 template<typename> class FEM_Data;
 
 /**
@@ -23,7 +23,7 @@ template<typename> class FEM_Data;
         4) local face number of element face that is located at interface to innner element
         5) pointer to potential  lower-dimensional intervening Element
 */
-template<size_t dim> ///
+template<uint32_t dim> ///
 struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > > {
     // constructor
     InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>,
@@ -85,7 +85,7 @@ SplitBoundary objects permit the implementation of jump discontinuities in conti
 @note SplitBoundary has no BOX_BOUNDARY flag because it can only have the value INTERNAL anyway.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace>,
                       public LocalVariableStorage<dim, SplitBoundary>
  {
@@ -175,7 +175,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
 // function prototypes
 
-template<size_t dim, typename Var>
+template<uint32_t dim, typename Var>
 void inputNodePropertyValue( SplitBoundary<dim>&,
                              const PropertyDatabase<dim>&,
                              const char* input_prop,

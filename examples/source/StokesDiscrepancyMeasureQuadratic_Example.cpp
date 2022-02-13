@@ -69,9 +69,9 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
     const bool binary_file( true );
     mesh_interface.Read_ANSYS_Mesh( in_file.c_str(), vset, mesh_topology, binary_file, true );
     // 1. eliminating the unwanted mesh regions from topology and vset
-    mesh_topology.ReduceToRegions( in_file.c_str() );
+    mesh_topology.ReduceToDomains( in_file.c_str() );
     map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
     vset.ReduceTo( old_and_new_elmtids );
     old_and_new_elmtids.clear();
 
@@ -124,8 +124,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       // we must now drop this Dirichlet boundary condition at inlet and outlet (i.e. FRONT and BACK of box-shaped model)
       // this is tricky because we do not want to drop them at the boundary of the boundary, so we can't use
       // the standard functions, but we must loop over the boundary nodes explicitly
-      for ( vector<Node<dim>*>::iterator
-            nit=gref.PerimeterNodesBegin(); nit!=gref.NodesEnd(); nit++ )
+      for ( auto nit=gref.PerimeterNodesBegin(); nit!=gref.NodesEnd(); nit++ )
         if ( (*nit)->AtBoundary() == FRONT  or  (*nit)->AtBoundary() == BACK )
           (*nit)->Status( pbf.Key(), PLAIN );
       // calculation
@@ -141,8 +140,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       // the 'parabolic function' divided by viscosity is now mapped to the variable "element parabolic function"
       PropertyHandle<dim>  lapbc( model, "cpoint parabolic function", SCALAR, ELEMENT_INTEGRATION_POINT );
       ScalarVariable       sc;
-      for ( vector<Element<dim>*>::iterator
-            eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+      for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
            (*eit)->PropertyValueAtBaryCenter( pbf.Key(), sc );
            (*eit)->Store( lapbc.Key(), (sc /= 1.) );
         }
@@ -210,8 +208,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
      PropertyHandle<dim>  term1( model, "term1", VECTOR, ELEMENT );
      TensorVariable<dim>  ts;
      VectorVariable<dim>  vc, vc2;
-     for ( vector<Element<dim>*>::iterator
-           eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+     for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
           // read hessian
           (*eit)->Read( hessian.Key(), ts );
           (*eit)->Read( grad.Key(), vc );
@@ -222,8 +219,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
 
     // computing term2: Laplacian of fluid pressure is found as sum of the diagonal terms of the Hessian (=its trace)
       PropertyHandle<dim>  lap_p( model, "laplacian of pressure", SCALAR, ELEMENT );
-      for ( vector<Element<dim>*>::iterator
-            nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
            // read Hessian from the nodes
            (*nit)->Read( hessian.Key(), ts );
            // add up the diagonal terms
@@ -241,8 +237,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       printRangeOfVariable( model, channel_region.c_str(), "gradient of laplacian of pressure");
       vtk_output.OutputDataToVTK( model, "grad-laplacian-pressure", "gradient of laplacian of pressure", 1 );
 
-      for ( vector<Element<dim>*>::iterator
-            nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
            // read parabolic function psi
            (*nit)->Read( lapbc.Key(), sc );
            // read gradient of laplacian
@@ -262,8 +257,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       PropertyHandle<dim>  E_mag( model, "Stokes Discrepancy Measure", SCALAR, ELEMENT );
 
       ScalarVariable  em;
-      for ( vector<Element<dim>*>::iterator
-            nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
            // take norm of grad p
            (*nit)->Read( gradp.Key(), vc );
            sc = vc.Length();

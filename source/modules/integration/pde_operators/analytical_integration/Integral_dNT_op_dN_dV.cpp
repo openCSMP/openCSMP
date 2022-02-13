@@ -10,8 +10,8 @@ namespace csmp {
 /** Accumulates the conductance matrix of the interpolation function
 derivatives.  
 */
-template<size_t dim,class SIMPLEX>
-Integral_dNT_op_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_dNT_op_dN_dV<dim,CELL>::Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                       const char*             oper, 
                                                       const char*             basic, 
                                                       const char*             test ) 
@@ -45,8 +45,8 @@ Integral_dNT_op_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_dV( const PropertyDatabas
 
 A reference to the current Element.  
 */
-template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );

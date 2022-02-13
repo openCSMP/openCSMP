@@ -35,7 +35,7 @@ FiniteElement::FiniteElement()
 FiniteElement::FiniteElement( CSMP_FEM_TYPE csp_fem_type,
                               bool isoparametric, 
                               bool uses_local_coordinates,  
-                              size_t order_of_shape_functions )
+                              uint32_t order_of_shape_functions )
  : XY(3,2), M(3,3), JAC(2,2), JINV(2,2), 
    isoparametric(isoparametric), 
    uses_local_coordinates(uses_local_coordinates),
@@ -188,7 +188,7 @@ void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
 size_t  FiniteElement::CurrentID() const      { return object_id; }
 
 /// initalizing to a value that makes sure that ID does not equal initial element idx
-size_t  FiniteElement::InitialID() { return std::numeric_limits<size_t>::max(); }
+size_t  FiniteElement::InitialID() { return std::numeric_limits<uint32_t>::max(); }
 
 
 bool  FiniteElement::Isoparametric() const        { return isoparametric; }
@@ -220,20 +220,20 @@ void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; 
 
 CSMP_FEM_TYPE  FiniteElement::ElementType() const { return csp_fem_type; }
 
- size_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
+ uint32_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
 
- size_t  FiniteElement::Interpolation()    const { return itp; }
- size_t  FiniteElement::Dim()              const { return dim; }
- size_t  FiniteElement::Nodes()            const { return npe; }
- size_t  FiniteElement::Segments()         const { return spe; }
- size_t  FiniteElement::Faces()            const { return fpe; }
- size_t  FiniteElement::Neighbors()        const { return epe; }
- size_t  FiniteElement::NodesPerFace( size_t ) const { return npf; }
- size_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
- size_t  FiniteElement::IntegrationPoints() const { return gpe; }
+ uint32_t  FiniteElement::Interpolation()    const { return itp; }
+ uint32_t  FiniteElement::Dim()              const { return dim; }
+ uint32_t  FiniteElement::Nodes()            const { return npe; }
+ uint32_t  FiniteElement::Segments()         const { return spe; }
+ uint32_t  FiniteElement::Faces()            const { return fpe; }
+ uint32_t  FiniteElement::Neighbors()        const { return epe; }
+ uint32_t  FiniteElement::NodesPerFace( uint32_t ) const { return npf; }
+// uint32_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
+ uint32_t  FiniteElement::IntegrationPoints() const { return gpe; }
 
- double  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
- void    FiniteElement::XYZ( size_t i, size_t j, double val ) { XY(i,j) = val; }
+ double  FiniteElement::XYZ( uint32_t i, uint32_t j ) const { return XY(i,j); }
+ void    FiniteElement::XYZ( uint32_t i, uint32_t j, double val ) { XY(i,j) = val; }
 
 
 
@@ -279,7 +279,7 @@ void FiniteElement::EdgeLengths( vector<double>& vec )
 
 
 
-void FiniteElement::NodesOfSegment( size_t sid, vector<size_t>& snids ) const
+void FiniteElement::NodesOfSegment( uint32_t sid, vector<uint32_t>& snids ) const
   {
      cout <<"\nFiniteElement::NodesOfSegment: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element segment with the entered (local) ID number. "<< endl;
@@ -289,7 +289,7 @@ void FiniteElement::NodesOfSegment( size_t sid, vector<size_t>& snids ) const
   }
 
 
-void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
+void FiniteElement::NodesOfFace( uint32_t fid, vector<uint32_t>& fnids ) const
   {
      cout <<"\nFiniteElement::NodesOfFace: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element face with the entered ID number. ";
@@ -301,7 +301,7 @@ void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
   }
 
 
-std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
+std::vector<uint32_t> FiniteElement::CornerNodesOfFace( uint32_t face_id ) const
  {
      cout <<"\nFiniteElement::CornerNodesOfFace: Returns the local node ID numbers of ";
      cout <<"the corner nodes of the element face with the entered ID number. ";
@@ -309,11 +309,11 @@ std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
      cout <<"the nodes with the same ID." << endl;
      cout <<"\ncalled by object: "<< object_id <<" for face "<< face_id << endl;
      throw invalid_argument("FiniteElement::CornerNodesOfFace");
-     return vector<size_t>{};
+     return vector<uint32_t>{};
  }
 
 
-vector<size_t>  FiniteElement::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  FiniteElement::NodesConnectedTo( uint32_t node_id ) const
   {
      cout <<"\nFiniteElement::NodesConnectedTo: Returns the local node ID numbers of ";
      cout <<"the corner nodes of the element face with the entered ID number. ";
@@ -321,7 +321,7 @@ vector<size_t>  FiniteElement::NodesConnectedTo( size_t node_id ) const
      cout <<"the nodes with the same ID." << endl;
      cout <<"\ncalled by object: "<< object_id <<" for node "<< node_id << endl;
      throw invalid_argument("FiniteElement::NodesConnectedTo");
-     return vector<size_t>{};
+     return vector<uint32_t>{};
   }
 
     
@@ -337,8 +337,8 @@ void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
   
 // other information
 
-void FiniteElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                vector<size_t>& fnids )
+void FiniteElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                vector<uint32_t>& fnids )
   {
      InstructUser("FiniteElement::ConsecutiveNodesAtBoundary");
      cout <<"\nnodes at boundary: "<< endl;
@@ -349,7 +349,7 @@ void FiniteElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
   }
 
 
-void FiniteElement::CornerNodes( vector<size_t>& ids ) const
+void FiniteElement::CornerNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::CornerNodes");
     out(ids);
@@ -357,21 +357,21 @@ void FiniteElement::CornerNodes( vector<size_t>& ids ) const
  }
  
  
-void FiniteElement::MidSideNodes( vector<size_t>& ids ) const
+void FiniteElement::MidSideNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::MidSideNodes");
     out(ids);
     throw invalid_argument("FiniteElement::MidSideNodes");
  }
 
-void FiniteElement::InteriorNodes( vector<size_t>& ids ) const
+void FiniteElement::InteriorNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::InteriorNodes");
     out(ids);
     throw invalid_argument("FiniteElement::InteriorNodes");
  }
 
-size_t FiniteElement::CornerNodes() const
+uint32_t FiniteElement::CornerNodes() const
  {
     InstructUser("FiniteElement::CornerNodes");
     throw invalid_argument("FiniteElement::CornerNodes");
@@ -379,14 +379,14 @@ size_t FiniteElement::CornerNodes() const
  }
  
  
-size_t FiniteElement::MidSideNodes() const
+uint32_t FiniteElement::MidSideNodes() const
  {
     InstructUser("FiniteElement::MidSideNodes");
     throw invalid_argument("FiniteElement::MidSideNodes");
     return 0;
  }
 
-size_t FiniteElement::InteriorNodes() const
+uint32_t FiniteElement::InteriorNodes() const
  {
     InstructUser("FiniteElement::InteriorNodes");
     throw invalid_argument("FiniteElement::InteriorNodes");
@@ -394,7 +394,7 @@ size_t FiniteElement::InteriorNodes() const
  }
 
 
-CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( uint32_t ) const
   {
      /// @todo (2-P) Remove typid by name fct
      InstructUser("FiniteElement::ElementTypeOfFace");
@@ -406,7 +406,7 @@ CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( size_t ) const
   }
 
 
-CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( size_t ) const
+CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( uint32_t ) const
   {
      /// @todo (2-P) Remove typid by name fct
      InstructUser("FiniteElement::ElementTypeOfSegment");
@@ -435,12 +435,12 @@ void  FiniteElement::UnitNormal( vector<double>& ) const
     
     method expects that the XY matrix is initialised with node coordinates
 */
-void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
+void  FiniteElement::UnitNormalToFace( uint32_t, std::vector<double>& ) const
  {
      InstructUser("FiniteElement::UnitNormalToFace");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalToFace(size_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalToFace(uint32_t,vector<double>)");
  }
 
 
@@ -453,17 +453,17 @@ void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
      @note this method cannot be constant because it modifies matrices that are data members
      of the FiniteElement class.
 */
-void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double>& )
+void  FiniteElement::UnitNormalAtFaceBarycenter( uint32_t, std::vector<double>& )
  {
      InstructUser("FiniteElement::UnitNormalAtFaceBarycenter");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter(size_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter(uint32_t,vector<double>)");
  }
 
 
 
-double FiniteElement::WeightAtIntegrationPoint( size_t ) const
+double FiniteElement::WeightAtIntegrationPoint( uint32_t ) const
   {
      throw invalid_argument("FiniteElement::WeightAtIntegrationPoint");
      return 0.5 * (1. / gpe); 
@@ -471,7 +471,7 @@ double FiniteElement::WeightAtIntegrationPoint( size_t ) const
 
 
 
-void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) const
+void  FiniteElement::IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const
  { 
     cout <<"\nFiniteElement::IntegrationPoint: called for integration point "<< i;
     cout <<" and output data vector 'xyz' of size "<< xyz.size() << endl;
@@ -483,7 +483,7 @@ void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) cons
 
 
 
-void  FiniteElement::CounterClockwiseNodes( vector<size_t>& ids ) const
+void  FiniteElement::CounterClockwiseNodes( vector<uint32_t>& ids ) const
  {
      InstructUser("FiniteElement::CounterClockwiseNodes");
      out(ids);
@@ -499,7 +499,7 @@ Expects input vector to be of size nvars * gauss points and in format
   var1 @ gp2, var2 @ gp2, var3 @ gp2 for all gauss points, with nvar == 3 ]
 
   */
-void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
+void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                  const vector<double>&, 
                                                                  vector<double>& ) const
  {
@@ -527,13 +527,13 @@ void   FiniteElement::N( vector<double>& N, const vector<double>& xyz )
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (N vector<double>, xyz vector<double>):"<< endl;
     out( N );
-    for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::N");
  } 
 
 
-void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double>& N )
+void   FiniteElement::N_AtIntegrationPoint( uint32_t ip, vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -578,14 +578,14 @@ double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
     M.Out();
-    for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::dN_At");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
+double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point )
  {
     InstructUser("FiniteElement::dN_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -597,7 +597,7 @@ double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gaus
  } 
 
 
-double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
+double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node )
  {
     InstructUser("FiniteElement::dN_AtNode");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -644,7 +644,7 @@ void   FiniteElement::OutputNodeDataToVTK( const char* file_name, const char* va
 
 
 
-void   FiniteElement::JacobianAtIntegrationPoint( size_t ip )
+void   FiniteElement::JacobianAtIntegrationPoint( uint32_t ip )
  {
     InstructUser("FiniteElement::JacobianAtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -876,7 +876,7 @@ void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {
     JAC.Resize(dim,dim);
     JAC(0,0) = static_cast<double>(0.0);
-    for ( size_t j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
+    for ( auto j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
       
  } // end Jacobian (1D)
 
@@ -887,9 +887,9 @@ void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& 
  {
     JAC.Resize(dim,dim);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( auto i=0; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
-        for ( size_t j=0; j<npe; j++ )
+        for ( auto j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -903,9 +903,9 @@ void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& d
  {
     JAC.Resize(dim,dim);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( auto i=0; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
-        for ( size_t j=0; j<npe; j++ )
+        for ( auto j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -964,10 +964,10 @@ double  FiniteElement::JacobianInverse()
               cerr <<"\n\nFiniteElement::JacobianInverse(2D): element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
               cerr << detJ << endl;
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-              for ( size_t i=0; i<Nodes(); i++ )
+              for ( auto i=0; i<Nodes(); i++ )
                 {
                   cerr<<" Node( "<<i<<" ): ";
-                  for ( size_t j=0; j<XY.Cols(); j++ )
+                  for ( auto j=0; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
                   cerr<<endl;
                 }
@@ -989,10 +989,10 @@ double  FiniteElement::JacobianInverse()
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
           std::cerr << detJ << std::endl;
           cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-          for ( size_t i=0; i<Nodes(); i++ )
+          for ( auto i=0; i<Nodes(); i++ )
             {
               cerr <<" Node( "<<i<<" ): ";
-              for ( size_t j=0; j<XY.Cols(); j++ )
+              for ( auto j=0; j<XY.Cols(); j++ )
                   cerr << XY(i,j) <<" ";
               cerr <<endl;
             }

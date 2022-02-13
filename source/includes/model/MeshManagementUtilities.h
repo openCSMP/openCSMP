@@ -15,49 +15,49 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
 
-template<size_t> class Model;
-template<size_t> class MeshManager;
-template<size_t> class Region;
-template<size_t> class Boundary;
-template<size_t> class SplitBoundary;
+template<uint32_t> class Model;
+template<uint32_t> class MeshManager;
+template<uint32_t> class Region;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 
 
 // MESH CONNECTIVITY
 
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
-template<size_t dim>
+template<uint32_t dim>
 void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
-template<size_t dim>
+template<uint32_t dim>
 void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
                                      bool unassign_neighbors_outside = false, bool verbose = true );
 
-template<size_t dim>
+template<uint32_t dim>
 void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
                                      bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
-template<size_t dim>
+template<uint32_t dim>
 bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
 
 /// using a breadth-first mesh traversal, finds all the Element, Face, or InterFace objects that belong to this contiguous mesh patch
-template<size_t dim,template<size_t> class CELL>
+template<uint32_t dim,template<uint32_t> class CELL>
 size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
 
 /// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
                                    typename plf::colony<CELL<dim>>::iterator end,
                                    std::map<std::string,std::vector<CELL<dim>*> >& );
 
 /// finds pointers to all contiguous regions in a mesh (collection of mesh patches) returning pointers to them so that they can be explored; returns patches found
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
                                              typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<CELL<dim>*,MeshPatchAttributes>& ); 
@@ -66,15 +66,15 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
 // DIAGNOSTICS
 
 /// determines whether mesh in model is built from finite elements with a local coordinate system
-template<size_t dim>
+template<uint32_t dim>
 bool isoparametricElementMesh( const Model<dim>& );
 
 /// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
-template<size_t dim>
-size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
+template<uint32_t dim>
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<uint32_t>& );
 
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
-template<size_t dim>
+template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
                           typename std::vector<Node<dim>*>::const_iterator nodes_end,
                           std::vector<std::vector<double> >& distances_and_weight );
@@ -83,7 +83,7 @@ void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes
 typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
 
 /// find all elements in a model that contact eachother across split interfaces and are node-matched
-template<size_t dim>
+template<uint32_t dim>
 bool findSplitInterfaceElements( const Region<dim>&,
                                  std::set<std::pair<std::pair<Element<dim>*, size_t>,
                                  std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
@@ -97,67 +97,67 @@ size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  ed
 // UTILITIES INVOLVING INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
 // TODO: implement
-//template<size_t dim,template<size_t> class CELL>
-//size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<size_t>& );
+//template<uint32_t dim,template<uint32_t> class CELL>
+//size_t detectDisconnectedCells( const MeshManager<dim>&, std::set<uint32_t>& );
 
 /// loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void detachNeighborsFrom( CELL<dim>* const cell_to_detach_neighbors_from );
 
 /// returns angle (in degrees) between the normals of the two cells, which must be surfaces (only in 3D)
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 );
 
 /// Line elements can exist in all 3 spatial dimensions.
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 );
 
 /// traverses mesh via node neighbors and collects nodes into argument set; @return number of discovered nodes; requires node to parent connectivity
-template<size_t dim>
+template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
 
 /// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
-template<size_t dim>
+template<uint32_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const );
 
 // TODO: implement: not sure how to do this in a generic way
-template<size_t dim>
+template<uint32_t dim>
 void updateParentElementConnectivity( Node<dim>* const );
 
 /// Using the parent elements of its nodes, finds its higher-dimensional neighbor on inside or outside
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>* const findInnerHigherDimensionalNeighborFromNodes( Element<dim>* const, INTERFACE_SIDE );
 
 /// Connects nodes to Face, finding them by matching the faces of the supplied higher dimensional elements
-template<size_t dim>
+template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_neighbor,
                                              Face<dim>* const );
 
 /// Connects nodes to InterFace, finding them by matching the faces of the supplied higher dimensional elements; face IDs are set as well
-template<size_t dim>
+template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_neighbor,
                                              InterFace<dim>* const );
 
 
 /// Surt's method to efficiently erase vector Element from a pointer vector.
-template<size_t dim>
+template<uint32_t dim>
 void eraseElementPointerFromVector( std::vector<csmp::Element<dim>*>&, const Element<dim>* );
 
 /// by comparison of node locations, finds overlapping cells and reports them
 bool findCollocatedCells(); // TODO: not implemented yet
 
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (faster)
-template<size_t dim>
+template<uint32_t dim>
 std::pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// assuming that the elements are adjacent, method finds their faces that are in contact with one another from their shared nodes (slower)
-template<size_t dim>
+template<uint32_t dim>
 std::pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 );
 
 /// returns true if the elements contain each others barycentre
-template<size_t dim>
+template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
@@ -167,25 +167,25 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double toleranc
 csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
 
 /// detect degenerate elements by using the node coordinates to check whether some nodes have the same location
-template<size_t dim>
+template<uint32_t dim>
 size_t collocatedNodes( const Element<dim>* const );
 
 
 // UTILITIES FOR TESTING ETC
 
 ///  captures a snapshot of the current cell connectivity for the range of cells; developed for testing
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
                                  typename std::vector<CELL<dim>*>::const_iterator last,
                                  std::vector<std::vector<CELL<dim>*> >& nbor_pointers );
 
 /// tests whether all the expected cell functionality is there and operational
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                      typename plf::colony<CELL<dim>>::const_iterator last );
 
 /// finds the min max corners of the bounding box for the supplied range of nodes
-template<size_t dim>
+template<uint32_t dim>
 std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
                                                typename std::vector<Node<dim>*>::const_iterator last );
 

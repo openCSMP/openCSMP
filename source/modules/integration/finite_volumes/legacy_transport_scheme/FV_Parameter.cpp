@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 
-FV_Parameter::FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with_normals )
+FV_Parameter::FV_Parameter( size_t sectors, size_t facets, uint32_t dim, bool with_normals )
  : sector_volume_( sectors ),
    facet_v_and_A_( facets )
  {
@@ -22,7 +22,7 @@ FV_Parameter::FV_Parameter( size_t sectors, size_t facets, size_t dim, bool with
 
 
 
-void FV_Parameter::Resize( size_t sectors, size_t facets, size_t dim, bool with_normals )
+void FV_Parameter::Resize( size_t sectors, size_t facets, uint32_t dim, bool with_normals )
  {
     sector_volume_.resize( sectors );  
     vector<double>(sector_volume_).swap(sector_volume_);
@@ -94,7 +94,7 @@ void FV_Parameter::Out() const
     cout <<"\nFV_Parameter::Out: Data of finite-volume stencil: ";
 
     cout <<"area, unit normal, and velocity magnitude on the finite volume facets: "<< endl;
-    for ( size_t i=0; i<facet_v_and_A_.size(); i++ ) {
+    for ( auto i=0; i<facet_v_and_A_.size(); i++ ) {
          //      facet                        area
          cout <<"f"<< i+1 <<": A "<< facet_v_and_A_[i].second <<", fn";
          // unit normal
@@ -106,7 +106,7 @@ void FV_Parameter::Out() const
       }
 
     cout <<"sector volumes: "<< endl;
-    for ( size_t i=0; i<sector_volume_.size(); i++ )
+    for ( auto i=0; i<sector_volume_.size(); i++ )
       cout << i+1 <<": "<< sector_volume_[i] << endl;
     cout << endl;
     cout.flush();

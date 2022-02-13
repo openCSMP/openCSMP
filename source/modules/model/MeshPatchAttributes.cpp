@@ -12,7 +12,7 @@ using namespace std;
 
 namespace csmp {
 
-MeshPatchAttributes::MeshPatchAttributes( size_t cells, ELEMENT_DIMENSION dim )
+MeshPatchAttributes::MeshPatchAttributes( size_t cells, CELL_SHAPE dim )
  : cells_(cells), cell_dimension_(dim)
  {
  }
@@ -30,13 +30,13 @@ size_t MeshPatchAttributes::Cells() const
  }
  
  
-void MeshPatchAttributes::Geometry( ELEMENT_DIMENSION dim )
+void MeshPatchAttributes::Geometry( CELL_SHAPE dim )
  {
     cell_dimension_ = dim;
  }
  
  
-ELEMENT_DIMENSION MeshPatchAttributes::Geometry() const
+CELL_SHAPE MeshPatchAttributes::Geometry() const
  {
     return cell_dimension_;
  }

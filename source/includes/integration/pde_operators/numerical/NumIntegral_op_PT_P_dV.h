@@ -12,7 +12,7 @@ namespace csmp {
 @date 2000 */
 
 /// vector solution variable: "mass matrix" for computation of vector properties (2-3DOF) and constant coefficients
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_op_PT_P_dV( const PropertyDatabase<dim>& p, 
@@ -21,7 +21,7 @@ class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim> {
     virtual void ComputeContribution( const CELL& );
 
   private:
-    size_t  nodal_degrees_of_freedom;
+    uint32_t  nodal_degrees_of_freedom;
 };
 
 // copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger

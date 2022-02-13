@@ -17,7 +17,7 @@ namespace csmp {
     @attention special case: if nu=0.5 a purely viscous (incompressible) fluid is modeled
     this requires a special material property matrix, see Zienkiewicz Vol II
 */
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref, 

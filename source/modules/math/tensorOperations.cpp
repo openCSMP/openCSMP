@@ -20,7 +20,7 @@ namespace csmp {
    or the average of the eigenvalues of the tensor property 
    with the given csmp::Index
 */
-template<size_t dim,template<size_t> class PLACE>
+template<uint32_t dim,template<uint32_t> class PLACE>
 double magnitude( const PLACE<dim>& site, const csmp::Index& prop_key )
  {
     if (  prop_key.type == SCALAR ) return site.Read( prop_key );

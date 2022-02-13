@@ -50,7 +50,7 @@ void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double>& b )
     size_t          i, icol(0), irow(0), j, k, l, ll;
     const size_t    n = A.Rows();
     double       big, dum, pivinv;
-    vector<size_t>  indxc(n,0), indxr(n,0), ipiv(n,0);
+    vector<uint32_t>  indxc(n,0), indxr(n,0), ipiv(n,0);
 
     for (j=0;j<n;j++) ipiv[j]=0;
     for (i=0;i<n;i++) {

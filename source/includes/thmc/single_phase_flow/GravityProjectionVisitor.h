@@ -14,7 +14,7 @@
 
 namespace csmp{
 
-template<size_t dim>
+template<uint32_t dim>
 class GravityProjectionVisitor : public Visitor<dim>
 {
 

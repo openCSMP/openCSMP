@@ -6,13 +6,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FractureMatrixUpscaled<dim>::FractureMatrixUpscaled()
  {
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>& database,
                                                      const char* permeability,
                                                      const char* visc_nw, const char* visc_w,
@@ -46,7 +46,7 @@ FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>& database,
                                                      const char* permeability,
                                                      const char* visc_nw, const char* visc_w,
@@ -81,7 +81,7 @@ FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( double permeability,
                                                      double visc_nw, double visc_w,
                                                      double rho_nw, double rho_w,
@@ -110,19 +110,19 @@ FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( double permeability,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 FractureMatrixUpscaled<dim>::~FractureMatrixUpscaled()
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void FractureMatrixUpscaled<dim>::InitializeForSw( double sw )
  {
    TwoPhaseModel<dim>::sat_ = sw;
  }
 
 /// @note only the element properties
-template<size_t dim>
+template<uint32_t dim>
 void FractureMatrixUpscaled<dim>::Initialize( const Element<dim>& e )
  {
     if( TwoPhaseModel<dim>::tensor_permeability_){
@@ -165,7 +165,7 @@ void FractureMatrixUpscaled<dim>::Initialize( const Element<dim>& e )
 
 
 /// @note node properties
-template<size_t dim>
+template<uint32_t dim>
 void FractureMatrixUpscaled<dim>::InitializeForNode( const Element<dim>& e,
                                                         size_t fem_node )
  {
@@ -182,7 +182,7 @@ void FractureMatrixUpscaled<dim>::InitializeForNode( const Element<dim>& e,
 
 /// wetting phase relative permeability
 /// @note these functions are all based on the absolute saturation
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::krw_Phase() const
  {
     // 1. Brooks-Corey based upscaled model using the GTF without boost factor
@@ -201,7 +201,7 @@ double FractureMatrixUpscaled<dim>::krw_Phase() const
 
 
 /// nonwetting phase relative permeability with transfer term
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::krn_Phase() const
  {
 
@@ -222,7 +222,7 @@ double FractureMatrixUpscaled<dim>::krn_Phase() const
     return ( qfqm_ > 1. ) ? std::max( 1. - krw_Phase(), krn_f ) : krn_m;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::pc_Phase( ) const
 {
    GenericTransferFunction  gtf( phim_, pd_, lambda_, this->muw_, this->mun_ );
@@ -231,13 +231,13 @@ double FractureMatrixUpscaled<dim>::pc_Phase( ) const
 
 
 /// for the wetting phase
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double>(5.6); // as computed with dfds method
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::dfds() const
 {
 
@@ -247,7 +247,7 @@ double FractureMatrixUpscaled<dim>::dfds() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double FractureMatrixUpscaled<dim>::dGds( ) const
 {
 
@@ -258,7 +258,7 @@ double FractureMatrixUpscaled<dim>::dGds( ) const
 //cout <<"\nsw "<< TwoPhaseModel<dim>::sat <<", bcp "<< TwoPhaseModel<dim>::pm2 <<", dGdS "<< dGdS <<" "; cout.flush();
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FractureMatrixUpscaled<dim>::Out( size_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);

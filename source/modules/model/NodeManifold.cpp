@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 NodeManifold<dim>::~NodeManifold()
 {
    // disconnecting the node pointers so that no damage is done
@@ -18,7 +18,7 @@ NodeManifold<dim>::~NodeManifold()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( const std::vector<Node<dim>*>& nodes,
                                  const std::vector<INTERFACE_SIDE>& sides,
                                  ManifoldType classifier )
@@ -28,7 +28,7 @@ NodeManifold<dim>::NodeManifold( const std::vector<Node<dim>*>& nodes,
     assert( n_branches >= 2 );
     assert( n_branches == sides.size() );
     branches_.reserve( n_branches );
-    for( size_t i=0U; i<n_branches; ++i ) {
+    for( auto i{0}; i<n_branches; ++i ) {
          branches_.push_back( make_pair( nodes[i], sides[i] ) );
          nodes[i]->Assign(this);
       }
@@ -39,7 +39,7 @@ NodeManifold<dim>::NodeManifold( const std::vector<Node<dim>*>& nodes,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
  : branches_(nodes),
    parent_geometry_(geometry)
@@ -64,7 +64,7 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
       @todo use also the material IDs that come together at that node
       @todo use std::initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
 */
-template<size_t dim>
+template<uint32_t dim>
 ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
  {
     // diagnostics: go over all possible cases excluding the ones that are not possible
@@ -79,7 +79,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
 //                 vol_counter(0U); // track inner and outer nodes
     // in the case of a fracture manifold (we can have an endpoint...)
     if ( with_middle_node )
-      for ( size_t i=0U; i<connected_elmts; ++i ) {
+      for ( auto i{0}; i<connected_elmts; ++i ) {
            if ( mnd_ptr->Parent(i)->IsLineElement() ) line_counter++;
            else surf_counter++;
         }
@@ -136,12 +136,12 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
 
 
 // accessor
-template<size_t dim>
+template<uint32_t dim>
 ManifoldType NodeManifold<dim>::GeometricClassifier() const
  {return parent_geometry_;}
 
 // mutator
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifold<dim>::GeometricClassifier( ManifoldType te )
  { parent_geometry_ = te; }
 
@@ -171,7 +171,7 @@ string parse( ManifoldType topology )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifold<dim>::SortByVariableValue( const Index& index )
 {
     assert(index.type==SCALAR);
@@ -186,7 +186,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
     // if the variable is associated with the node manifold
     // (different values on each node of the manifold)
     if(index.place==NODE){
-        for (size_t i = 0; i < n_branches; ++i) {
+        for (auto i = 0; i < n_branches; ++i) {
             double first = branches_[i].first->Read(index);
             assert(!isnan(first));
             for (size_t j = i + 1; j < n_branches; ++j) {
@@ -197,7 +197,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
         }
     // if the variable is associated with the parent elements
     } else if(index.place==ELEMENT) {
-        for (size_t i = 0; i < branches_.size(); ++i) {
+        for (auto i = 0; i < branches_.size(); ++i) {
             //double first = std::numeric_limits<double>::quiet_NaN();
             double first_value(0.);
             size_t first_count(0);
@@ -248,7 +248,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t NodeManifold<dim>::Branches() const
 {
   return branches_.size();
@@ -257,7 +257,7 @@ size_t NodeManifold<dim>::Branches() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Node<dim>* const NodeManifold<dim>::N( size_t index ) const
 {
   return branches_[index].first;
@@ -265,14 +265,14 @@ Node<dim>* const NodeManifold<dim>::N( size_t index ) const
 
 
 /// where the node resides
-template<size_t dim>
+template<uint32_t dim>
 INTERFACE_SIDE NodeManifold<dim>::InterFaceSide( size_t branch ) const
  {
    return branches_[branch].second;
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Node<dim>* const  NodeManifold<dim>::MIDDLE_Node() const
  {
     for ( auto& nit : branches_ )
@@ -288,7 +288,7 @@ Node<dim>* const  NodeManifold<dim>::MIDDLE_Node() const
 /** retrieve node(s) with specific flags (manifold should only contain one intervening Node (MIDDLE)
          @note due to the move() semantics there won't be redundant copying of the vector
  */
-template<size_t dim>
+template<uint32_t dim>
 vector<Node<dim>*>  NodeManifold<dim>::NodesLocatedAt( INTERFACE_SIDE side ) const
  {
     vector<Node<dim>*> temp;
@@ -303,7 +303,7 @@ vector<Node<dim>*>  NodeManifold<dim>::NodesLocatedAt( INTERFACE_SIDE side ) con
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType geometry )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -338,7 +338,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType ge
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool NodeManifold<dim>::Remove( Node<dim>* nd )
 {
    for ( auto& nit : branches_ )
@@ -360,7 +360,7 @@ bool NodeManifold<dim>::Remove( Node<dim>* nd )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
   std::cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the IDs:\t";

@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
 
 /**
 @brief ScalarVariable combines a floating point value with a flag
@@ -159,11 +159,11 @@ ScalarVariable  operator*( const double&, const ScalarVariable& );
 ScalarVariable  operator/( const double&, const ScalarVariable& );
 
 /// multiplies each element of vector variable with scalar
-template<size_t dim>
+template<uint32_t dim>
 VectorVariable<dim>  operator*( const ScalarVariable&, const VectorVariable<dim>& );
 
 /// multiplies each element of tensor variable with scalar
-template<size_t dim>
+template<uint32_t dim>
 TensorVariable<dim>  operator*( const ScalarVariable&, const TensorVariable<dim>& );
 
 /// for printing scalars using the standard streams cout, cerr, clog

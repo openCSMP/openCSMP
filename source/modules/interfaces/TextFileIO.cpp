@@ -128,7 +128,7 @@ bool openFile( FileStream& fs, const std::string& fname, const std::vector<std::
   if ( !fs.is_open() )
   {
     const size_t extensions( file_extensions.size() );
-    for ( size_t i = 1; i < extensions; i++ )
+    for ( auto i = 1; i < extensions; i++ )
     {
       strcpy( filename, fname.c_str() );
       strcat( filename, file_extensions[i].c_str() );
@@ -381,7 +381,7 @@ The method acts on the input character string.
 bool isBlankLine( const char* str )
 {
    const size_t strlength = strlen( str );
-   for ( size_t i=0U; i<strlength; ++i )
+   for ( auto i{0}; i<strlength; ++i )
      if ( !isblank( str[i] ) ) return false;
 
    return true;
@@ -434,7 +434,7 @@ bool isCommentLine( char* str )
     return true;
 
   // if the comment identifier is somewhere in the line
-  for ( size_t i = 0U; i<strlength; i++ )
+  for ( auto i = 0U; i<strlength; i++ )
     {
        if ( str[i] == '#' || str[i] == '%' ) {
             str[i] = '\0';
@@ -673,7 +673,7 @@ void readPropertyValue( ScalarVariable& sc )
 } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 void readPropertyValue( VectorVariable<dim>& vc )
 {
   char*        token( 0 );
@@ -706,7 +706,7 @@ void readPropertyValue( VectorVariable<dim>& vc )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void readPropertyValue( TensorVariable<dim>& ts )
 {
   char*  token( 0 );
@@ -729,7 +729,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
   if ( value_count == dim*dim ) {
     // Interpret dim*dim numbers as the full tensor
     const double* val = &values[0];
-    for ( size_t i = 0; i < dim; ++i )
+    for ( auto i = 0; i < dim; ++i )
     {
       for ( size_t j = 0; j < dim; ++j )
       {
@@ -740,14 +740,14 @@ void readPropertyValue( TensorVariable<dim>& ts )
   else if ( value_count == dim ) {
     // Interpret dim numbers as the tensor diagonal
     const double* val = &values[0];
-    for ( size_t i = 0; i < dim; ++i )
+    for ( auto i = 0; i < dim; ++i )
     {
       ts( i, i ) = *val++;
     }
   }
   else if ( value_count == 1 ) {
     // Interpret 1 number as the tensor diagonal
-    for ( size_t i = 0; i < dim; ++i )
+    for ( auto i = 0; i < dim; ++i )
     {
       ts( i, i ) = values[0];
     }
@@ -908,7 +908,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, ve
       flags.resize( depth, parseCondition( flag_name = token ) );
 
       flags[0] = parseCondition( flag_name = token );
-      for ( size_t i = 1U; i<depth; i++ )
+      for ( auto i = 1U; i<depth; i++ )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -969,7 +969,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, ve
 
       flags[0] = parseCondition( flag_name = token );
       const size_t depth2( depth*depth );
-      for ( size_t i = 0U; i<depth; i++ )
+      for ( auto i = 0U; i<depth; i++ )
       {
         for ( size_t j = 0U; j<depth; j++ )
         {
@@ -1079,7 +1079,7 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& positi
       flags.resize( depth, parseCondition( flag_name = token ) );
       flags[0] = parseCondition( flag_name = token );
 
-      for ( size_t i = 1U; i<depth; i++ )
+      for ( auto i = 1U; i<depth; i++ )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -1131,19 +1131,19 @@ void printPropertyValue( const ScalarVariable& sc )
   cout << sc << endl;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void printPropertyValue( const VectorVariable<dim>& vc )
 {
-  for ( size_t i = 0; i<dim; i++ )
+  for ( auto i = 0; i<dim; i++ )
     cout << vc[i] << ", ";
   cout << endl;
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void printPropertyValue( const TensorVariable<dim>& ts )
 {
-  for ( size_t i = 0; i<dim; i++ ) {
+  for ( auto i = 0; i<dim; i++ ) {
     cout << "\t";
     for ( size_t j = 0; j<dim; j++ )
       cout << ts( i, j ) << ", ";
@@ -1154,13 +1154,13 @@ void printPropertyValue( const TensorVariable<dim>& ts )
 
 void printPropertyValue( const ArrayVariable& av )
 {
-  for ( size_t i = 0; i<av.Size(); i++ )
+  for ( auto i = 0; i<av.Size(); i++ )
     cout << av[i] << ", ";
 }
 
 void printPropertyValue( const FlaggedArrayVariable& fv )
 {
-  for ( size_t i = 0; i<fv.Size(); i++ )
+  for ( auto i = 0; i<fv.Size(); i++ )
     cout << fv[i] << ", ";
 }
 
@@ -1239,7 +1239,7 @@ void reportAssignment( const string& prop,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const string& prop,
                        const string& unit,
                        const string& bound,
@@ -1261,7 +1261,7 @@ void reportAssignment( const string& prop,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const string& prop,
                        const string& unit,
                        const string& bound,
@@ -1285,7 +1285,7 @@ void reportAssignment( const string& prop,
   }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const string& prop,
                        const string& unit,
                        const string& bound,
@@ -1307,7 +1307,7 @@ void reportAssignment( const string& prop,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const string& prop,
                        const string& unit,
                        const string& bound,
@@ -1549,7 +1549,7 @@ the correct number of scalar data could be read.
 The method reports problems during the reading process.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readPointData( std::map<std::string, std::vector<double> >& pdata,
                     int ndata,
                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
@@ -1584,7 +1584,7 @@ bool readPointData( std::map<std::string, std::vector<double> >& pdata,
                                "Duplicate record for", token );
 
       // 3. point coordinates and data
-      for ( size_t i = 0; i<(dim + ndata); i++ ) {
+      for ( auto i = 0; i<(dim + ndata); i++ ) {
         token = strtok( NULL, delims );
         if ( token == NULL ) {
           cout << "\n" << text_line << endl;
@@ -1653,7 +1653,7 @@ after the method is called provided that the call was successful.
 
 The method provides feedback on the intended operation.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
                                        std::set<std::string>& groups,
                                        std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
@@ -1812,7 +1812,7 @@ if was properly assigned an IRREGULAR flag instead.
 The method reports potential errors that may occur if the input textline
 contains errors or imcomplete variable specifications.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2070,7 +2070,7 @@ not to overwrite preexisting Dirichlet constraints (anywhere on the boundary).
 This means whatever was on the boundary before is overwritten.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
                                               std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2166,7 +2166,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
       else if ( prop_type == VECTOR )
       {
         VectorVariable<dim> vc;
-        for ( size_t i = 0; i < dim; ++i ) {
+        for ( auto i = 0; i < dim; ++i ) {
           prop_flag = strtok( NULL, delims );
           vc.Flag( i ) = parseCondition( prop_flag );
         }
@@ -2195,7 +2195,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
       else if ( prop_type == TENSOR )
       {
         TensorVariable<dim> ts;
-        for ( size_t i = 0; i < dim; ++i )
+        for ( auto i = 0; i < dim; ++i )
           ts.Flag( i ) = parseCondition( prop_flag );
         readPropertyValue( ts );
         double  val = ts.MinElement();
@@ -2228,7 +2228,7 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
         av.Resize( length );
         av.Flag() = parseCondition( prop_flag );
         readPropertyValue( av );
-        for ( size_t i = 0; i< av.Size(); i++ ) {
+        for ( auto i = 0; i< av.Size(); i++ ) {
           double  val = av( i );
           sg.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -2255,12 +2255,12 @@ bool readBoundaryPropertyValuesAndConditions( Model<dim>& sg,
       {
         FlaggedArrayVariable fv;
         fv.Resize( length );
-        for ( size_t i = 0; i < fv.Size(); ++i ) {
+        for ( auto i = 0; i < fv.Size(); ++i ) {
           prop_flag = strtok( NULL, delims );
           fv.Flag( i ) = parseCondition( prop_flag );
         }
         readPropertyValue( fv );
-        for ( size_t i = 0; i< fv.Size(); i++ ) {
+        for ( auto i = 0; i< fv.Size(); i++ ) {
           double  val = fv( i );
           sg.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -2345,7 +2345,7 @@ that contains the boundary property flag information.
 The method reports the data that are read from file to stdout and
 reports any possible parsing errors.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyConditions( Model<dim>& model,
                                      std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2483,7 +2483,7 @@ reports any possible parsing errors.
 */
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool readRegionPropertyConditions( Model<dim>& model,
                                    std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2620,7 +2620,7 @@ BOUNDARY3	(tab)	interior	(tab)	fluid pressure	(tab)	2.0E+7
 
 @attention This applies only to unique boundary names.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyValues( Model<dim>& model,
                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2760,7 +2760,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
         ArrayVariable av;
         av.Resize( length );
         readPropertyValue( av );
-        for ( size_t i = 0; i< av.Size(); i++ ) {
+        for ( auto i = 0; i< av.Size(); i++ ) {
           double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -2790,7 +2790,7 @@ bool readBoundaryPropertyValues( Model<dim>& model,
         FlaggedArrayVariable fv;
         fv.Resize( length );
         readPropertyValue( fv );
-        for ( size_t i = 0; i< fv.Size(); i++ ) {
+        for ( auto i = 0; i< fv.Size(); i++ ) {
           double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -2858,7 +2858,7 @@ character string.
 The method attempts to correctly identify parsing errors that may
 occur when the textline is interpreted.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readRegionPropertyValues( Model<dim>& model,
                                std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -2976,7 +2976,7 @@ bool readRegionPropertyValues( Model<dim>& model,
           csmp_error.notice( FATAL_ERROR, "readRegionPropertyValues",
                              "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
-        for ( size_t i = 0; i < dim; ++i ) {
+        for ( auto i = 0; i < dim; ++i ) {
           double  val = eigVals( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3006,7 +3006,7 @@ bool readRegionPropertyValues( Model<dim>& model,
         ArrayVariable av;
         av.Resize( length );
         readPropertyValue( av );
-        for ( size_t i = 0; i< av.Size(); i++ ) {
+        for ( auto i = 0; i< av.Size(); i++ ) {
           double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3036,7 +3036,7 @@ bool readRegionPropertyValues( Model<dim>& model,
         FlaggedArrayVariable fv;
         fv.Resize( length );
         readPropertyValue( fv );
-        for ( size_t i = 0; i< fv.Size(); i++ ) {
+        for ( auto i = 0; i< fv.Size(); i++ ) {
           double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3111,7 +3111,7 @@ that should contain the tab-separated variable name and value(s).
 The method reports potential parsing errors and echoes the values that
 it reads to the screen.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readDefaultPropertyValues( Model<dim>& model,
                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -3166,7 +3166,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
           error_handler.notice( FATAL_ERROR, "readDefaultPropertyValues",
                                 "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
-        for ( size_t i = 0; i < dim; ++i ) {
+        for ( auto i = 0; i < dim; ++i ) {
           double  val = eigVals( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3181,7 +3181,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
         ArrayVariable av;
         av.Resize( length );
         readPropertyValue( av );
-        for ( size_t i = 0; i< av.Size(); i++ ) {
+        for ( auto i = 0; i< av.Size(); i++ ) {
           double  val = av( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3196,7 +3196,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
         FlaggedArrayVariable fv;
         fv.Resize( length );
         readPropertyValue( fv );
-        for ( size_t i = 0; i< fv.Size(); i++ ) {
+        for ( auto i = 0; i< fv.Size(); i++ ) {
           double  val = fv( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3263,7 +3263,7 @@ settings datablock.
 
 Any reading problems are reported.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool readComputationalSettings( ComputationalSettings& settings,
                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose )
 {
@@ -3438,7 +3438,7 @@ size_t  read_CSV_File( string filename, vector<string>& col_titles, vector<vecto
          rows_of_columns.emplace_back( vector<double>{ x, y, z } );
 
          // reading the property values
-         for ( size_t i=0U; i<n_properties; i++ ) {
+         for ( auto i{0}; i<n_properties; i++ ) {
               double data_value = atof(strtok(NULL,delims));
               // TODO: perhaps add a value check against property database here
               rows_of_columns[row_count].push_back( data_value );

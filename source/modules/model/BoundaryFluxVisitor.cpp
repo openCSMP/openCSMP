@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp{
 
-template <size_t dim>
+template <uint32_t dim>
 BoundaryFluxVisitor<dim>::BoundaryFluxVisitor( const PropertyDatabase<dim>& pdb, const char* property_name, const char* result_property_name )
 : Visitor<dim>( BOUNDARY, BOUNDARY ), property_key_( pdb.StorageKey(property_name) ), result_property_key_( pdb.StorageKey(result_property_name) )
   {
@@ -20,7 +20,7 @@ BoundaryFluxVisitor<dim>::BoundaryFluxVisitor( const PropertyDatabase<dim>& pdb,
       throw csmp::Exception( ERROR, "BoundaryFluxVisitor", "Result property has to be a scalar placed on the boundary" );
   }
 
-template <size_t dim>
+template <uint32_t dim>
 void BoundaryFluxVisitor<dim>::Visit(Boundary<dim>* bd)
 {
   double total_flux(0.);

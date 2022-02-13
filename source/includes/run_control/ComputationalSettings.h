@@ -11,7 +11,7 @@ enum TIME_STRATEGY { PEDANTIC, CONSERVATIVE, MODERATE, AGGRESSIVE, DARING, PRESC
 TIME_STRATEGY parseTimeStrategy( const char* );
 const char*   parseTimeStrategy( TIME_STRATEGY );
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /// base class for generic configurations
 class ComputationalSettings {
@@ -57,7 +57,7 @@ class ComputationalSettings {
                                double& adv_multiplier ) const;
 
     /// algorithm that monitors the flow velocity change from timestep to timestep and suggests a timeincrement on this basis
-    template<size_t dim>
+    template<uint32_t dim>
     double TimeIncrementFromVelocityChange( const Model<dim>& sg, 
                                               double log_velocity_change, 
                                               double current_delta_t, 

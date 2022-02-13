@@ -14,7 +14,7 @@ using namespace std;
 
 namespace csmp{
 
-template<size_t dim>
+template<uint32_t dim>
 void innerOuterParents( Model<dim>& model, VTU_Interface<dim>& vtu, Boundary<dim>& boundary, string fileName )
 {
   const ScalarVariable zero( PLAIN, 0. );
@@ -75,7 +75,7 @@ void Boundary_Test::run()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Boundary_Test::ElementNodes( const Region<dim>& region )
   {
   const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
@@ -84,7 +84,7 @@ void Boundary_Test::ElementNodes( const Region<dim>& region )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Boundary_Test::NoSurfaceElementsAsNodeParents( const Region<dim>& region )
 {
   const auto domainNodesEnd( region.NodesEnd() );
@@ -94,7 +94,7 @@ void Boundary_Test::NoSurfaceElementsAsNodeParents( const Region<dim>& region )
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 void Boundary_Test::TestBoxBoundary( Model<dim>& model, const string& boxBoundary, VTU_Interface<dim>& vtu )
 {
   std::string boundary_name( boxBoundary );
@@ -129,7 +129,7 @@ void Boundary_Test::TestBoxBoundary( Model<dim>& model, const string& boxBoundar
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Boundary<dim>& boundary, const char* variableName )
 {
   Index areaKey( model.Database().StorageKey( variableName ) );
@@ -137,8 +137,8 @@ size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Bound
                                    // either be Face, Element or InterFace
   ScalarVariable area( PLAIN, 0. );
   size_t surfaceElementCount( 0 );
-  const typename std::vector<Face<dim>*>::iterator domainElementsEnd( boundary.ElementsEnd() );
-  for( typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
+  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd( boundary.ElementsEnd() );
+  for( typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
   {
     area = (*it)->Area();
     (*it)->Store( areaKey, area );
@@ -151,7 +151,7 @@ size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Bound
 
 
 /// checks for that at least one neigbor is present
-template <size_t dim>
+template <uint32_t dim>
 void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
   {
 
@@ -160,8 +160,8 @@ void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
   for( auto it = boundary.ElementsBegin(); it != domainElementsEnd; ++it )
     {
       size_t notNullNeighbors(0);
-      const size_t neighbors( (*it)->Neighbors() );
-      for( size_t i = 0; i < neighbors; ++i )
+      const auto neighbors( (*it)->Neighbors() );
+      for( auto i = 0; i < neighbors; ++i )
         {
           if( (*it)->Neighbor(i) )
             ++notNullNeighbors;
@@ -172,7 +172,7 @@ void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
 
 
 /// checks for that face unit normal points toward outer parent element
-template <size_t dim>
+template <uint32_t dim>
 void Boundary_Test::CheckFaceUnitNormalOrientation( const Boundary<dim>& boundary )
   {
 	// IMPORTANT: this is ignored since the unit normal vector of that face such as the 2D-line face on a boundary
@@ -265,7 +265,7 @@ void Boundary_Test::UnitNormalTest3D()
 
 
 /// checks for flags of the boundary nodes
-template <size_t dim>
+template <uint32_t dim>
 void Boundary_Test::CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY flag, bool interiorOnly )
   {
     const auto interiorDomainNodesEnd( boundary.PerimeterNodesBegin() );
@@ -282,7 +282,7 @@ void Boundary_Test::CheckNodeFlags( const Boundary<dim>& boundary, BOX_BOUNDARY 
 
 
 /// checks for flags of the boundary nodes
-template <size_t dim>
+template <uint32_t dim>
 void Boundary_Test::CheckNodeParents( const Boundary<dim>& boundary )
   {
       const auto domainNodesEnd( boundary.NodesEnd() );
@@ -468,11 +468,11 @@ void Boundary_Test::runLegacy()
     CheckNodeFlags( boundaryOne, IRREGULAR );
     CheckNodeParents( boundaryOne );
     model.Region( "Model" ).UpdateMemberIndexes();
-    vector<size_t> outerParentsIDs;
+    vector<uint32_t> outerParentsIDs;
     for( vector<Face<3>*>::const_iterator it = boundaryOne.ElementsBegin(); it != boundaryOne.ElementsEnd(); ++it )
       outerParentsIDs.push_back( (*it)->Parent(OUTSIDE)->Idx() );
     model.FormRegionFrom( "BOUNDARY OUTER PARENTS", outerParentsIDs );
-    vector<size_t> innerParentsIDs;
+    vector<uint32_t> innerParentsIDs;
     for( vector<Face<3>*>::const_iterator it = boundaryOne.ElementsBegin(); it != boundaryOne.ElementsEnd(); ++it )
       innerParentsIDs.push_back( (*it)->Parent(INSIDE)->Idx() );
     model.FormRegionFrom( "BOUNDARY INNER PARENTS", innerParentsIDs );
@@ -509,8 +509,8 @@ void Boundary_Test::runLegacy()
     _test( InputElementAreaAsVolumeVariable<DIM3>( model, boundary12, "face variable" ) > 0 );
     if ( verbose_ ) vtu.OutputDataToVTU( "FaceVariable_B", "face variable", boundary12, static_cast<int>(0) );
     // FACE AREA
-    const std::vector<Face<3>*>::iterator boundaryElementsEnd( boundary12.ElementsEnd() );
-    for( std::vector<Face<3>*>::iterator it = boundary12.ElementsBegin(); it != boundaryElementsEnd; ++it )
+    const std::vector<Face<3>*>::const_iterator boundaryElementsEnd( boundary12.ElementsEnd() );
+    for( std::vector<Face<3>*>::const_iterator it = boundary12.ElementsBegin(); it != boundaryElementsEnd; ++it )
     {
       Face<DIM3> currentFace = (*(*it));
       _test( !withinTolerance( currentFace.Area(), 0., 1.0E-5 ) );

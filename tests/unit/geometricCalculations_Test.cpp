@@ -31,15 +31,15 @@ void geometricCalculations_Test::run()
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 );
 
 /// axes ( 2D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, const csmp::Point<dim>& pt3, csmp::Point<dim>& e1, csmp::Point<dim>& e2 );
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 );
 
 /// axes ( 3D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, const csmp::Point<dim>& pt3, const csmp::Point<dim>& pt4, csmp::Point<dim>& e1, csmp::Point<dim>& e2, csmp::Point<dim>& e3 );
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>& e3, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 );
 
 /// bar ( length )

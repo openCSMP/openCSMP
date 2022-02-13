@@ -15,7 +15,7 @@ namespace csmp {
     
     @todo make sure that the map:key nodes are ideed contained in the manifolds.
 */
-template<size_t dim>
+template<uint32_t dim>
 NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indices,
                                                plf::colony<Node<dim>>& mesh_nodes )
  {
@@ -39,7 +39,7 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
 #ifdef DEBUG
 // checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
 for ( auto& nit : indices ) {
-    set<size_t> mnodes;
+    set<uint32_t> mnodes;
     for ( auto mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
     // if the key node is not contained this is reported
     if ( mnodes.find(nit.first) == mnodes.end() )
@@ -82,31 +82,31 @@ for ( auto& nit : indices ) {
 
 
 // disconnecting and deleting the node manifolds
-template<size_t dim>
+template<uint32_t dim>
 NodeManifoldManager<dim>::~NodeManifoldManager<dim>()
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 typename NodeManifoldManager<dim>::manifoldIterator NodeManifoldManager<dim>::ManifoldsBegin()
   { return node_manifolds_.begin(); }
 
 
-template<size_t dim>
+template<uint32_t dim>
 typename NodeManifoldManager<dim>::manifoldIterator NodeManifoldManager<dim>::ManifoldsEnd()
   { return node_manifolds_.end(); }
 
-template<size_t dim>
+template<uint32_t dim>
 typename NodeManifoldManager<dim>::manifoldConstIterator NodeManifoldManager<dim>::ManifoldsBegin() const
   { return node_manifolds_.begin(); }
 
 
-template<size_t dim>
+template<uint32_t dim>
 typename NodeManifoldManager<dim>::manifoldConstIterator NodeManifoldManager<dim>::ManifoldsEnd() const
   { return node_manifolds_.end(); }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  NodeManifoldManager<dim>::Manifolds() const
   { return node_manifolds_.size(); }
 
@@ -118,7 +118,7 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
       
       @attention one can later add nodes to this manifold using  NodeManifold's methods
 */
-template<size_t dim>
+template<uint32_t dim>
 NodeManifold<dim>* const NodeManifoldManager<dim>::NewManifold( Node<dim>* const inside,
                                                                 Node<dim>* const outside,
                                                                 ManifoldType geom )
@@ -135,7 +135,7 @@ NodeManifold<dim>* const NodeManifoldManager<dim>::NewManifold( Node<dim>* const
 
 
     /// puts the nodes inside of the manifolds into the ascending order of values of the user specified  variable
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index )
  {
     for ( auto& nmf : node_manifolds_ ) {
@@ -154,14 +154,14 @@ void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_nam
    
    @attention the new Manifold does not get sorted
 */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeManifold<dim>* mnf2 )
   {
      // 1. making sure that the two manifolds actually share nodes
      size_t sum_nodes = mnf1->Branches() + mnf2->Branches();
      vector<pair<Node<dim>*,INTERFACE_SIDE> > combined_manifolds;
      combined_manifolds.reserve(sum_nodes);
-     for ( size_t i{0}; i<mnf1->Branches(); ++i )
+     for ( auto i{0}; i<mnf1->Branches(); ++i )
        combined_manifolds.push_back( make_pair( mnf1->N(i), mnf1->InterFaceSide(i) ) );
 
      // making the vector unique
@@ -197,7 +197,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager<dim>::Delete( NodeManifold<dim>* const md )
 {
    node_manifolds_.erase( node_manifolds_.get_iterator(md) );
@@ -208,7 +208,7 @@ void NodeManifoldManager<dim>::Delete( NodeManifold<dim>* const md )
   If there are single-node manifolds, their nodes are deconnected and the manifolds are deleted.
   Later, the manager is searched for the remaining null pointers and these are removed.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t NodeManifoldManager<dim>::DeleteSingleNodeManifolds()
   {
      size_t n_single_node_manifolds(0U);
@@ -233,7 +233,7 @@ size_t NodeManifoldManager<dim>::DeleteSingleNodeManifolds()
     @attention call DeleteSingleNodeManifolds() before to avoid storing any defunct manifolds
     @attention make sure that the nodes have unique numbers that match those in the other binary files
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_name,
                                                             const char* node_sorting_variable ) const
  {
@@ -306,11 +306,11 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         const string sort_variable(node_sorting_variable);
         binaryFileWrite( fp, sort_variable );
         // sorted nodes
-        vector<size_t>  manifold_node_list;
+        vector<uint32_t>  manifold_node_list;
         manifold_node_list.reserve( n_manifold_node_entries );
         for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
-             for ( size_t i=0U; i<entries; ++i )
+             for ( auto i{0}; i<entries; ++i )
                manifold_node_list.push_back( nmf.N(i)->Idx() );
           }
         binaryFileWrite( fp, manifold_node_list );
@@ -321,7 +321,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         manifold_node_topo_list.reserve( n_manifold_node_entries );
         for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
-             for ( size_t i=0U; i<entries; ++i )
+             for ( auto i{0}; i<entries; ++i )
                manifold_node_topo_list.push_back( nmf.InterFaceSide(i) );
           }
         binaryFileWrite( fp, manifold_node_topo_list );
@@ -337,7 +337,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
 
 /** Reads manifolds from binary file, using indices to create pointer connections
  */
-template<size_t dim>
+template<uint32_t dim>
 string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<dim>>& mesh_nodes,
                                                                const char* file_name )
  {
@@ -386,7 +386,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     // name of variable that was used for sorting the nodes
     binaryFileRead( fp, current_sort_variable_ );
     // sorted nodes
-    vector<size_t>  nodes_of_manifolds;
+    vector<uint32_t>  nodes_of_manifolds;
     binaryFileRead( fp, nodes_of_manifolds );
 
     // 4. like previous record but of INTERFACE_SIDE specifiers
@@ -400,7 +400,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     vector<Node<dim>*>     nodes;
     vector<INTERFACE_SIDE> sides;
     size_t counter(0U);
-    for ( size_t i=0U; i<manifolds; ++i ) {
+    for ( auto i{0}; i<manifolds; ++i ) {
          const size_t n_branches( nodes_per_manifold[i] );
          nodes.reserve( n_branches );
          sides.reserve( n_branches );
@@ -420,7 +420,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
  }
     
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager<dim>::Out() const
  {
     if ( node_manifolds_.empty() )

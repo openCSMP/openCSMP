@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 class ConstantFactor : public Interrelation< dim> {
   private:
     Operand<dim>&  res_;

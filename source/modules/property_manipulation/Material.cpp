@@ -17,7 +17,7 @@ using namespace std;
 namespace csmp {
 
 /// transforms rational (-1,0..5..n) property values into material IDs stored on the elements
-template<size_t dim>
+template<uint32_t dim>
 void material_IDs_FromPropertyValues( Model<dim>& model, const std::string& elmt_prop_name )
  {
     const csmp::Index key(model.Database().StorageKey(elmt_prop_name.c_str()));
@@ -27,8 +27,7 @@ void material_IDs_FromPropertyValues( Model<dim>& model, const std::string& elmt
     Region<dim>& model_domain(model.Region("Model"));
     int32_t mtrl_min(INT_MAX), mtrl_max(INT_MIN);
     
-    for ( typename vector<Element<dim>*>::iterator 
-          it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
         const double value = (*it)->Read(key);
         // checking that the property value can indeed be converted into an integer in a meaningful range
         // using the modulus operator % to determine whether the number has a decimal fraction
@@ -56,7 +55,7 @@ template void material_IDs_FromPropertyValues( Model<3U>&, const string& );
 
 
 /// transforms rational (-1,0..5..n) property values into material IDs stored on the elements
-template<size_t dim>
+template<uint32_t dim>
 void propertyValuesPFromMaterial_IDs( Model<dim>& model, const std::string& elmt_prop_name )
  {
     const csmp::Index key(model.Database().StorageKey(elmt_prop_name.c_str()));
@@ -66,8 +65,7 @@ void propertyValuesPFromMaterial_IDs( Model<dim>& model, const std::string& elmt
 
     Region<dim>& model_domain(model.Region("Model"));
     
-    for ( typename vector<Element<dim>*>::iterator 
-          it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          const double material_identifier = static_cast<double>( (*it)->Material_ID() );
          (*it)->Store( key, makeScalar( (*it)->Status(key), material_identifier ) );
       }
@@ -94,15 +92,14 @@ template void propertyValuesPFromMaterial_IDs( Model<3U>&, const string& );
     @attention Method uses BOX_BOUNDARY flags, i.e. AtBoundary() to determine whether an element is placed on a model boundary or interior
   
 */
-template<size_t dim>
+template<uint32_t dim>
 void smoothMaterialInterfaces( Model<dim>& model )
  {
     Region<dim>& model_domain(model.Region("Model"));
     size_t       modified_interior_elmts(0U),
                  modified_boundary_elmts(0U);
     
-    for ( typename vector<Element<dim>*>::iterator 
-          it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
          if ( !isTriangular( (*it)->FE_Type() ) )
            csmp::Exception( ERROR, "smoothMaterialInterfaces", "thus far, this method has only been implemented for triangles.");
          if ( !(*it)->IsSurfaceElement() )
@@ -111,7 +108,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
          // removing completely isolated elements
          const int32_t mtrl_ID = (*it)->Material_ID();
          bool  nbor_with_same_ID(false);
-         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr && (*it)->Neighbor(i)->Material_ID() == mtrl_ID ) {
                 nbor_with_same_ID = true;
                 break;

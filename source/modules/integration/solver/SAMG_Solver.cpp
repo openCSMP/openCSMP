@@ -670,7 +670,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 
   // solver returned ok so lets place contents back into x
   if ( settings_->UsePointBasedApproach() )
-    for ( size_t i = 0U; i < nnu_; i++ )
+    for ( auto i = 0U; i < nnu_; i++ )
       x[i%nsys_*(nnu_ / nsys_) + i / nsys_] = u_[i];
   else x = u_;
 
@@ -1208,7 +1208,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 
     // solver returned ok so lets place contents back into x
     if ( settings_->UsePointBasedApproach() )
-        for ( size_t i = 0U; i < nnu_; i++ )
+        for ( auto i = 0U; i < nnu_; i++ )
             x[i%nsys_*(nnu_/nsys_)+i/nsys_] = u_[i];
     else x = u_;
 
@@ -1303,11 +1303,11 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     out_file += ".amg";
     ofs.open(out_file.c_str());
     // this order is O.K. because the indices are not printed
-    for ( size_t i=0U; i<nnu_+1U; i++ ) ofs << crmat_.ia[i] << endl;
-    for ( size_t i=0U; i<nna_;    i++ ) ofs << crmat_.ja[i] << endl;
+    for ( auto i{0}; i<nnu_+1U; i++ ) ofs << crmat_.ia[i] << endl;
+    for ( auto i{0}; i<nna_;    i++ ) ofs << crmat_.ja[i] << endl;
     ofs.setf(ios::scientific);
     long prec = ofs.precision(15);
-    for ( size_t i=0U; i<nna_;   i++ ) ofs << crmat_.a[i] << endl;
+    for ( auto i{0}; i<nna_;   i++ ) ofs << crmat_.a[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();
@@ -1358,7 +1358,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     ofs.open(out_file.c_str());
     ofs.setf(ios::scientific);
     prec = ofs.precision(15);
-    size_t i=0U;
+    auto i{0};
     for ( size_t row=0U; row!=nnu_; row++ )
     {
         ofs <<"\n"<<(row+1)<<"\t"; // node number
@@ -1388,7 +1388,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".iu";
         ofs.open(out_file.c_str());
-        for ( size_t i=0U; i<ndiu_; i++ ) ofs << iu_[i] << endl;
+        for ( auto i{0}; i<ndiu_; i++ ) ofs << iu_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Solver::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;
@@ -1406,7 +1406,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".ip";
         ofs.open(out_file.c_str());
-        for ( size_t i=0U; i<ndip_; i++ ) ofs << ip_[i] << endl;
+        for ( auto i{0}; i<ndip_; i++ ) ofs << ip_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Adaptor::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;

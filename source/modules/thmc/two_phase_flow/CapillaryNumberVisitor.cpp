@@ -7,7 +7,7 @@
 namespace csmp{
 
 
-template<size_t dim>
+template<uint32_t dim>
 CapillaryNumberVisitor<dim>::CapillaryNumberVisitor( Model<dim>& model, const char* velTag,
                                                      const char* viscTag, const char* nCapTag, double ift )
     : Visitor<dim>( MODEL, ELEMENT ), model_(model), velKey_( model.Database().StorageKey(velTag) ),
@@ -16,7 +16,7 @@ CapillaryNumberVisitor<dim>::CapillaryNumberVisitor( Model<dim>& model, const ch
     }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void CapillaryNumberVisitor<dim>::Visit( Element<dim>* element )
     {
       const double visc( element->Read(viscKey_) );

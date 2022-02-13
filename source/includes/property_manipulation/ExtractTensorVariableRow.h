@@ -13,7 +13,7 @@ namespace csmp {
   @date 6/2006
   */
 
-template<size_t dim>
+template<uint32_t dim>
 class ExtractTensorVariableRow : public Interrelation<dim> {
     Operand<dim>&        t;
     Operand<dim>&        v;
@@ -32,7 +32,7 @@ class ExtractTensorVariableRow : public Interrelation<dim> {
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline void ExtractTensorVariableRow<dim>::Calculate()
  {
     t.AssignTo( ts );

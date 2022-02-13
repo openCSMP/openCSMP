@@ -134,7 +134,7 @@ void ErrorMetric_Example::assignLargestEigenValueOfTo( Model<3U>& sg, const char
     VectorVariable<3U>   evals;
     Region<3>&  sgref(sg.Region("Model"));
 
-    for ( vector<Node<3U>*>::iterator
+    for ( vector<Node<3U>*>::const_iterator
           nit=sgref.NodesBegin(); nit!=sgref.NodesEnd(); nit++ ) {
          (*nit)->Read( hes_key, ts );
 
@@ -169,8 +169,7 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
     ScalarVariable       emag;
     Region<3>&  sgref(sg.Region("Model"));
 
-    for ( vector<Element<3U>*>::iterator
-          eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
+    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
       {
          (*eit)->Read( hes_key, ts );
 

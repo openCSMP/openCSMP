@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
   public:
     Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& p,
@@ -17,8 +17,8 @@ class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
                                      const char* trigger,
                                      const double prefactor = 1. );
     
-    virtual void GetOperands( const SIMPLEX& );
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
   
   private:
     DenseMatrix<DM_MIN>  DN, DNT;

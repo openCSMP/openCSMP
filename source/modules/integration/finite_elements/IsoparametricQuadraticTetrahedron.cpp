@@ -328,7 +328,7 @@ A reference to the parent Element, the number of the integration point.
 The interpolation function values are returned into the third argument.
 
 */
-void IsoparametricQuadraticTetrahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& IPOL )
+void IsoparametricQuadraticTetrahedron::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& IPOL )
  {
     assert( ip < gpe );
 
@@ -343,7 +343,7 @@ void IsoparametricQuadraticTetrahedron::N_AtIntegrationPoint( size_t ip, std::ve
 
 
 void
-IsoparametricQuadraticTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricQuadraticTetrahedron::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(3);
     if ( segm_id == 0 ) {
@@ -408,8 +408,8 @@ Furthermore, NodesOfFace() is used in the construction of faces if
 these are made part of the mesh connectivity by the
 MeshManager.
  */
-void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
-                                                     vector<size_t>& fnids ) const
+void IsoparametricQuadraticTetrahedron::NodesOfFace( uint32_t face_id,
+                                                     vector<uint32_t>& fnids ) const
  {
     fnids.resize(6);
     if      ( face_id == 0 ) { // opposite node 0
@@ -449,32 +449,32 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( size_t face_id,
 
 
 
-vector<size_t>  IsoparametricQuadraticTetrahedron::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricQuadraticTetrahedron::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,3,2};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,2,1};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,3,2};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,2,1};
       }
     cerr <<"\nIsoparametricQuadraticTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
-vector<size_t>  IsoparametricQuadraticTetrahedron::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  IsoparametricQuadraticTetrahedron::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,2,3};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,1,2};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,2,3};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,1,2};
         default:
           cerr <<"\nIsoparametricQuadraticTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
@@ -487,7 +487,7 @@ This is an unsigned integer vector with the 4 local corner node ID numbers
 for the element.
 
 */
-void  IsoparametricQuadraticTetrahedron::CornerNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTetrahedron::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(4);
     ids[0] = 0;
@@ -506,7 +506,7 @@ Returns an unsigned integer vector with the 4 local midside-node ID numbers
 for the element.
 
 */
-void  IsoparametricQuadraticTetrahedron::MidSideNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTetrahedron::MidSideNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(6);
     ids[0] = 4;
@@ -518,7 +518,7 @@ void  IsoparametricQuadraticTetrahedron::MidSideNodes( std::vector<size_t>& ids 
  }
 
 
-void  IsoparametricQuadraticTetrahedron::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTetrahedron::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -534,16 +534,16 @@ void  IsoparametricQuadraticTetrahedron::CounterClockwiseNodes( std::vector<size
  }
 
 
-double IsoparametricQuadraticTetrahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricQuadraticTetrahedron::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 
-CSMP_FEM_TYPE IsoparametricQuadraticTetrahedron::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE IsoparametricQuadraticTetrahedron::ElementTypeOfFace( uint32_t ) const
  {
     return ISOPARAMETRIC_QUADRATIC_TRIANGLE;
  }
 
 
-void  IsoparametricQuadraticTetrahedron::JacobianAtIntegrationPoint( size_t gauss_point )
+void  IsoparametricQuadraticTetrahedron::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     dNr( IP(gauss_point,0), IP(gauss_point,1), IP(gauss_point,2), DNR );
     dNs( IP(gauss_point,0), IP(gauss_point,1), IP(gauss_point,2), DNS );
@@ -680,7 +680,7 @@ double  IsoparametricQuadraticTetrahedron::AspectRatio()
    double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
-   for ( size_t i=1; i<spe; i++ ) {
+   for ( uint32_t i=1; i<spe; i++ ) {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
      }
@@ -710,7 +710,7 @@ double  IsoparametricQuadraticTetrahedron::InnerRadius()
    double                 sum(0.0);
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( uint32_t i=0; i<spe; i++ ) sum += segms[i];
 
    return Volume() / (sum/2.);
 }
@@ -729,7 +729,7 @@ void IsoparametricQuadraticTetrahedron::ParametricToPhysical( vector<double>& rs
     xyz.resize(dim);
     xyz[0]=xyz[1]=xyz[2]=0.;
 
-    for( size_t i=0; i<npe; i++ ) {
+    for( uint32_t i=0; i<npe; i++ ) {
          xyz[0]+=XY(i,0)*DNR[i];
          xyz[1]+=XY(i,1)*DNR[i];
          xyz[2]+=XY(i,2)*DNR[i];
@@ -757,7 +757,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( size_t i=1; i<spe; i++ )
+    for ( uint32_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -791,9 +791,9 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
         double minDistanceFromGivenPoint;
 
         const double constantMu               = 1.0;
-        const size_t numberOfFirstIterrations   = 5;
-        const size_t maxNumberOfIterrations     = 20;
-        const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
+        const uint32_t numberOfFirstIterrations   = 5;
+        const uint32_t maxNumberOfIterrations     = 20;
+        const uint32_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
         const double incrementR = 1.0/(numberOfFirstIterrations-1);
         const double incrementS = 1.0/(numberOfFirstIterrations-1);
@@ -802,13 +802,13 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = 0.0;
-        for(size_t i=0;i<numberOfFirstIterrations;i++)
+        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = 0.0;
-            for(size_t j=0;j<numberOfFirstIterrations;j++)
+            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = 0.0;
-                for(size_t k=0;k<numberOfFirstIterrations;k++)
+                for(uint32_t k=0;k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -823,7 +823,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(size_t i=0; i<dim; i++)
+                        for(uint32_t i=0; i<dim; i++)
                             rstHatK[i] = rstHatK_PlusOne[i];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -845,7 +845,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
                                          distanceFromGivenPointLinf[1]*distanceFromGivenPointLinf[1] +
                                          distanceFromGivenPointLinf[2]*distanceFromGivenPointLinf[2] );
 
-        size_t iteration = 1;
+        uint32_t iteration = 1;
 
         /// Newton-Raphson iterations
         while ( ( distanceFromGivenPointL2 > geometricTolerance ) && ( iteration < maxNumberOfIterrations ) )
@@ -884,7 +884,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(size_t i=0; i<dim; i++)
+            for(uint32_t i=0; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -943,7 +943,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
 
     }
 
-    for(size_t i=0; i<dim; i++)
+    for(uint32_t i=0; i<dim; i++)
         rSt[i] = rstHatK[i];
 
 }
@@ -1120,9 +1120,9 @@ void IsoparametricQuadraticTetrahedron::dN( DenseMatrix<DM_MIN>& DN10 )
      M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) RST[j] = NXYZ(i,j);
+          for ( uint32_t j=0; j<dim; j++ ) RST[j] = NXYZ(i,j);
 
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -1133,7 +1133,7 @@ void IsoparametricQuadraticTetrahedron::dN( DenseMatrix<DM_MIN>& DN10 )
           Jacobian( DNR, DNS, DNT );
           JacobianInverse();
 
-          for ( size_t j=0; j<dim; j++ ) M(j,0) = DN10(j,i);
+          for ( uint32_t j=0; j<dim; j++ ) M(j,0) = DN10(j,i);
 
           // 3x3 * 3x1 = 3x1 gives the global DN entries
           JINV *= M;
@@ -1222,7 +1222,7 @@ double  IsoparametricQuadraticTetrahedron::Volume()
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( size_t i=0U; i<gpe; i++ )
+    for ( auto i{0}; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1322,7 +1322,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double IsoparametricQuadraticTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+double IsoparametricQuadraticTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -1380,7 +1380,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double IsoparametricQuadraticTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
+double IsoparametricQuadraticTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
  {
     assert( nd < npe );
     dNr( NXYZ(nd,0), NXYZ(nd,1), NXYZ(nd,2), DNR );
@@ -1470,8 +1470,8 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
  */
-void  IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                                     vector<size_t>& fnids )
+void  IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                                     vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -1544,9 +1544,9 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1576,7 +1576,7 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1584,8 +1584,8 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }
@@ -1640,14 +1640,14 @@ Such linear interpolation is facilitated by this method.
 
 */
 void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNodes(
-                                                                     size_t nvars,
+                                                                     uint32_t nvars,
                                                                      const vector<double>& IVAR,
                                                                      vector<double>&       NVAR )
  const
 {
    static double  a[4], b[4], c[4], d[4], intpol[4], volume6;
    static bool      first_call(true);
-   size_t i;
+   uint32_t i;
    int32_t  j;
 
    vector<double>  sum(nvars);
@@ -1712,11 +1712,11 @@ void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNo
 
         // carry out extrapolation
         fill( sum.begin(), sum.end(), static_cast<double>(0.) );
-        for ( size_t l=0; l<gpe; l++ )
-          for ( size_t k=0; k<nvars; k++ ) sum[k] += intpol[l] * IVAR[l*nvars + k];
+        for ( uint32_t l=0; l<gpe; l++ )
+          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[l] * IVAR[l*nvars + k];
 
         // store result in output vector
-        for ( size_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (STL vectors)
@@ -1726,7 +1726,7 @@ void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNo
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
-void  IsoparametricQuadraticTetrahedron::IntegrationPoint( size_t ip,
+void  IsoparametricQuadraticTetrahedron::IntegrationPoint( uint32_t ip,
                                                            vector<double>& xyz ) const
  {
     assert( ip < gpe );
@@ -1734,7 +1734,7 @@ void  IsoparametricQuadraticTetrahedron::IntegrationPoint( size_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -1772,7 +1772,7 @@ void IsoparametricQuadraticTetrahedron::JacobianAt( const std::vector<double>& r
 
     @author HA 2016
 */
-void IsoparametricQuadraticTetrahedron::UnitNormalAtFaceBarycenter( size_t face, std::vector<double>& nrmlAtbarycenter )
+void IsoparametricQuadraticTetrahedron::UnitNormalAtFaceBarycenter( uint32_t face, std::vector<double>& nrmlAtbarycenter )
 {
    assert(face < Faces());
    nrmlAtbarycenter.resize(3U);
@@ -1858,13 +1858,13 @@ void IsoparametricQuadraticTetrahedron::UnitNormalAtFaceBarycenter( size_t face,
     
     @author HA 2016
 */
-void IsoparametricQuadraticTetrahedron::FaceBarycenterCoordinates( size_t face, std::vector<double>& barycenterCoord )
+void IsoparametricQuadraticTetrahedron::FaceBarycenterCoordinates( uint32_t face, std::vector<double>& barycenterCoord )
 {
    assert(face < Faces());
    barycenterCoord.resize(3U);
    array<double,10> N_barycenterFace = N_AtFaceBarycenter(face);
    // getting the coordinate at barycenter of face 0
-   for (size_t i = 0; i < IntegrationPoints(); ++i ) {
+   for (auto i = 0; i < IntegrationPoints(); ++i ) {
         barycenterCoord[0] = N_barycenterFace[i] * XYZ(i, 0);
         barycenterCoord[1] = N_barycenterFace[i] * XYZ(i, 1);
         barycenterCoord[2] = N_barycenterFace[i] * XYZ(i, 2);
@@ -1879,10 +1879,10 @@ void IsoparametricQuadraticTetrahedron::FaceBarycenterCoordinates( size_t face, 
     
     @author HA 2016
 */
-array<double,10> IsoparametricQuadraticTetrahedron::N_AtFaceBarycenter( size_t i ) const
+array<double,10> IsoparametricQuadraticTetrahedron::N_AtFaceBarycenter( uint32_t i ) const
 {
    assert( i < Faces() );
-   const size_t nodesPerElement(10U);
+   const uint32_t nodesPerElement(10U);
   
    if (i == 0)
      return array < double, nodesPerElement >{ {-1.110223024625156e-16, -0.111111111111111, -0.111111111111111,

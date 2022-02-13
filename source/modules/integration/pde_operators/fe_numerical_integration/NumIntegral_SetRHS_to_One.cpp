@@ -8,11 +8,11 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_SetRHS_to_One<dim,CELL>::~NumIntegral_SetRHS_to_One() {}
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_SetRHS_to_One<dim,CELL>::NumIntegral_SetRHS_to_One( const PropertyDatabase<dim>& pref, const char* test )
   : MathOperatorRHS<dim>(pref,test)
  {
@@ -38,7 +38,7 @@ The result is returned into the MathOperatorRHS vector<fT> 'rhs'.
 @attention this 'rhs' contribution is not equivalent to an integral over an operand with a value of 1.
 
 tested: O.K.  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( const CELL& e )
 {
    // this integral is only for numerically integrated isoparametric finite elements
@@ -46,7 +46,7 @@ void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( const CELL& e )
 
    // create a RHS vector of zeros
    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-   for ( size_t i=0; i<e.Nodes(); i++ ) MathOperatorRHS<dim>::RHS[i] = 1.0/static_cast<double>(e.N(i)->Parents());
+   for ( auto i=0; i<e.Nodes(); i++ ) MathOperatorRHS<dim>::RHS[i] = 1.0/static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
 

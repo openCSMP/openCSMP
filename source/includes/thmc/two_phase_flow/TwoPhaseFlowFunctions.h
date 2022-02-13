@@ -20,7 +20,7 @@ namespace csmp {
     Uses the SaturationFunctions and Fluid module and the
     constitutive relationships specified therein.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class TwoPhaseFlowFunctions {
   public:
     /// current water saturation initialised inside of the model

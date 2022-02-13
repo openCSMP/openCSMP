@@ -7,7 +7,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::BrooksCorey()
 :default_capillary_pressure_max_(false)
 {
@@ -19,7 +19,7 @@ BrooksCorey<dim>::BrooksCorey()
     in this case the material parameter is used as the lambda parameter
     of the Brooks-Corey model
 */
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                double viscosity_nw, double viscosity_w,
@@ -42,7 +42,7 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const char* lamda, const char* pc_entry,
                                const bool sw_ro_mu_placement )
@@ -62,7 +62,7 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
   pc_max_ =  TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -88,7 +88,7 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
   pc_max_ =  TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -115,7 +115,7 @@ BrooksCorey<dim>::BrooksCorey( const PropertyDatabase<dim>& database,
   pc_max_ =  TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCorey<dim>::~BrooksCorey()
  {
  }
@@ -124,7 +124,7 @@ BrooksCorey<dim>::~BrooksCorey()
  
 
 /// Reading parameters for the linear & BC relperm models
-template<size_t dim>
+template<uint32_t dim>
 void BrooksCorey<dim>::Initialize( const Element<dim>& e )
  {
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -163,7 +163,7 @@ void BrooksCorey<dim>::Initialize( const Element<dim>& e )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::krw_Phase() const
  { 
     //  switch to linear relperm model if lambda = 0
@@ -176,7 +176,7 @@ double BrooksCorey<dim>::krw_Phase() const
 
 
 /// as in Helmig 97, eqn.2.57, p. 75
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::krn_Phase() const
  { 
     //  switch to linear relperm model if lambda = 0
@@ -187,7 +187,7 @@ double BrooksCorey<dim>::krn_Phase() const
     return (seffn * seffn) * (1. - pow( this->seff_, 2./lambda_ + 1.0) );
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dkrwds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -199,7 +199,7 @@ double BrooksCorey<dim>::dkrwds_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dkrnds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -216,7 +216,7 @@ double BrooksCorey<dim>::dkrnds_Phase() const
 
 
 /// pc covers the full saturation range, pc is capped based on maximum dpcds 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::pc_Phase( ) const
 {
     // linear relperm model
@@ -263,7 +263,7 @@ double BrooksCorey<dim>::pc_Phase( ) const
 
 
 /// dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dpcds_Phase( ) const
 {
 
@@ -303,7 +303,7 @@ double BrooksCorey<dim>::dpcds_Phase( ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::Sw_Phase( double pc ) const
 {
 
@@ -356,7 +356,7 @@ double BrooksCorey<dim>::Sw_Phase( double pc ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dsdpc_Phase( double pc ) const
 {
 
@@ -398,7 +398,7 @@ double BrooksCorey<dim>::dsdpc_Phase( double pc ) const
 
 */
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dfds() const
 {
 
@@ -430,7 +430,7 @@ double BrooksCorey<dim>::dfds() const
 }  // end dfdS
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::dGds() const
 {
 
@@ -464,7 +464,7 @@ double BrooksCorey<dim>::dGds() const
 
 
 /// for the wetting phase
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::MaxFractionalFlowDerivative() const
  {
     // linear relperm model
@@ -478,7 +478,7 @@ double BrooksCorey<dim>::MaxFractionalFlowDerivative() const
     return static_cast<double>(5.6); // as computed with dfds method
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::ShockSpeed() const
  {
     if ( lambda_ == static_cast<double>(0.) )
@@ -493,7 +493,7 @@ double BrooksCorey<dim>::ShockSpeed() const
 
 
 /// look this one up in the book by Randy LeVeque
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCorey<dim>::ShockHeight() const
  {
 
@@ -504,7 +504,7 @@ double BrooksCorey<dim>::ShockHeight() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void BrooksCorey<dim>::Out( size_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
@@ -518,27 +518,27 @@ void BrooksCorey<dim>::Out( size_t phase ) const
  
  
 
-template<size_t dim>
+template<uint32_t dim>
 double csmp::BrooksCorey<dim>::Pd() const
   {
     return entry_pressure_;
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void csmp::BrooksCorey<dim>::Pd( double pd )
   {
     entry_pressure_ = pd;
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void csmp::BrooksCorey<dim>::Lambda( double lambda )
   {
     lambda_ = lambda;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 double csmp::BrooksCorey<dim>::Lambda() const
   {
     return lambda_;

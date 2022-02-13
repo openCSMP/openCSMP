@@ -7,11 +7,11 @@
 namespace csmp {
 
 class FV_Parameter; 
-template<size_t> class Element;
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class Element;
+template<uint32_t> class TwoPhaseModel;
 
 /// for the calculation of FV equations to  be solved explicitly
-template<size_t dim>
+template<uint32_t dim>
 struct ExplicitStencilProcessor {
     /// for advection only
     ExplicitStencilProcessor( const csmp::Index& adv_key, 
@@ -167,7 +167,7 @@ struct ExplicitStencilProcessor {
     // fluid sources (+) or sinks (-) due to deviations from conservative fluxes
     std::vector<double>      src_, pc_; // divergence for each facet
     // node position w.r.t. the finite volume facet normal
-    mutable size_t       inside_node_, outside_node_;
+    mutable uint32_t         inside_node_, outside_node_;
      
     csmp::Index  adv1_key_;   // advected nodal quantity at t + dt
     csmp::Index  vel_key_;   // transport velocity at t

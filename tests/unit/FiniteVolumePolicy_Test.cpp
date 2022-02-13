@@ -34,7 +34,7 @@ namespace csmp {
 
 
 namespace {
-    template<size_t dim>
+    template<uint32_t dim>
     void dumpVector(const char* text, const Point<dim>& v)
     {
 		if ( dim==3 )
@@ -302,7 +302,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double fTolera
 	node2.Idx( 2 );
 	node2.x( -2.3680806 );
 
-    const size_t dim(1);
+    const uint32_t dim(1);
 
 	if(dim > 1)
 	{
@@ -490,7 +490,7 @@ Runs the test for the Isoparametric Linear Triangle element, for all dimensions 
 
 
 tested: is a test function*/
-template<size_t dim>
+template<uint32_t dim>
 void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance, double fToleranceInternal)
 {
 	FiniteElement* feptr			= new IsoparametricLinearTriangle(dim);
@@ -551,7 +551,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
 		//test mapped vs computed
 		_info("Test mapped area vs computed.");
-	  for(size_t i = 0; i < 3; i++)
+	  for(auto i = 0; i < 3; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -561,14 +561,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 3; i++)
+		   for(auto i = 0; i < 3; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 3; i++)
+		   for(auto i = 0; i < 3; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -638,7 +638,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
     //test mapped vs computed
     _info("Test mapped normal vs computed.");
-	  for(size_t i = 0; i < 3; i++)
+	  for(auto i = 0; i < 3; i++)
 	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -649,14 +649,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 3; i++)
+		   for(auto i = 0; i < 3; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 3; i++)
+		   for(auto i = 0; i < 3; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -891,7 +891,7 @@ double fTolerance - specifies the tolerance of the test
 Runs the test for the Isoparametric Linear Quadrilateral element, for all dimensions != 1.
 
 tested: is a test function*/
-template<size_t dim>
+template<uint32_t dim>
 void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal)
 {
 
@@ -973,7 +973,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
 	   //test mapped vs computed
 		 _info("Test mapped area vs computed.");
-	   for(size_t i = 0; i < 4; i++)
+	   for(auto i = 0; i < 4; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -983,14 +983,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 4; i++)
+		   for(auto i = 0; i < 4; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 4; i++)
+		   for(auto i = 0; i < 4; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -1062,7 +1062,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
 	    //test mapped vs computed
 		_info("Test mapped normal vs computed.");
-	  for(size_t i = 0; i < 4; i++)
+	  for(auto i = 0; i < 4; i++)
 	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -1073,14 +1073,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 4; i++)
+		   for(auto i = 0; i < 4; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 4; i++)
+		   for(auto i = 0; i < 4; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -1453,7 +1453,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 
 	  //test mapped vs computed
 		_info("Test mapped area vs computed.");
-	  for(size_t i = 0; i < 6; i++)
+	  for(auto i = 0; i < 6; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -1463,14 +1463,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 6; i++)
+		   for(auto i = 0; i < 6; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 6; i++)
+		   for(auto i = 0; i < 6; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -1561,7 +1561,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 
 	   //test mapped vs computed
 		_info("Test mapped normal vs computed.");
-	  for(size_t i = 0; i < 6; i++)
+	  for(auto i = 0; i < 6; i++)
 	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -1572,14 +1572,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 6; i++)
+		   for(auto i = 0; i < 6; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < 6; i++)
+		   for(auto i = 0; i < 6; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -2017,7 +2017,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 
      //test mapped vs computed
     _info("Test mapped area vs computed.");
-	  for(size_t i = 0; i < nr_of_facets; i++)
+	  for(auto i = 0; i < nr_of_facets; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -2027,14 +2027,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < nr_of_facets; i++)
+		   for(auto i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetArea( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < nr_of_facets; i++)
+		   for(auto i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -2264,7 +2264,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 	   //test mapped vs computed
 		 _info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 
-	   for(size_t i = 0; i < nr_of_facets; i++)
+	   for(auto i = 0; i < nr_of_facets; i++)
 	   {
 			_info("Normal " << i << ":");
 	    for(size_t j = 0; j < 3; j++)
@@ -2274,7 +2274,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
        _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 	   }
 
-	   for(size_t i = 0; i < nr_of_facets; i++)
+	   for(auto i = 0; i < nr_of_facets; i++)
 	    for(size_t j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -2285,14 +2285,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 
 		 clock_t ticks = clock();  double j(0);
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < nr_of_facets; i++)
+		   for(auto i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 	   ticks = clock();
 		  for(size_t t = 0; t < total_times; t++)
-		   for(size_t i = 0; i < nr_of_facets; i++)
+		   for(auto i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		 ticks = clock() - ticks;
 	   file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -2774,7 +2774,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 		//test mapped vs computed
 		_info("Test mapped area vs computed.");
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -2784,14 +2784,14 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -2958,7 +2958,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 		//test mapped vs computed
 		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
-		for(size_t i = 0; i < 8; i++)
+		for(auto i = 0; i < 8; i++)
 		{
 			_info("Normal " << i << ":");
 			for(size_t j = 0; j < 3; j++)
@@ -2968,7 +2968,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
         _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
 			for(size_t j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -2979,14 +2979,14 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -3240,7 +3240,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 
 		//test mapped vs computed
 		_info("Test mapped area vs computed.");
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -3250,14 +3250,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -3423,14 +3423,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 
 		//test mapped vs computed
 		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
-		for(size_t i = 0; i < 8; i++)
+		for(auto i = 0; i < 8; i++)
 		{
 			_info("Normal " << i << ":");
             dumpVector<3>(" ", elmt_.FacetNormal( i ));
             dumpVector<3>(" ", elmt_.FacetNormalMapped( i ));
 		}
 
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
 			for(size_t j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -3441,14 +3441,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -3712,7 +3712,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 
 		//test mapped vs computed
 		_info("Test mapped area vs computed.");
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -3722,14 +3722,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetArea( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -3893,7 +3893,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 		//test mapped vs computed
 		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 
-		for(size_t i = 0; i < 8; i++)
+		for(auto i = 0; i < 8; i++)
 		{
 			_info("Normal " << i << ":");
 			for(size_t j = 0; j < 3; j++)
@@ -3903,7 +3903,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
         _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
-		for(size_t i = 0; i < 12; i++)
+		for(auto i = 0; i < 12; i++)
 			for(size_t j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -3914,14 +3914,14 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 12; i++)
+			for(auto i = 0; i < 12; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;
@@ -4214,7 +4214,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 
 	  //test mapped vs computed
 		_info("Test mapped area vs computed.");
-	  for(size_t i = 0; i < 9; i++)
+	  for(auto i = 0; i < 9; i++)
       _equal( ( elmt_ ).FacetArea( i ), ( elmt_ ).FacetAreaMapped( i ), fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -4224,14 +4224,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 9; i++)
+			for(auto i = 0; i < 9; i++)
         j += ( elmt_ ).FacetArea( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetArea: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 9; i++)
+			for(auto i = 0; i < 9; i++)
         j += ( elmt_ ).FacetAreaMapped( i );
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetAreaMapped: "<< ticks << " " << j <<endl;
@@ -4359,7 +4359,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 
 		//test mapped vs computed
 		_info("Test mapped normal vs computed.");
-	  for(size_t i = 0; i < 9; i++)
+	  for(auto i = 0; i < 9; i++)
 	    for(size_t j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
@@ -4370,14 +4370,14 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 
 		clock_t ticks = clock();  double j(0);
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 9; i++)
+			for(auto i = 0; i < 9; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormal: "<< ticks << " " << j <<endl;
 
 		ticks = clock();
 		for(size_t t = 0; t < total_times; t++)
-			for(size_t i = 0; i < 9; i++)
+			for(auto i = 0; i < 9; i++)
         j += ( elmt_ ).FacetNormalMapped( i )[0];
 		ticks = clock() - ticks;
 		file <<"\n\tCPU clock ticks used for " << total_times << " FacetNormalMapped: "<< ticks << " " << j <<endl;

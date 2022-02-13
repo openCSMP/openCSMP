@@ -27,7 +27,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   getline( iStream, femTestData.femName_, '\n' );
   getline( iStream, cache, '\n' );
   if ( verbose ) cout << "(" << femTestData.femName_ << ")" << endl;
-  for( size_t i = 0; i < femTestData.femName_.size()+2; ++ i )
+  for( auto i = 0; i < femTestData.femName_.size()+2; ++ i )
     if ( verbose ) cout << "=";
   if ( verbose ) cout << endl;
 
@@ -45,7 +45,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
 
   // reading fem dim
   iStream.ignore( dS, dcT );
-  size_t dim;
+  uint32_t dim;
   iStream >> dim;
   femTestData.Dim( dim );
   if ( verbose ) cout << "FEM Spatial Dimension: " << dim << "(" << femTestData.Dim() << ")" << endl;
@@ -80,13 +80,13 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
 
   // reading nodes per face
   size_t nodesPerFace;
-  for( size_t i = 0; i < femTestData.FaceCount(); ++i )
+  for( auto i = 0; i < femTestData.FaceCount(); ++i )
   {
     iStream.ignore( dS, dcT );
     iStream >> nodesPerFace;
     femTestData.NodesPerFace( i, nodesPerFace );
   }
-  for( size_t i = 0; i < femTestData.FaceCount(); ++i )
+  for( auto i = 0; i < femTestData.FaceCount(); ++i )
     if ( verbose ) cout << "Nodes Face " << i << ":" << femTestData.NodesPerFace( i ) << endl;
 
   // reading constraint point neighbors
@@ -164,7 +164,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   iStream.ignore( dS, dcT );
   //iStream >> cache >> cache;
   double x, y, z;
-  for( size_t i = 0; i < femTestData.NodeCount(); ++i )
+  for( auto i = 0; i < femTestData.NodeCount(); ++i )
   {
     iStream >> x; iStream >> y; iStream >> z;
     Node<3U> newNode;
@@ -209,7 +209,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   //iStream >> cache >> cache;
   iStream.ignore( dS, dcT );
   double edgeLength;
-  for( size_t i = 0; i < femTestData.EdgeCount(); ++i )
+  for( auto i = 0; i < femTestData.EdgeCount(); ++i )
   {
     iStream >> edgeLength;
     femTestData.EdgeLength( i, edgeLength );
@@ -227,7 +227,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   //iStream >> cache >> cache >> cache;
   iStream.ignore( dS, dcT );
   size_t femNodeOfSegment;
-  for( size_t i = 0; i < femTestData.SegmentCount(); ++i )
+  for( auto i = 0; i < femTestData.SegmentCount(); ++i )
   {
     if ( verbose ) cout << "FEM Segment(" << i << ")" << endl;
     for( size_t j = 0; j < femTestData.NodesPerSegment(); ++j )
@@ -243,7 +243,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   //iStream >> cache >> cache >> cache;
   iStream.ignore( dS, dcT );
   size_t femNodeOfFace;
-  for( size_t i = 0; i < femTestData.FaceCount(); ++i )
+  for( auto i = 0; i < femTestData.FaceCount(); ++i )
   {
     if ( verbose ) cout << "FEM Face(" << i << ")" << endl;
     for( size_t j = 0; j < femTestData.NodesPerFace( i ); ++j )
@@ -263,7 +263,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   if ( verbose ) cout << "FEM Nodes at Corners: " << cornerNodeCount << "(" << femTestData.CornerNodeCount() << ")"<< endl;
   iStream >> cache >> cache >> cache;
   size_t cornerNode;
-  for( size_t i = 0; i < femTestData.CornerNodeCount(); ++i )
+  for( auto i = 0; i < femTestData.CornerNodeCount(); ++i )
   {
     iStream >> cornerNode;
     femTestData.NodeAtCorner( i, cornerNode );
@@ -278,7 +278,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   if ( verbose ) cout << "FEM Nodes at Interior: " << midsideNodeCount << "(" << femTestData.MidsideNodeCount() << ")"<< endl;
   iStream >> cache >> cache >> cache;
   size_t midsideNode;
-  for( size_t i = 0; i < femTestData.MidsideNodeCount(); ++i )
+  for( auto i = 0; i < femTestData.MidsideNodeCount(); ++i )
   {
     iStream >> midsideNode;
     femTestData.NodeAtMidside( i, midsideNode );
@@ -293,7 +293,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   if ( verbose ) cout << "FEM Nodes at Interior: " << interiorNodeCount << "(" << femTestData.InteriorNodeCount() << ")"<< endl;
   iStream >> cache >> cache >> cache;
   size_t interiorNode;
-  for( size_t i = 0; i < femTestData.InteriorNodeCount(); ++i )
+  for( auto i = 0; i < femTestData.InteriorNodeCount(); ++i )
   {
     iStream >> interiorNode;
     femTestData.NodeAtInterior( i, interiorNode );
@@ -304,7 +304,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   //iStream >> cache >> cache >> cache;
   iStream.ignore( dS, dcT );
   string faceElementType;
-  for( size_t i = 0; i < femTestData.FaceCount(); ++i )
+  for( auto i = 0; i < femTestData.FaceCount(); ++i )
   {
     iStream >> faceElementType;
     femTestData.FaceElementType( i, parseFiniteElementType( faceElementType ) );
@@ -318,7 +318,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
     if ( verbose ) cout << "Unit Normal: ";
     double comp;
     std::vector<double> unitNormal;
-    for( size_t i = 0; i < femTestData.Dim(); i++)
+    for( auto i = 0; i < femTestData.Dim(); i++)
     {
       iStream >> comp;
       unitNormal.push_back( comp );
@@ -539,7 +539,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   iStream >> var_b;
   femTestData.JACOBIANatIP( var_b );
 
-  size_t dim_volume=1;
+  uint32_t dim_volume=1;
 
   if( femTestData.SurfaceElement() )
       dim_volume=2;
@@ -596,7 +596,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
 
 
   // io feedback done
-  for( size_t i = 0; i < femTestData.femName_.size()+2; ++ i ) cout << "=";
+  for( auto i = 0; i < femTestData.femName_.size()+2; ++ i ) cout << "=";
     if ( verbose ) cout << endl << endl;
 
   return iStream;

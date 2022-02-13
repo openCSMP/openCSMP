@@ -12,7 +12,7 @@ namespace csmp {
     @author SKM
     @date 30/01/2018
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class LHS_Integral_dNT_dN_dV : public MathOperatorLHS<dim> {
   public:
     /// @param basic weighting function operand, @param test interpolation function operand
@@ -20,11 +20,11 @@ class LHS_Integral_dNT_dN_dV : public MathOperatorLHS<dim> {
                             const char* basic,
                             const char* test );
   
-    virtual void GetOperands( const SIMPLEX& e ) { /* noting to do here since there is no material operand */ }
+    virtual void GetOperands( const CELL& e ) { /* noting to do here since there is no material operand */ }
     
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
   
-    virtual LHS_Integral_dNT_dN_dV<dim,SIMPLEX>* clone() const { return new LHS_Integral_dNT_dN_dV<dim,SIMPLEX> (*this); }
+    virtual LHS_Integral_dNT_dN_dV<dim,CELL>* clone() const { return new LHS_Integral_dNT_dN_dV<dim,CELL> (*this); }
   
   private:
     DenseMatrix<DM_MIN>          DN, DNT;

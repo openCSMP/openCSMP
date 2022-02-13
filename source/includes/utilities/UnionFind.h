@@ -56,7 +56,7 @@ class UnionFind {
 
   std::map<Item,size_t> item_map_;
   std::deque<Record> records_;
-  std::set<size_t> components_;
+  std::set<uint32_t> components_;
 
   // Find the representative node of an item's component by traversing
   // the tree to the root, compressing the path by halves as we traverse.

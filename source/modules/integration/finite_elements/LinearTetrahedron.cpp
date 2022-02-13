@@ -134,7 +134,7 @@ void LinearTetrahedron::dN( DenseMatrix<DM_MIN>& B )
    // volume
    double vol6 = M(0,0)+M(0,1)+M(0,2)+M(0,3);
 
-   for ( size_t i=0; i<npe; i++ )
+   for ( uint32_t i=0; i<npe; i++ )
     {
        B(0,i) = M(1,i) / vol6;
        B(1,i) = M(2,i) / vol6;
@@ -191,7 +191,7 @@ void LinearTetrahedron::IntegralNN( DenseMatrix<DM_MIN>& M )
 @param ids Returns the counter-clockwise local node numbering for the element.
 
 */
-void LinearTetrahedron::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void LinearTetrahedron::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -201,7 +201,7 @@ void LinearTetrahedron::CounterClockwiseNodes( std::vector<size_t>& ids ) const
  }
 
 
-void LinearTetrahedron::CornerNodes( std::vector<size_t>& ids ) const
+void LinearTetrahedron::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -213,7 +213,7 @@ void LinearTetrahedron::CornerNodes( std::vector<size_t>& ids ) const
 
 
 void
-LinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+LinearTetrahedron::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -254,7 +254,7 @@ LinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) 
     
     @note the nodes are ordered counter-clockwise from the outside looking in.
 */
-void LinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void LinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
 
@@ -292,38 +292,38 @@ void LinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids 
 
 
 
-vector<size_t>  LinearTetrahedron::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  LinearTetrahedron::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,3,2};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,2,1};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,3,2};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,2,1};
       }
     cerr <<"\nLinearTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
 
-vector<size_t>  LinearTetrahedron::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  LinearTetrahedron::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,2,3};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,1,2};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,2,3};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,1,2};
         default:
           cerr <<"\nLinearTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
-CSMP_FEM_TYPE LinearTetrahedron::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE LinearTetrahedron::ElementTypeOfFace( uint32_t ) const
  {
     return LINEAR_TRIANGLE3D;
  }
@@ -331,7 +331,7 @@ CSMP_FEM_TYPE LinearTetrahedron::ElementTypeOfFace( size_t ) const
 
 
 /// returns rolling index that rolls over when i+a>=4
-size_t LinearTetrahedron::n( size_t i, size_t a )
+uint32_t LinearTetrahedron::n( uint32_t i, uint32_t a )
   {
      if ( i+a >= 4U ) return i + a - 4U;
      return i+a;
@@ -349,7 +349,7 @@ void LinearTetrahedron::UpdateFor()
      {
         // test function coefficients
         int32_t j(1);
-        for ( size_t i=0; i<npe; i++ )
+        for ( uint32_t i=0; i<npe; i++ )
           {
              // a(i)
              M(0,i)  = -XY(n(i,1),0) * (XY(n(i,3),1)*XY(n(i,2),2)-XY(n(i,3),2)*XY(n(i,2),1));
@@ -387,7 +387,7 @@ void LinearTetrahedron::UpdateFor()
      
      @test OK 
 */
-void  LinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  LinearTetrahedron::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);

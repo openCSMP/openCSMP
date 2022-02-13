@@ -8,11 +8,11 @@ namespace csmp{
 
 struct Index;
 class ScalarVariable;
-template<size_t> class VectorVariable;
-template<size_t> class Model;
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class Model;
+template<uint32_t> class TwoPhaseModel;
 
-template<size_t dim>
+template<uint32_t dim>
 class ComputeGravityTermVisitor : public Visitor<dim>
 {
   public:

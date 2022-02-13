@@ -16,7 +16,7 @@ enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
  
     @remarks refactored by SKM 19/1/2015
 */
-template<size_t dim, class CELL=Element<dim> >
+template<uint32_t dim, class CELL=Element<dim> >
 class NumIntegral_NT_dNi_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_NT_dNi_dV( const PropertyDatabase<dim>&,

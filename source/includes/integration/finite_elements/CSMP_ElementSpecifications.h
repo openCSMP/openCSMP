@@ -40,8 +40,8 @@ class CSMP_ElementSpecifications {
     static bool          QuadraticElement( int8_t etype );
     static bool          CubicElement( int8_t etype );
 
-    static size_t        MinimumSpatialDimension( const std::string& CSMP_finite_element_type );
-    static size_t        MinimumSpatialDimension( int8_t CSMP_finite_element_type );
+    static uint32_t      MinimumSpatialDimension( const std::string& CSMP_finite_element_type );
+    static uint32_t      MinimumSpatialDimension( int8_t CSMP_finite_element_type );
 
     static bool          LineElement( int8_t CSMP_finite_element_type );
     static bool          SurfaceElement( int8_t CSMP_finite_element_type );
@@ -55,13 +55,13 @@ class CSMP_ElementSpecifications {
     static void          SurfaceElements( std::list<std::string>& surf_elements );
     static void          VolumeElements( std::list<std::string>& vol_elements );
 
-    static size_t        NodesPerElementOfType( int8_t CSMP_finite_element_type );
-    static size_t        SegmentsPerElementOfType( int8_t CSMP_finite_element_type );
-    static size_t        FacesPerElementOfType( int8_t CSMP_finite_element_type );
-    static size_t        NeighborsPerElementOfType( int8_t CSMP_finite_element_type );
-    static size_t        NodesPerFaceForElementOfType( int8_t CSMP_finite_element_type, size_t face );
-    static std::pair<size_t,size_t>  CornerNodesPerSegmentForElementOfType( int8_t CSMP_finite_element_type, size_t segm );
-    static size_t        FaceNodeForElementOfType( int8_t CSMP_finite_element_type, size_t face, size_t face_node );
+    static uint32_t        NodesPerElementOfType( int8_t CSMP_finite_element_type );
+    static uint32_t        SegmentsPerElementOfType( int8_t CSMP_finite_element_type );
+    static uint32_t        FacesPerElementOfType( int8_t CSMP_finite_element_type );
+    static uint32_t        NeighborsPerElementOfType( int8_t CSMP_finite_element_type );
+    static uint32_t        NodesPerFaceForElementOfType( int8_t CSMP_finite_element_type, uint32_t face );
+    static std::pair<uint32_t,uint32_t>  CornerNodesPerSegmentForElementOfType( int8_t CSMP_finite_element_type, uint32_t segm );
+    static uint32_t        FaceNodeForElementOfType( int8_t CSMP_finite_element_type, uint32_t face, uint32_t face_node );
 };
 
 } // csmp

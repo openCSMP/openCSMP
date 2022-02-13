@@ -18,7 +18,7 @@ basic operands can be node or element variables.
 */
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
@@ -36,18 +36,18 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
 
     virtual void ComputeContribution( const CELL& );
     
-    void SpatialDerivative( size_t xyz );
+    void SpatialDerivative( uint32_t xyz );
     
     virtual NumIntegral_NT_op_dNi_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:
-    std::vector<double>         IPOL;
+    std::vector<double>           IPOL;
     DenseMatrix<DM_MIN>           DN;
     Index                         mtrl_key;
-    double                      oper_eprop, eprop;
-    const double                gravity;   ///< acceleration of gravity (m/s2)
-    size_t                        xyz;       ///< 0=x, 1=y, 2=z
-    double                      mtrl_time_multiplier;
+    double                        oper_eprop, eprop;
+    const double                  gravity;   ///< acceleration of gravity (m/s2)
+    uint32_t                      xyz;       ///< 0=x, 1=y, 2=z
+    double                        mtrl_time_multiplier;
     std::vector<ScalarVariable >  oper_nprop;
 };
 

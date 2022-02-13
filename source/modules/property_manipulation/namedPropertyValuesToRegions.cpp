@@ -34,7 +34,7 @@ namespace csmp {
     @author SKM
     @date 22/8/2018
 */
-template<size_t dim>
+template<uint32_t dim>
 void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, const string& region_identifier_file )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -127,7 +127,7 @@ template void namedPropertyValuesToRegions( Model<3U>&, const string&, const str
 /**
       To remove NO_DATA values which were converted to NAN.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& element_var, double replacement_val )
  {
     const csmp::Index key(model.Database().StorageKey(element_var.c_str()));

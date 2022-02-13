@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_BT_D_B_dV<dim,CELL>::NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref,
                                                         const char*             oper,  // Young's modulus
                                                         const char*             oper2, // Poisson's ratio
@@ -68,7 +68,7 @@ used shall be initialized for plane strain or plane stress.
 If the method is called in a 3D calculation, the user is warned that
 it will have no effect.  
  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::PlaneStress( bool yes_no )
  { 
      plane_strain_ = yes_no; 
@@ -88,7 +88,7 @@ While Poisson's ratio must be an element variable, this method allows for
 Young's modulus to be a node variable. Thus, a continuous loss of strength
 can be modeled.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -104,7 +104,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL& e )
         const size_t ipoints(e.IntegrationPoints());
         E_.resize(ipoints);
         nu_.resize(ipoints);
-        for ( size_t i=0; i<ipoints; ++i )
+        for ( auto i=0; i<ipoints; ++i )
           {
              // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
              E_[i]  = e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() );
@@ -114,7 +114,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL& e )
     else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE )
       {
          ScalarVariable sc;
-         for ( size_t i=0U; i<e.IntegrationPoints(); i++ ) {
+         for ( auto i{0}; i<e.IntegrationPoints(); i++ ) {
              e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim>::MaterialOperandKey(), i, sc );
              E_[i] = sc();
              e.PropertyValueAtIntegrationPoint( nu_key_, i, sc );
@@ -152,7 +152,7 @@ member matrix [C].
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
@@ -211,7 +211,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // matrices to element - contribution matrix
     MathOperatorLHS<dim>::LHS.Zero();
 
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       {
          // the material property matrix is constructed at each integration point
          if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {

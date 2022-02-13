@@ -5,11 +5,11 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class StencilProcessor;
+template<uint32_t> class Model;
+template<uint32_t> class StencilProcessor;
 
 /// monitoring of variables stored on the nodes, integrating them over the finite volumes
-template<size_t dim>
+template<uint32_t dim>
 class NodeCenteredFiniteVolumeMonitor {
   public:
     NodeCenteredFiniteVolumeMonitor( const char* output_file,

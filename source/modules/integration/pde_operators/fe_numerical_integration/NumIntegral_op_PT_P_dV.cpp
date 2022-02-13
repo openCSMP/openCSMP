@@ -6,7 +6,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_op_PT_P_dV<dim,CELL>::NumIntegral_op_PT_P_dV( const PropertyDatabase<dim>& pref,
                                                         const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -38,7 +38,7 @@ NumIntegral_op_PT_P_dV<dim,CELL>::NumIntegral_op_PT_P_dV( const PropertyDatabase
 
 
 /// in the special case, the integral of the testfunction products must be used
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -56,8 +56,8 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
          // equally over all the nodes.
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
            {    
-              for ( size_t n=0; n<e.Nodes(); n++ ) 
-                for ( size_t i=0; i<nodal_degrees_of_freedom; i++ )
+              for ( auto n=0; n<e.Nodes(); n++ ) 
+                for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
                   MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
            }
          // if a nodal property is accumulated, the integration must be performed 
@@ -66,15 +66,15 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
           {
              // the property value which has already been interpolated to each integration
              // point is assembled
-             for ( size_t n=0; n<e.FE()->IntegrationPoints(); n++ )
+             for ( auto n=0; n<e.FE()->IntegrationPoints(); n++ )
                { 
                   if ( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
-                    for ( size_t i=0; i<nodal_degrees_of_freedom; i++ )
+                    for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
                       MathOperatorRHS<dim>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                     MathOperatorRHS<dim>::MTRL[n](i,i) * volume) / e.Nodes();
                   else if ( MathOperatorRHS<dim>::MaterialOperandType() == TENSOR )
-                     for ( size_t i=0; i<nodal_degrees_of_freedom; i++ )
-                       for ( size_t j=0; j<nodal_degrees_of_freedom; j++ )
+                     for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
+                       for ( auto j=0; j<nodal_degrees_of_freedom; j++ )
                          MathOperatorRHS<dim>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                       MathOperatorRHS<dim>::MTRL[n](i,j) * volume) / e.Nodes();
               }

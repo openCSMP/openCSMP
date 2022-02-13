@@ -54,7 +54,7 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
     const double  sat_incr(1./model->Mesh().Nodes());
     ScalarVariable  saturation;
     // generating a range of saturation values for water and oil
-    for ( vector<Node<1U>*>::iterator
+    for ( vector<Node<1U>*>::const_iterator
           it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
       {
          saturation() = 0. + sat_incr * (*it)->Idx();
@@ -77,7 +77,7 @@ void TwoPhaseModel_TestSuite::run()
 
   fracture_rock_model_ = new Model1D<1U>( "FractureRockModel1D", "CSMP-2phase-variables.txt", length, N_ELEMENTS );
 
-  vector<size_t>   elms;
+  vector<uint32_t>   elms;
   elms.reserve( N_ELEMENTS );
   for ( uint32_t i = 0; i < 40; ++i )
     elms.push_back(i);

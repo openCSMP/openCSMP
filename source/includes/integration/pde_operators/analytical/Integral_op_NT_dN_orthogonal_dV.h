@@ -8,15 +8,15 @@
 namespace csmp {
 
 /// streamfunction operand for the RHS
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim> {
   public:
     Integral_op_NT_dN_orthogonal_dV( const PropertyDatabase<dim>& pref, 
                                      const char* basic,            // e.g., fluid pressure
                                      const char* test );           // streamfunction
     
-    virtual void GetOperands( const SIMPLEX& );
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
 
   private:
     DenseMatrix<DM_MIN>  M, DNORTHO, NT; 

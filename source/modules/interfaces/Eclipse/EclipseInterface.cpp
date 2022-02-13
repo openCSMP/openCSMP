@@ -1,5 +1,8 @@
 #include "EclipseInterface.h"
 
+#include "ModelTopology.h"
+#include "VSet.h"
+
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -119,11 +122,11 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
   // 4. create a default region including all cells except wells and faults
   std::vector<size_t> elmts;
   std::set<std::string> fem_types;
-  for ( size_t i = 0U; i < vset_->Elements(); i++ ) {
+  for ( auto i = 0U; i < vset_->Elements(); i++ ) {
     elmts.push_back( i );
     fem_types.insert( csmp::parseFiniteElementType( vset_->ElementType(i) ) );
   }
-  model_topology_->AddRegion( "ALL_CELLS", fem_types, elmts );
+  model_topology_->AddDomain( "ALL_CELLS", fem_types, elmts );
 
   //5. create descreate line elements for wells which are defined in Eclipse
   AddWell();
@@ -185,7 +188,7 @@ void EclipseInterface::WritePropertiesToVSet()
     size_t invalid_value_count = 0U;
 
     /// check value whether it is in the valid		
-    for ( size_t i = 0; i < num_cells; ++i ){
+    for ( auto i = 0; i < num_cells; ++i ){
       if ( perm_[i].IsWithinRange( -99999.0, min ) )
         perm_[i] *= -1.0f;
       
@@ -216,7 +219,7 @@ void EclipseInterface::WritePropertiesToVSet()
     size_t invalid_value_count = 0U;
 
     /// check value whether it is in the valid		
-    for ( size_t i = 0; i < num_cells; ++i )
+    for ( auto i = 0; i < num_cells; ++i )
     {
       permxyz_[i] *= conversion_factor;
 
@@ -264,7 +267,7 @@ void EclipseInterface::WritePropertiesToVSet()
     if ( conversion_factor != 1.0 )
     {
       const size_t num_cells( pressure_.size() );
-      for ( size_t i = 0; i<num_cells; ++i )
+      for ( auto i = 0; i<num_cells; ++i )
         pressure_[i] *= conversion_factor;
     }
     WriteScalarPropertyToVSet( *vset_, grid_,
@@ -311,7 +314,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
   // Convert vector data to scalar data
   const size_t data_size( vector_data.size() );
   std::vector<csmp::ScalarVariable> scalar_data( data_size, csmp::ScalarVariable( csmp::PLAIN, 0.0 ) );
-  for ( size_t i = 0; i < data_size; i++ )
+  for ( auto i = 0; i < data_size; i++ )
     scalar_data[i] = valueAverage( vector_data[i] );
   // Add scalar data to vset
   grid.WritePropertyToVSet( vset, scalar_data, property_name, place );
@@ -329,7 +332,7 @@ void EclipseInterface::WriteScalarPropertyToVSet( csmp::VSet<3U>&  vset,
   // Convert tensor data to scalar data
   const size_t data_size( tensor_data.size() );
   std::vector<csmp::ScalarVariable> scalar_data( data_size, csmp::ScalarVariable( csmp::PLAIN, 0.0 ) );
-  for ( size_t i = 0; i < data_size; i++ )
+  for ( auto i = 0; i < data_size; i++ )
     scalar_data[i] = tensor_data[i].Trace() / 3.0;
   // Add scalar data to vset
   grid.WritePropertyToVSet( vset, scalar_data, property_name, place );
@@ -782,7 +785,7 @@ bool EclipseInterface
 ::ReadBoxData( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-  std::vector<size_t> box_data;
+  std::vector<uint32_t> box_data;
   if ( readEclipseBoxData( box_data,
        ifs, text_line, line_length, csmp_error.Verbose() ) == 0 )
     return false;
@@ -826,7 +829,7 @@ void EclipseInterface::SaveVectorProperty( size_t component,
   const size_t data_size( scalar_data.size() );
   if ( component == 0 )
     vector_data.resize( data_size, csmp::VectorVariable<3U>( csmp::PLAIN, 0.0 ) );
-  for ( size_t i = 0; i < data_size; i++ )
+  for ( auto i = 0; i < data_size; i++ )
     for ( size_t j = component; j < 3U; j++ )
       vector_data[i]( j ) = scalar_data[i]();
 }
@@ -839,7 +842,7 @@ void EclipseInterface::SaveTensorProperty( size_t component,
   const size_t data_size( scalar_data.size() );
   if ( component == 0 )
     tensor_data.resize( data_size, csmp::TensorVariable<3U>( csmp::PLAIN, 0.0 ) );
-  for ( size_t i = 0; i < data_size; i++ )
+  for ( auto i = 0; i < data_size; i++ )
     for ( size_t j = component; j < 3U; j++ )
       tensor_data[i]( j, j ) = scalar_data[i]();
 }
@@ -866,7 +869,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
   size_t      num;
   size_t      value;
   bool        default_value;
-  std::vector<size_t> values;
+  std::vector<uint32_t> values;
 
   int firstLine( readEclipseFirstLineInBlock( ifs, text_line, line_length, endOfblock ) );
   if ( firstLine == 0 || firstLine == 2 )
@@ -887,7 +890,7 @@ int readEclipseDimensions( size_t& NX, size_t& NY, size_t& NZ,
         }
         else
         {
-          for ( size_t i = 0; i < num; i++ )
+          for ( auto i = 0; i < num; i++ )
           {
             values.push_back( value );
             counter++;
@@ -942,7 +945,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
   size_t      num;
   size_t      value;
   bool        default_value;
-  std::vector<size_t> values;
+  std::vector<uint32_t> values;
 
   int firstLine( readEclipseFirstLineInBlock( ifs, text_line, line_length, endOfblock ) );
   if ( firstLine == 0 || firstLine == 2 )
@@ -963,7 +966,7 @@ int readEclipseGridSpecs( size_t& NX, size_t& NY, size_t& NZ,
         }
         else
         {
-          for ( size_t i = 0; i < num; i++ )
+          for ( auto i = 0; i < num; i++ )
           {
             values.push_back( value );
             counter++;
@@ -1142,7 +1145,7 @@ int readEclipsePillarCoordinates( size_t& NX, size_t& NY,
 #if 0
   NY = pillars.size() - 1;
   NX = 0;
-  for ( size_t i = 0; i < NY; i++ )
+  for ( auto i = 0; i < NY; i++ )
     if ( pillars[i].size() > NX )
       NX = pillars[i].size();
   NX -= 1;
@@ -1364,7 +1367,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
   const size_t num_points_in_z_direction_internal_pillars( 8 * NZ );
   const size_t num_points_in_z_direction_boundary_pillars( 4 * NZ );
   const size_t num_points_in_z_direction_corner_pillars( 2 * NZ );
-  for ( size_t i = 1; i<NX; ++i )
+  for ( auto i = 1; i<NX; ++i )
   {
     for ( size_t j = 1; j<NY; ++j )
     {
@@ -1383,7 +1386,7 @@ int readEclipseCornerDepths( size_t NX, size_t NY, size_t& NZ,
       }
     }
   }
-  for ( size_t i = 1; i<NX; ++i )
+  for ( auto i = 1; i<NX; ++i )
   {
     if ( grid( i, 0 ).GetNumPoints() != num_points_in_z_direction_boundary_pillars ||
          grid( i, NY ).GetNumPoints() != num_points_in_z_direction_boundary_pillars )
@@ -1485,7 +1488,7 @@ int readEclipseActiveCells( std::vector<uint8_t>& cell_activity, std::ifstream& 
           if ( active_num == 0 || active_num == 1 )
           {
             if ( active_num == 1 ) active_cells++;
-            for ( size_t i = 0; i < num; i++ )
+            for ( auto i = 0; i < num; i++ )
               cell_activity.push_back( active_num );
           }
           else
@@ -1560,7 +1563,7 @@ int readEclipseCellData( std::vector<csmp::ScalarVariable>& values,
         }
         else
         {
-          for ( size_t i = 0; i < num; i++ )
+          for ( auto i = 0; i < num; i++ )
           {
             values.push_back( csmp::ScalarVariable( csmp::PLAIN, value ) );
             counter++;
@@ -1611,7 +1614,7 @@ int readEclipseWellSpecs( std::map<std::string, EclipseWell>& well_data,
   bool        endOfblock( false );
 
   /// temp data
-  std::vector<size_t> indices( 2, 0 );
+  std::vector<uint32_t> indices( 2, 0 );
   std::string  name;
   double value;
 
@@ -1666,7 +1669,7 @@ int readEclipseWellSpecs( std::map<std::string, EclipseWell>& well_data,
       }
 
       /// 2. read i,j indices
-      for ( size_t i = 0; i<2; ++i )
+      for ( auto i = 0; i<2; ++i )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -1779,7 +1782,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
 
   /// temp data
   const size_t NX_x_NY( NX * NY );
-  std::vector<size_t> indices( 4, 0 );
+  std::vector<uint32_t> indices( 4, 0 );
   std::map<int, CORNER_POINT_CELL_FACE_INDEX> face_map;
   face_map.emplace( -1, CORNER_POINT_CELL_FACE_Xminus );
   face_map.emplace( +1, CORNER_POINT_CELL_FACE_Xplus );
@@ -1819,7 +1822,7 @@ int readEclipseWellCompletionsData( size_t NX, size_t NY, size_t NZ,
       EclipseWellCompletion wellcomp;
 
       /// 2. read i,j,k_top,k_bot indices
-      for ( size_t i = 0; i<4; ++i )
+      for ( auto i = 0; i<4; ++i )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -1908,7 +1911,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
 
   /// fault data
   std::vector<std::pair<size_t, size_t> > data;
-  std::vector<size_t> index_range( 6, 0 );
+  std::vector<uint32_t> index_range( 6, 0 );
   std::string fault_name;
   std::string face;
 
@@ -1949,7 +1952,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
       }
 
       /// 2. read index ranges
-      for ( size_t i = 0; i<6; ++i )
+      for ( auto i = 0; i<6; ++i )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -1997,7 +2000,7 @@ int readEclipseFaultData( size_t NX, size_t NY, size_t NZ,
       fault.fault.reserve( (index_range[1] - index_range[0] + 1)
                            * (index_range[3] - index_range[2] + 1)
                            * (index_range[5] - index_range[4] + 1) );
-      for ( size_t i = index_range[0]; i <= index_range[1]; ++i )
+      for ( auto i = index_range[0]; i <= index_range[1]; ++i )
         for ( size_t j = index_range[2]; j <= index_range[3]; ++j )
           for ( size_t k = index_range[4]; k <= index_range[5]; ++k )
           {
@@ -2111,7 +2114,7 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
 /**
 To retrieve boundaries of the model?
 */
-int readEclipseBoxData( std::vector<size_t>& box_data,
+int readEclipseBoxData( std::vector<uint32_t>& box_data,
                         std::ifstream& ifs, char* text_line,
                         size_t line_length, bool verbose )
 {
@@ -2157,7 +2160,7 @@ int readEclipseBoxData( std::vector<size_t>& box_data,
         box_data[0] = atoi( token );
 
       /// 1. read index ranges
-      for ( size_t i = 1; i<6; ++i )
+      for ( auto i = 1; i<6; ++i )
       {
         token = strtok( NULL, delims );
         if ( token == NULL )
@@ -2209,7 +2212,7 @@ bool isEclipseCommentLine( char* str )
     return true;
 
   const size_t strlength( strlen( str ) );
-  for ( size_t i = 0U; i<strlength; i++ )
+  for ( auto i = 0U; i<strlength; i++ )
     if ( str[i] == '#' || str[i] == '%' ) {
       str[i] = '\0';
       break;
@@ -2231,7 +2234,7 @@ bool isEclipseEndOfBlock( char* str )
   if ( str[0] == '/' )
     return true;
   const size_t strlength( strlen( str ) );
-  for ( size_t i = 0U; i<strlength; i++ )
+  for ( auto i = 0U; i<strlength; i++ )
     if ( str[i] != ' ' && str[i] != '/' )
       return false;
     else if ( str[i] == '/' )
@@ -2251,7 +2254,7 @@ bool isEclipseLineWithEndOfBlock( char* str )
     return true;
 
   const size_t strlength( strlen( str ) );
-  for ( size_t i = 0U; i<strlength; i++ )
+  for ( auto i = 0U; i<strlength; i++ )
     if ( str[i] == '/' ) {
       if ( i + 1 < strlength )
         str[i + 1] = '\0';
@@ -2462,9 +2465,9 @@ EclipseModelSettings::EclipseModelSettings( const std::string& mesh_file_prefix 
   create_boundaries_( false ),
   tetra_mesh_( false )
 {
-  if ( csmp::doesRegionsFileExist( mesh_file_prefix.c_str() ) ) {
+  if ( csmp::doesDomainsFileExist( mesh_file_prefix.c_str() ) ) {
     regions_.clear();
-    csmp::readDesiredRegions( mesh_file_prefix.c_str(), regions_ );
+    csmp::readDesiredDomains( mesh_file_prefix.c_str(), regions_ );
   }
 }
 
@@ -2492,10 +2495,10 @@ void EclipseModelSettings
   exclude_inactive_cells_ = exclude_inactive_cells;
   tetra_mesh_ = tetra_mesh;
   create_boundaries_ = create_boundaries;
-  if ( csmp::doesRegionsFileExist( regions_file_prefix.c_str() ) )
+  if ( csmp::doesDomainsFileExist( regions_file_prefix.c_str() ) )
   {
     regions_.clear();
-    csmp::readDesiredRegions( regions_file_prefix.c_str(), regions_ );
+    csmp::readDesiredDomains( regions_file_prefix.c_str(), regions_ );
   }
 }
 
@@ -2795,7 +2798,7 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
   for ( size_t j = 0U; j<j_stride; j++ )
   {
     // reading the pillar coordinates
-    for ( size_t i = 0U; i<i_stride; i++ )
+    for ( auto i = 0U; i<i_stride; i++ )
     {
       // read pillar top
       double pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
@@ -2911,7 +2914,7 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
         }
         else
         {
-          for ( size_t i = 0; i < num; i++ )
+          for ( auto i = 0; i < num; i++ )
           {
             values.push_back( value );
             counter++;
@@ -2948,14 +2951,14 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
   {
     for ( size_t j = 0U; j<NY_; j++ )
     {
-      for ( size_t i = 0U; i<NX_; i++ )
+      for ( auto i = 0U; i<NX_; i++ )
       {
         double t_nw = values.at( pos++ );
         double t_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 0] = t_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 1] = t_ne;
       }
-      for ( size_t i = 0U; i<NX_; i++ )
+      for ( auto i = 0U; i<NX_; i++ )
       {
         double t_sw = values.at( pos++ );
         double t_se = values.at( pos++ );
@@ -2965,14 +2968,14 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
     }
     for ( size_t j = 0U; j<NY_; j++ )
     {
-      for ( size_t i = 0U; i<NX_; i++ )
+      for ( auto i = 0U; i<NX_; i++ )
       {
         double b_nw = values.at( pos++ );
         double b_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 4] = b_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 5] = b_ne;
       }
-      for ( size_t i = 0U; i<NX_; i++ )
+      for ( auto i = 0U; i<NX_; i++ )
       {
         double b_sw = values.at( pos++ );
         double b_se = values.at( pos++ );
@@ -3037,9 +3040,9 @@ void EclipseInterface::AddWell()
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
   if ( well_face_path_.size() > 0 ) {
-    std::string           well_name;
-    std::vector<size_t>   well_elmts;
-    std::set<std::string> well_fem_types;
+    std::string               well_name;
+    std::vector<size_t>       well_elmts;
+    std::set<std::string>     well_fem_types;
     const csmp::CSMP_FEM_TYPE edge_fem_type( csmp::ISOPARAMETRIC_LINEAR_BAR );
 
     std::map<size_t, std::vector<std::pair<size_t, csmp::CSMP_FEM_TYPE>>> embedded_cells_;
@@ -3060,7 +3063,7 @@ void EclipseInterface::AddWell()
       if ( !well_elmts.empty() )
       {
         well_name = it->first;
-        model_topology_->AddRegion( well_name.c_str(), well_fem_types, well_elmts );
+        model_topology_->AddDomain( well_name.c_str(), well_fem_types, well_elmts );
         wells_.insert( well_name.c_str() );
         if ( csmp_error.Verbose() )
           std::cout << "\nEclipseInterface::AddWell: '" << well_name << "' was added successfully!" << std::endl;
@@ -3099,7 +3102,7 @@ void EclipseInterface::AddWell( const std::string& well_name, const Point<3U>& w
 
   if ( valid_well )
   {
-    model_topology_->AddRegion( well_name.c_str(), well_fem_types, well_elmts );
+    model_topology_->AddDomain( well_name.c_str(), well_fem_types, well_elmts );
     wells_.insert( well_name.c_str() );
     if ( csmp_error.Verbose() )
       std::cout << "\nEclipseInterface::AddWell: '" << well_name << "' was added successfully!" << std::endl;
@@ -3162,7 +3165,7 @@ void addWellPath( size_t NX, size_t NY, size_t NZ,
 
 /// add well path with explicitly specified faces
 void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
+                  const std::vector<uint32_t>& cell_ids,
                   const std::vector<std::pair<size_t, size_t> >& face_ids,
                   std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path )
 {
@@ -3187,7 +3190,7 @@ void addWellPath( const std::string& well_name,
 
 /// add well path with explicitly specified faces ( same for all cells )
 void addWellPath( const std::string& well_name,
-                  const std::vector<size_t>& cell_ids,
+                  const std::vector<uint32_t>& cell_ids,
                   std::pair<size_t, size_t> face_id,
                   std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path )
 {
@@ -3199,7 +3202,7 @@ void addWellPath( const std::string& well_name,
   std::vector<std::pair<size_t, std::pair<size_t, size_t> > >   empty_path;
   well_path.insert( std::make_pair( well_name, empty_path ) );
   std::vector<std::pair<size_t, std::pair<size_t, size_t> > >& wpath( well_path[well_name] );
-  for ( size_t i = 0; i<num_cells; ++i )
+  for ( auto i = 0; i<num_cells; ++i )
   {
     cell_id = cell_ids[i];
     direction.first = face_id.first;

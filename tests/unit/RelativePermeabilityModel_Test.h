@@ -7,8 +7,8 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 class RelativePermeabilityModel_Test : public Test {
   public:

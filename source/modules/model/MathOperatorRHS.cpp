@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>::MathOperatorRHS()
     : name_("unspecified RHS-operator"),
     IDT(3),
@@ -28,7 +28,7 @@ namespace csmp {
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>::MathOperatorRHS(const PropertyDatabase<dim>& pref,
     const char* test)
     : name_("unspecified RHS-operator"),
@@ -57,7 +57,7 @@ namespace csmp {
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>::MathOperatorRHS(const PropertyDatabase<dim>& pref,
     const char* oper,
     const char* test)
@@ -90,7 +90,7 @@ namespace csmp {
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>::MathOperatorRHS(const MathOperatorRHS<dim>& mo)
     : name_(mo.name_),
     op(mo.op),    // basic operand
@@ -121,7 +121,7 @@ namespace csmp {
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>& MathOperatorRHS<dim>::operator=(const MathOperatorRHS<dim>& mo)
   {
     if (this != &mo) {
@@ -153,7 +153,7 @@ namespace csmp {
     return *this;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   MathOperatorRHS<dim>::~MathOperatorRHS()
   {
   }
@@ -161,7 +161,7 @@ namespace csmp {
 
   /// ===================================  Operand Functions ========================================================================
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::Name(const char* s, const char* topname)
   {
     name_ = s;
@@ -171,7 +171,7 @@ namespace csmp {
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::Name(const char* s, const char* operand_name, const char* topname)
   {
     name_ = s;
@@ -181,14 +181,14 @@ namespace csmp {
     name_ += topname;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   std::string  MathOperatorRHS<dim>::Name() const
   {
     return name_;
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::Out() const
   {
     op.Out();
@@ -200,37 +200,37 @@ namespace csmp {
 
   // MATERIAL PROPERTY OPERAND
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Parameter&   MathOperatorRHS<dim>::MaterialOperand() const
   {
     return op;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Index&   MathOperatorRHS<dim>::MaterialOperandKey() const
   {
     return op.key;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   std::string  MathOperatorRHS<dim>::MaterialOperandName() const
   {
     return op.name;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::MaterialOperandType() const
   {
     return op.key.type;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::PLACEMENT   MathOperatorRHS<dim>::MaterialOperandPlacement() const
   {
     return op.key.place;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t   MathOperatorRHS<dim>::MaterialOperandDataDepth() const
   {
     return op.key.dataDepth;
@@ -239,49 +239,49 @@ namespace csmp {
 
   // BASIC FUNCTION OPERAND
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Parameter&  MathOperatorRHS<dim>::BasicOperand() const
   {
     return top.first;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Index&   MathOperatorRHS<dim>::BasicOperandKey() const
   {
     return top.first.key;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   std::string  MathOperatorRHS<dim>::BasicOperandName() const
   {
     return top.first.name;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::BasicOperandType() const
   {
     return top.first.key.type;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::PLACEMENT   MathOperatorRHS<dim>::BasicOperandPlacement() const
   {
     return top.first.key.place;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t   MathOperatorRHS<dim>::BasicOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::BasicOperandOffset(size_t os)
   {
     top.second = os;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t MathOperatorRHS<dim>::BasicOperandOffset() const
   {
     return top.second;
@@ -289,49 +289,49 @@ namespace csmp {
 
   // TEST FUNCTION OPERAND
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Parameter&   MathOperatorRHS<dim>::TestOperand() const
   {
     return top.first;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   const csmp::Index&   MathOperatorRHS<dim>::TestOperandKey() const
   {
     return top.first.key;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   std::string  MathOperatorRHS<dim>::TestOperandName() const
   {
     return top.first.name;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::TestOperandType() const
   {
     return top.first.key.type;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   csmp::PLACEMENT   MathOperatorRHS<dim>::TestOperandPlacement() const
   {
     return top.first.key.place;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t   MathOperatorRHS<dim>::TestOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::TestOperandOffset(size_t os)
   {
     top.second = os;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t MathOperatorRHS<dim>::TestOperandOffset() const
   {
     return top.second;
@@ -345,7 +345,7 @@ namespace csmp {
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::AddAccumulate()
   {
     add_accumulate_ = true;
@@ -356,7 +356,7 @@ namespace csmp {
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::SubtractAccumulate()
   {
     add_accumulate_ = false;
@@ -367,7 +367,7 @@ namespace csmp {
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::AddAccumulateLater()
   {
     add_accumulate_ = false;
@@ -378,7 +378,7 @@ namespace csmp {
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::SubtractAccumulateLater()
   {
     add_accumulate_ = false;
@@ -389,7 +389,7 @@ namespace csmp {
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::MultiplyAccumulate()
   {
     add_accumulate_ = false;
@@ -399,103 +399,103 @@ namespace csmp {
     multiply_accumulate_ = true;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::LumpedFormulation(bool lumped)
   {
     lump_matrices_ = lumped;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void  MathOperatorRHS<dim>::ApplicationCycles(size_t c)
   {
     application_cycles_ = c;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void  MathOperatorRHS<dim>::ApplicationCycle(size_t c)
   {
     application_cycle_ = c;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::MultiplyBy(double integral_mult_factor)
   {
     factor_ = integral_mult_factor;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::MultiplyWithTimeIncrement(bool multiply)
   {
     time_multiply_ = multiply;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::DivideByTimeIncrement(bool divide)
   {
     time_divide_ = divide;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::Add() const
   {
     return add_accumulate_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::Subtract() const
   {
     return subtract_accumulate_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::AddLater() const
   {
     return add_accumulate_later_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::SubtractLater() const
   {
     return subtract_accumulate_later_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::Multiply() const
   {
     return multiply_accumulate_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t  MathOperatorRHS<dim>::ApplicationCycles() const
   {
     return application_cycles_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   size_t  MathOperatorRHS<dim>::ApplicationCycle() const
   {
     return application_cycle_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool  MathOperatorRHS<dim>::LumpedFormulation() const
   {
     return lump_matrices_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   double   MathOperatorRHS<dim>::MultiplyBy() const
   {
     return factor_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::MultiplyWithTimeIncrement() const
   {
     return time_multiply_;
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool MathOperatorRHS<dim>::DivideByTimeIncrement() const
   {
     return time_divide_;
@@ -506,7 +506,7 @@ namespace csmp {
 
 
   // interpolation of property if isoparametric elements are used
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::PropertyAtIntegrationPoint(const Element<dim>& e_ref,
     const csmp::Index& idx,
     size_t ip,
@@ -614,7 +614,7 @@ namespace csmp {
 
   } // end PropertyValueAtIntegrationPoint( Element )
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::PropertyAtIntegrationPoint(const Face<dim>& e_ref,
     const csmp::Index& idx,
     size_t ip,
@@ -736,7 +736,7 @@ namespace csmp {
 
  When the property is an element property, it will be put into the
  first vector entry MTRL[0].*/
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::GetOperands( const Element<dim>& e_ref)
   {
     // if operand property is an element property
@@ -773,7 +773,7 @@ namespace csmp {
       if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
         MTRL.resize(e_ref.FE()->IntegrationPoints());
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (size_t i = 0U; i < n_integration_points; i++)
+        for (auto i = 0U; i < n_integration_points; i++)
         {
           if (MaterialOperandType() == SCALAR)
             MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -805,7 +805,7 @@ namespace csmp {
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (size_t i = 0U; i < n_integration_points; i++)
+        for (auto i = 0U; i < n_integration_points; i++)
           PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
       }
       else
@@ -816,7 +816,7 @@ namespace csmp {
 
   } // end GetOperands(Element)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::GetOperands( const Face<dim>&  e_ref)
   {
     // if operand property is an element property
@@ -853,7 +853,7 @@ namespace csmp {
       if (MaterialOperandPlacement() == FACE_INTEGRATION_POINT) {
         MTRL.resize(e_ref.FE()->IntegrationPoints());
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (size_t i = 0U; i < n_integration_points; i++)
+        for (auto i = 0U; i < n_integration_points; i++)
         {
           if (MaterialOperandType() == SCALAR)
             MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -885,7 +885,7 @@ namespace csmp {
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (size_t i = 0U; i < n_integration_points; i++)
+        for (auto i = 0U; i < n_integration_points; i++)
           PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
       }
       else
@@ -896,7 +896,7 @@ namespace csmp {
 
   } // end GetOperands(Face)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::GetOperands(const InterFace<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::GetOperands(InterFace): ";
@@ -905,7 +905,7 @@ namespace csmp {
   } // end GetOperands(InterFace)
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::WriteOperands(Element<dim>& e)
   {
     std::cerr << "\nMathOperatorRHS<dim>::WriteOperands(Element): ";
@@ -914,7 +914,7 @@ namespace csmp {
   } // end WriteOperands(Element)
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::WriteOperands(Face<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::WriteOperands(Face): ";
@@ -922,7 +922,7 @@ namespace csmp {
     throw invalid_argument("MathOperatorRHS<dim>::WriteOperands(Face)");
   } // end WriteOperands(Face)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::WriteOperands(InterFace<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::WriteOperands(InterFace): ";
@@ -930,7 +930,7 @@ namespace csmp {
     throw invalid_argument("MathOperatorRHS<dim>::WriteOperands(InterFace)");
   } // end WriteOperands(InterFace)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::ComputeContribution( const Element<dim>& e)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Element): ";
@@ -938,7 +938,7 @@ namespace csmp {
     throw invalid_argument("MathOperatorRHS<dim>::ComputeContribution(Element)");
   }// end ComputeContribution(Element)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::ComputeContribution( const Face<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Face): ";
@@ -946,7 +946,7 @@ namespace csmp {
     throw invalid_argument("MathOperatorRHS<dim>::ComputeContribution(Face)");
   }// end ComputeContribution(Face)
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::ComputeContribution( const InterFace<dim>& f)
   {
     std::cerr << "\nMathOperatorRHS<dim>::ComputeContribution(InterFace): ";
@@ -956,23 +956,23 @@ namespace csmp {
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::MultiplyWithTimeFactor(double dt)
   {
-    for (size_t i = 0; i < RHS.size(); i++)
+    for (auto i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
   }
 
 
   /// AssignToGlobal matrix functions
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, vector<double>& rhs)
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
-    for (size_t i = 0U; i < nodes; i++)
+    for (auto i = 0U; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -980,20 +980,20 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (size_t i = 0U; i < dof; i++)
+    for (auto i = 0U; i < dof; i++)
       IDT[i] += this->TestOperandOffset();
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] *= RHS[i] * factor_;
 
     else if (add_accumulate_ || add_accumulate_later_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] += RHS[i] * factor_;
 
     else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
@@ -1001,14 +1001,14 @@ namespace csmp {
         "accumulation instructions could not be parsed.");
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs)
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
 
     IDT.resize(nodes);
-    for (size_t i = 0U; i < nodes; i++)
+    for (auto i = 0U; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1016,21 +1016,21 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (size_t i = 0U; i < dof; i++)
+    for (auto i = 0U; i < dof; i++)
       IDT[i] += this->TestOperandOffset();
 
     // perform assignment from local matrix to global matrix
 
     if (multiply_accumulate_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] *= RHS[i] * factor_;
 
     else if (add_accumulate_ || add_accumulate_later_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] += RHS[i] * factor_;
 
     else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
@@ -1038,7 +1038,7 @@ namespace csmp {
         "accumulation instructions could not be parsed.");
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, vector<double>& rhs)
   {
     std::cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
@@ -1052,12 +1052,12 @@ namespace csmp {
   /// Roman, 2013: Added Array Variable and Falgged Array Variable Index Accessor
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void  MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     // map local to global indexes for test and basic operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
-    for (size_t i = 0U; i < nodes; i++)
+    for (auto i = 0U; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1065,26 +1065,26 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (size_t i = 0U; i < dof; i++) {
+    for (auto i = 0U; i < dof; i++) {
       IDT[i] += this->TestOperandOffset();
        IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
     }
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_) {
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] *= RHS[i] * factor_;
         }
     }
     else if (add_accumulate_ || add_accumulate_later_){
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] += RHS[i] * factor_;
         }
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (size_t i = 0U; i < dof; i++)
+      for (auto i = 0U; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] -= RHS[i] * factor_;
         }
@@ -1096,13 +1096,13 @@ namespace csmp {
     }
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void  MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
 
     IDT.resize(nodes);
-    for (size_t i = 0U; i < nodes; i++)
+    for (auto i = 0U; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1110,7 +1110,7 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (size_t i = 0U; i < dof; i++) {
+    for (auto i = 0U; i < dof; i++) {
       IDT[i] += this->TestOperandOffset();
       IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
     }
@@ -1118,21 +1118,21 @@ namespace csmp {
     // perform assignment from local matrix to global matrix
 
     if (multiply_accumulate_) {
-      for (size_t i = 0U; i < dof; i++) {
+      for (auto i = 0U; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] *= RHS[i] * factor_;
         }
       }
     }
     else if (add_accumulate_ || add_accumulate_later_) {
-      for (size_t i = 0U; i < dof; i++) {
+      for (auto i = 0U; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] += RHS[i] * factor_;
         }
       }
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (size_t i = 0U; i < dof; i++) {
+      for (auto i = 0U; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] -= RHS[i] * factor_;
         }
@@ -1147,7 +1147,7 @@ namespace csmp {
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void  MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes) {
     std::cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
     std::cerr << " Overload to assign RHS  local entries to global matrix: " << f.Idx() << std::endl;
@@ -1164,7 +1164,7 @@ namespace csmp {
   in the global solution matrix.
 
   @param N The result is returned into the input vector. The final size
-  of this vector<size_t> will be
+  of this vector<uint32_t> will be
 
   nodes x dim for VECTOR,
   nodes x dim x dim for TENSOR,
@@ -1184,42 +1184,42 @@ namespace csmp {
   is a vector or tensor property.
   */
 
-  void transformNodeIndexVector(size_t dim, const csmp::Index& idx, vector<size_t>& N)
+  void transformNodeIndexVector( uint32_t dim, const csmp::Index& idx, vector<size_t>& N )
   {
     assert(!N.empty());
     assert(idx.type != SCALAR);
 
     // creating a running index for decrementation
-    const int32_t  oldNsize_m1(static_cast<int32_t>(N.size()) - 1);
+    const auto  oldNsize_m1(static_cast<int64_t>(N.size()) - 1);
 
     // VECTOR variables
     if (idx.type == VECTOR) {
       // new elements are set to zero
       N.resize(N.size() * dim, 0U); // new size of N vector
-      for (int32_t i = oldNsize_m1, k = static_cast<int32_t>(N.size()) - 1; i >= 0; i--)
-        for (size_t j = 0U; j < dim; j++)
-          N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * dim - j) - 1;
+      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
+        for ( auto j = 0U; j < dim; j++)
+          N[ k-- ] = ((N[i] + 1) * dim - j) - 1;
       return;
     }
 
     // TENSOR variables
     if (idx.type == TENSOR) {
-      const size_t  dim2(dim*dim);
+      const uint32_t  dim2(dim*dim);
       N.resize(N.size() * dim2, 0U);
-      for (int32_t i = oldNsize_m1, k = static_cast<int32_t>(N.size()) - 1; i >= 0; i--)
-        for (size_t j = 0; j < dim2; j++)
-          N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * dim2 - j) - 1;
+      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
+        for ( auto j = 0; j < dim2; j++)
+          N[ k-- ] = ((N[i] + 1) * dim2 - j) - 1;
     }
 
     // ARRAY or FLAGGEDARRAY variables
     if (idx.type == ARRAY || idx.type == FLAGGEDARRAY) {
-      const int64_t  length(idx.dataDepth);
+      const auto length(idx.dataDepth);
       // new elements are set to zero
       N.resize(N.size() * length, 0U); // new size of N vector ( length of array * number of nodes )
-      for (int64_t  i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i--)
+      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
         // cycle for one node through all the array variable components
-        for (size_t j = 0U; j < length; j++)
-          N[static_cast<size_t>(k--)] = ((N[static_cast<size_t>(i)] + 1) * length - j) - 1;
+        for ( auto j = 0U; j < length; j++)
+          N[ k-- ] = ((N[i] + 1) * length - j) - 1;
       return;
     }
 

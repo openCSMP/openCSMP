@@ -339,7 +339,7 @@ void dilatationInducedChangeInPorePressure( Model<DIM>& model )
          double fluid_compressibility = (*it)->Read(bf_key);
          // finite volume average dilatation
          double fv_dilatation(0.), fv_volume(0.);
-         for ( size_t i=0U; i<(*it)->Parents(); ++i ) {
+         for ( auto i{0}; i<(*it)->Parents(); ++i ) {
              // needed: sector volumes and elemental dilatation values
              Element<DIM>*  eptr((*it)->Parent(i));
              double sector_dilatation = eptr->Read( dil_key );
@@ -402,8 +402,7 @@ void porePressureBiotAlphaProduct( Model<DIM>& model, const char* target_region 
     csmp::Region<DIM>& ref = model.Region(target_region);
     ScalarVariable sc;
     
-    for ( typename vector<Element<DIM>*>::iterator
-          it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
+    for ( auto it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
       {
          const double alpha((*it)->Read( alpha_key ));
          if ( alpha < 0. or alpha > 1. ) {
@@ -434,8 +433,7 @@ void gravityForce( Model<DIM>& model, double acc_gravity )
     VectorVariable<DIM> gforce(ANY,0. );
     model.InputPropertyValue( "gravity force", gforce );
    
-    for ( typename vector<Element<DIM>*>::iterator
-          it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
+    for ( auto it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
       {
          (*it)->Read( gf_key, gforce );
          gforce(1) += (*it)->Read( drd_key ) * acc_gravity;

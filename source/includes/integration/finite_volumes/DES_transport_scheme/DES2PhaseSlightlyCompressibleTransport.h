@@ -8,7 +8,7 @@
 namespace csmp {
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FLOW_FUNCTIONS> {
 
   public:                           

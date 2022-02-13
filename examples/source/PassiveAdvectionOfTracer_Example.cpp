@@ -475,23 +475,23 @@ double  PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport_
   Region<3>&  gref(sg.Region("Model"));
 
   // for all interior nodes we calculate the normalised flux balance
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
+  for ( auto it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
        sc() = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        (*it)->Store( prop_key, sc );
        emax = std::max( emax, fabs(sc()) );
     }
 
   // for all boundary nodes we set the balance to zero because we cannot evaluate it
-  for ( vector<Node<3U>*>::iterator it=gref.PerimeterNodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.PerimeterNodesBegin(); it!=gref.NodesEnd(); it++ )
     (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), 0.) );
 
   // finding the worst finite volume and analyzing it
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( size_t i=0U; i<(*it)->Parents(); i++ )
+         for ( auto i{0}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }
@@ -533,7 +533,7 @@ void PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport( Mo
   double        emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
        sc() = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        if ( (*it)->AtBoundary() != NOT and (*it)->Status( pf_key ) == DIRICH )
          (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key),0.) );
@@ -543,12 +543,12 @@ void PassiveAdvectionOfTracer_Example::TestNodeCenteredFiniteVolumeTransport( Mo
     }
 
   // finding the worst finite volume and analyzing it
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( size_t i=0U; i<(*it)->Parents(); i++ )
+         for ( auto i{0}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }

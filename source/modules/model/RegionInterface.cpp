@@ -14,45 +14,45 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin()
 { return uniqueGroupMap_.begin(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd()
 { return uniqueGroupMap_.end(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::RegionsBegin()
 { return groupMap_.begin(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionIterator  RegionInterface<dim, REGION_COMPLEX>::RegionsEnd()
 { return groupMap_.end(); }
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsBegin() const
 { return uniqueGroupMap_.begin(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator  RegionInterface<dim, REGION_COMPLEX>::UniqueRegionsEnd() const
 { return uniqueGroupMap_.end(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::RegionsBegin() const
 { return groupMap_.begin(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 typename RegionInterface<dim, REGION_COMPLEX>::regionConstIterator RegionInterface<dim, REGION_COMPLEX>::RegionsEnd() const
 { return groupMap_.end(); }
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim, REGION_COMPLEX>::Regions() const
 { return uniqueGroupMap_.size() + groupMap_.size(); }
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim, REGION_COMPLEX>::UniqueRegions() const
 { return uniqueGroupMap_.size(); }
 
@@ -66,7 +66,7 @@ In the case of failure, a reference to the Model Region may be returned.
 This region is guaranteed to be
 there always.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 const Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const std::string& region_name ) const
 {
   if ( region_name.empty() )
@@ -103,7 +103,7 @@ In the case of failure, a reference to the Model Region may be returned.
 This region is guaranteed to be
 there always.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const std::string& region_name )
 {
   if ( region_name.empty() )
@@ -128,7 +128,7 @@ Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const std::string& r
 }
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool  RegionInterface<dim, REGION_COMPLEX>::IsUnique( const std::string& region_name ) const
 {
   typename std::map<std::string, csmp::Region<dim> >::const_iterator  iter( uniqueGroupMap_.find( region_name ) );
@@ -139,7 +139,7 @@ bool  RegionInterface<dim, REGION_COMPLEX>::IsUnique( const std::string& region_
 
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::ContainsRegion( const std::string& region_name ) const
 {
   if ( uniqueGroupMap_.find( region_name ) != uniqueGroupMap_.end() )
@@ -155,7 +155,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::ContainsRegion( const std::string& re
 
 // TODO: remove contiguity requirement in the presence of SplitBoundaries
   /// checks that there is a model region and that it contains elements
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
  {
     // does the region model exist?
@@ -182,7 +182,7 @@ Uses the highest order of elements (dim == model dimension) to perform a flood f
 @date 4/9/21
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -242,7 +242,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
       
       TODO: add a PropertyConstraint here
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -325,7 +325,7 @@ neighbors and deleted. These tasks are done by the MeshManager:
 Mesh().DetachOutsideNeighborsAlongPerimeter(  ModelSubdomain&  );
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName )
 {
   // check whether region exists (should be a notice only, nothrow)
@@ -386,7 +386,7 @@ interior vs. perimeter nodes and element; boudary faces etc.
 
 @note the element and node Idx indices must have a global unique numbering for this method to work.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* file_name ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -497,7 +497,7 @@ Reads all regions stored by OutputRegionsToBinary() into Interface,
 constructing them using the SubDomainInfo data, thereby avoiding the costly
 re-initialisation.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* file_name,
                                                                    const set<string>& subset_variables )
 {
@@ -538,7 +538,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
       fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
       if ( records > 0 )
           // reading the regions sequentially
-          for ( size_t i = 0U; i<records; i++ )
+          for ( auto i = 0U; i<records; i++ )
             {
               BinaryFileSectionRead hdr( fp, "ONE_REGN" );
               // reading name and element indices for each unique region
@@ -573,7 +573,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
     fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
     if ( records > 0 )
       // reading the regions sequentially
-      for ( size_t i = 0U; i<records; i++ )
+      for ( auto i = 0U; i<records; i++ )
         {
           BinaryFileSectionRead hdr( fp, "ONE_REGN" );
           // reading name and element indices for each unique region
@@ -663,7 +663,7 @@ produce as many Regions as there are finite-elements in the mesh.
 The method is interactive and will prompt the user for the names of the
 groups which are created in the course of its execution.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( const char* prop,
                                                                             std::set<std::string>& group_names )
 {
@@ -705,7 +705,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
       break;
     case ELEMENT_INTEGRATION_POINT:
       for ( auto eit : model_domain.CellVector() ) {
-        for ( size_t i = 0U; i < eit->IntegrationPoints(); i++ )
+        for ( auto i = 0U; i < eit->IntegrationPoints(); i++ )
           {
             double sc = eit->Read( i, prop_key );
             groups[sc] = "undefined";
@@ -765,8 +765,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
 /**
      Uses the region model, to form a region from its elements with the corresponding ID numbers.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<size_t>& elmt_ids, bool unique/*=false */ )
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<uint32_t>& elmt_ids, bool unique/*=false */ )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -798,7 +798,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
 
 
   /// forms unique or non-unique region from range of elements; returns reference to it
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionname,
                                                              typename vector<Element<dim>*>::iterator first,
                                                              typename vector<Element<dim>*>::iterator last,
@@ -845,7 +845,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
 
 
 /**
-FormAndAddRegion() used combined constraints suppplied in the form of
+FormAndAddDomain() used combined constraints suppplied in the form of
 a constraints object to determine which elements shall be used to
 form a (unique/non-unique) group with the target name.
 
@@ -866,7 +866,7 @@ The method reports an INFO if no values fall into the target ranges and
 a FATAL_ERROR if the group cannot be created because the name is already
 in use.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname,
                                                              PropertyConstraints& constraints,
                                                              bool unique_group )
@@ -968,7 +968,7 @@ A warning is issued if a group with the same name already exists or if no
 elements with the desired properties were found.
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupname,
                                                              const char* prop,
                                                              double min, double max,
@@ -1031,7 +1031,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* groupna
 Forms a Region from a set of region names by using the method MergeRegions.
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionname, const std::set<std::string>& region_names )
 {
     std::string output_region( regionname );
@@ -1056,7 +1056,7 @@ This forms a region from elements eligible as reported from elementComp.
 
 ElementComp is a model of binary predicate, i.e.
 @code
-template<size_t dim>
+template<uint32_t dim>
 struct ElementsLessX
 {
 bool operator () ( Element<dim> const* ePtr ) const
@@ -1066,19 +1066,19 @@ return ...is ePtr eligible?;
 };
 @endcode
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
-template<template<size_t> class ElementComp>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+template<template<uint32_t> class ElementComp>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegionName, ElementComp<dim> const& elementComp, const char* hostRegion )
   {
     static_cast<REGION_COMPLEX<dim>*>(this)->UpdateIndices();
     csmp::Region<dim> const& rref( this->Region( hostRegion ) );
     rref.UpdateMemberIndexes();
-    std::vector<size_t> elementIds;
+    std::vector<uint32_t> elementIds;
     elementIds.reserve( rref.Elements() );
     for ( typename csmp::Region<dim>::SimplexContainer::const_iterator it( rref.ElementsBegin() ); it != rref.ElementsEnd(); ++it )
       if ( elementComp( (*it) ) )
         elementIds.push_back( (*it)->Idx() );
-    std::vector<size_t>( elementIds ).swap( elementIds );
+    std::vector<uint32_t>( elementIds ).swap( elementIds );
     if ( elementIds.empty() )
       return 0U;
     
@@ -1118,7 +1118,7 @@ The method reports which regions are being formed.
 
 @todo for the debug version, put in a check that verifies that all element ids stored in the model topology are actually contained in the mesh.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology& topo )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1140,10 +1140,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
       if ( it.second )
         {
           // making a list of the element numbers
-          std::vector<size_t>  element_ids;
-          element_ids.reserve( topo.ElementsOfRegion( (*lit).c_str() ) );
-          copy( topo.ElementsOfRegionBegin( (*lit).c_str() ),
-                topo.ElementsOfRegionEnd( (*lit).c_str() ),
+          std::vector<uint32_t>  element_ids;
+          element_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
+          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
+                topo.CellsOfDomainEnd( (*lit).c_str() ),
                 back_inserter( element_ids ) );
 
           // retrieving the elements by their IDs and assigning them  to the region
@@ -1171,7 +1171,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
     }
   std::cout << std::endl;
 
-  if ( new_regions == topo.ModelRegions() ) return regions.size();
+  if ( new_regions == topo.ModelDomains() ) return regions.size();
   return 0U;
 
 } // end FormRegionsFrom
@@ -1190,7 +1190,7 @@ the region consists of elements from different spatial dimensions.
 @note This method is based on the floofFill() algorithm implemented in CSMP. 
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& region_name ) const
 {
   const csmp::Region<dim>& mref = Region( region_name );
@@ -1253,7 +1253,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const std::string& regi
       
       @attention this method cannot be applied to the region model or the master region
   */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1373,7 +1373,7 @@ The method will report if the region is  contiguous to start with. In this case 
 
 TODO: legacy of Andrew Bromage, not sure whether it makes any sense, needs testing!
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage( const char* group )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1395,7 +1395,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   for ( auto eit = gref.ElementsBegin(); eit != eend; eit++ ) {
     auto e = *eit;
     const size_t  neighbors( e->Neighbors() );
-    for ( size_t i = 0U; i<neighbors; i++ )
+    for ( auto i = 0U; i<neighbors; i++ )
       if ( e->Neighbor( i ) != NULL )
         unionFind.SameComponent( e, e->Neighbor( i ) );
   }
@@ -1505,7 +1505,7 @@ The method will report the names of the subregions that were removed.
 
 @todo (1) SKM: logic of this method seems to be broken and it does not always work. Refactor!
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const char* group )
 {
   std::string            target( group );
@@ -1631,7 +1631,7 @@ coordinate range can be found or because another group with the same
 name already exists, the method will terminate the program, by reporting
 a fatal error.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRectangularRegion( const char* groupname,
                                                                     const Point<dim>& min_xyz,
                                                                     const Point<dim>& max_xyz )
@@ -1691,7 +1691,7 @@ NB: The new group will not be unique.
 
 TODO: check whether this copying process is as fast as could be.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_group, const char* new_copied_group, bool unique_group )
 {
   if ( !ContainsRegion( existing_group ) )
@@ -1739,7 +1739,7 @@ both groups after the operation is complete.
 ERRORs are reported if either the first or the second group does
 not exist.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::AssimilateRegion( const char* group_to_add, const char* group_to_be_added_to )
 {
   // finding the group in the group list
@@ -1778,7 +1778,7 @@ If the set of regions is empty or if one of the specified regions does not
 exist, an error or an info message is reported.
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const std::set<std::string>& input_groups, const char* ensemble_group )
 {
   std::string output_region( ensemble_group );
@@ -1846,7 +1846,7 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const std::set<std::str
 
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const char* region_name_tag, const char* ensemble_group )
 {
   std::set<std::string> regions;
@@ -1884,7 +1884,7 @@ supported for Region objects.
 An error will be reported, if one of the evaluated groups does not
 exist.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionIncludes( const char* groupa, const char* groupb ) const
 {
   try {
@@ -1929,7 +1929,7 @@ form the union of a group which includes all elements that are hotter than
 If either one of the groups is empty or does not exist or if the target
 group cannot be formed an error is reported.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, const char* groupb,
                                                         const char* groupunion )
 {
@@ -2014,7 +2014,7 @@ If either the first or the second group does not exist or if the
 desired intersection group would have zero elements, an error is
 reported.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionIntersection( const char* groupa,
                                                                const char* groupb,
                                                                const char* groupintersection )
@@ -2089,7 +2089,7 @@ If either the first or the second group does not exist or if the
 desired distinction group would have zero elements, an error is
 reported.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionDifference( const char* groupa, const char* groupb,
                                                              const char* groupdiff )
 {
@@ -2170,7 +2170,7 @@ If either the first or the second group does not exist or if the
 desired distinction group would have zero elements, an error is
 reported.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionSymmetricDifference( const char* groupa,
                                                                       const char* groupb,
                                                                       const char* groupsymdiff )
@@ -2229,7 +2229,7 @@ faces only.
 
 @author R. Manasipov (2014)
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::RegionBetween( const char* group1, const char* group2,
                                                             const char* region_between, int32_t material_id )
 {
@@ -2320,7 +2320,7 @@ except for non-unique regions.
 @date 30/3/2016
 @test OK
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region, const char* region_to_subtract )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2374,7 +2374,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
 /**
     This version removes the pointers to the supplied elements from the target region.
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region, const set<Element<dim>*>& elmt_set )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2418,7 +2418,7 @@ non unique.
 @date 30/3/2016
 @test OK
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* unique_region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2451,7 +2451,7 @@ as "region identifier".
 
 @parameter vector of region names to retrieve them from the integer keys
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelRegions( const char* region_identifier, std::vector<std::string>& region_names )
 {
   REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
@@ -2487,7 +2487,7 @@ Region a will be the inner region whose perimeter Element pointers will be the f
 @author SKM
 @date 18/3/2017
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* region_a, const char* region_b,
                                                                    std::vector<std::tuple<Element<dim>*, ///< inner element
                                                                    Element<dim>*, ///< outer element
@@ -2527,7 +2527,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
       if ( nptr != nullptr and subdomain_b.IsPerimeterElement( nptr ) ) {
         // finding which face is the perimeter face in the neighbor element
         size_t opposite_pface( UINT_MAX );
-        for ( size_t i = 0U; i<nptr->Faces(); ++i )
+        for ( auto i = 0U; i<nptr->Faces(); ++i )
           if ( nptr->Neighbor( i ) == subdomain_a.E( eid ) ) {
             opposite_pface = i;
             break;
@@ -2557,7 +2557,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
       
       @attention the assumption is made the inter-element connectivity has was updated before
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
  {
      // since this region may now contain a different number of elements
@@ -2609,7 +2609,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
 
 
 
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
  {
      std::cout <<"\n\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";

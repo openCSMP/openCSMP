@@ -188,7 +188,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // for all the coordinate directions
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<size_t>(j)] = (*lit)[i][j];
+                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
@@ -225,7 +225,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // --------------------------------------------------------------
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<size_t>(j)] = (*lit)[i][j];
+                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
@@ -239,7 +239,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                    cout <<"\nTerminating execution of ObjectToPData()." << endl;
                    return;
                 }
-              else ids[static_cast<size_t>(i)] = (*cit).second; 
+              else ids[static_cast<uint32_t>(i)] = (*cit).second; 
            }
          // assigning entry to plist
          plist[ n++ ] = ids;

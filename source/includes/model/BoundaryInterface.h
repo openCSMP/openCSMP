@@ -6,22 +6,22 @@
 
 namespace csmp {
 
-template<size_t> class Face;
-template<size_t> class Element;
-template<size_t> class Boundary;
-template<size_t> class Region;
-template<size_t> class VSet;
+template<uint32_t> class Face;
+template<uint32_t> class Element;
+template<uint32_t> class Boundary;
+template<uint32_t> class Region;
+template<uint32_t> class VSet;
 class FaceConstructionData;
 
 /// finds the neighbors of dim-1 element, and their faces that connect to it; index records neighbor materials
-template<size_t dim>
+template<uint32_t dim>
 FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, const csmp::Index& );
 
 /// finds inside neighbor of dim-1 element, and the face that connects to it; index records neighbor materials
-template<size_t dim>
+template<uint32_t dim>
 const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
                                                             size_t& local_face_number_of_e, double& material_ID  );
-template<size_t dim>
+template<uint32_t dim>
 bool  higherDimensionalNeighbors( const Element<dim>& , std::vector<Element<dim>*>& );
 
 /**
@@ -49,7 +49,7 @@ and to give access to them.
 @date 2010, 2017
 
 */
-template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 class BoundaryInterface {
   public:
     BoundaryInterface() {}   

@@ -3,7 +3,7 @@
 
 namespace csmp{
 
-  template<size_t dim>
+  template<uint32_t dim>
   FractureComputeVelocityVisitor<dim>::FractureComputeVelocityVisitor( Model<dim>& model, TwoPhaseModel<dim>& saturationFunctions,
                                                                        const char* vt_Tag,
                                                                        const char* vn_Tag,
@@ -32,7 +32,7 @@ namespace csmp{
     }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void FractureComputeVelocityVisitor<dim>::Visit( Element<dim>* element )
   {
     velo_ = 0.;
@@ -47,7 +47,7 @@ namespace csmp{
       // first without gravity vt = -k (lt grad p)
       element->dN_AtBaryCenter( DERIV_, 1U );
 
-      for ( size_t i = 0; i < element->Nodes(); ++i )
+      for ( auto i = 0; i < element->Nodes(); ++i )
       {
         double pf = element->N(i)->Read( fluidPressureKey_ );
         double nodalFracPc = element->N(i)->Read( fracCapillaryPressureKey_ );
@@ -60,7 +60,7 @@ namespace csmp{
         // Computing the total velocity: vt = -k (lt grad p - (s_w rho_w + s_o rho_o) g)
         // first without gravity vt = -k (lt grad p)
         element->dN_AtBaryCenter( DERIV_, 1U );
-        for ( size_t i = 0; i < element->Nodes(); ++i )
+        for ( auto i = 0; i < element->Nodes(); ++i )
         {
           double pf = element->N(i)->Read( fluidPressureKey_ );
           for( size_t xyz = 0; xyz < dim; ++xyz )

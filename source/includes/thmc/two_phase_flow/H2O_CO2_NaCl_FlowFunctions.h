@@ -42,7 +42,7 @@ namespace csmp {
 // TODO: use these to generate values at nodes as well (no interpolations required!)
 // TODO: does the capillary diffusion multiplier need multiplication with density
 // TODO: create tensor permeability versions of these functions
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class H2O_CO2_NaCl_FlowFunctions {
   public:
   

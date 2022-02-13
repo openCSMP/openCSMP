@@ -154,7 +154,7 @@ inline void initVariable( csmp::Index key, FlaggedArrayVariable& var )
 
 
   /// domain (Model, Region...) variables binary IO
-template<class V, class D, size_t dim>
+template<class V, class D, uint32_t dim>
 bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
 {
   size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
@@ -175,7 +175,7 @@ bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim
 }
 
 
-template<class V, class D, size_t dim>
+template<class V, class D, uint32_t dim>
 bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
 {
   size_t vcount( -1 );
@@ -200,7 +200,7 @@ bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref
 }
 
 
-template<class D, size_t dim>
+template<class D, uint32_t dim>
 bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref )
 {
   if ( !variablesOut<ScalarVariable>( fp, domain, pref, SCALAR ) )
@@ -217,7 +217,7 @@ bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDataba
 }
 
 
-template<class D, size_t dim>
+template<class D, uint32_t dim>
 bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref )
 {
   if ( !variablesIn<ScalarVariable>( fp, domain, pref, SCALAR ) )
@@ -239,7 +239,7 @@ bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>
     @author SKM
     @date 6/9/2021
  */
-template<class V, class D, size_t dim>
+template<class V, class D, uint32_t dim>
 bool selectedVariablesIn( std::fstream& fp, D& domain,
                           const PropertyDatabase<dim>& pref,
                           VARIABLE_TYPE, const std::set<std::string>& selection )
@@ -271,7 +271,7 @@ bool selectedVariablesIn( std::fstream& fp, D& domain,
     @author SKM
     @date 6/9/2021
  */
-template<class D, size_t dim>
+template<class D, uint32_t dim>
 bool selectedDomainVariablesIn( std::fstream& fp, D& domain,
                                 const PropertyDatabase<dim>& pref,
                                 const std::set<std::string>& selection )
@@ -426,7 +426,7 @@ bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
           stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
         stl_ctner.reserve(elements);
         // writing all elements
-        for ( size_t i = 0; i<elements; i++ ) {
+        for ( auto i = 0; i<elements; i++ ) {
           // counting the successfully read elements
           fp.read( reinterpret_cast<char*>(&val), bytes );
           counter += 1;
@@ -464,7 +464,7 @@ bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
         
     	T val;
       // writing all elements
-      for ( size_t i = 0U; i<elements; i++ )
+      for ( auto i = 0U; i<elements; i++ )
         {
           // counting the successfully read elements
           fp.read( reinterpret_cast<char*>(&val), bytes );
@@ -590,7 +590,7 @@ bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
       //stl_ctner.reserve( elements );
       std::vector<T>  val;
       // 2. reading all the vector records
-      for ( size_t i = 0; i<elements; i++ ) {
+      for ( auto i = 0; i<elements; i++ ) {
         // counting the successfully read elements
         if (binaryFileRead(fp, val)) {
           counter++;
@@ -734,7 +734,7 @@ bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 
 	if (elements > 0) {
 		// 2. reading all map records
-		for ( size_t i = 0; i<elements; i++ )
+		for ( auto i = 0; i<elements; i++ )
 		{
 			// reading key
 			if (fp.read( reinterpret_cast<char*>(&key), bytesM )) counterM++;
@@ -875,7 +875,7 @@ bool binaryFileRead(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
       if (!stl_ctner.empty())
         stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
       // 2. reading all map records
-      for ( size_t i = 0; i<elements; i++)
+      for ( auto i = 0; i<elements; i++)
         {
           // reading key
           if (fp.read( reinterpret_cast<char*>(&key), bytesM)) counterM++;
@@ -1013,7 +1013,7 @@ bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
     if (!stl_ctner.empty())
       stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
 		// 2. reading all map records
-		for ( size_t i = 0; i<elements; i++)
+		for ( auto i = 0; i<elements; i++)
       {
         // reading key
         fp.read( reinterpret_cast<char*>(&key), bytes);

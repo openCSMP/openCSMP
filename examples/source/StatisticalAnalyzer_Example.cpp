@@ -51,8 +51,7 @@ void StatisticalAnalyzer_Example::Run()
 
   Index porosity_key = reservoir_model.Database().StorageKey("porosity");
 
-  for ( vector<Element<2U>*>::iterator
-    it=regionref.ElementsBegin(); it!=regionref.ElementsEnd(); it++ )
+  for ( auto it=regionref.ElementsBegin(); it!=regionref.ElementsEnd(); it++ )
   {
       double porosity = NormalDistributionGenerator(0.5, 0.1, 0, 1);
       (*it)->Store( porosity_key, makeScalar(PLAIN, porosity) );

@@ -8,9 +8,9 @@
 
 namespace csmp {
 
-template<size_t> class StressesAndStrains;
-template<size_t> class Element;
-template<size_t> class Model;
+template<uint32_t> class StressesAndStrains;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
 
 /**
     @brief 2D stress & strain are output as tensor variables, if they
@@ -51,7 +51,7 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U> {
     std::vector<DenseMatrix<DM_MIN> >  STIFF_;
 
   private:
-    const size_t  components_;  /// < stress strain components
+    const uint32_t  components_;  /// < stress strain components
     
     csmp::Index strain_key_, stress_key_,                 ///< tensor variables
                strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)

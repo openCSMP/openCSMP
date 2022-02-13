@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class VanGenuchten : public TwoPhaseModel<dim> {
   public:
     VanGenuchten( const PropertyDatabase<dim>& database,

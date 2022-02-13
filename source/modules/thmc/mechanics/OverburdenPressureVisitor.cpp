@@ -24,7 +24,7 @@ namespace csmp {
      'gravity term'  for hydrostatic fluid pressure gradient
      'gravity force' for body forces acting on the rock skeleton
 */
-template<size_t dim>
+template<uint32_t dim>
 OverburdenPressureVisitor<dim>::OverburdenPressureVisitor( Model<dim>& model, // Pa.s
                                                            double acc_gravity )
     : Visitor<dim>( MODEL, ELEMENT ),
@@ -52,7 +52,7 @@ OverburdenPressureVisitor<dim>::OverburdenPressureVisitor( Model<dim>& model, //
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 OverburdenPressureVisitor<dim>::~OverburdenPressureVisitor()
 {
 }
@@ -67,7 +67,7 @@ OverburdenPressureVisitor<dim>::~OverburdenPressureVisitor()
     
     @attention SKM 28/9/2014 - added case where stress is placed on the element
 */
-template<size_t dim>
+template<uint32_t dim>
 void OverburdenPressureVisitor<dim>::Visit( Element<dim>* e )
 {
    // element properties

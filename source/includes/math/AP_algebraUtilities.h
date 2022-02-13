@@ -40,19 +40,19 @@ namespace csmp {
                                          /*2nd std::vector*/const double&, const double&, const double&);
   
   
-  template<size_t dim>
+  template<uint32_t dim>
   void areaCenterOfMass(const std::vector<Point<dim> >&, Point<dim>& );
   
   
   bool normalOfPolygon(const std::vector< Point<3U> >& vecPolygon, const Point<3U>& vecNormalAt, Point<3U>& vecNormal);
   
-  template<size_t dim>
+  template<uint32_t dim>
   bool areaOfPolygon(const std::vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double & fArea);
   
-  template<size_t dim>
+  template<uint32_t dim>
   void localSurfaceNormal(const std::vector< Point< dim> >& vecPoints, const Point<dim>& vecNormalAt, const size_t& iLevelOfRefinement, Point<dim>& vecNormal);
   
-  template<size_t dim>
+  template<uint32_t dim>
   bool intersection(/*1st line*/const Point< dim>&, const Point< dim>&,
                     /*2nd line*/const Point< dim>&, const Point< dim>&,
                     Point< dim>&);
@@ -169,10 +169,10 @@ namespace csmp {
    The main idea is to calculate the center of mass delimited by the given
    vertices, supposing that the body is of constant density.
    */
-  template<size_t dim>
+  template<uint32_t dim>
   inline void vertexCenterOfMass( const std::vector<Point<dim> >& vecPoints, Point<dim>& vecCentroid )
   {
-    for(size_t i = 0U; i < vecPoints.size(); i++)
+    for(auto i = 0U; i < vecPoints.size(); i++)
       vecCentroid += vecPoints[i];
     
     vecCentroid /= vecPoints.size();
@@ -200,7 +200,7 @@ namespace csmp {
    The main idea is to calculate the center of mass delimited by the three given
    vertices, supposing that the body is of constant density.
    */
-  template<size_t dim>
+  template<uint32_t dim>
   inline void vertexCenterOfMass3Vertices( const Point<dim>& pt1, const Point<dim>& pt2,
                                           const Point<dim>& pt3, Point<dim>& vecCentroid )
   {

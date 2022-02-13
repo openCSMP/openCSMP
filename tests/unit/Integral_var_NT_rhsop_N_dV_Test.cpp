@@ -158,7 +158,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     calculateGlobalMatrix(sm, lhs);
     std::vector<double> lhs_vec(dof);
     std::fill(lhs_vec.begin(), lhs_vec.end(), 0.0);
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
         lhs_vec[i] += sm(i, j) * pressure[j];
       }
@@ -170,7 +170,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     
     // Test for equality
     assert(lhs_vec.size() == rhs_vec.size());
-    for (size_t i = 0; i < lhs_vec.size(); ++i) {
+    for (auto i = 0; i < lhs_vec.size(); ++i) {
       _equal(lhs_vec[i], rhs_vec[i], tol_);
     } 
 }
@@ -181,7 +181,7 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     csmp::Index key(sg_->Database().StorageKey(var_name));
     ScalarVariable sc;
         
-    unsigned int i = 0;
+    unsigned int i = 0; // BARF!
     for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
         (*it)->Read(key,sc);
         if ( verbose_ ) cout << "Node " << i << ": " << sc() << endl;
@@ -193,8 +193,8 @@ void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double>& var, const
     //std::deque<Node<2U> >::iterator it;
     csmp::Index key(sg_->Database().StorageKey(var_name));
 
-    unsigned int i = 0;
-    for (vector<Node<2U>*>::iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
+    unsigned int i = 0; // MORE BARF!
+    for ( auto it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
         (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
         ++i;
     }
@@ -205,7 +205,7 @@ void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double>& var, co
   csmp::Index key(sg_->Database().StorageKey(var_name));
   
   unsigned int i = 0;
-  for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
+  for (auto it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
               
     ++i;

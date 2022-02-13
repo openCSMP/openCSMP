@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 class Concatenate : public Interrelation< dim> {
   public:
     Concatenate( const PropertyDatabase<dim>& p, const char* resultProperty,
@@ -70,7 +70,7 @@ list.
 
 /** Combines the arguments and stores result into resultProperty.
 */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 inline void Concatenate<dim,operation>::Calculate()
  {
   typename std::map<std::string,Operand<dim> >::iterator 

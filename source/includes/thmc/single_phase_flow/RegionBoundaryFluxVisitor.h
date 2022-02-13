@@ -14,12 +14,12 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Element;
-template<size_t,template<size_t> class> class ModelSubDomain;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Element;
+template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
 /// using the FVM this visitor computes the cumulative single-phase influx into the target region
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class RegionBoundaryFluxVisitor : public Visitor<dim> {
   public:
     /// choice between Region, Boundary and SplitBoundary is desired

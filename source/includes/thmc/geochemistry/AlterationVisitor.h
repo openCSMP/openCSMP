@@ -14,8 +14,8 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 /**
 
@@ -182,7 +182,7 @@ In this example the verbose output of each speciation calculation
 is disabled by setting the second 'boolean' argument.
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class AlterationVisitor : public Visitor<dim> {
   public:
     AlterationVisitor( Model<dim>& sg, const char* rea_file, double dt );

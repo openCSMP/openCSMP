@@ -29,7 +29,7 @@ namespace csmp {
     traverses the mesh until the target point is found or a model boundary is encountered
     recording nullptr
 */
-template<size_t dim>
+template<uint32_t dim>
 std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>& model,
                                                       string target_region,
                                                       const vector<Point<dim> >& points_to_search )
@@ -88,7 +88,7 @@ template vector<Element<2>*>  findCellsEnclosingPoints( const Model<2>&, string,
  
  @todo make this method general
  */
-template<size_t dim>
+template<uint32_t dim>
 pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& point, size_t region_idx )
  {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
@@ -106,7 +106,7 @@ pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& p
     bool                point_is_inside{true};
 
     const size_t n_nodes{ IPOL.size() };
-    for ( size_t i{0}; i<n_nodes; ++i ) {
+    for ( auto i{0}; i<n_nodes; ++i ) {
          nearest_nbor.insert( make_pair( IPOL[i], i ) );
          if ( IPOL[i] < 0. ) point_is_inside = false;
       }
@@ -133,14 +133,14 @@ template pair<Element<2>*,bool>  containsPoint( Element<2>*, const Point<2>&, si
   
   
 /// returns the Element's node that is closest to the supplied point
-template<size_t dim>
+template<uint32_t dim>
 Node<dim>*  nearestNode( Element<dim>* e, const Point<dim>& point )
  {
     // computes distances between point and the elements node points returning the closest node
     // distance, local node number
     map<double,size_t>  node_distances;
     const size_t n_nodes{ e->Nodes() };
-    for ( size_t i{0}; i<n_nodes; ++i )
+    for ( auto i{0}; i<n_nodes; ++i )
       node_distances.insert( make_pair( point.DistanceTo( e->N(i)->Coordinate()),i) );
     
     return e->N( (*node_distances.begin()).second );
@@ -189,7 +189,7 @@ bool PointPropertyToCellMapper2D::MapPointsToCells( Model<2>& model, string targ
     const size_t cx = property_data_.ColumnIndex("x");
     vector<Point<2> >  points_to_search;
     points_to_search.reserve( property_data_.Rows() );
-    for ( size_t i{0}; i<property_data_.Rows(); ++i )
+    for ( auto i{0}; i<property_data_.Rows(); ++i )
       points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cx+1) ) );
       
     
@@ -259,7 +259,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
     // creating the point search data
     points_to_search.reserve( property_data_.Rows() );
     point_values.reserve( property_data_.Rows() );
-    for ( size_t i{0}; i<property_data_.Rows(); ++i ) {
+    for ( auto i{0}; i<property_data_.Rows(); ++i ) {
          // assuming that the x, y coordinates reside in column 0 and 1
          points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cy) ) );
          point_values.emplace_back( property_data_(i,prop_idx) );
@@ -377,7 +377,7 @@ void PointPropertyToCellMapper2D::Out() const
     const size_t cx = property_data_.ColumnIndex("x");
     const size_t cy = property_data_.ColumnIndex("y");
     const size_t cz = property_data_.ColumnIndex("z");
-    for ( size_t i{0}; i<property_data_.Rows(); ++i ) {
+    for ( auto i{0}; i<property_data_.Rows(); ++i ) {
          cout <<"("<< property_data_(i,cx) <<",";
          cout << property_data_(i,cy) <<",";
          cout << property_data_(i,cz) <<"): ";

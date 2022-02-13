@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim> class Node;
+template<uint32_t dim> class Node;
 class Index;
 
 // TODO: include parent InterFace connectivity to the NodeManifolds because this is missing for InterFace nodes
@@ -43,7 +43,7 @@ std::string parse( ManifoldType );
 /**
 * @brief: a class contains pointers to coincident nodes at split-boundary
 */
-template<size_t dim>
+template<uint32_t dim>
 class NodeManifold {
     public:
       NodeManifold() = default;
@@ -103,11 +103,11 @@ class NodeManifold {
 
 // TODO: needs rigorous testing; most certainly incomplete
 /// check whether through modification of the manifold, the original topology identifier is no longer valid
-template<size_t dim>
+template<uint32_t dim>
 ManifoldType consistencyCheck( const NodeManifold<dim>& );
   
 /// determines the type of manifold on the basis of its node members and their BOX_BOUNDARY flags
-//template<size_t dim>
+//template<uint32_t dim>
 //ManifoldType manifoldType( const NodeManifold<dim>& );
 
 

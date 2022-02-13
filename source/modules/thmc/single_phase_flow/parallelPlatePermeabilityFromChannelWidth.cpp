@@ -23,7 +23,7 @@ namespace csmp {
      
      @author SKM 8/2005
 */
-template<size_t dim>
+template<uint32_t dim>
 void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg, 
                                                 const char* channel_region, 
                                                 const char* channel_width,

@@ -166,17 +166,17 @@ class LinearTriangle3D : public FiniteElement {
     virtual double       AspectRatio();
     virtual double       InnerRadius();
     virtual void           EdgeLengths( std::vector<double>& vec );
-    virtual void           NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
-    virtual void           NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
-    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
-    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
-    virtual void           CounterClockwiseNodes( std::vector<size_t>& ids ) const;
-    virtual size_t         CornerNodes() const  { return 3; }
-    virtual void           CornerNodes( std::vector<size_t>& ids ) const;
+    virtual void           NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
+    virtual void           NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+    virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
+    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
+    virtual void           CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t         CornerNodes() const  { return 3; }
+    virtual void           CornerNodes( std::vector<uint32_t>& ids ) const;
     virtual void           UnitNormal( std::vector<double>& unrml ) const;
-    virtual void           UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
-    virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
-    virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return LINEAR_BAR; };
+    virtual void           UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
+    virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return LINEAR_BAR; };
 
     /// element interpolation functions at the point xzy
     virtual void           N( std::vector<double>& N, const std::vector<double>& xyz );

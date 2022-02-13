@@ -151,7 +151,7 @@ void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const 
      cout <<"\nprintNeigboursOfPerimeterElements: of region '"<< domain.Name() <<"'\t";
      for ( auto it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
           cout <<"\n"<< (*it).first <<": ";
-          for ( size_t i=0U; i<(*it).second->Faces(); ++i )
+          for ( auto i{0}; i<(*it).second->Faces(); ++i )
             if ( (*it).second->Neighbor(i) == nullptr )
               cout <<"NONE ";
             else

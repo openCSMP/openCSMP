@@ -11,13 +11,13 @@
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 Fluid<dim,USER>::Fluid()
  {
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Viscosity( Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U ); 
@@ -27,7 +27,7 @@ double Fluid<dim,USER>::Viscosity( Node<dim>* const n, size_t phase ) const
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t node, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
@@ -38,7 +38,7 @@ double Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t node, size_t ph
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
@@ -52,7 +52,7 @@ double Fluid<dim,USER>::Viscosity( Element<dim>* const e, size_t phase ) const
   
 
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Density( Node<dim>* const n, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
@@ -62,7 +62,7 @@ double Fluid<dim,USER>::Density( Node<dim>* const n, size_t phase ) const
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Density( Element<dim>* const e, size_t node, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
@@ -73,7 +73,7 @@ double Fluid<dim,USER>::Density( Element<dim>* const e, size_t node, size_t phas
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::Density( Element<dim>* const e, size_t phase ) const
  {
     assert( phase == 0U or phase == 1U );
@@ -89,7 +89,7 @@ double Fluid<dim,USER>::Density( Element<dim>* const e, size_t phase ) const
 /**
      aqueous phase viscosity / carbonic phase viscosity
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::ViscosityRatio( Node<dim>* const n ) const
  {
     assert( n != nullptr );
@@ -97,7 +97,7 @@ double Fluid<dim,USER>::ViscosityRatio( Node<dim>* const n ) const
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e, size_t node ) const
  {
     assert( e != nullptr );
@@ -109,7 +109,7 @@ double Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e, size_t node ) con
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e ) const
  {
     assert( e != nullptr );
@@ -122,7 +122,7 @@ double Fluid<dim,USER>::ViscosityRatio( Element<dim>* const e ) const
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::MixtureDensity( Node<dim>* const n ) const
  {
     assert( n != nullptr );
@@ -131,7 +131,7 @@ double Fluid<dim,USER>::MixtureDensity( Node<dim>* const n ) const
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::MixtureDensity( Element<dim>* const e, size_t node ) const
  {
     const double sw = e->N(node)->Read( User()->key_sH2O );
@@ -144,7 +144,7 @@ double Fluid<dim,USER>::MixtureDensity( Element<dim>* const e, size_t node ) con
  }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Fluid<dim,USER>::MixtureDensity( Element<dim>* const e ) const
  {
     const double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );

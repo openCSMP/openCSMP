@@ -8,13 +8,13 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 class FiniteDifferenceGrid;
-template<size_t> class DenseMatrix;
-template<size_t> class Element;
+template<uint32_t> class DenseMatrix;
+template<uint32_t> class Element;
 
 // works only in 2D, requires contiguous, unique element numbering
-template<size_t dim>
+template<uint32_t dim>
 class FemToGridVisitor : public Visitor<dim> {
   public:
     FemToGridVisitor( const PropertyDatabase<dim>&,

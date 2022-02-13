@@ -28,7 +28,7 @@ namespace csmp {
     @todo SKM move to applications, geothermal energy storage simulator
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class SimulatorSetup {
 public:
     SimulatorSetup(std::string geometry_prefix,

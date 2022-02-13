@@ -17,17 +17,17 @@ namespace csmp {
 class PropertyConstraints;
 class ModelTopology;
 class Standard_IO_Handler;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Element;
-template<size_t> class VSet;
-template<size_t> class Interrelation;
-template<size_t> class Visitor;
-template<size_t> class FiniteVolumeStencilManager;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Element;
+template<uint32_t> class VSet;
+template<uint32_t> class Interrelation;
+template<uint32_t> class Visitor;
+template<uint32_t> class FiniteVolumeStencilManager;
 template<typename> class FEM_Data;
 
-template<size_t, template<size_t> class> class PDE_Integrator;
-template<size_t, template<size_t> class> class PDE_Integrator_UoM;
+template<uint32_t,template<uint32_t> class> class PDE_Integrator;
+template<uint32_t,template<uint32_t> class> class PDE_Integrator_UoM;
 
 
 /**
@@ -184,7 +184,7 @@ model.OutputDataToHDF ( "computed_temperature", "temperature" );
 @todo (3) Replace references to groupMap_ and uniqueGroupMap_ in Model.cpp by corresponding Interface functionality
 @todo (3) Test binary IO of SplitBoundaries
 */
-template<size_t dim>
+template<uint32_t dim>
 class Model : public RegionInterface<dim, Model>,
               public BoundaryInterface<dim, Model>,
               public SplitBoundaryInterface<dim, Model>,
@@ -441,37 +441,37 @@ private:
 // SUPPORTING FUNCTIONS
 
 /// attempts to return the spatial dimension of the model stored in the file (1-3D)
-size_t spatialDimensionOfModel( const char* csmp_binary );
+uint32_t spatialDimensionOfModel( const char* csmp_binary );
 
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z );
 
 /// returns intermediate (true) or maximum (false) model dimensions
-template<size_t  dim>
+template<uint32_t  dim>
 double  printModelDimensions( const Model<dim>&, bool intermed_or_max = false );
 
 /// calculates the center of gravity of the model
-template<size_t  dim>
+template<uint32_t  dim>
 Point<dim>  centerOfGravity( const Model<dim>& );
 
 /// prints range to screen; returns either min(arg=false) or maximum variable value (default)
-template<size_t  dim>
+template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
                                 const char* var, bool print_maximum = true );
 
 /// prints range of target variable in model to screen and logs it to IO handler
-template<size_t  dim>
+template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
                                 Standard_IO_Handler& io, const char* var,
                                 bool max_instead_of_min = true );
 
 /// prints range of target variable within specific model subdomain
-template<size_t  dim>
+template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
                                 const char* group, const char* var, bool max_or_min = true );
 
 /// prints range of target variable within specific model subdomain and logs it to IO handler
-template<size_t  dim>
+template<uint32_t  dim>
 double  printRangeOfVariable( const Model<dim>&,
                                 Standard_IO_Handler&,
                                 const char* group, const char* var,
@@ -484,35 +484,35 @@ void printRangeOf( const std::vector<std::pair<double, double> >& );
 void printRangeOfVectorOfVectors( const std::vector<std::vector<double> >& );
 
 /// convert the flag(s) of a variable into integer values stored in its number part
-template<size_t dim>
+template<uint32_t dim>
 void flagToNumber( Model<dim>&, const char* variable );
 
 /// convert the flag(s) of first variable into integer values stored in the second variable
-template<size_t dim>
+template<uint32_t dim>
 void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_variable );
 
 /// using random number generator, adds percentage of Gaussian noise to variable values
-template<size_t dim>
+template<uint32_t dim>
 void randomPerturb( Model<dim>&, const char* prop, double by_percent_of_max_value );
 
 /// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
-template<size_t dim>
+template<uint32_t dim>
 bool compareConnectivity( const Model<dim>&, const VSet<dim>& );
 
 /// in target region, element variable is extrapolated to node and back as many times as indicated by n_smoothing_cycles
-template<size_t dim>
-void smoothElementVariable( Model<dim>&, const char*, const char* element_var, const char* temp_node_var, size_t n_smoothing_cycles );
+template<uint32_t dim>
+void smoothElementVariable( Model<dim>&, const char*, const char* element_var, const char* temp_node_var, uint32_t n_smoothing_cycles );
 
 /// replaces no-data values of target variable with nearest-neighbor values until there are none left, by default NAN's are no-data values
-template<size_t dim>
+template<uint32_t dim>
 void nearestNeighborFill( Model<dim>&, const char* target_region, const char* variable, double no_data_value );
 
 /// imposes either an upper- or a lower limit on the variable in the region of interest
-template<size_t dim>
+template<uint32_t dim>
 void imposeLimitOn( Model<dim>& model, const char* region, const char* variable, bool upper_limit, double limit_value );
 
 /// mapping node coordinates to a node variable
-template<size_t dim>
+template<uint32_t dim>
 void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char* nodal_variable );
 
 /// for Triangulator meshes: for meshes created from pixels, finds outlier triangles (3 nodes at region boundaries) and flips their property values

@@ -6,7 +6,7 @@
 
 namespace csmp{
 
-  template<size_t> class Model;
+  template<uint32_t> class Model;
 
 /// PL Nov 2010
 class CopyReplaceVisitor_Test : public Test

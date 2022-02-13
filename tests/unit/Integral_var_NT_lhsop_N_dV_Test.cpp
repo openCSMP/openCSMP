@@ -159,7 +159,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     calculateGlobalMatrix(sm_int, integral);
     calculateGlobalMatrix(sm_simp, simple);
     
-    for (size_t i = 0; i < sm_int.Rows(); ++i) {
+    for (auto i = 0; i < sm_int.Rows(); ++i) {
       for (size_t j = 0; j < sm_int.Cols(); ++j) {
         _equal(sm_int.At(i, j), sm_simp.At(i, j), tol_);
       }
@@ -236,13 +236,13 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
 
     std::vector<double> vec(dof);
     std::fill(vec.begin(), vec.end(), 0.0);
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
         vec[i] += sm_consistent.At(i,j);
       }
     }
 
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       _equal(sm_lumped.At(i,i), vec[i], tol_*1.0e+03);
       for (size_t j = 0; j < dof; ++j) {
         if (i != j) _equal(sm_lumped.At(i, j), 0.0, tol_);
@@ -254,7 +254,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     //cout << "Consistent formulation" << endl;
     //sm_consistent.Out();
     //cout << "Diagonal sum" << endl;
-    //for (size_t i = 0; i < dof; ++i) {
+    //for (auto i = 0; i < dof; ++i) {
     //  cout << vec[i] << endl;
     //}
   }

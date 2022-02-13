@@ -14,19 +14,19 @@ namespace csmp {
 
   namespace copyReplaceVisitorCompileTimeDispatch {
 
-    template<class V, size_t dim>
+    template<class V, uint32_t dim>
     void initializeVariable( V&, const PropertyDatabase<dim>&, const char* )
     {
          // does nothing
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     void initializeVariable( ArrayVariable& var, const PropertyDatabase<dim>& pdb, const char* propertyName )
     {
       var = ArrayVariable( propertyName, pdb );
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     void initializeVariable( FlaggedArrayVariable& var, const PropertyDatabase<dim>& pdb, const char* propertyName )
     {
       var = FlaggedArrayVariable( propertyName, pdb );
@@ -38,7 +38,7 @@ namespace csmp {
 
 
 /// custom constructor: replaces property b with the value of a
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 CopyReplaceVisitor<Var,dim>::CopyReplaceVisitor( const PropertyDatabase<dim>& p, 
                                                  const char* prop_a, const char* prop_b )
     : Visitor<dim>(MODEL,p.Placement(prop_a)),
@@ -64,14 +64,14 @@ CopyReplaceVisitor<Var,dim>::CopyReplaceVisitor( const PropertyDatabase<dim>& p,
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 CopyReplaceVisitor<Var,dim>::~CopyReplaceVisitor() 
  {  
  }
 
 // CopyReplaceVisitor Methods ====================
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( Model<dim>* gptr )
  {
     if ( prop_key_a_.place == MODEL ) {
@@ -81,7 +81,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Model<dim>* gptr )
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( Region<dim>* gptr ) 
  {
     if ( prop_key_a_.place == REGION ) {
@@ -98,7 +98,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Region<dim>* gptr )
    - sector integration point
    - finite volume facet integration point
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr ) 
  { 
     if ( prop_key_a_.place == ELEMENT ) {
@@ -109,7 +109,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
       
     // IntegrationPoint properties
     if ( prop_key_a_.place == ELEMENT_INTEGRATION_POINT ) {
-        for ( size_t i=0U; i<eptr->IntegrationPoints(); i++ ) {
+        for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
              eptr->Read( i, prop_key_a_, variable_ );
              eptr->Store( i, prop_key_b_, variable_ );
           }
@@ -119,7 +119,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == SECTOR_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Sectors(); i++ )
+        for ( auto i{0}; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -130,7 +130,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACET_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Facets(); i++ )
+        for ( auto i{0}; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -143,7 +143,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Element<dim>* eptr )
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
  { 
     if ( prop_key_a_.place == FACE ) {
@@ -154,7 +154,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
       
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACE_INTEGRATION_POINT ) {
-        for ( size_t i=0U; i<eptr->IntegrationPoints(); i++ ) {
+        for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
              eptr->Read( i, prop_key_a_, variable_ );
              eptr->Store( i, prop_key_b_, variable_ );
           }
@@ -164,7 +164,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACE_SECTOR_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Sectors(); i++ )
+        for ( auto i{0}; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -175,7 +175,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == FACE_FACET_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Facets(); i++ )
+        for ( auto i{0}; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -188,7 +188,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( Face<dim>* eptr )
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
  { 
     if ( prop_key_a_.place == INTER_FACE ) {
@@ -199,7 +199,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
       
     // IntegrationPoint properties
     if ( prop_key_a_.place == INTER_FACE_INTEGRATION_POINT ) {
-        for ( size_t i=0U; i<eptr->IntegrationPoints(); i++ ) {
+        for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
              eptr->Read( i, prop_key_a_, variable_ );
              eptr->Store( i, prop_key_b_, variable_ );
           }
@@ -209,7 +209,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Sectors(); i++ )
+        for ( auto i{0}; i<eptr->Sectors(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerSector(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -220,7 +220,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
     // IntegrationPoint properties
     if ( prop_key_a_.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
         assert( eptr->FV() != nullptr );
-        for ( size_t i=0U; i<eptr->Facets(); i++ )
+        for ( auto i{0}; i<eptr->Facets(); i++ )
           for ( size_t j=0U; j<eptr->IntegrationPointsPerFacet(); ++j ) {
                eptr->Read( i, j, prop_key_a_, variable_ );
                eptr->Store( i, j, prop_key_b_, variable_ );
@@ -237,7 +237,7 @@ void CopyReplaceVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
      @attention watch out that you do not visit the same node
      many times over.
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void CopyReplaceVisitor<Var,dim>::Visit( Node<dim>* nptr ) 
  { 
     nptr->Read( prop_key_a_, variable_ );

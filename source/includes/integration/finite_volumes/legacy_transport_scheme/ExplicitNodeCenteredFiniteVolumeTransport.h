@@ -20,7 +20,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolumeTransport<dim> {
   public:
     /// single phase solute advection-only constructor for a subregion identified as a group
@@ -83,7 +83,7 @@ class ExplicitNodeCenteredFiniteVolumeTransport : public NodeCenteredFiniteVolum
     /// passive advection: gives transported variable at end of time_interval
     virtual void ComposeSolution( double time_interval,const size_t var_comp_nr=0 );
     
-    STP<dim>               stencil_;
+    STP<dim>             stencil_;
     std::vector<double>  RESULT;
 #if defined(_OPENMP )
 
@@ -214,7 +214,7 @@ This is an example of how the second order accurate scheme is applied:
 
 
 /// single-phase passive advection (group-restricted)
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVolumeTransport(  
                                                                             const char* group,
                                                                             Model<dim>& sg, 
@@ -241,7 +241,7 @@ ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVo
 
 
 /// single-phase passive advection (group-restricted)
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVolumeTransport(  
                                                                             const char* group,
                                                                             Model<dim>& sg, 
@@ -314,7 +314,7 @@ flow field that necessitates frequent updates of the velocity fields.
 
 The memory that is consumed during the construction process is reported.  
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVolumeTransport(  
                                                                             const char* group,
                                                                             Model<dim>& sg,
@@ -351,18 +351,18 @@ ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ExplicitNodeCenteredFiniteVo
 
 /** Frees all the allocated memory.
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::~ExplicitNodeCenteredFiniteVolumeTransport()
  {
 #if defined(_OPENMP )
-    for (size_t i = 0 ; i < omp_get_max_threads(); i++)
+    for (auto i = 0 ; i < omp_get_max_threads(); i++)
          delete(thread_stencil_processor_[i]);
 #endif
  }
 
 
 /*
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
 {
     double        inflow, flux_balance;
@@ -425,7 +425,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryCondi
 /**
          Luat's fix 4/6/2020
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
   {
       double        inflow, flux_balance;
@@ -482,7 +482,7 @@ screen as a progress monitor.
 @todo (3) Needs timestep reduction and DIRICHLET inflow condition 
 
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable( double time_interval,
                                                                              double cfl_multiplication_factor,
                                                                              bool apply_flux_balance_correction,
@@ -572,7 +572,7 @@ not break the time interval into sub-parts and guarantee stability. This also me
 increment is not checked for in this method (and should be, externally, of course).
 
  */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariableSingleStep( double time_increment,
                                                                                    bool apply_flux_balance_correction,
                                                                                    bool update_pore_volumes )
@@ -660,7 +660,7 @@ Since it costs almost the same to compute the second-order accurate
 explicit solution, there is not much rational to use this method.  
 
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable1stOrder( 
                                                             double time_increment,
                                                             bool output_result_range )
@@ -736,7 +736,7 @@ to the transport equation. However, the CFL constraint applies. Thus
 one should use the implicit approach rather than this method, when the
 velocity field is not rapidly changing.  
  */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder( double time_increment,
                                                                                  bool output_result_range )
  {
@@ -751,16 +751,14 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder(
     std::vector<FV_Parameter>::const_iterator  fvt(this->STENCIL_DATA.begin());
 
     if(!this->with_lsmgrad_limiter_)
-        for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
              // 2.0 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionSolution2( this->SMINMAX,
                                                            (*fvt), *(*eit), RESULT );
     else{
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-        this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
-        for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+        this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
+        for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
              // 2.0 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionSolution2( this->SMINMAX,
                                                            (*fvt), *(*eit), RESULT, this->mass_center_key_,
@@ -789,7 +787,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder(
 
 
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable1stOrder( double time_increment,
                                                                                             bool output_result_range )
  {
@@ -821,7 +819,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
  } // end AdvectAndDiffuseVariable1stOrder
 
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariable2ndOrder( double time_increment,
 	                                                                                         bool output_result_range )
  {
@@ -843,7 +841,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
                                                                     (*fvt), *(*eit), RESULT );
     else{
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-        this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+        this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_,this->SMINMAX );
         for ( typename std::vector<Element<dim>*>::const_iterator
               eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
              // 1.1 initializing the stencil array index (needed for the limiter function)
@@ -896,7 +894,7 @@ this is an explicit transport scheme.
 
 For the passive advection of tracers.  
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double time_interval, const size_t var_comp_nr)
 {
     if (this->adv1_key_.type == SCALAR){
@@ -980,11 +978,11 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::ComposeSolution( double
 /**
     Accumulates facet fluxes (volume * saturation) coming into the control volumes into the result vector.
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
    // for all finite-volume facets
-   for ( size_t i=0U; i<this->gref_.E(stencil_.eidx_)->FV()->Facets(); i++ )
+   for ( auto i{0}; i<this->gref_.E(stencil_.eidx_)->FV()->Facets(); i++ )
       {
       // identifying the finite volumes to which the flux will be distributed
       this->gref_.E(stencil_.eidx_)->FV()->FacetEdgeNodes( i, stencil_.inside_node_, stencil_.outside_node_ );
@@ -1024,7 +1022,7 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 'out_of_range' exception is thrown.
 
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const PropertyDatabase<dim>& p,
                                                                             const csmp::Index& adv_key,
                                                                             bool show_range ,

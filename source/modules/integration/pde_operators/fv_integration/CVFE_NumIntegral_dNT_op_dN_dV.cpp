@@ -13,8 +13,8 @@ The Operand which is used here can be both, an element or a nodal variable
 which is then interpolated to the integration points to obtain the 
 integral properties.  
 */
-template<size_t dim,class SIMPLEX>
-CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFE_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFE_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                                    TwoPhaseModel<dim>&   kri,
                                                                    const char*           oper, 
                                                                    const char*           basic, 
@@ -49,8 +49,8 @@ CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFE_NumIntegral_dNT_op_dN_dV( const
 Compute "total mobility - permeability products at FV integration points, 
 storing the results in the material matrices of the base class.  
 */
-template<size_t dim,class SIMPLEX>
-void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( CELL& e )
  {
     // initialising the material constants of the relperm model
     kri_.Initialize(e);
@@ -78,7 +78,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
            this->MTRL[i] =  this->MTRL[0U];
       }
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
          kri_.InitializeForFacetIntegrationPoint( i, 0U, e );
          this->MTRL[i] *= kri_.TotalMobility();
@@ -92,8 +92,8 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 /** Laplacian operator of shape function derivatives squared.
 */
-template<size_t dim,class SIMPLEX>
-void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -102,7 +102,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
     const double fv_integration_weight(1./e.FV()->Facets());
 
      // for all finite-volume facets
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
          size_t inside_node  = e.FV()->InsideNode(i),
@@ -140,7 +140,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 //cout <<"\nCVFE_NumIntegral_dNT_op_dN_dV: on Element "<< e.Idx() << endl;
 //MathOperatorLHS<dim>::LHS.Out();
 
-// for ( size_t i=0U; i<this->LHS.Rows(); i++ )
+// for ( auto i{0}; i<this->LHS.Rows(); i++ )
 //   if ( this->LHS(i,i) < numeric_limits::epsilon() ) 
 //     cout <<"\nCVFE_NumIntegral_dNT_op_dN_dV: zero element in diagonal of element matrix."; 
 

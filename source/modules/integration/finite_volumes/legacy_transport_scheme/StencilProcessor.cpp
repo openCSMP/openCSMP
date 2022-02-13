@@ -13,7 +13,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessor<dim>::StencilProcessor( const csmp::Index& adv_key,   
                                          const csmp::Index& velo_key,
                                          const csmp::Index& src_key,
@@ -28,7 +28,7 @@ StencilProcessor<dim>::StencilProcessor( const csmp::Index& adv_key,
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessor<dim>::StencilProcessor( const csmp::Index& adv_key,   
                                          const csmp::Index& velo_key,
                                          const csmp::Index& diffusivity_key,
@@ -49,7 +49,7 @@ StencilProcessor<dim>::StencilProcessor( const csmp::Index& adv_key,
 /** Standard assignment operator.
 */
 /*
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessor<dim>& StencilProcessor<dim>::operator=( const StencilProcessor& tfs )
  {
     if ( &tfs != this ) {
@@ -70,7 +70,7 @@ StencilProcessor<dim>& StencilProcessor<dim>::operator=( const StencilProcessor&
 
  
  
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessor<dim>::StencilProcessor( const StencilProcessor<dim>& tfs )
   :  eidx_(tfs.eidx_),
      diff_coeff_(tfs.diff_coeff_),
@@ -94,7 +94,7 @@ Destructor is used to write theta limiter values (if accumulated) to
 a text file named "spatial-limiter-values" if the flag write_out_limiter
 has been set.  
 */
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessor<dim>::~StencilProcessor()
  {
  } // end destructor
@@ -107,7 +107,7 @@ current finite element = finite volume stencil.
 It is implied that advected variable and nodal source are always of the same type 
 (both SCALAR, both ARRAY or both FLAGGEDARRAY )
 */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
                                                   const Element<dim>& e,
                                                   const VARIABLE_TYPE& vt,
@@ -129,7 +129,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
      // getting all the node-related information
      // ----------------------------------------
      if (vt==SCALAR){
-         for ( size_t i=0U; i<e.Nodes(); i++ ) {
+         for ( auto i{0}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -138,7 +138,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
          }
      }
      else if (vt==ARRAY){
-         for ( size_t i=0U; i<e.Nodes(); i++ ) {
+         for ( auto i{0}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable and source
@@ -152,7 +152,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
          }
      }
      else if (vt==FLAGGEDARRAY){
-         for ( size_t i=0U; i<e.Nodes(); i++ ) {
+         for ( auto i{0}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable and source
@@ -170,7 +170,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
      // -------------------------------------------------------
      facet_flux_.resize(e.FV()->Facets());
      
-     for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
+     for ( auto i=0; i<e.FV()->Facets(); i++ ) {
          // project the velocities onto the facet normals to get
          // fluxes once the projections have been multiplied with
          // the surface areas
@@ -192,7 +192,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
 
 /** Computes Flux Mismatch for FVs at the Boundaries
 */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessor<dim>::ComputeBoundaryFluxMismatch(const FV_Parameter& param, const Element<dim>& e )
   {
      eidx_ = e.Idx();
@@ -204,15 +204,15 @@ void StencilProcessor<dim>::ComputeBoundaryFluxMismatch(const FV_Parameter& para
      else
         velo_mult_flag = true;
      
-     for ( size_t i=0U; i<e.Nodes(); i++ ) {
+     for ( auto i{0}; i<e.Nodes(); i++ ) {
 
          src_[i] = 0.;
          
          // compute flux mismatch
          if (e.N(i)->AtBoundary() != NOT)
            {
-             for ( size_t k=0U; k<e.FV()->FacetsPerSector(i); k++ ) {
-                 const size_t n(e.FV()->FacetSurroundingSector(i,k));
+             for ( auto k=0U; k<e.FV()->FacetsPerSector(i); k++ ) {
+                 const auto n(e.FV()->FacetSurroundingSector(i,k));
                  e.FV()->FacetEdgeNodes( n, inside_node_, outside_node_ );
                  // if the sector node is the inside node then an incoming flux will create a positive source term
                  double flux( (i == inside_node_) ? -param.FacetNormalVelocity(n) * param.FacetArea(n)
@@ -239,13 +239,13 @@ void StencilProcessor<dim>::ComputeBoundaryFluxMismatch(const FV_Parameter& para
 Initializes sector pore volume, facet flux, and facet advected variable
 vectors for current finite element = finite volume stencil.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessor<dim>::InitializeSecondOrder( const FV_Parameter& param,
                                                    const Element<dim>& e )
  {
      eidx_ = e.Idx();
 
-     const size_t facets(e.FV()->Facets());
+     const auto facets(e.FV()->Facets());
      sector_pore_volume_.resize(e.Nodes());
      psi1_.resize(e.Nodes());
      src_.resize(e.Nodes());
@@ -259,7 +259,7 @@ void StencilProcessor<dim>::InitializeSecondOrder( const FV_Parameter& param,
 
      // getting all the node-property related information
      // -------------------------------------------------
-     for ( size_t i=0U; i<e.FV()->Sectors(); i++ ) {
+     for ( auto i{0}; i<e.FV()->Sectors(); i++ ) {
           // sector pore volumes
           sector_pore_volume_[i] = param.SectorVolume( i );
           // advected variable (transformed by bijective mapping)
@@ -271,7 +271,7 @@ void StencilProcessor<dim>::InitializeSecondOrder( const FV_Parameter& param,
 
      // interpolating values of advected quantity to facet integration points
      // --------------------------------------------------------------------
-     for ( size_t i=0; i<facets; i++ ) {
+     for ( auto i=0; i<facets; i++ ) {
           // interpolating the property value to the (first) facet integration point
           ipsi1_[i] = ( e ).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
 
@@ -308,19 +308,19 @@ saturation values.
 This method is used in the non-linear iteration loops to avoid 
 unnecessary floating point operations.  
  */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessor<dim>::InitializeAdvectedVariableValues( const Element<dim>& e )
  {
      eidx_ = e.Idx();
 
-     const size_t facets(e.FV()->Facets());
+     const auto facets(e.FV()->Facets());
      psi1_.resize(e.Nodes());
 
      if ( !(diff_key_.index == ULONG_MAX) ) diff_coeff_ = e.Read( diff_key_ );
 
      // getting all the node-property related information
      // -------------------------------------------------
-     for ( size_t i=0; i<e.Nodes(); i++ )
+     for ( auto i=0; i<e.Nodes(); i++ )
        // advected variable & advected variable transformed by bijective mapping
        psi1_[i] = e.N(i)->Read( adv1_key_ ); // for upstream saturations
 
@@ -328,7 +328,7 @@ void StencilProcessor<dim>::InitializeAdvectedVariableValues( const Element<dim>
 
      // interpolating advected variable to finite-volume facet integration points
      // -------------------------------------------------------------------------
-     for ( size_t i=0; i<facets; i++ )
+     for ( auto i=0; i<facets; i++ )
        ipsi1_[i] = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
      
  } // end InitializeAdvectedPropertyValues
@@ -356,15 +356,15 @@ sets the flux to first order.
 
 To avoid numerical oscillations in higher-order transport schemes.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Element<dim>& e,
                                                                     const vector< pair<double,double> >& SMINMAX )
  {
     eidx_ = e.Idx();
-    size_t  n_upstr, n_dnstr;
-    const double   zero(0.), xi(2.);
+    uint32_t     n_upstr, n_dnstr;
+    const double zero(0.), xi(2.);
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -385,7 +385,7 @@ void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Elemen
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( const Element<dim>& e,
                                                                     const std::vector<std::pair<double,double> >& SMINMAX,
                                                                     const csmp::Index& mass_center_key,
@@ -397,7 +397,7 @@ void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( c
     size_t  n_upstr, n_dnstr;
     const double   zero(0.);
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ ){
+    for ( auto i{0}; i<e.FV()->Facets(); i++ ){
 
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -439,7 +439,7 @@ integration point.
 Limiting of source terms for explicit (for instance as in IMPES)
 calculations.
  */
-template<size_t dim>
+template<uint32_t dim>
 double  StencilProcessor<dim>::LimitExplicitSourceTerm(
                                        const Element<dim>& e,
                                        const vector<pair<double,double> >& SMINMAX,
@@ -462,7 +462,7 @@ double  StencilProcessor<dim>::LimitExplicitSourceTerm(
 See Matthai et al. 2009, TIPM for the explanation of the theta-
 time-level balancing method.
  */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
                                                     const vector<double>&  FVPOREVOL, // vols of FV's
                                                     const vector<double>&  SAT0, // saturation at initial time-level
@@ -476,7 +476,7 @@ void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
     theta_.resize(e.FV()->Facets());
 
     // for each sector divider
-    for ( size_t i=0; i<theta_.size(); i++ )
+    for ( auto i=0; i<theta_.size(); i++ )
       {
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -538,7 +538,7 @@ MAYBE FACET INTEGRATION POINT INTERPOLATION WORKS BETTER in multidimensional cas
    facet_flux_[i] = param.FacetNormalVelocity(i) * param.FacetArea(i) * relperm.dfds();
 @endcode
 */
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1( 
                                           const FV_Parameter& param,
                                           const Element<dim>& e,
@@ -574,7 +574,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
      src_.resize(e.Nodes());
 
      // for all FV sectors = nodes = matrix columns
-     for ( size_t j=0U; j<e.Nodes(); j++ ) 
+     for ( auto j=0U; j<e.Nodes(); j++ )
        {
           sector_pore_volume_[j] = param.SectorVolume(j);
           psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -582,8 +582,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
           // accumulate fluid sources (+) or sinks (-) due to deviations from 
           // potentially non-conservative fluxes
           src_[j] = 0.;  
-          for ( size_t k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
-               const size_t n(e.FV()->FacetSurroundingSector(j,k));
+          for ( auto k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
+               const auto n(e.FV()->FacetSurroundingSector(j,k));
                // if the sector node is the inside node then an incoming flux will create a positive source term
                const double fsign( (j == e.FV()->InsideNode(n)) ? -1. : 1. ); 
                src_[j] += fsign * param.FacetArea(n) * 
@@ -596,7 +596,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
       //    (compare with Helmig, 97, p. 108, eqn. 3.74)
       // -----------------------------------------------------------------------------
       facet_flux_.resize( e.FV()->Facets() );
-      for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+      for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
         facet_flux_[i] = param.FacetNormalVelocity(i) * dfds;
 
@@ -618,7 +618,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
   } // end AccumulateImplicitTwoPhaseSolution1 (generic version)
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
                                           const FV_Parameter& param,
                                           const Element<dim>& e,
@@ -645,7 +645,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
        diff_coeff_ = -relperm.CapillaryDiffusionMultiplier();
 
      // some provisions for taking account of gravitational forces
-     const size_t v( (dim==1u) ? 0u : 1u );
+     const auto v( (dim==1u) ? 0u : 1u );
 
      // ---------------------------------------------------------------------
      // 1. keeping track of the divergence of the non-linear facet flux
@@ -657,7 +657,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
      // getting all the node-property related information
      // for all FV sectors = nodes = matrix columns
      // -------------------------------------------------
-     for ( size_t j=0U; j<e.FV()->Sectors(); j++ ) //for ( size_t j=0U; j<e.Nodes(); j++ )
+     for ( auto j=0U; j<e.FV()->Sectors(); j++ ) //for ( size_t j=0U; j<e.Nodes(); j++ )
      {
        // sector pore volumes
        sector_pore_volume_[j] = param.SectorVolume(j);
@@ -670,8 +670,8 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
        // accumulate fluid sources (+) or sinks (-) due to deviations from
        // potentially non-conservative fluxes
        src_[j] = 0.;
-       for ( size_t k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
-         const size_t n(e.FV()->FacetSurroundingSector(j,k));
+       for ( auto k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
+         const auto n(e.FV()->FacetSurroundingSector(j,k));
          // if the sector node is the inside node then an incoming flux will create a positive source term
          const double fsign( (j == e.FV()->InsideNode(n) ) ? -1. : 1. );
          src_[j] += fsign * param.FacetArea(n) *
@@ -688,7 +688,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
 
      // interpolating values of advected quantity to facet integration points
      // --------------------------------------------------------------------
-     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+     for ( auto i{0}; i<e.FV()->Facets(); i++ )
      {
        // interpolating the property value to the (first) facet integration point
        ipsi1_[i] = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
@@ -720,7 +720,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewtonRaphson(
                                           const FV_Parameter& param,
                                           const Element<dim>& e,
@@ -774,22 +774,22 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
-             for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -983,7 +983,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(
                                           const vector<pair<double,double> >& SMINMAX,
                                           const FV_Parameter& param,
@@ -1000,7 +1000,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( size_t j=0U; j<e.Nodes(); j++ )
+    for ( auto j=0U; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -1037,9 +1037,9 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
@@ -1047,12 +1047,12 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
-             for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1263,7 +1263,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
   } // end AccumulateImplicitTwoPhaseSolution2NonlinearNewtonRaphson
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(
                                           const vector<pair<double,double> >& SMINMAX,
                                           const FV_Parameter& param,
@@ -1283,7 +1283,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( size_t j=0U; j<e.Nodes(); j++ )
+    for ( auto j=0U; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -1322,22 +1322,22 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
              for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
-             for ( size_t k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1552,7 +1552,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
   } // end AccumulateImplicitTwoPhaseSolution2NonlinearNewtonRaphson
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson(
                                                         const FV_Parameter& param,
                                                         const Element<dim>& e,
@@ -1599,18 +1599,18 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
     // now the saturation dependent properties are computed
     // for all FACETS per SECTOR surrounding the finite volume at the boundary
-    for ( size_t k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
+    for ( auto k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
       {
-         size_t i( e.FV()->FacetSurroundingSector(pnid,k) );
+         auto i( e.FV()->FacetSurroundingSector(pnid,k) );
 
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
          // get velocity across FV facet
@@ -1674,7 +1674,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 
 /** Outputs the current internal variables of the FV sector to screen.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  StencilProcessor<dim>::Out() const
  {
     cout <<"\n\n\nImplicitStencilProcessor<"<< dim <<">::Out: "<< endl;

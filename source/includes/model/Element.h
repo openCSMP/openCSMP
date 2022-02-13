@@ -11,9 +11,9 @@
 namespace csmp {
 
 struct  Index;
-template<size_t> class Node;
-template<size_t> class FiniteVolumeStencil;
-template<size_t> class Visitor;
+template<uint32_t> class Node;
+template<uint32_t> class FiniteVolumeStencil;
+template<uint32_t> class Visitor;
 
 /**
 @brief Object representation of a finite element Bridge pattern together with
@@ -142,7 +142,7 @@ Thus, one can have an element with FEM but without FVM, but not vice versa.
 @todo (3) Write faster code to determine whether a Point is contained in a certain element (A)
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class Element : public FiniteElementPolicy<dim, Element>,
                 public FiniteVolumePolicy<dim, Element>,
                 public LocalVariableStorage<dim, Element> {
@@ -196,12 +196,12 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // ------------------------------------------------------------------------
 
     /// (re)connect the element to its neighbors (during the model construction process or after remeshing)
-    void Assign( size_t nbor, Element<dim>* const );
+    void Assign( uint32_t nbor, Element<dim>* const );
     /// sets pointer to given neighbor element to zero
     void Unassign( const Element<dim>* const );
 
     /// (re)connect the element to its nodes (during the model construction process or after remeshing / split boundary creation)
-    void Assign( size_t node, Node<dim>* const );
+    void Assign( uint32_t node, Node<dim>* const );
     /// sets pointer to given node to zero
     void Unassign( const csmp::Node<dim>* const );
 
@@ -210,16 +210,16 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // ------------------------------------------------------------------------
 
     /// number of nodes of this element
-    size_t  Nodes() const;
+    uint32_t  Nodes() const;
 
     /// number of equidimensional neighbor elements of this element (not necessarily connected)
-    size_t  Neighbors() const;
+    uint32_t  Neighbors() const;
 
     /// number of equidimensional neighbor elements of this element (necessarily connected)
-    size_t  ConnectedNeighbors() const;
+    uint32_t  ConnectedNeighbors() const;
 
     /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
-    size_t  Faces() const;
+    uint32_t  Faces() const;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager); thus, nodes and element neighbors can be manipulated but not the pointers to them
     typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
@@ -231,19 +231,19 @@ class Element : public FiniteElementPolicy<dim, Element>,
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();
 
     /// accessor of the nodes of the current finite element
-    csmp::Node<dim>*       N( size_t n_local );
-    const csmp::Node<dim>* N( size_t n_local ) const;
+    csmp::Node<dim>*       N( uint32_t n_local );
+    const csmp::Node<dim>* N( uint32_t n_local ) const;
 
     /// accessor of the equidimensional neighbor elements of the current element (volume->volume, surface->surfaces element etc.)
-    csmp::Element<dim>*        Neighbor( size_t );
-    const csmp::Element<dim>*  Neighbor( size_t ) const;
+    csmp::Element<dim>*        Neighbor( uint32_t );
+    const csmp::Element<dim>*  Neighbor( uint32_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void         Idx( size_t ) const;
     size_t       Idx() const;
 
     /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
-    BOX_BOUNDARY AtBoundary( size_t boundary_face ) const;
+    BOX_BOUNDARY AtBoundary( uint32_t boundary_face ) const;
     
     /// unique material identifier that matches number of parent unique region
     int32_t Material_ID() const;
@@ -274,7 +274,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     void Out() const;
 
   private:
-    template<size_t> friend class MeshManager;
+    template<uint32_t> friend class MeshManager;
     void* operator new( size_t size );
     void operator  delete( void* p );
 

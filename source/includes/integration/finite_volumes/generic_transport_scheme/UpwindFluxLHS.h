@@ -13,7 +13,7 @@ namespace csmp {
        
        TODO: create version for tensor permeabilities where the flux is actually calculated from the pressure gradient
 */
-template<size_t dim>
+template<uint32_t dim>
 class UpwindFluxLHS : public MatrixOperator<dim> {
   public:
     explicit UpwindFluxLHS( const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& vol_flow_across_facet );

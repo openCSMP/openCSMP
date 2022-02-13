@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// Relative Permeability model based on text file input of Kr and Pc vs. Seff
-template<size_t dim>
+template<uint32_t dim>
 class TwoPhaseFileBased : public TwoPhaseModel<dim> {
   public:
     explicit TwoPhaseFileBased( const char* fileName );

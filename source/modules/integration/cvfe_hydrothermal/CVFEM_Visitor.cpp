@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
     CVFEM_Visitor<dim>::CVFEM_Visitor( Model<dim>& model, const char* variable)
   : with_operand( false ),
   dt(0.0)
@@ -26,7 +26,7 @@ template<size_t dim>
   }
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
     CVFEM_Visitor<dim>::CVFEM_Visitor( Model<dim>& model, const char* operand, const char* variable)
   : with_operand( true ),
   dt(0.0)
@@ -50,12 +50,12 @@ template<size_t dim>
 
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Visitor<dim>::~CVFEM_Visitor() 
  {}
 
 /** visit function for elem */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::Visit(Element<dim>* n)   
   {
 
@@ -65,7 +65,7 @@ void CVFEM_Visitor<dim>::Visit(Element<dim>* n)
 
   }
      
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
 {
 
@@ -113,7 +113,7 @@ void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
 } // end GetOperands
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
 {
 
@@ -197,11 +197,11 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::WriteOperands( Element<dim>& e )
  {
 
-   for (size_t i = 0; i < e.Nodes(); i++)
+   for (auto i = 0; i < e.Nodes(); i++)
      {
    	  if ( e.N(i)->Status( variable_key ) != DIRICH )
         e.N(i)->Store( variable_key, variable[i] );
@@ -209,7 +209,7 @@ void CVFEM_Visitor<dim>::WriteOperands( Element<dim>& e )
 
  } // end WriteOperands
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op )
  {
 
@@ -217,7 +217,7 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
 
  } // Add
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )
  {
 
@@ -229,7 +229,7 @@ void CVFEM_Visitor<dim>::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )
    
  } // Add
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op, const char* upwind_variable )
  {
 
@@ -237,7 +237,7 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
 
  } // Add
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorRHS<dim>* rhs_op, const char* upwind_variable )
  {
 
@@ -249,25 +249,25 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
    
  } // Add
  
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Visitor<dim>::SetTimeIncrement( double time_increment )
  {
    dt = time_increment;
  } // SetTimeIncrement( double time_increment )
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Visitor<dim>::Operator_LHS::Operator_LHS( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op )
  : lhs_operator( lhs_op )
  {
     basic_operand_key = pref.StorageKey(lhs_op->BasicOperandName().c_str());
  } // Operator_LHS( constructor )
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Visitor<dim>::Operator_RHS::Operator_RHS( CVFEM_MathOperatorRHS<dim>* rhs_op )
  : rhs_operator( rhs_op )
  {} // Operator_RHS( constructor )
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Visitor<dim>::Operator_LHS_Upwind::Operator_LHS_Upwind( const PropertyDatabase<dim>& pref,
                                                                 CVFEM_MathOperatorLHS<dim>* lhs_op,
                                                                 const char* upwind_variable )
@@ -277,7 +277,7 @@ CVFEM_Visitor<dim>::Operator_LHS_Upwind::Operator_LHS_Upwind( const PropertyData
     upwind_operand_key = pref.StorageKey(upwind_variable);
  } // Operator_LHS( constructor )
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Visitor<dim>::Operator_RHS_Upwind::Operator_RHS_Upwind( const PropertyDatabase<dim>& pref,
                                                                 CVFEM_MathOperatorRHS<dim>* rhs_op,
                                                                 const char* upwind_variable  )

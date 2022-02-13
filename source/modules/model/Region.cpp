@@ -30,7 +30,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p )
   : ModelSubDomain<dim, Element>( regionname, p )
 {
@@ -38,7 +38,7 @@ Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::Region( const Region& g )
   : ModelSubDomain<dim, Element>( g ),
     LocalVariableStorage<dim,Region>(g)
@@ -46,7 +46,7 @@ Region<dim>::Region( const Region& g )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::Region( Region&& g )
   : ModelSubDomain<dim, Element>( move(g) ),
     LocalVariableStorage<dim,Region>( move(g) )
@@ -59,7 +59,7 @@ Assignment does not affect the const reference to 'pref'.
 It remains the same as that before the assignment
 because it refers to the one Model in which all the Regions live.
 */
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>&  Region<dim>::operator=( const Region& g )
 {
   if ( &g != this ) {
@@ -72,7 +72,7 @@ Region<dim>&  Region<dim>::operator=( const Region& g )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::~Region()
 {
 }
@@ -101,7 +101,7 @@ from which the region is derived. This cannot be done by the subdomain
 itself because it does not know whether it will consist of elements,
 faces or interfaces.
 */
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      MeshManager<dim>& mesh, ///< not constant because region shall later be able to modify elements and nodes
                      const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
@@ -156,7 +156,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 /**
       re-constructor for regions via the nodes and elements which are explored by the MeshManager
  */
-template<size_t dim>
+template<uint32_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      const deque<Node<dim>*>& nodes,
                      const deque<Element<dim>*>& elmts,
@@ -202,7 +202,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
 
 // LOCAL VARIABLE STORAGE INTERFACE
-template<size_t dim>
+template<uint32_t dim>
 bool Region<dim>::ValidVariable( const char* variableName ) const
 {
   const PLACEMENT p( this->pref_.Placement( variableName ) );
@@ -213,11 +213,11 @@ bool Region<dim>::ValidVariable( const char* variableName ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables Region<dim>::ElementIntegrationPointVariables() const
 { return this->pref_.IntegrationPointVariablesAt( ELEMENT ); }
 
-template<size_t dim>
+template<uint32_t dim>
 LocalVariables Region<dim>::ElementVariables() const
 { return this->pref_.LocalVariablesAt( ELEMENT ); }
 
@@ -235,7 +235,7 @@ and finishes at application target.
 
 @author SKM
 */
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::Accept( csmp::Visitor<dim>& v )
 {
   if ( v.ApplicationLevel() == MODEL or
@@ -252,13 +252,11 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
       return;
       // element, face and interface are treated the same
     case ELEMENT:
-      for ( typename vector<Element<dim>*>::iterator
-            it = Region<dim>::ElementsBegin(); it != Region<dim>::ElementsEnd(); it++ )
+      for ( auto it = Region<dim>::ElementsBegin(); it != Region<dim>::ElementsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
-      for ( typename vector<csmp::Node<dim>*>::iterator
-            nd_it = Region<dim>::NodesBegin(); nd_it != Region<dim>::NodesEnd(); nd_it++ )
+      for ( auto nd_it = Region<dim>::NodesBegin(); nd_it != Region<dim>::NodesEnd(); nd_it++ )
         (*nd_it)->Accept( v );
       return;
     default:
@@ -284,7 +282,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
       @author SKM
       @date 7/6/2020
 */
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
@@ -329,7 +327,7 @@ template void Region<3U>::InputPropertyValue( const char*, const FlaggedArrayVar
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
@@ -395,7 +393,7 @@ All data is copied into the vset. IDs are used in the current state.
 The idea is to create a vset that contains all the information of the region.
 This vset can, for example, later be used to create a new Model.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
 {
   if ( this->elmt_vec_.empty() ) {
@@ -408,8 +406,8 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
 
   // 0. resizing the VSet
   size_t         counter( 0U );
-  deque<size_t>  nodes_per_element( this->elmt_vec_.size() );
-  deque<size_t>  elements_per_element( this->elmt_vec_.size() );
+  deque<uint32_t>  nodes_per_element( this->elmt_vec_.size() );
+  deque<uint32_t>  elements_per_element( this->elmt_vec_.size() );
   deque<int8_t>  etypes( this->elmt_vec_.size() );
   set<int8_t>    n_etypes;
 
@@ -434,7 +432,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   this->UpdateMemberIndexes();
 
   // 1. assigning coordinate values
-  for ( size_t i = 0U; i<this->node_vec_.size(); i++ ) {
+  for ( auto i = 0U; i<this->node_vec_.size(); i++ ) {
     vset.Px( i, this->node_vec_[i]->x() );
     if ( dim != 1U ) vset.Py( i, this->node_vec_[i]->y() );
     if ( dim == 3U ) vset.Pz( i, this->node_vec_[i]->z() );
@@ -443,13 +441,13 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   for ( typename vector<csmp::Element<dim>*>::const_iterator
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
     // mapping global to local node numbers
-    for ( size_t i = 0U; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
+    for ( auto i = 0U; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
 
   // 3. writing the neighbor per element map (pfverts)
   counter = 0U;
   for ( typename vector<csmp::Element<dim>*>::const_iterator
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
-    for ( size_t i = 0U; i<(*eit)->Neighbors(); i++ )
+    for ( auto i = 0U; i<(*eit)->Neighbors(); i++ )
       if ( (*eit)->Neighbor( i ) != NULL )
         vset.Pfvert( counter, i, static_cast<int32_t>((*eit)->Neighbor( i )->Idx()) );
       else {
@@ -486,7 +484,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::OutputDataTo( VSet<dim>& vset ) const
 {
   map<string, Index>  properties;
@@ -505,7 +503,7 @@ void Region<dim>::OutputDataTo( VSet<dim>& vset ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::OutputFvDataTo( VSet<dim>& vset ) const
 {
   map<string, Index>  properties;
@@ -529,7 +527,7 @@ into the input VSet container.
 
 @author SK 2016
 */
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::OutputTo( VSet<dim>& vset, const map<string, Index>& properties ) const
 {
   for ( map<string, Index>::const_iterator
@@ -550,7 +548,7 @@ Any variable is moved to inline storage in the provided container.
 
 @author SKM 2016
 */
-template<size_t dim>
+template<uint32_t dim>
 PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -756,7 +754,7 @@ by local id numbers.
 
 The idea is to extract the property data that corresponds to this group only.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) const
 {
@@ -769,42 +767,39 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
   switch ( idx.place ) {
     case ELEMENT: {
       data.Reset( idx, this->elmt_vec_.size(), var );
-      for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
-        (*eit)->Read( idx, var );
-        data[(*eit)->Idx()] = var;
+      for ( const auto& eit : this->elmt_vec_ ) {
+        eit->Read( idx, var );
+        data[ eit->Idx() ] = var;
       }
     }
                   break;
     case NODE: {
       data.Reset( idx, this->node_vec_.size(), var );
-      for ( typename vector<csmp::Node<dim>*>::const_iterator
-            nit = this->node_vec_.begin(); nit != this->node_vec_.end(); nit++ ) {
-        (*nit)->Read( idx, var );
-        data[(*nit)->Idx()] = var;
+      for ( const auto& nit : this->node_vec_ ) {
+        nit->Read( idx, var );
+        data[nit->Idx()] = var;
       }
     }
                break;
     case ELEMENT_INTEGRATION_POINT: {
       data.Reset( idx, this->IntegrationPoints(), var );
       size_t counter( 0U );
-      for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( size_t i = 0U; i<(*eit)->IntegrationPoints(); i++ ) {
-          (*eit)->Read( i, idx, var );
+      for ( const auto& eit : this->elmt_vec_ )
+        for ( auto i = 0U; i<eit->IntegrationPoints(); i++ ) {
+          eit->Read( i, idx, var );
           data[counter] = var;
           ++counter;
         }
     }
-                                    break;
+      break;
     case SECTOR_INTEGRATION_POINT: {
       data.Reset( idx, this->SectorIntegrationPoints(), var );
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( size_t j = 0U; j<(*eit)->Sectors(); j++ )
+        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
         {
-          for ( size_t i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -817,9 +812,9 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( size_t j = 0U; j<(*eit)->Facets(); j++ )
+        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
         {
-          for ( size_t i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -881,7 +876,7 @@ from from the data container.
 
 Enable to store data to disk to faciliate persistance.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 void Region<dim>::InputVariableFrom( const char* property,
                                      const FEM_Data<Var>& vdata )
@@ -921,7 +916,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( size_t i = 0U; i<(*eit)->IntegrationPoints(); i++ )
+        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -934,7 +929,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       {
         for ( size_t j = 0U; j<(*eit)->Sectors(); j++ )
         {
-          for ( size_t i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -949,7 +944,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       {
         for ( size_t j = 0U; j<(*eit)->Facets(); j++ )
         {
-          for ( size_t i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -1008,111 +1003,6 @@ template void Region<3>::InputVariableFrom<TensorVariable<3U> >( const char*, co
 
 
 
-/*
-In order to use the region node/element flags 'INTERIOR' or 'PERIMETER',
-boundary nodes and elements must be identified first.
-This is done every time when a new region is formed.
-
-@attention convention: elements are considered 'PERIMETER' elements
-of a Region only if they have at least one edge or face at the
-region boundary. This is the case irrespective of the dimensionality
-of such elements. In the extreme case of line elements inside a volume,
-they are flagged boundary, if they have one node on the perimeter of
-the volume region.
-Another way of looking at this is to consider all elements boundary
-elements, that share a face with the boundary.
-
-@attention convention: If a Region consists of elements of different
-dimensionality, the highest dimensional ones define the position of the boundary, i.e.
-all lower-dimensional elements that stick out of the region (and including all their
-nodes) are flagged 'PERIMETER'.
-Lower-dimensional elements inside a higher dimensional region are considered
-'INTERIOR'.
-
-@section application Application
-
-IdentifyPerimeter() is called as part of the region-forming process.
-The perimeter flagging is used to access boundaries selectively.
-
-@todo (1) Does not work for quadratic regions
-*/
-
-/* ORIGINAL VERSION
-
-template<size_t dim>
-void Region<dim>::IdentifyPerimeter()
-{
-// 1. putting the boundary elements at the end of the elmt_vec and sorting
-//    interior and boundary element ranges subsequently
-// ----------------------------------------------------
-const size_t first_bd_elmt = PartitionElementVector( "Region");
-assert( first_bd_elmt <= this->elmt_vec_.size() );
-
-// removing any potentially pre-existing boundary face information (O.K.)
-if ( !this->bd_face_vec_.empty() )
-this->bd_face_vec_.clear();
-this->bd_face_vec_.reserve( this->elmt_vec_.size() - first_bd_elmt );
-
-// 2. finding boundary faces of boundary elements
-//    and storing them in vector with same ordering
-// ------------------------------------------------
-vector<ONE_BYTE_NUMBER>  bfaces;
-enum { MAX_FACES=6 }; // hexahedron
-// for all elements on the region boundary
-for ( size_t i=first_bd_elmt; i<this->elmt_vec_.size(); i++ ) {
-bfaces.reserve(MAX_FACES);
-// identify their boundary faces as those who have no neighbor (because on model boundary)
-// and those whose neighbor elements do not belong to the region.
-for ( size_t j=0U; j<this->elmt_vec_[i]->Neighbors(); j++ ) {
-csmp::Element<dim>* const eptr(this->elmt_vec_[i]->Neighbor(j));
-// searching the pointers of the group
-if ( eptr == NULL or // both range searches (interior and boundary) do not give hits
-(!binary_search( this->elmt_vec_.begin(), this->elmt_vec_.begin() + static_cast<long>(first_bd_elmt), eptr ) and
-!binary_search( this->elmt_vec_.begin() + static_cast<long>(first_bd_elmt), this->elmt_vec_.end(), eptr )) )
-bfaces.push_back( static_cast<ONE_BYTE_NUMBER>(j) );
-}
-//         assert( !bfaces.empty() );
-if ( !bfaces.empty() ) this->bd_face_vec_.push_back( bfaces );
-bfaces.clear();
-}
-vector<vector<ONE_BYTE_NUMBER> >( this->bd_face_vec_ ).swap( this->bd_face_vec_ );
-
-// 3. identifying the boundary nodes
-// ---------------------------------
-vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
-set<csmp::Node<dim>*>                             boundary_nodes;
-vector<size_t>                                    fnids;
-
-// extracting a set of boundary nodes in order to partition the node vector into
-// interior- and exterior nodes
-for ( typename vector<Element<dim>*>::const_iterator
-it=PerimeterElementsBegin(); it!=ElementsEnd(); it++, bit++ )
-for ( size_t j=0U; j<(*bit).size(); j++ ) {
-(*it)->FE()->NodesOfFace( (*bit)[j], fnids );
-for ( size_t k=0U; k<fnids.size(); k++ )
-boundary_nodes.insert( (*it)->N(fnids[k]) );
-}
-this->first_bd_node_ = this->node_vec_.size() - boundary_nodes.size();
-
-// rebuilding and sorting the node vector (set nodes are already sorted)
-vector<csmp::Node<dim>*>  temp;
-temp.reserve(this->node_vec_.size());
-// first, the interior elements are inserted
-for ( typename vector<csmp::Node<dim>*>::const_iterator
-nit=this->node_vec_.begin(); nit!=this->node_vec_.end(); nit++ )
-if ( boundary_nodes.find(*nit) == boundary_nodes.end() )
-temp.push_back( *nit );
-// now the vector is sorted
-sort( temp.begin(), temp.end() );
-// second, the already sorted boundary nodes are appended
-for ( typename set<csmp::Node<dim>*>::const_iterator
-nit=boundary_nodes.begin(); nit!=boundary_nodes.end(); nit++ )
-temp.push_back( *nit );
-// now the temporary vector is assigned to the permanent one
-this->node_vec_ = temp;
-
-} // end IdentifyPerimeter
-*/
 
 
 
@@ -1124,7 +1014,7 @@ second value returns the highest spatial dimension contained.
 
 @author SKM 1/11/2013
 */
-template<size_t dim>
+template<uint32_t dim>
 pair<int32_t, int32_t>  Region<dim>::ElementSpatialDimensions() const
 {
   return this->SpatialDimensions();
@@ -1143,7 +1033,7 @@ and their number is returned.
 
 @attention SKM method is not implemented yet.
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  Region<dim>::IdentifyLowerDimensionalBoundaryElements( const std::pair<int32_t,int32_t>&,
 set<Element<dim>*>& ldim_bdry_elmts ) const
 {
@@ -1177,7 +1067,7 @@ SKM trying to make sense of Andrew Bromage's undocumented code:
 
 */
 /*
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
                                           bool reestablishNeighborConnectivity )
 {
@@ -1285,7 +1175,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
      
      @attention assumes that 'indexToPointerMapping' is unique and non empty.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1325,7 +1215,7 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
     
         @attention uses vector rather than set to create nodes vector.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iterator start,
                                 typename vector<csmp::Element<dim>*>::const_iterator end )
 {
@@ -1347,7 +1237,7 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iter
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterator start,
                                 typename set<csmp::Element<dim>*>::const_iterator end )
 {
@@ -1379,7 +1269,7 @@ into this region. Returns the number of elements found.
 @attention assumes that the iterator range is unique.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const PropertyConstraints& constraints )
 {
   if ( constraints.Constraints() == 0U )
@@ -1404,7 +1294,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
       {
         this->elmt_vec_.push_back( &(*it) );
         const size_t n_nodes{ (*it).Nodes() };
-        for ( size_t i = 0U; i<n_nodes; ++i )
+        for ( auto i = 0U; i<n_nodes; ++i )
           node_set.insert( (*it).N(i) );
       }
 
@@ -1434,7 +1324,7 @@ upper bound of it.
 @attention if the target variable is a node property, by default at least one of the element's
 nodes must have a value inside of the target range.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* feature, double min, double max )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1474,7 +1364,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
               }
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
-                for ( size_t i = 0U; i<n_nodes; i++ )
+                for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1491,7 +1381,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( size_t i = 0U; i<n_nodes; i++ )
+                for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1510,7 +1400,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( size_t i = 0U; i<n_nodes; i++ )
+                for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1529,7 +1419,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( size_t i = 0U; i<n_nodes; i++ )
+                for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1540,7 +1430,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( (*start).IsWithinRange( prop_key, min, max ) ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( size_t i = 0U; i<n_nodes; i++ )
+                for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1567,7 +1457,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
                                                  const Point<dim>& xyz_min,
                                                  const Point<dim>& xyz_max )
@@ -1597,7 +1487,7 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
       // the element becomes part of the new group
       if ( check == n_nodes ) {
           this->elmt_vec_.push_back( &(*start) );
-          for ( size_t i = 0U; i < n_nodes; i++ )
+          for ( auto i = 0U; i < n_nodes; i++ )
             this->node_vec_.push_back( (*start).N(i) );
         }
       start++;
@@ -1621,9 +1511,9 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
 /**
        @author SKM revised 22/5/2021
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
-                                         vector<size_t>& element_ids )
+                                         vector<uint32_t>& element_ids )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1665,7 +1555,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   // filling the vector
   for ( auto& it : this->elmt_vec_ ) {
        const size_t n_nodes{it->Nodes()};
-       for ( size_t i=0U; i<n_nodes; ++i ) {
+       for ( auto i{0}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
@@ -1711,10 +1601,10 @@ version, this is tested.
 Method will detect if the supplied vector<double> is empty or if a group by
 that name already exists.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_iterator start,
                                          typename vector<Element<dim>*>::const_iterator end,
-                                         vector<size_t>& element_ids )
+                                         vector<uint32_t>& element_ids )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
@@ -1735,11 +1625,11 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
   sort( element_ids.begin(), element_ids.end() );
 
   // if in debug mode, tests whether there are consecutive duplicated elements
-  vector<size_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
+  vector<uint32_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
   if ( new_end != element_ids.end() )
     element_ids.erase( new_end, element_ids.end() );
 
-  if ( element_ids.size() > static_cast<size_t>(distance( start, end )) )
+  if ( element_ids.size() > static_cast<uint32_t>(distance( start, end )) )
     csmp_error.notice( ERROR, "Region<dim>::AccumulateByNumber",
                        "user-supplied element-number vector is larger than iterator range." );
 
@@ -1754,7 +1644,7 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
       // add element with the correct id to the region
       this->elmt_vec_.push_back( (*start) );
       // add its nodes as well
-      for ( size_t i = 0U; i<(*start)->Nodes(); i++ )
+      for ( auto i = 0U; i<(*start)->Nodes(); i++ )
         node_set.insert( (*start)->N( i ) );
     }
     start++;
@@ -1785,8 +1675,8 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
     
     @attention the elements are not deleted, but pointers to them are returned into the second argument.
 */
-template<size_t dim>
-size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<dim>*>& ptrs_to_removed_elements )
+template<uint32_t dim>
+size_t Region<dim>::RemoveByNumber( vector<uint32_t>& element_ids, vector<Element<dim>*>& ptrs_to_removed_elements )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1839,7 +1729,7 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
 /**
     Removes those element pointers from the region which match the ones in the supplied range.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator begin,
                                  typename vector<csmp::Element<dim>*>::iterator end )
  {
@@ -1877,7 +1767,7 @@ size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator 
 /**
 Adds supplied region to the current region.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Region<dim>::Add( const Region<dim>& grp )
 {
   // if the added region is empty nothing needs to be done
@@ -1917,7 +1807,7 @@ This method assumes that elements are uniquely and throughgoingly numbered.
 The Elements are build so that their normals point from region 1 to region 2.
 Variable storage is assigned for both, the elements and region itself.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                                  const FiniteElementManager& finiteElementManager,
                                  const Region<dim>& region1,
@@ -1933,7 +1823,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   Element<dim>*       ePtr( NULL );
   Element<dim>*       ePtrNeighbor( NULL );
   FiniteElement*      femPtr( NULL );
-  std::vector<size_t> face_node_ids;
+  std::vector<uint32_t> face_node_ids;
 
   // reserving storage for boundary elements (logic: the number of faces created cannot be
   // larger than the minimum number boundary elements of the two neighboring groups)
@@ -1944,13 +1834,13 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   // If so, there is a shared boundary and faces or interfaces are constructed.
   const size_t n_elements( region1.Elements() );
 
-  for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
+  for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
     {
       ePtr = region1.E( i );
-      const size_t perimeter_faces( region1.PerimeterFaces( i ) );
-      for ( size_t j = 0U; j < perimeter_faces; ++j )
+      const auto perimeter_faces( region1.PerimeterFaces( i ) );
+      for ( auto j = 0U; j < perimeter_faces; ++j )
         {
-          const size_t face = region1.PerimeterFace( i, j );
+          const auto face = region1.PerimeterFace( i, j );
           ePtrNeighbor = ePtr->Neighbor( face );
 
           // checking whether neighbor element forms part of the boundary of group2
@@ -2015,7 +1905,7 @@ The two groups which will be turned into one.
 in the C++ language.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2031,8 +1921,8 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
     res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
   
-  sort( res.ElementsBegin(), res.ElementsEnd() );
-  res.CellVector().erase( unique(res.ElementsBegin(), res.ElementsEnd()), res.ElementsEnd() );
+  sort( res.CellVector().begin(), res.CellVector().end() );
+  res.CellVector().erase( unique(res.CellVector().begin(), res.CellVector().end()), res.CellVector().end() );
   res.CellVector().shrink_to_fit();
 
   res.CreateNodePointerVector();
@@ -2048,7 +1938,7 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 /**
 Forms the intersection group 'res' of the groups 'a' and 'b'.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& res )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2085,7 +1975,7 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
 Returns into Region 'res' those elements of Region 'a' which are not contained
 in Regions  'b'.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2123,7 +2013,7 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 Returns into Region 'res' those elements of Regions 'a' which are not in 'b' and those in 'b' which are
 not in 'a'.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2146,8 +2036,8 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   // removing potential duplicates
-  sort( res.ElementsBegin(), res.ElementsEnd() );
-  res.CellVector().erase( unique(res.ElementsBegin(), res.ElementsEnd()), res.ElementsEnd() );
+  sort( res.CellVector().begin(), res.CellVector().end() );
+  res.CellVector().erase( unique(res.CellVector().begin(), res.CellVector().end()), res.CellVector().end() );
   res.CellVector().shrink_to_fit();
 
   res.CellVector().shrink_to_fit();
@@ -2169,7 +2059,7 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
 /**
     Counts and returns the number of Elements shared between the two regions.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  sharedElements( const Region<dim>& g1, const Region<dim>& g2 )
 {
   // ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2226,7 +2116,7 @@ template size_t  sharedElements( const Region<3>&, const Region<3>& );
 /**
 If Region contains all the elements of Region 'g', Includes() returns true.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Region<dim>::Includes( const Region<dim>& g ) const
 {
   // because region vectors are sorted into 2 seperate ranges,
@@ -2261,7 +2151,7 @@ bool  hasLowerDimensionalRepresentation<1>( const Region<1>& )
   return false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 {
   const auto elementsEnd( region.ElementsEnd() );
@@ -2273,7 +2163,7 @@ bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
   return true;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& region )
 {
   const auto elementsEnd( region.ElementsEnd() );
@@ -2285,7 +2175,7 @@ bool  containsVolumeElements( const Region<dim>& region )
   return false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsSurfaceElements( const Region<dim>& region )
 {
   const auto elementsEnd( region.ElementsEnd() );
@@ -2297,7 +2187,7 @@ bool  containsSurfaceElements( const Region<dim>& region )
   return false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsLineElements( const Region<dim>& region )
 {
   const auto elementsEnd( region.ElementsEnd() );
@@ -2374,7 +2264,7 @@ Due to the total garbage results that may arise,
 MoveNodeCoordinatesBy() will halt the simulation reporting a fatal
 error, if the target property is node a node or vector<double> type property.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
 {
   csmp::Index          prop_key = this->pref_.StorageKey( vector_variable );
@@ -2388,11 +2278,10 @@ void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
     throw csmp::Exception( ERROR, "Model<dim>::MoveNodeCoordinatesBy",
                            "Only NODE variables can be added to NODE coordinates" );
 
-  for ( typename vector<csmp::Node<dim>*>::iterator
-        nit = this->NodesBegin(); nit != this->NodesEnd(); nit++ ) {
-    (*nit)->Read( prop_key, vc );
-    (*nit)->Coordinate( (*nit)->Coordinate() + vc );
-  }
+  for ( auto nit = this->NodesBegin(); nit != this->NodesEnd(); nit++ ) {
+      (*nit)->Read( prop_key, vc );
+      (*nit)->Coordinate( (*nit)->Coordinate() + vc );
+    }
 
 } // end MoveNodeCoordinatesBy
 
@@ -2404,7 +2293,7 @@ void Region<dim>::MoveNodeCoordinatesBy( const char* vector_variable )
 // @author Roman M.
 // @date   27/07/2014
 /*
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::CorrectLowDimRegionOrientation(  ) const
 {
 
@@ -2570,7 +2459,7 @@ functions of the current finite elements.
 For instance, if you want to ask your model which rock volume has been
 heated above 400oC at a certain timestep.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Region<dim>::Volume( bool multiply_with_porosity ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2629,7 +2518,7 @@ To compute the surface area, only elements of dim-1 are considered.
 
 TODO: SKM: implement and use virtual void FiniteElement::AreaOfFace() rather than iffy statement in area calculation
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Region<dim>::SurfaceArea() const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2641,12 +2530,12 @@ double  Region<dim>::SurfaceArea() const
   }
 
   vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
-  vector<size_t>  fnids;
+  vector<uint32_t>  fnids;
   double        area( 0. );
 
   if ( dim == 3U ) {
     // for all elements located on the region boundary
-    for ( size_t i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
+    for ( auto i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
       // since each element can have multiple boundary faces
       for ( size_t j = 0U; j<(*bit).size(); j++ ) {
         const size_t face( (*bit)[j] );
@@ -2678,7 +2567,7 @@ double  Region<dim>::SurfaceArea() const
   // in 2D the face is a segment the length of which has to be used
   else if ( dim == 2U ) {
     // for all surface elements on the region boundary (excluding line elements)
-    for ( size_t i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
+    for ( auto i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
       if ( this->elmt_vec_[i]->FE()->IsSurfaceElement() )
         for ( size_t j = 0U; j<(*bit).size(); j++ ) {
           this->elmt_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
@@ -2701,7 +2590,7 @@ i.e. an element property.
 
 @attention method should only be applied to volumetric regions.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosity, bool verbose ) const
 {
   csmp::Index prop_key = this->pref_.StorageKey( prop );
@@ -2821,7 +2710,7 @@ Integrates property over the elements contained in the Region and returns
 the volume integral of the variable multiplied with the local element thickness.
 Element thickness must be equal to one for volumetric elements.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply_with_porosity ) const
 {
   csmp::Index prop_key = this->pref_.StorageKey( prop );
@@ -2932,7 +2821,7 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
 
 
 /*
-template<size_t dim>
+template<uint32_t dim>
 void Region<dim>::Out() const
 {
 cout <<"\n\n\nRegion<"<< dim <<">::Out: ";

@@ -7,10 +7,10 @@
 namespace csmp{
 
   struct Index;
-  template<size_t> class Model;
+  template<uint32_t> class Model;
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FracturePecletNumberVisitor : public Visitor<dim>
   {
   public:

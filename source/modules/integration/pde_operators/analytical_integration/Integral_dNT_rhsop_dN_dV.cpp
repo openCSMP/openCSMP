@@ -9,8 +9,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_dNT_rhsop_dN_dV<dim,CELL>::Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
                                                           const char*             oper, 
                                                           const char*             test,
                                                           const char*             grad_var ) 
@@ -37,8 +37,8 @@ Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Integral_dNT_rhsop_dN_dV( const PropertyD
 
 
 
-template<size_t dim,class SIMPLEX>
-void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -68,7 +68,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
                                         "Hence, nodal properties cannot be integrated. Use numerically integrated elements in stead.");
    VAR.Resize(e.Nodes(),1);   
    // the gradient variable
-   for ( size_t i=0U; i<e.Nodes(); i++ )
+   for ( auto i{0}; i<e.Nodes(); i++ )
      VAR(i,0) = e.N(i)->Read( grad_key );   
           
 } // end GetOperands
@@ -78,8 +78,8 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 
 
 
-template<size_t dim,class SIMPLEX>
-void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -95,7 +95,7 @@ void Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& 
     double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    for ( size_t i=0; i<e.Nodes(); i++ )
+    for ( auto i=0; i<e.Nodes(); i++ )
       MathOperatorRHS<dim>::RHS[i] = DNT(i,0) * volume;
 
 } // end ComputeContribution

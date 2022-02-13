@@ -14,7 +14,7 @@ class MathOperatorLHS_Test : public Test
 public:
 	MathOperatorLHS_Test();
 	~MathOperatorLHS_Test();
-	void run(); // runs all the tests for the class (register other methods)
+	void run(); // runs all the tests for the class (register other methods below)
   void MathOperatorLHS_Ctor();
   void MathOperatorLHS_CopyCtor();
   void MathOperatorLHS_Equal();

@@ -33,13 +33,13 @@ namespace csmp {
 @author Stephan K. Matthaei
 
 */      
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class PointSource_rhsop : public MathOperatorRHS<dim> {
   public:
     PointSource_rhsop( const PropertyDatabase<dim>&, const char* nodal_src, const char* test );
-    virtual void GetOperands( const SIMPLEX& );
-    virtual void ComputeContribution( const SIMPLEX& );
-    virtual PointSource_rhsop<dim,SIMPLEX>* clone() const { return new PointSource_rhsop<dim,SIMPLEX> (*this); }
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
+    virtual PointSource_rhsop<dim,CELL>* clone() const { return new PointSource_rhsop<dim,CELL> (*this); }
   private:
     std::vector<ScalarVariable>  SRC_;
 };

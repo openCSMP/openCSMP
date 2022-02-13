@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 IsoparametricLinearTetrahedron::IsoparametricLinearTetrahedron	(
-                                                    size_t integrationPoints )
+                                                    uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_TETRAHEDRON, true, true, 1U ),
       NXYZ(4,3),
@@ -214,7 +214,7 @@ void IsoparametricLinearTetrahedron::dNt(
 
 
  void
- IsoparametricLinearTetrahedron::JacobianAtIntegrationPoint( size_t gauss_point )
+ IsoparametricLinearTetrahedron::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
       assert( gauss_point < gpe );
 
@@ -248,7 +248,7 @@ the quadratic tetrahedral element.
 for the element.
 */
 void
-IsoparametricLinearTetrahedron::CornerNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearTetrahedron::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -265,7 +265,7 @@ IsoparametricLinearTetrahedron::CornerNodes( std::vector<size_t>& ids ) const
 
 */
 void
-IsoparametricLinearTetrahedron::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearTetrahedron::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -277,7 +277,7 @@ IsoparametricLinearTetrahedron::CounterClockwiseNodes( std::vector<size_t>& ids 
 
 
 void
-IsoparametricLinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricLinearTetrahedron::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -312,7 +312,7 @@ IsoparametricLinearTetrahedron::NodesOfSegment( size_t segm_id, std::vector<size
 
 
 /// local node ids in counter-clockwise order from the outside looking into the faces
-void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void IsoparametricLinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
     if  ( face_id == 0  )
@@ -345,45 +345,45 @@ void IsoparametricLinearTetrahedron::NodesOfFace( size_t face_id, std::vector<si
 
 
 
-vector<size_t>  IsoparametricLinearTetrahedron::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearTetrahedron::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,3,2};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,2,1};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,3,2};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,2,1};
       }
     cerr <<"\nIsoparametricLinearTetrahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
 
-vector<size_t>  IsoparametricLinearTetrahedron::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  IsoparametricLinearTetrahedron::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,2,3};
-        case 2: return vector<size_t>{0,1,3};
-        case 3: return vector<size_t>{0,1,2};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,2,3};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,1,2};
         default:
           cerr <<"\nIsoparametricLinearTetrahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 
 
-CSMP_FEM_TYPE  IsoparametricLinearTetrahedron::ElementTypeOfFace( size_t )  const
+CSMP_FEM_TYPE  IsoparametricLinearTetrahedron::ElementTypeOfFace( uint32_t )  const
  {
     return ISOPARAMETRIC_LINEAR_TRIANGLE;
  }
 
-double IsoparametricLinearTetrahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearTetrahedron::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 
 
@@ -407,7 +407,7 @@ IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN4 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -538,7 +538,7 @@ procedures.
 
 */
 double  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
-                                                      size_t nd )
+                                                      uint32_t nd )
  {
     assert( nd < npe );
     dNr( NXYZ(nd,0), NXYZ(nd,1), NXYZ(nd,2), DNR );
@@ -567,7 +567,7 @@ double  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
-void  IsoparametricLinearTetrahedron::IntegrationPoint( size_t ip,
+void  IsoparametricLinearTetrahedron::IntegrationPoint( uint32_t ip,
                                                         vector<double>& xyz ) const
  {
     assert( ip < gpe );
@@ -575,7 +575,7 @@ void  IsoparametricLinearTetrahedron::IntegrationPoint( size_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -597,7 +597,7 @@ void IsoparametricLinearTetrahedron::ParametricToPhysical( vector<double>& rst,
     xyz.resize(dim);
     xyz[0]=xyz[1]=xyz[2]=0.;
 
-    for(size_t i=0; i<npe; i++) {
+    for(uint32_t i=0; i<npe; i++) {
          xyz[0]+=XY(i,0)*DNR[i];
          xyz[1]+=XY(i,1)*DNR[i];
          xyz[2]+=XY(i,2)*DNR[i];
@@ -683,7 +683,7 @@ void IsoparametricLinearTetrahedron::PhysicalToParametric(
 }
 
 // tested: o.k.
-inline size_t IsoparametricLinearTetrahedron::n( size_t i, size_t a ) const
+inline uint32_t IsoparametricLinearTetrahedron::n( uint32_t i, uint32_t a ) const
 {
      if ( i+a >= 4 ) return i+a-4;
      return i+a;
@@ -708,7 +708,7 @@ double  IsoparametricLinearTetrahedron::AspectRatio()
    double seg_max(NRST[0]), seg_min(NRST[0]);
 
    // find largest segment
-   for ( size_t i=1; i<spe; i++ ) {
+   for ( uint32_t i=1; i<spe; i++ ) {
         if ( NRST[i] > seg_max ) seg_max = NRST[i];
         if ( NRST[i] < seg_min ) seg_min = NRST[i];
      }
@@ -784,13 +784,12 @@ the area is computed.
 */
 double IsoparametricLinearTetrahedron::Volume()
 {
-    double   area; // determinant
-    size_t  i;
+    double   area{0.}; // determinant
 
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -819,7 +818,7 @@ A reference to the parent Element, the number of the integration point.
 @param N The interpolation function values are returned into the third argument.
 
 */
-void IsoparametricLinearTetrahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+void IsoparametricLinearTetrahedron::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -856,7 +855,7 @@ procedures.
 
 */
 double
-IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -931,7 +930,7 @@ IsoparametricLinearTetrahedron::InnerRadius()
    double  sum(0.);
 
    EdgeLengths( NRST );
-   for ( size_t i=0; i<spe; i++ ) sum += NRST[i];
+   for ( uint32_t i=0; i<spe; i++ ) sum += NRST[i];
 
    if(AspectRatio()>4.)
      cerr<<"\nIsoparametricLinearTetrahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
@@ -951,7 +950,7 @@ for the element.
 @attention method is not implemented.
 
 */
-void IsoparametricLinearTetrahedron::MidSideNodes(std::vector<size_t>&) const
+void IsoparametricLinearTetrahedron::MidSideNodes(std::vector<uint32_t>&) const
  {
     throw csmp::Exception( WARNING, "IsoparametricLinearTetrahedron::MidSideNodes:",
                                     "MidSideNodes not present",
@@ -960,8 +959,8 @@ void IsoparametricLinearTetrahedron::MidSideNodes(std::vector<size_t>&) const
 
 
 void
-IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                            vector<size_t>& fnids )
+IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                            vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
     cout <<"\nIsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary: not implemented."<< endl;
@@ -992,7 +991,7 @@ to the nodes.  This involves the steps:
    and use these to extrapolate the values of the variables at the nodes.
 */
 void
-IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+IsoparametricLinearTetrahedron::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                             const vector<double>& IVAR,
                                                                             vector<double>& NVAR	)
 const
@@ -1004,15 +1003,15 @@ const
    if ( gpe == 1U ) {
         // Define nodal values as bi-linear variation of the integration points values
         // See Zienkewitch, pp. 351, for example
-        for ( size_t i=0; i<npe; i++ )
-            for ( size_t k=0; k<nvars; k++ )	NVAR[i*nvars + k] = IVAR[k];
+        for ( uint32_t i=0; i<npe; i++ )
+            for ( uint32_t k=0; k<nvars; k++ )	NVAR[i*nvars + k] = IVAR[k];
 
         return;
      }
 
    static double  a[4], b[4], c[4], d[4], intpol[4], volume6;
    static bool      first_call(true);
-   size_t i;
+   uint32_t i;
    int32_t     j;
 
    vector<double>  sum(nvars);
@@ -1079,11 +1078,11 @@ const
 
         // carry out extrapolation
         fill( sum.begin(), sum.end(), static_cast<double>(0.0) );
-        for ( size_t j=0; j<gpe; j++ )
-          for ( size_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
+        for ( uint32_t j=0; j<gpe; j++ )
+          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
         // store result in output vector
-        for ( size_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
@@ -1120,7 +1119,7 @@ void IsoparametricLinearTetrahedron::JacobianAt( const std::vector<double>& rst 
      
      @test OK 
 */
-void  IsoparametricLinearTetrahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearTetrahedron::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1207,9 +1206,9 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" double"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1238,7 +1237,7 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1246,8 +1245,8 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" double"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }

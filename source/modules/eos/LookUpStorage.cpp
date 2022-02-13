@@ -64,7 +64,7 @@ void LookUpStorage<fT>::Initialize( fT x_dmax, fT y_dmax,  fT xres, fT yres )
      rowlength = size_x;
      
      // 3. set vector size
-     grid.resize(static_cast<size_t>(size_x * size_y));
+     grid.resize(static_cast<uint32_t>(size_x * size_y));
     
      // 4. output memory requirements
      cout <<"\nLookUpStorage: building new grid; allocating ";

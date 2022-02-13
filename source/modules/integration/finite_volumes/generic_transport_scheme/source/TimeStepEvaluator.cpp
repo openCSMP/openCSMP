@@ -19,7 +19,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 TimeStepEvaluator<dim,USER>::TimeStepEvaluator( double timestep_reduction_factor, double max_time_increment )
  : max_time_increment_(max_time_increment),
    step_size_reduction_factor_(timestep_reduction_factor)
@@ -36,7 +36,7 @@ TimeStepEvaluator<dim,USER>::TimeStepEvaluator( double timestep_reduction_factor
 
 
 /// adjust setting for the solve (default=0.5)
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void TimeStepEvaluator<dim,USER>::StepSizeReductionFactor( double factor )
  {
     step_size_reduction_factor_ = factor;
@@ -44,7 +44,7 @@ void TimeStepEvaluator<dim,USER>::StepSizeReductionFactor( double factor )
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TimeStepEvaluator<dim,USER>::StepSizeReductionFactor() const
  {
     return step_size_reduction_factor_;
@@ -52,7 +52,7 @@ double TimeStepEvaluator<dim,USER>::StepSizeReductionFactor() const
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
  {
     return max_time_increment_;
@@ -68,7 +68,7 @@ double TimeStepEvaluator<dim,USER>::MaxTimeIncrement() const
  
     This is robust criterion in the presence of fluid sources and sinks.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* const nptr, double outflow ) const
  {
      // 1. (phi * V) / q_out = dt
@@ -93,7 +93,7 @@ double TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrement( Node<dim>* 
       2. Dirichlet in- or outflow boundary where balance has to be guessed and compensation
          is necessary, else there is a saturation buildup at out-flow boundaries.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TimeStepEvaluator<dim,USER>::OutFlowLessThanContentIncrementBoundary( const Node<dim>* const nptr, double outflow ) const
   {
      assert( nptr != NULL );
@@ -171,7 +171,7 @@ in the domain. Equally, the user is informed if the CFL increment is
 less than a millisecond (usually a prohibitively small increment).  
 
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const eit ) const
  {
     vector<double>            gradPc(dim);
@@ -225,7 +225,7 @@ double  TimeStepEvaluator<dim,USER>::StreamlineCFL( const Element<dim>* const ei
 
 */
 /* TODO: port this to new relperm framework
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double max_time_increment ) const
  {
     assert( max_time_increment > 0. );

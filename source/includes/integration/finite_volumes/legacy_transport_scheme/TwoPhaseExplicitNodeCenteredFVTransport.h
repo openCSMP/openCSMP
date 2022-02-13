@@ -5,11 +5,11 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class Element;
+template<uint32_t> class TwoPhaseModel;
 
 /// two-phase explicit transport scheme
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 class TwoPhaseExplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeTransport<dim> {
   public:
     TwoPhaseExplicitNodeCenteredFVTransport( const char* region_name,

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
 @file MapleInterface.h

@@ -30,7 +30,7 @@ this reference.
 
 Is called inside each interrelation subclass. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Interrelation<dim>::Interrelation( const PropertyDatabase<dim>& p ) 
   : p_ref(p),
     name_("unspecified"),
@@ -42,7 +42,7 @@ Interrelation<dim>::Interrelation( const PropertyDatabase<dim>& p )
   
   
   
-template<size_t dim>
+template<uint32_t dim>
 Interrelation<dim>::~Interrelation()
  {
  } 
@@ -73,7 +73,7 @@ Interrelation subclass.
 
 Assign a name to an interrelation subclass inside of its constructor. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Interrelation<dim>::Name( const char* s )             
 { name_ = s; }
 
@@ -107,7 +107,7 @@ the corresponding Operand reference.
 Errors will be reported if the target property is unknown to the 
 PropertyDatabase or if the Operand already exists in the Operand map. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Interrelation<dim>::GlobalProperty( const char* var )
  {
     if ( p_ref.IsDefined(var) == false )
@@ -158,7 +158,7 @@ which property shall be modified by the Interrelation.
 Errors will be reported if the target property is unknown to the 
 PropertyDatabase or if the Operand already exists in the Operand map. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Interrelation<dim>::ResultProperty( const char* var )
  {
     result_ = operand_list_.find( string(var) );
@@ -196,7 +196,7 @@ Calls the Operand class interface OutputCondition().
 OutputCondition() must be called inside the constructor of the 
 Interrelation subclass. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void Interrelation<dim>::OutputCondition( Operand<dim>& var, VARIABLE_FLAG output )
  {
     var.OutputCondition( output );  
@@ -214,7 +214,7 @@ void Interrelation<dim>::OutputCondition( Operand<dim>& var, VARIABLE_FLAG outpu
      are volume integrated over each region, then the result is normalized
      by the region volume/surface/length.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Interrelation<dim>::Apply( Model<dim>& sg )
  {
      if ( application_level_ == REGION ) 
@@ -650,9 +650,9 @@ Element properties. If the result property value of an interrelation
 is outside the legitimate range another error is reported together
 with the name of the property which is concerned.  
  */
-template<size_t dim>
-template<template<size_t> class SIMPLEX>
-void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
+template<uint32_t dim>
+template<template<uint32_t> class CELL>
+void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -660,11 +660,9 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
       throw Exception( ERROR, "Interrelation<dim>::Apply(ModelSubDomain)", name_.c_str(),
                       "attempt to apply this on the application level REGION or BOUNDARY" );
  
-     typename vector<csmp::Node<dim>*>::iterator nst1 = gref.NodesBegin(),
-                                                 nst2 = gref.NodesEnd();
-                                              
-     typename vector<SIMPLEX<dim>*>::iterator est1 = gref.ElementsBegin(),
-                                              est2 = gref.ElementsEnd();
+     auto nst1 = gref.NodesBegin(), nst2 = gref.NodesEnd();
+     auto est1 = gref.ElementsBegin(), est2 = gref.ElementsEnd();
+
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
@@ -756,10 +754,9 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,SIMPLEX>& gref )
      // ----------------------------------------- 
      if ( application_level_ == ELEMENT_INTEGRATION_POINT ) 
        {
-          for ( typename vector<SIMPLEX<dim>*>::iterator
-                eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+          for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
             // looping over the constraint points inside the current element    
-            for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) 
+            for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) 
               {
                 // 1. Get the Operands
                 // -------------------

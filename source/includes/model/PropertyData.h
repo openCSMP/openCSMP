@@ -8,26 +8,26 @@ namespace csmp {
 class ScalarVariable;
 class ArrayVariable;
 class FlaggedArrayVariable;
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
 class PropertyData;
 
 /// prototypes for appending variable values to container
 void pushBack( PropertyData&, const ScalarVariable& );
 void pushBack( PropertyData&, const ArrayVariable& );
 void pushBack( PropertyData&, const FlaggedArrayVariable& );
-template<size_t dim> void pushBack( PropertyData&, const VectorVariable<dim>& );
-template<size_t dim> void pushBack( PropertyData&, const TensorVariable<dim>& );
+template<uint32_t dim> void pushBack( PropertyData&, const VectorVariable<dim>& );
+template<uint32_t dim> void pushBack( PropertyData&, const TensorVariable<dim>& );
 
 /// storing the PropertyData data:  store( data, i, makeScalar(ANY,0.) );
 template<typename csmp_var_type> void store( PropertyData&, size_t position, const csmp_var_type& );
-template<size_t dim> void store( PropertyData&, size_t position, const VectorVariable<dim>& );
-template<size_t dim> void store( PropertyData&, size_t position, const TensorVariable<dim>& );
+template<uint32_t dim> void store( PropertyData&, size_t position, const VectorVariable<dim>& );
+template<uint32_t dim> void store( PropertyData&, size_t position, const TensorVariable<dim>& );
 
 /// reading PropertyData data: VectorVariable<3U> a;  read( data, i, a );
 template<typename csmp_var_type> void read( const PropertyData&, size_t position, csmp_var_type& );
-template<size_t dim> void read( const PropertyData&, size_t position, VectorVariable<dim>& );
-template<size_t dim> void read( const PropertyData&, size_t position, TensorVariable<dim>& );
+template<uint32_t dim> void read( const PropertyData&, size_t position, VectorVariable<dim>& );
+template<uint32_t dim> void read( const PropertyData&, size_t position, TensorVariable<dim>& );
 
 /**
 
@@ -66,7 +66,7 @@ template<size_t dim> void read( const PropertyData&, size_t position, TensorVari
 class PropertyData {
   public:
     /// constructor (but no initializer) for all possible csmp variable types; array length gives number elements in array
-    PropertyData( PLACEMENT, VARIABLE_TYPE, size_t dim, size_t array_length=0U );
+    PropertyData( PLACEMENT, VARIABLE_TYPE, uint32_t dim, uint32_t array_length=0U );
   
     PropertyData( const PropertyData& );
     PropertyData( PropertyData&& );
@@ -78,10 +78,10 @@ class PropertyData {
   
     PLACEMENT     Placement() const { return place_; }
     VARIABLE_TYPE Type() const { return type_; }
-    size_t        Dim() const { return dim_; }
+    uint32_t      Dim() const { return dim_; }
     size_t        Size() const { return data_.size(); }
     /// number of value entries stored in the variable (=size of array)
-    size_t        Components() const { return data_stride_; };
+    uint32_t      Components() const { return data_stride_; };
   
     /// changing container size
     void Clear();
@@ -118,21 +118,21 @@ class PropertyData {
     VARIABLE_FLAG& Flag( size_t nth_value );
     VARIABLE_FLAG  Flag( size_t nth_value ) const;
     /// vectors and array variables
-    VARIABLE_FLAG& Flag( size_t nth_value, size_t ith_dim );
-    VARIABLE_FLAG  Flag( size_t nth_value, size_t ith_dim ) const;
+    VARIABLE_FLAG& Flag( size_t nth_value, uint32_t ith_dim );
+    VARIABLE_FLAG  Flag( size_t nth_value, uint32_t ith_dim ) const;
     /// tensors
-    VARIABLE_FLAG& Flag( size_t nth_value, size_t ith_row, size_t jth_col );
-    VARIABLE_FLAG  Flag( size_t nth_value, size_t ith_row, size_t jth_col ) const;
+    VARIABLE_FLAG& Flag( size_t nth_value, uint32_t ith_row, uint32_t jth_col );
+    VARIABLE_FLAG  Flag( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) const;
  
     /// scalars
     double&      Value( size_t nth_value );
     double       Value( size_t nth_value ) const;
     /// vectors and array variables
-    double&      Value( size_t nth_value, size_t ith_dim );
-    double       Value( size_t nth_value, size_t ith_dim ) const;
+    double&      Value( size_t nth_value, uint32_t ith_dim );
+    double       Value( size_t nth_value, uint32_t ith_dim ) const;
     /// tensors
-    double&      Value( size_t nth_value, size_t ith_row, size_t jth_col );
-    double       Value( size_t nth_value, size_t ith_row, size_t jth_col ) const;
+    double&      Value( size_t nth_value, uint32_t ith_row, uint32_t jth_col );
+    double       Value( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) const;
   
     /// checks range; all values included
     void MinMaxOf( double& tmin, double& tmax ) const;
@@ -157,9 +157,9 @@ class PropertyData {
   private:
     const PLACEMENT             place_;        ///< placement of variable
     const VARIABLE_TYPE         type_;         ///< any of scalar..flagged array
-    const size_t                dim_;          ///< spatial dimension 
-    const size_t                flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
-    const size_t                data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
+    const uint32_t              dim_;          ///< spatial dimension
+    const uint32_t              flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
+    const uint32_t              data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
     std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
     std::vector<double>         data_;         ///< variable values
  };
@@ -169,8 +169,8 @@ class PropertyData {
 PropertyData inBinaryPropertyData( std::fstream& fp );
 
 /// calculating the distance bwetween consecutive data entries in the container
-size_t flagOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
-size_t valueOffset( VARIABLE_TYPE, size_t spatial_dimension, size_t array_length );
+uint32_t flagOffset( VARIABLE_TYPE, uint32_t spatial_dimension, uint32_t array_length );
+uint32_t valueOffset( VARIABLE_TYPE, uint32_t spatial_dimension, uint32_t array_length );
 
 } // csmp
 

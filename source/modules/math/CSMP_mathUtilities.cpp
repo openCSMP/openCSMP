@@ -90,29 +90,29 @@ To pre-process DN matrices in multi-DOF computations.
 
     @test OK SKM refactored and retested 2/12/2014
 */
-void dN_To2DOF( size_t nodes, DenseMatrix<DM_MIN>& B )
+void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
  {
     assert( B.Cols() == nodes );
-    const size_t dof(B.Cols() * 2U);
+    const auto dof(B.Cols() * 2U);
 
     // farming old matrix out into entries of new one
     // starting with last row
     B.Resize(3,B.Cols() * 2U);
-    for ( size_t i=0; i<nodes; i++ )
+    for ( auto i=0; i<nodes; i++ )
       {
          B(2,i*2)   = B(1,i);
          B(2,i*2+1) = B(0,i);
       }
     
     // spreading out first row
-    for ( size_t i=nodes; i>0; i-- ) B(0,(i-1)*2) = B(0,(i-1));
+    for ( int i=nodes; i>0; i-- ) B(0,(i-1)*2) = B(0,(i-1));
     // zeroing intermediate positions
-    for ( size_t i=1; i<dof; i+=2 ) B(0,i) = 0.;
+    for ( auto i=1; i<dof; i+=2 ) B(0,i) = 0.;
       
     // spreading out second row
-    for ( size_t i=nodes; i>0; i-- ) B(1,(i-1)*2+1) = B(1,(i-1));
+    for ( int i=nodes; i>0; i-- ) B(1,(i-1)*2+1) = B(1,(i-1));
     // zeroing intermediate positions
-    for ( size_t i=0; i<dof; i+=2 ) B(1,i) = 0.;
+    for ( auto i=0; i<dof; i+=2 ) B(1,i) = 0.;
       
  } // end DNto2DOF
 
@@ -126,16 +126,16 @@ void dN_To2DOF( size_t nodes, DenseMatrix<DM_MIN>& B )
     
     @test OK SKM retested 2/12/2014
 */
-void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& B )
+void  dN_To3DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
  {
     assert( B.Cols() == nodes );
-    const size_t dof = B.Cols() * 3U;
-    const size_t old_nodes = B.Cols();
+    const auto dof = B.Cols() * 3U;
+    const auto old_nodes = B.Cols();
 
     B.Resize(6,dof);
     
     // inserting values into the extra three bottom rows
-    for ( size_t i=0; i<old_nodes; i++ )
+    for ( auto i=0; i<old_nodes; i++ )
       {
          // fourth row
          B(3,i*3)   = B(1,i); // d/dy
@@ -156,7 +156,7 @@ void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& B )
     // spreading out the values in the first three rows
     // (going backward in order not to overwrite values in old
     //  position, while these are still needed)
-    for ( size_t i=(old_nodes-1U); (i+1U)>0U; i-- )
+    for ( auto i=(old_nodes-1U); (i+1U)>0U; i-- )
       {
          // first row
          B(0,i*3)   = B(0,i);
@@ -245,7 +245,7 @@ void out( const Var& obj )
    cout <<"\ncontainer: "<< obj.size() << endl;
    
    int row_break(1), split_after(10); 
-   for ( size_t i=0; i<obj.size(); i++, row_break++ )
+   for ( auto i=0; i<obj.size(); i++, row_break++ )
      {
         if ( obj[i] > 0 ) cout <<" ";
         cout << obj[i] <<" ";
@@ -292,7 +292,7 @@ double  erf_Chebyshev( double x )
 // template explicit instantiations
 
 template void out( const vector<ONE_BYTE_NUMBER>& );
-template void out( const vector<size_t>& );
+template void out( const vector<uint32_t>& );
 template void out( const vector<int32_t>& );
 template void out( const vector<double>& );
 
@@ -362,7 +362,7 @@ double splineSecondDerivative( double x, double x1, double x2, double y1, double
 */
 double secant_method( double xmin, double xmax, double (*function)( double ), double tolerance)
 {
-  double xm, x0;
+  double xm{std::numeric_limits<double>::quiet_NaN()}, x0{std::numeric_limits<double>::quiet_NaN()};
   double c;
   
   if (function(xmin) * function(xmax) < 0) {  // check the range for finding root

@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-IsoparametricLinearPrism::IsoparametricLinearPrism( size_t integrationPoints )
+IsoparametricLinearPrism::IsoparametricLinearPrism( uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_PRISM, true, true, 1U ),
       NXYZ(6,3),
@@ -270,7 +270,7 @@ void IsoparametricLinearPrism::dNt(
 
 //tested AAM  ok1
 void
- IsoparametricLinearPrism::JacobianAtIntegrationPoint( size_t gauss_point )
+ IsoparametricLinearPrism::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     assert( gauss_point < gpe );
     dNr( IP(gauss_point,0), IP(gauss_point,1), IP(gauss_point,2), DNR );
@@ -302,7 +302,7 @@ point 'ip'.
 @param N The interpolation function values are returned into the third argument.
 */
 void
-IsoparametricLinearPrism::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+IsoparametricLinearPrism::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
      // local interpolation function values
@@ -325,7 +325,7 @@ for the element.
 
 */
 void
-IsoparametricLinearPrism::CornerNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearPrism::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -344,7 +344,7 @@ IsoparametricLinearPrism::CornerNodes( std::vector<size_t>& ids ) const
 @param ids Returns the counter-clockwise local node numbering for the element.
 */
 void
-IsoparametricLinearPrism::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearPrism::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -357,7 +357,7 @@ IsoparametricLinearPrism::CounterClockwiseNodes( std::vector<size_t>& ids ) cons
 
 
 void
-IsoparametricLinearPrism::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricLinearPrism::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
      if ( segm_id == 0 ) {
@@ -408,7 +408,7 @@ IsoparametricLinearPrism::NodesOfSegment( size_t segm_id, std::vector<size_t>& s
      Starting with the smallest local node number, the face nodes are returned
      in counter clockwise order from the outside looking in.
 */
-void IsoparametricLinearPrism::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void IsoparametricLinearPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     // bottom face
     if( face_id == 0  )
@@ -459,42 +459,42 @@ void IsoparametricLinearPrism::NodesOfFace( size_t face_id, std::vector<size_t>&
 
 
 
-vector<size_t>  IsoparametricLinearPrism::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearPrism::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{0,2,1};
-        case 1: return vector<size_t>{0,1,4,3};
-        case 2: return vector<size_t>{1,2,5,4};
-        case 3: return vector<size_t>{0,3,5,2};
-        case 4: return vector<size_t>{3,4,5};
+        case 0: return vector<uint32_t>{0,2,1};
+        case 1: return vector<uint32_t>{0,1,4,3};
+        case 2: return vector<uint32_t>{1,2,5,4};
+        case 3: return vector<uint32_t>{0,3,5,2};
+        case 4: return vector<uint32_t>{3,4,5};
       }
     cerr <<"\nIsoparametricLinearPrism::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
-std::vector<size_t>  IsoparametricLinearPrism::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  IsoparametricLinearPrism::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,2,3};
-        case 1: return vector<size_t>{0,2,4};
-        case 2: return vector<size_t>{0,1,5};
-        case 3: return vector<size_t>{0,4,5};
-        case 4: return vector<size_t>{1,3,5};
-        case 5: return vector<size_t>{2,3,4};
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,2,4};
+        case 2: return vector<uint32_t>{0,1,5};
+        case 3: return vector<uint32_t>{0,4,5};
+        case 4: return vector<uint32_t>{1,3,5};
+        case 5: return vector<uint32_t>{2,3,4};
         default:
           cerr <<"\nIsoparametricLinearPrism::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 
 
-CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( size_t face )  const
+CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( uint32_t face )  const
  {
     assert( face < fpe );
     if ( face == 0U || face == 4U )
@@ -503,7 +503,7 @@ CSMP_FEM_TYPE  IsoparametricLinearPrism::ElementTypeOfFace( size_t face )  const
     return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
  }
 
-double IsoparametricLinearPrism::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearPrism::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 
 
@@ -513,8 +513,8 @@ IsoparametricLinearPrism::GenerateIntegrationPoints(
                                                     DenseMatrix<DM_MIN> &Ip,
                                                     std::vector<double>& We)
 {
-    const size_t numberOfTriaIntegrationPoints=3; // order 2
-    const size_t numberOfDimensionsInPlane=2;
+    const uint32_t numberOfTriaIntegrationPoints=3; // order 2
+    const uint32_t numberOfDimensionsInPlane=2;
     DenseMatrix<DM_MIN> IPTRIA(numberOfTriaIntegrationPoints,numberOfDimensionsInPlane);
     const double constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
 
@@ -528,16 +528,16 @@ IsoparametricLinearPrism::GenerateIntegrationPoints(
     WTRIA[1]=constT2;
     WTRIA[2]=constT2;
 
-    const size_t numberOfLineIntegrationPoints=2;
+    const uint32_t numberOfLineIntegrationPoints=2;
     vector<double> IPLINE(numberOfLineIntegrationPoints),WLINE(numberOfLineIntegrationPoints);
 
     IPLINE[0]=-constA;  IPLINE[1]=constA;
     WLINE [0]= 1.0;     WLINE [1]=1.0;
 
-    size_t i=0;
-    for(size_t j=0;j<numberOfTriaIntegrationPoints;j++)
+    uint32_t i=0;
+    for(uint32_t j=0;j<numberOfTriaIntegrationPoints;j++)
     {
-    for(size_t k=0;k<numberOfLineIntegrationPoints;k++)
+    for(uint32_t k=0;k<numberOfLineIntegrationPoints;k++)
         {
             Ip(i,0)=IPTRIA(j,0);
             Ip(i,1)=IPTRIA(j,1);
@@ -588,7 +588,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN6 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -605,7 +605,7 @@ IsoparametricLinearPrism::dN( DenseMatrix<DM_MIN>& DN6 )
           //	cout<<" Jacobian Inverse Matrix: "<<endl;
           //JINV.Out();
           /////////////////////////////////////////////////////////
-          //for ( size_t j=0; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
+          //for ( uint32_t j=0; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
 
           // 3x3 * 3x1 = 3x1 gives the global DN entries
@@ -715,7 +715,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 */
 double
-IsoparametricLinearPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
+IsoparametricLinearPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
  {
     assert( nd < npe );
     dNr( NXYZ(nd,0), NXYZ(nd,1), NXYZ(nd,2), DNR );
@@ -749,9 +749,9 @@ IsoparametricLinearPrism::ParametricToPhysical(std::vector<double> &rst, std::ve
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
-    for(size_t i=0; i<dim; i++) xyz[i]=0.0;
+    for(uint32_t i=0; i<dim; i++) xyz[i]=0.0;
 
-    for(size_t i=0; i<npe; i++)
+    for(uint32_t i=0; i<npe; i++)
     {
         xyz[0]+=XY(i,0)*NRST[i];
         xyz[1]+=XY(i,1)*NRST[i];
@@ -781,7 +781,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( size_t i=1; i<spe; i++ )
+    for ( uint32_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -814,9 +814,9 @@ IsoparametricLinearPrism::PhysicalToParametric(
         double minDistanceFromGivenPoint;
 
         const double constantMu               = 1.0;
-        const size_t numberOfFirstIterrations   = 5;
-        const size_t maxNumberOfIterrations     = 20;
-        const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
+        const uint32_t numberOfFirstIterrations   = 5;
+        const uint32_t maxNumberOfIterrations     = 20;
+        const uint32_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
         const double incrementR = 1.0/(numberOfFirstIterrations-1);
         const double incrementS = 1.0/(numberOfFirstIterrations-1);
@@ -825,13 +825,13 @@ IsoparametricLinearPrism::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = 0.0;
-        for(size_t i=0;i<numberOfFirstIterrations;i++)
+        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = 0.0;
-            for(size_t j=0;j<numberOfFirstIterrations;j++)
+            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = -1.0;
-                for(size_t k=0;k<numberOfFirstIterrations;k++)
+                for(uint32_t k=0;k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -846,7 +846,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(size_t i=0; i<dim; i++)
+                        for(uint32_t i=0; i<dim; i++)
                             rstHatK[i] = rstHatK_PlusOne[i];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -868,7 +868,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
                                          distanceFromGivenPointLinf[1]*distanceFromGivenPointLinf[1] +
                                          distanceFromGivenPointLinf[2]*distanceFromGivenPointLinf[2] );
 
-        size_t iteration = 1;
+        uint32_t iteration = 1;
 
         /// Newton-Raphson iterations
         while ( ( distanceFromGivenPointL2 > geometricTolerance ) && ( iteration < maxNumberOfIterrations ) )
@@ -907,7 +907,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(size_t i=0; i<dim; i++)
+            for(uint32_t i=0; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -962,7 +962,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
 
     }
 
-    for(size_t i=0; i<dim; i++)
+    for(uint32_t i=0; i<dim; i++)
         rSt[i] = rstHatK[i];
 }
 
@@ -977,7 +977,7 @@ IsoparametricLinearPrism::PhysicalToParametric(
      
      @test OK
 */
-void  IsoparametricLinearPrism::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearPrism::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1066,7 +1066,7 @@ double  IsoparametricLinearPrism::AspectRatio()
    double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
-   for ( size_t i=1; i<spe; i++ ) {
+   for ( uint32_t i=1; i<spe; i++ ) {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
      }
@@ -1156,13 +1156,12 @@ the area is computed.
 double
 IsoparametricLinearPrism::Volume()
 {
-    double   area; // determinant
-    size_t  i;
+    double   area{0.}; // determinant
 
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1186,13 +1185,13 @@ double
 IsoparametricLinearPrism::VolumeOfRegularPrism()
 {
      vector<double> V1XYZ(dim), V2XYZ(dim), V3XYZ(dim);
-     for(size_t i=0; i<dim; i++)
+     for(uint32_t i=0; i<dim; i++)
         {
             V1XYZ[i]=XY(0,i);V2XYZ[i]=XY(1,i);V3XYZ[i]=XY(2,i);
         }
      double  areaBottom=AreaOfBase(V1XYZ,V2XYZ,V3XYZ);
 
-    for(size_t i=0; i<dim; i++)
+    for(uint32_t i=0; i<dim; i++)
         {
             V1XYZ[i]=XY(3,i);V2XYZ[i]=XY(4,i);V3XYZ[i]=XY(5,i);
         }
@@ -1240,7 +1239,7 @@ procedures.
 
 */
 double
-IsoparametricLinearPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+IsoparametricLinearPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -1323,7 +1322,7 @@ IsoparametricLinearPrism::InnerRadius()
    double         sum(0.0);
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( uint32_t i=0; i<spe; i++ ) sum += segms[i];
 
    //cout<<" IsoparametricLinearPrism::InnerRadius: WARNING: function not tetsted"<<endl;
 
@@ -1345,7 +1344,7 @@ for the element.
 
 */
 void
-IsoparametricLinearPrism::MidSideNodes(std::vector<size_t>& ids) const
+IsoparametricLinearPrism::MidSideNodes(std::vector<uint32_t>& ids) const
  {
     cerr<<"\nIsoparametricLinearPrism::MidSideNodes WARNING: MidSideNodes not present.\n"<<endl;
     ids[0]=0;
@@ -1380,8 +1379,8 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
 void
-IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                      vector<size_t>& fnids )
+IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                      vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -1414,7 +1413,7 @@ to the nodes.  This involves the steps:
    and use these to extrapolate the values of the variables at the nodes.
 */
 void
-IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+IsoparametricLinearPrism::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                       const vector<double>& IVAR,
                                                                       vector<double>& NVAR )
 const
@@ -1429,9 +1428,9 @@ const
 
   // Define nodal values as bi-linear variation of the integration points values
   // See Zienkewitch, pp. 351, for example
-    for ( size_t i=0; i<npe; i++ )
+    for ( uint32_t i=0; i<npe; i++ )
         {
-            for ( size_t k=0; k<nvars; k++ )
+            for ( uint32_t k=0; k<nvars; k++ )
             {
                 NVAR[i*nvars + k] = IVAR[k];
             }
@@ -1445,7 +1444,7 @@ const
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
-void  IsoparametricLinearPrism::IntegrationPoint( size_t ip,
+void  IsoparametricLinearPrism::IntegrationPoint( uint32_t ip,
                                                   vector<double>& xyz ) const
  {
     assert( ip < gpe );
@@ -1454,7 +1453,7 @@ void  IsoparametricLinearPrism::IntegrationPoint( size_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -1515,9 +1514,9 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1545,9 +1544,9 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
      if ( DATA.Rows() == 1 )
        {
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
-           ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
+           ofs <<"LOOKUP_TABLE default" << endl; // table must always be createds
            // matrix DATA is 1x9
-           for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1555,8 +1554,8 @@ IsoparametricLinearPrism::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }

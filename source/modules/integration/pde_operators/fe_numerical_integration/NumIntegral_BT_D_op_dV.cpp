@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref,
                                                         const char*             oper,      // strain
                                                         const char*             youngs, 
@@ -54,7 +54,7 @@ NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_op_dV<dim,CELL>::PlaneStress() { plane_strain_ = false; }
 
 
@@ -82,7 +82,7 @@ E_OP vector of dimension  nodes-per-element x dim.
 A reference to element, the contribution of which is to be aquired and
 the time-increment over which the deformation shall occur. 
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -98,7 +98,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
     else { // Node or Constraint Point
          E_.resize(e.FE()->IntegrationPoints());
          nu_.resize(e.FE()->IntegrationPoints());
-         for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
               MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, Y_key_, i, E_[i] );
               MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, nu_key_, i, nu_[i] );
            }
@@ -123,13 +123,13 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
     else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
          MathOperatorRHS<dim>::MTRL.resize(e.IntegrationPoints());
-         for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+         for ( auto i=0; i<e.IntegrationPoints(); i++ )
            for ( size_t j=0U; j<dim; ++j )
              MathOperatorRHS<dim>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim>::MaterialOperandKey() );
       }
     else // if a nodal variable is dealt with
       {
-         for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
           MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e,
                                          MathOperatorRHS<dim>::MaterialOperandKey(), 
                                          i, MathOperatorRHS<dim>::MTRL[i] );
@@ -161,7 +161,7 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // compute the material property matrix
@@ -184,7 +184,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // mapping isostatic components of strain vector into 3x1 matrix STR
     STR.Zero();
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
-      for ( size_t i=0; i<dim; i++ )
+      for ( auto i=0; i<dim; i++ )
         STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
 
     // numerical integration: 
@@ -192,7 +192,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // looping over the 3 Gauss points calculating matrix products
     // and applying uniform weights (1/3) before adding integrated 
     // matrices to element - contribution matrix
-    for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // the material property matrix is constructed at each integration point
          if ( Y_key_.place == ELEMENT_INTEGRATION_POINT or Y_key_.place == NODE ) {
@@ -222,7 +222,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT or 
               MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ) {
               STR.Zero();
-              for ( size_t j=0; j<dim; j++ ) 
+              for ( auto j=0; j<dim; j++ ) 
                 STR(j,0U) = MathOperatorRHS<dim>::MTRL[i](j,j);
            }
 
@@ -233,10 +233,10 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          BT *= TEMP;
 
          // multiplying with determinant and weights
-         for ( size_t n=0U; n<BT.Rows(); n++ ) BT(n,0U) *= e.WeightAtIntegrationPoint(i) * detJ; 
+         for ( auto n=0U; n<BT.Rows(); n++ ) BT(n,0U) *= e.WeightAtIntegrationPoint(i) * detJ; 
          
          // adding to result vector
-         for ( size_t n=0U; n<BT.Rows(); n++ ) 
+         for ( auto n=0U; n<BT.Rows(); n++ ) 
            MathOperatorRHS<dim>::RHS[n] += BT(n,0U);
       }
 

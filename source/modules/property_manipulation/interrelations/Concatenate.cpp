@@ -13,7 +13,7 @@ namespace csmp {
 /** Constructor which is there for convenience, since most of the time to
 variables are being combined.
 */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 Concatenate<dim,operation >::Concatenate( const PropertyDatabase<dim>& p,
                                           const char* resultProperty,
                                           const char* argumentProperty1,
@@ -44,7 +44,7 @@ Concatenate<dim,operation >::Concatenate( const PropertyDatabase<dim>& p,
 /** Constructor. The argument properties are passed as a vector of strings and
 processed in the order given therein.
 */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 Concatenate<dim,operation>::Concatenate( const PropertyDatabase<dim>& p,  
                                          const char* resultProperty,
 									                       vector<string>& arguments )
@@ -68,7 +68,7 @@ Concatenate<dim,operation>::Concatenate( const PropertyDatabase<dim>& p,
 
 
 
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 void Concatenate<dim,operation>::Init( const char* resultProperty, vector<string>& arguments ) 
 {
   for (vector<string>::iterator it = arguments.begin(); it != arguments.end(); ++it) {

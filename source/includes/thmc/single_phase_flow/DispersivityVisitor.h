@@ -6,15 +6,15 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 /**
 @author S.K. Matthaei
 @author S. Geiger
 @author S. Roberts
 @date 2001 */
-template<size_t dim>
+template<uint32_t dim>
 class DispersivityVisitor : public Visitor< dim> {
   public:
     DispersivityVisitor( Model< dim>&, const char* dispersivity, const char* pore_velocity, 

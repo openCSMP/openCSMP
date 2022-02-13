@@ -15,7 +15,7 @@ CSMP global constants and enumerations
 */
 
 /// initialisation of const to maximum value that size_t can take
-const size_t NULL_IDX(std::numeric_limits<size_t>::max());
+const size_t NULL_IDX(std::numeric_limits<uint32_t>::max());
 const short  UNSPECIFIED(-1);
 
 /**
@@ -158,7 +158,7 @@ bool           faceVariable( PLACEMENT );
 bool           interFaceVariable( PLACEMENT );
 
 /// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
-template<size_t dim, template<size_t> class PLACE>
+template<uint32_t dim, template<uint32_t> class PLACE>
 PLACEMENT      parsePlacement();
 
 bool           isPlacedOnIntegrationPoint( PLACEMENT );

@@ -69,7 +69,7 @@ namespace csmp {
    @update 9/2/2019
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class ExperimentalSaturationFunctions {
   public:
     /// reads capillary preessure and saturation functions from "rocktype" file

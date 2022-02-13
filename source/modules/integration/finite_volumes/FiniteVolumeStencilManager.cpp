@@ -6,21 +6,21 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FiniteVolumeStencilManager<dim>::FiniteVolumeStencilManager( const FiniteElementManager& fem_manager )
  {
     Initialize( fem_manager );
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 FiniteVolumeStencilManager<dim>::~FiniteVolumeStencilManager()
  {
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FiniteVolumeStencilManager<dim>::Initialize( const FiniteElementManager& fem_manager )
  {
     if ( !type_mapping.empty() ) return;
@@ -50,7 +50,7 @@ void FiniteVolumeStencilManager<dim>::Initialize( const FiniteElementManager& fe
 /**
     returns pointer to corresponding FV stencil type
 */
-template<size_t dim>
+template<uint32_t dim>
 const FiniteVolumeStencil<dim>* const FiniteVolumeStencilManager<dim>::Stencil( CSMP_FEM_TYPE etype ) const
  {
     std::map<CSMP_FEM_TYPE,size_t>::const_iterator  it = type_mapping.find(etype);

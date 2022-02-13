@@ -5,11 +5,11 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
 
 /// for application to individual FVs
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class TimeStepEvaluator {
   public:
     explicit TimeStepEvaluator( double step_size_reduction_factor=0.5, double max_time_increment=86400. * 365. );

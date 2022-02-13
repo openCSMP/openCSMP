@@ -7,17 +7,17 @@
 
 namespace csmp {
 
-template<size_t> class MathOperatorLHS;
-template<size_t> class Element;
-template<size_t> class Node;
-template<size_t> class Face;
-template<size_t> class Model;
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class MathOperatorLHS;
+template<uint32_t> class Element;
+template<uint32_t> class Node;
+template<uint32_t> class Face;
+template<uint32_t> class Model;
+template<uint32_t> class TwoPhaseModel;
 
 
 /// flow "velocity" & "volume flux" are output as vector<double> and scalar variables, respecitively
 /// upon request these properties are extrapolated to the nodes and averaged between adjacent elements
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
   public:
 
@@ -49,11 +49,11 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( SIMPLEX& );
-    virtual void WriteOperands( SIMPLEX& );
+    virtual void GetOperands( CELL& );
+    virtual void WriteOperands( CELL& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( SIMPLEX& );
+    virtual void ComputeContribution( CELL& );
 
     virtual void ComputeContribution( Node<dim>& n_ref );
 
@@ -61,13 +61,13 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     
   private:
 
-    void ExtractVelocity( const DenseMatrix<DM_MIN>& INP, size_t col, VectorVariable<dim>& );
-    void ExtractVolumeFlux( const DenseMatrix<DM_MIN>& INP, size_t col, ScalarVariable& );
-    void ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP, size_t col, VectorVariable<dim>& );
+    void ExtractVelocity( const DenseMatrix<DM_MIN>& INP, uint32_t col, VectorVariable<dim>& );
+    void ExtractVolumeFlux( const DenseMatrix<DM_MIN>& INP, uint32_t col, ScalarVariable& );
+    void ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP, uint32_t col, VectorVariable<dim>& );
     void TestRangeOfOutputVariables() const;
 
     // Compute Gravity Term and Total mobility
-    void ComputeTotalMobilityRelativeDensityAndGravityTerm( SIMPLEX& e);
+    void ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& e);
 
     bool                            verbose_,
                                     nodal_averaging_,
@@ -78,8 +78,8 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
 
     TwoPhaseModel<dim>&             satFunc_;
 
-    const size_t                    components_;
-    const size_t                    VERTICAL_AXIS_;
+    const uint32_t                  components_;
+    const uint32_t                  VERTICAL_AXIS_;
 
     csmp::Index                     velo_key_, ivelo_key_, flux_key_, velo_nw_key_, velo_w_key_,
                                     nvelo_key_, nivelo_key_, nflux_key_, nvelo_nw_key_, nvelo_w_key_,
@@ -90,9 +90,9 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     csmp::Index                     facet_normal_idx_,              // Facet Normal property index
                                     facet_area_idx_,                // Facet Area property index
                                     sector_volume_idx_;             // Sector Volume property index
-    std::pair<double,double>    minmaxV_, minmaxF_;
+    std::pair<double,double>        minmaxV_, minmaxF_;
     DenseMatrix<DM_MIN>             DERIV_, RESULT_;
-    std::vector<double>           VELOFLUX_, IVELOFLUX_, VELOFLUX_W_, VELOFLUX_NW_,
+    std::vector<double>             VELOFLUX_, IVELOFLUX_, VELOFLUX_W_, VELOFLUX_NW_,
                                     IPVF_, NVF_, veloflux_,
                                     IPOL_;
 
@@ -108,7 +108,9 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     ScalarVariable                  sc_;
     DenseMatrix<DM_MIN>             DN_;
     Point<dim>                      dsdn_;
-    double                        sum_, ac_gravity_, gravTerm_, rho_fac_,rhot_fac_, rho_w_fac_, rho_nw_fac_, mult_fac_, cell_thickness_;
+    double                          sum_, ac_gravity_, gravTerm_,
+                                    rho_fac_, rhot_fac_, rho_w_fac_,
+                                    rho_nw_fac_, mult_fac_, cell_thickness_;
 
 };
 

@@ -314,7 +314,7 @@ double Solver::CalculateResidual( const SparseMatrix& A,
     vector<double> tvec(len,0.);
     
     // calculating residual for actual solution
-    for ( size_t i=0U; i<len; i++ ) {
+    for ( auto i{0}; i<len; i++ ) {
          for ( size_t j=0; j<len; j++ ) tvec[i] += A(i,j) * x[j];
          tvec[i] = b[i] - tvec[i];
       }

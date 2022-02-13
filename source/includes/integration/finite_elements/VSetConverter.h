@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 /**
     To convert linear to quadratic elements and to remove degenerate elements 
@@ -15,7 +15,7 @@ template<size_t> class VSet;
     @date 2001
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class VSetConverter {
   public:
     /// the coordinates of the bounding box are initialized to Not A Number
@@ -86,7 +86,7 @@ class VSetConverter {
     Interpolation of variable values on the boundary, assuming that it lies in one 
     of the coordinate planes.
 */
-template<size_t dim>
+template<uint32_t dim>
 inline double VSetConverter<dim>::BoundaryValue( const std::map<size_t,double>& bvals, 
                                                    size_t nID1, size_t nID2 ) 
  const

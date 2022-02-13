@@ -9,10 +9,10 @@ namespace csmp {
 /// interface to J. Setchuk's (UC Berkeley's) Triangle mesh generator
 class TRIANGLE_Interface {
   public:
-    template<size_t dim>                        
+    template<uint32_t dim>                        
     void ReadTriangle2DMesh( const char* fname, VSet<dim>&, bool isoparametric=false, bool perform_extra_checks=false );
     
-    template<size_t dim>                        
+    template<uint32_t dim>                        
     void ReadTriangle2DMeshAndCreateDiscreteFractures( const char* fname, VSet<dim>& vset, double kfrac,
                                                        bool perform_extra_checks=false );
     

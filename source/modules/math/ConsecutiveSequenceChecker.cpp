@@ -200,7 +200,7 @@ bool ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( const std::map<si
   if ( check_whether_max_value_is_size_minus1 && maxval + 1U != iset.size() ) return false;
   
   // checking whether value range is consecutive upon iteration over range
-  for (size_t i = 0; i + 1 < iset.size(); ++i) {
+  for (auto i = 0; i + 1 < iset.size(); ++i) {
     if (iset[i] == iset[i+1]) {
       // fail uniqueness check
       return false;

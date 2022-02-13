@@ -1,4 +1,5 @@
 #include "EclipseModel.h"
+#include "ModelTopology.h"
 #include "Region.h"
 #include "ModelTime.h"
 #include "variableOperations.h"
@@ -245,14 +246,14 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	csmp::ErrorHandler& error_handler(csmp::ErrorHandler::Instance());
 
 	auto& domain = this->Region(target_region);
-	vector<size_t>        fnids;
+	vector<uint32_t>        fnids;
 	multimap<size_t, pair<BOX_BOUNDARY, Node<3U>*> >  boundary_nodes;
 	vector<double>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
 	Box                   box;
 	double              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
 	BOX_BOUNDARY          bflag(NOT);
 
-	const size_t dim(3U);
+	const uint32_t dim(3U);
 	box.UnitNormalTo(BOTTOM, dim, nrml_bottom);
 	box.UnitNormalTo(TOP, dim, nrml_top);
 	box.UnitNormalTo(LEFT, dim, nrml_left);
@@ -271,7 +272,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 		// idea: loop over the faces of the cell and where there is no neighbor
 		// check in which direction the face normal is pointing, assign boundary flags accordingly
 		// if the element has more than one face at the boundary, idenfify it as an edge or a corner
-		for (size_t i = 0U; i<(*it)->Faces(); ++i)
+		for (auto i = 0U; i<(*it)->Faces(); ++i)
 			if ((*it)->Neighbor(i) == nullptr) {
 				// determining in which direction the face normal points
 				(*it)->UnitNormalToFace(i, nrml);
@@ -319,7 +320,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 
 		// testing
 		//cerr <<"\n("<< (*it)->Idx() <<"): ";
-		//for ( size_t n=0U; n<(*it)->Nodes(); ++n )
+		//for ( auto n=0U; n<(*it)->Nodes(); ++n )
 		//  cerr << parseBoundary( (*it)->N(n)->AtBoundary() ) <<" ";
 
 		// resetting

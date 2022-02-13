@@ -67,7 +67,7 @@ void PermeabilityTensor_Example::Run()
   grad( 2 ) = 0.1;
 
   // calculating flow vector
-  for( size_t i = 0; i < 3; ++i )
+  for( auto i = 0; i < 3; ++i )
     q( i ) = a() / mu() * (   kTensor( i,0 )*grad( 0 )
                                         + kTensor( i,1 )*grad( 1 )
                                         + kTensor( i,2 )*grad( 2 ) );

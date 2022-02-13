@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 VanGenuchten<dim>::VanGenuchten()
  : acc_gravity_(9.80665), 
    PC_LOW_SW_LIMIT_ (0.01),
@@ -20,7 +20,7 @@ VanGenuchten<dim>::VanGenuchten()
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 VanGenuchten<dim>::VanGenuchten( const PropertyDatabase<dim>& database,
                                  const char* model_parameter_n,
                                  const char* model_parameter_alpha,
@@ -51,7 +51,7 @@ VanGenuchten<dim>::VanGenuchten( const PropertyDatabase<dim>& database,
 
  }
 
-template<size_t dim>
+template<uint32_t dim>
 VanGenuchten<dim>::VanGenuchten( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -86,14 +86,14 @@ VanGenuchten<dim>::VanGenuchten( const PropertyDatabase<dim>& database,
             matrix_tensor_permeability_ = true;
 
 }
-template<size_t dim>
+template<uint32_t dim>
 VanGenuchten<dim>::~VanGenuchten()
  {
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void VanGenuchten<dim>::Initialize( const Element<dim>& e )
  {
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -123,7 +123,7 @@ void VanGenuchten<dim>::Initialize( const Element<dim>& e )
 
 
 /// initializer for DFN model with virtual matrix transfer function
-template<size_t dim>
+template<uint32_t dim>
 void VanGenuchten<dim>::InitializeVirtualMatrix( const Element<dim>& e )
  {
 
@@ -148,7 +148,7 @@ void VanGenuchten<dim>::InitializeVirtualMatrix( const Element<dim>& e )
 
 
 /// calculates van Genuchten parameter m = 1 - 1/n
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::m_from_n( double n ) const
  {
     return 1. - 1. / n;
@@ -157,7 +157,7 @@ double VanGenuchten<dim>::m_from_n( double n ) const
 
 
 /// Helmig 97', p. 75 eqn. 2.58
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::krw_Phase() const
  {
     if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(0.);
@@ -185,7 +185,7 @@ double VanGenuchten<dim>::krw_Phase() const
 
 
 /// Helmig 97', p. 75 eqn. 2.59
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::krn_Phase() const
  {
     if ( TwoPhaseModel<dim>::seff_ <= 0.) return static_cast<double>(1.);
@@ -209,7 +209,7 @@ double VanGenuchten<dim>::krn_Phase() const
     return std::pow( 1. - TwoPhaseModel<dim>::seff_, 1./3. ) * term;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::dkrwds_Phase() const
  {
 
@@ -235,7 +235,7 @@ double VanGenuchten<dim>::dkrwds_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::dkrnds_Phase() const
  {
 
@@ -262,7 +262,7 @@ double VanGenuchten<dim>::dkrnds_Phase() const
 
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::pc_Phase( ) const
 {
     /// Not consistent way of regularization
@@ -299,7 +299,7 @@ double VanGenuchten<dim>::pc_Phase( ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::dpcds_Phase( ) const
 {
     /// Not consistent way of regularization
@@ -326,7 +326,7 @@ double VanGenuchten<dim>::dpcds_Phase( ) const
     return -(term2 * term0) / (alpha_ * n_ * m * TwoPhaseModel<dim>::seff_ * term1) * seff_mult;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::Sw_Phase( double pc ) const
 {
 
@@ -369,7 +369,7 @@ double VanGenuchten<dim>::Sw_Phase( double pc ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::dsdpc_Phase( double pc ) const
 {
 
@@ -397,7 +397,7 @@ double VanGenuchten<dim>::dsdpc_Phase( double pc ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double>(7.); // as computed with dfds_Phase method
@@ -418,7 +418,7 @@ Reference saturation, pore throat radius, pore radius.
 
 @return The capillary pressure
 */
-template<size_t dim>
+template<uint32_t dim>
 double VanGenuchten<dim>::PoreParametersCapillaryPressure( double pt, double pr, double tension ) const
  {
     // saturation function f(satw) = arccos(2satw - 1) / pi

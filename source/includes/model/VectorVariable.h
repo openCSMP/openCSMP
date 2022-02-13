@@ -97,11 +97,11 @@ class VectorVariable<3U> {
     explicit VectorVariable( const csmp::Point<3U>& );
 
     // access of vector elements
-    double&        operator()( size_t );
-    const double&  operator()( size_t ) const;
-    double         operator[]( size_t ) const;
-    void             Component( size_t, double );
-    double         Component( size_t ) const;
+    double&        operator()( uint32_t );
+    const double&  operator()( uint32_t ) const;
+    double         operator[]( uint32_t ) const;
+    void           Component( uint32_t, double );
+    double         Component( uint32_t ) const;
     
     // assigments
     VectorVariable&  operator=( double );
@@ -149,32 +149,29 @@ class VectorVariable<3U> {
     bool             operator<(  const VectorVariable& ) const;
   
     /// dot product = scalar product
-    double         operator&(  const VectorVariable& ) const;
+    double           operator&(  const VectorVariable& ) const;
   
     /// cross product (vector perpendicular to input vectors
     VectorVariable   operator%(  const VectorVariable& ) const;
     
     /// returns spatial i-th dimension
-    double        Length() const;
-    double        AngleTo( const VectorVariable& v ) const;
+    double           Length() const;
+    double           AngleTo( const VectorVariable& v ) const;
   
     /// returns csmp::Point initialised with vector values; @note name avoids GNU clash
     Point<3U>       P() const;
   
     /// checks vector length against the value range supplied as arguments
     bool            IsWithinRange( double vmin, double vmax ) const;
-    VARIABLE_FLAG   Flag( size_t i=0 ) const;
-    VARIABLE_FLAG&  Flag( size_t i=0 );
+    VARIABLE_FLAG   Flag( uint32_t i=0 ) const;
+    VARIABLE_FLAG&  Flag( uint32_t i=0 );
   
     /// for the PropertyStorage
-    size_t          Size() const;
-  
-    /// sets all values to newValue; @todo SKM (1) deprecate
-    void            Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+    uint32_t        Size() const;
   
     // projections
-    double        DotProduct( const csmp::Point<3U>& ) const;
-    double        DotProduct( const VectorVariable& ) const;
+    double          DotProduct( const csmp::Point<3U>& ) const;
+    double          DotProduct( const VectorVariable& ) const;
     VectorVariable  CrossProduct( const csmp::Point<3U>& ) const;
     VectorVariable  CrossProduct( const VectorVariable& ) const;
     VectorVariable  ProjectOnto( const std::vector<double>& ) const;
@@ -201,7 +198,7 @@ class VectorVariable<3U> {
 
   private:
     std::array<VARIABLE_FLAG,3U>  flag;  ///< flags that specify the treatment of the values in computations
-    std::array<double,3U>       data;  ///< values of the vector components
+    std::array<double,3U>         data;  ///< values of the vector components
 };
 
 
@@ -212,7 +209,7 @@ VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::a
 VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double>& );
 
 
-template<size_t dim>
+template<uint32_t dim>
 std::ostream&  operator<<( std::ostream&, const VectorVariable<dim>& );
 
 // 1D

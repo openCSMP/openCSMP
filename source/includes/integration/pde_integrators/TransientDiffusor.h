@@ -12,7 +12,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 
 /** transient diffusion solver with Backward-Euler time-stepping
@@ -27,7 +27,7 @@ template<size_t> class Model;
    @attention gradient_multiplier currently is not used.
    
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
     typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;

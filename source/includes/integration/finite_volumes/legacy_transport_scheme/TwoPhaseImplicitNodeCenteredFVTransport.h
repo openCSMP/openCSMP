@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 class TwoPhaseImplicitNodeCenteredFVTransport : public NodeCenteredFiniteVolumeTransport<dim> {
   public:
 

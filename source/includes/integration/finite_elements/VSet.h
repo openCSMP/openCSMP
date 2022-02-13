@@ -17,7 +17,7 @@ that forms part of their HDF data file storage.
 @date 1996
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class VSet : public VData {
 
   public:
@@ -27,14 +27,14 @@ class VSet : public VData {
     VSet( VSet&& ) = default;
     
     /// single element type constructor
-    VSet( size_t nodes_per_element, 
-          size_t nbors_per_element,
-          int8_t  csmp_etype, 
+    VSet( uint32_t nodes_per_element,
+          uint32_t nbors_per_element,
+          int8_t   csmp_etype,
           size_t nodes, size_t elmts );
 
     /// multiple element type constructor
-    VSet( const std::deque<size_t>& npes,
-          const std::deque<size_t>& epes,
+    VSet( const std::deque<uint32_t>& npes,
+          const std::deque<uint32_t>& epes,
           size_t nodes );
 
     virtual ~VSet();
@@ -42,14 +42,14 @@ class VSet : public VData {
     VSet& operator=( const VSet& );
     VSet& operator=( VSet&& ) = default;
 
-    void Resize( size_t nodes_per_element, 
-                 size_t nbors_per_element,
+    void Resize( uint32_t nodes_per_element,
+                 uint32_t nbors_per_element,
                  int8_t csmp_etype, 
                  size_t nodes, size_t elmts );
 
     void Resize( const std::deque<int8_t>& etypes,
-                 const std::deque<size_t>& npes, 
-                 const std::deque<size_t>& epes,
+                 const std::deque<uint32_t>& npes, 
+                 const std::deque<uint32_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
 
     /// node coordinates

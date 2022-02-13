@@ -13,7 +13,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
                                                double& vmin, double& vmax ) const
  {                                             
@@ -46,11 +46,11 @@ void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( Model<dim>& sg ) const
   {
     std::vector<Point<dim> > bc_vec(0);
-    std::vector<size_t>     id_vec(0);
+    std::vector<uint32_t>     id_vec(0);
     double                 sign;
     size_t                   id, cntr(0);
     
@@ -64,11 +64,11 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
         sign = 0.;
         // construct a polygon of with vertices equal to the barycenters of the neighbor FEs
         // if there is no neighbor FE, use barycenter of current FE.
-        for ( size_t i=0U; i<(*eit)->Neighbors(); i++ ) {
+        for ( auto i{0}; i<(*eit)->Neighbors(); i++ ) {
             if ( (*eit)->Neighbor(i) != NULL ) bc_vec[i] = (*eit)->Neighbor(i)->BaryCenter();
             else                               bc_vec[i] = (*eit)->BaryCenter(); 
           }
-        for ( size_t i=0U; i<(bc_vec.size()-1U); i++ ) {
+        for ( auto i{0}; i<(bc_vec.size()-1U); i++ ) {
             // calculate sign of polygon determinant z = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + xn * y1 + x1 * yn
             sign += bc_vec[i][0] * bc_vec[i+1U][1] - bc_vec[i+1][0] * bc_vec[i][1];
           } 
@@ -81,7 +81,7 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
             if ( id_vec.size() != (*eit)->Neighbors() ) id_vec.resize((*eit)->Neighbors());
             id = (*eit)->Neighbors()-1;
             // reorder element ids
-            for ( size_t i=0; i<(*eit)->Neighbors(); i++ ) {
+            for ( auto i=0; i<(*eit)->Neighbors(); i++ ) {
                 if ( (*eit)->Neighbor(i) != NULL ) id_vec[id-i] = (*eit)->Neighbor(i)->Idx();
                 else                               id_vec[id-i] = 0;
               }
@@ -136,7 +136,7 @@ diagnostics to stdout:
 SKM fix 18/10/2014: additions to catch exceptions associated with negative Jacobians.
       
  */
-template<size_t dim>
+template<uint32_t dim>
 bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
  {
     Region<3>&  sgroup(sg.Region("Model"));
@@ -152,7 +152,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     bool   problems = false;
            
     DenseMatrix<DM_MIN>    XY(3,3);
-    vector<size_t>         nids(3);
+    vector<uint32_t>         nids(3);
     Standard_IO_Handler    stdio;
 
     // Node coordinates
@@ -169,7 +169,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
           eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
       {
          (*eit)->NodeCoordinateMatrix( XY );
-         for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+         for ( auto i{0}; i<(*eit)->Nodes(); i++ )
            {
               if ( XY(i,0) > h_valmax ) h_valmax = XY(i,0);
               if ( XY(i,1) > v_valmax ) v_valmax = XY(i,1);
@@ -198,7 +198,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
           eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
       {
          (*eit)->SegmentLengths( lengths );
-         for ( size_t i=0U; i<lengths.size(); i++ )
+         for ( auto i{0}; i<lengths.size(); i++ )
            {
               l_segm = lengths[i];
               if ( l_segm > sl_max )   sl_max   = l_segm;
@@ -219,7 +219,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     // Element volume
     double        volume;
     bool            repeat(true);
-    vector<size_t>  element_numbers;
+    vector<uint32_t>  element_numbers;
    
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Verifying element volumes/areas/lengths..."<< endl;
     for ( vector<Element<3U>*>::const_iterator
@@ -278,7 +278,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
 /**
     tests for negative element volumes
 */
-template<size_t dim>
+template<uint32_t dim>
 bool MeshDiagnostics<dim>::DetectPotentiallyMisnumberedElements( const Model<dim>& model ) const
  {
     const Region<dim> model_domain(model.Region("Model"));
@@ -304,7 +304,7 @@ bool MeshDiagnostics<dim>::DetectPotentiallyMisnumberedElements( const Model<dim
     
     @attention method has been implemented only for scalar and vector variables.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim>& model, const char* variable_of_interest, VARIABLE_FLAG status ) const
  {
     const csmp::Index key = model.Database().StorageKey( variable_of_interest );
@@ -319,7 +319,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
       for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
            double value(numeric_limits<double>::quiet_NaN());
            bool     detected_status(false);
-           for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
+           for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
                 // finding status-flagged nodes and reading their stored values
                 if ( !detected_status && (*eit)->N(i)->Status(key) == status ) {
                      value           = (*eit)->N(i)->Read(key);
@@ -343,7 +343,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
           for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
                VectorVariable<dim> vc;
                bool     detected_status(false);
-               for ( size_t i=0U; i<(*eit)->Nodes(); ++i ) {
+               for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
                     // recovering the variable
                     (*eit)->N(i)->Read( key, vc );
                  
@@ -382,7 +382,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
 /**
     checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood
 */
-template<size_t dim>
+template<uint32_t dim>
 bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const char* variable_of_interest ) const
  {
     const csmp::Index key = model.Database().StorageKey( variable_of_interest );
@@ -398,7 +398,7 @@ bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const
       for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
            double n_value = (*nit)->Read(key);
            double val_min(1e30), val_max(-1e30);
-           for ( size_t i=0U; i<(*nit)->Neighbors(); ++i ) {
+           for ( auto i{0}; i<(*nit)->Neighbors(); ++i ) {
                 val_min = std::min( val_min, (*nit)->Neighbor(i)->Read(key) );
                 val_max = std::max( val_max, (*nit)->Neighbor(i)->Read(key) );
              }
@@ -419,7 +419,7 @@ bool MeshDiagnostics<dim>::DetectNonMonotonicity( const Model<dim>& model, const
 
 
 /// elements where all nodes have a status constraint so that they do not participate in the computation
-template<size_t dim>
+template<uint32_t dim>
 bool MeshDiagnostics<dim>::DetectOverConstrainedElements( const Model<dim>& model, const char* variable_of_interest, VARIABLE_FLAG status ) const
 {
     const csmp::Index key = model.Database().StorageKey( variable_of_interest );
@@ -433,7 +433,7 @@ bool MeshDiagnostics<dim>::DetectOverConstrainedElements( const Model<dim>& mode
            const size_t nodes = (*eit)->Nodes();
            size_t status_constraints(0U);
            if ( key.type == SCALAR ) {
-                for ( size_t i=0U; i<nodes; ++i )
+                for ( auto i{0}; i<nodes; ++i )
                   if ( (*eit)->N(i)->Status(key) == status )
                     status_constraints++;
               }
@@ -463,7 +463,7 @@ template class MeshDiagnostics<3>;
 
 
 ///@return true if there are duplicate elements in the model
-template<size_t dim>
+template<uint32_t dim>
 bool detectDuplicateElements( const Model<dim>& m )
  {
     set<csmp::Point<dim> >  element_barycenters;

@@ -8,8 +8,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-Integral_NT_N_dV<dim,SIMPLEX>::Integral_NT_N_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_NT_N_dV<dim,CELL>::Integral_NT_N_dV( const PropertyDatabase<dim>& pref,
                                                  const char* test )
   : MathOperatorLHS<dim>(pref,"permeability",test,test)
  {
@@ -30,8 +30,8 @@ Integral_NT_N_dV<dim,SIMPLEX>::Integral_NT_N_dV( const PropertyDatabase<dim>& pr
 /** Computes the volume (area) integral over the testfunction products
 multiplied with the Operand.  
 */
-template<size_t dim,class SIMPLEX>
-void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_NT_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -47,8 +47,8 @@ void Integral_NT_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
       {
          MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
          double vol_div3 = e.Volume() / static_cast<double>(e.Nodes());
-         for ( size_t i=0; i<e.Nodes(); i++ )
-           for ( size_t j=0; j<e.Nodes(); j++ )
+         for ( auto i=0; i<e.Nodes(); i++ )
+           for ( auto j=0; j<e.Nodes(); j++ )
              if ( i == j ) MathOperatorLHS<dim>::LHS(i,j) = vol_div3;
              else          MathOperatorLHS<dim>::LHS(i,j) = 0.;
       }      

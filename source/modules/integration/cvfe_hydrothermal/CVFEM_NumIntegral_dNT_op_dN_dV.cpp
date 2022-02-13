@@ -9,12 +9,12 @@ using namespace std;
 namespace csmp {
 
 /** default destructor */
-template<size_t dim, class SIMPLEX>
-CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::~CVFEM_NumIntegral_dNT_op_dN_dV() {}
+template<uint32_t dim, class CELL>
+CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>::~CVFEM_NumIntegral_dNT_op_dN_dV() {}
 
 /** custom constructor */
-template<size_t dim, class SIMPLEX>
-CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
+template<uint32_t dim, class CELL>
+CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>::CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
                                                             const char*           oper, 
                                                             const char*           basic, 
                                                             const char*           test ) 
@@ -37,8 +37,8 @@ CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::CVFEM_NumIntegral_dNT_op_dN_dV( con
 }
 
 /** compute contribution */
-template<size_t dim, class SIMPLEX>
-void CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( Element<dim>& e )
+template<uint32_t dim, class CELL>
+void CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( Element<dim>& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -50,7 +50,7 @@ void CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( Element<d
     // ------------------------------------------------------------------
     if ( this->MaterialOperandPlacement() == ELEMENT or this->MaterialOperandPlacement() == REGION or this->MaterialOperandPlacement() == FACE)
       {
-        for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
+        for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
              double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
@@ -73,7 +73,7 @@ void CVFEM_NumIntegral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( Element<d
           }
       }
     else { // NODE or ELEMENT_INTEGRATION_POINT
-        for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
+        for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) {
              double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
              B.Transposed( BT );
              BT *= MathOperatorLHS<dim>::MTRL[i];

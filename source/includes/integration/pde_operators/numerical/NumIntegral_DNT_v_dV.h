@@ -11,7 +11,7 @@ namespace csmp {
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_DNT_v_dV( const PropertyDatabase<dim>& p, 

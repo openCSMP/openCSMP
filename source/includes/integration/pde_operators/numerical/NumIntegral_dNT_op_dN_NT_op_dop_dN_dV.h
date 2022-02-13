@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' dop x op multiplier
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_op_dN_NT_op_dop_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -31,7 +31,7 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
     virtual void GetOperands( const CELL& );
     virtual void ComputeContribution( const CELL& );
     
-    void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
+    void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, // derivatives of basis functions
@@ -45,13 +45,13 @@ class NumIntegral_dNT_op_dN_NT_op_dop_dN_dV : public MathOperatorLHS<dim> {
                                       rrho_vec; 
     ScalarVariable                emult, econd; 
          
-    csmp::Index       grad_key,    // key to variable to compute gradient of for calculation of 'v'
-                    rrho_key,    // relative fluid density at nodes or similar operand
-                    cond_key,    // e.g., op to be multiplied with dop
-                    mult_key;    // for instance heat transport velocity coefficient
-    bool            with_gravity;
-    const double        gravity;
-    size_t       xyz;
+    csmp::Index    grad_key,    // key to variable to compute gradient of for calculation of 'v'
+                   rrho_key,    // relative fluid density at nodes or similar operand
+                   cond_key,    // e.g., op to be multiplied with dop
+                   mult_key;    // for instance heat transport velocity coefficient
+    bool           with_gravity;
+    const double   gravity;
+    uint32_t       xyz;
 };
 
 } // csmp

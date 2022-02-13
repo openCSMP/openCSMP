@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// algorithm and interrelation required to compute streaming potential
-template<size_t dim>
+template<uint32_t dim>
 class StreamingPotential {
   public:
     StreamingPotential( Model<dim>& );
@@ -22,7 +22,7 @@ class StreamingPotential {
  };
  
 /// to compute the input coefficients
-template<size_t dim>
+template<uint32_t dim>
 class PotentialSource : public Interrelation<dim> {
     Operand<dim>&  mu;     // dynamic viscosity [Pa s-1]
     Operand<dim>&  k;      // permeability    [m2]

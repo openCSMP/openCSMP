@@ -12,7 +12,7 @@ namespace csmp {
 - correction for the presence sodium chloride according to Fournier 1983, GCA 47, p. 579-586.
 */
 
-template<size_t dim>
+template<uint32_t dim>
 class QuartzSolubilityNaCl : public Interrelation<dim> {
     Operand<dim>&    T; /// < temperature (oC)
     Operand<dim>&    R; /// < nodal density of saline fluid (kg m-3)

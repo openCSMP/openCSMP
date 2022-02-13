@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// Known as: streaming potential source term
-template<size_t dim, class SIMPLEX=Element<dim>, typename var=ScalarVariable >
+template<uint32_t dim, class CELL=Element<dim>, typename var=ScalarVariable >
 class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim> {
   public:
     Integral_rhsop_dNT_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -16,9 +16,9 @@ class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim> {
                               const char* test,
                               double prefactor=1. );
 
-    virtual void GetOperands( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
     
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
 
   private:
     DenseMatrix<DM_MIN> DN, DNT;

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class MohrCoulombFailure : public Interrelation<dim> {
     Operand<dim>&  MS;        // mean stress
     Operand<dim>&  STRESS;

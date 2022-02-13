@@ -9,8 +9,8 @@ class HashKey {
     char  key_text[60];
     char  num[20];      // 20 = size of 8-byte size_t size_t as char string
     short hash_key_digits;
-    std::set<size_t>            sorter;
-    std::set<size_t>::iterator  sit;  
+    std::set<uint32_t>            sorter;
+    std::set<uint32_t>::iterator  sit;  
     size_t key;
   public:
     HashKey();
@@ -57,7 +57,7 @@ inline long HashKey::Key( size_t a, size_t b )
          std::sprintf( num, "%lu", *sit );
          std::strcat( key_text, num );
       }
-    if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
+    if ( std::strlen(key_text) > static_cast<uint32_t>(hash_key_digits) )
       {
           std::cout <<"\nHashKey::Key: too many digits to convert string '";
           std::cout << key_text << "' to size_t."<< std::endl;
@@ -85,7 +85,7 @@ inline long HashKey::Key( size_t a, size_t b, size_t c )
          std::sprintf( num, "%lu", *sit );
          std::strcat( key_text, num );
       }
-    if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
+    if ( std::strlen(key_text) > static_cast<uint32_t>(hash_key_digits) )
       {
           std::cout <<"\nHashKey::Key: too many digits to convert string '";
           std::cout << key_text << "' to size_t."<< std::endl;
@@ -113,7 +113,7 @@ inline long HashKey::Key( size_t a, size_t b, size_t c, size_t d )
          std::sprintf( num, "%lu", *sit );
          std::strcat( key_text, num );
       }
-    if ( std::strlen(key_text) > static_cast<size_t>(hash_key_digits) )
+    if ( std::strlen(key_text) > static_cast<uint32_t>(hash_key_digits) )
       {
           std::cout <<"\nHashKey::Key: too many digits to convert string '";
           std::cout << key_text << "' to size_t."<< std::endl;

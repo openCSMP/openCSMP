@@ -3,6 +3,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "Exception.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
@@ -11,8 +12,8 @@ namespace csmp {
 /** The operand defines the fluid density, and the mtrl variable would for
 instance be the hydraulic conductivity.  
 */
-template<size_t dim,class SIMPLEX>
-Integral_NT_op_dNi_dV<dim,SIMPLEX>::Integral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_NT_op_dNi_dV<dim,CELL>::Integral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                       const char* oper, 
                                                       const char* mtrl, 
                                                       const char* test )
@@ -22,7 +23,7 @@ Integral_NT_op_dNi_dV<dim,SIMPLEX>::Integral_NT_op_dNi_dV( const PropertyDatabas
     IPOL(3),
     DN(dim,3),
     coord(dim),
-    gravity(9.80665), // scalar acts to increase the pressure
+    gravity(ACC_GRAVITY), // scalar acts to increase the pressure
     prop2_time_multiplier(1.0),
     xyz(2)
  {
@@ -46,16 +47,16 @@ Integral_NT_op_dNi_dV<dim,SIMPLEX>::Integral_NT_op_dNi_dV( const PropertyDatabas
 
 
 
-template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::SpatialDerivative( size_t num_xyz )
+template<uint32_t dim,class CELL>
+void Integral_NT_op_dNi_dV<dim,CELL>::SpatialDerivative( uint32_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
     xyz = num_xyz;
  }
 
 
-template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::MaterialPropertyTimeMultiplier( double time_increment )
+template<uint32_t dim,class CELL>
+void Integral_NT_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double time_increment )
  {
     prop2_time_multiplier = time_increment;
  }
@@ -64,8 +65,8 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::MaterialPropertyTimeMultiplier( double 
 
 /** Reads the Operand values from the elements.
 */
-template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    // reading fluid density or something like that
    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or MathOperatorRHS<dim>::MaterialOperandPlacement() == REGION ) 
@@ -75,7 +76,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
         e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), OP );
         e.N_AtBaryCenter( IPOL );
         prop1() = 0.0;
-        for ( size_t i=0; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
+        for ( auto i=0; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
      }
      
    // reading the material property variable (for instance conductivity)
@@ -100,8 +101,8 @@ multiplied with the Operand.
 gravity is negative since it acts in the opposite direction of the 
 coordinate axis.
 */
-template<size_t dim,class SIMPLEX>
-void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -111,7 +112,7 @@ void Integral_NT_op_dNi_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
     
     double vol = e.Volume();
 
-    for ( size_t i=0; i<e.Nodes(); i++ ) 
+    for ( auto i=0; i<e.Nodes(); i++ ) 
       //                             gradZ        density    K          acc.gravity    element volume
       MathOperatorRHS<dim>::RHS[i] = DN(xyz-1,i) * prop1() * prop2() * -gravity  * vol;
 

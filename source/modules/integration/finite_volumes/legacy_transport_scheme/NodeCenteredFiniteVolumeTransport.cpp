@@ -28,7 +28,7 @@ namespace csmp {
 
 The model and basic transport-related variables.
 */
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const char* group_name,
                                                                            Model<dim>& sg,
                                                                            const char* porosity,
@@ -106,7 +106,7 @@ The model and basic transport-related variables.
 Maybe later this can be made more flexible by turning the vectors into
 deque's that can grow on either side.
  */
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const char* group_name,
                                                                            Model<dim>& sg,
                                                                            const char* porosity,
@@ -175,14 +175,14 @@ NodeCenteredFiniteVolumeTransport<dim>::NodeCenteredFiniteVolumeTransport( const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeTransport<dim>::~NodeCenteredFiniteVolumeTransport()
 {
     delete baseAdvector_;
     delete grad_advprop_limiter_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& NodeCenteredFiniteVolumeTransport<dim>::GetSolverSettings()
 {
 
@@ -194,7 +194,7 @@ CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& NodeCenteredFiniteVolumeTransport<dim>::Get
     return baseAdvector_->GetSolverSettings();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 CSMP_DEFAULT_LINEAR_SOLVER* NodeCenteredFiniteVolumeTransport<dim>::GetSolver()
 {
 
@@ -206,7 +206,7 @@ CSMP_DEFAULT_LINEAR_SOLVER* NodeCenteredFiniteVolumeTransport<dim>::GetSolver()
     return baseAdvector_->GetSolver();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AdjustSolverSettings()
 {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -232,7 +232,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdjustSolverSettings()
 /** Uses the initializations of internal variables to detect whether the
 transport object is setup for second-order in time computations.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeCenteredFiniteVolumeTransport<dim>::SecondOrderInTime() const
 {
     // all thats needed for the second order in time scheme
@@ -245,7 +245,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::SecondOrderInTime() const
 
 /** If a node connectivity graph is present in the algorithm it is suited
 for second-order in space computations.  */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeCenteredFiniteVolumeTransport<dim>::SecondOrderInSpace() const
 {
     // all that is needed for the second order in time scheme
@@ -255,13 +255,13 @@ bool NodeCenteredFiniteVolumeTransport<dim>::SecondOrderInSpace() const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MaxNonlinear2ndOrderIterations(size_t max_nonlinear_iterations)
 {
     max_nonlinear_limiting_case_iterations_= max_nonlinear_iterations;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::TargetNonlinear2ndOrderResidual(double target_residual)
 {
     target_nonlinear_limiting_case_residual_ = target_residual;
@@ -285,7 +285,7 @@ As option, sector pore volumes of lower dimensional elements can be multiplied w
 the thickness attribute.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::InitializeFiniteVolumeData( bool multiply_pore_volumes_with_thickness )
 {
     STENCIL_DATA.resize( gref_.Elements() );
@@ -300,7 +300,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeFiniteVolumeData( bool mu
     
     // initializing FV stencil data
     const bool store_normals(true);
-    for ( size_t i=0U; i<gref_.Elements(); i++ ) {
+    for ( auto i{0}; i<gref_.Elements(); i++ ) {
         // resizing the data vectors
         STENCIL_DATA[i].Resize( gref_.E(i)->FV()->Sectors(),
                                 gref_.E(i)->FV()->Facets(), dim, store_normals );
@@ -350,14 +350,14 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeFiniteVolumeData( bool mu
 /** 
       As in InitializeFiniteVolumeData(), but all quantities are mapped from parametric to physical space.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::InitializeFiniteVolumeDataParametricToPhysical( bool store_normals )
 {
     STENCIL_DATA.resize( gref_.Elements() );
     vector<FV_Parameter>(STENCIL_DATA).swap(STENCIL_DATA);
 
     // initializing FV stencil data
-    for ( size_t i=0U; i<gref_.Elements(); i++ ) {
+    for ( auto i{0}; i<gref_.Elements(); i++ ) {
         // resizing the data vectors
         STENCIL_DATA[i].Resize( gref_.E(i)->FV()->Sectors(),
                                 gref_.E(i)->FV()->Facets(), dim, store_normals );
@@ -392,7 +392,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeFiniteVolumeDataParametri
      
      The results are stored in the FV stencil data array.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::InitializeSectorPoreVolumeData( bool multiply_pore_volumes_with_thickness )
 {
     assert( STENCIL_DATA.size() == gref_.Elements() );
@@ -406,7 +406,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeSectorPoreVolumeData( boo
     
     if (phi_key_.place == ELEMENT)
     {
-        for ( size_t i=0U; i<gref_.Elements(); i++ ) 
+        for ( auto i{0}; i<gref_.Elements(); i++ ) 
         {
             // computing the sector pore volumes
             poro = gref_.E(i)->Read( phi_key_ );
@@ -417,7 +417,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeSectorPoreVolumeData( boo
     }
     else if (phi_key_.place == SECTOR_INTEGRATION_POINT)
     {
-        for ( size_t i=0U; i<gref_.Elements(); i++ ) 
+        for ( auto i{0}; i<gref_.Elements(); i++ ) 
         {
             // computing the sector pore volumes
             if ( multiply_pore_volumes_with_thickness ) thi = gref_.E(i)->Read( thi_key_ );
@@ -430,7 +430,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::InitializeSectorPoreVolumeData( boo
     }
     else if (phi_key_.place == NODE)
     {
-        for ( size_t i=0U; i<gref_.Elements(); i++ ) 
+        for ( auto i{0}; i<gref_.Elements(); i++ ) 
         {
             // computing the sector pore volumes
             if ( multiply_pore_volumes_with_thickness ) thi = gref_.E(i)->Read( thi_key_ );
@@ -459,7 +459,7 @@ sectors. The stencils are initialized this way by the method
 InitializeFiniteVolumeData(), see above.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod()
 {
     FVPOREVOL.resize( gref_.Nodes() );
@@ -472,7 +472,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod
     // computing pore volume of each finite volume from its sector volumes (these were already multiplied with phi)
     for ( typename vector<Element<dim>*>::const_iterator
           eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-      for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+      for ( auto i{0}; i<(*eit)->Nodes(); i++ )
         FVPOREVOL[ (*eit)->N(i)->Idx() ] += STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i);
 
     var_ncomponents_=1;
@@ -505,7 +505,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForFirstOrderMethod
      Computes min/max of saturation at upstream nodes, and remembers transported variable values
      from current timestep.
  */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForSecondOrderMethod(
         bool second_order_in_space,
         bool second_order_in_time )
@@ -552,7 +552,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::InitializeArraysForSecondOrderMetho
 
 @return The approximate current allocation in bytes used.
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  NodeCenteredFiniteVolumeTransport<dim>::MeasureAllocatedMemory() const
 {
     size_t  allocated_memory(0);
@@ -584,7 +584,7 @@ size_t  NodeCenteredFiniteVolumeTransport<dim>::MeasureAllocatedMemory() const
 
 /** Checks the input variables for correct placement and type compatibility.
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
 {
     if ( (phi_key_.place != ELEMENT && phi_key_.place != SECTOR_INTEGRATION_POINT && phi_key_.place != NODE) 
@@ -637,13 +637,13 @@ Output Arguments&amp; Return Value
 The current saturations are returned into the vector<double> SAT0 and their
 minimum and maximum values are stored in the last two method arguments.
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::InitialAdvectedPropertyValues( const csmp::Index& adv_key )
 {
     MinMaxAdvectedProperty();
 
     // SAT0
-    for ( size_t i=0U; i<gref_.Nodes(); i++ )
+    for ( auto i{0}; i<gref_.Nodes(); i++ )
         // the saturation at the node is assigned to SAT0 vector
         SAT0[i] = gref_.N(i)->Read( adv_key );
 
@@ -677,14 +677,14 @@ SAT0 is initialized and the range of the transport property upstream is returned
 into the last two method arguments.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::InitialAdvectedPropertyValues( const csmp::Index& adv_key,
                                                                             double& smin,
                                                                             double& smax )
 {
     smin = smax = gref_.N(0)->Read( adv_key );
 
-    for ( size_t i=0U; i<gref_.Nodes(); i++ ) {
+    for ( auto i{0}; i<gref_.Nodes(); i++ ) {
         // the saturation at the node is assigned to SAT0 vector
         SAT0[i] = gref_.N(i)->Read( adv_key );
         smin = std::min( smin, SAT0[i] );
@@ -727,7 +727,7 @@ iteration loop.
 The determined min/max values are required as bounds for the spatial
 limiting in higher-order transport schemes.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MinMaxAdvectedProperty()
 {
     typename vector<pair<double,double> >::iterator  sit(SMINMAX.begin());
@@ -736,7 +736,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::MinMaxAdvectedProperty()
           nit=gref_.NodesBegin(); nit!=gref_.NodesEnd(); nit++, sit++ ) {
         // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( adv1_key_ );
-        for ( size_t i=0U; i<(*nit)->Neighbors(); i++ ) {
+        for ( auto i{0}; i<(*nit)->Neighbors(); i++ ) {
             const double adv_var((*nit)->Neighbor(i)->Read( adv1_key_ ));
             // if element value is smaller the current minimum is assigned etc.
             (*sit).first  = std::min( (*sit).first,  adv_var );
@@ -756,11 +756,11 @@ FACETFLUXES0 so that they can used in the next calculation to obtain
 second-order accuracy in time for the transport scheme.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::BackupFacetFluxes()
 {
     // all stencils including those for the halo elements
-    for ( size_t i=0U; i<gref_.Elements(); i++ )
+    for ( auto i{0}; i<gref_.Elements(); i++ )
         for ( size_t j=0U; j<FACETFLUXES0[i].size(); j++ )
             FACETFLUXES0[i][j] = STENCIL_DATA[i].FacetNormalVelocity(j) * STENCIL_DATA[i].FacetArea(j);
 
@@ -806,14 +806,14 @@ number for the current grid.
 but on the perimeter of the target region.
 
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBalances()
 {
     gref_.UpdateMemberIndexes();
 
     VectorVariable<dim>  velo;
-    size_t               inside_node, outside_node;
-    double             flux;
+    uint32_t             inside_node, outside_node;
+    double               flux;
 
     fill( FLUX_BALANCE.begin(), FLUX_BALANCE.end(), static_cast<double>(0.) );
 
@@ -826,7 +826,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBal
     while ( eit != gref_.ElementsEnd() )
     {
         (*eit)->Read( vel_key_, velo );
-        for ( size_t i=0U; i<(*stit).Facets(); i++ )
+        for ( auto i{0}; i<(*stit).Facets(); i++ )
         {
             (*eit)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
             // inside node
@@ -871,7 +871,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBal
             ep->Assign(this->fvmgrs_[tid].Stencil( ep->FE_Type()));
             //----------------------------------------------------
 
-            for ( size_t i=0U; i<STENCIL_DATA[e].Facets(); i++ )
+            for ( auto i{0}; i<STENCIL_DATA[e].Facets(); i++ )
             {
                 ep->FV()->FacetEdgeNodes( i, thread_inside_node, thread_outside_node );
                 // inside node
@@ -913,7 +913,7 @@ imbalances will occur where the finite volumes are truncated across
 model boundaries.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::FluxBalance( double& fmin, double& fmax ) const
 {
     typename vector<double>::const_iterator it=FLUX_BALANCE.begin();
@@ -958,7 +958,7 @@ finite element connected to FV for its velocity etc.
  *
  *
  *
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::CourantIncrement()
 {
     if ( dim != 1U )
@@ -1002,7 +1002,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::CourantIncrement()
         }
 
         // calculating the CFL criterion from the cell diameter of each sector (pore) volume
-        for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
             double cell_diameter = STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i);
             courant_increment = std::min( courant_increment, cell_diameter / velocity );
         }
@@ -1045,7 +1045,7 @@ facet areas. -- Julian M. 23-09-2013
 @return The method returns the smallest global timestep for which the transport
 distance in each element is less than or equal to its intersection.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
 {
     //if ( dim == 1U ) return CourantIncrement();
@@ -1071,7 +1071,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
         Element<dim> * eit = *it;
 #else
     vector<double> thread_courant_increments(omp_get_max_threads());
-    vector<size_t> thread_counters(omp_get_max_threads());
+    vector<uint32_t> thread_counters(omp_get_max_threads());
 #pragma omp parallel
     {
         VectorVariable<dim>         vc;
@@ -1154,7 +1154,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement()
         }
 #if defined(_OPENMP )
     } // close the parallel pragma.
-    for (size_t i = 0 ; i < thread_counters.size();i++)
+    for (auto i = 0 ; i < thread_counters.size();i++)
         counter+=thread_counters[i];
 
     courant_increment = *(std::min_element(thread_courant_increments.begin(),thread_courant_increments.end()));
@@ -1215,7 +1215,7 @@ Overload this method if you use a less restrictive transport scheme than IMPES i
  *
  *
  *
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::CourantIncrement( TwoPhaseModel<dim>& relperm )
 {
     if ( dim != 1U )
@@ -1264,7 +1264,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::CourantIncrement( TwoPhaseModel<d
 
         // 4. calculating the CFL criterion from the cell diameter for each sector (pore) volume
         // -------------------------------------------------------------------------------------
-        for ( size_t i=0U; i<(*eit)->Nodes(); i++ )     // porevolume is taken as proxy of sector length
+        for ( auto i{0}; i<(*eit)->Nodes(); i++ )     // porevolume is taken as proxy of sector length
             courant_increment = std::min( courant_increment, STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i) / velocity );
     }
 
@@ -1324,7 +1324,7 @@ input max_time_increment which may be the case if there is no flow at all
 in the domain. Equally, the user is informed if the CFL increment is
 less than a millisecond (usually a prohibitively small increment).
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
                                                                               double max_time_increment )
 {
@@ -1414,7 +1414,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::AnisotropicCourantIncrement( TwoP
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::CFL_Multiplier( double desired_value )
 {
     cfl_multiplier_ = desired_value;
@@ -1422,13 +1422,13 @@ void NodeCenteredFiniteVolumeTransport<dim>::CFL_Multiplier( double desired_valu
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::CFL_Multiplier() const
 {
     return cfl_multiplier_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::WithLsmGradientLimiter(Model<dim>& sg)
 {
     with_lsmgrad_limiter_=true;
@@ -1475,7 +1475,7 @@ Use this method only on finite volumes that are located on the boundary
 of the computational domain.
 
  */
-template<size_t dim>
+template<uint32_t dim>
 bool NodeCenteredFiniteVolumeTransport<dim>::FluxThroughBoundaryFiniteVolume(
         const Node<dim>* nd_ptr,
         double& inflow, double& flux_balance ) const
@@ -1491,7 +1491,7 @@ bool NodeCenteredFiniteVolumeTransport<dim>::FluxThroughBoundaryFiniteVolume(
         const size_t nid(nd_ptr->ParentNodeNumber(t));
         double  flux(0.);
         // for all facets surrounding the finite volume at the boundary
-        for ( size_t i=0U; i<nd_ptr->Parent(t)->FV()->FacetsPerSector(nid); i++ )
+        for ( auto i{0}; i<nd_ptr->Parent(t)->FV()->FacetsPerSector(nid); i++ )
         {
             size_t iFacet( nd_ptr->Parent(t)->FV()->FacetSurroundingSector(nid,i) );
             // fluxes are determined for the sectors inside and outside of the advection region
@@ -1567,7 +1567,7 @@ domain boundary.
 
 This method is used in implicit advection calculations.
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AssignFluxBoundaryConditions( NodeCenteredFiniteVolumeAlgorithm<dim>& advection_algorithm,
                                                                            bool use_t0_saturation ) const
 {
@@ -1620,7 +1620,7 @@ outflow boundaries.
 
 @section arguments Input Arguments
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::RecordFluxBalances( const char* balance_var,
                                                                  double& total_surplus,
                                                                  double& total_deficit ) const
@@ -1633,7 +1633,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::RecordFluxBalances( const char* bal
     string              b;
     total_surplus = total_deficit = zero;
 
-    for ( size_t n=0U; n<gref_.Nodes(); n++ ) {
+    for ( auto n=0U; n<gref_.Nodes(); n++ ) {
         if ( FLUX_BALANCE[n] < zero ) total_deficit += fabs(FLUX_BALANCE[n]);
         else                          total_surplus += FLUX_BALANCE[n];
 
@@ -1669,7 +1669,7 @@ works.
 @test SKM 29/5/14 refactored, and tested for box-boundary case.
       Roman, 14/10/14 corrected local facet number
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double& in_flow,
                                                                  double& out_flow,
                                                                  bool box_shaped,                           ///< special case (to be deprecated)
@@ -1714,17 +1714,17 @@ double NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double& in_flow,
                double finite_volume_influx(0.);
                if( use_advected_variable )
                    (*nit)->Read( advected_var_key, advected_var );
-               for ( size_t i=0; i<(*nit)->Parents(); ++i ) {
-                    size_t nd = (*nit)->ParentNodeNumber(i);
+               for ( auto i=0; i<(*nit)->Parents(); ++i ) {
+                    auto nd = (*nit)->ParentNodeNumber(i);
                     // the velocity is expected to already take potential thickness attributes into account
                     (*nit)->Parent(i)->Read( vel_key_, vc );
                     // loop over all facets j, integrating the velocity over their area
-                    for ( size_t j=0; j<(*nit)->Parent(i)->FV()->FacetsPerSector(nd); ++j ) {
+                    for ( auto j=0; j<(*nit)->Parent(i)->FV()->FacetsPerSector(nd); ++j ) {
                          const size_t facet((*nit)->Parent(i)->FV()->FacetSurroundingSector(nd,j));
                          double facet_flux = (*nit)->Parent(i)->ProjectionOnFacetNormal( facet, vc );
                          facet_flux *= (*nit)->Parent(i)->FacetArea(facet);
                          // distinguishing 2 cases:
-                         size_t inside_node = (*nit)->Parent(i)->FV()->InsideNode(facet);
+                         auto inside_node = (*nit)->Parent(i)->FV()->InsideNode(facet);
                          //   1. outward point normal (in this case a positive flux indicates outflow)
                          if ( inside_node == nd )
                              finite_volume_influx += facet_flux;
@@ -1758,11 +1758,11 @@ double NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double& in_flow,
            double finite_volume_influx(0.);
            if( use_advected_variable )
                (*nit)->Read( advected_var_key, advected_var );
-           for ( size_t i=0; i<(*nit)->Parents(); ++i ) {
-                size_t nd = (*nit)->ParentNodeNumber(i);
+           for ( auto i=0; i<(*nit)->Parents(); ++i ) {
+                auto nd = (*nit)->ParentNodeNumber(i);
                 (*nit)->Parent(i)->Read( vel_key_, vc );
                 // loop over all facets j, integrating the velocity over their area
-                for ( size_t j=0; j<(*nit)->Parent(i)->FV()->FacetsPerSector(nd); ++j ) {
+                for ( auto j=0; j<(*nit)->Parent(i)->FV()->FacetsPerSector(nd); ++j ) {
                      const size_t facet((*nit)->Parent(i)->FV()->FacetSurroundingSector(nd,j));
                      double facet_flux = (*nit)->Parent(i)->ProjectionOnFacetNormal( facet, vc );
                      facet_flux *= (*nit)->Parent(i)->FacetArea(facet);
@@ -1798,7 +1798,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::BoundaryFluxes( double& in_flow,
 
 /** Computes and returns inflow into model or subregion of it.
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::ModelInflow() const
 {
     double in_flow, out_flow;
@@ -1809,7 +1809,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::ModelInflow() const
 
 /** Computes and returns outflow into model or subregion of it.
  */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::ModelOutflow() const
 {
     double in_flow, out_flow;
@@ -1830,7 +1830,7 @@ FLUX_BALANCE for each finite volume.
 @todo (1) The SAMG solver should be created one time or the SAMG_Setting should be modified,
 otherwise it doesn't converge.
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable( double time_interval,
                                                                  double cfl_multiplication_factor,
                                                                  bool apply_flux_balance_correction,
@@ -1922,7 +1922,7 @@ FLUX_BALANCE for each finite volume.
 otherwise it doesn't converge.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double time_increment,
                                                                        bool apply_flux_balance_correction,
                                                                        bool update_pore_volumes)
@@ -1987,7 +1987,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double ti
 /** Stub for method which needs to be implemented in subclass.
  */
 // function stub for single-phase flow base class
-template<size_t dim>
+template<uint32_t dim>
 double  NodeCenteredFiniteVolumeTransport<dim>::TransportPhase( TwoPhaseModel<dim>& ff, double )
 {
     cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim;
@@ -2012,7 +2012,7 @@ fluid sources and sinks.
 
 Used by the method AdvectVariable().
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable1stOrder( NodeCenteredFiniteVolumeAlgorithm<dim>& advector,
                                                                      double time_increment,
                                                                      bool with_flux_balance_correction )
@@ -2070,7 +2070,7 @@ See Matthai et al. 2009, TIPM for description of 2nd-order in space
 algorithm implemented here.
 @todo (1) There're two flux balance corrections in item 2.3 and item 2.8. Should be only one correction. By the moment the item 2.8 is commented.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder(
         NodeCenteredFiniteVolumeAlgorithm<dim>& advector,
         double time_increment,
@@ -2247,7 +2247,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder(
         MinMaxAdvectedProperty();
 
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-        this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+        this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
 
         for ( typename vector<Element<dim>*>::const_iterator eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
         {
@@ -2315,7 +2315,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrder(
                 MinMaxAdvectedProperty();
 
                 this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-                this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+                this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
 
                 for ( typename vector<Element<dim>*>::const_iterator
                       eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ ){
@@ -2377,7 +2377,7 @@ See Matthai et al. 2009, TIPM for description of theta-limited
 algorithm implemented here.
 
 @todo (1) Does not create sharp profile yet and fails in the presence of sources and sinks */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrderInSpaceAndTime(
         NodeCenteredFiniteVolumeAlgorithm<dim>& advector,
         double time_increment,
@@ -2490,7 +2490,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable2ndOrderInSpaceAndTim
     }else{
 
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-        this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+        this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
 
         for ( size_t iteration=1; iteration<=iterations; iteration++ )
         {
@@ -2594,7 +2594,7 @@ Uses a map to store the temporary variable values.
 For instance, to use node variables to assign Neumann boundary
 conditions to a finite element model.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarNodePropertyByFiniteVolume( const char* property )
 {
     csmp::Index  prop_key = pref_.StorageKey(property);
@@ -2609,7 +2609,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarNodePropertyByFiniteV
 
     for ( typename vector<Element<dim>*>::const_iterator
           eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-        for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
             // read variable
             double prop_val = (*eit)->N(i)->Read( prop_key );
             // multiply with sector volume
@@ -2620,7 +2620,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarNodePropertyByFiniteV
     // write variable
     ScalarVariable  sc;
 
-    for ( size_t i=0U; i<node_data.size(); i++ ) {
+    for ( auto i{0}; i<node_data.size(); i++ ) {
         sc.Flag( ) = gref_.N(i)->Status( prop_key );
         sc        = node_data[i];
         gref_.N(i)->Store( prop_key, sc );
@@ -2651,7 +2651,7 @@ as specified in the property database.
 This method will not integrate element variables. The obvious choice
 for their volume integration is the finite element method.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( const char* property,
                                                                                              bool take_porosity_into_account ) const
 {
@@ -2672,7 +2672,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
         {
             assert( (*eit)->FV() != NULL );
             double phi = (*eit)->Read( phi_key );
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                 result += (*eit)->N(i)->Read( prop_key ) * phi * ( *(*eit) ).SectorVolume(i);
         }
     }
@@ -2680,7 +2680,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
         for ( typename vector<Element<dim>*>::const_iterator
               eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ ) {
             assert( (*eit)->FV() != NULL );
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                 result += (*eit)->N(i)->Read( prop_key ) * ( *(*eit) ).SectorVolume(i);
         }
     }
@@ -2714,7 +2714,7 @@ the model subregion.
 
 For monitoring of variables in model subregions.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolumeVariable( const char* group,
                                                                                              const Model<dim>& sg,
                                                                                              const char* property,
@@ -2740,7 +2740,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
         {
             assert( (*eit)->FV() != NULL );
             interim_result = 0.;
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                 interim_result += (*eit)->N(i)->Read( prop_key ) * ( *(*eit) ).SectorVolume(i);
             result += interim_result * (*eit)->Read( phi_key );
         }
@@ -2748,7 +2748,7 @@ double  NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteVolum
     else {
         for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
             assert( (*eit)->FV() != NULL );
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                 result += (*eit)->N(i)->Read( prop_key ) * ( *(*eit) ).SectorVolume(i);
         }
     }
@@ -2781,7 +2781,7 @@ variable over the current model.
 There has to be a good reason for the application of this more costly
 method as opposed to the direct integration of nodal variables.
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElementVariable(
         const char* property,
         bool take_porosity_into_account,const char* region ) const
@@ -2819,7 +2819,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElemen
 
         for ( typename vector<Element<dim>*>::const_iterator
               eit=rref.ElementsBegin(); eit!=rref.ElementsEnd(); eit++ )
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                 // interpolate property to finite volume sector integration points
                 interim_result  = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, prop_key );
                 interim_result *= ( *(*eit) ).SectorVolume(i) * (*eit)->Read( phi_key );
@@ -2829,7 +2829,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElemen
     else {
         for ( typename vector<Element<dim>*>::const_iterator
               eit=rref.ElementsBegin(); eit!=rref.ElementsEnd(); eit++ )
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                 // interpolate property to finite volume sector integration points
                 double interim_result  = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, prop_key );
                 interim_result *= ( *(*eit) ).SectorVolume(i);
@@ -2849,7 +2849,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElemen
 Also returns the total volume or porevolume of the model as calculated
 from the finite volume discretization.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  NodeCenteredFiniteVolumeTransport<dim>::FiniteVolume( const char* volume_property ) const
 {
     csmp::Index  prop_key = pref_.StorageKey(volume_property);
@@ -2863,10 +2863,10 @@ double  NodeCenteredFiniteVolumeTransport<dim>::FiniteVolume( const char* volume
 
     for ( typename vector<Element<dim>*>::const_iterator
           eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-        for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+        for ( auto i{0}; i<(*eit)->Nodes(); i++ )
             volumes[ (*eit)->N(i)->Idx() ] += ( *(*eit) ).SectorVolume(i);
 
-    typename vector<Node<dim>*>::iterator nit=gref_.NodesBegin();
+    auto nit=gref_.NodesBegin();
     for ( typename vector<double>::const_iterator it=volumes.begin(); it!=volumes.end(); it++, nit++ ) {
         (*nit)->Store( prop_key, makeScalar( (*nit)->Status( prop_key ), (*it)) );
         result += (*it);
@@ -2884,7 +2884,7 @@ Computes integrals for finite-element computations on the entire Region.
 The first parameter specifies the property to be integrated and the
 second one the property into which the result will be stored.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integrand_property,
                                                               const char* result_property ) const
 {
@@ -2905,13 +2905,13 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
     if ( iprop_key.place == NODE ) {
         for ( typename vector<Element<dim>*>::const_iterator
               eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                 nresult[ (*eit)->N(i)->Idx() ] += (*eit)->N(i)->Read( iprop_key ) * STENCIL_DATA[ (*eit)->Idx() ].SectorVolume(i);
     }
     else if ( iprop_key.place == ELEMENT ) {
         for ( typename vector<Element<dim>*>::const_iterator
               eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-            for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+            for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                 size_t nidx = (*eit)->N(i)->Idx();
                 // interpolate property to finite volume sector integration points
                 double res = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, iprop_key );
@@ -2925,21 +2925,21 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         return;
     }
 
-    for ( size_t i=0U; i<gref_.Nodes(); i++ )
+    for ( auto i{0}; i<gref_.Nodes(); i++ )
         gref_.N(i)->Store( rprop_key, ScalarVariable( gref_.N(i)->Status( rprop_key ), nresult[i]) );
 
 } // end VolumeIntegrate (Region, single property)
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integrand_property,
                                                               const char* integrand_multiplier,
                                                               const char* result_property ) const
 {
-    csmp::Index  iprop_key = pref_.StorageKey(integrand_property);
-    csmp::Index  mprop_key = pref_.StorageKey(integrand_multiplier);
-    csmp::Index  rprop_key = pref_.StorageKey(result_property);
+    const csmp::Index  iprop_key = pref_.StorageKey(integrand_property);
+    const csmp::Index  mprop_key = pref_.StorageKey(integrand_multiplier);
+    const csmp::Index  rprop_key = pref_.StorageKey(result_property);
 
     if ( iprop_key.type != SCALAR ) {
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
@@ -2956,7 +2956,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         if ( mprop_key.place == NODE ) {
             for ( typename vector<Element<dim>*>::const_iterator
                   eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-                for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+                for ( auto i{0}; i<(*eit)->Nodes(); i++ )
                     nresult[ (*eit)->N(i)->Idx() ] +=
                             (*eit)->N(i)->Read( iprop_key ) *
                             (*eit)->N(i)->Read( mprop_key ) *
@@ -2965,7 +2965,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         else if ( mprop_key.place == ELEMENT ) {
             for ( typename vector<Element<dim>*>::const_iterator
                   eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-                for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+                for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                     double int_mult = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, mprop_key );
                     nresult[ (*eit)->N(i)->Idx() ] +=
                             (*eit)->N(i)->Read( iprop_key ) * int_mult *
@@ -2979,7 +2979,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         if ( mprop_key.place == ELEMENT ) {
             for ( typename vector<Element<dim>*>::const_iterator
                   eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-                for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+                for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                     // interpolate element properties to finite volume sector integration points
                     double iprop = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, iprop_key );
                     double mprop = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, mprop_key );
@@ -2990,7 +2990,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         else if ( mprop_key.place == NODE ) {
             for ( typename vector<Element<dim>*>::const_iterator
                   eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ )
-                for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+                for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
                     // interpolate element properties to finite volume sector integration points
                     double iprop = ( *(*eit) ).PropertyValueAtSectorIntegrationPoint( i, 0U, iprop_key );
 
@@ -3008,7 +3008,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
         return;
     }
 
-    for ( size_t i=0U; i<gref_.Nodes(); i++ )
+    for ( auto i{0}; i<gref_.Nodes(); i++ )
         gref_.N(i)->Store( rprop_key, makeScalar( gref_.N(i)->Status( rprop_key ), nresult[i] ) );
 
 } // end VolumeIntegrate( entire model, with integral multiplier )
@@ -3021,12 +3021,12 @@ void NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrate( const char* integr
 Element vector<double> property is projected on and integrated over finite volume
 facets; the measured divergence is stored in the variable 'result_property'.
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::Divergence( const char* div_property,
                                                          const char* result_property ) const
 {
-    csmp::Index  dprop_key = pref_.StorageKey(div_property);
-    csmp::Index  rprop_key = pref_.StorageKey(result_property);
+    const csmp::Index  dprop_key = pref_.StorageKey(div_property);
+    const csmp::Index  rprop_key = pref_.StorageKey(result_property);
 
     if ( dprop_key.type != VECTOR  or  dprop_key.place != ELEMENT  ) {
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::VolumeIntegrate",
@@ -3038,14 +3038,14 @@ void NodeCenteredFiniteVolumeTransport<dim>::Divergence( const char* div_propert
     }
 
     // perform surface integration of projected velocities
-    vector<double>     nresult( gref_.Nodes(), 0. );
-    size_t               inside_node, outside_node;
+    vector<double>       nresult( gref_.Nodes(), 0. );
+    uint32_t             inside_node, outside_node;
     VectorVariable<dim>  velo;
 
     for ( typename vector<Element<dim>*>::const_iterator
           eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); eit++ ) {
         (*eit)->Read( dprop_key, velo );
-        for ( size_t i=0U; i<(*eit)->FV()->Facets(); i++ )
+        for ( auto i{0}; i<(*eit)->FV()->Facets(); i++ )
         {
             // projecting velocity onto facet normal i
             (*eit)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
@@ -3057,7 +3057,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::Divergence( const char* div_propert
         }
     }
 
-    for ( size_t i=0U; i<nresult.size(); i++ )
+    for ( auto i{0}; i<nresult.size(); i++ )
         gref_.N(i)->Store( rprop_key,
                            ScalarVariable( gref_.N(i)->Status( rprop_key ), nresult[i]) );
 
@@ -3090,15 +3090,15 @@ flux term, for instance 'hydraulic conductivity' in the case of Darcy's law.
 flux term it reads. If true, the term will be treated as integrated total for
 the boundary, else it will be assigned as a flux per unit area.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::TransformScalarBoundaryValuesIntoNeumannConditions(
         BOX_BOUNDARY boundary,
         const char* node_property,
         const char* propertionality_constant,
         bool distribute_total_amount )
 {
-    csmp::Index  prop_key = pref_.StorageKey(node_property);
-    csmp::Index  cond_key = pref_.StorageKey(propertionality_constant);
+    const csmp::Index  prop_key = pref_.StorageKey(node_property);
+    const csmp::Index  cond_key = pref_.StorageKey(propertionality_constant);
 
     // here a check whether the model is box-shaped needs to be performed
 
@@ -3113,24 +3113,24 @@ void NodeCenteredFiniteVolumeTransport<dim>::TransformScalarBoundaryValuesIntoNe
     // setting the normal up for the projection taking into account the model boundary
     vector<double>     bnormal(3U);
     Box                  box;  box.UnitNormalTo( boundary, 3U, bnormal );
-    VectorVariable<dim>  vc;   for ( size_t i=0U; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
+    VectorVariable<dim>  vc;   for ( auto i{0}; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
 
     ScalarVariable  sc( NEUMANN, 0.);
-    double        total_surface_area(0.), projection;
-    size_t          inside_node, outside_node;
+    double          total_surface_area(0.), projection;
+    uint32_t        inside_node, outside_node;
 
     // 1. if the specified quantity shall be distributed over the entire surface area of the boundary,
     //    this area must be computed first
     // -----------------------------------
     if ( distribute_total_amount and dim != 1U ) {
         // add the total volumes up
-        for ( size_t n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
+        for ( auto n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
             if ( gref_.N(n)->AtBoundary() == boundary )
                 // loop over the parent elements of the node
-                for ( size_t t=0U; t<gref_.N(n)->Parents(); t++ ) {
-                    size_t nid = gref_.N(n)->ParentNodeNumber(t);
+                for ( auto t=0U; t<gref_.N(n)->Parents(); t++ ) {
+                    auto nid = gref_.N(n)->ParentNodeNumber(t);
                     // integrate surface area of finite volume facets as projected onto unit normal to model boundary
-                    for ( size_t i=0U; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
+                    for ( auto i{0}; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
                     {
                         gref_.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                         // project only if necessary
@@ -3154,7 +3154,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::TransformScalarBoundaryValuesIntoNe
 
     // 2. assigment of finite-volume cross-sectional area dependent nodal property terms
     // ---------------------------------------------------------------------------------
-    for ( size_t n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
+    for ( auto n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
         if ( gref_.N(n)->AtBoundary() == boundary )
         {
             // reading the nodal source term counting it if it is flagged Neumann
@@ -3171,7 +3171,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::TransformScalarBoundaryValuesIntoNe
             if ( dim != 1U )
                 for ( size_t t=0U; t<gref_.N(n)->Parents(); t++ ) {
                     size_t nid = gref_.N(n)->ParentNodeNumber(t);
-                    for ( size_t i=0U; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
+                    for ( auto i{0}; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
                     {
                         gref_.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                         // project only if necessary
@@ -3218,14 +3218,14 @@ quantities can be accumulated directly (without integration) into the
 finite element equations. For this purpose, PDE operators like the
 PointSource_rhsop can be used.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::AssignScalarBoundaryValues(
         BOX_BOUNDARY boundary,
         const char* property,
         VARIABLE_FLAG bcond, double val,
         bool distribute_total_amount )
 {
-    csmp::Index  prop_key = pref_.StorageKey(property);
+    const csmp::Index  prop_key = pref_.StorageKey(property);
 
     if ( prop_key.type != SCALAR || prop_key.place != ELEMENT )
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::AssignScalarBoundaryValues",
@@ -3234,38 +3234,38 @@ void NodeCenteredFiniteVolumeTransport<dim>::AssignScalarBoundaryValues(
     // setting the normal up for the projection taking into account the model boundary
     vector<double>     bnormal(3U);
     Box                  box;      box.UnitNormalTo( boundary, 3U, bnormal );
-    VectorVariable<dim>  vc;       for ( size_t i=0U; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
+    VectorVariable<dim>  vc;       for ( auto i{0}; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
 
     ScalarVariable  sc( bcond, 0.);
-    double        total_surface_area(0.), projection;
-    size_t          inside_node, outside_node;
+    double          total_surface_area(0.), projection;
+    uint32_t        inside_node, outside_node;
 
     // 1. if the quantity shall be distributed over the surface area of the boundary,
     //    this area must be computed first
     // -----------------------------------
     if ( distribute_total_amount and dim != 1U ) {
         // add the total volumes up
-        for ( size_t n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
+        for ( auto n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
             if ( gref_.N(n)->AtBoundary() == boundary )
                 // loop over the parent elements of the node
-                for ( size_t t=0U; t<gref_.N(n)->Parents(); t++ ) {
-                    size_t nid = gref_.N(n)->ParentNodeNumber(t);
+                for ( auto t=0U; t<gref_.N(n)->Parents(); t++ ) {
+                    auto nid = gref_.N(n)->ParentNodeNumber(t);
                     // integrate surface area of finite volume facets as projected onto unit normal to model boundary
-                    for ( size_t i=0U; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
-                    {
-                        gref_.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
-                        // project only if necessary
-                        if ( nid == inside_node || nid == outside_node ) {
-                            projection = ( *gref_.N(n)->Parent(t) ).ProjectionOnFacetNormal( i, vc );
-                            // the area is added to the total surface area of the model boundary
-                            // only those facets that delimited sector of target node are considered
-                            if      ( nid == inside_node )
-                                total_surface_area += ( *gref_.N(n)->Parent(t) ).FacetArea( i ) * projection;
-                            else if ( nid == outside_node )
-                                total_surface_area -= ( *gref_.N(n)->Parent(t) ).FacetArea( i ) * projection;
-                        }
-                    }
-                }
+                    for ( auto i{0}; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
+                      {
+                          gref_.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
+                          // project only if necessary
+                          if ( nid == inside_node || nid == outside_node ) {
+                              projection = ( *gref_.N(n)->Parent(t) ).ProjectionOnFacetNormal( i, vc );
+                              // the area is added to the total surface area of the model boundary
+                              // only those facets that delimited sector of target node are considered
+                              if      ( nid == inside_node )
+                                  total_surface_area += ( *gref_.N(n)->Parent(t) ).FacetArea( i ) * projection;
+                              else if ( nid == outside_node )
+                                  total_surface_area -= ( *gref_.N(n)->Parent(t) ).FacetArea( i ) * projection;
+                          }
+                      }
+                  }
         cout <<"\nNodeCenteredFiniteVolumeTransport<"<< dim;
         cout <<">::AssignScalarBoundaryValues: Surface area of target boundary is: "<< total_surface_area;
     }
@@ -3273,14 +3273,14 @@ void NodeCenteredFiniteVolumeTransport<dim>::AssignScalarBoundaryValues(
 
     // 2. assigment of finite-volume cross-sectional area dependent nodal property terms
     // ---------------------------------------------------------------------------------
-    for ( size_t n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
+    for ( auto n=gref_.InteriorNodes(); n<gref_.Nodes(); n++ )
         if ( gref_.N(n)->AtBoundary() == boundary )
         {
             sc = (dim == 1U) ? 1. : 0.;
             if ( dim != 1U )
                 for ( size_t t=0U; t<gref_.N(n)->Parents(); t++ ) {
                     size_t nid = gref_.N(n)->ParentNodeNumber(t);
-                    for ( size_t i=0U; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
+                    for ( auto i{0}; i<gref_.N(n)->Parent(t)->FV()->Facets(); i++ )
                     {
                         gref_.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                         // project only if necessary
@@ -3309,7 +3309,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AssignScalarBoundaryValues(
 /** As above but reads values from the nodes before converting them into
 equivalent sources.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea(
         Model<dim>& model,BOX_BOUNDARY boundary, const char* property )
 {
@@ -3321,12 +3321,12 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFinit
                                "This method only handles scalar node properties / node-centered finite volume variables" );
 
     // setting the normal up for the projection taking into account the model boundary
-    vector<double>     bnormal(3U);
+    vector<double>       bnormal(3U);
     Box                  box;  box.UnitNormalTo( boundary, 3U, bnormal );
-    VectorVariable<dim>  vc;   for ( size_t i=0U; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
+    VectorVariable<dim>  vc;   for ( auto i{0}; i<bnormal.size(); i++ ) vc(i) = -bnormal[i];
     ScalarVariable       sc;
-    double             surface_area, projection;
-    size_t               inside_node, outside_node;
+    double               surface_area, projection;
+    uint32_t             inside_node, outside_node;
 
     // 1. assigment of finite-volume cross-sectional area dependent nodal property terms
     // ---------------------------------------------------------------------------------
@@ -3334,12 +3334,12 @@ void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFinit
     cout <<" Converting the original nodal values to ones weighted by the surface area. ";
     cout <<"Concerned variable '"<< property <<"'"<< endl;
 
-    for ( size_t n=0U; n<rref.Nodes(); n++ )
+    for ( auto n=0U; n<rref.Nodes(); n++ )
     {
         surface_area = 0.;
-        for ( size_t t=0U; t<rref.N(n)->Parents(); t++ ) {
-            size_t nid = rref.N(n)->ParentNodeNumber(t);
-            for ( size_t i=0U; i<rref.N(n)->Parent(t)->FV()->Facets(); i++ )
+        for ( auto t=0U; t<rref.N(n)->Parents(); t++ ) {
+            auto nid = rref.N(n)->ParentNodeNumber(t);
+            for ( auto i{0}; i<rref.N(n)->Parent(t)->FV()->Facets(); i++ )
             {
                 rref.N(n)->Parent(t)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                 // project only if necessary
@@ -3372,40 +3372,40 @@ Writes internal (state) variables of the NCFVT to the screen. Note that
 these may vary dependent on the choice of constructor which was used
 when the object was built.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::Out() const
 {
     cout <<"\nNodeCenteredFiniteVolumeTransport<"<<  dim <<">::Out: ";
     cout <<"Variable to advect '"<< advected_variable_ <<"'"<< endl;
 
     cout <<"\nFV_STENCIL_DATA - sectors, facets, facet-areas and normals for each finite element: "<< endl;
-    for ( size_t i=0U; i<STENCIL_DATA.size(); i++ ) {
+    for ( auto i{0}; i<STENCIL_DATA.size(); i++ ) {
         cout <<"\nStencil "<< i+1;
         STENCIL_DATA[i].Out();
     }
     cout << endl;
 
     cout <<"\nFVPOREVOL, FLUX_BALANCE pore volumes and flux balances for each finite volume: "<< endl;
-    for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
+    for ( auto i{0}; i<FVPOREVOL.size(); i++ )
         cout << i+1 <<": "<< FVPOREVOL[i] <<" "<< FLUX_BALANCE[i] << endl;
 
     if ( SecondOrderInSpace() ) {
         cout <<"\nThe transport algorithm was constructed for a higher order method; It also contains the following arrays."<< endl;
 
         cout <<"\nSMINMAX - min,max of transport variable in the neighborhood of finite volume:"<< endl;
-        for ( size_t i=0U; i<SMINMAX.size(); i++ )
+        for ( auto i{0}; i<SMINMAX.size(); i++ )
             cout << i+1 <<": "<< SMINMAX[i].first <<" "<< SMINMAX[i].second << endl;
         cout << endl;
     }
 
     if ( SecondOrderInTime() ) {
         cout <<"\nSAT0 - initial transport variable values for each finite volume: "<< endl;
-        for ( size_t i=0U; i<FVPOREVOL.size(); i++ )
+        for ( auto i{0}; i<FVPOREVOL.size(); i++ )
             cout << i+1 <<": "<< SAT0[i] <<" ";
         cout << endl;
 
         cout <<"\nFACETFLUXES0 - fluxes across finite volume facets in each finite element at time levels 0:"<< endl;
-        for ( size_t i=0U; i<FACETFLUXES0.size(); i++ ) {
+        for ( auto i{0}; i<FACETFLUXES0.size(); i++ ) {
             cout <<" element "<< i+1;
             for ( size_t j=0U; j<FACETFLUXES0[i].size(); j++ )
                 cout <<"\n\tfacet "<< j <<": "<< FACETFLUXES0[i][j] <<" ";
@@ -3414,7 +3414,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::Out() const
         cout << endl;
 
         cout <<"\nLTDSATS0 - limited facet values of transported variable at time levels 0:"<< endl;
-        for ( size_t i=0U; i<LTDSATS0.size(); i++ ) {
+        for ( auto i{0}; i<LTDSATS0.size(); i++ ) {
             cout <<" element "<< i+1;
             for ( size_t j=0U; j<LTDSATS0[i].size(); j++ )
                 cout <<"\n\tfacet "<< j <<": "<< LTDSATS0[i][j] <<" ";
@@ -3447,7 +3447,7 @@ Function needs the nodal variable fluid pressure to be defined.
 The method reports properties like FV cell and FV sector volumes,
 projected velocities and FV facet areas.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>& gref,
                               NodeCenteredFiniteVolumeTransport<dim>& ncvft, long data_precision )
 {
@@ -3456,9 +3456,9 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
     //                           in- and outflow for each FV
     vector<pair<double,double> >  THROUGHPUT( gref.Nodes(), make_pair(0.,0.) );
     VectorVariable<dim>               velo;
-    double                          evolume, flux, area, sum, val;
-    const double                    zero(0.);
-    size_t                            inside_node, outside_node;
+    double                            evolume, flux, area, sum, val;
+    const double                      zero(0.);
+    uint32_t                          inside_node, outside_node;
     vector<ScalarVariable >           node_prop;
     csmp::Index                       prop_key = p.StorageKey("fluid pressure");
 
@@ -3477,14 +3477,14 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
         cout <<"\nElement: "<< (*eit)->Idx() <<", vol: "<< (evolume=(*eit)->Volume()) <<", type: ";
         cout << parseFiniteElementType( (*eit)->FE_Type() );
         cout <<"\nXYZ of nodes: "<< endl <<"\t";
-        for ( size_t i=0U; i<(*eit)->Nodes(); i++ )
+        for ( auto i{0}; i<(*eit)->Nodes(); i++ )
             cout <<"("<< i+1 <<") "<< (*eit)->N(i)->Coordinate() <<" ";
         cout << endl;
 
         // 2. testing the surface areas and velocity projections
         // -----------------------------------------------------
         cout <<"\nFacet fluxes, areas and inside/outside nodes: "<< endl <<"\t";
-        for ( size_t i=0U; i<(*eit)->FV()->Facets(); i++ )
+        for ( auto i{0}; i<(*eit)->FV()->Facets(); i++ )
         {
             // identifying the finite volumes to which the flux will be distributed
             (*eit)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
@@ -3514,7 +3514,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
         // 3. testing the interpolation to facet integration points
         // --------------------------------------------------------
         cout <<"\nProperty values interpolated to facet integration points:  "<< endl <<"\t";
-        for ( size_t i=0; i<(*eit)->FV()->Facets(); i++ ) {
+        for ( auto i=0; i<(*eit)->FV()->Facets(); i++ ) {
             // testing sum of interpolation functions at integration point
             ( *(*eit) ).N_At( (*eit)->FV()->FacetIntegrationPoint( i, 0U ), IPOL );
             if ( fabs(accumulate( IPOL.begin(), IPOL.end(), 0. ) - 1.0) > 1.0e-15 )
@@ -3523,7 +3523,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
             // trying property interpolation
             (*eit)->NodePropertyVector( prop_key, node_prop );
             sum = zero;
-            for ( size_t j=0; j<(*eit)->Nodes(); j++ ) sum += IPOL[j] * node_prop[j]();
+            for ( auto j=0; j<(*eit)->Nodes(); j++ ) sum += IPOL[j] * node_prop[j]();
             cout <<"("<< i+1 <<") "<< sum <<" ";
 
         }
@@ -3533,7 +3533,7 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
         // -----------------------------------------
         cout <<"\nSector volumes: "<< endl <<"\t";
         sum = zero;
-        for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i=0; i<(*eit)->Nodes(); i++ ) {
             cout <<"("<< i+1 <<") "<< (val=( *(*eit) ).SectorVolume(i)) <<" ";
             sum += val;
         }
@@ -3546,8 +3546,8 @@ bool testFiniteVolumeStencil( const PropertyDatabase<dim>& p, const Region<dim>&
 
     // 2. calculating the normalized flux balance for each finite volume cell
     // -------------------------------------------------------------------------------------
-    double  overall_flux_balance(zero), flux_balance;
-    uint32_t     cells_counted(0);
+    double   overall_flux_balance(zero), flux_balance;
+    size_t   cells_counted(0);
 
     cout <<"\ntestFiniteVolumeStencil(NodeCenteredFiniteVolumeTransport): Testing flux-balance in FV cells away from model boundary; ";
     cout <<" cell idx and corresponding balance normalized by FV cell volume: "<< endl;

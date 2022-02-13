@@ -95,7 +95,7 @@ void SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion( const Mod
  
      @author SKM
 */
-template<size_t dim>
+template<uint32_t dim>
 bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, const std::string& data_file )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -552,7 +552,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 */
 bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& input_txt_file,
                                                                const string& target_region,
-                                                               std::set<size_t>& no_data_elmt_numbers )
+                                                               std::set<uint32_t>& no_data_elmt_numbers )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string datafile = input_txt_file + "-element_barycentres_properties.txt";
@@ -614,7 +614,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
           }
         if ( no_data_count == (items_per_line - first_prop) )
           // for any NO_DATA element record insert element number into the element number set
-          no_data_elmt_numbers.insert( static_cast<size_t>(elmt_num) );
+          no_data_elmt_numbers.insert( static_cast<uint32_t>(elmt_num) );
 
         // reading next line
         bc_ifs.getline( text_line, LMAX );
@@ -649,11 +649,11 @@ After removing the elements, the unique regions, boundaries, and split boundarie
 @date 22/5/2021
 
 */
-void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<size_t>& no_data_elmt_numbers )
+void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<uint32_t>& no_data_elmt_numbers )
 {
   csmp::Region<3U>& region = model.Region( target_region );
   
-  vector<size_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
+  vector<uint32_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
   vector<csmp::Element<3U>*>  ptrs_to_removed_elements;
   size_t n_removed_elmts    = region.RemoveByNumber( element_ids, ptrs_to_removed_elements );
   

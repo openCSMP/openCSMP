@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 MohrCoulombFailure<dim>::MohrCoulombFailure( const PropertyDatabase<dim>& p,
                                              double friction_angle ) 
       : Interrelation<dim>(p),
@@ -25,7 +25,7 @@ MohrCoulombFailure<dim>::MohrCoulombFailure( const PropertyDatabase<dim>& p,
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 MohrCoulombFailure<dim>::~MohrCoulombFailure() {}
 
 
@@ -34,7 +34,7 @@ MohrCoulombFailure<dim>::~MohrCoulombFailure() {}
 Yielding can occur when F >= 0, the material is described only in terms of 
 its friction angle and cohesion.
 */
-template<size_t dim>
+template<uint32_t dim>
 void MohrCoulombFailure<dim>::Calculate()
  {
     STRESS.AssignTo( ts );
@@ -63,7 +63,7 @@ void MohrCoulombFailure<dim>::Calculate()
 
 
 /// calculate lode angle, Smith & Griffiths, p. 233, computed in radians
-template<size_t dim>
+template<uint32_t dim>
 double MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double t )
  {
     double sx, sy, sz, J3;
@@ -92,7 +92,7 @@ double MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double t )
 
 
 /// Zienkiewitz II, p. 89
-template<size_t dim>
+template<uint32_t dim>
 double  MohrCoulombFailure<dim>::G_OfTheta( double theta ) 
  {
     double K(std::sin(phi));
@@ -107,7 +107,7 @@ double  MohrCoulombFailure<dim>::G_OfTheta( double theta )
 
 
 /// Smith & Griffiths, p. 233
-template<size_t dim>
+template<uint32_t dim>
 double  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts ) 
  {
     // Smith & Griffiths, p. 233
@@ -119,7 +119,7 @@ double  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts )
 
 
 /// Zienkiewitz II, p. 61 bottom, p. 62 top, sigma-dash = deviatoric stress
-template<size_t dim>
+template<uint32_t dim>
 double  MohrCoulombFailure<dim>::DeviatoricStress( const TensorVariable<dim>& ts, double& t ) 
  {
     // Smith & Griffiths, p. 233

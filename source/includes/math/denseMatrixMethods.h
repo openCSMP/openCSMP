@@ -14,9 +14,9 @@
 namespace csmp {
 
 /// turns the original matrix into upper diagonal form
-template<size_t dim> void LU_Decomposition( DenseMatrix<dim>& );
+template<uint32_t dim> void LU_Decomposition( DenseMatrix<dim>& );
 
-template<size_t dim> void LU_BackSubstitution( const DenseMatrix<dim>&, std::vector<double>& solution );
+template<uint32_t dim> void LU_BackSubstitution( const DenseMatrix<dim>&, std::vector<double>& solution );
 
 } // end csmp
 

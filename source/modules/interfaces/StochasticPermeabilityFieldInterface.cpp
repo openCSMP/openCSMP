@@ -13,13 +13,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StochasticPermeabilityFieldInterface<dim>::StochasticPermeabilityFieldInterface( Model<dim>& sg ) 
 : nodal_perm( sg, "nodal permeability", SCALAR, NODE ),
   log_perm( sg, "log nodal permeability", SCALAR, NODE )
 {}
 
-template<size_t dim>
+template<uint32_t dim>
 StochasticPermeabilityFieldInterface<dim>::~StochasticPermeabilityFieldInterface() {}
 
 
@@ -49,7 +49,7 @@ values to the Model.
 
  
 @test tested: O.K. */
-template<size_t dim>
+template<uint32_t dim>
 bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid( Model<dim>& sg, const char* fname ) 
  {
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid: Mapping 2D Permeability Field to Nodes" << endl;
@@ -60,11 +60,8 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         return false;
       }             
     
-    typename std::map<mjl::Point, size_t>           coor_map;
-    typename std::map<mjl::Point, size_t>           node_map;
-    typename std::map<mjl::Point, size_t>::iterator mit;
-    typename std::vector<Node<dim>*>::iterator      it;
-    typename std::vector<Element<dim>*>::iterator   eit;
+    typename std::map<mjl::Point, size_t>  coor_map, node_map;
+
     mjl::Point  xy;
     double      xval, yval, perm;
     char        file[200];
@@ -79,9 +76,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     Region<dim>&  super_group(sg.Region("Model"));
     
     // loop over all elements and check if all ahve the same volume. if yes, it is most likely that grid is regular
-    eit = super_group.ElementsBegin();
+    auto eit = super_group.ElementsBegin();
     vol = (*eit)->Volume();
-    for ( eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
+    for ( auto eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
         if ( (*eit)->Volume() != vol ) {
             throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
                      "Element volume varies, mesh appears to be not regular, exiting function, nothing is done" );
@@ -91,7 +88,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
     
     // store xy-coordinates and node ID in a map to find node id using xy-coordinates from input file
-    for ( it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
+    for ( auto it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
         xy(0) = (*it)->x();
         xy(1) = (*it)->y();
         node_map.insert( make_pair( xy, (*it)->Idx() ) );
@@ -123,7 +120,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         ifs >> xval >> yval >> perm;
         xy(0) = xval;
         xy(1) = yval;
-        mit = node_map.find( xy );
+        auto mit = node_map.find( xy );
         if ( xy != (*mit).first ) {
             cout << "\nCoordinates x: " << xval << ", y: " << yval << endl;
             throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
@@ -142,10 +139,10 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }  
     
     // now check that each node as a permeability assigned to it, if this is not the case, assign NAN to each node for nk, logk  
-    for ( it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
+    for ( auto it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
         xy(0) = (*it)->x();
         xy(1) = (*it)->y();
-        mit = coor_map.find( xy );
+        auto mit = coor_map.find( xy );
         if ( xy != (*mit).first ) {
             cout << "\nCoordinates x: " << xy(0) << ", y: " << xy(1) << endl;
             throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
@@ -187,7 +184,7 @@ field is retained.
 
  
 @test tested: O.K. */
-template<size_t dim>
+template<uint32_t dim>
 bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityField( Model<dim>& sg, const char* fname ) 
  {
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityField: Mapping 2D Permeability Field to Nodes" << endl;
@@ -305,7 +302,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     csmp::Index perm_key(sg.Database().StorageKey("permeability"));  
     double mink(1.0e+20), maxk(0.0);
     size_t nan_count(0);
-    for ( eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) { 
+    for ( auto eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
         (*eit)->Read( perm_key, perm );
         if ( !isnan(perm()) ) {
             if ( perm() > maxk ) maxk = perm();
@@ -328,7 +325,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // if k is nan, average the k's of the neighbor elements. If no neighbor elements are given or k's are all nan
     // as well, assign random k
     double k_avg, counter;
-    for ( eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
+    for ( auto eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
         (*eit)->Read( perm_key, perm );
         if ( isnan( perm() ) ) {
             k_avg = counter = 0.;
@@ -351,7 +348,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     super_group.ExtrapolateElementToNodeProperty( "permeability", "nodal permeability" );
 
     // store log k values for visualzation
-    for ( it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
+    for ( auto it = super_group.NodesBegin(); it !=  super_group.NodesEnd(); it++ ) {
         (*it)->Read( nodal_perm.Key(), nk );
         log_k = std::log10( nk() );
         (*it)->Store( log_perm.Key(), log_k );
@@ -365,7 +362,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
  
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void StochasticPermeabilityFieldInterface<dim>::Tokenize( const std::string& str, std::vector<std::string>& tkns ) 
  {
    std::string buf;

@@ -1,4 +1,4 @@
-﻿#include "PolygonGrid.h"
+#include "PolygonGrid.h"
 
 #include "ErrorHandler.h"
 
@@ -85,7 +85,7 @@ void GridNode::AssignPoint( const csmp::Point<3U>& pt )
 std::ostream&  operator<<( std::ostream& stream, const GridNode& gn )
  {
      stream <<" idx: "<< gn.GetIdx() <<", xyz: ";
-     for ( size_t i=0U; i<3U; i++ ) std::cout << gn[i] <<" ";
+     for ( auto i{0}; i<3U; i++ ) std::cout << gn[i] <<" ";
      return stream;
  }
  
@@ -349,15 +349,15 @@ PolygonGrid::~PolygonGrid()
 {
     /// delete nodes
     const size_t num_nodes( nodes_.size() );
-    for(size_t i =0; i<num_nodes; ++i)
+    for(auto i =0; i<num_nodes; ++i)
         delete nodes_[i];
     /// delete faces
     const size_t num_faces( faces_.size() );
-    for(size_t i =0; i<num_faces; ++i)
+    for(auto i =0; i<num_faces; ++i)
         delete faces_[i];
     /// delete elements
     const size_t num_elements( elements_.size() );
-    for(size_t i =0; i<num_elements; ++i)
+    for(auto i =0; i<num_elements; ++i)
         delete elements_[i];
 }
 
@@ -505,7 +505,7 @@ GridNode* PolygonGridManager::AddNode( const csmp::Point<3U>& pt )
 
 /* SKM REPLACED
 
-template<size_t dim>
+template<uint32_t dim>
 GridNode* PolygonGridManager::AddNode( const csmp::Point<dim>& pt )
 {
     const size_t nid( points_.size() );

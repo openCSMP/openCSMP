@@ -6,15 +6,15 @@ using namespace std;
 namespace csmp {
 
 /** default constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorRHS<dim>::CVFEM_MathOperatorRHS() {}
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorRHS<dim>::~CVFEM_MathOperatorRHS() {}
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorRHS<dim>::CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& pref, 
                                                               const char* test )
   : MathOperatorRHS<dim>(pref,test)
@@ -23,7 +23,7 @@ CVFEM_MathOperatorRHS<dim>::CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& 
  }
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorRHS<dim>::CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& pref, 
                                                               const char* oper,
                                                               const char* test )
@@ -32,7 +32,7 @@ CVFEM_MathOperatorRHS<dim>::CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& 
  }
 
 /** virtual function for CVFEM_Visitor */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key )
  {
 
@@ -42,7 +42,7 @@ void CVFEM_MathOperatorRHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index 
 }
 
 /** access function for CVFEM_Visitor to the vector entries*/
-template<size_t dim>
+template<uint32_t dim>
 std::vector<double> CVFEM_MathOperatorRHS<dim>::GetContribution( )
  {
    return MathOperatorRHS<dim>::RHS;

@@ -12,17 +12,17 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> {
   public:
     CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
-                                  UpwindControlVisitor<dim>& upwind_visitor,
-                                  ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
-                           		  const char* oper,
-                           		  const char* basic,
-                           		  const char* test,
-                           		  const char* upwind,
-                           		  const char* grav_trigger);
+                                            UpwindControlVisitor<dim>& upwind_visitor,
+                                            ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
+                                          const char* oper,
+                                          const char* basic,
+                                          const char* test,
+                                          const char* upwind,
+                                          const char* grav_trigger);
 
     ~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV();
     
@@ -42,7 +42,7 @@ class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> 
 
     double area, normal_component;
     double contribution, operand;
-    size_t inside_node_, outside_node_;
+    uint32_t inside_node_, outside_node_;
     
     std::vector<ScalarVariable> el_uvar;
     std::vector<ScalarVariable> upwind_var_multiplier;

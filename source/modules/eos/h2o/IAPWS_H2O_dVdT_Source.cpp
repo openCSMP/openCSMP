@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2O_dVdT_Source<dim>::IAPWS_H2O_dVdT_Source( const PropertyDatabase<dim>& pref,
                                                    double dt, double eL_rock ) 
       : Interrelation<dim>(pref),
@@ -25,11 +25,11 @@ IAPWS_H2O_dVdT_Source<dim>::IAPWS_H2O_dVdT_Source( const PropertyDatabase<dim>& 
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2O_dVdT_Source<dim>::SetTimeIncrement( double dt ) { delta_t = dt; }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2O_dVdT_Source<dim>::Calculate()
  {
     T.AssignTo( temperature );

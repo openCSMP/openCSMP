@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class QuartzPrecipitation : public Interrelation<dim> {
     Operand<dim>&        F;   /// < fluid velocity
     Operand<dim>&        DS;  /// < quartz solubility gradient

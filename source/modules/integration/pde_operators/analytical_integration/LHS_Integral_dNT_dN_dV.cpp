@@ -7,8 +7,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::LHS_Integral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+LHS_Integral_dNT_dN_dV<dim,CELL>::LHS_Integral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
                                                              const char*          basic,
                                                              const char*          test )
   : MathOperatorLHS<dim>(pref,basic,test),
@@ -35,8 +35,8 @@ LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::LHS_Integral_dNT_dN_dV( const PropertyDatab
 /**
    Computes the product of the interpolation function derivatives.
 */
-template<size_t dim,class SIMPLEX>
-void LHS_Integral_dNT_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void LHS_Integral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );

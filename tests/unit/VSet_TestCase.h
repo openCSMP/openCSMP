@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
        Tests the use of VSet in model construction 

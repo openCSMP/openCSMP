@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref,
                                                                          const char* diffusion_oper,   // element prop, for instance thermal conductivity
                                                                          const char* advection_oper,   // element prop, for instance heat transport velocity
@@ -60,7 +60,7 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
 The diffusion (op) and advection (adv) coefficients are read from the storage in the model. 
 
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -72,25 +72,25 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
       {
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               double sc = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
-              for ( size_t i=0; i<dim; i++ ) 
+              for ( auto i=0; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = sc;
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-              for ( size_t i=0; i<dim; i++ ) 
+              for ( auto i=0; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-              for ( size_t i=0; i<dim; i++ ) 
-                for ( size_t j=0; j<dim; j++ ) 
+              for ( auto i=0; i<dim; i++ ) 
+                for ( auto j=0; j<dim; j++ ) 
                   MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
            }
       }
     else { // or an integration point variable
-         for ( size_t i=0U; i<e.IntegrationPoints(); i++ )
+         for ( auto i{0}; i<e.IntegrationPoints(); i++ )
            MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
                                                              i, MathOperatorLHS<dim>::MTRL[i] );
       }
@@ -113,7 +113,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
@@ -126,7 +126,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( size_t i=0U; i<e.IntegrationPoints(); i++ )
+    for ( auto i{0}; i<e.IntegrationPoints(); i++ )
       {
         // 1. Compute "diffusion" matrix DNT_K_DN_DV
         // -----------------------------------------

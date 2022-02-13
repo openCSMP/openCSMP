@@ -26,10 +26,10 @@ known at compile time.
 */
 bool Index::operator<( const csmp::Index& i ) const
  {
-    const size_t lhs( (type+1) * (place+1) * (index+1U) * dataDepth * flagDepth  
+    const uint32_t lhs( (type+1) * (place+1) * (index+1U) * dataDepth * flagDepth
                       * (offsetFactorSimplex+1) * (offsetFactorSector+1) *(flagOffset+1) );
    
-    const size_t rhs( (i.type+1) * (i.place+1) * (i.index+1U) * i.dataDepth * i.flagDepth 
+    const uint32_t rhs( (i.type+1) * (i.place+1) * (i.index+1U) * i.dataDepth * i.flagDepth
                       * (i.offsetFactorSimplex+1) * (i.offsetFactorSector+1) * (i.flagOffset+1));
    
     return (lhs < rhs);
@@ -132,7 +132,7 @@ Inline implementation.
 @param idx the index
 
 */
-Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, size_t idx ) 
+Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, uint32_t idx )
   : type(ty), place(pl),
     index(idx), dataDepth(0), flagDepth(0), dataOffset(0), 
     flagOffset(0), offsetFactorSimplex(0), offsetFactorSector(0), 
@@ -156,11 +156,11 @@ Inline implementation.
 @param lvs LocalVariables of placement pl
 @param ivs IntegrationPointVariables of elements
 */
-Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, size_t idx, 
-                      size_t datadepth, size_t flagdepth, size_t dataoffset, size_t flagoffset,
-                      const LocalVariables& lvs, const IntegrationPointVariables& ivs, 
-                      size_t offsetfactorsimplex, size_t offsetfactorsector, size_t ipfactorsimplex, 
-                      size_t ipfactorsector, size_t ipfactorfacet ) 
+Index::Index( VARIABLE_TYPE ty, PLACEMENT pl, uint32_t idx,
+              uint32_t datadepth, uint32_t flagdepth, uint32_t dataoffset, uint32_t flagoffset,
+              const LocalVariables& lvs, const IntegrationPointVariables& ivs, 
+              uint32_t offsetfactorsimplex, uint32_t offsetfactorsector, uint32_t ipfactorsimplex,
+              uint32_t ipfactorsector, uint32_t ipfactorfacet )
   : type(ty), place(pl),
     index(idx), dataDepth(datadepth), flagDepth(flagdepth), dataOffset(dataoffset), 
     flagOffset(flagoffset), offsetFactorSimplex(offsetfactorsimplex), offsetFactorSector(offsetfactorsector), 
@@ -403,8 +403,8 @@ void Index::Out() const
 
 bool Index::Out( std::fstream& fp ) const
 {
-  const size_t flag_size = sizeof( int32_t );
-  const size_t data_size = sizeof( size_t );
+  const uint32_t flag_size = sizeof( int32_t );
+  const uint32_t data_size = sizeof( uint32_t );
   const int32_t var_type( type );
   const int32_t place_type( place );
 
@@ -463,8 +463,8 @@ bool Index::Out( std::fstream& fp ) const
 
 bool Index::In( fstream& fp )
 {
-  const size_t flag_size = sizeof( int32_t );
-  const size_t data_size = sizeof( size_t );
+  const uint32_t flag_size = sizeof( int32_t );
+  const uint32_t data_size = sizeof( uint32_t );
   int32_t var_type ( SCALAR );
   int32_t place_type( NODE );
 

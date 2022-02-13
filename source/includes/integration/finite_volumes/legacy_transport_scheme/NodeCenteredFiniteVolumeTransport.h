@@ -14,15 +14,15 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t>  class Node;
-template<size_t>  class Model;
-template<size_t>  class TwoPhaseModel;
-template<size_t>  class Region;
-template<size_t>  class NodeCenteredFiniteVolumeAlgorithm;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t>  class Node;
+template<uint32_t>  class Model;
+template<uint32_t>  class TwoPhaseModel;
+template<uint32_t>  class Region;
+template<uint32_t>  class NodeCenteredFiniteVolumeAlgorithm;
 
 /// base class for node-centered generic finite volume calculations on an entire Model object
-template<size_t dim>
+template<uint32_t dim>
 class NodeCenteredFiniteVolumeTransport {
   public:
     /// single-phase solute advection-ONLY constructor, 1st-order method
@@ -242,7 +242,7 @@ protected:
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline double NodeCenteredFiniteVolumeTransport<dim>::PoreVolume( size_t fv_cell ) const
  {
     assert( fv_cell < FVPOREVOL.size() );
@@ -251,7 +251,7 @@ inline double NodeCenteredFiniteVolumeTransport<dim>::PoreVolume( size_t fv_cell
 
 
 // verify underlying generic FV scheme
-template<size_t dim>
+template<uint32_t dim>
 bool testFiniteVolumeStencil( const PropertyDatabase<dim>&, const Region<dim>&,
                               NodeCenteredFiniteVolumeTransport<dim>&, long data_precision=3 );
 

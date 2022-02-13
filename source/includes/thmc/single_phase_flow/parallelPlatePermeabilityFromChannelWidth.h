@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
 
@@ -18,7 +18,7 @@ The calculated permeability is    k = a^2/12
 where a is the channel width.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg, 
                                                 const char* channel_region,
                                                 const char* channel_width="channel width",

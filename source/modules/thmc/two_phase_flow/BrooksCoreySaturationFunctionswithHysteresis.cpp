@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFunctionsWithHysteresis( PropertyDatabase<dim>& pref )
 
   : key_SwImbToDr_(pref.StorageKey("previous imbibition endpoint")),
@@ -33,7 +33,7 @@ BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::BrooksCoreySaturationFun
   
   
 /// get seff at the element barycentre
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
 
@@ -58,7 +58,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturati
   
   
 /// get seff from the supplied saturation value
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double sw ) const
   {
     double seff =  (sw - e->Read(User()->key_srH2O)) /
@@ -82,7 +82,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::EffectiveSaturati
   Oil residual saturation has been estimated from Land's formula based on the initial oil saturations.
   
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSaturation( Element<dim>* const e) const
   {
 
@@ -106,7 +106,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::OilResidualSatura
     Check whether the process is imbibition or drainage. check the change of saturation before and after at barycenter.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 typename BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::TWO_PHASE_FLOW_PROCESS
 BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Element<dim>* const e ) const
   {
@@ -137,7 +137,7 @@ BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Eleme
    This function set the parameters for the Imbibitions of Drainage curves
    
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::SetBrooksCoreyCurvesParameters( const Element<dim>* const e, std::array<double, 2>& a,std::array<double, 2>& c ) const {
   
   
@@ -179,7 +179,7 @@ BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::FlowProcess( const Eleme
    This function update the pseudo residual and end point saturations
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdatePseudoResidualAndEndpointSaturations( Element<dim>* e ) const
 { 
       const double dsCO2_old = e->Read(User()->key_dsCO2);
@@ -287,7 +287,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::UpdatePseudoResidua
   If it is out of bound will be replaced with the Drainage (Or Imbibition) capillary pressure.
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim>* const e ) const
   {
     
@@ -348,7 +348,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim>*
   
   
   // Capilary pressure at the specific saturations
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc_at( Element<dim>* const e, double s ) const
   {
     
@@ -413,7 +413,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::pc( Element<dim>*
   Here we also check the capillary function bound, and then if it ois out of bound the derivative.
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<dim>* const e ) const
   {
   
@@ -460,7 +460,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds( Element<di
   
   
 // The first derivative of Capilary pressure at the specific saturations
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Element<dim>* const e, double sH2O ) const
   {
     assert( sH2O >= 0. );
@@ -515,7 +515,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dpcds_at( Element
    are constant. We need to estimate the residual water saturation.
   
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSaturation( Element<dim>* const e, double Sro) const
   {
     
@@ -577,7 +577,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSatu
   the water and oil residual saturations.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double& Swr_, double& Sor_) const
   {
     const size_t    Nr(3);   // number of iteration of solving Non-linear system of equations to get the psedo-resduals.
@@ -656,7 +656,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidual
  
 */
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<dim>* const e ) const
   {
     
@@ -722,7 +722,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw( Element<dim>
    Second form of the water relative permeability.. the same as previous function for any saturation..
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element<dim>* const e, double S) const
   {
     
@@ -787,7 +787,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krw_at( Element<d
    the Corey-Burdine realative permeablity equations... for further information see the page 65 in Skjaeveland et al. 2000.
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<dim>* const e ) const
   {
     
@@ -848,7 +848,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn( Element<dim>
    Second form of the oil relative permeability.. the same as previous function for any saturation..
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element<dim>* const e, double S) const
   {
     
@@ -912,7 +912,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krn_at( Element<d
  calculating the 1st derivative of water relative permeability
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
     std::array<double, 2> a ;
@@ -972,7 +972,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds( Element<d
    calculating the 1st derivative of water relative permeability for any water saturation
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Element<dim>* const e, double S) const
   {
     
@@ -1034,7 +1034,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at( Elemen
   calculating the 1st derivative of oil relative permeability
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element<dim>* const e ) const
   {
     
@@ -1095,7 +1095,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds( Element<d
    calculating the 1st derivative of oil relative permeability for any water saturations
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Element<dim>* const e, double S ) const
   {
     
@@ -1157,7 +1157,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Elemen
  Check The Limits of Capillary presure and reset the residuals
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e , double& newSrH2O, double& newSrCO2, std::array<double, 2>& a,std::array<double, 2>& c) const {
   
     const double srH2O(e->Read(User()->key_srH2O));  // To have primary Drianage and Imibition parameters
@@ -1208,7 +1208,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndRes
    calculate the upper and lowwer limits of Capillary presure
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
   std::pair<double,double> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CapillaryPressureLimits( Element<dim>* const e ) const
   {
     std::pair<double,double> pc_PrimaryImbibitionDrainage;
@@ -1258,7 +1258,7 @@ template<size_t dim, template<size_t> class USER>
    calculate the upper and lowwer limits of relative permeability of water
    
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   std::pair<double,double> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krwLimits_at( Element<dim>* const e, double const S ) const
   {
     std::pair<double,double> krw_PrimaryImbibitionDrainage;
@@ -1307,7 +1307,7 @@ template<size_t dim, template<size_t> class USER>
    calculate the upper and lowwer limits of relative permeability of non-wet phase
    
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   std::pair<double,double> BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::krnLimits_at( Element<dim>* const e, double const S ) const
   {
     std::pair<double,double> krn_PrimaryImbibitionDrainage;
@@ -1356,7 +1356,7 @@ template<size_t dim, template<size_t> class USER>
   Numerical derivative of relative water permeability
   
   */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
@@ -1385,7 +1385,7 @@ template<size_t dim, template<size_t> class USER>
   Numerical derivative of relative water permeability at specific saturation
    
   */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double sw, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
@@ -1415,7 +1415,7 @@ template<size_t dim, template<size_t> class USER>
    Numerical derivative of relative co2 permeability
    
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
@@ -1444,7 +1444,7 @@ template<size_t dim, template<size_t> class USER>
    Numerical derivative of relative co2 permeability at specific saturation
    
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double sw, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));

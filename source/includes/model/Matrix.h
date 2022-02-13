@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
 
 /** 
     @brief Experimental implementation of class for a dense matrix
@@ -103,8 +103,8 @@ class Matrix {
     void Out( long digits=5L ) const;
 
     /// LU decomposition and back-substitution
-    void LUDecomposition(std::vector<size_t>& index, double& d);
-    void LUBackSubstitution(std::vector<size_t>& index, std::vector<double>& b);
+    void LUDecomposition(std::vector<uint32_t>& index, double& d);
+    void LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double>& b);
   
   private:
    size_t                               rows, cols;

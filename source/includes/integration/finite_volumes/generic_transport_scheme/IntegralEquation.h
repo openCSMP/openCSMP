@@ -23,7 +23,7 @@ enum ADE_TERM : std::int8_t { ADVECTION,
                 SORPTION,
                 DECAY };
                 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 
 /**
 
@@ -44,7 +44,7 @@ Attributes
 + enum OPERATION {};
 
 */
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 class IntegralEquation : public VARIABLE_SET {
   public:
     /// advection with sources and sinks

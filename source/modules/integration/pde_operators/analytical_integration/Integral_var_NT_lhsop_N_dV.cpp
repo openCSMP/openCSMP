@@ -9,8 +9,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_var_NT_lhsop_N_dV<dim,CELL>::Integral_var_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
                                                                 const char* oper,
                                                                 const char* basic, 
                                                                 const char* test,
@@ -44,8 +44,8 @@ Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::Integral_var_NT_lhsop_N_dV( const Prope
 
 /** Reads the Operand values from the elements.
 */
-template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_var_NT_lhsop_N_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -59,8 +59,8 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
 /** Computes the volume (area) integral over the testfunction products
 multiplied with the Operand.  
 */
-template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_var_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
   if ( !MathOperatorLHS<dim>::LumpedFormulation() ) { // consistent formulation
     if (e.FE_Type() != LINEAR_TRIANGLE)
@@ -75,7 +75,7 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX
     DenseMatrix< DM_MIN> mat;
     e.IntegralNN(mat);
     
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
       for (size_t k = 0; k < e.Nodes(); ++k) {
         MathOperatorLHS<dim>::LHS(i, i) += mat(i, k) * vvar_[k]();
       }
@@ -90,8 +90,8 @@ void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX
 
 
 
-template<size_t dim,class SIMPLEX>
-void Integral_var_NT_lhsop_N_dV<dim,SIMPLEX>::ComputeIntegral( const SIMPLEX& e ) {
+template<uint32_t dim,class CELL>
+void Integral_var_NT_lhsop_N_dV<dim,CELL>::ComputeIntegral( const CELL& e ) {
   assert(e.Nodes() == 3);
   assert(vvar_.size() == 3);
 

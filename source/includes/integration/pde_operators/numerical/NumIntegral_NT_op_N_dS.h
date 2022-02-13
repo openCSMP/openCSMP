@@ -18,7 +18,7 @@ namespace csmp {
 @attention to be used to assign boundary integrals to higher-dimensional domains
 
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 class NumIntegral_NT_op_N_dS : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& p, 

@@ -7,10 +7,10 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Region;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
 
 
 
@@ -24,7 +24,7 @@ template<size_t> class Region;
     this. Node tracking relied on indices which
     is no longer a give.
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 class CopyReplaceVisitor : public Visitor<dim> {
   public:
     CopyReplaceVisitor( const PropertyDatabase<dim>&, 

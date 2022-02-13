@@ -7,8 +7,8 @@
 
 namespace csmp {
 
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
 // TODO: gradient calculation: compare different implementations (ExtrapolateElementPropertyToNode...)
 // TODO: make the transported variable a template as well: Scalar, Array, FlaggedArray...
@@ -36,7 +36,7 @@ template<size_t> class Model;
     TODO: add choice of transport scheme: 1st versus 2nd order in space
     TODO: Generalise scheme so that it can handle Face and InterFace objects
 */
-template<size_t dim>
+template<uint32_t dim>
 class ExplicitTransport : public variables::VariableSet_TracerTransfer,
                           public FluxEvaluator<dim,ExplicitTransport>,
                           public TimeStepEvaluator<dim,ExplicitTransport> {

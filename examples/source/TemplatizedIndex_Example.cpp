@@ -135,7 +135,7 @@ void  TemplatizedIndex_Example::Run()
 //    process( scalar );
  //   process( vector );
             
-    set<size_t>  test_set;
+    set<uint32_t>  test_set;
     
     test_set.insert( 1U );
     test_set.insert( 2U );
@@ -146,7 +146,7 @@ void  TemplatizedIndex_Example::Run()
     for ( size_t i=20U; i>0; i-- )
       test_set.insert( i );
     
-    for ( set<size_t>::const_reverse_iterator
+    for ( set<uint32_t>::const_reverse_iterator
           it=test_set.rbegin(); it!=test_set.rend(); it++ )
       cout << *it <<" ";
 

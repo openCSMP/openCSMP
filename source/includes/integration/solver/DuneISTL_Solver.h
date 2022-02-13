@@ -208,7 +208,7 @@ class DuneISTL_Solver : public Solver
         // create sparsity pattern
         typedef Dune::BCRSMatrix<MB>::CreateIterator Iter;
         for(Iter row=B.createbegin(); row!=B.createend(); ++row ){
-            const size_t i = row.index();
+            const auto i = row.index();
             // add nonzeros elements
             for(csmp::SparseMatrix::colsConstIterator cit = A.RowBegin( i ); cit != A.RowEnd( i ); ++cit ){
                 const size_t j = (*cit).first;
@@ -887,7 +887,7 @@ struct ISTLAMGStatistics
   bool directCoarseLevelSolver;
 };
 
-template<size_t dim, class M, class V,
+template<uint32_t dim, class M, class V,
          template<class,class,class,int> class Preconditioner,
          template<class> class Solver,
          bool skipBlocksizeCheck = false>
@@ -1036,7 +1036,7 @@ private:
  * @tparam GO The type of the grid operator
  * (or the fakeGOTraits class for the old grid operator space).
  */
-template<size_t dim, class M, class V>
+template<uint32_t dim, class M, class V>
 class DuneISTL_SEQ_LS_AMG_SSOR
   : public DuneISTL_SEQ_AMG<dim,M,V, Dune::SeqSSOR, Dune::LoopSolver>
 {
@@ -1065,7 +1065,7 @@ public:
  * @tparam GO The type of the grid operator
  * (or the fakeGOTraits class for the old grid operator space).
  */
-template<size_t dim, class M, class V>
+template<uint32_t dim, class M, class V>
 class DuneISTL_SEQ_LS_AMG_SOR
   : public DuneISTL_SEQ_AMG<dim,M,V, Dune::SeqSOR, Dune::LoopSolver>
 {
@@ -1102,7 +1102,7 @@ public:
  * @tparam GO The type of the grid operator
  * (or the fakeGOTraits class for the old grid operator space).
  */
-template<size_t dim, class M, class V>
+template<uint32_t dim, class M, class V>
 class DuneISTL_SEQ_CG_AMG_SSOR
   : public DuneISTL_SEQ_AMG<dim,M,V, Dune::SeqSSOR, Dune::CGSolver>
 {
@@ -1137,7 +1137,7 @@ public:
  * @tparam GO The type of the grid operator
  * (or the fakeGOTraits class for the old grid operator space).
  */
-template<size_t dim, class M, class V>
+template<uint32_t dim, class M, class V>
 class DuneISTL_SEQ_BCGS_AMG_SSOR
   : public DuneISTL_SEQ_AMG<dim,M,V, Dune::SeqSSOR, Dune::BiCGSTABSolver>
 {
@@ -1166,7 +1166,7 @@ public:
  * @tparam GO The type of the grid operator
  * (or the fakeGOTraits class for the old grid operator space).
  */
-template<size_t dim, class M, class V>
+template<uint32_t dim, class M, class V>
 class DuneISTL_SEQ_BCGS_AMG_SOR
   : public DuneISTL_SEQ_AMG<dim,M,V, Dune::SeqSOR, Dune::BiCGSTABSolver>
 {

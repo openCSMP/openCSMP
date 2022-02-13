@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_NT_rhsop_N_dV : public MathOperatorRHS<dim> {
   public:
     Integral_NT_rhsop_N_dV( const PropertyDatabase<dim>& p,
@@ -14,8 +14,8 @@ class Integral_NT_rhsop_N_dV : public MathOperatorRHS<dim> {
                             const char* basic,
                             const char* test );
     
-    virtual void GetOperands( const SIMPLEX& );
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
+    virtual void ComputeContribution( const CELL& );
   
   private:
     DenseMatrix<DM_MIN>           INN;

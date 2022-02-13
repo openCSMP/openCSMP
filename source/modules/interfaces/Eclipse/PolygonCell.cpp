@@ -173,7 +173,7 @@ size_t PolygonCell
 {
     if( !extra_nodes_.empty() )
         return extra_nodes_[0]->GetIdx();
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
 }
 
 
@@ -589,7 +589,7 @@ void PolygonCell::Out() const
     std::cout <<"\nPolygonCell::Out:\n";
     std::cout <<"\tnodes: "<< num_nodes_ <<", extra nodes: "<< extra_nodes_.size();
     std::cout <<", custom node order:\n\t";
-    for ( size_t i=0U; i<custom_node_order_.size(); i++ ) std::cout << custom_node_order_[i] <<" ";
+    for ( auto i{0}; i<custom_node_order_.size(); i++ ) std::cout << custom_node_order_[i] <<" ";
 
     std::cout <<"\n\tnodes:\n";
     for ( typename std::vector<GridNode*>::const_iterator it=nodes_.begin(); it!=nodes_.end(); ++it )
@@ -615,7 +615,7 @@ void PolygonCell::Out() const
 
     /// faces
     std::cout <<"\n\tfaces ("<< num_faces_ << ") and their nodes:\n";
-    for ( size_t i=0U; i<face_nodes_.size(); i++ ) {
+    for ( auto i{0}; i<face_nodes_.size(); i++ ) {
          std::cout <<"\tface "<< i+1 <<": ";
          for ( size_t j=0U; j<face_nodes_[i].size(); j++ )
            std::cout << face_nodes_[i][j] <<" ";
@@ -623,7 +623,7 @@ void PolygonCell::Out() const
       }
 
     std::cout <<"\n\tfaces ("<< num_faces_ << ") and their nodes in custom order:\n";
-    for ( size_t i=0U; i<face_nodes_in_custom_order_.size(); i++ ) {
+    for ( auto i{0}; i<face_nodes_in_custom_order_.size(); i++ ) {
          std::cout <<"\tface "<< i+1 <<": ";
          for ( size_t j=0U; j<face_nodes_in_custom_order_[i].size(); j++ )
            std::cout << face_nodes_in_custom_order_[i][j] <<" ";
@@ -631,7 +631,7 @@ void PolygonCell::Out() const
       }
 
     std::cout <<"\n\tface order :\n";
-    for ( size_t i=0U; i<custom_face_order_.size(); i++ )
+    for ( auto i{0}; i<custom_face_order_.size(); i++ )
       std::cout << custom_face_order_[i] <<" ";
     std::cout <<"\n";
 

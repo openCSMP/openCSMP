@@ -47,7 +47,7 @@ namespace csmp {
     @todo: change FlowRateDependentLayerSaturations that it deals with horizontal and vertical flow and all funky cases
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
   public:
     enum FLOW_DIRECTION { HORIZONTAL, VERTICAL } flow_direction_;

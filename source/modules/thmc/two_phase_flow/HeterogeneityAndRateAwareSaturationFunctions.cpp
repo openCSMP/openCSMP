@@ -13,20 +13,20 @@ namespace csmp {
 /**
    The default constructor of Brooks Corey Saturation Functions class
 */
-template<size_t dim, template<size_t> class USER> 
+template<uint32_t dim, template<uint32_t> class USER> 
 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::HeterogeneityAndRateAwareSaturationFunctions()
 {
 }
 
 
-template<size_t dim, template<size_t> class USER> 
+template<uint32_t dim, template<uint32_t> class USER> 
 HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::~HeterogeneityAndRateAwareSaturationFunctions()
  {
  }
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitilizeRockProperties( Element<dim>* const e ) const
 {
     if(e->Status( User()->key_srH2O ) != DIRICH)
@@ -49,7 +49,7 @@ void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitilizeRockProper
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -83,7 +83,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element<d
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -117,7 +117,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element<d
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -152,7 +152,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -186,7 +186,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<dim
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -220,7 +220,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<di
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -254,7 +254,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Element
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -289,7 +289,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -317,7 +317,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Element<
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -352,7 +352,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<di
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -396,7 +396,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Element
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -424,7 +424,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Element
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -459,7 +459,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -483,7 +483,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element<d
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -508,7 +508,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -529,7 +529,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDra
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -555,7 +555,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDra
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -576,7 +576,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDraina
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -602,7 +602,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDraina
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -623,7 +623,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDra
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -649,7 +649,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDra
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -670,7 +670,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDraina
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage( Element<dim>* const e, double Sw, double vt_magnitude) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -696,7 +696,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDraina
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -723,7 +723,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Element
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -750,7 +750,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Elemen
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -777,7 +777,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Element<
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -805,7 +805,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Element
 
 
 /// get seff at the element barycentre
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
 {
     double Sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -816,7 +816,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturati
 
 
 /// get seff from the supplied saturation value
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
@@ -828,7 +828,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::EffectiveSaturati
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 int32_t HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::RockType( Element<dim>* const e ) const
 {
      const double rock_type = e->Read(User()->key_RRT);
@@ -838,7 +838,7 @@ int32_t HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::RockType( Elemen
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 bool HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -858,7 +858,7 @@ bool HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite( Elemen
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e);
@@ -874,7 +874,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp( Element<dim>
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp_low( Element<dim>* const e ) const
 {    
     // VG m parameter
@@ -887,7 +887,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Bcp_low( Element<
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 VectorVariable<dim> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitializeVelocity( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -922,7 +922,7 @@ VectorVariable<dim> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Init
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e); 
@@ -935,7 +935,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc( Element<dim>*
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double Sw ) const
 {
     const int  rock_type = RockType(e); 
@@ -947,7 +947,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at( Element<di
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_BrookCorey( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
@@ -983,7 +983,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_BrookCorey( El
   
  
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCorey( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
@@ -1022,7 +1022,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_BrookCorey(
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_VanGenuchten( Element<dim>* const e ) const
 { 
 
@@ -1056,7 +1056,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_VanGenuchten( 
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_VanGenuchten( Element<dim>* const e, double Sw ) const
 {
 
@@ -1088,7 +1088,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::pc_at_VanGenuchte
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
 {
     const int  rock_type = RockType(e); 
@@ -1111,7 +1111,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds( Element<di
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double sw ) const
 {
     const int  rock_type = RockType(e); 
@@ -1133,7 +1133,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at( Element
 
   
    
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_BC( Element<dim>* const e ) const
 {
     double h(0.001);
@@ -1142,7 +1142,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_BC( Element
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_BC( Element<dim>* const e, double sw ) const
 {
     double h(0.001);
@@ -1151,7 +1151,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_BC( Elem
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_VG( Element<dim>* const e ) const
 {
     double h(0.001);
@@ -1167,7 +1167,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_VG( Element
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_VG( Element<dim>* const e, double sw ) const
 {
     double h(0.001);
@@ -1182,7 +1182,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_VG( Elem
 
  
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Element<dim>* const e, size_t direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1210,7 +1210,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Ele
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1235,7 +1235,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( El
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1261,7 +1261,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( 
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at( Element<dim>* const e, double Sw  ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1285,7 +1285,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at(
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpendicularToLaminations( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
@@ -1303,7 +1303,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityPerpe
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParallelToLaminations( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
@@ -1319,7 +1319,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityParal
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlowDirection( Element<dim>* const e,
                                                                                               const TensorVariable<dim>& KK) const
 {
@@ -1344,7 +1344,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::PermeabilityInFlo
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_flow_direction( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1375,7 +1375,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_fl
 
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
@@ -1405,7 +1405,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw( Element<dim>
   
    
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double Sw ) const
 {
     bool is_composite = IsComposite(e);
@@ -1435,7 +1435,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_at( Element<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Element<dim>* const e, size_t direction ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1463,7 +1463,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Ele
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( Element<dim>* const e ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1488,7 +1488,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( El
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( Element<dim>* const e, double Sw, size_t direction ) const 
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1514,7 +1514,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( 
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at( Element<dim>* const e, double Sw ) const
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1538,7 +1538,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at(
 
 
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
 {
     bool is_composite = IsComposite(e);
@@ -1566,7 +1566,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn( Element<dim>
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double Sw ) const
 {
     assert( Sw >= 0. );
@@ -1602,7 +1602,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_at( Element<d
  calculating the 1st derivative of water relative permeability
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
 {
     double h(0.001);
@@ -1616,7 +1616,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds( Element<d
    calculating the 1st derivative of water relative permeability for any water saturation
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double sw ) const
 {
     double h(0.001);
@@ -1630,7 +1630,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at( Elemen
   calculating the 1st derivative of oil relative permeability
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
 {
     double h(0.001);
@@ -1643,7 +1643,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds( Element<d
    calculating the 1st derivative of oil relative permeability for any water saturations
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double sw ) const
 {
     double h(0.001);
@@ -1654,7 +1654,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at( Elemen
 
 // Numerical derivative
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double h ) const
 {
     double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -1685,7 +1685,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_Numerical(
 }
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
@@ -1714,7 +1714,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrwds_at_Numeric
 }
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double h ) const
 {
     double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -1745,7 +1745,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_Numerical(
 }
  
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
@@ -1775,7 +1775,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dkrnds_at_Numeric
  
   
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_BC( Element<dim>* const e, double h ) const
 {
     double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -1807,7 +1807,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_B
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_BC( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
@@ -1838,7 +1838,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerica
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_VG( Element<dim>* const e, double h ) const
 {
     double sw = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -1872,7 +1872,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_Numerical_V
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerical_VG( Element<dim>* const e, double sw, double h ) const
 {
     assert( sw >= 0. );
@@ -1909,7 +1909,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::dpcds_at_Numerica
 /**
     writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0.005 saturation increments
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::WriteRelativePermeabilityTable (const char* filename, long RT, Element<dim>* const e)
 {
 
@@ -1937,7 +1937,7 @@ void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::WriteRelativePermea
  
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::OutputTestingResults(Element<dim>* const e)
 {
 

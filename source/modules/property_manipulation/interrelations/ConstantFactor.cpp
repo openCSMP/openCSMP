@@ -14,7 +14,7 @@ namespace csmp {
 Constructor which is there for convenience, since most of the time to 
 variables are being combined.
 */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 ConstantFactor<dim,operation >::ConstantFactor( const PropertyDatabase<dim>& p, 
                                                 const char* resultProperty,
                                                 const char* argumentProperty,
@@ -46,7 +46,7 @@ ConstantFactor<dim,operation >::ConstantFactor( const PropertyDatabase<dim>& p,
  
  /** Changes the factor.
  */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 void ConstantFactor<dim,operation>::ChangeFactor(double factor) {
   factor_ = factor;
 }
@@ -55,7 +55,7 @@ void ConstantFactor<dim,operation>::ChangeFactor(double factor) {
 
 /** Combines the arguments and stores result into resultProperty
  */
-template<size_t dim, template <typename> class operation>
+template<uint32_t dim, template <typename> class operation>
 void ConstantFactor<dim,operation>::Calculate()
  {
     if ( !res_prop_equal_to_arg_prop_ ) {

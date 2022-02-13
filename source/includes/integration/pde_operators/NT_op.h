@@ -18,14 +18,14 @@ namespace csmp {
 @date 1999 
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NT_op : public MathOperatorRHS<dim> {
 
   public:
 
     NT_op( const PropertyDatabase<dim>& p, const char* oper, const char* test );
-    virtual void GetOperands( const SIMPLEX& e );
-    virtual void ComputeContribution( const SIMPLEX& e );
+    virtual void GetOperands( const CELL& e );
+    virtual void ComputeContribution( const CELL& e );
 
   private:
 

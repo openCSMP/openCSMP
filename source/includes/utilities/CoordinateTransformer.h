@@ -15,7 +15,7 @@
 namespace csmp {
 
 /// utility to convert between coordinate systems and flip axes
-template<size_t dim>
+template<uint32_t dim>
 class CoordinateTransformer {
   public:
     /// no translation, scaling nor inversion of coordinate axis

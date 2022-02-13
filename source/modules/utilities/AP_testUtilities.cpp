@@ -98,7 +98,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   ofs << "\n;*****FACES ";
-  vector<size_t> fnids;
+  vector<uint32_t> fnids;
   for ( size_t iFace = 0U; iFace < e.Faces(); iFace++ )
   {
    e.FE()->NodesOfFace( iFace, fnids );
@@ -147,7 +147,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   ofs << "\n;*****FACES ";
-  vector<size_t> fnids;
+  vector<uint32_t> fnids;
   for ( size_t iFace = 0U; iFace < e.Faces(); iFace++ )
   {
    e.FE()->NodesOfFace( iFace, fnids );
@@ -228,7 +228,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
  //only prints volumetric finite volumes
  void printFiniteVolumes( const Model<3U>& sg )
  {    
-   size_t inside_node, outside_node;
+   uint32_t inside_node, outside_node;
     
    typedef std::vector< Point<3U> > FacetPoints;
    typedef std::pair<FacetPoints, Point<3U> > Facet;
@@ -236,7 +236,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    vector< string > nodes (sg.Region("Model").Nodes());
    
-   for ( size_t i = 0; i < nodes.size(); i++ )
+   for ( auto i = 0; i < nodes.size(); i++ )
    {
     stringstream s;
     createLayer( s, "FV", i );
@@ -246,7 +246,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    const Region<3U>&  sgref(sg.Region("Model"));
    
    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ ) 
-     for ( size_t iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
+     for ( auto iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
   	  if((*eit)->FE()->IsVolumeElement()) // there are four facet points
         {    	    
     	    (*eit)->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
@@ -272,7 +272,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
  
   ofstream ofs("finite_volumes.txt", ios::out|ios::trunc);
   
-	for ( size_t i = 0; i < nodes.size(); i++ )
+	for ( auto i = 0; i < nodes.size(); i++ )
 	  ofs << nodes[i] << "\n";
   
   ofs.close();

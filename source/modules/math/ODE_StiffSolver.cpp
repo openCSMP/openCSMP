@@ -2014,7 +2014,7 @@ void ODE_StiffSolver::ResetIndependentProductTerms( vector<pair<int32_t,string> 
           if ( (tit=(*sit).second.find( (*it).first )) != (*sit).second.end() )
             // correct index is abs(idx-1) since all independent var indices 
             // are negative (-1...-n). The exponent stays untouched
-            (*tit).second.first = vals[ static_cast<size_t>(abs((*it).first)-1) ];
+            (*tit).second.first = vals[ static_cast<uint32_t>(abs((*it).first)-1) ];
 
     // 2. for all independent variables in algebraic equations
     // -------------------------------------------------------
@@ -2034,7 +2034,7 @@ void ODE_StiffSolver::ResetIndependentProductTerms( vector<pair<int32_t,string> 
           if ( (ot=(*soit).find( (*it).first )) != (*soit).end() )
             // correct index is abs(idx-1) since all independent var indices 
             // are negative (-1...-n). The exponent stays untouched
-            (*ot).second = vals[ static_cast<size_t>(abs((*it).first)-1) ];
+            (*ot).second = vals[ static_cast<uint32_t>(abs((*it).first)-1) ];
 
  } // end
 

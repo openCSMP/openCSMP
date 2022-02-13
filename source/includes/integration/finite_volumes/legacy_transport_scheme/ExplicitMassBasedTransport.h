@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 class ExplicitMassBasedTransport : public ExplicitNodeCenteredFiniteVolumeTransport<dim, STP> {
   public:
     
@@ -39,7 +39,7 @@ class ExplicitMassBasedTransport : public ExplicitNodeCenteredFiniteVolumeTransp
     virtual void ComposeSolution( double time_interval,const size_t var_comp_nr=0);
 
   protected:
-    const csmp::Index                   ad_rhs_key_;       ///< transported variable
+    const csmp::Index  ad_rhs_key_;       ///< transported variable
 
 };
 }

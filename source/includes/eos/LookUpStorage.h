@@ -37,7 +37,7 @@ class LookUpStorage {
 template<typename fT>
 inline fT&  LookUpStorage<fT>::operator()( int32_t row, int32_t col ) 
   {
-      return grid[ static_cast<size_t>(row*rowlength + col) ];
+      return grid[ static_cast<uint32_t>(row*rowlength + col) ];
   }
 template<typename fT>
 inline int32_t   LookUpStorage<fT>::Rows() const { return size_y-1; }

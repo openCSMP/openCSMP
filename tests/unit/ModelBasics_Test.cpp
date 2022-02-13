@@ -88,7 +88,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      _test( approximatelyEqual( pmax, 1.0e-12 ) );
      
      // testing fundamental assumption made working with default initialisations of 'size_t'
-     size_t default_uint = std::numeric_limits<size_t>::max();
+     size_t default_uint = std::numeric_limits<uint32_t>::max();
      _test( default_uint != UINT_MAX ); // should be false because UINT_MAX is not for size_t
      _test( hasDefaultValueForUnassignedInteger( default_uint ) );
      

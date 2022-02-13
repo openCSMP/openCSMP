@@ -9,8 +9,8 @@ namespace csmp {
 
 
 
-template<size_t dim,class SIMPLEX>
-NT_op<dim,SIMPLEX>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
+template<uint32_t dim,class CELL>
+NT_op<dim,CELL>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test)
  {
     MathOperatorRHS<dim>::Name("NT_op", oper, test );
@@ -30,8 +30,8 @@ NT_op<dim,SIMPLEX>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, 
 /** Reads scalar node data for further processing
 by the ComputeContribution() method.  
 */
-template<size_t dim,class SIMPLEX>
-void NT_op<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void NT_op<dim,CELL>::GetOperands( const CELL& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), M_ );
    }
@@ -59,13 +59,13 @@ To compute nodal forces acting on the boundary of a model.
 @todo (1) Not tested yet, maybe, the loads must be on the midside nodes 
 
 */
-template<size_t dim,class SIMPLEX>
-void NT_op<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void NT_op<dim,CELL>::ComputeContribution( const CELL& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
   
-   for ( size_t i=0U; i<e.Nodes(); i++ )
+   for ( auto i{0}; i<e.Nodes(); i++ )
      if ( M_[i].Flag() == NEUMANN )
        // contributions must be divided by number of elements which share the node
        // to avoid multiple accumulation

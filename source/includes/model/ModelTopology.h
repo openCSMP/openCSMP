@@ -7,25 +7,32 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 /** 
-     Model topology  associates elements with regions and (future) boundaries,
-     recording the region and boundary names, element types, and their dimensionality.
+     Model topology  associates elements with regions and boundaries,
+     recording their names, element types, and their dimensionality.
      This is important in model construction process.
-     The ModelTopology stores this "topologic" information, which
+     The ModelTopology thus stores this "topologic" information, which
      cannot be stored in the VSet.
      
-     Model topology is used also to perform a consistency check on the VSet. It checks the neighbor connectivity and gets VSet to fix it if there is a problem.
+     In CSMP regions are model subdomains, just as boundaries and split boundaries. All of these can be stored in the ModelTopology.
+     They are distinguished only by their names. Thus, a Boundary either contains the string BOUNDARY in its name or has one of the standard names
+     for boundaries and or edges of box-shaped models (BOTTOM, TOP, LEFT, RIGHT, BACK, FRONT, IRREGULAR etc., EDGE1..EDGE12.
+     Likewise, SplitBoundary objects contain the string SPLITBOUNDARY in their name, typically separated by underscores from other more specific
+     parts of the name.
     
-     When the model is supposed box-shaped, this is tested and potentially missing information is restored in collaboration with the VSet / VDataand Box.
+     @attention It follows that the user has to assign appropriate names to the geometrical entities in their model that they want to become boundaries.
+  
+     Model topology can also be used to perform a consistency check on the cells stored in the VSet.
+     Thus, it can check the cell numbering and the neighbor connectivity.
+     To some degree it can also fix such potential problems with the VSet.
+    
+     When the model is supposed box-shaped, this is tested and potentially missing information is restored in collaboration with the VSet / VData and Box.
+     In this case it can deduce the correct BOX_BOUNDARY flags and assign them to the nodes.
      
-     When the model was created by ANSYS and output using its CSP interface,
+     When a model is created by ANSYS and output using the CSMP interface of ANSYS
      the information needed to initialise the ModelToplogy class is contained in the '.asc' file.
-
-    @author S.K. Matthaei
-    @date 2001
-     
 
     @section motivation Motivation
 
@@ -54,16 +61,9 @@ template<size_t> class VSet;
     When the ModelTopology is reduced to a subset of the original 
     model, corresponding operations must be performed on the VSet.
      
-     
-    @section participants Participants
-     
-    The current implementation depends on the ANSYS_ElementSpecifications 
-    object for the interpretation of finite element names.  
-     
-     
-    @section examples Application Examples
-     
-    The topology class is used inside of ANSYS_Model3D  and  2D.
+    @author S.K. Matthaei
+    @date 2001
+    
  */
 class ModelTopology {
   public:
@@ -76,17 +76,17 @@ class ModelTopology {
     /// general model info
     void        ModelName( const char* name );
     std::string ModelName() const;
-    size_t      ModelRegions() const;
+    size_t      ModelDomains() const;
     
     /// model shape and spatial dimension
     bool        LineModel() const;
     bool        SurfaceModel() const; // true if only surface and/or line elements
     bool        SolidModel() const;
-    size_t      MinimumSpatialDimensionOfRegion( const char* region ) const;
+    size_t      MinimumSpatialDimensionOfDomain( const char* region ) const;
 
     /// type of elements
-    bool        IsoparametricElements() const;
-    void        TreatElementsAsIsoparametric();
+    bool        IsoparametricFiniteElements() const;
+    void        UseIsoparametricFiniteElementTypes();
 
     /// FEM interpolation function properties
     size_t      InterpolationOrder() const;
@@ -96,21 +96,31 @@ class ModelTopology {
     /// return total number and CSMP names of FE-types in the model
     size_t      FiniteElementTypes( std::set<std::string>& etypes ) const;
     size_t      FiniteElementTypes( std::set<int32_t>& etypes ) const;
-    void        ChangeElementType( const std::string& old_element_type, std::string new_element_type );
-    void        EliminateElementType( const char* etype );
-    void        EliminateElementTypes( const std::list<std::string>& etypes );
-    void        EliminateLineElements();
-    void        EliminateSurfaceElements();
-    void        EliminateVolumeElements();
+    
+    // Since Regions consist of Elements, Boundaries of Faces, and SplitBoundaries of InterFaces, all these are just referred to as Cells
+    
+    /// changes the finite - element type associated with a particular region; see FiniteElement.h for available types
+    void        ChangeCellType( const std::string& old_cell_type, std::string new_cell_type_same_as_enum_names );
+    void        EliminateCellType( const char* etype );
+    void        EliminateCellTypes( const std::list<std::string>& etypes );
+    
+    /// remove all curves
+    void        EliminateLineCells();
+    
+    /// remove all surfaces
+    void        EliminateSurfaceCells();
+    
+    /// remove all volumetric elements from a model
+    void        EliminateVolumeCells();
 
     /// manipulation with elements within region
-    size_t      Elements() const;
-    void        Elements( std::set<size_t>& elmt_ids ) const;
-    size_t      ElementsOfRegion( const char* region ) const;
-    std::vector<size_t>::const_iterator  ElementsOfRegionBegin( const char* region ) const;
-    std::vector<size_t>::const_iterator  ElementsOfRegionEnd( const char* region ) const;
-    void        ElementTypesOfRegion( const char* region, std::set<std::string>& etypes ) const;
-    bool        IsWithinRegion( const char* region, size_t elmt_id ) const;
+    size_t      Cells() const;
+    void        Cells( std::set<size_t>& elmt_ids ) const;
+    size_t      CellsWithinDomain( const char* region ) const;
+    std::vector<size_t>::const_iterator  CellsOfDomainBegin( const char* region ) const;
+    std::vector<size_t>::const_iterator  CellsOfDomainEnd( const char* region ) const;
+    void        CellTypesOfDomain( const char* region, std::set<std::string>& etypes ) const;
+    bool        IsWithinDomain( const char* region, size_t elmt_id ) const;
 
     /// operations on regions
     /// output subset as another model topology
@@ -121,42 +131,45 @@ class ModelTopology {
     bool        Contains( const char* region ) const;
     /// remove certain regions
     void        Erase(); ///< all regions
-    void        RemoveRegions( const std::set<std::string>& regions );
-    void        RemoveRegion( const char* name );
+    void        RemoveDomains( const std::set<std::string>& regions );
+    void        RemoveDomain( const char* name );
     /// eliminate all model regions other than the ones specified in '*-regions.txt' file
-    void        ReduceToRegions( const char* regions_file );
-    void        ReduceToRegions( const std::set<std::string>& regions );
+    void        ReduceToDomains( const char* regions_file );
+    void        ReduceToDomains( const std::set<std::string>& regions );
     /// add new regions
-    bool        AddRegion( const char* rname,
+    bool        AddDomain( const char* rname,
                            const std::set<std::string>& fem_types,
                            const std::vector<size_t>& elms );
-    void        AddRegionElementType( const char* rname,
-                                      const std::string& fem_types );
-    void        AddRegionElementTypes( const char* rname,
-                                      const std::set<std::string>& fem_types );
-    void        AddRegionElementId( const char* rname,
-                                    size_t elm );
-    void        AddRegionElementIds( const char* rname,
-                                     const std::vector<size_t>& elms );
+                           
+    /// if the region only consists of a single element type, choose this method to add it (enums and strings are defined in FiniteElement.h)
+    void        AddDomainCellType( const char* rname, const std::string& fem_types );
+    
+    /// add element types for regions that consist of multiple ones (enums and strings are defined in FiniteElement.h)
+    void        AddDomainCellTypes( const char* rname, const std::set<std::string>& fem_types );
+    
+    /// element IDs range from 0..n-1
+    void        AddDomainCellId( const char* rname, size_t elm );
+    
+    void        AddDomainCellIds( const char* rname, const std::vector<size_t>& elms );
                                      
     /// adds unique (non-overlapping) regions to topology, using the name, element types and element indices supplied
-    bool        AddRegions( const std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >& unique_regions );
+    bool        AddDomains( const std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >& unique_regions );
     
     /// adds unique (non-overlapping) regions to topology, using the region specifications (name and element types) and element index lists supplied
-    bool        AddRegions( const std::multimap<std::string,std::string>& object_specs,
+    bool        AddDomains( const std::multimap<std::string,std::string>& object_specs,
                             const std::multimap<std::string,std::vector<size_t> >& object_elements );
      
     /// adds regions to topology, eliminating lower-dimensional regions with the same name as the ones with the same dimension as the model
-    bool        AddRegionsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
+    bool        AddDomainsWithEquidimensionalCheck( const std::multimap<std::string,std::string>& object_specs,
                                                     const std::multimap<std::string,std::vector<size_t> >& object_elements );
-    template<size_t dim>
-    void        RemoveLowDimElementsFromRegions( csmp::VSet<dim>& vset );
+    template<uint32_t dim>
+    void        RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset );
 
 	  /// region names
-	  void		    RegionNames( std::vector<std::string>& ) const;
+	  void		    DomainNames( std::vector<std::string>& ) const;
 
     /// properties of regions
-    void        PropertiesOfRegions( const char* regions_file,
+    void        PropertiesOfDomains( const char* regions_file,
                                      std::list<std::string>& properties,
                                      std::map<std::string,std::list<double> >& props ) const;
 
@@ -166,7 +179,7 @@ class ModelTopology {
     // ---------------------------------------------------------
 
     /// initialises topology object and fixes pontentially wrong surface element orientations, non-consecutive numbering, orphan nodes, neighbor connectivity etc.
-    template<size_t dim>
+    template<uint32_t dim>
     bool        EstablishTopology( VSet<dim>& vset,
                                    const std::multimap<std::string,std::string>& object_specs,
                                    const std::multimap<std::string,std::vector<size_t> >& object_elements,
@@ -176,7 +189,7 @@ class ModelTopology {
                                    bool reassign_boundary_flags = true );
   
     /// calls EstablishTopology with a reduced set of options
-    template<size_t dim>
+    template<uint32_t dim>
     bool        EstablishTopology( VSet<dim>& vset,
                                    bool require_unique_names_for_vol_surf_lines = true,
                                    bool correct_orientation_of_surface_elements = false,
@@ -189,16 +202,16 @@ class ModelTopology {
     bool BoxShapedModel() const;
     
     /// recreates the BOX_BOUNDARY node flags if a problem was detected
-    template<size_t dim> 
+    template<uint32_t dim> 
     bool  AssignBoxShapedModelFlags( VSet<dim>& ) const;
 
-    template<size_t dim>
+    template<uint32_t dim>
     void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
 
-    bool  CheckElementNumbering() const;
+    bool  CheckCellNumbering() const;
 
     /// numbering / repair
-    void  CreateNewElementNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
+    void  CreateNewCellNumbers( std::map<size_t,size_t>& old_to_new_mapping, bool check_output=true );
 
     /// output info
     void  Out() const;
@@ -206,34 +219,36 @@ class ModelTopology {
 
 
   private:  
-    template<size_t dim>
-    void  RenumberElements( VSet<dim>& vset, bool check_whether_already_correct );
-    void  RenumberElements( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
+    template<uint32_t dim>
+    void  RenumberCells( VSet<dim>& vset, bool check_whether_already_correct );
+    void  RenumberCells( const std::map<size_t /* old */,size_t /* new */>& eid_mapping );
 
     /// tests that the corner elements are indeed present
     bool Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VSet<2U>& ) const;
     
     /// deduces node boundary flags from BOX_BOUNDARY and other regions the name of which contains 'BOUNDARY'
-    bool  FlagNodesUsingBoundaryRegions( VSet<2U>& vset ) const;
-    bool  FlagNodesUsingBoundaryRegions( VSet<3U>& vset ) const;
+    bool  FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const;
+    bool  FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const;
 
 
   private:
     //       region name           etypes-of-region      ids of elements in region
-    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_regions;
+    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >  model_domains_;
     // public information on csmp element types
     typedef CSMP_ElementSpecifications  fem_specs;
-    std::string  model_name;
-    bool  isoparametric_mesh; // default is false
+    std::string  model_name_;
+    bool  isoparametric_mesh_; // default is false
 };
 
 
 /// read regions from file
-bool doesRegionsFileExist( const char* regions_file );
-void readDesiredRegions( const char* regions_file, std::set<std::string>& desired_regions );
+bool doesDomainsFileExist( const char* regions_file );
+void readDesiredDomains( const char* regions_file, std::set<std::string>& desired_regions );
 
-/// box-shaped models
+/// enlist the boundary names of box-shaped models
 void BoundariesOfBoxShapedModel( std::set<std::string>& bs );
+
+/// enlist the boundary names of rectangular models
 void BoundariesOfRectangleShapedModel( std::set<std::string>& );
 
 } // csmp

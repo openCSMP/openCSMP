@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
 
@@ -89,10 +89,10 @@ double parseDataValue( const std::string& value );
 
 void readPropertyValue( ScalarVariable& sc );
 
-template<size_t dim>
+template<uint32_t dim>
 void readPropertyValue( VectorVariable<dim>& vc );
 
-template<size_t dim>
+template<uint32_t dim>
 void readPropertyValue( TensorVariable<dim>& ts );
 
 void readPropertyValue( ArrayVariable& av );
@@ -116,10 +116,10 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& positi
 
 void printPropertyValue( const ScalarVariable& sc );
 
-template<size_t dim>
+template<uint32_t dim>
 void printPropertyValue( const VectorVariable<dim>& vc );
 
-template<size_t dim>
+template<uint32_t dim>
 void printPropertyValue( const TensorVariable<dim>& ts );
 
 void printPropertyValue( const ArrayVariable& av );
@@ -138,23 +138,23 @@ void reportAssignment( const std::string& prop, const std::string& unit,
                        ScalarVariable& sc1, ScalarVariable& sc2,
                        ScalarVariable& sc3, ScalarVariable& sc4 );
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const std::string& prop, const std::string& unit,
                        const std::string& bound,
                        VectorVariable<dim>& vc1, VectorVariable<dim>& vc2 );
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const std::string& prop, const std::string& unit,
                        const std::string& bound,
                        VectorVariable<dim>& vc1, VectorVariable<dim>& vc2,
                        VectorVariable<dim>& vc3, VectorVariable<dim>& vc4 );
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const std::string& prop, const std::string& unit,
                        const std::string& bound,
                        TensorVariable<dim>& ts1, TensorVariable<dim>& ts2 );
 
-template<size_t dim>
+template<uint32_t dim>
 void reportAssignment( const std::string& prop, const std::string& unit,
                        const std::string& bound,
                        TensorVariable<dim>& ts1, TensorVariable<dim>& ts2,
@@ -185,53 +185,53 @@ bool doesConfigFileExist( const std::string& filename_prefix );
 bool doesVariableFileExist( const std::string& filename_prefix );
 
 /// read point data  such as well rates ( a.k.a block7 )
-template<size_t dim>
+template<uint32_t dim>
 bool readPointData( std::map<std::string,std::vector<double> >& well_data, int ndata,
                     std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// build Regions based on the range of particular property data ( a.k.a block1 )
-template<size_t dim>
+template<uint32_t dim>
 bool buildRegionsBasedOnPropertyRange( Model<dim>& model,
                                        std::set<std::string>& groups,
                                        std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read box boundary values and conditions ( a.k.a. block4 )
-template<size_t dim>
+template<uint32_t dim>
 bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
                                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read boundary values and conditions ( a.k.a. block6 )
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyValuesAndConditions( Model<dim>& model,
                                               std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read boundary conditions
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyConditions( Model<dim>& model,
                                      std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read region conditions ( a.k.a block5 )
-template<size_t dim>
+template<uint32_t dim>
 bool readRegionPropertyConditions( Model<dim>& model,
                                    std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read boundary property values
-template<size_t dim>
+template<uint32_t dim>
 bool readBoundaryPropertyValues( Model<dim>& model,
                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read region property values ( a.k.a block3 )
-template<size_t dim>
+template<uint32_t dim>
 bool readRegionPropertyValues( Model<dim>& model,
                                std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read default property values ( a.k.a block2 )
-template<size_t dim>
+template<uint32_t dim>
 bool readDefaultPropertyValues( Model<dim>& model,
                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 
 /// read computational settings such as duration time, output times, time stepping strategy ( a.k.a block8 )
-template<size_t dim>
+template<uint32_t dim>
 bool readComputationalSettings( ComputationalSettings& settings,
                                 std::ifstream& ifs, char* text_line, size_t line_length, bool verbose );
 

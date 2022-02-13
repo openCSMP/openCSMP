@@ -17,7 +17,7 @@ and a three-point integration scheme where the Gauss points are located
 at the midside nodes. The weights of the integration points are set to
 1/3 such that the integrated contributions add up to 1.  .
  */
-IsoparametricQuadraticTriangle::IsoparametricQuadraticTriangle( size_t dimensions )
+IsoparametricQuadraticTriangle::IsoparametricQuadraticTriangle( uint32_t dimensions )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_QUADRATIC_TRIANGLE, true, true, 2U ),
     use2Dto3Djacobi( !(dimensions==2) ),
@@ -110,7 +110,7 @@ IsoparametricQuadraticTriangle::~IsoparametricQuadraticTriangle()
  }
 
 
-void IsoparametricQuadraticTriangle::Dimensions( size_t dimensions )
+void IsoparametricQuadraticTriangle::Dimensions( uint32_t dimensions )
  {
    dim = dimensions;
    if ( dim == 3 ) use2Dto3Djacobi = true;
@@ -187,7 +187,7 @@ double  IsoparametricQuadraticTriangle::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
+   for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()),
           segm2 = (*segms.rbegin());
@@ -217,7 +217,7 @@ double  IsoparametricQuadraticTriangle::InnerRadius()
    double         sum(0.0), vol;
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<segms.size(); i++ ) sum += segms[i];
+   for ( uint32_t i=0; i<segms.size(); i++ ) sum += segms[i];
    sum /= 2.0;
    vol  = Volume();
    vol /= sum;
@@ -298,13 +298,12 @@ the area is computed.
 */
 double  IsoparametricQuadraticTriangle::Volume()
 {
-    double  area;
-    size_t  i;
+    double  area{0.};
 
     // numerical integration:
     // looping over the 3 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          // getting interpolation function derivatives
          RS[0] = rr[i];
@@ -378,7 +377,7 @@ void IsoparametricQuadraticTriangle::Nrs( double r, double s, double* nrst ) con
 
 /**
 
-  void IsoparametricQuadraticTriangle::N_AtIntegrationPoint( size_t ip, vector<double>& N )
+  void IsoparametricQuadraticTriangle::N_AtIntegrationPoint( uint32_t ip, vector<double>& N )
 
 
 
@@ -394,7 +393,7 @@ A reference to the parent Element, the number of the integration point.
 @param N The interpolation function values are returned into the third argument.
 
 */
-void IsoparametricQuadraticTriangle::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+void IsoparametricQuadraticTriangle::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
 
@@ -463,8 +462,8 @@ void IsoparametricQuadraticTriangle::dNs(  double s, double t, std::vector<doubl
 
 /**
 
-void IsoparametricQuadraticTriangle::NodesOfFace( size_t face_id,
-                                     vector<size_t>& fnids )
+void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
+                                     vector<uint32_t>& fnids )
 
 
 
@@ -487,8 +486,8 @@ When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 
 */
-void IsoparametricQuadraticTriangle::NodesOfFace( size_t face_id,
-                                                  std::vector<size_t>& fnids ) const
+void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
+                                                  std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
 
@@ -517,33 +516,33 @@ void IsoparametricQuadraticTriangle::NodesOfFace( size_t face_id,
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<size_t>  IsoparametricQuadraticTriangle::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  IsoparametricQuadraticTriangle::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nIsoparametricQuadraticTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
-vector<size_t>  IsoparametricQuadraticTriangle::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricQuadraticTriangle::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nIsoparametricQuadraticTriangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
-void IsoparametricQuadraticTriangle::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+void IsoparametricQuadraticTriangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(3);
     if ( segm_id == 0 ) {
@@ -580,7 +579,7 @@ for the element (These integers are germane to all quadratic triangular
 elements in the mesh).
 
 */
-void  IsoparametricQuadraticTriangle::CornerNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTriangle::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(3);
     ids[0] = 0;
@@ -601,7 +600,7 @@ for the element (These integers are germane to all quadratic triangular
 elements in the mesh).
 
 */
-void  IsoparametricQuadraticTriangle::MidSideNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTriangle::MidSideNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npf);
     ids[0] = 3;
@@ -611,7 +610,7 @@ void  IsoparametricQuadraticTriangle::MidSideNodes( std::vector<size_t>& ids ) c
 
 
 
-void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -622,11 +621,11 @@ void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<size_t>
     ids[5] = 5;
  }
 
-double IsoparametricQuadraticTriangle::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricQuadraticTriangle::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 
 
-CSMP_FEM_TYPE IsoparametricQuadraticTriangle::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE IsoparametricQuadraticTriangle::ElementTypeOfFace( uint32_t ) const
  {
     return ISOPARAMETRIC_QUADRATIC_BAR;
  }
@@ -635,7 +634,7 @@ CSMP_FEM_TYPE IsoparametricQuadraticTriangle::ElementTypeOfFace( size_t ) const
 
 
 
-void  IsoparametricQuadraticTriangle::JacobianAtIntegrationPoint( size_t gauss_point )
+void  IsoparametricQuadraticTriangle::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     if ( !use2Dto3Djacobi ) {
          dNr( rr[gauss_point], ss[gauss_point], DNR );
@@ -703,7 +702,7 @@ void IsoparametricQuadraticTriangle::dN( DenseMatrix<DM_MIN>& DN6 )
      // Jacobian transformation to global coordinate system
      if ( use2Dto3Djacobi )
        {
-          for ( size_t i=0; i<npe; i++ ) {
+          for ( uint32_t i=0; i<npe; i++ ) {
                 RS[0] = NXY(i,0);
                 RS[1] = NXY(i,1);
 
@@ -724,7 +723,7 @@ void IsoparametricQuadraticTriangle::dN( DenseMatrix<DM_MIN>& DN6 )
      DenseMatrix<DM_MIN> TEMP(dim,1);
      DN6 = DN;
 
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
            dNr( NXY(i,0), NXY(i,1), DNR );
            dNs( NXY(i,0), NXY(i,1), DNS );
@@ -848,8 +847,8 @@ double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs, vector<
     // compute 2x3 Jacobian matrix (expects 6x3 x-y-z coordinate matrix)
     J.Resize(2,dim);
     J.Zero();
-    for ( size_t i=0; i<XY.Cols(); i++ )
-      for ( size_t j=0; j<XY.Rows(); j++ ) {
+    for ( uint32_t i=0; i<XY.Cols(); i++ )
+      for ( uint32_t j=0; j<XY.Rows(); j++ ) {
            J(0,i) += DNR[j] * XY(j,i);
            J(1,i) += DNS[j] * XY(j,i);
         }
@@ -861,7 +860,7 @@ double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs, vector<
     EFG.resize(3);
     fill( EFG.begin(), EFG.end(), 0. );
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( uint32_t i=0; i<dim; i++ ) {
         EFG[0] += J(0,i) * J(0,i);
         EFG[1] += J(0,i) * J(1,i);
         EFG[2] += J(1,i) * J(1,i);
@@ -886,8 +885,8 @@ double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs )
     JMAT.Resize(2,dim);
     JMAT.Zero();
 
-    for ( size_t i=0; i<XY.Cols(); i++ )
-      for ( size_t j=0; j<XY.Rows(); j++ ) {
+    for ( uint32_t i=0; i<XY.Cols(); i++ )
+      for ( uint32_t j=0; j<XY.Rows(); j++ ) {
            JMAT(0,i) += DNR[j] * XY(j,i);
            JMAT(1,i) += DNS[j] * XY(j,i);
         }
@@ -898,7 +897,7 @@ double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs )
     // compute E, F, and g
     double E(0.0), F(0.0), G(0.0);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( uint32_t i=0; i<dim; i++ ) {
          E += JMAT(0,i) * JMAT(0,i);
          F += JMAT(0,i) * JMAT(1,i);
          G += JMAT(1,i) * JMAT(1,i);
@@ -918,15 +917,15 @@ IsoparametricQuadraticTriangle::ParametricToPhysical( std::vector<double> &rst,
   vector<double> N(npe);
   Nrs(rst[0],rst[1], N );
 
-  for(size_t i=0; i<dim; i++) xyz[i]=0.0;
+  for(uint32_t i=0; i<dim; i++) xyz[i]=0.0;
 
     if(dim==2){
-      for(size_t i=0; i<npe; i++){
+      for(uint32_t i=0; i<npe; i++){
         xyz[0]+=XY(i,0)*N[i];
         xyz[1]+=XY(i,1)*N[i];
        }
     }else if(dim==3){
-        for(size_t i=0; i<npe; i++){
+        for(uint32_t i=0; i<npe; i++){
           xyz[0]+=XY(i,0)*N[i];
           xyz[1]+=XY(i,1)*N[i];
           xyz[2]+=XY(i,2)*N[i];
@@ -954,7 +953,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( size_t i=1; i<spe; i++ )
+    for ( uint32_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -996,9 +995,9 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
         double minDistanceFromGivenPoint;
 
         const double constantMu               = 1.0;
-        const size_t numberOfFirstIterrations   = 5;
-        const size_t maxNumberOfIterrations     = 20;
-        const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
+        const uint32_t numberOfFirstIterrations   = 5;
+        const uint32_t maxNumberOfIterrations     = 20;
+        const uint32_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
         const double incrementR = 2.0/(numberOfFirstIterrations-1);
         const double incrementS = 2.0/(numberOfFirstIterrations-1);
@@ -1006,10 +1005,10 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = -1.0;
-        for(size_t i=0;i<numberOfFirstIterrations;i++)
+        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = -1.0;
-            for(size_t j=0;j<numberOfFirstIterrations;j++)
+            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
             {
                 ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -1033,7 +1032,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
 
                 if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                 {
-                    for(size_t i=0; i<2U; i++)
+                    for(uint32_t i=0; i<2U; i++)
                         rstHatK[i] = rstHatK_PlusOne[i];
 
                     minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -1063,7 +1062,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
                                              distanceFromGivenPointLinf[1]*distanceFromGivenPointLinf[1] );
         }
 
-        size_t iteration = 1;
+        uint32_t iteration = 1;
 
         /// Newton-Raphson iterations
         while ( ( distanceFromGivenPointL2 > geometricTolerance ) && ( iteration < maxNumberOfIterrations ) )
@@ -1101,7 +1100,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
                 rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
                 rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-                for(size_t i=0; i<2; i++)
+                for(uint32_t i=0; i<2; i++)
                     rstHatK[i] = rstHatK_PlusOne[i];
 
                 ParametricToPhysical( rstHatK, outxyz);
@@ -1116,7 +1115,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
                 rstHatK_PlusOne[0] = rstHatK[0] - constantMu*(JINV(0,0)*(outxyz[0]-xyz[0]) + JINV(1,0)*(outxyz[1]-xyz[1]) );
                 rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) );
 
-                for(size_t i=0; i<2; i++)
+                for(uint32_t i=0; i<2; i++)
                     rstHatK[i] = rstHatK_PlusOne[i];
 
                 ParametricToPhysical( rstHatK, outxyz);
@@ -1184,7 +1183,7 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
 
     }
 
-    for(size_t i=0; i<2; i++)
+    for(uint32_t i=0; i<2; i++)
         rSt[i] = rstHatK[i];
 }
 
@@ -1264,7 +1263,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 
 */
-double IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+double IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
  {
     double det;
 
@@ -1281,7 +1280,7 @@ double IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN
 
          B.Resize(dim,npe);
 
-         for ( size_t i=0; i<npe; i++ )
+         for ( uint32_t i=0; i<npe; i++ )
            {
              B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
              B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1345,7 +1344,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.
 */
-double IsoparametricQuadraticTriangle::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
+double IsoparametricQuadraticTriangle::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
  {
     double  det;
 
@@ -1361,7 +1360,7 @@ double IsoparametricQuadraticTriangle::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t
 
         B.Resize(dim,npe);
 
-        for ( size_t i=0; i<npe; i++ )
+        for ( uint32_t i=0; i<npe; i++ )
           {
             B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
             B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1415,7 +1414,7 @@ double IsoparametricQuadraticTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
         B.Resize(dim,npe);
 
-        for ( size_t i=0; i<npe; i++ )
+        for ( uint32_t i=0; i<npe; i++ )
           {
             B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
             B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1479,8 +1478,8 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
-void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                                  vector<size_t>& fnids )
+void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                                  vector<uint32_t>& fnids )
  {
      fnids.resize(3);
 
@@ -1574,13 +1573,13 @@ void IsoparametricQuadraticTriangle::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" double"<< endl;
-     for ( size_t i=0; i<6; i++ ) {
+     for ( uint32_t i=0; i<6; i++ ) {
          if ( use2Dto3Djacobi ) {
-             for ( size_t j=0; j<3; j++ ) ofs << COORD(i,j) <<" ";
+             for ( uint32_t j=0; j<3; j++ ) ofs << COORD(i,j) <<" ";
              ofs << endl;
            }
          else {
-             for ( size_t j=0; j<2; j++ ) ofs << COORD(i,j) <<" ";
+             for ( uint32_t j=0; j<2; j++ ) ofs << COORD(i,j) <<" ";
              ofs << 0.0 << endl;
            }
        }
@@ -1613,7 +1612,7 @@ void IsoparametricQuadraticTriangle::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x6
-           for ( size_t i=0; i<6; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<6; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1621,8 +1620,8 @@ void IsoparametricQuadraticTriangle::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" double"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 6
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( use2Dto3Djacobi )
                  ofs << endl;
                else
@@ -1656,7 +1655,7 @@ involves the steps:
    and use these to extrapolate the values of the variables at the nodes.
  */
 void IsoparametricQuadraticTriangle::ExtrapolateIntegrationPointVariableToNodes(
-                                                   size_t nvars,
+                                                   uint32_t nvars,
                                                    const vector<double>& IVAR,
                                                    vector<double>& NVAR )
 const
@@ -1695,19 +1694,19 @@ const
 
    // 2. For each node point compute the values of the interpolation functions
    //    and use these to extrapolate the values of the variables at the nodes.
-   for ( size_t i=0; i<npe; i++ )
+   for ( uint32_t i=0; i<npe; i++ )
      {
         // compute interpolation function values at node i
-        for ( size_t j=0; j<gpe; j++ )
+        for ( uint32_t j=0; j<gpe; j++ )
           intpol[j] = ae2 * (a[j] + b[j] * NXY(i,0) + c[j] * NXY(i,1));
 
         // carry out extrapolation
-        for ( size_t k=0; k<nvars; k++ ) sum[k] = 0.0;
-        for ( size_t j=0; j<gpe; j++ )
-          for ( size_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
+        for ( uint32_t k=0; k<nvars; k++ ) sum[k] = 0.0;
+        for ( uint32_t j=0; j<gpe; j++ )
+          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
         // store result in output vector
-        for ( size_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
@@ -1737,7 +1736,7 @@ double  IsoparametricQuadraticTriangle::JacobianInverse()
          static vector<double> EFG(dim);
            fill( EFG.begin(), EFG.end(), 0.0 );
 
-           for ( size_t i=0; i<dim; i++ ) {
+           for ( uint32_t i=0; i<dim; i++ ) {
                EFG[0] += JAC(0,i) * JAC(0,i);
                EFG[1] += JAC(0,i) * JAC(1,i);
                EFG[2] += JAC(1,i) * JAC(1,i);
@@ -1763,10 +1762,10 @@ double  IsoparametricQuadraticTriangle::JacobianInverse()
        cerr <<"\nIsoparametricQuadraticTriangle::JacobianInverse: element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
         cerr << detJ << endl;
         cerr <<"\ncaused by element of type: "<< parseFiniteElementType(ElementType()) << endl;
-        for ( size_t i=0; i<Nodes(); i++ )
+        for ( uint32_t i=0; i<Nodes(); i++ )
           {
             cerr<<" Node( "<<i<<" ): "<<endl;
-            for ( size_t j=0; j<XY.Cols(); j++ )
+            for ( uint32_t j=0; j<XY.Cols(); j++ )
                 cerr << XY(i,j) <<" ";
             cerr<<endl;
           }
@@ -1830,7 +1829,7 @@ second argument in global coordinates.
 
 @warning To work correctly the matrix XYZ must be uptodate.
 */
-void  IsoparametricQuadraticTriangle::IntegrationPoint( size_t ip,
+void  IsoparametricQuadraticTriangle::IntegrationPoint( uint32_t ip,
                                                         vector<double>& xyz ) const
  {
     assert( &xyz != &NRST );

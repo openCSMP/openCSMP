@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
                                                              const char* fluidPressure,
                                                              const char* fluidDensity,
@@ -47,7 +47,7 @@ IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
                                                              Index& fluidPressure,
                                                              Index& fluidTemperature,
@@ -88,7 +88,7 @@ IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
                                                              const char* fluidPressure,
                                                              const char* fluidTemperature,
@@ -141,7 +141,7 @@ IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
      @attention the only extra variable that is used if steam is enabled,
      is the 'saturation steam'.
 */
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
                                                              const char* temperature,
                                                              const char* fluidPressure,
@@ -178,7 +178,7 @@ IAPWS_H2OPropertiesVisitor<dim>::IAPWS_H2OPropertiesVisitor( Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2OPropertiesVisitor<dim>::PlacementChecks()
 {
     // testing that the variables exist on the right place and are of right type
@@ -215,19 +215,19 @@ void IAPWS_H2OPropertiesVisitor<dim>::PlacementChecks()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2OPropertiesVisitor<dim>::Verbose() { verbose = (verbose==false) ? true : false; }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2OPropertiesVisitor<dim>::~IAPWS_H2OPropertiesVisitor() 
 {
 }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n ) 
 {
     // 1. reading input variables
@@ -333,10 +333,10 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
 {
-    for ( size_t i=0U; i<e->IntegrationPoints(); i++ )
+    for ( auto i{0}; i<e->IntegrationPoints(); i++ )
     {
         Tf=e->PropertyValueAtIntegrationPoint(T_key,i);
         Pf=e->PropertyValueAtIntegrationPoint(P_key,i);

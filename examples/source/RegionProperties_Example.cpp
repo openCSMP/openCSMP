@@ -53,12 +53,12 @@ void RegionProperties_Example::Run()
     ModelTopology   mesh_topology( "variable-access-test model", isoparametric );
     vector<size_t>  elms; 
     elms.reserve(n_squares_on_side);
-    for ( size_t i=0U; i<n_squares_on_side; i++ ) elms.push_back(i);
-    mesh_topology.AddRegion( "region1", fem_type, elms );
+    for ( auto i{0}; i<n_squares_on_side; i++ ) elms.push_back(i);
+    mesh_topology.AddDomain( "region1", fem_type, elms );
     elms.erase( elms.begin(), elms.end() );
     elms.reserve(mesh_container.Elements()-n_squares_on_side);
     for ( size_t i=n_squares_on_side; i<mesh_container.Elements(); i++ ) elms.push_back(i);
-    mesh_topology.AddRegion( "region2", fem_type, elms );
+    mesh_topology.AddDomain( "region2", fem_type, elms );
     elms.erase( elms.begin(), elms.end() );
     mesh_topology.Out();
  

@@ -17,7 +17,7 @@ namespace csmp {
   @date 6/2000
   */
 
-template<size_t dim>
+template<uint32_t dim>
 class ExtractVectorVariableComponent : public Interrelation<dim> {
     Operand<dim>&        V;
     Operand<dim>&        S;
@@ -37,7 +37,7 @@ class ExtractVectorVariableComponent : public Interrelation<dim> {
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline void ExtractVectorVariableComponent<dim>::Calculate()
  {
     V.AssignTo( vc );

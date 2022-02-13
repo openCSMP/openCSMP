@@ -20,7 +20,7 @@ base class for 2-phase flow models (Linear, Brooks Corey, Van Genuchten, Richard
 now you can inherit BrooksCoreyWetting, BrooksCoreyNonWetting... 
  
  */
-template<size_t dim>
+template<uint32_t dim>
 class TwoPhaseModel {
   public:
     /// for fixed values of fluid viscosities and densities

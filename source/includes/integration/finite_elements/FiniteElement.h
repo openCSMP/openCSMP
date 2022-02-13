@@ -141,7 +141,7 @@ class FiniteElement {
   public:
     FiniteElement( CSMP_FEM_TYPE csp_fem_type, 
                    bool isoparametric, bool uses_local_coordinates, 
-                   size_t order_of_shape_functions );
+                   uint32_t order_of_shape_functions );
 
     virtual ~FiniteElement() {}
 
@@ -155,30 +155,27 @@ class FiniteElement {
     static size_t      InitialID();
   
     /// return minimum spatial dimension in which this element can exist
-    size_t             Dim() const;
+    uint32_t             Dim() const;
   
-    size_t             Nodes() const;
+    uint32_t             Nodes() const;
   
     /// returns the number of edges of the FE, i.e. the number of connections between nodes
-    size_t             Segments() const;
+    uint32_t             Segments() const;
   
     /// returns the number of sides the finite element has
-    size_t             Faces() const;
+    uint32_t             Faces() const;
   
     /// neighbor elements that may be connected to this FE in its characteristic space
-    size_t             Neighbors() const;
+    uint32_t             Neighbors() const;
   
     /// returns how many nodes make up a particular face
-    size_t             NodesPerFace( size_t ) const;
-  
-    /// @todo (1) SKM: WHAT IS THIS
-    size_t             IntegrationPointNeighbors() const;
+    uint32_t             NodesPerFace( uint32_t ) const;
   
     /// returns number of quadrature points used by current integration scheme
-    size_t             IntegrationPoints() const;
+    uint32_t             IntegrationPoints() const;
   
     /// returns order of interpolation scheme: linear=1, quadratic=2, cubic=3
-    size_t             Interpolation() const;
+    uint32_t             Interpolation() const;
   
     /// for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions
     bool               Isoparametric() const;
@@ -187,7 +184,7 @@ class FiniteElement {
     bool               UsesLocalCoordinates() const;
   
     /// returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions
-    size_t             OrderOfShapeFunctions() const;
+    uint32_t           OrderOfShapeFunctions() const;
   
     bool               IsLineElement() const;
     bool               IsSurfaceElement() const;
@@ -211,74 +208,74 @@ class FiniteElement {
     virtual void       EdgeLengths( std::vector<double>& vec );
   
     /// returns 0..nodes-1 (local) node numbers of the supplied boundary nodes, i.e., reports the actual ordering
-    virtual void       ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes, 
-                                                   std::vector<size_t>& fnids );
+    virtual void       ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes, 
+                                                   std::vector<uint32_t>& fnids );
                                                    
     // all of the following give 0...nodes-1 (local) node numbers
     /// reports the egde nodes (0..nodes-1) which can be more than 2 in higher-order elements
-    virtual void       NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
+    virtual void       NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
   
     /// reports the face nodes (0..nodes-1) of the given face
-    virtual void       NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual void       NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
     
     /// returns the local  numbers of the corner nodes of the face
-    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
+    virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     
     /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-    virtual std::vector<size_t>  NodesConnectedTo( size_t node ) const;
+    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node ) const;
   
     /// reports only the corner nodes (0..nodes-1) of the element
-    virtual void       CornerNodes( std::vector<size_t>& ids ) const;
+    virtual void       CornerNodes( std::vector<uint32_t>& ids ) const;
 
     /// reports only the mid-edge nodes (0..nodes-1) of the element
-    virtual void       MidSideNodes( std::vector<size_t>& ids ) const;
+    virtual void       MidSideNodes( std::vector<uint32_t>& ids ) const;
 
     /// reports the nodes (0..nodes-1) of the element which are not shared with any other element
-    virtual void       InteriorNodes( std::vector<size_t>& ids ) const;
+    virtual void       InteriorNodes( std::vector<uint32_t>& ids ) const;
   
-    virtual size_t     CornerNodes() const;
-    virtual size_t     MidSideNodes() const;
-    virtual size_t     InteriorNodes() const;
+    virtual uint32_t   CornerNodes() const;
+    virtual uint32_t   MidSideNodes() const;
+    virtual uint32_t   InteriorNodes() const;
   
     /// reports the element type that would match that of its corresponding face
-    virtual CSMP_FEM_TYPE ElementTypeOfFace( size_t face ) const;
+    virtual CSMP_FEM_TYPE ElementTypeOfFace( uint32_t face ) const;
   
     /// reports the element type that would match that of its corresponding segment
-    virtual CSMP_FEM_TYPE ElementTypeOfSegment( size_t segment ) const;
+    virtual CSMP_FEM_TYPE ElementTypeOfSegment( uint32_t segment ) const;
 
     /// returns the unit normal where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates
     virtual void       UnitNormal( std::vector<double>& unrml ) const;
 
     // TODO: SKM: add more efficient unit-normal calculation that returns point 
     /// returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates
-    virtual void       UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
+    virtual void       UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
   
     /// computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework
-    virtual void       UnitNormalAtFaceBarycenter( size_t face, std::vector<double>& nrml );
+    virtual void       UnitNormalAtFaceBarycenter( uint32_t face, std::vector<double>& nrml );
   
     /// accessor for coordinate matrix which is associated with the element
-    double           XYZ( size_t i, size_t j ) const;
+    double             XYZ( uint32_t i, uint32_t j ) const;
 
     /// mutator for coordinate matrix which is associated with the element
-    void               XYZ( size_t i, size_t j, double val );
+    void               XYZ( uint32_t i, uint32_t j, double val );
 
     /// for element types defined using a local coordinate system, returns the node coordinates into the argument matrix
     virtual void       ReferenceCoordinates( DenseMatrix<DM_MIN>& matCoords ) const;
 
     /// using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes
-    virtual   void      ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+    virtual   void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                     const std::vector<double>& IVAR,
                                                                     std::vector<double>&       NVAR ) const;
 
     /// returns the global coordinates of the element integration point
-    virtual   void      IntegrationPoint( size_t i, std::vector<double>& xyz ) const;
+    virtual   void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
   
     /// returns the integration weight of the desired quadrature point
-    virtual   double  WeightAtIntegrationPoint( size_t i ) const;
+    virtual   double  WeightAtIntegrationPoint( uint32_t i ) const;
   
     /// reports the local node numbers in counter clockwise order
     // DEPRECATE, but check whether this is used by any of ther applications
-    virtual   void      CounterClockwiseNodes( std::vector<size_t>& ids ) const;
+    virtual   void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
 
     /// reports the values of the interpolation functions at the point given in global coordinates; @attention slow for numerically integrated elements
     // REMOVE: use XYZtoRST(); to find the point of interest
@@ -286,7 +283,7 @@ class FiniteElement {
   
     /// reports the values of the interpolation functions at the given quadrature point
     // RENAME: N_AtPoint();
-    virtual   void      N_AtIntegrationPoint( size_t ip, std::vector<double>& N );
+    virtual   void      N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
   
     /// reports the values of the interpolation functions at the center of gravity of the element
     virtual   void      N_AtBaryCenter( std::vector<double>& N );
@@ -300,10 +297,10 @@ class FiniteElement {
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
     // RENAME dN_AtPoint();
-    virtual   double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, size_t gauss_point );
+    virtual   double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, uint32_t gauss_point );
 
     /// returns first derivative of interpolaton functions at node; determinant of the Jacobian is returned as well
-    virtual   double  dN_AtNode( DenseMatrix<DM_MIN>&, size_t node );
+    virtual   double  dN_AtNode( DenseMatrix<DM_MIN>&, uint32_t node );
 
     /// returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian is returned as well
     virtual   double  dN_AtBarycenter( DenseMatrix<DM_MIN>& );
@@ -312,7 +309,7 @@ class FiniteElement {
     // are returned into the protected matrices JAC and JINV
   
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point
-    virtual   void      JacobianAtIntegrationPoint( size_t ip );
+    virtual   void      JacobianAtIntegrationPoint( uint32_t ip );
 
     /// initialises JAC = DN*XY (intpl. derivative * coordinate matrix) parametric-to-physical space transformation matrix for given quadrature point defined in parametric space (r,s,t)
     virtual   void      JacobianAt( const std::vector<double>& rst );
@@ -340,7 +337,6 @@ class FiniteElement {
     virtual   void      IntegraldNdN( DenseMatrix<DM_MIN>& );
     
     // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
-    // TODO AJB: Consolidate N() methods; we don't need both std::vector and pointer versions.
 
     // from Hani Akbari: for analytic integration
     virtual   void    Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
@@ -390,7 +386,7 @@ class FiniteElement {
     void           VolumeElement();
     void           ElementType( CSMP_FEM_TYPE etype );
 
-    size_t dim,       /**< spatial dimension of element */
+    uint32_t dim,       /**< spatial dimension of element */
            itp,       /**< degree of interpolation */
            npf,       /**< nodes per face */
            npe,       /**< nodes per element  */
@@ -408,19 +404,19 @@ class FiniteElement {
     DenseMatrix<DM_MIN>   JAC;       /**< Jacobian matrix */
     DenseMatrix<DM_MIN>   JINV;      /**< the Jacobians inverse */
 
-    mutable std::vector<double>  NRST, ///< convenience storage for interpolation function values
+    mutable std::vector<double>    NRST, ///< convenience storage for interpolation function values
                                    DNR,  ///< convenience storage for interpolation function derivatives
                                    DNS,  ///< convenience storage for interpolation function derivatives
                                    DNT;  ///< convenience storage for interpolation function derivatives
-    mutable std::vector<size_t>    IDX;  ///< convenience storage for integer vectors
+    mutable std::vector<uint32_t>  IDX;  ///< convenience storage for integer vectors
 
   private:
     FiniteElement();
     bool    isoparametric,               ///< true if interpolation order of basis- and shape functions is the same
             uses_local_coordinates;      ///< for elements defined in a local (r,s,t) coordinate system
   
-    size_t  order_of_shape_functions,    ///< order of element shape functions
-            object_id;                   ///< number used to track operations done on a particular element
+    uint32_t  order_of_shape_functions;    ///< order of element shape functions
+    size_t    object_id;                   ///< number used to track operations done on a particular element
   
     enum { LINE, SURFACE, VOLUME } element_category; ///< element classifier
     enum CSMP_FEM_TYPE             csp_fem_type;     ///< elements supported by CSMP, see definition above

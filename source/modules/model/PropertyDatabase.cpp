@@ -20,7 +20,7 @@ namespace csmp {
 
 /** initializes from text variables file
  */
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
     : vectorFlags(dim),
       tensorFlags(dim),
@@ -36,7 +36,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
 /**
       Reader of binary variables file which also permits restriction to a subset of variables
 */
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
     : vectorFlags(dim),
       tensorFlags(dim),
@@ -52,7 +52,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const se
 
 
 /// default constructor: all variable counters are set to zero
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase()
  : vectorFlags(dim),
    tensorFlags(dim),
@@ -69,7 +69,7 @@ PropertyDatabase<dim>::PropertyDatabase()
 
 
 /// @attention We do not copy the IndexTracker here!
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
   : vectorFlags(dim),
     tensorFlags(dim),
@@ -95,7 +95,7 @@ PropertyDatabase<dim>::PropertyDatabase( const PropertyDatabase<dim>& p )
 
 
 ///  Initialization with variable specifications read from '*-variables.txt' ascii file.
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::Initialize( const char* variables_file )
   {
     if (variables_file) { // this was the pre-existing logic(JEM - July 11-2014)
@@ -114,7 +114,7 @@ void PropertyDatabase<dim>::Initialize( const char* variables_file )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,size_t>& typeCount )
   {
     set<VARIABLE_TYPE> types;
@@ -125,7 +125,7 @@ void PropertyDatabase<dim>::InitializeVariableTypeCount( std::map<VARIABLE_TYPE,
 
 
 /// Initializes private container to all available placements
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::InitializeCount()
   {
     set<PLACEMENT> places;
@@ -136,7 +136,7 @@ void PropertyDatabase<dim>::InitializeCount()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>& PropertyDatabase<dim>::operator=( const PropertyDatabase<dim>& p )
  {
     if ( &p == this ) return *this;
@@ -152,7 +152,7 @@ PropertyDatabase<dim>& PropertyDatabase<dim>::operator=( const PropertyDatabase<
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 PropertyDatabase<dim>::~PropertyDatabase()
   {
     indexTracker_.DetachFromAll();
@@ -162,28 +162,28 @@ PropertyDatabase<dim>::~PropertyDatabase()
 
 
 // property iterators
-template<size_t dim>
+template<uint32_t dim>
 std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::Begin() const
  {
     return propList_.begin();
  } 
  
  
-template<size_t dim>
+template<uint32_t dim>
 std::map<std::string,Parameter>::const_iterator  PropertyDatabase<dim>::End() const
  {
     return propList_.end();
  } 
 
 
-template<size_t dim>
+template<uint32_t dim>
 std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountEnd() const
   {
     return variableCount_.end();
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 std::map<PLACEMENT,std::map<VARIABLE_TYPE,size_t> >::const_iterator PropertyDatabase<dim>::VariableCountBegin() const
   {
     return variableCount_.begin();
@@ -198,7 +198,7 @@ database.
 
 @return The boolean variable 'true' or 'false'.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::IsDefined( const char* s ) const
  {
     if ( propList_.find(std::string(s)) != propList_.end() ) return true;
@@ -219,7 +219,7 @@ physical variable.
 
 If the variable is not defined, an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 PLACEMENT PropertyDatabase<dim>::Placement( const char* s ) const 
   {
      auto iter(propList_.find(std::string(s)));
@@ -248,7 +248,7 @@ vector inside of the MemoryManager.
 
 If the variable is not defined, an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::Index( const char* s ) const 
   {
      auto iter(propList_.find(std::string(s)));
@@ -277,7 +277,7 @@ tensor type.
 
 If the variable is not defined, an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 VARIABLE_TYPE  PropertyDatabase<dim>::Type( const char* s ) const 
   {
      auto iter(propList_.find(std::string(s)));
@@ -310,7 +310,7 @@ FlaggedArray:   variable (as defined in the variables file)
 
 If the variable is not defined, an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  PropertyDatabase<dim>::Components( const char* s ) const 
   {
      auto iter(propList_.find(std::string(s)));
@@ -352,7 +352,7 @@ class objects to derive Index keys for computations.
 If the variable does not exist in the property database, an error will be
 reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
  {
     auto iter(propList_.find(std::string(s)));
@@ -368,7 +368,7 @@ csmp::Index  PropertyDatabase<dim>::StorageKey( const char* s ) const
     return (*iter).second.key;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
 {
   auto iter(propList_.find(std::string(s)));
@@ -387,7 +387,7 @@ csmp::Parameter  PropertyDatabase<dim>::Parameter( const char* s ) const
 
 
 /// reports how the variable is normally used (as input by user vs. computed)
-template<size_t dim>
+template<uint32_t dim>
 const char*  PropertyDatabase<dim>::Usage( const char* s ) const
  {
     auto iter(propList_.find(std::string(s)));
@@ -424,7 +424,7 @@ const char*  PropertyDatabase<dim>::Usage( const char* s ) const
 
  @return  true if it succeeds, false if it fails.
  */
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
   {
   size_t parameterCount( propList_.size() );
@@ -441,7 +441,7 @@ bool PropertyDatabase<dim>::BinaryOut( fstream& fp ) const
 
 
 /// Writes to binary file, appends '_variables.dat' to fileName if necessary
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
   {
   string outputFileName(fileName);
@@ -469,7 +469,7 @@ bool PropertyDatabase<dim>::BinaryOut( const char* fileName ) const
 
  @return  true if it succeeds, false if it fails.
  */
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>& subset_variables )
 {
   size_t parameterCount(0);
@@ -495,7 +495,7 @@ bool PropertyDatabase<dim>::BinaryIn( fstream& fp, const set<string>& subset_var
 
 
 /// Reads from binary file, appends '_variables.dat' if necessary, and can read only a subset of variables from the variables as an option
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>& subset_variables )
   {
     InitializeCount();
@@ -519,7 +519,7 @@ bool PropertyDatabase<dim>::BinaryIn( const char* fileName, const set<string>& s
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 const char*  PropertyDatabase<dim>::VariablesFile() const
  {
    return physvarsFile.c_str();
@@ -532,7 +532,7 @@ const char*  PropertyDatabase<dim>::VariablesFile() const
 @return The boolean variable 'true' or 'false'.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::IsDefined( const csmp::Index& idx ) const
  {
      for ( auto& prop : propList_ )
@@ -545,7 +545,7 @@ bool PropertyDatabase<dim>::IsDefined( const csmp::Index& idx ) const
 
 
 /// Prints all parameter records in the database to std output.  
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::FlushToScreen() const
  {
      map<string,csmp::Parameter>::const_iterator  iter;
@@ -570,7 +570,7 @@ void PropertyDatabase<dim>::FlushToScreen() const
 The method uses the 'Out()' interface of the Parameter class 
 to print the variable record(s). 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::FlushToScreen( const char* propname ) const
  {
      auto iter=propList_.find(string(propname));
@@ -599,7 +599,7 @@ Private method of the property database.
 
 If the property database is empty, a warning message will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::CountVariables()
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -640,7 +640,7 @@ from file.
 
 If the property database is empty, a warning message will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::AssignVariableIndices() 
   {
      InitializeCount();
@@ -667,7 +667,7 @@ Method calls the Out() interface of the Parameter class.
 @section application Application
 To get full descriptions of the characteristics of all model variables. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::ListVariables() const 
   {
      for ( auto& prop : propList_ )
@@ -681,7 +681,7 @@ void PropertyDatabase<dim>::ListVariables() const
     
     @test last modified: SKM 25/10/14: fixed segmentation fault caused by printing empty variable.
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::ListVariableNames() const
   {
      cout <<"\nPropertyDatabase::ListVariableNames: Variables in current database: "<< endl;
@@ -712,7 +712,7 @@ is unable to open the variable database input text file.
 
 @attention Variable enum int equivalents hardcoded here
  */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_textfile, bool echo_to_screen )
   {
      ifstream  ifs( property_database_textfile );
@@ -756,7 +756,7 @@ void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_text
           // unit
           new_param.unit = *propertyIter++;
 
-          // variable type (scalar=1,vector=2,tensor=3, array=4..max<size_t>, flagged array=-1...-max<size_t>) and corresponding components/depth
+          // variable type (scalar=1,vector=2,tensor=3, array=4..max<uint32_t>, flagged array=-1...-max<uint32_t>) and corresponding components/depth
           /// Roman, 2013: in addition to the old style the new way of reading type's is added
           /// The type's can be represented by name and size specification
           /// For types SCALAR, VECTOR, TENSOR there is no need to specify the size
@@ -842,7 +842,7 @@ if the new variable already exists in the property database.
 @todo (3-D) These cout should become either Exception or errors using ErrorHandler
 @todo (3-D) Refactor to use overload internally
 */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Index  PropertyDatabase<dim>::AddProperty() 
  {    
     string     new_prop;
@@ -918,7 +918,7 @@ database.
 
 @return The Index reflecting the new state ov LocalVariables and IntegrationPointVariables, including added property.
 */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char *unit,
                                                 VARIABLE_TYPE vtype, PLACEMENT vplace, size_t vsize,
                                                 double vmin, double vmax, string usage )
@@ -968,7 +968,7 @@ database.
 @return The Index reflecting the new state ov LocalVariables and IntegrationPointVariables, including added property.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, size_t index,
                                                  VARIABLE_TYPE vtype, PLACEMENT place, size_t vsize,
                                                  double vmin, double vmax, string usage )
@@ -1032,7 +1032,7 @@ A warning will be issued, if the target variable does not exist in the
 property database.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::DeleteProperty( const char* s ) 
  {
     string pName(s);
@@ -1071,7 +1071,7 @@ objects. If this list already contains data, it is erased before the
 new indices are entered. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::ListKeys( list<csmp::Index>& keys ) const
  {
     keys.clear();
@@ -1088,7 +1088,7 @@ variable records. If this map already contains any data, it will be
 erased before the new physical variable data are entered. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) const
  {
     props.erase( props.begin(), props.end() );
@@ -1098,7 +1098,7 @@ void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) con
  }
 
 /// enlists properties with a specific placement
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Index>& props ) const
  {
     props.clear();
@@ -1113,7 +1113,7 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Ind
  }
 
 /// reports properties with the target placement as a set
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& props ) const
  {
     props.clear();
@@ -1126,7 +1126,7 @@ size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& prop
  }
 
 /// reports properties with a specific placement and type as a set
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
   {
   props.clear();
@@ -1155,7 +1155,7 @@ cannot be found, a NULL pointer is returned.
 An error is reported if the variable cannot be found in the property
 database. 
 */
-template<size_t dim>
+template<uint32_t dim>
 const char*  PropertyDatabase<dim>::Unit( const char* s ) const
   {
      auto iter = propList_.find(string(s));
@@ -1203,7 +1203,7 @@ The method will report an error if it cannot identify one of its string
 arguments. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double  PropertyDatabase<dim>::UnitConversionFactor( const char* sys_in, 
                                                   const char* sys_out, 
                                                   const char* unit ) const
@@ -1281,7 +1281,7 @@ permitted values of the target variable.
 If the target variable has not been defined in the property database,
 an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::RangeOf( const char* s, double& mn, double& mx ) const
  {
      auto iter = propList_.find(string(s));
@@ -1292,7 +1292,7 @@ void PropertyDatabase<dim>::RangeOf( const char* s, double& mn, double& mx ) con
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double PropertyDatabase<dim>::LowerLimitOf( const char* property ) const
  {
      auto iter = propList_.find(string(property));
@@ -1303,7 +1303,7 @@ double PropertyDatabase<dim>::LowerLimitOf( const char* property ) const
  } //  end 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double PropertyDatabase<dim>::UpperLimitOf( const char* property ) const
  {
      auto iter = propList_.find(string(property));
@@ -1337,7 +1337,7 @@ of range and the variable is set to the closest range bound.
 If the target variable has not been defined in the property database,
 an error will be reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::CheckRange( const char* s, double& var ) const
  {
     double mn, mx;
@@ -1375,7 +1375,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double& var ) const
 /**
    returns true if tha value of the supplied variable is within the range stored in the database, else false
 */
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var ) const
  {
     double mn, mx;
@@ -1391,7 +1391,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ScalarVariable& var
  } // end CheckRange (scalar)
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim>& var ) const
  {
     double mn, mx;
@@ -1408,7 +1408,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const VectorVariable<dim>
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim>& var ) const
  {
     double mn, mx;
@@ -1427,7 +1427,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const TensorVariable<dim>
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var ) const
  {
     double mn, mx;
@@ -1451,7 +1451,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const ArrayVariable& var 
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariable& var ) const
  {
     double mn, mx;
@@ -1478,7 +1478,7 @@ bool PropertyDatabase<dim>::CheckRange( const char* s, const FlaggedArrayVariabl
 /**
      Sets of the range of the target variable at runtime in case relevant information becomes available.
 */
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::SetRangeOf( const char* property_name, double vmin, double vmax )
  {
     auto iter = propList_.find(string(property_name));
@@ -1501,7 +1501,7 @@ retrieved.
 If the variable has not been defined in the property database, the 
 output string will be 'undefined'.
 */
-template<size_t dim>
+template<uint32_t dim>
 const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
  {
     for ( auto& prop : propList_ )
@@ -1515,7 +1515,7 @@ const char* PropertyDatabase<dim>::Name( const csmp::Index& idx ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::Out() const
  {
      cout <<"\nPropertyDatabase::Out: variables file '"<< physvarsFile <<"'"<< endl;
@@ -1538,7 +1538,7 @@ void PropertyDatabase<dim>::Out() const
 
 
 /// writes a csmp variables text file. NB: parameter is fully specified fileName(incl extension)
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyDatabase<dim>::WriteVariablesFile( const char* fileName ) const
   {
     ofstream variablesFile( fileName );
@@ -1569,8 +1569,8 @@ bool PropertyDatabase<dim>::WriteVariablesFile( const char* fileName ) const
 
 
 /// Clears arrayLengths and inserts depth of ARRAY variables for place in order of index
-template<size_t dim>
-void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<size_t>& arrayLengths ) const
+template<uint32_t dim>
+void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const
   {
     arrayLengths.clear();
     map<size_t,size_t> offsetIndexMap;
@@ -1582,10 +1582,10 @@ void PropertyDatabase<dim>::ArrayLengths( PLACEMENT place, std::vector<size_t>& 
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::ArrayLengthTotal( PLACEMENT place ) const
   {
-    vector<size_t> lengths;
+    vector<uint32_t> lengths;
     ArrayLengths( place, lengths );
     size_t totalLength(0);
     for( size_t i(0); i < lengths.size(); ++i )
@@ -1594,8 +1594,8 @@ size_t PropertyDatabase<dim>::ArrayLengthTotal( PLACEMENT place ) const
   }
 
 /// Clears arrayLengths and inserts depth of FLAGGEDARRAY variables for place in order of index
-template<size_t dim>
-void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<size_t>& arrayLengths ) const
+template<uint32_t dim>
+void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const
   {
     arrayLengths.clear();
     map<size_t,size_t> offsetIndexMap;
@@ -1607,10 +1607,10 @@ void PropertyDatabase<dim>::FlaggedArrayLengths( PLACEMENT place, std::vector<si
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::FlaggedArrayLengthTotal( PLACEMENT place ) const
   {
-    vector<size_t> lengths;
+    vector<uint32_t> lengths;
     FlaggedArrayLengths( place, lengths );
     size_t totalLength(0);
     for( size_t i(0); i < lengths.size(); ++i )
@@ -1619,7 +1619,7 @@ size_t PropertyDatabase<dim>::FlaggedArrayLengthTotal( PLACEMENT place ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::UpdateParametersAndDatabase()
   {
     // updating the numbering of variables
@@ -1640,7 +1640,7 @@ void PropertyDatabase<dim>::UpdateParametersAndDatabase()
 
 
 /// Creates IndexTracker <--> Index connection and updates offsets of all Index references
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::AttachIndices()
   {
     // attach
@@ -1653,7 +1653,7 @@ void PropertyDatabase<dim>::AttachIndices()
 
 
 /// Updates all register Index objects
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::UpdateIndexReferences()
   {
     size_t i(0);
@@ -1678,7 +1678,7 @@ void PropertyDatabase<dim>::UpdateIndexReferences()
 
 
 /// Removes IndexTracker <--> Index connection
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::DetachIndices( string parameterName )
   {
     indexTracker_.Detach(parameterName);  
@@ -1686,7 +1686,7 @@ void PropertyDatabase<dim>::DetachIndices( string parameterName )
 
 
 /// Sets local and integration point variables in indices for all parameters
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishIndexLocalAndIntegrationPointVariables()
   {
     for( auto& prop : propList_ )
@@ -1697,7 +1697,7 @@ void PropertyDatabase<dim>::EstablishIndexLocalAndIntegrationPointVariables()
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishScalarOffsets( PLACEMENT whithin )
   {
     ///  Scalars: data offset = flag offset = index (as many flags as components)
@@ -1707,7 +1707,7 @@ void PropertyDatabase<dim>::EstablishScalarOffsets( PLACEMENT whithin )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVectorOffsets( PLACEMENT whithin )
   {
     const size_t scalars( VariableCount( whithin, SCALAR ) );
@@ -1719,7 +1719,7 @@ void PropertyDatabase<dim>::EstablishVectorOffsets( PLACEMENT whithin )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishTensorOffsets( PLACEMENT whithin )
   {
     const size_t scalars( VariableCount( whithin, SCALAR ) );
@@ -1736,7 +1736,7 @@ void PropertyDatabase<dim>::EstablishTensorOffsets( PLACEMENT whithin )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishArrayOffsets( PLACEMENT whithin )
   {
     const size_t scalars( VariableCount( whithin, SCALAR ) );
@@ -1768,7 +1768,7 @@ void PropertyDatabase<dim>::EstablishArrayOffsets( PLACEMENT whithin )
       }
   }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishFlaggedArrayOffsets( PLACEMENT whithin )
   {
     const size_t scalars( VariableCount( whithin, SCALAR ) );
@@ -1803,7 +1803,7 @@ void PropertyDatabase<dim>::EstablishFlaggedArrayOffsets( PLACEMENT whithin )
       }
   }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishIndexOffsets()
   {
     for( auto it( VariableCountBegin() ); it != VariableCountEnd(); ++it )
@@ -1818,7 +1818,7 @@ void PropertyDatabase<dim>::EstablishIndexOffsets()
 
 
 /// Establishes integration point factors used in index arithmetic within LocalVariableStorage
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishPlacementDependentProperties( PLACEMENT placement, csmp::Index& key ) const
   {
     if( placement == ELEMENT_INTEGRATION_POINT ||
@@ -1863,7 +1863,7 @@ void PropertyDatabase<dim>::EstablishPlacementDependentProperties( PLACEMENT pla
 
 
 /// Roman, 2013: Added the case of negative type for FlaggedArrayVariable
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype, csmp::Index& key ) const
   {
     if( vtype < 0 )
@@ -1906,7 +1906,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
 
 
 /// Roman, 2013: Added explicit way of establishing type and size of the variable dependent properties
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype, size_t vsize, csmp::Index& key ) const
   {
     if( static_cast<VARIABLE_TYPE>(vtype) == SCALAR )
@@ -1949,7 +1949,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( int vtype,
 /// Available types:    SCALAR, VECTOR, TENSOR, ( the size defined automatically based on the dimension )
 ///                     ARRAY Size,             ( size of Array Variable with single flag specified by user, one should put space after the name ARRAY)
 ///                     FLAGGEDARRAY Size       ( size of Flagged Array Variable with multiple flag's specified by user, one should put space after the name FLAGGEDARRAY)
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( std::string vtype, csmp::Index& key ) const
   {
     std::string vtype_name;
@@ -1999,7 +1999,7 @@ void PropertyDatabase<dim>::EstablishVariableTypeDependentProperties( std::strin
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 LocalVariables PropertyDatabase<dim>::LocalVariablesAt( PLACEMENT within ) const
   {
     if( within == ELEMENT_INTEGRATION_POINT ||
@@ -2028,7 +2028,7 @@ LocalVariables PropertyDatabase<dim>::LocalVariablesAt( PLACEMENT within ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::IntegrationPointVariablesAt( PLACEMENT within ) const
   {
     /// only for Element / Face / InterFace and their IntegrationPointVariables
@@ -2043,7 +2043,7 @@ IntegrationPointVariables PropertyDatabase<dim>::IntegrationPointVariablesAt( PL
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::ElementIntegrationPointVariables() const
   {
     size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
@@ -2068,7 +2068,7 @@ IntegrationPointVariables PropertyDatabase<dim>::ElementIntegrationPointVariable
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::FaceIntegrationPointVariables() const
   {
     size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
@@ -2092,7 +2092,7 @@ IntegrationPointVariables PropertyDatabase<dim>::FaceIntegrationPointVariables()
                                       totalDataDepthFA, totalFlagDepthFA );
   }
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables PropertyDatabase<dim>::InterFaceIntegrationPointVariables() const
   {
     size_t scalarsSI(0), vectorsSI(0), tensorsSI(0), arrayCountSI(0), arrayLengthSI(0),flaggedArrayCountSI(0),flaggedArrayLengthSI(0);
@@ -2117,7 +2117,7 @@ IntegrationPointVariables PropertyDatabase<dim>::InterFaceIntegrationPointVariab
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::VariableCount( PLACEMENT within, size_t& scalars, size_t& vectors, size_t& tensors, size_t& arrayCount, size_t& arrayLength, size_t& flaggedArrayCount, size_t& flaggedArrayLength ) const
   {
     scalars             = VariableCount     ( within, SCALAR );
@@ -2131,7 +2131,7 @@ void PropertyDatabase<dim>::VariableCount( PLACEMENT within, size_t& scalars, si
 
   }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::VariableCount() const
   {
     size_t variableCount(0);
@@ -2142,7 +2142,7 @@ size_t PropertyDatabase<dim>::VariableCount() const
     return variableCount;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement, VARIABLE_TYPE variableType ) const
   {
     size_t variableCount(0);
@@ -2157,7 +2157,7 @@ size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement, VARIAB
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::VariableCount( VARIABLE_TYPE variableType ) const
   {
     size_t variableCount(0);
@@ -2171,7 +2171,7 @@ size_t PropertyDatabase<dim>::VariableCount( VARIABLE_TYPE variableType ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement ) const
   {
     size_t variableCount(0);
@@ -2186,7 +2186,7 @@ size_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement ) const
 
 
 /// Clears propertyPlacements and inserts all PLACEMENT for all propertyNames
-template<size_t dim>
+template<uint32_t dim>
 void PropertyDatabase<dim>::ListProperties( const set<string>& propertyNames, set<PLACEMENT>& propertyPlacments ) const
 {
   propertyPlacments.clear();

@@ -6,8 +6,8 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class TwoPhaseModel;
+template<uint32_t> class Model;
+template<uint32_t> class TwoPhaseModel;
 
 /// PL Nov 2010
 class TwoPhaseModel_Test : public Test {

@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FluidCompressibilitySourceLHS<dim>::FluidCompressibilitySourceLHS( const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& key_SPV,
                                                                    const csmp::INDEX<SCALAR,ELEMENT>& key_PHI,
                                                                    const csmp::INDEX<SCALAR,ELEMENT>& key_CT,
@@ -27,14 +27,14 @@ FluidCompressibilitySourceLHS<dim>::FluidCompressibilitySourceLHS( const csmp::I
 /**
     Element-wise accumulation of source term/
 */  
-template<size_t dim>
+template<uint32_t dim>
 void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix& mat ) const
   {
     const double phi = e.Read( key_PHI_ );
     const double ct  = e.Read( key_CT_ );
 
     const size_t sectors(e.Sectors());
-    for ( size_t i=0U; i<sectors; ++i ) 
+    for ( auto i{0}; i<sectors; ++i ) 
      {
         const double sector_PV = (interpolate_pf_to_sector_ip_) ? e.Read( i, 0U, key_SPV_ ) : e.SectorVolume(i) * phi;  
         double pf0(0.), pf1(0.);
@@ -66,12 +66,12 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
         @note using a single pressure value is perhaps not rigorous enough. One should rather interpolate
         the pressure to the sector integration in order to capture the source term more accurately.
   */ 
-  template<size_t dim>
+  template<uint32_t dim>
   void FluidCompressibilitySourceLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& mat ) const
   {
     // getting properties from parent elements
     const size_t parent_elements(fv.Parents());
-    for ( size_t i=0U; i<parent_elements; ++i ) {
+    for ( auto i{0}; i<parent_elements; ++i ) {
         const Element<dim>* const eptr = fv.Parent(i);
         const size_t n_node = fv.ParentNodeNumber(i); 
 

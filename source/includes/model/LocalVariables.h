@@ -17,15 +17,15 @@ struct LocalVariables {
       totalFlagDepth    (0)
   {}
 
-  LocalVariables( size_t scalarsVars,
-                  size_t vectorVars,
-                  size_t tensorVars,
-                  size_t array_count,
-                  size_t array_length,
-                  size_t flag_array_count,
-                  size_t flag_array_length,
-                  size_t total_data_depth,
-                  size_t total_flag_depth )
+  LocalVariables( uint32_t scalarsVars,
+                  uint32_t vectorVars,
+                  uint32_t tensorVars,
+                  uint32_t array_count,
+                  uint32_t array_length,
+                  uint32_t flag_array_count,
+                  uint32_t flag_array_length,
+                  uint32_t total_data_depth,
+                  uint32_t total_flag_depth )
 
     : scalars           (scalarsVars),
       vectors           (vectorVars),
@@ -69,7 +69,7 @@ struct LocalVariables {
 
   bool Empty() const { return ( scalars==0U && vectors==0U && tensors==0U && arrayCount==0U && flaggedArrayCount==0U ); }
 
-  size_t    scalars,
+  uint32_t  scalars,
             vectors,
             tensors,
             arrayCount,

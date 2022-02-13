@@ -9,8 +9,8 @@ namespace csmp {
 
 class ModelTopology;
 class ANSYS_ElementSpecifications;
-template<size_t> class VSet;
-template<size_t> class Model;
+template<uint32_t> class VSet;
+template<uint32_t> class Model;
 
 /**
  
@@ -267,7 +267,7 @@ class ANSYS_Interface {
     
     /// Reading function
 
-    template<size_t dim>
+    template<uint32_t dim>
     void Read_ANSYS_Mesh( const std::string& mesh_file_set,
                           VSet<dim>&,
                           ModelTopology&,
@@ -276,7 +276,7 @@ class ANSYS_Interface {
 
   protected:
     /// ascii format
-    template<size_t dim>
+    template<uint32_t dim>
     void ReadMeshASCII( const std::string& meshfile,
                         VSet<dim>&,
                         ModelTopology&,
@@ -284,7 +284,7 @@ class ANSYS_Interface {
 
     /// binary format
     /// use the binary interfaces for efficient reading of large files
-    template<size_t dim>
+    template<uint32_t dim>
     void ReadMeshBinary( const std::string& meshfile,
                          VSet<dim>&,
                          ModelTopology&,
@@ -301,31 +301,31 @@ class ANSYS_Interface {
     bool ReadRegionsAndElementTypesASCII( std::ifstream& ifs );
 
     /// ASCI data file
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPelementASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPlistASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPfvertsASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPmaterialASCII( std::ifstream&, VSet<dim>& );
 
     /// Binary data file
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadNodeCoordinatesBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadBoundaryFlagsAndConditionsBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPelementBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPlistBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPfvertsBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPmaterialBinary( FILE*, VSet<dim>& );
 
     void Clear();
@@ -348,9 +348,9 @@ class ANSYS_Interface {
 
 
 /// ANSYS - to - CSMP FE's
-template<size_t dim>
+template<uint32_t dim>
 void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>&,bool);
-void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>&,bool,size_t);
+void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>&,bool,uint32_t);
 
 
 

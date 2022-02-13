@@ -34,7 +34,7 @@ namespace csmp {
 
 	void QuadraturePointOutputToVTK::OutputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK(const Model<3U>& model, const char* region, const char* variable_name)
  {
-     const size_t dim(3U); // REMOVE WHEN TEMPLATIZING
+     const uint32_t dim(3U); // REMOVE WHEN TEMPLATIZING
      const Region<dim>& model_domain(model.Region(region));
      const csmp::Index key(model.Database().StorageKey(variable_name));
      assert( key.type == SCALAR );
@@ -88,8 +88,8 @@ namespace csmp {
      DenseMatrix<DM_MIN> COORD;
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
           (*it)->NodeCoordinateMatrix( COORD );
-          for ( size_t i=0; i<(*it)->Nodes(); ++i ) {
-              for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( auto i=0; i<(*it)->Nodes(); ++i ) {
+              for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
               if ( dim == 2 ) ofs << 0.;
               ofs << endl;
             }
@@ -104,7 +104,7 @@ namespace csmp {
             // nodes per cell
             ofs << (*it)->Nodes() <<" ";
             // member nodes (running node index)
-            for ( size_t i=0; i<(*it)->Nodes(); ++i ) ofs << node++ <<" ";
+            for ( auto i=0; i<(*it)->Nodes(); ++i ) ofs << node++ <<" ";
             ofs << endl;
         }
 
@@ -130,12 +130,12 @@ namespace csmp {
      for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
            // collecting the variable values from the integration points
            IVAR.resize( (*it)->IntegrationPoints() );
-           for ( size_t i=0U; i<(*it)->IntegrationPoints(); ++i )
+           for ( auto i{0}; i<(*it)->IntegrationPoints(); ++i )
              IVAR[i] = (*it)->Read( i, key );
            // extrapolation
            const size_t n_node_variables(1U);
            (*it)->FE()->ExtrapolateIntegrationPointVariableToNodes( n_node_variables, IVAR, NVAR );
-           for ( size_t i=0U; i<NVAR.size(); ++i ) ofs << NVAR[i] <<" ";
+           for ( auto i{0}; i<NVAR.size(); ++i ) ofs << NVAR[i] <<" ";
            ofs << endl;
        }
 

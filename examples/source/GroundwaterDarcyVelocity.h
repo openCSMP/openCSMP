@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class GroundwaterDarcyVelocity : public Interrelation<dim> {
     Operand<dim>&  DH;   // hydraulic head gradient
     Operand<dim>&  K;    // hydraulic conductivity

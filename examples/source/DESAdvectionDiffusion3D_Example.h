@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-  template<size_t dim> class Model;
-  template<size_t dim> class VTK_Interface;
+  template<uint32_t dim> class Model;
+  template<uint32_t dim> class VTK_Interface;
 
 class  DESAdvectionDiffusion3D_Example : public Example {
   public:

@@ -138,17 +138,17 @@ namespace csmp {
     }
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   Point<dim>
-  directedAreaOfFacet(const Element<dim>& e, size_t iFacet)
+  directedAreaOfFacet(const Element<dim>& e, uint32_t iFacet)
   {
     auto fv = e.FV();
     switch (fv->Geometry()) {
       case LINE:
       {
         Point<dim> normal;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0U; iNode < iNrNodes; ++iNode) {
           const Point<dim> n(e.N(iNode)->Coordinate());
           auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           normal += weights.first * n;
@@ -162,8 +162,8 @@ namespace csmp {
       {
         Point<dim> tangent;
         Point<dim> bitangent;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0U; iNode < iNrNodes; ++iNode) {
           const Point<dim> n(e.N(iNode)->Coordinate());
           auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           tangent += weights.first * n;
@@ -180,8 +180,8 @@ namespace csmp {
       {
         Point<dim> v0(0.0);
         Point<dim> v1(0.0);
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0; iNode < iNrNodes; ++iNode) {
           auto xform_weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           const Point<dim> n(e.N(iNode)->Coordinate());
           v0 += xform_weights.first * n;
@@ -197,8 +197,8 @@ namespace csmp {
     }
   }
 
-  template Point<1u> directedAreaOfFacet(const Element<1u>& e, size_t iFacet);
-  template Point<2u> directedAreaOfFacet(const Element<2u>& e, size_t iFacet);
-  template Point<3u> directedAreaOfFacet(const Element<3u>& e, size_t iFacet);
+  template Point<1u> directedAreaOfFacet(const Element<1u>& e, uint32_t iFacet);
+  template Point<2u> directedAreaOfFacet(const Element<2u>& e, uint32_t iFacet);
+  template Point<3u> directedAreaOfFacet(const Element<3u>& e, uint32_t iFacet);
 
 }

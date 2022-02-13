@@ -6,7 +6,7 @@
 namespace csmp{
 
 
-template<size_t dim>
+template<uint32_t dim>
 FractureBrooksCoreyParameterVisitor<dim>::FractureBrooksCoreyParameterVisitor( Model<dim>& model, const char* frapTag,
                                                                                const char* brooksCoreyLambdaTag, double meanPoreRadius )
   : Visitor<dim>( MODEL, ELEMENT ), model_( model ), frapKey_( model.Database().StorageKey(frapTag) ),
@@ -16,7 +16,7 @@ FractureBrooksCoreyParameterVisitor<dim>::FractureBrooksCoreyParameterVisitor( M
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void FractureBrooksCoreyParameterVisitor<dim>::Visit( Element<dim>* element )
   {
     const double frap( element->Read(frapKey_) );

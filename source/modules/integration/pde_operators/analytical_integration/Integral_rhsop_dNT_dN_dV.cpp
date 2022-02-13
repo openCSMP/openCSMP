@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX,typename var>
-Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL,typename var>
+Integral_rhsop_dNT_dN_dV<dim,CELL,var>::Integral_rhsop_dNT_dN_dV( const PropertyDatabase<dim>& pref,
                                                                 const char*             oper,
                                                                 const char*             basic,
                                                                 const char*             test,
@@ -43,8 +43,8 @@ Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::Integral_rhsop_dNT_dN_dV( const Prope
 
 /** Reads the Operand values from the elements.
 */
-template<size_t dim,class SIMPLEX,typename var>
-void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL,typename var>
+void Integral_rhsop_dNT_dN_dV<dim,CELL,var>::GetOperands( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -56,8 +56,8 @@ void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::GetOperands( const SIMPLEX& e )
 
 
 
-template<size_t dim,class SIMPLEX,typename var>
-void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL,typename var>
+void Integral_rhsop_dNT_dN_dV<dim,CELL,var>::ComputeContribution( const CELL& e )
  {
     e.dN( DN );
     
@@ -74,7 +74,7 @@ void Integral_rhsop_dNT_dN_dV<dim,SIMPLEX,var>::ComputeContribution( const SIMPL
     double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
       for (size_t j = 0; j < e.Nodes(); ++j) {
            MathOperatorRHS<dim>::RHS[i] += DNT(i,j) * basic_var_[j]() * volume * prefactor_;
         }

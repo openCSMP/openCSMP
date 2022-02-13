@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FV_IntegrationPointsAndWeights<dim>::FV_IntegrationPointsAndWeights()
  {
  } // end constructor
@@ -20,7 +20,7 @@ should be used in all cases.
 
 @param typeOfElement type of Finite Element in CSMP
 */
-template<size_t dim>
+template<uint32_t dim>
 FV_IntegrationPointsAndWeights<dim>::FV_IntegrationPointsAndWeights( CSMP_FEM_TYPE typeOfElement )
  {
     ErrorHandler& error_handler ( ErrorHandler::Instance() );
@@ -69,7 +69,7 @@ FV_IntegrationPointsAndWeights<dim>::FV_IntegrationPointsAndWeights( CSMP_FEM_TY
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 FV_IntegrationPointsAndWeights<dim>::~FV_IntegrationPointsAndWeights()
 {
 }
@@ -94,12 +94,12 @@ FV_IntegrationPointsAndWeights<dim>::~FV_IntegrationPointsAndWeights()
 The method is used in FiniteVolumeStencil class to resize the internal arrays 
 of the FV_IntegrationPointsAndWeights class.
 */
-template<size_t dim>
-void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
-                                                  size_t srfs_per_node, 
-                                                  size_t n_ivol, 
-                                                  size_t n_spts, 
-                                                  size_t n_vpts ) 
+template<uint32_t dim>
+void FV_IntegrationPointsAndWeights<dim>::Resize( uint32_t n_isrf,
+                                                  uint32_t srfs_per_node,
+                                                  uint32_t n_ivol,
+                                                  uint32_t n_spts,
+                                                  uint32_t n_vpts )
  {
     m_facet_integration_points.resize( n_isrf );   vector<vector<Point<dim> > >( m_facet_integration_points ).swap( m_facet_integration_points );
     m_facet_integration_weights.resize( n_isrf );  vector<vector<double> >( m_facet_integration_weights ).swap( m_facet_integration_weights );
@@ -107,14 +107,14 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
     m_projection_weights.resize( n_isrf );         vector<vector<double> >(m_projection_weights).swap(m_projection_weights);
 
     m_facet_normals.resize( n_isrf );              vector<Point<dim> >(m_facet_normals).swap(m_facet_normals);
-    m_facets_surrounding_node.resize( n_ivol );    vector<vector<size_t> >(m_facets_surrounding_node).swap(m_facets_surrounding_node);
+    m_facets_surrounding_node.resize( n_ivol );    vector<vector<uint32_t> >(m_facets_surrounding_node).swap(m_facets_surrounding_node);
     
-    for ( size_t i=0U; i<n_ivol; i++ ) {
+    for ( auto i{0}; i<n_ivol; i++ ) {
          m_facets_surrounding_node[i].resize( srfs_per_node );
-         vector<size_t>(m_facets_surrounding_node[i]).swap(m_facets_surrounding_node[i]);
+         vector<uint32_t>(m_facets_surrounding_node[i]).swap(m_facets_surrounding_node[i]);
       }
     
-    for ( size_t i=0U; i<n_isrf; i++ ) {
+    for ( auto i{0}; i<n_isrf; i++ ) {
          m_facet_integration_points[i].resize( n_spts );
          vector<Point<dim> >(m_facet_integration_points[i]).swap(m_facet_integration_points[i]);
          m_facet_integration_weights[i].resize(n_spts);
@@ -130,7 +130,7 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
     m_par_volume_integration_points.resize( n_ivol );  
     vector<vector<Point<dim> > >(m_par_volume_integration_points).swap(m_par_volume_integration_points);
 
-    for ( size_t i=0U; i<n_ivol; i++ ) {
+    for ( auto i{0}; i<n_ivol; i++ ) {
          m_volume_integration_points1[i].resize( n_vpts );
          vector<Point<dim> >(m_volume_integration_points1[i]).swap(m_volume_integration_points1[i]);
          m_par_volume_integration_points[i].resize( n_vpts );
@@ -156,7 +156,7 @@ void FV_IntegrationPointsAndWeights<dim>::Resize( size_t n_isrf,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints( 
                           std::vector<std::vector<Point<dim> > >&  volume_integration_points ) const
 {
@@ -164,7 +164,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationPoints(
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights( 
                                        std::vector<std::vector<double> >&  volume_integration_weights ) const
 {
@@ -172,7 +172,7 @@ void FV_IntegrationPointsAndWeights<dim>::SectorIntegrationWeights(
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints( 
                          std::vector<std::vector<Point<dim> > >&  facet_integration_points ) const
 {
@@ -180,7 +180,7 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationPoints(
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights( 
                                       std::vector<std::vector<double> >&  facet_integration_weights ) const
 {
@@ -188,21 +188,21 @@ void FV_IntegrationPointsAndWeights<dim>::FacetIntegrationWeights(
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::ProjectionWeights( 
                                                 std::vector<std::vector<double> >&  projection_weights ) const
 {
    projection_weights = m_projection_weights;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormalTransformations( 
                                                    std::vector<std::vector<std::pair<double,double>>>&  facet_normal_xforms ) const
 {
    facet_normal_xforms = m_facet_normal_xforms;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetNormals( 
                                                    std::vector<Point<dim> >&  facet_normals ) const
 {
@@ -210,46 +210,46 @@ void FV_IntegrationPointsAndWeights<dim>::FacetNormals(
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetsSurroundingNode( 
-                                   std::vector<std::vector<size_t> >& facets_surrounding_node ) const
+                                   std::vector<std::vector<uint32_t> >& facets_surrounding_node ) const
 {
    facets_surrounding_node = m_facets_surrounding_node;
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::EdgePairs( 
-                                    std::vector<std::pair<size_t,size_t> >&  edges_of_element ) const
+                                    std::vector<std::pair<uint32_t,uint32_t> >&  edges_of_element ) const
 {
    edges_of_element = m_edges_of_element;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::EdgeMidpoints(std::vector<Point<dim> >& rst_facet_edge_midpoints)
 {
    rst_facet_edge_midpoints = m_facet_edge_midpoints;
 }
 		  
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::Barycenter( Point<dim>& rst_barycenter )
 {
 	rst_barycenter = m_barycenter;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetPoints( std::vector<std::vector<Point<dim> > >& rst_facet_points )
 {
    rst_facet_points = m_facet_points;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::FacetTypes( std::vector<FV_FACET_TYPE>& facet_types )
 {
    facet_types = m_facet_types;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
                           std::vector<std::vector<Point<dim> > >& rst_sector_points)
 {
@@ -257,9 +257,9 @@ void FV_IntegrationPointsAndWeights<dim>::SectorPoints(
 }    
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::SectorEdgePairs( 
-               std::vector<std::vector<std::pair<size_t,size_t> > >&  edges_of_sector ) const
+               std::vector<std::vector<std::pair<uint32_t,uint32_t> > >&  edges_of_sector ) const
 {
    edges_of_sector = m_edge_of_sectors;
 }
@@ -271,14 +271,14 @@ void FV_IntegrationPointsAndWeights<dim>::SectorEdgePairs(
 Generates data needed in the subdivision of the isoparametric linear
 bar element into CV sectors.
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR()
 {
-  const size_t NumOfIPperVolume(1U);
-  const size_t NumberOfInternalFacets(1U);
-  const size_t NumberOfInternalFacetsPerNode(1U);
-  const size_t NumberOfInternalVolumes(2U);
-  const size_t NumberOfIntegrationPointsPerFacet(1U);
+  const uint32_t NumOfIPperVolume(1U);
+  const uint32_t NumberOfInternalFacets(1U);
+  const uint32_t NumberOfInternalFacetsPerNode(1U);
+  const uint32_t NumberOfInternalVolumes(2U);
+  const uint32_t NumberOfIntegrationPointsPerFacet(1U);
 
   Resize( NumberOfInternalFacets, NumberOfInternalFacetsPerNode,
           NumberOfInternalVolumes, NumberOfIntegrationPointsPerFacet, NumOfIPperVolume ); 
@@ -297,7 +297,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
                    }; 
     
   // in parametric space, the bar element has just a single dimension r
-  for( size_t i=0; i<NumberOfInternalVolumes; i++ )
+  for( uint32_t i=0; i<NumberOfInternalVolumes; i++ )
     m_volume_integration_points1[i][0][0U]=vip[i][0U];
 
   // Facet surrounding node
@@ -306,7 +306,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
 
   // Edges
   m_edges_of_element.resize(1U);
-  vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+  vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
   m_edges_of_element[0]=make_pair(0U,1U);
 
   m_facet_edge_midpoints[0][0] = -1./2.;
@@ -334,7 +334,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_BAR
   m_sector_points[1][1] = 1.; 
 
   m_edge_of_sectors.resize(2U);
-  for ( size_t jSector=0U; jSector < 2U; jSector++ ) {
+  for ( uint32_t jSector=0U; jSector < 2U; jSector++ ) {
       m_edge_of_sectors[jSector].resize(1U);
       // in this case each sector only has one edge
       m_edge_of_sectors[jSector][0] = make_pair(0U,1U); 
@@ -351,16 +351,16 @@ Generates data for subdivision of isoparametric linear
 triangle to CV sectors.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI()
 {
   // Total number of line segments in the triangle is 9, but internal - 3, by one IP 
-  const size_t NumOfIPperVolume(1U);
+  const uint32_t NumOfIPperVolume(1U);
   Resize(3,2,3,1,NumOfIPperVolume); 
 
   // Volume (area) of each sector 
-  for(size_t i=0; i<3U; i++) //where 3 is the number of sectors
-    for(size_t j=0;j<NumOfIPperVolume;j++)
+  for(uint32_t i=0; i<3U; i++) //where 3 is the number of sectors
+    for(uint32_t j=0;j<NumOfIPperVolume;j++)
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1./6.;
      
@@ -373,15 +373,15 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
      }; 
 
    // products of detJ's, weights & conversion factors
-   const size_t iNumberOfFacets(3U);
+   const uint32_t iNumberOfFacets(3U);
   
    m_facet_integration_weights[0][0]=sqrt(5.)/6.;
    m_facet_integration_weights[1][0]=sqrt(2.)/6.;
    m_facet_integration_weights[2][0]=sqrt(5.)/6.;
 
    // fill in vectors of facet integration points
-   for(size_t i=0;i<iNumberOfFacets;i++)
-    for (size_t j=0;j<dim; j++)
+   for(uint32_t i=0;i<iNumberOfFacets;i++)
+    for (uint32_t j=0;j<dim; j++)
       m_facet_integration_points[i][0][j]=fip[i][j];  
   
    // facet unit normals  
@@ -402,8 +402,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
       { 7./36., 11./18., 0. }
     }; 
     
-    for(size_t i=0U;i<3U;i++)
-      for(size_t j=0U;j<dim; j++) m_volume_integration_points1[i][0][j]=vip[i][j];
+    for(auto i{0};i<3U;i++)
+      for(uint32_t j=0U;j<dim; j++) m_volume_integration_points1[i][0][j]=vip[i][j];
       
     // facets surrounding node
     m_facets_surrounding_node[0][0]=0U; m_facets_surrounding_node[0][1]=2U;     
@@ -437,7 +437,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
         { { -1.0/6.0,1.0/3.0,-1.0/6.0 }, { 1.0/3.0,1.0/12.0,-5.0/12.0 } }
     };
     m_facet_normal_xforms.resize(3u);
-    for ( size_t iFacet=0U; iFacet<3U; iFacet++ ) {
+    for ( uint32_t iFacet=0U; iFacet<3U; iFacet++ ) {
         m_facet_types[iFacet] = UNIT_LINEAR_FACET;
 
         m_facet_points[iFacet].resize(2U);
@@ -446,7 +446,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
         m_facet_points[iFacet][1] = m_barycenter;
 
         m_facet_normal_xforms[iFacet].resize(3u);
-        for (size_t j = 0; j < 3; ++j) {
+        for (uint32_t j = 0; j < 3; ++j) {
             m_facet_normal_xforms[iFacet][j]
                 = std::make_pair(
                         facet_normal_transforms[iFacet][0][j],
@@ -459,7 +459,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
     Point<dim> p;
     // sector points numbered counter-clockwise from the outside looking in
     // and starting with the sector (node) point
-    for ( size_t iSector=0U; iSector<3U; iSector++ ) { 
+    for ( uint32_t iSector=0U; iSector<3U; iSector++ ) {
          // each sector has four points 
          m_sector_points[iSector].resize(4U); 
          // generating sector node coordinates assuming that triangle has a 90o
@@ -474,9 +474,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
     
     // for all sectors  
     m_edge_of_sectors.resize(3U);
-    for ( size_t jSector = 0U; jSector < 3U; jSector++ ) {
+    for ( uint32_t jSector = 0U; jSector < 3U; jSector++ ) {
          m_edge_of_sectors[jSector].resize(4U);
-         for ( size_t jEdge = 0U; jEdge < 4U; jEdge++ )
+         for ( uint32_t jEdge = 0U; jEdge < 4U; jEdge++ )
            m_edge_of_sectors[jSector][jEdge] = make_pair(jEdge,(jEdge+1) % 4); 
       }
     
@@ -491,14 +491,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TRI
 Generates data for subdivision of isoparametric linear
 quadrilateral to the CV sectors.
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUAD()
 {
-  const size_t NumOfInternalFacets(4U);
-  const size_t NumOfInternalFacetsPerNode(2U);
-  const size_t NumOfInternalVolumes(4U); // == VolMultipliers
-  const size_t NumOfIPperVolume(1U);
-  const size_t NumOfIPperFacet(1U);
+  const uint32_t NumOfInternalFacets(4U);
+  const uint32_t NumOfInternalFacetsPerNode(2U);
+  const uint32_t NumOfInternalVolumes(4U); // == VolMultipliers
+  const uint32_t NumOfIPperVolume(1U);
+  const uint32_t NumOfIPperFacet(1U);
 
   //Resize SKM data structure  int_surf, srf_per_node, int_vols, int_pts_per_surf, 
    Resize( NumOfInternalFacets,
@@ -508,8 +508,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
            NumOfIPperVolume );
  
   // Map volume multipliers to new vectors
-  for(size_t i=0;i<NumOfInternalVolumes;i++)
-    for(size_t j=0;j<NumOfIPperVolume;j++)
+  for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+    for(uint32_t j=0;j<NumOfIPperVolume;j++)
       m_volume_integration_weights[i][j]=1.;
      
   // facet integration points
@@ -524,9 +524,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
    // products of detJ's, weights & conversion factors
    
    // Fill in vectors of face variables
-   for(size_t i=0;i<NumOfInternalFacets; i++ ){
+   for(uint32_t i=0;i<NumOfInternalFacets; i++ ){
      m_facet_integration_weights[i][0]=1.0;
-    	for(size_t j=0;j<dim; j++) {
+    	for(uint32_t j=0;j<dim; j++) {
            m_facet_integration_points[i][0][j]=fip[i][j];  
         }
     }
@@ -540,8 +540,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
       {-0.5, 0.5, 0. }
     }; 
     
-   for(size_t i=0U; i<NumOfInternalVolumes; i++)
-      for(size_t j=0U; j<dim; j++ ) m_volume_integration_points1[i][0][j]=vip[i][j];
+   for(auto i{0}; i<NumOfInternalVolumes; i++)
+      for(uint32_t j=0U; j<dim; j++ ) m_volume_integration_points1[i][0][j]=vip[i][j];
 
    m_facet_normals[0][0]= 1.0; m_facet_normals[0][1]= 0.0;
    m_facet_normals[1][0]= 0.0; m_facet_normals[1][1]= 1.0;
@@ -579,12 +579,12 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     };
     m_facet_normal_xforms.resize(4u);
 
-    for ( size_t iFacet = 0U; iFacet < 4; iFacet++ )
+    for ( uint32_t iFacet = 0U; iFacet < 4; iFacet++ )
        {
          m_facet_types[iFacet] = UNIT_LINEAR_FACET;
 
          m_facet_normal_xforms[iFacet].resize(4u);
-         for (size_t j = 0; j < 4; ++j) {
+         for (uint32_t j = 0; j < 4; ++j) {
              m_facet_normal_xforms[iFacet][j]
                  = std::make_pair(
                         facet_normal_transforms[iFacet][0][j],
@@ -599,7 +599,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     
     // tested: 08/Nov/2007 Hamid	
     Point<dim> p;
-    for ( size_t iSector=0U; iSector<4U; iSector++ ) {  
+    for ( uint32_t iSector=0U; iSector<4U; iSector++ ) {
          m_sector_points[iSector].resize(4U);               
          m_sector_points[iSector][1] = m_facet_edge_midpoints[iSector];         
          m_sector_points[iSector][2] = m_barycenter;                             
@@ -616,9 +616,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
     m_sector_points[3][0] = p;
 
     m_edge_of_sectors.resize(4U);
-    for ( size_t jSector = 0U; jSector < 4U; jSector++ ) {
+    for ( uint32_t jSector = 0U; jSector < 4U; jSector++ ) {
         m_edge_of_sectors[jSector].resize(4U);
-        for ( size_t jEdge = 0U; jEdge < 4U; jEdge++ )
+        for ( uint32_t jEdge = 0U; jEdge < 4U; jEdge++ )
           m_edge_of_sectors[jSector][jEdge] = make_pair(jEdge,(jEdge+1)%4); 
       }
     
@@ -632,14 +632,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_QUA
 Generates stencil data for subdivision of unit isoparametric linear
 tetrahedron to the CV sectors.
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET()
  {
-    const size_t NumOfInternalFacets(6U);
-    const size_t NumOfInternalFacetsPerNode(3U);
-    const size_t NumOfInternalVolumes(4U); // == VolMultipliers
-  	const size_t NumOfIPperVolume(1U);
-    const size_t NumOfIPperFacet(1U);
+    const uint32_t NumOfInternalFacets(6U);
+    const uint32_t NumOfInternalFacetsPerNode(3U);
+    const uint32_t NumOfInternalVolumes(4U); // == VolMultipliers
+  	const uint32_t NumOfIPperVolume(1U);
+    const uint32_t NumOfIPperFacet(1U);
 
    Resize( NumOfInternalFacets,
             NumOfInternalFacetsPerNode,
@@ -648,8 +648,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
             NumOfIPperVolume );
  
     // Map volume multipliers to new vectors
-    for(size_t i=0;i<NumOfInternalVolumes;i++)
-      for(size_t j=0;j<NumOfIPperVolume;j++)
+    for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+      for(uint32_t j=0;j<NumOfIPperVolume;j++)
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1./24.;
 	
@@ -664,8 +664,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     };
     
     // Mapping to the new vectors    		
-    for(size_t i=0;i<NumOfInternalFacets;i++)
-      for(size_t j=0;j<dim; j++)
+    for(uint32_t i=0;i<NumOfInternalFacets;i++)
+      for(uint32_t j=0;j<dim; j++)
     	  m_facet_integration_points[i][0][j]=fip[i][j];
     		  		
     // Subdivided Tet Volume integration points
@@ -678,9 +678,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     };
     
     // Map volume IP to vectors 		
-    for(size_t i=0;i<NumOfInternalVolumes;i++)
-     for(size_t j=0;j<NumOfIPperVolume; j++)
-      for(size_t k=0;k<dim; k++)
+    for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+     for(uint32_t j=0;j<NumOfIPperVolume; j++)
+      for(uint32_t k=0;k<dim; k++)
         m_volume_integration_points1[i][j][k]=vip[i][k];		
     
     // products of detJ's, weights & conversion factors
@@ -717,7 +717,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
     
     // Edges
     m_edges_of_element.resize(6U);
-    vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+    vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
     m_edges_of_element[0]=make_pair(0U,1U);
     m_edges_of_element[1]=make_pair(1U,2U);
     m_edges_of_element[2]=make_pair(2U,0U);
@@ -816,9 +816,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
         { { 1.0/24.0,-7.0/24.0,1.0/8.0,1.0/8.0 }, { -7.0/24.0,1.0/24.0,1.0/8.0,1.0/8.0 } }
     };
     m_facet_normal_xforms.resize(6u);
-    for (size_t f = 0; f < 6u; ++f) {
+    for (uint32_t f = 0; f < 6u; ++f) {
         m_facet_normal_xforms[f].resize(4u);
-        for (size_t n = 0; n < 4u; ++n) {
+        for (uint32_t n = 0; n < 4u; ++n) {
             m_facet_normal_xforms[f][n] = std::make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
@@ -874,14 +874,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
 
     // for all sectors
     m_edge_of_sectors.resize(4U); 
-    for ( size_t iSector=0U; iSector<4U; iSector++ ) 
+    for ( uint32_t iSector=0U; iSector<4U; iSector++ )
       { 
          m_edge_of_sectors[iSector].resize(12U);
-         for ( size_t iLine=0U; iLine<4U; iLine++ )
+         for ( uint32_t iLine=0U; iLine<4U; iLine++ )
            m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4); 
-         for ( size_t iLine=4U; iLine<8U; iLine++ )
+         for ( uint32_t iLine=4U; iLine<8U; iLine++ )
            m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine-3)%4+4);  
-         for ( size_t iLine=8U; iLine<12U; iLine++ ) 
+         for ( uint32_t iLine=8U; iLine<12U; iLine++ )
            m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
       }  
     
@@ -896,14 +896,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_TET
 Generates data for subdivision of unit isoparametric linear
 hexahedron to the CV sectors.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX()
  {
-    const size_t NumOfInternalFacets(12U);
-    const size_t NumOfInternalFacetsPerNode(3U);
-    const size_t NumOfInternalVolumes(8U); // == VolMultipliers
-  	const size_t NumOfIPperVolume(1U);
-    const size_t NumOfIPperFacet(1U);
+    const uint32_t NumOfInternalFacets(12U);
+    const uint32_t NumOfInternalFacetsPerNode(3U);
+    const uint32_t NumOfInternalVolumes(8U); // == VolMultipliers
+  	const uint32_t NumOfIPperVolume(1U);
+    const uint32_t NumOfIPperFacet(1U);
 
    Resize( NumOfInternalFacets,
             NumOfInternalFacetsPerNode,
@@ -912,16 +912,16 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
             NumOfIPperVolume );
 
     // Map volume multipliers to new vectors
-    for(size_t i=0;i<NumOfInternalVolumes;i++)
-      for(size_t j=0;j<NumOfIPperVolume;j++)
+    for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+      for(uint32_t j=0;j<NumOfIPperVolume;j++)
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1.0;
 	
     // Faces 
     // products of detJ's, weights & conversion factors
     //Map to new vectors
-    for( size_t i=0;i<NumOfInternalFacets;i++)
-      for ( size_t j=0;j<NumOfIPperFacet; j++) {
+    for( uint32_t i=0;i<NumOfInternalFacets;i++)
+      for ( uint32_t j=0;j<NumOfIPperFacet; j++) {
            m_projection_weights[i][j]=1.;
            m_facet_integration_weights[i][j]=1.;
         }
@@ -947,9 +947,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     };
 	
      // Map to new vectors
-    for(size_t i=0;i<NumOfInternalFacets;i++)
-     for(size_t j=0;j<NumOfIPperFacet; j++)
-      for(size_t k=0;k<dim; k++) 
+    for(uint32_t i=0;i<NumOfInternalFacets;i++)
+     for(uint32_t j=0;j<NumOfIPperFacet; j++)
+      for(uint32_t k=0;k<dim; k++)
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided volume integration points for hexahedron
@@ -967,9 +967,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
         }; 
   
     // m_volume_integration_points1;   // [ivol][vpts][dim]
-    for( size_t i=0U; i<NumOfInternalVolumes; i++ )
-      for( size_t j=0U; j<NumOfIPperVolume; j++ )
-    	for( size_t k=0U; k<dim; k++)
+    for( auto i{0}; i<NumOfInternalVolumes; i++ )
+      for( uint32_t j=0U; j<NumOfIPperVolume; j++ )
+    	for( uint32_t k=0U; k<dim; k++)
     	  m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
 
     // Facet normals pointing outside the internal face, all together 6 normals!
@@ -1021,7 +1021,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
 
     //Edges   
     m_edges_of_element.resize(12U);
-    vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+    vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
     m_edges_of_element[0]=make_pair(0U,1U);
     m_edges_of_element[1]=make_pair(1U,2U);
     m_edges_of_element[2]=make_pair(2U,3U);
@@ -1214,9 +1214,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
           { 3.0/16.0, 1.0/16.0, 1.0/16.0, 3.0/16.0, -3.0/16.0, -1.0/16.0, -1.0/16.0, -3.0/16.0 } }
     };
     m_facet_normal_xforms.resize(12u);
-    for (size_t f = 0; f < 12u; ++f) {
+    for (uint32_t f = 0; f < 12u; ++f) {
         m_facet_normal_xforms[f].resize(8u);
-        for (size_t n = 0; n < 8u; ++n) {
+        for (uint32_t n = 0; n < 8u; ++n) {
             m_facet_normal_xforms[f][n] = std::make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
@@ -1315,14 +1315,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
     m_sector_points[7][7] = pt_c3478; 
 
     m_edge_of_sectors.resize(8U);
-    for ( size_t iSector=0U; iSector<8U; iSector++ ) 
+    for ( uint32_t iSector=0U; iSector<8U; iSector++ )
       { 
          m_edge_of_sectors[iSector].resize(12U);
-         for ( size_t iLine=0U; iLine<4U; iLine++ )
+         for ( uint32_t iLine=0U; iLine<4U; iLine++ )
             m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4); 
-          for ( size_t iLine=4U; iLine<8U; iLine++ )
+          for ( uint32_t iLine=4U; iLine<8U; iLine++ )
             m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine-3)%4+4);  
-          for ( size_t iLine=8U; iLine<12U; iLine++ ) 
+          for ( uint32_t iLine=8U; iLine<12U; iLine++ )
             m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
       }  
 
@@ -1339,10 +1339,10 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_HEX
 Generates data for subdivision of unit isoparametric linear
 prism to the CV sectors.
 */
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRISM()
  {
-//	  const size_t NumberOfPhysicalDimensions(3U);
+//	  const uint32_t NumberOfPhysicalDimensions(3U);
 	  enum { NumberOfPhysicalDimensions = 3, 
            NumOfInternalFacets        = 9,
            NumOfInternalFacetsPerNode = 3,
@@ -1357,8 +1357,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
             NumOfIPperVolume );
 
     // Map volume multipliers to new vectors
-    for(size_t i=0;i<NumOfInternalVolumes;i++)
-      for(size_t j=0;j<NumOfIPperVolume;j++)
+    for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+      for(uint32_t j=0;j<NumOfIPperVolume;j++)
        // Hard coded, check multiple points!
        m_volume_integration_weights[i][j]=1./6.;
 
@@ -1393,9 +1393,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     }; //end of faces integration points initialisation list
 
     // Map to new vectors
-    for(size_t i=0;i<NumOfInternalFacets;i++)
-     for(size_t j=0;j<NumOfIPperFacet; j++)
-      for(size_t k=0;k<NumberOfPhysicalDimensions; k++) 
+    for(uint32_t i=0;i<NumOfInternalFacets;i++)
+     for(uint32_t j=0;j<NumOfIPperFacet; j++)
+      for(uint32_t k=0;k<NumberOfPhysicalDimensions; k++)
          m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];
     		
     // Subdivided Tet Volume integration points
@@ -1410,9 +1410,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     }; 
     
     // m_volume_integration_points1;   // [ivol][vpts][dim]
-    for(size_t i=0;i<NumOfInternalVolumes;i++)
-      for(size_t j=0;j<NumOfIPperVolume;j++)
-    	for(size_t k=0;k<NumberOfPhysicalDimensions; k++)
+    for(uint32_t i=0;i<NumOfInternalVolumes;i++)
+      for(uint32_t j=0;j<NumOfIPperVolume;j++)
+    	for(uint32_t k=0;k<NumberOfPhysicalDimensions; k++)
     		m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
     		
     const double cosAlpha1(static_cast<double>(2./sqrt(5.0)));
@@ -1452,7 +1452,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     
     // Edges
     m_edges_of_element.resize(9U);
-    vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+    vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
     m_edges_of_element[0]=make_pair(0U,1U);
     m_edges_of_element[1]=make_pair(1U,2U);
     m_edges_of_element[2]=make_pair(2U,0U);
@@ -1604,9 +1604,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
           { 5.0/24.0, 1.0/12.0, 5.0/24.0, -5.0/24.0, -1.0/12.0, -5.0/24.0 } }
     };
     m_facet_normal_xforms.resize(9u);
-    for (size_t f = 0; f < 9u; ++f) {
+    for (uint32_t f = 0; f < 9u; ++f) {
         m_facet_normal_xforms[f].resize(6u);
-        for (size_t n = 0; n < 6u; ++n) {
+        for (uint32_t n = 0; n < 6u; ++n) {
             m_facet_normal_xforms[f][n] = std::make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
@@ -1683,14 +1683,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PRI
     m_sector_points[5][7] = pt_c2356;
 
     m_edge_of_sectors.resize(6U); 
-    for ( size_t iSector=0U; iSector<6U; iSector++ ) 
+    for ( uint32_t iSector=0U; iSector<6U; iSector++ )
       { 
         m_edge_of_sectors[iSector].resize(12U);
-        for ( size_t iLine=0U; iLine<4U; iLine++ )
+        for ( uint32_t iLine=0U; iLine<4U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4);  //   [iSector][iLine] 
-        for ( size_t iLine=4U; iLine<8U; iLine++ )  
+        for ( uint32_t iLine=4U; iLine<8U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine-3)%4+4);  
-        for ( size_t iLine=8U; iLine<12U; iLine++ ) 
+        for ( uint32_t iLine=8U; iLine<12U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
       }  
   
@@ -1711,14 +1711,14 @@ other 4 sectors.
 */
 #ifndef PYRAMID_TRIANGULAR_FACETS
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR()
  {
-    const size_t NumOfInternalFacets(8U);
-    const size_t NumOfInternalFacetsPerNode(4U); //Special case of 4 facets?
-    const size_t NumOfInternalVolumes(5U); // == VolMultipliers
-  	const size_t NumOfIPperVolume(1U);
-    const size_t NumOfIPperFacet(1U);
+    const uint32_t NumOfInternalFacets(8U);
+    const uint32_t NumOfInternalFacetsPerNode(4U); //Special case of 4 facets?
+    const uint32_t NumOfInternalVolumes(5U); // == VolMultipliers
+  	const uint32_t NumOfIPperVolume(1U);
+    const uint32_t NumOfIPperFacet(1U);
 
     Resize( NumOfInternalFacets,
             NumOfInternalFacetsPerNode,
@@ -1726,7 +1726,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
             NumOfIPperFacet,
             NumOfIPperVolume );
             
-    for ( size_t i=0U; i<NumOfInternalVolumes; i++ )	
+    for ( auto i{0}; i<NumOfInternalVolumes; i++ )	
       m_volume_integration_weights[i][0]=1./4.;//0.24537037;//
     
     m_volume_integration_weights[4][0]=1./3.;//0.351851852;//
@@ -1742,9 +1742,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
       }; 
     
     // map to m_volume_integration_points1;   // [ivol][vpts][dim]
-    for( size_t i=0U; i<NumOfInternalVolumes; i++ )
-      for( size_t j=0U; j<NumOfIPperVolume; j++ )
-    	for( size_t k=0U; k<3U; k++ )
+    for( auto i{0}; i<NumOfInternalVolumes; i++ )
+      for( uint32_t j=0U; j<NumOfIPperVolume; j++ )
+    	for( uint32_t k=0U; k<3U; k++ )
     	  m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
 
 
@@ -1761,9 +1761,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
          {-7./24.,7./24.,17./48.}
     }; //end of faces integration points initialisation list
     
-     for(size_t i=0;i<NumOfInternalFacets;i++)
-      for(size_t j=0;j<NumOfIPperFacet; j++)
-       for(size_t k=0;k<3U; k++) 
+     for(uint32_t i=0;i<NumOfInternalFacets;i++)
+      for(uint32_t j=0;j<NumOfIPperFacet; j++)
+       for(uint32_t k=0;k<3U; k++)
           m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];    		
    
      // the facet integration weights is the area of the facet in parametric space
@@ -1807,7 +1807,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     //Edges   
     m_edges_of_element.resize(8U);
-    vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+    vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
     m_edges_of_element[0]=make_pair(0U,1U);
     m_edges_of_element[1]=make_pair(1U,2U);
     m_edges_of_element[2]=make_pair(2U,3U);
@@ -1985,25 +1985,25 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_sector_points[4][9] = m_barycenter; 
     
     m_edge_of_sectors.resize(5U); 
-    for ( size_t iSector=0U; iSector<4U; iSector++ ) 
+    for ( uint32_t iSector=0U; iSector<4U; iSector++ )
       { 
         m_edge_of_sectors[iSector].resize(13U);
-        for ( size_t iLine=0U; iLine<4U; iLine++ )
+        for ( uint32_t iLine=0U; iLine<4U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4);  //   [iSector][iLine] 
-        for ( size_t iLine=4U; iLine<8U; iLine++ )
+        for ( uint32_t iLine=4U; iLine<8U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine-3)%4+4);  
-        for ( size_t iLine=8U; iLine<12U; iLine++ ) 
+        for ( uint32_t iLine=8U; iLine<12U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
         m_edge_of_sectors[iSector][12]=make_pair(4U,6U);  
       }  
     m_edge_of_sectors[4].resize(20U);
-    for ( size_t iLine=0U; iLine<8U; iLine++ )
+    for ( uint32_t iLine=0U; iLine<8U; iLine++ )
       m_edge_of_sectors[4][iLine]=make_pair(iLine,(iLine+1)%8);  //   [iSector][iLine] 
-    size_t j=0U;
-    for ( size_t iLine=8U; iLine<12U; iLine++,j++,j++ )
+    uint32_t j=0U;
+    for ( uint32_t iLine=8U; iLine<12U; iLine++,j++,j++ )
       m_edge_of_sectors[4][iLine]=make_pair(8U,j);  
     j=0U;
-    for ( size_t iLine=12U; iLine<20U; iLine++ , j++) 
+    for ( uint32_t iLine=12U; iLine<20U; iLine++ , j++)
       m_edge_of_sectors[4][iLine]=make_pair(9U,j);     
 
 
@@ -2011,14 +2011,14 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
 #else
 
-template<size_t dim>
+template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR()
 {
-    const size_t NumOfInternalFacets(12U);
-    const size_t NumOfInternalFacetsPerNode(8U); //Special case of 8 facets at the apex
-    const size_t NumOfInternalVolumes(5U); // == VolMultipliers
-  	const size_t NumOfIPperVolume(1U);
-    const size_t NumOfIPperFacet(1U);
+    const uint32_t NumOfInternalFacets(12U);
+    const uint32_t NumOfInternalFacetsPerNode(8U); //Special case of 8 facets at the apex
+    const uint32_t NumOfInternalVolumes(5U); // == VolMultipliers
+  	const uint32_t NumOfIPperVolume(1U);
+    const uint32_t NumOfIPperFacet(1U);
 
     Resize( NumOfInternalFacets,
             NumOfInternalFacetsPerNode,
@@ -2026,7 +2026,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
             NumOfIPperFacet,
             NumOfIPperVolume );
             
-    for ( size_t i=0U; i<NumOfInternalVolumes; i++ )	
+    for ( auto i{0}; i<NumOfInternalVolumes; i++ )	
       m_volume_integration_weights[i][0]=1./4.;
     
     m_volume_integration_weights[4][0]=1./3.;
@@ -2042,9 +2042,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
       }; 
     
     // map to m_volume_integration_points1;   // [ivol][vpts][dim]
-    for( size_t i=0U; i<NumOfInternalVolumes; i++ )
-      for( size_t j=0U; j<NumOfIPperVolume; j++ )
-    	for( size_t k=0U; k<3U; k++ )
+    for( auto i{0}; i<NumOfInternalVolumes; i++ )
+      for( uint32_t j=0U; j<NumOfIPperVolume; j++ )
+    	for( uint32_t k=0U; k<3U; k++ )
     	  m_volume_integration_points1[i][j][k]=vip[i*NumOfIPperVolume+j][k];
 
 	  //face integration points
@@ -2064,9 +2064,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
        {-7./18.,1./6., 13./36.} 
     }; //end of faces integration points initialisation list
     
-   for(size_t i=0;i<NumOfInternalFacets;i++)
-    for(size_t j=0;j<NumOfIPperFacet; j++)
-     for(size_t k=0;k<3U; k++) 
+   for(uint32_t i=0;i<NumOfInternalFacets;i++)
+    for(uint32_t j=0;j<NumOfIPperFacet; j++)
+     for(uint32_t k=0;k<3U; k++)
         m_facet_integration_points[i][j][k]=fip[i*NumOfIPperFacet+j][k];    		
  
    // the facet integration weights is the area of the facet in parametric space
@@ -2120,7 +2120,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     //Edges   
     m_edges_of_element.resize(12U);
-    vector<pair<size_t,size_t> >(m_edges_of_element).swap(m_edges_of_element);
+    vector<pair<uint32_t,uint32_t> >(m_edges_of_element).swap(m_edges_of_element);
     m_edges_of_element[0]=make_pair(0U,1U);
     m_edges_of_element[1]=make_pair(1U,2U);
     m_edges_of_element[2]=make_pair(2U,3U);
@@ -2302,9 +2302,9 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
             { sqrt2/6.0, 0.0, 0.0, -sqrt2/12.0, -sqrt2/12.0 } }
     };
     m_facet_normal_xforms.resize(12u);
-    for (size_t f = 0; f < 12u; ++f) {
+    for (uint32_t f = 0; f < 12u; ++f) {
         m_facet_normal_xforms[f].resize(5u);
-        for (size_t n = 0; n < 5u; ++n) {
+        for (uint32_t n = 0; n < 5u; ++n) {
             m_facet_normal_xforms[f][n] = std::make_pair(
                     facet_normal_transforms[f][0][n],
                     facet_normal_transforms[f][1][n]
@@ -2372,25 +2372,25 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
     m_sector_points[4][9] = m_barycenter; 
     
     m_edge_of_sectors.resize(5U); 
-    for ( size_t iSector=0U; iSector<4U; iSector++ ) 
+    for ( uint32_t iSector=0U; iSector<4U; iSector++ )
       { 
         m_edge_of_sectors[iSector].resize(13U);
-        for ( size_t iLine=0U; iLine<4U; iLine++ )
+        for ( uint32_t iLine=0U; iLine<4U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine+1)%4);  //   [iSector][iLine] 
-        for ( size_t iLine=4U; iLine<8U; iLine++ )
+        for ( uint32_t iLine=4U; iLine<8U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine,(iLine-3)%4+4);  
-        for ( size_t iLine=8U; iLine<12U; iLine++ ) 
+        for ( uint32_t iLine=8U; iLine<12U; iLine++ )
           m_edge_of_sectors[iSector][iLine]=make_pair(iLine-8,iLine-4);  
         m_edge_of_sectors[iSector][12]=make_pair(4U,6U);
       }  
     m_edge_of_sectors[4].resize(20U);
-    for ( size_t iLine=0U; iLine<8U; iLine++ )
+    for ( uint32_t iLine=0U; iLine<8U; iLine++ )
       m_edge_of_sectors[4][iLine]=make_pair(iLine,(iLine+1)%8);  //   [iSector][iLine] 
-    size_t j=0U;
-    for ( size_t iLine=8U; iLine<12U; iLine++ ,j++,j++ )
+    uint32_t j=0U;
+    for ( uint32_t iLine=8U; iLine<12U; iLine++ ,j++,j++ )
       m_edge_of_sectors[4][iLine]=make_pair(8U,j);  
     j=0U;
-    for ( size_t iLine=12U; iLine<20U; iLine++,j++ ) 
+    for ( uint32_t iLine=12U; iLine<20U; iLine++,j++ ) 
       m_edge_of_sectors[4][iLine]=make_pair(9U,j);  
 
 }

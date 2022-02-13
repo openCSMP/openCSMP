@@ -18,7 +18,7 @@ namespace csmp{
  @author  P. Lang
  @date  9/24/2012
  */
-template<size_t dim>
+template<uint32_t dim>
 void LocalVariableStorage_Test::runTest()
   {
     // initialize storage with 3 of each (scalars, vectors, tensors)

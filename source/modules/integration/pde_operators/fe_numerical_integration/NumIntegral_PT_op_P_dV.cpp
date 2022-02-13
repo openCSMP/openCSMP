@@ -7,7 +7,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_PT_op_P_dV<dim,CELL>::NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& pref,
                                                      const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -53,7 +53,7 @@ in the special case, the integral of the testfunction products must be used
 
 Use this operator to compute capacitance, storage capacity etc. matrices.
  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -82,8 +82,8 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
              
              if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
                {   
-                 for ( size_t n=0; n<e.Nodes(); n++ ) 
-                   for ( size_t i=0; i<nodal_degrees_of_freedom; i++ )
+                 for ( auto n=0; n<e.Nodes(); n++ ) 
+                   for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
                      MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
                }
              else
@@ -97,7 +97,7 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
         // consistent formulation (not tested thus far)  
        else 
          {
-            for ( size_t i = 0; i<e.FE()->IntegrationPoints(); i++ )
+            for ( auto i = 0; i<e.FE()->IntegrationPoints(); i++ )
               {
                 e.N_AtIntegrationPoint( i, N );
                 det = e.det_JINV_AtIntegrationPoint( i );

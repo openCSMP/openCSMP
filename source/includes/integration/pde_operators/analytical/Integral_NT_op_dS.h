@@ -11,14 +11,14 @@ namespace csmp {
 @date 2001 */
 
 /// works only if there are faces
-template<typename fT,size_t dim>
+template<typename fT,uint32_t dim>
 class Integral_NT_op_dS : public MathOperatorRHS<dim> {
   public:
     Integral_NT_op_dS( const PropertyDatabase<dim>& p, const char* oper, const char* test );
     
-    virtual void GetOperands( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
 
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
   
   private:
     ScalarVariable          sc;

@@ -97,9 +97,9 @@ void SteadyStatePressureToVset_Example::Run()
          ANSYS_Interface  mesh_interface(isoparametric);
          const bool binary_file( true );
          mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, true );
-         mesh_topology.ReduceToRegions( file_name );
+      mesh_topology.ReduceToDomains( file_name );
          map<size_t,size_t>  old_and_new_elmtids;
-         mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+         mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
          mesh_container.ReduceTo( old_and_new_elmtids );
          old_and_new_elmtids.clear();
          // optional: scaling the model to a target size

@@ -14,7 +14,7 @@ namespace csmp {
     while the arithmetic mean is always the greatest of the three,
     and the geometric mean is always in between. 
 */
-template<size_t dim, typename var>
+template<uint32_t dim, typename var>
 ArithmeticMean<dim,var>::ArithmeticMean( const PropertyDatabase<dim>& p, const char* res_prop, const char* prop_to_avg ) 
       : Interrelation<dim>(p),
         I_( Interrelation<dim>::GlobalProperty(prop_to_avg) ),
@@ -38,8 +38,8 @@ ArithmeticMean<dim,var>::ArithmeticMean( const PropertyDatabase<dim>& p, const c
  
  
  
-template<size_t dim, typename var>
-inline void ArithmeticMean<dim,var>::Calculate()
+template<uint32_t dim, typename var>
+void ArithmeticMean<dim,var>::Calculate()
  {
     I_.AssignTo( prop_value_ );
     O_ = prop_value_;

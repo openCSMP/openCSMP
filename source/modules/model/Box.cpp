@@ -468,7 +468,7 @@ void boundaryMinMaxCoordinates( BOX_BOUNDARY boundary,
 /**
 Returns a normal (vector) to the specified boundary of a box-shaped model.
 */
-void Box::UnitNormalTo( BOX_BOUNDARY bdry, size_t dim, vector<double>& nrml ) const
+void Box::UnitNormalTo( BOX_BOUNDARY bdry, uint32_t dim, vector<double>& nrml ) const
 {
   nrml.resize( dim );
 
@@ -616,7 +616,7 @@ bool isDiagnosticBoxBoundaryClassifier( const string& i )
 /**
 prints a summary of the current flags of the nodes and elements to screen.
 */
-template<size_t dim>
+template<uint32_t dim>
 void printBoxBoundaryFlags( const Model<dim>& model )
  {
     const Region<dim>& modeldomain(model.Region("Model"));
@@ -636,7 +636,7 @@ void printBoxBoundaryFlags( const Model<dim>& model )
       
     multiset<BOX_BOUNDARY> elmt_flags;
     for ( auto eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags.insert( (*eit)->AtBoundary(i) );
       
     it = elmt_flags.begin();
@@ -1132,7 +1132,7 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
          if ( !isQuadrilateral( (*it)->FE_Type() ) )
            throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForQuadrilateralModel", "this method only works for quadrilateral elements");
            
-         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+         for ( auto i=0; i<(*it)->Nodes(); ++i )
            (*it)->N(i)->AtBoundary( NOT );
         // BOTTOM 
          if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
@@ -1209,7 +1209,7 @@ void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
 void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
  { 
     Region<3U>&    modeldomain(model.Region("Model"));
-    vector<size_t> fnids;
+    vector<uint32_t> fnids;
     
     for ( vector<Element<3U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
       {
@@ -1220,7 +1220,7 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
            throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
            
          // DEFAULT (not at any boundary)
-         for ( size_t i=0; i<(*it)->Nodes(); ++i )
+         for ( auto i=0; i<(*it)->Nodes(); ++i )
            (*it)->N(i)->AtBoundary( NOT );
            
          // BOTTOM 
@@ -1402,7 +1402,7 @@ static bool isIn( const set<BOX_BOUNDARY>& bflags, initializer_list<BOX_BOUNDARY
       @date 14/10/21
       @test OK
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
  {
     assert( eptr != nullptr );
@@ -1419,7 +1419,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
 
     // storing the box-boundary flags of the boundary face in a set
     set<BOX_BOUNDARY>  eflags;
-    vector<size_t>     fnids;
+    vector<uint32_t>     fnids;
     eptr->FE()->NodesOfFace( b_face, fnids );
     for ( size_t j{0}; j<fnids.size(); ++j )
       if ( eptr->N( fnids[j] )->AtBoundary() != NOT )
@@ -1463,7 +1463,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
               // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
               if ( eptr->FE()->OrderOfShapeFunctions() == 1 ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
@@ -1527,7 +1527,7 @@ template BOX_BOUNDARY atBoundary( const Element<3U>* const, size_t  );
 /*
 if ( eptr->FE()->IsLineElement() ) {
      cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
-     for ( size_t i{0}; i<eptr->Nodes(); ++i )
+     for ( auto i{0}; i<eptr->Nodes(); ++i )
        cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
      cerr << endl;
   }
@@ -1536,19 +1536,19 @@ if ( eptr->FE()->IsLineElement() ) {
 
 
 /// returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const cptr )
  {
      // for surface and line elements all nodes must be at the boundary
      if ( !cptr->IsEquidimensional() ) {
           const size_t n_nodes{ cptr->Nodes() };
-          for( size_t i{0}; i<n_nodes; ++i )
+          for( auto i{0}; i<n_nodes; ++i )
             if ( cptr->N(i)->AtBoundary() == NOT )
               return false;
        }
      else { // equidimensional elements
           const size_t n_nbors{ cptr->Neighbors() };
-          for ( size_t i{0}; i<n_nbors; ++i )
+          for ( auto i{0}; i<n_nbors; ++i )
             if ( cptr->Neighbor(i) == nullptr )
               return true;
           return false;
@@ -1567,7 +1567,7 @@ template bool atBoundary( const Element<3U>* const );
 
 /* FAILS AT TIMES
 
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
  {
     assert( eptr != nullptr );
@@ -1576,7 +1576,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // nodal bflags are stored in a set
     set<BOX_BOUNDARY>  eflags;
     const size_t nodes( eptr->Nodes() );
-    for ( size_t i = 0U; i<nodes; ++i ) {
+    for ( auto i = 0U; i<nodes; ++i ) {
          assert( eptr->N(i) != nullptr );
          if ( eptr->N(i)->AtBoundary() != NOT )
            eflags.insert( eptr->N( i )->AtBoundary() );
@@ -1586,7 +1586,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // in which case it is missing on of its neighbors
     if ( eflags.empty() ) {
          size_t n_nbors{eptr->Neighbors()};
-         for ( size_t i{0}; i<n_nbors; ++i )
+         for ( auto i{0}; i<n_nbors; ++i )
            if ( eptr->Neighbor(i) == nullptr )
              return INTERNAL;
          return NOT;
@@ -1616,7 +1616,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               else {
                    // checking that there is indeed a face on the model boundary
                    const size_t n_nbors{eptr->Neighbors()};
-                   for ( size_t i{0}; i<n_nbors; ++i )
+                   for ( auto i{0}; i<n_nbors; ++i )
                      if ( eptr->Neighbor(i) == nullptr )
                        return (*eflags.begin());
                 }
@@ -1643,7 +1643,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
               if ( !isQuadrilateral( eptr->FE_Type() ) ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):",
@@ -1659,7 +1659,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
            }
          else {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
@@ -1694,7 +1694,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               // corner quadrilaterals that should not exist unless the element is a non simplex element
               if ( !isQuadrilateral( eptr->FE_Type() ) ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( size_t i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
@@ -1709,7 +1709,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
          // three flags may imply that a tetrahedral, pyramid, or prism element is located at boundary
          else if ( eflags.size() == 3U ) {
             const size_t n_nbors{eptr->Neighbors()};
-            for ( size_t i{0}; i<n_nbors; ++i )
+            for ( auto i{0}; i<n_nbors; ++i )
               if ( eptr->Neighbor(i) == nullptr )
                 if ( isTriangular( eptr->FE()->ElementTypeOfFace(i) ) )
                   {
@@ -1725,7 +1725,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                      else {
                           // something went wrong
                           cerr <<"\n\n\ttriangular element face: "<< i <<", boundary flags:\n\t\t\t";
-                          vector<size_t> fnids;
+                          vector<uint32_t> fnids;
                           eptr->FE()->NodesOfFace( i, fnids );
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
@@ -1737,7 +1737,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
          // 4 flags may imply that a pyramid, prism or hexahedral element is located at boundary
          else if ( eflags.size() == 4U ) {
             const size_t n_nbors{eptr->Neighbors()};
-            for ( size_t i{0}; i<n_nbors; ++i )
+            for ( auto i{0}; i<n_nbors; ++i )
               if ( eptr->Neighbor(i) == nullptr )
                 if ( isQuadrilateral( eptr->FE()->ElementTypeOfFace(i) ) )
                   {
@@ -1753,7 +1753,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                      else {
                           // something went wrong
                           cerr <<"\n\n\tquadrilateral element face: "<< i <<", boundary flags:\n\t\t\t";
-                          vector<size_t> fnids;
+                          vector<uint32_t> fnids;
                           eptr->FE()->NodesOfFace( i, fnids );
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
@@ -2004,7 +2004,7 @@ Encodes boundary flag values into scalar variables which can be examined for cor
 
 @author SKM 7/3/16
 */
-template<size_t dim>
+template<uint32_t dim>
 void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const char* elmt_variable )
 {
   const csmp::Index nprop_key( model.Database().StorageKey( node_variable ) );
@@ -2021,7 +2021,7 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
        size_t face = UNSPECIFIED;
        bool at_boundary{false};
-       for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
          if ( (*eit)->Neighbor(i) == nullptr ) {
               face        = i;
               at_boundary = true;
@@ -2042,7 +2042,7 @@ template void boxFlagsToVariable( Model<3>&, const char*, const char* );
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
                                const char* node_property, double& bmin, double& bmax )
 {

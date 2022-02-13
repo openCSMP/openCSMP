@@ -7,9 +7,9 @@ namespace csmp {
 
 class PropertyConstraints;
 class ModelTopology;
-template<size_t> class Region;
-template<size_t> class Element;
-template<size_t> class Point;
+template<uint32_t> class Region;
+template<uint32_t> class Element;
+template<uint32_t> class Point;
 
 /**
 @brief Policy of the class model for the management of its labeled subdomains that
@@ -63,7 +63,7 @@ are not defined. A rule is needed to assign them in a consistent fashion
 TODO: @todo !!! all methods that create regions from regions must also copy potential regional property values to these
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 class RegionInterface {
   public:
     RegionInterface() {}
@@ -152,7 +152,7 @@ class RegionInterface {
     size_t FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity = true );
     
     /// Assuming that elements have been numbered as required by caller, method forms region of elements with this Idx() values; returns # of elements in region; returns number of elements
-    size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
+    size_t FormRegionFrom( const char* regionname, std::vector<uint32_t>& elmt_ids, bool is_unique=true );
 
     /// forms a new non-unique region from elements whose property value falls into the user-defined range; returns number of elements
     size_t FormRegionFrom( const char* regionname, const char* prop, double pmin, double pmax, bool unique = false );
@@ -164,7 +164,7 @@ class RegionInterface {
     size_t FormRegionFrom( const char* regionname, const std::set<std::string>& region_names );
 
     /// ; returns number of elements
-    template<template<size_t> class ElementComp>
+    template<template<uint32_t> class ElementComp>
     size_t FormRegionFrom( const char* regionname, ElementComp<dim> const& elementComp, const char* hostRegion = "Model" );
 
 

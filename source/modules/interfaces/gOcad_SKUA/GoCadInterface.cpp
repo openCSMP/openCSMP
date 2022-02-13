@@ -14,13 +14,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 GoCadInterface<dim>::GoCadInterface()
  {
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 GoCadInterface<dim>::~GoCadInterface()
  {
  }
@@ -29,7 +29,7 @@ GoCadInterface<dim>::~GoCadInterface()
 /** Peaks into next file of file to see whether it contains the search string
 of interest. 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool  GoCadInterface<dim>::IsInNextLine( ifstream& ifs, const char* search_string ) const
  {
     char text_line[256];
@@ -46,7 +46,7 @@ bool  GoCadInterface<dim>::IsInNextLine( ifstream& ifs, const char* search_strin
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double>& nd1,
                                                                       const vector<double>& nd2,
                                                                       const vector<double>& nd3 )
@@ -120,7 +120,7 @@ GoCad file. This includes the header with the object type and name, as
 well as the property class headers for the properties associated with
 the surface.  
  */
-template<size_t dim>                        
+template<uint32_t dim>                        
 void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname, 
                                                             GocadHeader& header, 
                                                             VSet<dim>& vset )
@@ -223,7 +223,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DSurface( const char* fname,
          token = strtok( text_line, delims ); 
          for ( it=prop_headers.begin(); it!=prop_headers.end(); it++ ) {
               assert( (token=strtok( NULL, delims )) != NULL );
-              (*it).ESize( static_cast<size_t>(atoi(token)) );
+              (*it).ESize( static_cast<uint32_t>(atoi(token)) );
            } 
              
          // 3.2 Reading the property class headers for each property
@@ -309,7 +309,7 @@ performed successfully the boolean variable true is returned.
 
 The method reports potential file reading errors.  
 */
-template<size_t dim>                        
+template<uint32_t dim>                        
 bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs, 
                                            const list<GocadPropertyClassHeader>& properties,
                                            VSet<dim>& vset )
@@ -367,7 +367,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
            {
              // getting point coordinates
              token = strtok( NULL, delims );
-             nodeID = static_cast<size_t>(atol( token ));   // node ID
+             nodeID = static_cast<uint32_t>(atol( token ));   // node ID
              token = strtok( NULL, delims );
              xyz[0] = atof( token );   // x
              token = strtok( NULL, delims ); 
@@ -376,7 +376,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
              xyz[2] = atof( token );   // z
              // node properties
              if ( !properties.empty() ) {
-                  for ( size_t n=0; n<data_entries; n++ ) {
+                  for ( auto n=0; n<data_entries; n++ ) {
                        token    = strtok( NULL, delims );
                        props[n] = atof( token ); // property value
                     }
@@ -436,11 +436,11 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
            {
              // getting node ID numbers for each triangle
              token = strtok( NULL, delims );
-             node_ids[0] = static_cast<size_t>(atol( token ));   // node 1
+             node_ids[0] = static_cast<uint32_t>(atol( token ));   // node 1
              token = strtok( NULL, delims ); 
-             node_ids[1] = static_cast<size_t>(atol( token ));   // node 2        
+             node_ids[1] = static_cast<uint32_t>(atol( token ));   // node 2        
              token = strtok( NULL, delims );
-             node_ids[2] = static_cast<size_t>(atol( token ));   // node 3
+             node_ids[2] = static_cast<uint32_t>(atol( token ));   // node 3
              
              // assigning nodes to triangles and triangles to tface
              triangles[ triangleID++ ] = node_ids;
@@ -470,7 +470,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
            {
               if ( n++ >= 100 ) break;
               cout <<"Node: "<< (*nit).first <<":  ";
-              for ( size_t i=0; i<(*nit).second.second.size(); i++ )
+              for ( auto i=0; i<(*nit).second.second.size(); i++ )
               cout << (*nit).second.second[i] <<",\t";
               cout <<"flag: "<< (*nit).second.first << endl;
            }
@@ -481,7 +481,7 @@ bool GoCadInterface<dim>::ReadTSurface( ifstream& ifs,
            {
               if ( n++ >= 100 ) break;
               cout <<"Triangle: "<< (*plit).first <<":  ";
-              for ( size_t i=0; i<(*plit).second.size(); i++ )
+              for ( auto i=0; i<(*plit).second.size(); i++ )
                 cout << (*plit).second[i] <<", ";
               cout << endl;
            }
@@ -822,7 +822,7 @@ If the GoCad input file does not exist, if more than a single property
 was specified therein, or if the variable 'permeability' is missing
 the method will report an error and exit.  
  */
-template<size_t dim>                        
+template<uint32_t dim>                        
 void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file, 
                                                          GocadHeader& header, 
                                                          VSet<dim>& vset )
@@ -930,7 +930,7 @@ void GoCadInterface<dim>::ReadTetrahedralGocad3DMesh( const char* file,
          for ( it=prop_headers.begin(); it!=prop_headers.end(); it++ ) {
               token=strtok( NULL, delims );
               assert( token != NULL );
-              (*it).ESize( static_cast<size_t>(atoi(token)) );
+              (*it).ESize( static_cast<uint32_t>(atoi(token)) );
            } 
              
          // 3.2 Reading the property class headers for each property
@@ -1059,7 +1059,7 @@ boundary flags by "IndentifyTetrahedronBoundary()". This may be the case,
 if the element boundary faces are appreciably inclined relative to the 
 normals of the coordinate system (>45o). 
  */
-template<size_t dim>                        
+template<uint32_t dim>                        
 void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset, 
                                              bool with_node_prop )
  {
@@ -1129,7 +1129,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
            {
              // getting point coordinates
              token = strtok( NULL, delims );
-             nodeID = static_cast<size_t>(atol( token ));   // node ID
+             nodeID = static_cast<uint32_t>(atol( token ));   // node ID
              token = strtok( NULL, delims );
              xyz[0] = atof( token );   // x
              token = strtok( NULL, delims ); 
@@ -1200,13 +1200,13 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
            {
              // getting node ID numbers for each tetrahedron
              token = strtok( NULL, delims );
-             node_ids[0] = static_cast<size_t>(atol( token ));   // node 1
+             node_ids[0] = static_cast<uint32_t>(atol( token ));   // node 1
              token = strtok( NULL, delims ); 
-             node_ids[1] = static_cast<size_t>(atol( token ));   // node 2        
+             node_ids[1] = static_cast<uint32_t>(atol( token ));   // node 2        
              token = strtok( NULL, delims );
-             node_ids[2] = static_cast<size_t>(atol( token ));   // node 3
+             node_ids[2] = static_cast<uint32_t>(atol( token ));   // node 3
              token = strtok( NULL, delims );
-             node_ids[3] = static_cast<size_t>(atol( token ));   // node 4
+             node_ids[3] = static_cast<uint32_t>(atol( token ));   // node 4
              
              // assigning nodes to tetrahedra and tetrahedra to tvolume
              tetrahedra[ tetraID ]    = node_ids;
@@ -1286,7 +1286,7 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                
                   // parsed PVTRX ID is not numbered consecutively !
                   token = strtok( NULL, delims );
-                  newID = static_cast<size_t>(atol( token ));   
+                  newID = static_cast<uint32_t>(atol( token ));   
                   // getting point coordinates
                   token = strtok( NULL, delims );
                   xyz[0] = atof( token );   // x
@@ -1355,17 +1355,17 @@ void GoCadInterface<dim>::ReadTSolid( ifstream& ifs, VSet<dim>& vset,
                {
                   // getting node ID numbers for each tetrahedron
                   token = strtok( NULL, delims );
-                  node_ids[0] = static_cast<size_t>(atol( token ));   // node 1
+                  node_ids[0] = static_cast<uint32_t>(atol( token ));   // node 1
                   token = strtok( NULL, delims ); 
-                  node_ids[1] = static_cast<size_t>(atol( token ));   // node 2        
+                  node_ids[1] = static_cast<uint32_t>(atol( token ));   // node 2        
                   token = strtok( NULL, delims );
-                  node_ids[2] = static_cast<size_t>(atol( token ));   // node 3
+                  node_ids[2] = static_cast<uint32_t>(atol( token ));   // node 3
                   token = strtok( NULL, delims );
-                  node_ids[3] = static_cast<size_t>(atol( token ));   // node 4
+                  node_ids[3] = static_cast<uint32_t>(atol( token ));   // node 4
             
                   // translating node IDs to CSP ids
                   // -------------------------------
-                  for ( size_t n=0; n<4; n++ )
+                  for ( auto n=0; n<4; n++ )
                     {
                        if ( (shit=shared_vtrx.find( node_ids[n] )) != shared_vtrx.end() )
                          node_ids[n] = (*shit).second;
@@ -1736,7 +1736,7 @@ flags defined in 'CSMP_definitions.h'.
 Method will detect when the model is not orthogonal and issue warnings for
 the nodes which could not be assigned the desired edge flags.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void GoCadInterface<dim>::FlagEdgeNodesOfBoxShapedModel( VSet<dim>& vset )
  {
     // 1. finding coordinate extrema for the boundary nodes
@@ -1845,7 +1845,7 @@ If the output file cannot be opened, if the model is not two-dimensional,
 or if an attempt is made to output a IntegrationPoint variable, the method
 will report an error and exit without completing its task. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  GoCadInterface<dim>::OutputVariableToTSurface( const Model<dim>& sgroup, 
                                                         const char* fname, 
                                                         const char* var, 
@@ -1899,7 +1899,6 @@ const
    ScalarVariable                       sc;
    VectorVariable<dim>                   vc;
    TensorVariable<dim>                   ts;
-   size_t                                i, j;
 
    // 5. All properties are output as NODE Properties
    // ------------------------------------------------
@@ -1909,21 +1908,21 @@ const
    vector<ScalarVariable >     sc_elmt_data;
    vector<VectorVariable<dim> > vc_elmt_data;
    vector<TensorVariable<dim> > ts_elmt_data;
-   vector<size_t>               node_ids;
+   vector<uint32_t>               node_ids;
    
    if ( prop_key.place == ELEMENT ) 
      {
         if       ( prop_key.type == SCALAR ) { 
              sc_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) sc_elmt_data.push_back( ScalarVariable() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) sc_elmt_data.push_back( ScalarVariable() );
           }
         else if  ( prop_key.type == VECTOR ) {
              vc_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) vc_elmt_data.push_back( VectorVariable<dim>() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) vc_elmt_data.push_back( VectorVariable<dim>() );
           }
         else if  ( prop_key.type == TENSOR ) {
              ts_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
         for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
@@ -1932,15 +1931,15 @@ const
                     case SCALAR:
                          (*eit)->Read(prop_key, sc );
                          // triangles only
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) sc_elmt_data[ (*eit)->N(i)->Idx() ] = sc;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) sc_elmt_data[ (*eit)->N(i)->Idx() ] = sc;
                       break;
                     case VECTOR:
                          (*eit)->Read(prop_key, vc );
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) vc_elmt_data[ (*eit)->N(i)->Idx() ] = vc;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) vc_elmt_data[ (*eit)->N(i)->Idx() ] = vc;
                       break;
                     case TENSOR:
                          (*eit)->Read(prop_key, ts );
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
                 }
@@ -1965,12 +1964,12 @@ const
               case VECTOR:
                    (*nit)->Read(prop_key, vc );
                    // z-component was assigned 0.0 in 2D case 
-                   for( i=0; i<3; i++ ) ofs << vc[i] <<" ";
+                   for( auto i=0; i<3; i++ ) ofs << vc[i] <<" ";
                 break;
               case TENSOR:
                    (*nit)->Read(prop_key, ts );
-                   for( i=0; i<3; i++ ) 
-                      for( j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
+                   for( auto i=0; i<3; i++ )
+                      for( auto j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
            }
@@ -1983,12 +1982,12 @@ const
                 break;
               case VECTOR:
                    // z-component was assigned 0.0 in 2D case 
-                   for ( i=0; i<3; i++ ) 
+                   for ( auto i=0; i<3; i++ )
                       ofs << vc_elmt_data[ (*nit)->Idx() ][i] <<" ";
                 break;
               case TENSOR:
-                   for ( i=0; i<3; i++ ) 
-                      for ( j=0; j<3; j++ ) 
+                   for ( auto i=0; i<3; i++ )
+                      for ( auto j=0; j<3; j++ )
                           ofs << ts_elmt_data[ (*nit)->Idx() ](i,j) <<" ";
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2002,7 +2001,7 @@ const
     for ( auto eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
       {
          ofs <<"TRGL ";
-         for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
+         for ( auto j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
          ofs << endl;
       }
     ofs << "END"<< endl;    
@@ -2069,7 +2068,7 @@ if the target Region is not defined,
 or if an attempt is made to output a IntegrationPoint variable, the method
 will report an error and exit without completing its task. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  GoCadInterface<dim>::OutputVariableToTSurface( const Model<dim>& sgroup, 
                                                     const char* fname,
                                                     const char* group_name, 
@@ -2127,13 +2126,13 @@ const
    // 4.2 Writing the vertex=Node data to file
    // ----------------------------------------
    ScalarVariable  val;
-   size_t            i(0U);
 
    // 4.3 making a list of nodes that belong to the group
    // ---------------------------------------------------
    vector<size_t>  nodes(   gref.Nodes() );
    vector<size_t>  cpoints( gref.IntegrationPoints() );
-
+   
+   size_t i{0};
    for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) nodes[i++] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
@@ -2146,14 +2145,13 @@ const
    VectorVariable<dim>          vc;
    TensorVariable<dim>          ts;
    Point<dim>                   xyz;
-   size_t                       j, k;
    vector<ScalarVariable >     sc_elmt_data;
    vector<VectorVariable<dim> > vc_elmt_data;
    vector<TensorVariable<dim> > ts_elmt_data;
-   vector<size_t>               node_ids;
+   vector<uint32_t>               node_ids;
    // node-id's of elements
-   set<size_t>                  elmts;
-   typename set<size_t>::const_iterator en_it;
+   set<uint32_t>                  elmts;
+   typename set<uint32_t>::const_iterator en_it;
    
    if ( prop_key.place == ELEMENT ) 
      {
@@ -2171,7 +2169,7 @@ const
           }
         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
-              for ( j=0; j<(*it)->Nodes(); j++ ) elmts.insert( (*it)->N(j)->Idx() );
+              for ( auto j=0; j<(*it)->Nodes(); j++ ) elmts.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
                 {
                     case SCALAR:
@@ -2198,7 +2196,7 @@ const
    switch( prop_key.place )
      {
         case NODE:
-             for ( i=0; i<nodes.size(); i++ )
+             for ( auto i=0; i<nodes.size(); i++ )
                {
                   gref.N( nodes[i] )->Read(prop_key, val );
                   ofs <<"PVRTX "<< i+1 <<" ";
@@ -2210,7 +2208,7 @@ const
           break;
         case ELEMENT_INTEGRATION_POINT:
              for ( auto it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
-               for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++ )
+               for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ )
                {
                   // getting constraint point coordinates
                   Point<dim>  xyz((*it)->IntegrationPoint(i));
@@ -2225,7 +2223,7 @@ const
                } 
            break;
         case ELEMENT:
-             for ( i=1, en_it=elmts.begin(); en_it!=elmts.end(); en_it++ )
+             for ( auto en_it=elmts.begin(); en_it!=elmts.end(); en_it++ )
                {
                   ofs <<"PVRTX "<< i++ <<" ";
                   ofs << gref.N( (*en_it) )->x() <<" "<< gref.N( (*en_it) )->y() <<" "<< 0.0 <<" ";
@@ -2235,12 +2233,12 @@ const
                             ofs << sc_elmt_data[ (*en_it) ]() <<" ";
                          break;
                        case VECTOR:
-                            for ( j=0; j<3; j++ ) 
+                            for ( auto j=0; j<3; j++ )
                                ofs << vc_elmt_data[ (*en_it) ][j] <<" ";
                          break;
                        case TENSOR:
-                            for ( k=0; k<3; k++ ) 
-                              for ( j=0; j<3; j++ ) 
+                            for ( auto k=0; k<3; k++ )
+                              for ( auto j=0; j<3; j++ )
                                  ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                       default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2263,7 +2261,7 @@ const
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          ofs <<"TRGL ";
-         for ( size_t j=0U; j<(*it)->Nodes(); j++ ) 
+         for ( auto j=0U; j<(*it)->Nodes(); j++ )
            ofs << (*new_node_ids.find( (*it)->N(j)->Idx() )).second <<" ";
          ofs << endl;
       }
@@ -2309,7 +2307,7 @@ Externalize the property values of a run to visualize them in GoCad.
 The method will report errors if the output file cannot be opened, if no 
 physical variables are defined or if the model is not two-dimensional. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup, 
                                                       const char* fname, long timestep ) const
  {
@@ -2385,7 +2383,6 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    ScalarVariable                                val;
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
-   size_t                                        i, j;
    auto nit = sg.NodesBegin();
 
    // All properties are output as NODE Properties
@@ -2409,11 +2406,11 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
                        case VECTOR:
                             (*nit)->Read(prop_key, vc );
                             // z-component was assigned 0.0 in 2D case 
-                            for( i=0; i<3; i++ ) ofs << vc[i] <<" ";
+                            for( auto i=0; i<3; i++ ) ofs << vc[i] <<" ";
                          break;
                        case TENSOR:
-                           for( i=0; i<3; i++ ) 
-                             for( j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
+                           for( auto i=0; i<3; i++ )
+                             for( auto j=0; j<3; j++ ) ofs << ts(i,j) <<" ";
                        default:
                          throw out_of_range("GoCadInterface<dim>::OutputVariablesToTSurface: variable type not handled");
                      }
@@ -2429,7 +2426,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
     for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
       {
          ofs <<"TRGL ";
-         for ( j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
+         for ( auto j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
          ofs << endl;
       }
     ofs << "END"<< endl;    
@@ -2498,7 +2495,7 @@ opposed to a region of a CSMP model.
 The method will report an error and fail to write an output file, if it
 cannot open the specified file with extension '.so' in text mode. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup, 
                                                      const char* fname, 
                                                      const char* var, 
@@ -2552,7 +2549,6 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    VectorVariable<dim>                           vc;
    TensorVariable<dim>                           ts;
    vector<double>                                xyz;
-   size_t                                        i, j;
 
    // 3.3 All properties are output as NODE Properties
    // ------------------------------------------------
@@ -2565,17 +2561,17 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    
    if ( prop_key.place == ELEMENT ) 
      {
-        if       ( prop_key.type == SCALAR ) { 
+        if ( prop_key.type == SCALAR ) { 
              sc_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) sc_elmt_data.push_back( ScalarVariable() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) sc_elmt_data.push_back( ScalarVariable() );
           }
         else if  ( prop_key.type == VECTOR ) {
              vc_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) vc_elmt_data.push_back( VectorVariable<dim>() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) vc_elmt_data.push_back( VectorVariable<dim>() );
           }
         else if  ( prop_key.type == TENSOR ) {
              ts_elmt_data.reserve( sg.Nodes() );
-             for ( i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
+             for ( auto i=0; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
         for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
           {
@@ -2584,15 +2580,15 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                     case SCALAR:
                          (*eit)->Read(prop_key, sc );
                          // triangles only
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) sc_elmt_data[ (*eit)->N(i)->Idx() ] = sc;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) sc_elmt_data[ (*eit)->N(i)->Idx() ] = sc;
                       break;
                     case VECTOR:
                          (*eit)->Read(prop_key, vc );
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) vc_elmt_data[ (*eit)->N(i)->Idx() ] = vc;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) vc_elmt_data[ (*eit)->N(i)->Idx() ] = vc;
                       break;
                     case TENSOR:
                          (*eit)->Read(prop_key, ts );
-                         for ( i=0; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
+                         for ( auto i=0; i<(*eit)->Nodes(); i++ ) ts_elmt_data[ (*eit)->N(i)->Idx() ] = ts;
                     default:
                       throw out_of_range("GoCadInterface<dim>: variable type not handled");
                 }
@@ -2618,7 +2614,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                size_t  counter(0U);
                for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
                  {
-                    for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ ) {
+                    for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) {
                         // getting constraint point coordinates
                         Point<dim>  xyz((*eit)->IntegrationPoint(i));
                         (*eit)->Read( i, prop_key, sc );
@@ -2642,12 +2638,12 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                              ofs << sc_elmt_data[ (*nit)->Idx() ]() <<" ";
                           break;
                         case VECTOR:
-                             for ( i=0; i<dim; i++ ) 
+                             for ( auto i=0; i<dim; i++ )
                                ofs << vc_elmt_data[ (*nit)->Idx() ][i] <<" ";
                           break;
                         case TENSOR:
-                             for ( i=0; i<dim; i++ ) 
-                               for ( j=0; j<dim; j++ ) 
+                             for ( auto i=0; i<dim; i++ )
+                               for ( auto j=0; j<dim; j++ )
                                  ofs << ts_elmt_data[ (*nit)->Idx() ](i,j) <<" ";
                         default:
                           throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2667,7 +2663,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
     for ( auto eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
       {
          ofs <<"TETRA ";
-         for ( size_t j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
+         for ( auto j=0; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
          ofs << endl;
       }
     ofs << "END"<< endl;    
@@ -2743,7 +2739,7 @@ cannot open the specified file with extension '.so' in text mode.
 If the target group is not defined (which it may due to a spelling error,
 for instance), the method will also report this as an error. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup, 
                                                       const char* fname, 
                                                       const char* group_name, 
@@ -2823,14 +2819,13 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    VectorVariable<dim>          vc;
    TensorVariable<dim>          ts;
    Point<dim>                   xyz;
-   size_t                       j, k;
-   vector<ScalarVariable >     sc_elmt_data;
-   vector<VectorVariable<dim> > vc_elmt_data;
-   vector<TensorVariable<dim> > ts_elmt_data;
-   vector<size_t>               node_ids;
+   vector<ScalarVariable >        sc_elmt_data;
+   vector<VectorVariable<dim> >   vc_elmt_data;
+   vector<TensorVariable<dim> >   ts_elmt_data;
+   vector<uint32_t>               node_ids;
    // node-id's of elements
-   set<size_t>                  elmt_nds;
-   set<size_t>::const_iterator  en_it;
+   set<size_t>                    elmt_nds;
+   set<uint32_t>::const_iterator  en_it;
    
    if ( prop_key.place == ELEMENT ) 
      {
@@ -2848,24 +2843,26 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
           }
         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
           {
-              for ( j=0; j<(*it)->Nodes(); j++ ) elmt_nds.insert( (*it)->N(j)->Idx() );
-              switch ( prop_key.type )
-                {
-                    case SCALAR:
-                         (*it)->Read(prop_key, sc );
-                         // triangles only
-                         for ( i=0; i<(*it)->Nodes(); i++ ) sc_elmt_data[ (*it)->N(j)->Idx() ] = sc;
-                      break;
-                    case VECTOR:
-                         (*it)->Read(prop_key, vc );
-                         for ( i=0; i<(*it)->Nodes(); i++ ) vc_elmt_data[ (*it)->N(j)->Idx() ] = vc;
-                      break;
-                    case TENSOR:
-                         (*it)->Read(prop_key, ts );
-                         for ( i=0; i<(*it)->Nodes(); i++ ) ts_elmt_data[ (*it)->N(j)->Idx() ] = ts;
-                    default:
-                        cout <<"\nGoCadInterface<dim>::OutputVariableToTSolid: type of elmt. prop. not defined.\n";
-                }
+              for ( auto j=0; j<(*it)->Nodes(); j++ ) {
+                  elmt_nds.insert( (*it)->N(j)->Idx() );
+                  switch ( prop_key.type )
+                    {
+                        case SCALAR:
+                             (*it)->Read(prop_key, sc );
+                             // triangles only
+                             for ( auto i=0; i<(*it)->Nodes(); i++ ) sc_elmt_data[ (*it)->N(j)->Idx() ] = sc;
+                          break;
+                        case VECTOR:
+                             (*it)->Read(prop_key, vc );
+                             for ( auto i=0; i<(*it)->Nodes(); i++ ) vc_elmt_data[ (*it)->N(j)->Idx() ] = vc;
+                          break;
+                        case TENSOR:
+                             (*it)->Read(prop_key, ts );
+                             for ( auto i=0; i<(*it)->Nodes(); i++ ) ts_elmt_data[ (*it)->N(j)->Idx() ] = ts;
+                        default:
+                            cout <<"\nGoCadInterface<dim>::OutputVariableToTSolid: type of elmt. prop. not defined.\n";
+                    }
+             }
           }
      }
 
@@ -2874,7 +2871,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    switch( prop_key.place )
      {
         case NODE:
-             for ( i=0; i<nodes.size(); i++ )
+             for ( auto i=0; i<nodes.size(); i++ )
                {
                   ofs <<"PVRTX "<< i+1 <<" ";
                   ofs << gref.N( nodes[i] )->x() <<" "<< gref.N( nodes[i] )->y() <<" "<< gref.N( nodes[i] )->z() <<" ";
@@ -2886,12 +2883,12 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                          break;
                        case VECTOR:                   
                             gref.N( nodes[i] )->Read(prop_key, vc );
-                            for ( j=0; j<dim; j++ )  ofs << vc[j] <<" ";
+                            for ( auto j=0; j<dim; j++ )  ofs << vc[j] <<" ";
                          break;
                        case TENSOR:                   
                             gref.N( nodes[i] )->Read(prop_key, ts );
-                            for ( j=0; j<dim; j++ )
-                              for ( k=0; k<dim; k++ ) 
+                            for ( auto j=0; j<dim; j++ )
+                              for ( auto k=0; k<dim; k++ )
                                  ofs << ts(j,k) <<" ";
                        default:
                          throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -2903,7 +2900,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
         case ELEMENT_INTEGRATION_POINT: 
              for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
                {
-                  for ( j=0; j<(*it)->IntegrationPoints(); j++ ) {
+                  for ( auto j=0; j<(*it)->IntegrationPoints(); j++ ) {
                         // getting constraint point coordinates
                         Point<dim>  xyz((*it)->IntegrationPoint( j ));
                         (*it)->Read(prop_key, sc );
@@ -2917,7 +2914,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                
            break;
         case ELEMENT:
-             for ( i=1, en_it=elmt_nds.begin(); en_it!=elmt_nds.end(); en_it++ )
+             for ( auto en_it=elmt_nds.begin(); en_it!=elmt_nds.end(); en_it++ )
                {
                   ofs <<"PVRTX "<< i++ <<" ";
                   ofs << gref.N( (*en_it) )->x() <<" "<< gref.N( (*en_it) )->y() <<" "<< gref.N( (*en_it) )->z() <<" ";
@@ -2927,12 +2924,12 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
                             ofs << sc_elmt_data[ (*en_it) ]() <<" ";
                          break;
                        case VECTOR:
-                            for ( j=0; j<dim; j++ ) 
+                            for ( auto j=0; j<dim; j++ )
                                ofs << vc_elmt_data[ (*en_it) ][j] <<" ";
                          break;
                        case TENSOR:
-                            for ( k=0; k<dim; k++ ) 
-                              for ( j=0; j<dim; j++ ) 
+                            for ( auto k=0; k<dim; k++ )
+                              for ( auto j=0; j<dim; j++ )
                                  ofs << ts_elmt_data[ (*en_it) ](k,j) <<" ";
                        default:
                           throw out_of_range("GoCadInterface<dim>: variable type not handled");
@@ -3010,7 +3007,7 @@ selected subregions of a CSP model as GoCad input files for visualisation.
 The method will report an error and exit without completing its task, if 
 no Region objects were defined in the model. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void GoCadInterface<dim>::OutputRegionsToGoCadFiles( const Model<dim>& sgroup, 
                                                        const char* property, 
                                                        long timestep ) const
@@ -3044,7 +3041,7 @@ void GoCadInterface<dim>::OutputRegionsToGoCadFiles( const Model<dim>& sgroup,
 Loops through plist making a map of node numbers. If this map has jumps 
 in the numbering, these are detected when looping through it again. 
  */
-template<size_t dim>
+template<uint32_t dim>
 bool GoCadInterface<dim>::VerifyConsecutiveNodeNumbering( map<size_t,vector<int64_t> >& plist )
  const 
  {

@@ -30,7 +30,7 @@ namespace csmp
       size_t nullNeighborsOut(0);
       const Region<3U> model_domain1(modelOutput1.Region("Model"));
       for ( auto it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
-        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+        for ( auto n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighborsOut;
 
@@ -88,7 +88,7 @@ namespace csmp
       if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
       for ( auto it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
-        for ( size_t n(0); n < (*it)->Neighbors(); ++n )
+        for ( auto n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighbors;
 
@@ -204,8 +204,8 @@ namespace csmp
       Region<3>& rref( model.Region( "Model" ) );
       rref.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 0. ) );
       size_t boundaryNodeCount( 0 );
-      const vector<Node<3>*>::iterator nodesEnd( rref.NodesEnd() );
-      for( vector<Node<3>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+      const vector<Node<3>*>::const_iterator nodesEnd( rref.NodesEnd() );
+      for( vector<Node<3>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
         {
         const BOX_BOUNDARY boxBoundary( (*it)->AtBoundary() );
         if( boxBoundary == LEFT or boxBoundary == RIGHT or boxBoundary == TOP or boxBoundary == BOTTOM  or boxBoundary == FRONT or boxBoundary == BACK )

@@ -7,7 +7,7 @@ namespace csmp {
 
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseTransportPHX<dim>::TwoPhaseTransportPHX( Model<dim>& model,
                           UpwindControlVisitor<dim>& upwind_visitor,
                           ExplicitFiniteVolumeTransportPHX<dim>& fv_vapor,
@@ -40,13 +40,13 @@ TwoPhaseTransportPHX<dim>::TwoPhaseTransportPHX( Model<dim>& model,
   } // end constructor 
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseTransportPHX<dim>::~TwoPhaseTransportPHX()
  {
  }
 
 /** modify maximum size of time step */
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseTransportPHX<dim>::SetLargestTimeStep( const double& max_time_step )
  {
     fv_transport_liquid.SetMaximumTimeStep( max_time_step );
@@ -54,7 +54,7 @@ void TwoPhaseTransportPHX<dim>::SetLargestTimeStep( const double& max_time_step 
  }
 
 /** main function to coordinate two-phase flow */
-template<size_t dim>
+template<uint32_t dim>
 double  TwoPhaseTransportPHX<dim>::AdvectMassConserved( const double& time_increment )
  {
  
@@ -84,7 +84,7 @@ double  TwoPhaseTransportPHX<dim>::AdvectMassConserved( const double& time_incre
 
 
 /** calculating facet fluxes for both phases */
-template<size_t dim>
+template<uint32_t dim>
 void  TwoPhaseTransportPHX<dim>::DetermineFacetFluxes()
   {
     fv_transport_liquid.DetermineFacetFlux( cfl_dt, UpwindVisitor.UpwindMatrices( fv_transport_liquid.GetDensityKey()) );
@@ -93,7 +93,7 @@ void  TwoPhaseTransportPHX<dim>::DetermineFacetFluxes()
 
 
 /** checking mass-based time step criterion and adjusting time step if necessary */
-template<size_t dim>
+template<uint32_t dim>
 void  TwoPhaseTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimestep()
   {
   
@@ -133,7 +133,7 @@ void  TwoPhaseTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimestep()
   } // end CheckDryFiniteVolumesAndAdjustTimestep
 
 /** finalize FV calculations */
-template<size_t dim>
+template<uint32_t dim>
 void  TwoPhaseTransportPHX<dim>::PerformFacetFluxes( )
   {
 
@@ -143,7 +143,7 @@ void  TwoPhaseTransportPHX<dim>::PerformFacetFluxes( )
   } // end PerformFacetFluxes
 
 /** active gravity component */
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseTransportPHX<dim>::WithGravityComponentLiquidAndVapor()
    {
       fv_transport_liquid.WithGravityComponent();
@@ -151,7 +151,7 @@ void TwoPhaseTransportPHX<dim>::WithGravityComponentLiquidAndVapor()
    }
 
 /** update projection of velocity onto facet normal */
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseTransportPHX<dim>::UpdateProjection( )
    {
       fv_transport_liquid.UpdateProjection(  );
@@ -159,7 +159,7 @@ void TwoPhaseTransportPHX<dim>::UpdateProjection( )
    }
 
 /** special function to track fluxes of magmatic fluids */
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseTransportPHX<dim>::TrackFluxes( )
    {
 
@@ -223,7 +223,7 @@ void TwoPhaseTransportPHX<dim>::TrackFluxes( )
    }
 
 /** adding further variables for FV calculations */
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseTransportPHX<dim>::AddAdvectionVariable( const char* new_lhs_liquid, const char* new_rhs_liquid,
                                                         const char* new_lhs_vapor,  const char* new_rhs_vapor )
   {

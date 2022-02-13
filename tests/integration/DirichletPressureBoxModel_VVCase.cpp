@@ -158,9 +158,9 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
    const bool binary_file( true );
    mesh_interface.Read_ANSYS_Mesh( model_name_.c_str(), mesh_container, mesh_topology, binary_file, true );
 
-   mesh_topology.ReduceToRegions( model_name_.c_str() );
+  mesh_topology.ReduceToDomains( model_name_.c_str() );
    map<size_t,size_t>  old_and_new_elmtids;
-   mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+   mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
    mesh_container.ReduceTo( old_and_new_elmtids );
 
    Model<DIM> model( mesh_topology, mesh_container, "DirichletPressureBoxModel_VVCase-variables.txt", true, true );

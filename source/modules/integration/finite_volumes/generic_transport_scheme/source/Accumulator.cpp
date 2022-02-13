@@ -12,7 +12,7 @@ namespace csmp {
 /**
   Should use information from equation to define computational problem (solution variables etc.)
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::SetUp() 
 {
    // sizing the linear algebraic system
@@ -37,7 +37,7 @@ void Accumulator<dim,USER>::SetUp()
      
     Inside of the domain and for the halo stencils, accumulation by stencil is used, while truncated boundary FVs need to be accumulated finite volume by finite volume (only certain terms)
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::Accumulate( double time_increment )
  {
     ErrorHandler& error_handler( ErrorHandler::Instance() );
@@ -89,7 +89,7 @@ void Accumulator<dim,USER>::Accumulate( double time_increment )
 
 
     /// compensate (+) balance at inflow boundaries, (-) balance at outflow boundaries, and any potential divergence of flow at no-flow boundaries              
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::BalanceFlowsThroughTruncatedBoundaryFiniteVolumes( SparseMatrix& lhs, 
                                                                                vector<double>& rhs,
                                                                                double time_increment )
@@ -110,7 +110,7 @@ void Accumulator<dim,USER>::BalanceFlowsThroughTruncatedBoundaryFiniteVolumes( S
 /**
     Accumulates lefthand-side = matrix A of the equation A x = b
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::AccumulateByStencil( typename vector<Element<dim>*>::const_iterator first, 
                                                            typename vector<Element<dim>*>::const_iterator last,
                                                            const MatrixOperator<dim>* const mat_op,
@@ -127,7 +127,7 @@ void Accumulator<dim,USER>::AccumulateByStencil( typename vector<Element<dim>*>:
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::AccumulateByStencil( typename vector<Element<dim>*>::const_iterator first, 
                                                            typename vector<Element<dim>*>::const_iterator last,
                                                            const VectorOperator<dim>* const vec_op,
@@ -145,7 +145,7 @@ void Accumulator<dim,USER>::AccumulateByStencil( typename vector<Element<dim>*>:
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Accumulator<dim,USER>::AccumulateByFiniteVolume( typename std::vector<Node<dim>*>::const_iterator nit,
                                                                 typename std::vector<Node<dim>*>::const_iterator end,
                                                                 const MatrixOperator<dim>* const mat_op, ///< modified to contain operation information
@@ -160,7 +160,7 @@ void Accumulator<dim,USER>::AccumulateByFiniteVolume( typename std::vector<Node<
 } // end AccumulateByFiniteVolume
 
 
-template<size_t dim,template<size_t> class USER>
+template<uint32_t dim,template<uint32_t> class USER>
 void Accumulator<dim,USER>::AccumulateByFiniteVolume( typename std::vector<Node<dim>*>::const_iterator nit,
                                                                 typename std::vector<Node<dim>*>::const_iterator end,
                                                                 const VectorOperator<dim>* const vec_op, ///< modified to contain operation information

@@ -7,10 +7,9 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 GenericNodePropertyGradientLimiter<dim>::GenericNodePropertyGradientLimiter( Model<dim>& sg, const char* region, const char* prop_name )
-  : gref_(sg.Region(region)),
-    tolerance(1.0e-15),
+  : tolerance(1.0e-15),
     //gradient( sg_, prop, VECTOR, NODE ), // tbd NOT to be called with  prop, but with name of gradient!
     u_key(sg.Database().StorageKey(prop_name)),
     grad_key(sg.Database().StorageKey( (string(prop_name) + " gradient").c_str() )),
@@ -29,10 +28,9 @@ GenericNodePropertyGradientLimiter<dim>::GenericNodePropertyGradientLimiter( Mod
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 GenericNodePropertyGradientLimiter<dim>::GenericNodePropertyGradientLimiter( Model<dim>& sg, const char* region, vector<char*> prop_names )
-  : gref_(sg.Region(region)),
-    tolerance(1.0e-15),
+  : tolerance(1.0e-15),
     //gradient( sg, prop, VECTOR, NODE ), // tbd NOT to be called with  prop, but with name of gradient!
     node_prop_grad( sg, region, prop_names ),
     limiter( prop_names.size(), NULL )
@@ -41,7 +39,7 @@ GenericNodePropertyGradientLimiter<dim>::GenericNodePropertyGradientLimiter( Mod
     string   str2;
     str2 = " limiter";
 
-    for( size_t i = 0; i < prop_names.size(); i++ ){
+    for( auto i = 0; i < prop_names.size(); i++ ){
       // construct the name of the property's gradient:
       limiter_strings[i] = prop_names[i]; 
       limiter_strings[i] = limiter_strings[i] + str2;
@@ -52,13 +50,13 @@ GenericNodePropertyGradientLimiter<dim>::GenericNodePropertyGradientLimiter( Mod
 
 
   
-template<size_t dim>
+template<uint32_t dim>
 GenericNodePropertyGradientLimiter<dim>::~GenericNodePropertyGradientLimiter()
   {
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void GenericNodePropertyGradientLimiter<dim>::CalculateGenericNodalGradient()
 {
     node_prop_grad.CalculateGenericNodalGradient();
@@ -75,38 +73,31 @@ automatically at the property database.
 The method is implemented from the various FiniteVolume<fT, dim>Visitors
 
 */
-template<size_t dim>
-void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vector<pair<double,double> >& MINMAX, int counter )
+template<uint32_t dim>
+void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const Region<dim>& gref,
+                                                                     const vector<pair<double,double> >& MINMAX, int counter )
   {
-    ScalarVariable                                  val1, val2, phi;
-    VectorVariable<dim>                             grad, dist;
-    typename std::vector<size_t>::iterator          sit;
-    Node<dim>                                       fv;
-    typename std::vector<size_t>::iterator          nit;
-    std::pair<size_t, size_t>                       ids;
-    double                                        max, min, val_left, phi_temp;
-    Node<dim>*                                      cvit, neighbor_node;
-    size_t                                          nloc_id, global_el_id, local_facet_id,node_id;
+    ScalarVariable             val1, val2, phi;
+    VectorVariable<dim>        grad, dist;
+    Node<dim>                  fv;
+    double                     max, min, val_left, phi_temp;
     
     // loop over finite volumes
     // -------------------------
-    for( typename std::vector<Node<dim>*>::const_iterator
-         it=gref_.NodesBegin(); it!=gref_.NodesEnd(); it++){
-         
-        cvit = (*it); // node pointer
-        node_id =  (*(*it)).Idx();
+    for( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); ++it ){
+        const size_t node_id = (*it)->Idx();
         // if finite volume is at a node with DIRICHLET or NEUMANN boundary conditions,
         // its phi value is zero (first order upwind scheme)
-        if ( (*cvit).Status(u_key) == PLAIN || (*cvit).Status(u_key) == ANY ) {
+        if ( (*it)->Status(u_key) == PLAIN || (*it)->Status(u_key) == ANY ) {
         
             // read the gradient at the node
-            (*cvit).Read( grad_key,  grad );
+            (*it)->Read( grad_key,  grad );
             
             //double  node_x =  (*cvit).x();
             //double  node_y =  (*cvit).y();
 
             // read concentration at the fv at its center of mass
-            (*cvit).Read( u_key, val1 );
+            (*it)->Read( u_key, val1 );
 
             //string name = sg_.Database().Name( u_key );
                     
@@ -118,8 +109,8 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
             min = val1();
             max = val1();
 
-            for ( nit = node_prop_grad.neighbors_[node_id].begin(); nit != node_prop_grad.neighbors_[node_id].end(); nit++ ) {
-                  gref_.N(*nit)->Read( u_key, val2 );
+            for ( auto nit = node_prop_grad.neighbors_[node_id].begin(); nit != node_prop_grad.neighbors_[node_id].end(); nit++ ) {
+                  gref.N(*nit)->Read( u_key, val2 );
                 if ( val2() < min ) { min = val2(); }
                 if ( val2() > max ) { max = val2(); }
             }
@@ -131,25 +122,21 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
               
             // sitting at a node, loop over parent el's
             // ------------------------------------------           
-            for(  size_t p = 0; p< (*cvit).Parents() ; p++ ){
+            for( auto p = 0; p< (*it)->Parents() ; p++ ){
 
                 // get the global parent id:
-                global_el_id = (*cvit).Parent( p )->Idx();
+                size_t global_el_id = (*it)->Parent( p )->Idx();
 
                 // get the corresponding element:
-                if(global_el_id<gref_.Elements()){
-
-                    Element<dim>* eptr = gref_.E( global_el_id);
-
-                    // get local node number
-                    nloc_id = (*cvit).ParentNodeNumber( p );
+                if( global_el_id<gref.Elements() ) {
+                    uint32_t nloc_id = (*it)->ParentNodeNumber( p );
 
                     // at that parent element, loop over all facets that belong to the current node/fv
                     // -------------------------------------------------------------------------------
-                    for ( size_t i=0U; i < eptr->FV()->FacetsPerSector(nloc_id); i++ ) {
+                    for ( auto i{0}; i < gref.E(global_el_id)->FV()->FacetsPerSector(nloc_id); i++ ) {
 
                          // at that facet, get local facet_id used for determining distance:
-                         local_facet_id = eptr->FV()->FacetSurroundingSector( nloc_id,i );
+                         auto local_facet_id = gref.E(global_el_id)->FV()->FacetSurroundingSector( nloc_id,i );
 
                          // get distance barycenter - facetcenter for that facet:
                          node_prop_grad.GenericDistanceFacetFVBarycenter( global_el_id, local_facet_id, nloc_id, dist );
@@ -157,8 +144,8 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
                          // construct linear interpolant:
                          val_left  = val1();
 
-                         for (size_t j=0;j<dim;j++)
-                             val_left += grad[j]*dist[j];
+                         for ( auto j=0;j<dim;j++)
+                           val_left += grad[j] * dist[j];
 
                          /*
                          // calculate r for that facet:
@@ -195,7 +182,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
         
         // store the gradient limiter
         // ----------------------------
-        (*cvit).Store( lim_key, phi );
+        (*it)->Store( lim_key, phi );
 
     } // end loop over finite volumes
     
@@ -205,7 +192,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const vecto
 
 
 /// provide the csmp::Index for the gradient variable
-template<size_t dim>
+template<uint32_t dim>
 void GenericNodePropertyGradientLimiter<dim>::SetPropertyKey( csmp::Index& key )  { u_key = key; }
 
 
@@ -217,7 +204,7 @@ void GenericNodePropertyGradientLimiter<dim>::SetPropertyKey( csmp::Index& key )
 @return double Returns the storage in bytes required by the GenericNodePropertyGradientLimiter object
 
 */    
-template<size_t dim>
+template<uint32_t dim>
 double GenericNodePropertyGradientLimiter<dim>::SizeOf() const
   {
     return sizeof( *this );

@@ -14,7 +14,7 @@ namespace csmp {
 */
 class GridNode : public csmp::Point<3U> {
   public:
-    GridNode() : idx_(std::numeric_limits<size_t>::max()) {}
+    GridNode() : idx_(std::numeric_limits<uint32_t>::max()) {}
     GridNode( size_t index, const Point<3U>& );
     GridNode( const GridNode& );
     // add move constructor
@@ -32,7 +32,7 @@ class GridNode : public csmp::Point<3U> {
     void AssignPoint( const csmp::Point<3U>& );
 
 private:
-    size_t idx_ = std::numeric_limits<size_t>::max();
+    size_t idx_ = std::numeric_limits<uint32_t>::max();
 };
 
 std::ostream&  operator<<( std::ostream&, const GridNode& );

@@ -72,7 +72,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     vector<size_t>    elements( mesh_container.Elements() );
     iota( begin(elements),  end(elements), 0 );
     // creating a region of all elements 'sediments'
-    topology.AddRegion( "sediments",fem_types, elements );
+    topology.AddDomain( "sediments",fem_types, elements );
     // constructing the rectangular model              
     const bool create_boundary_objects(false /* since there are no line elements */), box_shaped(true);
     Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", create_boundary_objects, box_shaped );
@@ -92,7 +92,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     const csmp::Index bcp_key = model.Database(). StorageKey("brooks corey parameter");
     Region<2> model_domain(model.Region("Model"));
     
-    for ( vector<Element<2>*>::iterator it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
           const double permeability = (*it)->Read( k_key );
           // porosity: phi = cubic root of permeability times constant factor + offset
           const double scale_factor(2.5e3);
@@ -184,14 +184,14 @@ void createInflowRegion( Model<2U>& model )
      Region<2U>&  domain(model.Region("Model"));
      domain.UpdateMemberIndexes();
     
-     vector<size_t> element_ids;
+     vector<uint32_t> element_ids;
      element_ids.reserve(800); // there are 800 elements in the vertical
     
      for ( auto eit=domain.ElementsBegin(); eit!=domain.ElementsEnd(); ++eit ) {
           // for quadrilateral elements, if any of their nodes are on the left boundary the element is as well
           assert( (*eit)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL );
           bool at_left_boundary(false);
-          for ( size_t i=0U; i<(*eit)->Nodes(); ++i )
+          for ( auto i{0}; i<(*eit)->Nodes(); ++i )
             if ( isLEFT( (*eit)->N(i)->AtBoundary() ) ) {
                  at_left_boundary = true;
                  break;

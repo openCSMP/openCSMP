@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_PT_op_dV<dim,CELL>::NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref,
                                                     const char* oper, const char* test ) 
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -40,7 +40,7 @@ be the best procedure available (see Cook et al.).
 A reference to the variable storage inside of the Model<dim>  and a 
 reference to the Element from which the Operand shall be read.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -56,8 +56,8 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( size_t i=0; i<e.Nodes(); i++ )
-          for ( size_t j=0; j<dim; j++ ) BFORCE[k++] = forces[i][j];
+        for ( auto i=0; i<e.Nodes(); i++ )
+          for ( auto j=0; j<dim; j++ ) BFORCE[k++] = forces[i][j];
      }
    else // Element property
      {
@@ -67,15 +67,15 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( size_t i=0; i<e.Nodes(); i++ )
-          for ( size_t j=0; j<dim; j++ ) BFORCE[k++] = vc[j];
+        for ( auto i=0; i<e.Nodes(); i++ )
+          for ( auto j=0; j<dim; j++ ) BFORCE[k++] = vc[j];
     }
 
    // zeroing the corner nodes again (only for quadratic triangle in 2D
    // where number of midside nodes is equal to corner nodes)
    if ( e.FE_Type() == QUADRATIC_TRIANGLE ||
         e.FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
-     for ( size_t i=0; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
+     for ( auto i=0; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
 
 } // end GetOperands
 
@@ -111,7 +111,7 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     MathOperatorRHS<dim>::RHS.resize( BFORCE.size() );
@@ -122,13 +122,13 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
          const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
-         for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
+         for ( auto i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
          const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
-         for ( size_t i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
+         for ( auto i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
     

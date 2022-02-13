@@ -56,7 +56,7 @@ Ich hoffe, dass es ansonsten halbwegs selbsterklaerend und bug-arm ist, aber das
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 PVTX_Calculator_H2O_CO2_NaCl<dim>::PVTX_Calculator_H2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& props )
   : props_(props),
     Xbulk_(4,numeric_limits<double>::quiet_NaN(),ANY), aq_ph_composition_(3), carb_ph_composition_(2),
@@ -77,7 +77,7 @@ PVTX_Calculator_H2O_CO2_NaCl<dim>::PVTX_Calculator_H2O_CO2_NaCl( const variables
     @attention since precipitatated salt also occupies a fraction of the pore space, the water and carbondioxide saturations
     will be reduced correspondingly.
 */
-template<size_t dim>
+template<uint32_t dim>
 double PVTX_Calculator_H2O_CO2_NaCl<dim>::WaterSaturation() const
 {
   return (flash_.massAqueousPhase() / flash_.rho_aq()) /
@@ -89,7 +89,7 @@ double PVTX_Calculator_H2O_CO2_NaCl<dim>::WaterSaturation() const
 /**
     Calculate the halite saturation.
 */
-template<size_t dim>
+template<uint32_t dim>
 double PVTX_Calculator_H2O_CO2_NaCl<dim>::HaliteVolumeFraction() const
  {
   return (flash_.massHalite() / rhoNaCl_) /
@@ -112,7 +112,7 @@ double PVTX_Calculator_H2O_CO2_NaCl<dim>::HaliteVolumeFraction() const
       - aq_ph_composition_, CO2composition - composition of the phases in terms of new mass fractions
       - the densities, viscosities and compressibilities of the phases
  */
-template<size_t dim>
+template<uint32_t dim>
 SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -462,7 +462,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
 /**
      @attention does not compute source term.
 */
-template<size_t dim>
+template<uint32_t dim>
 SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -572,7 +572,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
 /**
     TODO: deal with the salt-only case, in terms of saturations and mass balances, or use trick that there is always some water left
 */
-template<size_t dim>
+template<uint32_t dim>
 void PVTX_Calculator_H2O_CO2_NaCl<dim>::InitialisePVTX_FromFieldData( const Node<dim>* n )
  {
     // 0. establish locai conditions
@@ -659,11 +659,11 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InitialisePVTX_FromFieldData( const Node
  
     @test SKM 30/1/19
 */
-template<size_t dim>
+template<uint32_t dim>
 void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( const Element<dim>* e )
  {
     // 0. interpolating all relevant properties to element barycentre
-    const size_t nodes(e->Nodes()), sector_ip(0U);
+    const auto nodes(e->Nodes()), sector_ip(0U);
     IPOL_.resize(nodes);
     e->N_AtBaryCenter( IPOL_ );
     const double PV = e->Volume() * e->Read(props_.key_thi) * e->Read(props_.key_phi);
@@ -674,7 +674,7 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
     Xbulk_ = Pf_ = ToC_ = 0.;
     double NaCl(0.);
     // interpolation
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
          // pressure and temperature
          Pf_  += IPOL_[i] * e->N(i)->Read( props_.key_pf );
          ToC_ += IPOL_[i] * e->N(i)->Read( props_.key_T );
@@ -729,13 +729,13 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
  
      @return returns the maximum pd detected.
 */
-template<size_t dim>
+template<uint32_t dim>
 double PVTX_Calculator_H2O_CO2_NaCl<dim>::MaxEntryPressureOfParentElements( const Node<dim>* n ) const
  {
     assert( n != nullptr );
     double pd(0.);
    
-    for ( size_t i=0U; i<n->Parents(); ++i ) {
+    for ( auto i{0}; i<n->Parents(); ++i ) {
          const Element<dim>* eptr(n->Parent(i));
          assert( eptr != nullptr );
          pd = max( pd, eptr->Read(props_.key_pd) );
@@ -758,14 +758,14 @@ double PVTX_Calculator_H2O_CO2_NaCl<dim>::MaxEntryPressureOfParentElements( cons
 
     @test OK SKM 20/1/2019
 */
-template<size_t dim>
+template<uint32_t dim>
 PHASES_CONTINUOUS_ACROSS_ELEMENT  continuousPhases( const variables::VariableSet_CO2GeoSequestration& props, const Element<dim>* eptr )
  {
     assert( eptr != nullptr );
     int aqueous(0), carbonic(0), salt(0);
 
     const size_t nodes(eptr->Nodes());
-    for ( size_t i=0U; i<nodes; ++i ) {
+    for ( auto i{0}; i<nodes; ++i ) {
          const SYSTEM_STATE state(static_cast<SYSTEM_STATE>(static_cast<int>(eptr->N(i)->Read(props.key_nPHS))));
          // counting the phases
          if      ( state == SYSTEM_STATE::aq   ) aqueous++;

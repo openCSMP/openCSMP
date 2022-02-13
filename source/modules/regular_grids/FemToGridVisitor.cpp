@@ -14,7 +14,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 FemToGridVisitor<dim>::FemToGridVisitor( const PropertyDatabase<dim>&  p, 
                                          FiniteDifferenceGrid& g, 
                                          const char*           var,
@@ -49,14 +49,14 @@ FemToGridVisitor<dim>::FemToGridVisitor( const PropertyDatabase<dim>&  p,
 
 
       
-template<size_t dim>
+template<uint32_t dim>
 FemToGridVisitor<dim>::~FemToGridVisitor() 
  {  
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 FemToGridVisitor<dim>&  FemToGridVisitor<dim>::operator=( const FemToGridVisitor<dim>& vis )
  {
     if ( &vis != this )
@@ -78,17 +78,17 @@ FemToGridVisitor<dim>&  FemToGridVisitor<dim>::operator=( const FemToGridVisitor
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool FemToGridVisitor<dim>::OverWrite() const { return overwrite; }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::OverWrite( bool ow ) { overwrite=ow; }
 
 
 /* 
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::ChangeOutputProperty( const char* var )
  {
      prop_key = pref.StorageKey( var );
@@ -108,7 +108,7 @@ void FemToGridVisitor<dim>::ChangeOutputProperty( const char* var )
 */
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x, 
                                                double& min_y, double& max_y )
  {
@@ -123,7 +123,7 @@ void FemToGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x,
       }
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  FemToGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update )
   {
      mjl::Point p1(XY(0,0),XY(0,1)), 
@@ -155,7 +155,7 @@ bool  FemToGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update )
      return true;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  FemToGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
   {
      // this method currently works only for regular rectangles
@@ -179,7 +179,7 @@ bool  FemToGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_type  )
  {
     double  min_x, max_x, min_y, max_y;
@@ -216,7 +216,7 @@ void FemToGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_
 
 
 /// if the visitor is passed to a region, all its elements are processed
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::Visit( Region<dim>* r )
  {
     r->RenumberElements();
@@ -235,7 +235,7 @@ onto the FiniteDifferenceGrid object.
 
 To output model results to JPEG images or other gridded data.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::Visit( Element<dim>* n )   
   { 
      double val;
@@ -292,7 +292,7 @@ void FemToGridVisitor<dim>::Visit( Element<dim>* n )
     
         
     
-template<size_t dim>
+template<uint32_t dim>
 void FemToGridVisitor<dim>::OutputProperty( const char* prop )
  {
      Index tmp_key = pref.StorageKey( prop );
@@ -308,7 +308,7 @@ void FemToGridVisitor<dim>::OutputProperty( const char* prop )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 const char* FemToGridVisitor<dim>::OutputProperty() const
  {
     return pref.Name( prop_key );

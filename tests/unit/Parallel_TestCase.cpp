@@ -147,7 +147,7 @@ namespace csmp
 
     // updating the saturation of water
     const vector<Node<3>*>::const_iterator nodesEnd( mref.NodesEnd() );
-    for ( vector<Node<3>*>::iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
+    for ( vector<Node<3>*>::const_iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
       {
       sc = 1. - (*it)->Read( saturationOilKey );
       (*it)->Store(  saturationWaterKey, sc );
@@ -155,7 +155,7 @@ namespace csmp
 
     // computing the total mobility
     const vector<Element<3>*>::const_iterator elementsEnd( mref.ElementsEnd() );
-    for ( vector<Element<3>*>::iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
+    for ( vector<Element<3>*>::const_iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
       {
       // setting up the relative permeability model
       saturationFunctions.Initialize( *(*it) );
@@ -181,13 +181,13 @@ namespace csmp
       csmp::Region<3>&  mref( model.Region( "Model" ) );
 
       const vector<Element<3U>*>::const_iterator elementsEnd = mref.ElementsEnd();
-      for ( vector<Element<3U>*>::iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
+      for ( vector<Element<3U>*>::const_iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
         {
           // computing the total velocity: vt = -k (lt grad p )
           const double mob_t = (*it)->Read( totalMobilityKey );
           velo = 0.;
           (*it)->dN_AtBaryCenter( DERIV, 1U );
-          for ( size_t i = 0; i < (*it)->Nodes(); ++i )
+          for ( auto i = 0; i < (*it)->Nodes(); ++i )
             {
               double pf = (*it)->N(i)->Read( fluidPresssureKey );
               velo(0)  += pf  * -DERIV(0,i) * mob_t;

@@ -137,13 +137,13 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
   	IsoparametricLinearQuadrilateral iso_quad;
   	
   	//elements hexahedrons
-    size_t         nodes(4); // number of nodes
-  	deque<size_t>  npes(1);  // number of nodes per element
-    deque<size_t>  epes(1);  // elements per element
-    deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_QUADRILATERAL);
+    size_t           nodes(4); // number of nodes
+  	deque<uint32_t>  npes(1);  // number of nodes per element
+    deque<uint32_t>  epes(1);  // elements per element
+    deque<int8_t>    etypes(1,ISOPARAMETRIC_LINEAR_QUADRILATERAL);
 
-    npes[0]=iso_quad.Nodes();
-  	epes[0]=iso_quad.Neighbors();
+    npes[0] = iso_quad.Nodes();
+  	epes[0] = iso_quad.Neighbors();
   	
     //--------------------------ELEMENT TYPES
   	//add element types
@@ -165,7 +165,7 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
   	px[3]=0;                py[3]=length_of_sides;    pz[3]=0;
   	
   	if( bSkewed )
-  	 for (size_t i = 0; i < 8; i++)
+  	 for (auto i = 0; i < 8; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -220,8 +220,8 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
     vecElementTypes[0]= ISOPARAMETRIC_LINEAR_TRIANGLE;
   	
     const size_t   nodes(9); // number of nodes
-  	deque<size_t>  npes(10);  // number of nodes per element
-    deque<size_t>  epes(10);  // elements per element
+  	deque<uint32_t>  npes(10);  // number of nodes per element
+    deque<uint32_t>  epes(10);  // elements per element
   	IsoparametricLinearTriangle iso_tria;
     npes[0]=iso_tria.Nodes();
   	epes[0]=iso_tria.Neighbors();
@@ -363,9 +363,9 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
                                       B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B,B };
   	
     const size_t   nodes(22); // number of nodes
-  	deque<size_t>  npes(45,3);  // default: number of nodes per triangle
-    deque<size_t>  epes(45,3);  // default: elements per triangle
-    for ( size_t i=0U; i<vecElementTypes.size(); ++i ) {
+  	deque<uint32_t>  npes(45,3);  // default: number of nodes per triangle
+    deque<uint32_t>  epes(45,3);  // default: elements per triangle
+    for ( auto i{0}; i<vecElementTypes.size(); ++i ) {
          if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
               npes[i] = 4;
               epes[i] = 4;
@@ -523,21 +523,21 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     // creating a matching model topology
     ModelTopology mesh_topology( "test_Create_MeshPatchWithLineElements_VSet", true );
     // all surface elements are "MATRIX"
-    mesh_topology.AddRegion( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+    mesh_topology.AddDomain( "MATRIX", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
                               vector<size_t>{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24} );
 
     // fracture line-element regions
-    mesh_topology.AddRegion( "FRAC1", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{25,29,31} );
-    mesh_topology.AddRegion( "FRAC2", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{26,27,28} );
-    mesh_topology.AddRegion( "FRAC3", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30} );
-    mesh_topology.AddRegion( "FRAC4", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{32} );
+    mesh_topology.AddDomain( "FRAC1", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{25,29,31} );
+    mesh_topology.AddDomain( "FRAC2", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{26,27,28} );
+    mesh_topology.AddDomain( "FRAC3", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30} );
+    mesh_topology.AddDomain( "FRAC4", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{32} );
     // boundaries
-    mesh_topology.AddRegion( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{33,34,35} );
-    mesh_topology.AddRegion( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38} );
-    mesh_topology.AddRegion( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{39,40,41} );
-    mesh_topology.AddRegion( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{42,43,44} );
+    mesh_topology.AddDomain( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{33,34,35} );
+    mesh_topology.AddDomain( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38} );
+    mesh_topology.AddDomain( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{39,40,41} );
+    mesh_topology.AddDomain( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{42,43,44} );
 
-    assert( mesh_topology.Elements() == vset.Elements() );
+    assert( mesh_topology.Cells() == vset.Elements() );
 
     // adding corresponding materials to VSet
     vector<int32_t> pmtrl(45,1); // matrix
@@ -552,12 +552,12 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
 
     // vset.Out();
@@ -579,8 +579,8 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	
   	//elements hexahedrons
     size_t nodes(8);         //number of nodes
-  	deque<size_t>  npes(1);  //number of nodes per element
-    deque<size_t>  epes(1);  //elements per element
+  	deque<uint32_t>  npes(1);  //number of nodes per element
+    deque<uint32_t>  epes(1);  //elements per element
     deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
     
     npes[0]=iso_hexahedron.Nodes();
@@ -610,7 +610,7 @@ void test_Create_One_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	px[7]=0;py[7]=1;pz[7]=1;
   	
   	if( bSkewed )
-  	 for (size_t i = 0; i < 8; i++)
+  	 for (auto i = 0; i < 8; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -704,7 +704,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
  // 	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -732,7 +732,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
       
@@ -785,7 +785,7 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -933,7 +933,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	double delta_y = y_length/static_cast<double>(y_dimension);
   	
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  if(bSkewed)
   	  {
@@ -953,7 +953,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     //define quad elements (elements 0->26), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement((iDim_i-1)*j+i);
       
@@ -1004,7 +1004,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     //nodes at edges:
   	//nodes at faces:
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1038,7 +1038,7 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     
     //go over elements, introduce slit
     for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{ 
      const bool over_slit  = (j == y_dimension/2       && i >= x_dimension-depth_of_slit);
      const bool under_slit = (j == (y_dimension/2 - 1) && i >= x_dimension-depth_of_slit);
@@ -1159,8 +1159,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	//elements 0->7 are hexahedrons
   	//elements 8->13 are pyramids
     size_t nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
-  	deque<size_t>  npes(iNrOfElements);  //number of nodes per element
-    deque<size_t>  epes(iNrOfElements);  //element type per element
+  	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
+    deque<uint32_t>  epes(iNrOfElements);  //element type per element
     deque<int8_t>  etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
 
 // NB: the pyramid elements still need to be dealt with
@@ -1206,7 +1206,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
       if(bSkewed)
   	  {
@@ -1238,7 +1238,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      
@@ -1442,7 +1442,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1560,14 +1560,14 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	//elements 0->23 are hexahedrons
   	//elements 8->29 are prisms
     const size_t   nodes(iDim_i*iDim_j*iDim_k);  //number of nodes: 64 on a 4x4x4 grid
-  	deque<size_t>  npes(iNrOfElements);  //number of nodes per element
-    deque<size_t>  epes(iNrOfElements);  //element type per element
+  	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
+    deque<uint32_t>  epes(iNrOfElements);  //element type per element
     deque<int8_t>  etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
     
     size_t iElement = 0;
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	  if(i==1 && j==1) //its a prism
   	  { 
@@ -1598,7 +1598,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     vector<int8_t> vecElementTypes(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	  if(i==1 && j==1) //its a prism
   	  {
@@ -1624,7 +1624,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -1655,7 +1655,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     iElement = 0;
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 
      //size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -1965,7 +1965,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -2122,7 +2122,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     bflags[61] = CNR8;
     
     // verification of boundary flags
-    for ( size_t i{0}; i<vset.Vertices(); ++i ) {
+    for ( auto i{0}; i<vset.Vertices(); ++i ) {
          if ( vset.BoundaryFlag(i) != bflags[i] )
 // original data were not correct:   cerr <<"\n\t"<< (int)vset.BoundaryFlag(i) <<" vs. "<< (int)bflags[i];
          vset.AddBFlag( i, bflags[i] );
@@ -2156,8 +2156,8 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	
   	//elements hexahedrons
     size_t nodes(iso_prism.Nodes());         //number of nodes
-  	deque<size_t>  npes(1);  //number of nodes per element
-    deque<size_t>  epes(1);  //elements per element
+  	deque<uint32_t>  npes(1);  //number of nodes per element
+    deque<uint32_t>  epes(1);  //elements per element
     deque<int8_t>  etypes(1,ISOPARAMETRIC_LINEAR_PRISM);
 
     npes[0]=iso_prism.Nodes();
@@ -2185,7 +2185,7 @@ void test_Create_One_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	px[5]=1;py[5]=1;pz[5]=1;
   	
   	if( bSkewed )
-  	 for (size_t i = 0; i < 6; i++)
+  	 for (auto i = 0; i < 6; i++)
   	  {
   	    px[i]+= (rand()%2000)*PERTURBATION;
   	    py[i]+= (rand()%2000)*PERTURBATION;
@@ -2273,7 +2273,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2305,7 +2305,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 //lower element
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2394,7 +2394,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -2612,7 +2612,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2634,7 +2634,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   	//add barycenters, one barycenter per cell
   	for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
   	  //const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2662,7 +2662,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 //we have 6 pyramids per cell
   	 
@@ -2741,7 +2741,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
   	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(size_t i = 0U; i < iDim_i-1; i++) //x
+  	for(auto i = 0U; i < iDim_i-1; i++) //x
   	{
   	 //pyramid 0
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2874,7 +2874,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
   	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(size_t i = 0U; i < iDim_i; i++) //x
+  	for(auto i = 0U; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -3041,27 +3041,27 @@ void test_Create_FracBox( VSet<3U>& vset, ModelTopology& topology )
 //    iota( elmtIdx_surfaces.begin(), elmtIdx_surfaces.end(), 1363 );
     iota( elmtIdx_lines.begin(), elmtIdx_lines.end(), 1783 );
 
-    topology.AddRegion( "MATRIX", femTypes_matrix, elmtIdx_matrix );
-//    topology.AddRegion( "SURFACES", femTypes_surfaces, elmtIdx_surfaces ); // don't include because it would duplicate elements
-    topology.AddRegion( "LINES", femTypes_lines, elmtIdx_lines );
+    topology.AddDomain( "MATRIX", femTypes_matrix, elmtIdx_matrix );
+//    topology.AddDomain( "SURFACES", femTypes_surfaces, elmtIdx_surfaces ); // don't include because it would duplicate elements
+    topology.AddDomain( "LINES", femTypes_lines, elmtIdx_lines );
     
     // specific regions
-    topology.AddRegion( "FRACTURE", femTypes_surfaces, elmtIdx_fracture );
+    topology.AddDomain( "FRACTURE", femTypes_surfaces, elmtIdx_fracture );
     // boundaries
-    topology.AddRegion( "BOUNDARY1", femTypes_surfaces, elmtIdx_boundary1 );
-    topology.AddRegion( "BOUNDARY2", femTypes_surfaces, elmtIdx_boundary2 );
-    topology.AddRegion( "BOUNDARY3", femTypes_surfaces, elmtIdx_boundary3 );
-    topology.AddRegion( "BOUNDARY4", femTypes_surfaces, elmtIdx_boundary4 );
-    topology.AddRegion( "BOUNDARY5", femTypes_surfaces, elmtIdx_boundary5 );
-    topology.AddRegion( "BOUNDARY6", femTypes_surfaces, elmtIdx_boundary6 );
+    topology.AddDomain( "BOUNDARY1", femTypes_surfaces, elmtIdx_boundary1 );
+    topology.AddDomain( "BOUNDARY2", femTypes_surfaces, elmtIdx_boundary2 );
+    topology.AddDomain( "BOUNDARY3", femTypes_surfaces, elmtIdx_boundary3 );
+    topology.AddDomain( "BOUNDARY4", femTypes_surfaces, elmtIdx_boundary4 );
+    topology.AddDomain( "BOUNDARY5", femTypes_surfaces, elmtIdx_boundary5 );
+    topology.AddDomain( "BOUNDARY6", femTypes_surfaces, elmtIdx_boundary6 );
 
    // VSET (types 25, 20, and 17)
    deque<int8_t> etypes{25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
     25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17};
 
-deque<size_t> npes{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
+deque<uint32_t> npes{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
 
-deque<size_t> epes{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
+deque<uint32_t> epes{4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
 
 vset.Resize( etypes, npes, epes, 340, 0, 0 );
 
@@ -6853,14 +6853,14 @@ vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
 elmt_nums.Reserve( vset.Elements() );
 
-for ( size_t i = 0U; i<vset.Elements(); ++i )
+for ( auto i = 0U; i<vset.Elements(); ++i )
   pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
 vset.AddData( "element number", elmt_nums );
 
 PropertyData node_nums( NODE, SCALAR, 2U );
 node_nums.Reserve( vset.Vertices() );
 
-for ( size_t i = 0U; i<vset.Vertices(); ++i )
+for ( auto i = 0U; i<vset.Vertices(); ++i )
   pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
 vset.AddData( "node number", node_nums ); } // end test_Create_FracBox
 

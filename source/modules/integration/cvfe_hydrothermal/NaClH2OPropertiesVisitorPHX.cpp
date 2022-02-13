@@ -11,7 +11,7 @@ using namespace std;
 namespace csmp
 {
 
-  template<size_t dim>
+  template<uint32_t dim>
   NaClH2OPropertiesVisitorPHX<dim>::NaClH2OPropertiesVisitorPHX( Model<dim>& model )
   //
 #include "NaClH2OPropertiesVisitorPHX_initializer_list.hpp"
@@ -122,13 +122,13 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   NaClH2OPropertiesVisitorPHX<dim>::~NaClH2OPropertiesVisitorPHX()
   {
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Visit(Region<dim>* n)
   {
      throw csmp::Exception( ERROR, "NaClH2OPropertiesVisitorPHX<dim>::Visit(Region<dim>*):", "Method not implemented yet!");
@@ -137,7 +137,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Visit( Node<dim>* n )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -225,7 +225,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Equilibrate( Node<dim>* n )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -254,21 +254,21 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::SetTimeIncrement( double time_increment )
   {
     dt_ = time_increment;
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>:: TopBoundaryHandling( bool TB )
   {
     top_boundary = TB;
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::ReadAllVariables( Node<dim>* n )
   {
     n->Read( t_key,  t );
@@ -334,7 +334,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CalculateAbsoluteVariables( )
   {
     pore_volume                 = phi();
@@ -418,7 +418,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::UpdateSowatVariables()
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -449,7 +449,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::UpdateCSMPVariables( Node<dim>& n )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -684,7 +684,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::BoundaryHandling( Node<dim>* n )
   {
     h_fluid_ = Bulk.h;
@@ -706,7 +706,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   double NaClH2OPropertiesVisitorPHX<dim>::TwoPhasePureWaterCompressibility(double cpl, double cpv)
   {
     // compressibility of liquid/vapor mixture after Grant and Sory, WRR 15(3) p. 684-686
@@ -723,7 +723,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::StorePropertiesAndFlags( Node<dim>& n )
   {
 
@@ -838,7 +838,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::StoreInitialPropertiesAndFlags( Node<dim>& n )
   {
     int temp;
@@ -980,7 +980,7 @@ namespace csmp
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::InitialPropertiesFromPTX( Model<dim>& model )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1142,7 +1142,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::ScreenOutputSowatVariables()
   {
     cout.precision(15);
@@ -1189,7 +1189,7 @@ namespace csmp
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::Output_PTXState()
   {
     cout.precision(15);
@@ -1206,7 +1206,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CheckForOutOfRange( Node<dim>* n )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1253,7 +1253,7 @@ namespace csmp
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CheckBoundaryFlags( Node<dim>* n )
   {
     if(t.Flag() == DIRICH && n->AtBoundary() != NOT && n->AtBoundary() != INTERNAL)
@@ -1272,7 +1272,7 @@ namespace csmp
 
 
   // JPW Nov 2010
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
                                                                                       double cpr_max_ext, double t_max_ext )
   {
@@ -1281,7 +1281,7 @@ namespace csmp
   }
 
   // JPW  Nov 2010
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double reference_specific_enthalpy,
                                                                     double reference_salinity )
   {
@@ -1292,7 +1292,7 @@ namespace csmp
   }
 
   // JPW  Nov 2010
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::WithOpenBoundaries( double reference_salinity )
   {
     open_boundaries = true;
@@ -1301,7 +1301,7 @@ namespace csmp
   }
 
   // JPW  Nov 2010
-  /*  template< size_t dim>
+  /*  template< uint32_t dim>
       double NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
       {
 
@@ -1417,7 +1417,7 @@ namespace csmp
       }
   */
   // JPW  Oct 2011 correctipon
-  template<size_t dim>
+  template<uint32_t dim>
   double NaClH2OPropertiesVisitorPHX<dim>::BoundaryFlow()
   {
 
@@ -1556,7 +1556,7 @@ namespace csmp
   }
 
   // JPW  Nov 2010
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::BoundaryIteration( )
   {
     //    cout << "enter. " << endl;
@@ -1832,7 +1832,7 @@ namespace csmp
 
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::TimeStepAdjustment()
   {
     time_factor_p = 1.0;
@@ -1876,7 +1876,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::VolumeFactorComputations( Node<dim>* n )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2008,7 +2008,7 @@ namespace csmp
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::PrepareVariablesForStorage()
   {
     state()   = static_cast<double>(Bulk.state);
@@ -2061,7 +2061,7 @@ namespace csmp
 
   //*** new TD May 2011
 
-  template<size_t dim>
+  template<uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CheckPhaseChange()
   {
     if( (old_state == VL  && (current_state == L || current_state == F || current_state == LH))
@@ -2091,7 +2091,7 @@ namespace csmp
     else return;
   }
 
-  template< size_t dim>
+  template< uint32_t dim>
   void NaClH2OPropertiesVisitorPHX<dim>::CheckVolumeMismatchCompensation()
   {
     if( ( (mt()-Bulk.rho)/Bulk.beta/mt() / p() < -0.05 || p()+(mt()-Bulk.rho)/Bulk.beta/mt() < 1.0e5 )

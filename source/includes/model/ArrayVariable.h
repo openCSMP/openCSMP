@@ -72,7 +72,7 @@ class ScalarVariable;
       typedef std::vector<double> ArrayContainer;
 
       ArrayVariable();
-      template<size_t dim>
+      template<uint32_t dim>
       ArrayVariable( const char* arrayPropertyName,
                      const PropertyDatabase<dim>&,
                      double defaultValue=std::numeric_limits<double>::quiet_NaN(),
@@ -131,10 +131,10 @@ class ScalarVariable;
       bool           operator<( const ArrayVariable& ) const;
 
       /// accessors to the data
-      double&      operator()( size_t );
-      double       operator[]( size_t ) const;
+      double&        operator()( size_t );
+      double         operator[]( size_t ) const;
       void           Component( size_t, double );
-      double       Component( size_t ) const;
+      double         Component( size_t ) const;
 
       size_t         Size() const;
       void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );

@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FluidDensityFromConcentration<dim>::FluidDensityFromConcentration( const PropertyDatabase<dim>& p, double rho_max )
       : Interrelation<dim>(p),
         CONC( Interrelation<dim>::GlobalProperty("concentration") ),
@@ -18,7 +18,7 @@ FluidDensityFromConcentration<dim>::FluidDensityFromConcentration( const Propert
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FluidDensityFromConcentration<dim>::Calculate()
  {
     CONC.AssignTo( conc );

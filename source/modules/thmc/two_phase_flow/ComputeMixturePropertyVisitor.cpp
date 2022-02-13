@@ -4,7 +4,7 @@
 
 namespace csmp{
 
-  template<size_t dim>
+  template<uint32_t dim>
   ComputeMixturePropertyVisitor<dim>::ComputeMixturePropertyVisitor( Model<dim>& model,
                                                                      const char* saturationOilTag ,
                                                                      const char* saturationWaterTag,
@@ -25,7 +25,7 @@ namespace csmp{
   {
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void ComputeMixturePropertyVisitor<dim>::Visit( Element<dim>* element )
   {
       element->PropertyValueAtBaryCenter( saturationOilKey_, satOil_ );

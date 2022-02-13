@@ -9,7 +9,7 @@ namespace csmp {
 /// @note for lambda=0, this implementation of Brooks-Corey model switches to linear
 /// @note for linear case capillary pressure is a constant value equal to entry pressure
 /// @note base class pm1 and pm2 are used for pd and lambda, respectively
-template<size_t dim>
+template<uint32_t dim>
 class BrooksCorey : public TwoPhaseModel<dim> {
   public:
 

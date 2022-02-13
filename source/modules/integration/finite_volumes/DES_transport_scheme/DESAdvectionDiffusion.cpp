@@ -13,7 +13,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* target_region, double cfl_multiplier, double PEP_multiplier, bool tensor_k )
   : sg_(m), 
     gref_(m.Region(target_region)),
@@ -34,7 +34,7 @@ DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* ta
   
 
 
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::InitializeVariablsAndKeys()
 {
     //creating new variables if not defined yet 
@@ -137,25 +137,25 @@ void DESAdvectionDiffusion<dim>::InitializeVariablsAndKeys()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
  {
     //zeroing FV pore volumes for accumulation in element loop
     gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
     
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref_.ElementsEnd());
+    for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
-         const size_t sectors((*it)->Sectors());
-         const size_t facets((*it)->Facets());
+         const auto sectors((*it)->Sectors());
+         const auto facets((*it)->Facets());
 
          // computing sector pore volumes
          double phi = (*it)->Read( key_phi);
          const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
-         for ( size_t i=0U; i<sectors; ++i ) {
+         for ( auto i{0}; i<sectors; ++i ) {
               const double sector_volume = (*it)->SectorVolume(i);  
               double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
@@ -163,7 +163,7 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
          }
 
          // computing facet normals and areas
-         for ( size_t j=0U; j<facets; ++j ) {
+         for ( auto j=0U; j<facets; ++j ) {
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
@@ -177,14 +177,14 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
 
    // initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
    // (here the pore volumes do not include the sectors outside the region)
-   const typename vector<Node<dim>*>::iterator nit_end(gref_.NodesEnd());
-   for ( typename vector<Node<dim>*>::iterator nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
-        const size_t parent_elements((*nit)->Parents());      
-        for ( size_t i=0U; i<parent_elements; ++i ) {
+   const auto nit_end(gref_.NodesEnd());
+   for ( auto nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
+        const auto parent_elements((*nit)->Parents());
+        for ( auto i{0}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // computing facet normals and areas
-             const size_t facets(eptr->Facets());
-             for ( size_t j=0U; j<facets; ++j ) {
+             const auto facets(eptr->Facets());
+             for ( auto j=0U; j<facets; ++j ) {
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);
@@ -202,7 +202,7 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
 
 
 //advect variable with TDS (time driven simulation)
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_TDS( double time_interval, size_t num_threads )
 {
 #if defined(_OPENMP )
@@ -232,7 +232,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS( double time_interval, size_
 
 
 //advect variable with DES (discrete event simulation)
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_DES( double model_time, size_t num_threads )
 {
 #if defined(_OPENMP )
@@ -263,7 +263,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES( double model_time, size_t n
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::InitializeEvents()
 {        
     //create events for all nodes and add them to event lists
@@ -298,7 +298,7 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
 
 
 //Compute the flux balance and CFL time increment for a node/FV
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 {
   Node<dim>* nd = event->getNode();
@@ -309,20 +309,20 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     double flux_balance(0.), outflow(0.);
     
     VectorVariable<dim> vD, facetNrml;
-    const size_t node_parent_elements(nd->Parents());
+    const auto node_parent_elements(nd->Parents());
     
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    for ( auto t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
         assert( eptr != NULL );
-        const size_t pnid(nd->ParentNodeNumber(t));
+        const auto pnid(nd->ParentNodeNumber(t));
         eptr->Read( key_V, vD);
 
-        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( size_t i=0U; i<sector_facets; i++ )
+        const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( auto i{0}; i<sector_facets; i++ )
         {
-            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
+            const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const auto inside_node(eptr->FV()->InsideNode(iFacet));
                         
             eptr->Read( iFacet, 0U,  key_fn, facetNrml );
             const double  vD_n = vD.DotProduct(facetNrml);
@@ -354,7 +354,7 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 
 
 //Compute the rate of change in a node/FV
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
 {
   Node<dim>* nd = event->getNode();
@@ -367,21 +367,21 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
 
     double accumulation(0.);
     VectorVariable<dim> vD, facetNrml;
-    const size_t node_parent_elements(nd->Parents());
+    const auto node_parent_elements(nd->Parents());
     
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    for ( auto t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
         assert( eptr != NULL );
-        const size_t pnid(nd->ParentNodeNumber(t));
+        const auto pnid(nd->ParentNodeNumber(t));
         eptr->Read( key_V, vD);
 
-        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( size_t i=0U; i<sector_facets; i++ )
+        const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( auto i{0}; i<sector_facets; i++ )
         {
-            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));            
+            const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const auto inside_node(eptr->FV()->InsideNode(iFacet));
+            const auto outside_node(eptr->FV()->OutsideNode(iFacet));
             
             eptr->Read( iFacet, 0U, key_fn, facetNrml );
             const double  vD_n = vD.DotProduct(facetNrml);
@@ -391,7 +391,7 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
             //compute facet fluid flux
             double facet_flux = sign * vD_n * facetArea;
             // finding the upstream node
-            const size_t upstream_node = (vD_n < 0.) ? outside_node : inside_node;
+            const auto upstream_node = (vD_n < 0.) ? outside_node : inside_node;
             const double C_upstream = eptr->N(upstream_node)->Read( key_C0 );
             accumulation += facet_flux * C_upstream;  
         }
@@ -405,7 +405,7 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
 
 
 //schedule an event associated with a node/FV
-template<size_t dim>
+template<uint32_t dim>
 bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double t_end)
 {
   Node<dim>* nd = event->getNode();
@@ -454,7 +454,7 @@ bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double t_end)
 
 
 //update solution and check it against the specified range (with DES)
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double t_clock)
 {
   Node<dim>* nd = event->getNode();
@@ -503,7 +503,7 @@ void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double t_clock)
 
 
 //update solution and check it against the specified range (with TDS)
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double delta_t)
 {
   Node<dim>* nd = event->getNode();
@@ -541,7 +541,7 @@ void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double delta_t)
 
 
 //Synchronize neighbor nodes/FVs
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, double& t_remove )
 {
   Node<dim>* nd = event->getNode();
@@ -554,12 +554,12 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
     nd->Read(key_time, array);
     array.Component(4, 0.); //reset cumulative change of solution
     nd->Store(key_time, array);
-    for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
+    for ( auto n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
         if( neighbor_node != NULL && neighbor_node->Status( key_C0 ) != DIRICH){
-            size_t index = neighbor_node->Read(key_EventIndex);
+            auto index = neighbor_node->Read(key_EventIndex);
             if(index >= 0 && index < FullList.size()){
-                Event<dim>* neighbor_event = FullList[index];  
+                Event<dim>* neighbor_event = FullList[index];  // TODO: deal with implicit type conversion
                 assert( neighbor_event  != NULL ); 
                 if (neighbor_event != NULL && neighbor_event->inPEPStack() == false) {
                     PEPList.push_back(neighbor_event);
@@ -576,7 +576,7 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
                         clock_t t_begin = clock();
                         #endif
                         if (neighbor_event->inQueue()){
-                            Heap_Node* neighbor_heap_node = HeapNodeFullList[index];
+                            Heap_Node* neighbor_heap_node = HeapNodeFullList[index]; // TODO: deal with implicit type conversion
                             EventHeap.remove(neighbor_heap_node);
                             neighbor_event->inQueue(false);
                         }
@@ -597,7 +597,7 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
 
 
 //advect variable with TDS (time-driven simulation), serial mode
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval )
 {
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial "<<endl;
@@ -670,7 +670,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
 
 #if defined(_OPENMP)
 //advect variable with TDS (time-driven simulation), parallel mode
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interval )
 {
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel "<<endl;
@@ -686,14 +686,14 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interv
     #pragma omp parallel num_threads(num_threads)
     {
         #pragma omp for schedule(dynamic)
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = PEPList.begin()+i;
             ComputeRateofChange((*it));  
         };
     }
 
-    for(size_t i = 0U; i < PEPList_size; ++i)
+    for(auto i = 0U; i < PEPList_size; ++i)
     {
         auto it = PEPList.begin()+i;
         Event<dim>* event = *it;     
@@ -729,14 +729,14 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interv
         #pragma omp parallel num_threads(num_threads)
         {        
             #pragma omp for schedule(dynamic)     
-            for(size_t i = 0U; i < PEPList_size; ++i)
+            for(auto i = 0U; i < PEPList_size; ++i)
             {
                 auto it = PEPList.begin()+i;
                 ComputeRateofChange((*it));;
             }
         }        
         
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = PEPList.begin()+i;
             ArrayVariable array2;
@@ -771,7 +771,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_parallel( double time_interv
 
 
 //advect variable with DES (discrete event simulation), serial mode
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
 {
     double begin=clock();
@@ -804,7 +804,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
                 if (isactive) {
                     T_begin= clock();
                     double scheduled_time = event->t_schedule();
-                    size_t index = event->getNode()->Read(key_EventIndex);
+                    size_t index = event->getNode()->Read(key_EventIndex); // TODO: deal with implicit type conversion
                     Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
                     EventHeap.insert(heap_node);
                     HeapNodeFullList[index] = heap_node;
@@ -894,7 +894,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
 
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel mode
-template<size_t dim>
+template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time, size_t num_threads)
 {
     double begin=omp_get_wtime();
@@ -924,7 +924,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time,
             std::vector<Event<dim>*> privateList;
             
             #pragma omp for schedule(dynamic)
-            for(size_t i = 0U; i < PEPList_size; ++i)
+            for(auto i = 0U; i < PEPList_size; ++i)
             {
                 auto it = PEPList.begin()+i;
                 Event<dim>* event = *it;                                
@@ -940,7 +940,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time,
         } 
         
         size_t tempList_size = tempList.size();
-        for(size_t i = 0U; i < tempList_size; ++i)
+        for(auto i = 0U; i < tempList_size; ++i)
         {
             auto it = tempList.begin()+i;
             Event<dim>* event = *it;                 

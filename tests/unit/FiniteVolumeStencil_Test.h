@@ -31,8 +31,8 @@ class FiniteVolumeStencil_Test : public Test {
     std::vector<FiniteVolumeStencil<3U> >  fvs_;
     std::vector<FiniteElement*>            vecFEs_;
     
-    template<size_t dim>
-	  std::vector< Point<dim> > GetPointsOfFacet( const size_t& iFacet, const CSMP_FEM_TYPE& elType, 
+    template<uint32_t dim>
+	  std::vector< Point<dim> > GetPointsOfFacet( const uint32_t& iFacet, const CSMP_FEM_TYPE& elType, 
                                                 const FiniteVolumeStencil<dim>& fvs, const FiniteElement & fe );
     const bool verbose_;
 };

@@ -20,9 +20,9 @@ namespace csmp {
    @date 2013
    */
   
-template<size_t> class Model;
+template<uint32_t> class Model;
 
-  template<size_t> class Model;
+  template<uint32_t> class Model;
   
   typedef struct {
     const char* pres_w;
@@ -45,7 +45,7 @@ template<size_t> class Model;
   } FluidPropertyVisitorConfiguration;
   
   
-  template<size_t dim>
+  template<uint32_t dim>
   class TwoPhaseUndersaturatedFluidPropertyVisitor : public Visitor<dim> {
   public:
     
@@ -164,7 +164,7 @@ template<size_t> class Model;
   
   ///Spivey et. al 1999 Compressibility of oil at pressures higher than Pb
   
-template<size_t dim>
+template<uint32_t dim>
 inline double TwoPhaseUndersaturatedFluidPropertyVisitor<dim>::SalinityToConcentration( double S ) const {
     return 1000.0*S/(58.4428*(1-S));
  }

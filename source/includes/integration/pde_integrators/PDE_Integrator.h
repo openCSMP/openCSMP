@@ -261,13 +261,13 @@ done in the following example:
  @author Stephen G. Roberts
  @date 1997
 
-@todo (1) Implement AssignNonEssentialConditions( const COMPUTATION_DOMAIN<SIMPLEX<dim> >& );
+@todo (1) Implement AssignNonEssentialConditions( const COMPUTATION_DOMAIN<CELL<dim> >& );
 
 @todo !!! SKM: Implement the automatic integration over boundaries in the case where surface integrals are present
       (design approved: Garmisch and Colleoli)
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class PDE_Integrator {
 
   public:

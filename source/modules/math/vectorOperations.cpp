@@ -12,11 +12,11 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 double valueAverage( const VectorVariable<dim>& vc )
  {
      double sum(0.);
-     for ( size_t i=0U; i<dim; ++i )
+     for ( auto i{0}; i<dim; ++i )
        sum += vc[i];
    
      return sum / static_cast<double>(dim);

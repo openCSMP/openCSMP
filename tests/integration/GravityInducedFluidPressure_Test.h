@@ -14,7 +14,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
     Using a 1D model with 100 linear line elements,
@@ -56,7 +56,7 @@ class GravityInducedFluidPressure_Test : public Test {
   
     bool TestComputedWithReferencePressure();
   
-    template<size_t dim>
+    template<uint32_t dim>
     bool TestResultsByComparison( const Model<dim>* const, const char* test_variable, const char* reference_variable, double tolerance );
   
     /// like in vertical fluid pressure example
@@ -71,11 +71,11 @@ class GravityInducedFluidPressure_Test : public Test {
     void ComputeCO2PressureFromReducedPressure_PDE_Integrator2( Model<1U>* const, double pf_top );
 
     /// templatised version for 2D and 3D (small models, Gauss-Jordan solver)
-    template<size_t dim>
+    template<uint32_t dim>
     void ComputeCO2PressureFromReducedPressure_PDE_Integrator_GaussJordan( Model<dim>* const, double pf_top );
 
     /// templatised version for 2D and 3D (big models, SAMG)
-    template<size_t dim>
+    template<uint32_t dim>
     void ComputeCO2PressureFromReducedPressure_PDE_IntegratorCRM_SAMG( Model<dim>* const, double pf_top );
 
   private:

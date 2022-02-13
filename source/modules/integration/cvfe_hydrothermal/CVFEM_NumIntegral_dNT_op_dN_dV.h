@@ -12,7 +12,7 @@
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
+template<uint32_t dim,class CELL>
 class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> {
   public:
     CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -23,7 +23,7 @@ class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> {
     virtual ~CVFEM_NumIntegral_dNT_op_dN_dV();
     
     virtual void ComputeContribution( Element<dim>& e );
-    virtual CVFEM_NumIntegral_dNT_op_dN_dV <dim,SIMPLEX >* clone() const { return new CVFEM_NumIntegral_dNT_op_dN_dV <dim,SIMPLEX >(*this); }
+    virtual CVFEM_NumIntegral_dNT_op_dN_dV <dim,CELL >* clone() const { return new CVFEM_NumIntegral_dNT_op_dN_dV <dim,CELL >(*this); }
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 

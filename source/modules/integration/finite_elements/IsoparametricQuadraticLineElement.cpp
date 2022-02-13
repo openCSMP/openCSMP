@@ -7,7 +7,7 @@ using namespace std;
 namespace csmp {
 
 
-IsoparametricQuadraticLineElement::IsoparametricQuadraticLineElement( size_t dimensions )
+IsoparametricQuadraticLineElement::IsoparametricQuadraticLineElement( uint32_t dimensions )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_QUADRATIC_BAR, true, true, 2U ),
     current_detJ(std::numeric_limits<double>::quiet_NaN())
@@ -86,7 +86,7 @@ void IsoparametricQuadraticLineElement::dNr( double r, std::vector<double>& dnr 
 }
 
 
-double IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double>& DNR, size_t coord ) const
+double IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double>& DNR, uint32_t coord ) const
  {
     assert( coord < dim );
     return DNR[0] * XY(0,coord) + DNR[1] * XY(1,coord) + DNR[2] * XY(2,coord);
@@ -127,7 +127,7 @@ double IsoparametricQuadraticLineElement::Jacobian3D( const std::vector<double>&
 double IsoparametricQuadraticLineElement::JacobianInverse() { return current_detJ; }
 
 
-void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( size_t ipoint )
+void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( uint32_t ipoint )
  {
     if ( ipoint > 1 ) {
          std::cerr <<"\nIsoparametricQuadraticLineElement::JacobianAtIntegrationPoint: ";
@@ -145,7 +145,7 @@ void IsoparametricQuadraticLineElement::JacobianAtIntegrationPoint( size_t ipoin
  
 
 
-double IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( size_t i ) const
+double IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( uint32_t i ) const
  {
     if      ( i == 0 ) return W[0];
     else if ( i == 1 ) return W[1];
@@ -155,7 +155,7 @@ double IsoparametricQuadraticLineElement::WeightAtIntegrationPoint( size_t i ) c
 
 
 
-void IsoparametricQuadraticLineElement::N_AtIntegrationPoint( size_t gauss_point, std::vector<double>& N )
+void IsoparametricQuadraticLineElement::N_AtIntegrationPoint( uint32_t gauss_point, std::vector<double>& N )
  {
     assert( gauss_point < gpe );
 
@@ -170,7 +170,7 @@ void IsoparametricQuadraticLineElement::N_AtBaryCenter( std::vector<double>& N )
   }
 
 
-void  IsoparametricQuadraticLineElement::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricQuadraticLineElement::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -179,7 +179,7 @@ void  IsoparametricQuadraticLineElement::CounterClockwiseNodes( std::vector<size
  }
 
 
-void  IsoparametricQuadraticLineElement::CornerNodes( std::vector<size_t>& ids ) const   
+void  IsoparametricQuadraticLineElement::CornerNodes( std::vector<uint32_t>& ids ) const   
  {
     ids.resize(2);
     ids[0] = 0;
@@ -188,7 +188,7 @@ void  IsoparametricQuadraticLineElement::CornerNodes( std::vector<size_t>& ids )
 
 
 
-void  IsoparametricQuadraticLineElement::MidSideNodes( std::vector<size_t>& ids ) const   
+void  IsoparametricQuadraticLineElement::MidSideNodes( std::vector<uint32_t>& ids ) const   
  {
     ids.resize(1);
     ids[0] = 2;
@@ -196,7 +196,7 @@ void  IsoparametricQuadraticLineElement::MidSideNodes( std::vector<size_t>& ids 
 
 
 /// segments are numbered like faces
-void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+void IsoparametricQuadraticLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     if ( segm_id > 1U )
       std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfSegment: There is only one segment present."<< std::endl;
@@ -212,7 +212,7 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( size_t segm_id, std::vec
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Convention: face 0 has only one node which is the first node of the element and face 1 contains the second node.
 */
-void  IsoparametricQuadraticLineElement::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     if ( face_id > 1U )
       std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
@@ -221,23 +221,23 @@ void  IsoparametricQuadraticLineElement::NodesOfFace( size_t face_id, std::vecto
  }
 
 
-vector<size_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
-    return vector<size_t>{face_id};
+    return vector<uint32_t>{face_id};
  }
 
 
-vector<size_t>  IsoparametricQuadraticLineElement::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  IsoparametricQuadraticLineElement::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1};
-        case 1: return vector<size_t>{0};
+        case 0: return vector<uint32_t>{1};
+        case 1: return vector<uint32_t>{0};
         default:
           cerr <<"\nIsoparametricQuadraticLineElement::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
@@ -305,13 +305,13 @@ void IsoparametricQuadraticLineElement::dN( DenseMatrix<DM_MIN>& DN )
      // using M matrix for temporary storage
      dN_AtNode( M, 0 );
      // creating entries for first column of DN
-     for ( size_t i=0; i<dim; i++ ) DN(i,0) = M(i,0);
+     for ( uint32_t i=0; i<dim; i++ ) DN(i,0) = M(i,0);
      dN_AtNode( M, 1 );
      // creating entries for first column of DN
-     for ( size_t i=0; i<dim; i++ ) DN(i,1) = M(i,1);
+     for ( uint32_t i=0; i<dim; i++ ) DN(i,1) = M(i,1);
      dN_AtNode( M, 2 );
      // creating entries for first column of DN
-     for ( size_t i=0; i<dim; i++ ) DN(i,2) = M(i,2);
+     for ( uint32_t i=0; i<dim; i++ ) DN(i,2) = M(i,2);
              
   } // end dN
   
@@ -334,14 +334,14 @@ double IsoparametricQuadraticLineElement::Volume()
 
    // 2-dimensional models
    if ( dim == 2 )
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( uint32_t i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian2D( DNR );
        }
      
    // 3-dimensional models
    else if ( dim == 3 )
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( uint32_t i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian3D( DNR );
        }
@@ -349,7 +349,7 @@ double IsoparametricQuadraticLineElement::Volume()
    // in this case the length of the element is equivalent to
    // the sum of the Jacobian determinants at the integration points
    else if ( dim == 1 ) 
-     for ( size_t i=0; i<gpe; i++ ) {
+     for ( uint32_t i=0; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian1D( DNR );
        }
@@ -375,7 +375,7 @@ global coordinates as
 DN_global = DN^T J-1^T  ops J-1 DN
 */
 double IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DN,
-                                                       size_t gauss_point )
+                                                       uint32_t gauss_point )
  {
      DN.Resize(dim,npe);
      
@@ -472,7 +472,7 @@ the second method argument. The method also returns the determinant
 of the Jacobian matrix since it is often needed in integration
 procedures.  
 */
-double IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, size_t nd )
+double IsoparametricQuadraticLineElement::dN_AtNode( DenseMatrix<DM_MIN>& DN, uint32_t nd )
  {
      DN.Resize(dim,npe);
      
@@ -623,8 +623,8 @@ void  IsoparametricQuadraticLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
 		M *= EPROP;
 
 		EPROP.Resize(dim,npe);
-		for ( size_t i=0; i<dim; i++ )
-		  for ( size_t j=0; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
+		for ( uint32_t i=0; i<dim; i++ )
+		  for ( uint32_t j=0; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
   
         return;
      }
@@ -633,7 +633,7 @@ void  IsoparametricQuadraticLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
  
 
  
-void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
+void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR, 
                                                                   std::vector<double>& NVAR ) const
 {
@@ -652,7 +652,7 @@ void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNo
    //    and use these to extrapolate the values of the variables at the nodes.
         // compute interpolation function values at node i
    // node 1
-   for ( size_t k=0; k<nvars; k++ ) {
+   for ( uint32_t k=0; k<nvars; k++ ) {
         // compute the slope of the interpolation function
         double m = (IVAR[1*nvars + k] - IVAR[0*nvars + k]) / dx;
         // extrapolate value from IP1 to node 1
@@ -672,7 +672,7 @@ void  IsoparametricQuadraticLineElement::ExtrapolateIntegrationPointVariableToNo
 
 /// integration point location transformed into global coordinates
 /// @warning the matrix XYZ must be uptodate
-void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<double>& xyz ) const
+void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<double>& xyz ) const
  {
     assert( i < gpe );
     xyz.resize(dim); 
@@ -683,7 +683,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<doub
 
     // 1D
     if ( dim == 1U ) {
-         for( size_t i=0U; i<npe; i++ )
+         for( auto i{0}; i<npe; i++ )
            xyz[0] += XY(i,0) * NRST[i];
 	     return;
       }
@@ -691,7 +691,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<doub
     // 2D
     if ( dim == 2U ) {
          xyz[1]=0;
-         for( size_t i=0U; i<npe; i++ ) {
+         for( auto i{0}; i<npe; i++ ) {
 	          xyz[0] += XY(i,0) * NRST[i];
 	          xyz[1] += XY(i,1) * NRST[i];
 	       }
@@ -700,7 +700,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<doub
    
     // 3D case   
     xyz[1]=xyz[2]=0.; 
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
 	      xyz[0] += XY(i,0) * NRST[i];
 	      xyz[1] += XY(i,1) * NRST[i];
 	      xyz[2] += XY(i,2) * NRST[i];
@@ -712,8 +712,8 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( size_t i, vector<doub
 
 
 
-void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                        vector<size_t>& fnids )
+void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                        vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -777,8 +777,8 @@ void IsoparametricQuadraticLineElement::OutputNodeDataToVTK( const char* file_na
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ ) {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" "; 
+     for ( uint32_t i=0; i<npe; i++ ) {
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -808,7 +808,7 @@ void IsoparametricQuadraticLineElement::OutputNodeDataToVTK( const char* file_na
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( size_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -816,8 +816,8 @@ void IsoparametricQuadraticLineElement::OutputNodeDataToVTK( const char* file_na
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

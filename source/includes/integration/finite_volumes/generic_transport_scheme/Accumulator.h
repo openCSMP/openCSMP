@@ -25,7 +25,7 @@ namespace csmp {
     @attention the Accumulator uses stencil accumulation for the interior and finite volume accumulation for its perimeter.
     @attention the order in which LHS and RHS are accumulated is defined in Operation
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class Accumulator {
   public:
     /// initalises sparse matrix and vector, taking into account how many solution variables there are

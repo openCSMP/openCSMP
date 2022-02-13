@@ -12,7 +12,7 @@ namespace csmp {
 
  /// Limiting the value of a variable to a specified range
 
-template<size_t dim>
+template<uint32_t dim>
 class Limiter : public Interrelation<dim> {
     Operand<dim>&  op;
     double min, max;

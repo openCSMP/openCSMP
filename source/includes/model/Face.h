@@ -8,11 +8,11 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Visitor;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Visitor;
 class FiniteElementManager;
-template<size_t> class FiniteVolumeStencilManager;
+template<uint32_t> class FiniteVolumeStencilManager;
 
 /**
     Lower dimensional surface (in 3D) or line (2D) elements  serve as boundaries (Face) or connect disconnected mesh domains (InterFace).
@@ -45,7 +45,7 @@ template<size_t> class FiniteVolumeStencilManager;
     @author Stephan Matthai
     @date 3/3/2016
 */
-template<size_t dim>
+template<uint32_t dim>
 class Face : public FiniteElementPolicy<dim,Face>,
              public FiniteVolumePolicy<dim,Face>,
              public LocalVariableStorage<dim,Face>
@@ -62,8 +62,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Face( Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
-          size_t inner_parent_face_id,
-          size_t outer_parent_face_id,
+          uint32_t inner_parent_face_id,
+          uint32_t outer_parent_face_id,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
@@ -71,7 +71,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     Face( Element<dim>& inner_parent,
           csmp::FiniteElement* FE_type_of_boundary_face,
           const FiniteVolumeStencilManager<dim>&,
-          size_t n_boundary_face,
+          uint32_t n_boundary_face,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
@@ -80,8 +80,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const FiniteVolumeStencilManager<dim>&,
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
-          size_t inner_parent_face_id,
-          size_t outer_parent_face_id,
+          uint32_t inner_parent_face_id,
+          uint32_t outer_parent_face_id,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
@@ -98,8 +98,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
           const FiniteVolumeStencilManager<dim>&,
           Element<dim>* const parent_of_face1,
           Element<dim>* const parent_of_face2,
-          size_t parent_elmt1_segm_id,
-          size_t parent_elmt2_segm_id,
+          uint32_t parent_elmt1_segm_id,
+          uint32_t parent_elmt2_segm_id,
           const std::vector<Node<dim>*>&  edge_nodes,
           const LocalVariables&,
           const IntegrationPointVariables& );
@@ -119,7 +119,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     ~Face();
 
     /// connects face to the supplied node
-    void Assign( size_t node, Node<dim>* const );
+    void Assign( uint32_t node, Node<dim>* const );
     
     /// disconnecting the Node without deleting it; its pointer is set to nullptr
     void Unassign( const csmp::Node<dim>* const );
@@ -128,7 +128,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void Assign( Element<dim>* const innerElement, Element<dim>* const outerElement );
   
     /// tell face about its face neighbors
-    void Assign( size_t nbor, Face<dim>* const );
+    void Assign( uint32_t nbor, Face<dim>* const );
       
     /// sets the pointer to given neighbor face to zero
 	  bool Unassign( const Face<dim>* const );
@@ -153,12 +153,12 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// Local variable storage interface; required by LocalVariableStorage
     PLACEMENT Placement() const { return FACE; }
 
-    size_t  Nodes() const;
-    size_t  Neighbors() const;
-	  size_t  ConnectedNeighbors() const;
+    uint32_t  Nodes() const;
+    uint32_t  Neighbors() const;
+	  uint32_t  ConnectedNeighbors() const;
     
     /// sides of Face object by analogy with Element
-    size_t  Faces() const;
+    uint32_t  Faces() const;
 
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager)
     typename std::vector<csmp::Node<dim>*>::const_iterator   NodesBegin()     const;
@@ -170,12 +170,12 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void Accept( csmp::Visitor<dim>& );
 
     /// access the nodes that are connected to the Face
-    csmp::Node<dim>*  N( size_t n_local );
-    const csmp::Node<dim>*  N( size_t n_local ) const;
+    csmp::Node<dim>*  N( uint32_t n_local );
+    const csmp::Node<dim>*  N( uint32_t n_local ) const;
   
     /// access the neighbor faces of this face
-    csmp::Face<dim>*  Neighbor( size_t );
-    const csmp::Face<dim>*  Neighbor( size_t ) const;
+    csmp::Face<dim>*  Neighbor( uint32_t );
+    const csmp::Face<dim>*  Neighbor( uint32_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void           Idx( size_t ) const;
@@ -192,10 +192,10 @@ class Face : public FiniteElementPolicy<dim,Face>,
   
     /// returns which Face of the higher dimensional inner neighbor element this Face shares its nodes with
     /// local number of the face in the inner parent element, which borders against the interface
-    void           ParentFaceID( INTERFACE_SIDE, size_t idx );
-    size_t         InnerParentFaceID() const;
-    size_t         OuterParentFaceID() const;
-    size_t         ParentFaceID( INTERFACE_SIDE side ) const;
+    void           ParentFaceID( INTERFACE_SIDE, uint32_t idx );
+    uint32_t       InnerParentFaceID() const;
+    uint32_t       OuterParentFaceID() const;
+    uint32_t       ParentFaceID( INTERFACE_SIDE side ) const;
   
     /// returns the number of the desired node in the inner parent element of the Face
     size_t         ParentNodeNumber( size_t n_local ) const;
@@ -208,7 +208,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     double       Area() const;
   
     /// not a face-normal vector, but the shortest path between the barycenters of face and element
-    void           VectorToInnerElementBaryCenter( VectorVariable<dim>& ) const;
+    void         VectorToInnerElementBaryCenter( VectorVariable<dim>& ) const;
   
     // unit normal computations for Face are handled by its FiniteElementPolicy the options are
     // Point<dim> UnitNormal() const;
@@ -234,7 +234,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
   private:
     
     /// for exclusive use by MeshManager
-    template<size_t> friend class MeshManager;
+    template<uint32_t> friend class MeshManager;
     void* operator new( size_t size );
     void operator delete( void* p );
   
@@ -246,8 +246,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     mutable size_t           idx_;
-    size_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
-    size_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
     Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
     std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face

@@ -199,8 +199,8 @@ void IsoparametricQuadraticTetrahedron_Test::run()
         cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Element coordinate matrix:"<< endl;
         XY.Out();
         // nodes
-        vector<size_t>  NN(element_.Nodes());
-        for ( size_t i=0U; i<NN.size(); ++i ) NN[i] = element_.N(i)->Idx();
+        vector<uint32_t>  NN(element_.Nodes());
+        for ( auto i{0}; i<NN.size(); ++i ) NN[i] = element_.N(i)->Idx();
         //cout <<"\nIsoparametricQuadraticTetrahedron_Test::run: Node number vector (element):"<< endl;
         //out(NN);
         // dummy data (nodes 1-10 translating integers to numbers)
@@ -422,7 +422,7 @@ void IsoparametricQuadraticTetrahedron_Test::run()
       cout <<"\nExtrapolated gradient integration point values: ";
       out( NVF );
     }
-  for ( size_t i=0U; i<element_.Nodes(); i++ )
+  for ( auto i{0}; i<element_.Nodes(); i++ )
     _equal( NVF[i], element_.N(i)->y(), 1.0e-7 );
 
 
@@ -535,12 +535,12 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
     // using the negative sum of the global coordinates as an interpolant:
     // At all nodes, val = -x + -y + -z.
     vector<double>  node_vals(e.Nodes());
-    for ( size_t i=0U; i<e.Nodes(); i++ )
+    for ( auto i{0}; i<e.Nodes(); i++ )
       node_vals[i] = -e.N(i)->x() + -e.N(i)->y() + -e.N(i)->z();
 
     // interpolating nodal values to integration points and checking these against theoretic values
     vector<double> IPOL;
-    for ( size_t i=0U; i<element_.IntegrationPoints(); i++ ) {
+    for ( auto i{0}; i<element_.IntegrationPoints(); i++ ) {
          // interpolation
          e.N_AtIntegrationPoint( i, IPOL );
          double ivalue(0.);
@@ -616,7 +616,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputIntegrationPointsToVTK( const
     vector<pair<Point<3U>,double> >  ipoint_data(element_.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
     double display_value(0.);
-    for ( size_t i=0U; i<element_.IntegrationPoints(); i++ ) {
+    for ( auto i{0}; i<element_.IntegrationPoints(); i++ ) {
          Point<3U> xyz = element_.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
          display_value += 1.;
@@ -691,7 +691,7 @@ void IsoparametricQuadraticTetrahedron_Test::OutputFaceNormalsToVTK( const char*
 
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
-    vector<size_t> fnids;
+    vector<uint32_t> fnids;
     for ( size_t i=0; i<e.Faces(); i++ ) {
          // computing and storing normal to face
          e.FE()->UnitNormalAtFaceBarycenter( i, nrml );

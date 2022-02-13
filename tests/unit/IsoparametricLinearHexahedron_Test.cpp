@@ -131,7 +131,7 @@ namespace csmp {
 		//The calcualtion of the Hexa Volume summing up the volumes of the sectors of the FV stencils over the finite element. 
 		HexaVolumeUsingFVSectors_ = 0;
 		double SectorNumbers = element.Sectors();		// This gives the number of FV sectors within a Finite Elment.
-		for (size_t i = 0; i < SectorNumbers; i++) {
+		for (auto i = 0; i < SectorNumbers; i++) {
 			HexaVolumeUsingFVSectors_ += element.SectorVolume(i);	// This gives the volume of the each of the sectors. 
 		}
 
@@ -140,7 +140,7 @@ namespace csmp {
 		//The calcualtion of the Hexa Volume summing up the volumes of the sectors by multiplying the sector integration point weight by the determinant of the Jacobian matrix over the sectors of the FV stencils over the finite element. 
 		double VolofSector(0.);
 		HexaVolumeUsingFVSectorsIPWeight_ = 0.;
-		for (size_t i = 0; i < SectorNumbers; i++){
+		for (auto i = 0; i < SectorNumbers; i++){
 			if (verbose_){
 				cout << element.FV()->SectorIntegrationWeight(i, 0) << "\t";
 				cout << element.FE()->JacobianDeterminant() << "\t";

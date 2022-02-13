@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 QuartzSolubility<dim>::QuartzSolubility( const PropertyDatabase<dim>& p ) 
       : Interrelation<dim>(p), 
         T( Interrelation<dim>::GlobalProperty("temperature") ),
@@ -17,7 +17,7 @@ QuartzSolubility<dim>::QuartzSolubility( const PropertyDatabase<dim>& p )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void QuartzSolubility<dim>::Calculate()
  {
      // 1. getting input data for the calculation 

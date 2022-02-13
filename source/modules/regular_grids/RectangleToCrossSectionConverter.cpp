@@ -77,7 +77,7 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
     cout <<"with dimensions "<< upper_right.DistanceTo(upper_left) <<" (m, horizontal) x ";
     cout << upper_left.DistanceTo(lower_left) <<" (m, vertical).\n";
     // Creating an isoparametric linear quadrilateral element for the extrapolation of the point locations
-    const size_t dim(3U);
+    const uint32_t dim(3U);
     IsoparametricLinearQuadrilateral quadrilateral( dim );
     Element<dim> rectangle( &quadrilateral );
     rectangle.Idx(0);
@@ -98,7 +98,7 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
     global_coordinates.clear();
     global_coordinates.reserve( n_cells_x_ * n_cells_y_ );
  
-    for ( size_t i=0U; i<n_cells_y_; ++i )
+    for ( auto i{0}; i<n_cells_y_; ++i )
       for ( size_t j=0U; j<n_cells_x_; ++j ) {
            // performing the coordinate transformation
            Point<3U> rs = (*this)(i,j);
@@ -129,7 +129,7 @@ void RectangularGrid::WriteGridAsIntegerMatrix( const char* file_name ) const
 
     ofstream ofs( file_name );
  
-    for (  size_t i=0U; i<n_cells_y_; ++i ) {
+    for (  auto i{0}; i<n_cells_y_; ++i ) {
          for ( size_t j=0U; j<n_cells_x_; ++j ) ofs <<"1\t";
          ofs <<"\n";
       }

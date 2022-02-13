@@ -321,7 +321,7 @@ This method is used to calculate the effective hydraulic conductivity
 of the model domain.
 
 tested: */
-template<size_t dim>
+template<uint32_t dim>
 double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
@@ -375,13 +375,13 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
          IPVF.resize( (*eit)->IntegrationPoints()*dim );
          fill( IPVF.begin(), IPVF.end(), 0. );
 
-         for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+         for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
            {
               // getting shape function derivative matrix at the integration point
               (*(*eit)).dN_AtIntegrationPoint( DERIV, i, 1 );
 
               // getting the material properties, K and phi into the equation
-              for ( size_t n=0; n<(*eit)->Nodes(); n++ )
+              for ( auto n=0; n<(*eit)->Nodes(); n++ )
                 for ( size_t j=0; j<dim; j++ )
                   // -DERIV because fluid flows down pressure
                   IPVF[ i*dim + j ] += PF[n]() * -DERIV(j,n) * K();
@@ -396,7 +396,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
        assert( mit.second );
        (*mit.first).second.resize((*eit)->Nodes());
 
-       for ( size_t i=0U; i<(*eit)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*eit)->Nodes(); i++ ) {
             (*mit.first).second[i].resize(dim);
             for ( size_t j=0; j<dim; j++ )
               (*mit.first).second[i][j] = NVF[ i*dim + j ];
@@ -484,8 +484,7 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     ScalarVariable       sc;
     Region<2>&  gref(sg.Region("Model"));
 
-    for ( vector<Element<2U>*>::iterator
-          eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
          (*eit)->Read( con_key, sc );
          sc = 1. / sc();
          (*eit)->Store( res_key, sc );

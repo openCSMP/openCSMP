@@ -9,49 +9,49 @@ namespace csmp {
 class PropertyData;
 class PropertyConstraints;
 struct LocalVariables;
-template<size_t>   class PropertyDatabase;
-template<size_t>   class Node;
-template<size_t>   class VSet;
-template<size_t>   class Region;
-template<size_t>   class Boundary;
-template<size_t>   class MeshManager;
+template<uint32_t>   class PropertyDatabase;
+template<uint32_t>   class Node;
+template<uint32_t>   class VSet;
+template<uint32_t>   class Region;
+template<uint32_t>   class Boundary;
+template<uint32_t>   class MeshManager;
 template<typename> class FEM_Data;
 
 /// returns number of nodes that are shared by the two subdomains
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  sharedNodes( const ModelSubDomain<dim, SIMPLEX>&, const ModelSubDomain<dim, SIMPLEX>& );
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 
 /// returns number of nodes on the subdomain perimeters that are shared by the two subdomains
-template<size_t dim, template<size_t> class SIMPLEX>
-size_t  sharedPerimeterNodes( const ModelSubDomain<dim, SIMPLEX>&, const ModelSubDomain<dim, SIMPLEX>& );
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 
 // boolean operations (see also region related functions below class declaration)
 // -----------------------------------------------------------------------------
-template<size_t dim>
+template<uint32_t dim>
 size_t  groupUnion( const Region<dim>&, const Region<dim>&, Region<dim>& combined_regions );
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  intersection( const Region<dim>&, const Region<dim>&, Region<dim>& intersection_region );
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  difference( const Region<dim>&, const Region<dim>&, Region<dim>& difference_region );
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  symmetricDifference( const Region<dim>&, const Region<dim>&, Region<dim>& sym_difference_region );
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  sharedElements( const Region<dim>&, const Region<dim>& );
 
-template<size_t dim>
+template<uint32_t dim>
 bool  hasLowerDimensionalRepresentation( const Region<dim>& );
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& );
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsSurfaceElements( const Region<dim>& );
 
-template<size_t dim>
+template<uint32_t dim>
 bool  containsLineElements( const Region<dim>& );
 
 /**
@@ -76,7 +76,7 @@ the group. Elements are assigned a boundary flag if at least one of
 their faces coincides with the region boundary.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class Region : public ModelSubDomain<dim, Element>,
                public LocalVariableStorage<dim, Region> {
   public:
@@ -160,14 +160,14 @@ class Region : public ModelSubDomain<dim, Element>,
     size_t AccumulateAll( MeshManager<dim>& );
 
     /// creates element pointers assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
-    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& element_ids );
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<uint32_t>& element_ids );
 
     // Accumulate based on pointers to elements
 
     /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids' using binary_search; @attention use after mesh modification
     size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
                                typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                               std::vector<size_t>& element_ids );
+                               std::vector<uint32_t>& element_ids );
 
     /// accumulates range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
     size_t Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
@@ -192,7 +192,7 @@ class Region : public ModelSubDomain<dim, Element>,
     void  Add( const Region& );
 
     /// removes those elements in the region whose id matches one of the numbers contained in vector 'element_ids'
-    size_t RemoveByNumber( std::vector<size_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
+    size_t RemoveByNumber( std::vector<uint32_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
 
     /// removes those elements from the target region whose pointers matches the ones in the range supplied and subsequently rebuilds the region
     size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,

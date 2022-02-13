@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ConcentrationFluidVolumeSource<dim>::ConcentrationFluidVolumeSource( const PropertyDatabase<dim>& p,
                                                                      double max_rho ) 
       : Interrelation<dim>(p),
@@ -22,7 +22,7 @@ ConcentrationFluidVolumeSource<dim>::ConcentrationFluidVolumeSource( const Prope
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void ConcentrationFluidVolumeSource<dim>::Calculate()
  {
     CONCN.AssignTo( concn );

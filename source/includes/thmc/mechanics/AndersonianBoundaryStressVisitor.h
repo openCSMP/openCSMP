@@ -16,10 +16,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Boundary;
-template<size_t> class Model;
-template<size_t> class VectorVariable;
+template<uint32_t> class Element;
+template<uint32_t> class Boundary;
+template<uint32_t> class Model;
+template<uint32_t> class VectorVariable;
 class StressRegime;
 
 /**

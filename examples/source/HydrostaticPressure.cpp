@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 HydrostaticPressure<dim>::HydrostaticPressure( const PropertyDatabase<dim>& p,
                                                double highest_elevation, 
                                                double ref_density ) 
@@ -21,7 +21,7 @@ HydrostaticPressure<dim>::HydrostaticPressure( const PropertyDatabase<dim>& p,
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void HydrostaticPressure<dim>::Calculate()
  {
     E.AssignTo( height );

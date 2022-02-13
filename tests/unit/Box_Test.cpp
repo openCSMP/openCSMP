@@ -502,7 +502,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
@@ -518,7 +518,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
@@ -548,7 +548,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
@@ -565,7 +565,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;

@@ -13,17 +13,17 @@ namespace csmp {
 */
 
 class Standard_IO_Handler;
-template<size_t> class Point;
-template<size_t> class Visitor;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Model;
-template<size_t> class VSet;
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Region;
-template<size_t> class MeshManager;
+template<uint32_t> class Point;
+template<uint32_t> class Visitor;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
+template<uint32_t> class VSet;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Region;
+template<uint32_t> class MeshManager;
 
 /**
 @addtogroup CSMPglobalFunctions
@@ -48,7 +48,7 @@ inline std::string number_to_string( const T& value ) {
 bool areFartherApartThan( const double* pn, const double* pw, double distance );
 
 // finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
-template<size_t dim>
+template<uint32_t dim>
 long  findNode( const Model<dim>&, const Point<dim>& pxyz, double tolerance, bool verbose = false );
 
 /// find node by its position as identified from its coordinates: tolerance should take into account single-precision of CAD tools
@@ -62,7 +62,7 @@ size_t  findNode( const Model<3U>&,
                   double nx, double ny, double nz, double tolerance );
 
 /// prints sorted global element node numbers in a compact way
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void printNodes( const CELL<dim>& );
 
 /// linear interpolation to point between 2 points in 1D
@@ -102,7 +102,7 @@ double bilinearInterpolate( size_t idx_x, size_t idx_y,
                               double p1, double p2, double p3, double p4 );
 
 /// extrapolate element property values stored in VSet to the vertices
-template<size_t dim, class VarType>
+template<uint32_t dim, class VarType>
 void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                                        const std::vector<VarType>&  elmnt_values,
                                        std::vector<VarType>&        nodal_values );
@@ -160,62 +160,6 @@ bool isInputFileEmpty( std::ifstream& );
 char * strptime( const char *s, const char *format, struct tm *tm );
 #endif
 
-
-
-
-
-/**
-Hash table utility class for storing (i,j,k) coordinates
-*/
-struct ijk {
-  size_t i, j, k;
-
-  bool operator<( const ijk& rhs ) const {
-    if ( i != rhs.i )
-      return i < rhs.i;
-    if ( j != rhs.j )
-      return j < rhs.j;
-    return j < rhs.j;
-  }
-
-  bool operator==( const ijk& rhs ) const {
-    return i == rhs.i && j == rhs.j && k == rhs.k;
-  }
-
-  ijk( size_t i, size_t j, size_t k )
-    : i( i ), j( j ), k( k )
-  {
-  }
-};
-
-/**
-@}
-*/
-
-} // end namespace csmp
-
-namespace std {
-
-/** Hashtable support for ijk */
-template<> struct hash<csmp::ijk> {
-  size_t operator()( const csmp::ijk& key ) const {
-    hash<size_t> h;
-
-    // (1 + sqrt 5) * 2^30
-    size_t s = 0xcf1bbcdd;
-
-    // Boost hash_combine function
-    s ^= h( key.i ) + 0x9e3779b9 + (s << 6) + (s >> 2);
-    s ^= h( key.j ) + 0x9e3779b9 + (s << 6) + (s >> 2);
-    s ^= h( key.k ) + 0x9e3779b9 + (s << 6) + (s >> 2);
-    return s;
-  }
-};
-
-
-/// reads vector<vector> from filestream where the elements of the vector are sequential 
-template<typename T>   
-void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_vector, deque<vector<T> >& file_records );
 
 } // end csmp
 

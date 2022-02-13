@@ -6,15 +6,15 @@ using namespace std;
 namespace csmp {
 
 /** default constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS() {}
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorLHS<dim>::~CVFEM_MathOperatorLHS() {}
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS( const PropertyDatabase<dim>& pref, 
                                                               const char* basic, 
                                                               const char* test )
@@ -24,7 +24,7 @@ CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS( const PropertyDatabase<dim>& 
  }
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS( const PropertyDatabase<dim>& pref, 
                                                               const char* oper,
                                                               const char* basic, 
@@ -35,7 +35,7 @@ CVFEM_MathOperatorLHS<dim>::CVFEM_MathOperatorLHS( const PropertyDatabase<dim>& 
  }
 
 /** virtual function for CVFEM_Visitor */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_MathOperatorLHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key )
  {
 
@@ -45,7 +45,7 @@ void CVFEM_MathOperatorLHS<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index 
  }
 
 /** access function for CVFEM_Visitor to the matrix entries*/
-template<size_t dim>
+template<uint32_t dim>
 DenseMatrix<DM_MIN> CVFEM_MathOperatorLHS<dim>::GetContribution( )
  {
    return MathOperatorLHS<dim>::LHS;

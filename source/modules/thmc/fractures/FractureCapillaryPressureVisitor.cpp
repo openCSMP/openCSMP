@@ -5,7 +5,7 @@
 namespace csmp{
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   FractureCapillaryPressureVisitor<dim>::FractureCapillaryPressureVisitor( Model<dim>& model, const char* fracApTag,
                                                                          const char* fracPcTag, double pd, double ift, double ca )
     : Visitor<dim>( MODEL, ELEMENT ), model_( model ), fracApKey_( model.Database().StorageKey(fracApTag) ),
@@ -14,7 +14,7 @@ namespace csmp{
     }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void FractureCapillaryPressureVisitor<dim>::Visit( Element<dim>* element )
     {
       const double fracAp( element->Read( fracApKey_ ) );

@@ -11,17 +11,17 @@
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
+template<uint32_t dim,class CELL>
 class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
   public:
     CVFEM_PointSource_rhsop( const PropertyDatabase<dim>& p, const char* nodal_src, const char* test );
 
     ~CVFEM_PointSource_rhsop();
     
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void GetOperandsCVFEM( SIMPLEX& e, csmp::Index upwind_var_key );
-    virtual void ComputeContribution( SIMPLEX& e );
-    virtual CVFEM_PointSource_rhsop<dim,SIMPLEX>* clone() const { return new CVFEM_PointSource_rhsop<dim,SIMPLEX> (*this); }
+    virtual void GetOperands( CELL& e );
+    virtual void GetOperandsCVFEM( CELL& e, csmp::Index upwind_var_key );
+    virtual void ComputeContribution( CELL& e );
+    virtual CVFEM_PointSource_rhsop<dim,CELL>* clone() const { return new CVFEM_PointSource_rhsop<dim,CELL> (*this); }
   private:
   
     std::vector<ScalarVariable> SRC_;

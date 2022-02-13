@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractTensorVariableComponent<dim>::ExtractTensorVariableComponent( const PropertyDatabase<dim>& p,
                                                                      const char* tens_var, 
                                                                      const char* scalar_var, 
@@ -46,7 +46,7 @@ ExtractTensorVariableComponent<dim>::ExtractTensorVariableComponent( const Prope
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractTensorVariableComponent<dim>::~ExtractTensorVariableComponent() {}
 
 

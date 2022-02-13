@@ -75,7 +75,7 @@ TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLA
 
 
 
-double& TensorVariable<2U>::operator()( size_t i, size_t j ) 
+double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j )
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -93,7 +93,7 @@ double& TensorVariable<2U>::operator()( size_t i, size_t j )
 
 
 
-const double& TensorVariable<2U>::operator()( size_t i, size_t j ) const
+const double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j ) const
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -110,7 +110,7 @@ const double& TensorVariable<2U>::operator()( size_t i, size_t j ) const
 
 
 
-void TensorVariable<2U>::Component( size_t i, double val )
+void TensorVariable<2U>::Component( uint32_t i, double val )
  { 
     assert( i < Size() );
     // row by row
@@ -122,7 +122,7 @@ void TensorVariable<2U>::Component( size_t i, double val )
 
 
 
-double TensorVariable<2U>::Component( size_t i ) const
+double TensorVariable<2U>::Component( uint32_t i ) const
  { 
     assert( i < Size() );
     // row by row
@@ -136,7 +136,7 @@ double TensorVariable<2U>::Component( size_t i ) const
  
  
 
-VARIABLE_FLAG& TensorVariable<2U>::Flag( size_t i )      
+VARIABLE_FLAG& TensorVariable<2U>::Flag( uint32_t i )
  { 
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -149,7 +149,7 @@ VARIABLE_FLAG& TensorVariable<2U>::Flag( size_t i )
 
 
 
-VARIABLE_FLAG  TensorVariable<2U>::Flag( size_t i ) const 
+VARIABLE_FLAG  TensorVariable<2U>::Flag( uint32_t i ) const
  { 
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -161,18 +161,11 @@ VARIABLE_FLAG  TensorVariable<2U>::Flag( size_t i ) const
  }
 
 
-size_t TensorVariable<2U>::Size() const
+uint32_t TensorVariable<2U>::Size() const
   {
     return 4U;
   }
 
-void TensorVariable<2U>::Resize( size_t, double newValue )
-  {
-    data[0][0] = newValue;
-    data[0][1] = newValue;
-    data[1][0] = newValue;
-    data[1][1] = newValue;
-  }
  
                                    
  
@@ -222,7 +215,7 @@ double TensorVariable<2U>::Trace() const
 
 
 
-void TensorVariable<2U>::AssignToRow( size_t iRow, VectorVariable<2U>& vc )
+void TensorVariable<2U>::AssignToRow( uint32_t iRow, VectorVariable<2U>& vc )
 {
 	if ( iRow == 0U )
 	    flag[0U] = vc.Flag(0U);
@@ -233,7 +226,7 @@ void TensorVariable<2U>::AssignToRow( size_t iRow, VectorVariable<2U>& vc )
 }
 
 
-void TensorVariable<2U>::AssignToColumn( size_t iCol, VectorVariable<2U>& vc )
+void TensorVariable<2U>::AssignToColumn( uint32_t iCol, VectorVariable<2U>& vc )
 {
 	if ( iCol == 0U )
 	    flag[0U] = vc.Flag(0U);
@@ -246,14 +239,14 @@ void TensorVariable<2U>::AssignToColumn( size_t iCol, VectorVariable<2U>& vc )
 
 
 
-VectorVariable<2U> TensorVariable<2U>::Row( size_t iRow ) const
+VectorVariable<2U> TensorVariable<2U>::Row( uint32_t iRow ) const
 {
 	return VectorVariable<2U>( flag[iRow], flag[iRow], 
 	                           data[iRow][0U], data[iRow][1U] );
 }
 
 
-VectorVariable<2U> TensorVariable<2U>::Column( size_t iCol ) const
+VectorVariable<2U> TensorVariable<2U>::Column( uint32_t iCol ) const
 {
 	return VectorVariable<2U>( flag[iCol], flag[iCol], 
 	                           data[0U][iCol], data[1U][iCol] );
@@ -749,15 +742,15 @@ void  TensorVariable<2U>::In()
      cout.flush();
      string  status;
      cin >> status;
-     for ( size_t i=0; i<2U; i++ )
+     for ( uint32_t i=0; i<2U; i++ )
        flag[i] = parseStatus( status.c_str() );
      
      cout <<"\nEnter first row of elements : ";
      cout.flush();
-     for ( size_t i=0; i<2U; i++ ) cin >> data[0][i];
+     for ( uint32_t i=0; i<2U; i++ ) cin >> data[0][i];
      cout <<"Enter second row of elements: ";
      cout.flush();
-     for ( size_t i=0; i<2U; i++ ) cin >> data[1][i];
+     for ( uint32_t i=0; i<2U; i++ ) cin >> data[1][i];
 
  } // end In
 

@@ -6,7 +6,7 @@
 namespace csmp {
 
 class ComputationalSettings;
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /** @brief input of parameter values from block-structured text file.
  
@@ -200,7 +200,7 @@ Or with the generic method, but the specific settings:
 @endcode
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class  InputDataManager {
   public:
     /// writes configuration options to screen

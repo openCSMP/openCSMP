@@ -7,15 +7,15 @@
 namespace csmp {
 
 	/// Known as: element conductance matrix or K div^2 P
-	template<size_t dim, class SIMPLEX = Element<dim> >
+	template<uint32_t dim, class CELL = Element<dim> >
 	class Integral_dNT_op_dN_dV_Analytical : public MathOperatorLHS<dim> {
 	public:
 		Integral_dNT_op_dN_dV_Analytical( const PropertyDatabase<dim>& pref,
 			                                const char* oper, const char* basic, const char* test);
 
-		virtual void ComputeContribution( const SIMPLEX& e);
+		virtual void ComputeContribution( const CELL& e);
     
-		virtual Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>* clone() const { return new Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>(*this); }
+		virtual Integral_dNT_op_dN_dV_Analytical<dim, CELL>* clone() const { return new Integral_dNT_op_dN_dV_Analytical<dim, CELL>(*this); }
 	};
 
 

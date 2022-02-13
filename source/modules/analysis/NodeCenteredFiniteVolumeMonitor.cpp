@@ -10,7 +10,7 @@ using namespace std;
 namespace csmp {
 
 /// text-file based monitoring of user-specified target variable on either, entire model or its unique regions
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeMonitor<dim>::NodeCenteredFiniteVolumeMonitor( const char* out_file, 
                                                                        const char* prop,
                                                                        bool monitor_groups )
@@ -36,7 +36,7 @@ NodeCenteredFiniteVolumeMonitor<dim>::NodeCenteredFiniteVolumeMonitor( const cha
     Integrating current values of the target variables over the entire model domain.
     If region by region approach is chosen, only the unique regions are considered.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model<dim>& sg, 
                                                                      bool consider_porosity,
                                                                      bool normalize_by_initial_integral,
@@ -58,7 +58,7 @@ void NodeCenteredFiniteVolumeMonitor<dim>::MonitorPropertyIntegrals( const Model
 
 
 /// updates the values one more time and then writes output to file specified in constructor
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeMonitor<dim>::Out( const Model<dim>& model, bool normalize_values ) const
  {
     SaveToFile( model, normalize_values );
@@ -68,7 +68,7 @@ void NodeCenteredFiniteVolumeMonitor<dim>::Out( const Model<dim>& model, bool no
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeMonitor<dim>::SaveToFile( const Model<dim>& sg,
                                                        bool normalize_by_initial_integral ) const
  {

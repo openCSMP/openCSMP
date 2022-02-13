@@ -13,7 +13,7 @@ namespace csmp {
 
 /// Capacitance matrix (RHS) with the operand values applied strictly to the node
 
-template<size_t dim, class SIMPLEX>
+template<uint32_t dim, class CELL>
 class NumIntegral_NT_rhs_nodal_op_N_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_rhs_nodal_op_N_dV( const PropertyDatabase<dim>& p, 
@@ -21,9 +21,9 @@ class NumIntegral_NT_rhs_nodal_op_N_dV : public MathOperatorRHS<dim> {
 
     ~NumIntegral_NT_rhs_nodal_op_N_dV();
 
-    virtual void GetOperands( SIMPLEX& e );
-    virtual void ComputeContribution( SIMPLEX& e );
-    virtual NumIntegral_NT_rhs_nodal_op_N_dV<dim,SIMPLEX>* clone() const { return new NumIntegral_NT_rhs_nodal_op_N_dV<dim,SIMPLEX> (*this); }
+    virtual void GetOperands( CELL& e );
+    virtual void ComputeContribution( CELL& e );
+    virtual NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_rhs_nodal_op_N_dV<dim,CELL> (*this); }
   private:
 
     NumIntegral_NT_rhs_nodal_op_N_dV();

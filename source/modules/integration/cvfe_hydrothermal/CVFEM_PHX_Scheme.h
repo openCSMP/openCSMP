@@ -27,7 +27,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_PHX_Scheme {
   public:
 

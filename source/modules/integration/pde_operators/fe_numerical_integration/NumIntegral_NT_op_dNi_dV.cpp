@@ -13,7 +13,7 @@ namespace csmp {
 use the local value
 */
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                                  const char* oper, 
                                                                  const char* test,
@@ -47,7 +47,7 @@ instance be the hydraulic conductivity.
 use the local value
 
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                          const char* oper, 
                                                          const char* mtrl, 
@@ -77,8 +77,8 @@ NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyData
  }
 
 
-template<size_t dim,class CELL>
-void NumIntegral_NT_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
+template<uint32_t dim,class CELL>
+void NumIntegral_NT_op_dNi_dV<dim,CELL>::SpatialDerivative( uint32_t num_xyz )
  {
     assert( num_xyz >= 0 && num_xyz <3U );
     xyz = num_xyz;
@@ -91,7 +91,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
 property from the element, and its multipliers from the nodes for later
 interpolation to the integration points.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    // 1. reading Operand (fluid density or something like that)
@@ -129,7 +129,7 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -140,7 +140,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
     
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
                // multiply property value it with multipliers
                ip_value = oper_eprop * eprop * -gravity;
@@ -155,7 +155,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
                // interpolating Operand value and multipliers to integration point
                e.N_AtIntegrationPoint( i, IPOL );
                double op_value(0.);
-               for ( size_t j=0; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
+               for ( auto j=0; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
 
                // multiply property value it with multipliers
                ip_value = op_value * eprop * -gravity;
@@ -165,7 +165,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
          ip_value *= e.WeightAtIntegrationPoint(i) 
                    * e.dN_AtIntegrationPoint( DN, i );
          //                                                                              Y-derivative
-         for ( size_t j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += ip_value * DN((xyz),j);
+         for ( auto j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += ip_value * DN((xyz),j);
       }
 
 } // end ComputeContribution

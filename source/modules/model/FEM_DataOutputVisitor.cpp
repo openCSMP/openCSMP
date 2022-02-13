@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 FEM_DataOutputVisitor<Var,dim>::FEM_DataOutputVisitor( const PropertyDatabase<dim>& p, 
                                                        const char* input_prop,
                                                        FEM_Data<Var>& data  )
@@ -23,21 +23,21 @@ FEM_DataOutputVisitor<Var,dim>::FEM_DataOutputVisitor( const PropertyDatabase<di
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 FEM_DataOutputVisitor<Var,dim>::~FEM_DataOutputVisitor() 
  {  
  }
 
 // FEM_DataOutputVisitor Methods ====================
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void FEM_DataOutputVisitor<Var,dim>::Visit( Region<dim>* gptr ) 
  { 
     gptr->Read( prop_key_, input_data_ref_[ counter_++ ] );
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void FEM_DataOutputVisitor<Var,dim>::Visit( Element<dim>* eptr ) 
  { 
     if ( prop_key_.place == ELEMENT ) {
@@ -46,14 +46,14 @@ void FEM_DataOutputVisitor<Var,dim>::Visit( Element<dim>* eptr )
          return;
       }
     // IntegrationPoint properties
-    for ( size_t i=0U; i<eptr->IntegrationPoints(); i++ ) {
+    for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
          assert( counter_ < input_data_ref_.Size() ); 
          eptr->Read( i, prop_key_, input_data_ref_[ counter_++ ] );
       }
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void FEM_DataOutputVisitor<Var,dim>::Visit( Node<dim>* nptr ) 
  { 
     assert( nptr->Idx() < input_data_ref_.Size() ); 
@@ -61,7 +61,7 @@ void FEM_DataOutputVisitor<Var,dim>::Visit( Node<dim>* nptr )
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void FEM_DataOutputVisitor<Var,dim>::Reset()
  { counter_=0U; }
 

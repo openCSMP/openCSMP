@@ -11,7 +11,7 @@ namespace csmp {
 @date 1997 */
 
 /// Known as: capacitance matrix
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& p, 

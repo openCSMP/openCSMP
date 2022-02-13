@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t> class Node;
+template<uint32_t> class Node;
 
 /**
     Interator to perform a breadth-first traversal of contiguous mesh patch during its construction
@@ -25,7 +25,7 @@ template<size_t> class Node;
     @todo needs to be completed to become useful
     @todo use this breadth-first graph traversal rather than any other method to discover patch of CELLs.
 */
-template<size_t dim, template<size_t> class CELL> 
+template<uint32_t dim, template<uint32_t> class CELL> 
 class MeshIterator {
   public:
     /// discovers interconnected mesh patch initiaising the member cells

@@ -272,12 +272,12 @@ void SparseMatrix::MultiplyWith( const std::vector<double>& vec, std::vector<dou
 
 
 /// j's of cols with data
-void SparseMatrix::ColumnIndices( size_t row, vector<size_t>& indices ) const
+void SparseMatrix::ColumnIndices( size_t row, vector<uint32_t>& indices ) const
  {
     size_t i(0);
 
     indices.resize( data[row].size() );
-    vector<size_t>( indices ).swap( indices );
+    vector<uint32_t>( indices ).swap( indices );
 
     for ( map<size_t,double>::const_iterator
           ditc=data[row].begin(); ditc!=data[row].end(); ditc++ )
@@ -288,7 +288,7 @@ size_t SparseMatrix::RecountEntries() const
  {
     size_t current_entries(0U);
 
-    for ( size_t n=0U; n<data.size(); n++ )
+    for ( auto n=0U; n<data.size(); n++ )
       for ( map<size_t,double>::const_iterator
             rit=data[n].begin(); rit!=data[n].end(); rit++ )
         current_entries++;
@@ -351,7 +351,7 @@ bool SparseMatrix::ZeroesInDiagonal() const
     if ( entries < Rows() ) return true;
     
     map<size_t,double>::const_iterator  ditc;
-    for ( size_t i=0U; i<data.size(); i++ )
+    for ( auto i{0}; i<data.size(); i++ )
       if ( data[i].empty() ||
           (ditc=data[i].find(i)) == data[i].end() ||
           (*ditc).second == static_cast<double>(0.) ) {
@@ -390,7 +390,7 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
     fname +=".txt";
     ofstream  ofs(fname.c_str());
 
-     for ( size_t i=0U; i<Rows(); i++ )
+     for ( auto i{0}; i<Rows(); i++ )
        {
           for ( size_t j=0U; j<Cols(); j++ )
             if ( At(i,j) != 0. ) ofs << 1 <<" ";
@@ -412,9 +412,9 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
 template<class cspMat1, class cspMat2>
 void SparseMatrix::Assign( const cspMat1& idx, const cspMat2& d )
  {
-    for ( size_t i=0U; i<idx.Rows(); ++i )
+    for ( auto i{0}; i<idx.Rows(); ++i )
       for ( size_t j=0U; j<idx.Cols(); ++j )
-        Add( static_cast<size_t>(idx(i,j)), static_cast<size_t>(idx(i,j)), d(i,j) );
+        Add( static_cast<uint32_t>(idx(i,j)), static_cast<uint32_t>(idx(i,j)), d(i,j) );
 
  } // end Assign
 
@@ -775,7 +775,7 @@ void SparseMatrix::In( const char* file_name_without_extension )
       ifs >> msize;
       Resize( msize );
       
-      for ( size_t i=0U; i<msize; i++ )
+      for ( auto i{0}; i<msize; i++ )
         for ( size_t j=0U; j<msize; j++ ) {
                ifs >> fdata;
                if ( fdata != 0. ) Add( i, j, fdata );
@@ -804,7 +804,7 @@ void SparseMatrix::Out( long digits ) const
     if ( digits != 0 ) cout.setf(ios::scientific);
 
     // for all rows
-    for ( size_t i=0U; i<data.size(); i++ )
+    for ( auto i{0}; i<data.size(); i++ )
       // for all column entries
       for ( map<size_t,double>::const_iterator
             ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
@@ -883,7 +883,7 @@ void SparseMatrix::OutForMatlab(const char* file) const
 		prec = ofs.precision(digits);
 	}
 
-	for (size_t i = 0; i<data.size(); i++)
+	for (auto i = 0; i<data.size(); i++)
 		for (map<size_t, double>::const_iterator
 			ditc = data[i].begin(); ditc != data[i].end(); ditc++) {
 			ofs << i + 1 << " " << ((*ditc).first) + 1 << " " << (*ditc).second << "\n";

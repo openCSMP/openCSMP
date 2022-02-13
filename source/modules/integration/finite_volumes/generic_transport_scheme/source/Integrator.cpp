@@ -15,7 +15,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class USER>
+template<uint32_t dim,template<uint32_t> class USER>
 Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper_limit )
  : solver_(&settings_),
    lower_limit_(lower_limit), upper_limit_(upper_limit)
@@ -27,7 +27,7 @@ Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::ReconfigureSolverForRepeatedUse()
  {
     // minimize output
@@ -49,7 +49,7 @@ void Integrator<dim,USER>::ReconfigureSolverForRepeatedUse()
 /**
    assuming that the IntegralEquation and Accumulator have already been applied  to build system and Solver to solve it
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::IntegrateOver( double time_increment )
  {
 //    if ( time_increment > 0. ) AssignInitialConditions( subdomain );
@@ -63,7 +63,7 @@ void Integrator<dim,USER>::IntegrateOver( double time_increment )
  
 
 /*
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& subdomain )
  {
  } // end AssignInitialConditions
@@ -71,7 +71,7 @@ void Integrator<dim,USER>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& subdomain )
  {
  } // end AssignEssentialConditions
@@ -79,7 +79,7 @@ void Integrator<dim,USER>::AssignEssentialConditions( const COMPUTATION_DOMAIN<d
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::SolveLinearAlgebraicSystem()
  {
     if ( User()->Verbose() ) {
@@ -104,7 +104,7 @@ void Integrator<dim,USER>::SolveLinearAlgebraicSystem()
     If not, the deviations are reported and the nearest maximum or minimum permitted values
     of saturation are stored.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double Integrator<dim,USER>::VerifyAndAssignResults( bool show_range, bool do_range_check )
   {
     double amin(+std::numeric_limits<double>::max());
@@ -112,8 +112,8 @@ double Integrator<dim,USER>::VerifyAndAssignResults( bool show_range, bool do_ra
     double difference_to_last_output(0.);
     size_t   error_counter(0);
     
-    const typename vector<Node<dim>*>::iterator  nodes_end(User()->ComputationDomain().NodesEnd());
-    for ( typename vector<Node<dim>*>::iterator  nit = User()->ComputationDomain().NodesBegin(); nit != nodes_end; ++nit )
+    const auto  nodes_end(User()->ComputationDomain().NodesEnd());
+    for ( auto  nit = User()->ComputationDomain().NodesBegin(); nit != nodes_end; ++nit )
     {
       const VARIABLE_FLAG status((*nit)->Status( User()->key_C0 ));
       if ( status != DIRICH )

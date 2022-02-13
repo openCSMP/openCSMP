@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV : public CVFEM_MathOperatorRHS<dim> {
   public:
     CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& p, 
@@ -41,7 +41,7 @@ class CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV : public CVFEM_MathOperatorRHS<dim
 
     double area, normal_component;
     double contribution, operand, grav;
-    size_t inside_node_, outside_node_;
+    uint32_t inside_node_, outside_node_;
         
     double                          gravity;// acceleration of gravity
     size_t                   xyz;// 1=x, 2=y, 3=z

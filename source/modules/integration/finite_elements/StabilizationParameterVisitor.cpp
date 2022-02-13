@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
                                                                    double mu, double coeff,
                                                                    const char* stab_param)
@@ -19,7 +19,7 @@ StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& m
 } // end constructor
 
 
-template<size_t dim>
+template<uint32_t dim>
 StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& mdl,
                                                                    double coeff,
                                                                    const char* stab_param)
@@ -36,15 +36,15 @@ StabilizationParameterVisitor<dim>::StabilizationParameterVisitor( Model<dim>& m
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 StabilizationParameterVisitor<dim>::~StabilizationParameterVisitor() {}
 
-template<size_t dim>
+template<uint32_t dim>
 void StabilizationParameterVisitor<dim>::Visit( Model<dim>* m )
   {
   }
 
-template<size_t dim>
+template<uint32_t dim>
 void StabilizationParameterVisitor<dim>::Visit( Element<dim>* e )
   {
      e->SegmentLengths( segments );

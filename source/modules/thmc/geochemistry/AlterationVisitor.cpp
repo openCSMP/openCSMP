@@ -58,7 +58,7 @@ files. In this constructor a test is performed whether the number of
 depedendent variables in the reaction file is the same as in the 
 properties input file (it should be). If not, an error is reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file, double dt )
     : pref(sg.Database()), 
       group_name("Model"),
@@ -99,7 +99,7 @@ AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file,
      typename vector<pair<int32_t,string> >::iterator  dit;
      
      for ( dit=dependent_comps.begin(); dit!=dependent_comps.end(); dit++ ) 
-       if ( (*dit).second == "H2O_aq" ) h2o_index = static_cast<size_t>((*dit).first + 1);
+       if ( (*dit).second == "H2O_aq" ) h2o_index = static_cast<uint32_t>((*dit).first + 1);
      if ( h2o_index == UINT_MAX )
        cout <<"\nAlterationVisitor::(ctor): Error: variable H2O_aq not found in input file."<< endl;
      
@@ -135,7 +135,7 @@ AlterationVisitor<dim>::AlterationVisitor( Model<dim>& sg, const char* rea_file,
          
          
    
-template<size_t dim>
+template<uint32_t dim>
 AlterationVisitor<dim>::~AlterationVisitor() 
  {  
  }
@@ -143,7 +143,7 @@ AlterationVisitor<dim>::~AlterationVisitor()
 
 
 // switch on and off
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::Verbose( bool print_output ) 
  {
     verbose = print_output;  
@@ -161,7 +161,7 @@ system has to evolve.
 
 The new integration time for the ODE solver. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::AdjustTimeIncrement( double new_dt ) 
  { time_increment = new_dt; }
 
@@ -184,7 +184,7 @@ depedendent variables are represented in double precision
 The accuracy to which all reactant and product concentrations shall be
 calculated. 
  */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::Precision( double tol )
  { tolerance = tol; }
 
@@ -202,7 +202,7 @@ The default factor is 1.5.
 
 The multiplication factor for absolute reactant concentrations. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::ThresholdReactantChangeFactor( double fac )
  {
     val_tolerance = fac;  // tolerance factor for absolute concentration values
@@ -223,7 +223,7 @@ current node visitation.
 The new rate above which the solver shall be applied to the chemical
 system of interest.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::ThresholdReactantChangeRate( double rate )
  {
     rate_tolerance = rate; // maximal rates of change before solver is invoked
@@ -253,7 +253,7 @@ mode is disabled.
 The Visit() method as well as the ODE solver report errors and other
 information during their execution. 
 */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::Equilibrate( Model<dim>& sg, bool show_results )
  {
      cout <<"\nAlterationVisitor::Equilibrate: Carrying out speciation calculations, ";
@@ -398,7 +398,7 @@ reporting errors. It can fail either because the matrix coupling the
 ODEs becomes singular or because the rate of change of some equations
 becomes so fast that the minimal timestep size limit is reached.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void AlterationVisitor<dim>::Visit( Node<dim>* n ) 
   { 
      bool    invoke_solver(false);
@@ -657,7 +657,7 @@ names do not correspond to those in the file from which the ODE solver
 is initialized, or if the reactant is unknown to the PropertyDatabase. 
 Also if the phase state is mispelled an error will be reported.  
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t  AlterationVisitor<dim>::ReadDependentVariablePhaseState( const char* fname )
  {
     phase_properties.erase( phase_properties.begin(), phase_properties.end() );
@@ -775,7 +775,7 @@ The species concentrations are queried from the ODE solver object.
 
 To test whether charge balance is maintained in the reacting system. 
 */
-template<size_t dim>
+template<uint32_t dim>
 double AlterationVisitor<dim>::TestChargeBalance()
  {
     double balance(0.);

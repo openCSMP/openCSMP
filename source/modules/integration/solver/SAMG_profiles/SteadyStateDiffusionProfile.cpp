@@ -4,7 +4,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model,
                                                                const char* diffusivity,
                                                                const char* diffusingVariable,
@@ -20,7 +20,7 @@ SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model
 } // end constructor
 
 
-template<size_t dim>
+template<uint32_t dim>
 SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model,
                                                                const char* diffusivity,
                                                                const char* diffusingVariable,
@@ -38,7 +38,7 @@ SteadyStateDiffusionProfile<dim>::SteadyStateDiffusionProfile( Model<dim>& model
 } // end constructor
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool SteadyStateDiffusionProfile<dim>::AdjustSolverSettings()
 {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -153,13 +153,13 @@ bool SteadyStateDiffusionProfile<dim>::AdjustSolverSettings()
 
     ad.4 Relative convergence is defined by "res <= eps.res0" (res0 = starting residual).
     */
-template<size_t dim>
+template<uint32_t dim>
 bool SteadyStateDiffusionProfile<dim>::Solve( double modelTime )
 { 
     /// SAMG output to file
     #ifdef SAMG_OUTPUT_TO_FILE
         std::string currentDumpFileName( dumpFileName_ );
-        currentDumpFileName.append( numberToString( static_cast<size_t>( modelTime ) ) );
+        currentDumpFileName.append( numberToString( static_cast<uint32_t>( modelTime ) ) );
         this->Solver().GetSolverSettings().Set_filnam_dump( currentDumpFileName );
     #endif
 

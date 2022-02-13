@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StatisticalAnalyzer<dim>::StatisticalAnalyzer( const Model<dim>& sg )
    : sref(sg),
      pref(sg.Database())
@@ -19,7 +19,7 @@ StatisticalAnalyzer<dim>::StatisticalAnalyzer( const Model<dim>& sg )
   } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 StatisticalAnalyzer<dim>::~StatisticalAnalyzer()
  {
  }
@@ -40,7 +40,7 @@ The column height is normalized by the total volume of the target region.
 in a single region.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::RegionPropertyHistograms( const char* prop,
                                                          const HistogramBins& bins,
                                                          map<string,pair<HistogramBins,size_t> >& results )
@@ -149,7 +149,7 @@ using the region name as key / identifier.
 region if this is set to true.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::RegionPropertyHistograms( const char* prop,
                                                          const HistogramBins& bins,
                                                          map<std::string,pair<HistogramBins,size_t> >& results,
@@ -332,7 +332,7 @@ using the region name as key / identifier.
 
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElement( const char* prop,
                                                                 const HistogramBins& bins,
                                                                 //  region_name  up.bin.lt, value, n-samples
@@ -415,7 +415,7 @@ const
                           // ------------------------------------------------------------------------------------
                           if ( prop_key.type == SCALAR ) {
                                 val = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      val += (*it)->PropertyValueAtIntegrationPoint( prop_key, n );
                                   }
                                 // averaging the ip values
@@ -423,7 +423,7 @@ const
                              }
                           else if ( prop_key.type == VECTOR ) {
                                 val = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
                                      val += vc.Length();
                                   }
@@ -431,7 +431,7 @@ const
                              }
                           else { // TENSOR
                                 val = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      (*it)->PropertyValueAtIntegrationPoint( prop_key, n, ts );
                                      val += ts.Determinant();
                                   }
@@ -526,7 +526,7 @@ const
      
      */
     
-    template<size_t dim>
+    template<uint32_t dim>
     void StatisticalAnalyzer<dim>::RegionPropertyHistogramsIntegrationPoint( const char* prop,
                                                                             const HistogramBins& bins,
                                                                             //  region_name  up.bin.lt, value, n-samples
@@ -571,7 +571,7 @@ const
             val = 0.;
             element_vol = 0.;
             //volume = (*it)->Volume();
-            for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
+            for ( auto n=0; n<(*it)->IntegrationPoints(); ++n ) {
                 if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
                     (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
                     double det_J((*it)->det_JINV_AtIntegrationPoint(n));
@@ -580,7 +580,7 @@ const
                     val += vc.Length() * volume;
                     element_vol += volume;
                 } //if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
-            } // for ( size_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
+            } // for ( auto n=0; n<(*it)->IntegrationPoints(); ++n ) {
             //val /= static_cast<double>((*it)->FE()->IntegrationPoints());
             if (element_vol > 0.) {
                 val /= element_vol;
@@ -636,7 +636,7 @@ const
 /**
     Whoever wrote this, should explain what it does !
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBasedOnProperty1(
                                                        const char* prop1,
                                                        const char* prop2,
@@ -704,7 +704,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case ELEMENT_INTEGRATION_POINT:
                                         if ( prop2_key.type == SCALAR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
@@ -712,7 +712,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
@@ -720,7 +720,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
@@ -821,7 +821,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case ELEMENT_INTEGRATION_POINT:
                                         if ( prop2_key.type == SCALAR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
@@ -829,7 +829,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
@@ -837,7 +837,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
@@ -869,7 +869,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                           // ------------------------------------------------------------------------------------
                           if ( prop1_key.type == SCALAR ) {
                                 val1 = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      val1 += (*it)->PropertyValueAtIntegrationPoint( prop1_key, n );
                                   }
                                 // averaging the ip values
@@ -877,7 +877,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                              }
                           else if ( prop1_key.type == VECTOR ) {
                                 val1 = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      (*it)->PropertyValueAtIntegrationPoint( prop1_key, n, vc );
                                      val1 += vc.Length();
                                   }
@@ -885,7 +885,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                              }
                           else { // TENSOR
                                 val1 = 0.;
-                                for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                      (*it)->PropertyValueAtIntegrationPoint( prop1_key, n, ts );
                                      val1 += ts.Determinant();
                                   }
@@ -953,7 +953,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                 case ELEMENT_INTEGRATION_POINT:
                                         if ( prop2_key.type == SCALAR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    val2 += (*it)->PropertyValueAtIntegrationPoint( prop2_key, n );
                                                 }
                                               // averaging the ip values
@@ -961,7 +961,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else if ( prop2_key.type == VECTOR ) {
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, vc );
                                                    val2 += vc.Length();
                                                 }
@@ -969,7 +969,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                                            }
                                         else { // TENSOR
                                               val2 = 0.;
-                                              for ( size_t n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
+                                              for ( auto n=0U; n<(*it)->FE()->IntegrationPoints(); n++ ) {
                                                    (*it)->PropertyValueAtIntegrationPoint( prop2_key, n, ts );
                                                    val2 += ts.Determinant();
                                                 }
@@ -1064,7 +1064,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::WriteHistogramToTextfile( const char* fname,
                                                          const HistogramBins& hist,
                                                          size_t points )
@@ -1095,7 +1095,7 @@ const
 
      writing: datasetname := [ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8) ]:
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::WriteHistogramToMapleTextfile( const char* fname,
                                                               const char* datasetname,
                                                               const HistogramBins& bins,
@@ -1159,7 +1159,7 @@ const
 
 
 /// writing: datasetname := [ [bin_bound1+bin_bound2/2., value1], [bin_bound2+bin_bound3/2., value2],... ]:
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::WriteCurvePointsToMapleTextfile( const char* fname,
                                                                const char* datasetname,
                                                                const HistogramBins& bins,
@@ -1218,7 +1218,7 @@ const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::OutputRegionPropertyHistograms( const char* prop,
                                                              // bin ranges from < to <=
                                     const map<std::string,pair<HistogramBins,size_t> >& results )
@@ -1261,7 +1261,7 @@ In Maple paste the data into the list as shown below:
 > data1:=[ Weight(1..3, 5), Weight(3..5, 10), Weight(5..7, 8)]:
 > histogram(data1, color=cyan);
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::OutputRegionPropertyHistogramsMaple( const char* prop,
                                                                     const HistogramBins& bins,
                                                                     // bin ranges from < to <=
@@ -1305,7 +1305,7 @@ const
 
 
 /// outputs a list of bin-center, column-height pairs to plot histogram-like curves
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::OutputRegionPropertyAbundancePolygonsMaple( const char* prop,
                                     const HistogramBins& bins,
                                                              // bin ranges from < to <=
@@ -1348,7 +1348,7 @@ const
 
 
 /// outputs a list of bin-center, column-height pairs to plot histogram-like curves
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::OutputRegionPropertyAbundancePolygonsMaple( const char* prop,
                                     const char* file_name_prefix,
                                     const HistogramBins& bins,
@@ -1418,7 +1418,7 @@ Example
 6.0e-4
 EOF
 */
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
                                            HistogramBins& data ) const
  {
@@ -1449,7 +1449,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
     data.reserve(bins);
 
     // bin boundaries
-    for ( size_t n=0U; n<bins; n++ ) {
+    for ( auto n=0U; n<bins; n++ ) {
          if ( ifs.eof() ) break;
          ifs >> val;
          if ( (fabs(val) < 1.0e-30 && val != 0.0) || fabs(val) > 1.0e+30 ) {
@@ -1477,7 +1477,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const char* bin_file,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double first_val, ... ) const
  {
     //bins.erase( bins.begin(), bins.end() );
@@ -1518,7 +1518,7 @@ void StatisticalAnalyzer<dim>::DefineBins( HistogramBins& bins, double first_val
  } // end defineBins
 
 
-template<size_t dim>
+template<uint32_t dim>
 void StatisticalAnalyzer<dim>::DefineBins( const double minimum, 
                                            const double maximum, 
                                            const size_t number_of_bins,
@@ -1539,7 +1539,7 @@ void StatisticalAnalyzer<dim>::DefineBins( const double minimum,
     double  first_val, val;
 
 
-    for ( size_t n=0U; n < (number_of_bins + 1); n++ ) {
+    for ( auto n=0U; n < (number_of_bins + 1); n++ ) {
          val = minimum + n * bin_size;
          if ( n == 0 ) first_val = val;
          else data.push_back( make_pair(first_val,val) );

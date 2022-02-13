@@ -7,11 +7,11 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNi_rhsop_dV<dim,CELL>::~NumIntegral_DNi_rhsop_dV() {}
 
 /// custom constructor that should be used
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNi_rhsop_dV<dim,CELL>::NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
                                                                  const char*                  oper,
                                                                  const char*                  test )
@@ -46,7 +46,7 @@ string parse( SPATIAL_DERIVATIVE deriv ) {
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
@@ -56,7 +56,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE n
  
  
  
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( const CELL& e )
 {
    e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), op_vec_ );
@@ -66,7 +66,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( const CELL& e )
  
  
 //element contribution
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // initialize output matrix
@@ -77,22 +77,22 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL& e )
     const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
     double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim>::DERIV ) : 0.;
 
-    for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
          if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
          double grad_op(0.);
          const size_t nodes(e.Nodes());
-         for ( size_t j=0; j<nodes; ++j )
+         for ( auto j=0; j<nodes; ++j )
            grad_op += MathOperatorRHS<dim>::DERIV(xyz_,j) * op_vec_[j]();
         
          // integration
          e.N_AtIntegrationPoint( i, MathOperatorRHS<dim>::IPOL );
-         for ( size_t k=0; k<nodes; ++k )
+         for ( auto k=0; k<nodes; ++k )
            MathOperatorRHS<dim>::IPOL[k] *= grad_op * det * e.WeightAtIntegrationPoint(i);
 
          // RHS vector for accumulation
-         for ( size_t k=0; k<nodes; ++k )
+         for ( auto k=0; k<nodes; ++k )
            MathOperatorRHS<dim>::RHS[k] += MathOperatorRHS<dim>::IPOL[k];
       }
 

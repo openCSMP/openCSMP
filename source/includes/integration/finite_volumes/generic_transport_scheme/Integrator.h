@@ -34,7 +34,7 @@ class SAMG_Solver;
     + Vector             rhs_;
     + Vector             x_;
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class Integrator {
   public:
     /// m=n since solution matrix is square, limits should include permitted tolerances

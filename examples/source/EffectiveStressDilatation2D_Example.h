@@ -14,9 +14,9 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class Region;
-template<size_t,template<size_t> class> class PDE_Integrator;
+template<uint32_t> class Model;
+template<uint32_t> class Region;
+template<uint32_t,template<uint32_t> class> class PDE_Integrator;
 
 /// gas flow into a horizontal well drilled into overpressured "shale" layer
 class  EffectiveStressDilatation2D_Example : public Example {

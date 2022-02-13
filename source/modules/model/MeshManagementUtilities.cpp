@@ -28,8 +28,8 @@ boundary conditions and should be eliminated.
 
 @author SKM
 */
-template<size_t dim>
-size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<size_t>& belmts )
+template<uint32_t dim>
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<uint32_t>& belmts )
 {
   belmts.clear();
 
@@ -42,7 +42,7 @@ size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<s
         it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
       const size_t nodes((*it).Nodes());
       size_t       counter(0U);
-      for ( size_t i=0U; i<nodes; ++i )
+      for ( auto i{0}; i<nodes; ++i )
         if ( (*it).N(i)->AtBoundary() != NOT ) counter++;
       if ( counter == nodes ) {
             belmts.insert( (*it).Idx() );
@@ -52,8 +52,8 @@ size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<s
   return boundary_only_elements;
 }
 
-template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<2U>&, set<size_t>& );
-template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, set<size_t>& );
+template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<2U>&, set<uint32_t>& );
+template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, set<uint32_t>& );
 
 
 
@@ -87,7 +87,7 @@ To break regions into contiguous subdomains.
 @date 21/5/2021
 
 */
-template<size_t dim,template<size_t> class CELL>
+template<uint32_t dim,template<uint32_t> class CELL>
 size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -150,12 +150,12 @@ template size_t findContiguousMeshPatch( InterFace<3U>* const, set<InterFace<3U>
 
 /** loops over the valid neighbors of the cell and sets their neighbor pointers to point to this cell to nullptr
  */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void detachNeighborsFrom( CELL<dim>* const eptr )
  {
     // nulling the connections of neighbor neighbor elements to this element
     // (neighbor pointer to this element is nulled)
-    for ( size_t i{0}; i<eptr->Neighbors(); ++i )
+    for ( auto i{0}; i<eptr->Neighbors(); ++i )
       if ( eptr->Neighbor(i) != nullptr )
         for ( size_t j{0}; j<eptr->Neighbor(i)->Neighbors(); ++j )
         if ( eptr->Neighbor(i)->Neighbor(j) == eptr )
@@ -184,7 +184,7 @@ template void detachNeighborsFrom( InterFace<3>* const );
       
              @author SKM 14/8/21
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
                                    typename plf::colony<CELL<dim>>::iterator end,
                                    map<string,vector<CELL<dim>*> >& mesh_patches )
@@ -315,7 +315,7 @@ template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::iterator
 /**
       tested:OK
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*>& contiguous_set_of_nodes )
  {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
@@ -337,7 +337,7 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
           {
              const size_t n_node_nbors{ nit->Neighbors() };
              new_node_nbors.reserve( n_node_nbors );
-             for ( size_t i{0}; i < n_node_nbors; ++i ) {
+             for ( auto i{0}; i < n_node_nbors; ++i ) {
                  Node<dim>* nbor_ptr = nit->Neighbor(i);
                  assert( nbor_ptr != nullptr );
                  if ( contiguous_set_of_nodes.find( nbor_ptr ) == contiguous_set_of_nodes.end() ) {
@@ -371,7 +371,7 @@ template size_t findInterconnectedNodeCluster( Node<1>* const nptr, set<Node<1>*
       returns number of stand-alone mesh patches found.
       
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_iterator begin,
                                              typename vector<CELL<dim>*>::const_iterator end,
                                              map<CELL<dim>*,MeshPatchAttributes>& root_pointers )
@@ -466,7 +466,7 @@ template size_t  findPointersToStandAloneMeshPatches( vector<InterFace<3U>*>::co
         @return the number of neighbors that were identified
  */
  // TODO: simplify by using the corner nodes only for the face matching
-template<size_t dim>
+template<uint32_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -482,8 +482,8 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
      //  key             face
      map<set<Node<dim>*>,size_t>  face_keys;
      const size_t                 n_nbors(face_keys.size());
-     vector<size_t>               fnids;
-     for ( size_t i=0U; i<n_nbors; ++i ) {
+     vector<uint32_t>               fnids;
+     for ( auto i{0}; i<n_nbors; ++i ) {
           eptr->FE()->NodesOfFace( i, fnids );
           set<Node<dim>*> face_key;
           for ( auto j : fnids ) face_key.insert( eptr->N(j) );
@@ -501,7 +501,7 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
      if ( dim == 1 ) min_face_nodes = 1;
      // using the element's nodes to find the neighbors
      for ( auto nit=eptr->NodesBegin(); nit!=eptr->NodesEnd(); ++nit )
-       for (size_t i=0U; i<(*nit)->Parents(); ++i )
+       for (auto i{0}; i<(*nit)->Parents(); ++i )
          {
             size_t counter(0U);
             for ( auto it=(*nit)->Parent(i)->NodesBegin(); it!=(*nit)->Parent(i)->NodesEnd(); ++it )
@@ -516,7 +516,7 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
        {
           // loop over faces until matching face is found; else report
           const size_t n_faces(it->Neighbors());
-          for ( size_t i=0U; i<n_faces; ++i ) {
+          for ( auto i{0}; i<n_faces; ++i ) {
               it->FE()->NodesOfFace( i, fnids );
               for ( auto& j : fnids ) nbor_face_key.insert( it->N(j) );
               // searching & assigning neighbors found
@@ -552,7 +552,7 @@ template size_t connectNeighborsUsingNodeParents( Element<3U>* );
     
     The nodes of the face are assigned directly
  */
-template<size_t dim>
+template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_nbor,
                                              Face<dim>* const face )
@@ -573,21 +573,21 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    set<set<Node<dim>*> > outer_elmt_faces;
 
    const size_t n_outer_elmt_faces(outer_nbor->Faces());
-   for ( size_t i=0U; i<n_outer_elmt_faces; ++i ) {
+   for ( auto i{0}; i<n_outer_elmt_faces; ++i ) {
         // creating and recording the search key and face number
         outer_elmt_faces.insert( outer_nbor->CornerNodesOfFace(i) );
      }
      
    // 2. Searching the faces of the inner element that matches this face
    const size_t n_inner_elmt_faces(inner_nbor->Faces());
-   for ( size_t i=0U; i<n_inner_elmt_faces; ++i ) {
+   for ( auto i{0}; i<n_inner_elmt_faces; ++i ) {
         // creating the search key and performing the search
         auto search_it = outer_elmt_faces.find( inner_nbor->CornerNodesOfFace(i) );
         // if a matching face is found
         if ( search_it != outer_elmt_faces.end() ) {
              // assigning the nodes which are in the right order in fnids
              // (remember that the nodes of the Face should match the order at the inner face)
-             vector<size_t> fnids;
+             vector<uint32_t> fnids;
              inner_nbor->FE()->NodesOfFace( i, fnids );
              size_t k(0U);
              for ( auto& j : fnids )
@@ -614,7 +614,7 @@ template void findNodesViaHigherDimensionalNeighbors( Element<3>* const, Element
     
     The nodes of the face are assigned directly
  */
-template<size_t dim>
+template<uint32_t dim>
 void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
                                              Element<dim>* const outer_nbor,
                                              InterFace<dim>* const interface )
@@ -635,12 +635,12 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    map<Point<dim>,pair<size_t,size_t> > outer_elmt_nodes;
    // OUTER ELEMENT
    const size_t n_nodes_outer_elmt(outer_nbor->Nodes());
-   for ( size_t i=0U; i<n_nodes_outer_elmt; ++i )
+   for ( auto i{0}; i<n_nodes_outer_elmt; ++i )
      outer_elmt_nodes.insert( make_pair( outer_nbor->N(i)->Coordinate(), make_pair(UINT_MAX,i) ) );
    
    // 2. searching for the shared nodes
    const size_t n_nodes_inner_elmt(inner_nbor->Nodes());
-   for ( size_t i=0U; i<n_nodes_inner_elmt; ++i ) {
+   for ( auto i{0}; i<n_nodes_inner_elmt; ++i ) {
         auto search_it=outer_elmt_nodes.find( inner_nbor->N(i)->Coordinate() );
         // if the node is shared between the elements its local id is stored
         if ( search_it != outer_elmt_nodes.end() )
@@ -648,7 +648,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
      }
    
    // 3. creating face_node ID search keys for the inner and outer elements
-   set<size_t> inner_nodes, outer_nodes;
+   set<uint32_t> inner_nodes, outer_nodes;
    for ( auto& it : outer_elmt_nodes )
      if ( it.second.first != UINT_MAX ) {
           inner_nodes.insert( it.second.first );
@@ -656,14 +656,14 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
        }
    
    // 4. searching the faces of the higher-dimensional for the node keys
-   vector<size_t> fnids;
+   vector<uint32_t> fnids;
    // INNER ELEMENT
    const size_t n_inner_elmt_faces(inner_nbor->Faces());
    bool  inner_face_found(false);
-   for ( size_t i=0U; i<n_inner_elmt_faces; ++i ) {
+   for ( auto i{0}; i<n_inner_elmt_faces; ++i ) {
         inner_nbor->FE()->NodesOfFace( i, fnids );
         // creating and recording the search key
-        set<size_t> face_nodes( fnids.begin(), fnids.end() );
+        set<uint32_t> face_nodes( fnids.begin(), fnids.end() );
         // if it matches the interface, the nodes are assigned and the loop is stopped
         if ( face_nodes == inner_nodes ) {
              inner_face_found = true;
@@ -681,10 +681,10 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // OUTER ELEMENT
    const size_t n_outer_elmt_faces(outer_nbor->Faces());
    bool  outer_face_found(false);
-   for ( size_t i=0U; i<n_outer_elmt_faces; ++i ) {
+   for ( auto i{0}; i<n_outer_elmt_faces; ++i ) {
         outer_nbor->FE()->NodesOfFace( i, fnids );
         // creating and recording the search key
-        set<size_t> face_nodes( fnids.begin(), fnids.end() );
+        set<uint32_t> face_nodes( fnids.begin(), fnids.end() );
         // if it matches the interface, the nodes are assigned and the loop is stopped
         if ( face_nodes == outer_nodes ) {
              outer_face_found = true;
@@ -711,7 +711,7 @@ template void findNodesViaHigherDimensionalNeighbors( Element<3>* const, Element
 /*
     Finds the face between 2 elements (if any) via the neighbor connectivity.
 */
-template<size_t dim>
+template<uint32_t dim>
 pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -732,7 +732,7 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
     // 1. finding which face of element 1 is shared with element 2
     size_t face_elmt1 = UNSPECIFIED;
     const size_t n_faces1(eptr1->Faces());
-    for ( size_t i{0}; i<n_faces1; ++i )
+    for ( auto i{0}; i<n_faces1; ++i )
       if ( eptr1->Neighbor(i) == eptr2 ) {
            face_elmt1 = i;
            break;
@@ -741,7 +741,7 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
     // 2. finding which face of element 2 is shared with element 1
     size_t face_elmt2 = UNSPECIFIED;
     const size_t n_faces2(eptr2->Faces());
-    for ( size_t i{0}; i<n_faces2; ++i )
+    for ( auto i{0}; i<n_faces2; ++i )
       if ( eptr2->Neighbor(i) == eptr1 ) {
            face_elmt2 = i;
            break;
@@ -767,7 +767,7 @@ template pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<1>* const, 
      @attention if neighbor connectivty exists, use matching neighbor pointers which is much faster!
      @attention if no shared face can be found, function returns UNSPECIFIED.
 */
-template<size_t dim>
+template<uint32_t dim>
 pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element<dim>* const eptr2 )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -790,7 +790,7 @@ pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element
     vector<set<Node<dim>*> > e1_face_keys;
     const size_t n_faces(eptr1->Faces());
     e1_face_keys.reserve(n_faces);
-    for ( size_t i{0}; i<n_faces; ++i )
+    for ( auto i{0}; i<n_faces; ++i )
       if ( eptr1->Neighbor(i) != nullptr ) {
           e1_face_keys.emplace_back( eptr1->CornerNodesOfFace(i) );
        }
@@ -798,9 +798,9 @@ pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element
     
     // 2. creating face keys for the outer element trying match them
     //    with the faces of the inner one
-    set<size_t>    face_key_n;
+    set<uint32_t>    face_key_n;
     const size_t n_faces2(eptr2->Faces());
-    for ( size_t i=0U; i<n_faces2; ++i ) {
+    for ( auto i{0}; i<n_faces2; ++i ) {
          // is this a matching face
          auto fit = find( e1_face_keys.begin(), e1_face_keys.end(), eptr2->CornerNodesOfFace(i) );
          if ( fit != e1_face_keys.end() ) {
@@ -830,7 +830,7 @@ template pair<size_t,size_t> findAdjacentElementFaces( Element<1>* const, Elemen
      
      https://stackoverflow.com/questions/26719144/how-to-erase-a-value-efficiently-from-a-sorted-vector/26720032
  */
-template<size_t dim>
+template<uint32_t dim>
 void eraseElementPointerFromVector( vector<csmp::Element<dim>*>& vec, const Element<dim>* eptr )
  {
     // get the range in 2*log2(N), N=vec.size()
@@ -872,7 +872,7 @@ it was able to reach from the supplied iterator.
 To break regions into contiguous subdomains.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -884,7 +884,7 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguou
     vector<Element<dim>*>  neighbor_elements;
     const size_t  neighbors(eptr->Neighbors());
     neighbor_elements.reserve( neighbors );
-    for ( size_t i=0U; i<neighbors; i++ )
+    for ( auto i{0}; i<neighbors; i++ )
       if ( eptr->Neighbor(i) != nullptr )
         neighbor_elements.push_back( eptr->Neighbor(i) );
  
@@ -945,7 +945,7 @@ template void floodFill( Element<3U>* const, set<Element<3U>*>& );
 
         @TODO: no need to use set, use sort() then unique() on the result vector, searching will be much faster
 */
-template<size_t dim>
+template<uint32_t dim>
 void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -964,7 +964,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
     multimap<set<Node<dim>*>,pair<size_t,Element<dim>*> >  volume_neighbor_keys,
                                                            surface_neighbor_keys,
                                                            line_neighbor_keys;
-    vector<size_t>                 fnids;
+    vector<uint32_t>                 fnids;
     typename std::set<Node<dim>*>  key;
 
     for ( typename vector<Element<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
@@ -997,7 +997,7 @@ void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool 
              for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
                if ( (*it)->Neighbor( neighbor ) != NULL ) {
                  const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
-                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                 for ( auto i = 0; i < neighbor_neighbors; i++ )
                    if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
                      if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
                        (*it)->NeighborElementVector()[i] = NULL;
@@ -1153,7 +1153,7 @@ template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>
        
          Inside and outside must be considered.
 */
-template<size_t dim>
+template<uint32_t dim>
 void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1171,7 +1171,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
     //       key             face number neighbor
     multimap<set<Node<dim>*>,pair<size_t,InterFace<dim>*> >  surface_neighbor_keys,
                                                              line_neighbor_keys;
-    vector<size_t>                 fnids;
+    vector<uint32_t>                 fnids;
     typename std::set<Node<dim>*>  key;
 
     for ( typename vector<InterFace<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
@@ -1208,7 +1208,7 @@ void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplex
              for ( size_t neighbor = 0; neighbor < neighbors; ++neighbor )
                if ( (*it)->Neighbor( neighbor ) != NULL ) {
                  const size_t neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
-                 for ( size_t i = 0; i < neighbor_neighbors; i++ )
+                 for ( auto i = 0; i < neighbor_neighbors; i++ )
                    if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
                      if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
                        (*it)->NeighborElementVector()[i] = NULL;
@@ -1358,7 +1358,7 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double toleranc
     computes parent element barycentre-to-node distances for all parent elements and returns them into the supplied vector
     distances_and_weight vector [e1,e2...e_n,e_sum] with a size of parent elements+1
 */
-template<size_t dim>
+template<uint32_t dim>
 void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begin,
                           typename vector<Node<dim>*>::const_iterator nodes_end,
                           vector<vector<double> >& distances_and_weights )
@@ -1373,7 +1373,7 @@ void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begi
           const size_t parents((*nodes_begin)->Parents());
           distances_and_weights[node_index].reserve(parents+1U);
          
-          for ( size_t i=0U; i<parents; i++ ) {
+          for ( auto i{0}; i<parents; i++ ) {
                // recording the node-to-barycentre distances
                distances_and_weights[node_index].push_back( npt.DistanceTo( (*nodes_begin)->Parent(i)->BaryCenter() ) );
                weight += distances_and_weights[node_index][i];
@@ -1414,7 +1414,7 @@ template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<N
     @TODO do we need to remember which side of the interface we are on?
     @todo test method on Chloe's dataset
 */
-template<size_t dim>
+template<uint32_t dim>
 bool findSplitInterfaceElements( const Region<dim>& subdomain,
                                  set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >& interface_elmt_pairs )
  {
@@ -1425,13 +1425,13 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     // 1. for all elements on the perimeter of the model subdomain,
     //    generate keys from their node coordinates that are then matched with one-another
     //    in order to connect these elements
-    for ( size_t n=subdomain.InteriorElements(); n<subdomain.Elements(); ++n )
+    for ( auto n=subdomain.InteriorElements(); n<subdomain.Elements(); ++n )
         {
            // for those element faces that define the perimeter surface
-           for ( size_t i=0U; i<subdomain.PerimeterFaces(n); ++i )
+           for ( auto i{0}; i<subdomain.PerimeterFaces(n); ++i )
              {
                 // get the local node numbers of the perimeter face
-                vector<size_t> fnids;
+                vector<uint32_t> fnids;
                 subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
                 // add the corresponding node points to a set that will form the element face key
                 pair<set<Point<dim> >,size_t> face_key;
@@ -1465,7 +1465,7 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // building search maps that we will use to find the shared interfaces
            // key=pointset   face iD
            map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
-           vector<size_t>  nids;
+           vector<uint32_t>  nids;
            // first element
            Element<dim>* e1 = (*it).second.first;
            for ( size_t face = 0U; face<e1->Faces(); ++face ) {
@@ -1529,8 +1529,8 @@ template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Eleme
 /**
     Checks whether region of interest contains elements of the type of interest.
 */
-template<size_t dim>
-bool containsElementsOfType( const Region<dim>& gref, ELEMENT_DIMENSION dimension )
+template<uint32_t dim>
+bool containsElementsOfType( const Region<dim>& gref, CELL_SHAPE dimension )
  {
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       if ( parseFiniteElementDimension( (*it)->FE_Type() ) == dimension )
@@ -1540,9 +1540,9 @@ bool containsElementsOfType( const Region<dim>& gref, ELEMENT_DIMENSION dimensio
       
  } // end containsElementsOfTtype
 
-template bool containsElementsOfType<1U>( const Region<1>&, ELEMENT_DIMENSION );
-template bool containsElementsOfType<2U>( const Region<2>&, ELEMENT_DIMENSION );
-template bool containsElementsOfType<3U>( const Region<3>&, ELEMENT_DIMENSION );
+template bool containsElementsOfType<1U>( const Region<1>&, CELL_SHAPE );
+template bool containsElementsOfType<2U>( const Region<2>&, CELL_SHAPE );
+template bool containsElementsOfType<3U>( const Region<3>&, CELL_SHAPE );
 
 
 
@@ -1576,7 +1576,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
       if ( (*it)->IsSurfaceElement() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
-           for ( size_t i=0U; i<neighbors; ++i )
+           for ( auto i{0}; i<neighbors; ++i )
              // only valid neighbor elements are considered
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
@@ -1609,7 +1609,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
       if ( (*it)->IsLineElement() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
-           for ( size_t i=0U; i<neighbors; ++i )
+           for ( auto i{0}; i<neighbors; ++i )
              // only valid neighbor elements are considered
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
@@ -1650,7 +1650,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain 
 
 
 
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* const cell2 )
  {
     assert( cell1 != nullptr );
@@ -1678,7 +1678,7 @@ template double angleBetweenSurfaceCells<InterFace>( const InterFace<3>* const, 
 /**
     Line elements can exist in all 3 spatial dimensions.
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* const cell2 )
  {
     assert( cell1 != nullptr );
@@ -1745,7 +1745,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
      for ( const auto& nit : edge_nodes ) {
           node_processing:
           const size_t n_parents{ nit->Parents() };
-          for ( size_t i{0}; i<n_parents; ++i )
+          for ( auto i{0}; i<n_parents; ++i )
             if ( nit->Parent(i)->IsVolumeElement() )
               {
                  // checking which of the neighbor nodes of the parent element
@@ -1780,7 +1780,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
               it.first->Idx( UINT_MAX );
               const size_t n_segments{ it.first->Segments() };
               for ( size_t segm{0}; segm < n_segments; ++segm ) {
-                   vector<size_t> snids;
+                   vector<uint32_t> snids;
                    it.first->FE()->NodesOfSegment( segm, snids );
                    // making set of segment node pointers to search for
                    set<Node<3>*> segm_nodes;
@@ -1820,7 +1820,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
 
 
 
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
                                  typename std::vector<CELL<dim>*>::const_iterator last,
                                  std::vector<std::vector<CELL<dim>*> >& nbor_pointers )
@@ -1832,7 +1832,7 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
     while ( first != last ) {
          const size_t n_nbors{ (*first)->Neighbors() };
          vector<CELL<dim>*>  nbors( n_nbors, nullptr );
-         for ( size_t i{0}; i<n_nbors; ++i )
+         for ( auto i{0}; i<n_nbors; ++i )
            if ( (*first)->Neighbor(i) != nullptr )
              nbors.push_back( (*first)->Neighbor(i) );
          nbor_pointers.emplace_back( nbors );
@@ -1863,7 +1863,7 @@ template void backupNeighborConnectivity( typename vector<Face<2>*>::const_itera
 /**
    Checks validity of FE policy, nodes, neighbors, node parents, node neighbors.
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                      typename plf::colony<CELL<dim>>::const_iterator last )
  {
@@ -1884,7 +1884,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
            }
          else {
              // connected nodes
-             for ( size_t i{0}; i<(*first).Nodes(); ++i )
+             for ( auto i{0}; i<(*first).Nodes(); ++i )
                if ( (*first).N(i) == nullptr ) {
                     cerr <<"\n"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
                     issues++;
@@ -1892,7 +1892,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                else shared_nodes.push_back( (*first).N(i) );
              // there should be at least one neighbor
              size_t n_valid_nbors{0};
-             for ( size_t i{0}; i<(*first).Neighbors(); ++i )
+             for ( auto i{0}; i<(*first).Neighbors(); ++i )
                if ( (*first).Neighbor(i) != nullptr )
                  n_valid_nbors++;
              if ( n_valid_nbors == 0 ) {
@@ -1902,9 +1902,9 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
              // valid neighbors should not be corrupt
              const long one_billion{1000000000};
              cerr <<"\n"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" "<< (*first).BaryCenter();
-             for ( size_t i{0}; i<(*first).Nodes(); ++i )
+             for ( auto i{0}; i<(*first).Nodes(); ++i )
                cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
-             for ( size_t i{0}; i<(*first).Neighbors(); ++i ) {
+             for ( auto i{0}; i<(*first).Neighbors(); ++i ) {
                  if ( (*first).Neighbor(i) != nullptr ) {
                       if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
                       if ( (*first).Neighbor(i)->Idx() > one_billion )
@@ -1920,7 +1920,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    for ( const auto& nit : shared_nodes ) {
        if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
        else
-         for ( size_t i{0}; i<nit->Parents(); ++i )
+         for ( auto i{0}; i<nit->Parents(); ++i )
             if ( nit->Parent(i) == nullptr ||
                  nit->Parent(i)->FE() == nullptr ) {
                  cerr <<"\nnode parents vector contains nullptr.";
@@ -1931,7 +1931,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    for ( const auto& nit : shared_nodes ) {
        if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
        else
-         for ( size_t i{0}; i<nit->Neighbors(); ++i )
+         for ( auto i{0}; i<nit->Neighbors(); ++i )
             if ( nit->Neighbor(i) == nullptr ) {
                  cerr <<"\nneighbor "<< i <<" of node "<< nit->Idx() <<": is corrupt.";
                  issues++;
@@ -1958,7 +1958,7 @@ template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::c
                                           
                                           
                                           
-template<size_t dim>
+template<uint32_t dim>
 pair<Point<dim>,Point<dim>>  boundingBox( typename vector<Node<dim>*>::const_iterator first, typename vector<Node<dim>*>::const_iterator last )
  {
     if ( first == last ) return make_pair( Point<dim>{}, Point<dim>{} );
@@ -1990,7 +1990,7 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
         // building search maps that we will use to find the shared interfaces
         // key=pointset   face iD
         map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
-        vector<size_t>  nids;
+        vector<uint32_t>  nids;
         // first element
         Element<dim>* e1 = f->InnerParent();
         for ( size_t face = 0U; face<e1->Faces(); ++face ) {
@@ -2041,7 +2041,7 @@ template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator,
    returns true if the elements contain each others barycentre,
       only considers equidimensional elements.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* const elmt2 )
  {
     if constexpr ( dim == 3 )
@@ -2110,7 +2110,7 @@ may not work if any elements are concave (possible in the case of hexahedra).
 */
 Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query )
     {
-      std::vector<size_t> fnids;
+      std::vector<uint32_t> fnids;
       fnids.reserve(4);
 
       const auto eend = region.ElementsEnd();
@@ -2182,7 +2182,7 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 size_t collocatedNodes( const Element<dim>* const eptr )
  {
     assert( eptr != nullptr );
@@ -2190,7 +2190,7 @@ size_t collocatedNodes( const Element<dim>* const eptr )
     set<Point<dim> > node_points;
     
     // set admits only unique node coordinates
-    for ( size_t i{0}; i<n_nodes; ++i )
+    for ( auto i{0}; i<n_nodes; ++i )
       node_points.insert( eptr->N(i)->Coordinate() );
  
     return n_nodes - node_points.size();

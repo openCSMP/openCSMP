@@ -13,7 +13,7 @@ namespace csmp {
 @date 2000 */
 
 /// vector solution variable: "mass matrix" for vector dependent variables
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& p, 
@@ -24,7 +24,7 @@ class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim> {
     virtual void ComputeContribution( const CELL& );
 
   private:
-    int                 nodal_degrees_of_freedom;
+    uint32_t            nodal_degrees_of_freedom;
     csmp::Index         phi_key;
     ScalarVariable      phi;
     DenseMatrix<DM_MIN> PT, P;

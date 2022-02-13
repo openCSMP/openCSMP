@@ -5,7 +5,7 @@
 namespace csmp{
 
 
-template<size_t dim>
+template<uint32_t dim>
 FracturePecletNumberVisitor<dim>::FracturePecletNumberVisitor( Model<dim>& model, const char* velocityTag,
                                                                const char* pecletNumberTag, double nodalSourceSink )
     : Visitor<dim>( MODEL, ELEMENT ), model_( model ), velKey_( model.Database().StorageKey(velocityTag) ),
@@ -14,7 +14,7 @@ FracturePecletNumberVisitor<dim>::FracturePecletNumberVisitor( Model<dim>& model
     }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void FracturePecletNumberVisitor<dim>::Visit( Element<dim>* element )
     {
       VectorVariable<dim> nodalVelocity;

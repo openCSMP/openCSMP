@@ -206,7 +206,7 @@ void TransportVisitor2D::Visit( Element<2U>* n )
           // getting x and y velocity components at point
           // by summing up the testfunction values at the point
           double  dvx(0.), dvy(0.);
-          for ( size_t i=0U; i<n->Nodes(); i++ ) {
+          for ( auto i{0}; i<n->Nodes(); i++ ) {
                dvx += n->FE()->NRST[i] * P[i](0);
                dvy += n->FE()->NRST[i] * P[i](1);
             }
@@ -232,7 +232,7 @@ bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double final_time )
     double  time(0.), vmin, vmax, p0min, p0max, p1min, p1max;
 
     Region<2>&  sgroup(sg.Region("Model"));
-    renumberElementNodes( sgroup.ElementsBegin(), sgroup.ElementsEnd() );
+    sgroup.RenumberNodes();
 
     // getting range of transported property before advection
     sg.MinMaxOf( adv_prop, p0min, p0max );
@@ -384,8 +384,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
          return;
       }
     if ( prop_key1.place == NODE ) {
-        for ( vector<Node<2U>*>::iterator 
-              nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
+        for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
              res.Flag() = (*nit)->Status( prop_key1 );
              res = grid( (*nit)->x(), (*nit)->y(), false );
              (*nit)->Store( prop_key1, res ); 

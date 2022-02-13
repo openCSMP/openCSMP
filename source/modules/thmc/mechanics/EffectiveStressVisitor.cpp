@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-  template<size_t dim>
+  template<uint32_t dim>
   EffectiveStressVisitor<dim>::EffectiveStressVisitor( Model<dim>& model, 
                                                        const char* stressTensor,
                                                        const char* effectiveStressTensor,
@@ -23,7 +23,7 @@ namespace csmp {
     KeyChecks();
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   EffectiveStressVisitor<dim>::EffectiveStressVisitor( Model<dim>& model, 
                                                        const char* stressTensor,
                                                        const char* effectiveStressTensor,
@@ -40,7 +40,7 @@ namespace csmp {
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void EffectiveStressVisitor<dim>::KeyChecks() const
   {
     if ( fluidPressureKey_.place != NODE || fluidPressureKey_.type != SCALAR )
@@ -63,7 +63,7 @@ namespace csmp {
   }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   EffectiveStressVisitor<dim>::~EffectiveStressVisitor()
   {
   }
@@ -80,7 +80,7 @@ namespace csmp {
     else this will not work.
  
 */
-  template<size_t dim>
+  template<uint32_t dim>
   void EffectiveStressVisitor<dim>::Visit( Element<dim>* e )
   {
     for ( size_t i(0); i < e->FE()->IntegrationPoints(); ++i )

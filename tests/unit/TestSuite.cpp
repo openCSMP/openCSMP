@@ -35,7 +35,7 @@ void TestSuite::addTest(const char* test_name, Test* t)
 
 void TestSuite::addTestSuite(const TestSuite& s) 
 {
-    for (size_t i = 0; i < s.m_tests.size(); ++i)
+    for (auto i = 0; i < s.m_tests.size(); ++i)
         addTest(s.m_tests[i]);
 }
 
@@ -43,7 +43,7 @@ void TestSuite::FreeAllButSpecificTest(const char* test_name)
 {
     // This is not a destructor because tests
     // don't have to be on the heap.
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         if (!(string(test_name)==m_tests[i]->getName()))
         {
@@ -57,7 +57,7 @@ void TestSuite::free()
 {
     // This is not a destructor because tests
     // don't have to be on the heap.
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         delete m_tests[i];
         m_tests[i] = 0;
@@ -71,7 +71,7 @@ void TestSuite::run()
     int   status;
     char* realname;
     reset();
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);
         if (m_tests[i]->hasName())
@@ -94,7 +94,7 @@ void TestSuite::RunSpecificTest(const char* test_name)
 {
 
     reset();
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);  //just a check
         if (string(test_name)==m_tests[i]->getName())
@@ -107,7 +107,7 @@ void TestSuite::RunSpecificTest(const char* test_name)
 
 bool TestSuite::IsInSuite( const char* test_name )
 {
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
      {
         if (m_tests[i])
           {
@@ -157,7 +157,7 @@ long TestSuite::report() const
 long TestSuite::getNumPassed() const
 {
     long totPass = 0;
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);
         totPass += m_tests[i]->getNumPassed();
@@ -168,7 +168,7 @@ long TestSuite::getNumPassed() const
 long TestSuite::getNumFailed() const
 {
     long totFail = 0;
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);
         totFail += m_tests[i]->getNumFailed();
@@ -178,7 +178,7 @@ long TestSuite::getNumFailed() const
 
 void TestSuite::reset()
 {
-    for (size_t i = 0; i < m_tests.size(); ++i)
+    for (auto i = 0; i < m_tests.size(); ++i)
     {
         assert(m_tests[i]);
         m_tests[i]->reset();

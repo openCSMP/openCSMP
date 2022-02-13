@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
   /// Automatically sets size to corresponding index, flag to ANY
-template<size_t dim>
+template<uint32_t dim>
 ArrayVariable::ArrayVariable( const char* arrayPropertyName, const PropertyDatabase<dim>& pd, double defaultValue, VARIABLE_FLAG flag )
     : data_( pd.StorageKey(arrayPropertyName).dataDepth, defaultValue ), flag_(flag)
     {
@@ -142,7 +142,7 @@ ArrayVariable& ArrayVariable::operator=( const ArrayVariable& av )
 void ArrayVariable::CopyValuesOnly( FlaggedArrayVariable& fav )
 {
     if( this->Size() == fav.Size() )
-        for (size_t i = 0 ; i< fav.Size();i++)
+        for (auto i = 0 ; i< fav.Size();i++)
             data_[i]         = fav(i);
 }
 

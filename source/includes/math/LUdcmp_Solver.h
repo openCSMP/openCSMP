@@ -38,18 +38,18 @@ with csmp::SparseMatrix, STL and according functionality
     private:
       void ludcmp( SparseMatrix& a,
                    long n,
-                   std::vector<size_t>& indx);
+                   std::vector<uint32_t>& indx);
                    
       void lubksb( SparseMatrix& a,
                    long n,
-                   std::vector<size_t>& indx,
+                   std::vector<uint32_t>& indx,
                    std::vector<double>& x,
                    std::vector<double>& b );
       void luout();
 
       double             tiny_; /**< represents chosen numerical limit */
       long                 n_;
-      std::vector<size_t>  index_; /**< cache vector for indices */
+      std::vector<uint32_t>  index_; /**< cache vector for indices */
 };
 
 } // end namespace csmp

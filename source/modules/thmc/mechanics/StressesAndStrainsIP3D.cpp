@@ -208,7 +208,7 @@ can be retrieved.
 */
 void StressesAndStrainsIP3D::GetOperands( Element<3U>& e )
 {
-   const size_t  nodes(e.Nodes());
+   const uint32_t  nodes(e.Nodes());
    // 1. For strain computation at integration points from nodal displacements
    // ------------------------------------------------------------------------
    // read nodal displacements
@@ -219,9 +219,9 @@ void StressesAndStrainsIP3D::GetOperands( Element<3U>& e )
    // its displacements
    // ----------------------------
    DISPL_.Resize( nodes * 3U, 1 );
-   size_t k(0U);
-   for ( size_t i=0; i<nodes; i++ )
-     for ( size_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i](j);
+   uint32_t k(0U);
+   for ( auto i=0; i<nodes; i++ )
+     for ( uint32_t j=0; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i](j);
 
    if ( verbose_ ) {     
         cout <<"\nStressesAndStrainsIP3D::GetOperands: Nodal displacements, element: "<< e.Idx() << endl;
@@ -295,7 +295,7 @@ void StressesAndStrainsIP3D::ComputeContribution( Element<3U>& e )
   
   // 1.1 Computing the strains at the integration points
   // ---------------------------------------------------
-  for ( size_t i=0; i<integration_points; i++ )
+  for ( auto i=0; i<integration_points; i++ )
     {
        //  getting DN matrices at the node points
        e.dN_AtIntegrationPoint( EGP_, i, 3U );
@@ -328,7 +328,7 @@ void StressesAndStrainsIP3D::ComputeContribution( Element<3U>& e )
 
        // inserting strains and stresses sequentially into temporary 
        // STL vectors
-       for ( size_t k=0; k<components_; k++ ) {
+       for ( auto k=0; k<components_; k++ ) {
             IPSTRAIN_[ i*components_ + k ] = EGP_(k,0);
             IPSTRESS_[ i*components_ + k ] = SGP_(k,0);
          }
@@ -372,7 +372,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
         // 1. accumulating and averaging the strain & stress values
         // --------------------------------------------------------
         // accumulation
-        for ( size_t i=0; i<e.IntegrationPoints(); i++ ) {
+        for ( auto i=0; i<e.IntegrationPoints(); i++ ) {
               convertTo( IPSTRAIN_, i, ts_ );
               IP_STRAIN_TENSOR_ += ts_;
               convertTo( IPSTRESS_, i, ts_ );
@@ -430,7 +430,7 @@ void StressesAndStrainsIP3D::WriteOperands( Element<3U>& e )
     // --------------------------------
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+      for ( auto i=0; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------

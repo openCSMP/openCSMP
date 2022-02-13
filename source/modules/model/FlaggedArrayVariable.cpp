@@ -48,7 +48,7 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator=( const FlaggedArrayVariabl
 void FlaggedArrayVariable::CopyValuesOnly( ArrayVariable& av )
 {
     if( this->Size() == av.Size() )
-        for (size_t i = 0 ; i< av.Size();i++)
+        for (auto i = 0 ; i< av.Size();i++)
             data_[i]         = av(i);
 }
 

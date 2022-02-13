@@ -21,7 +21,7 @@ double maximumDifference<3U,Node>( Model<3U>& model, const char* prop1Name, cons
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
   const std::vector<Node<3U>*>::const_iterator nodesEnd( rref.NodesEnd() );
-  for( std::vector<Node<3U>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+  for( std::vector<Node<3U>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
   {
     prop1 = (*it)->Read( prop1Key );
     prop2 = (*it)->Read( prop2Key );
@@ -52,7 +52,7 @@ double averageDifference<3U,Node>( Model<3U>& model, const char* prop1Name, cons
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
   const std::vector<Node<3U>*>::const_iterator nodesEnd( rref.NodesEnd() );
-  for( std::vector<Node<3U>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+  for( std::vector<Node<3U>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
   {
     prop1 = (*it)->Read( prop1Key );
     prop2 = (*it)->Read( prop2Key );
@@ -79,7 +79,7 @@ double maximumOfProperty<3U,Node>( Model<3U>& model, const char* propName, const
   // looping over all nodes of the region of interest
   Region<3>& rref( model.Region( region ) );
   const std::vector<Node<3U>*>::const_iterator nodesEnd( rref.NodesEnd() );
-  for( std::vector<Node<3U>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+  for( std::vector<Node<3U>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
   {
     prop = (*it)->Read( propKey );
     maxOfProp = maxOfProp < prop ? prop : maxOfProp;
@@ -94,7 +94,7 @@ double maximumOfProperty<3U,Node>( Model<3U>& model, const char* propName, const
 void ignoreIstream( std::istream& iStream, size_t noOfTerms )
 {
   static std::string cache;
-  for( size_t i = 0; i < noOfTerms; ++i )
+  for( auto i = 0; i < noOfTerms; ++i )
     iStream >> cache;
 } // ignoreIstream
 
@@ -160,7 +160,7 @@ void scaleModelByFactor( Model<3U>& model, double xFactor, double yFactor, doubl
   Region<3>& mref( model.Region( "Model" ) );
   const vector<Node<3U>*>::const_iterator nodesEnd( mref.NodesEnd() );
 
-  for( vector<Node<3U>*>::iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
+  for( auto it = mref.NodesBegin(); it != nodesEnd; ++it )
   {
     (*it)->x( (*it)->x() * xFactor );
     (*it)->y( (*it)->y() * yFactor );

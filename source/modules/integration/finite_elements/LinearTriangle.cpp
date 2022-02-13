@@ -169,7 +169,7 @@ void LinearTriangle::IntegralNN( DenseMatrix<DM_MIN>& CE )
 
 /// segments are numbered like faces
 void 
-LinearTriangle::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+LinearTriangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -191,7 +191,7 @@ LinearTriangle::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) con
 For this element, the faces are numbered such that face 0 lies opposite of 
 node 0, face 1 node 1 etc.
 */
-void LinearTriangle::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const
+void LinearTriangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
     
@@ -216,35 +216,35 @@ void LinearTriangle::NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) c
 
 
 
-vector<size_t>  LinearTriangle::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  LinearTriangle::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nLinearTriangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<size_t>  LinearTriangle::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  LinearTriangle::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
-        case 0: return vector<size_t>{1,2};
-        case 1: return vector<size_t>{2,0};
-        case 2: return vector<size_t>{0,1};
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
       }
     cerr <<"\nLinearTriangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 /// The linear triangle is numbered counter-clockwise by default.
-void LinearTriangle::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void LinearTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -253,7 +253,7 @@ void LinearTriangle::CounterClockwiseNodes( std::vector<size_t>& ids ) const
  }
 
 /// clearly all nodes are corner nodes
-void LinearTriangle::CornerNodes( std::vector<size_t>& ids ) const
+void LinearTriangle::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -262,7 +262,7 @@ void LinearTriangle::CornerNodes( std::vector<size_t>& ids ) const
  }
 
 
-CSMP_FEM_TYPE LinearTriangle::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE LinearTriangle::ElementTypeOfFace( uint32_t ) const
  {
     return LINEAR_BAR;
  }
@@ -279,7 +279,7 @@ double  LinearTriangle::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( size_t i=0; i<spe; i++ ) segms.insert( vec[i] );
+   for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()), 
             segm2 = (*segms.rbegin());
@@ -296,7 +296,7 @@ double  LinearTriangle::InnerRadius()
    double         sum(0.0), vol;
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<segms.size(); i++ ) sum += segms[i];
+   for ( uint32_t i=0; i<segms.size(); i++ ) sum += segms[i];
    sum /= 2.0;
    vol  = Volume();
    vol /= sum;
@@ -328,7 +328,7 @@ void LinearTriangle::N( vector<double>& N, const vector<double>& xyz )
 
    // summing the interpolation functions to get their value at (x,y)   
    N.resize(npe);
-   for ( size_t i=0; i<npe; i++ )
+   for ( uint32_t i=0; i<npe; i++ )
      N[i] = ae2 * (a[i] + b[i] * xyz[0] + c[i] * xyz[1]);
      
 } // end N
@@ -349,12 +349,12 @@ void LinearTriangle::N_AtBaryCenter( std::vector<double>& IPOL )
 
 
 
-void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes, 
-                                                  vector<size_t>& fnids )
+void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes, 
+                                                  vector<uint32_t>& fnids )
  {
      if ( bnodes.size() < 2 ) {
            cerr <<"\n\tnodes at boundary: ";
-           for ( size_t j=0; j<bnodes.size(); j++ ) cerr << bnodes[j] <<" ";
+           for ( uint32_t j=0; j<bnodes.size(); j++ ) cerr << bnodes[j] <<" ";
            cerr << endl;
            throw csmp::Exception( ERROR, "LinearTriangle::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
@@ -389,7 +389,7 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
 /**
      @author SKM 18/2/2016
 */
-void  LinearTriangle::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  LinearTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(2);
@@ -456,10 +456,10 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
           // x, y
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" "; 
+          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           // z
           ofs << 0.0 <<" ";
           ofs << endl;
@@ -490,7 +490,7 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x6
-           for ( size_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -499,8 +499,8 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 6
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                // the missing 3rd dimension
                ofs << 0.0 <<"  ";
                ofs << endl;

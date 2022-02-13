@@ -10,7 +10,7 @@
 
 namespace csmp{
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 struct CFL_TestData;
 
 class CFL_TestCase : public Test

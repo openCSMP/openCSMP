@@ -17,14 +17,14 @@ SUBDOMAIN_PART parseSubdomainPart( const char* subdomain );
 std::string    parseSubdomainPart( SUBDOMAIN_PART part );
 
 class FiniteElementManager;
-template<size_t> class PropertyDatabase;
-template<size_t> class MeshManager;
-template<size_t> class FiniteVolumeStencilManager;
-template<size_t> class Point;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Interrelation;
-template<size_t> class Visitor;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class MeshManager;
+template<uint32_t> class FiniteVolumeStencilManager;
+template<uint32_t> class Point;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Interrelation;
+template<uint32_t> class Visitor;
 class PropertyConstraints;
 
 /**
@@ -36,11 +36,11 @@ class PropertyConstraints;
 */
 struct SubDomainInfo {
    std::string         name;                           ///< unique name
-   std::vector<size_t> interior_elmts;                 ///< elements that have no face on the perimeter
-   std::vector<size_t> perimeter_elmts;                ///< elements that have at least one face on perimeter
+   std::vector<uint32_t> interior_elmts;                 ///< elements that have no face on the perimeter
+   std::vector<uint32_t> perimeter_elmts;                ///< elements that have at least one face on perimeter
    std::vector<std::vector<int8_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
-   std::vector<size_t> interior_nodes;                 ///< nodes within the subdomain
-   std::vector<size_t> perimeter_nodes;                ///< nodes on the perimeter of the subdomain
+   std::vector<uint32_t> interior_nodes;                 ///< nodes within the subdomain
+   std::vector<uint32_t> perimeter_nodes;                ///< nodes on the perimeter of the subdomain
 };
 
 
@@ -52,7 +52,7 @@ struct SubDomainInfo {
     - External boundaries have names corresponding to the sides of box-shaped
       models or other unique names.
 */
-template<size_t dim,template<size_t> class CELL>
+template<uint32_t dim,template<uint32_t> class CELL>
 class ModelSubDomain {
   public:
     typedef CELL<dim> CellType; // used by SteadyStateDiffusor and others
@@ -81,8 +81,8 @@ class ModelSubDomain {
     void RebuildSubDomainAfterChangeOfCellVector();
     
     /// rebuilds subdomain on the basis of the elements that will be selected according to the supplied property constraints
-    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::iterator master_domain_start,
-                                                  typename std::vector<CELL<dim>*>::iterator master_domain_end,
+    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
+                                                  typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
                                                   const PropertyConstraints& );
 
     /// distinguishes PERIMETER simplices that have at least one face on region boundary from INTERIOR ones; calls PartitionElementVector()
@@ -132,24 +132,13 @@ class ModelSubDomain {
     /// reference to Node pointer vector
     const typename std::vector<Node<dim>*>&  NodeVector() const;
 
-    // iterators
-    /// each vector begins with the interior nodes
-    typename std::vector<csmp::Node<dim>*>::iterator     NodesBegin();
-    /// start of the perimeter nodes = interior nodes end
-    typename std::vector<csmp::Node<dim>*>::iterator     PerimeterNodesBegin();
-    /// end of all nodes = end of perimeter nodes
-    typename std::vector<csmp::Node<dim>*>::iterator     NodesEnd();
-    typename std::vector<CELL<dim>*>::iterator           ElementsBegin();
-    typename std::vector<CELL<dim>*>::iterator           PerimeterElementsBegin();
-    typename std::vector<CELL<dim>*>::iterator           ElementsEnd();
-
-    // const iterators
+    /// const iterators (cell and node pointers cannot be modified but the nodes and cells can!)
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator  ElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator  PerimeterElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator  ElementsEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator        ElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator        PerimeterElementsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator        ElementsEnd() const;
 
     /// returns the nodes that the region shares with the given range
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
@@ -174,9 +163,9 @@ class ModelSubDomain {
     bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
     bool              IsPerimeterElement( const CELL<dim>* const ) const;
     /// number of faces of perimeter element #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
-    size_t            PerimeterFaces( size_t eid ) const;
+    uint32_t          PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
-    size_t            PerimeterFace( size_t eid, size_t face ) const;
+    uint32_t          PerimeterFace( size_t eid, uint32_t face ) const;
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
     csmp::Node<dim>*  N( size_t n ) const;
     /// pointer to element #n of model subdomain
@@ -193,7 +182,7 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// if the model subdomain consists of a single element type this method returns true and tells whether these are volumes, surfaces or lines
-    std::pair<CELL_SHAPE,bool>  SingleCellTypeDomain() const;
+    std::pair<CELL_SHAPE,bool>  SingleCellShapeDomain() const;
 
     /// returns 1) elements of how many different spatial dimensions are contained, and 2) the highest element spatial dimension in subdomain
     std::pair<int32_t,int32_t>  SpatialDimensions() const;
@@ -249,19 +238,19 @@ class ModelSubDomain {
 
     /// changes the flag of a particular variable component to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,
-                               size_t component,
+                               uint32_t component,
                                VARIABLE_FLAG new_status,
                                SUBDOMAIN_PART=COMPLETE );
 
     /// changes the flag of a particular variable component to new value if the scalar variable is withing the specified range
     void ChangePropertyStatusWhere( const char* property,
-                                    size_t component,
+                                    uint32_t component,
                                     VARIABLE_FLAG new_status,
                                     double min_value_to_change,
                                     double max_value_to_change );
 
     /// by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned
-    VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , size_t i=0 ) const;
+    VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , uint32_t i=0 ) const;
 
     /// min/max property values (length of vectors and eigenvalues of tensors)
     void MinMaxOf( const char* property,   double& gmin, double& gmax ) const;
@@ -311,7 +300,7 @@ class ModelSubDomain {
     std::vector<CELL<dim>*>                     elmt_vec_;               ///< doubly sorted, interior elements first
     std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;            ///< as in second segment of elmt_vec_
     std::vector<csmp::Node<dim>*>               node_vec_;               ///< doubly sorted, interior nodes first
-    size_t          first_bd_node_ = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
+    size_t        first_bd_node_ = std::numeric_limits<uint32_t>::max(); ///< begin of the perimeter nodes
     inline static int32_t                       domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
     int32_t                                     domain_idx_;             ///< created during construction from domain_count_
     bool                                        rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
@@ -323,15 +312,15 @@ class ModelSubDomain {
 
 
 /// returns number of nodes that are shared by the two subdomains (matches by pointers)
-template<size_t dim,template<size_t> class CELL>
+template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// returns number of nodes on the subdomain perimeters that are shared by the two subdomains (matches by pointers)
-template<size_t dim,template<size_t> class CELL>
+template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
-void readDomainIndexesFromBinaryFile( size_t dim, std::fstream&, SubDomainInfo& );
+void readDomainIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& );
 
 
 } // end namespace

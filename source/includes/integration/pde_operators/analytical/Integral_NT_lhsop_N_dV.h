@@ -11,17 +11,17 @@ namespace csmp {
   @date 1999 */
 
 /// known as mass or capacitance matrix
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
   public:
     Integral_NT_lhsop_N_dV( const PropertyDatabase<dim>& p, 
                             const char* oper, const char* basic, const char* test );
 
-    virtual void GetOperands( const SIMPLEX& e );
+    virtual void GetOperands( const CELL& e );
 
-    virtual void ComputeContribution( const SIMPLEX& e );
+    virtual void ComputeContribution( const CELL& e );
     
-    virtual Integral_NT_lhsop_N_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_lhsop_N_dV<dim,SIMPLEX> (*this); }
+    virtual Integral_NT_lhsop_N_dV<dim,CELL>* clone() const { return new Integral_NT_lhsop_N_dV<dim,CELL> (*this); }
 
   private:
     double scalar_value_;

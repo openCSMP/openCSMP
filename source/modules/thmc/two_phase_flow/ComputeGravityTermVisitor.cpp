@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp{
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
                                                            TwoPhaseModel<dim>& saturationFunctions,
                                                            const char* gravityVectorTag,
@@ -31,7 +31,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
                                                            const char* gravityVectorTag,
                                                            const char* permeabilityTag, 
@@ -52,7 +52,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
                                                            Index gravityVector,
                                                            Index permeability,
@@ -73,7 +73,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit( Model<dim>* m ){
     if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Model<dim>*)"<<endl;
 #if defined(_OPENMP )
@@ -81,7 +81,7 @@ void ComputeGravityTermVisitor<dim>::Visit( Model<dim>* m ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
     if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
 
@@ -105,7 +105,7 @@ void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit( Element<dim>* element )
 {
 #if !defined(_OPENMP)
@@ -113,7 +113,7 @@ void ComputeGravityTermVisitor<dim>::Visit( Element<dim>* element )
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element )
 {
 

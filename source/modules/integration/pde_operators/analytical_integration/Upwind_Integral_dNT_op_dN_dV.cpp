@@ -14,8 +14,8 @@ namespace csmp {
 The upwinding is based on the basic operand (which will be the pressure)
 variable.
 */
-template<size_t dim,class SIMPLEX>
-Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             				const char* oper, 
                                                             				const char* basic, 
                                                             				const char* test,
@@ -70,8 +70,8 @@ Operand is.
 
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. */
-template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -90,8 +90,8 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
  } // end GetOperands
 
 
-template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -103,7 +103,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPL
     DNT *= DN;
     
     // calculate upwinding coefficients and multiply them with operand matrix   
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
     	for (size_t j = 0; j < e.Nodes(); ++j) {
     		if (i != j) {
     			const double decision = DNT(i, j)*(el_tvar[j]() - el_tvar[i]());
@@ -115,7 +115,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPL
     	}
     }
     
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
     	DNT(i, i) = -DNT.RowSum(i);
     }
     

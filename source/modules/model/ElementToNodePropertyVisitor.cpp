@@ -28,7 +28,7 @@ Steps:
   accumulation is complete).
 
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 ElementToNodePropertyVisitor<Var,dim>::ElementToNodePropertyVisitor( 
                                                              const PropertyDatabase<dim>& p,
                                                              const char* elmt_prop,
@@ -44,7 +44,7 @@ ElementToNodePropertyVisitor<Var,dim>::ElementToNodePropertyVisitor(
 
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void ElementToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
  {
     
@@ -57,14 +57,14 @@ void ElementToNodePropertyVisitor<Var,dim>::ApplyWeightingToExtrapolatedValues()
  }
 
 
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 ElementToNodePropertyVisitor<Var,dim>::~ElementToNodePropertyVisitor() 
  {  
  }
 
 
 /// first application cycle (extrapolation)
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void ElementToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr ) 
  { 
     eptr->Read( eprop_key_, evariable_ );
@@ -73,7 +73,7 @@ void ElementToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     csmp::Point<dim>  bc = eptr->BaryCenter();
     
     // accumulating results into nodes vector for later averaging
-    for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
+    for ( auto i{0}; i<eptr->Nodes(); i++ ) {
          // using 1 / (distance from barycenter to node)  as a weight
          const double weight = 1. / (bc - eptr->N(i)->Coordinate()).Length();
          assert( eptr->N(i)->Idx() < summed_weights_.size() );
@@ -90,7 +90,7 @@ void ElementToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
 
 
 /// second application cycle (weighting)
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 void ElementToNodePropertyVisitor<Var,dim>::Visit( Node<dim>* nptr ) 
  { 
     if ( !weighting_completed_.GetBit( nptr->Idx() ) ) {

@@ -6,7 +6,7 @@ using namespace std;
 namespace csmp {
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
     UpwindControlVisitor<dim>::UpwindControlVisitor( Model<dim>& model, 
                                   ExplicitFiniteVolumeTransportPHX<dim>& fv_liquid,
                                   ExplicitFiniteVolumeTransportPHX<dim>& fv_vapor,
@@ -131,13 +131,13 @@ template<size_t dim>
   }
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 UpwindControlVisitor<dim>::~UpwindControlVisitor() 
  {}
 
 
 /** visit function for region */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Visit(Region<dim>* n)
 {
 
@@ -145,17 +145,16 @@ void UpwindControlVisitor<dim>::Visit(Region<dim>* n)
 }
 
 /** visit function for elements */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Visit(Element<dim>* n)   
   {
-
-	facets = n->FV()->Facets();
+	  facets = n->FV()->Facets();
 
     n->Read( k_key, k );
     n->Read( KgradP_key, KgradP );
     n->NodePropertyVector( sh_key , sh );
 
-    for (size_t i = 0; i < phases; i++)
+    for (auto i = 0; i < phases; i++)
       {
          n->NodePropertyVector( rho_key[i], rho[i] );
          n->NodePropertyVector( relperm_visc_key[i], relperm_visc[i] );
@@ -165,7 +164,7 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
     if (with_velocity)
       {
       n->Read( phi_key, phi );
-      for (size_t i = 0; i < phases; i++)
+      for (auto i = 0; i < phases; i++)
         {
          cfl[i] = largest_time_step;      
          facet_pore_velocity[i].resize(facets);
@@ -174,9 +173,9 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
 
      DetermineUpwindNodes( *n );
 
-	for (size_t p = 0; p < phases; ++p) {
+	for (auto p = 0; p < phases; ++p) {
      uc_scal() = 0;
-     for ( size_t i=0U; i<n->FV()->Facets(); i++ )
+     for ( auto i{0}; i<n->FV()->Facets(); i++ )
        {
         n->FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
         uc_scal() += Upwinder[p][n->Idx()](inside_node_,outside_node_);
@@ -201,7 +200,7 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
      
 
 /** define upwind nodes for CVFEM scheme - and calculate velocitites if requested */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
 {
 
@@ -221,7 +220,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
     sat = 0.0;
 
     // loop over facets of the element
-    for ( size_t i=0U; i<facets; i++ )
+    for ( auto i{0}; i<facets; i++ )
        {
            facet_cfl = true;
            e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -402,7 +401,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
 
 
 /** reset booleans */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Reset()
     {
       recalculate   = false;
@@ -411,24 +410,24 @@ void UpwindControlVisitor<dim>::Reset()
     } // end Reset
 
 /** set boolean recalculate */
-template<size_t dim>
+template<uint32_t dim>
 bool UpwindControlVisitor<dim>::Recalculate()
     {
       return recalculate;
     } // end Recalculate
 
 /** set boolean flip */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Flipping(bool flip)
     {
       flipping = flip;
     } // end Flipping
 
 /** access to upwind matrix of specified phase (density) and element */
-template<size_t dim>
+template<uint32_t dim>
 DenseMatrix<DM_MIN>  UpwindControlVisitor<dim>::UpwindMatrix(csmp::Index rho_index, size_t eidx)
     {
-      for (size_t i = 0; i < rho_key.size(); i++)
+      for (auto i = 0; i < rho_key.size(); i++)
          if (rho_index == rho_key[i])
             return Upwinder[i][eidx];
       
@@ -439,10 +438,10 @@ DenseMatrix<DM_MIN>  UpwindControlVisitor<dim>::UpwindMatrix(csmp::Index rho_ind
     } // end UpwindMatrix
 
 //// access to vector of upwind matrices of specified phase (density); TODO: refactor: creates DenseMatrix as temporary!
-template<size_t dim>
+template<uint32_t dim>
 std::vector<DenseMatrix<DM_MIN> >& UpwindControlVisitor<dim>::UpwindMatrices(csmp::Index rho_index)
     {
-      for (size_t i = 0; i < rho_key.size(); i++)
+      for (auto i = 0; i < rho_key.size(); i++)
          if (rho_index == rho_key[i])
             return Upwinder[i];
             
@@ -455,21 +454,21 @@ std::vector<DenseMatrix<DM_MIN> >& UpwindControlVisitor<dim>::UpwindMatrices(csm
   
   
 /** set recalculate boolean */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Recalculate(bool recalc)
     {
       recalculate = recalc;
     } // end Recalculate
 
 /** activate or deactivate gravity component */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Gravity(bool with_gravity)
     {
       grav = with_gravity;
     } // end Gravity
 
 /** set boolean for velocity calculations */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::WithVelocity(bool velo)
     {
       with_velocity = velo;
@@ -478,14 +477,14 @@ void UpwindControlVisitor<dim>::WithVelocity(bool velo)
     } // end Gravity
 
 /** set maximum size of time step */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::SetLargestTimeStep(double timestep)
     {
       largest_time_step = timestep;
     } // end SetLargestTimeStep
  
 /** modify calculation of cfl criterion */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindControlVisitor<dim>::Adjust_CFL_Criterion(double scale_factor, bool take_pore_velocity)
     {
       cfl_scaling = scale_factor;

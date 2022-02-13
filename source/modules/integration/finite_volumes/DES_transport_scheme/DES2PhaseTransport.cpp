@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
                                                              const char* target_region,
                                                              bool with_gravity_forces,
@@ -42,7 +42,7 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
 
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
 {
     //creating new variables if not defined yet from input file   
@@ -163,15 +163,15 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
 }
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
  {
     //zeroing FV pore volumes for accumulation in element loop
     gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
     
     // For the interior elements of the region compute relevant variable values
-    const typename vector<Element<dim>*>::iterator it_end(gref_.ElementsEnd());
-    for ( typename vector<Element<dim>*>::iterator it=gref_.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref_.ElementsEnd());
+    for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
     {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -181,7 +181,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
-         for ( size_t i=0U; i<sectors; ++i ) {
+         for ( auto i{0}; i<sectors; ++i ) {
               const double sector_volume = (*it)->SectorVolume(i);  
               double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
@@ -189,7 +189,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          }
 
          // computing facet normals and areas
-         for ( size_t j=0U; j<facets; ++j ) {
+         for ( auto j=0U; j<facets; ++j ) {
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
@@ -207,15 +207,15 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
 
    // initialising facet area, facet normals, sector volume (/pore volume) in the elements surrounding perimeter nodes
    // (here the pore volumes do not include the sectors outside the region)
-   const typename vector<Node<dim>*>::iterator nit_end(gref_.NodesEnd());
-   for ( typename vector<Node<dim>*>::iterator nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
+   const auto nit_end(gref_.NodesEnd());
+   for ( auto nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const size_t parent_elements((*nit)->Parents());   
         bool truncated_node = false;    
-        for ( size_t i=0U; i<parent_elements; ++i ) {
+        for ( auto i{0}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // computing facet normals and areas
-             const size_t facets(eptr->Facets());
-             for ( size_t j=0U; j<facets; ++j ) {
+             const auto facets(eptr->Facets());
+             for ( auto j=0U; j<facets; ++j ) {
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);
@@ -246,7 +246,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
 
 
 //resest cfl multipliers to default value = CFL_multiplier_*relaxing_factor_ for all nodes
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::ResetCFLMultiplier()
 {
     const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());

@@ -76,7 +76,7 @@ namespace csmp
     int             state_iD_;        ///< phase state of system at low-T, high-P left corner of lookup cell (always H for halite)
     
     std::vector<double> storage_vector; ///< stores lookup data in sequence t-p-x-rho-h at each Lookup point
-    // should the next one be <size_t> or <uint> rather than <int>?
+    // should the next one be <uint32_t> or <uint> rather than <int>?
     std::vector<int>      state_vector;   ///< stores phase state at each Lookup point
 
     double NormalInterpolation( const int& property_index );

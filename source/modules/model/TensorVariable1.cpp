@@ -4,54 +4,50 @@ using namespace std;
 
 namespace csmp {
 
-double& TensorVariable<1U>::operator()( size_t, size_t ) 
+double& TensorVariable<1U>::operator()( uint32_t, uint32_t )
  {
     return data; 
  }
 
 
-const double& TensorVariable<1U>::operator()( size_t, size_t ) const
- {
-    return data; 
- }
-
-
-
-double TensorVariable<1U>::Component( size_t ) const
+const double& TensorVariable<1U>::operator()( uint32_t, uint32_t ) const
  {
     return data; 
  }
 
 
 
-void  TensorVariable<1U>::Component( size_t, double val ) 
+double TensorVariable<1U>::Component( uint32_t ) const
+ {
+    return data; 
+ }
+
+
+
+void  TensorVariable<1U>::Component( uint32_t, double val )
  {
     data = val; 
  }
 
 
 
-VARIABLE_FLAG& TensorVariable<1U>::Flag( size_t )
+VARIABLE_FLAG& TensorVariable<1U>::Flag( uint32_t )
  { 
     return flag; 
  }
 
 
 
-VARIABLE_FLAG  TensorVariable<1U>::Flag( size_t ) const 
+VARIABLE_FLAG  TensorVariable<1U>::Flag( uint32_t ) const
  { 
     return flag; 
  }
 
-size_t TensorVariable<1U>::Size() const
+uint32_t TensorVariable<1U>::Size() const
   {
     return 1U;
   }
 
-void TensorVariable<1U>::Resize( size_t, double newValue )
-  {
-    data = newValue;
-  }
 
 
 TensorVariable<1U>::TensorVariable()
@@ -408,14 +404,14 @@ bool  TensorVariable<1U>::IsWithinRange( double vmin, double vmax ) const
   
 
 
-void TensorVariable<1U>::AssignToRow( size_t, VectorVariable<1U>& vc )
+void TensorVariable<1U>::AssignToRow( uint32_t, VectorVariable<1U>& vc )
 {
 	flag = vc.Flag(0U); 
 	data = vc[0U];
 }
 
 
-void TensorVariable<1U>::AssignToColumn( size_t, VectorVariable<1U>& vc )
+void TensorVariable<1U>::AssignToColumn( uint32_t, VectorVariable<1U>& vc )
 {
 	flag = vc.Flag(0U);
 	data = vc[0U];
@@ -424,13 +420,13 @@ void TensorVariable<1U>::AssignToColumn( size_t, VectorVariable<1U>& vc )
 
 
 
-VectorVariable<1U> TensorVariable<1U>::Row( size_t ) const
+VectorVariable<1U> TensorVariable<1U>::Row( uint32_t ) const
 {
 	return VectorVariable<1U>( flag, data );
 }
 
 
-VectorVariable<1U> TensorVariable<1U>::Column( size_t ) const
+VectorVariable<1U> TensorVariable<1U>::Column( uint32_t ) const
 {
 	return VectorVariable<1U>( flag, data );
 }

@@ -47,12 +47,12 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	int dimension;
 
 	map< string, std::set<std::string> > fem_types;
-	map< string, vector<size_t> >    regions; // key: name of the region, value: list of vertices
-	vector<int8_t>                   element_types;
-	deque< vector< int64_t  > >        elements;
-	vector<int8_t>                   element_type;
-	deque<size_t>                    mixed_ele_plist;      // number of nodes per element
-	deque<size_t>                    mixed_ele_pfverts;    // number of neighbours per element
+	map< string, vector<size_t> >        regions; // key: name of the region, value: list of vertices
+	vector<int8_t>                       element_types;
+	deque< vector< int64_t  > >          elements;
+	vector<int8_t>                       element_type;
+	deque<uint32_t>                      mixed_ele_plist;      // number of nodes per element
+	deque<uint32_t>                      mixed_ele_pfverts;    // number of neighbours per element
 	std::deque<std::vector<int64_t> > pfverts; // neighbour elements
 
 	size_t n_vertices = 0;
@@ -76,7 +76,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 
 	double px, py, pz;
 	int unknown;
-	for (int i = 0; i<n_vertices; i++)
+	for ( size_t i = 0; i<n_vertices; i++)
 	{
 		file >> px >> py >> pz >> unknown;
 		vset.Px(i, px);
@@ -84,7 +84,8 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 		vset.Pz(i, pz);
 	}
 
-	size_t region, npe, fpe, n_elem, inode;
+	size_t region, n_elem;
+  uint32_t npe, fpe, inode;
 	string stype;
 	int8_t etype;
 	int64_t  elem_idx = 0;
@@ -146,7 +147,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 
 	// mixed_ele_plist: size=n_elements, each item contains the number of nodes of the corresponding element
 	vset.ResizePlist(mixed_ele_plist);
-	// plist: deque of vector<size_t>, one per element, vector contains idx of nodes of the elem
+	// plist: deque of vector<uint32_t>, one per element, vector contains idx of nodes of the elem
 	vset.AddPlist(elements.begin(), elements.end());
 
 	// element_types: deque of size_t, one per element, contains the type of the element (CSMP_FEM_TYPE)
@@ -180,7 +181,7 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	for ( const auto &pair : regions )
     {
        //cout << "\n\ttopology created for region: " << pair.first.c_str() << endl;
-       model_topology.AddRegion( pair.first.c_str(), (*fem_types.find(pair.first.c_str())).second, pair.second );
+       model_topology.AddDomain( pair.first.c_str(), (*fem_types.find(pair.first.c_str())).second, pair.second );
     }
 	//model_topology.Out();
   
@@ -203,12 +204,12 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	int dimension;
 
 	map< string, std::set<std::string> > fem_types;
-	map< string, vector<size_t> > regions; // key: name of the region, value: list of vertices
+	map< string, vector<uint32_t> > regions; // key: name of the region, value: list of vertices
 	vector<int> element_types;
 	deque< vector< size_t> > elements;
 	vector<int32_t> element_type;
-	deque<size_t> mixed_ele_plist;      // number of nodes per element
-	deque<size_t> mixed_ele_pfverts;    // number of neighbours per element
+	deque<uint32_t> mixed_ele_plist;      // number of nodes per element
+	deque<uint32_t> mixed_ele_pfverts;    // number of neighbours per element
 	std::deque<std::vector<int64_t> > pfverts; // neighbour elements
 
 	VSet<3U> vset;
@@ -262,7 +263,7 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 		if (n_elem <= 0) throw out_of_range(str+"value not expected");
 		n_elements += n_elem;
 
-		vector<size_t> elem(npe);
+		vector<uint32_t> elem(npe);
 
 		for (int i = 0; i<n_elem; i++)
 		{
@@ -291,7 +292,7 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 
 	// mixed_ele_plist: size=n_elements, each item contains the number of nodes of the corresponding element
 	vset.ResizePlist(mixed_ele_plist);
-	// plist: deque of vector<size_t>, one per element, vector contains idx of nodes of the elem
+	// plist: deque of vector<uint32_t>, one per element, vector contains idx of nodes of the elem
 	vset.AddPlist(elements.begin(), elements.end());
 
 	// element_types: deque of size_t, one per element, contains the type of the element (CSMP_FEM_TYPE)
@@ -327,7 +328,7 @@ Model<3U>* IntrepidInterface::Read(const char* filename, const char* element_var
 	for (const auto &pair : regions)
 	{
 		//cout << "topology created  " << fem_types[pair.first] << endl;
-		model_topology.AddRegion(pair.first.c_str(), fem_types[pair.first], pair.second);
+		model_topology.AddDomain(pair.first.c_str(), fem_types[pair.first], pair.second);
 	}
 
 	// model_topology.Out("c:\\test\\model_topology.txt");
@@ -349,16 +350,16 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
  {
      cout <<"nIntrepidInterface::RepairElementOrientations: checking the right-hand-rule numbering of the tetrahedral elements...\n";
      LinearTetrahedron  tet;
-     vector<size_t>     ids;
+     vector<uint32_t>     ids;
      size_t             repaired_elmts(0U);
    
      for ( size_t elmt=0; elmt<vset.Elements(); ++elmt )
        if ( vset.ElementType(elmt) == ISOPARAMETRIC_LINEAR_TETRAHEDRON )
          {
-            // initialising the element
+            // initialising a tetrahedral element
             tet.CurrentID(elmt);
-            const size_t nodes(4U);
-            for ( size_t node=0; node<nodes; ++node ) {
+            const uint32_t nodes(4U);
+            for ( uint32_t node=0; node<nodes; ++node ) {
                  tet.XYZ( node, 0U, vset.Px( vset.Plist( elmt, node ) ) ); // X
                  tet.XYZ( node, 1U, vset.Py( vset.Plist( elmt, node ) ) ); // Y
                  tet.XYZ( node, 2U, vset.Pz( vset.Plist( elmt, node ) ) ); // Z
@@ -368,7 +369,7 @@ void IntrepidInterface::RepairElementOrientations( VSet<3U>& vset ) const
             if ( tet.Volume() < 0. ) {
                 tet.CounterClockwiseNodes( ids );
                 // reassigning the nodes to the plist in opposite order (first getting the global node numbers
-                for ( vector<size_t>::iterator it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
+                for ( auto it=ids.begin(); it!=ids.end(); ++it ) (*it) = vset.Plist( elmt, (*it) );
                 size_t counter(0U);
                 for ( vector<int64_t>::iterator nit=vset.PlistBegin(elmt); nit!=vset.PlistEnd(elmt); ++nit )
                   (*nit) = ids[counter++];

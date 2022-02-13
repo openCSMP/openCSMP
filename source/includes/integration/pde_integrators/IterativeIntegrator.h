@@ -12,9 +12,9 @@ namespace csmp {
 
 namespace csmp {
 
-template<size_t> class Interrelation;
-template<size_t> class Visitor;
-template<size_t> class Model;
+template<uint32_t> class Interrelation;
+template<uint32_t> class Visitor;
+template<uint32_t> class Model;
 
 /**
  
@@ -41,7 +41,7 @@ Models, Visitors and Interrelations. Calculations on single Region
 objects is not supported.  
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class IterativeIntegrator : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
   public:
     IterativeIntegrator();

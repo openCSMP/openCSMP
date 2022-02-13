@@ -5,10 +5,10 @@
 
 namespace csmp {
 
-template<size_t> class Node;
+template<uint32_t> class Node;
 
     
-template<size_t dim>
+template<uint32_t dim>
 class Event {
   public:
     //constructor

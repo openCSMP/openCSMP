@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 PotentialSource<dim>::PotentialSource( const PropertyDatabase<dim>& p ) 
   : Interrelation<dim>(p),
     mu( Interrelation<dim>::GlobalProperty("fluid viscosity") ),
@@ -26,7 +26,7 @@ PotentialSource<dim>::PotentialSource( const PropertyDatabase<dim>& p )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PotentialSource<dim>::Calculate()
  {
     // numerator of R factor, R = mu / (k rhof)
@@ -49,7 +49,7 @@ template class PotentialSource<3U>;
 
 
 /// the streaming potential method
-template<size_t dim>
+template<uint32_t dim>
 StreamingPotential<dim>::StreamingPotential( Model<dim>& sg )
  : ones( sg, "one coefficient", SCALAR, ELEMENT ),
    ccoeff( sg, "coupling coefficient", SCALAR, ELEMENT )
@@ -57,7 +57,7 @@ StreamingPotential<dim>::StreamingPotential( Model<dim>& sg )
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 StreamingPotential<dim>::~StreamingPotential()
  {
  }
@@ -70,7 +70,7 @@ StreamingPotential<dim>::~StreamingPotential()
 an arbitrary point somewhere in the model is used as a reference "electrode"
 it is assigned a Dirichlet potential value of zero.
 */
-template<size_t dim>
+template<uint32_t dim>
 void StreamingPotential<dim>::EvaluatePotential( Model<dim>& sg,
                                                  const char* potential )
  {

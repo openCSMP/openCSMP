@@ -26,10 +26,10 @@ class TensorVariable<2U> {
                                                       
     ~TensorVariable();
     
-    double&        operator()( size_t i, size_t j );
-    const double&  operator()( size_t i, size_t j ) const;
-    void             Component( size_t, double );
-    double         Component( size_t i ) const;
+    double&        operator()( uint32_t i, uint32_t j );
+    const double&  operator()( uint32_t i, uint32_t j ) const;
+    void           Component( uint32_t, double );
+    double         Component( uint32_t i ) const;
 
     TensorVariable   operator+( double val ) const;
     TensorVariable   operator-( double val ) const;
@@ -70,15 +70,14 @@ class TensorVariable<2U> {
     bool             operator<( const TensorVariable& ) const; 
     
     bool             IsWithinRange( double vmin, double vmax ) const;
-    VARIABLE_FLAG&   Flag( size_t i=0 );
-    VARIABLE_FLAG    Flag( size_t i=0 ) const;
-    size_t           Size() const;
-    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+    VARIABLE_FLAG&   Flag( uint32_t i=0 );
+    VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
+    uint32_t         Size() const;
     void             Identity();
-    double         MinElement() const;
-    double         MaxElement() const;
-    double         Determinant() const;
-    double         Trace() const;
+    double           MinElement() const;
+    double           MaxElement() const;
+    double           Determinant() const;
+    double           Trace() const;
     TensorVariable   Adjoint()     const;
     TensorVariable   Inverse()     const;
     TensorVariable   Transposed()  const;
@@ -93,10 +92,10 @@ class TensorVariable<2U> {
  	  void				     DiagonalValues( double f_00, double f_11);
  	  void				     DiagonalValues( const std::vector<double>& vecDiags );
  	  void				     DiagonalValues( const VectorVariable<2U>& vecDiags );
- 	  void             AssignToRow( size_t i, VectorVariable<2U>& vc );
- 	  void             AssignToColumn( size_t j, VectorVariable<2U>& vc );
-	  VectorVariable<2U> Row( size_t iRow ) const;
- 	  VectorVariable<2U> Column( size_t iCol ) const;
+ 	  void             AssignToRow( uint32_t i, VectorVariable<2U>& vc );
+ 	  void             AssignToColumn( uint32_t j, VectorVariable<2U>& vc );
+	  VectorVariable<2U> Row( uint32_t iRow ) const;
+ 	  VectorVariable<2U> Column( uint32_t iCol ) const;
  		
     void             	In();
     void             	Out() const;

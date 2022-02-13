@@ -286,13 +286,13 @@ to deduce the spatial dimension from.
 from 1(=1D) to 3(=3D).
 
 */
-size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( const std::string& etype )
+uint32_t  CSMP_ElementSpecifications::MinimumSpatialDimension( const std::string& etype )
  {
     if ( LineElement(etype) )    return 1U;
     if ( SurfaceElement(etype) ) return 2U;
     return 3U;
  }
-size_t  CSMP_ElementSpecifications::MinimumSpatialDimension( int8_t etype )
+uint32_t  CSMP_ElementSpecifications::MinimumSpatialDimension( int8_t etype )
  {
     if ( LineElement(etype) )    return 1U;
     if ( SurfaceElement(etype) ) return 2U;
@@ -577,7 +577,7 @@ bool  CSMP_ElementSpecifications::VolumeElement( int8_t etype )
     Returns the number of nodes of the CSMP element type as identified by
     the CSMP element integer code (enumeration CSMP_FEM_TYPE in FiniteElement.h).
 */
-size_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
+uint32_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
  {
     // bar
     if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR )
@@ -655,7 +655,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
 
     std::cerr <<"\nCSMP_ElementSpecifications::NodesPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return std::numeric_limits<size_t>::max(); // unknown element type
+    return std::numeric_limits<uint32_t>::max(); // unknown element type
 
  } // end
 
@@ -665,7 +665,7 @@ size_t CSMP_ElementSpecifications::NodesPerElementOfType( int8_t etype )
 /** Returns the  number of segments of the input CSMP finite element type
     as specified in CSMP_FEM_conventions.pdf   file in CSMP's documentation directory.
 */
-size_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
+uint32_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
  {
     // bar
     if ( etype == ISOPARAMETRIC_LINEAR_BAR || etype == LINEAR_BAR ||
@@ -722,12 +722,12 @@ size_t CSMP_ElementSpecifications::SegmentsPerElementOfType( int8_t etype )
 
     std::cerr <<"\nCSMP_ElementSpecifications::SegmentsPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return std::numeric_limits<size_t>::max(); // unknown element type
+    return std::numeric_limits<uint32_t>::max(); // unknown element type
  } // end
 
 
 
-size_t CSMP_ElementSpecifications::FacesPerElementOfType( int8_t CSMP_finite_element_type )
+uint32_t CSMP_ElementSpecifications::FacesPerElementOfType( int8_t CSMP_finite_element_type )
  {
     // since these are equivalent numbers
     return NeighborsPerElementOfType( CSMP_finite_element_type );
@@ -739,7 +739,7 @@ size_t CSMP_ElementSpecifications::FacesPerElementOfType( int8_t CSMP_finite_ele
 /** Returns the maximum possible number of neighbors of the input CSMP finite element type
     as specified in CSMP_FEM_conventions.pdf in the documentation directory.
 */
-size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
+uint32_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
  {
     // tetrahedron
     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON || etype == LINEAR_TETRAHEDRON ||
@@ -796,7 +796,7 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
 
     std::cerr <<"\nCSMP_ElementSpecifications::NeighborsPerElementOfType: ";
     std::cerr <<"unable to parse element type, returning 0"<< std::endl;
-    return std::numeric_limits<size_t>::max(); // unknown element type
+    return std::numeric_limits<uint32_t>::max(); // unknown element type
     
  } // end
 
@@ -811,8 +811,8 @@ size_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
 
     @attention 17/12/2015 SKM fixed method for quadratic elements
 */
-size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
-                                                                 size_t face )
+uint32_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
+                                                                   uint32_t face )
  {
     // bar
     // ---
@@ -943,7 +943,7 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
 
     std::cerr <<"\nCSMP_ElementSpecifications::NodesPerFaceForElementOfType: ";
     std::cerr <<"unable to parse element type, returning ULONG_MAX"<< std::endl;
-    return std::numeric_limits<size_t>::max(); // unknown number of faces
+    return std::numeric_limits<uint32_t>::max(); // unknown number of faces
 
  } // end NodesPerFaceForElementOfType
 
@@ -953,8 +953,8 @@ size_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
 
 
 
-std::pair<size_t,size_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( int8_t CSMP_FE_type,
-                                                                                             size_t segm_id )
+std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType( int8_t CSMP_FE_type,
+                                                                                                 uint32_t segm_id )
  {
     switch( CSMP_FE_type )
       {
@@ -1102,9 +1102,9 @@ std::pair<size_t,size_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentForEl
     
     Use this method to retrieve this information before any finite elements have been built.
 */
-size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
-                                                             size_t face,
-                                                             size_t face_node )
+uint32_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
+                                                               uint32_t face,
+                                                               uint32_t face_node )
  {
     // bar element
     // -----------
@@ -1505,7 +1505,7 @@ size_t CSMP_ElementSpecifications::FaceNodeForElementOfType( int8_t etype,
                             "pyramid elements with quadratic or cubic interpolation functions are not handled yet");
       }
 
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
 
  } // end FaceNodeForElementOfType
 

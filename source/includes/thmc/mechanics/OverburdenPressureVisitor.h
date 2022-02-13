@@ -13,9 +13,9 @@
 
 namespace csmp {
 
-template<size_t> class VectorVariable;
-template<size_t> class Element;
-template<size_t> class Model;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
 
 /** 
      For a given Sv (overburden stress at the model top),
@@ -32,7 +32,7 @@ template<size_t> class Model;
      @todo SKM: this visitor should include the influence of pore pressure.
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class OverburdenPressureVisitor : public Visitor<dim> {
   public:
     /// for the computation of nodal 'gravity force'
@@ -60,7 +60,7 @@ class OverburdenPressureVisitor : public Visitor<dim> {
 
 
 /// calculation ignoring the weight of air.
-template<size_t dim>
+template<uint32_t dim>
 inline double OverburdenPressureVisitor<dim>::dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity )
  {
     return rho_bulk - porosity * rho_fluid;

@@ -12,9 +12,9 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
+  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     idx_( UINT_MAX ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
@@ -28,11 +28,11 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
+  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
     idx_( UINT_MAX ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
@@ -48,13 +48,13 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
 
 
 /// custom constructor which also builds variable storage; used in most cases
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
+  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
     idx_( UINT_MAX ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
@@ -74,14 +74,14 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( size_t index,
                            csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs,
                            const LocalVariables& ep,
                            const IntegrationPointVariables& ip )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim, ::csmp::InterFace>( fvs ),
+  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
     idx_( index ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
@@ -102,10 +102,10 @@ InterFace<dim>::InterFace( size_t index,
 
 
 /// copy constructor
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( const InterFace<dim>& ifc )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( ifc.FE() ),
-    FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
+  : FiniteElementPolicy<dim,csmp::InterFace>( ifc.FE() ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( ifc.FV() ),
     idx_( ifc.idx_ ),
     node_connector_( ifc.node_connector_ ),
     interface_connector_( ifc.interface_connector_ ),
@@ -124,9 +124,9 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
 
 
 /// move constructor
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::InterFace( InterFace<dim>&& ifc )
-  : FiniteElementPolicy<dim, ::csmp::InterFace>( ifc.FE() ),
+  : FiniteElementPolicy<dim, csmp::InterFace>( ifc.FE() ),
     FiniteVolumePolicy<dim, csmp::InterFace>( ifc.FV() ),
     idx_( ifc.idx_ ),
     inner_parent_face_id_( ifc.inner_parent_face_id_ ),
@@ -158,7 +158,7 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
           and update the NodeManifolds.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>::~InterFace()
  {
  }
@@ -167,7 +167,7 @@ InterFace<dim>::~InterFace()
 
 
 /// assignment
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 {
   if ( &ifc != this )
@@ -193,7 +193,7 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
 {
   assert( &ifc != this );
@@ -222,7 +222,7 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
 /// WARNING: this operator is used specifically in the process of creation of particular SplitBoundary.
 /// Therefore only important infromation for that process is taken into account in order to distinguish two InterFace's.
 /// That must be reference to inner and outer parent Elements, inner and outer parent face ID's
-template<size_t dim>
+template<uint32_t dim>
 bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 {
   if ( &ifc != this )
@@ -237,7 +237,7 @@ bool  InterFace<dim>::operator==( const InterFace<dim>& ifc )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void* InterFace<dim>::operator new( size_t size )
   {
 //      std::cout<< "\nInterFace<"<< dim <<">: called overloaded new operator.\n";
@@ -246,7 +246,7 @@ void* InterFace<dim>::operator new( size_t size )
   }
  
 
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::operator delete( void* p )
   {
 //     std::cout<< "\nInterFace<"<< dim <<">: called overloaded delete operator.\n";
@@ -256,27 +256,27 @@ void InterFace<dim>::operator delete( void* p )
 
 
 /// iterator to the element nodes
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesBegin() const
 {
    if ( current_side_ == INSIDE ) return node_connector_.begin();
    return next( node_connector_.begin(), this->FE()->Nodes() );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() const
 {
   if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
   return node_connector_.end();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const
 {
   return interface_connector_.begin();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd() const
 {
   return interface_connector_.end();
@@ -285,7 +285,7 @@ typename std::vector<InterFace<dim>*>::const_iterator  InterFace<dim>::Neighbors
 
 
 // VISITOR
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 {
   if ( vis.ApplicationTarget() == INTER_FACE )
@@ -300,8 +300,8 @@ void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 /**
     Assigning neighbor InterFace objects on either side of the InterFace.
 */
-template<size_t dim>
-void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr ) // neighbor interface
+template<uint32_t dim>
+void InterFace<dim>::Assign( uint32_t i, InterFace<dim>* const ifc_ptr ) // neighbor interface
 {
   assert( i < interface_connector_.size() );
   interface_connector_[i] = ifc_ptr;
@@ -310,7 +310,7 @@ void InterFace<dim>::Assign( size_t i, InterFace<dim>* const ifc_ptr ) // neighb
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::Assign( Element<dim>* const base_elmt )
 {
   assert( base_elmt != nullptr );
@@ -330,7 +330,7 @@ the outside.
 Same method as in Face, but - in addition - connects InterFace to the multiplicated nodes
 on either side.
 */
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes )
 {
   assert( inner_elmt != nullptr );
@@ -348,9 +348,9 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, Element<dim>* const
 /**
 As above, but with the extra knowledge of the indices of the element faces that are juxtaposed
 */
-template<size_t dim>
-void InterFace<dim>::Assign( Element<dim>* const inner_elmt, size_t inner_local_face_id,
-                             Element<dim>* const outer_elmt, size_t outer_local_face_id,
+template<uint32_t dim>
+void InterFace<dim>::Assign( Element<dim>* const inner_elmt, uint32_t inner_local_face_id,
+                             Element<dim>* const outer_elmt, uint32_t outer_local_face_id,
                              bool assign_nodes )
 {
   assert( inner_elmt != nullptr );
@@ -372,8 +372,8 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, size_t inner_local_
 
 
 
-template<size_t dim>
-void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, INTERFACE_SIDE side )
+template<uint32_t dim>
+void InterFace<dim>::Assign( Element<dim>* const parentElement, uint32_t faceId, INTERFACE_SIDE side )
 {
   assert( parentElement != nullptr );
   assert( side != MIDDLE );
@@ -407,13 +407,13 @@ void InterFace<dim>::Assign( Element<dim>* const parentElement, size_t faceId, I
 
     @author SKM 16/6/2016
 */
-template<size_t dim>
-void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE side )
+template<uint32_t dim>
+void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE side )
 {
    assert( nptr != nullptr );
    assert( this->FE() != nullptr );
    
-   const size_t finite_element_nodes( this->FE()->Nodes() );
+   const auto finite_element_nodes( this->FE()->Nodes() );
    assert( n_local < finite_element_nodes );
    assert( !node_connector_.empty() );
    assert( finite_element_nodes * 2 == node_connector_.size() );
@@ -430,7 +430,7 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
      }
 
   if ( side == MIDDLE )
-    throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( size_t, Node, INTERFACE_SIDE )",
+    throw csmp::Exception( ERROR, "csmp::InterFace<dim>::Assign( uint32_t, Node, INTERFACE_SIDE )",
                           "Called wrong method to assign intervening element!" );
 
 } // end Assign node pointers
@@ -441,11 +441,11 @@ void InterFace<dim>::Assign( size_t n_local, Node<dim>* nptr, INTERFACE_SIDE sid
 /**
     unassigns the neighbor face, setting the pointer in the 'face_connector' vector to null
 */
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
   {
     if ( e_ptr == nullptr ) return;
-    for ( size_t i = 0U; i < interface_connector_.size(); i++ )
+    for ( auto i = 0U; i < interface_connector_.size(); i++ )
       if ( e_ptr == interface_connector_[i] ) {
           interface_connector_[i] = nullptr;
           break;
@@ -459,10 +459,10 @@ void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
 /**
     return the number of the Interface object neighbors which are connected with the InterFace and not null.
 */
-template<size_t dim>
-size_t  InterFace<dim>::ConnectedNeighbors() const
+template<uint32_t dim>
+uint32_t InterFace<dim>::ConnectedNeighbors() const
 {
-  size_t connections( interface_connector_.size() );
+  uint32_t connections( interface_connector_.size() );
   for ( auto& f : interface_connector_ )
     if ( f == nullptr ) connections--;
   return connections;
@@ -471,13 +471,14 @@ size_t  InterFace<dim>::ConnectedNeighbors() const
 
 
   /// node_connector_.size() = total nodes on both sides of InterFace
-template<size_t dim>
-size_t  InterFace<dim>::Nodes() const 
+template<uint32_t dim>
+uint32_t  InterFace<dim>::Nodes() const
  { 
     assert( this->FE()!=nullptr ); 
     assert( (this->FE()->Nodes()*2) == node_connector_.size() );
-    return node_connector_.size(); 
+    return static_cast<uint32_t>(node_connector_.size());
  }
+
 
   
 /**
@@ -485,12 +486,12 @@ size_t  InterFace<dim>::Nodes() const
    to the number of interface finite element faces although either side of the Interface
    has different nodes.
 */
-template<size_t dim>
-size_t  InterFace<dim>::Neighbors() const 
+template<uint32_t dim>
+uint32_t  InterFace<dim>::Neighbors() const
   {
      assert( this->FE()!=nullptr ); 
      assert( this->FE()->Neighbors() == interface_connector_.size() );
-     return interface_connector_.size(); 
+     return static_cast<uint32_t>(interface_connector_.size());
   }
 
 
@@ -499,12 +500,12 @@ size_t  InterFace<dim>::Neighbors() const
     Again this number is the same as that of the number of faces of the underlying finite element
     inspite of the fact that the InterFace has two sides.
 */
-template<size_t dim>
-size_t  InterFace<dim>::Faces() const 
+template<uint32_t dim>
+uint32_t  InterFace<dim>::Faces() const
  { 
     assert( this->FE()!=nullptr ); 
     assert( this->FE()->Faces() == interface_connector_.size() );
-    return interface_connector_.size(); 
+    return static_cast<uint32_t>(interface_connector_.size());
  }
 
 
@@ -514,40 +515,40 @@ size_t  InterFace<dim>::Faces() const
     
     uses point coordinates that must be matched across the interface to find the nodes.
 */
-template<size_t dim>
-std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
+template<uint32_t dim>
+std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
 {
   assert( innerParent_ != nullptr );
   assert( outerParent_ != nullptr );
 
   // 1. building search maps that we will use to find the shared interfaces
   //    key=pointset   face iD
-  map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
-  vector<size_t>  nids;
+  map<set<Point<dim> >, pair<INTERFACE_SIDE,uint32_t> >   inner_elmt_faces, outer_elmt_faces;
+  vector<uint32_t>  nids;
   // inner parent element
-  const size_t ifaces(innerParent_->Faces());
-  for ( size_t face = 0U; face < ifaces; ++face ) {
-    innerParent_->FE()->NodesOfFace( face, nids );
-    set<Point<dim> >  face_key;
-    const size_t nodes(nids.size());
-    for ( size_t j = 0U; j<nodes; ++j )
-      face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
-    inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
-  }
+  const auto ifaces(innerParent_->Faces());
+  for ( auto face = 0U; face < ifaces; ++face ) {
+      innerParent_->FE()->NodesOfFace( face, nids );
+      set<Point<dim> >  face_key;
+      const auto nodes(nids.size());
+      for ( uint32_t j = 0U; j<nodes; ++j )
+        face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
+      inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+    }
   // outer parent element
-  const size_t ofaces(outerParent_->Faces());
-  for ( size_t face = 0U; face < ofaces; ++face ) {
+  const uint32_t ofaces(outerParent_->Faces());
+  for ( uint32_t face = 0U; face < ofaces; ++face ) {
     outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
-    const size_t nodes(nids.size());
-    for ( size_t j = 0U; j<nodes; ++j )
+    const auto nodes(nids.size());
+    for ( uint32_t j = 0U; j<nodes; ++j )
       face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
 
   // 2. finding the shared faces
   bool found( false );
-  size_t inner_face_id, outer_face_id;
+  uint32_t inner_face_id, outer_face_id;
   for ( auto& inner_face : inner_elmt_faces ) {
     for ( auto& outer_face : outer_elmt_faces ) {
       // compares the sets of the point coordinates of potentially opposing faces
@@ -585,11 +586,11 @@ std::pair<size_t, size_t>  InterFace<dim>::SharedElementFaces()
     Thus the number of nodes is assumed to be 1, duplicated to 2.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void InterFace<dim>::InitializeNodeVector()
 {
   // 1. get shared faces and assign them
-  std::pair<size_t, size_t> shared_faces = SharedElementFaces();
+  std::pair<uint32_t, uint32_t> shared_faces = SharedElementFaces();
   inner_parent_face_id_ = shared_faces.first;
   outer_parent_face_id_ = shared_faces.second;
 
@@ -601,14 +602,14 @@ void InterFace<dim>::InitializeNodeVector()
   node_connector_.shrink_to_fit();
 
   // 2,3. starting with the inside
-  vector<size_t>  nids;
+  vector<uint32_t>  nids;
 
   // inside
   innerParent_->FE()->NodesOfFace( shared_faces.first, nids );
   // we retain the order in which the nodes are given to
   if ( dim != 1U ) {
     assert( nids.size() == this->FE()->Nodes() );
-    for ( size_t n = 0U; n<this->FE()->Nodes(); ++n )
+    for ( auto n{0}; n<this->FE()->Nodes(); ++n )
       Assign( n, innerParent_->N( nids[n] ), INSIDE );
   }
   // assuming that the unit normal points from the inside to the outside
@@ -619,7 +620,7 @@ void InterFace<dim>::InitializeNodeVector()
   // we retain the order in which the nodes are given to
   if ( dim != 1U ) {
     assert( nids.size() == this->FE()->Nodes() );
-    for ( size_t n = 0U; n<this->FE()->Nodes(); ++n )
+    for ( auto n{0}; n<this->FE()->Nodes(); ++n )
       Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
   }
   else Assign( 0U, outerParent_->N( 0 ), OUTSIDE );
@@ -636,9 +637,9 @@ void InterFace<dim>::InitializeNodeVector()
     @note Nodes() cannot not be used here because the node_connector_ vector is
     just getting initialised
 */
-template<size_t dim>
-void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
-                                           size_t outer_elmt_face_id )
+template<uint32_t dim>
+void InterFace<dim>::InitializeNodeVector( uint32_t inner_elmt_face_id,
+                                           uint32_t outer_elmt_face_id )
 {
   assert( inner_elmt_face_id < innerParent_->Faces() );
   assert( outer_elmt_face_id < outerParent_->Faces() );
@@ -661,22 +662,22 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
   }
 
   // 2. 2 and 3D cases starting with the inside
-  const size_t n_nodes_per_face{this->FE()->Nodes()};
-  vector<size_t>  nids;
+  const auto        n_nodes_per_face{this->FE()->Nodes()};
+  vector<uint32_t>  nids;
 
   // inside
   innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
   assert( nids.size() == n_nodes_per_face );
   // assuming that the unit normal points from the inside to the outside
   // we retain the order in which the nodes are given to
-  for ( size_t n = 0U; n<n_nodes_per_face; ++n )
+  for ( auto n{0}; n<n_nodes_per_face; ++n )
     Assign( n, innerParent_->N( nids[n] ), INSIDE );
 
   // outside
   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
   assert( nids.size() == n_nodes_per_face );
   // we retain the order in which the nodes are given to
-  for ( size_t n = 0U; n<n_nodes_per_face; ++n )
+  for ( auto n{0}; n<n_nodes_per_face; ++n )
     Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
 
 } // end InitializeNodeVector (version 2)
@@ -685,7 +686,7 @@ void InterFace<dim>::InitializeNodeVector( size_t inner_elmt_face_id,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::CurrentSide( INTERFACE_SIDE side_to_assign )
 {
   current_side_ = side_to_assign;
@@ -693,25 +694,25 @@ void  InterFace<dim>::CurrentSide( INTERFACE_SIDE side_to_assign )
 
 
 // ACCESSORS
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::Idx( size_t idx_to_assign ) const
 {
   idx_ = idx_to_assign;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t  InterFace<dim>::Idx() const
 {
   return idx_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 INTERFACE_SIDE  InterFace<dim>::CurrentSide() const
 {
   return current_side_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVector()
 {
   return interface_connector_;
@@ -736,19 +737,19 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
 
     @return A pointer to the Target node.
 */
-template<size_t dim>
-const csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
+template<uint32_t dim>
+const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) const
 {
   assert( n < this->FE()->Nodes() );
   
   // the number of nodes on a single side of the interface
-  const size_t if_FE_nodes( this->FE()->Nodes() );
+  const auto if_FE_nodes( this->FE()->Nodes() );
 
   if ( side == INSIDE )
     return node_connector_[n];
 
   if ( side == OUTSIDE ) {
-    size_t outside_idx = n + if_FE_nodes;
+    uint32_t outside_idx = n + if_FE_nodes;
     if ( n < if_FE_nodes )
       return node_connector_[outside_idx];
     else {
@@ -768,19 +769,19 @@ const csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side ) const
 
 
 
-template<size_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side )
+template<uint32_t dim>
+csmp::Node<dim>*  InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side )
 {
   assert( n < this->FE()->Nodes() );
   
   // the number of nodes on a single side of the interface
-  const size_t if_FE_nodes( this->FE()->Nodes() );
+  const auto if_FE_nodes( this->FE()->Nodes() );
 
   if ( side == INSIDE )
     return node_connector_[n];
 
   if ( side == OUTSIDE ) {
-    size_t outside_idx = n + if_FE_nodes;
+    uint32_t outside_idx = n + if_FE_nodes;
     if ( n < if_FE_nodes )
       return node_connector_[outside_idx];
     else {
@@ -802,15 +803,15 @@ csmp::Node<dim>*  InterFace<dim>::N( size_t n, INTERFACE_SIDE side )
 /**
     Access to all nodes of the interface.
 */
-template<size_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( size_t n )
+template<uint32_t dim>
+csmp::Node<dim>*  InterFace<dim>::N( uint32_t n )
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
 }
 
-template<size_t dim>
-const csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
+template<uint32_t dim>
+const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n ) const
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -821,16 +822,16 @@ const csmp::Node<dim>*  InterFace<dim>::N( size_t n ) const
 /**
     Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
-template<size_t dim>
-csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n )
+template<uint32_t dim>
+csmp::InterFace<dim>*  InterFace<dim>::Neighbor( uint32_t n )
 {
   assert( interface_connector_.size() == this->Neighbors() );
   assert( n < this->Neighbors() );
   return interface_connector_[n];
 }
 
-template<size_t dim>
-const csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
+template<uint32_t dim>
+const csmp::InterFace<dim>*  InterFace<dim>::Neighbor( uint32_t n ) const
 {
   assert( interface_connector_.size() == this->Neighbors() );
   assert( n < this->Neighbors() );
@@ -844,19 +845,19 @@ const csmp::InterFace<dim>*  InterFace<dim>::Neighbor( size_t n ) const
  
    @note costly method, use judiciously.
 */
-template<size_t dim>
-size_t  InterFace<dim>::ParentNodeNumber( size_t n, INTERFACE_SIDE side ) const
+template<uint32_t dim>
+uint32_t  InterFace<dim>::ParentNodeNumber( uint32_t n, INTERFACE_SIDE side ) const
 {
   assert( n < node_connector_.size() );
 
   if ( side == INSIDE ) {
     // finding the parent element that corresponds to inside element
-    for ( size_t i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == innerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
   else if ( side == OUTSIDE ) {
-    for ( size_t i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == outerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
@@ -872,7 +873,7 @@ size_t  InterFace<dim>::ParentNodeNumber( size_t n, INTERFACE_SIDE side ) const
 
 
 // watch out if there is no base element this returns a nullptr pointer
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  InterFace<dim>::Parent( INTERFACE_SIDE side ) const
 {
   if ( side == INSIDE )
@@ -882,18 +883,18 @@ Element<dim>*  InterFace<dim>::Parent( INTERFACE_SIDE side ) const
   return middleElement_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  InterFace<dim>::InnerParent() const
 {
   return innerParent_;
 }
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  InterFace<dim>::OuterParent() const
 {
   return outerParent_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>*  InterFace<dim>::InterveningElement() const
 {
   return middleElement_;
@@ -901,8 +902,8 @@ Element<dim>*  InterFace<dim>::InterveningElement() const
 
 
 /// return face ID of inner parent element
-template<size_t dim>
-size_t  InterFace<dim>::InnerParentFaceID() const
+template<uint32_t dim>
+uint32_t  InterFace<dim>::InnerParentFaceID() const
 {
   if ( innerParent_ == nullptr ) return NULL_IDX;
   return inner_parent_face_id_;
@@ -910,8 +911,8 @@ size_t  InterFace<dim>::InnerParentFaceID() const
 
 
 /// return face ID of outer parent element
-template<size_t dim>
-size_t  InterFace<dim>::OuterParentFaceID() const
+template<uint32_t dim>
+uint32_t  InterFace<dim>::OuterParentFaceID() const
 {
   if ( outerParent_ == nullptr ) return NULL_IDX;
   return outer_parent_face_id_;
@@ -919,8 +920,8 @@ size_t  InterFace<dim>::OuterParentFaceID() const
 
 
 /// return face ID of inner or outer parent element depending on index
-template<size_t dim>
-size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
+template<uint32_t dim>
+uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 {
   if ( side == INSIDE )
   {
@@ -943,8 +944,8 @@ size_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 
 
 /// assign face ID of inner or outer parent element depending on their local face numbering 
-template<size_t dim>
-void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, size_t idx )
+template<uint32_t dim>
+void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
 {
   if ( side == INSIDE )
   {
@@ -984,7 +985,7 @@ inline Point<1U> normalOfTriangle( const Point<1U>&, const Point<1U>&, const Poi
     The area is computed taking the side of the interface into account.
     Thus, it will give different results for INSIDE and OUTSIDE if the nodes on either side no longer match.
 */
-template<size_t dim>
+template<uint32_t dim>
 double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1006,7 +1007,7 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 
 /** returns unit normal into argument vector variable depending on corresponding parent element side
 */
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side ) const
 {
   if ( side == INSIDE )
@@ -1030,7 +1031,7 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
 {
   UnitNormal( vc, INSIDE );
@@ -1040,7 +1041,7 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
 /**
    returns the normal pointing from the inside to the outside higher-dimensional Element of the InterFace, calculated for bisector plane.
 */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Point<dim>  InterFace<dim>::UnitNormal() const
  {
     if ( middleElement_ != nullptr ) return middleElement_->UnitNormal();
@@ -1055,8 +1056,8 @@ csmp::Point<dim>  InterFace<dim>::UnitNormal() const
 /**
 Initialises VectorVariable with vector between node pair - returns false if overlap, true if distant
 */
-template<size_t dim>
-bool InterFace<dim>::NodeSpacing( size_t n, VectorVariable<dim>& innerToOuter ) const
+template<uint32_t dim>
+bool InterFace<dim>::NodeSpacing( uint32_t n, VectorVariable<dim>& innerToOuter ) const
 {
   assert( n < node_connector_.size() - Nodes() );
   Point<dim> dxyz = node_connector_[n]->Coordinate() - node_connector_[n + Nodes()]->Coordinate();
@@ -1097,26 +1098,26 @@ transformation) matrix.
 are used to find mid-points.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
-  const size_t n_nodes( this->FE()->Nodes() );
+  const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( size_t i = 0U; i<n_nodes; ++i )
+  for ( auto i = 0U; i<n_nodes; ++i )
     XY.AssignRow( i, N( i, side )->Coordinate() );
 
 } // end CoordinateMatrix
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
-  const size_t n_nodes( Nodes() );
+  const auto n_nodes( Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( size_t i = 0U; i<n_nodes; ++i )
+  for ( auto i = 0U; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -1149,14 +1150,14 @@ BaryCentre().
 @test O.K. SKM25/8/14 after refactoring loop
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  InterFace<dim>::BaryCenter() const
 {
-  Point<dim>    pt( N( 0U )->Coordinate() );
-  const size_t  n_nodes( node_connector_.size() );
+  Point<dim>  pt( N( 0U )->Coordinate() );
+  const auto  n_nodes( node_connector_.size() );
 
   // all the nodes on both sides
-  for ( size_t i = 1U; i<n_nodes; ++i )
+  for ( auto i = 1U; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
   return pt / static_cast<double>(Nodes());
@@ -1187,7 +1188,7 @@ when evaluating the quality of a certain mesh.
 @todo this method could be optimised if only the corner nodes would be used
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
 {
   double fMinTemp( static_cast<double>(DBL_MAX) );
@@ -1199,8 +1200,8 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
   // avoid division by zero
   assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
-  const size_t n_nodes( node_connector_.size() );
-  for ( size_t i = 0; i<n_nodes; ++i ) {
+  const auto n_nodes( node_connector_.size() );
+  for ( auto i = 0; i<n_nodes; ++i ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
     double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
@@ -1222,7 +1223,7 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
          @attention the order of the nodes corresponds to the numbering of the face of the corresponding higher dimensional element 
          on the in- or outside.
 */
-template<size_t dim>
+template<uint32_t dim>
 template< class Var>
 void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V, INTERFACE_SIDE side ) const
 {
@@ -1235,10 +1236,10 @@ void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Va
   }
 
   // resizing V if necessary
-  const size_t  n_nodes( this->FE()->Nodes() );
+  const auto  n_nodes( this->FE()->Nodes() );
   V.resize( n_nodes );
 
-  for ( size_t i = 0U; i<n_nodes; i++ )
+  for ( auto i = 0U; i<n_nodes; i++ )
     N( i, side )->Read( idx, V[i] );
 }
 
@@ -1265,25 +1266,25 @@ template void  InterFace<3U>::NodePropertyVector( const csmp::Index&, std::vecto
 
 
 // SCREEN OUTPUT
-template<size_t dim>
+template<uint32_t dim>
 void  InterFace<dim>::Out() const
 {
   cout << "\nInterFace<" << dim << ">::Out: number: " << idx_;
   cout << "\nInternal data: ";
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
-  for ( size_t i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i = 0U; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, INSIDE )->AtBoundary() );
     cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
   }
-  for ( size_t i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i = 0U; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
     cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
   cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
-  for ( size_t i = 0U; i<this->Neighbors(); i++ )
+  for ( auto i = 0U; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Idx() << ":";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
@@ -1307,18 +1308,18 @@ void  InterFace<dim>::Out() const
     else
       cout << "\n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
-    const size_t ipoints( this->IntegrationPoints() );
+    const auto ipoints( this->IntegrationPoints() );
     if ( ipoints > 0U ) {
       cout << "\n\tStorage sites for IntegrationPoint properties: " << ipoints << endl;
     }
 
     cout << "\n Connected Node objects, side 1 of interface: ";
-    for ( size_t i = 0U; i<this->Nodes(); i++ )
+    for ( auto i = 0U; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
     cout << "\n Connected Node objects, side 2 of interface: ";
-    for ( size_t i = 0U; i<this->Nodes(); i++ )
+    for ( auto i = 0U; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
@@ -1340,7 +1341,7 @@ void  InterFace<dim>::Out() const
     cout << "\tUnit Normal:            ";
     VectorVariable<dim> un( PLAIN, 0. );
     UnitNormal( un );
-    for ( size_t i = 0U; i<dim; i++ ) cout << un[i] << ", ";
+    for ( auto i = 0U; i<dim; i++ ) cout << un[i] << ", ";
     cout << endl;
 
 } // end Out

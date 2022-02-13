@@ -13,7 +13,7 @@ namespace csmp {
 
 /// stencil processor for finitive volume calculations within CVFEM scheme (Weis et al., Geofluids, 2014).
 
-template<size_t dim>
+template<uint32_t dim>
 class StencilProcessorPHX {
   public:
 
@@ -52,10 +52,10 @@ class StencilProcessorPHX {
     
     VectorVariable<dim> gravity_;
 
-    size_t              eidx_;
-    mutable size_t      inside_node_, outside_node_;
+    size_t            eidx_;
+    mutable uint32_t  inside_node_, outside_node_;
 
-    ScalarVariable      rhs_property_, density_, perm_;
+    ScalarVariable    rhs_property_, density_, perm_;
     double            grav_, g_component_, vel_;
 
 };

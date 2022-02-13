@@ -27,7 +27,7 @@ namespace csmp {
 /**
 returns reference to SplitBoundary
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundary( const std::string& spbName )
 {
   splitBoundaryIterator  sbit = splitBoundaryMap_.find( spbName );
@@ -46,7 +46,7 @@ SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBo
 /**
 returns const reference to SplitBoundary
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 const SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundary( const std::string& spbName ) const
 {
   splitBoundaryConstIterator  sbit = splitBoundaryMap_.find( spbName );
@@ -65,7 +65,7 @@ const SplitBoundary<dim>&  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::S
 /**
 Reports whether a SplitBoundary with the corresponding name exists inside the model.
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::ContainsSplitBoundary( const std::string& bname ) const
 {
   if ( splitBoundaryMap_.find( bname ) != splitBoundaryMap_.end() ) return true;
@@ -73,29 +73,29 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::ContainsSplitBoundary(
 }
 
 
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 typename std::map<std::string, csmp::SplitBoundary<dim> >::iterator
 SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesBegin()
 { return splitBoundaryMap_.begin(); }
 
 
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 typename std::map<std::string, csmp::SplitBoundary<dim> >::iterator
 SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesEnd()
 { return splitBoundaryMap_.end(); }
 
 
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 typename std::map<std::string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesBegin() const
 { return splitBoundaryMap_.begin(); }
 
 
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 typename std::map<std::string, csmp::SplitBoundary<dim> >::const_iterator  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesEnd() const
 { return splitBoundaryMap_.end(); }
 
 
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 size_t  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundaries() const
 { return splitBoundaryMap_.size(); }
 
@@ -116,11 +116,9 @@ from the model, potentially turning it into a disconnected group of mesh patches
        @author SKM (refactored - since design was flawed)
        @date 15/8/2020
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( const char* splitboundary )
  {
-    SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* >(this) );
-    
     if ( !ContainsSplitBoundary(splitboundary) ) {
          ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface::RemoveSplitBoundary",
                                           splitboundary, "split boundary is not contained in model; nothing was done");
@@ -130,8 +128,6 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
     // locating the boundary in the split boundary map
     splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary );
     if ( spit != splitBoundaryMap_.end() ) {
-         // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().Delete( (*spit).second.ElementsBegin(), (*spit).second.ElementsEnd() );
          // deleting the split boundary
          splitBoundaryMap_.erase( (*spit).first );
          return;
@@ -158,7 +154,7 @@ from the model, potentially turning it into a disconnected group of mesh patches
        @author SKM (refactored - since design was flawed)
        @date 15/8/2020
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary )
  {
     SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* >(this) );
@@ -167,8 +163,6 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
     splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary.Name() );
     // if the addresses are the same
     if ( spit !=  splitBoundaryMap_.end() ) {
-         // getting the MeshManager to delete the interfaces
-         splitboundaryComplex->Mesh().Delete( splitboundary.ElementsBegin(), splitboundary.ElementsEnd() );
          // if the split boundary is contained in the map, it is erased
          splitBoundaryMap_.erase( (*spit).first );
          return;
@@ -196,7 +190,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
         SBDRYVAR
         SBDFFOTR
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesToBinary( const char* file_name ) const
 {
   if ( this->SplitBoundaries() == 0 ) return false;
@@ -260,7 +254,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
     @author SKM
     @date 6/9/2021
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFromBinary( const char* file_name,
                                                                                          const set<string>& subset_variables )
 {
@@ -297,7 +291,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
     fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
     if ( records > 0 )
       // reading the regions sequentially
-      for ( size_t i=0U; i<records; ++i )
+      for ( auto i{0}; i<records; ++i )
         {
            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
@@ -364,7 +358,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 
 
 /// container of juxtaposed element pairs for SplitBoundary creation:
-template<size_t dim>
+template<uint32_t dim>
 struct SplitBoundaryElementSets : public
   //       key consisting out the names of regions juxtaposed at the SplitBoundary
   std::map<std::pair<std::string, std::string>,
@@ -388,7 +382,7 @@ argument pair.
 @author SKM
 @date January 2018
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 std::string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryName( const std::pair<std::string, std::string>& juxtaposed_regions ) const
 {
   string split_boundary_name( "SPLITBOUNDARY_" + juxtaposed_regions.first + '_' + juxtaposed_regions.second );
@@ -436,7 +430,7 @@ std::string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBound
     @date 20/03/2018 updated 5/9/2021
 
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DetectAndCreateSplitBoundaries()
 {
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
@@ -529,7 +523,7 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
 /**
     Creates SplitBoundar(ies) from lower dimensional region without the need for a user to create Boundary objects first. The underlying region is removed in the process.
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
  {
     SPLITBOUNDARY_COMPLEX<dim>* model( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
@@ -562,7 +556,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
      
      @return boolean indicating whether the method was able to create a singe Split boundary and its name
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( Boundary<dim>& boundary )
 {
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
@@ -620,7 +614,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 /**
       TODO: find faster alternative to this brute-force method
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::UpdateSplitBoundaryComplex()
  {
     SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
@@ -646,7 +640,7 @@ The original boundary gets removed.
 @date 25/1/20
 
  */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1, const char* region2 )
  {
    SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
@@ -678,7 +672,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
     //E.P TODO: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case!
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
                                                                                                                 int32_t material_id )
  {
@@ -700,11 +694,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      set<Node<dim>*>     unique_new_nodes;
      vector<Node<dim>*>  node_pointers; // linear array of the nodes of one face after another
      node_pointers.reserve( splitBoundary.Nodes() );
-     for ( typename vector<InterFace<dim>*>::iterator
-           it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) {
+     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) {
           const size_t n_nodes((*it)->Nodes());
           // looping over the nodes on the inside of the interface which must be manifolds
-          for ( size_t i=0U; i<n_nodes; ++i ) {
+          for ( auto i{0}; i<n_nodes; ++i ) {
                assert( (*it)->N(i)->IsManifold() );
                pair<typename set<Node<dim>*>::iterator,bool> nit=unique_new_nodes.insert( (*it)->N(i) );
                // if the node is not yet contained in 'unique_new_nodes' it is created and added, but only if
@@ -737,8 +730,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      new_elmts.reserve( splitBoundary.Elements() );
      size_t node_offset(0U); // for moving through the node-pointer vector
      
-     for ( typename vector<InterFace<dim>*>::iterator
-           it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) 
+     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it )
        {
           assert( (*it)->Parent(MIDDLE) == nullptr );
           // extracting element-node subvector
@@ -796,7 +788,7 @@ TODO: like Boundary patches, the split boundary patches should have unique names
 
 */
 /*
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSplitBoundaries( const char* region_name, int32_t material_id )
 {
   SPLITBOUNDARY_COMPLEX<dim>*       splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
@@ -840,7 +832,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
   const IntegrationPointVariables&  if_ip_vars( splitboundaryComplex->Database().IntegrationPointVariablesAt( ELEMENT_INTEGRATION_POINT ) );
 
   // creating the new lower-dimensional elements between the sides of collected InterFace objects and assigning them to middle-element pointer
-  vector<size_t>  element_numbers;
+  vector<uint32_t>  element_numbers;
   element_numbers.reserve( ifelmts.size() );
 
   for ( auto& ifelmt : ifelmts )
@@ -866,7 +858,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
     {
       Element<dim>* const new_elmt = ifelmt->InterveningElement();
 
-      for (size_t i = 0; i < ifelmt->Nodes() / 2; i++) {
+      for (auto i = 0; i < ifelmt->Nodes() / 2; i++) {
           // finding the new node using the matching node of the inside of the interface as search key
           Node<dim>* new_node = node_pairs[ ifelmt->N(i, INSIDE) ];
           assert( new_node != nullptr );
@@ -928,7 +920,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
        @author SKM
        @date 26/1/2020
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id )
 {
   ErrorHandler&                csmp_error(ErrorHandler::Instance());
@@ -962,7 +954,7 @@ set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDime
 /**
 Prints current SplitBoundaries to screen
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
 {
   cout << "\nSplitBoundaryInterface::SplitBoundariesOut: current split boundaries in the model: " << splitBoundaryMap_.size();
@@ -985,32 +977,27 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
  
     @attention in the construction of the Splitboundary, the manifold flagging will allow to retrieve the correct side of the interface.
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDisconnectParents( Boundary<dim>& inputBoundary,
                                                                                              bool include_perimeter_nodes )
  {
     SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
     MeshManager<dim>& mesh_manager(model->Mesh());
     
-    const typename vector<csmp::Node<dim>*>::iterator nodesEnd = (include_perimeter_nodes==true) ?
-                                                                  inputBoundary.NodesEnd() : inputBoundary.PerimeterNodesBegin();
-    // TODO: track already existing manifolds here
-    for ( typename vector<csmp::Node<dim>*>::iterator
-          nit=inputBoundary.NodesBegin(); nit!=nodesEnd; ++nit )
+    const auto nodesEnd = (include_perimeter_nodes==true) ? inputBoundary.NodesEnd() : inputBoundary.PerimeterNodesBegin();
+    for ( auto nit=inputBoundary.NodesBegin(); nit!=nodesEnd; ++nit )
       mesh_manager.Duplicate( *nit, OUTSIDE, ManifoldType::INTERFACE );
     
     // assigning the new nodes to the higher dimensional parent elements on the outside
-    vector<size_t>  fnids;
-    const typename vector<csmp::Face<dim>*>::iterator facesEnd{inputBoundary.ElementsEnd()};
-    for ( typename vector<csmp::Face<dim>*>::iterator
-          it=inputBoundary.ElementsBegin(); it!=facesEnd; ++it )
+    vector<uint32_t>  fnids;
+    for ( auto it=inputBoundary.ElementsBegin(); it!= inputBoundary.ElementsEnd(); ++it )
       {
          // the nodes on the outside need to be updated
          assert( (*it)->OuterParent() );
-         const size_t outer_parent_face_id = (*it)->OuterParentFaceID();
+         const auto outer_parent_face_id = (*it)->OuterParentFaceID();
          (*it)->FE()->NodesOfFace( outer_parent_face_id, fnids );
          size_t n_nodes{fnids.size()};
-         for ( size_t i{0}; i<n_nodes; ++i ) {
+         for ( auto i{0}; i<n_nodes; ++i ) {
               assert( (*it)->OuterParent()->N( fnids[i] )->IsManifold() );
               NodeManifold<dim>* nmanifold = (*it)->OuterParent()->N( fnids[i] )->Manifold();
               vector<Node<dim>*> node_vec = nmanifold->NodesLocatedAt( OUTSIDE );
@@ -1060,7 +1047,7 @@ template class SplitBoundaryInterface<3U, Model>;
  or use such Region just to introduce the interface around it and delete it afterwards
  */
  /*
- template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+ template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
  bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( const string& region )
  {
    bool succeeded( false );
@@ -1133,7 +1120,7 @@ This method will only work for Regions which are not overlapping.
 This method makes no sense for the region 'Model' as it encompasses all unique regions.
 */
 /*
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertSplitBoundary( const std::string& group1, const std::string& group2, bool createRegionBetween )
 {
   SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );

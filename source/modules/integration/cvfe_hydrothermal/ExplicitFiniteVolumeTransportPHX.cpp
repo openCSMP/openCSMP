@@ -1,9 +1,6 @@
 #include "ExplicitFiniteVolumeTransportPHX.h"
 #include "Region.h"
-//#include "ElementFiniteVolumeTraits.h"
-//#include "CSP_ErrorHandler.h"
-//#include "CSP_STL_utilities.h"
-//#include <numeric>
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -11,7 +8,7 @@ namespace csmp {
 
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<dim>& model,
                                                   std::vector<std::string>& lhs_property,
                                                   std::vector<std::string>& rhs_property,
@@ -78,7 +75,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
 
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 ExplicitFiniteVolumeTransportPHX<dim>::~ExplicitFiniteVolumeTransportPHX()
  {
  }
@@ -86,7 +83,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::~ExplicitFiniteVolumeTransportPHX()
 
 
 /** change lhs variable by adding and subtracting flux in and out of control volume */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::ComposeAdvection( )
  {
 
@@ -101,7 +98,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::ComposeAdvection( )
 
 
 /** store lhs variables */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
  {
     double                   pmin(0), pmax(0), value(0);
@@ -142,56 +139,55 @@ void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
  } // end WriteResults
 
 /** change size of maximum time step */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::SetMaximumTimeStep( const double& new_max_time_step )
    {
      max_time_step = new_max_time_step;
    }
 
 /** access to flux out of control volume - main property */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(size_t index)
    {
     return flux_out_vectors[0][index];
    }
    
 /** access to flux into control volume - main property */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(size_t index)
    {
     return flux_in_vectors[0][index];
    }
 
 /** access to flux out of control volume - specified property */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(unsigned int index, unsigned int property_idx)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxOut(size_t index, uint32_t property_idx)
    {
     return flux_out_vectors[property_idx][index];
    }
 
 /** access to flux into control volume - specified property */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(unsigned int index, unsigned int property_idx)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFluxIn(size_t index, uint32_t property_idx)
    {
     return flux_in_vectors[property_idx][index];
    }
 
 /** get value of main property at specified control volume */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetPropertyValue(unsigned int index)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetPropertyValue(size_t index)
    {
     return region_ref.N(index)->Read( pl_key[0] );
    }
 
 /** get facte flux of specified propoerty at indicated facet */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, unsigned int facet_idx, unsigned int property_idx )
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, uint32_t facet_idx, uint32_t property_idx )
    {
-    size_t eidx_,inside_node_,outside_node_;
-    double flux_;
-    eidx_ = e.Idx();
+    uint32_t  inside_node_,outside_node_;
+    auto eidx_{e.Idx()};
     e.FV()->FacetEdgeNodes( facet_idx, inside_node_, outside_node_ );
-    flux_ = facet_flux_vectors[property_idx][eidx_][facet_idx];
+    double flux_ = facet_flux_vectors[property_idx][eidx_][facet_idx];
     if (flux_<0)
       flux_ *= mass_balance_vectors[property_idx][e.N(outside_node_)->Idx()];
     else
@@ -200,14 +196,14 @@ double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetFlux( Element<dim>& e, uns
    }
 
 /** get facte flux of specified propoerty at indicated facet */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetMainPropertyLHS(unsigned int index)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetMainPropertyLHS(size_t index)
    {
     return property_vectors[0][index];
    }
 
 /** calculate and store facet fluxes with suggested time step */
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double& time_increment, std::vector<DenseMatrix<DM_MIN> >& upwind_visitor )
   {
   
@@ -248,7 +244,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double& 
  } // end DetermineFacetFlux
 
 /** calculate total flux out of control volumes */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
    {
 
@@ -270,7 +266,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
    } // end CalculateOutflowPerPoreVolume
 
 /** adjust fluxes, perform advection calculations and store results*/
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustAndPerformFacetFlux( const double& time_factor ){
    	
    	internal_time_step *= time_factor;
@@ -288,7 +284,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustAndPerformFacetFlux( const d
      } // end AdjustAndPerformFacetFlux
 
 /** adjust fluxes */
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double& time_factor ){
    	
    	
@@ -298,7 +294,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double& time_
           fvit=region_ref.NodesBegin(); 
           fvit!=region_ref.NodesEnd(); fvit++ )
           { 
-            unsigned int idx = (*fvit)->Idx();
+            size_t idx = (*fvit)->Idx();
             for ( size_t i=0; i<flux_out_vectors.size(); i++ )
                {
                  flux_out_vectors[i][idx] *= time_factor;
@@ -317,7 +313,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double& time_
      } // end AdjustFluxOut
 
 /** calculate flux into control volumes */
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::CalculateFluxIn( )
     {
    	
@@ -335,7 +331,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::CalculateFluxIn( )
     } // end CalculateFluxIn
 
 /** calculate total flux into control volumes */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
    {
 
@@ -345,7 +341,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
           fvit=region_ref.NodesBegin(); 
           fvit!=region_ref.NodesEnd(); fvit++ )
           { 
-            unsigned int idx = (*fvit)->Idx();
+            size_t idx = (*fvit)->Idx();
    		    pore_vol = (*fvit)->Read( pv_key );
             for ( size_t i=0; i<flux_in_vectors.size(); i++ )
                {
@@ -357,21 +353,21 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
    } // end CalculateInflowPerPoreVolume
 
 /** get projected velocity for specified facet */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetProjectedVelocities( Element<dim>& e, size_t i)
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetProjectedVelocities( Element<dim>& e, uint32_t i)
    {
      return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[e.Idx()].FacetNormalVelocity(i)*NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[e.Idx()].FacetArea(i);
    }
 
 /** activate gravity component */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::WithGravityComponent( )
    {
        with_gravity = true;      
    }
 
 /** get matrix for upwind nodes */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::GetUpwindMatrix( const Element<dim>& e, std::vector<DenseMatrix<DM_MIN> >& upwind_visitor )
 {
 
@@ -380,7 +376,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::GetUpwindMatrix( const Element<dim>&
 } // GetUpwindMatrix
 
 /** get index of phase density */
-template<size_t dim>
+template<uint32_t dim>
 csmp::Index ExplicitFiniteVolumeTransportPHX<dim>::GetDensityKey(  )
 {
 
@@ -389,7 +385,7 @@ csmp::Index ExplicitFiniteVolumeTransportPHX<dim>::GetDensityKey(  )
 } // GetDensityKey
 
 /** update projection of velocity onto the facet */
-template<size_t dim>
+template<uint32_t dim>
 void ExplicitFiniteVolumeTransportPHX<dim>::UpdateProjection(  )
 {
     NodeCenteredFiniteVolumeTransport<dim>::UpdateProjectedVelocitiesAndFluxBalances( );
@@ -397,28 +393,28 @@ void ExplicitFiniteVolumeTransportPHX<dim>::UpdateProjection(  )
 } // UpdateProjection
 
 /** update projection of velocity onto the facet */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalVelocity( size_t element, size_t facet )
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalVelocity( size_t element, uint32_t facet )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetNormalVelocity(facet);
 } // GetFacetNormalVelocity
 
 /** get normal component of indicated facet and direction */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalComponent( size_t element, size_t facet, size_t x_or_y_or_z )
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetNormalComponent( size_t element, uint32_t facet, uint32_t x_or_y_or_z )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetNormalComponent(facet, x_or_y_or_z);
 } // GetFacetNormalComponent
 
 /** get area of indicated facet */
-template<size_t dim>
-double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetArea( size_t element, size_t facet )
+template<uint32_t dim>
+double ExplicitFiniteVolumeTransportPHX<dim>::GetFacetArea( size_t element, uint32_t facet )
 {
    return NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA[element].FacetArea(facet);
 } // GetFacetArea
 
 /** add new advection variables for finite volume calculations */
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* new_lhs, const char* new_rhs)
 {
 
@@ -431,7 +427,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* 
    mass_balance_vectors.resize(pl_key.size());
    facet_flux_vectors.resize(pl_key.size());
 
-   size_t i = pl_key.size()-1;
+   auto i = pl_key.size()-1;
    flux_in_vectors[i].resize(region_ref.Nodes());
    flux_out_vectors[i].resize(region_ref.Nodes());
    property_vectors[i].resize(region_ref.Nodes());
@@ -446,7 +442,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* 
 
 
 /** single-phase version of mass balanced finite volume calculations */
-template<size_t dim>
+template<uint32_t dim>
 double  ExplicitFiniteVolumeTransportPHX<dim>::AdvectMassConservedSinglePhase( const double& time_increment )
  {
 
@@ -473,7 +469,7 @@ double  ExplicitFiniteVolumeTransportPHX<dim>::AdvectMassConservedSinglePhase( c
  } // end AdvectMassConserved
 
 /** mass-balance check, reducing time step if criterion is not met */
-template<size_t dim>
+template<uint32_t dim>
 void  ExplicitFiniteVolumeTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase( )
  {
 
@@ -481,17 +477,15 @@ void  ExplicitFiniteVolumeTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimes
 
     single_phase_time_step_factor = 1.0;
 
-    unsigned int idx;
-    double LHS, Outflow, temp_factor;
+    double temp_factor;
 
     // time step is only cut if the primary variable (liquid + vapor mass) is running dry
     for ( typename vector<Node<dim>*>::const_iterator fvit = region_ref.NodesBegin();
          fvit != region_ref.NodesEnd(); fvit++ )
          {
-           idx = (*fvit)->Idx();
-
-           LHS      = GetMainPropertyLHS(idx);
-           Outflow  = GetFluxOut(idx);
+           auto   idx      = (*fvit)->Idx();
+           double LHS      = GetMainPropertyLHS(idx);
+           double Outflow  = GetFluxOut(idx);
            if (Outflow != 0.) temp_factor = LHS / Outflow;
            else temp_factor = 1.;
 
@@ -504,7 +498,7 @@ void  ExplicitFiniteVolumeTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimes
  } // end CheckDryFiniteVolumesAndAdjustTimestepForSinglePhase
 
 /** calculate facet flux for single-phase version */
-template<size_t dim>
+template<uint32_t dim>
 void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFluxSinglePhase( )
   {
 

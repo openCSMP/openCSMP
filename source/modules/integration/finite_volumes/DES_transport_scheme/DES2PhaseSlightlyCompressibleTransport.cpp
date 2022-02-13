@@ -12,7 +12,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::DES2PhaseSlightlyCompressibleTransport(  Model<dim>& m,
                                                                                                      const char* target_region,
                                                                                                      bool with_gravity_forces,
@@ -38,7 +38,7 @@ DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::DES2PhaseSlightlyCom
 
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVariablsAndKeys()
 {
     //creating new variables if not defined yet
@@ -77,7 +77,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
 
 
 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeEvents()
 { 
     //create events for all nodes and add them to event lists
@@ -114,7 +114,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeEvent
 
 //Compute non-wetting phase saturaiton gradient at parement elements, for capillary component computation.
 // TODO: super expensive approach - use values from neighboring nodes 
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradients (Event<dim>* event )
 {
     Node<dim>* nd = event->getNode();
@@ -125,7 +125,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
   
     const size_t parent_elements(nd->Parents());      
-    for ( size_t i=0U; i<parent_elements; ++i ) {
+    for ( auto i{0}; i<parent_elements; ++i ) {
         Element<dim>* const eptr = nd->Parent(i);
         
         if(truncated_node == 1 && (this->halo_stencils_.find(eptr) != this->halo_stencils_.end())) { //ignore if parent element located outside domain
@@ -159,7 +159,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
 
 
 //Compute the rate of change of non-wetting phase in a node/FV
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Event<dim>* event )
 {
   Node<dim>* nd = event->getNode();
@@ -223,7 +223,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         
         double inflow(0.), CO2_inflow (0.);
         const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( size_t i=0U; i<sector_facets; i++ )
+        for ( auto i{0}; i<sector_facets; i++ )
         {
             const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
             const size_t inside_node(eptr->FV()->InsideNode(iFacet));
@@ -400,7 +400,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 
 
 //schedule an event associated with a node/FV
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<dim>* event, double t_end)
 {
   Node<dim>* nd = event->getNode();
@@ -444,7 +444,7 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Schedule(Event<
 
 
 //update solution and check it against the specified range (with DES)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Event<dim>* event, double t_clock)
 {
   Node<dim>* nd = event->getNode();
@@ -490,7 +490,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_DES(Even
 
 
 //update solution and check it against the specified range (with TDS)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Event<dim>* event, double delta_t)
 {
   Node<dim>* nd = event->getNode();
@@ -527,7 +527,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Update_TDS(Even
 
 
 //Synchronize neighbor nodes/FVs
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Event<dim>* event, double t_clock, double& t_remove )
 {
   Node<dim>* nd = event->getNode();
@@ -540,7 +540,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
     nd->Read(this->key_time, array);
     array.Component(4, 0.); //reset cumulative change of solution
     nd->Store(this->key_time, array);
-    for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
+    for ( auto n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
         if( neighbor_node != NULL && neighbor_node->Status(  this->key_sCO2 ) != DIRICH){
             size_t index = neighbor_node->Read(this->key_EventIndex);
@@ -584,7 +584,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
 
 
 //advect variable with TDS (time driven simulation)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS( double time_interval, size_t num_threads )
 {
 #if defined(_OPENMP)
@@ -614,7 +614,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 
 //advect variable with DES (discrete event simulation)
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES( double model_time, size_t num_threads )
 {
 #if defined(_OPENMP)
@@ -646,7 +646,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 
 //advect variable with TDS (time-driven simulation), serial mode
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial( double time_interval)
 {
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_TDS_serial "<<endl;
@@ -721,7 +721,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 #if defined(_OPENMP)
 //advect variable with TDS (time-driven simulation), parallel mode
-template<size_t dim>
+template<uint32_t dim>
 void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( double time_interval, size_t num_threads )
 {
     cout<<"Start DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel "<<endl;
@@ -735,7 +735,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
     
     size_t PEPList_size = this->PEPList.size();
     
-    for(size_t i = 0U; i < PEPList_size; ++i)
+    for(auto i = 0U; i < PEPList_size; ++i)
     {
         auto it = this->PEPList.begin()+i;
         this->ComputeGradients ((*it));
@@ -744,14 +744,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
     #pragma omp parallel num_threads(num_threads)
     {
         #pragma omp for schedule(dynamic)
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             ComputeRateofChange((*it));  
         };
     }
 
-    for(size_t i = 0U; i < PEPList_size; ++i)
+    for(auto i = 0U; i < PEPList_size; ++i)
     {
         auto it = this->PEPList.begin()+i;
         Event<dim>* event = *it;     
@@ -784,7 +784,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
         
         T_begin = omp_get_wtime();
         time_increment = time_interval; 
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             this->ComputeGradients ((*it));
@@ -793,14 +793,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
         #pragma omp parallel num_threads(num_threads)
         {        
             #pragma omp for schedule(dynamic)     
-            for(size_t i = 0U; i < PEPList_size; ++i)
+            for(auto i = 0U; i < PEPList_size; ++i)
             {
                 auto it = this->PEPList.begin()+i;
                 ComputeRateofChange((*it));;
             }
         }        
         
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             ArrayVariable array2;
@@ -834,7 +834,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
 
 
 //advect variable with DES (discrete event simulation), serial mode
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_serial( double model_time)
 {
     double begin=clock();
@@ -975,7 +975,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 #if defined(_OPENMP)
 //advect variable with DES (discrete event simulation), parallel mode
-template<size_t dim, template<size_t> class FLOW_FUNCTIONS>
+template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_DES_parallel( double model_time, size_t num_threads)
 {
     double begin=omp_get_wtime();
@@ -1002,7 +1002,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
                 
         size_t PEPList_size = this->PEPList.size();
         
-        for(size_t i = 0U; i < PEPList_size; ++i)
+        for(auto i = 0U; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             Event<dim>* event = *it;   
@@ -1015,7 +1015,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             std::vector<Event<dim>*> privateList;
             
             #pragma omp for schedule(dynamic)
-            for(size_t i = 0U; i < PEPList_size; ++i)
+            for(auto i = 0U; i < PEPList_size; ++i)
             {
                 
                 auto it = this->PEPList.begin()+i;
@@ -1032,7 +1032,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         } 
         
         size_t tempList_size = tempList.size();
-        for(size_t i = 0U; i < tempList_size; ++i)
+        for(auto i = 0U; i < tempList_size; ++i)
         {
             auto it = tempList.begin()+i;
             Event<dim>* event = *it;                 

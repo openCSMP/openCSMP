@@ -5,7 +5,7 @@
 
 namespace csmp{
 
-  template<size_t> class Face;
+  template<uint32_t> class Face;
 
   class Face_Test : public Test {
     enum{DIM=3};

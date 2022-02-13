@@ -17,8 +17,8 @@
 namespace csmp {
 
 class ScalarVariable;
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
 class ArrayVariable;
 class FlaggedArrayVariable;
                                         
@@ -168,13 +168,13 @@ here we instantiated an array on the element of size 22. So to recap the variabl
   1 .. ScalarVariable
   2 .. VectorVariable
   3 .. TensorVariable
-  4 to max<size_t> ArrayVariable of that size
+  4 to max<uint32_t> ArrayVariable of that size
 
 @todo (2-C) DocMe (Update to P. Lang 2012)
 @todo (3-D) Refactor!! maps
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class PropertyDatabase  {
  public:
    PropertyDatabase();
@@ -200,8 +200,8 @@ class PropertyDatabase  {
    bool           IsDefined( const csmp::Index& idx ) const;
    void           RangeOf( const char* property_name, double& min, double& max ) const;
    void           SetRangeOf( const char* property_name, double vmin, double vmax );
-   double       LowerLimitOf( const char* property_name ) const;
-   double       UpperLimitOf( const char* property_name ) const;
+   double         LowerLimitOf( const char* property_name ) const;
+   double         UpperLimitOf( const char* property_name ) const;
 
    // range checking
    /// prints details of the range check to screen and terminates program is value is out of range
@@ -267,10 +267,10 @@ class PropertyDatabase  {
    size_t VariableCount()                             const;
 
    size_t ArrayLengthTotal( PLACEMENT place ) const;
-   void   ArrayLengths( PLACEMENT place, std::vector<size_t>& arrayLengths ) const;
+   void   ArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const;
 
    size_t FlaggedArrayLengthTotal( PLACEMENT place ) const;
-   void   FlaggedArrayLengths( PLACEMENT place, std::vector<size_t>& arrayLengths ) const;
+   void   FlaggedArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const;
    
    bool   WriteVariablesFile( const char* fileName ) const;
 

@@ -65,7 +65,7 @@ class SparseMatrix {
     void      MultiplyWith(const std::vector<double>& vec, std::vector<double>& res);
 
     /// returns j's of non-zero column entries in row
-    void      ColumnIndices( size_t row, std::vector<size_t>& indices ) const;
+    void      ColumnIndices( size_t row, std::vector<uint32_t>& indices ) const;
     /// if suspected that a recent operation modified number of entries
     size_t    RecountEntries() const;
 

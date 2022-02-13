@@ -39,7 +39,7 @@ Outputs into a file named by the first argument string plus extension
 third argument allows you to append the timestep to the filename. 
 This timestep information must be an integer. 
   */
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                                              const char* fname, const char* var ) const
  {
@@ -306,7 +306,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
 /**
     Output of data from one specific region of interest.
 */
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumns( const char* region,
                                              const Model<dim>& sg,
                                              const char* fname, const char* s ) const
@@ -388,7 +388,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
-              for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+              for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
                 fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -444,7 +444,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( size_t i=0U; i<(*eit)->Nodes(); ++i )
+                for ( auto i{0}; i<(*eit)->Nodes(); ++i )
                 {
                   // printing the element id first
                   fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -518,7 +518,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( size_t i=0U; i<(*eit)->FV()->Facets(); ++i )
+                for ( auto i{0}; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
                   fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -651,7 +651,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
 
 
 /// output of a suite of variables with same placement for a specific region; user can transform coordinates
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                                              const char* file_name, const char* region,
                                              const CoordinateTransformer<dim>& xyzt,
@@ -716,16 +716,16 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
           var_keys[var_count] = model.Database().StorageKey( (*pit).c_str() );
           if ( var_keys[var_count].type == SCALAR ) fprintf( fp, "%s\t", (*pit).c_str() );
           else if ( var_keys[var_count].type == VECTOR ) {
-                 for ( size_t i=0U; i<dim; i++ )
+                 for ( auto i{0}; i<dim; i++ )
                    fprintf( fp, "%s%zu\t", (*pit).c_str(), i );
             }
           else if ( var_keys[var_count].type == TENSOR ) {
-                 for ( size_t i=0U; i<dim; i++ )
+                 for ( auto i{0}; i<dim; i++ )
                    for ( size_t j=0U; j<dim; j++ )
                      fprintf( fp, "%s%zu%zu\t", (*pit).c_str(), i, j );
             }
           else if ( var_keys[var_count].type == ARRAY or var_keys[var_count].type == FLAGGEDARRAY ) {
-                 for ( size_t i=0U; i<var_keys[var_count].dataDepth; i++ )
+                 for ( auto i{0}; i<var_keys[var_count].dataDepth; i++ )
                    fprintf( fp, "%s%zu\t", (*pit).c_str(), i );
             }
           var_count++;
@@ -769,7 +769,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                            case TENSOR: 
                                 (*nit)->Read( (*vt), ts );
                                 for ( size_t j=0; j<dim; j++ )
-                                  for ( size_t k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                                  for ( auto k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                             break;
                           case ARRAY:
                                (*nit)->Read( (*vt), ary );
@@ -814,7 +814,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                              case TENSOR:
                                   (*eit)->Read( (*vt), ts );
                                   for ( size_t j=0; j<dim; j++ )
-                                    for ( size_t k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                                    for ( auto k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                                break;
                              case ARRAY:
                                   (*eit)->Read( (*vt), ary );
@@ -859,7 +859,7 @@ template void TextInterface::OutputDataAsTextColumns( const Model<3U>&, const ch
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumnsNumbered( const Model<dim>& sg,
                                                      const char* fname, const char* s ) const
  {
@@ -873,7 +873,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const Model<dim>& sg,
                                                      const char* fname, const char* s ) const
  {
@@ -939,7 +939,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
-              for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+              for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
                 fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -1030,7 +1030,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                                              const char* file_name, const char* s, 
                                              long timestep, bool numbered ) const
@@ -1084,7 +1084,7 @@ The method will report an error and return without creating any output if
 no groups were defined. 
  
 */
-template<size_t dim>
+template<uint32_t dim>
 void TextInterface::OutputRegionsToTextFiles( const Model<dim>& sg, const char* property ) const
  {
     typename map<string,Region<dim> >::const_iterator  it = sg.RegionsBegin();
@@ -1235,7 +1235,7 @@ void  TextInterface::ReadPixelTextImage256( const char* fname, Matrix& data )
       throw csmp::Exception( FATAL_ERROR, "TextInterface::ReadPixelTextImage256", 
                                           "Input file could not be opened");
       
-     for ( size_t i=0U; i<data.Rows(); i++ )
+     for ( auto i{0}; i<data.Rows(); i++ )
        for ( size_t j=0U; j<data.Cols(); j++ )
          {   
            ifs >> value;

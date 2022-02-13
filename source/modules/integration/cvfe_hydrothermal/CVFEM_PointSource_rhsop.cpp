@@ -7,11 +7,11 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, class SIMPLEX>
-CVFEM_PointSource_rhsop<dim,SIMPLEX>::~CVFEM_PointSource_rhsop() {}
+template<uint32_t dim, class CELL>
+CVFEM_PointSource_rhsop<dim,CELL>::~CVFEM_PointSource_rhsop() {}
 
-template<size_t dim, class SIMPLEX>
-CVFEM_PointSource_rhsop<dim,SIMPLEX>::CVFEM_PointSource_rhsop( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
+template<uint32_t dim, class CELL>
+CVFEM_PointSource_rhsop<dim,CELL>::CVFEM_PointSource_rhsop( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
   : CVFEM_MathOperatorRHS<dim>(pref,oper,test),
     SRC_(3)
  {
@@ -20,47 +20,47 @@ CVFEM_PointSource_rhsop<dim,SIMPLEX>::CVFEM_PointSource_rhsop( const PropertyDat
      if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR || 
           MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE ) 
      {
-        cout <<"\nMathOperatorRHS->CVFEM_PointSource_rhsop<dim,SIMPLEX>::(constructor): ";
+        cout <<"\nMathOperatorRHS->CVFEM_PointSource_rhsop<dim,CELL>::(constructor): ";
         cout <<"Fatal Error: Operand must be a scalar variable placed on the node. Terminating..."<< endl;
         throw invalid_argument("CVFEM_PointSource_rhsop<csp_float,dim>::CVFEM_PointSource_rhsop");
      }
  }
 
 
-template<size_t dim, class SIMPLEX>
-void CVFEM_PointSource_rhsop<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<uint32_t dim, class CELL>
+void CVFEM_PointSource_rhsop<dim,CELL>::GetOperands( CELL& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), SRC_ );
       // taking into account that the source contributes to several elements
-      for ( size_t i=0U; i<e.Nodes(); i++ )
+      for ( auto i{0}; i<e.Nodes(); i++ )
         SRC_[i] /= static_cast<double>(e.N(i)->Parents()); 
 
    } // end GetOperands
 
 
-template<size_t dim, class SIMPLEX>
-void CVFEM_PointSource_rhsop<dim,SIMPLEX>::GetOperandsCVFEM( SIMPLEX& e, csmp::Index upwind_var_key  )
+template<uint32_t dim, class CELL>
+void CVFEM_PointSource_rhsop<dim,CELL>::GetOperandsCVFEM( CELL& e, csmp::Index upwind_var_key  )
    { 
 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), SRC_ );
       e.NodePropertyVector( upwind_var_key, upwind_var_);
        
       // taking into account that the source contributes to several elements
-      for ( size_t i=0U; i<e.Nodes(); i++ )
+      for ( auto i{0}; i<e.Nodes(); i++ )
         SRC_[i] /= static_cast<double>(e.N(i)->Parents()); 
 
-      for (size_t i = 0; i < upwind_var_.size(); i++)
+      for (auto i = 0; i < upwind_var_.size(); i++)
          SRC_[i]() *= upwind_var_[i]();
 
 
    } // end GetOperands
 
 
-template<size_t dim, class SIMPLEX>
-void CVFEM_PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<uint32_t dim, class CELL>
+void CVFEM_PointSource_rhsop<dim,CELL>::ComputeContribution( CELL& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
-   for ( size_t i=0; i<e.Nodes(); i++ )
+   for ( auto i=0; i<e.Nodes(); i++ )
      MathOperatorRHS<dim>::RHS[i] = SRC_[i]();
      
 } // end ComputeContribution

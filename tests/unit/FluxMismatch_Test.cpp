@@ -119,23 +119,23 @@ int flux_mismatch( bool bPrescribedVelocity )
     ScalarVariable  sc;
     double  emax(0.);
     Region<3>&  sgref(sg.Region("Model"));
-    for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ ) {
+    for ( auto it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ ) {
          sc = fabs( (*it)->Read( prop_key ));// / cross_section_fv[it->ID()-1U] );
          (*it)->Store( prop_key, sc );           
          emax = std::max( emax, sc() );
       }
-    for ( vector<Node<3U>*>::iterator it=sgref.PerimeterNodesBegin(); it!=sgref.NodesEnd(); it++ )
+    for ( auto it=sgref.PerimeterNodesBegin(); it!=sgref.NodesEnd(); it++ )
       (*it)->Store( prop_key, sc=0. );
     
     // finding the worst finite volume and analyzing it
-    for ( vector<Node<3U>*>::iterator it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ )
+    for ( auto it=sgref.NodesBegin(); it!=sgref.PerimeterNodesBegin(); it++ )
       if ( fabs(emax - (*it)->Read( prop_key )) <= 1e-15 )
         if ( verbose )
         {
            cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: " << (*it)->Read( prop_key ) << endl;
            (*it)->Out();
            cout <<"\ncomposed of the element types: "<< endl;
-           for ( size_t i=0U; i<(*it)->Parents(); i++ )
+           for ( auto i{0}; i<(*it)->Parents(); i++ )
              {
                cout << (*it)->Parent(i) << " ";             
                cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;       

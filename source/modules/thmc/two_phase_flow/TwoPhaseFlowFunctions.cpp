@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
   {
      assert( e != nullptr );
@@ -23,7 +23,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
 /**
       Mobility of phase i, kri(sw) / mu_i.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::Mobility( Element<dim>* const e, size_t phase ) const
   {
     assert( e != nullptr );
@@ -49,7 +49,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Mobility( Element<dim>* const e, size_t 
     Mobility of phase i, kri(sw) / mu_i.
     Using prescribed sw value, instead of intepolated value.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, size_t phase, double sw ) const
  {
     assert( e != nullptr );
@@ -74,7 +74,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, size
 /**
     Mobility saturation derivative for phase i.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const e, size_t phase, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
@@ -92,7 +92,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const 
   /**
    Mobility saturation derivative for phase i.
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, size_t phase, double sw ) const
   {
     assert( e != nullptr );
@@ -111,7 +111,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const 
   /**
       Sum of mobilities (not multiplied with permeability).
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double TwoPhaseFlowFunctions<dim,USER>::TotalMobility(Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -126,7 +126,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const 
     Sum of mobilities (not multiplied with permeability).
     Using prescribed sw value, instead of intepolated value.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::TotalMobility_at( Element<dim>* const e, double sw ) const
  {
     assert( e != nullptr );
@@ -146,7 +146,7 @@ double TwoPhaseFlowFunctions<dim,USER>::TotalMobility_at( Element<dim>* const e,
     Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn
     and de Neef (1998). Note that Initialize() must be called first.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const e ) const
  {
     assert( e != nullptr );
@@ -163,7 +163,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const e )
 /** 
     Saturation derivative of mobility product.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>* const e, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
@@ -196,7 +196,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>*
   /**
    Saturation derivative of mobility product.
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double TwoPhaseFlowFunctions<dim,USER>::MobilityProductDerivative_at( Element<dim>* const e , double sw) const
   {
     assert( e != nullptr );
@@ -233,7 +233,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 (ehase=2) phases using the relative k's. and viscosities. Note that
 Initialize() must be called first.  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::f( Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
@@ -258,7 +258,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 (ehase=2) phases using prescribed sw value, instead of intepolated value.
 
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t phase, double sw ) const
  {
     assert( e != nullptr );
@@ -293,7 +293,7 @@ double TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t phas
  
     @todo check whether code for end-member cases has to be reinstated.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
@@ -321,7 +321,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t phas
  
     @todo check whether code for end-member cases has to be reinstated.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, double sw ) const
  {
    assert( e != nullptr );
@@ -350,7 +350,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, double s
      function at the current saturation of the wetting phase (see Helmig, 1997,
      p. 108, eqn. 3.74, term 2 (first part).
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const e ) const
 {
    assert( e != nullptr );
@@ -365,7 +365,7 @@ double TwoPhaseFlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const
 /**
      k * delta_rho * g
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier( Element<dim>* const e,
                                                         VectorVariable<dim>& dip_vc ) const
  {
@@ -403,7 +403,7 @@ void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier( Element<dim>* const e,
  
      G = lambda_overbar * k * delta_rho * g
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( Element<dim>* const e,
                                                            VectorVariable<dim>& dip_vc ) const
  {
@@ -423,7 +423,7 @@ void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_G( Element<dim>* const e
  lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
  p. 108, eqn. 3.74, term 2 (second part).
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( Element<dim>* const e,
                                                                    VectorVariable<dim>& dip_vc ) const
  {
@@ -440,7 +440,7 @@ void TwoPhaseFlowFunctions<dim,USER>::GravityMultiplier_dGds( Element<dim>* cons
  Returns the diffusion coefficient for the phase of interest. If not
  overloaeded, the hydraulic conductivity is returned.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* const e, size_t phase ) const
  {
     assert( e != nullptr );
@@ -461,7 +461,7 @@ double TwoPhaseFlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* const
  See Helmig, 1997, p. 108, eqn. 3.74, term 1. This takes into account the
  permeability in direction of flow  x  lambda_overbar  x pc-gradient.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -475,7 +475,7 @@ double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<di
   
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Element<dim>* const e, size_t phase ) const
   {
     assert( e != nullptr );
@@ -498,7 +498,7 @@ double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Elem
   
   // ===============================================================================================
   
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double TwoPhaseFlowFunctions<dim,USER>::dfds_Numerical( Element<dim>* const e, size_t phase, double h ) const
   {
     assert( e != nullptr );
@@ -531,7 +531,7 @@ double TwoPhaseFlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Elem
    
    @todo check whether code for end-member cases has to be reinstated.
    */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dfds_at_Numerical( Element<dim>* const e, double sw, double h) const
   {
     assert( e != nullptr );
@@ -549,7 +549,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dfds_at_Numerical( Element<dim>* const e
   
   
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dGds_Numerical( Element<dim>* const e, double h ) const
   {
     assert( e != nullptr );
@@ -573,7 +573,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dGds_Numerical( Element<dim>* const e, d
 
 
 /// derivative of wetting phase mobility
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dlwds_Numerical( Element<dim>* const e, double h ) const
  {
     assert( e != nullptr );
@@ -588,7 +588,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dlwds_Numerical( Element<dim>* const e, 
 
 
 /// derivative of non-wetting phase mobility
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::dlnds_Numerical( Element<dim>* const e, double h ) const
  {
     assert( e != nullptr );
@@ -609,7 +609,7 @@ double TwoPhaseFlowFunctions<dim,USER>::dlnds_Numerical( Element<dim>* const e, 
   This can be more accurate by puting in the loop of more and more finer maxima serach algorithm.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -668,7 +668,7 @@ double TwoPhaseFlowFunctions<dim,USER>::InflectionPointSaturation( Element<dim>*
 
  */
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -694,7 +694,7 @@ double TwoPhaseFlowFunctions<dim,USER>::TangentPointSaturation( Element<dim>* co
  The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book.
   
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( Element<dim>* const e, double S ) const
   {
      assert( e != nullptr );
@@ -715,7 +715,7 @@ double TwoPhaseFlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( Element
  Using the the SecantMethod to find the root of The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( Element<dim>* const e, double S1, double S2 ) const
   {
     assert( e != nullptr );
@@ -746,7 +746,7 @@ double TwoPhaseFlowFunctions<dim,USER>::FindRootSecantMethod( Element<dim>* cons
  @attension: Generally "MaxFractionalqFlowDerivative" is not speed. It is after Buckley-Leverett problem
  */
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::MaxFractionalFlowDerivative( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -763,7 +763,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MaxFractionalFlowDerivative( Element<dim
 
   
 /// shock speed base on Buckley Leverett theory
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -775,7 +775,7 @@ double TwoPhaseFlowFunctions<dim,USER>::ShockSpeed( Element<dim>* const e ) cons
   
 
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::ShockHeight( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -808,7 +808,7 @@ double TwoPhaseFlowFunctions<dim,USER>::ShockHeight( Element<dim>* const e ) con
   
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( Element<dim>* const e, double& speed, double& height) const
 {
     assert( e != nullptr );
@@ -829,7 +829,7 @@ void TwoPhaseFlowFunctions<dim,USER>::ShockSpeedAndHeight( Element<dim>* const e
   
 */
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double TwoPhaseFlowFunctions<dim,USER>::ShockFrontVelocity( Element<dim>* const e ) const
   {
      assert( e != nullptr );

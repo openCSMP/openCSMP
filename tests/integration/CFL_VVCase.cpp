@@ -1,5 +1,6 @@
 #include "CFL_VVCase.h"
 #include "ANSYS_Model3D.h"
+#include "Model.h"
 #include "LinearSolver.h"
 #include "PropertyHandle.h"
 #include "PDE_Integrator.h"
@@ -7,6 +8,7 @@
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "PL_Utilities.h"
 #include "TwoPhaseImplicitNodeCenteredFVTransport.h"
+#include "CSMP_highLevelUtilities.h"
 #include "StencilProcessor.h"
 #include "BrooksCorey.h"
 #include "VTU_Interface.h"
@@ -43,7 +45,7 @@ void CFL_TestCase::run()
     //const
     const  double satOil(1.), tolCFL(.1);
     //for each test
-    double time(0.), CFLmultiplier(1.), mobilityRatio(0.), velX(0.), testCFL(0.), phi(0.);
+    double time(0.), CFLmultiplier(1.), velX(0.), testCFL(0.), phi(0.);
 
     //test container
     vector<CFL_TestData> tests;

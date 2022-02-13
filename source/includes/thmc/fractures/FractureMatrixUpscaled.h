@@ -12,7 +12,7 @@ ensemble relative permeability model for fracture matrix systems
 parameterized with, qf/qm ratio, Af(sw), and GTF
 the BrooksCorey model is retained to calculate lambda overbar and pc
 for the transfer function*/
-template<size_t dim>
+template<uint32_t dim>
 class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
   public:
     FractureMatrixUpscaled( const PropertyDatabase<dim>& database,
@@ -109,7 +109,7 @@ class FractureMatrixUpscaled : public TwoPhaseModel<dim> {
 
 
 /// exponential function from 0.1 to 1 at sw=1, should be fitted to simulation results
-template<size_t dim>
+template<uint32_t dim>
 inline double FractureMatrixUpscaled<dim>::Af_sw() const
  {
     // .1 * exp(2.3*x^3)

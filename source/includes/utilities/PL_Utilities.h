@@ -48,20 +48,20 @@ inline bool smallerThanWithinTolerance( T valueInQuestion, T referenceValue, T t
 }
 
 /// returns the maximum difference found on any node/element between two properties property
-template<size_t dim, template<size_t> class NodeOrElement>
+template<uint32_t dim, template<uint32_t> class NodeOrElement>
 double maximumDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
 
 /// returns the averaged difference found on all nodes/elements between two properties property
-template<size_t dim, template<size_t> class NodeOrElement>
+template<uint32_t dim, template<uint32_t> class NodeOrElement>
 double averageDifference( Model<dim>& model, const char* nodeProp1, const char* nodeProp2, const char* region = "Model" );
 
 
 /// returns the maximum value on any node/element of a property
-template<size_t dim, template<size_t> class NodeOrElement>
+template<uint32_t dim, template<uint32_t> class NodeOrElement>
 double maximumOfProperty( Model<dim>& model, const char* prop, const char* region = "Model" );
 
 /// returns arithmetic average of parent elements prop to node
-template<size_t dim>
+template<uint32_t dim>
 double elementToNodeProperty( Node<dim>* node, Index key )
   {
     double cacheDouble = 0.;
@@ -76,7 +76,7 @@ template<typename T>
 inline void vectorOut( const std::vector<T>& v, std::string message = "" )
  {
   std::cout << "\nvectorOut(" << message << "):\n";
-  for( size_t i = 0; i < v.size(); ++i )
+  for( auto i = 0; i < v.size(); ++i )
     std::cout << v.at( i ) << std::endl;
  }
 
@@ -103,7 +103,7 @@ Point<3U> modelMidpoint( const Model<3U>& model, const char* regionName = "Model
 
 
 /// NCFVT bug workaround to calculate inflow across a boundary with PP conditions. Requires add. 'nodal volume flux'
-template<size_t dim>
+template<uint32_t dim>
 double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
   {
     model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
@@ -111,7 +111,7 @@ double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
   {
   model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
@@ -119,7 +119,7 @@ double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
   }
 
 /// establishes 'velocity' and 'volume flux' for a single phase system ('conductivity'), beware of surface elements
-template<size_t dim>
+template<uint32_t dim>
 void singlePhaseVelocity( Model<dim>& model, const std::string& regionName, 
                          const std::string velocityName = "velocity", 
                          const std::string pressureName = "fluid pressure", 
@@ -136,14 +136,14 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
 
     Region<dim>&  rref(  model.Region( regionName.data() ) );
 
-    const typename std::vector<Element<dim>*>::const_iterator elementsEnd = rref.ElementsEnd();
-    for ( typename std::vector<Element<dim>*>::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd = rref.ElementsEnd();
+    for ( auto it = rref.ElementsBegin(); it != elementsEnd; ++it )
       {
         // vt = -k (lt grad p)
         const double conductivity = (*it)->Read( conductivityKey );
         velo = 0.;
         (*(*it)).dN_AtBaryCenter( DERIV, 1U );
-        for ( size_t i = 0; i < (*it)->Nodes(); ++i )
+        for ( auto i = 0; i < (*it)->Nodes(); ++i )
           {
             double pf = (*it)->N(i)->Read( fluidPresssureKey );
             for( size_t xyz = 0; xyz < dim; ++xyz )
@@ -193,7 +193,7 @@ bool mapOut( const std::map<KeyType,ValueType>& mapToOutput, const char* filenam
 }
 
 
-template<size_t dim,template<size_t> class Domain>
+template<uint32_t dim,template<uint32_t> class Domain>
 bool connected( const Domain<dim>& d1, const Domain<dim>& d2 )
 {
   const typename std::vector<typename Domain<dim>::Simplex*>::const_iterator simplicesEnd = d1.ElementsEnd();
@@ -209,7 +209,7 @@ bool connected( const Domain<dim>& d1, const Domain<dim>& d2 )
 }
 
 
-template<size_t dim,template<size_t> class Domain>
+template<uint32_t dim,template<uint32_t> class Domain>
 double averageDistanceBetween( const Domain<dim>& d1, const Domain<dim>& d2 )
   {
     double averageDistance( 0. );
@@ -231,7 +231,7 @@ double averageDistanceBetween( const Domain<dim>& d1, const Domain<dim>& d2 )
 
 
 /// @todo (2-F) (2-C) Should return a vector instead
-template<size_t dim,template<size_t> class Domain>
+template<uint32_t dim,template<uint32_t> class Domain>
 double minimumDistanceBetween( const Domain<dim>& d1, const Domain<dim>& d2 )
 {
   double minumumDistance( std::numeric_limits<double>::max() );

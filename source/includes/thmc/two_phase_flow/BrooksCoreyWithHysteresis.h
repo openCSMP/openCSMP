@@ -7,7 +7,7 @@ namespace csmp {
 
 // for lambda=0, this implementation of Brooks-Corey model switches to linear
 // base class pm1 and pm2 are used for pd and lambda, respectively
-template<size_t dim>
+template<uint32_t dim>
 class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
   public:
     BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,

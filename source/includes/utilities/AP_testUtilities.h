@@ -6,9 +6,9 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class Element;
-template<size_t,template<size_t> class> class FiniteVolumeTraits;
+template<uint32_t> class Model;
+template<uint32_t> class Element;
+template<size_t,template<uint32_t> class> class FiniteVolumeTraits;
 
 void rhinoOutput( const Model<3U>& );
 

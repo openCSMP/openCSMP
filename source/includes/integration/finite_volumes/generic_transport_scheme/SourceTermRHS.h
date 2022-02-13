@@ -17,7 +17,7 @@ namespace csmp {
    Either an areal/volumetric source specified on the Element or Face or
    a nodal (point) source term to be accumulated into the righthand vector.
 */
-template<size_t dim>
+template<uint32_t dim>
 class SourceTermRHS : public VectorOperator<dim> {
   public:
     /// note that this source variable may be an element or a nodal one

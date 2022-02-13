@@ -12,7 +12,7 @@ namespace csmp {
 /**
     @attention SKM 28/9/2014 - added documentation, fixed wrong output and formatted code
 */
-template<size_t dim>
+template<uint32_t dim>
 MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model,
                                                              bool positive_compressive_stress_convention,
                                                              bool verbose )
@@ -56,7 +56,7 @@ MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 MohrCoulombFailure_Visitor<dim>::~MohrCoulombFailure_Visitor()
 {
 }
@@ -73,13 +73,13 @@ MohrCoulombFailure_Visitor<dim>::~MohrCoulombFailure_Visitor()
     
     @attention SKM 28/9/2014 - added case where stress is placed on the element.
 */
-template<size_t dim>
+template<uint32_t dim>
 void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
  {
     // cohesion, failure variables are in integration point
     if ( Stress_key_.place == ELEMENT_INTEGRATION_POINT ) {
         const size_t integration_points(e->FE()->IntegrationPoints());
-        for ( size_t i=0U; i<integration_points; i++ )
+        for ( auto i{0}; i<integration_points; i++ )
           {
             // 1. reading input variables
             e->Read(i, Stress_key_, Cartesian_stress_ );
