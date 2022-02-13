@@ -28,8 +28,9 @@ INCLUDE_DIRECTORIES(
 	${BASE_INCLUDES_SUBDIR}
 	${BASE_INCLUDES_SUBSUBDIR}
 	${MODULES_SOURCE_DIR}
-	"${CMAKE_SOURCE_DIR}/thirdparty/catch/include"
+	"${CMAKE_SOURCE_DIR}/thirdparty/catch2"
 	"${CMAKE_SOURCE_DIR}/thirdparty/iaps_h2o_eos"
+    "${CMAKE_SOURCE_DIR}/thirdparty/plf_colony"
 	"${CMAKE_BINARY_DIR}/source/generated_includes"
 	"${CMAKE_CURRENT_SOURCE_DIR}/unit"
 	"${CMAKE_CURRENT_SOURCE_DIR}/integration"

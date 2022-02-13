@@ -24,6 +24,8 @@
 #include "plf_colony.h"
 #include "VTK_Interface.h"
 
+#include <chrono>
+
 using namespace std;
 
 namespace csmp {

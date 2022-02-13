@@ -223,7 +223,9 @@ void Node<dim>::Assign( size_t pnode, Element<dim>* element )
 
 
 /**
-    Sets the pointer to the target element to zero, and the corresponding node number to NOT_INITIALIZED.
+    Sets the pointer to the argument element to zero, and the corresponding node number to NOT_INITIALIZED.
+    
+    @note the argument element is not deleted. To do this use EraseNullPointerParents().
 */
 template<size_t dim>
 bool Node<dim>::Unassign( Element<dim>* element )
@@ -244,7 +246,7 @@ bool Node<dim>::Unassign( Element<dim>* element )
 
 
 /**
-    Removes parent elements pointers that were set to nullptr.
+    Removes parent elements pointers, but only if these were set to nullptr before.
 */
 template<size_t dim>
 void Node<dim>::EraseNullPointerParents()

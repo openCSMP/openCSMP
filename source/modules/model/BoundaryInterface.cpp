@@ -1171,18 +1171,12 @@ throw csmp::Exception( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::Create
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* boundary )
   {
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* >(this) );
-    
     if ( !ContainsBoundary(boundary) ) {
          ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::RemoveBoundary",
                                           boundary, "no boundary with this name found; nothing was done");
          return;
       }
     
-    // getting MeshManager to remove the boudary faces
-    csmp::Boundary<dim>&  subdomain( this->Boundary(boundary) );
-    boundaryComplex->Mesh().Delete( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
-
     // erasing the boundary
     faceBoundaryMap_.erase( boundary );
     
@@ -1199,13 +1193,10 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* bound
 template<size_t dim, template<size_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary )
   {
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* >(this) );
-    
     // locating the boundary in the boundary map
     boundaryIterator it = faceBoundaryMap_.find( boundary.Name() );
     // if the addresses of the objects are the same
     if ( it != faceBoundaryMap_.end() ) {
-         boundaryComplex->Mesh().Delete( boundary.ElementsBegin(), boundary.ElementsEnd() );
          faceBoundaryMap_.erase( (*it).first );
          return;
       }
@@ -1446,7 +1437,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     const csmp::Region<dim>&  gref1(boundaryComplex->Region(group1));
     const csmp::Region<dim>&  gref2(boundaryComplex->Region(group2));
    
-    string boundary_name = FindBoundaryName( set{string{group1},string{group2}} );
+    string boundary_name = FindBoundaryName( set<string>{string{group1},string{group2}} );
 
     // attempt to create a (Face-based) boundary, appending numbers as necessary
     pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
@@ -2008,25 +1999,28 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
 
+      // 3. disconnecting perimeter elements of the regions that will be deleted
+      //    from their equidimensional neighbors outside of the region
+      // -----------------------------------------------------------------------
+      if ( model->ContainsRegion("TOP") )
+        model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("TOP") );
+      if ( model->ContainsRegion("IRREGULAR") )
+        model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("TOP") );
+      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("BOTTOM") );
+      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("LEFT") );
+      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("RIGHT") );
+      if constexpr ( dim == 3 ) {
+          model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("BACK") );
+          model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("FRONT") );
+        }
 
-// DEBUGGING
-// checking input vector for duplicates (OK for prism_test
-/*
-sort( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
-bool hasDuplicates = adjacent_find( elmts_to_become_faces.begin(), elmts_to_become_faces.end()) !=
-                                                                                 elmts_to_become_faces.end();
-// contains null pointers ?
-bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces.end(), nullptr) !=
-                                                                  elmts_to_become_faces.end();
-*/
-
-      // 3. getting MeshManager to create faces and delete pre-cursor elements
+      // 4. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
       vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                        elmts_to_become_faces.begin(),
                                                                        elmts_to_become_faces.end() );
 
-      // 4. creating the Boundaries from the faces
+      // 5. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };
 
@@ -2042,7 +2036,7 @@ bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces
           AddBoundary( "FRONT", next(fit,front.first), next(fit,front.second), FRONT );
        }
       
-      // 5. removing the input regions
+      // 6. removing the input regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
       if ( top.first != top.second ) model->RemoveRegion( "TOP" );
@@ -2112,7 +2106,6 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
 	  cout << "\nBoundaryInterface<" << dim << ">::EstablishBoundaries: searching for eligible boundary domains...\n";
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-//csmp_error.notice( FATAL_ERROR, "BoundaryInterface<dim, BOUNDARY_COMPLEX>::EstablishBoundariesFromRegions", "method not refactored yet");
 
     // 1. compiling the unique regions that will be used as input for boundary creation
     //    and making a map of their elements that will be converted to faces
@@ -2150,13 +2143,23 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
          return set<string>{};
       }
 
+	  // 2. removing the original regions from which the boundaries were created
+    // ------------------------------------------------------------------------------------
+    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
+    for ( auto& it : eligibleRegions ) {
+         model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
+         model->RemoveRegion( it.first.c_str() );
+      }
 
-    // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
+// DEBUGGING - checked that there are no duplicates or nullptrs in the 'elmts_to_become_faces' vector
+//           - no elements numbered as follows are among the memory violations:  for ( auto& it : elmts_to_become_faces ) it->Idx(999);
+
+    // 3. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                      elmts_to_become_faces.begin(),
                                                                      elmts_to_become_faces.end() );
-    // 3. creating the Boundaries from the faces
+    // 4. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
     set<string>  boundaries_created;
@@ -2176,12 +2179,6 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
          cout << endl;
       }
 
-	  // 4. removing the original regions from which the boundaries were created
-    // ------------------------------------------------------------------------------------
-    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-    for ( auto& it : eligibleRegions )
-       model->RemoveRegion( it.first.c_str() );
-
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     
     // if there are some unattributed faces left the method returs false
@@ -2194,7 +2191,16 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
 //          csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
 //                                      "unable to create Boundary", it->first );
 
-  
+ // DEBUGGING - checked that there are no duplicates or nullptrs in the 'elmts_to_become_faces' vector
+// checking input vector for duplicates (OK for prism_test
+/*
+sort( elmts_to_become_faces.begin(), elmts_to_become_faces.end() );
+bool hasDuplicates = adjacent_find( elmts_to_become_faces.begin(), elmts_to_become_faces.end()) !=
+                                                                                 elmts_to_become_faces.end();
+// contains null pointers ?
+bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces.end(), nullptr) !=
+                                                                         elmts_to_become_faces.end();
+*/
   
   
 
@@ -2493,8 +2499,13 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
      for ( auto bit=BoundariesBegin(); bit!=BoundariesEnd(); ++bit ) {
           cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
           cout <<" "<< (*bit).second.Elements() <<" faces, ";
-          cout <<" area (m2): "<< (*bit).second.Area();
-          if ( dim == 3 ) cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
+          // in 3D a boudary is a surface
+           if constexpr ( dim == 3 ) {
+                cout <<"area (m2): "<< (*bit).second.Area();
+                cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
+             }
+           if constexpr ( dim == 2 )
+             cout <<" length (m): "<< (*bit).second.Area();
        }
      cout << endl << endl;
      cout.flush();

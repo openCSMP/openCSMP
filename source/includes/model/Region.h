@@ -195,8 +195,8 @@ class Region : public ModelSubDomain<dim, Element>,
     size_t RemoveByNumber( std::vector<size_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
 
     /// removes those elements from the target region whose pointers matches the ones in the range supplied and subsequently rebuilds the region
-    size_t RemoveRange( typename std::vector<csmp::Element<dim>* const>::iterator begin,
-                        typename std::vector<csmp::Element<dim>* const>::iterator end );
+    size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,
+                        typename std::vector<csmp::Element<dim>*>::iterator end );
 
     /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
     bool CreateBetween( MeshManager<dim>&,

@@ -251,7 +251,7 @@ size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,
     size_t       counts(0);
     
     while ( first != last ) {
-         for ( vector<Node<1U>*>::iterator
+         for ( vector<Node<1U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
               pair<set<size_t>::iterator,bool>
               sit=node_numbers.insert(counts);
@@ -278,7 +278,7 @@ size_t  renumberElementNodes( vector<Element<2U>*>::iterator first,
     size_t       counts(0);
     
     while ( first != last ) {
-         for ( vector<Node<2U>*>::iterator
+         for ( vector<Node<2U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
               pair<set<size_t>::iterator,bool>
               sit=node_numbers.insert(counts);
@@ -304,7 +304,7 @@ size_t  renumberElementNodes( vector<Element<3U>*>::iterator first,
     size_t       counts(0);
     
     while ( first != last ) {
-         for ( vector<Node<3U>*>::iterator
+         for ( vector<Node<3U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
               pair<set<size_t>::iterator,bool>
               sit=node_numbers.insert(counts);

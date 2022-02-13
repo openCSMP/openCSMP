@@ -154,16 +154,11 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// the InterFace object neighbors which are connected with the InterFace and not null.
     size_t  ConnectedNeighbors() const;
 
-    /// dependent on CurrentSide, either the inside nodes or the outside nodes will be iterated over
-    typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
-    typename std::vector<csmp::InterFace<dim>*>::iterator       NeighborsBegin();
-    typename std::vector<csmp::InterFace<dim>*>::iterator       NeighborsEnd();
-
-    typename std::vector<const csmp::Node<dim>*>::const_iterator        NodesBegin()     const;
-    typename std::vector<const csmp::Node<dim>*>::const_iterator        NodesEnd()       const;
-    typename std::vector<const csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<const csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
+    /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager);
+    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesBegin()     const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator        NodesEnd()       const;
+    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
 
     /// access to all nodes connected to the InterFace (inside nodes first)
     csmp::Node<dim>* N( size_t n_local );

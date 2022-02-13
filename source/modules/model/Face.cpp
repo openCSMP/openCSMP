@@ -781,49 +781,25 @@ void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
 
 /// iterator to the element nodes
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  Face<dim>::NodesBegin()
+typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesBegin() const
 {
   return node_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  Face<dim>::NodesEnd()
+typename std::vector<csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() const
 {
   return node_connector_.end();
 }
 
 template<size_t dim>
-typename std::vector<Face<dim>*>::iterator  Face<dim>::NeighborsBegin()
+typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsBegin() const
 {
   return face_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<Face<dim>*>::iterator  Face<dim>::NeighborsEnd()
-{
-  return face_connector_.end();
-}
-
-template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  Face<dim>::NodesBegin() const
-{
-  return node_connector_.begin();
-}
-
-template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  Face<dim>::NodesEnd() const
-{
-  return node_connector_.end();
-}
-
-template<size_t dim>
-typename std::vector<const Face<dim>*>::const_iterator  Face<dim>::NeighborsBegin() const
-{
-  return face_connector_.begin();
-}
-
-template<size_t dim>
-typename std::vector<const Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() const
+typename std::vector<Face<dim>*>::const_iterator  Face<dim>::NeighborsEnd() const
 {
   return face_connector_.end();
 }

@@ -5,7 +5,7 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "TextFileIO.h"
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "CSMP_ElementSpecifications.h"
@@ -2694,13 +2694,13 @@ void  VData::EstablishElementConnectivity2D()
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
                   pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 0
-                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set{elmt_idx} ) );
+                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it0.second )
                     (*it0.first).second.insert( elmt_idx );
                   
                   pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1
-                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set{elmt_idx} ) );
+                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it1.second )
                     (*it1.first).second.insert( elmt_idx );
@@ -2982,8 +2982,8 @@ size_t VData::SwitchCornerTriangles2D()
                    auto face_it = fnids.find( face_nds );
                    if ( face_it != fnids.end() ) {
                         // reassigning nodes to new elements (first nodes are taken as those on the far sides (not shared ones))
-                        array elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
-                        array elmt2_nds{ plist[nb_idx][0],   plist[nb_idx][1],   plist[nb_idx][2] };
+                        array<int64_t, 3> elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
+                        array<int64_t, 3> elmt2_nds{ plist[nb_idx][0],   plist[nb_idx][1],   plist[nb_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
                         rotate( begin(elmt1_nds), begin(elmt1_nds) + cnr_nd, end(elmt1_nds) );
                         rotate( begin(elmt2_nds), begin(elmt2_nds) + (*face_it).second, end(elmt2_nds) );
@@ -2997,8 +2997,8 @@ size_t VData::SwitchCornerTriangles2D()
                         plist[nb_idx][2]   = elmt1_nds[0];
                         // reassigning neighbors
                         // old neighbors
-                        array elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
-                        array elmt2_nbors{ pfverts[nb_idx][0],   pfverts[nb_idx][1],   pfverts[nb_idx][2] };
+                        array<int64_t, 3> elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
+                        array<int64_t, 3> elmt2_nbors{ pfverts[nb_idx][0],   pfverts[nb_idx][1],   pfverts[nb_idx][2] };
                         // rotating these vectors such that the unshared nodes become the corner nodes
                         rotate( elmt1_nbors.begin(), elmt1_nbors.begin() + cnr_nd, elmt1_nbors.end() );
                         rotate( elmt2_nbors.begin(), elmt2_nbors.begin() + (*face_it).second, elmt2_nbors.end() );
@@ -3070,7 +3070,7 @@ void VData::EstablishElementConnectivity3D()
     for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
       {
          // getting the element type (unfortunately this is known only at runtime)
-         const CSMP_FEM_TYPE etype{ pelmt[elmt_idx] };
+         const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>( pelmt[elmt_idx] );
          assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
          
           const size_t faces(CSMP_ElementSpecifications::FacesPerElementOfType(etype));
@@ -3100,12 +3100,12 @@ void VData::EstablishElementConnectivity3D()
                     // for all line elements
                     // node 0
                     pair<map<size_t,set<size_t> >::iterator,bool>
-                      it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set{elmt_idx} ) );
+                      it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<size_t>{elmt_idx} ) );
                     // if there is already an entry for the node, the elmt id is added to the set
                     if ( !it0.second ) (*it0.first).second.insert( elmt_idx );
                     // node 1
                     pair<map<size_t,set<size_t> >::iterator,bool>
-                      it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set{elmt_idx} ) );
+                      it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<size_t>{elmt_idx} ) );
                     // if there is already an entry for the node, the elmt id is added to the set
                     if ( !it1.second ) (*it1.first).second.insert( elmt_idx );
                  }
@@ -3240,7 +3240,7 @@ void VData::EstablishElementConnectivity3D()
                   // finding out on which boundary the edge of the face is
                   // relying on appropriate box-boundary flagging
                   // (using only the two first nodes of the face)
-                  const CSMP_FEM_TYPE etype{ pelmt[elmt_idx] };
+                  const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>( pelmt[elmt_idx] );
                   assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
                   const size_t n0 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 0 ) ];
                   const size_t n1 = plist[elmt_idx][CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, 1 ) ];

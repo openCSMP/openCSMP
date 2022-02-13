@@ -25,7 +25,7 @@ class Colony_Test : public Test
     bool TestColonyWith_Element2();
   
   private:
-    const bool verbose_ = true;
+    const static bool verbose_ = true;
 };
 
 } //end csmp

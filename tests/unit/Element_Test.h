@@ -27,6 +27,8 @@ class Element_Test : public Test
     void BaryCenterTest();
     
     void MoveSemanticsTest();
+    
+    void VariableAccessAndIterators();
   
   private:
     double fTolerance   = 1.0e-3;

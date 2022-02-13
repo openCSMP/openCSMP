@@ -155,7 +155,7 @@ pair<Element<dim>*,bool>  containsPointLinearTriangle( Element<dim>* elmt, const
    // no sign is taken, thus method works with cw and ccw node numbering
    elmt->CoordinateMatrix();
    DenseMatrix<DM_MIN> XY( elmt->FE()->XY );
-   double64 ae2 = 1.0 / ( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
+   double ae2 = 1.0 / ( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
                           XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
                           XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) ) );
 

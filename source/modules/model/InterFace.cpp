@@ -257,54 +257,27 @@ void InterFace<dim>::operator delete( void* p )
 
 /// iterator to the element nodes
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  InterFace<dim>::NodesBegin()
+typename std::vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesBegin() const
 {
    if ( current_side_ == INSIDE ) return node_connector_.begin();
    return next( node_connector_.begin(), this->FE()->Nodes() );
 }
 
 template<size_t dim>
-typename std::vector<csmp::Node<dim>*>::iterator  InterFace<dim>::NodesEnd()
+typename std::vector<csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() const
 {
   if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
   return node_connector_.end();
 }
 
 template<size_t dim>
-typename std::vector<InterFace<dim>*>::iterator  InterFace<dim>::NeighborsBegin()
-{
-  // each face of an interface has only got one neighbor
-  return interface_connector_.begin();
-}
-
-template<size_t dim>
-typename std::vector<InterFace<dim>*>::iterator  InterFace<dim>::NeighborsEnd()
-{
-  return interface_connector_.end();
-}
-
-template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesBegin() const
-{
-   if ( current_side_ == INSIDE ) return node_connector_.begin();
-   return next( node_connector_.begin(), this->FE()->Nodes() );
-}
-
-template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  InterFace<dim>::NodesEnd() const
-{
-  if ( current_side_ == INSIDE ) return next( node_connector_.begin(), this->FE()->Nodes() );
-  return node_connector_.end();
-}
-
-template<size_t dim>
-typename std::vector<const InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const
+typename std::vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsBegin() const
 {
   return interface_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<const InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd() const
+typename std::vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd() const
 {
   return interface_connector_.end();
 }

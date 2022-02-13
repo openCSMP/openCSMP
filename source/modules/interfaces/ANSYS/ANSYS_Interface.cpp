@@ -1299,36 +1299,28 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         std::cout.flush();
     }
     int32_t        ival;
-    const int32_t  min28(-30), zero(0);
-    uint32_t       counter(0);
-    size_t nodes(vset.Vertices());
+    const int32_t  min29(MULTIPLE_BOUNDARIES), zero(NOT);
+    const size_t   nodes(vset.Vertices());
     for ( size_t i=0; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
-         if ( ival < min28 || ival > zero )
-           csmp_error.notice( ERROR, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
-         // if this is a boundary node
-         if ( ival < zero ) {
-              vset.AddBFlag( i, static_cast<int8_t>(ival) );
-              counter++;
+         if ( ival < min29 || ival > zero ) {
+              csmp_error.notice( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
+              ival = IRREGULAR;
            }
-         else vset.AddBFlag( i, NOT );
-      }
-    if ( counter == nodes )
-      csmp_error.notice( WARNING, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","all entries in 'bflag' array are negative. Data have to be recreated!");
+         vset.AddBFlag( i, static_cast<int8_t>(ival) );
+     }
 
 
     // 2. reading boundary condition values 'pbounds' (double) and ignoring them
     // --------------------------------------------------------------------------
-
+    // CURRENTLY IGNORED because users never assign any in ANSYS
     if ( csmp_error.Verbose() ) {
-        std::cout <<"\n\treading "<< counter <<" boundary values 'pbounds'..."<< std::endl;
+        std::cout <<"\n\treading boundary values 'pbounds'..."<< std::endl;
         std::cout.flush();
       }
     double dval;
-    for ( size_t i=1; i<=nodes; i++ ) {
-         fread( (void*) &dval, dbytes, 1U, fp );
-         // only if a boundary flag was stored, a boundary value is stored as well
-      }
+    for ( size_t i=0; i<nodes; i++ )
+      fread( (void*) &dval, dbytes, 1U, fp );
 
     return true;
 }
@@ -1336,6 +1328,8 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<1U>&);
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<2U>&);
 template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE*,VSet<3U>&);
+
+
 
 
 

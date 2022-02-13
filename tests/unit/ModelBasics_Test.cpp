@@ -49,7 +49,7 @@ void ModelBasics_Test::run()
     
     cout <<"\nModelBasics_Test::run: raw size of local variable storage of Model: ";
     cout << sizeof(LocalVariableStorage<3,Model>) << endl;
-    // around 100-bytes for empty storage!
+    // around 100-bytes for empty storage, but only in the case where DEBUG is on!
  
    } // end run
 

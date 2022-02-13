@@ -3,6 +3,8 @@
 #include "VectorVariable.h"
 #include "TensorVariable.h"
 
+#include <chrono>
+
 using namespace std;
 
 namespace csmp {

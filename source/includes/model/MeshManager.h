@@ -18,6 +18,7 @@ template<size_t> struct IndexToPointerMapping;
 template<size_t> class PropertyDatabase;
 template<size_t> class VSet;
 template<size_t> class NodeManifoldManager;
+template<size_t,template<size_t> class> class ModelSubDomain;
 
 /**
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
@@ -121,6 +122,10 @@ public:
   // MESH MODIFICATION
   //
   // ==============================================================
+  
+  /// for all outside-facing CELL neighbor perimeter face pointers that are not nullptr,/ set  neighbors of the corresponding cell to null, getting subdomain ready for deletion
+  template<template<size_t> class CELL>
+  size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
   
   /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
   std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,

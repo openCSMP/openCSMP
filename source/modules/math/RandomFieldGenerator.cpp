@@ -3,6 +3,8 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 
+#include <chrono>
+
 using namespace std;
 
 namespace csmp {

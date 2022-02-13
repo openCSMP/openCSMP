@@ -180,7 +180,7 @@ class Element : public FiniteElementPolicy<dim, Element>,
     /// hand-coded assignment to deal with pointers
     Element& operator=( Element&& );
 
-     // TODO: deprecate or make stand-alone binary operator? - cheapest comparison at the moment
+    /// compares finite element type, material id, nodes, and neighbors; ignoring mutable idx and other attributes
     bool operator==( const Element<dim>& ) const;
 
     /// less than operator for comparing barycentre locations using operator of the corresponding point object
@@ -221,15 +221,11 @@ class Element : public FiniteElementPolicy<dim, Element>,
     /// number of faces (side-surfaces) of the current element; for each element face, there can be a neighbor
     size_t  Faces() const;
 
-    typename std::vector<csmp::Node<dim>*>::iterator            NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator            NodesEnd();
-    typename std::vector<csmp::Element<dim>*>::iterator         NeighborsBegin();
-    typename std::vector<csmp::Element<dim>*>::iterator         NeighborsEnd();
-
-    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
-    typename std::vector<const csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
-    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
-    typename std::vector<const csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
+    /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager); thus, nodes and element neighbors can be manipulated but not the pointers to them
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin()     const;
+    typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd()       const;
+    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsBegin() const;
+    typename std::vector<csmp::Element<dim>*>::const_iterator   NeighborsEnd()   const;
 
     typename  std::vector<csmp::Node<dim>*>&                    NodeVector();
     typename  std::vector<csmp::Element<dim>*>&                 NeighborElementVector();

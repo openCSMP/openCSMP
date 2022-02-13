@@ -203,27 +203,16 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 
 
 
-/// Roman, 2014
-/// WARNING: this operator is used specifically in the process of creation of particular ??? Region ???
-/// Therefore only important infromation for that process is taken into account in order to distinguish two Element's.
-/// That must be FE_Type and attached Nodes
-///   SKM revised 2021
 template<size_t dim>
 bool  Element<dim>::operator==( const Element<dim>& el ) const
 {
   if ( &el != this )
     {
        if ( this->FE_Type() != el.FE_Type() ) return false;
-       if ( node_connector_.size() != el.node_connector_.size() ) return false;
+       if ( material_id_    != el.material_id_ ) return false;
+       if ( node_connector_ != el.node_connector_ ) return false;
+       if ( elmt_connector_ != el.elmt_connector_ ) return false;
        // ignored: if ( idx_ == el.idx_ ) return true;
-       set<Node<dim>*> nodes1( node_connector_.begin(), node_connector_.end() );
-       set<Node<dim>*> nodes2( el.node_connector_.begin(), el.node_connector_.end() );
-       vector<Node<dim>*> nodes_intersect;
-       set_intersection( nodes1.begin(), nodes1.end(),
-                         nodes2.begin(), nodes2.end(),
-                         back_inserter( nodes_intersect ) );
-        if ( nodes_intersect.size() == node_connector_.size() )
-          return true;
     }
   return true;
 }
@@ -344,6 +333,7 @@ size_t  Element<dim>::Faces() const
 // ITERATORS
 
 /// iterator to the element nodes
+/*
 template<size_t dim>
 typename std::vector<csmp::Node<dim>*>::iterator  Element<dim>::NodesBegin()
 {
@@ -367,27 +357,28 @@ typename std::vector<Element<dim>*>::iterator  Element<dim>::NeighborsEnd()
 {
   return elmt_connector_.end();
 }
+*/
 
 template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesBegin() const
 {
   return node_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<const csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
+typename std::vector<csmp::Node<dim>*>::const_iterator  Element<dim>::NodesEnd() const
 {
   return node_connector_.end();
 }
 
 template<size_t dim>
-typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
+typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsBegin() const
 {
   return elmt_connector_.begin();
 }
 
 template<size_t dim>
-typename std::vector<const Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
+typename std::vector<Element<dim>*>::const_iterator  Element<dim>::NeighborsEnd() const
 {
   return elmt_connector_.end();
 }

@@ -10,6 +10,7 @@
 #include "Experimental_Example.h"
 #include "compareFloats.h"
 #include "ANSYS_Model3D.h"
+#include "ModelTopology.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"

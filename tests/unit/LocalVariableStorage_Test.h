@@ -16,6 +16,7 @@ namespace csmp
       void runTest();
 
       void run3D();
+      void run3D_with_templatized_INDEX();
     };
 
   } // csmp

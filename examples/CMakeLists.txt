@@ -70,8 +70,9 @@ TARGET_INCLUDE_DIRECTORIES(examples PRIVATE
 	${INCLUDES_DIR}/thmc/mechanics
 	${INCLUDES_DIR}/thmc/single_phase_flow
 	${INCLUDES_DIR}/thmc/two_phase_flow
-	${THIRDPARTY_DIR}/catch/include
+	${THIRDPARTY_DIR}/catch2
 	${THIRDPARTY_DIR}/iaps_h2o_eos
+    ${THIRDPARTY_DIR}/plf_colony
 	${GEN_INCLUDES_DIR}
 )
 

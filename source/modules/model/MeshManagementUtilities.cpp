@@ -1901,12 +1901,16 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                }
              // valid neighbors should not be corrupt
              const long one_billion{1000000000};
-             for ( size_t i{0}; i<(*first).Neighbors(); ++i )
-               if ( (*first).Neighbor(i) != nullptr ) {
-                    if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
-                    if ( (*first).Neighbor(i)->Idx() > one_billion )
-                      cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
-                 }
+             cerr <<"\n"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" "<< (*first).BaryCenter();
+             for ( size_t i{0}; i<(*first).Nodes(); ++i )
+               cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
+             for ( size_t i{0}; i<(*first).Neighbors(); ++i ) {
+                 if ( (*first).Neighbor(i) != nullptr ) {
+                      if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
+                      if ( (*first).Neighbor(i)->Idx() > one_billion )
+                        cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
+                   }
+               }
            }
          first++;
       }

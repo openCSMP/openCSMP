@@ -119,7 +119,7 @@ void AndersonianBoundaryStressVisitor::Visit( Boundary<3U>* b )
 */
 void AndersonianBoundaryStressVisitor::Visit( Face<3U>* f )
 {
-   const double64 nodes(static_cast<double64>(f->Nodes()));
+   const double nodes(static_cast<double>(f->Nodes()));
   
    // 1. projecting the far-field stress onto the Face normal
    // -------------------------------------------------------
@@ -128,7 +128,7 @@ void AndersonianBoundaryStressVisitor::Visit( Face<3U>* f )
    VectorVariable<3U> faceStressVector = far_field_stress_ * nrml_;
    // going from specific- to area-integrated stress values to nodal forces
    const size_t  face_nodes(f->Nodes());
-   faceStressVector = faceStressVector * (f->Area() / static_cast<double64>(face_nodes));
+   faceStressVector = faceStressVector * (f->Area() / static_cast<double>(face_nodes));
   
    // TODO: make sure that the stress is inward pointing relative to the boundary
    if ( dotProduct(faceStressVector,nrml_) >= 0. )
