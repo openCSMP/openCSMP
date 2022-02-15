@@ -1,7 +1,11 @@
 #include "NodeManifoldManager_Test.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
+#include "Region.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
+#include "NodeManifoldManager.h"
+
 #include "VTU_Interface.h"
 
 
@@ -40,7 +44,7 @@ void NodeManifoldManager_Test::run()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_between_regions( const std::string& model_name )
 {
   std::ostringstream ostr;
@@ -57,10 +61,10 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   Model<dim>* modelIN(nullptr);
 
   if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
   else if ( dim == 3U )
     // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true ));
 /*
   // validating the model
   if ( verbose_ ) {
@@ -112,18 +116,18 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   if(!modelIN->Database().IsDefined("node indicator")) modelIN->CreateProperty( "node indicator", "none", SCALAR, NODE, 1, 0, 1000); 
   modelIN->Region("Model").InputPropertyValue("node indicator", makeScalar(PLAIN, 0));
   csmp::INDEX<SCALAR,NODE> key_nd = csmp::INDEX<SCALAR,NODE>( modelIN->Database().StorageKey("node indicator") );
-  double64 min_x(1e10), node_id;
+  double min_x(1e10);
   //Node<dim>* left_nd(nullptr);
   Node<dim>* left_bt_nd(nullptr);
-  double64 min_y(1e10);
+  double min_y(1e10);
   //Node<dim>* bt_nd(nullptr);
   //for(auto it = modelIN->Region("FRACS").PerimeterNodesBegin(); it!=modelIN->Region("FRACS").NodesEnd(); it++) {
   for(auto it = modelIN->Region("FAULT").PerimeterNodesBegin(); it!=modelIN->Region("FAULT").NodesEnd(); it++) {
   //for(auto it = modelIN->Region("FAULT_SURFACE").NodesBegin(); it!=modelIN->Region("FAULT_SURFACE").NodesEnd(); it++) {
       (*it)->Store(key_nd, makeScalar((*it)->Status(key_nd), 1));
-      double64 x = (*it)->Coordinate()[0];
+      double x = (*it)->Coordinate()[0];
       //if(x<min_x) {min_x = x; left_nd = (*it);};
-      double64 y = (*it)->Coordinate()[1];
+      double y = (*it)->Coordinate()[1];
       if(x<=min_x && y<=min_y) {min_x = x; min_y = y; left_bt_nd = (*it);};
       //if(y<=min_y) {min_y = y; bt_nd = (*it);};
   }
@@ -161,7 +165,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   //assign different entry pressures to different regions
   if(!modelIN->Database().IsDefined("entry pressure")) modelIN->CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000); 
   modelIN->Region("Model").InputPropertyValue("entry pressure", makeScalar(PLAIN, 0.));
-  double64 entry_pressure = 100.;   
+  double entry_pressure = 100.;   
   for ( auto it = modelIN->RegionsBegin(); it != modelIN->RegionsEnd(); it++ ) {
       auto rg_name = (*it).first;
       if ( rg_name != "Model" ) {
@@ -198,16 +202,15 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   modelIN->Region("Model").InputPropertyValue("element indicator", makeScalar(PLAIN, 0.));
   csmp::INDEX<SCALAR,ELEMENT> key_element = csmp::INDEX<SCALAR,ELEMENT>( modelIN->Database().StorageKey("element indicator") );
   csmp::INDEX<SCALAR,ELEMENT> key_pd = csmp::INDEX<SCALAR,ELEMENT>( modelIN->Database().StorageKey("entry pressure") );
-  //double64 min_x(1e10), node_id;
+  //double min_x(1e10), node_id;
   size_t count(0);
-  for(auto mit = modelIN->Mesh().Manifold().NodeManifoldsBegin();mit!=modelIN->Mesh().Manifold().NodeManifoldsEnd();mit++, count++) {
-    auto md = (*mit);
-    md->SortByVariableIndex(key_pd);
-    for(size_t n1(0);n1<md->Nodes();n1++){
-      auto nd1 = md->N(n1);
+  for(auto mit = modelIN->Mesh().NodeManifoldsBegin();mit!=modelIN->Mesh().NodeManifoldsEnd();mit++, count++) {
+    (*mit).SortByVariableValue(key_pd);
+    for(size_t n1(0);n1<(*mit).Branches();n1++){
+      auto nd1 = (*mit).N(n1);
       nd1->Store(key_nd, makeScalar(nd1->Status(key_nd), 2));
-      double64 x = nd1->Coordinate()[0];
-      double64 y = nd1->Coordinate()[1];
+      double x = nd1->Coordinate()[0];
+      double y = nd1->Coordinate()[1];
       //if(x<min_x) {min_x = x; node_id = nd1->Idx();};
       //if(x==min_x) {cout<<"after split, left most node found, id = "<<nd1->Idx()<<", parent elements = "<<nd1->Parents()<<", node neighbors = "<<nd1->Neighbors()<<endl;}
       //if(nd1==left_nd) {
@@ -218,7 +221,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
         cout<<"after split, left bottom node found, id = "<<nd1->Idx()<<", parent elements = "<<nd1->Parents()<<", node neighbors = "<<nd1->Neighbors()<<endl;
         //cout<<"after split, bottom node found, id = "<<nd1->Idx()<<", parent elements = "<<nd1->Parents()<<", node neighbors = "<<nd1->Neighbors()<<endl;
         cout<<"nd position = "<<nd1->Coordinate()<<endl;
-        for(size_t e(0);e<nd1->Parents();e++){
+        for(auto e(0);e<nd1->Parents();e++){
           //cout<<"  parent element id = "<<nd1->Neighbor(e)->Idx()<<", x = "<<nd1->Parent(e)->BaryCenter()[0]<<endl;
           cout<<"  parent element id = "<<nd1->Parent(e)->Idx()<<", position = "<<nd1->Parent(e)->BaryCenter()<<endl;
           //if(n1==0) //master node
@@ -229,7 +232,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
           else //new node
               nd1->Parent(e)->Store(key_element, makeScalar(PLAIN, 2));
         }
-        for(size_t n(0);n<nd1->Neighbors();n++){
+        for(auto n(0);n<nd1->Neighbors();n++){
           //cout<<"  parent element id = "<<nd1->Neighbor(e)->Idx()<<", x = "<<nd1->Parent(e)->BaryCenter()[0]<<endl;
           cout<<"  neighbor node id = "<<nd1->Neighbor(n)->Idx()<<", position = "<<nd1->Neighbor(n)->Coordinate()<<endl;
         }
@@ -246,7 +249,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
       }
 
       if(count==5) {  
-        for(size_t e(0);e<nd1->Parents();e++){
+        for(auto e(0);e<nd1->Parents();e++){
           if(n1==0) //master node
               nd1->Parent(e)->Store(key_element, makeScalar(PLAIN, 1));
           else //slave node
@@ -267,7 +270,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_around_regions( const std::string& model_name )
 {
   std::ostringstream ostr;
@@ -284,10 +287,10 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_a
   Model<dim>* modelIN(nullptr);
 
   if ( dim == 2U )
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
   else if ( dim == 3U )
     // SKM FIX: irregular = true
-    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true, true ));
+    modelIN = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true, true, true ));
 
   // check the model
   if ( verbose_ ) {
@@ -321,7 +324,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_a
   /*
   //assign different entry pressures to different regions
   if(!modelIN->Database().IsDefined("entry pressure")) modelIN->CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000); 
-  double64 entry_pressure = 100.;   
+  double entry_pressure = 100.;   
   for ( auto it = modelIN->RegionsBegin(); it != modelIN->RegionsEnd(); it++ ) {
       auto rg_name = (*it).first;
       if ( rg_name != "Model" ) {
@@ -364,7 +367,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_a
   //assign different entry pressures to different regions
   if(!modelIN->Database().IsDefined("entry pressure")) modelIN->CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000); 
   modelIN->Region("Model").InputPropertyValue("entry pressure", makeScalar(PLAIN, 0.));
-  double64 entry_pressure = 100.;   
+  double entry_pressure = 100.;   
   for ( auto it = modelIN->RegionsBegin(); it != modelIN->RegionsEnd(); it++ ) {
       auto rg_name = (*it).first;
       if ( rg_name != "Model" ) {
@@ -399,7 +402,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_a
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::Create_splitboundary_around_regions( Model<dim>& model,
                                                        std::vector<std::string>& interfaces )
 {
@@ -561,7 +564,7 @@ void NodeManifoldManager_Test::InputFromFile( const char* file_name,
 
 
 /// Input name of regions to split
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::EstablishContiguousRegionsList( Model<dim>& model,
                                                                   const std::set<string>& interface_basic_set,
                                                                   std::set<string>& interface_sets )
@@ -618,92 +621,95 @@ void NodeManifoldManager_Test::OutputToFile( const char* file_name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::Test_created_manifolds( Model<dim>& modelIN )
 {
   //test created node manifolds
-  size_t n_manifolds = modelIN.Mesh().Manifold().NodeManifolds();
+  size_t n_manifolds = modelIN.Mesh().Nodes();
   cout<<"total node manifolds = "<<n_manifolds<<endl;
   _test(n_manifolds>0);
   size_t count(0);
   //test whether each node in a manifold is unique
-  for(auto mit = modelIN.Mesh().Manifold().NodeManifoldsBegin();mit!=modelIN.Mesh().Manifold().NodeManifoldsEnd();mit++,count++) {
+  for(auto mit = modelIN.Mesh().NodeManifoldsBegin();mit!=modelIN.Mesh().NodeManifoldsEnd();mit++,count++) {
     auto md = (*mit);
-    if(md->Nodes()>2) cout<<"  manifold "<<count<<":"<<endl;
-    if(md->Nodes()>2) cout<<"    number of collocated nodes = "<<md->Nodes()<<endl;
-    _test(md->Nodes()>=2);
+    if(md.Branches()>2) cout<<"  manifold "<<count<<":"<<endl;
+    if((*mit).Branches()>2) cout<<"    number of collocated nodes = "<<(*mit).Branches()<<endl;
+    _test((*mit).Branches()>=2);
 
-    for(size_t n1(0);n1<md->Nodes();n1++){
-      auto nd1 = md->N(n1);
-      if(md->Nodes()>2) cout<<"    node "<<n1<<": index = "<<nd1->Idx()<<endl;
-      for(size_t n2(n1+1);n2<md->Nodes();n2++){
-        auto nd2 = md->N(n2);
+    for(size_t n1(0);n1<(*mit).Branches();n1++){
+      auto nd1 = (*mit).N(n1);
+      if((*mit).Branches()>2) cout<<"    node "<<n1<<": index = "<<nd1->Idx()<<endl;
+      for(size_t n2(n1+1);n2<(*mit).Branches();n2++){
+        auto nd2 = (*mit).N(n2);
         _test(nd1->Idx()!=nd2->Idx());
       }  
     }
   }
 
   //test whether each node is contained in one manifold only
-  for(auto nit=modelIN.Region( "Model" ).NodesBegin();nit!=modelIN.Region( "Model" ).NodesEnd();nit++){
+  // TODO: this was a crazy-wasteful loop - recap what is happening here!!!
+  // for(auto nit=modelIN.Region( "Model" ).NodesBegin();nit!=modelIN.Region( "Model" ).NodesEnd();nit++){
+  
+  const Region<dim>& model_domain(modelIN.Region( "Model" ));
+  for(auto nit=model_domain.NodesBegin();nit!=model_domain.NodesEnd();nit++ ) {
       auto nd = (*nit);
-      if(nd->ParentManifold() != nullptr){
-        for(auto mit = modelIN.Mesh().Manifold().NodeManifoldsBegin();mit!=modelIN.Mesh().Manifold().NodeManifoldsEnd();mit++) {
-          auto md = (*mit);
-          if(md != nd->ParentManifold())
-            for(size_t n(0);n<md->Nodes();n++)
-              _test(nd != md->N(n));
+      if( nd->IsManifold() ) {
+        for(auto mit = modelIN.Mesh().NodeManifoldsBegin();mit!=modelIN.Mesh().NodeManifoldsEnd();mit++) {
+          if( nd->IsManifold() )
+            for(size_t n(0);n<(*mit).Branches();n++)
+              _test(nd != (*mit).N(n));
         }
       }
   }
 
   //test the sorting function
   //sort by entry pressure
-  csmp::INDEX<SCALAR,ELEMENT> key_pd = csmp::INDEX<SCALAR,ELEMENT>( modelIN.Database().StorageKey("entry pressure") );
+  const csmp::INDEX<SCALAR,ELEMENT> key_pd = csmp::INDEX<SCALAR,ELEMENT>( modelIN.Database().StorageKey("entry pressure") );
+  
   size_t id(0);
-  for(auto mit = modelIN.Mesh().Manifold().NodeManifoldsBegin();mit!=modelIN.Mesh().Manifold().NodeManifoldsEnd();mit++, id++) {
-      auto md = (*mit);
-      md->SortByVariableIndex(key_pd);
+  for(auto mit = modelIN.Mesh().NodeManifoldsBegin();mit!=modelIN.Mesh().NodeManifoldsEnd();mit++, id++) {
+      (*mit).SortByVariableValue(key_pd);
       //cout<<"\nManifold id = "<<id<<":"<<endl;
-      for(size_t n1(0);n1<md->Nodes();n1++){
-        //double64 pd1 = md->N(n1)->Parent(0)->Read(key_pd);
-        double64 pd1(0.);
+      for(size_t n1(0);n1<(*mit).Branches();n1++){
+        //double pd1 = (*mit).N(n1)->Parent(0)->Read(key_pd);
+        double pd1(0.);
         size_t pd1_count(0);
-        for(size_t e = 0; e < md->N(n1)->Parents(); e++) {
-            //if( (dim==2 && md->N(n1)->Parent(e)->IsSurfaceElement()) || (dim==3 && md->N(n1)->Parent(e)->IsVolumeElement()) ) {
+        for(auto e = 0; e < (*mit).N(n1)->Parents(); e++) {
+            //if( (dim==2 && (*mit).N(n1)->Parent(e)->IsSurfaceElement()) || (dim==3 && (*mit).N(n1)->Parent(e)->IsVolumeElement()) ) {
             /*  
             bool surface_element(false), volume_element(false);
-            if( dim==2 && md->N(n1)->Parent(e)->IsSurfaceElement()) {
+            if( dim==2 && (*mit).N(n1)->Parent(e)->IsSurfaceElement()) {
               surface_element = true;
-              cout<<"  n1 = "<<n1<<" e = "<<e<<" pd = "<<md->N(n1)->Parent(e)->Read(key_pd)<<" IsSurfaceElement = "<<surface_element <<endl;  
+              cout<<"  n1 = "<<n1<<" e = "<<e<<" pd = "<<(*mit).N(n1)->Parent(e)->Read(key_pd)<<" IsSurfaceElement = "<<surface_element <<endl;
             }
 
-            if( dim==3 && md->N(n1)->Parent(e)->IsVolumeElement() ) {
+            if( dim==3 && (*mit).N(n1)->Parent(e)->IsVolumeElement() ) {
               volume_element = true;
-              cout<<"  n1 = "<<n1<<"  e = "<<e<<" pd = "<<md->N(n1)->Parent(e)->Read(key_pd)<<" IsVolumeElement = "<<volume_element <<endl;  
+              cout<<"  n1 = "<<n1<<"  e = "<<e<<" pd = "<<(*mit).N(n1)->Parent(e)->Read(key_pd)<<" IsVolumeElement = "<<volume_element <<endl;
             }            
             */
-            if(!isnan(md->N(n1)->Parent(e)->Read(key_pd))) {  
-                //pd1 = md->N(n1)->Parent(e)->Read(key_pd);
+            if(!isnan((*mit).N(n1)->Parent(e)->Read(key_pd))) {
+                //pd1 = (*mit).N(n1)->Parent(e)->Read(key_pd);
                 //break;
-                pd1 += md->N(n1)->Parent(e)->Read(key_pd);
+                pd1 += (*mit).N(n1)->Parent(e)->Read(key_pd);
                 pd1_count ++;
             }
         }   
         pd1 /= pd1_count;  
-        //cout<<"  Node id = "<<md->N(n1)->Idx()<<":"<<endl;
-        //for(size_t e(0);e<md->N(n1)->Parents();e++)
-          //cout<<"    Parent element id = "<<md->N(n1)->Parent(e)->Idx()<<" pd = "<<md->N(n1)->Parent(e)->Read(key_pd)<<endl;
+        //cout<<"  Node id = "<<(*mit).N(n1)->Idx()<<":"<<endl;
+        //for(size_t e(0);e<(*mit).N(n1)->Parents();e++)
+          //cout<<"    Parent element id = "<<(*mit).N(n1)->Parent(e)->Idx()<<" pd = "<<(*mit).N(n1)->Parent(e)->Read(key_pd)<<endl;
         //cout<<"pd = "<<pd1;
-        for(size_t n2(n1+1);n2<md->Nodes();n2++){ 
-          //double64 pd2 = md->N(n2)->Parent(0)->Read(key_pd);
-          double64 pd2(0.);
+        for(size_t n2(n1+1);n2<(*mit).Branches();n2++){
+          //double pd2 = (*mit).N(n2)->Parent(0)->Read(key_pd);
+          double pd2(0.);
           size_t pd2_count(0);
-          for(size_t e = 0; e < md->N(n2)->Parents(); e++) {
-              //if( (dim==2 && md->N(n2)->Parent(e)->IsSurfaceElement()) || (dim==3 && md->N(n2)->Parent(e)->IsVolumeElement()) ) {
-              if(!isnan(md->N(n2)->Parent(e)->Read(key_pd))) {
-                  //pd2 = md->N(n2)->Parent(e)->Read(key_pd);
+          for(auto e = 0; e < (*mit).N(n2)->Parents(); e++) {
+              //if( (dim==2 && (*mit).N(n2)->Parent(e)->IsSurfaceElement()) || (dim==3 && (*mit).N(n2)->Parent(e)->IsVolumeElement()) ) {
+              if(!isnan((*mit).N(n2)->Parent(e)->Read(key_pd))) {
+                  //pd2 = (*mit).N(n2)->Parent(e)->Read(key_pd);
                   //break;
-                  pd2 += md->N(n2)->Parent(e)->Read(key_pd);
+                  pd2 += (*mit).N(n2)->Parent(e)->Read(key_pd);
                   pd2_count ++;
               }
           } 
@@ -721,7 +727,7 @@ void NodeManifoldManager_Test::Test_created_manifolds( Model<dim>& modelIN )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>& modelIN )
 {
   std::ostringstream ostr;
@@ -736,10 +742,10 @@ void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>&
   std::vector<std::string> regions;
   regions.reserve( modelIN.UniqueRegions() );
 
-  const pair<int32, int32>  model_dim = modelIN.Region( "Model" ).SpatialDimensions();
+  const auto  model_dim = modelIN.Region( "Model" ).SpatialDimensions();
   for ( typename std::map<std::string, csmp::Region<dim> >::iterator
         it = modelIN.UniqueRegionsBegin(); it != modelIN.UniqueRegionsEnd(); ++it ) {
-    const pair<int32, int32>  sub_dim = (*it).second.SpatialDimensions();
+    const auto  sub_dim = (*it).second.SpatialDimensions();
     if ( sub_dim.second == model_dim.second ) // check whether the highest dimension of the region is equal to the highest dimension of the model
       regions.push_back( (*it).second.Name() );
   }
@@ -787,7 +793,7 @@ void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>&
     regions_to_assign.insert(it.second);
   }
   if(!modelIN.Database().IsDefined("entry pressure")) modelIN.CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0 ,50000000);  
-  double64 entry_pressure = 100.;
+  double entry_pressure = 100.;
   for (auto rg : regions_to_assign) {
     modelIN.Region(rg).InputPropertyValue("entry pressure", makeScalar(PLAIN, entry_pressure));
     cout<<"entry pressure = "<<entry_pressure<<" assign to region: "<<rg<<endl;
@@ -799,12 +805,12 @@ void NodeManifoldManager_Test::Create_splitboundary_between_regions( Model<dim>&
   // -------------------------------------------
   // do this sequentially according to neighbours, otherwise boundaries are not assgiend properly
   for ( auto it : region_final_pairs ) {// for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
-    modelIN.InsertSplitBoundary( it.first.c_str(), it.second.c_str() );
+     modelIN.CreateSplitBoundaryBetween( it.first.c_str(), it.second.c_str() );
   }
   
   // create lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   // insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  set<string> new_regions = modelIN.RegionsFromSplitBoundaries();
+// TODO: method does not exist:  set<string> new_regions = modelIN.RegionsFromSplitBoundaries();
 
   // output Model to Binary
   modelIN.OutputToBinaryFile(modelIN.Name());

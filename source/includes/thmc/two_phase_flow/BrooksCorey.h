@@ -88,7 +88,7 @@ class BrooksCorey : public TwoPhaseModel<dim> {
     virtual double ShockSpeed() const;
     virtual double ShockHeight() const;
     
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
 
     // brooks corey parameters
@@ -99,9 +99,9 @@ class BrooksCorey : public TwoPhaseModel<dim> {
 
   private:
 
-    csmp::Index          pd_key_, pc_max_key_, lamda_key_;
-    double             lambda_, entry_pressure_,pc_max_;
-    bool                 default_capillary_pressure_max_;
+    csmp::Index  pd_key_, pc_max_key_, lamda_key_;
+    double       lambda_, entry_pressure_,pc_max_;
+    bool         default_capillary_pressure_max_;
 
 };
 

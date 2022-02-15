@@ -157,8 +157,6 @@ from the model, potentially turning it into a disconnected group of mesh patches
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary )
  {
-    SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* >(this) );
-
     // locating the boundary in the split boundary map
     splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary.Name() );
     // if the addresses are the same

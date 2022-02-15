@@ -19,29 +19,29 @@ namespace csmp {
     
       virtual void run();
 
-      //template<size_t dim>
+      //template<uint32_t dim>
       //void Create_splitboundary_between_regions( const std::string& model_name );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void Test_nodemanifolds_created_from_splitboundaries_between_regions( const std::string& model_name );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void Test_nodemanifolds_created_from_splitboundaries_around_regions( const std::string& model_name );      
       
-      template<size_t dim>
+      template<uint32_t dim>
       void Test_created_manifolds( Model<dim>& modelIN );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void Create_splitboundary_between_regions( Model<dim>& modelIN );    
 
-      template<size_t dim>
+      template<uint32_t dim>
       void Create_splitboundary_around_regions( Model<dim>& model,
                                                 std::vector<std::string>& interfaces );
 
       void InputFromFile( const char* file_name,
                           std::set<std::string>& fractures_basic_set );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void EstablishContiguousRegionsList( Model<dim>& model,
                                            const std::set<std::string>& fractures_basic_set,
                                            std::set<std::string>& fractures );    

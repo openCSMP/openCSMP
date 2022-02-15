@@ -1400,7 +1400,7 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
     // 1. while looping over all triangles build ordered triangles using the first three
     //    nodes
     typename deque<vector<int64_t> >::iterator  pit(vset.PlistBegin());
-    vector<uint32_t>                             pdata(7);
+    vector<size_t>                              pdata(7);
     typename deque<vector<int64_t> >::iterator  fit(vset.PfvertsBegin());
     vector<int64_t>                             pfvert(3);
     map<mjl::Point,size_t>                     ordered_nodes;

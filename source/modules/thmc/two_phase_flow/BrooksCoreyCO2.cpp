@@ -505,7 +505,7 @@ double BrooksCoreyCO2<dim>::ShockHeight() const
 
 
 template<uint32_t dim>
-void BrooksCoreyCO2<dim>::Out( size_t phase ) const
+void BrooksCoreyCO2<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nBrooksCoreyCO2<"<< dim << ">::Out: Additional properties: "<< endl;

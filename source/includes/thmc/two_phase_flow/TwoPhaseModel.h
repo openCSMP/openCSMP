@@ -57,16 +57,16 @@ class TwoPhaseModel {
     virtual void InitializeForBaryCenter( const Element<dim>& e );
 
     virtual void InitializeForNode( const Element<dim>& e,
-                                    size_t node );
+                                    uint32_t node );
                                     
     /// finite element integration points
-    virtual void InitializeForIntegrationPoint( size_t ip, 
+    virtual void InitializeForIntegrationPoint( uint32_t ip,
                                                 const Element<dim>& e );
     /// finite volume facets
-    virtual void InitializeForFacetIntegrationPoint( size_t facet, size_t ip,
+    virtual void InitializeForFacetIntegrationPoint( uint32_t facet, uint32_t ip,
                                                      const Element<dim>& e );
     /// finite volume sectors
-    virtual void InitializeForSectorIntegrationPoint( size_t sector, size_t ip,
+    virtual void InitializeForSectorIntegrationPoint( uint32_t sector, uint32_t ip,
                                                       const Element<dim>& e );
      
     virtual void InterpolateNodeProperties( const Element<dim>& e );
@@ -84,12 +84,12 @@ class TwoPhaseModel {
     csmp::Index TotalMobilityKey() const;
 
     /// accessors
-    double   Permeability()  const;
+    double     Permeability()  const;
     void       Permeability( double permeability );
     TensorVariable<dim>   TensorPermeability()  const;
     void       TensorPermeability( TensorVariable<dim> permeability );
-    double   Swr() const;
-    double   Snr() const;
+    double     Swr() const;
+    double     Snr() const;
     void       Swr( double swr );
     void       Snr( double snr );    
 
@@ -98,8 +98,8 @@ class TwoPhaseModel {
     double   ViscosityWettingPhase() const;
     double   DensityNonWettingPhase() const;
     double   DensityWettingPhase() const;
-    double   Saturation( size_t phase ) const;
-    double   MobilityPhase( size_t phase ) const; // kr_i/mu_i
+    double   Saturation( uint32_t phase ) const;
+    double   MobilityPhase( uint32_t phase ) const; // kr_i/mu_i
     double   ViscosityRatio() const;
 
     /// sum of all phase mobilities * k
@@ -138,7 +138,7 @@ class TwoPhaseModel {
     virtual double MaxFractionalFlowDerivative( ) const;
 
     /// maximum value of dpcdS
-    double MaxCapillaryPressure( size_t phase = 1U ) const;
+    double MaxCapillaryPressure( uint32_t phase = 1U ) const;
 
     /// always of the wetting phase by convention
     virtual double  EffectiveSaturation() const;
@@ -146,7 +146,7 @@ class TwoPhaseModel {
     virtual double  SeffToSw( double seff) const;
 
     /// fractional flow
-    double f_Phase( size_t phase ) const;
+    double f_Phase( uint32_t phase ) const;
   
     /// fractional flow of water at water saturation sw
     double fw_at( double sw ) const;
@@ -211,7 +211,7 @@ class TwoPhaseModel {
     double spline_second_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
 
     /// default is the wetting phase
-    virtual void Out( size_t phase=1U ) const;
+    virtual void Out( uint32_t phase=1U ) const;
     
   protected:
 
@@ -227,16 +227,16 @@ class TwoPhaseModel {
                       rhw_key_,     // density of wetting phase (nodal property)
                       rhn_key_,     // density of non-wetting phase (nodal property)
                       lt_key_;      // total mobility
-    double          swr_, snr_,   // irreducible saturations
+    double            swr_, snr_,   // irreducible saturations
                       k_,           // permeability
                       ift_,         // interfacial tension
                       mun_, muw_,   // viscosities of wetting and non-wetting phase
                       rhn_, rhw_;   // densities
     TensorVariable<dim> K_;         // tensor permeability
 
-    mutable double  sat_,         // saturation of the wetting phase
+    mutable double    sat_,         // saturation of the wetting phase
                       seff_;        // actual saturation, effective saturation
-    const double    acc_gravity_, // accelaration of gravity
+    const double      acc_gravity_, // accelaration of gravity
                       tolerance_,   // cut_off value for expensive calculations
                       MAX_CAPILLARY_PRESSURE_,      // maximum permitted capillary pressure
                       MAX_CAPILLARY_PRESSURE_SLOPE_;// maximum permitted capillary pressure slope

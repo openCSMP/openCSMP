@@ -561,7 +561,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( CELL& e )
 
                 if( with_capillary_ ){
 
-                    for ( size_t i=0; i<e.Nodes(); i++ ){
+                    for ( auto i=0; i<e.Nodes(); i++ ){
                         satFunc_.InitializeForNode(e,i);
                         satFunc_.EffectiveSaturation();
                         const double pc ( satFunc_.pc_Phase());

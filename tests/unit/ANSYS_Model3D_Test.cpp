@@ -259,8 +259,8 @@ namespace csmp
       modelOutput3.InputPropertyValue( "faip vector", vv );
       modelOutput3.InputPropertyValue( "seip tensor", tv );
       Element<3>* ePtr = *modelOutput3.Region("Model").ElementsBegin();
-      for( size_t f(0); f < ePtr->Facets(); ++f )
-        for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+      for( auto f(0); f < ePtr->Facets(); ++f )
+        for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
@@ -278,8 +278,8 @@ namespace csmp
 
         ePtr = *modelInput3.Region("Model").ElementsBegin();
         size_t ctrFaIps(0);
-        for( size_t f(0); f < ePtr->Facets(); ++f )
-          for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+        for( auto f(0); f < ePtr->Facets(); ++f )
+          for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
           {
             ePtr->Read( f, fip, faipVectorKey, vvPlain );
             _test( vvPlain == vv );
@@ -309,8 +309,8 @@ namespace csmp
         ctrFaIps = 0;
         ctrSeIps = 0;
 
-        for( size_t f(0); f < ePtr->Facets(); ++f )
-          for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+        for( auto f(0); f < ePtr->Facets(); ++f )
+          for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
           {
             ePtr->Read( f, fip, faipVectorKey, vvPlain );
             _test( vvPlain == vv );

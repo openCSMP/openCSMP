@@ -52,8 +52,6 @@ using namespace std;
 
 namespace csmp {
 
-const size_t DIM(3U);
-
 void Experimental_Example::Specifications()
   {
      SetTitle( "Experimental_Example" );

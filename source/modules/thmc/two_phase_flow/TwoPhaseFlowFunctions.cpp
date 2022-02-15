@@ -24,7 +24,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
       Mobility of phase i, kri(sw) / mu_i.
  */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::Mobility( Element<dim>* const e, size_t phase ) const
+double TwoPhaseFlowFunctions<dim,USER>::Mobility( Element<dim>* const e, uint32_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -50,7 +50,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Mobility( Element<dim>* const e, size_t 
     Using prescribed sw value, instead of intepolated value.
 */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, size_t phase, double sw ) const
+double TwoPhaseFlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, uint32_t phase, double sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -75,7 +75,7 @@ double TwoPhaseFlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, size
     Mobility saturation derivative for phase i.
 */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const e, size_t phase, bool evaluate_numerically ) const
+double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const e, uint32_t phase, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -93,7 +93,7 @@ double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const 
    Mobility saturation derivative for phase i.
    */
   template<uint32_t dim, template<uint32_t> class USER>
-  double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, size_t phase, double sw ) const
+  double TwoPhaseFlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, uint32_t phase, double sw ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -234,7 +234,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::f( Element<dim>* const e, size_t phase ) const
+double TwoPhaseFlowFunctions<dim,USER>::f( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -259,7 +259,7 @@ Computes the fractional flow of the wetting (ehase=1) and non-wetting
 
 */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t phase, double sw ) const
+double TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, uint32_t phase, double sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -294,7 +294,7 @@ double TwoPhaseFlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t phas
     @todo check whether code for end-member cases has to be reinstated.
 */
 template<uint32_t dim, template<uint32_t> class USER>
-double TwoPhaseFlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t phase ) const
+double TwoPhaseFlowFunctions<dim,USER>::dfds( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );

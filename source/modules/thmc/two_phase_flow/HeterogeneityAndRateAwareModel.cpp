@@ -1401,7 +1401,7 @@ double csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double Ncap ) const
 
 
 template<uint32_t dim>
-void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
+void HeterogeneityAndRateAwareModel<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nHeterogeneityAndRateAwareModel<"<< dim << ">::Out(rocktype="<< rocktype_ <<"): return values of functions: "<< endl;

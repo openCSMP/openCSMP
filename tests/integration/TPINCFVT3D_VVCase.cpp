@@ -55,7 +55,7 @@ void TPINCFVT3D_VVCase::run()
     //const
     const  double tolSat(0.05), satOil(1.), tolFront(.1);
     //for each test
-    double time(0.), CFLmultiplier(1.), mobilityRatio(0.), velX(0.), analyticFront(0.);
+    double time(0.), mobilityRatio(0.), analyticFront(0.);
 
     //test container
     vector<TPINCFVT3D_TestData> tests;
@@ -782,7 +782,7 @@ void TPINCFVT3D_VVCase::OutputVTU( Model<3>& model,
   list<string> props;
   props.push_back( "saturation water" );
   props.push_back( "nodal velocity" );
-  vtu.OutputDataToVTU( fileName, "saturation water","Model", static_cast<uint32_t>(time) );
+  vtu.OutputDataToVTU( fileName, "saturation water","Model", static_cast<size_t>(time) );
 }//OutputVTU
 
 

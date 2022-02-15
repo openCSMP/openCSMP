@@ -53,8 +53,6 @@ using namespace std;
 
 namespace csmp {
 
-const size_t DIM(3U);
-
 void SplitBoundary_Example::Specifications()
   {
      SetTitle( "SplitBoundary_Example" );
@@ -90,7 +88,6 @@ void SplitBoundary_Example::Run()
   const bool binary_file(true);             /* true = binary, false = ascii */
   const bool use_regions_file(true);        /* true = reduce regions according to regions file, false = does not redure regions */
   const bool create_boundaries(true);       /* true = creates boundaries around model, false = does not create boundaries */
-  const bool create_splitboundaries(false); // FAIL /* true = creates splitboundaries around model, false = does not create splitboundaries */
   // Ansys model
   const string model_name("BoxHalfs2D");
   ANSYS_Model2D ansys_model("BoxHalfs2D", "BoxHalfs2D", "THMC_shear_zone-variables.txt",

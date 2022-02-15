@@ -197,7 +197,6 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       
     Region<dim>&  super_group(sg.Region("Model"));
     
-    typename std::vector<Node<dim>*>::iterator     it;
     typename std::vector<Element<dim>*>::iterator  eit;
     typename std::vector<double>  xvec, yvec, kvec;
     mjl::Point xy;                                    

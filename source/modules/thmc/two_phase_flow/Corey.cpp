@@ -353,7 +353,7 @@ double Corey<dim>::MaxFractionalFlowDerivative() const
 
 
 template<uint32_t dim>
-void Corey<dim>::Out( size_t phase ) const
+void Corey<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout << "\nCorey<csp_float," << dim << ">::Out: Additional properties: " << endl;

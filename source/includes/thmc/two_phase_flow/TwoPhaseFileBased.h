@@ -52,7 +52,7 @@ class TwoPhaseFileBased : public TwoPhaseModel<dim> {
     // inverse capillary pressure derivative
     virtual double dsdpc_Phase( double pc_Phase ) const;
 
-    int32_t             writeData();
+    int32_t  writeData();
 
   private:
     TwoPhaseFileBased();

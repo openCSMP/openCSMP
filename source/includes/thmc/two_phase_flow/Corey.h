@@ -78,14 +78,14 @@ class Corey : public TwoPhaseModel<dim> {
     // maximum absolute value returned by dfdS
     virtual double MaxFractionalFlowDerivative() const;
 
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
   private:
 
     Corey();
-    Index           pd_key_, pc_max_key_,expw_key_, expn_key_, lambda_key_, krw_key_, krn_key_;
-    double        krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
-    bool            default_capillary_pressure_max_;
+    Index   pd_key_, pc_max_key_,expw_key_, expn_key_, lambda_key_, krw_key_, krn_key_;
+    double  krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
+    bool    default_capillary_pressure_max_;
 
 };
 

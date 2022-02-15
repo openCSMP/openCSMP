@@ -1158,12 +1158,10 @@ void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries( const std::
 template<uint32_t dim>
 void SplitBoundaryInterface_Test::Detect_and_create_splitboundaries_from_constructor( const std::string& model_name )
 {
-  const bool verbose( false );
   const string variables_file( "SplitBoundary_Test-variables.txt" );
   
   // 1. convert ansys model into CSMP model
   Model<dim>* model = NULL;
-  const bool create_splitboundaries( true );
   if constexpr ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
   else if constexpr ( dim == 3U )

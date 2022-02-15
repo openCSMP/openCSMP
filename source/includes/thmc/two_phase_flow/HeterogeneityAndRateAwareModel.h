@@ -93,7 +93,7 @@ class HeterogeneityAndRateAwareModel : public TwoPhaseModel<dim> {
     /// Outputs the relperms for the current model initialisation to a plot for visual examination; filename appends rocktype and Ncap calculated
     void WriteRelativePermeabilityTable( const char* filename, long rocktype, const VectorVariable<dim>& vt );
   
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
   
   private:
     /// takes permeability values (from Model or Rocktypes) and initialises scalar permeability k and tensor K in TwoPhaseModel base class

@@ -47,7 +47,7 @@ class BrooksCoreyWithHysteresis : public TwoPhaseModel<dim> {
     virtual double ShockSpeed() const;
     virtual double ShockHeight() const;
     
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
   private:
     BrooksCoreyWithHysteresis();

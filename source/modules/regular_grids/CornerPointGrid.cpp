@@ -213,7 +213,6 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
   // 1. Classify the cells
 
-  size_t skewCells = 0;
   for ( auto& index_column : columns_ ) {
     auto& column = index_column.second;
     auto i = index_column.first.first;
@@ -467,7 +466,7 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
   size_t invalid_tets = 0;
   size_t invalid_pris = 0;
 
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( faceAboveIsQuad ) {
     if ( faceBeneathIsQuad ) {
@@ -1006,7 +1005,7 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 4, 5, 1, 0, generator_->getNodeID( cell, 3 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1034,7 +1033,7 @@ bool CornerPointGrid::ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 4, 5, 1, 0, generator_->getNodeID( cell, 2 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1073,7 +1072,7 @@ bool CornerPointGrid::ConstructEclipseCell0011( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 3, 7, 4, 0, generator_->getNodeID( cell, 1 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1115,7 +1114,7 @@ bool CornerPointGrid::ConstructEclipseCell0101( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPrism( cell, 0, 4, 1, 3, 7, 2 ) ) {
     size_t eid = generator_->EmitPrism( cell );
@@ -1137,7 +1136,7 @@ bool CornerPointGrid::ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_0
 bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 5, 4, generator_->getNodeID( cell, 0 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1158,7 +1157,7 @@ bool CornerPointGrid::ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPyramidOnFace( cell, 5, 6, 2, 1, generator_->getNodeID( cell, 0 ) ) ) {
     size_t eid = generator_->EmitPyramid( cell );
@@ -1214,7 +1213,7 @@ bool CornerPointGrid::ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_1
 bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 6, 5, 4, generator_->getNodeID( cell, 1 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1235,7 +1234,7 @@ bool CornerPointGrid::ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructPrism( cell, 0, 3, 7, 1, 2, 6 ) ) {
     size_t eid = generator_->EmitPrism( cell );
@@ -1257,7 +1256,7 @@ bool CornerPointGrid::ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_2
 bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 6, 5, generator_->getNodeID( cell, 2 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
@@ -1279,16 +1278,15 @@ bool CornerPointGrid::ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, si
 //Eclipse cell type: ECLIPSE_CELL_PYRAMID_3
 bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructTetrahedronOnFace( cell, 7, 6, 4, generator_->getNodeID( cell, 3 ) ) ) {
     size_t eid = generator_->EmitTetrahedron( cell );
     addElementToMap( i, j, k, eid );
     new_elements.push_back( eid );
   }
-  else {
-    invalid_elements++;
-  }
+  else invalid_elements++;
+
 
   badTetrahedra_ += invalid_elements;
 
@@ -1307,7 +1305,7 @@ bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, si
 
 bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, size_t& new_elemt_idx ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   auto it = columns_.find( make_pair( i, j ) );
   if ( it == columns_.end() ) return false;
@@ -1340,7 +1338,7 @@ bool CornerPointGrid::ConstructLineElement( size_t& i, size_t& j, size_t& k, siz
 
 bool CornerPointGrid::ConstructLineElement( ColumnCell& cell, size_t& i, size_t& j, size_t& k ) {
   size_t invalid_elements = 0;
-  std::vector<uint32_t> new_elements;
+  std::vector<size_t> new_elements;
 
   if ( generator_->ConstructLine( cell ) ) {
     size_t eid = generator_->EmitLine( cell );

@@ -194,7 +194,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
 
        {
 
@@ -281,7 +281,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        // checking the element that contains this point
        Region<2U>& model_domain(model.Region("Model"));
 
-       for ( vector<Element<2U>*>::iterator it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
+       for ( auto it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -371,7 +371,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
 
        {
 
@@ -458,7 +458,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
 
        {
 
@@ -548,8 +548,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       // TODO: refactor this crazy code
+       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
 
        {
 
@@ -638,7 +638,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
 
        {
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;

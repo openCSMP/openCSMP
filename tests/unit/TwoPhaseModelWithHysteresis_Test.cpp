@@ -1,5 +1,6 @@
 #include "CSMP_definitions.h"
 #include "Model1D.h"
+#include "Region.h"
 #include "InputDataManager.h"
 #include "FlowFunctionsModule.h"
 #include "TwoPhaseModelWithHysteresis_Test.h"
@@ -9,44 +10,23 @@ using namespace std;
 
 namespace csmp {
   
-  // default constructor
-  TwoPhaseModelwithHysteresis_Test::TwoPhaseModelwithHysteresis_Test()
-  {
-  }
- 
-  
-  
-  
-  
-  // simple destructore
-  TwoPhaseModelwithHysteresis_Test::~TwoPhaseModelwithHysteresis_Test()
-  {
-  }
-  
-  
-  
-  
 /**
- 1. the process test.. loop over saturation and check the process is picking the correct path
- 
+     1. the process test.. loop over saturation and check the process is picking the correct path
 */
-
-vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Extract_data( Model<1U>& mdl, TestCases subfunctions) {
+vector <pair<double,double> >  TwoPhaseModelwithHysteresis_Test::Extract_data( Model<1U>& mdl, TestCases subfunctions) {
     
     PropertyDatabase<1U>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
     
-    vector< pair<double64,double64> > SwPc;
+    vector< pair<double,double> > SwPc;
     
     FlowFunctionsModule2<1U> SatFunctions( p_ref, 9.8 ) ;
+    Region<1U>& mdl_domain{mdl.Region("Model")};
   
-    for (auto it = mdl.Region("Model").ElementsBegin(); it != mdl.Region("Model").ElementsEnd(); ++it ) // loop over elements
-      
+    for (auto it = mdl_domain.ElementsBegin(); it != mdl_domain.ElementsEnd(); ++it ) // loop over elements
     {
-      if ( ((*it)->AtBoundary() != CNR1) and ((*it)->AtBoundary() != CNR2))   // not boundary elements
-      {
-        double64 Sw = SatFunctions.Sw((*it)) ;
-        double64 extract_data(0) ;
+        double Sw = SatFunctions.Sw((*it)) ;
+        double extract_data(0) ;
         
         switch (subfunctions) {
             
@@ -72,13 +52,11 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Extract_dat
         }
         
         SwPc.push_back(make_pair(Sw,extract_data)) ;
-        
-      }
-      
     }
     
     return SwPc ;
-}
+    
+} // end Extract_data
   
   
   
@@ -104,34 +82,34 @@ vector <pair<double64,double64> >  TwoPhaseModelwithHysteresis_Test::Extract_dat
  [0.31500375 0.8576149 ]
  [-5.1522971e-07  4.4824004e+00]
  
- array<array<double64,2>,2> a1_ =  {{0.634,0.858},{9.58e+00,4.48}} ;
- array<array<double64,2>,2> c1_ {{0.606,0.315},{-1.6e-13,-5.e-07}} ;
+ array<array<double,2>,2> a1_ =  {{0.634,0.858},{9.58e+00,4.48}} ;
+ array<array<double,2>,2> c1_ {{0.606,0.315},{-1.6e-13,-5.e-07}} ;
  
- array<array<double64,2>,2> a1_ =  {{0.4,0.858},{0.9,4.48}} ;
- array<array<double64,2>,2> c1_ {{1.15,0.315},{-0.015,-5.e-07}} ;
+ array<array<double,2>,2> a1_ =  {{0.4,0.858},{0.9,4.48}} ;
+ array<array<double,2>,2> c1_ {{1.15,0.315},{-0.015,-5.e-07}} ;
  
- array<array<double64,2>,2> a1_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;  // these are just for test
- array<array<double64,2>,2> c1_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;  // these are just for test
+ array<array<double,2>,2> a1_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;  // these are just for test
+ array<array<double,2>,2> c1_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;  // these are just for test
  */
  
 void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_case ) {
      //10.1 first create the Main Drainage and Imbibition curves...
   
   
-    double64 length(1);
+    double length(1);
     size_t   elements(3);
   
-    double64 DS(0.01);
+    double DS(0.01);
   
-    double64 srH2O(0.3) ;
-    double64 srCO2(0.1) ;
+    double srH2O(0.3) ;
+    double srCO2(0.1) ;
   
     Point<1U> origin(0) ;
     Point<1U> destination(1);
   
     Model1D<1U> mdl( "Model1D", "CO2-geo-sequestration-variables.txt", length, elements );
   
-    Region<1U>& rref = mdl.Region( "Model" );
+    Region<1U>& model_domain = mdl.Region( "Model" );
     PropertyDatabase<1U>&   p_ref = mdl.Database();
     variables::VariableSet_CO2GeoSequestration var( p_ref );
 
@@ -172,19 +150,19 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
    ^
    This number counts as a "DataDepth" for the array
    
-   array<array<double64,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
-   array<array<double64,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
+   array<array<double,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
+   array<array<double,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
    
-   array<array<double64,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
-   array<array<double64,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
+   array<array<double,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
+   array<array<double,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
   
-  array<array<double64,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
-  array<array<double64,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
+  array<array<double,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
+  array<array<double,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
   
   */
   
-  array<array<double64,2>,2> a_ = {{{{0.52,0.26}},{{0.24,0.4}}}} ;
-  array<array<double64,2>,2> c_ = {{{{5.0,3.0}},{{-2.0,-2.0}}}} ;
+  array<array<double,2>,2> a_ = {{{{0.52,0.26}},{{0.24,0.4}}}} ;
+  array<array<double,2>,2> c_ = {{{{5.0,3.0}},{{-2.0,-2.0}}}} ;
   
   
   ArrayVariable arrayvariable1_(8, PLAIN);
@@ -201,7 +179,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
-  for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
+  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
     (*it)->Store( var.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
@@ -235,9 +213,9 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   cerr <<"The Main Drainage test....\n" ;
   cerr <<"\n" ;
   
-  for ( double64 S = 0; S<= 1; S+=DS) {   // Drainage loop
+  for ( double S = 0; S<= 1; S+=DS) {   // Drainage loop
     
-    for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
+    for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
       ScalarVariable Sw_ ((*it)->Status(var.key_sH2O), S) ;
       ScalarVariable SCO2_ ((*it)->Status(var.key_sCO2), 1-S) ;
@@ -253,9 +231,9 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
     
   }
   
-  for ( double64 S = 0; S<= 1; S+=DS) { //Imbibitaions loop
+  for ( double S = 0; S<= 1; S+=DS) { //Imbibitaions loop
       
-    for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
+    for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
       ScalarVariable Sw_ ((*it)->Status(var.key_sH2O), S) ;
       ScalarVariable SCO2_ ((*it)->Status(var.key_sCO2), 1-S) ;
@@ -320,7 +298,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
 
     
     
-    for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
+    for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
     
       (*it)->Store( var.key_sH2O,   Sw0_   ) ;
@@ -337,7 +315,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   
   outputfile2.close() ;
     
-}
+} // end runOverSaturationRange
 
   
   
@@ -356,25 +334,22 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    12.1) Create an 1D model without any spliting point in the model.
    
    */
-  double64 length   = 10;
+  double length   = 10;
   size_t   elements = 20;
   
-  double64 srH2O(0.) ;
-  double64 srCO2(0.) ;
+  double srH2O(0.) ;
+  double srCO2(0.) ;
   
   Point<1U> origin = 0 ;
   Point<1U> destination = 10;
   
   Model1D<1U> model( "Model1D", "CO2-geo-sequestration-variables.txt", length, elements );
-  
-  
-  Region<1U>& rref = model.Region( "Model" );
-  PropertyDatabase<1U>&   p_ref = model.Database();
-  variables::VariableSet_CO2GeoSequestration var( p_ref );
-  
-  
   printModelDimensions( model, true );
   cout << "\n 1D Model created" << endl;
+  
+  Region<1U>&              model_domain = model.Region( "Model" );
+  PropertyDatabase<1U>&    p_ref = model.Database();
+  variables::VariableSet_CO2GeoSequestration var( p_ref );
   
   FlowFunctionsModule2<1U> SatFunctions( p_ref , 9.8 ) ;
 
@@ -419,16 +394,16 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    12.3.1) accumulate the nodes with water satuaration from 0 to 1 ...
    
    */
-  double64 i(0.0) ;
-  for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
-  {
-    ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
-    (*it)->Store( var.key_sH2O, variable0_);
-    (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
-    (*it)->Store( var.key_sCO2_0,1.0-variable0_) ;
-    i++ ;
-  }
-  
+  double i(0.0) ;
+  for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
+    {
+      ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
+      (*it)->Store( var.key_sH2O, variable0_);
+      (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
+      (*it)->Store( var.key_sCO2_0,1.0-variable0_) ;
+      i++ ;
+    }
+    
   /**
    
    12.3.2) define the Hysteresis relative permeability model Parameters on each elements
@@ -443,17 +418,17 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    ^
    This number counts as a "DataDepth" for the array
    
-   array<array<double64,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
-   array<array<double64,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
+   array<array<double,2>,2> a_ = {{{{0.5,0.25}},{{0.25,0.5}}}} ;
+   array<array<double,2>,2> c_ = {{{{3.0,3.0}},{{-2.0,-2.0}}}} ;
    
-   array<array<double64,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
-   array<array<double64,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
+   array<array<double,2>,2> a_ =  {{{{0.4,0.858}},{{0.9,4.48}}}} ;
+   array<array<double,2>,2> c_ {{{{1.15,0.315}},{{-0.015,-5.e-07}}}} ;
    
    
    */
   
-  array<array<double64,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
-  array<array<double64,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
+  array<array<double,2>,2> a_ =  {{{{0.634,0.858}},{{9.58e+00,4.48}}}} ;
+  array<array<double,2>,2> c_ =  {{{{0.606,0.315}},{{-1.6e-13,-5.e-07}}}} ;
   
   
   ArrayVariable arrayvariable1_(8, PLAIN);
@@ -470,7 +445,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
-  for ( auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it )
+  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
     (*it)->Store( var.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
@@ -482,9 +457,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    
    */
   
-  for ( auto it = rref.NodesBegin(); it != rref.NodesEnd(); ++it )
-  {
-    
+  for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it ) {
     auto Sw = (*it)->Read(var.key_sH2O) ;
     cerr <<"Water Saturation defined at Nodes: "<< Sw <<"\n" ;
     
@@ -504,11 +477,9 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    
    */
   
-  for (auto it = rref.ElementsBegin(); it != rref.ElementsEnd(); ++it ) // loop over elements
+  for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it ) // loop over elements
   {
     auto idx_ = (*it)->Idx() ;
-
-    
     
     /**
      Important:
@@ -524,7 +495,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     // Water Saturation of model at the BaryCenter.. this is not the same as water saturation of Nodes.. its is interploated from the nodes at BaryCenter
     
   
-    double64 Sw = SatFunctions.Sw((*it)) ;
+    double Sw = SatFunctions.Sw((*it)) ;
     
     cerr <<"\n" ;
     cerr <<"Entering into Element: " << idx_ << "\n" ;
@@ -537,7 +508,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     
     //  Check the water saturation is in the range of
    
-    double64 pc = SatFunctions.pc((*it)) ;
+    double pc = SatFunctions.pc((*it)) ;
     
     cerr <<"Capillary pressure: "<< pc <<"\n" ;
     
@@ -545,7 +516,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     // ---------------------------------------------
     //_test( !isnan(pc) );
     
-    double64 dpcds = SatFunctions.dpcds((*it)) ;
+    double dpcds = SatFunctions.dpcds((*it)) ;
     
     cerr <<"Derivative of capillary pressure: "<< dpcds <<"\n" ;
     
@@ -553,7 +524,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     // ---------------------------------------------
     _test( !isnan(dpcds) );
     
-    double64 krw = SatFunctions.krw((*it)) ;
+    double krw = SatFunctions.krw((*it)) ;
     
     cerr <<"Relative permability of Water: "<< krw <<"\n" ;
     
@@ -562,7 +533,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     _test( !isnan(krw) );
     _test(!( krw < 0. || krw > 1. )) ;
     
-    double64 dkrwds = SatFunctions.dkrwds((*it)) ;
+    double dkrwds = SatFunctions.dkrwds((*it)) ;
     
     cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
     
@@ -570,7 +541,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     // ---------------------------------------------
     _test( !isnan(dkrwds) );
     
-    double64 krn = SatFunctions.krn((*it)) ;
+    double krn = SatFunctions.krn((*it)) ;
     
     cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
     
@@ -579,7 +550,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     _test( !isnan(krn) );
     _test(!( krn < 0. || krn > 1. )) ;
     
-    double64 dkrnds = SatFunctions.dkrnds((*it)) ;
+    double dkrnds = SatFunctions.dkrnds((*it)) ;
     
     cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
     
@@ -603,18 +574,18 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
     
     // Functionality for the prescribed saturation
     // ---------------------------------------------
-    for (double64 S(0.0); S <= 1.0; S+=0.1){
+    for (double S(0.0); S <= 1.0; S+=0.1){
       
       cerr <<"\n" ;
       cerr <<"Prescribed saturation:  "<< S <<"\n" ;
       
-      double64 S_at = SatFunctions.EffectiveSaturation_at((*it), S) ;
+      double S_at = SatFunctions.EffectiveSaturation_at((*it), S) ;
       
       // water Saturation
       // ---------------------------------------------
       _test(!( S_at < 0. || S_at > 1.  ));
       
-      double64 krw = SatFunctions.krw_at((*it), S) ;
+      double krw = SatFunctions.krw_at((*it), S) ;
       
       cerr <<"Relative permability of Water: "<< krw <<"\n" ;
       
@@ -623,7 +594,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krw) );
       _test(!( krw < 0. || krw > 1. )) ;
       
-      double64 dkrwds = SatFunctions.dkrwds_at((*it), S) ;
+      double dkrwds = SatFunctions.dkrwds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
       
@@ -631,7 +602,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       // ---------------------------------------------
       _test( !isnan(dkrwds) );
       
-      double64 krn = SatFunctions.krn_at((*it), S) ;
+      double krn = SatFunctions.krn_at((*it), S) ;
       
       cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
       
@@ -640,7 +611,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krn) );
       _test(!( krn < 0. || krn > 1. )) ;
       
-      double64 dkrnds = SatFunctions.dkrnds_at((*it), S) ;
+      double dkrnds = SatFunctions.dkrnds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
       
@@ -682,11 +653,6 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   runOverSaturationRange(krw) ;                    // Pass
   
   runOverSaturationRange(krn) ;                   // Pass
-  
-
-  
-  
-  
   
 } // run()
 

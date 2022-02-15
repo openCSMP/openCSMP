@@ -88,13 +88,13 @@ class BrooksCoreyCO2 : public TwoPhaseModel<dim> {
     virtual double ShockSpeed() const;
     virtual double ShockHeight() const;
     
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
 
     // brooks corey parameters
-    void      Lambda( double lambda );
+    void    Lambda( double lambda );
     double  Lambda() const;
-    void      Pd( double pd );
+    void    Pd( double pd );
     double  Pd() const;
 
   private:

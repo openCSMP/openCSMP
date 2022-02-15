@@ -280,7 +280,7 @@ double TwoPhaseModel<dim>::DensityWettingPhase() const
 { return rhw_; }
 
 template<uint32_t dim>
-double TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
+double TwoPhaseModel<dim>::MaxCapillaryPressure( uint32_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
    if ( phase == 2U ) return MAX_CAPILLARY_PRESSURE_;
@@ -289,7 +289,7 @@ double TwoPhaseModel<dim>::MaxCapillaryPressure( size_t phase ) const
 
 
 template<uint32_t dim>
-double TwoPhaseModel<dim>::Saturation( size_t phase ) const
+double TwoPhaseModel<dim>::Saturation( uint32_t phase ) const
 { 
    assert( phase == 1U or phase == 2U );
    if ( phase == 2U ) return static_cast<double>(1.) - sat_;
@@ -298,7 +298,7 @@ double TwoPhaseModel<dim>::Saturation( size_t phase ) const
 
 
 template<uint32_t dim>
-double TwoPhaseModel<dim>::MobilityPhase( size_t phase ) const 
+double TwoPhaseModel<dim>::MobilityPhase( uint32_t phase ) const
  {
     assert( phase == 1U or phase == 2U );
     if ( phase == 1U ) return krw_Phase() / muw_;
@@ -399,7 +399,7 @@ void TwoPhaseModel<dim>::InitializeForBaryCenter( const Element<dim>& e )
 
 template<uint32_t dim>
 void TwoPhaseModel<dim>::InitializeForNode( const Element<dim>& e,
-                                                   size_t fem_node )
+                                                   uint32_t fem_node )
  {
     if (sw_ro_mu_placement_) {
         sat_ = e.N(fem_node)->Read( sat_key_ );
@@ -413,7 +413,7 @@ void TwoPhaseModel<dim>::InitializeForNode( const Element<dim>& e,
 
 
 template<uint32_t dim>
-void TwoPhaseModel<dim>::InitializeForIntegrationPoint( size_t ip, 
+void TwoPhaseModel<dim>::InitializeForIntegrationPoint( uint32_t ip,
                                                                const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -427,7 +427,7 @@ void TwoPhaseModel<dim>::InitializeForIntegrationPoint( size_t ip,
  
  
 template<uint32_t dim>
-void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_t ip,
+void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( uint32_t facet, uint32_t ip,
                                                                     const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -440,7 +440,7 @@ void TwoPhaseModel<dim>::InitializeForFacetIntegrationPoint( size_t facet, size_
 
 
 template<uint32_t dim>
-void TwoPhaseModel<dim>::InitializeForSectorIntegrationPoint( size_t sector, size_t ip,
+void TwoPhaseModel<dim>::InitializeForSectorIntegrationPoint( uint32_t sector, uint32_t ip,
                                                                      const Element<dim>& e )
  {
     if (sw_ro_mu_placement_) {
@@ -494,7 +494,7 @@ Computes the fractional flow of the wetting (phase=1) and non-wetting
 Initialize() must be called first.  
 */
 template<uint32_t dim>
-double TwoPhaseModel<dim>::f_Phase( size_t phase ) const
+double TwoPhaseModel<dim>::f_Phase( uint32_t phase ) const
  {
     assert( phase == 1U or phase == 2U );
       if ( phase == 1U )
@@ -1164,7 +1164,7 @@ double TwoPhaseModel<dim>::spline_second_derivative( double x, double x1, double
 }
 
 template<uint32_t dim>
-void TwoPhaseModel<dim>::Out( size_t phase ) const
+void TwoPhaseModel<dim>::Out( uint32_t phase ) const
  { 
     assert( phase == 1U or phase == 2U );
     cout <<"\nTwoPhaseModel<" << dim <<">::Out: ";
