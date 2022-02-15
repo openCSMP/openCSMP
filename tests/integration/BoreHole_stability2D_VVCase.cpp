@@ -194,8 +194,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -370,9 +370,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2>& mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -457,9 +456,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -549,8 +547,9 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
        // TODO: refactor this crazy code
-       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
+       Region<2> mod_domain(model.Region("Model"));
 
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //       cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -637,9 +636,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( auto it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
 
