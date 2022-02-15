@@ -721,19 +721,17 @@ void SplitBoundary<dim>::Out() const
   cout << " member interfaces: interior=" << this->InteriorElements();
   cout << ", perimeter=" << this->elmt_vec_.size() - this->InteriorElements() << ": " << endl;
 
-  for ( typename vector<InterFace<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+  for ( auto it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
     if ( (*it) == nullptr )
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out",
                              "member interface pointer not initialised" );
   }
 
   cout << "\n\n edge interfaces and their edges (current local numbering): " << endl;
-  vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
+  auto  bit( this->bd_face_vec_.begin() );
   for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
     cout << "\ninterface " << i << ": edge numbers: ";
-    for ( vector<ONE_BYTE_NUMBER>::const_iterator
-          ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+    for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
   }
 
   cout << "\n\n edge nodes: " << this->node_vec_.size() - this->first_bd_node_ << " (current local numbering):" << endl;

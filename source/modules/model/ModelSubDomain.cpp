@@ -453,17 +453,16 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_elemen
 
      const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(this->elmt_vec_.begin(),interior_elements) );
      const typename vector<CELL<dim>*>::const_iterator elementsEnd( this->elmt_vec_.end() );
-     vector<ONE_BYTE_NUMBER>  boundary_faces;
-     size_t                   counter(0U);
+     vector<uint32_t>  boundary_faces;
+     size_t            counter(0U);
 
      // for all faces of CELLs that are located on the subdomain boundary
-     for ( typename vector<CELL<dim>*>::const_iterator
-           it = perimeterElementsBegin; it != elementsEnd; ++it )
+     for ( auto it = perimeterElementsBegin; it != elementsEnd; ++it )
        {
           assert( (*it)->Faces() == (*it)->Neighbors() );
-          const size_t faces( (*it)->Faces() );
+          const auto faces( (*it)->Faces() );
           boundary_faces.reserve( faces );
-          for ( size_t face(0U); face<faces; ++face )
+          for ( auto face(0U); face<faces; ++face )
             //   located on model boundary          or  neighbor is not contained in this subdomain
             if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
               boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
@@ -767,8 +766,8 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
         //       parent element of face, face
         typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
         typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
-        vector<ONE_BYTE_NUMBER>  bface_data;
-        size_t                   counter(0U);
+        vector<uint32_t>  bface_data;
+        size_t            counter(0U);
 
         while ( bfit != boundary_faces.end() ) {
             assert((*ffit).first == this->elmt_vec_[counter + interior_elmts.size()]);
@@ -785,7 +784,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
             bface_data.clear();
             counter++;
           }
-        vector<vector<ONE_BYTE_NUMBER> >(this->bd_face_vec_).swap(this->bd_face_vec_);
+        this->bd_face_vec_.shrink_to_fit();
         // debug checks
         for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
           assert( (*it).size() >= 1 );
@@ -4710,11 +4709,10 @@ void ModelSubDomain<dim,CELL>::Out() const
       }
 
     cout <<"\n\n perimeter elements and their perimeter faces (current local numbering): "<< endl;
-    vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(bd_face_vec_.begin());
+    auto  bit{ bd_face_vec_.begin() };
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
          cout <<"\nelement "<< i <<": edge face numbers: ";
-         for ( vector<ONE_BYTE_NUMBER>::const_iterator
-               ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
+         for ( auto ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
     cout <<"\n\n perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;

@@ -3,8 +3,6 @@
 
 #include "CSMP_definitions.h"
 #include "LocalVariableStorage.h"
-#include "TensorVariable.h"
-#include "Box.h"
 
 namespace csmp {
 
@@ -295,16 +293,16 @@ class ModelSubDomain {
     /// establishes interior vs. exterior simplices and nodes; returns index of first boundary element
     size_t  PartitionCellVector();
 
-    const PropertyDatabase<dim>&                pref_;
-    std::string                                 subdomain_name_;         ///< passed down when region is created so that it can be referred to
-    std::vector<CELL<dim>*>                     elmt_vec_;               ///< doubly sorted, interior elements first
-    std::vector<std::vector<ONE_BYTE_NUMBER> >  bd_face_vec_;            ///< as in second segment of elmt_vec_
-    std::vector<csmp::Node<dim>*>               node_vec_;               ///< doubly sorted, interior nodes first
-    size_t        first_bd_node_ = std::numeric_limits<uint32_t>::max(); ///< begin of the perimeter nodes
-    inline static int32_t                       domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
-    int32_t                                     domain_idx_;             ///< created during construction from domain_count_
-    bool                                        rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
-    static constexpr bool                       verbose_ = false;
+    const PropertyDatabase<dim>&        pref_;
+    std::string                         subdomain_name_;         ///< passed down when region is created so that it can be referred to
+    std::vector<CELL<dim>*>             elmt_vec_;               ///< doubly sorted, interior elements first
+    std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< as in second segment of elmt_vec_
+    std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
+    size_t                              first_bd_node_ = std::numeric_limits<uint32_t>::max(); ///< begin of the perimeter nodes
+    inline static int32_t               domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains
+    int32_t                             domain_idx_;             ///< created during construction from domain_count_
+    bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
+    static constexpr bool               verbose_ = false;
 
   private:
     ModelSubDomain();

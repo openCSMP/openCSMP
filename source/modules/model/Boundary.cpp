@@ -1314,11 +1314,10 @@ void Boundary<dim>::Out() const
   //for ( auto it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )  (*it)->Out();
 
   cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
-  vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
+  auto  bit( this->bd_face_vec_.begin() );
   for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
       cout << i << ":";
-      for ( vector<ONE_BYTE_NUMBER>::const_iterator
-            ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+      for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }
   cout << endl;
   

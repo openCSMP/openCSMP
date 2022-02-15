@@ -927,7 +927,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( size_t j = 0U; j<(*eit)->Sectors(); j++ )
+        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
         {
           for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
@@ -942,7 +942,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( size_t j = 0U; j<(*eit)->Facets(); j++ )
+        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
         {
           for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
@@ -2529,16 +2529,16 @@ double  Region<dim>::SurfaceArea() const
     return std::numeric_limits<double>::signaling_NaN();
   }
 
-  vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
+  auto               bit( this->bd_face_vec_.begin() );
   vector<uint32_t>  fnids;
-  double        area( 0. );
+  double            area( 0. );
 
   if ( dim == 3U ) {
     // for all elements located on the region boundary
     for ( auto i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
       // since each element can have multiple boundary faces
-      for ( size_t j = 0U; j<(*bit).size(); j++ ) {
-        const size_t face( (*bit)[j] );
+      for ( uint32_t j = 0U; j<(*bit).size(); j++ ) {
+        const uint32_t face( (*bit)[j] );
         this->elmt_vec_[i]->FE()->NodesOfFace( face, fnids );
         const CSMP_FEM_TYPE etype( this->elmt_vec_[i]->FE()->ElementTypeOfFace( face ) );
         // triangular face

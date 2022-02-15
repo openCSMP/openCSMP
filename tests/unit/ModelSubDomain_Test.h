@@ -12,6 +12,7 @@
 #include "Test.h"
 #include "ModelSubDomain.h"
 #include "CSMP_mathUtilities.h"
+#include "Box.h"
 
 namespace csmp {
 
