@@ -43,7 +43,7 @@ void ExampleSuite::Free()
 /// add example to suite (use heap)
 size_t ExampleSuite::RegisterExample( Example *example )
 {
-  // initialize example - sets database entries( Author, Category, Desrciption...)
+  // initialize example - sets database entries( Author, Category, Description...)
   example->Initialize();
   // get pointer to example category entry in map. If not contained yet, create one.
   // either way, an iterator to the respective map entry is established
@@ -153,7 +153,7 @@ void ExampleSuite::UICategoryMenu() const
 /// sorts examples in vector<Example*> depending on difficulty
 void ExampleSuite::SortExampleVector( vector<Example*>& examples )
 {
-  // finding all occuring diffiulties and establish an example vector for each
+  // finding all occuring difficulties and establish an example vector for each
   vector<uint32_t> difficulties;
   vector<vector<Example*>* > sortedExamples;
   bool newDifficulty;
@@ -169,7 +169,7 @@ void ExampleSuite::SortExampleVector( vector<Example*>& examples )
       sortedExamples.push_back( new vector<Example*>() );
     }
   }
-  // putting examples in their respectiv difficulty vector
+  // putting examples in their respective difficulty vector
   size_t index( 0 );
   for( vector<Example*>::const_iterator it = examples.begin(); it != examples.end(); ++it )
   {

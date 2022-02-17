@@ -675,7 +675,7 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
                                  object_name.c_str() );
                                    
                else {
-                    // 2.5 inserting the region descrition into 'object_specs'
+                    // 2.5 inserting the region description into 'object_specs'
                     object_specs_.insert( make_pair(object_name,elmt_specifier) );
                     region++;
                  }
