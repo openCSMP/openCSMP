@@ -77,6 +77,7 @@ int main()
             examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow3D_Example() );
             examplesSuite.RegisterExample( new QuadrilateratorToCSMPbinary_Example() );
             examplesSuite.RegisterExample( new Intrepid_Example() );
+            examplesSuite.RegisterExample( new SKUA_Example() );
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI

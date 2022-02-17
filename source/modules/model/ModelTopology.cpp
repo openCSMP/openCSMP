@@ -3,6 +3,7 @@
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
 #include "Standard_IO_Handler.h"
+#include "TextFileIO.h"
 #include "VSet.h"
 #include "Box.h"
 #include "ConsecutiveSequenceChecker.h"
@@ -81,7 +82,7 @@ void  ModelTopology::Out() const
 
 Writes all the currently stored topological information to a user
 specified text file. If no information is present when the method
-is called, a message is printed to screen in stead of writing
+is called, a message is printed to screen instead of writing
 an output file.
 
 @param output_file The name of the textfile which will either be newly created or
@@ -113,6 +114,88 @@ void  ModelTopology::Out( const char* output_file ) const
     ofs << endl;
  }
 
+
+/**
+
+Reads topological information from a user specified text file. Format is as
+produced by method ModelTopology::Out().
+
+@param file_dot_asc The name of the textfile containing topological information
+to be read.
+*/
+bool ModelTopology::InputFromTextFile( const char* file_dot_asc ) {
+	string file( file_dot_asc );
+    if( file.rfind( ".asc" ) != file.length() - 4 ) {
+	    file += ".asc";
+    }
+
+	ifstream  ifs(file.c_str());
+
+	if (!ifs.is_open()) return false;
+
+    // erasing all regions
+    Erase();
+
+    char text_line[NAME_STRING];
+
+    do ifs.getline( text_line, 256 );
+    while ( (isCommentLine(text_line) && !ifs.eof()) );
+
+    ifs.getline( text_line, 256 );
+    string text_str( text_line );
+    string::size_type pos = text_str.find( '\'' );
+    assert( pos != string::npos );
+    model_name_ = text_str.substr( pos + 1, text_str.length() - pos - 2 );
+
+    const char* const word_delims = " ,\',\n";
+    while( !ifs.eof() ) {
+        do ifs.getline( text_line, 256 );
+        while ( (isCommentLine(text_line) && !ifs.eof()) );
+        ifs.getline( text_line, 256 );
+        if( ifs.eof() ) break;
+        text_str = string( text_line );
+        pos = text_str.find( '\'' ); // skip "Domain:"
+        assert( pos != string::npos );
+        char* domain = strtok( &text_line[pos+1], word_delims );
+        string domain_string( domain );
+        strtok( NULL, word_delims ); // skip "of"
+        set<string> etypes;
+        string type( strtok( NULL, word_delims ) );
+        while( type != "finite" ) {
+            etypes.insert( type );
+            type = string( strtok( NULL, word_delims ) );
+        }
+        ifs.getline( text_line, 256 );
+        string num_elements( text_line );
+        pos = num_elements.rfind( ' ' );
+        assert( pos != string::npos );
+        size_t nb_el = stoi( num_elements.substr( pos + 1, num_elements.length() - 1 ) );
+        vector<size_t> cell_ids;
+        cell_ids.reserve( nb_el );
+        ifs.getline( text_line, 256 ); // skip "Cell ID numbers: " 
+        char ch[12];
+        while( ifs.peek() != '\n' ) {
+            int c = 0;
+            ch[c] = ifs.get();
+            while( ch[c] != ' ' && ifs.peek() != '\n' ) ch[++c] = ifs.get();
+            string ch_string( &ch[0], c );
+            size_t cell = stoi( string( &ch[0], c ) );
+            cell_ids.push_back( cell );
+        }
+        assert( cell_ids.size() == nb_el );
+        model_domains_.insert(
+            make_pair( domain_string,
+                make_pair( etypes, cell_ids )
+            )
+        );
+        ifs.getline( text_line, 256 );
+    }
+
+	cout << "\n\tFile read successfully." << endl;
+
+	return true;
+
+} // end InputFromTextFile
 
 
 

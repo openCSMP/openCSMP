@@ -37,6 +37,7 @@
 #include "Experimental_Example.h"
 #include "EffectiveStressDilatation2D_Example.h"
 #include "Intrepid_Example.h"
+#include "SKUA_Example.h"
 #include "Experimental_Example.h"
 #include "Averaging_Example.h"
 #include "Tutorial1_Example.h"

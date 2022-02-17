@@ -217,6 +217,8 @@ class ModelTopology {
     void  Out() const;
     void  Out( const char* output_file ) const;
 
+    /// initialises ModelTopology from text file as written by Out()
+    bool InputFromTextFile( const char* file_dot_asc );
 
   private:  
     template<uint32_t dim>
