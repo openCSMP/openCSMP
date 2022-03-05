@@ -158,9 +158,9 @@ void IntrepidInterface::Read( const char* filename, VSet<3U>& vset, ModelTopolog
 	vset.ResizePfverts(mixed_ele_pfverts);
 
 	vector<int64_t> neighbours;
-	for (int i = 0; i<n_elements; i++)
+	for ( size_t i = 0; i<n_elements; i++)
 	{
-		size_t fpe = mixed_ele_pfverts[i];
+		fpe = mixed_ele_pfverts[i];
 		neighbours.resize(fpe, -1);
 		pfverts.push_back(neighbours);
 	}

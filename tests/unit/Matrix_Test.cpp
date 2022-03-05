@@ -262,8 +262,7 @@ void Matrix_Test::run()
     if ( verbose_ ) cout << "Test vector x =   ";
 
     vector<double>::const_iterator it( x.begin() );
-    for ( vector<double>::const_iterator
-         it = x.begin(); it != x.end(); it++ )
+    for ( it = x.begin(); it != x.end(); it++ )
     {
         if ( verbose_ ) cout << *it << setw(5);
     }
@@ -275,8 +274,7 @@ void Matrix_Test::run()
 
     cout << "\n\ny = ";
 
-    for (vector<double>::const_iterator
-         it1 = y.begin(); it1 != y.end(); it1++ )
+    for ( it1 = y.begin(); it1 != y.end(); it1++ )
     {
         if ( verbose_ ) cout << *it1 << setw(5);
     }
@@ -288,8 +286,7 @@ void Matrix_Test::run()
 
     vector<double>::const_iterator itsol_y(sol_y.begin());
 
-    for (vector<double>::const_iterator
-         itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
+    for ( itsol_y=sol_y.begin(), it1=y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
         {
             //cout << "\n" << *itsol_y << setw(7) << *it1;
             _equal( *itsol_y, *it1, 1E-6);
@@ -319,8 +316,7 @@ void Matrix_Test::run()
 
     //cout << endl << "\nA  " << setw(5) << "y";
 
-    for (vector<double>::const_iterator
-         itB = solB.begin(); itB != solB.end(); itB++, itsol_y++ )
+    for ( itB=solB.begin(), itsol_y=sol_y.begin(); itB != solB.end(); itB++, itsol_y++ )
     {
         //cout << "\n" << *itB << setw(7) << *it1;
         _equal( *itB, *itsol_y, 1E-6 );
@@ -361,15 +357,14 @@ void Matrix_Test::run()
         solD.push_back(D(i,0));
     }
 
-    vector<double>::const_iterator itD( solD.begin() );
 
     //cout << endl << "\nA  " << setw(5) << "y";
 
-    for (vector<double>::const_iterator
-         itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, itD++ )
+    vector<double>::const_iterator itD( solD.begin() );
+    for ( auto sol = sol_y.begin(); sol != sol_y.end(); sol++, itD++ )
         {
             //cout << "\n" << *itsol_y << setw(7) << *itD;
-            _equal( *itsol_y, *itD, 1E-6);
+            _equal( *sol, *itD, 1E-6);
         }
 
     if ( verbose_ ) cout << endl;
@@ -1025,8 +1020,7 @@ void Matrix_Test::run()
 
             if ( verbose_ ) cout << "Test vector x";
 
-            for (vector<double>::const_iterator
-                 itx = x.begin(); itx != x.end(); itx++)
+            for ( itx = x.begin(); itx != x.end(); itx++ )
             {
                 if ( verbose_ ) cout << "\n" << *itx;
             }
@@ -1034,8 +1028,7 @@ void Matrix_Test::run()
             if ( verbose_ ) cout << "\n\nMatrix3x3.RowCondenseTo( x )";
             Matrix3x3.RowCondenseTo( x );
 
-            for (vector<double>::const_iterator
-                 itx = x.begin(); itx != x.end(); itx++)
+            for ( itx = x.begin(); itx != x.end(); itx++)
             {
                 if ( verbose_ ) cout << "\n" << *itx ;
                 _equal( *itx, 27., 1E-6 );

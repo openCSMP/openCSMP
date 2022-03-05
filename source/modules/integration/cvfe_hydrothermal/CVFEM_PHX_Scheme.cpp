@@ -241,10 +241,10 @@ CVFEM_PHX_Scheme<dim>::~CVFEM_PHX_Scheme()
 
 /** modifying maximum size of time step */
 template<uint32_t dim>
-void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double timestep)
+void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double tstep )
     {
 
-      largest_timestep = dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
+      largest_timestep = dt = cfl_dt = current_dt = control_dt = old_dt = tstep;
       upwind_control.SetLargestTimeStep( largest_timestep );
       transport.SetLargestTimeStep( largest_timestep );
 
@@ -252,10 +252,10 @@ void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double timestep)
 
 /** adjusting timestep */
 template<uint32_t dim>
-void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double timestep)
+void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double tstep )
     {
 
-      dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
+      dt = cfl_dt = current_dt = control_dt = old_dt = tstep;
 
     } // end SetLargestTimeStep
 
@@ -496,7 +496,7 @@ void CVFEM_PHX_Scheme<dim>::ApplyCVFEM_Visitors()
 //     model.AssignBoundaryFlags(LEdouble,names.conduction_visitor_variables[1].c_str(), DIRICH );
 //     model.AssignBoundaryFlags(RIGHT,names.conduction_visitor_variables[1].c_str(), DIRICH );
 
-      //********
+      // ********
       // CVFEM_Visitor
       mass_visitor.SetTimeIncrement( current_dt );
       enthalpy_visitor.SetTimeIncrement( current_dt );

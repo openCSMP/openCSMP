@@ -577,7 +577,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == ELEMENT ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double property_integral( 0. ), prop_value;
+      double prop_value;
       for ( auto& ife : this->elmt_vec_ ) {
         double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
@@ -595,7 +595,6 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == INTER_FACE ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double property_integral( 0. );
       for ( auto& ife : this->elmt_vec_ )
         property_integral += ife->Area() * ife->Read( prop_key );
 
@@ -605,7 +604,6 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == NODE ) {
       // the property value is interpolated to the interface integration points and then integrated
       // using their integration weights
-      double        property_integral( 0. );
       ScalarVariable  sc;
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
@@ -619,7 +617,6 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
 
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
-      double property_integral( 0. );
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
         for ( auto i = 0U; i<ife->IntegrationPoints(); ++i )
@@ -679,19 +676,19 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const V
   if ( part == COMPLETE ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == INTERIOR ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterElementsBegin() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == PERIMETER ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else

@@ -117,8 +117,8 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::const_iterator
 
 
 // SHOULD NOT BE NECESSARY (but else, the interior nodes are overwritten by superfluous perimeter nodes???
-for ( auto nit(first); nit!=nodes_end; ++nit )
-  perimeter_nodes.erase( (*nit) );
+for ( auto nit2(first); nit2!=nodes_end; ++nit2 )
+  perimeter_nodes.erase( (*nit2) );
 
 #ifdef NIMBLE_REGION_DEBUG
     // debugging: labeling the perimeter nodes continuously
@@ -129,9 +129,9 @@ for ( auto nit(first); nit!=nodes_end; ++nit )
     // inserting the sorted perimeter nodes at the end of the node vector so that it now consists of 2 sorted ranges
     nodes_.reserve( n_interior_nodes_ + perimeter_nodes.size() );
     const typename set<Node<dim>*>::iterator perimeter_nodes_end(perimeter_nodes.end());
-    for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes_end; ++nit )
+    for ( typename set<Node<dim>*>::iterator nit2=perimeter_nodes.begin(); nit2!=perimeter_nodes_end; ++nit2 )
       // if the node is located on the model boundary, it is a perimeter node
-      nodes_.push_back( (*nit) );
+      nodes_.push_back( (*nit2) );
 
  } // end Update
 
@@ -270,18 +270,18 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
     set<CellType*>   elmts;
     set<Node<dim>*>  perimeter_nodes;
     //for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_end; ++nit )
-    for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_.end(); ++nit )
-       for ( auto i=0; i<(*nit)->Parents(); ++i ) {
-            assert( (*nit)->Parent(i) != nullptr );
-            pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit)->Parent(i) );
+    for ( typename vector<Node<dim>*>::iterator nit2=nodes_.begin(); nit2!=nodes_.end(); ++nit2 )
+       for ( auto i=0; i<(*nit2)->Parents(); ++i ) {
+            assert( (*nit2)->Parent(i) != nullptr );
+            pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit2)->Parent(i) );
             // if this is element was not encountered before, we keep track of its nodes
             if ( eit.second ) {
-                const auto nodes((*nit)->Parent(i)->Nodes());
+                const auto nodes((*nit2)->Parent(i)->Nodes());
                 for ( auto j=0U; j<nodes; ++j )
                     // but only those nodes that are not contained in the interior
-                    if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit)->Parent(i)->N(j) ) ) {
+                    if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit2)->Parent(i)->N(j) ) ) {
                          // storing the unique perimeter nodes
-                         perimeter_nodes.insert( (*nit)->Parent(i)->N(j) );
+                         perimeter_nodes.insert( (*nit2)->Parent(i)->N(j) );
                       }
                 }
          }
@@ -314,8 +314,8 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
       }
 
     // SHOULD NOT BE NECESSARY (but else, the interior nodes are overwritten by superfluous perimeter nodes???
-    for ( auto nit(first); nit!=nodes_end; ++nit )
-        perimeter_nodes.erase( (*nit) );
+    for ( auto nit2(first); nit2!=nodes_end; ++nit2 )
+        perimeter_nodes.erase( (*nit2) );
 
 #ifdef NIMBLE_REGION_DEBUG
     // debugging: labeling the perimeter nodes continuously
@@ -326,9 +326,9 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
     // inserting the sorted perimeter nodes at the end of the node vector so that it now consists of 2 sorted ranges
     nodes_.reserve( n_interior_nodes_ + perimeter_nodes.size() );
     const typename set<Node<dim>*>::iterator perimeter_nodes_end(perimeter_nodes.end());
-    for ( typename set<Node<dim>*>::iterator nit=perimeter_nodes.begin(); nit!=perimeter_nodes_end; ++nit )
+    for ( typename set<Node<dim>*>::iterator nit2=perimeter_nodes.begin(); nit2!=perimeter_nodes_end; ++nit2 )
       // if the node is located on the model boundary, it is a perimeter node
-      nodes_.push_back( (*nit) );
+      nodes_.push_back( (*nit2) );
  } // end Update
 
 

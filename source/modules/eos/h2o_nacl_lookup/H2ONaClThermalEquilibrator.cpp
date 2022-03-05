@@ -165,7 +165,6 @@ namespace csmp
     // 0a. Set diagnostic bools to false
     equilibrated = false;
     fatal        = false;
-    char           mychar;
 
     mass_rock_eq    = mass_rock;
     cp_rock_eq      = cp_rock;

@@ -325,10 +325,10 @@ vector<uint32_t>  FiniteElement::NodesConnectedTo( uint32_t node_id ) const
   }
 
     
-void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
+void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM )
   {
      InstructUser("FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )");
-     M.Out();
+     DM.Out();
      cout <<"\ncalled by object: "<< object_id << endl;
      throw invalid_argument("FiniteElement::IntegraldNdN");
   }
@@ -552,32 +552,32 @@ void   FiniteElement::N_AtBaryCenter( vector<double>& N )
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
  }
 
-void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& DM, DenseMatrix<DM_MIN>& K)
 {
 	InstructUser("FiniteElement::Integral_dNT_K_dN");
 	cout << "\nThis method is not defined for the FE element type which you are using" << endl;
 	cout << "\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):" << endl;
-	M.Out();
+	DM.Out();
 	throw invalid_argument("FiniteElement::dN");
 }
 
 
-void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients 
+void   FiniteElement::dN( DenseMatrix<DM_MIN>& DM ) // coefficients
  {
     InstructUser("FiniteElement::dN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN");
  } 
     
     
-double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  ) // derivatives at 'xy'
+double FiniteElement::dN_At( DenseMatrix<DM_MIN>& DM, const vector<double>& xyz  ) // derivatives at 'xy'
  {
     InstructUser("FiniteElement::dN_At");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
-    M.Out();
+    DM.Out();
     for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::dN_At");
@@ -585,47 +585,47 @@ double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  
  } 
 
 
-double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t gauss_point )
+double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DM, uint32_t gauss_point )
  {
     InstructUser("FiniteElement::dN_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (gp, dof, DenseMatrix<DM_MIN> M):"<< endl;
     cout << gauss_point <<", "<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtIntegrationPoint");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node )
+double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& DM, uint32_t node )
  {
     InstructUser("FiniteElement::dN_AtNode");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (node, dof, DenseMatrix<DM_MIN> M): ";
     cout << node <<", "<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtNode");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
+double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DM )
  {
     InstructUser("FiniteElement::dN_AtBarycenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M): " << endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtBarycenter");
     return 0.0;
  } 
     
 
-void   FiniteElement::IntegralNN( DenseMatrix<DM_MIN>& M )
+void   FiniteElement::IntegralNN( DenseMatrix<DM_MIN>& DM )
  {
     InstructUser("FiniteElement::IntegralNN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::IntegralNN");
  } 
 
@@ -673,21 +673,7 @@ void   FiniteElement::Nr( double r, vector<double>& NR ) const
 
 
 
-    // 1D
-void   FiniteElement::Nr( double r, double* NR ) const
- {
-    InstructUser("FiniteElement::Nr");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinate r: "<< r << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nr");
- }
-
-
-void   FiniteElement::dNr( double r, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -695,7 +681,7 @@ void   FiniteElement::dNr( double r, vector<double>& DNR ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinate r: "<< r << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
@@ -715,21 +701,7 @@ void   FiniteElement::Nrs( double r, double s, vector<double>& NRS ) const
     throw invalid_argument("FiniteElement::Nrs");
  }
 
-    // 2D
-void   FiniteElement::Nrs( double r, double s, double* NRS ) const
- {
-    InstructUser("FiniteElement::Nrs");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nrs");
- }
-
-
-void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r, double s, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -737,13 +709,13 @@ void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
 
 
-void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
+void   FiniteElement::dNs( double r, double s, vector<double>& vDNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -751,14 +723,14 @@ void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    out( DNS );
+    out( vDNS );
     cout << endl;
     throw invalid_argument("FiniteElement::dNs");
  }
 
 
     // 3D
-void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, vector<double>& vNRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -766,27 +738,15 @@ void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST )
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( NRST );
+    out( vNRST );
     cout << endl;
     throw invalid_argument("FiniteElement::Nrst");
  }
 
 
-    // 3D
-void   FiniteElement::Nrst( double r, double s, double t, double* NRST ) const
- {
-    InstructUser("FiniteElement::Nrst");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nrst");
- }
 
 
-void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r,  double s, double t, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -794,13 +754,13 @@ void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
 
 
-void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) const
+void   FiniteElement::dNs( double r,  double s, double t, vector<double>& vDNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -808,13 +768,13 @@ void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNS );
+    out( vDNS );
     cout << endl;
     throw invalid_argument("FiniteElement::dNs");
  }
 
 
-void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) const
+void   FiniteElement::dNt( double r,  double s, double t, vector<double>& vDNT ) const
  {
     InstructUser("FiniteElement::dNt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -822,7 +782,7 @@ void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNT );
+    out( vDNT );
     cout << endl;
     throw invalid_argument("FiniteElement::dNt");
  }
@@ -870,7 +830,7 @@ are provided as pointers to inbuilt arrays of type 'double'.
 Whether a third argument is supplied or not determines whether a 2D
 or a 3D Jacobian is output.  
 
-@return The Jacobian matrix is returned into the protected matrix JAC.
+The Jacobian matrix is returned into the protected matrix JAC.
 */
 void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {

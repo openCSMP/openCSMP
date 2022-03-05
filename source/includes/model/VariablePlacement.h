@@ -14,10 +14,11 @@ namespace csmp {
   template<uint32_t dim> struct NeighbourNodeCollection;
 
   template<uint32_t dim>
-  void calculateN(const Element<dim>& e, const Point<dim>& p, double* coeff);
+  void calculateN(const Element<dim>& e, const Point<dim>& p, std::vector<double>& coeff );
 
-  template<uint32_t dim>
-  void calculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double>* coeff);
+  // TODO: works only for elements where the Jacobian matrix is constant
+//  template<uint32_t dim>
+//  void calculateDN(const Element<dim>& e, const Point<dim>& p, std::vector<double>& coeff );
 
   template<uint32_t dim>
   Point<dim> directedAreaOfFacet(const Element<dim>& e, uint32_t iFacet);

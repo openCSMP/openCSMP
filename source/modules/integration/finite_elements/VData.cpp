@@ -2899,9 +2899,9 @@ void  VData::EstablishElementConnectivity2D()
                          assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                          // finding the yet-to-be-assigned element
                          size_t unassigned_elmt{UINT_MAX};
-                         for ( auto& eit : joint_line_elmts )
-                           if ( assigned_elements.find(eit) == assigned_elements.end() ) {
-                                unassigned_elmt = eit;
+                         for ( auto& leit : joint_line_elmts )
+                           if ( assigned_elements.find(leit) == assigned_elements.end() ) {
+                                unassigned_elmt = leit;
                                 break;
                              }
                          assert ( unassigned_elmt != UINT_MAX );

@@ -1,9 +1,11 @@
 #include "CSMP_definitions.h"
+#include "PropertyDatabase.h"
 #include "Model1D.h"
 #include "Region.h"
 #include "InputDataManager.h"
 #include "FlowFunctionsModule.h"
 #include "TwoPhaseModelWithHysteresis_Test.h"
+#include "BrooksCoreyWithHysteresis.h"
 
 
 using namespace std;
@@ -13,14 +15,12 @@ namespace csmp {
 /**
      1. the process test.. loop over saturation and check the process is picking the correct path
 */
-vector <pair<double,double> >  TwoPhaseModelwithHysteresis_Test::Extract_data( Model<1U>& mdl, TestCases subfunctions) {
-    
-    PropertyDatabase<1U>&   p_ref = mdl.Database();
-    variables::VariableSet_CO2GeoSequestration var( p_ref );
+vector <pair<double,double> >  TwoPhaseModelwithHysteresis_Test::Extract_data( Model<1U>& mdl, TestCases subfunctions)
+ {
     
     vector< pair<double,double> > SwPc;
     
-    FlowFunctionsModule2<1U> SatFunctions( p_ref, 9.8 ) ;
+    FlowFunctionsModule2<1U> SatFunctions( mdl.Database(), 9.8 ) ;
     Region<1U>& mdl_domain{mdl.Region("Model")};
   
     for (auto it = mdl_domain.ElementsBegin(); it != mdl_domain.ElementsEnd(); ++it ) // loop over elements
@@ -54,7 +54,7 @@ vector <pair<double,double> >  TwoPhaseModelwithHysteresis_Test::Extract_data( M
         SwPc.push_back(make_pair(Sw,extract_data)) ;
     }
     
-    return SwPc ;
+    return SwPc;
     
 } // end Extract_data
   
@@ -110,10 +110,8 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
     Model1D<1U> mdl( "Model1D", "CO2-geo-sequestration-variables.txt", length, elements );
   
     Region<1U>& model_domain = mdl.Region( "Model" );
-    PropertyDatabase<1U>&   p_ref = mdl.Database();
-    variables::VariableSet_CO2GeoSequestration var( p_ref );
 
-    FlowFunctionsModule2<1U> SatFunctions( p_ref , 9.8 ) ;
+    FlowFunctionsModule2<1U> SatFunctions( mdl.Database() , 9.8 ) ;
   
   
   
@@ -180,7 +178,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
   for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
-    (*it)->Store( var.key_kri_param, arrayvariable1_);
+    (*it)->Store( SatFunctions.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
   
@@ -217,13 +215,13 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
     
     for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
-      ScalarVariable Sw_ ((*it)->Status(var.key_sH2O), S) ;
-      ScalarVariable SCO2_ ((*it)->Status(var.key_sCO2), 1-S) ;
+      ScalarVariable Sw_ ((*it)->Status(SatFunctions.key_sH2O), S) ;
+      ScalarVariable SCO2_ ((*it)->Status(SatFunctions.key_sCO2), 1-S) ;
       ScalarVariable pSCO2_ (SCO2_*.9) ;
       
-      (*it)->Store( var.key_sH2O,   Sw_   ) ;
-      (*it)->Store( var.key_sCO2,   SCO2_ ) ;
-      (*it)->Store( var.key_sCO2_0, pSCO2_) ;
+      (*it)->Store( SatFunctions.key_sH2O,   Sw_   ) ;
+      (*it)->Store( SatFunctions.key_sCO2,   SCO2_ ) ;
+      (*it)->Store( SatFunctions.key_sCO2_0, pSCO2_) ;
     }
     
     auto SwPc1_st_Drainage = Extract_data(mdl,local_case) ;
@@ -235,15 +233,15 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
       
     for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
-      ScalarVariable Sw_ ((*it)->Status(var.key_sH2O), S) ;
-      ScalarVariable SCO2_ ((*it)->Status(var.key_sCO2), 1-S) ;
+      ScalarVariable Sw_ ((*it)->Status(SatFunctions.key_sH2O), S) ;
+      ScalarVariable SCO2_ ((*it)->Status(SatFunctions.key_sCO2), 1-S) ;
       ScalarVariable pSCO2_ (SCO2_*1.1) ;
       
       if (pSCO2_.Component(1) > 1) pSCO2_ = SCO2_ ;
       
-      (*it)->Store( var.key_sH2O,   Sw_   ) ;
-      (*it)->Store( var.key_sCO2,   SCO2_ ) ;
-      (*it)->Store( var.key_sCO2_0, pSCO2_) ;
+      (*it)->Store( SatFunctions.key_sH2O,   Sw_   ) ;
+      (*it)->Store( SatFunctions.key_sCO2,   SCO2_ ) ;
+      (*it)->Store( SatFunctions.key_sCO2_0, pSCO2_) ;
     }
     
     auto SwPc1_st_Imbib = Extract_data(mdl,local_case) ;
@@ -300,12 +298,9 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
     
     for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
-    
-      (*it)->Store( var.key_sH2O,   Sw0_   ) ;
-      (*it)->Store( var.key_sCO2,   1.-Sw0_ ) ; // assume SCO2 = 1 - SH2O
-      (*it)->Store( var.key_sCO2_0, PSCO2  ) ;
-      
-      
+      (*it)->Store( SatFunctions.key_sH2O,   Sw0_   ) ;
+      (*it)->Store( SatFunctions.key_sCO2,   1.-Sw0_ ) ; // assume SCO2 = 1 - SH2O
+      (*it)->Store( SatFunctions.key_sCO2_0, PSCO2  ) ;
     }
     
     auto SwPc1_st_Drainage2Imbib = Extract_data(mdl,local_case) ;
@@ -348,10 +343,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   cout << "\n 1D Model created" << endl;
   
   Region<1U>&              model_domain = model.Region( "Model" );
-  PropertyDatabase<1U>&    p_ref = model.Database();
-  variables::VariableSet_CO2GeoSequestration var( p_ref );
-  
-  FlowFunctionsModule2<1U> SatFunctions( p_ref , 9.8 ) ;
+  FlowFunctionsModule2<1U> SatFunctions( model.Database() , 9.8 ) ;
 
   /**
    
@@ -397,10 +389,10 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   double i(0.0) ;
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it )
     {
-      ScalarVariable variable0_ ((*it)->Status(var.key_sH2O), i/elements) ;
-      (*it)->Store( var.key_sH2O, variable0_);
-      (*it)->Store( var.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
-      (*it)->Store( var.key_sCO2_0,1.0-variable0_) ;
+      ScalarVariable variable0_ ((*it)->Status(SatFunctions.key_sH2O), i/elements) ;
+      (*it)->Store( SatFunctions.key_sH2O, variable0_);
+      (*it)->Store( SatFunctions.key_sCO2, 1.0-variable0_) ; // assume SCO2 = 1 - SH2O
+      (*it)->Store( SatFunctions.key_sCO2_0,1.0-variable0_) ;
       i++ ;
     }
     
@@ -446,7 +438,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
   for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
-    (*it)->Store( var.key_kri_param, arrayvariable1_);
+    (*it)->Store( SatFunctions.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
   
@@ -458,7 +450,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    */
   
   for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it ) {
-    auto Sw = (*it)->Read(var.key_sH2O) ;
+    auto Sw = (*it)->Read(SatFunctions.key_sH2O) ;
     cerr <<"Water Saturation defined at Nodes: "<< Sw <<"\n" ;
     
   }
@@ -585,7 +577,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       // ---------------------------------------------
       _test(!( S_at < 0. || S_at > 1.  ));
       
-      double krw = SatFunctions.krw_at((*it), S) ;
+      krw = SatFunctions.krw_at((*it), S) ;
       
       cerr <<"Relative permability of Water: "<< krw <<"\n" ;
       
@@ -594,7 +586,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krw) );
       _test(!( krw < 0. || krw > 1. )) ;
       
-      double dkrwds = SatFunctions.dkrwds_at((*it), S) ;
+      dkrwds = SatFunctions.dkrwds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Water: "<< dkrwds <<"\n" ;
       
@@ -602,7 +594,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       // ---------------------------------------------
       _test( !isnan(dkrwds) );
       
-      double krn = SatFunctions.krn_at((*it), S) ;
+      krn = SatFunctions.krn_at((*it), S) ;
       
       cerr <<"Relative permability of Co2: "<< krn <<"\n" ;
       
@@ -611,7 +603,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
       _test( !isnan(krn) );
       _test(!( krn < 0. || krn > 1. )) ;
       
-      double dkrnds = SatFunctions.dkrnds_at((*it), S) ;
+      dkrnds = SatFunctions.dkrnds_at((*it), S) ;
       
       cerr <<"Derivative of Relative permability of Co2: "<< dkrnds <<"\n" ;
       

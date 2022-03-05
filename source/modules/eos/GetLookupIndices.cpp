@@ -8,13 +8,13 @@ namespace csmp
   {
     // new version
     double t_res;
-    long      it;
-    if(     t <    0.0e0)
+    long      it; // TODO: error, used unitialised
+    if ( t < 0.0e0 )
       {
-	cerr << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";
-	cerr << "or to continue, enter any key : ";
-	char yesno;
-	cin >> yesno;
+          cerr << "H2OLookup::GetTemperatureIndex(const double& t) : t < 0 (t = " << t << "), better terminate ...\n";
+          cerr << "or to continue, enter any key : ";
+          char yesno;
+          cin >> yesno;
       }
     else if(t <= 250.0e0){  t_res =  5.0; it =     static_cast<long>( (t-   0.0)/t_res ); }
     else if(t <= 350.0e0){  t_res =  2.0; it =  50+static_cast<long>( (t- 250.0)/t_res ); }

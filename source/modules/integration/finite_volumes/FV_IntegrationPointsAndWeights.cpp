@@ -1709,7 +1709,7 @@ NB: The pyramid is a special element type since it has two sector
 integration points in the apex, but only a single one in each of the
 other 4 sectors.
 */
-#ifndef PYRAMID_TRIANGULAR_FACETS
+#ifdef PYRAMID_WITHOUT_TRIANGULAR_FACETS
 
 template<uint32_t dim>
 void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR()
@@ -1864,7 +1864,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[1] = QUADRILATERAL_FACET;
 
-	m_facet_points[1].resize(4);
+  	m_facet_points[1].resize(4);
     vector<Point<dim> >(m_facet_points[1]).swap(m_facet_points[1]);
     m_facet_points[1][0] = pt_c23;
     m_facet_points[1][1] = pt_c1234; 
@@ -1882,8 +1882,8 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[3] = QUADRILATERAL_FACET;
 
-	m_facet_points[3].resize(4);
-	vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
+	  m_facet_points[3].resize(4);
+	  vector<Point<dim> >(m_facet_points[3]).swap(m_facet_points[3]);
     m_facet_points[3][0] = pt_c14;
     m_facet_points[3][1] = pt_c1234; 
     m_facet_points[3][2] = m_barycenter;
@@ -1891,7 +1891,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[4] = QUADRILATERAL_FACET;
 
-	m_facet_points[4].resize(4);
+    m_facet_points[4].resize(4);
     vector<Point<dim> >(m_facet_points[4]).swap(m_facet_points[4]);
     m_facet_points[4][0] = pt_c15;
     m_facet_points[4][1] = pt_c125; 
@@ -1900,7 +1900,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[5] = QUADRILATERAL_FACET;
 
-	m_facet_points[5].resize(4);
+	  m_facet_points[5].resize(4);
     vector<Point<dim> >(m_facet_points[5]).swap(m_facet_points[5]);
     m_facet_points[5][0] = pt_c25;
     m_facet_points[5][1] = pt_c235; 
@@ -1909,7 +1909,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[6] = QUADRILATERAL_FACET;
 
-	m_facet_points[6].resize(4);
+	  m_facet_points[6].resize(4);
     vector<Point<dim> >(m_facet_points[6]).swap(m_facet_points[6]);
     m_facet_points[6][0] = pt_c35;
     m_facet_points[6][1] = pt_c345; 
@@ -1918,7 +1918,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
 
     m_facet_types[7] = QUADRILATERAL_FACET;
 
-	m_facet_points[7].resize(4);
+  	m_facet_points[7].resize(4);
     vector<Point<dim> >(m_facet_points[7]).swap(m_facet_points[7]);
     m_facet_points[7][0] = pt_c45;
     m_facet_points[7][1] = pt_c145; 

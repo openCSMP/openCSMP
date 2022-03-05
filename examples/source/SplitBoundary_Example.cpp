@@ -87,7 +87,6 @@ void SplitBoundary_Example::Run()
   const bool irregular_mesh(false);         /* true = non-box shaped model, false = box shaped model */
   const bool binary_file(true);             /* true = binary, false = ascii */
   const bool use_regions_file(true);        /* true = reduce regions according to regions file, false = does not redure regions */
-  const bool create_boundaries(true);       /* true = creates boundaries around model, false = does not create boundaries */
   // Ansys model
   const string model_name("BoxHalfs2D");
   ANSYS_Model2D ansys_model("BoxHalfs2D", "BoxHalfs2D", "THMC_shear_zone-variables.txt",

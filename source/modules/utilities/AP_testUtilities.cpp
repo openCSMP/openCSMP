@@ -52,12 +52,13 @@ void rhinoOutput( const Model<3U>& sgroup )
     }
  } // end rhinoOutput
  
- 
- void writeSurfaceFacet(std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, size_t iFacet)
+
+
+static void writeSurfaceFacet(std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, uint32_t iFacet)
  {
    ss << "\nSrfPt ";
      
-   for(size_t iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
+   for(auto iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
    {
     const Point<3U> pt( e.RstToXYZ(e.FV()->FacetPoint(iFacet,iPoint)) );
     ss << pt[0] << "," << pt[1] << "," << pt[2] << " ";
@@ -66,7 +67,8 @@ void rhinoOutput( const Model<3U>& sgroup )
    ss << "_Enter ";
  }
  
- void writeNormal (std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, size_t iFacet, bool bInverted)
+
+static void writeNormal (std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, uint32_t iFacet, bool bInverted)
  {
    Point<3U> pt1( e.RstToXYZ(e.FV()->FacetIntegrationPoint(iFacet,0U)) );
    Point<3U> pt2;
@@ -99,7 +101,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   
   ofs << "\n;*****FACES ";
   vector<uint32_t> fnids;
-  for ( size_t iFace = 0U; iFace < e.Faces(); iFace++ )
+  for ( auto iFace = 0U; iFace < e.Faces(); iFace++ )
   {
    e.FE()->NodesOfFace( iFace, fnids );
    ofs << "\nSrfPt ";
@@ -122,7 +124,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   //print facets
-  for ( size_t ip=0U; ip < e.FE()->IntegrationPoints(); ip++ )
+  for ( auto ip=0U; ip < e.FE()->IntegrationPoints(); ip++ )
   {
      ofs << "\nPoint ";
      Point<3U> pt((e).IntegrationPoint(ip));
@@ -148,7 +150,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   
   ofs << "\n;*****FACES ";
   vector<uint32_t> fnids;
-  for ( size_t iFace = 0U; iFace < e.Faces(); iFace++ )
+  for ( auto iFace = 0U; iFace < e.Faces(); iFace++ )
   {
    e.FE()->NodesOfFace( iFace, fnids );
    ofs << "\nSrfPt ";
@@ -171,7 +173,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   //print facets
-  for ( size_t iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
+  for ( auto iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
   {
    if(e.FE()->IsSurfaceElement()) // only two facet points
    {
@@ -199,7 +201,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   }
   
   ofs << "\n; *****NORMALS, out of the FACET Integration Points ";
-  for ( size_t iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
+  for ( auto iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
   {
    stringstream ss;
    writeNormal(ss, e, e, iFacet, false);
@@ -212,6 +214,8 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   ofs.close();
  } // end printElementStencil
  
+
+
  void createLayer ( std::stringstream & ss, const std::string & layer, size_t id_element )
  {
   stringstream layer_color;

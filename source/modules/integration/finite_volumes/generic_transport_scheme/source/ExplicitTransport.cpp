@@ -148,8 +148,8 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
  
      // 3. processing potential halo stencils
      if ( HasHaloStencils() ) {
-         const auto elements_end(halo_elmts_.end());
-         for ( auto eit=halo_elmts_.begin(); eit!=elements_end; ++eit )
+         const auto halo_elements_end(halo_elmts_.end());
+         for ( auto eit=halo_elmts_.begin(); eit!=halo_elements_end; ++eit )
            {
               // 1.1 computation of transport velocity from fluid pressure gradient
            
@@ -221,8 +221,8 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
  
      // 3. same process applied to the halo stencils
      if ( HasHaloStencils() ) {
-         const auto elements_end(halo_elmts_.end());
-         for ( auto eit=halo_elmts_.begin(); eit!=elements_end; ++eit )
+         const auto halo_elements_end(halo_elmts_.end());
+         for ( auto eit=halo_elmts_.begin(); eit!=halo_elements_end; ++eit )
            {
               this->TransportVariableFluxesAndBalances( (*eit) );
            }

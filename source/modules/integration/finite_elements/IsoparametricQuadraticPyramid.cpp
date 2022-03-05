@@ -913,7 +913,7 @@ IsoparametricQuadraticPyramid::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
     B.Resize(dim,npe);
     for(uint32_t inode=0;inode<npe; inode++)
       {
-        B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode];
+        B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode];
       }
 
     B = JINV * B;
@@ -1048,8 +1048,8 @@ IsoparametricQuadraticPyramid::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                        for(uint32_t l=0; l<dim; l++)
+                            rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
                     }
@@ -1371,7 +1371,7 @@ IsoparametricQuadraticPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, ui
       // Forming maTRIX delta Akin, p.420
       for(uint32_t inode=0;inode<npe; inode++)
          {
-            B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode];
+           B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode];
          }
 
     B = JINV * B;
@@ -1484,9 +1484,11 @@ IsoparametricQuadraticPyramid::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
 
-    for(uint32_t i=0; i<npe; i++)
-      B(0,i) = DNR[i], B(1,i) = DNS[i], B(2,i) = DNT[i];
-
+    for (uint32_t i=0; i<npe; i++) {
+         B(0,i) = DNR[i];
+         B(1,i) = DNS[i];
+         B(2,i) = DNT[i];
+      }
     B = JINV * B;
    return detJ;
  }

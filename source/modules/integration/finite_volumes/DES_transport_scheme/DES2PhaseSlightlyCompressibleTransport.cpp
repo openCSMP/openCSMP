@@ -854,7 +854,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
     
     while (!Finished)
     {   
-        clock_t T_begin;
+        clock_t T_begin = clock();
         const typename vector<Event<dim>*>::iterator stack_end(this->PEPList.end());
         for ( typename vector<Event<dim>*>::iterator it=this->PEPList.begin(); it!=stack_end; ++it )       
         {   

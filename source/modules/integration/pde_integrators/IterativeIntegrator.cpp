@@ -95,7 +95,7 @@ template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMAIN<dim>& sg )
  {
    SAMG_KeepMemory();
-   double res; 
+   double res = std::numeric_limits<double>::quiet_NaN(); 
    size_t i; 
   
   for ( i = 0U; i < max_iter_; ++i) {

@@ -900,8 +900,8 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
  {
     static double  xa[5], ya[5];
     int32_t        i;
-    double         a;
-    double         err;
+    double         a = std::numeric_limits<double>::quiet_NaN();
+   double          err{0.};
     
     // 1. outside normal boundaries
     // ----------------------------

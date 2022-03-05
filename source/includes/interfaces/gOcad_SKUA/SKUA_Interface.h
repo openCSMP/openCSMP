@@ -61,7 +61,7 @@ class SKUA_Interface {
     /// For each rock type the elements will be converted into regions with the corresponding name
     void ConvertRockTypesIntoRegions( Model<3U>&, const std::string& rocktype_info_file );
 
-    void Erase_NO_DATA_ElementsFromModel( Model<3U>&, const std::string& target_region, std::set<uint32_t>& no_data_elmt_numbers );
+    void Erase_NO_DATA_ElementsFromModel( Model<3U>&, const std::string& target_region, std::set<size_t>& no_data_elmt_numbers );
 
   private:
   
@@ -69,7 +69,7 @@ class SKUA_Interface {
   
     /// Enlists 'element number's of elements with NO_DATA values (-9999, -99999) in the target region
     bool Detect_NO_DATA_ElementsInDatasetFromSKUA( const std::string& input_txt_file, const std::string& target_region,
-                                                   std::set<uint32_t>& no_data_elmt_numbers );
+                                                   std::set<size_t>& no_data_elmt_numbers );
 
 };
 

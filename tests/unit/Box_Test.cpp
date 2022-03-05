@@ -302,7 +302,6 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool debug(true), verbose(true);
    
     ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     Region<3U>    model_domain(model.Region("Model"));
@@ -318,7 +317,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( BACK,   3, backNormal );
 
     for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
-         for ( size_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+         for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
                 const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
                 assert( flag != NOT );
                 // verifying alignment of the element's unit normal with that of the model boundary

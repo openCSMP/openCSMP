@@ -17,11 +17,13 @@ namespace csmp {
 
 template<uint32_t dim,template<uint32_t> class USER>
 Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper_limit )
- : solver_(&settings_),
-   lower_limit_(lower_limit), upper_limit_(upper_limit)
+ : lower_limit_(lower_limit), upper_limit_(upper_limit)
  {
     // configuring SAMG for first use
+#ifdef CSMP_WITH_SAMG_SOLVER
+    solver_.GetSolverSettings() = &settings_;
     settings_.SetSolverInstance(2);
+#endif
  }
  
 
@@ -30,14 +32,14 @@ Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper
 template<uint32_t dim, template<uint32_t> class USER>
 void Integrator<dim,USER>::ReconfigureSolverForRepeatedUse()
  {
+#ifdef CSMP_WITH_SAMG_SOLVER
     // minimize output
     settings_.Set_iout1( 0 );
     settings_.Set_iout2( 0 );
-
     // use relative error solution criterion
     settings_.Set_eps(0.);
     settings_.Set_rel_eps(1.E-10);
-
+#endif
     // trigger file dump
     //settings_.Set_idmp( 8 );        // define SAMG command and file output
     //settings_.Set_ioform( "f" );    // define SAMG file output format for reduced file size, idmp > 1 is required
@@ -84,12 +86,14 @@ void Integrator<dim,USER>::SolveLinearAlgebraicSystem()
  {
     if ( User()->Verbose() ) {
          cout <<"\n\nIntegrator::SolveLinearAlgebraicSystem: calling solver instance: ";
+#ifdef CSMP_WITH_SAMG_SOLVER
          cout << settings_.GetSolverInstance() << endl;
          cout <<"\tSAMG settings:";
          cout <<"\n\t\tiswit  = " << settings_.Get_iswit();
          cout <<"\n\t\titypu  = " << settings_.Get_ifirst();
          cout <<"\n\t\tlevelx = " << settings_.Get_levelx();
          cout << endl;
+#endif
       }
      solver_.Solve( User()->LinearSystem().LHS, User()->LinearSystem().RHS, User()->LinearSystem().X );
      

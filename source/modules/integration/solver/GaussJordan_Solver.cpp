@@ -47,10 +47,10 @@ vector.
 */
 void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double>& b )
  {
-    size_t          i, icol(0), irow(0), j, k, l, ll;
+    size_t          i, icol(0), irow(0), j, k, ll;
     const size_t    n = A.Rows();
-    double       big, dum, pivinv;
-    vector<uint32_t>  indxc(n,0), indxr(n,0), ipiv(n,0);
+    double          big, dum, pivinv;
+    vector<size_t>  indxc(n,0), indxr(n,0), ipiv(n,0);
 
     for (j=0;j<n;j++) ipiv[j]=0;
     for (i=0;i<n;i++) {
@@ -70,7 +70,7 @@ void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double>& b )
                 }
         ++(ipiv[icol]);
         if (irow != icol) {
-            for (l=0;l<n;l++) SwapSparseMatrixElements( A, irow, l, icol, l );
+            for (auto l=0;l<n;l++) SwapSparseMatrixElements( A, irow, l, icol, l );
             swap( b[irow], b[icol] );
         }
         indxr[i] = irow;
@@ -78,13 +78,13 @@ void GaussJordan_Solver::GaussJordan( SparseMatrix& A, vector<double>& b )
         if ( A( icol, icol ) == 0.0) throw("gaussj: Singular Matrix");
         pivinv = 1.0 / A( icol, icol );
         A.Assign( icol, icol, 1. );
-        for (l=0;l<n;l++) A.Assign( icol,l, A(icol,l) * pivinv);
+        for (auto l=0;l<n;l++) A.Assign( icol,l, A(icol,l) * pivinv);
         b[icol] *= pivinv;
         for (ll=0;ll<n;ll++)
             if (ll != icol) {
                 dum=A(ll,icol);
                 A.Assign(ll,icol, 0.);
-                for (l=0;l<n;l++) A.Assign(ll,l, A(ll,l)-A(icol,l)*dum);
+                for (auto l=0;l<n;l++) A.Assign(ll,l, A(ll,l)-A(icol,l)*dum);
                 b[ll] -= b[icol]*dum;
             }
     }

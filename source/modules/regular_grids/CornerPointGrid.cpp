@@ -383,6 +383,8 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
           if ( !ConstructEclipseCell1110( cell, i, j, k, cellAbove, cellBeneath ) )
             cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_3(" << i << "," << j << "," << k << ")";
           break;
+        default:
+           throw csmp::Exception( ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "switch(cellType) unhandled case");
       }
     }
   }
@@ -805,9 +807,9 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
                 invalid_pris++;
               }
               badPrisms_ += invalid_pris;
-
+              
               break;
-
+              
             case FACE_TYPE::SPLIT_13_OR_57:
               if ( generator_->ConstructPyramidOnFace( cell, 0, 4, 5, 1, centroid ) ) {
                 size_t eid = generator_->EmitPyramid( cell );
@@ -878,11 +880,13 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
               else {
                 invalid_tets++;
               }
-
+              
               badPyramids_ += invalid_pyrs;
               badTetrahedra_ += invalid_tets;
-
+              
               break;
+              
+            case FACE_TYPE::FULL_QUAD:
 
             default:
               throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "Hexahedron with unknown bottom face" );
@@ -961,12 +965,12 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
               else {
                 invalid_tets++;
               }
-
+              
               badPyramids_ += invalid_pyrs;
               badTetrahedra_ += invalid_tets;
-
+              
               break;
-
+              
             case FACE_TYPE::SPLIT_13_OR_57:
               if ( generator_->ConstructPrism( cell, 5, 4, 7, 1, 0, 3 ) ) {
                 size_t eid = generator_->EmitPrism( cell );
@@ -985,13 +989,15 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
                 invalid_pris++;
               }
               badPrisms_ += invalid_pris;
-
+              
               break;
-
+              
             default:
               throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "Hexahedron with unknown bottom face" );
           }
           break;
+        case FACE_TYPE::SPLIT_X:
+          throw csmp::Exception( ERROR, "CornerPointGrid::ConstructEclipseCell0000", "switch case FACE_TYPE::SPLIT_X not handled yet");
       }
     }
   }

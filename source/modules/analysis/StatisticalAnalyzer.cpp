@@ -63,10 +63,10 @@ const
 
      // vector<pair<double,double> >
      HistogramBins        result( bins.size(), make_pair(0.,0.) );
-     double             volume;
+     double               volume;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     double             val;
+     double               val;
      
      // defining upper bin limits in result vector (lowest limit is 0.0)
      typename HistogramBins::iterator rit=result.begin();
@@ -122,15 +122,14 @@ const
 
            // normalizing by area, i.e. how much of total area has this characteristic
            // ------------------------------------------------------------------------
-           for ( uint32_t i=0; i<result.size(); i++ ) result[i].second /= total_volume;
+           for ( size_t i=0; i<result.size(); i++ ) result[i].second /= total_volume;
             
            // 3. storing result map and zeroing vector for next region
            //---------------------------------------------------------
            results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
          
            // zeroing out the column values
-           for ( typename HistogramBins::iterator
-                 rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
+           for ( rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
           
        } // end for all regions
      

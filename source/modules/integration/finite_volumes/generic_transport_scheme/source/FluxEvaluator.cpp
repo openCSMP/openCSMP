@@ -617,8 +617,8 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
  
      // 3. processing potential halo stencils
      if ( !halo_stencils.empty() ) {
-         const auto elements_end(halo_stencils.end());
-         for ( auto eit=halo_stencils.begin(); eit!=elements_end; ++eit )
+         const auto halo_elements_end(halo_stencils.end());
+         for ( auto eit=halo_stencils.begin(); eit!=halo_elements_end; ++eit )
            {
               // 1.1 computation of transport velocity from fluid pressure gradient
            

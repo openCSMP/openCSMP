@@ -11,7 +11,7 @@ class CompressedRowMatrixParallel : public CompressedRowMatrix
 public:
     CompressedRowMatrixParallel();
 private:
-    void RemoveHalo( int32_t& );
+    void RemoveHalo( int32_t& ); // TODO: check whether we do need int64_t here
     void CreatePartitions( uint32_t n_blocks, std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&  ) const;
 
     // vector mu st be initialized with the partition ranges

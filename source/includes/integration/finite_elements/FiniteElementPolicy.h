@@ -37,11 +37,11 @@ class FiniteElementPolicy {
     bool       IsSurfaceElement() const;
     bool       IsVolumeElement() const;
 
-    uint32_t     Interpolation() const;
+    uint32_t   Interpolation() const;
     bool       UsesLocalCoordinates() const;
 
     /// number of element integration points for current quadrature scheme
-    uint32_t     IntegrationPoints() const;
+    uint32_t   IntegrationPoints() const;
   
     /// returns the location of the integration point in global coordinates
     Point<dim> IntegrationPoint( uint32_t ip ) const;

@@ -22,8 +22,7 @@ class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim> {
   
   private:
     std::vector<ScalarVariable > NPROP;
-    std::vector<double>        xyz, ctr, IPOL;
-    double                     vol_div3;
+    double                       vol_div3;
 };
 
 

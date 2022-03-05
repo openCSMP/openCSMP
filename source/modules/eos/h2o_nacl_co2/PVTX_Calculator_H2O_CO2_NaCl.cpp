@@ -663,7 +663,7 @@ template<uint32_t dim>
 void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( const Element<dim>* e )
  {
     // 0. interpolating all relevant properties to element barycentre
-    const auto nodes(e->Nodes()), sector_ip(0U);
+    const auto nodes(e->Nodes());
     IPOL_.resize(nodes);
     e->N_AtBaryCenter( IPOL_ );
     const double PV = e->Volume() * e->Read(props_.key_thi) * e->Read(props_.key_phi);

@@ -271,7 +271,7 @@ class FiniteElement {
     virtual   void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
   
     /// returns the integration weight of the desired quadrature point
-    virtual   double  WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual   double     WeightAtIntegrationPoint( uint32_t i ) const;
   
     /// reports the local node numbers in counter clockwise order
     // DEPRECATE, but check whether this is used by any of ther applications
@@ -293,7 +293,7 @@ class FiniteElement {
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
     // REMOVE: only RST should be supported; use XYZtoRST to compute point location
-    virtual   double  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
+    virtual   double    dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
     // RENAME dN_AtPoint();
@@ -344,23 +344,21 @@ class FiniteElement {
 
     /// 1D element interpolation functions N(r)
     virtual void  Nr(  double r, std::vector<double>& NRST ) const;
-    virtual void  Nr(  double r, double* NRST ) const;
 
     /// 1D element interpolation functions derivatives N(r)/dr
     virtual void  dNr( double r, std::vector<double>& DNR ) const;
 
     /// 2D element interpolation functions N(r,s)
     virtual void  Nrs( double r, double s, std::vector<double>& NRST ) const;
-    virtual void  Nrs( double r, double s, double* NRST ) const;
 
     /// 2D element interpolation functions derivatives N(r,s)/dr
     virtual void  dNr( double r, double s, std::vector<double>& DNR ) const;
+    
     /// 2D element interpolation functions derivatives N(r,s)/ds
     virtual void  dNs( double r, double s, std::vector<double>& DNS ) const;
 
     /// 3D element interpolation functions N(r,s,t)
     virtual void  Nrst( double r, double s, double t, std::vector<double>& NRST ) const;
-    virtual void  Nrst( double r, double s, double t, double* NRST ) const;
 
     /// 2D element interpolation functions derivatives N(r,s,t)/dr
     virtual void  dNr( double r,  double s, double t, std::vector<double>& DNR ) const;
@@ -418,8 +416,8 @@ class FiniteElement {
     uint32_t  order_of_shape_functions;    ///< order of element shape functions
     size_t    object_id;                   ///< number used to track operations done on a particular element
   
-    enum { LINE, SURFACE, VOLUME } element_category; ///< element classifier
-    enum CSMP_FEM_TYPE             csp_fem_type;     ///< elements supported by CSMP, see definition above
+    CELL_SHAPE     element_category; ///< element classifier
+    CSMP_FEM_TYPE  csp_fem_type;     ///< elements supported by CSMP, see definition above
   
     /// stub for all virtual functions, providing feedback to users if member functions are not defined for particular element type
     void InstructUser( const char* method ) const;

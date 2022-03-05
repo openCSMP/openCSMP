@@ -45,10 +45,10 @@ class Tecplot_Interface {
                                   long timestep );
 
   private:
-    VSet<dim>  vset;
-    std::map<size_t,std::vector<size_t> >  plist, transformed_plist;
-    std::map<size_t,size_t>                node_mapping;
-    std::map<size_t,std::vector<double> >  pxyz_data;
+    //VSet<dim>  vset;
+    std::map<size_t,std::vector<size_t> >  plist_, transformed_plist_;
+    std::map<size_t,size_t>                node_mapping_;
+    std::map<size_t,std::vector<double> >  pxyz_data_;
 
     void NodeBasedTopology( const Model<dim>&,
                             const std::vector<size_t>& elmt_ids,

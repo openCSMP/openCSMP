@@ -1356,8 +1356,8 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case NODE:
         while ( start != end ) {
             bool applies = false;
-            const size_t n_nodes{ (*start).Nodes() };
-            for ( size_t j = 0U; j<n_nodes; j++ )
+            const auto n_nodes{ (*start).Nodes() };
+            for ( auto j = 0U; j<n_nodes; j++ )
               if ( (*start).N( j )->IsWithinRange( prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1373,7 +1373,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case ELEMENT_INTEGRATION_POINT:
         while ( start != end ) {
             bool applies = false;
-            for ( size_t j = 0U; j<(*start).IntegrationPoints(); j++ )
+            for ( auto j = 0U; j<(*start).IntegrationPoints(); j++ )
               if ( (*start).IsWithinRange( j, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1391,8 +1391,8 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             bool applies = false;
             assert( (*start).IntegrationPointsPerSector() == 1 );
-            size_t n_sectors{ (*start).FV()->Sectors() };
-            for ( size_t j = 0U; j<n_sectors; j++ )
+            auto n_sectors{ (*start).FV()->Sectors() };
+            for ( auto j = 0U; j<n_sectors; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1410,8 +1410,8 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             bool applies = false;
             assert( (*start).IntegrationPointsPerFacet() == 1 );
-            const size_t n_facets{ (*start).FV()->Facets() };
-            for ( size_t j = 0U; j<n_facets; j++ )
+            const auto n_facets{ (*start).FV()->Facets() };
+            for ( auto j = 0U; j<n_facets; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1429,7 +1429,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             if ( (*start).IsWithinRange( prop_key, min, max ) ) {
                 this->elmt_vec_.push_back( &(*start) );
-                const size_t n_nodes{ (*start).Nodes() };
+                const auto n_nodes{ (*start).Nodes() };
                 for ( auto i = 0U; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
@@ -1477,9 +1477,9 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
 
   while ( start != end ) {
       size_t check{0};
-      const size_t n_nodes{ (*start).Nodes() };
+      const auto n_nodes{ (*start).Nodes() };
       // all nodes have to be inside for the element selection criterion to be fulfilled
-      for ( size_t j = 0U; j<n_nodes; j++ ) {
+      for ( auto j = 0U; j<n_nodes; j++ ) {
           Point<dim>  p = (*start).N( j )->Coordinate();
           if ( p.IsBetween( xyz_min, xyz_max ) ) check++;
         }
@@ -1513,7 +1513,7 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
 */
 template<uint32_t dim>
 size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
-                                         vector<uint32_t>& element_ids )
+                                         vector<size_t>& element_ids )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1604,7 +1604,7 @@ that name already exists.
 template<uint32_t dim>
 size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_iterator start,
                                          typename vector<Element<dim>*>::const_iterator end,
-                                         vector<uint32_t>& element_ids )
+                                         vector<size_t>& element_ids )
 {
   if ( start == end )
     throw Exception( ERROR, "Region<dim>::AccumulateByNumber",
@@ -1625,7 +1625,7 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
   sort( element_ids.begin(), element_ids.end() );
 
   // if in debug mode, tests whether there are consecutive duplicated elements
-  vector<uint32_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
+  vector<size_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
   if ( new_end != element_ids.end() )
     element_ids.erase( new_end, element_ids.end() );
 
@@ -1676,7 +1676,7 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
     @attention the elements are not deleted, but pointers to them are returned into the second argument.
 */
 template<uint32_t dim>
-size_t Region<dim>::RemoveByNumber( vector<uint32_t>& element_ids, vector<Element<dim>*>& ptrs_to_removed_elements )
+size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<dim>*>& ptrs_to_removed_elements )
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

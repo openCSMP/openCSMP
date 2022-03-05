@@ -52,10 +52,10 @@ IsoparametricLinearTetrahedron::IsoparametricLinearTetrahedron	(
     // initializing local node coordinates
     // local node coordinates are defined as r==ksi, s==nu, t==mu.
     // similar to the base of the tetrahedron
-    NXYZ(0,0) = 0.0, NXYZ(0,1) = 0.0, NXYZ(0,2) =  0.0;
-    NXYZ(1,0) = 1.0, NXYZ(1,1) = 0.0, NXYZ(1,2) =  0.0;
-    NXYZ(2,0) = 0.0, NXYZ(2,1) = 1.0, NXYZ(2,2) =  0.0;
-    NXYZ(3,0) = 0.0, NXYZ(3,1) = 0.0, NXYZ(3,2) =  1.0;
+     NXYZ(0,0) = 0.0; NXYZ(0,1) = 0.0; NXYZ(0,2) = 0.0;
+     NXYZ(1,0) = 1.0; NXYZ(1,1) = 0.0; NXYZ(1,2) = 0.0;
+     NXYZ(2,0) = 0.0; NXYZ(2,1) = 1.0; NXYZ(2,2) = 0.0;
+     NXYZ(3,0) = 0.0; NXYZ(3,1) = 0.0; NXYZ(3,2) = 1.0;
 
     W.resize(gpe);
 
@@ -472,14 +472,14 @@ IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN2,
     DN2  = JINV;
 
     //Instead of using previos version: dN(DN);
-    DenseMatrix<DM_MIN>DN(dim,npe);
+    DenseMatrix<DM_MIN>DN_TEMP(dim,npe);
     for(int i=0;i<npe;i++){
-        DN(0,i)=DNR[i];
-        DN(1,i)=DNS[i];
-        DN(2,i)=DNT[i];
+      DN_TEMP(0,i)=DNR[i];
+      DN_TEMP(1,i)=DNS[i];
+      DN_TEMP(2,i)=DNT[i];
     }
 
-    DN2*=DN;
+    DN2*=DN_TEMP;
 
     /////////////////////////////// Debug printout ///////////////////////////////////////////////
 //    cout<<" IsoparametricLinearTetrahedron::dN  For given xyz=("<<xyz[0]<<","<<xyz[1]<<","<<xyz[2]<<"), rst=("<<
@@ -552,10 +552,10 @@ double  IsoparametricLinearTetrahedron::dN_AtNode( DenseMatrix<DM_MIN>& B,
     // compose matrix DN = 3 x 6 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
 
     B = JINV * B;
 
@@ -872,10 +872,10 @@ IsoparametricLinearTetrahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, u
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
 
     B = JINV * B;
 
@@ -899,10 +899,10 @@ IsoparametricLinearTetrahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
 
     B = JINV * B;
 
@@ -1010,9 +1010,7 @@ const
      }
 
    static double  a[4], b[4], c[4], d[4], intpol[4], volume6;
-   static bool      first_call(true);
-   uint32_t i;
-   int32_t     j;
+   static bool    first_call(true);
 
    vector<double>  sum(nvars);
 
@@ -1035,7 +1033,7 @@ const
          "This method expects four integration points on which extrapolation functions will be based on" );
 
         // test function coefficients
-        for ( i=0, j=1; i<4; i++ )
+        for ( int i=0, j=1; i<4; i++ )
           {
              // a(i)
              a[i]  = -IP(n(i,1),0) * (IP(n(i,3),1)*IP(n(i,2),2)-IP(n(i,3),2)*IP(n(i,2),1));
@@ -1068,7 +1066,7 @@ const
 
    // 2. For each node point compute the values of the linear extrapolation functions
    //    and use these to extrapolate the values of the variables at the nodes.
-   for ( i=0; i<npe; i++ )
+   for ( int i=0; i<npe; i++ )
      {
         // compute interpolation function values at node i
         intpol[0] = (a[0] + b[0] * NXYZ(i,0) + c[0] * NXYZ(i,1) + d[0] * NXYZ(i,2)) / volume6;
@@ -1078,8 +1076,8 @@ const
 
         // carry out extrapolation
         fill( sum.begin(), sum.end(), static_cast<double>(0.0) );
-        for ( uint32_t j=0; j<gpe; j++ )
-          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
+        for ( int j=0; j<gpe; j++ )
+          for ( int k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
         // store result in output vector
         for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
@@ -1255,9 +1253,6 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
      cout <<"\nIsoparametricLinearTetrahedron::OutputNodeDataToVTK: file '"<< outfile <<"' written successfully."<< endl;
 
  } // end OutputNodeDataToVTK
-
-
-
 
 
 } // end namespace csmp

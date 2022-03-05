@@ -40,8 +40,10 @@ IsoparametricQuadraticLineElement::IsoparametricQuadraticLineElement( uint32_t d
     W.resize( gpe );
 
     // Cook et al. p. 171, table 6.4-1
-    IP[0]   = -1. / sqrt(3.), IP[1]     = 1. / sqrt(3.);
-    W[0]    =  1.,            W[1] = 1.; // since length = 2.0 (-1,1)
+    IP[0]   = -1. / sqrt(3.);
+    IP[1]   =  1. / sqrt(3.);
+    W[0]    = 1.;
+    W[1]    = 1.; // since length = 2.0 (-1,1)
 
     // local node coordinates (node order 1,2,3)
     NX[0] = -1.;
@@ -683,7 +685,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<do
 
     // 1D
     if ( dim == 1U ) {
-         for( auto i{0}; i<npe; i++ )
+         for( i=0; i<npe; i++ )
            xyz[0] += XY(i,0) * NRST[i];
 	     return;
       }
@@ -691,7 +693,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<do
     // 2D
     if ( dim == 2U ) {
          xyz[1]=0;
-         for( auto i{0}; i<npe; i++ ) {
+         for( i=0; i<npe; i++ ) {
 	          xyz[0] += XY(i,0) * NRST[i];
 	          xyz[1] += XY(i,1) * NRST[i];
 	       }
@@ -700,7 +702,7 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<do
    
     // 3D case   
     xyz[1]=xyz[2]=0.; 
-    for( auto i{0}; i<npe; i++ ) {
+    for( i=0; i<npe; i++ ) {
 	      xyz[0] += XY(i,0) * NRST[i];
 	      xyz[1] += XY(i,1) * NRST[i];
 	      xyz[2] += XY(i,2) * NRST[i];

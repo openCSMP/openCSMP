@@ -145,10 +145,10 @@ class NodeCenteredFiniteVolumeAlgorithm {
   private:
     Region<dim>&           gref_;
     SparseMatrix           LHS;
-    std::vector<double>  RHS, RESULT;
+    std::vector<double>    RHS, RESULT;
     DenseMatrix<DM_MIN>    DN, DNT;
     Solver*                solver_;
-    const uint32_t           MAX_NODES_GAUSS_SOLVER;
+    const uint32_t         MAX_NODES_GAUSS_SOLVER;
     bool                   firstCall_;
     bool                   verbose_;
 };

@@ -151,12 +151,11 @@ void LinearElasticity_Example::Run()
     SAMG_Settings settings;
     settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
-    SAMG_Solver    samg_solver(&settings);
-    PDE_IntegratorExperimental<2U,Region>  deformation(samg_solver);
-//    PDE_Integrator_UoM<2U,Region>  deformation(samg_solver);
+    SAMG_Solver  solver(&settings);
+    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  deformation(linear_solver);
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
+    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
 #endif
 
     PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );

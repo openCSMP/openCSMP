@@ -904,10 +904,10 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguou
           for ( const auto& nit : neighbor_elements )
             // if the element has not already been dealt with
             if ( nit != nullptr && elements_contiguous_subset.find( nit ) == elements_contiguous_subset.end() ) {
-                const size_t  neighbors(nit->Neighbors());
-                new_neighbor_elements.reserve( neighbors );
+                const auto  n_neighbors(nit->Neighbors());
+                new_neighbor_elements.reserve( n_neighbors );
                 // adding its neighbor ids to the element list to be processed next, if they haven't been dealt with already
-                for ( size_t j=0U; j<neighbors; ++j )
+                for ( auto j=0U; j<neighbors; ++j )
                   // if there is a neighbor whose neighbors have not been traversed, it is input in the list
                   if ( nit->Neighbor(j) != nullptr )
                     new_neighbor_elements.push_back( nit->Neighbor(j) );

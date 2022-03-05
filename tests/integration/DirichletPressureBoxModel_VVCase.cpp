@@ -93,27 +93,33 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
      _test( !diagnostics.DetectOverConstrainedElements( model, "fluid pressure"  ) );
 
       Region<DIM>& model_domain(model.Region("Model"));
-      
-      SAMG_Settings  settings;
+ 
+#ifdef CSMP_WITH_SAMG_SOLVER
+      SAMG_Settings settings;
+      SAMG_Solver   solver( &settings );
+      PDE_Integrator<3U,Region> pde_integrator( &solver );
+      // solver configuration
       settings.SetSolverInstance(1);
-
-      // iout
       settings.Set_iout1( 0 );
       settings.Set_iout2( 0 );
       if ( !verbose_ ) settings.Set_idmp( -1 );
-      // more expensive relaxation parameter
+      /// more expensive relaxation parameter
       settings.Set_nxtyp(1); // GOOD
-      // one-time solver set-up: nothing is remembered for next try
+      /// one-time solver set-up: nothing is remembered for next try
 //      settings.Set_iswit(5);
-      // SAMG solution criteria
+      /// SAMG solution criteria
       settings.Set_eps(0.); // absolute criterion
-      // Agressive first level coarsening nredlev(1) for decreased setup time and reduced no. of cycles
+      /// Agressive first level coarsening nredlev(1) for decreased setup time and reduced no. of cycles
 //    fluid_pressure.GetSolverSettings().Set_nred(1);
-      // Pre-adjust SAMG coarse matrix size relative to original size, based on solver output
+      /// Pre-adjust SAMG coarse matrix size relative to original size, based on solver output
 //      settings.Set_a_cmplx(2);
-      // Pre-adjust SAMG mesh complexity, based on solver output
+      /// Pre-adjust SAMG mesh complexity, based on solver output
 //      settings.Set_g_cmplx(1.5);
 //      settings.Set_w_avrge(2);
+#else
+      CSMP_DEFAULT_LINEAR_SOLVER  solver;
+      PDE_Integrator<3U,Region>   pde_integrator( &solver );
+#endif
 
 #ifdef SAMG_OUTPUT_TO_FILE
       // trigger output to file
@@ -124,14 +130,10 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
       settings.Set_filnam_dump( "DirichletPressureBoxModel_VVCase" );
 #endif
 
-      SAMG_Solver    solver(&settings);
-      PDE_Integrator<DIM,Region>  pde_integrator(solver);
-//      pde_integrator.ScaleEssentialConditions( 1.0e-15 ); // because the model is so small
-
       const PropertyDatabase<DIM>&  p_ref = model.Database();
 //      NumIntegral_dNT_dN_dV<DIM>   laplacian( p_ref, "fluid pressure", "fluid pressure" );
       NumIntegral_dNT_op_dN_dV<DIM>  laplacian( p_ref, "conductivity",  "fluid pressure", "fluid pressure" );
-      NumIntegral_NT_op_N_dV<DIM>   rhs( p_ref, "fluid volume source", "fluid pressure" );
+      NumIntegral_NT_op_N_dV<DIM>    rhs( p_ref, "fluid volume source", "fluid pressure" );
 
       pde_integrator.Add( &laplacian );
       pde_integrator.Add( &rhs );           // End the numIntegration
@@ -158,7 +160,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
    const bool binary_file( true );
    mesh_interface.Read_ANSYS_Mesh( model_name_.c_str(), mesh_container, mesh_topology, binary_file, true );
 
-  mesh_topology.ReduceToDomains( model_name_.c_str() );
+   mesh_topology.ReduceToDomains( model_name_.c_str() );
    map<size_t,size_t>  old_and_new_elmtids;
    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
    mesh_container.ReduceTo( old_and_new_elmtids );
@@ -176,6 +178,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
 
    Region<DIM>& model_domain(model.Region("Model"));
   
+#ifdef CSMP_WITH_SAMG_SOLVER
    SAMG_Settings  settings;
    settings.SetSolverInstance(1);
    // iout
@@ -186,7 +189,10 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
 //         settings.Set_nxtyp(1); 
    settings.Set_eps(0.); // absolute criterion
 
-   SAMG_Solver    solver(&settings);
+   SAMG_Solver solver(&settings);
+#else
+   CSMP_DEFAULT_LINEAR_SOLVER solver;
+#endif
    PDE_Integrator<DIM,Region>  pde_integrator(solver);
 //      pde_integrator.ScaleEssentialConditions( 1.0e-15 ); // because the model is so small
 

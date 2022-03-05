@@ -144,11 +144,11 @@ void Tutorial4_Example_Revisited::Run()
   settings.Set_ncycle( 50 );
 
   // FE algorithm with specialised SAMG settings
-  SAMG_Solver  samg_solver( &settings );
-  PDE_Integrator_UoM<2U, Region>  stokes_flow( samg_solver );
+  SAMG_Solver  solver( &settings );
+  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
 #else
-  CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-  PDE_Integrator_CRM<2U, Region>  stokes_flow( linear_solver );
+  CSMP_DEFAULT_LINEAR_SOLVER  solver;
+  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
 #endif
 
   // Stokes lubrication equation

@@ -665,9 +665,9 @@ size_t  AlterationVisitor<dim>::ReadDependentVariablePhaseState( const char* fna
     typename vector<pair<int32_t,string> >::const_iterator  it;
     char                      intext[INFO_STRING], name[NAME_STRING];
     const char* const         white_delims =" ,\t", *token;
-    int32_t                     index;
-    int32_t                     charge(0);
-    double                  density(0.0), molar_weight(0.0);
+    int32_t                   index(0);
+    int32_t                   charge(0);
+    double                    density(0.0), molar_weight(0.0);
     PHASE_STATE               pstate;
     pair<Index,Reactant>      entry;
     ifstream                  ifs(fname);

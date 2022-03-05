@@ -16,24 +16,23 @@ CapillaryNumberVisitor<dim>::CapillaryNumberVisitor( Model<dim>& model, const ch
     }
 
 
-  template<uint32_t dim>
-  void CapillaryNumberVisitor<dim>::Visit( Element<dim>* element )
-    {
-      const double visc( element->Read(viscKey_) );
-      ScalarVariable capillaryNumber_( PLAIN, 0.0 );
-      VectorVariable<dim> velocity_;
-      element->Read( velKey_, velocity_ );
+template<uint32_t dim>
+void CapillaryNumberVisitor<dim>::Visit( Element<dim>* element )
+  {
+    const double visc( element->Read(viscKey_) );
+    ScalarVariable capillaryNumber( PLAIN, 0.0 );
+    VectorVariable<dim> velocity;
+    element->Read( velKey_, velocity );
 
-      // Capillary number (Saffman and Taylor, 1958) = v * mu * del(frap) / ift
-      capillaryNumber_ = visc * velocity_.Length()
-                             / ift_;
+    // Capillary number (Saffman and Taylor, 1958) = v * mu * del(frap) / ift
+    capillaryNumber = visc * velocity.Length() / ift_;
 
-      element->Store( nCapKey_, capillaryNumber_ );
-    }
+    element->Store( nCapKey_, capillaryNumber );
+  }
 
-  template class CapillaryNumberVisitor<1>;
-  template class CapillaryNumberVisitor<2>;
-  template class CapillaryNumberVisitor<3>;
+template class CapillaryNumberVisitor<1>;
+template class CapillaryNumberVisitor<2>;
+template class CapillaryNumberVisitor<3>;
 
 }
 

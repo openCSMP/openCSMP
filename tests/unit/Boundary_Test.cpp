@@ -468,11 +468,11 @@ void Boundary_Test::runLegacy()
     CheckNodeFlags( boundaryOne, IRREGULAR );
     CheckNodeParents( boundaryOne );
     model.Region( "Model" ).UpdateMemberIndexes();
-    vector<uint32_t> outerParentsIDs;
+    vector<size_t> outerParentsIDs;
     for( vector<Face<3>*>::const_iterator it = boundaryOne.ElementsBegin(); it != boundaryOne.ElementsEnd(); ++it )
       outerParentsIDs.push_back( (*it)->Parent(OUTSIDE)->Idx() );
     model.FormRegionFrom( "BOUNDARY OUTER PARENTS", outerParentsIDs );
-    vector<uint32_t> innerParentsIDs;
+    vector<size_t> innerParentsIDs;
     for( vector<Face<3>*>::const_iterator it = boundaryOne.ElementsBegin(); it != boundaryOne.ElementsEnd(); ++it )
       innerParentsIDs.push_back( (*it)->Parent(INSIDE)->Idx() );
     model.FormRegionFrom( "BOUNDARY INNER PARENTS", innerParentsIDs );
@@ -581,7 +581,6 @@ void Boundary_Test::runLegacy()
       const bool irregular_mesh(true);      /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
       const bool binary_file(true);         /* true = binary, false = ascii */
       const bool use_regions_file(false);   /* true = reduce regions according to regions file, false = does not redure regions */
-      const bool create_boundaries(false);  /* true = creates boundaries around model, false = does not create boundaries */
       ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
                           irregular_mesh, binary_file, use_regions_file ); // TODO: test does not require boundaries
                           

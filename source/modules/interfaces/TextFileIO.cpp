@@ -679,7 +679,7 @@ void readPropertyValue( VectorVariable<dim>& vc )
   char*        token( 0 );
   const char*  delims = " ,:,\t,\n,\r";
 
-  size_t i;
+  uint32_t i;
   vc = 0.0;
   for ( i = 0; i < dim; ++i )
   {
@@ -688,7 +688,7 @@ void readPropertyValue( VectorVariable<dim>& vc )
       vc( i ) = atof( token );
     else if ( i != 0 )
     {
-      for ( size_t j = i; j < dim; ++j )
+      for ( uint32_t j = i; j < dim; ++j )
         vc( j ) = vc( i - 1 );
       break;
     }
@@ -731,7 +731,7 @@ void readPropertyValue( TensorVariable<dim>& ts )
     const double* val = &values[0];
     for ( auto i = 0; i < dim; ++i )
     {
-      for ( size_t j = 0; j < dim; ++j )
+      for ( uint32_t j = 0; j < dim; ++j )
       {
         ts( i, j ) = *val++;
       }
@@ -837,7 +837,7 @@ template void readPropertyValue<3U>( TensorVariable<3U>& );
 
 // READ PROPERTY STATUS
 
-void readPropertyStatusOfScalar( size_t depth, bool& digit, size_t& position, vector<VARIABLE_FLAG>& flags )
+void readPropertyStatusOfScalar( size_t depth, bool& digit, uint32_t& position, vector<VARIABLE_FLAG>& flags )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -883,7 +883,7 @@ void readPropertyStatusOfScalar( size_t depth, bool& digit, size_t& position, ve
 } // end
 
 
-void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, vector<VARIABLE_FLAG>& flags )
+void readPropertyStatusOfVector( size_t depth, bool& digit, uint32_t& position, vector<VARIABLE_FLAG>& flags )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -943,7 +943,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, ve
 }
 
 
-void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, vector<VARIABLE_FLAG>& flags )
+void readPropertyStatusOfTensor( size_t depth, bool& digit, uint32_t& position, vector<VARIABLE_FLAG>& flags )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1009,7 +1009,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, ve
   }
 }
 
-void readPropertyStatusOfArray( size_t depth, bool& digit, size_t& position, vector<VARIABLE_FLAG>& flags )
+void readPropertyStatusOfArray( size_t depth, bool& digit, uint32_t& position, vector<VARIABLE_FLAG>& flags )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1054,7 +1054,7 @@ void readPropertyStatusOfArray( size_t depth, bool& digit, size_t& position, vec
   }
 }
 
-void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& position, vector<VARIABLE_FLAG>& flags )
+void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, uint32_t& position, vector<VARIABLE_FLAG>& flags )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1145,7 +1145,7 @@ void printPropertyValue( const TensorVariable<dim>& ts )
 {
   for ( auto i = 0; i<dim; i++ ) {
     cout << "\t";
-    for ( size_t j = 0; j<dim; j++ )
+    for ( auto j = 0; j<dim; j++ )
       cout << ts( i, j ) << ", ";
     cout << endl;
   }
@@ -2356,7 +2356,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
   VARIABLE_TYPE  prop_type;
   vector<VARIABLE_FLAG>  flags;
   size_t         length;
-  size_t         position(0);
+  uint32_t       position(0);
   bool           digit( false );
 
   if ( verbose )
@@ -2494,7 +2494,7 @@ bool readRegionPropertyConditions( Model<dim>& model,
   VARIABLE_TYPE  prop_type;
   vector<VARIABLE_FLAG>  flags;
   size_t         length;
-  size_t         position;
+  uint32_t       position{0};
   bool           digit( false );
 
   if ( verbose )

@@ -83,12 +83,12 @@ namespace csmp {
   template<uint32_t dim>
   void EffectiveStressVisitor<dim>::Visit( Element<dim>* e )
   {
-    for ( size_t i(0); i < e->FE()->IntegrationPoints(); ++i )
+    for ( auto i(0); i < e->FE()->IntegrationPoints(); ++i )
     {
       e->PropertyValueAtIntegrationPoint( fluidPressureKey_, i, fluidPressure_ );
       e->Read( i, sigmaKey_, sigma_ );
 
-      for( size_t j(0); j < dim; ++j )
+      for( auto j(0); j < dim; ++j )
 		  sigma_(j,j) -= fluidPressure_();
 
       e->Store( i, sigmaEffKey_, sigma_ );
@@ -97,12 +97,12 @@ namespace csmp {
     if(outputMeanStress_)
     {
       meanStress_() = 0.;
-      for ( size_t i(0); i < e->FE()->IntegrationPoints(); ++i )
+      for ( auto i(0); i < e->FE()->IntegrationPoints(); ++i )
       {
         e->Read( i, sigmaEffKey_, sigma_ );
 
-        for( size_t i(0); i < dim; ++i )
-          meanStress_() += sigma_(i,i);
+        for( auto j(0); j < dim; ++j )
+          meanStress_() += sigma_(i,j);
       }
       meanStress_() /= dim*e->FE()->IntegrationPoints();
       e->Store( meanStressKey_, meanStress_ );

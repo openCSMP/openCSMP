@@ -2311,7 +2311,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
      // 2. Going over the nodes, making BOX_BOUNDARY flag assignments
      // -------------------------------------------------------------
      // zapping all previous box boundary flags
-     for ( auto bit=vset.BFlagsBegin(); bit!= vset.BFlagsEnd(); ++bit ) (*bit) = NOT;
+     for ( auto abit=vset.BFlagsBegin(); abit!= vset.BFlagsEnd(); ++abit ) (*abit) = NOT;
      // (starting with the least specific regions so that their corners are overwritten by box boundary flags)
      for ( auto nit : nodes_irregular ) vset.AddBFlag( nit, IRREGULAR );
      for ( auto nit : nodes_bottom ) vset.AddBFlag( nit, BOTTOM );

@@ -82,7 +82,7 @@ B = |   0   dN0dy   0    ...   0   dN(nodes)dy |
 
 The shape function derivative matrix DN for 1 degree of freedom per node. 
 
-@return The expanded matrix is returned into the input matrix.
+The expanded matrix is returned into the input matrix.
 
 @section application Application
 
@@ -258,6 +258,12 @@ void out( const Var& obj )
    cout << endl;
  }
 
+// template explicit instantiations
+
+template void out( const vector<size_t>& );
+template void out( const vector<uint32_t>& );
+template void out( const vector<int32_t>& );
+template void out( const vector<double>& );
 
 
 
@@ -289,12 +295,6 @@ double  erf_Chebyshev( double x )
 
 
 
-// template explicit instantiations
-
-template void out( const vector<ONE_BYTE_NUMBER>& );
-template void out( const vector<uint32_t>& );
-template void out( const vector<int32_t>& );
-template void out( const vector<double>& );
 
 
 
@@ -481,7 +481,7 @@ double g( double x, double x1, double (*function)( double ), double (*dfunction)
 double secant_line( double x1, double xmin, double xmax, double (*function)( double ), double (*dfunction)( double ), double tolerance)
   {
     
-    double xm, x0;
+    double xm = std::numeric_limits<double>::quiet_NaN(), x0 = std::numeric_limits<double>::quiet_NaN();
     double c;
     
      if (g(xmin,x1,function ,dfunction) * g(xmax,x1,function ,dfunction) < 0) {  // check the range for finding root
@@ -500,11 +500,7 @@ double secant_line( double x1, double xmin, double xmax, double (*function)( dou
        } while (fabs(xm - x0) >= tolerance); // repeat the loop
       
      }
-    else
-    {
-      cout << "Error at CSMP_mathUtilities:the_secant_method Can not find a root in the given interval";
-      xm =  std::numeric_limits<double>::quiet_NaN() ;
-    }
+    else cerr << "CSMP_mathUtilities  secant_line: can not find a root in given interval";
     
     return xm;
   }

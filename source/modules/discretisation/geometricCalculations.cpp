@@ -588,24 +588,6 @@ double dihedralRadAngle( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2,
 Check whether provided 4 point create tetrahedron or quadrilateral
 */
 
-static bool isTetra( const csmp::Point<1U>& pt1,
-              const csmp::Point<1U>& pt2,
-              const csmp::Point<1U>& pt3,
-              const csmp::Point<1U>& pt4 )
-{
-  // no tetra in 1D
-  return false;
-}
-
-static bool isTetra( const csmp::Point<2U>& pt1,
-              const csmp::Point<2U>& pt2,
-              const csmp::Point<2U>& pt3,
-              const csmp::Point<2U>& pt4 )
-{
-  // no tetra in 1D
-  return false;
-}
-
 bool isTetra( const csmp::Point<3U>& pt1,
               const csmp::Point<3U>& pt2,
               const csmp::Point<3U>& pt3,

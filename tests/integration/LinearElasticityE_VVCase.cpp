@@ -31,7 +31,7 @@ namespace csmp
       const size_t ELEMENTS(3);
       const double LENGTH(1.);
       const double displacementInX( 0.099 );
-      const double relativeToleranceStrain(0.01), relativeToleranceStress(0.01);
+      const double relativeToleranceStrain(0.01);
       const ScalarVariable zeroScalar( PLAIN, 0. );
       const VectorVariable<DIM> zeroVector( PLAIN, 0. );
       const VectorVariable<DIM> zeroVectorDirichlet( DIRICH, 0. );
@@ -52,8 +52,15 @@ namespace csmp
       model.InputBoundaryValue( RIGHT, "displacement", displacementRight );
 
       // setting up & solving linear elasticity fea problem
+#ifdef CSMP_WITH_SAMG_SOLVER
+      SAMG_Settings settings;
+      SAMG_Solver   solver(&settings);
+      settings.Set_napproach(2);
+#else
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+#endif
+      PDE_Integrator<DIM,Region> deformation( solver );
 
-      PDE_Integrator<DIM,Region> deformation( new SAMG_Solver() );
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );
       NumIntegral_BT_D_B_dV<DIM,Element<DIM> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       deformation.Add( &stiffness );

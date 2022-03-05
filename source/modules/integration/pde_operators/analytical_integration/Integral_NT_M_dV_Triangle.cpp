@@ -16,10 +16,7 @@ template<uint32_t dim,class CELL>
 Integral_NT_M_dV_Triangle<dim,CELL>::Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>& pref,
                                                                    const char* test )
   : MathOperatorRHS<dim>(pref,"permeability",test),
-    NPROP(3),
-    xyz(dim),
-    ctr(dim),
-    IPOL(3)
+    NPROP(3)
  {
     MathOperatorRHS<dim>::Name("Integral_NT_M_dV_Triangle", "__", test );
     
@@ -76,12 +73,12 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      // averaging coordinates to find barycenter
      xyz /= 4.; 
      // evaluating test functions at barycenter of quadrilateral sector
-     e.N_AtGlobalPoint( IPOL, xyz.Coordinates() );
+     e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
      // assigning nodal contribution of M-sector integral 1
      //                                Ni        Mj        
-     MathOperatorRHS<dim>::RHS[0] = IPOL[0] * NPROP[0]();
-     MathOperatorRHS<dim>::RHS[1] = IPOL[1] * NPROP[0]();
-     MathOperatorRHS<dim>::RHS[2] = IPOL[2] * NPROP[0]();
+     MathOperatorRHS<dim>::RHS[0] = this->IPOL[0] * NPROP[0]();
+     MathOperatorRHS<dim>::RHS[1] = this->IPOL[1] * NPROP[0]();
+     MathOperatorRHS<dim>::RHS[2] = this->IPOL[2] * NPROP[0]();
 
      // sector surrounding node 1
      // -------------------------
@@ -92,10 +89,10 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      // segment 12
      xyz += (e.N(1)->Coordinate() + e.N(2)->Coordinate()) / 2.;
      xyz /= 4.; 
-     e.N_AtGlobalPoint( IPOL, xyz.Coordinates() );
-     MathOperatorRHS<dim>::RHS[0] += IPOL[0] * NPROP[1]();
-     MathOperatorRHS<dim>::RHS[1] += IPOL[1] * NPROP[1]();
-     MathOperatorRHS<dim>::RHS[2] += IPOL[2] * NPROP[1]();
+     e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
+     MathOperatorRHS<dim>::RHS[0] += this->IPOL[0] * NPROP[1]();
+     MathOperatorRHS<dim>::RHS[1] += this->IPOL[1] * NPROP[1]();
+     MathOperatorRHS<dim>::RHS[2] += this->IPOL[2] * NPROP[1]();
 
      // sector surrounding node 2
      // -------------------------
@@ -106,10 +103,10 @@ void Integral_NT_M_dV_Triangle<dim,CELL>::ComputeContribution( const CELL& e )
      // segment 20
      xyz += (e.N(0)->Coordinate() + e.N(2)->Coordinate()) / 2.;
      xyz /= 4.; 
-     e.N_AtGlobalPoint( IPOL, xyz.Coordinates() );
-     MathOperatorRHS<dim>::RHS[0] += IPOL[0] * NPROP[2]();
-     MathOperatorRHS<dim>::RHS[1] += IPOL[1] * NPROP[2]();
-     MathOperatorRHS<dim>::RHS[2] += IPOL[2] * NPROP[2]();
+     e.N_AtGlobalPoint( this->IPOL, xyz.Coordinates() );
+     MathOperatorRHS<dim>::RHS[0] += this->IPOL[0] * NPROP[2]();
+     MathOperatorRHS<dim>::RHS[1] += this->IPOL[1] * NPROP[2]();
+     MathOperatorRHS<dim>::RHS[2] += this->IPOL[2] * NPROP[2]();
      
      // Evaluating the M-Volume integrals for the FV solution
      vol_div3 = e.Volume() / 3.;

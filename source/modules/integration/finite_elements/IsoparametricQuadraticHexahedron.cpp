@@ -113,10 +113,10 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( uint32_t int
         const double oneDivSqrtThree=1./sqrt(3.0);
         const double sqrtTwoThirds=sqrt(2.0/3.0);
 
-        IP(0,0) = 0.0, 			IP(0,1) = -sqrtTwoThirds, 	IP(0,2) = -oneDivSqrtThree;
-        IP(1,0) = 0.0, 			IP(1,1) = sqrtTwoThirds,	IP(1,2) = -oneDivSqrtThree;
-        IP(2,0) = -sqrtTwoThirds,IP(2,1) = 0.0, 				IP(2,2) =  oneDivSqrtThree;
-        IP(3,0) =  sqrtTwoThirds,IP(3,1) = 0.0, 				IP(3,2) =  oneDivSqrtThree;
+        IP(0,0) = 0.0;	IP(0,1) = -sqrtTwoThirds; IP(0,2) = -oneDivSqrtThree;
+        IP(1,0) = 0.0;	IP(1,1) = sqrtTwoThirds;	IP(1,2) = -oneDivSqrtThree;
+        IP(2,0) = -sqrtTwoThirds; IP(2,1) = 0.0;	IP(2,2) =  oneDivSqrtThree;
+        IP(3,0) =  sqrtTwoThirds; IP(3,1) = 0.0;	IP(3,2) =  oneDivSqrtThree;
     }
     else if( integrationPoints == 6 )
     {
@@ -133,13 +133,12 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( uint32_t int
         W[5] = fourThirds;
 
         // Location of the integration points in r-s-t coordinates see Lo, p. 68
-
-        IP(0,0) = -1.0,         IP(0,1) = 0.0, 				IP(0,2) = 0.0; // Node 25
-        IP(1,0) =  1.0, 		IP(1,1) = 0.0,				IP(1,2) = 0.0; // Node 23
-        IP(2,0) =  0.0,			IP(2,1) =-1.0, 				IP(2,2) = 0.0; // Node 22
-        IP(3,0) =  0.0,			IP(3,1) = 1.0, 				IP(3,2) = 0.0; // Node 24
-        IP(4,0) =  0.0,			IP(4,1) = 0.0, 				IP(4,2) =-1.0; // Node 21
-        IP(5,0) =  0.0,			IP(5,1) = 0.0, 				IP(5,2) = 1.0; // Node 26
+        IP(0,0) = -1.0;     IP(0,1) = 0.0; 				IP(0,2) = 0.0; // Node 25
+        IP(1,0) =  1.0; 		IP(1,1) = 0.0;				IP(1,2) = 0.0; // Node 23
+        IP(2,0) =  0.0;			IP(2,1) =-1.0; 				IP(2,2) = 0.0; // Node 22
+        IP(3,0) =  0.0;			IP(3,1) = 1.0; 				IP(3,2) = 0.0; // Node 24
+        IP(4,0) =  0.0;			IP(4,1) = 0.0; 				IP(4,2) =-1.0; // Node 21
+        IP(5,0) =  0.0;			IP(5,1) = 0.0; 				IP(5,2) = 1.0; // Node 26
 
         /*
         IP(0,0) = 1.0/sqrt(6.0),		IP(0,1) = 1.0/sqrt(2.0),	IP(0,2) = -1.0/sqrt(3.0);
@@ -161,20 +160,20 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( uint32_t int
 
         const double a1=0.577350269189626;
 
-        IP(0,0) =-a1,	IP(0,1) =-a1, 	IP(0,2) =-a1;
-        IP(1,0) = a1,	IP(1,1) =-a1, 	IP(1,2) =-a1;
-        IP(2,0) = a1,	IP(2,1) = a1, 	IP(2,2) =-a1;
-        IP(3,0) =-a1,	IP(3,1) = a1, 	IP(3,2) =-a1;
-        IP(4,0) =-a1,	IP(4,1) =-a1, 	IP(4,2) = a1;
-        IP(5,0) = a1,	IP(5,1) =-a1, 	IP(5,2) = a1;
-        IP(6,0) = a1,	IP(6,1) = a1, 	IP(6,2) = a1;
-        IP(7,0) =-a1,	IP(7,1) = a1, 	IP(7,2) = a1;
+        IP(0,0) =-a1;	IP(0,1) =-a1;	IP(0,2) =-a1;
+        IP(1,0) = a1;	IP(1,1) =-a1;	IP(1,2) =-a1;
+        IP(2,0) = a1;	IP(2,1) = a1;	IP(2,2) =-a1;
+        IP(3,0) =-a1;	IP(3,1) = a1;	IP(3,2) =-a1;
+        IP(4,0) =-a1;	IP(4,1) =-a1;	IP(4,2) = a1;
+        IP(5,0) = a1;	IP(5,1) =-a1;	IP(5,2) = a1;
+        IP(6,0) = a1;	IP(6,1) = a1;	IP(6,2) = a1;
+        IP(7,0) =-a1;	IP(7,1) = a1;	IP(7,2) = a1;
     }
-    else
+      else
     {
-         cerr<<"***ERROR: IsoparametricQuadraticHexahedron::IsoparametricLinearHexahedron: N of integration points should be 4 or 8"<<endl;
-         throw std::range_error
-         ("IsoparametricQuadraticHexahedron::IsoparametricLinearHexahedron: Number of integration points should be 4 or 8" );
+       cerr<<"***ERROR: IsoparametricQuadraticHexahedron::IsoparametricLinearHexahedron: N of integration points should be 4 or 8"<<endl;
+       throw std::range_error
+       ("IsoparametricQuadraticHexahedron::IsoparametricLinearHexahedron: Number of integration points should be 4 or 8" );
     }
 
  }
@@ -1099,7 +1098,7 @@ IsoparametricQuadraticHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
     for(uint32_t inode=0;inode<npe; inode++)
-     {B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode]; }
+    { B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
 
@@ -1206,8 +1205,8 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                        for(uint32_t l=0; l<dim; l++)
+                            rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
                     }
@@ -1564,7 +1563,7 @@ IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
 
     // Forming maTRIX delta Akin, p.420
     for(uint32_t inode=0;inode<npe; inode++)
-         {B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode]; }
+    {B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
 
@@ -1661,7 +1660,7 @@ IsoparametricQuadraticHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     for(uint32_t i=0; i<npe; i++)
     {
-    B(0,i) = DNR[i], B(1,i) = DNS[i], B(2,i) = DNT[i];
+      B(0,i) = DNR[i]; B(1,i) = DNS[i]; B(2,i) = DNT[i];
     }
 
     B = JINV * B;

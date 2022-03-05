@@ -73,7 +73,7 @@ FiniteVolumeStencil_Test::FiniteVolumeStencil_Test( bool verbose )
     {
       (*vIterFEs)->ReferenceCoordinates( matCoords );
 	    for( auto i = 0; i < (*vIterFEs)->Nodes(); i++ )
-	     for( size_t d = 0; d < dim; d++ )
+	     for( auto d = 0; d < dim; d++ )
 	     {
 	       const double v(matCoords(i,d)); 
 	       (*vIterFEs)->XYZ(i, d, isnan(v)?0.:v);
@@ -704,14 +704,14 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     (*vIterFEs)->Nrst( rst0[0], rst0[1], rst0[2], NRST0 );
                     (*vIterFEs)->Nrst( rst1[0], rst1[1], rst1[2], NRST1 );
 
-                    Point<3> v0(0,0,0), v1(0,0,0);
+                    Point<3> pt0(0,0,0), pt1(0,0,0);
                     for ( auto iNode = 0; iNode < iNrOfNodes; ++iNode) {
                       const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
                       const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
-                      v0 += NRST0[iNode] * nt;
-                      v1 += NRST1[iNode] * nt;
+                      pt0 += NRST0[iNode] * nt;
+                      pt1 += NRST1[iNode] * nt;
                     }
-                    mappedNormal += 0.5 * crossProduct(v1, v0);
+                    mappedNormal += 0.5 * crossProduct(pt1, pt0);
                   }
                 }
                 else if ((*vIterFEs)->IsSurfaceElement()) {

@@ -93,7 +93,6 @@ void CsmpIntro1_TestCase::run()
     _test( !model.ContainsBoundary("back") );
 
     // referencing regions
-    Region<DIM>& modelRegion( model.Region("Model") );
     Region<DIM>& matrixLeft( model.Region("MATRIX_LEFT") );
     Region<DIM>& matrixRight( model.Region("MATRIX_RIGHT") );
 

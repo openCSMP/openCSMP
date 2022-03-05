@@ -76,7 +76,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     void EraseParents();
 
     /// returns how many elements share this node
-    size_t Parents() const;
+    uint32_t Parents() const;
     /// access to the (0..n-1) parent element
     Element<dim>* Parent( uint32_t ) const;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)

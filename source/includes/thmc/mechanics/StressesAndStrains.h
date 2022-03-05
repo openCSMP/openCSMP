@@ -39,7 +39,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
     void PrincipalStrainsAndStresses( bool yes_no );
     virtual StressesAndStrains<3U>* clone() const { return new StressesAndStrains<3U> (*this); }
   private:
-    const size_t  components_;  // stress strain components
+    const uint32_t  components_;  // stress strain components
     
     csmp::Index strain_key_, stress_key_,                  ///< tensor variables
                 strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)

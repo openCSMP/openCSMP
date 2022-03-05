@@ -58,7 +58,15 @@ namespace csmp
       model.InputBoundaryValue( RIGHT, "force", forceRight );
 
       // setting up & solving linear elasticity fea problem;
-      PDE_Integrator<DIM,Region> deformation( new SAMG_Solver() );
+#ifdef CSMP_WITH_SAMG_SOLVER
+      SAMG_Settings settings;
+      SAMG_Solver   solver(&settings);
+      settings.Set_napproach(2);
+#else
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+#endif
+      PDE_Integrator<DIM,Region> deformation( solver );
+
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );
       NumIntegral_BT_D_B_dV<DIM,Element<DIM> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
       deformation.Add( &stiffness );

@@ -151,12 +151,6 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
 
 
 
-
-
-
-
-
-
 /**
  
 Allows to toggle the addional computation of the variables:
@@ -659,9 +653,4 @@ evecs_.Out();
 cerr <<"\n";
 */
 
-
- 
-#ifndef _MSC_VER
-template class StressesAndStrains<3U>;
-#endif
 } // csmp

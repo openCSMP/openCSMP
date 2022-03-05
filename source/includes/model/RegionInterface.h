@@ -152,7 +152,7 @@ class RegionInterface {
     size_t FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity = true );
     
     /// Assuming that elements have been numbered as required by caller, method forms region of elements with this Idx() values; returns # of elements in region; returns number of elements
-    size_t FormRegionFrom( const char* regionname, std::vector<uint32_t>& elmt_ids, bool is_unique=true );
+    size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
 
     /// forms a new non-unique region from elements whose property value falls into the user-defined range; returns number of elements
     size_t FormRegionFrom( const char* regionname, const char* prop, double pmin, double pmax, bool unique = false );

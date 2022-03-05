@@ -1388,7 +1388,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".iu";
         ofs.open(out_file.c_str());
-        for ( auto i{0}; i<ndiu_; i++ ) ofs << iu_[i] << endl;
+        for ( i=0; i<ndiu_; i++ ) ofs << iu_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Solver::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;
@@ -1406,7 +1406,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
         out_file  = file;
         out_file += ".ip";
         ofs.open(out_file.c_str());
-        for ( auto i{0}; i<ndip_; i++ ) ofs << ip_[i] << endl;
+        for ( i=0; i<ndip_; i++ ) ofs << ip_[i] << endl;
         ofs.close();
         cout <<"\nSAMG_Adaptor::Write_SAMG_TextInputFile: file '"<< out_file;
         cout <<" written successfully."<< endl;

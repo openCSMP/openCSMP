@@ -182,9 +182,9 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
                cout <<"\nSparseMatrix (rows=columns="<< A.Rows() <<") Zero entries (i=j): "<< endl;
                cout.setf(ios::scientific);
                long prec = cout.precision(15U);
-               for ( auto i{0}; i < A.Rows(); i++ )
-                 if ( std::fabs(A(i,i)) < std::numeric_limits<double>::epsilon() )
-                   cout <<"\n\t"<< i <<": "<< A(i,i);
+               for ( auto i2{0}; i2 < A.Rows(); i2++ )
+                 if ( std::fabs(A(i2,i2)) < std::numeric_limits<double>::epsilon() )
+                   cout <<"\n\t"<< i2 <<": "<< A(i2,i2);
                cout << endl;
                cout.unsetf( ios::scientific );
                cout.precision(prec);
@@ -196,9 +196,9 @@ void CompressedRowMatrix::Initialize( const SparseMatrix& A )
           ia[i+1U]       = static_cast<int32_t>(n); 
           // inserting the diagonal elements at the beginning of each row
           const uint32_t istart = static_cast<uint32_t>(ia[i]);
-          int32_t jatemp   = ja[ istart ];
-          double atemp = a[ istart ];
-          int32_t dindex   = diag;
+          int32_t jatemp = ja[ istart ];
+          double  atemp  = a[ istart ];
+          int32_t dindex = diag;
           ja[ istart ]   = ja[ dindex ];
           a[ istart]     = a[ dindex ];
           a[ dindex ]    = atemp;
@@ -230,7 +230,7 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
    
       map<size_t,double>::const_iterator rit;
       long      i, j, k, row;
-      int32_t     diag;
+      int32_t   diag;
       bool      zero_diag_element(false);
 	  
       std::vector<int32_t>  temp( ja.size() ); // auxilary vector
@@ -268,8 +268,8 @@ void CompressedRowMatrix::InitializePointBased( const SparseMatrix& A, size_t ns
        }
 	   
      // converting C array indices (0..n-1) into Fortran indices (1..n) 
-     for ( vector<int32_t>::iterator i=ia.begin(); i!=ia.end(); ++i )  (*i)++;
-     for ( vector<int32_t>::iterator i=ja.begin(); i!=ja.end(); ++i )  (*i)++;
+     for ( vector<int32_t>::iterator l=ia.begin(); l!=ia.end(); ++l )  (*l)++;
+     for ( vector<int32_t>::iterator l=ja.begin(); l!=ja.end(); ++l )  (*l)++;
 
 }  // end InitializePointBased
 

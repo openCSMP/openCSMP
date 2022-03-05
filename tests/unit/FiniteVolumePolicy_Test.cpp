@@ -371,12 +371,12 @@ void FiniteVolumePolicy_Test::IsoparametricLinearLineElement_Test(double fTolera
 
 	if (m_bProjectionOnFacetNormal)
       {
-	   const size_t iNrOfFacets(elmt_.FV()->Facets());
-	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+	   const auto iNrOfFacets(elmt_.FV()->Facets());
+	   for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     //const CSPINDEX& prop_key
 			 VectorVariable<1U> vVariable;
-	     for(size_t iD= 0U; iD < dim; iD++) {
+	     for(int iD= 0U; iD < dim; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
 	     }
@@ -638,8 +638,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
     //test mapped vs computed
     _info("Test mapped normal vs computed.");
-	  for(auto i = 0; i < 3; i++)
-	    for(size_t j = 0; j < 3; j++)
+	  for(int i = 0; i < 3; i++)
+	    for(int j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -667,7 +667,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
         double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
@@ -681,7 +681,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 	  {
 		Point<dim>  vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -722,11 +722,11 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTriangle_Test(double fTolerance
 
    if(m_bProjectionOnFacetNormal)
    {
-	   const size_t iNrOfFacets(elmt_.FV()->Facets());
-	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+	   const auto iNrOfFacets(elmt_.FV()->Facets());
+	   for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     VectorVariable<dim> vVariable;
-	     for(size_t iD= 0U; iD < dim; iD++) {
+	     for(int iD= 0U; iD < dim; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
 	     }
@@ -1062,8 +1062,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
 	    //test mapped vs computed
 		_info("Test mapped normal vs computed.");
-	  for(auto i = 0; i < 4; i++)
-	    for(size_t j = 0; j < 3; j++)
+	  for(int i = 0; i < 4; i++)
+	    for(int j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -1092,7 +1092,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
         double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
@@ -1106,7 +1106,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 	  {
 		Point<dim> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -1152,8 +1152,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearQuadrilateral_Test(double fTole
 
    if(m_bProjectionOnFacetNormal)
    {
-	   const size_t iNrOfFacets(elmt_.FV()->Facets());
-	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+	   const auto iNrOfFacets(elmt_.FV()->Facets());
+	   for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     VectorVariable<dim> vVariable;
 	     vVariable=3.;
@@ -1562,7 +1562,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 	   //test mapped vs computed
 		_info("Test mapped normal vs computed.");
 	  for(auto i = 0; i < 6; i++)
-	    for(size_t j = 0; j < 3; j++)
+	    for(int j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -1591,7 +1591,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
         double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
@@ -1605,7 +1605,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 	  {
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -1623,7 +1623,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 	 {
        double fVolSum(0.);
 	   double fSectorVolume(0.);
-	   for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
+	   for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 				 //_info("Volume is: " << fSectorVolume);
@@ -1637,8 +1637,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearTetrahedron_Test( double fToler
 
       if(m_bProjectionOnFacetNormal)
      {
-	   const size_t iNrOfFacets(elmt_.FV()->Facets());
-	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+	   const auto iNrOfFacets(elmt_.FV()->Facets());
+	   for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     //const CSPINDEX& prop_key
 	     VectorVariable<3> vVariable;
@@ -2101,7 +2101,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 #else
      //overload tolerance for this bit
      {
-     const double fTolerance = 1.e-6;
+     fTolerance = 1.e-6;
 
      vecNormal = ( elmt_ ).FacetNormal(4U);
      _info("Normal is: [" << vecNormal[0] << ", " << vecNormal[1] << ", " << vecNormal[2] << "]");
@@ -2209,7 +2209,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 #else
      //overload tolerance for this bit
      {
-     const double fTolerance = 1.e-6;
+     fTolerance = 1.e-6;
 
      vecNormalMapped = ( elmt_ ).FacetNormalMapped(4U);
      _info("Mapped Normal is: [" << vecNormalMapped[0] << ", " << vecNormalMapped[1] << ", " << vecNormalMapped[2] << "]");
@@ -2267,15 +2267,15 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 	   for(auto i = 0; i < nr_of_facets; i++)
 	   {
 			_info("Normal " << i << ":");
-	    for(size_t j = 0; j < 3; j++)
+	    for(int j = 0; j < 3; j++)
        _info(( elmt_ ).FacetNormal( i )[j] << " ");
 			_info(" vs ");
-	    for(size_t j = 0; j < 3; j++)
+	    for(int j = 0; j < 3; j++)
        _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 	   }
 
 	   for(auto i = 0; i < nr_of_facets; i++)
-	    for(size_t j = 0; j < 3; j++)
+	    for(int j = 0; j < 3; j++)
       _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		 //compare time computed vs mapped
@@ -2284,7 +2284,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 		 file << "\nIsoparametricLinearPyramid_Test<3>: ";
 
 		 clock_t ticks = clock();  double j(0);
-		  for(size_t t = 0; t < total_times; t++)
+		  for(int t = 0; t < total_times; t++)
 		   for(auto i = 0; i < nr_of_facets; i++)
         j += ( elmt_ ).FacetNormal( i )[0];
 		 ticks = clock() - ticks;
@@ -2304,7 +2304,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	  {
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( int iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
         double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 				_info("Area is: " << fArea);
@@ -2318,7 +2318,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 	  {
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		  {
 		    //ignore return parameter, jacobian
         vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -2336,7 +2336,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 	   double fVolSum(0.);
 
 	   double fSectorVolume(0.);
-	   for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors()-1; iSector++ )
+	   for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors()-1; iSector++ )
 	   {
        fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 				 //_info("Volume is: " << fSectorVolume);
@@ -2355,12 +2355,12 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPyramid_Test(double fTolerance,
 
    if(m_bProjectionOnFacetNormal)
    {
-	   const size_t iNrOfFacets(elmt_.FV()->Facets());
-	   for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+	   const auto iNrOfFacets(elmt_.FV()->Facets());
+	   for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 	   {
 	     //const CSPINDEX& prop_key
 	     VectorVariable<3> vVariable;
-	     for(size_t iD= 0U; iD < 3; iD++) {
+	     for(int iD= 0U; iD < 3; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
 	     }
@@ -2958,18 +2958,18 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 		//test mapped vs computed
 		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
-		for(auto i = 0; i < 8; i++)
+		for( int i = 0; i < 8; i++)
 		{
 			_info("Normal " << i << ":");
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _info(( elmt_ ).FacetNormal( i )[j] << " ");
 			_info(" vs ");
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
 		for(auto i = 0; i < 12; i++)
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -2998,7 +2998,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	{
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
       double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
@@ -3012,7 +3012,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 	{
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -3029,7 +3029,7 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 	{
 		double fVolSum(0.);
 		double fSectorVolume(0.);
-		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
+		for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 			//_info("Volume is: " << fSectorVolume);
@@ -3044,12 +3044,12 @@ void FiniteVolumePolicy_Test::Test_UnitaryIsoparametricLinearHexahedron(double f
 
 	if(m_bProjectionOnFacetNormal)
 	{
-		const size_t iNrOfFacets(elmt_.FV()->Facets());
-		for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+		const auto iNrOfFacets(elmt_.FV()->Facets());
+		for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 		{
 			//const CSPINDEX& prop_key
 			VectorVariable<3> vVariable;
-			for(size_t iD= 0U; iD < 3; iD++) {
+			for(int iD= 0U; iD < 3; iD++) {
 				vVariable.Flag(iD)=PLAIN;
 				vVariable(iD)=3.;
 			}
@@ -3430,8 +3430,8 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
             dumpVector<3>(" ", elmt_.FacetNormalMapped( i ));
 		}
 
-		for(auto i = 0; i < 12; i++)
-			for(size_t j = 0; j < 3; j++)
+		for(int i = 0; i < 12; i++)
+			for(int j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -3460,7 +3460,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	{
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
       double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
@@ -3474,7 +3474,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 	{
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -3491,7 +3491,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 	{
 		double fVolSum(0.);
 		double fSectorVolume(0.);
-		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
+		for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 			_info("Volume is: " << fSectorVolume);
@@ -3521,12 +3521,12 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron1(double fTolera
 		//and hence this is simply an exchange of an area calculation for a jacobian determinant calculation.
 		//in essence, both of these are the same, but there is not any immediate functionality that needs to be tested
 		//here. (or compared).
-		const size_t iNrOfFacets(elmt_.FV()->Facets());
-		for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+		const auto iNrOfFacets(elmt_.FV()->Facets());
+		for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 		{
 			//const CSPINDEX& prop_key
 			VectorVariable<3> vVariable;
-			for(size_t iD= 0U; iD < 3; iD++) {
+			for(int iD= 0U; iD < 3; iD++) {
 				vVariable.Flag(iD)=PLAIN;
 				vVariable(iD)=3.;
 			}
@@ -3893,18 +3893,18 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 		//test mapped vs computed
 		_info("Test mapped normal vs computed., tolerance: " << fToleranceInternal);
 
-		for(auto i = 0; i < 8; i++)
+		for(int i = 0; i < 8; i++)
 		{
 			_info("Normal " << i << ":");
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _info(( elmt_ ).FacetNormal( i )[j] << " ");
 			_info(" vs ");
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _info(( elmt_ ).FacetNormalMapped( i )[j] << " ");
 		}
 
 		for(auto i = 0; i < 12; i++)
-			for(size_t j = 0; j < 3; j++)
+			for(int j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -3933,7 +3933,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	{
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
       double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
@@ -3947,7 +3947,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 	{
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -3964,7 +3964,7 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 	{
 		double fVolSum(0.);
 		double fSectorVolume(0.);
-		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
+		for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 			//_info("Volume is: " << fSectorVolume);
@@ -3979,18 +3979,18 @@ void FiniteVolumePolicy_Test::Test_IsoparametricLinearHexahedron2(double fTolera
 
 	if(m_bProjectionOnFacetNormal)
 	{
-		const size_t iNrOfFacets(elmt_.FV()->Facets());
+		const auto iNrOfFacets(elmt_.FV()->Facets());
 		//double int_physicalspace(0.);
 		//double int_parametricspace(0.);
 		//double j_factor(0.);
 
-		for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+		for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 		{
 			//const CSPINDEX& prop_key
 			VectorVariable<3U> vVariable;
 			VectorVariable<3U> vVariableP;
 			VectorVariable<3U> pFacetNormal;
-			for(size_t iD= 0U; iD < 3; iD++) {
+			for(int iD= 0U; iD < 3; iD++) {
 				vVariable.Flag(iD)=PLAIN;
 				vVariableP.Flag(iD)=PLAIN;
 				vVariable(iD)=3.;
@@ -4359,8 +4359,8 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 
 		//test mapped vs computed
 		_info("Test mapped normal vs computed.");
-	  for(auto i = 0; i < 9; i++)
-	    for(size_t j = 0; j < 3; j++)
+	  for(int i = 0; i < 9; i++)
+	    for(int j = 0; j < 3; j++)
         _equal( ( elmt_ ).FacetNormal( i )[j], ( elmt_ ).FacetNormalMapped( i )[j], fToleranceInternal );
 
 		//compare time computed vs mapped
@@ -4389,7 +4389,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 	//testing: fT   ParametricFacetArea( size_t surface, fT surfacePhysicalDetJ ) const;
 	if ( m_bTestParametricFacetArea )
 	{
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
       double fArea = ( elmt_ ).ParametricFacetArea( iFacet );
 			_info("Area is: " << fArea);
@@ -4403,7 +4403,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 	{
 		Point<3U> vecNormal;
 
-		for ( size_t iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
+		for ( auto iFacet = 0U; iFacet < elmt_.FV()->Facets(); iFacet++ )
 		{
 			//ignore return parameter, jacobian
       vecNormal = ( elmt_ ).ParametricFacetNormal(iFacet);
@@ -4421,7 +4421,7 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 	{
 		double fVolSum(0.);
 		double fSectorVolume(0.);
-		for ( size_t iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
+		for ( auto iSector = 0U; iSector < elmt_.FV()->Sectors(); iSector++ )
 		{
       fSectorVolume = ( elmt_ ).SectorVolume( iSector );
 			//_info("Volume is: " << fSectorVolume);
@@ -4449,12 +4449,12 @@ void FiniteVolumePolicy_Test::IsoparametricLinearPrism_Test(double fTolerance, d
 		//and hence this is simply an exchange of an area calculation for a jacobian determinant calculation.
 		//in essence, both of these are the same, but there is not any immediate functionality that needs to be tested
 		//here. (or compared).
-		const size_t iNrOfFacets(elmt_.FV()->Facets());
-		for ( size_t iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
+		const auto iNrOfFacets(elmt_.FV()->Facets());
+		for ( auto iFacet = 0U; iFacet < iNrOfFacets; iFacet++ )
 		{
 			//const CSPINDEX& prop_key
 			VectorVariable<3> vVariable;
-			for(size_t iD= 0U; iD < 3; iD++) {
+			for(int iD= 0U; iD < 3; iD++) {
 	     	vVariable.Flag(iD)=PLAIN;
 	     	vVariable(iD)=3.;
 			}

@@ -359,7 +359,7 @@ template size_t countAndLabelRegions( Model<3U>&, const char*, std::vector<std::
     may return false if the surface contains a cusp (>90^o kink).
  
 */
-bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
+static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
     vector<double> normal(3U), nbor_normal(3U);
    
@@ -411,7 +411,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
      @attention  where the boundary just intersects a layer (same material on either side), the layer name appears
      only once. The second instance is replaced by INTERSECTION.
 */
-std::string internalBoundaryNameFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
+static std::string internalBoundaryNameFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
  {
      assert( fdata.ElementMaterial() < region_names.size() );
      std::string boundary_name( region_names[ fdata.ElementMaterial() ] );
@@ -480,8 +480,8 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
      @author SKM 
      @date March 2016
 */
-size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
-                        set<string>& region_patches_found )
+static size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
+                               set<string>& region_patches_found )
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
@@ -539,7 +539,7 @@ size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_r
      TODO: output the numbers of matching faces of the discovered the elements so that they can later be connected
  
 */
-FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
+static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
  {
      assert( e.IsSurfaceElement() );
 

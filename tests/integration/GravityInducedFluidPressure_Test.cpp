@@ -54,7 +54,7 @@ void GravityInducedFluidPressure_Test::InitialiseModel1D( double model_height )
  {
     assert( model_height > 0. );
     VSet<1U>                mesh_container;
-    const uint32_t            N_ELEMENTS(100);
+    const uint32_t          N_ELEMENTS(100);
     LineElementMesher<1U>   mesher;
     top_ = model_height; 
     mesher.BuildUniformMesh( mesh_container, model_height, N_ELEMENTS );
@@ -232,8 +232,8 @@ void GravityInducedFluidPressure_Test::run()
 //    _test( TestComputedWithReferencePressure() );
     if ( verbose_ ) OutputResultsToText( "GravityInducedFluidPressure_Test2" );
  
-// TODO: PDE integrator CRM
-ComputeCO2Pressure_PDE_Integrator_CRM( pf_model_top );
+    // TODO: PDE integrator CRM
+    ComputeCO2Pressure_PDE_Integrator_CRM( pf_model_top );
  
    
     // 3. testing the same computation for a 3D model with surface topography
@@ -892,9 +892,13 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
 
     // 1. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings                  settings;
-    SAMG_Solver                    samg_solver( &settings );
-    PDE_Integrator_UoM<dim,Region> hydrostatic_pressure(samg_solver);
+    SAMG_Solver                    solver( &settings );
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER     solver;
+#endif
+    PDE_Integrator_UoM<dim,Region> hydrostatic_pressure(solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 

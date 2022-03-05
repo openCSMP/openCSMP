@@ -160,14 +160,14 @@ class Region : public ModelSubDomain<dim, Element>,
     size_t AccumulateAll( MeshManager<dim>& );
 
     /// creates element pointers assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
-    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<uint32_t>& element_ids );
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& element_ids );
 
     // Accumulate based on pointers to elements
 
     /// accumulate those elements into a region whose id matches one of the numbers contained in vector 'element_ids' using binary_search; @attention use after mesh modification
     size_t AccumulateByNumber( typename std::vector<csmp::Element<dim>*>::const_iterator start,
                                typename std::vector<csmp::Element<dim>*>::const_iterator end,
-                               std::vector<uint32_t>& element_ids );
+                               std::vector<size_t>& element_ids );
 
     /// accumulates range of elements into a region identified by constant pointers created by AccumulateAll; returns # of accumulated elements
     size_t Accumulate( typename std::vector<csmp::Element<dim>*>::const_iterator start,
@@ -192,7 +192,7 @@ class Region : public ModelSubDomain<dim, Element>,
     void  Add( const Region& );
 
     /// removes those elements in the region whose id matches one of the numbers contained in vector 'element_ids'
-    size_t RemoveByNumber( std::vector<uint32_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
+    size_t RemoveByNumber( std::vector<size_t>& element_ids, std::vector<csmp::Element<dim>*>& ptrs_to_removed_elements );
 
     /// removes those elements from the target region whose pointers matches the ones in the range supplied and subsequently rebuilds the region
     size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,

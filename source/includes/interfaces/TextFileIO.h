@@ -101,15 +101,15 @@ void readPropertyValue( FlaggedArrayVariable& fv );
 
 // Reading property status
 
-void readPropertyStatusOfScalar( size_t depth, bool& digit, size_t& position, std::vector<VARIABLE_FLAG>& flags );
+void readPropertyStatusOfScalar( size_t depth, bool& digit, uint32_t& position, std::vector<VARIABLE_FLAG>& flags );
 
-void readPropertyStatusOfVector( size_t depth, bool& digit, size_t& position, std::vector<VARIABLE_FLAG>& flags );
+void readPropertyStatusOfVector( size_t depth, bool& digit, uint32_t& position, std::vector<VARIABLE_FLAG>& flags );
 
-void readPropertyStatusOfTensor( size_t depth, bool& digit, size_t& position, std::vector<VARIABLE_FLAG>& flags );
+void readPropertyStatusOfTensor( size_t depth, bool& digit, uint32_t& position, std::vector<VARIABLE_FLAG>& flags );
 
-void readPropertyStatusOfArray( size_t depth, bool& digit, size_t& position, std::vector<VARIABLE_FLAG>& flags );
+void readPropertyStatusOfArray( size_t depth, bool& digit, uint32_t& position, std::vector<VARIABLE_FLAG>& flags );
 
-void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, size_t& position, std::vector<VARIABLE_FLAG>& flags );
+void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, uint32_t& position, std::vector<VARIABLE_FLAG>& flags );
 
 
 // Printing property values

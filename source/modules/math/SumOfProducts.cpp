@@ -57,14 +57,14 @@ itself from this string.*/
 void SumOfProducts::InitializeFrom( const char* s, map<string,pair<int32_t,double> >& withval,
                                                    map<string,int32_t>&              withoutval )
  {
-    list<string>                                        products, product_terms;
-    list<string>::iterator                              tik, tik1;
-    map<string,int32_t>::const_iterator                   it;
+    list<string>                                       products, product_terms;
+    list<string>::iterator                             tik, tik1;
+    map<string,int32_t>::const_iterator                it;
     map<string,pair<int32_t,double> >::const_iterator  vit;
-    map<int32_t,double>                                    product;
+    map<int32_t,double>                                product;
     char                        rhs[250], temp[100], temp1[50], temp2[50], *sub;
-    int32_t                         idx, idxminus=-500; // large enough to avoid overwrite by independent vars.
-    double                      val;
+    int32_t                     idx, idxminus=-500; // large enough to avoid overwrite by independent vars.
+    double                      val=std::numeric_limits<double>::quiet_NaN();
     strcpy( rhs, s );
     TokenizeString( rhs, "+", products );
 

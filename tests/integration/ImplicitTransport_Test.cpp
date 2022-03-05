@@ -197,10 +197,14 @@ void  ImplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf 
  {
     // 1.  Building the steady-state FE Algorithm "fluid_pressure"
     // -----------------------------------------------------------
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     settings.Set_eps(0.);
-    SAMG_Solver  samg_solver(&settings);
-    PDE_IntegratorExperimental<3U,Region>  fluid_pressure(samg_solver);
+    SAMG_Solver    solver(&settings);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+#endif
+    PDE_IntegratorExperimental<3U,Region>  fluid_pressure( solver );
 
     NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
     NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
@@ -263,10 +267,10 @@ double ImplicitTransport_Test::FluxMultiplier( const Element<3U>* const eptr, si
     // for each sector, record whether the facet normal is inward or outward pointing
     vector<vector<short> > sign_of_facet( eptr->Facets(), vector<short>(eptr->Nodes(),0) );
     for ( auto i{0}; i<eptr->Nodes(); ++i ) {
-         for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(i); ++j ) {
-               size_t facet        = eptr->FV()->FacetSurroundingSector( i, j );
-               size_t inside_node  = eptr->FV()->InsideNode( facet );
-               sign_of_facet[facet][i] = (inside_node==i) ? 1 : -1;
+         for ( auto j=0U; j<eptr->FV()->FacetsPerSector(i); ++j ) {
+               auto s_facet      = eptr->FV()->FacetSurroundingSector( i, j );
+               auto inside_node  = eptr->FV()->InsideNode( s_facet );
+               sign_of_facet[s_facet][i] = (inside_node==i) ? 1 : -1;
             }
       }
  
@@ -377,7 +381,7 @@ void ImplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
               const size_t facet_ip(0U);
               // finding the orientation of the facet
               // inside sector
-              size_t   node = (*it)->FV()->InsideNode(i);
+              auto   node = (*it)->FV()->InsideNode(i);
               double sign = FluxMultiplier( (*it), node, i );
               assert( sign != 0. );
               if ( (*it)->N(node)->AtBoundary() == NOT )

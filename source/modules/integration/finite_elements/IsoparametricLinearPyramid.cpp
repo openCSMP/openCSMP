@@ -773,11 +773,11 @@ IsoparametricLinearPyramid::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
     // compose matrix DN = 3 x 5 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
 
     B = JINV * B;
 
@@ -897,8 +897,8 @@ IsoparametricLinearPyramid::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                        for(uint32_t l=0; l<dim; l++)
+                            rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
                     }
@@ -1279,11 +1279,11 @@ double IsoparametricLinearPyramid::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
 
     B = JINV * B;
 
@@ -1425,11 +1425,11 @@ IsoparametricLinearPyramid::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // compose matrix DN = 3 x 5 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
 
     B = JINV * B;
 

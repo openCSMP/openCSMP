@@ -1080,39 +1080,39 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
      }
   	 
   	 if (under_slit)
-  	 {
-  	  //create new duplicate node (2)
-  	  double new_px(px[(iDim_i)*(j+1)+i+1]), 
-               new_py(py[(iDim_i)*(j+1)+i+1]),
-               new_pz(pz[(iDim_i)*(j+1)+i+1]);
-  	  size_t node_number = px.size();
-  	  px.push_back(new_px);
-  	  py.push_back(new_py);
-  	  pz.push_back(new_pz);
-  	  //set new duplicate node
-      deqElements[iElement][2]= 1+ node_number;
-      //set boundary
-      vset.AddBFlag( node_number, IRREGULAR_OUTSIDE);
-
-  	  if(i > x_dimension-depth_of_slit) // node is NOT at the end of the slit
-  	  {
-        //create new duplicate node (3)
-    	  double new_px = px[(iDim_i)*(j+1)+i]; 
-    	  double new_py = py[(iDim_i)*(j+1)+i]; 
-    	  double new_pz = pz[(iDim_i)*(j+1)+i];
-    	  node_number = px.size();
-    	  px.push_back(new_px);
-    	  py.push_back(new_py);
-    	  pz.push_back(new_pz);
-    	  //set new duplicate node
-        deqElements[iElement][3]= 1+ node_number;
-        
+       {
+        //create new duplicate node (2)
+        double new_px(px[(iDim_i)*(j+1)+i+1]),
+                 new_py(py[(iDim_i)*(j+1)+i+1]),
+                 new_pz(pz[(iDim_i)*(j+1)+i+1]);
+        size_t node_number = px.size();
+        px.push_back(new_px);
+        py.push_back(new_py);
+        pz.push_back(new_pz);
+        //set new duplicate node
+        deqElements[iElement][2]= 1+ node_number;
         //set boundary
-        vset.AddBFlag( node_number, IRREGULAR_OUTSIDE );
-      }
+        vset.AddBFlag( node_number, IRREGULAR_OUTSIDE);
+
+        if(i > x_dimension-depth_of_slit) // node is NOT at the end of the slit
+          {
+            //create new duplicate node (3)
+            double new_px2 = px[(iDim_i)*(j+1)+i];
+            double new_py2 = py[(iDim_i)*(j+1)+i];
+            double new_pz2 = pz[(iDim_i)*(j+1)+i];
+            node_number = px.size();
+            px.push_back(new_px2);
+            py.push_back(new_py2);
+            pz.push_back(new_pz2);
+            //set new duplicate node
+            deqElements[iElement][3]= 1+ node_number;
+            
+            //set boundary
+            vset.AddBFlag( node_number, IRREGULAR_OUTSIDE );
+          }
+       }
       
-  	 }	 
-  	}
+      }
   	
   	//load nodes
   	vset.AddXYZ( px, py, pz );

@@ -85,13 +85,13 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
 
 
 template<uint32_t dim,class CELL>
-void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& P )
+void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& mP )
  {
-    P.Resize(1,nodal_degrees_of_freedom*N.size());
-    size_t k(0);
-    
+    mP.Resize(1,nodal_degrees_of_freedom * N.size());
+
+    int k(0);
     for ( auto i=0; i<N.size(); i++ ) 
-      for ( auto j=0; j<nodal_degrees_of_freedom; j++ ) P(0,k++ ) = N[i];
+      for ( auto j=0; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
 }
 
 

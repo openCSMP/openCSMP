@@ -121,9 +121,9 @@ void LinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
           edge2.Set( org2, dest2 );
           len = edge2.Length();
           // x-derivatives
-          DN(0,0) = -(dest2[0]-org2[0]) / len, DN(0,1) = (dest2[0]-org2[0]) / len;
+          DN(0,0) = -(dest2[0]-org2[0]) / len; DN(0,1) = (dest2[0]-org2[0]) / len;
           // y-derivatives
-          DN(1,0) = -(dest2[1]-org2[1]) / len, DN(1,1) = (dest2[1]-org2[1]) / len;
+          DN(1,0) = -(dest2[1]-org2[1]) / len; DN(1,1) = (dest2[1]-org2[1]) / len;
        }
      // 3-dimensional edge
      else
@@ -133,11 +133,11 @@ void LinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
           edge3.Set( org3, dest3 );
           len = edge3.Length();
           // x-derivatives
-          DN(0,0) = -(dest3[0]-org3[0]) / len, DN(0,1) = (dest3[0]-org3[0]) / len;
+          DN(0,0) = -(dest3[0]-org3[0]) / len; DN(0,1) = (dest3[0]-org3[0]) / len;
           // y-derivatives
-          DN(1,0) = -(dest3[1]-org3[1]) / len, DN(1,1) = (dest3[1]-org3[1]) / len;
+          DN(1,0) = -(dest3[1]-org3[1]) / len; DN(1,1) = (dest3[1]-org3[1]) / len;
           // z-derivatives
-          DN(2,0) = -(dest3[2]-org3[2]) / len, DN(2,1) = (dest3[2]-org3[2]) / len;
+          DN(2,0) = -(dest3[2]-org3[2]) / len; DN(2,1) = (dest3[2]-org3[2]) / len;
        }
 
   } // end dN
@@ -174,9 +174,9 @@ double LinearLineElement::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double>& 
           edge2.Set( org2, dest2 );
           len = edge2.Length();
           // x-derivatives
-          DN(0,0) = -(dest2[0]-org2[0]) / len, DN(0,1) = (dest2[0]-org2[0]) / len;
+          DN(0,0) = -(dest2[0]-org2[0]) / len; DN(0,1) = (dest2[0]-org2[0]) / len;
           // y-derivatives
-          DN(1,0) = -(dest2[1]-org2[1]) / len, DN(1,1) = (dest2[1]-org2[1]) / len;
+          DN(1,0) = -(dest2[1]-org2[1]) / len; DN(1,1) = (dest2[1]-org2[1]) / len;
        }
      // 3-dimensional edge
      else
@@ -186,11 +186,11 @@ double LinearLineElement::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double>& 
           edge3.Set( org3, dest3 );
           len = edge3.Length();
           // x-derivatives
-          DN(0,0) = -(dest3[0]-org3[0]) / len, DN(0,1) = (dest3[0]-org3[0]) / len;
+          DN(0,0) = -(dest3[0]-org3[0]) / len; DN(0,1) = (dest3[0]-org3[0]) / len;
           // y-derivatives
-          DN(1,0) = -(dest3[1]-org3[1]) / len, DN(1,1) = (dest3[1]-org3[1]) / len;
+          DN(1,0) = -(dest3[1]-org3[1]) / len; DN(1,1) = (dest3[1]-org3[1]) / len;
           // z-derivatives
-          DN(1,0) = -(dest3[2]-org3[2]) / len, DN(1,1) = (dest3[2]-org3[2]) / len;
+          DN(1,0) = -(dest3[2]-org3[2]) / len; DN(1,1) = (dest3[2]-org3[2]) / len;
        }
 
      return len;

@@ -142,14 +142,19 @@ void SlopeMechanics_Example::Run()
   model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
   
   // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
+#ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Settings  samg_settings;
-  SAMG_Solver    samg_solver(&samg_settings);
-  PDE_Integrator_UoM<DIM,Region>  hydrostatic_pressure(samg_solver);
+  SAMG_Solver    solver(&samg_settings);
   // minimizing screen output
   samg_settings.Set_iout1( 0 );
   samg_settings.Set_iout2( 0 );
   samg_settings.Set_idmp( -1 );
   samg_settings.SetSolverInstance(2);
+#else
+  CSMP_DEFAULT_LINEAR_SOLVER  solver;
+#endif
+
+  PDE_Integrator_UoM<DIM,Region>  hydrostatic_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
@@ -202,12 +207,17 @@ void SlopeMechanics_Example::Run()
   // -----------------------------------------------------------
   // mechanical properties are placed on the element integration points
   // computes the increase in pore-pressure due to the gravitational loading
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  samg_mechanics_settings;
     samg_mechanics_settings.Set_napproach(2); // sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
     samg_mechanics_settings.SetSolverInstance(2);
                                // which is needed for deformation simulations
-    SAMG_Solver                 samg_solver2(&samg_mechanics_settings);
-    PDE_Integrator<DIM,Region>  deformation(samg_solver2);
+    SAMG_Solver                 solver2(&samg_mechanics_settings);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER  solver2;
+#endif
+    PDE_Integrator<DIM,Region>  deformation(solver2);
+    
     deformation.ScaleEssentialConditions(1.0e15);
 
     // this will also include boundary stresses translated into nodal forces
@@ -327,7 +337,6 @@ void dilatationInducedChangeInPorePressure( Model<DIM>& model )
     const csmp::Index bf_key(model.Database().StorageKey("fluid compressibility"));
  
     Region<DIM>& model_domain(model.Region("Model"));
-    ScalarVariable fluid_compressibility;
 
     // TODO: we need to get the nodal dilatation using the FVM discretisation
     // volume-weighted average of the dilatation of the FV sectors surrounding the node
@@ -343,7 +352,7 @@ void dilatationInducedChangeInPorePressure( Model<DIM>& model )
              // needed: sector volumes and elemental dilatation values
              Element<DIM>*  eptr((*it)->Parent(i));
              double sector_dilatation = eptr->Read( dil_key );
-             size_t esector = (*it)->ParentNodeNumber(i);
+             auto   esector = (*it)->ParentNodeNumber(i);
              double sector_volume  = eptr->SectorVolume(esector);
              fv_dilatation += sector_dilatation * sector_volume;
              fv_volume     += sector_volume;

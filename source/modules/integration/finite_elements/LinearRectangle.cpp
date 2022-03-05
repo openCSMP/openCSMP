@@ -267,9 +267,9 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 			Z2 = XY(3, 2) - XY(0, 2);
 		// Second : cross product (normal to quad)
 		vc.resize(3);
-		vc[0] = Z2*Y1 - Y2*Z1,
-		vc[1] = Z1*X2 - X1*Z2,
-		vc[2] = Y2*X1 - X2*Y1 ;
+    vc[0] = Z2*Y1 - Y2*Z1;
+    vc[1] = Z1*X2 - X1*Z2;
+		vc[2] = Y2*X1 - X2*Y1;
 		// Third : normalization to unit length
 		double length = sqrt(vc[0] * vc[0] + vc[1] * vc[1] + vc[2] * vc[2]);
 		vc[0] /= length;

@@ -124,11 +124,11 @@ class VTK_Interface {
    bool toSubFolder_;                                        ///< output to subfolder
    std::string problemTitle_;                                ///< title that goes into xml header
    std::string subFolderName_;                               ///< name of subfolder
-   std::deque<VTK_TYPE>                     geometric_primitives_VTK;
-   std::map<size_t,std::vector<size_t> >    plist;
-   std::deque<std::vector<size_t> >         transformed_plist;
-   std::map<size_t,PointDescriptor>         node_mapping;
-   std::map<size_t,std::vector<double> >  pxyz_data;
+   std::deque<VTK_TYPE>                     geometric_primitives_VTK_;
+   std::map<size_t,std::vector<size_t> >    plist_;
+   std::deque<std::vector<size_t> >         transformed_plist_;
+   std::map<size_t,PointDescriptor>         node_mapping_;
+   std::map<size_t,std::vector<double> >    pxyz_data_;
    PLACEMENT                                last_visualized_;
    bool                                     node_output_of_element_data_;
 

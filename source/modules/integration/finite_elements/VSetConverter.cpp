@@ -354,9 +354,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
     if ( debug ) 
       {
          cout <<"\nListing old and new nodes and their coordinates:";
-         for ( auto ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ ) {
-              cout <<"\nx,y,z,id: "<< (*ndit).first.X() <<", "<< (*ndit).first.Y() <<", "<< (*ndit).first.Z();
-              cout  <<": "<< (*ndit).second;
+         for ( auto ndit2=nodeIDs.begin(); ndit2!=nodeIDs.end(); ndit2++ ) {
+              cout <<"\nx,y,z,id: "<< (*ndit2).first.X() <<", "<< (*ndit2).first.Y() <<", "<< (*ndit2).first.Z();
+              cout  <<": "<< (*ndit2).second;
            }
          cout << endl << endl;
       }
@@ -1799,15 +1799,14 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
     deque<double>  px( nodeIDs.size() ),
-                      py( nodeIDs.size() ),  // new node-point coordinates
-                      pz( nodeIDs.size() );
-    map<mjl::Point3D,size_t>::const_iterator  nit;
+                   py( nodeIDs.size() ),  // new node-point coordinates
+                   pz( nodeIDs.size() );
 
-    for ( auto nit=nodeIDs.begin(); nit!=nodeIDs.end(); nit++ )
+    for ( auto n : nodeIDs )
       {
-         px[ (*nit).second ] = (*nit).first.x_;
-         py[ (*nit).second ] = (*nit).first.y_;
-         pz[ (*nit).second ] = (*nit).first.z_;
+         px[ n.second ] = n.first.x_;
+         py[ n.second ] = n.first.y_;
+         pz[ n.second ] = n.first.z_;
       }  
     vset.AddXYZ( px, py, pz );
     

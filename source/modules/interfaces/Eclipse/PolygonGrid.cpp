@@ -29,7 +29,7 @@ GridNode& GridNode::operator=( const GridNode& gn )
 
 bool GridNode::operator==( const GridNode& gn )
 {
-    if( *this == gn ) return true;
+    if( this->Point<3>::operator==(gn) == true ) return true;
     return false;
 }
 

@@ -317,8 +317,8 @@ uint32_t  Node<dim>::ReassignNeighbors()
     for ( auto i{0}; i < n_parents; ++i )
       if ( Parent(i) != nullptr &&
            Parent(i)->IsEquidimensional() ) {
-           for ( auto& i :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
-             current_nbors.insert( i );
+           for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
+             current_nbors.insert( j );
         }
     
     neighbor_node_pointers_.assign( current_nbors.begin(), current_nbors.end() );
@@ -467,8 +467,8 @@ void  Node<dim>::EraseParents()
 
 
 template<uint32_t dim>
-size_t   Node<dim>::Parents() const
-  { return parent_element_pointers_.size(); }
+uint32_t   Node<dim>::Parents() const
+  { return static_cast<uint32_t>(parent_element_pointers_.size()); }
 
 
 
@@ -672,8 +672,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     // searching for shared parent elements in the following nodes
     while ( nit != nodesEnd ) {
          set<Element<dim>*> temp;
-         const auto n_parents{(*nit)->Parents()};
-         for ( auto i{0}; i<n_parents; ++i ) {
+         const auto parents{(*nit)->Parents()};
+         for ( auto i{0}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
               if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
               if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;

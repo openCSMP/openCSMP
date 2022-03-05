@@ -54,8 +54,6 @@ void TPINCFVT3D_VVCase::run()
     enum{DIM=3};
     //const
     const  double tolSat(0.05), satOil(1.), tolFront(.1);
-    //for each test
-    double time(0.), mobilityRatio(0.), analyticFront(0.);
 
     //test container
     vector<TPINCFVT3D_TestData> tests;

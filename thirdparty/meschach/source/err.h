@@ -56,7 +56,7 @@ extern  int err_list_free();		/* freeing a list of errors */
 
 #else  /* ANSI_C */
 
-static void	float_error(int	num);
+//static void	float_error(int	num);
 void	catch_FPE();
 
 int ev_err(const char*,int,int,const char*,int);  /* main error handler, SKM: introduced 'const' as fix 20/7/19 */

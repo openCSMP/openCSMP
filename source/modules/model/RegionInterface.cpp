@@ -425,7 +425,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   // 2. writing the unique regions
   // -----------------------------
   {
-    BinaryFileSectionWrite hdr( fp, "UNIQREGN" );
+    BinaryFileSectionWrite uhdr( fp, "UNIQREGN" );
 
     int64_t  records = this->UniqueRegions();
     
@@ -448,7 +448,7 @@ void RegionInterface<dim, REGION_COMPLEX>::OutputRegionsToBinary( const char* fi
   // -----------------------------
   {
     cout << "\n\n\tNon-unique regions overlapping unique ones and potentially each other: ";
-    BinaryFileSectionWrite hdr( fp, "NONUREGN" );
+    BinaryFileSectionWrite nhdr( fp, "NONUREGN" );
 
     int64_t  records = this->Regions() - this->UniqueRegions();
 
@@ -532,7 +532,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
   // -----------------------------
   std::cout << "\n\tunique regions: ";
     {
-      BinaryFileSectionRead hdr( fp, "UNIQREGN" );
+      BinaryFileSectionRead uhdr( fp, "UNIQREGN" );
       // getting number of unique region records from file
       int64_t   records( 0 );  // region records
       fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
@@ -567,7 +567,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
   // -----------------------------
   std::cout << "\n\tnon-unique regions: ";
   {
-    BinaryFileSectionRead hdr( fp, "NONUREGN" );
+    BinaryFileSectionRead nhdr( fp, "NONUREGN" );
     // getting number of non-unique region records from file
     int64_t   records( 0 );
     fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
@@ -766,7 +766,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
      Uses the region model, to form a region from its elements with the corresponding ID numbers.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<uint32_t>& elmt_ids, bool unique/*=false */ )
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionName, vector<size_t>& elmt_ids, bool unique/*=false */ )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1140,7 +1140,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
       if ( it.second )
         {
           // making a list of the element numbers
-          std::vector<uint32_t>  element_ids;
+          std::vector<size_t>  element_ids;
           element_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
           copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
                 topo.CellsOfDomainEnd( (*lit).c_str() ),
@@ -1449,10 +1449,10 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
       // accumulating the subregion
       std::vector<Element<dim>*> subgroup;
       subgroup.reserve( subgroupSize );
-      for ( auto it = cmCBegin; it != cmCEnd; ++it ) {
-        subgroup.push_back( it->second );
-      }
-      (*it.first).second.Accumulate( subgroup.begin(), subgroup.end() );
+      for ( auto rit = cmCBegin; rit != cmCEnd; ++rit )
+        subgroup.push_back( rit->second );
+
+        (*it.first).second.Accumulate( subgroup.begin(), subgroup.end() );
 
       // copy all values of region properties from parent to child region
       (*it.first).second.LVS( gref.LVS() );
@@ -2518,10 +2518,10 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 
   // 1. searching for shared faces between the regions
   for ( size_t eid = subdomain_a.InteriorElements(); eid<subdomain_a.Elements(); ++eid )
-    for ( size_t face = 0U; face<subdomain_a.PerimeterFaces( eid ); ++face ) {
+    for ( auto face = 0U; face<subdomain_a.PerimeterFaces( eid ); ++face ) {
       // checking whether the neighbor of the perimeter face is in region b
       // ------------------------------------------------------------------
-      const size_t pface = subdomain_a.PerimeterFace( eid, face );
+      const auto   pface = subdomain_a.PerimeterFace( eid, face );
       Element<dim>* nptr = subdomain_a.E( eid )->Neighbor( pface );
       // avoiding searches for neighbors that do not exist because one is at the model boundary
       if ( nptr != nullptr and subdomain_b.IsPerimeterElement( nptr ) ) {

@@ -1,17 +1,16 @@
-#ifndef LINEAR_SOLVER_H
-#define LINEAR_SOLVER_H
+#ifndef CSMP_LINEAR_SOLVER_H
+#define CSMP_LINEAR_SOLVER_H
 
 /*
-=======================
+========================
 Linear Solvers Interface
-=======================
+========================
 */
 // define CSMP_DEFAULT_LINEAR_SOLVER by the priority order
-// TODO: relieve this from the pre-processor to get better control on what happens
 
-#define CSMP_DEFAULT_LINEAR_SOLVER csmp::Solver
+#define CSMP_DEFAULT_LINEAR_SOLVER csmp::LUdcmp_Solver
 #define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::SolverSettings
-#include "Solver.h"
+#include "LUdcmp_Solver.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #undef CSMP_DEFAULT_LINEAR_SOLVER

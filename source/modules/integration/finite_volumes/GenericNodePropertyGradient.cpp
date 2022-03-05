@@ -362,43 +362,40 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 template<uint32_t dim>
 void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary( vector<vector<vector<VectorVariable<dim> > > >& d_facet_FVBarycenter )
 {
- // local node id's:
- uint32_t inside_node_, outside_node_;
- std::vector<double>  facet_bc(dim);  // global coordinates of facet barycenter
- VectorVariable<dim>  mass_center;
-
- // loop over elements
- // ------------------
  for ( auto eit=gref_.ElementsBegin();
-       eit!=gref_.ElementsEnd(); eit++ ){
+       eit!=gref_.ElementsEnd(); eit++ )
+   {
         // loop over facets
         // -------------------
         for( auto fi=0U; fi < (*eit)->FV()->Facets(); fi++ ){
 
               // get facet barycenter in global coordinates:
+              vector<double>  facet_bc(dim);  // global coordinates of facet barycenter
               ConvertToGlobalCoordinates( *(*eit), (*eit)->FV()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
 
               // get local node id's
+              uint32_t inside_node_, outside_node_;
               (*eit)->FV()->FacetEdgeNodes( fi, inside_node_, outside_node_ );
 
 
               // get mass center for FV of inside_node_:
-              GenericCenterOfMass(  (*eit)->N(inside_node_)->Idx(), mass_center );
+              VectorVariable<dim> mass_ctr;
+              GenericCenterOfMass(  (*eit)->N(inside_node_)->Idx(), mass_ctr );
 
               VectorVariable<dim> face_dist_inside_node( PLAIN,  0.0);
               for(auto k=0;k<dim;k++)
-                  face_dist_inside_node.Component(k,facet_bc[k] - mass_center[k]);
+                  face_dist_inside_node.Component(k,facet_bc[k] - mass_ctr[k] );
 
               d_facet_FVBarycenter[ (*eit)->Idx() ][ fi ][ inside_node_ ] =face_dist_inside_node;
 
 
               // get mass center for FV of outside_node_:
-              GenericCenterOfMass(  (*eit)->N(outside_node_)->Idx(), mass_center );
+              GenericCenterOfMass(  (*eit)->N(outside_node_)->Idx(), mass_ctr );
 
               // calculate distance vector:
               VectorVariable<dim> face_dist_outside_node( PLAIN,  0.0);
               for(auto k=0;k<dim;k++)
-                  face_dist_outside_node.Component(k,facet_bc[k] - mass_center[k]);
+                  face_dist_outside_node.Component(k,facet_bc[k] - mass_ctr[k] );
 
               d_facet_FVBarycenter[ (*eit)->Idx() ][ fi ][ outside_node_ ] = face_dist_outside_node;
 
@@ -474,11 +471,10 @@ void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>&
 
 Returns the calculated centers of mass of generic finite volumes in 2d.
 
-@param size_t_global_id:       global_node_id: the node id of the corresponding FV
+@param global_node_id  the node id of the corresponding FV
 
-@param VectorVariable:            the Vector onto which the xyz-coordinates of the mass center
+@param mass_center_out        the Vector onto which the xyz-coordinates of the mass center
                          of the FV that belongs to the the node are written
-
 */
 template<uint32_t dim>
 void GenericNodePropertyGradient<dim>::GenericCenterOfMass( size_t global_node_id, VectorVariable<dim>& mass_center_out ) const
@@ -490,9 +486,9 @@ template<uint32_t dim>
 void GenericNodePropertyGradient<dim>::GenericDistanceFacetFVBarycenter( size_t global_el_id,
                                                                          uint32_t local_facet_id,
                                                                          uint32_t local_node_id,
-                                                                         VectorVariable<dim>& distance ) const
+                                                                         VectorVariable<dim>& fdistance ) const
 {
- distance =   distance_facet_FVBarycenter_[ global_el_id ][ local_facet_id ][ local_node_id ] ;
+   fdistance =   distance_facet_FVBarycenter_[ global_el_id ][ local_facet_id ][ local_node_id ] ;
 }
 
 

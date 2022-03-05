@@ -229,7 +229,6 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
          
            double total_flux_physical = 0.0;
            double total_flux_parametric = 0.0;
-           bool touches_boundary = false;
 
           // 2. facet projections
           // --------------------

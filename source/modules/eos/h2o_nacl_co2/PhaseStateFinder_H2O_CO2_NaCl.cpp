@@ -172,11 +172,11 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
         X_h2o_                      = xh2o*molar_mass_h2o/molar_mass_aq;
         X_co2_                      = xco2*molar_mass_co2/molar_mass_aq;
         X_nacl_                     = xnacl*molar_mass_nacl/molar_mass_aq;
-        const double mnacl        = xnacl*55.508/xh2o;
-        rho_aq_                     = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl ),xco2);
-        mu_aq_                      = eos.mu_AqueousPhase( p, t, mnacl );
-        beta_aq_                    = eos.C_AqueousPhase(p,t,mnacl);
-        D_Co2_                      = eos.D_Co2( p, t, mnacl );
+        const double mnacl2         = xnacl*55.508/xh2o;
+        rho_aq_                     = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl2 ),xco2);
+        mu_aq_                      = eos.mu_AqueousPhase( p, t, mnacl2 );
+        beta_aq_                    = eos.C_AqueousPhase(p,t,mnacl2);
+        D_Co2_                      = eos.D_Co2( p, t, mnacl2 );
         massnorm                    = molenorm*molar_mass_aq + weight_phase_c*molar_mass_nacl;
         massAqueousPhase_           = molenorm*molar_mass_aq/massnorm*total_mass;
         massCarbonicPhase_          = 0.0;
@@ -210,11 +210,11 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
         massAqueousPhase_  = weight_phase_a*molar_mass_aq/massnorm*total_mass;
         massCarbonicPhase_ = weight_phase_b*molar_mass_carb/massnorm*total_mass;
         massHalite_        = total_mass - massAqueousPhase_ - massCarbonicPhase_;
-        const double mnacl = corner_xnacl[a]*55.508/corner_xh2o[a]; // get molality in aqueous phase
-        rho_aq_            = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl ),corner_xco2[a]);
-        mu_aq_             = eos.mu_AqueousPhase( p, t, mnacl );
-        beta_aq_           = eos.C_AqueousPhase(p,t,mnacl);
-        D_Co2_             = eos.D_Co2( p, t, mnacl );
+        const double mnacl2 = corner_xnacl[a]*55.508/corner_xh2o[a]; // get molality in aqueous phase
+        rho_aq_            = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl2 ),corner_xco2[a]);
+        mu_aq_             = eos.mu_AqueousPhase( p, t, mnacl2 );
+        beta_aq_           = eos.C_AqueousPhase(p,t,mnacl2 );
+        D_Co2_             = eos.D_Co2( p, t, mnacl2 );
         rho_carb_          = eos.Rho_CarbonicPhase(p,t);
         mu_carb_           = eos.mu_CarbonicPhase(p,t);
         beta_carb_         = eos.C_CarbonicPhase(p,t);
@@ -276,14 +276,14 @@ SYSTEM_STATE PhaseStateFinder_H2O_CO2_NaCl::Equilibrate()
         double xh2o        = bulk_xh2o;
         double xco2        = bulk_xco2;
         double xnacl       = bulk_xnacl;
-        const double mnacl = xnacl*55.508/xh2o;
-        rho_aq_            = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl ),xco2);
-        mu_aq_             = eos.mu_AqueousPhase( p, t, mnacl );
-        beta_aq_           = eos.C_AqueousPhase(p,t,mnacl);
+        const double mnacl2 = xnacl*55.508/xh2o;
+        rho_aq_            = eos.densityAqueousPhase(eos.volumePartialMolarCo2(t),eos.densityBrine( p, t, mnacl2 ),xco2);
+        mu_aq_             = eos.mu_AqueousPhase( p, t, mnacl2 );
+        beta_aq_           = eos.C_AqueousPhase(p,t,mnacl2 );
         X_h2o_             = bulk_massfraction_h2o;
         X_co2_             = bulk_massfraction_co2;
         X_nacl_            = bulk_massfraction_nacl;
-        D_Co2_     = eos.D_Co2( p, t, mnacl );
+        D_Co2_     = eos.D_Co2( p, t, mnacl2 );
         Y_h2o_     = std::numeric_limits<double>::quiet_NaN();
         Y_co2_     = std::numeric_limits<double>::quiet_NaN();
         rho_carb_  = std::numeric_limits<double>::quiet_NaN();
@@ -362,7 +362,7 @@ void PhaseStateFinder_H2O_CO2_NaCl::EvaluateSaltyAqCarb()
     massCarbonicPhase_ = weightcarb*molar_mass_carb/massnorm*total_mass;
     massAqueousPhase_  = weightaq*molar_mass_aq/massnorm*total_mass;
     massHalite_        = 0.0;
-    const double mnacl = corner_xnacl[0]*55.508/corner_xh2o[0];
+    //const double mnacl = corner_xnacl[0]*55.508/corner_xh2o[0];
     X_h2o_             = corner_xh2o[0]*molar_mass_h2o/molar_mass_aq;
     Y_h2o_             = corner_xh2o[1]*molar_mass_h2o/molar_mass_carb;
     X_co2_             = corner_xco2[0]*molar_mass_co2/molar_mass_aq;
@@ -399,10 +399,10 @@ void PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionTriangularCornersToCartes
 }
 
 
-void PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionToCartesian(double& x, double& y, double xh2o, double xco2, double xnacl)
+void PhaseStateFinder_H2O_CO2_NaCl::ConvertMolefractionToCartesian( double& param_x, double& param_y, double xh2o, double xco2, double xnacl)
 {
-    x = xh2o*h2o_x + xco2*co2_x + xnacl*nacl_x;
-    y = xh2o*h2o_y + xco2*co2_y + xnacl*nacl_y;
+    param_x = xh2o*h2o_x + xco2*co2_x + xnacl*nacl_x;
+    param_y = xh2o*h2o_y + xco2*co2_y + xnacl*nacl_y;
 }
 
 void PhaseStateFinder_H2O_CO2_NaCl::InputComposition()
@@ -447,13 +447,13 @@ bool PhaseStateFinder_H2O_CO2_NaCl::EvaluateFractionsInTriangularRegion()
 
 
 
-void PhaseStateFinder_H2O_CO2_NaCl::SetCornerPointsTriangularRegions( SYSTEM_STATE mystate ) // tested 1.1.19, TD
+void PhaseStateFinder_H2O_CO2_NaCl::SetCornerPointsTriangularRegions( SYSTEM_STATE state ) // tested 1.1.19, TD
 {
     xsat = liquidus.MoleFractionNaCl();
     msat = XNaCl2Molal(xsat);
     double mco2,yh2o;
 
-    switch(mystate)
+    switch(state)
     {
     case SYSTEM_STATE::aq_salt :
         corner_xh2o[0]=1.0-xsat; corner_xco2[0]=0.0; corner_xnacl[0]=xsat;
@@ -522,9 +522,9 @@ void PhaseStateFinder_H2O_CO2_NaCl::SetCornerPointsTriangularRegions( SYSTEM_STA
 
 
 
-void PhaseStateFinder_H2O_CO2_NaCl::DisplayFractions( SYSTEM_STATE mystate )
+void PhaseStateFinder_H2O_CO2_NaCl::DisplayFractions( SYSTEM_STATE state )
 {
-    SetCornerPointsTriangularRegions(mystate);
+    SetCornerPointsTriangularRegions(state);
     double xh2o,xco2,xnacl;
     cout << "xh2o : "; cin >> xh2o;
     cout << "xco2 : "; cin >> xco2;

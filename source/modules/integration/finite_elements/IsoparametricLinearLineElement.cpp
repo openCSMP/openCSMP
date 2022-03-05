@@ -946,7 +946,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
 
     // 1D
     if ( dim == 1U ) {
-         for( auto i{0}; i<npe; i++ )
+         for( i=0; i<npe; i++ )
            xyz[0] += XY(i,0) * NRST[i];
          return;
       }
@@ -954,7 +954,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
     // 2D
     if ( dim == 2U ) {
          xyz[1]=0.;
-         for( auto i{0}; i<npe; i++ ) {
+         for( i=0; i<npe; i++ ) {
               xyz[0] += XY(i,0) * NRST[i];
               xyz[1] += XY(i,1) * NRST[i];
            }
@@ -963,7 +963,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
 
     // 3D case
     xyz[1]=xyz[2]=0.;
-    for( auto i{0}; i<npe; i++ ) {
+    for( i=0; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];

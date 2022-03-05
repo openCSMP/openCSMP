@@ -2719,7 +2719,7 @@ void EclipseModelSettings
 
 
 /// provide continous stream of number tokens
-char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
+static char* const popToken( std::ifstream& ifs, char* text_line, size_t line_length )
 {
   csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
 
@@ -3163,8 +3163,10 @@ void addWellPath( size_t NX, size_t NY, size_t NZ,
   well_path.emplace( well_name, wpath );
 }
 
+
+
 /// add well path with explicitly specified faces
-void addWellPath( const std::string& well_name,
+static void addWellPath( const std::string& well_name,
                   const std::vector<uint32_t>& cell_ids,
                   const std::vector<std::pair<size_t, size_t> >& face_ids,
                   std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path )
@@ -3188,8 +3190,10 @@ void addWellPath( const std::string& well_name,
   }
 }
 
+
+
 /// add well path with explicitly specified faces ( same for all cells )
-void addWellPath( const std::string& well_name,
+static void addWellPath( const std::string& well_name,
                   const std::vector<uint32_t>& cell_ids,
                   std::pair<size_t, size_t> face_id,
                   std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path )
@@ -3213,8 +3217,10 @@ void addWellPath( const std::string& well_name,
   }
 }
 
+
+
 /// add well path with explicitly specified faces ( for single cell )
-void addWellPath( const std::string& well_name,
+static void addWellPath( const std::string& well_name,
                   size_t cell_id,
                   std::pair<size_t, size_t> face_id,
                   std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path )

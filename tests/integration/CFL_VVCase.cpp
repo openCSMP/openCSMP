@@ -44,8 +44,6 @@ void CFL_TestCase::run()
     enum{DIM=3};
     //const
     const  double satOil(1.), tolCFL(.1);
-    //for each test
-    double time(0.), CFLmultiplier(1.), velX(0.), testCFL(0.), phi(0.);
 
     //test container
     vector<CFL_TestData> tests;

@@ -503,7 +503,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
 {
     if( vset.Vertices() > 0 )
     {
-        const size_t  n_vertices( vset.Vertices() );
+        size_t  n_vertices( vset.Vertices() );
 
         // collect the coordinates of  nodes
         std::set<Point<dim> > nodes;
@@ -534,8 +534,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             // add splitnodes to the original nodes
             nodes.insert( splitnodes.begin(), splitnodes.end() );
 
-            const size_t n_vertices( nodes.size() + splitnodes.size() );
-            const size_t n_elements( nodes.size() - 1U );
+            n_vertices        = nodes.size() + splitnodes.size();
+            size_t n_elements = nodes.size() - 1U;
 
             //1.0 VSet - refitting VSet
             vset.Resize( IsoparametricLinearLineElement().Nodes(),

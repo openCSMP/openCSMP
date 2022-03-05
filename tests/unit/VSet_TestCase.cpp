@@ -344,9 +344,9 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
         for ( auto i{0}; i<(*it).size(); ++i )
           if ( (*it) != (*itb) ) {
                cerr <<"\n\t"<< elmt <<":";
-               for ( auto i : (*itb) ) cerr <<" "<< i;
+               for ( auto j : (*itb) ) cerr <<" "<< j;
                cerr <<" vs. ";
-               for ( auto i : (*it) ) cerr <<" "<< i;
+               for ( auto j : (*it) ) cerr <<" "<< j;
                vec_mismatches++;
             }
         elmt++;
@@ -386,9 +386,9 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
         for ( auto i{0}; i<(*it).size(); ++i )
           if ( (*it)[i] >= 0 && (*it)[i] != (*itb)[i] ) {
                cerr <<"\n\t"<< elmt <<":";
-               for ( auto i : (*itb) ) cerr <<" "<< i;
+               for ( auto j : (*itb) ) cerr <<" "<< j;
                cerr <<" vs. ";
-               for ( auto i : (*it) ) cerr <<" "<< i;
+               for ( auto j : (*it) ) cerr <<" "<< j;
                vec_mismatches++;
             }
         elmt++;

@@ -78,7 +78,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // loop over all elements and check if all ahve the same volume. if yes, it is most likely that grid is regular
     auto eit = super_group.ElementsBegin();
     vol = (*eit)->Volume();
-    for ( auto eit = super_group.ElementsBegin(); eit !=  super_group.ElementsEnd(); eit++ ) {
+    for ( eit = super_group.ElementsBegin(); eit != super_group.ElementsEnd(); eit++ ) {
         if ( (*eit)->Volume() != vol ) {
             throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
                      "Element volume varies, mesh appears to be not regular, exiting function, nothing is done" );
@@ -102,7 +102,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         return false;
       }
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid: \nEchoing File Header: " << endl << endl;
-    for ( size_t i=0; i<6; i++ ) {
+    for ( int i=0; i<6; i++ ) {
         getline( ifs, text_line );
         cout << text_line << endl;
         if ( i == 2 ) {
@@ -197,10 +197,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       
     Region<dim>&  super_group(sg.Region("Model"));
     
-    typename std::vector<Element<dim>*>::iterator  eit;
     typename std::vector<double>  xvec, yvec, kvec;
     mjl::Point xy;                                    
-    double dx, dy, x, y, k, xmax(0.), ymax(0.);
+    double dx=std::numeric_limits<double>::quiet_NaN(), dy=std::numeric_limits<double>::quiet_NaN(), x, y, k, xmax(0.), ymax(0.);
     size_t index(0);
     char    file[200];
     std::string   text_line;

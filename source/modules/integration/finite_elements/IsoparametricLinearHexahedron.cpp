@@ -102,10 +102,10 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( uint32_t integrati
         double oneDivSqrtThree=1./sqrt(3.0);
         double sqrtTwoThirds=sqrt(2.0/3.0);
 
-        IP(0,0) = 0.0,              IP(0,1) = -sqrtTwoThirds, 	IP(0,2) = -oneDivSqrtThree;
-        IP(1,0) = 0.0,              IP(1,1) = sqrtTwoThirds,	IP(1,2) = -oneDivSqrtThree;
-        IP(2,0) = -sqrtTwoThirds,   IP(2,1) = 0.0, 				IP(2,2) =  oneDivSqrtThree;
-        IP(3,0) =  sqrtTwoThirds,   IP(3,1) = 0.0, 				IP(3,2) =  oneDivSqrtThree;
+        IP(0,0) = 0.0;              IP(0,1) = -sqrtTwoThirds; 	IP(0,2) = -oneDivSqrtThree;
+        IP(1,0) = 0.0;              IP(1,1) = sqrtTwoThirds;	IP(1,2) = -oneDivSqrtThree;
+        IP(2,0) = -sqrtTwoThirds;   IP(2,1) = 0.0; 				IP(2,2) =  oneDivSqrtThree;
+        IP(3,0) =  sqrtTwoThirds;   IP(3,1) = 0.0; 				IP(3,2) =  oneDivSqrtThree;
     }
     else if( integrationPoints == 8 )
     {
@@ -115,14 +115,14 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( uint32_t integrati
 
         const double a1 = 0.577350269189626;
 
-        IP(0,0) =-a1,	IP(0,1) =-a1, 	IP(0,2) =-a1;
-        IP(1,0) = a1,	IP(1,1) =-a1, 	IP(1,2) =-a1;
-        IP(2,0) = a1,	IP(2,1) = a1, 	IP(2,2) =-a1;
-        IP(3,0) =-a1,	IP(3,1) = a1, 	IP(3,2) =-a1;
-        IP(4,0) =-a1,	IP(4,1) =-a1, 	IP(4,2) = a1;
-        IP(5,0) = a1,	IP(5,1) =-a1, 	IP(5,2) = a1;
-        IP(6,0) = a1,	IP(6,1) = a1, 	IP(6,2) = a1;
-        IP(7,0) =-a1,	IP(7,1) = a1, 	IP(7,2) = a1;
+        IP(0,0) =-a1;	IP(0,1) =-a1;	IP(0,2) =-a1;
+        IP(1,0) = a1;	IP(1,1) =-a1;	IP(1,2) =-a1;
+        IP(2,0) = a1;	IP(2,1) = a1;	IP(2,2) =-a1;
+        IP(3,0) =-a1;	IP(3,1) = a1;	IP(3,2) =-a1;
+        IP(4,0) =-a1;	IP(4,1) =-a1;	IP(4,2) = a1;
+        IP(5,0) = a1;	IP(5,1) =-a1;	IP(5,2) = a1;
+        IP(6,0) = a1;	IP(6,1) = a1;	IP(6,2) = a1;
+        IP(7,0) =-a1;	IP(7,1) = a1;	IP(7,2) = a1;
     }
     else
     {
@@ -539,13 +539,13 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
         isoLinQuad.IntegrationPointsFromParToPhys(IPPHYSQ);
         const auto numberIPofQuad=4;
         rhinos<<"# Face "<<i+1<<", area="<<element1.Volume()<<endl;
-            for(auto i=0;i<numberIPofQuad;i++)
+            for(auto n=0;n<numberIPofQuad;n++)
             {
             rhinos<<"point (";
             for(auto k=0;k<dim;k++)
-            if(k!=dim-1) rhinos<<IPPHYSQ(i,k)<<",";
+            if(k!=dim-1) rhinos<<IPPHYSQ(n,k)<<",";
                         else
-                         rhinos<<IPPHYSQ(i,k)<<") ";
+                         rhinos<<IPPHYSQ(n,k)<<") ";
             }
            rhinos<<endl;
       }
@@ -910,14 +910,14 @@ IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -1076,8 +1076,8 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(auto i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                        for(auto l=0; l<dim; l++)
+                            rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
                     }
@@ -1496,14 +1496,14 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, ui
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -1633,14 +1633,14 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 

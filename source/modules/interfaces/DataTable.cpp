@@ -194,8 +194,8 @@ DataTable  DataTable::ExtractSubTable( const vector<int>& cols, const vector<int
     // table data
     row = 0;
     for ( auto i{0}; i<rows.size(); ++i ) {
-         for ( size_t j{0}, col{0}; j<cols.size(); ++j )
-           table[row][col++] = table_[ rows[i] ][ cols[j] ];
+         for ( auto j{0}, k{0}; j<cols.size(); ++j )
+           table[row][k++] = table_[ rows[i] ][ cols[j] ];
          row++;
       }
         

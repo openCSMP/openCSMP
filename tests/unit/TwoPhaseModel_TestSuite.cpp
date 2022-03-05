@@ -70,14 +70,14 @@ void TwoPhaseModel_TestSuite::run()
 
   free_ = false;
 
-  const uint32_t  N_ELEMENTS(100);
+  const size_t N_ELEMENTS(100);
   const double length(1.);
 
   // creating 1D TestModel with a matrix and fracture region
 
   fracture_rock_model_ = new Model1D<1U>( "FractureRockModel1D", "CSMP-2phase-variables.txt", length, N_ELEMENTS );
 
-  vector<uint32_t>   elms;
+  vector<size_t>   elms;
   elms.reserve( N_ELEMENTS );
   for ( uint32_t i = 0; i < 40; ++i )
     elms.push_back(i);

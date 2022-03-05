@@ -149,7 +149,7 @@ struct ExplicitStencilProcessor {
     void AccumulateExplicitTwoPhaseSolutionAtBoundary(const FV_Parameter& param,
                                               const Element<dim>& e,
                                               TwoPhaseModel<dim>& relperm,
-                                              size_t pnid,
+                                              uint32_t pnid,
                                               double& flux,
                                               bool with_gravity_forces,
                                               bool with_capillary_spreading);

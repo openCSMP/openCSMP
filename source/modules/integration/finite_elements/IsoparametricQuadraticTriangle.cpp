@@ -66,9 +66,9 @@ IsoparametricQuadraticTriangle::IsoparametricQuadraticTriangle( uint32_t dimensi
    // see also discussion in Smith & Griffiths 98, p. 71, Fig. 3.9, but they have a clockwise
    // node numbering
    // (fourth integration point is only used if the Gauss Radau rule is switched on)
-   rr[0] = 0.5,   rr[1] = 0.5,   rr[2] = 0.0;
-   ss[0] = 0.0,   ss[1] = 0.5,   ss[2] = 0.5;
-   W[0]  = 1./6., W[1]  = 1./6., W[2]  = 1./6.;
+   rr[0] = 0.5;   rr[1] = 0.5;   rr[2] = 0.0;
+   ss[0] = 0.0;   ss[1] = 0.5;   ss[2] = 0.5;
+   W[0]  = 1./6.; W[1]  = 1./6.; W[2]  = 1./6.;
 
 
    // initializing local node coordinates
@@ -90,12 +90,12 @@ IsoparametricQuadraticTriangle::IsoparametricQuadraticTriangle( uint32_t dimensi
    // intializing fixed size matrix with the interpolation function derivatives
    // at each node, see for instance Akin, p. 113
    // verified with Mathematica
-   DN(0,0) = -3.0, DN(1,0) = -3.0; // w.r.t. x
-   DN(0,1) =  3.0, DN(1,1) =  0.0;
-   DN(0,2) =  0.0, DN(1,2) =  3.0;
-   DN(0,3) =  0.0, DN(1,3) = -2.0;
-   DN(0,4) =  2.0, DN(1,4) =  2.0;
-   DN(0,5) = -2.0, DN(1,5) =  0.0;
+   DN(0,0) = -3.0; DN(1,0) = -3.0; // w.r.t. x
+   DN(0,1) =  3.0; DN(1,1) =  0.0;
+   DN(0,2) =  0.0; DN(1,2) =  3.0;
+   DN(0,3) =  0.0; DN(1,3) = -2.0;
+   DN(0,4) =  2.0; DN(1,4) =  2.0;
+   DN(0,5) = -2.0; DN(1,5) =  0.0;
 
    UsesLocalCoordinates(true);
    Isoparametric(true);
@@ -759,13 +759,13 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 @return The interpolation-function derivative matrix is returned into the
 second method argument.
 */
-double IsoparametricQuadraticTriangle::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double>& xyz  )
+double IsoparametricQuadraticTriangle::dN_At( DenseMatrix<DM_MIN>& mDN, const vector<double>& xyz  )
  {
     if ( dim == 3 )
       throw csmp::Exception( FATAL_ERROR, "IsoparametricQuadraticTriangle::dN",
                       "Function can only be used if dim = 2");
 
-    DN.Resize(dim,npe);
+    mDN.Resize(dim,npe);
     // update the interpolation function coefficients
     //
     //      | ai aj ak |
@@ -787,20 +787,20 @@ double IsoparametricQuadraticTriangle::dN_At( DenseMatrix<DM_MIN>& DN, const vec
                              XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) );
 
     // compute interpolation function derivatives wrt x as given in Cook page 158
-    DN(0,0) = (4.0 * LXY[0] - 1.0 ) * M(1,0);
-    DN(0,1) = (4.0 * LXY[1] - 1.0 ) * M(1,1);
-    DN(0,2) = (4.0 * LXY[2] - 1.0 ) * M(1,2);
-    DN(0,3) = 4.0 * ( LXY[1] * M(1,0) + LXY[0] * M(1,1) );
-    DN(0,4) = 4.0 * ( LXY[2] * M(1,1) + LXY[1] * M(1,2) );
-    DN(0,5) = 4.0 * ( LXY[0] * M(1,2) + LXY[2] * M(1,0) );
+    mDN(0,0) = (4.0 * LXY[0] - 1.0 ) * M(1,0);
+    mDN(0,1) = (4.0 * LXY[1] - 1.0 ) * M(1,1);
+    mDN(0,2) = (4.0 * LXY[2] - 1.0 ) * M(1,2);
+    mDN(0,3) = 4.0 * ( LXY[1] * M(1,0) + LXY[0] * M(1,1) );
+    mDN(0,4) = 4.0 * ( LXY[2] * M(1,1) + LXY[1] * M(1,2) );
+    mDN(0,5) = 4.0 * ( LXY[0] * M(1,2) + LXY[2] * M(1,0) );
 
     // compute interpolation function derivatives wrt y as given in Cook page 158
-    DN(1,0) = (4.0 * LXY[0] - 1.0 ) * M(2,0);
-    DN(1,1) = (4.0 * LXY[1] - 1.0 ) * M(2,1);
-    DN(1,2) = (4.0 * LXY[2] - 1.0 ) * M(2,2);
-    DN(1,3) = 4.0 * ( LXY[1] * M(2,0) + LXY[0] * M(2,1) );
-    DN(1,4) = 4.0 * ( LXY[2] * M(2,1) + LXY[1] * M(2,2) );
-    DN(1,5) = 4.0 * ( LXY[0] * M(2,2) + LXY[2] * M(2,0) );
+    mDN(1,0) = (4.0 * LXY[0] - 1.0 ) * M(2,0);
+    mDN(1,1) = (4.0 * LXY[1] - 1.0 ) * M(2,1);
+    mDN(1,2) = (4.0 * LXY[2] - 1.0 ) * M(2,2);
+    mDN(1,3) = 4.0 * ( LXY[1] * M(2,0) + LXY[0] * M(2,1) );
+    mDN(1,4) = 4.0 * ( LXY[2] * M(2,1) + LXY[1] * M(2,2) );
+    mDN(1,5) = 4.0 * ( LXY[0] * M(2,2) + LXY[2] * M(2,0) );
 
     return 1.0 / ( 2.0 * area2 );
 
@@ -838,7 +838,7 @@ A second overloaded function exists that returns only the jacobi and uses the
 reference to the parent element and the vector containing the local coordinates
 as input arguments.
 */
-double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs, vector<double>& EFG, DenseMatrix<DM_MIN>& J )
+double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs, vector<double>& vEFG, DenseMatrix<DM_MIN>& J )
  {
     // 1. Compute 3x2 Jacobian Matrix
     dNr( rs[0], rs[1], DNR );
@@ -857,17 +857,17 @@ double IsoparametricQuadraticTriangle::Jacobi( const vector<double>& rs, vector<
     // using equation J' = ( E * g - F^2 )^0.5 see FEM-development-in-CSP.doc equation (15)
 
     // compute E, F, and g
-    EFG.resize(3);
-    fill( EFG.begin(), EFG.end(), 0. );
+    vEFG.resize(3);
+    fill( vEFG.begin(), vEFG.end(), 0. );
 
     for ( uint32_t i=0; i<dim; i++ ) {
-        EFG[0] += J(0,i) * J(0,i);
-        EFG[1] += J(0,i) * J(1,i);
-        EFG[2] += J(1,i) * J(1,i);
+        vEFG[0] += J(0,i) * J(0,i);
+        vEFG[1] += J(0,i) * J(1,i);
+        vEFG[2] += J(1,i) * J(1,i);
       }
 
    // compute J'
-   return sqrt( EFG[0] * EFG[2] - EFG[1] * EFG[1] );
+   return sqrt( vEFG[0] * vEFG[2] - vEFG[1] * vEFG[1] );
 
  }  // end Jacobi
 
@@ -1032,8 +1032,8 @@ void IsoparametricQuadraticTriangle::PhysicalToParametric( std::vector<double>& 
 
                 if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                 {
-                    for(uint32_t i=0; i<2U; i++)
-                        rstHatK[i] = rstHatK_PlusOne[i];
+                    for(uint32_t l=0; l<2U; l++)
+                        rstHatK[l] = rstHatK_PlusOne[l];
 
                     minDistanceFromGivenPoint = distanceFromGivenPointL2;
                 }
@@ -1271,23 +1271,23 @@ double IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN
 
     if ( use2Dto3Djacobi )
       {
-         vector<double> EFG(dim);
+         vector<double> vEFG(dim);
          RS[0] = rr[gauss_point];
          RS[1] = ss[gauss_point];
 
-         det = Jacobi( RS, EFG, JMAT );
+         det = Jacobi( RS, vEFG, JMAT );
          double det_inverse = 1.0 / ( det * det );
 
          B.Resize(dim,npe);
 
          for ( uint32_t i=0; i<npe; i++ )
            {
-             B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-             B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
-             B(1,i)  = det_inverse * JMAT(0,1) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-             B(1,i) += det_inverse * JMAT(1,1) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
-             B(2,i)  = det_inverse * JMAT(0,2) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
-             B(2,i) += det_inverse * JMAT(1,2) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
+             B(0,i)  = det_inverse * JMAT(0,0) * ( vEFG[2] * DNR[i] - vEFG[1] * DNS[i] );
+             B(0,i) += det_inverse * JMAT(1,0) * ( vEFG[0] * DNS[i] - vEFG[1] * DNR[i] );
+             B(1,i)  = det_inverse * JMAT(0,1) * ( vEFG[2] * DNR[i] - vEFG[1] * DNS[i] );
+             B(1,i) += det_inverse * JMAT(1,1) * ( vEFG[0] * DNS[i] - vEFG[1] * DNR[i] );
+             B(2,i)  = det_inverse * JMAT(0,2) * ( vEFG[2] * DNR[i] - vEFG[1] * DNS[i] );
+             B(2,i) += det_inverse * JMAT(1,2) * ( vEFG[0] * DNS[i] - vEFG[1] * DNR[i] );
            }
 
          return det;
@@ -1304,12 +1304,12 @@ double IsoparametricQuadraticTriangle::dN_AtIntegrationPoint( DenseMatrix<DM_MIN
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
 
     B = JINV * B;
 
@@ -1385,12 +1385,12 @@ double IsoparametricQuadraticTriangle::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
 
     B = JINV * B;
 
@@ -1438,12 +1438,12 @@ double IsoparametricQuadraticTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
 
     B = JINV * B;
 
@@ -1496,16 +1496,16 @@ void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<u
 
      // the midside nodes determine the boundaries so they are sought after
      if ( bnodes[0] == 3 || bnodes[1] == 3 || bnodes[2] == 3 ) {
-           fnids[0] = 0, fnids[1] = 3, fnids[2] = 1;
-           return;
+          fnids[0] = 0; fnids[1] = 3; fnids[2] = 1;
+          return;
        }
      if ( bnodes[0] == 4 || bnodes[1] == 4 || bnodes[2] == 4 ) {
-           fnids[0] = 1, fnids[1] = 4, fnids[2] = 2;
-           return;
+          fnids[0] = 1; fnids[1] = 4; fnids[2] = 2;
+          return;
        }
      if ( bnodes[0] == 5 || bnodes[1] == 5 || bnodes[2] == 5 ) {
-           fnids[0] = 2, fnids[1] = 5, fnids[2] = 0;
-           return;
+          fnids[0] = 2; fnids[1] = 5; fnids[2] = 0;
+          return;
        }
 
  } // end ConsecutiveNodesAtBoundary

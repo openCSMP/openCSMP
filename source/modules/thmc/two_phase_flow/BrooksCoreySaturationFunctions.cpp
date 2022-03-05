@@ -474,7 +474,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
   
   
   // helper function for numerical differentiation
-  double pcBC( double sw, double swr, double snr, double bcp, double pd )
+ static double pcBC( double sw, double swr, double snr, double bcp, double pd )
   {
      const double pc_max(1.0e7), dpcds_max(1.0e6);
      const double seff( sw - swr / (1. - swr -snr) );

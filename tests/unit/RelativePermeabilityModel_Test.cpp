@@ -32,11 +32,11 @@ namespace csmp {
 RelativePermeabilityModel_Test::RelativePermeabilityModel_Test( bool verbose )
  : model_ptr_(0), verbose_(verbose)
  {
-    const uint32_t  N_ELEMENTS(100);
+    const size_t  N_ELEMENTS(100);
     model_ptr_ = new Model1D<1U>("Model1D", "CSMP-2phase-variables_upscaled.txt", 50., N_ELEMENTS );
     if ( verbose_ ) cerr << "Number of elemnts: " << model_ptr_ -> Mesh().Elements() << endl;
     // making some groups: rock (elements 1-40, 61-100) and fracture (elements 41-60)
-    vector<uint32_t>   elms;  elms.reserve( N_ELEMENTS );
+    vector<size_t>   elms;  elms.reserve( N_ELEMENTS );
     for ( uint32_t i=0; i<40; i++ ) elms.push_back(i);
     for ( uint32_t i=60; i<N_ELEMENTS; i++ ) elms.push_back(i);
     model_ptr_->FormRegionFrom( "ROCK", elms );

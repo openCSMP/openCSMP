@@ -10,8 +10,7 @@
 #define CSMP_INTEGRATOR_H
 
 #include "IntegralEquation.h"
-#include "SAMG_Settings.h"
-#include "SAMG_Solver.h"
+#include "LinearSolver.h"
 
 namespace csmp {
 
@@ -59,9 +58,13 @@ class Integrator {
     /// shorthand for accessing the class that this is a policy of
     USER<dim>* User() { return static_cast<USER<dim>*>(this); }
     USER<dim> const* User() const { return static_cast<const USER<dim>*>(this); }
-    
+ #ifdef CSMP_WITH_SAMG
     SAMG_Settings   settings_;
     SAMG_Solver     solver_;
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS settings_;
+    CSMP_DEFAULT_LINEAR_SOLVER          solver_;
+#endif
     const double  upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
 };
 

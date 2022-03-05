@@ -117,7 +117,7 @@ struct Index {
 
     VARIABLE_TYPE               type;
     PLACEMENT                   place;
-    uint32_t                    index;                      ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
+    uint32_t                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
     uint32_t                    dataDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim*dim, Array:Size, FlaggedArray:Size
     uint32_t                    flagDepth;                  ///< Scalar:1 , Vector: dim, Tensor: dim, Array:1, FlaggedArray:Size
     uint32_t                    dataOffset;                 ///< Index in data container where data start

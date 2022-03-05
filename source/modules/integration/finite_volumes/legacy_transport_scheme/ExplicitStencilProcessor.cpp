@@ -300,12 +300,12 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      // ---------------------------------------------------------
 
      e.dN_AtBaryCenter( DN_ );
-     double psi_node;
-     double psi_inside_node;  
-     double psi_outside_node; 
+     double psi_node = std::numeric_limits<double>::quiet_NaN();
+     double psi_inside_node  = std::numeric_limits<double>::quiet_NaN();
+     double psi_outside_node = std::numeric_limits<double>::quiet_NaN();
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( size_t j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j=0U; j<DN_.Cols(); j++ ) {
           if (vt == SCALAR)  
             psi_node = e.N(j)->Read( adv1_key_ );
           else if (vt == ARRAY)
@@ -321,7 +321,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
             psi_node = fav[var_comp_nr];
           }
 
-          for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( auto k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
      for ( auto i{0}; i<e.FV()->Facets(); i++ )
@@ -400,9 +400,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      e.dN_AtBaryCenter( DN_ );
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( size_t j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j=0U; j<DN_.Cols(); j++ ) {
           double psi_node = e.N(j)->Read( adv1_key_ );
-          for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( auto k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
             
      for ( auto i{0}; i<e.FV()->Facets(); i++ )
@@ -466,7 +466,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      e.dN_AtBaryCenter( DN_ );
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( size_t j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j=0U; j<DN_.Cols(); j++ ) {
           double psi_node = e.N(j)->Read( adv1_key_ );
           for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
@@ -532,8 +532,6 @@ See argument list of method. The base class of a two-phase
 relative permeability model is used to compute the non-linear flow 
 multipliers from Helmig's formulation.  
 
-@return Return Value 
-
 Entries into the results and source term vectors for the finite volumes
 that are part of the current finite-element finite-volume stencil.  
 
@@ -581,9 +579,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
 
      e.dN_AtBaryCenter( DN_ );
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( size_t j=0U; j<e.Nodes(); j++ ) {
+     for ( auto j=0; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
-          for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+          for ( auto k=0; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
      for ( auto i{0}; i<e.FV()->Facets(); i++ )
@@ -855,8 +853,6 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
  {
      eidx_ = e.Idx();
 
-     const double zero(0.);
-
      // 0. computing capillary pressure gradient from pc at nodes
      // ---------------------------------------------------------
 
@@ -879,9 +875,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      e.dN_AtBaryCenter( DN_ );
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( size_t j=0U; j<e.Nodes(); j++ ) {
+     for ( auto j=0U; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
-          for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+          for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
      for ( auto i{0}; i<e.FV()->Facets(); i++ )
@@ -1000,7 +996,6 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      eidx_ = e.Idx();
 
      double limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
-     const double zero(0.0);
 
      // 0. computing capillary pressure gradient from pc at nodes
      // ---------------------------------------------------------
@@ -1009,9 +1004,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      e.dN_AtBaryCenter( DN_ );
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( size_t j=0U; j<e.Nodes(); j++ ) {
+     for ( auto j=0U; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
-          for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+          for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
 
@@ -1131,9 +1126,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
@@ -1330,9 +1325,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
@@ -1550,9 +1545,9 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
@@ -1738,14 +1733,13 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
 
 
 template<uint32_t dim>
-void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundary(
-                                                        const FV_Parameter& param,
-                                                        const Element<dim>& e,
-                                                        TwoPhaseModel<dim>& relperm,
-                                                        size_t pnid,
-                                                        double& flux,
-                                                        bool with_gravity_forces,
-                                                        bool with_capillary_spreading)
+void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundary(  const FV_Parameter& param,
+                                                                                    const Element<dim>& e,
+                                                                                    TwoPhaseModel<dim>& relperm,
+                                                                                    uint32_t pnid,
+                                                                                    double& flux,
+                                                                                    bool with_gravity_forces,
+                                                                                    bool with_capillary_spreading)
  {
 
     eidx_ = e.Idx();
@@ -1754,7 +1748,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
     relperm.InitializeForNode( e, pnid );
     relperm.EffectiveSaturation();
 
-    const size_t v( (dim==1u) ? 0u : 1u );
+    const uint32_t v = (dim==1u) ? 0u : 1u;
     VectorVariable<dim> velo;
     double facetArea;
 
@@ -1762,18 +1756,18 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
 
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j=0U; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
     // now the saturation dependent properties are computed
     // for all FACETS per SECTOR surrounding the finite volume at the boundary
-    for ( size_t k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
+    for ( auto k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
       {
-         size_t i( e.FV()->FacetSurroundingSector(pnid,k) );
+        auto i( e.FV()->FacetSurroundingSector(pnid,k) );
 
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 

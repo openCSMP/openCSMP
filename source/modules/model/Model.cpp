@@ -2596,9 +2596,8 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
       gmax = std::max( gmax, vmax );
       git++;
     }
-    for ( typename std::map<std::string, csmp::Region<dim> >::const_iterator
-          git = this->RegionsBegin(); git != this->RegionsEnd(); git++ ) {
-      (*git).second.MinMaxOf( prop_key, vmin, vmax );
+    for ( auto ngit = this->RegionsBegin(); ngit != this->RegionsEnd(); ngit++ ) {
+      (*ngit).second.MinMaxOf( prop_key, vmin, vmax );
       gmin = std::min( gmin, vmin );
       gmax = std::max( gmax, vmax );
     }

@@ -1,14 +1,13 @@
 #ifndef LUDCMP_SOLVER_H
 #define LUDCMP_SOLVER_H
 
-
 #include "Solver.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
 
 namespace csmp {
 
-/** Trivial LU decomposition Solver
+/** Trivial LU decomposition and back substitution Solver
 
 This solver was implemented during the 2010 CSMP retreat by MUL
 in Starigrad, Croatia, and used to solve FEM matrices with up to 300 dof.
@@ -38,18 +37,18 @@ with csmp::SparseMatrix, STL and according functionality
     private:
       void ludcmp( SparseMatrix& a,
                    long n,
-                   std::vector<uint32_t>& indx);
+                   std::vector<size_t>& indx );
                    
       void lubksb( SparseMatrix& a,
                    long n,
-                   std::vector<uint32_t>& indx,
+                   std::vector<size_t>& indx,
                    std::vector<double>& x,
                    std::vector<double>& b );
       void luout();
 
-      double             tiny_; /**< represents chosen numerical limit */
+      double               tiny_; /**< represents chosen numerical limit */
       long                 n_;
-      std::vector<uint32_t>  index_; /**< cache vector for indices */
+      std::vector<size_t>  index_; /**< cache vector for indices */
 };
 
 } // end namespace csmp

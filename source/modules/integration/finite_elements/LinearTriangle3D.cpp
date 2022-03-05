@@ -802,7 +802,7 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      ofs <<"SCALARS "<< "sum_N" <<" float"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
      for ( uint32_t i=0; i<npe; i++ ) {
-          xyz[0] = XY(i,0), xyz[1] = XY(i,1), xyz[2] = XY(i,2), sum = 0.0;
+          xyz[0] = XY(i,0); xyz[1] = XY(i,1); xyz[2] = XY(i,2); sum = 0.0;
           N( IPOL, xyz );
           for ( uint32_t j=0; j<npe; j++ ) sum += IPOL[j];
           ofs << sum <<" ";

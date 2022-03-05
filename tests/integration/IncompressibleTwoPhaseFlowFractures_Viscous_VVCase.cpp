@@ -760,6 +760,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "<<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
 
     // terminate
+    delete steady_state_pressure_solver_;
     cout << "\nThat's it..."<< endl;
 
 

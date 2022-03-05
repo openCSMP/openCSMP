@@ -184,7 +184,7 @@ void createInflowRegion( Model<2U>& model )
      Region<2U>&  domain(model.Region("Model"));
      domain.UpdateMemberIndexes();
     
-     vector<uint32_t> element_ids;
+     vector<size_t> element_ids;
      element_ids.reserve(800); // there are 800 elements in the vertical
     
      for ( auto eit=domain.ElementsBegin(); eit!=domain.ElementsEnd(); ++eit ) {

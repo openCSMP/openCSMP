@@ -57,8 +57,8 @@ IsoparametricQuadraticQuadrilateral::IsoparametricQuadraticQuadrilateral( uint32
 
    // full 4-point integration basis
    double sqRootOneThird=sqrt(1.0/3.0);
-   rr[0] = sqRootOneThird,   rr[1] = -sqRootOneThird,   rr[2] = -sqRootOneThird,   rr[3] = sqRootOneThird;
-   ss[0] = sqRootOneThird,   ss[1] =  sqRootOneThird,   ss[2] = -sqRootOneThird,   ss[3] =-sqRootOneThird;
+   rr[0] = sqRootOneThird;  rr[1] = -sqRootOneThird; rr[2] = -sqRootOneThird; rr[3] = sqRootOneThird;
+   ss[0] = sqRootOneThird;  ss[1] =  sqRootOneThird; ss[2] = -sqRootOneThird; ss[3] =-sqRootOneThird;
 
    W[0]  = W[1]  = W[2]  =  W[3]  = 1.0;
 
@@ -833,8 +833,8 @@ IsoparametricQuadraticQuadrilateral::PhysicalToParametric(
 
                 if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                 {
-                    for(uint32_t i=0; i<2U; i++)
-                        rstHatK[i] = rstHatK_PlusOne[i];
+                    for(uint32_t l=0; l<2U; l++)
+                      rstHatK[l] = rstHatK_PlusOne[l];
 
                     minDistanceFromGivenPoint = distanceFromGivenPointL2;
                 }
@@ -1069,7 +1069,7 @@ as input arguments.
 */
 double
 IsoparametricQuadraticQuadrilateral::Jacobi(	const vector<double>& rs,
-                                                vector<double>& EFG,
+                                                vector<double>& vEFG,
                                                 DenseMatrix<DM_MIN>& J )
  {
     // 1. Compute 3x2 Jacobian Matrix
@@ -1089,19 +1089,21 @@ IsoparametricQuadraticQuadrilateral::Jacobi(	const vector<double>& rs,
     // using equation J' = ( E * g - F^2 )^0.5 see FEM-development-in-CSP.doc equation (15)
 
     // compute E, F, and g
-    EFG.resize(3);
-    fill( EFG.begin(), EFG.end(), 0.0 );
+    vEFG.resize(3);
+    fill( vEFG.begin(), vEFG.end(), 0.0 );
 
     for ( uint32_t i=0; i<dim; i++ ) {
-        EFG[0] += J(0,i) * J(0,i);
-        EFG[1] += J(0,i) * J(1,i);
-        EFG[2] += J(1,i) * J(1,i);
+        vEFG[0] += J(0,i) * J(0,i);
+        vEFG[1] += J(0,i) * J(1,i);
+        vEFG[2] += J(1,i) * J(1,i);
       }
 
    // compute J'
-   return sqrt( EFG[0] * EFG[2] - EFG[1] * EFG[1] );
+   return sqrt( vEFG[0] * vEFG[2] - vEFG[1] * vEFG[1] );
 
  }  // end Jacobi
+
+
 
 
 double IsoparametricQuadraticQuadrilateral::Jacobi( const vector<double>& rs )
@@ -1255,16 +1257,15 @@ IsoparametricQuadraticQuadrilateral::dN_AtIntegrationPoint(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
-
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7];
-    B(0,8) = DNR[8], B(1,8) = DNS[8];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7];
+    B(0,8) = DNR[8]; B(1,8) = DNS[8];
 
     B = JINV * B;
 
@@ -1342,16 +1343,16 @@ IsoparametricQuadraticQuadrilateral::dN_AtNode(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7];
-    B(0,8) = DNR[8], B(1,8) = DNS[8];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7];
+    B(0,8) = DNR[8]; B(1,8) = DNS[8];
 
     B = JINV * B;
 
@@ -1400,16 +1401,16 @@ IsoparametricQuadraticQuadrilateral::dN_AtBarycenter(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
-    B(0,4) = DNR[4], B(1,4) = DNS[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7];
-    B(0,8) = DNR[8], B(1,8) = DNS[8];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7];
+    B(0,8) = DNR[8]; B(1,8) = DNS[8];
 
     B = JINV * B;
 
@@ -1464,20 +1465,20 @@ IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
 
      // the midside nodes determine the boundaries so they are sought after
      if ( bnodes[0] == 2 || bnodes[1] == 2 || bnodes[2] == 2 ) {
-           fnids[0] = 0, fnids[1] = 4, fnids[2] = 1;
+       fnids[0] = 0; fnids[1] = 4; fnids[2] = 1;
            return;
        }
      if ( bnodes[0] == 3 || bnodes[1] == 3 || bnodes[2] == 3 ) {
-           fnids[0] = 1, fnids[1] = 5, fnids[2] = 2;
+       fnids[0] = 1; fnids[1] = 5; fnids[2] = 2;
            return;
        }
      if ( bnodes[0] == 4 || bnodes[1] == 4 || bnodes[2] == 4 ) {
-           fnids[0] = 2, fnids[1] = 6, fnids[2] = 3;
+       fnids[0] = 2; fnids[1] = 6; fnids[2] = 3;
            return;
        }
 
       if ( bnodes[0] == 5 || bnodes[1] == 5 || bnodes[2] == 5 ) {
-          fnids[0] = 3, fnids[1] = 7, fnids[2] = 0;
+        fnids[0] = 3; fnids[1] = 7; fnids[2] = 0;
           return;
       }
 
@@ -1722,9 +1723,9 @@ IsoparametricQuadraticQuadrilateral::UnitNormal( std::vector<double>& vc ) const
               Z12 = XY(1,2) - XY(0,2), // Z
               Z31 = XY(0,2) - XY(2,2);
 
-  // normal to quad
-    vc[0]  = -Y12*Z31 + Z12*Y31,
-    vc[1]  = -Z12*X31 + X12*Z31,
+    // normal to quad
+    vc[0]  = -Y12*Z31 + Z12*Y31;
+    vc[1]  = -Z12*X31 + X12*Z31;
     vc[2]  = -X12*Y31 + Y12*X31;
     // normalization to unit length
     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
@@ -1777,20 +1778,21 @@ IsoparametricQuadraticQuadrilateral::ReferenceCoordinates(DenseMatrix<DM_MIN> & 
 
     matCoords(0,0) = NXY(0,0);
     matCoords(0,1) = NXY(0,1);
-  matCoords(1,0) = NXY(1,0);
-  matCoords(1,1) = NXY(1,1);
-  matCoords(2,0) = NXY(2,0);
-  matCoords(2,1) = NXY(2,1);
-  matCoords(3,0) = NXY(3,0);
-  matCoords(3,1) = NXY(3,1);
-  matCoords(4,0) = NXY(4,0);
-  matCoords(4,1) = NXY(4,1);
-  matCoords(5,0) = NXY(5,0);
-  matCoords(5,1) = NXY(5,1);
-  matCoords(6,0) = NXY(6,0);
-  matCoords(6,1) = NXY(6,1);
-  matCoords(7,0) = NXY(7,0);
-  matCoords(7,1) = NXY(7,1);
-}
-}// namespace csp
+    matCoords(1,0) = NXY(1,0);
+    matCoords(1,1) = NXY(1,1);
+    matCoords(2,0) = NXY(2,0);
+    matCoords(2,1) = NXY(2,1);
+    matCoords(3,0) = NXY(3,0);
+    matCoords(3,1) = NXY(3,1);
+    matCoords(4,0) = NXY(4,0);
+    matCoords(4,1) = NXY(4,1);
+    matCoords(5,0) = NXY(5,0);
+    matCoords(5,1) = NXY(5,1);
+    matCoords(6,0) = NXY(6,0);
+    matCoords(6,1) = NXY(6,1);
+    matCoords(7,0) = NXY(7,0);
+    matCoords(7,1) = NXY(7,1);
+  }
+
+}// namespace csmp
 

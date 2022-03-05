@@ -73,9 +73,9 @@ namespace csmp {
 		
 	}
 
-	double IsoparametricLinearHexahedron_Test::HexaVolUsingCSMP(double *Xcord, double *Ycord, double *Zcord,
-                                                                double& HexaVolumeUsingFVSectors_,
-                                                                double& HexaVolumeUsingFVSectorsIPWeight_)
+	double IsoparametricLinearHexahedron_Test::HexaVolUsingCSMP( double *Xcord, double *Ycord, double *Zcord,
+                                                               double& HexaVolumeUsingFVSectors,
+                                                               double& HexaVolumeUsingFVSectorsIPWeight )
 	{
 		//The following is the alternative for the dynamic allocation of memory, which is helpful when the required memory is only determined at the run time. 
 		//This method creates a Hexahedron element each time that the class is called and kills the element when returining to the run method. 
@@ -129,24 +129,24 @@ namespace csmp {
 		double HexVol = element.Volume();
 
 		//The calcualtion of the Hexa Volume summing up the volumes of the sectors of the FV stencils over the finite element. 
-		HexaVolumeUsingFVSectors_ = 0;
+		HexaVolumeUsingFVSectors = 0;
 		double SectorNumbers = element.Sectors();		// This gives the number of FV sectors within a Finite Elment.
 		for (auto i = 0; i < SectorNumbers; i++) {
-			HexaVolumeUsingFVSectors_ += element.SectorVolume(i);	// This gives the volume of the each of the sectors. 
+			HexaVolumeUsingFVSectors += element.SectorVolume(i);	// This gives the volume of the each of the sectors.
 		}
 
 		//delete lHex_, element_;  //Deletes a dynamically created element. 
 
 		//The calcualtion of the Hexa Volume summing up the volumes of the sectors by multiplying the sector integration point weight by the determinant of the Jacobian matrix over the sectors of the FV stencils over the finite element. 
 		double VolofSector(0.);
-		HexaVolumeUsingFVSectorsIPWeight_ = 0.;
+		HexaVolumeUsingFVSectorsIPWeight = 0.;
 		for (auto i = 0; i < SectorNumbers; i++){
 			if (verbose_){
 				cout << element.FV()->SectorIntegrationWeight(i, 0) << "\t";
 				cout << element.FE()->JacobianDeterminant() << "\t";
 			}
 			VolofSector = element.FV()->SectorIntegrationWeight(i, 0)*element.FE()->JacobianDeterminant();
-			HexaVolumeUsingFVSectorsIPWeight_ += VolofSector;
+			HexaVolumeUsingFVSectorsIPWeight += VolofSector;
 			// Similar line from FiniteVolumeTraits: fVolume += e.FV()->SectorIntegrationWeight(iSector, j) * e.FE()->JacobianDeterminant();
 		}
 

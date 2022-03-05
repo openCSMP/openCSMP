@@ -111,7 +111,6 @@ void Geothermal_Example::Run()
   CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
 
-
   //! --------------------------------------------------------
   //! 2. Setting up finite element algorithms for PT diffusion
   //! --------------------------------------------------------
@@ -384,9 +383,9 @@ bool Geothermal_Example::Compare( Model<DIM>& model, const string& file ) const
   tol = 1.;
 
   // computes C-norm of the difference (sum of the absolute values)
-  for ( size_t ind = 0; ind<nPoints; ind++ ) {
-    pAt.PropertyValueAt( ind, result );
-    res += fabs( result() - values[ind] );
+  for ( size_t ind2 = 0; ind2<nPoints; ind2++ ) {
+    pAt.PropertyValueAt( ind2, result );
+    res += fabs( result() - values[ind2] );
   }
 
   // divided by the number of points

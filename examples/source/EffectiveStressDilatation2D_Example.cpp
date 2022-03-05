@@ -479,10 +479,11 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 bool createLowerDimensionalRegion( Model<DIM>& model, const char* name_of_new_region )
  {
     Region<DIM>& mref = model.Region("Model");
-    set<uint32_t> element_idx;
+    set<size_t> element_idx;
     for ( vector<Element<DIM>*>::const_iterator it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
       if ( (*it)->FE()->IsLineElement() ) element_idx.insert( (*it)->Idx() );
-    vector<uint32_t> unique_idx( element_idx.begin(), element_idx.end() );
+    
+    vector<size_t> unique_idx( element_idx.begin(), element_idx.end() );
    
     if ( model.ContainsRegion( name_of_new_region ) ) return false;
    

@@ -45,15 +45,15 @@ struct INDEX : public Index {
 //template<typename A, typename B>
 //void add( const A&, const B& );
  
-void add( const Index&, const Index& ) {
+static void add( const Index&, const Index& ) {
     std::cout <<"\nadd: standard version, no specialisation found."<< std::endl;
  } 
 
-void add( const INDEX<SCALAR,NODE>&, const Index& ) {
+static void add( const INDEX<SCALAR,NODE>&, const Index& ) {
     std::cout <<"\nadd: standard version, SCALAR/NODE partial version."<< std::endl;
  } 
 
-void add( const INDEX<SCALAR,NODE>&, const INDEX<SCALAR,NODE>& ) {
+static void add( const INDEX<SCALAR,NODE>&, const INDEX<SCALAR,NODE>& ) {
     std::cout <<"\nadd: standard version, SCALAR/NODE full version."<< std::endl;
  } 
  

@@ -552,7 +552,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
 */
 bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& input_txt_file,
                                                                const string& target_region,
-                                                               std::set<uint32_t>& no_data_elmt_numbers )
+                                                               std::set<size_t>& no_data_elmt_numbers )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     string datafile = input_txt_file + "-element_barycentres_properties.txt";
@@ -649,11 +649,11 @@ After removing the elements, the unique regions, boundaries, and split boundarie
 @date 22/5/2021
 
 */
-void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<uint32_t>& no_data_elmt_numbers )
+void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const string& target_region, std::set<size_t>& no_data_elmt_numbers )
 {
   csmp::Region<3U>& region = model.Region( target_region );
   
-  vector<uint32_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
+  vector<size_t>              element_ids( no_data_elmt_numbers.begin(), no_data_elmt_numbers.end() );
   vector<csmp::Element<3U>*>  ptrs_to_removed_elements;
   size_t n_removed_elmts    = region.RemoveByNumber( element_ids, ptrs_to_removed_elements );
   

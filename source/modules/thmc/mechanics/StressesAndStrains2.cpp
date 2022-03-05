@@ -317,9 +317,9 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
          // and recording the elements spatial translation as the average of
          // its displacements
          DISPL_.Resize( e.Nodes()*2U, 1 );
-         k = 0, avg = 0.;
+         k = 0; avg = 0.;
          for ( auto i=0; i<e.Nodes(); i++ ) {
-              for ( size_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
+              for ( int j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
               avg         += NVAR[i];
            }
          avg /= static_cast<double>(e.Nodes());
@@ -624,12 +624,6 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
 //    for ( typename vector::const_iterator 
 //          it=IPSTRAIN_.begin(); it!=IPSTRAIN_.end(); it++ ) cout << (*it) <<" ";
 
-
-
- 
-#ifndef _MSC_VER
-template class StressesAndStrains<2U>;
-#endif
 
 } // csmp
 

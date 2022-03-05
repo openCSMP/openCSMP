@@ -4361,9 +4361,9 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                     {
                        eit->dN_AtIntegrationPoint( DN, i );
                        vc = 0.;
-                       for ( auto i{0}; i<nodes; i++ )
+                       for ( auto l{0}; l<nodes; l++ )
                          for ( auto j=0U; j<dim; j++ )
-                           vc(j) += DN(j,i) * SC[i]();
+                           vc(j) += DN(j,l) * SC[i]();
 
                        eit->Store( i, b_key, vc );
                     }
@@ -4421,9 +4421,9 @@ bool  ModelSubDomain<dim,CELL>::CopyGradientOfProperty_A_To_B( const char* a, co
                       eit->dN_AtIntegrationPoint( DN, i );
                       ts = 0.;
                       for ( auto n=0U; n<nodes; n++ )
-                        for ( auto i{0}; i<dim; i++ )
+                        for ( auto l{0}; l<dim; l++ )
                           for ( auto j=0U; j<dim; j++ )
-                            ts(i,j) += DN(i,n) * VC[n][j];
+                            ts(i,j) += DN(l,n) * VC[n][j];
 
                       // saving the resulting vector<double>
                       eit->Store( i, b_key, ts );

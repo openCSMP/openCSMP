@@ -199,7 +199,7 @@ void Region_Example::Run()
    // building a region from a subset of element numbers
    // first, a range of element numbers 10 to 100 has to be generated
    cout <<"\n\n\nmain: FormRegionFrom()  forming a new region that contains the elements 10 to 100."<< endl;
-   vector<uint32_t>  element_ids( 100U );
+   vector<size_t>  element_ids( 100U );
    size_t          ecount(10U);
    for ( auto i{0}; i<element_ids.size(); i++ ) element_ids[i] = ecount++;
    // test 10: O.K.

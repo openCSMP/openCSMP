@@ -67,7 +67,7 @@ struct SimulatorSetupParameter : Parameter {
                 p.notation==notation &&
                 p.unit==unit &&
                 p.type==type &&
-                p.vsize==p.vsize &&
+                p.vsize==vsize &&
                 p.min==min &&
                 p.max==max &&
                 p.placement==placement &&
@@ -80,7 +80,7 @@ struct SimulatorSetupParameter : Parameter {
                 p.notation!=notation ||
                 p.unit!=unit ||
                 p.type!=type ||
-                p.vsize!=p.vsize ||
+                p.vsize!=vsize ||
                 p.min!=min ||
                 p.max!=max ||
                 p.placement!=placement ||

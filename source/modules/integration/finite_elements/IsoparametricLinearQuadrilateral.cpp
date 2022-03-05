@@ -55,8 +55,8 @@ IsoparametricLinearQuadrilateral::IsoparametricLinearQuadrilateral( uint32_t dim
 
    // full 4-point integration basis
    const double sqRootOneThird=sqrt(1./3.);
-   rr[0] = sqRootOneThird,   rr[1] = -sqRootOneThird,   rr[2] = -sqRootOneThird,   rr[3] = sqRootOneThird;
-   ss[0] = sqRootOneThird,   ss[1] =  sqRootOneThird,   ss[2] = -sqRootOneThird,   ss[3] =-sqRootOneThird;
+   rr[0] = sqRootOneThird; rr[1] = -sqRootOneThird; rr[2] = -sqRootOneThird; rr[3] = sqRootOneThird;
+   ss[0] = sqRootOneThird; ss[1] =  sqRootOneThird; ss[2] = -sqRootOneThird; ss[3] =-sqRootOneThird;
 
    W[0]  = W[1]  = W[2]  =  W[3]  = 1.0;
 
@@ -784,8 +784,8 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
 
                 if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                 {
-                    for(uint32_t i=0; i<2U; i++)
-                        rstHatK[i] = rstHatK_PlusOne[i];
+                    for(uint32_t k=0; k<2U; k++)
+                        rstHatK[k] = rstHatK_PlusOne[k];
 
                     minDistanceFromGivenPoint = distanceFromGivenPointL2;
                 }
@@ -1206,10 +1206,10 @@ IsoparametricLinearQuadrilateral::dN_AtIntegrationPoint(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1287,10 +1287,10 @@ IsoparametricLinearQuadrilateral::dN_AtNode(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1341,10 +1341,10 @@ IsoparametricLinearQuadrilateral::dN_AtBarycenter(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1757,14 +1757,14 @@ void IsoparametricLinearQuadrilateral::UnitNormal( std::vector<double>& vc ) con
               Z31 = XY(0,2) - XY(2,2);
 
      // normal to quad
-    vc[0]  = -Y12*Z31 + Z12*Y31,
-    vc[1]  = -Z12*X31 + X12*Z31,
-    vc[2]  = -X12*Y31 + Y12*X31;
-    // normalization to unit length
-    double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
-    vc[0] /= length;
-    vc[1] /= length;
-    vc[2] /= length;
+     vc[0]  = -Y12*Z31 + Z12*Y31;
+     vc[1]  = -Z12*X31 + X12*Z31;
+     vc[2]  = -X12*Y31 + Y12*X31;
+     // normalization to unit length
+     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
+     vc[0] /= length;
+     vc[1] /= length;
+     vc[2] /= length;
  }
 
 
@@ -1831,8 +1831,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, std::ve
      // the face normals are found as cross-products between element normal and edges
      // nodes 0 and 1
      if ( face == 0 ) {
-          Point<3> face(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           // (-) to flip the normal to the outside
           unrml[0] = -nrml[0];
@@ -1842,8 +1842,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, std::ve
        }
      // nodes 1 and 2
      if ( face == 1 ) {
-          Point<3> face(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];
@@ -1852,8 +1852,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, std::ve
        }
      // nodes 2 and 3
      if ( face == 2 ) {
-          Point<3> face(XY(3,0)-XY(2,0),XY(3,1)-XY(2,1),XY(3,2)-XY(2,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(3,0)-XY(2,0),XY(3,1)-XY(2,1),XY(3,2)-XY(2,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];
@@ -1862,8 +1862,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, std::ve
        }
      // nodes 3 and 0
      if ( face == 3 ) {
-          Point<3> face(XY(0,0)-XY(3,0),XY(0,1)-XY(3,1),XY(0,2)-XY(3,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(0,0)-XY(3,0),XY(0,1)-XY(3,1),XY(0,2)-XY(3,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];

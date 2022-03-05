@@ -51,28 +51,28 @@ IsoparametricQuadraticPrism::IsoparametricQuadraticPrism()
     // initializing local node coordinates
     // local node coordinates are defined as r==ksi, s==nu, t==mu.
     // r-s-t/x-y-z
-    NXYZ(0,0) = 0.0, NXYZ(0,1) = 0.0, NXYZ(0,2) = -1.0;
-    NXYZ(1,0) = 1.0, NXYZ(1,1) = 0.0, NXYZ(1,2) = -1.0;
-    NXYZ(2,0) = 0.0, NXYZ(2,1) = 1.0, NXYZ(2,2) = -1.0;
-    NXYZ(3,0) = 0.0, NXYZ(3,1) = 0.0, NXYZ(3,2) =  1.0;
-    NXYZ(4,0) = 1.0, NXYZ(4,1) = 0.0, NXYZ(4,2) =  1.0;
-    NXYZ(5,0) = 0.0, NXYZ(5,1) = 1.0, NXYZ(5,2) =  1.0;
+     NXYZ(0,0) = 0.0; NXYZ(0,1) = 0.0; NXYZ(0,2) = -1.0;
+     NXYZ(1,0) = 1.0; NXYZ(1,1) = 0.0; NXYZ(1,2) = -1.0;
+     NXYZ(2,0) = 0.0; NXYZ(2,1) = 1.0; NXYZ(2,2) = -1.0;
+     NXYZ(3,0) = 0.0; NXYZ(3,1) = 0.0; NXYZ(3,2) =  1.0;
+     NXYZ(4,0) = 1.0; NXYZ(4,1) = 0.0; NXYZ(4,2) =  1.0;
+     NXYZ(5,0) = 0.0; NXYZ(5,1) = 1.0; NXYZ(5,2) =  1.0;
 
-    NXYZ(6,0) = 0.5;NXYZ(6,1) = 0.0;NXYZ(6,2) = -1.0; //7
-    NXYZ(7,0) = 0.5;NXYZ(7,1) = 0.5;NXYZ(7,2) = -1.0; //8
-    NXYZ(8,0) = 0.0;NXYZ(8,1) = 0.5;NXYZ(8,2) = -1.0; //9
+    NXYZ(6,0) = 0.5; NXYZ(6,1) = 0.0; NXYZ(6,2) = -1.0; //7
+    NXYZ(7,0) = 0.5; NXYZ(7,1) = 0.5; NXYZ(7,2) = -1.0; //8
+    NXYZ(8,0) = 0.0; NXYZ(8,1) = 0.5; NXYZ(8,2) = -1.0; //9
 
-    NXYZ(9,0) = 0.0;NXYZ(9,1) = 0.0;NXYZ(9,2) =  0.0; //10
-    NXYZ(10,0)= 1.0;NXYZ(10,1)= 0.0;NXYZ(10,2) = 0.0; //11
-    NXYZ(11,0)= 0.0;NXYZ(11,1)= 1.0;NXYZ(11,2) = 0.0; //12
+    NXYZ(9,0) = 0.0; NXYZ(9,1) = 0.0; NXYZ(9,2) =  0.0; //10
+    NXYZ(10,0)= 1.0; NXYZ(10,1)= 0.0; NXYZ(10,2) = 0.0; //11
+    NXYZ(11,0)= 0.0; NXYZ(11,1)= 1.0; NXYZ(11,2) = 0.0; //12
 
-    NXYZ(12,0)= 0.5;NXYZ(12,1)= 0.0;NXYZ(12,2) = 1.0; //13
-    NXYZ(13,0)= 0.5;NXYZ(13,1)= 0.5;NXYZ(13,2) = 1.0; //14
-    NXYZ(14,0)= 0.0;NXYZ(14,1)= 0.5;NXYZ(14,2) = 1.0; //15
+    NXYZ(12,0)= 0.5; NXYZ(12,1)= 0.0; NXYZ(12,2) = 1.0; //13
+    NXYZ(13,0)= 0.5; NXYZ(13,1)= 0.5; NXYZ(13,2) = 1.0; //14
+    NXYZ(14,0)= 0.0; NXYZ(14,1)= 0.5; NXYZ(14,2) = 1.0; //15
 
-    NXYZ(15,0)= 0.5;NXYZ(15,1)= 0.0;NXYZ(15,2) = 0.0; //16
-    NXYZ(16,0)= 0.5;NXYZ(16,1)= 0.5;NXYZ(16,2) = 0.0; //17
-    NXYZ(17,0)= 0.0;NXYZ(17,1)= 0.5;NXYZ(17,2) = 0.0; //18
+    NXYZ(15,0)= 0.5; NXYZ(15,1)= 0.0; NXYZ(15,2) = 0.0; //16
+    NXYZ(16,0)= 0.5; NXYZ(16,1)= 0.5; NXYZ(16,2) = 0.0; //17
+    NXYZ(17,0)= 0.0; NXYZ(17,1)= 0.5; NXYZ(17,2) = 0.0; //18
 
     W.resize( gpe );
     // Numeric integration 2nd order, number of point m=6
@@ -772,7 +772,7 @@ IsoparametricQuadraticPrism::dN_At( DenseMatrix<DM_MIN>& DN2,
     DN2.Resize(dim,dim);
     DN2  = JINV;
 
-    DenseMatrix<DM_MIN> DN(dim,npe);
+//    DenseMatrix<DM_MIN> DN(dim,npe);
 
     dN(DN);
 
@@ -845,7 +845,7 @@ IsoparametricQuadraticPrism::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
     for(uint32_t inode=0;inode<npe; inode++)
-     {B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode]; }
+     {B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
 
@@ -951,12 +951,12 @@ IsoparametricQuadraticPrism::PhysicalToParametric(
                                                      distanceFromGivenPointLinf[2]*distanceFromGivenPointLinf[2] );
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
-                    {
-                        for(uint32_t i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                      {
+                          for(uint32_t l=0; l<dim; l++)
+                              rstHatK[l] = rstHatK_PlusOne[l];
 
-                        minDistanceFromGivenPoint = distanceFromGivenPointL2;
-                    }
+                          minDistanceFromGivenPoint = distanceFromGivenPointL2;
+                      }
                     rstHatK_PlusOne[2] += incrementT;
                 }
                 rstHatK_PlusOne[1] += incrementS;
@@ -1416,7 +1416,7 @@ IsoparametricQuadraticPrism::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint
 
     // Forming maTRIX delta Akin, p.420
     for(uint32_t inode=0;inode<npe; inode++)
-         {B(0,inode) = DNR[inode], B(1,inode) = DNS[inode], B(2,inode) = DNT[inode]; }
+    {B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
 
@@ -1549,9 +1549,9 @@ IsoparametricQuadraticPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     B.Resize(dim,npe);
 
     for(uint32_t i=0; i<npe; i++)
-    {
-    B(0,i) = DNR[i], B(1,i) = DNS[i], B(2,i) = DNT[i];
-    }
+      {
+        B(0,i) = DNR[i]; B(1,i) = DNS[i]; B(2,i) = DNT[i];
+      }
 
     B = JINV * B;
 

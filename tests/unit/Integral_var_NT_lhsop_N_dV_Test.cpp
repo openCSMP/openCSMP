@@ -173,7 +173,6 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                                    "fluid pressure",
                                                    "total mobility");
     lumped.LumpedFormulation(true);
-    const size_t dof = sg_->Region("Model").Nodes();
 
     // Set values
     vector<double> mobility;

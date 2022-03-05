@@ -308,7 +308,7 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type, const string& source,
 
 
 
-void print( const multimap<string,string>& m )
+static void print( const multimap<string,string>& m )
  {
      for ( multimap<string,string>::const_iterator
            it=m.begin(); it!=m.end(); it++ )

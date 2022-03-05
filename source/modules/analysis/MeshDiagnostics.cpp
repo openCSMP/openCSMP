@@ -217,9 +217,9 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
 
 
     // Element volume
-    double        volume;
+    double          volume;
     bool            repeat(true);
-    vector<uint32_t>  element_numbers;
+    vector<size_t>  element_numbers;
    
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Verifying element volumes/areas/lengths..."<< endl;
     for ( vector<Element<3U>*>::const_iterator
@@ -236,7 +236,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
            }
          if ( volume < 0. && repeat == true )
            {
-              cerr <<"\nMeshDiagnostics<dim>::ScrutinizeMeshErratic area/volume of element ",
+              cerr <<"\nMeshDiagnostics<dim>::ScrutinizeMeshErratic area/volume of element ";
               cerr << (*eit)->Idx() <<": "<< volume;
               repeat = true; // stdio.YesNo("Would you like to form region of elements with negative area");
               if ( repeat ) element_numbers.push_back( (*eit)->Idx() );

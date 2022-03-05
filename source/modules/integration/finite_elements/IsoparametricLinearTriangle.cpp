@@ -905,14 +905,14 @@ IsoparametricLinearTriangle::dN( DenseMatrix<DM_MIN>& DN2,
   DN2.Resize(dim,dim);
   DN2  = JINV;
 
-  DenseMatrix<DM_MIN>DN(dim,npe);
+  DenseMatrix<DM_MIN>DN_TEMP(dim,npe);
   for(int i=0;i<npe;i++)
   {
-      DN(0,i)=DNR[i];
-      DN(1,i)=DNS[i];
+    DN_TEMP(0,i)=DNR[i];
+    DN_TEMP(1,i)=DNS[i];
   }
 
-  DN2*=DN;
+  DN2*=DN_TEMP;
 
   /////////////////////////////// Debug printout ///////////////////////////////////////////////
   //cout<<" IsoparametricLinearTriangle3D::dN  For given xyz=("<<xyz[1]<<","<<xyz[2]<<","<<xyz[3]<<"), rst=("<<
@@ -1204,9 +1204,9 @@ IsoparametricLinearTriangle::dN_AtNode(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
 
     B = JINV * B;
 
@@ -1250,9 +1250,9 @@ double IsoparametricLinearTriangle::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
 
     B = JINV * B;
 

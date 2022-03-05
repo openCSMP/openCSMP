@@ -149,8 +149,8 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // 1. getting new node mapping and updating storage if geometry has changed
      // ------------------------------------------------------------------------
      if ( last_visualized_ != NODE ) {
-          NodeBasedTopology( gref, elmt_ids, plist, node_mapping );
-          TransformPlist( gref, plist, transformed_plist );
+          NodeBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+          TransformPlist( gref, plist_, transformed_plist_ );
           last_visualized_ = NODE;
        }
 
@@ -189,12 +189,12 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // -------------------------------------------------------
      variable = (*node_props.begin());
      replaceWhiteSpaceBy( variable, '_' );
-     NodeData( gref, prop_key, node_mapping, pxyz_data );
+     NodeData( gref, prop_key, node_mapping_, pxyz_data_ );
      
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
-     ofs <<"POINTS " << pxyz_data.size() <<" double"<< endl;
+     ofs <<"POINTS " << pxyz_data_.size() <<" double"<< endl;
      for ( map<size_t,vector<double> >::const_iterator
-           nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+           nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
           for ( auto i{0}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0. <<"  ";
@@ -205,13 +205,13 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // 4. getting total number of connections + numbers giving connections per element
      // -------------------------------------------------------------------------------
      size_t cell_list_size(0);                            
-     for ( auto eit=transformed_plist.begin(); eit!=transformed_plist.end(); eit++ )
+     for ( auto eit=transformed_plist_.begin(); eit!=transformed_plist_.end(); eit++ )
        cell_list_size += (*eit).size() + 1U;
      
      // 5. writing CELLS (cell-size and member nodes (point))
      // -----------------------------------------------------
-     ofs <<"CELLS "<< transformed_plist.size() <<" "<< cell_list_size << endl;
-     for ( auto it=transformed_plist.begin(); it!=transformed_plist.end(); it++ )
+     ofs <<"CELLS "<< transformed_plist_.size() <<" "<< cell_list_size << endl;
+     for ( auto it=transformed_plist_.begin(); it!=transformed_plist_.end(); it++ )
        {
           ofs << (*it).size() <<" ";
           for ( auto i=(*it).begin(); i!=(*it).end(); i++ ) ofs << *i <<" ";
@@ -221,9 +221,9 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      
      // 6. writing CELL_TYPES
      // ---------------------
-     ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
+     ofs <<"CELL_TYPES "<< geometric_primitives_VTK_.size() << endl;
      for ( typename deque<VTK_TYPE>::const_iterator
-           vit=geometric_primitives_VTK.begin(); vit!=geometric_primitives_VTK.end(); vit++ ) ofs << (*vit) << endl;    
+           vit=geometric_primitives_VTK_.begin(); vit!=geometric_primitives_VTK_.end(); vit++ ) ofs << (*vit) << endl;
      ofs << endl;
 
      // 7. writing POINT_DATA point-type data values
@@ -239,7 +239,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
           line_break = 1;
           // getting the property data, but only after first set was written
           if ( first_iteration ) {
-               ofs <<"POINT_DATA "<< pxyz_data.size() << endl;
+               ofs <<"POINT_DATA "<< pxyz_data_.size() << endl;
                ofs.setf( ios::scientific );
                first_iteration = false;
             }
@@ -248,7 +248,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                variable = (*npit).c_str();
                replaceWhiteSpaceBy( variable, '_');
                // now only get data without coordinates
-               RetrieveData( gref, prop_key1, node_mapping, pxyz_data );
+               RetrieveData( gref, prop_key1, node_mapping_, pxyz_data_ );
                offset = 0; 
             }
        
@@ -259,7 +259,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                     ofs <<"SCALARS "<< variable <<" double"<< endl;
                     ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++, line_break++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++, line_break++ )
                       {
                          ofs << (*nit).second[offset] <<" ";
                          if ( line_break == 4 )
@@ -274,7 +274,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                case VECTOR:
                     ofs <<"VECTORS "<< variable <<" double"<< endl;
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
                       {
                          // variables have always 3 components since view screen is 3D
                          for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -286,7 +286,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                case TENSOR:
                     ofs <<"TENSORS "<< variable <<" double"<< endl;
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
                       {
                          // always 3x3 components in the tensors
                          for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -473,31 +473,31 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
        {
           // SKM fix for element based vector and tensor data
           if ( prop_key.place == ELEMENT and prop_key.type != SCALAR ) {
-                geometric_primitives_VTK.clear();
-                geometric_primitives_VTK.resize( plist.size() );
-                fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_VERTEX );
-                transformed_plist.clear();
+                geometric_primitives_VTK_.clear();
+                geometric_primitives_VTK_.resize( plist_.size() );
+                fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_VERTEX );
+                transformed_plist_.clear();
                 // inserting just the element id into the plist
                 size_t eidx(0U);
-                for ( auto eit=plist.begin(); eit!=plist.end(); eit++ )
-                  // SKM FIX (only single point needs to be stored) transformed_plist.push_back((*eit).second);
-                  transformed_plist.emplace_back(vector<size_t>(1,eidx++));
+                for ( auto eit=plist_.begin(); eit!=plist_.end(); eit++ )
+                  // SKM FIX (only single point needs to be stored) transformed_plist_.push_back((*eit).second);
+                  transformed_plist_.emplace_back(vector<size_t>(1,eidx++));
             }
           else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-            ElmtIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            ElmtIntegrationPointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
             // fill transform plist - AP Aug2006
-            transformed_plist.clear();
-            for ( auto& p : plist )
-              transformed_plist.push_back(p.second);
+            transformed_plist_.clear();
+            for ( auto& p : plist_ )
+              transformed_plist_.push_back(p.second);
           }
           else if ( prop_key.place == FACET_INTEGRATION_POINT ) {
-            FacetIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            FacetIntegrationPointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
             use_cells = false;
-            transformed_plist.clear();
+            transformed_plist_.clear();
             size_t idx(0u);
-            for (auto& p : plist) {
+            for (auto& p : plist_) {
               for (auto q : p.second) {
-                transformed_plist.emplace_back(vector<size_t>(1, idx++));
+                transformed_plist_.emplace_back(vector<size_t>(1, idx++));
               }
             }
           }
@@ -506,25 +506,25 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                             "Sector integration point placement not yet supported");
           }
           else {
-               NodeBasedTopology( gref, elmt_ids, plist, node_mapping );
-               TransformPlist( gref, plist, transformed_plist );
+               NodeBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+               TransformPlist( gref, plist_, transformed_plist_ );
             }
        }
      last_visualized_ = prop_key.place;
 
      // not the topology but only the data have to be updated
      if ( prop_key.place == NODE ) 
-       NodeData( gref, prop_key, node_mapping, pxyz_data );
+       NodeData( gref, prop_key, node_mapping_, pxyz_data_ );
      else if ( prop_key.place == ELEMENT_INTEGRATION_POINT
               || prop_key.place == FACET_INTEGRATION_POINT
               || prop_key.place == SECTOR_INTEGRATION_POINT )
-       IntegrationPointData( gref, prop_key, pxyz_data );
+       IntegrationPointData( gref, prop_key, pxyz_data_ );
      else if ( prop_key.place == ELEMENT  or  prop_key.place == FACE  or prop_key.place == INTER_FACE  ) {
           if ( prop_key.type != SCALAR ) {
-                PointBasedTopology( gref, elmt_ids, plist, node_mapping );
-                ElementPointData( gref, prop_key, node_mapping, pxyz_data );
+                PointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+                ElementPointData( gref, prop_key, node_mapping_, pxyz_data_ );
             }
-          else NodeCoordinates( gref, node_mapping, pxyz_data );
+          else NodeCoordinates( gref, node_mapping_, pxyz_data_ );
        }
 
      // 2. write data into a stringstream
@@ -542,11 +542,11 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      // 3.2 writing coordinates
      // ---------------------------
      ofs <<"DATASET " << (use_cells ? "UNSTRUCTURED_GRID" : "POLYDATA") << endl;
-     ofs <<"POINTS " << pxyz_data.size() <<" double"<< endl;
+     ofs <<"POINTS " << pxyz_data_.size() <<" double"<< endl;
      
      typename map<size_t,vector<double> >::const_iterator  nit;
-     const typename map<size_t,vector<double> >::const_iterator  nit_end(pxyz_data.end());
-     for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+     const typename map<size_t,vector<double> >::const_iterator  nit_end(pxyz_data_.end());
+     for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
        {
           for ( uint32_t i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2 ) ofs << 0.0 <<"  ";
@@ -558,14 +558,14 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
       // 3.3 getting total number of connections + numbers giving connections per element
       // -------------------------------------------------------------------------------
      size_t cell_list_size(0);
-     const auto eit_end(transformed_plist.end());
-     for ( auto eit=transformed_plist.begin(); eit!=eit_end; eit++ )
+     const auto eit_end(transformed_plist_.end());
+     for ( auto eit=transformed_plist_.begin(); eit!=eit_end; eit++ )
        cell_list_size += (*eit).size() + 1;
      
      // 3.4 writing CELLS (cell-size and member nodes (point))
      // -----------------------------------------------------
-     ofs <<"CELLS "<< transformed_plist.size() <<" "<< cell_list_size << endl;
-     for ( auto eit=transformed_plist.begin(); eit!=eit_end; eit++ )
+     ofs <<"CELLS "<< transformed_plist_.size() <<" "<< cell_list_size << endl;
+     for ( auto eit=transformed_plist_.begin(); eit!=eit_end; eit++ )
        {
           ofs << (*eit).size() <<" ";
           for ( auto it=(*eit).begin(); it!=(*eit).end(); it++ ) ofs << *it <<" ";
@@ -575,10 +575,10 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      
      // 3.5 writing CELL_TYPES
      // ----------------------
-     ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
+     ofs <<"CELL_TYPES "<< geometric_primitives_VTK_.size() << endl;
      deque<VTK_TYPE>::const_iterator  vit;
-     const deque<VTK_TYPE>::const_iterator  vit_end(geometric_primitives_VTK.end());
-     for ( vit=geometric_primitives_VTK.begin(); vit!=vit_end; vit++ )
+     const deque<VTK_TYPE>::const_iterator  vit_end(geometric_primitives_VTK_.end());
+     for ( vit=geometric_primitives_VTK_.begin(); vit!=vit_end; vit++ )
        ofs << (*vit) << endl;
      ofs << endl;
     }
@@ -589,19 +589,19 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      size_t  offset(3U);
      if ( prop_key.type == SCALAR  and  (prop_key.place == ELEMENT  or prop_key.place == FACE  or prop_key.place == INTER_FACE ) ) {
           // resizing cell data record
-          CellData( gref, prop_key, plist, pxyz_data );
-//          assert( pxyz_data.size() == transformed_plist.size() );
-          ofs <<"CELL_DATA "<< transformed_plist.size() << endl;
+          CellData( gref, prop_key, plist_, pxyz_data_ );
+//          assert( pxyz_data_.size() == transformed_plist_.size() );
+          ofs <<"CELL_DATA "<< transformed_plist_.size() << endl;
           offset = 0U;
        }
-     else ofs <<"POINT_DATA "<< pxyz_data.size() << endl;
+     else ofs <<"POINT_DATA "<< pxyz_data_.size() << endl;
      ofs.setf( ios::scientific );
      switch( prop_key.type )
        {
           case SCALAR:
                ofs <<"SCALARS "<< variable <<" double"<< endl;
                ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++, line_break++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++, line_break++ )
                  {
                     ofs << (*nit).second[offset] <<" ";
                     if ( line_break == 4 ) {
@@ -613,7 +613,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
 
           case VECTOR:
                ofs <<"VECTORS "<< variable <<" double"<< endl;
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
                  {
                     // variables have always 3 components since view screen is 3D
                     for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -623,7 +623,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
            break;
           case TENSOR:
                ofs <<"TENSORS "<< variable <<" double"<< endl;
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
                  {
                     // always 3x3 components in the tensors
                     for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -940,9 +940,9 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
       
     // 2. assigning the VTK type for the clist entries
     // -----------------------------------------------
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
-    geometric_primitives_VTK.resize( clist.size() );
-    fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
+    geometric_primitives_VTK_.resize( clist.size() );
+    fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_POLY_VERTEX );
 
   } // end ElmtIntegrationPointBasedTopology
 
@@ -1011,9 +1011,9 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
     
     // 2. assigning the VTK type for the clist entries
     // -----------------------------------------------
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
-    geometric_primitives_VTK.resize( clist.size() );
-    fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
+    geometric_primitives_VTK_.resize( clist.size() );
+    fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_POLY_VERTEX );
     
   } // end IntegrationPointBasedTopology
   
@@ -1511,7 +1511,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
     // 2. Looping through the plist, associating the element properties with the nodal pxyz_data     
     // data values
     // -----------------------------------------------------------------------------------------
-    for ( auto it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist_.begin(); it!=plist_.end(); it++ )
       {
          if ( prop_key.type == SCALAR )
            {
@@ -1614,7 +1614,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
     // 2. Looping through the plist, associating the element properties with the nodal pxyz_data     
     // data values
     // -----------------------------------------------------------------------------------------
-    for ( auto it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist_.begin(); it!=plist_.end(); it++ )
       {
          if ( prop_key.type == SCALAR )
            {
@@ -1694,205 +1694,205 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
     vector<size_t>  pentry(3), tentry(4),   qentry(4),     hentry(8);
  
     tdeque.erase( tdeque.begin(), tdeque.end() );
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
    
     for ( auto it=plist.begin(); it!=plist.end(); it++ )
       {
          switch ( sgref.E( (*it).first )->FE_Type() )
            {
               case LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
+                   geometric_primitives_VTK_.push_back(VTK_LINE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
+                   geometric_primitives_VTK_.push_back(VTK_LINE);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_BAR: // double segment
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_EDGE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_EDGE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TRIANGLE3D: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TETRAHEDRON: // tetrahedron (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tdeque.push_back( (*it).second );
                 break;
               
               case ISOPARAMETRIC_LINEAR_TETRAHEDRON: // tetrahedron (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tdeque.push_back( (*it).second );
                 break;
               
               case QUADRATIC_TRIANGLE:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_QUADRATIC_TRIANGLE: // quadratic triangle
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TRIANGLE); // (=22)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TRIANGLE); // (=22)
                    tdeque.push_back( (*it).second );
                 break;
 
               // there is not matching VTK element type, hence conversion into 6 triangles
               case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE: // quadratic barycentric triangle (bubble node)
                    // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_BIQUADRATIC_TRIANGLE); // (=32)
+                   geometric_primitives_VTK_.push_back(VTK_BIQUADRATIC_TRIANGLE); // (=32)
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: // quadratic tetrahedron -> 13 tetrahedra
                    // ANSYS 10-noded tetrahedron
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TETRA); // (=24)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TETRA); // (=24)
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON: // barycentric quadratic tetrahedron -> 13 tetrahedra
                    // basal 3 outer tetrahedra
                    // tetrahedron 1
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[0]; tentry[1]=(*it).second[4]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[7];
                    tdeque.push_back( tentry );
                    // tetrahedron 2
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[1]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[4]; tentry[3]=(*it).second[8];
                    tdeque.push_back( tentry );
                    // tetrahedron 3
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[2]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[5]; tentry[3]=(*it).second[9];
                    tdeque.push_back( tentry );
                    // top 3 tetrahedra
                    // tetrahedron 4
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[7]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // tetrahedron 5
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[8]; tentry[1]=(*it).second[9]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // tetrahedron 6
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[7]; tentry[1]=(*it).second[10]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // intermediate 3 side tetrahedra
                    // tetrahedron 7
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[8]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 8
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[5]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 9
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[6]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[9];
                    tdeque.push_back( tentry );
                    // oblique 3 tetrahedra in the lower part of the parent tetrahedron
                    // tetrahedron 10
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[7]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 11
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[8];
                    tdeque.push_back( tentry );
                    // tetrahedron 12
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[6]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // lower plane basal tetrahedron
                    // tetrahedron 13
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                 break;
 
 			  case LINEAR_RECTANGLE: // (vectors are just copied over)
-				  geometric_primitives_VTK.push_back(VTK_QUAD);
+				  geometric_primitives_VTK_.push_back(VTK_QUAD);
 				  tdeque.push_back((*it).second);
 				  break;
 
               case ISOPARAMETRIC_LINEAR_QUADRILATERAL: // (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
+                   geometric_primitives_VTK_.push_back(VTK_QUAD);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_LINEAR_PYRAMID: // (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_PYRAMID);
+                   geometric_primitives_VTK_.push_back(VTK_PYRAMID);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_LINEAR_PRISM: // Wedge (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_WEDGE);
+                   geometric_primitives_VTK_.push_back(VTK_WEDGE);
                    tdeque.push_back( (*it).second );
                 break;
                 
 			  case LINEAR_CUBOID: // linear cuboid 
-				  geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+				  geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
 				  tdeque.push_back((*it).second);
 				  break;
 
               case ISOPARAMETRIC_LINEAR_HEXAHEDRON: // linear hexahedron 
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    tdeque.push_back( (*it).second );
                 break;
                
               case ISOPARAMETRIC_QUADRATIC_PRISM15:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_WEDGE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_WEDGE);
                    tdeque.push_back( (*it).second );
                 break;
                
               case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_PYRAMID);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_PYRAMID);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20: // quadratic hexahedron
                    // like the 20-noded ANSYS hexahedron
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_HEXAHEDRON); // (=25)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_HEXAHEDRON); // (=25)
                    tdeque.push_back( (*it).second );
                  break;
                
               case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: // quadratic hexahedron
                    //Linear hex 1 => 0,8,20,11,   12,22,26,24
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[0]; hentry[1] = (*it).second[8]; hentry[2] = (*it).second[20];
                    hentry[3] = (*it).second[11]; hentry[4] = (*it).second[12]; hentry[5] = (*it).second[21];
                    hentry[6] = (*it).second[26]; hentry[7] = (*it).second[24];
                    tdeque.push_back( hentry );
                    
                     //Linear hex 2 => 8,1,9,20,   21,13,22,26
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[8]; hentry[1] = (*it).second[1]; hentry[2] = (*it).second[9];
                    hentry[3] = (*it).second[20]; hentry[4] = (*it).second[21]; hentry[5] = (*it).second[13];
                    hentry[6] = (*it).second[22]; hentry[7] = (*it).second[26];
                    tdeque.push_back( hentry );
                 
                    //Linear hex 3 =>  20,9,2,10  26,22,14,23 
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[20]; hentry[1] = (*it).second[9]; hentry[2] = (*it).second[2];
                    hentry[3] = (*it).second[10]; hentry[4] = (*it).second[26]; hentry[5] = (*it).second[22];
                    hentry[6] = (*it).second[14]; hentry[7] = (*it).second[23];
                    tdeque.push_back( hentry );
                 
                    //Linear hex 4 =>  11,20,10,3  24,26,23,15
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[11]; hentry[1] = (*it).second[20]; hentry[2] = (*it).second[10];
                    hentry[3] = (*it).second[3]; hentry[4] = (*it).second[24]; hentry[5] = (*it).second[26];
                    hentry[6] = (*it).second[23]; hentry[7] = (*it).second[15];
@@ -1900,28 +1900,28 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                    
                    // Second layer of hexes
                    //Linear hex 5 =>  12,21,26,24  4,16,25,19
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[12]; hentry[1] = (*it).second[21]; hentry[2] = (*it).second[26];
                    hentry[3] = (*it).second[24]; hentry[4] = (*it).second[4]; hentry[5] = (*it).second[16];
                    hentry[6] = (*it).second[25]; hentry[7] = (*it).second[19];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 6 => 21,13,22,26,  16,5,17,25,
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[21]; hentry[1] = (*it).second[13]; hentry[2] = (*it).second[22];
                    hentry[3] = (*it).second[26]; hentry[4] = (*it).second[16]; hentry[5] = (*it).second[5];
                    hentry[6] = (*it).second[17]; hentry[7] = (*it).second[25];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 7 => 26,22,14,23,  25,17,6,18
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[26]; hentry[1] = (*it).second[22]; hentry[2] = (*it).second[14];
                    hentry[3] = (*it).second[23]; hentry[4] = (*it).second[25]; hentry[5] = (*it).second[17];
                    hentry[6] = (*it).second[6]; hentry[7] = (*it).second[18];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 8 => 24,26,23,15  19,25,18,7
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[24]; hentry[1] = (*it).second[26]; hentry[2] = (*it).second[23];
                    hentry[3] = (*it).second[15]; hentry[4] = (*it).second[19]; hentry[5] = (*it).second[25];
                    hentry[6] = (*it).second[18]; hentry[7] = (*it).second[7];
@@ -1929,12 +1929,12 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: // 8-noded quadratic quadrilateral
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_QUAD); // (=23)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_QUAD); // (=23)
                    tdeque.push_back( (*it).second  );
                 break;
                 
               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9: // quadratic quadrilateral
-                   geometric_primitives_VTK.push_back(VTK_BIQUADRATIC_QUAD);
+                   geometric_primitives_VTK_.push_back(VTK_BIQUADRATIC_QUAD);
                    tdeque.push_back( (*it).second  );
                 break;
 
@@ -2846,7 +2846,7 @@ void csmpBinaryToVTK( const char* modelBinFIleName )
   Model<3> model( bin_file_set );
 
   if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
-    cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
+    cerr << "\ncsmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
     return;
   }
   if ( !model.ContainsRegion( regionName.c_str() ) ) {

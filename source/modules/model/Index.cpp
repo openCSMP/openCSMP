@@ -105,7 +105,7 @@ template VARIABLE_TYPE variableType( const FlaggedArrayVariable& );
 Index::Index() 
   : type(SCALAR), 
     place(UNDEFINED), 
-    index(ULONG_MAX),
+    index(UNSPECIFIED),
     dataDepth(0),
     flagDepth(0),
     dataOffset(0),
@@ -347,7 +347,7 @@ bool Index::operator!=( const csmp::Index& i ) const
 
 @return true if an index has been assigned
 */
-bool Index::IsDefined() const { return (index != ULONG_MAX);  }
+bool Index::IsDefined() const { return (index != UNSPECIFIED);  }
 
 
 /// Registers an IndexTracker (does not detach from current!)
