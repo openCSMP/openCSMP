@@ -99,6 +99,7 @@ public:
                              const std::vector<double>& b,
                              const std::vector<double>& x ) const;
 
+  virtual void InputSolverSettings( SolverSettings& settings );
   virtual SolverSettings* GetSolverSettings();
 
 protected:
@@ -114,7 +115,7 @@ protected:
                                      
   // TODO: add other options to interface with MTL, Eigen etc.
 
-  SolverSettings* solver_settings_;
+  SolverSettings* solver_settings_ = nullptr;
 
 private:
   bool  verbose_;

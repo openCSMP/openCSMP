@@ -21,7 +21,7 @@ Integrator<dim,USER>::Integrator( size_t m_x_n, double lower_limit, double upper
  {
     // configuring SAMG for first use
 #ifdef CSMP_WITH_SAMG_SOLVER
-    solver_.GetSolverSettings() = &settings_;
+    solver_.InputSolverSettings( settings_ );
     settings_.SetSolverInstance(2);
 #endif
  }

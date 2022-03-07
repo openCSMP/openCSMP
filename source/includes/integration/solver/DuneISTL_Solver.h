@@ -96,7 +96,7 @@ public:
     double   Get_reduction() const { return reduction; }
     double   Get_w() const { return w_; }
     int      Get_n() const { return n_; }
-    const AmgParameters& Get_amg_params() const { return params; }
+    const    AmgParameters& Get_amg_params() const { return params; }
     bool     Get_reuse() const { return reuse; }
     bool     Get_usesuperlu() const { return usesuperlu; }
 

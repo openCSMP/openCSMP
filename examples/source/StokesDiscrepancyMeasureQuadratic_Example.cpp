@@ -98,7 +98,6 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       PropertyHandle<dim>  pbf( model, "parabolic function", SCALAR, NODE );
 
       #ifdef CSMP_WITH_SAMG_SOLVER
-something wrong with the compilation
       SAMG_Settings  settings;
       SAMG_Solver    solver(&settings);
       settings.Set_nxtyp(0);

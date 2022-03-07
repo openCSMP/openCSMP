@@ -14,24 +14,24 @@ public:
     virtual ~Meschach_Solver();
 
 protected:
-    virtual void SolveWithMeschach(SparseMatrix& A,
-                                   std::vector<double>& b,
-                                   std::vector<double>& x,
-                                   double solver_tolerance) = 0;
+    virtual void SolveWithMeschach( SparseMatrix& A,
+                                    std::vector<double>& b,
+                                    std::vector<double>& x,
+                                    double solver_tolerance ) = 0;
 
 private:
-    virtual void SolveMatrixEquation(SparseMatrix& A,
-                                     std::vector<double>& b,
-                                     std::vector<double>& x,
-                                     size_t no_unknowns);
+    virtual void SolveMatrixEquation( SparseMatrix& A,
+                                      std::vector<double>& b,
+                                      std::vector<double>& x,
+                                      size_t no_unknowns );
 
-    double GuessResidual(const SparseMatrix& A,
-                            const std::vector<double>& b,
-                            std::vector<double>& x);
+    double GuessResidual( const SparseMatrix& A,
+                          const std::vector<double>& b,
+                          std::vector<double>& x );
     
-    double CalculateResidual(const SparseMatrix& A,
-                                const std::vector<double>& b,
-                                const std::vector<double>& x);
+    double CalculateResidual( const SparseMatrix& A,
+                              const std::vector<double>& b,
+                              const std::vector<double>& x );
 
     double residual_factor_;
 };
