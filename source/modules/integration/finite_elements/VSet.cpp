@@ -82,10 +82,9 @@ void VSet<dim>::Resize( uint32_t nodes_per_element,
                         size_t elmts )
 {
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
-  if ( !pmtrl_.empty() || !property_map_.empty() ) {
-       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
-       pmtrl_.resize( elmts );
-    }
+  pmtrl_.resize( elmts );
+  if ( !property_map_.empty() )
+    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
 }
 
 
@@ -101,10 +100,9 @@ void VSet<dim>::Resize( const deque<int8_t>& etypes,
                         size_t nodes, size_t faces, size_t interfaces )
 {
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
-  if ( !pmtrl_.empty() || !property_map_.empty() ) {
-       pmtrl_.resize( epes.size() - faces - interfaces );
-       cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
-    }
+  pmtrl_.resize( epes.size() - faces - interfaces );
+  if ( !property_map_.empty() )
+    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
 }
 
 

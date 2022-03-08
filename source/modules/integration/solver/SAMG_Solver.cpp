@@ -136,16 +136,10 @@ The new setting is stored as a pointer variable.
 objects given to it. The user is therefore solely responsible for guaranteeing
 the destruction of SAMG_Settings objects created with new
 */
-void SAMG_Solver::InputSolverSettings( SAMG_Settings* settings ) {
-    assert(settings!=NULL);
-    if (settings_)
-        delete settings_;
-    if (solver_settings_)
-        delete solver_settings_;
-
-    settings_ = settings;
-    solver_settings_ = settings;
-}
+void SAMG_Solver::InputSolverSettings( SolverSettings& settings )
+ {
+    settings_ = static_cast<SAMG_Settings*>(&settings);
+ }
 
 SolverSettings* SAMG_Solver::GetSolverSettings() {
     return settings_;

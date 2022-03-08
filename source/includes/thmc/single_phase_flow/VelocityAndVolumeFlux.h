@@ -120,12 +120,15 @@ class VelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( CELL& );
-    virtual void WriteOperands( CELL& );
+    virtual void GetOperands( const CELL& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
+
+    virtual void WriteOperands( CELL& );
+
     virtual VelocityAndVolumeFlux<dim,CELL>* clone() const { return new VelocityAndVolumeFlux<dim,CELL> (*this); }
+
   private:
 
     void ExtractVelocity( const DenseMatrix<DM_MIN>& INP, uint32_t col, VectorVariable<dim>& );

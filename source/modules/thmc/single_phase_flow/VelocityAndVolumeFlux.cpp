@@ -241,19 +241,18 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 template<uint32_t dim,class CELL>
 VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
-                                                    const char* oper,   // conductivity
-                                                    const char* basic,  // porosity
-                                                    const char* test,   // fluid pressure 
-                                                    const char* relative_density, // relative fluid density
-                                                    const char* prop_multiplier, // operand multiplier
-                                                    bool  node_averaging,
-													const char* velocity,
-													const char* pore_velocity,
-													const char* volume_flux,
-													const char* nodal_velocity,
-													const char* nodal_pore_velocity,
-													const char* nodal_volume_flux)
-
+                                                        const char* oper,   // conductivity
+                                                        const char* basic,  // porosity
+                                                        const char* test,   // fluid pressure
+                                                        const char* relative_density, // relative fluid density
+                                                        const char* prop_multiplier, // operand multiplier
+                                                        bool  node_averaging,
+                                                        const char* velocity,
+                                                        const char* pore_velocity,
+                                                        const char* volume_flux,
+                                                        const char* nodal_velocity,
+                                                        const char* nodal_pore_velocity,
+                                                        const char* nodal_volume_flux)
   : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
     PF_(3),
     VELOFLUX_(dim+1),
@@ -408,7 +407,7 @@ bool VelocityAndVolumeFlux<dim,CELL>::WithLowerDimensionalElements( const Model<
 
 
 template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::GetOperands( CELL& e )
+void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
     
@@ -501,10 +500,8 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( CELL& e )
 A reference to the Element for which the post-processing is done.  
 */
 template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( CELL& e )
+void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
 {
-   typename list<vector<double> >::const_iterator  lit;
-
    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
         if ( verbose_ )
           cout <<"\n\nVelocityAndVolumeFlux::ComputeContribution: Element: "<< e.Idx() << endl; 
@@ -685,8 +682,8 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( CELL& e )
                for ( auto j=0; j<components_; j++ )
                  {  
                     // averaging velocity/flux components
-                    for ( sum_=0.0,
-                          lit =temp_veloflux_[ e.N(i)->Idx() ].begin();
+                    sum_=0.0;
+                    for ( auto lit =temp_veloflux_[ e.N(i)->Idx() ].begin();
                           lit!=temp_veloflux_[ e.N(i)->Idx() ].end(); lit++ )
                           sum_ += (*lit)[j];
                     sum_ /= static_cast<double>(temp_veloflux_[ e.N(i)->Idx() ].size());
@@ -788,19 +785,17 @@ void VelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MI
 
 template<uint32_t dim,class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
-                                                                      uint32_t col,
-                                                                      VectorVariable<dim>& vc )
+                                                                   uint32_t col,
+                                                                   VectorVariable<dim>& vc )
  {
     for ( auto i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
  }
  
 
 
-
-
-template class VelocityAndVolumeFlux<1U,Element<1U> >;
-template class VelocityAndVolumeFlux<2U,Element<2U> >;
-template class VelocityAndVolumeFlux<3U,Element<3U> >;
+template class VelocityAndVolumeFlux<1U>;
+template class VelocityAndVolumeFlux<2U>;
+template class VelocityAndVolumeFlux<3U>;
 
 template class VelocityAndVolumeFlux<1U,Face<1U> >;
 template class VelocityAndVolumeFlux<2U,Face<2U> >;

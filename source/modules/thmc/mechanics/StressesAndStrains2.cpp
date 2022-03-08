@@ -301,7 +301,7 @@ base class MathOperatorRHS must be overloaded, such that the nodal Operand
 can be retrieved. 
 */
 
-void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
+void StressesAndStrains<2U>::GetOperands( const Element<2U>& e )
 {
     vector<VectorVariable<2U> >  NVAR(e.Nodes());
     size_t                       k;
@@ -378,7 +378,7 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
 A reference to the Element for which the post-processing is done.  
 */
 
-void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
+void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
 {
    // 1. Computing STRAINS and STRESSES at the integration points from the nodal 
    //    displacements and the interpolation function derivative matrices

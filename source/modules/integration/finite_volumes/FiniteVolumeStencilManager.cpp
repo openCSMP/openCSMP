@@ -55,7 +55,7 @@ const FiniteVolumeStencil<dim>* const FiniteVolumeStencilManager<dim>::Stencil( 
  {
     std::map<CSMP_FEM_TYPE,size_t>::const_iterator  it = type_mapping.find(etype);
     if ( it == type_mapping.end() ) {
-         std::cerr <<"\nFiniteVolumeStencilManager<dim>::FiniteVolumeStencil: FV Stencil for requested ";
+         std::cerr <<"\nFiniteVolumeStencilManager<dim>::Stencil: FV stencil for requested ";
          std::cerr << parseFiniteElementType(etype) <<" type is not available."<< std::endl;
          return nullptr;
       }

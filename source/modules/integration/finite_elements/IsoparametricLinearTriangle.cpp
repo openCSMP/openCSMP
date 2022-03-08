@@ -410,7 +410,7 @@ IsoparametricLinearTriangle::AspectRatio()
    for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()),
-             segm2 = (*segms.rbegin());
+          segm2 = (*segms.rbegin());
 
    return segm2 / segm1;
 }
@@ -1572,11 +1572,11 @@ void IsoparametricLinearTriangle::UnitNormal( std::vector<double>& vc ) const
       }
 
     double X12 = XY(1,0) - XY(0,0), // X
-             X31 = XY(0,0) - XY(2,0),
-             Y12 = XY(1,1) - XY(0,1), // Y
-             Y31 = XY(0,1) - XY(2,1),
-             Z12 = XY(1,2) - XY(0,2), // Z
-             Z31 = XY(0,2) - XY(2,2);
+           X31 = XY(0,0) - XY(2,0),
+           Y12 = XY(1,1) - XY(0,1), // Y
+           Y31 = XY(0,1) - XY(2,1),
+           Z12 = XY(1,2) - XY(0,2), // Z
+           Z31 = XY(0,2) - XY(2,2);
 
     // normal to triangle (*- to flip to outside)
     vc[0]  = -Y12*Z31 + Z12*Y31;

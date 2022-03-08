@@ -57,8 +57,9 @@ Element<dim>::Element( csmp::FiniteElement* f,
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
-  assert( f   != nullptr );
-  assert( fvs != nullptr );
+   assert( f   != nullptr );
+   if ( this->UsesLocalCoordinates() )
+     assert( fvs != nullptr );
 }
 
 
@@ -76,10 +77,11 @@ Element<dim>::Element( csmp::FiniteElement* f,
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
 {
-  assert( f   != nullptr );
-  assert( fvs != nullptr );
-  if ( this->UsesLocalCoordinates() )
-    this->ResizePropertyStorage( ep, cp );
+  assert( f != nullptr );
+  if ( this->UsesLocalCoordinates() ) {
+       assert( fvs != nullptr );
+       this->ResizePropertyStorage( ep, cp );
+    }
   else
     this->ResizePropertyStorage( ep );
 }
@@ -106,9 +108,10 @@ Element<dim>::Element( size_t idx,
     node_connector_( f->Nodes(), nullptr )
 {
   assert( f != nullptr );
-  assert( s != nullptr );
-  if ( this->UsesLocalCoordinates() )
-    this->ResizePropertyStorage( ep, cp );
+  if ( this->UsesLocalCoordinates() ) {
+       assert( s != nullptr );
+       this->ResizePropertyStorage( ep, cp );
+    }
   else
     this->ResizePropertyStorage( ep );
 }
