@@ -396,12 +396,12 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensit
 
 
 template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( CELL& e )
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
 
         // relative density, total mobility and gravity term
-        ComputeTotalMobilityRelativeDensityAndGravityTerm( e );
+        ComputeTotalMobilityRelativeDensityAndGravityTerm( const_cast<CELL&>(e) );
 
         // fluid pressure
         e.NodePropertyVector( MathOperatorLHS<dim>::TestOperandKey(), PF_ );
@@ -479,7 +479,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( CELL& e )
 A reference to the Element for which the post-processing is done.  
 */
 template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( CELL& e )
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
 {
     typename list<vector<double> >::const_iterator  lit;
 
@@ -867,7 +867,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( CELL& e )
 //////////////////////////////////////////////////
 
 template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( Node<dim>& n_ref )
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<dim>& n_ref )
 {
     // initialize output value
     double value = 0.0;

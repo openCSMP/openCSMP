@@ -328,4 +328,8 @@ SolverSettings* Solver::GetSolverSettings() {
     return solver_settings_;
 }
 
+void Solver::InputSolverSettings( SolverSettings& solver_settings ) {
+   solver_settings_ = &solver_settings;
+}
+
 } // end namespace csmp

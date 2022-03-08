@@ -531,13 +531,13 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     set<CELL<dim>*> interior_elmts, boundary_elmts;
     set<Node<dim>*>                 boundary_nodes;
     set<pair<CELL<dim>*,size_t> >   boundary_faces;
-    vector<uint32_t>                  fnids;
+    vector<uint32_t>                fnids;
 
     // 1.1 If all elements have the same spatial dimension
     // ---------------------------------------------------
     if ( elmt_dim.first == 1 )
       {
-        for ( const auto& eit : this->elmt_vec_ )
+        for ( auto& eit : this->elmt_vec_ )
           {
             // identifying the boundary faces and their nodes
             // (each face potentially has a neighbor element)
@@ -552,8 +552,10 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                   // boundary nodes
                   assert( eit->FE() != nullptr );
                   eit->FE()->NodesOfFace(i, fnids);
-                  for (size_t j = 0U; j<fnids.size(); ++j)
-                    boundary_nodes.insert( eit->N(fnids[j]) );
+                  for ( auto j=0U; j<fnids.size(); ++j ) {
+                       assert( eit->N( fnids[j] ) );
+                       boundary_nodes.insert( eit->N( fnids[j] ) );
+                    }
                   // counting neighbors
                   nbors_that_belong_to_group--;
                 }
@@ -580,38 +582,37 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
         set<CELL<dim>*> lesser_dim_elmts;
         set<Node<dim>*> highest_dim_elmt_nodes;
 
-        for ( typename vector<CELL<dim>*>::const_iterator
-              eit=this->elmt_vec_.begin(); eit!=this->elmt_vec_.end(); eit++ )
+        for ( auto& eit : this->elmt_vec_ )
           {
               // elements of the highest spatial dimension are used to define the boundary
-              assert( parseFiniteElementDimension( (*eit)->FE_Type() ) != 0 );
-              if ( parseFiniteElementDimension( (*eit)->FE_Type() ) == elmt_dim.second )
+              assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
+              if ( parseFiniteElementDimension( eit->FE_Type() ) == elmt_dim.second )
                 {
                    // creating a subset with their nodes
-                   for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
-                        assert( (*eit)->N(i) != nullptr );
-                        highest_dim_elmt_nodes.insert( (*eit)->N(i) );
+                   for ( auto i{0}; i<eit->Nodes(); ++i ) {
+                        assert( eit->N(i) != nullptr );
+                        highest_dim_elmt_nodes.insert( eit->N(i) );
                      }
                    // if the element has faces that lie on the region boundary
                    // it is considered a boudary element
-                   long  nbors_that_belong_to_group((*eit)->Neighbors());
-                   for ( auto i{0}; i<(*eit)->Faces(); ++i )
+                   long  nbors_that_belong_to_group(eit->Neighbors());
+                   for ( auto i{0}; i<eit->Faces(); ++i )
                      // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
-                     if ( (*eit)->Neighbor(i) == nullptr        or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), (*eit)->Neighbor(i) ) )
+                     if ( eit->Neighbor(i) == nullptr        or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i) ) )
                        {
                           // the element pointer and the face number are used to create a unique key for the discovered boundary face
-                          boundary_faces.insert( make_pair( (*eit), i ) );
+                          boundary_faces.insert( make_pair( eit, i ) );
                           // recording the nodes of the boundary face as boundary nodes
-                          (*eit)->FE()->NodesOfFace( i, fnids );
+                          eit->FE()->NodesOfFace( i, fnids );
                           for ( size_t j=0U; j<fnids.size(); ++j )
-                            boundary_nodes.insert( (*eit)->N(fnids[j]) );
+                            boundary_nodes.insert( eit->N(fnids[j]) );
 
                           nbors_that_belong_to_group--;
                        }
-                   if ( nbors_that_belong_to_group == (*eit)->Neighbors() ) interior_elmts.insert( (*eit) );
-                   else boundary_elmts.insert( (*eit) );
+                   if ( nbors_that_belong_to_group == eit->Neighbors() ) interior_elmts.insert( eit );
+                   else boundary_elmts.insert( eit );
                 }
-               else lesser_dim_elmts.insert( (*eit) );
+               else lesser_dim_elmts.insert( eit );
             }
         assert( /* all elements are accounted for */ this->elmt_vec_.size() == interior_elmts.size() + boundary_elmts.size() + lesser_dim_elmts.size() );
 
@@ -626,15 +627,15 @@ cout.flush();
          // 1.3  processing lower dimensional elements and their nodes in the subdomain
          // ---------------------------------------------------------------------------
          // 1.3.1 nodes that are not contained in the higher-dimensional element subset are identified as extra boundary node
-         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
-           for ( auto i{0}; i<(*it)->Nodes(); ++i )
-             if ( highest_dim_elmt_nodes.find( (*it)->N(i) ) == highest_dim_elmt_nodes.end() )
-               boundary_nodes.insert( (*it)->N(i) );
+         for ( auto& it : lesser_dim_elmts )
+           for ( auto i{0}; i<it->Nodes(); ++i )
+             if ( highest_dim_elmt_nodes.find( it->N(i) ) == highest_dim_elmt_nodes.end() )
+               boundary_nodes.insert( it->N(i) );
 
          // 1.3.2 finding the lesser dimensional elements on the region boundary
          set<CELL<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
 
-         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
+         for ( auto it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
            {
               // a) lower-dim elements sticking out
               // ----------------------------------
@@ -696,9 +697,9 @@ cout.flush();
            }
 
          // adding lesser-dimensional elements that are not at the boundary to the interior domain
-         for ( typename set<CELL<dim>*>::const_iterator it=lesser_dim_elmts.begin(); it!=lesser_dim_elmts.end(); ++it )
-           if ( boundary_elmts.find( (*it) ) == boundary_elmts.end() )
-             interior_elmts.insert( (*it) );
+         for ( auto& it : lesser_dim_elmts )
+           if ( boundary_elmts.find( it ) == boundary_elmts.end() )
+             interior_elmts.insert( it );
 
          if ( !lesser_dim_elmts_detached.empty() ) {             
               csmp_error.notice( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
@@ -725,9 +726,8 @@ cout.flush();
     // --------------------------------------------------
     // 2. rebuilding the element vector
     // --------------------------------------------------
-//    assert( interior_elmts.size() + boundary_elmts.size() == this->elmt_vec_.size() );
+    assert( interior_elmts.size() + boundary_elmts.size() == this->elmt_vec_.size() );
     // appending the boundary element vector<double> to the interior element vector
-    this->elmt_vec_.clear();
     this->elmt_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
     back_insert_iterator<vector<CELL<dim>*> >  back_it(this->elmt_vec_);
     copy( boundary_elmts.begin(), boundary_elmts.end(), back_it );
@@ -796,22 +796,25 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // 4. partitioning the node vector
     // --------------------------------------------------
     this->first_bd_node_ = this->node_vec_.size() - boundary_nodes.size();
-    // rebuilding and sorting the node vector (set nodes are already sorted)
+    // rebuilding and sorting the node vector (noting that set nodes are already sorted)
+    // ---------------------------------------------------------------------------------
+    sort( this->node_vec_.begin(), this->node_vec_.end() );
+    // a temp vector is created
     vector<csmp::Node<dim>*>  temp;
     temp.reserve(this->node_vec_.size());
-    // first, the interior nodes are inserted
-    for ( typename vector<csmp::Node<dim>*>::const_iterator
-          nit=this->node_vec_.begin(); nit!=this->node_vec_.end(); nit++ )
-      if ( boundary_nodes.find(*nit) == boundary_nodes.end() )
-        temp.push_back( *nit );
-    // now the vector is sorted
-    sort( temp.begin(), temp.end() );
+    // the interior nodes are inserted
+    for ( auto& nit : this->node_vec_ )
+      if ( boundary_nodes.find(nit) == boundary_nodes.end() )
+        temp.push_back( nit );
     // second, the already sorted boundary nodes are appended
-    for ( typename set<csmp::Node<dim>*>::const_iterator
-          nit=boundary_nodes.begin(); nit!=boundary_nodes.end(); nit++ )
-        temp.push_back( *nit );
+    for ( auto& nit : boundary_nodes )
+        temp.push_back( nit );
     // now the temporary vector is assigned to the permanent one
-    this->node_vec_ = temp;
+    assert( temp.size() == this->node_vec_.size() );
+    this->node_vec_ = move( temp );
+    this->node_vec_.shrink_to_fit();
+    
+    assert( this->first_bd_node_ <= this->node_vec_.size() );
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
 cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< this->Name() <<"': of the ";
@@ -2515,8 +2518,8 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
-                                                        VARIABLE_FLAG new_status_of_scalar,
-                                                        SUBDOMAIN_PART sdpart )
+                                                      VARIABLE_FLAG new_status_of_scalar,
+                                                      SUBDOMAIN_PART sdpart )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatus( property, status, sdpart );
@@ -2526,9 +2529,9 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
-                                                             VARIABLE_FLAG new_status_of_scalar,
-                                                             double min_value_to_change,
-                                                             double max_value_to_change )
+                                                           VARIABLE_FLAG new_status_of_scalar,
+                                                           double min_value_to_change,
+                                                           double max_value_to_change )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatusWhere( property, status, min_value_to_change, max_value_to_change );

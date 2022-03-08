@@ -124,8 +124,8 @@ void LineElementMesher<dim>
 
 template<uint32_t dim>
 void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
-                                        const Point<dim>& origin,
-                                        const Point<dim>& destination )
+                                                 const Point<dim>& origin,
+                                                 const Point<dim>& destination )
 {
     if( vset.Vertices() > 0 )
     {
@@ -169,6 +169,8 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
 
 } // end Initialize
 
+
+
 template<uint32_t dim>
 void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
                                       const std::vector<double>& splitnodes_x )
@@ -176,13 +178,13 @@ void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
     if( !splitnodes_x.empty() && ( vset.Vertices() > 0 ) )
     {
         // convert splitnode coordinates along x axis to generic Point format
-        std::set<Point<dim> > splitnodes;
+        set<Point<dim> > splitnodes;
         Point<dim> p( 0.0 );
         for( std::vector<double>::const_iterator it = splitnodes_x.begin(); it != splitnodes_x.end(); it++ )
         {
             p[ 0U ] = (*it);
-            for( size_t  dimension = 1U; dimension<dim; dimension++)
-                p[ dimension ] = 0.0;
+            for( auto dimension = 1U; dimension<dim; dimension++)
+              p[ dimension ] = 0.0;
             splitnodes.insert( p );
         }
 
@@ -193,8 +195,7 @@ void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
 
 
 template<uint32_t dim>
-void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
-                                      std::set<Point<dim> >& splitnodes )
+void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset, set<Point<dim> >& splitnodes )
 {
     // add splitnodes and reestablish connectivety
     EstablishConnectivity( vset, splitnodes );
@@ -216,11 +217,14 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
         AssignCornerPoints( vset, origin, destination );
 }
 
+
+
+
 template<uint32_t dim>
 void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
-                                  const std::vector<Point<dim> >& splitnode_coordinates,
-                                  const Point<dim>& origin,
-                                  const Point<dim>& destination )
+                                           const std::vector<Point<dim> >& splitnode_coordinates,
+                                           const Point<dim>& origin,
+                                           const Point<dim>& destination )
 {
     if( splitnode_coordinates.empty() )
         EstablishConnectivity( vset );
@@ -233,14 +237,6 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
     if( origin != destination )
         AssignCornerPoints( vset, origin, destination );
 }
-
-
-
-
-
-
-
-
 
 
 
@@ -274,6 +270,9 @@ void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
    }
 
  } // end UniformMesh
+
+
+
 
 
 /// create a refined mesh
@@ -380,9 +379,12 @@ void LineElementMesher<dim>
         vset.P( dimension, n, 0.0 );
 }
 
+
+
+
+
 template<uint32_t dim>
-void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
-                                const std::vector<double>& node_coordinates )
+void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<double>& node_coordinates )
 {
     const size_t  n_vertices( node_coordinates.size() );
     const size_t  n_elements( n_vertices - 1 );
@@ -408,9 +410,13 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
 
 } // end CustomMesh
 
+
+
+
+
+
 template<uint32_t dim>
-void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
-                                const std::vector<Point<dim> >& node_coordinates )
+void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<Point<dim> >& node_coordinates )
 {
     const size_t  n_vertices( node_coordinates.size() );
     const size_t  n_elements( n_vertices - 1 );
@@ -449,8 +455,6 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
     @attention for a 1D model which is oriented vertically the assignment of the
     second corner is not strictly correct.
 */
-
-
 template<uint32_t dim>
 void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 {
@@ -491,12 +495,15 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 
 } // EstablishConnectivity
 
+
+
+
+
 /**
     Inserting SplitNodes to 1D mesh, reestablishing the connectivity
 
     @author R. Manasipov
 */
-
 template<uint32_t dim>
 void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
                                            std::set<Point<dim> >& splitnodes )

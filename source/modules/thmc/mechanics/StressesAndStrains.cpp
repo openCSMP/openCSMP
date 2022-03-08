@@ -207,7 +207,7 @@ base class MathOperatorRHS must be overloaded, such that the nodal Operand
 can be retrieved. 
 
 */
-void StressesAndStrains<3U>::GetOperands( Element<3U>& e )
+void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
 {
     if ( MathOperatorLHS<3U>::ApplicationCycle() == 1 )
       {
@@ -290,7 +290,7 @@ stresses first and then calculate the eigenvalues, vectors, etc.
 only once.
  
 */
-void StressesAndStrains<3U>::ComputeContribution( Element<3U>& e )
+void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
 {
    // 1. Computing STRAINS and STRESSES at the integration points from the nodal 
    //    displacements and the interpolation function derivative matrices

@@ -49,14 +49,14 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     
     void Verbose( bool stdoutput );
 
-    virtual void GetOperands( CELL& );
-    virtual void WriteOperands( CELL& );
+    virtual void GetOperands( const CELL& );
 
     /// {V} = [grad P]{k}
-    virtual void ComputeContribution( CELL& );
+    virtual void ComputeContribution( const CELL& );
 
-    virtual void ComputeContribution( Node<dim>& n_ref );
+    virtual void ComputeContribution( const Node<dim>& );
 
+    virtual void WriteOperands( CELL& );
 
     
   private:
@@ -67,7 +67,7 @@ class TwoPhaseVelocityAndVolumeFlux : public MathOperatorLHS<dim> {
     void TestRangeOfOutputVariables() const;
 
     // Compute Gravity Term and Total mobility
-    void ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& e);
+    void ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& );
 
     bool                            verbose_,
                                     nodal_averaging_,

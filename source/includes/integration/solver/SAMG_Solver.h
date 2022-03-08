@@ -53,7 +53,7 @@ namespace csmp {
       virtual ~SAMG_Solver();
       SAMG_Solver& operator=( const SAMG_Solver& );
       
-      void InputSolverSettings( SAMG_Settings* settings );
+      virtual void InputSolverSettings( SolverSettings& settings );
       virtual SolverSettings* GetSolverSettings();
 
       bool Write_SAMG_TextInputFile( const char* filename ) const;

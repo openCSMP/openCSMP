@@ -349,6 +349,15 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                 this->RemoveBoundary( this->Boundary("Model_Boundary") );
             }
          this->RebuildRegions();
+
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
+
          this->RegionsOut();
          this->BoundariesOut();
       }
@@ -451,7 +460,7 @@ void Model<dim>::Initialize( bool isoparametric_elements,
   InitializeLocalVariableStorage();
   UpdateSubdomainPropertyStorage();
 
-#ifdef DEBUG
+#ifdef CSMP_MODEL_DEBUG
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );

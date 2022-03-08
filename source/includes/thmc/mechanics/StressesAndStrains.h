@@ -28,10 +28,10 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
                         bool geomechanics_conventions=true  );
     
     /// get displacement values to compute {d} vector
-    virtual void GetOperands( Element<3U>& );
+    virtual void GetOperands( const Element<3U>& );
 
     /// {e} = [B]{d}, {s} = [D]{e} at integration points
-    virtual void ComputeContribution( Element<3U>& );
+    virtual void ComputeContribution( const Element<3U>& );
 
     /// write {e} to each elements
     virtual void WriteOperands( Element<3U>& );
