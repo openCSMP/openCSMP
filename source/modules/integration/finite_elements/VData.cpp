@@ -3073,7 +3073,7 @@ void VData::EstablishElementConnectivity3D()
     for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
       {
          // getting the element type (unfortunately this is known only at runtime)
-         const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>( pelmt[elmt_idx] );
+         const auto etype = (HybridElementTypeMesh()==true) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt_idx]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
          assert( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) != UNKNOWN );
          
           const auto faces(CSMP_ElementSpecifications::FacesPerElementOfType(etype));
