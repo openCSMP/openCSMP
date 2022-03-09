@@ -25,7 +25,8 @@ class TRIANGLE_Interface {
     
     void ReadNodeDataFile( const char* file, 
                            std::deque<double>& x, std::deque<double>& y, std::deque<double>& z,
-                           std::vector<std::int8_t>&  bflags, std::map<size_t,double>& bvalues );
+                           std::map<size_t,int8_t>& bflags,
+                           std::map<size_t,double>& bvalues );
 
     void ReadElementDataFile( const char* file, 
                               std::map<size_t,std::vector<int64_t> >& plist,
@@ -45,16 +46,16 @@ class TRIANGLE_Interface {
 
     void FlagBoundaryNodes( std::map<size_t,std::vector<int64_t> >& pfverts,
                             std::map<size_t,std::vector<int64_t> >& plist,
-                            std::vector<std::int8_t>& bflags );
+                            std::map<size_t,int8_t>& bflags );
                      
     void SplitSingleCornerElements( std::map<size_t,std::vector<int64_t> >& plist,
                                     std::map<size_t,std::vector<int64_t> >& pfverts, 
                                     std::vector<double>& evalues );
   private: 
     int32_t  FindFaceBoundary( std::vector<double>& face_node1,
-                                   std::vector<double>& face_node2,
-                                   std::vector<double>& opposite_node,
-                                   bool verbose=false ); 
+                               std::vector<double>& face_node2,
+                               std::vector<double>& opposite_node,
+                               bool verbose=false );
 
     bool VerifyConsecutiveNodeNumbering( std::map<size_t,std::vector<int64_t> >& plist ) const; 
     
@@ -63,11 +64,11 @@ class TRIANGLE_Interface {
                                         std::deque<double>& x, 
                                         std::deque<double>& y ) const;
 
-    void FlagBoundaryNodesAccordingTo( size_t fvert, int64_t  bflag,
+    void FlagBoundaryNodesAccordingTo( int fvert, std::int8_t bflag,
                                        const std::vector<int64_t>& nds, 
-                                       std::vector<std::int8_t>& bflags );
+                                       std::map<size_t,int8_t>& bflags );
     
-    void FlagCornerNodes( std::vector<std::int8_t>& bflags,
+    void FlagCornerNodes( std::map<size_t,int8_t>& bflags,
                           std::deque<double>& x, std::deque<double>& y, std::deque<double>& z );  
  };
 

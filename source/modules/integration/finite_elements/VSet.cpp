@@ -131,17 +131,19 @@ void VSet<dim>::AddXYZ( const deque<double>& x,
 
 	for (auto i = 0; i<x.size(); i++) Px(i, x[i]);
 
-	if ( dim > 1 )
+	if constexpr ( dim > 1 )
     {
       assert(x.size() == y.size());
       for (auto i = 0; i<y.size(); i++) Py(i, y[i]);
     }
 
-	if ( dim > 2 )
+	if constexpr ( dim > 2 )
     {
       assert(y.size() == z.size());
       for (auto i = 0; i<x.size(); i++) Pz(i, z[i]);
     }
+    
+   ResizeBFlags();
 }
 
 

@@ -89,7 +89,7 @@ void LinearElasticity_Example::Run()
 
     const bool  use_isoparametric_elements(true);
     // 'example12.txt' is the text file that defines the variables used in this example
-    Model<2U>  model( mesh_container, "example12.txt", use_isoparametric_elements ); 
+    Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt", use_isoparametric_elements );
     mesh_container.Erase();
     printModelDimensions( model, true );
 
@@ -103,7 +103,6 @@ void LinearElasticity_Example::Run()
     Region<2U>& model_domain(model.Region("Model"));
     double  volume = model_domain.Volume();
     cout <<"\nmain: The model has a volume of: "<< volume <<" m^3."<< endl;
-
 
   // ---------------------------------------------------------------------------------------
   // 3. Material properties, groups etc. & initial & essential conditions

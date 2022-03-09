@@ -36,32 +36,28 @@ Standard_IO_Handler::~Standard_IO_Handler()
 @param question Question to be asked
 @returns true if user replies 'yes'
 */
-bool Standard_IO_Handler::YesNo( const char question[150] )
+bool Standard_IO_Handler::YesNo( const string& question )
   {
-    bool answer = false;
-    char  c;
-    int   i;
-    
-    if ( (c=static_cast<char>(cin.peek())) == '\n' ) cin.get( c );
+    bool  answer = false;
+    char  choice;
     
     /* USER YES/NO PROMPT */
     quest : { cout<<"\n\n"<< question << " [y/n] ";
-              cout.flush();
-              cin.get( c );
-              i = static_cast<int32_t>( c );
-              if ( i == 121 ) answer = true;
-              if ( i == 110 ) answer = false;
-              if ( i != 121 && i != 110 ) 
+              cin >> choice;
+              int i = choice;
+              if      ( i == 121 ) answer = true;
+              else if ( i == 110 ) answer = false;
+              else
                 {
-                   cin.get( c );
+                   cin >> choice;
                    goto quest; 
                 }
             } // END QUESTION
 
     string  communication(question);
     communication += " -> ";
-    if ( c == 'y' ) communication += "true.";
-    else            communication += "false.";
+    if ( choice == 'y' ) communication += "true.";
+    else                 communication += "false.";
     input_output.push_back(communication);
     
     return ( answer );

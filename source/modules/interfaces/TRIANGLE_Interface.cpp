@@ -4,7 +4,6 @@
 #include "IsoparametricLinearTriangle.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
-//#include "FEM_Data.h"
 #include "PropertyData.h"
 
 using namespace std;
@@ -59,14 +58,13 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     size_t  elements;
     int32_t   node_attributes;
     int32_t   elmt_attributes;
-    bool    verbose(false);
     
     // temporary mesh storage
     deque<double>                 x, y, z;
     vector<double>                evalues;
     map<size_t,vector<int64_t> >  plist;
     map<size_t,vector<int64_t> >  pfverts;
-    vector<std::int8_t>           bflags;
+    map<size_t,int8_t>            bflags;
     map<size_t,double>            bvalues;
 
     // 1. Read input files 
@@ -125,15 +123,18 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
                                        IsoparametricLinearTriangle().Neighbors(),
                                        IsoparametricLinearTriangle().ElementType(), x.size(), plist.size() );
     vset.AddXYZ( x, y, z );
+    for ( const auto& b : bflags ) vset.AddBFlag( b.first, b.second );
     vset.AddPlist( plist.begin(), plist.end() );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
-    vset.AddBFlags( bflags.begin(), bflags.end() );
     vset.AddData( "permeability", mesh_regions );
     
     // 7. Checking the VSet
     // --------------------
     vset.EstablishZeroBasedNumbering();
-    if ( verbose ) vset.Out(); 
+    
+    // SKM_FIX because neighbor information seems corrupt
+    vset.EstablishElementConnectivity2D();
+    
    
 } // end ReadTriangle2DMesh
 
@@ -161,20 +162,20 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     size_t          nodes_per_element;
     size_t          nodes;
     size_t          elements;
-    int32_t              node_attributes;
-    int32_t              elmt_attributes;
-    bool               verbose(false);
+    int32_t         node_attributes;
+    int32_t         elmt_attributes;
+    bool            verbose(false);
     
     // temporary mesh storage
-    deque<double>              x, y, z; 
-    vector<double>             evalues;
-    vector<ScalarVariable >      sc_values;
+    deque<double>                 x, y, z;
+    vector<double>                evalues;
+    vector<ScalarVariable >       sc_values;
     map<size_t,vector<int64_t> >  plist_tria;
     map<size_t,vector<int64_t> >  plist_bar;
     map<size_t,vector<int64_t> >  pfverts_tria;
     map<size_t,vector<int64_t> >  pfverts_bar;
-    std::vector<std::int8_t>     bflags;
-    map<size_t,double>         bvalues;
+    map<size_t,int8_t>            bflags;
+    map<size_t,double>            bvalues;
 
     // 1. Read input files 
     // ---------------------------------------------------------------
@@ -229,15 +230,15 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     map<size_t,vector<int64_t> > plist;
     map<size_t,vector<int64_t> > pfverts;
     plist = plist_tria;
-    for ( size_t i=1; i<=plist_bar.size(); i++ )   plist[tria_elements+i]   = plist_bar[i];
+    for ( auto i=1; i<=plist_bar.size(); i++ )   plist[tria_elements+i]   = plist_bar[i];
     pfverts = pfverts_tria;
-    for ( size_t i=1; i<=pfverts_bar.size(); i++ ) pfverts[tria_elements+i] = pfverts_bar[i];
+    for ( auto i=1; i<=pfverts_bar.size(); i++ ) pfverts[tria_elements+i] = pfverts_bar[i];
     
     deque<uint32_t>  ndele(total_elements); // nodes per element and neighbours per element are identical for BAR and TRIA
                        
-    for ( size_t i=0; i<plist_tria.size(); i++ )                  
+    for ( auto i=0; i<plist_tria.size(); i++ )
       ndele[i] = 3U; 
-    for ( size_t i=plist_tria.size(); i<total_elements; i++ )                  
+    for ( auto i=plist_tria.size(); i<total_elements; i++ )
       ndele[i] = 2U; 
     vset.ResizePlist( ndele );
     vset.ResizePfverts( ndele );
@@ -245,9 +246,9 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     // 7. Putting results into the VSet
     // ------------------------------------
     vset.AddXYZ( x, y, z );
+    for ( const auto& b : bflags ) vset.AddBFlag( b.first, b.second );
     vset.AddPlist( plist.begin(), plist.end() );
     vset.AddPfverts( pfverts.begin(), pfverts.end() );
-    vset.AddBFlags( bflags.begin(), bflags.end() );
     vset.AddData( "permeability", mesh_regions );
     
     vector<int8_t> elmt_types(total_elements);
@@ -337,7 +338,7 @@ void TRIANGLE_Interface::CheckTriangleOutput( const char*  file,
 void TRIANGLE_Interface::ReadNodeDataFile( const char* file, 
                                            deque<double>& x, deque<double>& y, 
                                            deque<double>& z,
-                                           vector<std::int8_t>&  bflags,
+                                           map<size_t,int8_t>& bflags,
                                            map<size_t,double>& bvalues )
  {
     char    fname[200];
@@ -347,9 +348,10 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
     
     assert( ifs.is_open() );
 
-    size_t    id, nodes;
-    int32_t     pbflag(0), dim, node_attributes, boundary_markers;
-    double  pbval, xval, yval;
+    size_t   id, nodes;
+    int32_t  dim, node_attributes, boundary_markers;
+    int      pbflag(0);
+    double   pbval = numeric_limits<double>::quiet_NaN(), xval, yval;
 
     // erasing vectors and maps
     if ( !x.empty() ) x.erase( x.begin(), x.end() );
@@ -375,13 +377,11 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
            throw csmp::Exception( FATAL_ERROR, "TRIANGLE_Interface::ReadNodeDataFile", 
                      "encountered erratic node ID's (nodes should be numbered 1...n)" );
 
-         // boundary
-         bflags.resize( x.size() );
-//         bvalues.resize( x.size() );
-         
+         // boundary values and flags are stored only if a node is at the model
+         // as signified by a flag value of 1 (as opposed to zero
          if ( pbflag == 1 )
            {
-//              bvalues[ id ] = pbval;
+              bvalues[ id ] = pbval;
               bflags[ id ]  = pbflag;
            }
       }
@@ -417,35 +417,35 @@ void TRIANGLE_Interface::ReadElementDataFile( const char* file,
     // file information
     long      elements;
     size_t    id, pval, points_per_element, n_attributes;
-    int32_t     n_boundary_markers, bmark;
-    double  eval;
+    int32_t   n_boundary_markers, bmark;
+    double    eval;
 
     // reading the header line and discarding it because the info is already there
     ifs.getline( text_line, 256 );
     token              = strtok( text_line, delims );
     elements           = atol( token );   
     token              = strtok( NULL, delims );
-    points_per_element = static_cast<uint32_t>(atol( token ));  
+    points_per_element = atol( token );
     token              = strtok( NULL, delims );
-    n_attributes       = static_cast<uint32_t>(atol( token ));
+    n_attributes       = atol( token );
     token              = strtok( NULL, delims );
     if ( token != NULL ) n_boundary_markers = atoi( token );
     else n_boundary_markers = 0;
 
     // evalues will have a size that corresponds to n-elements * n-attributes  
-    evalues.reserve( static_cast<uint32_t>(elements) * n_attributes );
+    evalues.reserve( static_cast<size_t>(elements) * n_attributes );
     vector<int64_t>  pdata(points_per_element);
     
     // reading the pdata
-    for ( auto i{0}; i<static_cast<uint32_t>(elements); i++ )
+    for ( auto i{0}; i<elements; i++ )
        {
           ifs >> id;
-          for ( size_t j=0U; j<points_per_element; j++ )
+          for ( auto j{0}; j<points_per_element; j++ )
             {
                ifs     >> pval;
                pdata[j] = pval;
             }
-          for ( size_t l=0U; l<n_attributes; l++ ) ifs >> eval;
+          for ( auto l{0}; l<n_attributes; l++ ) ifs >> eval;
           evalues.push_back( eval );
           if  ( n_boundary_markers > 0 ) ifs >> bmark;
           plist[ id ] = pdata;
@@ -480,8 +480,8 @@ void TRIANGLE_Interface::ReadPolyDataFile( const char* file,
     if ( !plist.empty() ) plist.erase( plist.begin(), plist.end() );
     
     // file information
-    int32_t     nodes, dimensions, attributes, markers, segments, bmark;
-    size_t id, pval, fid(1);
+    int32_t nodes, dimensions, attributes, markers, segments, bmark;
+    size_t  id, pval, fid(1);
 
     // reading the header line and discarding it because the info is already there
     ifs >> nodes >> dimensions >> attributes >> markers;
@@ -494,10 +494,10 @@ void TRIANGLE_Interface::ReadPolyDataFile( const char* file,
     vector<int64_t>  pdata(2); // bar elements have 2 nodes per element.
     
     // reading the pdata
-    for ( auto i{0}; i<static_cast<uint32_t>(segments); i++ )
+    for ( auto i{0}; i<segments; i++ )
        {
           ifs >> id;
-          for ( size_t j=0; j<2; j++ )
+          for ( int j=0; j<2; j++ )
             {
                ifs     >> pval;
                pdata[j] = pval;
@@ -526,9 +526,9 @@ void TRIANGLE_Interface::FindNeighborsForFractureElements( map<size_t,vector<int
   
   size_t i(1);
   
-  for ( map<size_t,vector<int64_t> >::iterator plit1 = plist.begin(); plit1 != plist.end(); plit1++ ) {
+  for ( auto plit1 = plist.begin(); plit1 != plist.end(); plit1++ ) {
       nbors[0] = nbors[1] = -1; // flag as -1 in case BAR element has no neighbor
-      for ( map<size_t,vector<int64_t> >::iterator plit2 = plist.begin(); plit2 != plist.end(); plit2++) {
+      for ( auto plit2 = plist.begin(); plit2 != plist.end(); plit2++) {
           if ( ( plit1->second[0] == plit2->second[0] || plit1->second[0] == plit2->second[1] ) && plit1 != plit2 )  
               nbors[0] = (plit2->first);
           if ( ( plit1->second[1] == plit2->second[0] || plit1->second[1] == plit2->second[1] ) && plit1 != plit2 )  
@@ -558,17 +558,17 @@ void TRIANGLE_Interface::ReadNeighborDataFile( const char* file,
     
     // file information
     size_t  elements, neighbors_per_element, id;
-    int64_t   nid;
+    int64_t nid;
 
     // reading the header line and discarding it because the info is already there
     ifs >> elements >> neighbors_per_element;
     vector<int64_t> nbors( neighbors_per_element );
     
     // reading the faceverts as being opposite to the nodes in the triangles
-    for ( size_t i=0; i<elements; i++ )
+    for ( auto i=0; i<elements; i++ )
       {
          ifs >> id;
-         for ( size_t j=0; j<neighbors_per_element; j++ )
+         for ( auto j=0; j<neighbors_per_element; j++ )
            {
               ifs     >> nid;
               nbors[j] = nid; 
@@ -600,7 +600,7 @@ void TRIANGLE_Interface::FlagBoundaryElements( map<size_t,vector<int64_t> >& pfv
                                                map<size_t,vector<int64_t> >& plist,
                                                deque<double>& bx, deque<double>& by )
  {
-    const int32_t MINUS1 = -1;  // flag of program 'triangle' for no neighbor element 
+    const int MINUS1 = -1;  // flag of program 'triangle' for no neighbor element
     
     // 0. Testing whether the coordination can be made
     // -----------------------------------------------
@@ -620,10 +620,10 @@ void TRIANGLE_Interface::FlagBoundaryElements( map<size_t,vector<int64_t> >& pfv
     
     for ( ; it!=pfverts.end(); it++, pit++ )
       {
-         for ( auto n=0; n<3; n++ )
+         for ( int n=0; n<3; n++ )
             {
                // if a boundary face has been found
-               if ( (*it).second[n] == MINUS1 )
+               if ( (*it).second[n] <= MINUS1 )
                  { 
                     // in 'Triangle' 
                     // elements are numbered counter-clockwise 
@@ -676,7 +676,7 @@ corner points of the model. This task is left to CSMP.
 */
 void TRIANGLE_Interface::FlagBoundaryNodes( map<size_t,vector<int64_t> >& pfverts,
                                             map<size_t,vector<int64_t> >& plist,
-                                            std::vector<std::int8_t>& bflags )
+                                            map<size_t,int8_t>& bflags )
  {
     // flag of program 'triangle' for boundary node
     map<size_t,vector<int64_t> >::iterator  pit;
@@ -719,9 +719,9 @@ nodes accordingly using the flagging enumeration BOX_BOUNDARY.
 The faceverts are required to lie opposite to the nodes with the same 
 numbers. 
 */
-void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( size_t fvert, int64_t  bflag_int,
+void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( int fvert, int8_t bflag_int,
                                                        const vector<int64_t>& nds,
-                                                       std::vector<std::int8_t>&  bflags )
+                                                       map<size_t,int8_t>& bflags )
  {
     assert( fvert < 3 );
     // 1. parsing the boundary identifying integer to BOX_BOUNDARY enum
@@ -735,16 +735,28 @@ void TRIANGLE_Interface::FlagBoundaryNodesAccordingTo( size_t fvert, int64_t  bf
  
     // 2. Flagging the nodes
     if ( fvert == 0U ) {
-         bflags[nds[1]] = bflag;
-         bflags[nds[2]] = bflag;
+         auto bit=bflags.find(nds[1]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
+         bit=bflags.find(nds[2]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
       }
     else if ( fvert == 1U ) {
-         bflags[nds[2]] = bflag;
-         bflags[nds[0]] = bflag;
+         auto bit=bflags.find(nds[2]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
+         bit=bflags.find(nds[0]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
       }
     else if ( fvert == 2U ) {
-         bflags[nds[0]] = bflag;
-         bflags[nds[1]] = bflag;
+         auto bit=bflags.find(nds[0]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
+         bit=bflags.find(nds[1]);
+         assert ( bit != bflags.end() );
+         (*bit).second = bflag;
       }
     
  } // end FlagBoundaryNodesAccordingTo                                       
@@ -763,17 +775,14 @@ in the numbering, these are detected when looping through it again.
 bool TRIANGLE_Interface::VerifyConsecutiveNodeNumbering( map<size_t,vector<int64_t> >& plist )
  const 
  {
-    set<uint32_t>  node_numbers;
+    set<size_t>  node_numbers;
     size_t       counter(1);
     
-    for ( map<size_t,vector<int64_t> >::const_iterator
-          it=plist.begin(); it!=plist.end(); it++ )
-      for ( vector<int64_t>::const_iterator
-            nit=(*it).second.begin(); nit!=(*it).second.end(); nit++ ) 
+    for ( auto it=plist.begin(); it!=plist.end(); it++ )
+      for ( auto nit=(*it).second.begin(); nit!=(*it).second.end(); nit++ )
         node_numbers.insert( *nit );
           
-    for ( set<uint32_t>::const_iterator 
-          sit=node_numbers.begin(); sit!=node_numbers.end(); sit++ )
+    for ( auto sit=node_numbers.begin(); sit!=node_numbers.end(); sit++ )
       // if a gap in the numbering leads to a difference in incremented counter
       // and the ordered node numbers in the list, false is returned.
       if ( *sit != counter++ ) 
@@ -874,10 +883,10 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<int64_t> 
     map<size_t,vector<int64_t> >::iterator  pfit, neigh_it, findit;
     map<size_t,vector<int64_t> >::iterator  eit1, eit2;
     size_t                                 i, neighbors, cnr_node, opp_node, corner_elements(0);
-    int64_t                                  cnr_id, neighbor_id;
-    vector<uint32_t>                         new_pl1(3), new_pl2(3);
-    vector<int64_t>                         new_pf1(3), new_pf2(3);
-    double                               new_prop, eprop1, eprop2;
+    int64_t                                cnr_id, neighbor_id;
+    vector<size_t>                         new_pl1(3), new_pl2(3);
+    vector<int64_t>                        new_pf1(3), new_pf2(3);
+    double                                 new_prop, eprop1, eprop2;
     
     
     for ( pfit=pfverts.begin(); pfit!=pfverts.end(); pfit++ )
@@ -903,7 +912,7 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<int64_t> 
               //    (the nodes opposite the corner nodes are found because they correspond
               //    to the positions where the neighbor elements have the identified ID(s).
               assert( neighbor_id > 0 );
-              neigh_it=pfverts.find( static_cast<uint32_t>(neighbor_id) );
+              neigh_it=pfverts.find( static_cast<size_t>(neighbor_id) );
               assert( neigh_it != pfverts.end() );
               for ( opp_node=0; opp_node<(*neigh_it).second.size(); opp_node++ ) 
                 if ( (*neigh_it).second[opp_node] == cnr_id ) break;
@@ -1039,21 +1048,21 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<int64_t> 
               // only one element must be updated with regard to its neighbors
               if ( cnr_node == 0 ) {
                   assert( new_pf1[0] > 0 );
-                  findit = pfverts.find( static_cast<uint32_t>(new_pf1[0]) );
+                  findit = pfverts.find( new_pf1[0] );
                   assert( findit != pfverts.end() );
                 }
               else if ( cnr_node == 1 ) {
                   assert( new_pf1[1] > 0 );
-                  findit = pfverts.find( static_cast<uint32_t>(new_pf1[1]) );
+                  findit = pfverts.find( new_pf1[1] );
                   assert( findit != pfverts.end() );
                 }
               else if ( cnr_node == 2 ) {
                   assert( new_pf1[2] > 0 );
-                  findit = pfverts.find( static_cast<uint32_t>(new_pf1[2]) );
+                  findit = pfverts.find( new_pf1[2] );
                   assert( findit != pfverts.end() );
                 }
 
-              for ( size_t n = 0; n < (*findit).second.size(); n++ )
+              for ( auto n = 0; n < (*findit).second.size(); n++ )
                 if ( (*findit).second[n] == neighbor_id ) {
                      (*findit).second[n] = cnr_id;
                      break;
@@ -1151,37 +1160,37 @@ such that the 2D model has, counting from the bottom up in counter-
 clockwise fashion, the corners 1, 2, 3, 4. In a 3D model another rectangle
 further front (z-direction) has the corresponding corners 4, 5, 6, 7, 8.  
  */
-void TRIANGLE_Interface::FlagCornerNodes( vector<std::int8_t>& bflags,
+void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
                                           deque<double>& x,
                                           deque<double>& y,
                                           deque<double>& z )
  {
      deque<double>::const_iterator xmin = min_element( x.begin(), x.end() ), 
-                                     xmax = max_element( x.begin(), x.end() ),
-                                     ymin = min_element( y.begin(), y.end() ),
-                                     ymax = max_element( y.begin(), y.end() ),
-                                     zmin = min_element( z.begin(), z.end() ),
-                                     zmax = max_element( z.begin(), z.end() );
+                                   xmax = max_element( x.begin(), x.end() ),
+                                   ymin = min_element( y.begin(), y.end() ),
+                                   ymax = max_element( y.begin(), y.end() ),
+                                   zmin = min_element( z.begin(), z.end() ),
+                                   zmax = max_element( z.begin(), z.end() );
       
      size_t n_node(0U);
      for ( auto it=bflags.begin(); it!=bflags.end(); it++, n_node++ )
        {
           if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
-            (*it) = CNR_MIN;
+            (*it).second = CNR_MIN;
           if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
-            (*it) = CNR_MAX;
+            (*it).second = CNR_MAX;
           if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmin )
-            (*it) = CNR_MIN_MAXX;
+            (*it).second = CNR_MIN_MAXX;
           if ( x[ n_node ] == *xmax && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
-            (*it) = CNR_MIN_MAXXZ;
+            (*it).second = CNR_MIN_MAXXZ;
           if ( x[ n_node ] == *xmin && y[ n_node ] == *ymin && z[ n_node ] == *zmax )
-            (*it) = CNR_MIN_MAXZ;
+            (*it).second = CNR_MIN_MAXZ;
           if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
-            (*it) = CNR_MAX_MINXZ;
+            (*it).second = CNR_MAX_MINXZ;
           if ( x[ n_node ] == *xmax && y[ n_node ] == *ymax && z[ n_node ] == *zmin )
-            (*it) = CNR_MAX_MAXX;
+            (*it).second = CNR_MAX_MAXX;
           if ( x[ n_node ] == *xmin && y[ n_node ] == *ymax && z[ n_node ] == *zmax )
-            (*it) = CNR_MAX_MAXZ;
+            (*it).second = CNR_MAX_MAXZ;
        }    
  
  } // end FlagCornerNodes  

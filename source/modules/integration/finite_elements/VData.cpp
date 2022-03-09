@@ -2793,125 +2793,128 @@ void  VData::EstablishElementConnectivity2D()
         // detecting elements with more than one face on boundary (these need to be fixed)
         elmt_idx = 0U;
         for ( deque<vector<int64_t> >::const_iterator
-              pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx )
-          if ( !isLineElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) )
-            {
-               size_t boundaries_per_element(0U);
-               for ( vector<int64_t>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
-                 // the face is on the boundary
-                 if ( (*pt) < 0 ) boundaries_per_element++;
-               if ( boundaries_per_element > 1U &&
-                   isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) )
-                 {
-                   cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
-                   cerr <<" has "<< boundaries_per_element <<" faces on model boundary.\n";
-                   csmp_error.notice( WARNING, "VData::EstablishElementConnectivity2D:",
-                                     "triangular element with  2 faces on boundary ");
-                   triangle_with_all_nodes_on_boundary = true;
-                 }
+              pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
+              auto etype = (HybridElementTypeMesh()==false) ? pelmt[0] : pelmt[elmt_idx];
+              if ( !isLineElement( parseFiniteElementTypeEnum( etype ) ) )
+                {
+                   size_t boundaries_per_element(0U);
+                   for ( vector<int64_t>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
+                     // the face is on the boundary
+                     if ( (*pt) < 0 ) boundaries_per_element++;
+                   if ( boundaries_per_element > 1U &&
+                       isTriangularElement( parseFiniteElementTypeEnum( etype ) ) )
+                     {
+                       cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
+                       cerr <<" has "<< boundaries_per_element <<" faces on model boundary.\n";
+                       csmp_error.notice( WARNING, "VData::EstablishElementConnectivity2D:",
+                                         "triangular element with  2 faces on boundary ");
+                       triangle_with_all_nodes_on_boundary = true;
+                     }
+                }
             }
         
         // 3. reconnecting line elements
         // -----------------------------
-        // map<size_t,set<uint32_t> >  line_elmt_that_contain_node;
-        for ( const auto& it : line_elmt_that_share_node )
-          {
-              const size_t n_connections(it.second.size()-1);
-              
-              // 1. isolated line elements terminating either at an inside node (INTERNAL) or at the BOX_BOUNDARY
-              // --------------------------------------------------------------------------------------------------
-              if ( n_connections == 0U ) {
-                   const size_t elmt = (*it.second.begin());
-                   // if there is no neighbor element corresponding to the first node
-                   if ( it.first == plist[elmt][0] ) {
-                        // identifying the boundary that the missing neighbor is located at
-                        pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
-                     }
-                   else if ( it.first == plist[elmt][1] ) {
-                        // the missing neighbor is located at a boundary
-                        pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
-                     }
-                   else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
-                }
-              // 2. two line elements sharing one node
-              // --------------------------------------------------------------------------------------------------
-              else if ( n_connections == 1U ) {
-                   const size_t elmt1 = (*it.second.begin());
-                   const size_t elmt2 = (*it.second.rbegin());
-                   // processing the neighbors
-                   // line element 1
-                   if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                   else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
-                   // line element 2
-                   if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                   else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
-                }
-              // 3. line element manifolds (multiple line elements)
-              // --------------------------------------------------------------------------------------------------
-              // off the possible neighbors, the aligned elements are picked
-              else { // n_connections > 1 )
-                   // finding the pair of most closely aligned line elements starting at node
-                   // establish element combinations
-                   std::vector<int64_t>    joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
-                   const size_t            n_elmts_to_combine(2U);
-                   deque<vector<int64_t> > combinations;
-                   if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
-                     csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
-                   // finding inter-element angle for all combinations
-                   //             angle, combination number
-                   vector<pair<double,size_t> > inter_element_angles;
-                   inter_element_angles.reserve( combinations.size() );
-                   size_t n_combi{0};
-                   for ( auto& cit : combinations ) {
-                        const double angle = AngleBetweenLineElements2D( cit[0], cit[1] );
-                        // ignoring edge direction
-                        const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
-                        inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
-                     }
-                   // sorting the angles to find the edges that are closest to a straight continuation
-                   // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
-                   sort( inter_element_angles.begin(), inter_element_angles.end(),
-                         [](auto& a, auto& b) -> bool { return a.first < b.first; } );
-                    // for any 2 edges unique connections are made until there are no more elements to connect
-                    set<size_t> assigned_elements;
-                    for ( auto& aet : inter_element_angles ) {
-                         // connecting the pair of line elements
-                         // ------------------------------------
-                         const size_t elmt1 = combinations[aet.second][0];
-                         const size_t elmt2 = combinations[aet.second][1];
-                         // only if both elements in the combination have not been assigned already
-                         if ( assigned_elements.find(elmt1) == assigned_elements.end() &&
-                              assigned_elements.find(elmt2) == assigned_elements.end() )
-                           {
-                              // finding the correct side of edge1
-                              if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                              else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
-                              assigned_elements.insert( elmt1 );
-                              // and edge2
-                              if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                              else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
-                              assigned_elements.insert( elmt2 );
-                           }
-                      }
-                    // assigning boundary flag to left-over neighbor elements at manifolds
-                    if ( assigned_elements.size() < joint_line_elmts.size() ) {
-                         // making sure that there only is a single unassigned element
-                         assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
-                         // finding the yet-to-be-assigned element
-                         size_t unassigned_elmt{UINT_MAX};
-                         for ( auto& leit : joint_line_elmts )
-                           if ( assigned_elements.find(leit) == assigned_elements.end() ) {
-                                unassigned_elmt = leit;
-                                break;
+        // map<size_t,set<size_t> >  line_elmt_that_contain_node;
+        if ( HybridElementTypeMesh() )
+          for ( const auto& it : line_elmt_that_share_node )
+            {
+                const size_t n_connections(it.second.size()-1);
+                
+                // 1. isolated line elements terminating either at an inside node (INTERNAL) or at the BOX_BOUNDARY
+                // --------------------------------------------------------------------------------------------------
+                if ( n_connections == 0U ) {
+                     const size_t elmt = (*it.second.begin());
+                     // if there is no neighbor element corresponding to the first node
+                     if ( it.first == plist[elmt][0] ) {
+                          // identifying the boundary that the missing neighbor is located at
+                          pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
+                       }
+                     else if ( it.first == plist[elmt][1] ) {
+                          // the missing neighbor is located at a boundary
+                          pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                       }
+                     else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
+                  }
+                // 2. two line elements sharing one node
+                // --------------------------------------------------------------------------------------------------
+                else if ( n_connections == 1U ) {
+                     const size_t elmt1 = (*it.second.begin());
+                     const size_t elmt2 = (*it.second.rbegin());
+                     // processing the neighbors
+                     // line element 1
+                     if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                     else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                     // line element 2
+                     if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                     else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                  }
+                // 3. line element manifolds (multiple line elements)
+                // --------------------------------------------------------------------------------------------------
+                // off the possible neighbors, the aligned elements are picked
+                else { // n_connections > 1 )
+                     // finding the pair of most closely aligned line elements starting at node
+                     // establish element combinations
+                     std::vector<int64_t>    joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
+                     const size_t            n_elmts_to_combine(2U);
+                     deque<vector<int64_t> > combinations;
+                     if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
+                       csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                     // finding inter-element angle for all combinations
+                     //             angle, combination number
+                     vector<pair<double,size_t> > inter_element_angles;
+                     inter_element_angles.reserve( combinations.size() );
+                     size_t n_combi{0};
+                     for ( auto& cit : combinations ) {
+                          const double angle = AngleBetweenLineElements2D( cit[0], cit[1] );
+                          // ignoring edge direction
+                          const double acute_angle = ( angle > 90. ) ? 180. - angle : angle;
+                          inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
+                       }
+                     // sorting the angles to find the edges that are closest to a straight continuation
+                     // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                     sort( inter_element_angles.begin(), inter_element_angles.end(),
+                           [](auto& a, auto& b) -> bool { return a.first < b.first; } );
+                      // for any 2 edges unique connections are made until there are no more elements to connect
+                      set<size_t> assigned_elements;
+                      for ( auto& aet : inter_element_angles ) {
+                           // connecting the pair of line elements
+                           // ------------------------------------
+                           const size_t elmt1 = combinations[aet.second][0];
+                           const size_t elmt2 = combinations[aet.second][1];
+                           // only if both elements in the combination have not been assigned already
+                           if ( assigned_elements.find(elmt1) == assigned_elements.end() &&
+                                assigned_elements.find(elmt2) == assigned_elements.end() )
+                             {
+                                // finding the correct side of edge1
+                                if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
+                                else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                                assigned_elements.insert( elmt1 );
+                                // and edge2
+                                if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
+                                else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                                assigned_elements.insert( elmt2 );
                              }
-                         assert ( unassigned_elmt != UINT_MAX );
-                         // finding the correct side of the line element and assigning the vertex bflag to irt
-                         if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
-                         else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
-                      }
-                }
-                            
-          } // processing the line element neighbors
+                        }
+                      // assigning boundary flag to left-over neighbor elements at manifolds
+                      if ( assigned_elements.size() < joint_line_elmts.size() ) {
+                           // making sure that there only is a single unassigned element
+                           assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
+                           // finding the yet-to-be-assigned element
+                           size_t unassigned_elmt{UINT_MAX};
+                           for ( auto& leit : joint_line_elmts )
+                             if ( assigned_elements.find(leit) == assigned_elements.end() ) {
+                                  unassigned_elmt = leit;
+                                  break;
+                               }
+                           assert ( unassigned_elmt != UINT_MAX );
+                           // finding the correct side of the line element and assigning the vertex bflag to irt
+                           if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
+                           else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
+                        }
+                  }
+                              
+            } // processing the line element neighbors
 
      } // if plist empty
 
@@ -2922,7 +2925,7 @@ void  VData::EstablishElementConnectivity2D()
    if ( triangle_with_all_nodes_on_boundary ) SwitchCornerTriangles2D();
 
    // 5. reorienting line-element chains (done in other method)
-   CreateConsistentLineElementOrientations2D();
+   if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
 
  } // end EstablishElementConnectivity2D
 
@@ -3489,7 +3492,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
         if ( pnode[elmt].empty() )
           {
              // getting the element type
-             const auto CSMP_FE_type{ pelmt[elmt] };
+             const auto CSMP_FE_type = (HybridElementTypeMesh()) ? pelmt[elmt] : pelmt[0];
              if ( CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) == 2 ) {
                  // dealing with quadratic elements that have midside nodes
                  // relying on the numbering convention that midside nodes follow the corner nodes in the same order

@@ -1082,8 +1082,8 @@ CELL_SHAPE  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
 CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
   {
      if ( etype == UNKNOWN ) return UNKNOWN;
-	 if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
-	 if (etype == LINEAR_CUBOID) return LINEAR_CUBOID;
+	   if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
+	   if (etype == LINEAR_CUBOID) return LINEAR_CUBOID;
      if ( etype == LINEAR_BAR ) return LINEAR_BAR;    										
      if ( etype == QUADRATIC_BAR ) return QUADRATIC_BAR;
      if ( etype == CUBIC_BAR ) return CUBIC_BAR;										   
@@ -1129,7 +1129,7 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
      if ( etype == EXPERIMENTAL_ELEMENT ) return EXPERIMENTAL_ELEMENT; 
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return UNKNOWN;
  
  } // end parseFiniteElementType
@@ -1191,7 +1191,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == "ISOPARAMETRIC_CUBIC_HEXAHEDRON" ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
      if ( etype == "EXPERIMENTAL_ELEMENT" ) return EXPERIMENTAL_ELEMENT;
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return UNKNOWN;
 
  } // end parseFiniteElementType
@@ -1252,7 +1252,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "ISOPARAMETRIC_CUBIC_HEXAHEDRON";
      if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL_ELEMENT"; 
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return "UNKNOWN";
  
  } // end parseFiniteElementType
@@ -1309,7 +1309,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "IHEX^3";
      if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL";
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return "?";
  
  } // end parseAbbreviated_FE_Type
@@ -1322,7 +1322,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if (ftype == "UNIT_LINEAR_FACET") return UNIT_LINEAR_FACET;
      if (ftype == "TRIANGULAR_FACET") return TRIANGULAR_FACET;
      if (ftype == "QUADRILATERAL_FACET") return QUADRILATERAL_FACET;
-     cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+     cerr << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
      return static_cast<FV_FACET_TYPE>(0);
  }
 
@@ -1335,7 +1335,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
          case TRIANGULAR_FACET: return "TRIANGULAR_FACET";
          case QUADRILATERAL_FACET: return "QUADRILATERAL_FACET";
          default:
-             cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+             cerr << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
              return "(unknown)";
      }
  } // end parseFacetType

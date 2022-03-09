@@ -806,7 +806,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     for ( auto& nit : this->node_vec_ )
       if ( boundary_nodes.find(nit) == boundary_nodes.end() )
         temp.push_back( nit );
-    // second, the already sorted boundary nodes are appended
+    // second, the already sorted perimeter nodes are appended
     for ( auto& nit : boundary_nodes )
         temp.push_back( nit );
     // now the temporary vector is assigned to the permanent one
