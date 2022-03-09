@@ -257,14 +257,14 @@ template<uint32_t dim>
 void Model<dim>::Initialize( const char* regions_file_prefix,
                              ModelTopology& mesh_topology,
                              VSet<dim>& vset,
-                             bool create_boundaries,
+                             bool create_boundaries_not_in_topology,
                              bool fully_irregular_mesh )
 {
   // 1. eliminates unwanted mesh regions from topology and vset, rebuild boundary flags, checks element numbering etc.
   mesh_topology.ReduceToDomains( regions_file_prefix );
 
   // 2. building the model with variable storage
-  Initialize( mesh_topology, vset, create_boundaries, fully_irregular_mesh );
+  Initialize( mesh_topology, vset, create_boundaries_not_in_topology, fully_irregular_mesh );
 
 } // end Initialize (with regions from file)
 
@@ -283,7 +283,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix,
 template<uint32_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology,
                              VSet<dim>& vset,
-                             bool create_boundaries, // from lower-dimensional regions
+                             bool create_boundaries_not_in_topology, // from lower-dimensional regions
                              bool fully_irregular_mesh )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -321,6 +321,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 6. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );
+    this->FormBoundariesFrom( mesh_topology );
+    this->FormSplitBoundariesFrom( mesh_topology );
 	
     // 7. forming Boundaries
     if ( mesh_topology.BoxShapedModel() )
@@ -328,7 +330,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
         csmp_error.notice( WARNING, "Model<dim>::Initialize:",
                           "ModelTopology indicates Box-shaped model; ignoring this characteristic.");
 
-    if ( create_boundaries ) {
+    if ( create_boundaries_not_in_topology ) {
           // if the model is box-shaped (albeit perhaps with irregular top surface)
           if ( !fully_irregular_mesh ) {
               this->EstablishBoxBoundaries();
@@ -349,15 +351,6 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
                 this->RemoveBoundary( this->Boundary("Model_Boundary") );
             }
          this->RebuildRegions();
-
-#ifdef DEBUG
-integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
-if ( mesh_manager_.Faces() > 0 )
-  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
-if ( mesh_manager_.InterFaces() > 0 )
-  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
-#endif
-
          this->RegionsOut();
          this->BoundariesOut();
       }

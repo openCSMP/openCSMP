@@ -1,4 +1,5 @@
 #include "ModelTopology.h"
+#include "ModelSubDomain.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
@@ -1024,18 +1025,76 @@ before the new names are inserted.
 
 If the current model does not contain a topology a message is printed.
 */
-void  ModelTopology::Out( list<string>& regions ) const
+void  ModelTopology::OutputAll( list<string>& regions ) const
  {
     if ( model_domains_.empty() ) {
-         cout <<"\nModelTopology::Out: Topology of '"<< model_name_;
+         cout <<"\nModelTopology::OutputAll: Topology of '"<< model_name_;
          cout <<"' is not defined."<< endl;
          return;
       }
     if ( !regions.empty() ) regions.erase( regions.begin(), regions.end() );
 
-    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ )
-      regions.push_back( (*it).first );
+    for ( const auto& it : model_domains_ )
+      regions.push_back( it.first );
  }
+
+
+void  ModelTopology::OutputRegions( list<string>& regions ) const
+ {
+    set<string>  model_regions;
+    for ( auto rit : model_domains_ )
+      if ( modelSubdomainType( rit.first ) == REGION )
+        model_regions.insert( rit.first );
+      
+    if ( model_regions.empty() ) {
+         cout <<"\nModelTopology::OutputRegions: Topology of regions in '"<< model_name_;
+         cout <<"' is not defined."<< endl;
+         return;
+      }
+    if ( !regions.empty() ) regions.erase( regions.begin(), regions.end() );
+
+    for ( const auto& it : model_regions )
+      regions.push_back( it );
+ }
+
+
+void  ModelTopology::OutputBoundaries( list<string>& boundaries ) const
+ {
+    set<string>  model_boundaries;
+    for ( auto rit : model_domains_ )
+      if ( modelSubdomainType( rit.first ) == BOUNDARY )
+        model_boundaries.insert( rit.first );
+      
+    if ( model_boundaries.empty() ) {
+         cout <<"\nModelTopology::OutputBoundaries: Topology of boundaries in '"<< model_name_;
+         cout <<"' is not defined."<< endl;
+         return;
+      }
+    if ( !boundaries.empty() ) boundaries.erase( boundaries.begin(), boundaries.end() );
+
+    for ( const auto& it : model_boundaries )
+      boundaries.push_back( it );
+ }
+
+
+void  ModelTopology::OutputSplitBoundaries( list<string>& split_boundaries ) const
+ {
+    set<string>  model_split_boundaries;
+    for ( auto rit : model_domains_ )
+      if ( modelSubdomainType( rit.first ) == SPLIT_BOUNDARY )
+        model_split_boundaries.insert( rit.first );
+      
+    if ( model_split_boundaries.empty() ) {
+         cout <<"\nModelTopology::OutputSplitBoundaries: Topology of split boundaries in '"<< model_name_;
+         cout <<"' is not defined."<< endl;
+         return;
+      }
+    if ( !split_boundaries.empty() ) split_boundaries.erase( split_boundaries.begin(), split_boundaries.end() );
+
+    for ( const auto& it : model_split_boundaries )
+      split_boundaries.push_back( it );
+ }
+
 
 /**
 

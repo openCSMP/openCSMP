@@ -119,6 +119,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // --------------------------------------------------
     // building of SplitBoundaries and their modification
     // --------------------------------------------------
+    
+    /// forms a split boundary from existing interfaces assuming that these are numbered n=elmts+faces .. interfaces-1
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( MeshManager<dim>&, Boundary<dim>& );

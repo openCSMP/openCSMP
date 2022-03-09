@@ -6,6 +6,7 @@
 
 namespace csmp {
 
+class ModelTopology;
 template<uint32_t> class Face;
 template<uint32_t> class Element;
 template<uint32_t> class Boundary;
@@ -94,6 +95,9 @@ class BoundaryInterface {
     // Boundary creation, modification & removal
     // -----------------------------------------------
     
+    /// uses the Face ids stored in the model topology object to form boundaries with corresponding names; returns number of boundaries formed
+    size_t FormBoundariesFrom( const ModelTopology& );
+    
     /// creates Faces and uniquely named boundary patches, returning their names if successful; the patches are created from meshed surface inside of model which will be removed by default
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
                                                                        bool remove_dim_minus1_region=true );
@@ -154,7 +158,7 @@ class BoundaryInterface {
     bool EstablishEdgeBoundariesOfBoxShapedModel();
 
  protected:
-   std::map<std::string,csmp::Boundary<dim> >   faceBoundaryMap_; ///< storage of the boundaries
+   std::map<std::string,csmp::Boundary<dim> >  boundaryMap_; ///< storage of the boundaries
 };
 
 } // csmp

@@ -931,6 +931,67 @@ cerr << endl;
 */
 
 
+template<uint32_t dim>
+size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
+                                          vector<size_t>& cell_ids )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( cell_ids.empty() )
+    csmp_error.notice( ERROR, "Boundary<dim>::AccumulateByNumber",
+                      "user-supplied face-number vector is empty. Nothing is done." );
+
+  if ( !this->elmt_vec_.empty() ) {
+      csmp_error.notice( WARNING, "Boundary<dim>::AccumulateByNumber",
+                         "Boundary is not empty", "erasing all members..." );
+      this->elmt_vec_.clear();
+    }
+
+  // eliminating potential duplicates from element index vector
+#ifdef DEBUG
+  const size_t n_cells{cell_ids.size()};
+  sort( cell_ids.begin(), cell_ids.end() );
+  cell_ids.erase( unique( cell_ids.begin(), cell_ids.end() ), cell_ids.end() );
+  if ( cell_ids.size() < n_cells )
+    csmp_error.notice( WARNING, "Boundary<dim>::AccumulateByNumber",
+                      "user-supplied face ID set contained duplicates which were removed." );
+#endif
+  if ( cell_ids.size() > mesh.Faces() )
+    csmp_error.notice( ERROR, "Boundary<dim>::AccumulateByNumber",
+                       "user-supplied face-number vector is larger than range of index-to-element-pointer mapping." );
+
+  // creating the element vector for the region
+  // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
+  const auto offset = mesh.Elements();
+  this->elmt_vec_.reserve( cell_ids.size() );
+  for ( auto& idx : cell_ids ) {
+       Face<dim>* fptr = &(*next(mesh.FacesBegin(),idx-offset));
+       assert( fptr != nullptr );
+       assert( fptr->Idx() == idx );
+       this->elmt_vec_.push_back( fptr );
+    }
+    
+  // creating node vector
+  if ( this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
+  // filling the vector
+  for ( auto& it : this->elmt_vec_ ) {
+       const size_t n_nodes{it->Nodes()};
+       for ( auto i{0}; i<n_nodes; ++i ) {
+            assert( it->N(i) != nullptr );
+            this->node_vec_.push_back( it->N(i) );
+         }
+     }
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
+  this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
+
+} // end AccumulateByNumber
+
 
 
 
@@ -999,8 +1060,8 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
       if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurfaceElement() ) continue;
 
       // for each perimeter face
-      const size_t perimeter_faces( region.PerimeterFaces( i ) );
-      for ( size_t j = 0U; j<perimeter_faces; ++j ) {
+      const auto perimeter_faces( region.PerimeterFaces( i ) );
+      for ( auto j = 0U; j<perimeter_faces; ++j ) {
            // if this indeed an element at the model boundary
            if ( region.E(i)->Neighbor(j) == nullptr ) {
                this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
@@ -1009,9 +1070,9 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
            // if this will be a Face in the interior of the model
            else {
                // finding which face of the outer element will be at the boundary
-               size_t shared_face = UNSPECIFIED;
-               const size_t n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
-               for ( size_t k{0}; k<n_neighbors; ++k ) {
+               uint32_t shared_face = UNSPECIFIED;
+               const auto n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
+               for ( auto k{0}; k<n_neighbors; ++k ) {
                     if ( region.E(i)->Neighbor(j) == region.E(i) ) shared_face = k;
                     break;
                  }
@@ -1083,10 +1144,10 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
     {
       Element<dim>* const ePtr = region1.E( i );
-      const size_t perimeter_faces( region1.PerimeterFaces(i) );
-      for ( size_t j = 0U; j < perimeter_faces; ++j )
+      const auto perimeter_faces( region1.PerimeterFaces(i) );
+      for ( auto j = 0U; j < perimeter_faces; ++j )
         {
-          const size_t face = region1.PerimeterFace( i, j );
+          const auto face = region1.PerimeterFace( i, j );
           Element<dim>*  ePtrNeighbor = ePtr->Neighbor( face );
 
           // checking whether neighbor element is part of the boundary of region2
@@ -1095,9 +1156,9 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
             if ( region2.IsPerimeterElement( ePtrNeighbor ) )
               {
                  // if the neighbor is in the boundary, the new Face is build
-                 size_t face2 = UNSPECIFIED;
-                 const size_t n_neighbors{ePtrNeighbor->Neighbors()};
-                 for ( size_t k{0}; k<n_neighbors; ++k ) {
+                 uint32_t face2 = UNSPECIFIED;
+                 const auto n_neighbors{ePtrNeighbor->Neighbors()};
+                 for ( auto k{0}; k<n_neighbors; ++k ) {
                       if ( ePtrNeighbor->Neighbor(k) == ePtr ) face2 = k;
                       break;
                    }

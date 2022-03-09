@@ -1,4 +1,5 @@
 #include "SplitBoundaryInterface.h"
+#include "ModelTopology.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -513,6 +514,60 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
 } // end DetectAndCreateSplitBoundaries
 
 
+
+
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFrom( const ModelTopology& topo )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // 1. getting the names of the regions
+  std::list<std::string> split_boundaries;
+  topo.OutputSplitBoundaries( split_boundaries );
+
+  // 2. assigning the regions to groups in the Model
+  std::cout << "\nSplitBoundaryInterface::FormSplitBoundariesFrom: Forming the split boundaries: ";
+
+  size_t new_split_boundaries{0};
+  for ( auto lit = split_boundaries.begin(); lit != split_boundaries.end(); lit++ )
+    {
+      std::string domain_name( *lit );
+      auto it = splitBoundaryMap_.insert( make_pair( domain_name, csmp::SplitBoundary<dim>( domain_name, static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this)->Database() ) ) );
+      // if the region was successfully inserted
+      if ( it.second )
+        {
+          // making a list of the element numbers
+          std::vector<size_t>  cell_ids;
+          cell_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
+          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
+                topo.CellsOfDomainEnd( (*lit).c_str() ),
+                back_inserter( cell_ids ) );
+
+          // retrieving the elements by their IDs and assigning them  to the region
+          (*it.first).second.AccumulateByNumber( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this)->Mesh(), cell_ids );
+          cell_ids.erase( cell_ids.begin(), cell_ids.end() );
+
+          // removing the group if it contains no elements
+          if ( (*it.first).second.Elements() == 0U ) {
+              splitBoundaryMap_.erase( it.first );
+              csmp_error.notice( WARNING, "SplitBoundaryInterface::FormSplitBoundariesFrom",
+                                 "SplitBoundary could not be formed", (*lit).c_str() );
+            }
+          else {
+               // reporting the name of the newly generated region
+               std::cout << domain_name << " ";
+               new_split_boundaries++;
+            }
+        }
+      else
+        throw csmp::Exception( ERROR, "SplitBoundaryInterface::FormSplitBoundariesFrom",
+                              "SplitBoundary could not be formed. Does this region already exist?", (*lit).c_str() );
+    }
+  std::cout << std::endl;
+
+  return new_split_boundaries;
+
+} // end FormSplitBoundariesFrom
 
 
 
