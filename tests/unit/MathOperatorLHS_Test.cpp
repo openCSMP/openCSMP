@@ -9,10 +9,9 @@ namespace csmp {
 
 MathOperatorLHS_Test::MathOperatorLHS_Test()
 : model_ (new Model1D<1U>( "MathOperatorLHS_Test", "CSMP-2phase-variables.txt", 0.01, 100U )),
-  database_ (model_->Database())
-
+  database_ (model_->Database()),
+  fTolerance_(1.e-15)
 {
-  fTolerance = 1.e-20;
 }
 
 
@@ -25,7 +24,7 @@ MathOperatorLHS_Test::~MathOperatorLHS_Test()
 
 void MathOperatorLHS_Test::run()
 {
-
+    cout <<"\nMathOperatorLHS_Test::run: running test...\n";
     MathOperatorLHS_Ctor();
     MathOperatorLHS_CopyCtor();
     MathOperatorLHS_Equal();
@@ -119,7 +118,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_CopyCtor()
     _test( MOLHS2.MultiplyWithTimeIncrement() == time_multiply );
     _test( MOLHS2.ApplicationCycles() == application_cycles );
     _test( MOLHS2.ApplicationCycle() == application_cycle );
-    _equal( MOLHS2.MultiplyBy(), factor, fTolerance );
+    _equal( MOLHS2.MultiplyBy(), factor, fTolerance_ );
     _test( MOLHS2.BasicOperandOffset() == basic_offset );
     _test( MOLHS2.TestOperandOffset() == test_offset );
     _test( MOLHS2.MaterialOperandKey() == perm_key );
@@ -180,7 +179,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_Equal()
     _test( MOLHS2.MultiplyWithTimeIncrement() == time_multiply );
     _test( MOLHS2.ApplicationCycles() == application_cycles );
     _test( MOLHS2.ApplicationCycle() == application_cycle );
-    _equal( MOLHS2.MultiplyBy(), factor, fTolerance );
+    _equal( MOLHS2.MultiplyBy(), factor, fTolerance_ );
     _test( MOLHS2.BasicOperandOffset() == basic_offset );
     _test( MOLHS2.TestOperandOffset() == test_offset );
     _test( MOLHS2.MaterialOperandKey() == perm_key );
@@ -325,11 +324,11 @@ void MathOperatorLHS_Test::MathOperatorLHS_MultiplyBy()
     
     NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
-    _equal( MOLHS.MultiplyBy(), 1., fTolerance );
+    _equal( MOLHS.MultiplyBy(), 1., fTolerance_ );
     
     MOLHS.MultiplyBy(factor);
     
-    _equal( MOLHS.MultiplyBy(), factor, fTolerance );
+    _equal( MOLHS.MultiplyBy(), factor, fTolerance_ );
 
 }
 

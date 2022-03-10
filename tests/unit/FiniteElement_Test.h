@@ -16,7 +16,7 @@ class FiniteElement_Test : public Test
     ~FiniteElement_Test();
   private:
     std::string fileName_;
-    FiniteElement* femPtr_;
+    FiniteElement* femPtr_ = nullptr;
     FiniteElement_TestData femData_;
     const bool verbose_;
 };

@@ -19,7 +19,7 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim> {
                                const char* basic,
                                const char* test,
                                const char* var,
-                               const double prefactor = 1.0);
+                               const double prefactor = 1. );
     
     virtual void GetOperands( const CELL& );
 

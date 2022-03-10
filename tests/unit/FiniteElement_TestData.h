@@ -21,57 +21,57 @@ public:
 
   std::string FemName() const { return femName_; }
   void        FemName( std::string femName ) { femName_ = femName; }
-  size_t Dim() const { return dim_; }
-  void   Dim( uint32_t dim ) {
-                             dim_ = dim; shapeFunctionXYZ_.assign( dim, 999. );
-                             jacobianAtRST_.assign( dim, std::vector<double>( Dim(), 999. ) );
-                             RST_.assign( dim, 999. );
-                           }
+  int         Dim() const { return dim_; }
+  void        Dim( int dim ) {
+                   dim_ = dim; shapeFunctionXYZ_.assign( dim, 999. );
+                   jacobianAtRST_.assign( dim, std::vector<double>( Dim(), 999. ) );
+                   RST_.assign( dim, 999. );
+                 }
   size_t NodeCount() const { return nodes_.size(); }
-  void   NodeCount( size_t nodeCount ) {
-                                          DeleteNodes();
-                                          nodes_.assign( nodeCount, NULL );
-                                          counterNodes_.assign( nodeCount, 999. );                                          
-                                          shapeFunctionN_.assign( nodeCount, 999. );
-                                          shapeFunctionNatBarycenter_.assign( nodeCount, 999. );
-                                          shapeFunctionDN_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
-                                          shapeFunctionDNatXZY_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
-                                          shapeFunctionDNatNode_.assign( nodeCount, std::vector<std::vector<double> >( nodeCount, std::vector<double>( Dim(), 999. ) ) );
-                                          shapeFunctionDNatBaryCenter_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
-                                       }
-  size_t SegmentCount() const { return segmentCount_; }
-  void   SegmentCount( size_t segmentCount ) { segmentCount_ = segmentCount; }
+  void   NodeCount( int nodeCount ) {
+                                        DeleteNodes();
+                                        nodes_.assign( nodeCount, nullptr );
+                                        counterNodes_.assign( nodeCount, 999. );
+                                        shapeFunctionN_.assign( nodeCount, 999. );
+                                        shapeFunctionNatBarycenter_.assign( nodeCount, 999. );
+                                        shapeFunctionDN_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
+                                        shapeFunctionDNatXZY_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
+                                        shapeFunctionDNatNode_.assign( nodeCount, std::vector<std::vector<double> >( nodeCount, std::vector<double>( Dim(), 999. ) ) );
+                                        shapeFunctionDNatBaryCenter_.assign( nodeCount, std::vector<double>( Dim(), 999. ) );
+                                     }
+  int SegmentCount() const { return segmentCount_; }
+  void   SegmentCount( int segmentCount ) { segmentCount_ = segmentCount; }
   size_t FaceCount() const { return nodesPerFace_.size(); }
-  void   FaceCount( size_t faceCount ) {
-                                         nodesPerFace_.assign( faceCount, 0 );
-                                         nodesOfFace_.assign( faceCount, std::vector<uint32_t>() );
-                                         faceElementTypes_.assign( faceCount, UNKNOWN );
-                                       }
-  size_t NeighborCount() const { return neighborCount_; }
-  void   NeighborCount( size_t neighborCount ) { neighborCount_ = neighborCount; }
-  size_t NodesPerFace( size_t i ) const { return nodesPerFace_.at( i ); }
-  void   NodesPerFace( size_t i, size_t nodesPerFace ) { nodesPerFace_.at( i ) = nodesPerFace; }
-  size_t NodeOfFace( size_t face, size_t faceNode ) const { return nodesOfFace_.at( face ).at( faceNode ); }
-  void   NodeOfFace( size_t face, size_t faceNode , size_t femNode ) { nodesOfFace_.at( face ).push_back( femNode ); }
-  size_t IntegrationPointNeighborCount() const { return constraintPointNeighborCount_; }
-  void   IntegrationPointNeighborCount( size_t constraintPointNeighborCount ) { constraintPointNeighborCount_ = constraintPointNeighborCount; }
-  size_t IntegrationPointCount() const { return integrationPointCount_; }
-  void   IntegrationPointCount( size_t count ) {
+  void   FaceCount( int faceCount ) {
+                                       nodesPerFace_.assign( faceCount, 0 );
+                                       nodesOfFace_.assign( faceCount, std::vector<int>() );
+                                       faceElementTypes_.assign( faceCount, UNKNOWN );
+                                     }
+  int NeighborCount() const { return neighborCount_; }
+  void   NeighborCount( int neighborCount ) { neighborCount_ = neighborCount; }
+  int NodesPerFace( int i ) const { return nodesPerFace_.at( i ); }
+  void   NodesPerFace( int i, int nodesPerFace ) { nodesPerFace_.at( i ) = nodesPerFace; }
+  int NodeOfFace( int face, int faceNode ) const { return nodesOfFace_.at( face ).at( faceNode ); }
+  void   NodeOfFace( int face, int faceNode , int femNode ) { nodesOfFace_.at( face ).push_back( femNode ); }
+  int IntegrationPointNeighborCount() const { return constraintPointNeighborCount_; }
+  void   IntegrationPointNeighborCount( int constraintPointNeighborCount ) { constraintPointNeighborCount_ = constraintPointNeighborCount; }
+  int IntegrationPointCount() const { return integrationPointCount_; }
+  void   IntegrationPointCount( int count ) {
                                                  integrationPointCount_ = count;
-                                                 ipGlobal_.assign( count , std::vector<double>( Dim() ) );
+                                                 ipGlobal_.assign( count, std::vector<double>( Dim() ) );
                                                  integrationPointWeights_.assign( count, 999. );
                                                  shapeFunctionNatIP_.assign( count, std::vector<double>( NodeCount(), 999. ) );
                                                  shapeFunctionDNatIP_.assign( count, std::vector<std::vector<double> >( NodeCount(), std::vector<double>( Dim(), 999. ) ) );
                                                  jacobianAtIP_.assign( count, std::vector<std::vector<double> >( Dim(), std::vector<double>( Dim(), 999. ) ) );
                                                }
-  size_t InterpolationNumber() const { return interpolationNumber_; }
-  void   InterpolationNumber( size_t interpolationNumber ) { interpolationNumber_ = interpolationNumber; }
+  int InterpolationNumber() const { return interpolationNumber_; }
+  void   InterpolationNumber( int interpolationNumber ) { interpolationNumber_ = interpolationNumber; }
   bool   Isoparametric() const { return isoparametric_; }
   void   Isoparametric( bool isoparametric ) { isoparametric_ = isoparametric; }
   bool   UsesLocalCoordinates() const { return localCoordinates_; }
   void   UsesLocalCoordinates( bool localCoordinates ) { localCoordinates_ = localCoordinates; }
-  size_t OrderOfShapeFunctions() const { return orderOfShapeFunctions_; }
-  void   OrderOfShapeFunctions( size_t orderOfShapeFunctions ) { orderOfShapeFunctions_ = orderOfShapeFunctions; }
+  int OrderOfShapeFunctions() const { return orderOfShapeFunctions_; }
+  void   OrderOfShapeFunctions( int orderOfShapeFunctions ) { orderOfShapeFunctions_ = orderOfShapeFunctions; }
   bool   LineElement() const { return lineElement_; }
   void   LineElement( bool lineElement ) { lineElement_ = lineElement; }
   bool   SurfaceElement() const { return surfaceElement_; }
@@ -80,10 +80,10 @@ public:
   void   VolumeElement( bool volumeElement ) { volumeElement_ = volumeElement; }
   CSMP_FEM_TYPE   ElementType() const { return elementType_; }
   void            ElementType( CSMP_FEM_TYPE elementType ) { elementType_ = elementType; }
-  CSMP_FEM_TYPE   FaceElementType( size_t face ) const { return faceElementTypes_.at( face ); }
-  void            FaceElementType( size_t face, CSMP_FEM_TYPE faceElementType ) { faceElementTypes_.at( face ) = faceElementType; }
-  Node<3U>*       NodePtr( size_t i ) const { return nodes_.at( i ); }
-  void            NodePtr( size_t i, Node<3U>* node ) { nodes_.at( i ) = node; }
+  CSMP_FEM_TYPE   FaceElementType( int face ) const { return faceElementTypes_.at( face ); }
+  void            FaceElementType( int face, CSMP_FEM_TYPE faceElementType ) { faceElementTypes_.at( face ) = faceElementType; }
+  Node<3U>*       NodePtr( int i ) const { return nodes_.at( i ); }
+  void            NodePtr( int i, Node<3U>* node ) { nodes_.at( i ) = node; }
   double Volume() const { return volume_; }
   void   Volume( double volume ) { volume_ = volume; }
   double Tolerance() const { return tolerance_; }
@@ -93,87 +93,87 @@ public:
   double InnerRadius() const { return innerRadius_; }
   void   InnerRadius( double innerRadius ) { innerRadius_ = innerRadius; }
   size_t EdgeCount() const { return edgeLengths_.size(); }
-  void   EdgeCount( size_t edgeCount ) { edgeLengths_.clear(); edgeLengths_.assign( edgeCount, 0 ); }
-  double EdgeLength( size_t i ) const { return edgeLengths_.at( i ); }
-  void   EdgeLength( size_t i, double length ) { edgeLengths_.at( i ) = length; }
+  void   EdgeCount( int edgeCount ) { edgeLengths_.clear(); edgeLengths_.assign( edgeCount, 0 ); }
+  double EdgeLength( int i ) const { return edgeLengths_.at( i ); }
+  void   EdgeLength( int i, double length ) { edgeLengths_.at( i ) = length; }
   size_t NodesPerSegment() const { return nodesOfSegment_.at( 0 ).size(); }
-  void   NodesPerSegment( size_t nodesPerSegment ) { nodesOfSegment_.assign( SegmentCount(), std::vector<uint32_t>( nodesPerSegment, 999 ) ); }
-  size_t NodeOfSegment( size_t segment, size_t segmentNode ) const { return nodesOfSegment_.at( segment ).at( segmentNode ); }
-  void   NodeOfSegment( size_t segment, size_t segmentNode , size_t femNode ) { nodesOfSegment_.at( segment ).at( segmentNode ) = femNode; }
+  void   NodesPerSegment( int nodesPerSegment ) { nodesOfSegment_.assign( SegmentCount(), std::vector<int>( nodesPerSegment, 999 ) ); }
+  int NodeOfSegment( int segment, int segmentNode ) const { return nodesOfSegment_.at( segment ).at( segmentNode ); }
+  void   NodeOfSegment( int segment, int segmentNode , int femNode ) { nodesOfSegment_.at( segment ).at( segmentNode ) = femNode; }
   size_t CornerNodeCount() const { return cornerNodes_.size(); }
-  void   CornerNodeCount( size_t count ) { cornerNodes_.assign( count, 999 ); }
-  size_t NodeAtCorner( size_t corner ) const { return cornerNodes_.at( corner ); }
-  void   NodeAtCorner( size_t corner, size_t femNode ) { cornerNodes_.at( corner ) = femNode; }
+  void   CornerNodeCount( int count ) { cornerNodes_.assign( count, 999 ); }
+  int NodeAtCorner( int corner ) const { return cornerNodes_.at( corner ); }
+  void   NodeAtCorner( int corner, int femNode ) { cornerNodes_.at( corner ) = femNode; }
   size_t MidsideNodeCount() const { return midsideNodes_.size(); }
-  void   MidsideNodeCount( size_t count ) { midsideNodes_.assign( count, 999 ); }
-  size_t NodeAtMidside( size_t midside ) const { return midsideNodes_.at( midside ); }
-  void   NodeAtMidside( size_t midside, size_t femNode ) { midsideNodes_.at( midside ) = femNode; }
+  void   MidsideNodeCount( int count ) { midsideNodes_.assign( count, 999 ); }
+  int NodeAtMidside( int midside ) const { return midsideNodes_.at( midside ); }
+  void   NodeAtMidside( int midside, int femNode ) { midsideNodes_.at( midside ) = femNode; }
   size_t InteriorNodeCount() const { return interiorNodes_.size(); }
-  void   InteriorNodeCount( size_t count ) { interiorNodes_.assign( count, 999 ); }
-  size_t NodeAtInterior( size_t interior ) const { return interiorNodes_.at( interior ); }
-  void   NodeAtInterior( size_t interior, size_t femNode ) { interiorNodes_.at( interior ) = femNode; }
+  void   InteriorNodeCount( int count ) { interiorNodes_.assign( count, 999 ); }
+  int NodeAtInterior( int interior ) const { return interiorNodes_.at( interior ); }
+  void   NodeAtInterior( int interior, int femNode ) { interiorNodes_.at( interior ) = femNode; }
   void   UnitNormal( std::vector<double> unitNormal ) { unitNormal_ = unitNormal; }
   std::vector<double> UnitNormal() const { return unitNormal_; }
-  void   ExtrapolationVariableCount( size_t count ) { ivars_.assign( IntegrationPointCount(), std::vector<double>( count )  ); nvars_.assign( NodeCount(), std::vector<double>( count ) ); }
+  void   ExtrapolationVariableCount( int count ) { ivars_.assign( IntegrationPointCount(), std::vector<double>( count )  ); nvars_.assign( NodeCount(), std::vector<double>( count ) ); }
   size_t ExtrapolationVariableCount() const { return ivars_.at( 0 ).size(); }
-  double IntegrationPointVariable( size_t ip, size_t var ) const { return ivars_.at( ip ).at( var ); }
-  void   IntegrationPointVariable( size_t ip, size_t var, double value )  {  ivars_.at( ip ).at( var ) = value; }
-  double NodePointVariable( size_t np, size_t var ) const { return nvars_.at( np ).at( var ); }
-  void   NodePointVariable( size_t np, size_t var, double value )  {  nvars_.at( np ).at( var ) = value; }
-  double IpGlobal( size_t ip, size_t xyz ) const { return ipGlobal_.at( ip ).at( xyz ); }
-  void   IpGlobal( size_t ip, size_t xyz, double value )  {  ipGlobal_.at( ip ).at( xyz ) = value; }
-  double IntegrationPointWeight( size_t ip ) const { return integrationPointWeights_.at( ip ); }
-  void   IntegrationPointWeight( size_t ip, double value ) { integrationPointWeights_.at( ip ) = value; }
-  size_t CounterClockWiseNode( size_t n ) const { return counterNodes_.at( n ); }
-  void   CounterClockWiseNode( size_t n, size_t node ) { counterNodes_.at( n ) = node; }
-  double ShapeFunctionXYZ( size_t xyz ) const { return shapeFunctionXYZ_.at( xyz ); }
-  void   ShapeFunctionXYZ( size_t xyz, double value ) { shapeFunctionXYZ_.at( xyz ) = value; }
-  double ShapeFunctionN( size_t n ) const { return shapeFunctionN_.at( n ); }
-  void   ShapeFunctionN( size_t n, double value ) { shapeFunctionN_.at( n ) = value; }
-  double ShapeFunctionNatIP( size_t ip, size_t n ) const { return shapeFunctionNatIP_.at( ip ).at( n ); }
-  void   ShapeFunctionNatIP( size_t ip,  size_t n, double value ) { shapeFunctionNatIP_.at( ip ).at( n ) = value; }
-  double ShapeFunctionNatBarycenter( size_t n ) const { return shapeFunctionNatBarycenter_.at( n ); }
-  void   ShapeFunctionNatBarycenter( size_t n, double value ) { shapeFunctionNatBarycenter_.at( n ) = value; }
-  double ShapeFunctionDN( size_t n, size_t xyz ) const { return shapeFunctionDN_.at( n ).at( xyz ); }
-  void   ShapeFunctionDN( size_t n,  size_t xyz, double value ) { shapeFunctionDN_.at( n ).at( xyz ) = value; }
-  double ShapeFunctionDNatXYZ( size_t n, size_t xyz ) const { return shapeFunctionDNatXZY_.at( n ).at( xyz ); }
-  void   ShapeFunctionDNatXYZ( size_t n, size_t xyz, double value ) { shapeFunctionDNatXZY_.at( n ).at( xyz ) = value; }
+  double IntegrationPointVariable( int ip, int var ) const { return ivars_.at( ip ).at( var ); }
+  void   IntegrationPointVariable( int ip, int var, double value )  {  ivars_.at( ip ).at( var ) = value; }
+  double NodePointVariable( int np, int var ) const { return nvars_.at( np ).at( var ); }
+  void   NodePointVariable( int np, int var, double value )  {  nvars_.at( np ).at( var ) = value; }
+  double IpGlobal( int ip, int xyz ) const { return ipGlobal_.at( ip ).at( xyz ); }
+  void   IpGlobal( int ip, int xyz, double value )  {  ipGlobal_.at( ip ).at( xyz ) = value; }
+  double IntegrationPointWeight( int ip ) const { return integrationPointWeights_.at( ip ); }
+  void   IntegrationPointWeight( int ip, double value ) { integrationPointWeights_.at( ip ) = value; }
+  int CounterClockWiseNode( int n ) const { return counterNodes_.at( n ); }
+  void   CounterClockWiseNode( int n, int node ) { counterNodes_.at( n ) = node; }
+  double ShapeFunctionXYZ( int xyz ) const { return shapeFunctionXYZ_.at( xyz ); }
+  void   ShapeFunctionXYZ( int xyz, double value ) { shapeFunctionXYZ_.at( xyz ) = value; }
+  double ShapeFunctionN( int n ) const { return shapeFunctionN_.at( n ); }
+  void   ShapeFunctionN( int n, double value ) { shapeFunctionN_.at( n ) = value; }
+  double ShapeFunctionNatIP( int ip, int n ) const { return shapeFunctionNatIP_.at( ip ).at( n ); }
+  void   ShapeFunctionNatIP( int ip,  int n, double value ) { shapeFunctionNatIP_.at( ip ).at( n ) = value; }
+  double ShapeFunctionNatBarycenter( int n ) const { return shapeFunctionNatBarycenter_.at( n ); }
+  void   ShapeFunctionNatBarycenter( int n, double value ) { shapeFunctionNatBarycenter_.at( n ) = value; }
+  double ShapeFunctionDN( int n, int xyz ) const { return shapeFunctionDN_.at( n ).at( xyz ); }
+  void   ShapeFunctionDN( int n,  int xyz, double value ) { shapeFunctionDN_.at( n ).at( xyz ) = value; }
+  double ShapeFunctionDNatXYZ( int n, int xyz ) const { return shapeFunctionDNatXZY_.at( n ).at( xyz ); }
+  void   ShapeFunctionDNatXYZ( int n, int xyz, double value ) { shapeFunctionDNatXZY_.at( n ).at( xyz ) = value; }
   void   ShapeFunctionDNatXYZ( bool val ) { shapeFunctionDNatXZYbool_ = val; }
   bool   ShapeFunctionDNatXYZ() const { return shapeFunctionDNatXZYbool_; }
-  double ShapeFunctionDNatIP( size_t ip, size_t n, size_t xyz ) const { return shapeFunctionDNatIP_.at( ip ).at( n ).at( xyz ); }
-  void   ShapeFunctionDNatIP( size_t ip, size_t n,  size_t xyz, double value ) { shapeFunctionDNatIP_.at( ip ).at( n ).at( xyz ) = value; }
+  double ShapeFunctionDNatIP( int ip, int n, int xyz ) const { return shapeFunctionDNatIP_.at( ip ).at( n ).at( xyz ); }
+  void   ShapeFunctionDNatIP( int ip, int n,  int xyz, double value ) { shapeFunctionDNatIP_.at( ip ).at( n ).at( xyz ) = value; }
   void   ShapeFunctionDNatIP( bool val ) { shapeFunctionDNatIPbool_ = val; }
   bool   ShapeFunctionDNatIP() const { return shapeFunctionDNatIPbool_; }
-  double ShapeFunctionDNatNode( size_t node, size_t n, size_t xyz ) const { return shapeFunctionDNatNode_.at( node ).at( n ).at( xyz ); }
-  void   ShapeFunctionDNatNode( size_t node, size_t n,  size_t xyz, double value ) { shapeFunctionDNatNode_.at( node ).at( n ).at( xyz ) = value; }
+  double ShapeFunctionDNatNode( int node, int n, int xyz ) const { return shapeFunctionDNatNode_.at( node ).at( n ).at( xyz ); }
+  void   ShapeFunctionDNatNode( int node, int n,  int xyz, double value ) { shapeFunctionDNatNode_.at( node ).at( n ).at( xyz ) = value; }
   void   ShapeFunctionDNatNode( bool val ) { shapeFunctionDNatNodeBool_ = val; }
   bool   ShapeFunctionDNatNode() const { return shapeFunctionDNatNodeBool_; }
-  double ShapeFunctionDNatBaryCenter( size_t n, size_t xyz ) const { return shapeFunctionDNatBaryCenter_.at( n ).at( xyz ); }
-  void   ShapeFunctionDNatBaryCenter( size_t n,  size_t xyz, double value ) { shapeFunctionDNatBaryCenter_.at( n ).at( xyz ) = value; }
+  double ShapeFunctionDNatBaryCenter( int n, int xyz ) const { return shapeFunctionDNatBaryCenter_.at( n ).at( xyz ); }
+  void   ShapeFunctionDNatBaryCenter( int n,  int xyz, double value ) { shapeFunctionDNatBaryCenter_.at( n ).at( xyz ) = value; }
   void   ShapeFunctionDNatBaryCenter( bool val ) { shapeFunctionDNatBaryCenterBool_ = val; }
   bool   ShapeFunctionDNatBaryCenter() const { return shapeFunctionDNatBaryCenterBool_; }
-  double JACOBIANatIP( size_t ip, size_t row, size_t column ) const { return jacobianAtIP_.at( ip ).at( row ).at( column ); }
-  void   JACOBIANatIP( size_t ip, size_t row, size_t column, double value ) { jacobianAtIP_.at( ip ).at( row ).at( column ) = value; }
+  double JACOBIANatIP( int ip, int row, int column ) const { return jacobianAtIP_.at( ip ).at( row ).at( column ); }
+  void   JACOBIANatIP( int ip, int row, int column, double value ) { jacobianAtIP_.at( ip ).at( row ).at( column ) = value; }
   void   JACOBIANatIP( bool val ) { JACOBIANatIPbool_ = val; }
   bool   JACOBIANatIP() const { return JACOBIANatIPbool_; }
   void   JACOBIANatRST( bool val ) { JACOBIANatRSTbool_ = val; }
   bool   JACOBIANatRST() const { return JACOBIANatRSTbool_; }
-  void   JACOBIANatRST( size_t row, size_t column, double value ) { jacobianAtRST_.at( row ).at( column ) = value; }
-  double JACOBIANatRST( size_t row, size_t column ) const { return jacobianAtRST_.at( row ).at( column ); }
-  void   RST( size_t rst, double value ) { RST_.at( rst ) = value; }
-  double RST( size_t rst ) const { return RST_.at( rst ); }
+  void   JACOBIANatRST( int row, int column, double value ) { jacobianAtRST_.at( row ).at( column ) = value; }
+  double JACOBIANatRST( int row, int column ) const { return jacobianAtRST_.at( row ).at( column ); }
+  void   RST( int rst, double value ) { RST_.at( rst ) = value; }
+  double RST( int rst ) const { return RST_.at( rst ); }
 
 
 
 private:
   std::string femName_;
-  uint32_t dim_;
-  size_t segmentCount_;
-  size_t neighborCount_;
-  size_t constraintPointNeighborCount_;
-  size_t integrationPointCount_;
-  size_t interpolationNumber_;
-  size_t orderOfShapeFunctions_;
+  int dim_;
+  int segmentCount_;
+  int neighborCount_;
+  int constraintPointNeighborCount_;
+  int integrationPointCount_;
+  int interpolationNumber_;
+  int orderOfShapeFunctions_;
   bool isoparametric_;
   bool localCoordinates_;
   bool lineElement_;
@@ -190,11 +190,11 @@ private:
   double aspectRatio_;
   double innerRadius_;
   CSMP_FEM_TYPE elementType_;
-  std::vector<uint32_t> nodesPerFace_;
-  std::vector<uint32_t> cornerNodes_;
-  std::vector<uint32_t> midsideNodes_;
-  std::vector<uint32_t> interiorNodes_;
-  std::vector<uint32_t> counterNodes_;
+  std::vector<int> nodesPerFace_;
+  std::vector<int> cornerNodes_;
+  std::vector<int> midsideNodes_;
+  std::vector<int> interiorNodes_;
+  std::vector<int> counterNodes_;
   std::vector<Node<3U>*> nodes_;
   std::vector<double> edgeLengths_;
   std::vector<double> unitNormal_;
@@ -214,16 +214,17 @@ private:
   std::vector<std::vector<std::vector<double> > > shapeFunctionDNatIP_;
   std::vector<std::vector<std::vector<double> > > shapeFunctionDNatNode_;
   std::vector<std::vector<std::vector<double> > > jacobianAtIP_;
-  std::vector<std::vector<uint32_t> > nodesOfSegment_;
-  std::vector<std::vector<uint32_t> > nodesOfFace_;
+  std::vector<std::vector<int> > nodesOfSegment_;
+  std::vector<std::vector<int> > nodesOfFace_;
   std::vector<CSMP_FEM_TYPE> faceElementTypes_;
+  
   const bool verbose_;
 
   void   DeleteNodes() {
-                         for( std::vector<Node<3U>*>::iterator it = nodes_.begin(); it != nodes_.end(); ++it )
-                           delete (*it);
-                         nodes_.clear();
-                       } // DeleteNodes
+             for( auto it = nodes_.begin(); it != nodes_.end(); ++it )
+               delete (*it);
+             nodes_.clear();
+           } // DeleteNodes
 };
 
 

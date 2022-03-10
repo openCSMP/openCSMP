@@ -198,7 +198,6 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
 
   // 1. building the 'Model' region
   // ------------------------------
-  // TODO: since Region has no move constructor, multiple copies of the empty region are made here
   std::pair<typename map<string,csmp::Region<dim> >::iterator, bool>
     newRegion = (is_unique) ?
     uniqueGroupMap_.insert( make_pair( regionname, csmp::Region<dim>( regionname,
@@ -213,6 +212,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
        if ( elmts == 0 )
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
                             regionname, "region could not be formed." );
+       // do not renumber
+       // (*newRegion.first).second.UpdateMemberIndexes();
     }
   else {
       csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",

@@ -10,6 +10,7 @@ namespace csmp {
 template<uint32_t dim> class Visitor;
 template<uint32_t dim> class Element;
 template<uint32_t dim> class NodeManifold;
+class FiniteElement_TestData;
 
 /**
  
@@ -168,7 +169,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     
-    friend class FiniteElement_TestData; // for testing 
+    friend class FiniteElement_TestData; // for testing
+    friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
 };
 
 
