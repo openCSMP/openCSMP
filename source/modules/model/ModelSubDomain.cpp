@@ -803,9 +803,11 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     vector<csmp::Node<dim>*>  temp;
     temp.reserve(this->node_vec_.size());
     // the interior nodes are inserted
-    for ( auto& nit : this->node_vec_ )
-      if ( boundary_nodes.find(nit) == boundary_nodes.end() )
-        temp.push_back( nit );
+    for ( auto& nit : this->node_vec_ ) {
+          assert( nit );
+          if ( boundary_nodes.find(nit) == boundary_nodes.end() )
+            temp.push_back( nit );
+      }
     // second, the already sorted perimeter nodes are appended
     for ( auto& nit : boundary_nodes )
         temp.push_back( nit );
