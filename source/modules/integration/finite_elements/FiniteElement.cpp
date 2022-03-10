@@ -190,7 +190,6 @@ size_t  FiniteElement::CurrentID() const      { return object_id; }
 /// initalizing to a value that makes sure that ID does not equal initial element idx
 size_t  FiniteElement::InitialID() { return std::numeric_limits<uint32_t>::max(); }
 
-
 bool  FiniteElement::Isoparametric() const        { return isoparametric; }
 
 bool  FiniteElement::UsesLocalCoordinates() const { return uses_local_coordinates; }
@@ -911,7 +910,7 @@ double  FiniteElement::JacobianInverse()
 
     if ( dim == 2U ) {
          // compute determinant  
-         double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+         const double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
     
          // inversion of J
          const double dum = JAC(0,0) / detJ;
@@ -922,19 +921,17 @@ double  FiniteElement::JacobianInverse()
          
          if ( detJ <= 0. ) {
               cerr <<"\n\nFiniteElement::JacobianInverse(2D): element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
-              cerr << detJ << endl;
+              cerr << std::defaultfloat << detJ << endl;
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
               for ( auto i=0; i<Nodes(); i++ )
                 {
-                  cerr<<" Node( "<<i<<" ): ";
+                  cerr<<" Node("<<i<<"): "<< std::scientific;
                   for ( auto j=0; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
-                  cerr<<endl;
+                  cerr << std::defaultfloat << endl;
                 }
               csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                                 "the value of the Jacobian is negative; check node-numbering.");
-
-//              return fabs(detJ);
            }
       
          return detJ;
@@ -942,19 +939,19 @@ double  FiniteElement::JacobianInverse()
       
      // 3D case
      const double detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
-                           JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
-                           JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
+                         JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
+                         JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
 
      if ( detJ <= 0. ) {
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
-          std::cerr << detJ << std::endl;
+          std::cerr << std::defaultfloat << detJ << std::endl;
           cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
           for ( auto i=0; i<Nodes(); i++ )
             {
-              cerr <<" Node( "<<i<<" ): ";
+              cerr <<" Node("<<i<<"): "<< std::scientific;
               for ( auto j=0; j<XY.Cols(); j++ )
                   cerr << XY(i,j) <<" ";
-              cerr <<endl;
+              cerr << std::defaultfloat << endl;
             }
           csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                             "the value of the Jacobian is negative; check node-numbering.");

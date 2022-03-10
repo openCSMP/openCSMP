@@ -198,7 +198,6 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
 
   // 1. building the 'Model' region
   // ------------------------------
-  // TODO: since Region has no move constructor, multiple copies of the empty region are made here
   std::pair<typename map<string,csmp::Region<dim> >::iterator, bool>
     newRegion = (is_unique) ?
     uniqueGroupMap_.insert( make_pair( regionname, csmp::Region<dim>( regionname,
@@ -213,6 +212,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
        if ( elmts == 0 )
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
                             regionname, "region could not be formed." );
+       // do not renumber
+       // (*newRegion.first).second.UpdateMemberIndexes();
     }
   else {
       csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
@@ -1125,12 +1126,12 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
 
   // 1. getting the names of the regions
   std::list<std::string> regions;
-  topo.Out( regions );
+  topo.OutputRegions( regions );
 
   // 2. assigning the regions to groups in the Model
-  std::cout << "\nRegionInterface<dim,REGION_COMPLEX>::FormRegionsFrom: Forming the regions: ";
+  std::cout << "\nRegionInterface::FormRegionsFrom: Forming the regions: ";
 
-  int32_t new_regions( 0U );
+  uint32_t new_regions( 0U );
   for ( typename std::list<std::string>::const_iterator lit = regions.begin(); lit != regions.end(); lit++ )
     {
       std::string group_name( *lit );
@@ -1153,7 +1154,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
           // removing the group if it contains no elements
           if ( (*it.first).second.Elements() == 0U ) {
               uniqueGroupMap_.erase( it.first );
-              csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom",
+              csmp_error.notice( WARNING, "RegionsInterface::FormRegionsFrom",
                                  "Region could not be formed", (*lit).c_str() );
             }
           else {
@@ -1166,13 +1167,12 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
             }
         }
       else
-        throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFrom",
+        throw csmp::Exception( ERROR, "RegionsInterface::FormRegionsFrom",
                                "Region could not be formed. Does this region already exist?", (*lit).c_str() );
     }
   std::cout << std::endl;
 
-  if ( new_regions == topo.ModelDomains() ) return regions.size();
-  return 0U;
+  return new_regions;
 
 } // end FormRegionsFrom
 

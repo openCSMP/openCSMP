@@ -339,7 +339,7 @@ class FiniteElement {
     // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
 
     // from Hani Akbari: for analytic integration
-    virtual   void    Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K);
+    virtual   void    Integral_dNT_K_dN( DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K );
   
 
     /// 1D element interpolation functions N(r)
@@ -385,15 +385,15 @@ class FiniteElement {
     void           ElementType( CSMP_FEM_TYPE etype );
 
     uint32_t dim,       /**< spatial dimension of element */
-           itp,       /**< degree of interpolation */
-           npf,       /**< nodes per face */
-           npe,       /**< nodes per element  */
-           spe,       /**< segments per element  */
-           fpe,       /**< faces per element  */
-           epe,       /**< neighbors of element */
-           nne,       /**< typical number of elements that share each node */
-           cne,       /**< typical number of elements that share each integration point */
-           gpe;       /**< Gauss points per element for numerical integration */
+             itp,       /**< degree of interpolation */
+             npf,       /**< nodes per face */
+             npe,       /**< nodes per element  */
+             spe,       /**< segments per element  */
+             fpe,       /**< faces per element  */
+             epe,       /**< neighbors of element */
+             nne,       /**< typical number of elements that share each node */
+             cne,       /**< typical number of elements that share each integration point */
+             gpe;       /**< Gauss points per element for numerical integration */
 
     DenseMatrix<DM_MIN>   M;         /**< test-function coefficients */
                      

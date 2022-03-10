@@ -126,7 +126,13 @@ class ModelTopology {
     /// output subset as another model topology
     void        ExportSelectionTo( const std::list<std::string>& regions,
                                    ModelTopology& mt ) const;
-    void        Out( std::list<std::string>& regions ) const;
+       
+    /// lists all the contained subdomains (regions, boundaries and splitboundaries
+    void        OutputAll( std::list<std::string>& regions ) const;
+    void        OutputRegions( std::list<std::string>& regions ) const;
+    void        OutputBoundaries( std::list<std::string>& regions ) const;
+    void        OutputSplitBoundaries( std::list<std::string>& regions ) const;
+
     /// check whether region is alreday included
     bool        Contains( const char* region ) const;
     /// remove certain regions

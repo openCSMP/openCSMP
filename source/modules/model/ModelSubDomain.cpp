@@ -4989,6 +4989,29 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Nod
  }
 
 
+// NON-MEMBER FUNCTIONS
+
+/// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
+PLACEMENT modelSubdomainType( const std::string& subdomain_name )
+  {
+     // case insensitive search
+     string lowercase_name;
+     for ( auto& it : subdomain_name )
+       lowercase_name += tolower( it );
+      
+     // split boundary first because boundary is a substring of splitboundary
+     if ( lowercase_name.find("splitboundary") != string::npos ||
+          lowercase_name.find("split_boundary") != string::npos ||
+          lowercase_name.find("split boundary") != string::npos )
+     return SPLIT_BOUNDARY;
+
+     if ( isDiagnosticBoxBoundaryClassifier(lowercase_name) || lowercase_name.find("boundary") != string::npos )
+       return BOUNDARY;
+     
+     return REGION;
+
+  } // end modelSubdomainType
+
 
 
 

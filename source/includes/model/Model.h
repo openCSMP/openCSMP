@@ -405,13 +405,13 @@ protected:
   void Initialize( const char* regions_file_prefix,
                    ModelTopology& mesh_topology,
                    VSet<dim>& vset,
-                   bool create_boundaries,
+                   bool create_boundaries_not_in_topology,
                    bool non_box_shaped_model );
 
   /// builds model from scratch without any region information; the only (unique) region will be 'Model'
   void Initialize( ModelTopology& mesh_topology,
                    VSet<dim>& vset,
-                   bool create_boundaries,
+                   bool create_boundaries_not_in_topology,
                    bool non_box_shaped_model );
 
   void InitializeLocalVariableStorage();

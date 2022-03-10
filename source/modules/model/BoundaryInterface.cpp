@@ -1,4 +1,5 @@
 #include "BoundaryInterface.h"
+#include "ModelTopology.h"
 #include "Model.h"
 #include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
@@ -20,22 +21,22 @@ namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 typename BoundaryInterface<dim,BOUNDARY_COMPLEX>::boundaryIterator  BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundariesBegin()
-  { return faceBoundaryMap_.begin(); }
+  { return boundaryMap_.begin(); }
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 typename BoundaryInterface<dim,BOUNDARY_COMPLEX>::boundaryIterator  BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundariesEnd()
-  { return faceBoundaryMap_.end(); }
+  { return boundaryMap_.end(); }
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 typename BoundaryInterface<dim,BOUNDARY_COMPLEX>::boundaryConstIterator  BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundariesBegin() const
-  { return faceBoundaryMap_.begin(); }
+  { return boundaryMap_.begin(); }
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 typename BoundaryInterface<dim,BOUNDARY_COMPLEX>::boundaryConstIterator  BoundaryInterface<dim,BOUNDARY_COMPLEX>::BoundariesEnd() const
-  { return faceBoundaryMap_.end(); }
+  { return boundaryMap_.end(); }
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
@@ -49,14 +50,14 @@ typename BoundaryInterface<dim,BOUNDARY_COMPLEX>::boundaryIterator  BoundaryInte
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 size_t  BoundaryInterface<dim,BOUNDARY_COMPLEX>::Boundaries() const
-  { return faceBoundaryMap_.size(); }
+  { return boundaryMap_.size(); }
 
 
 
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 bool  BoundaryInterface<dim,BOUNDARY_COMPLEX>::ContainsBoundary( const std::string& bname ) const
  {
-    if ( faceBoundaryMap_.find(bname) != faceBoundaryMap_.end()  ) return true;
+    if ( boundaryMap_.find(bname) != boundaryMap_.end()  ) return true;
     return false;
  }
 
@@ -64,8 +65,8 @@ bool  BoundaryInterface<dim,BOUNDARY_COMPLEX>::ContainsBoundary( const std::stri
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 Boundary<dim>&  BoundaryInterface<dim,BOUNDARY_COMPLEX>::Boundary( const std::string& bname )
   { 
-    boundaryIterator  bit=faceBoundaryMap_.find( bname );
-    if( bit != faceBoundaryMap_.end() )
+    boundaryIterator  bit=boundaryMap_.find( bname );
+    if( bit != boundaryMap_.end() )
       return bit->second;  
     else
       {
@@ -81,8 +82,8 @@ Boundary<dim>&  BoundaryInterface<dim,BOUNDARY_COMPLEX>::Boundary( const std::st
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 const Boundary<dim>&  BoundaryInterface<dim,BOUNDARY_COMPLEX>::Boundary( const std::string& bname ) const
   {    
-    boundaryConstIterator  bit=faceBoundaryMap_.find( bname );
-    if( bit != faceBoundaryMap_.end() )
+    boundaryConstIterator  bit=boundaryMap_.find( bname );
+    if( bit != boundaryMap_.end() )
       return bit->second;  
     else
       {
@@ -289,6 +290,64 @@ bool BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoxShaped() const
 
 
 
+
+
+template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
+size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelTopology& topo )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // 1. getting the names of the regions
+  std::list<std::string> boundaries;
+  topo.OutputBoundaries( boundaries );
+
+  // 2. assigning the regions to groups in the Model
+  std::cout << "\nBoundaryInterface::FormBoundariesFrom: Forming the boundaries: ";
+
+  size_t new_boundaries{0};
+  for ( auto lit = boundaries.begin(); lit != boundaries.end(); lit++ )
+    {
+      std::string domain_name( *lit );
+      auto boundary_flag = parseBoundary( domain_name );
+      auto it = boundaryMap_.insert( make_pair( domain_name, csmp::Boundary<dim>( domain_name, static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Database(), boundary_flag ) ) );
+      // if the region was successfully inserted
+      if ( it.second )
+        {
+          // making a list of the element numbers
+          std::vector<size_t>  cell_ids;
+          cell_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
+          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
+                topo.CellsOfDomainEnd( (*lit).c_str() ),
+                back_inserter( cell_ids ) );
+
+          // retrieving the elements by their IDs and assigning them  to the region
+          (*it.first).second.AccumulateByNumber( static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Mesh(), cell_ids );
+          cell_ids.erase( cell_ids.begin(), cell_ids.end() );
+
+          // removing the group if it contains no elements
+          if ( (*it.first).second.Elements() == 0U ) {
+              boundaryMap_.erase( it.first );
+              csmp_error.notice( WARNING, "BoundaryInterface::FormBoundariesFrom",
+                                 "Boundary could not be formed", (*lit).c_str() );
+            }
+          else {
+               // reporting the name of the newly generated region
+               std::cout << domain_name << " ";
+               new_boundaries++;
+            }
+        }
+      else
+        throw csmp::Exception( ERROR, "BoundaryInterface::FormBoundariesFrom",
+                               "Boundary could not be formed. Does this region already exist?", (*lit).c_str() );
+    }
+  std::cout << std::endl;
+
+  return new_boundaries;
+
+} // end FormBoundariesFrom
+
+
+
 /**
     Creates boundary from Faces that already know their parent elements.
     
@@ -316,10 +375,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
       boundaryComplex->Mesh().template BuildLineConnectivity<Face>( facesBegin, facesEnd );
 
     // inserting boundary if it does not existing yet
-    std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
-        it = faceBoundaryMap_.insert( std::make_pair( boundary_name, csmp::Boundary<dim>( boundary_name,
-                                                                                          boundaryComplex->Database(),
-                                                                                          facesBegin, facesEnd, bflag ) ) );
+    auto it = boundaryMap_.insert( std::make_pair( boundary_name, csmp::Boundary<dim>( boundary_name,
+                                                                                       boundaryComplex->Database(),
+                                                                                       facesBegin, facesEnd, bflag ) ) );
     if ( it.second ) {
          cout << "\nBoundaryInterface<"<< dim <<">::AddBoundary: successfully created boundary '";
          cout << boundary_name <<"' from input faces.";
@@ -1142,7 +1200,7 @@ throw csmp::Exception( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::Create
     
     // inserting boundary if not existing yet
     pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
-        it = faceBoundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
+        it = boundaryMap_.insert( std::make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
         // creates connectivity among Faces
@@ -1178,7 +1236,7 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* bound
       }
     
     // erasing the boundary
-    faceBoundaryMap_.erase( boundary );
+    boundaryMap_.erase( boundary );
     
   } // end RemoveBoundary
 
@@ -1194,10 +1252,10 @@ template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary )
   {
     // locating the boundary in the boundary map
-    boundaryIterator it = faceBoundaryMap_.find( boundary.Name() );
+    boundaryIterator it = boundaryMap_.find( boundary.Name() );
     // if the addresses of the objects are the same
-    if ( it != faceBoundaryMap_.end() ) {
-         faceBoundaryMap_.erase( (*it).first );
+    if ( it != boundaryMap_.end() ) {
+         boundaryMap_.erase( (*it).first );
          return;
       }
     
@@ -1351,7 +1409,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
                
                // 1.3 creating the boundary objects
                std::pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
-                 it=faceBoundaryMap_.insert( make_pair( info.name, csmp::Boundary<dim>(database, mesh, info, bflag) ) );
+                 it=boundaryMap_.insert( make_pair( info.name, csmp::Boundary<dim>(database, mesh, info, bflag) ) );
               
                if ( !it.second )
                  throw csmp::Exception( FATAL_ERROR, "BoundaryInterface::InputBoundariesFromBinary:",
@@ -1441,7 +1499,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
 
     // attempt to create a (Face-based) boundary, appending numbers as necessary
     pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
-      it = faceBoundaryMap_.insert( make_pair( boundary_name, csmp::Boundary<dim>( boundary_name, boundaryComplex->Database(), INTERNAL ) ) );
+      it = boundaryMap_.insert( make_pair( boundary_name, csmp::Boundary<dim>( boundary_name, boundaryComplex->Database(), INTERNAL ) ) );
 
     if ( it.second ) {
         cout << "\nBoundaryInterface<"<< dim <<">::CreateBetween: creating boundary between ";
@@ -1495,7 +1553,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryAround( const char* 
     
     // inserting boundary if not existing yet
     std::pair<typename std::map<std::string,csmp::Boundary<dim> >::iterator,bool>
-        it = faceBoundaryMap_.insert( make_pair( boundaryName, csmp::Boundary<dim>( boundaryName, boundaryComplex->Database(), boxBoundary ) ) );
+        it = boundaryMap_.insert( make_pair( boundaryName, csmp::Boundary<dim>( boundaryName, boundaryComplex->Database(), boxBoundary ) ) );
     if ( it.second )
       {
         cout << "\nBoundaryInterface<"<< dim <<">::CreateAround: creating boundary " << parseBoundary( boxBoundary ) << endl;
@@ -2383,7 +2441,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !faceBoundaryMap_.empty() ) {
+  if ( !boundaryMap_.empty() ) {
        csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoxBoundariesFromNodeFlags:",
                                    "model already contains Boundary objects; nothing was done.");
        return;
@@ -2395,8 +2453,8 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
   // for all element faces on the model boundary
   for ( size_t eid{model_domain.InteriorElements()}; eid < model_domain.Elements(); ++eid )
-    for ( size_t j{0}; j < model_domain.PerimeterFaces(eid); ++j ) {
-         const size_t face_id{ model_domain.PerimeterFace(eid,j) };
+    for ( auto j{0}; j < model_domain.PerimeterFaces(eid); ++j ) {
+         const auto face_id{ model_domain.PerimeterFace(eid,j) };
          // getting the boundary flag of the face
          const BOX_BOUNDARY bflag = atBoundary( model_domain.E(eid), face_id );
          // storing the FaceInfo for the correct boundary

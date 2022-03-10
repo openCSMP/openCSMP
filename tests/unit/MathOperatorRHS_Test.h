@@ -14,7 +14,9 @@ class MathOperatorRHS_Test : public Test
 public:
 	MathOperatorRHS_Test();
 	~MathOperatorRHS_Test();
+  
 	void run(); // runs all the tests for the class (register other methods below)
+  
   void MathOperatorRHS_Ctor();
   void MathOperatorRHS_CopyCtor();
   void MathOperatorRHS_Equal();

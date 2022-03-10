@@ -35,7 +35,7 @@ private:
 
     double tol_;
 
-    Model<2U>* sg_;
+    Model<2U>* sg_ = nullptr;
     const bool verbose_;
 };
 

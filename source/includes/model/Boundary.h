@@ -117,6 +117,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // ----------------------------------------
     //  boundary initialisation & modification
     // ----------------------------------------
+    
+    /// creates element pointers assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
     /// creating from supplied vector of faces
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,

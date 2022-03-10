@@ -143,7 +143,7 @@ void FiniteElement_Test::run()
     femPtr_->NodesOfSegment( i, segmentNodes );
     if( global_verbose )
       if ( verbose_ ) cout << "  Segment " << i << endl;
-    for( size_t j = 0; j < segmentNodes.size(); ++ j )
+    for( auto j = 0; j < segmentNodes.size(); ++ j )
     {
       if( global_verbose )
         if ( verbose_ ) cout << "    Node " << j << ": " << segmentNodes.at( j ) << " versus " << femData_.NodeOfSegment( i, j ) << endl;
@@ -159,7 +159,7 @@ void FiniteElement_Test::run()
     femPtr_->NodesOfFace( i, faceNodes );
     if( global_verbose )
       if ( verbose_ ) cout << "  Face " << i << endl;
-    for( size_t j = 0; j < faceNodes.size(); ++j )
+    for( auto j = 0; j < faceNodes.size(); ++j )
     {
       if(global_verbose )
         if ( verbose_ ) cout << "    Node " << j << ": " << faceNodes.at( j ) << " versus " << femData_.NodeOfFace( i, j ) << endl;
@@ -230,7 +230,7 @@ void FiniteElement_Test::run()
 
   // .) COORDINATE MATRIX
   if ( verbose_ ) cout << "Testing coordinate matrix...\n";
-  for( size_t row = 0; row < femPtr_->Nodes(); ++row )
+  for( auto row = 0; row < femPtr_->Nodes(); ++row )
   {
     for( uint32_t dim = 0; dim < femPtr_->Dim(); ++dim )
     {
@@ -250,18 +250,18 @@ void FiniteElement_Test::run()
   {
     vector<double> ivars( femPtr_->IntegrationPoints() * femData_.ExtrapolationVariableCount() );
     vector<double> nvars( femPtr_->Nodes() * femData_.ExtrapolationVariableCount() );
-    size_t index( 0 );
-    for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+    int index( 0 );
+    for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
-      for( size_t v = 0; v < femData_.ExtrapolationVariableCount(); ++v )
+      for( auto v = 0; v < femData_.ExtrapolationVariableCount(); ++v )
         ivars.at( index++ ) = femData_.IntegrationPointVariable( ip, v );
     }
     femPtr_->ExtrapolateIntegrationPointVariableToNodes( femData_.ExtrapolationVariableCount(),
                                                          ivars, nvars );
     index = 0;
-    for( size_t np = 0; np < femPtr_->Nodes(); ++np )
+    for( auto np = 0; np < femPtr_->Nodes(); ++np )
     {
-      for( size_t v = 0; v < femData_.ExtrapolationVariableCount(); ++v )
+      for( auto v = 0; v < femData_.ExtrapolationVariableCount(); ++v )
         _equal( nvars.at( index++ ), femData_.NodePointVariable( np, v ), femData_.Tolerance() );
     }
   }
@@ -271,24 +271,24 @@ void FiniteElement_Test::run()
   if( femPtr_->IntegrationPoints() != 0 )
   {
     vector<double> ipGlobal;
-    for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+    for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
       femPtr_->IntegrationPoint( ip, ipGlobal );
-      for( size_t xyz = 0; xyz < femData_.Dim(); ++xyz )
+      for( auto xyz = 0; xyz < femData_.Dim(); ++xyz )
         _equal( ipGlobal.at( xyz ), femData_.IpGlobal( ip, xyz ), femData_.Tolerance() );
     }
   }
 
   // .) INTEGRATION POINT WEIGHTS
   cout << "Testing integration point weights...\n";
-  for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+  for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     _equal( femPtr_->WeightAtIntegrationPoint( ip ), femData_.IntegrationPointWeight( ip ), femData_.Tolerance() );
 
   // .) COUNTER CLOCK WISE NODES
   if ( verbose_ ) cout << "Testing counter clock wise nodes...\n";
   std::vector<uint32_t> counterNodes;
   femPtr_->CounterClockwiseNodes( counterNodes );
-  for( size_t n = 0; n < counterNodes.size(); ++n )
+  for( auto n = 0; n < counterNodes.size(); ++n )
     _test( counterNodes.at( n ) == femData_.CounterClockWiseNode( n ) );
 
 
@@ -296,19 +296,19 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing shape function N at point...\n";
   std::vector<double> shapeFunctionN;
   std::vector<double> shapeFunctionXYZ;
-  for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
+  for( auto xyz = 0; xyz < femPtr_->Dim(); ++xyz )
     shapeFunctionXYZ.push_back( femData_.ShapeFunctionXYZ( xyz ) );
   femPtr_->N( shapeFunctionN, shapeFunctionXYZ );
-  for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+  for( auto n = 0; n < femPtr_->Nodes(); ++n )
     _equal( shapeFunctionN.at( n ), femData_.ShapeFunctionN( n ), femData_.Tolerance() );
 
   // .) SHAPE FUNCTION: N AT INTEGRATION POINT
   if ( verbose_ ) cout << "Testing shape function N at integration point...\n";
-  for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+  for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
   {
     shapeFunctionN.clear();
     femPtr_->N_AtIntegrationPoint( ip, shapeFunctionN );
-    for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+    for( auto n = 0; n < femPtr_->Nodes(); ++n )
       _equal( shapeFunctionN.at( n ), femData_.ShapeFunctionNatIP( ip, n ), femData_.Tolerance() );
   }
 
@@ -316,7 +316,7 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing shape function N at barycenter...\n";
   shapeFunctionN.clear();
   femPtr_->N_AtBaryCenter( shapeFunctionN );
-  for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+  for( auto n = 0; n < femPtr_->Nodes(); ++n )
     _equal( shapeFunctionN.at( n ), femData_.ShapeFunctionNatBarycenter( n ), femData_.Tolerance() );
 
   /*
@@ -336,9 +336,9 @@ void FiniteElement_Test::run()
   if( femData_.ShapeFunctionDNatXYZ() )
   {
     femPtr_->dN_At( denseMatrix, shapeFunctionXYZ );
-    for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+    for( auto n = 0; n < femPtr_->Nodes(); ++n )
       {
-        for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
+        for( auto xyz = 0; xyz < femPtr_->Dim(); ++xyz )
           _equal( denseMatrix( xyz, n ), femData_.ShapeFunctionDNatXYZ( n, xyz ), femData_.Tolerance() );
       }
   }
@@ -347,12 +347,12 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing shape function derivative at integration point...\n";
   if( femData_.ShapeFunctionDNatIP() )
   {
-    for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+    for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
       femPtr_->dN_AtIntegrationPoint( denseMatrix, ip );
-      for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+      for( auto n = 0; n < femPtr_->Nodes(); ++n )
         {
-          for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
+          for( auto xyz = 0; xyz < femPtr_->Dim(); ++xyz )
             _equal( denseMatrix( xyz, n ), femData_.ShapeFunctionDNatIP( ip, n, xyz ), femData_.Tolerance() );
         }
     }
@@ -362,12 +362,12 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing shape function derivative at nodes...\n";
   if( femData_.ShapeFunctionDNatNode() )
   {
-    for( size_t node = 0; node < femPtr_->Nodes(); ++node )
+    for( auto node = 0; node < femPtr_->Nodes(); ++node )
     {
       femPtr_->dN_AtNode( denseMatrix, node );
-      for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+      for( auto n = 0; n < femPtr_->Nodes(); ++n )
       {
-          for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
+          for( auto xyz = 0; xyz < femPtr_->Dim(); ++xyz )
             _equal( denseMatrix( xyz, n ), femData_.ShapeFunctionDNatNode( node, n, xyz ), femData_.Tolerance() );
         }
     }
@@ -378,9 +378,9 @@ void FiniteElement_Test::run()
   if( femData_.ShapeFunctionDNatBaryCenter() )
   {
     femPtr_->dN_AtBarycenter( denseMatrix );
-    for( size_t n = 0; n < femPtr_->Nodes(); ++n )
+    for( auto n = 0; n < femPtr_->Nodes(); ++n )
     {
-      for( size_t xyz = 0; xyz < femPtr_->Dim(); ++xyz )
+      for( auto xyz = 0; xyz < femPtr_->Dim(); ++xyz )
         _equal( denseMatrix( xyz, n ), femData_.ShapeFunctionDNatBaryCenter( n, xyz ), femData_.Tolerance() );
     }
   }
@@ -396,12 +396,12 @@ void FiniteElement_Test::run()
 
   if( femData_.JACOBIANatIP() )
   {
-    for( size_t ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
+    for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     {
       femPtr_->JacobianAtIntegrationPoint( ip );
-      for( size_t row = 0; row < dim_volume; ++row )
+      for( auto row = 0; row < dim_volume; ++row )
       {
-        for( size_t column = 0; column < femPtr_->Dim(); ++column )
+        for( auto column = 0; column < femPtr_->Dim(); ++column )
           _equal( femPtr_->JAC( row, column ), femData_.JACOBIANatIP( ip, row, column ), femData_.Tolerance() );
       }
     }
@@ -413,7 +413,7 @@ void FiniteElement_Test::run()
   if( femData_.JACOBIANatRST() )
   {
     var_v.clear();
-    for( size_t rst = 0; rst < femPtr_->Dim(); ++rst )
+    for( auto rst = 0; rst < femPtr_->Dim(); ++rst )
       var_v.push_back( femData_.RST( rst ) );
 
     femPtr_->JacobianAt( var_v );
@@ -427,16 +427,16 @@ void FiniteElement_Test::run()
 
   // .) TEST INTERPOLATION DERIVATIVES OVER A LINEAR SIMPLEX
   if ( femPtr_->IsSimplex() && femPtr_->Interpolation() == 1 ) {
-    const size_t iNrIps = femPtr_->IntegrationPoints();
+    const auto iNrIps = femPtr_->IntegrationPoints();
     std::cerr << "Shape matrices for FE " << fileName_ << '\n';
     femPtr_->dN_AtBarycenter( denseMatrix );
     DenseMatrix<DM_MIN> denseMatrixIP;
-    for (size_t ip = 0; ip < iNrIps; ++ip) {
+    for (auto ip = 0; ip < iNrIps; ++ip) {
       femPtr_->dN_AtIntegrationPoint( denseMatrixIP, ip );
       _test( denseMatrix.Rows() == denseMatrixIP.Rows() );
       _test( denseMatrix.Cols() == denseMatrixIP.Cols() );
       for (auto i = 0; i < denseMatrix.Cols(); ++i) {
-        for (size_t j = 0; j < denseMatrix.Rows(); ++j) {
+        for (auto j = 0; j < denseMatrix.Rows(); ++j) {
           _test( approximatelyEqual( denseMatrix(j,i), denseMatrixIP(j,i) ));
         }
       }

@@ -1,4 +1,5 @@
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
+#include "vsetMakers.h"
 
 using namespace std;
 
@@ -7,21 +8,14 @@ namespace csmp {
 Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
  : tol_(0.001), verbose_(verbose), sg_(nullptr)
 {
-  const bool       isoparametric(true);
-  ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
-  VSet<2U>         mesh_container;
-  ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
+  const bool  isoparametric(false);
+  VSet<2U>    mesh_container;
+  test_Create_TrianglePatch_VSet( mesh_container );
 
   // Building Region object from ANSYS data files
-  if ( verbose_ ) cout <<"Reading mesh..."<<endl;
-  string mesh_name("pde_integrator_test");
-  const bool binary_file( true );
-  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
-  if ( verbose_ ) {
-      cout <<"Finished reading mesh..."<<endl;
-      cout <<"Building Model..."<<endl;
-    }
-  sg_= new Model<2U> ( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");
+  string mesh_name("triangle_patch");
+  if ( verbose_ ) cout <<"\nIntegral_var_NT_rhsop_N_dV_Test: Building Model..."<<endl;
+  sg_= new Model<2U>( mesh_container, "CSMP-2phase-variables.txt", isoparametric );
 
     // Set values on nodes
   sg_->InputPropertyValue("fluid pressure", makeScalar(PLAIN,1.));

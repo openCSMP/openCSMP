@@ -421,6 +421,70 @@ pair<int32_t, int32_t>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 
 
 
+template<uint32_t dim>
+size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
+                                               vector<size_t>& cell_ids )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( cell_ids.empty() )
+    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+                      "user-supplied interface-number vector is empty. Nothing is done." );
+
+  if ( !this->elmt_vec_.empty() ) {
+      csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+                         "SplitBoundary is not empty", "erasing all members..." );
+      this->elmt_vec_.clear();
+    }
+
+  // eliminating potential duplicates from element index vector
+#ifdef DEBUG
+  const size_t n_cells{cell_ids.size()};
+  sort( cell_ids.begin(), cell_ids.end() );
+  cell_ids.erase( unique( cell_ids.begin(), cell_ids.end() ), cell_ids.end() );
+  if ( cell_ids.size() < n_cells )
+    csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+                      "user-supplied interface ID set contained duplicates which were removed." );
+#endif
+  if ( cell_ids.size() > mesh.InterFaces() )
+    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+                       "user-supplied interface-number vector is larger than range of index-to-element-pointer mapping." );
+
+  // creating the element vector for the region
+  // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
+  const auto offset = mesh.Elements() + mesh.Faces();
+  this->elmt_vec_.reserve( cell_ids.size() );
+  for ( auto& idx : cell_ids ) {
+       InterFace<dim>* ifptr = &(*next(mesh.InterFacesBegin(),idx-offset));
+       assert( ifptr != nullptr );
+       assert( ifptr->Idx() == idx );
+       this->elmt_vec_.push_back( ifptr );
+    }
+    
+  // creating node vector
+  if ( this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
+  // filling the vector
+  for ( auto& it : this->elmt_vec_ ) {
+       const size_t n_nodes{it->Nodes()};
+       for ( auto i{0}; i<n_nodes; ++i ) {
+            assert( it->N(i) != nullptr );
+            this->node_vec_.push_back( it->N(i) );
+         }
+     }
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
+  this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
+
+} // end AccumulateByNumber
+
+
+
+
 /**
     Creates a split boundary from a boundary. Requires unique indices.
     @author SKM 1/11/2013

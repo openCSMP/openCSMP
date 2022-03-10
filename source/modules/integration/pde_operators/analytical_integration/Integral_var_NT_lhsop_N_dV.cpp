@@ -11,11 +11,11 @@ namespace csmp {
 
 template<uint32_t dim,class CELL>
 Integral_var_NT_lhsop_N_dV<dim,CELL>::Integral_var_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
-                                                                const char* oper,
-                                                                const char* basic, 
-                                                                const char* test,
-                                                                const char* var,
-                                                                const double prefactor )
+                                                                  const char* oper,
+                                                                  const char* basic,
+                                                                  const char* test,
+                                                                  const char* var,
+                                                                  const double prefactor )
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     var_(pref.Parameter(var)),
     prefactor_(prefactor)
@@ -76,7 +76,7 @@ void Integral_var_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
     e.IntegralNN(mat);
     
     for (auto i = 0; i < e.Nodes(); ++i) {
-      for (size_t k = 0; k < e.Nodes(); ++k) {
+      for (auto k = 0; k < e.Nodes(); ++k) {
         MathOperatorLHS<dim>::LHS(i, i) += mat(i, k) * vvar_[k]();
       }
     }

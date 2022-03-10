@@ -23,6 +23,7 @@ MathOperatorRHS_Test::~MathOperatorRHS_Test()
 
 void MathOperatorRHS_Test::run()
 {
+    cout <<"\nMathOperatorRHS_Test::run: running test...\n";
     MathOperatorRHS_Ctor();
     MathOperatorRHS_CopyCtor();
     MathOperatorRHS_Equal();

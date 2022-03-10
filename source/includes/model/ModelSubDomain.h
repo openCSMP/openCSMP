@@ -308,6 +308,8 @@ class ModelSubDomain {
     ModelSubDomain();
 };
 
+/// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
+PLACEMENT modelSubdomainType( const std::string& subdomain_name );
 
 /// returns number of nodes that are shared by the two subdomains (matches by pointers)
 template<uint32_t dim,template<uint32_t> class CELL>
