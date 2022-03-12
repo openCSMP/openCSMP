@@ -293,7 +293,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology,
 
     // 1. reducing the element data to the desired elements specified in the topology object
     //    if the element numbers in the two are different.
-    if ( mesh_topology.Cells() != vset.Elements() ) {
+    if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.InterFaces() ) {
         map<size_t,size_t>  old_and_new_elmtids;
         mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
         vset.ReduceTo( old_and_new_elmtids );
