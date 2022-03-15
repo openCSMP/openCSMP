@@ -45,7 +45,8 @@ void Visitor_Example::Run()
   const bool binary_file( true );
   mesh_interface.Read_ANSYS_Mesh( model_name.c_str(), mesh_container, mesh_topology, binary_file, true );
 
-  Model<2U> reservoir_model( mesh_topology, mesh_container, "VisitorExample-var.txt" );
+  const bool get_domain_info_from_regions_file{true};
+  Model<2U> reservoir_model( mesh_topology, mesh_container, "VisitorExample-var.txt", get_domain_info_from_regions_file );
 
 
   PressureSaturationInitializer<2U> pressure_saturation_initializer ( reservoir_model,

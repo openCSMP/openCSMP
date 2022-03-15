@@ -63,7 +63,7 @@ void RegionProperties_Example::Run()
     mesh_topology.Out();
  
     // constructing the model with the constructor for ANSYS meshes 
-    Model<DIM>  model( mesh_topology, mesh_container, "example1.txt" );
+    Model<DIM>  model( mesh_topology, mesh_container, "example1.txt", true );
     
     // assigning material properties 
     // -----------------------------------------------------  

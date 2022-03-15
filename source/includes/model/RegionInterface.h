@@ -143,8 +143,8 @@ class RegionInterface {
     /// treats the values of the property as discrete, forming one region per value and returning their names into the set; returns number of regions
     size_t FormRegionsFromPropertyValues( const char* prop, std::set<std::string>& region_names );
 
-    /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object, and assigns region number to the material ID of the elements; returns # of regions
-    size_t FormRegionsFrom( const ModelTopology& );
+    /// forms unique regions from the supplied element ids (0..n-1) stored in ModelTopology; assigns region number to element material IDs if empty; returns # of regions formed
+    size_t FormRegionsFrom( const ModelTopology&, bool ignore_domain_type_identifiers=false );
 
     // FROM THE 'MODEL' REGION THAT NEEDS TO BE CREATED BEFORE
 

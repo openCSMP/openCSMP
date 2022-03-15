@@ -14,14 +14,13 @@ void Operand_Test::run()
 {
   // 2D test case
   {
-    const bool  isoparametric(true);
     VSet<2U>    mesh_container;
     test_Create_TrianglePatch_VSet( mesh_container );
 
     // Building Region object from ANSYS data files
     string mesh_name("triangle_patch");
     cout <<"Operand_Test::run: Building Model..."<<endl;
-    Model<2U> model( mesh_container, "CSMP-Operand_Test-variables.txt", isoparametric );
+    Model<2U> model( mesh_container, "CSMP-Operand_Test-variables.txt" );
 
     ScalarVariable      s(PLAIN,1.0);
     VectorVariable<2U>  v(PLAIN,PLAIN,1.0, 1.0);
@@ -229,14 +228,13 @@ void Operand_Test::run()
 
   // 3D test
   {
-    const bool  isoparametric(true);
     VSet<3U>    mesh_container;
     testCreateTetra_VSet( mesh_container );
 
     // Building Region object from ANSYS data files
     string mesh_name("triangle_patch");
     cout <<"Operand_Test::run: Building Model..."<<endl;
-    Model<3U> model( mesh_container, "CSMP-Operand_Test-variables.txt", isoparametric );
+    Model<3U> model( mesh_container, "CSMP-Operand_Test-variables.txt" );
 
     ScalarVariable      s(PLAIN,1.0);
     VectorVariable<3U>  v(PLAIN,PLAIN,PLAIN,1.0, 1.0,1.0);

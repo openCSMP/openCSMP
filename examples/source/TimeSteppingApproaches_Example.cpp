@@ -78,7 +78,7 @@ void TimeSteppingApproaches_Example::Run()
 
    // 2. Building the 1D Region named 'model'
    // --------------------------------------------
-   Model<DIM>  model( mesh_topology, mesh_container, "example22.txt" );
+   Model<DIM>  model( mesh_topology, mesh_container, "example22.txt", false );
 
 
    // 3. Input of material properties and initial conditions

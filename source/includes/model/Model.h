@@ -194,23 +194,19 @@ class Model : public RegionInterface<dim, Model>,
 public:
   // class Model is not copy constructable
 
-  /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
-  Model( VSet<dim>&, const char* var_file, bool isoparametric = false );
+  /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name is "*-variables.txt" where * is the name of the model
+  Model( ModelTopology&, VSet<dim>&, const char* var_file, bool treat_domains_as_regions_and_use_regions_file_if_any );
 
-  /// using the supplied polygonal data constructs unnamed single-domain model without regions, boundaries nor variable storage
-  Model( VSet<dim>&, bool isoparametric = false );
-
-  /// constructs model with regions supplied as labeled element lists, variables file name is "*-variables.txt" where * is the name of the model
-  Model( ModelTopology&, VSet<dim>&, bool create_boundaries_from_surface_regions = false, bool box_shaped = true );
-
-  /// constructs model with regions supplied as labeled element lists and with the possibility to specific a variables file with unique name
-  Model( ModelTopology&, VSet<dim>&, const char* var_file,
-         bool create_boundary_objects = false, bool box_shaped = true );
-
-  /// to read model from set of CSMP native binary files
+  /// Reconstructor:  reads model from set of CSMP native binary files
   explicit Model( const std::string& binaryFiles );
 
-  /// to read model from set of CSMP native binary files; but only with the specified subset of variables from the binary variables file
+  /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
+  Model( VSet<dim>&, const char* var_file );
+
+  /// constructs purely topological unnamed single-domain model without regions, boundaries nor variable storage
+  explicit Model( VSet<dim>& );
+
+  /// Reconstructor reads model from CSMP native binary files; but only bringing in the specified subset of variables
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// destructor that needs to be overloaded when a subclass is derived from model
@@ -387,32 +383,21 @@ public:
 
 protected:
 
+  /// default constructor that is custom-made
   Model();
   
   /// to construct model  as a base class to a derived model built from an external dataset using a variable file in ASCII format
   explicit Model( const char* complete_variables_file_name );
 
-  /// to read model from set of CSMP native binary files; boolean whether a binary variable file with same name as model is available or not
-  Model( const std::string& modelName, bool with_binary_variables_file );
+  /// builds with model without specifically named subdomains other than "Model".  If model is box-shaped corresponding boundary flags will exist.
+  void Initialize( VSet<dim>& );
 
-  /// build model from scratch
-  void Initialize( bool isoparametric_elements,
-                   VSet<dim>& vset,
-                   bool create_boundaries,
-                   bool non_box_shaped_model );
+  /// builds model treating any topologic entities from regions file as unique regions; later converts correspondingly labelled ones into boundaries and split boundaries
+  void Initialize( const char* regions_file_prefix, ///< use to select regions in ANSYS or other mesh
+                   ModelTopology&, VSet<dim>& );
 
-  /// builds model from scratch including region information from file (this method is used by ANSYS_Model3D) 
-  void Initialize( const char* regions_file_prefix,
-                   ModelTopology& mesh_topology,
-                   VSet<dim>& vset,
-                   bool create_boundaries_not_in_topology,
-                   bool non_box_shaped_model );
-
-  /// builds model from scratch without any region information; the only (unique) region will be 'Model'
-  void Initialize( ModelTopology& mesh_topology,
-                   VSet<dim>& vset,
-                   bool create_boundaries_not_in_topology,
-                   bool non_box_shaped_model );
+  /// builds model  with regions, boundaries, and splitboundaries as identified by "BOX_BOUNDARY", "boundary" or "splitboundary" strings in the domain names
+  void Initialize( ModelTopology&, VSet<dim>& );
 
   void InitializeLocalVariableStorage();
   bool UpdateSubdomainPropertyStorage();

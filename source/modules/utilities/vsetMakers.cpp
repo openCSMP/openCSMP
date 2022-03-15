@@ -2974,6 +2974,8 @@ void test_Create_FracBox( VSet<3U>& vset, ModelTopology& topology )
                 femTypes_lines{"ISOSPARAMETRIC_LINEAR_BAR"};
 
     // MODEL TOPOLOGY
+    topology.ModelName("FracBox");
+    
     vector<size_t> elmtIdx_matrix(1363), elmtIdx_lines(1871-1782); // elmtIdx_surfaces(1782-1362)
     
     vector<size_t> elmtIdx_fracture{ 1516, 1519, 1525, 1526, 1527, 1528, 1537, 1539, 1545, 1546,
@@ -6850,14 +6852,14 @@ const int32_t  material_identifier{1};
 vector<int32_t> pmtrl( vset.Elements(), material_identifier );
 vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
-PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
 elmt_nums.Reserve( vset.Elements() );
 
 for ( auto i = 0U; i<vset.Elements(); ++i )
   pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
 vset.AddData( "element number", elmt_nums );
 
-PropertyData node_nums( NODE, SCALAR, 2U );
+PropertyData node_nums( NODE, SCALAR, 3U );
 node_nums.Reserve( vset.Vertices() );
 
 for ( auto i = 0U; i<vset.Vertices(); ++i )

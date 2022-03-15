@@ -180,11 +180,7 @@ void Model1D<dim>::Initialize( VSet<dim>& vset )
     const bool non_box_shaped_model                 ( false );
     const bool isoparametric_elements               ( true  );
 
-    Model<dim>::Initialize( isoparametric_elements,
-                            vset,
-                            create_boundaries,
-                            non_box_shaped_model
-                          );
+    Model<dim>::Initialize( vset );
 }
 
 /// creates an uniform mesh

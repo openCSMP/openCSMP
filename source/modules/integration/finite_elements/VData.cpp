@@ -207,7 +207,10 @@ size_t VData::ElementTypes() const { return pelmt.size(); }
 
 size_t VData::ElementNeighbors() const { return pfverts.size(); }
 
-size_t VData::BFlags() const { return bflags.size(); }
+size_t VData::BFlags() const {
+   set<int8_t> range_of_bflags( bflags.begin(), bflags.end() );
+   return range_of_bflags.size();
+}
 
 bool VData::HybridElementTypeMesh() const { return hybrid_mesh_; }
 

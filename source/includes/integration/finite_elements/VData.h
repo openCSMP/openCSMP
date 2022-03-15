@@ -56,9 +56,10 @@ class VData {
     /// constructor for meshes that only hold a single element type
     VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nodes, size_t elmts );
     
+    /// if the mesh contains only a single element type it can be set with this method
     void SingleElementType( int8_t etype );
     
-    /// maps to CSMP_FEM_TYPE
+    /// CSMP_FEM_TYPEs for all the elements stored in the VData
     void ElementTypes( const std::vector<int8_t>& elmt_types );
     
     void AddElementTypes( std::vector<int8_t>::const_iterator first,
@@ -119,7 +120,7 @@ class VData {
     /// number of element neighbors in a single element type mesh
     size_t ElementNeighbors() const;
   
-    /// number of nodes at model boundaries
+    /// reports the number of different nde flags stored as boundary flags in the model
     size_t BFlags() const;
   
     /// number of nodes stored for element, face or interface
@@ -295,12 +296,6 @@ class VData {
     /// clear the container
     void Erase();
 
-    /// write mesh to supplied binary file
-    void OutBinary( std::fstream& ) const;
-  
-    /// read mesh from supplied binary file
-    void InBinary( std::fstream& );
-  
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
     
@@ -332,7 +327,13 @@ class VData {
     
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
 
-  private:
+     /// write mesh to supplied binary file
+    void OutBinary( std::fstream& ) const;
+  
+    /// read mesh from supplied binary file
+    void InBinary( std::fstream& );
+  
+ private:
 
     bool                               hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double>                px, py, pz;        ///< node coordinates

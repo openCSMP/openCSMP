@@ -87,9 +87,8 @@ void LinearElasticity_Example::Run()
     VSetConverter<2U>  converter;
     converter.ConvertLinearToQuadraticTriangles( mesh_container );
 
-    const bool  use_isoparametric_elements(true);
     // 'example12.txt' is the text file that defines the variables used in this example
-    Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt", use_isoparametric_elements );
+    Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
     mesh_container.Erase();
     printModelDimensions( model, true );
 

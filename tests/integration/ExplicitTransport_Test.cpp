@@ -77,10 +77,10 @@ Model<3U>*  ExplicitTransport_Test::CreateHexahedralModel()
  
     // create test model
     const bool bSkewed(false);
-    const bool isoparametric(true);
+    // is already isoparametric
     test_Create_Hexahedra_VSet( vset, bSkewed ); // only hexahedral elements
     //                                singlePhase_advection-variables.txt
-    model_ptr_ = new Model<3U>( vset, test_variable_file_.c_str(), isoparametric );
+    model_ptr_ = new Model<3U>( vset, test_variable_file_.c_str() );
     Point<3U> min_coord, max_coord;
     model_ptr_->MinMaxCoordinates( min_coord, max_coord );
     model_length_ = max_coord[0] - min_coord[0];

@@ -129,7 +129,7 @@ void EffectiveStressDilatation2D_Example::Run()
 
   // 2.0 Building the "Model" with associated property storage (see variables file: example2.txt
   // -------------------------------------------------------------------------------------------
-  Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt" );
+  Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt", true );
   mesh_container.Erase();
   mesh_topology.Erase();
   

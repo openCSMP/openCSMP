@@ -188,7 +188,7 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
     // ------------------------------
     VSet<2U> vset;
     test_Create_TrianglePatch_VSet( vset );
-    Model<2U>          model( vset, "CSMP-variables.txt", true );
+    Model<2U>          model( vset, "CSMP-variables.txt" );
     const Region<2U>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison

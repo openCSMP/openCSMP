@@ -86,8 +86,9 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 0. building Region object
  // ------------------------------------------------------------------------------------
-   const bool isoparametric(true);
-   Model<2U>  model( mesh_container, "example21.txt", isoparametric );
+  // to get isoparametric elements
+   VSetConverter<2U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
+   Model<2U>  model( mesh_container, "example21.txt" );
    mesh_container.Erase();
 
 

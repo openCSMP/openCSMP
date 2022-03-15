@@ -55,7 +55,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     _test( mesh_topology.Cells() == vset.Elements() );
 
     // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", false );
     printModelDimensions( model, true );
     _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
     _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
@@ -154,7 +154,8 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     _test( dodgy_neighbors == 0 );
 
     // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
+    const bool get_domain_info_from_regions_file{true};
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", get_domain_info_from_regions_file );
     printModelDimensions( model, true );
     
     // saving model to binary
@@ -411,8 +412,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
 void VSet_TestCase::BoundaryFlagsToVTK( VSet<3>& vset )
  {
     const string variable_file{"Vset_TestCase-variables.txt"};
-    const bool isoparametric{true};
-    Model<3> model( vset, variable_file.c_str(), isoparametric );
+    Model<3> model( vset, variable_file.c_str() );
     
     VTK_Interface<3>  vtk_out;
     

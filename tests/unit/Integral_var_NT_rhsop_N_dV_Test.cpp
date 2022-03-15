@@ -1,5 +1,6 @@
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
 #include "vsetMakers.h"
+#include "VSetConverter.h"
 
 using namespace std;
 
@@ -8,14 +9,13 @@ namespace csmp {
 Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
  : tol_(0.001), verbose_(verbose), sg_(nullptr)
 {
-  const bool  isoparametric(false);
   VSet<2U>    mesh_container;
   test_Create_TrianglePatch_VSet( mesh_container );
 
   // Building Region object from ANSYS data files
   string mesh_name("triangle_patch");
   if ( verbose_ ) cout <<"\nIntegral_var_NT_rhsop_N_dV_Test: Building Model..."<<endl;
-  sg_= new Model<2U>( mesh_container, "CSMP-2phase-variables.txt", isoparametric );
+  sg_= new Model<2U>( mesh_container, "CSMP-2phase-variables.txt" );
 
     // Set values on nodes
   sg_->InputPropertyValue("fluid pressure", makeScalar(PLAIN,1.));

@@ -19,6 +19,7 @@
 #include "MapleInterface.h"
 
 #include "LineElementMesher.h"
+#include "VSetConverter.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #include "Gauss_Solver.h"
@@ -87,7 +88,9 @@ void TemperatureDensityPressure_Example::Run()
     mesh_topology.AddDomain( "ROCK", fem_types, elms );
     elms.erase( elms.begin(), elms.end() );
 
-    Model<1U>  model( mesh_topology, mesh_container, "example17.txt" );
+    // to get isoparametric elements
+    VSetConverter<1U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
+    Model<1U>  model( mesh_topology, mesh_container, "example17.txt", true );
     printModelDimensions( model );
 
     // 2. Input of material properties and initial conditions

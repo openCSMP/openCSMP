@@ -7,47 +7,47 @@ using namespace std;
 
 namespace csmp {
 
-  PDE_Integrator_UoM_Test::PDE_Integrator_UoM_Test(std::string modelName) {
-    const bool       isoparametric(true);
-    ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
-    VSet<2U>         mesh_container;
-    ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
+  PDE_Integrator_UoM_Test::PDE_Integrator_UoM_Test( string modelName )
+    {
+        const bool       isoparametric(true);
+        ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
+        VSet<2U>         mesh_container;
+        ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
 
-    string mesh_name(modelName);
-    const bool binary_file(true);
-    mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
-    cout << "Finished reading mesh..." << endl;
-    cout << "Building Model..." << endl;
-    model = new Model<2U>(mesh_topology, mesh_container, "PDE_Integrate_UoM_2phase-variables.txt");
-   
-    Reset();
+        string mesh_name(modelName);
+        const bool binary_file(true);
+        mesh_interface.Read_ANSYS_Mesh(mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
+        cout << "Finished reading mesh..." << endl;
+        cout << "Building Model..." << endl;
+        model = new Model<2U>(mesh_topology, mesh_container, "PDE_Integrate_UoM_2phase-variables.txt", true );
+       
+        Reset();
 
-    // Create pde-operators
-    pressureLHS = new NumIntegral_dNT_op_dN_dV<2U, Element<2U> >(model->Database(),
-      "permeability",
-      "fluid pressure",
-      "fluid pressure");
+        // Create pde-operators
+        pressureLHS = new NumIntegral_dNT_op_dN_dV<2U, Element<2U> >(model->Database(),
+          "permeability",
+          "fluid pressure",
+          "fluid pressure");
 
-    sourceVolume = new NumIntegral_NT_op_N_dV<2U, Element<2U> >(model->Database(),
-      "fluid volume source", "fluid pressure");
+        sourceVolume = new NumIntegral_NT_op_N_dV<2U, Element<2U> >(model->Database(),
+          "fluid volume source", "fluid pressure");
 
-    sourcePoint = new PointSource_rhsop<2U, Element<2U>>(model->Database(),
-      "nodal fluid point source", "fluid pressure");
-    
-    gravityTerm = new NumIntegral_dNT_op_dV<2U, Element<2U>>(model->Database(),
-      "gravity vector",
-      "fluid pressure");
+        sourcePoint = new PointSource_rhsop<2U, Element<2U>>(model->Database(),
+          "nodal fluid point source", "fluid pressure");
+        
+        gravityTerm = new NumIntegral_dNT_op_dV<2U, Element<2U>>(model->Database(),
+          "gravity vector",
+          "fluid pressure");
 
-    //fluid_velocity = new VelocityAndVolumeFlux<2U, Element<2U>>(*model, "total mobility", "porosity", "fluid pressure", true, "velocity");
+        //fluid_velocity = new VelocityAndVolumeFlux<2U, Element<2U>>(*model, "total mobility", "porosity", "fluid pressure", true, "velocity");
 
-    temperatureLHS = new NumIntegral_dNT_op_dN_dV<2U, Element<2U> >(model->Database(),
-      "permeability",
-      "temperature",
-      "temperature");
+        temperatureLHS = new NumIntegral_dNT_op_dN_dV<2U, Element<2U> >(model->Database(),
+          "permeability",
+          "temperature",
+          "temperature");
 
-    sourceHeat = new NumIntegral_NT_op_N_dV<2U, Element<2U>>(model->Database(),
-      "thermal volume source", "temperature");
-
+        sourceHeat = new NumIntegral_NT_op_N_dV<2U, Element<2U>>(model->Database(),
+          "thermal volume source", "temperature");
   }
 
   PDE_Integrator_UoM_Test::~PDE_Integrator_UoM_Test() {

@@ -109,9 +109,7 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
       node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
 
     // 3. construct model based on obtained model topology and vset
-    Model<3U>::Initialize( mesh_topology,
-                           vset, true,
-                          !mesh_topology.BoxShapedModel() );
+    Model<3U>::Initialize( mesh_topology, vset );
                             
     // 4. Performing range check on the inmported properties
     ErrorHandler& csmp_error(ErrorHandler::Instance());

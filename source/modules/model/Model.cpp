@@ -1,5 +1,6 @@
 #include "Model.h"
 #include "VSet.h"
+#include "VSetConverter.h"
 #include "ModelTopology.h"
 #include "Face.h"
 #include "InterFace.h"
@@ -72,7 +73,7 @@ Model<dim>::Model( const char* varTextFile )
 
 
 /**
-    Re-constructor: builds model from binary file set with a binary variables file that has the same name as the Model.
+    Re-constructor: builds model from binary file set, using a binary variables file that has the same name as the Model.
     
     @author SKM
     @date 11/9/2019
@@ -84,13 +85,14 @@ Model<dim>::Model( const std::string& binaryFileName )
     database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), set<string>() )
 {
   InitializeLocalVariableStorage();
-  set<string> empty_set;
+  set<string> empty_set; // will read all the variables contained in the binary
   InputFromBinaryFile( binaryFileName.c_str(), empty_set );
 }
 
 
 /**
-Full input from CSMP-native binary file.
+    Re-constructor: builds model from binary file set, using only the variables specified in the subset, but with the definitions
+    that these variables have in the binary.
 
 @author Junchul Kim
 @date 2019
@@ -127,14 +129,12 @@ Constructor is used when an ANSYS Model is built from topology and VData.
 @attention VSet is mutable because it may be shrunk in construction process.
 */
 template<uint32_t dim>
-Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_elements )
+Model<dim>::Model( VSet<dim>& vset, const char* var_file )
   : model_name_( "to be named" ),
     database_( var_file ),
     verbose_( true )
 {
-  Initialize( isoparametric_elements, vset,
-              false /* do not create boundaries */,
-              false /* irregular boundaries */ );
+  Initialize( vset );
 
 } // end VSet constructor
 
@@ -142,14 +142,12 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file, bool isoparametric_ele
 
 
 template<uint32_t dim>
-Model<dim>::Model( VSet<dim>& vset, bool isoparametric_elements )
+Model<dim>::Model( VSet<dim>& vset )
   : model_name_( "to be named" ),
     database_(),
     verbose_(true)
 {
-  Initialize( isoparametric_elements, vset,
-              false /* do not create boundaries */,
-              false /* irregular boundaries */ );
+  Initialize( vset );
 
 } // end VSet constructor
 
@@ -194,30 +192,20 @@ by default.
 @attention per default this constructor will not create any boundaries
 */
 template<uint32_t dim>
-Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, const char* var_file,
-                   bool create_boundary_objects, bool box_shaped )
+Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset,
+                   const char* var_file,
+                   bool treat_domains_as_regions_and_use_regions_file )
   : model_name_( mesh_topology.ModelName() ),
     database_( var_file ),
     verbose_( true )
 {
-  Initialize( mesh_topology, vset,
-              create_boundary_objects,
-              !box_shaped /* irregular boundaries */ );
+   if ( treat_domains_as_regions_and_use_regions_file ) {
+        const string regions_file_prefix(mesh_topology.ModelName());
+        Initialize( regions_file_prefix.c_str(), mesh_topology, vset );
+     }
+   else Initialize( mesh_topology, vset );
 
 } // end VSet/ModelTopology constructor
-
-
-
-template<uint32_t dim>
-Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset, bool create_boundary_objects, bool box_shaped )
-  : model_name_( mesh_topology.ModelName() )
-{
-  Initialize( mesh_topology, vset,
-              create_boundary_objects,
-              !box_shaped /* irregular boundaries */ );
-
-} // end VSet/ModelTopology constructor
-
 
 
 
@@ -252,118 +240,160 @@ Performs the following steps:
 9. Adds required property storage for regions and boundaries (however their properties are not initialised here)
 
 @attention MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR  EXTERNAL DATA  - including ANSYS_Model3D, SKUA etc.
-*/
-template<uint32_t dim>
-void Model<dim>::Initialize( const char* regions_file_prefix,
-                             ModelTopology& mesh_topology,
-                             VSet<dim>& vset,
-                             bool create_boundaries_not_in_topology,
-                             bool fully_irregular_mesh )
-{
-  // 1. eliminates unwanted mesh regions from topology and vset, rebuild boundary flags, checks element numbering etc.
-  mesh_topology.ReduceToDomains( regions_file_prefix );
-
-  // 2. building the model with variable storage
-  Initialize( mesh_topology, vset, create_boundaries_not_in_topology, fully_irregular_mesh );
-
-} // end Initialize (with regions from file)
-
-
-
-
-/**
- Actual Initialise() method used by previous method
  
- @attention MOST COMMONLY USED MODEL CONSTRUCTION  FROM EXTERNAL DATA METHOD - including ANSYS_Model3D
- 
- @attention a fully valid VSet is expected by this method.
+@attention a fully valid VSet is expected by this method.
 
 @note should only be used for models created externally.
 */
 template<uint32_t dim>
-void Model<dim>::Initialize( ModelTopology& mesh_topology,
-                             VSet<dim>& vset,
-                             bool create_boundaries_not_in_topology, // from lower-dimensional regions
-                             bool fully_irregular_mesh )
+void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this would be equivalent to the model name
+                             ModelTopology& mesh_topology,    ///< stores tbe model name as well as the regions in the form of element idx
+                             VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( !vset.WithNeighbourConnectivity() )
-      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
+     if ( vset.Faces() > 0 || vset.InterFaces() > 0 )
+       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "method works only for vsets without Face or InterFace objects.");
+      
+     if ( !vset.WithNeighbourConnectivity() )
+       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
-    // 1. reducing the element data to the desired elements specified in the topology object
-    //    if the element numbers in the two are different.
-    if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.InterFaces() ) {
-        map<size_t,size_t>  old_and_new_elmtids;
-        mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
-        vset.ReduceTo( old_and_new_elmtids );
-        old_and_new_elmtids.clear();
+    // 1. eliminating unwanted mesh regions from topology and vset, rebuilding boundary flags, check   element numbering etc.
+    string prefix( regions_file_prefix );
+    if ( filesystem::exists( prefix + "-regions.txt" ) )
+      {
+        mesh_topology.ReduceToDomains( regions_file_prefix );
+        //    reducing the element data to the desired elements specified in the topology object
+        //    if the element numbers in the two are different.
+        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.InterFaces() ) {
+            map<size_t,size_t>  old_and_new_elmtids;
+            mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
+            vset.ReduceTo( old_and_new_elmtids );
+            old_and_new_elmtids.clear();
+          }
       }
+      
      // the VSet must be correct calling initialise
      if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
+         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
-    // 3. building the finite element mesh and property storage
+    // 2. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), vset );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
-      csmp_error.notice( INFO, "Model<dim>::Initialize(topo,vset,bool,bool):",
+      csmp_error.notice( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
 
-    // 4. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
+    // 3. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
 
-    // 5. forming default computational domain called "Model" and regions
+    // 4. forming default computational domain called "Model" and regions
     const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
-      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
+      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "Region 'Model' has zero elements.");
 
-    // 6. associating supplied subregions with regions (model subdomains)
-    this->FormRegionsFrom( mesh_topology );
-    this->FormBoundariesFrom( mesh_topology );
-    this->FormSplitBoundariesFrom( mesh_topology );
+    // 5. associating supplied subregions with regions (model subdomains)
+    const bool ignore_domain_identification_by_name{true};
+    this->FormRegionsFrom( mesh_topology, ignore_domain_identification_by_name );
 	
-    // 7. forming Boundaries
-    if ( mesh_topology.BoxShapedModel() )
-      if ( fully_irregular_mesh )
-        csmp_error.notice( WARNING, "Model<dim>::Initialize:",
-                          "ModelTopology indicates Box-shaped model; ignoring this characteristic.");
+    // 6. forming Boundaries
+    //    if the model is box-shaped (albeit perhaps with an irregular top surface)
+    if (  mesh_topology.BoxShapedModel() ) {
+        this->EstablishBoxBoundaries();
+        // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+        cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
+      }
+    // irregularly shaped models
+    else {
+          if ( contiguous_model )
+            this->EstablishBoundariesFromRegions();
+          else
+            csmp_error.notice( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
+                  
+                // we do not want to keep faces at internal boundaries that might become SplitBoundary objects
+                // but we do want to create them on the outside of the model where the names of the input regions contain
+                // the string "BOUNDARY"
+          if ( this->ContainsBoundary("Model_Boundary") )
+            this->RemoveBoundary( this->Boundary("Model_Boundary") );
 
-    if ( create_boundaries_not_in_topology ) {
-          // if the model is box-shaped (albeit perhaps with irregular top surface)
-          if ( !fully_irregular_mesh ) {
-              this->EstablishBoxBoundaries();
-              // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-              cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
-            }
-          // irregularly shaped models
-          else {
-              if ( contiguous_model )
-                this->EstablishBoundariesFromRegions();
-              else
-                csmp_error.notice( ERROR, "Model::Intialise", "discontiguous model not handled yet");
-                
-              // we do not want to keep faces at internal boundaries that might become SplitBoundary objects
-              // but we do want to create them on the outside of the model where the names of the input regions contain
-              // the string "BOUNDARY"
-              if ( this->ContainsBoundary("Model_Boundary") )
-                this->RemoveBoundary( this->Boundary("Model_Boundary") );
-            }
+         // cleanup after boundary creation
          this->RebuildRegions();
          this->RegionsOut();
          this->BoundariesOut();
       }
-    else cout<<"\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
     
-    // 8. forming SplitBoundaries if a discontiguous model was detected
+    // 7. forming SplitBoundaries if a discontiguous model was detected
     if ( !contiguous_model ) {
          this->DetectAndCreateSplitBoundaries();
          // reporting which boundaries were created
          this->SplitBoundariesOut();
       }
 
-    // 9. adding property storage to the Model
+    // 8. adding property storage to the Model
+    InitializeLocalVariableStorage();  // for the model
+    UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
+
+#ifdef DEBUG
+integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+if ( mesh_manager_.Faces() > 0 )
+  integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
+if ( mesh_manager_.InterFaces() > 0 )
+  integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
+#endif
+
+    cout << "\n============================================================================";
+    cout << "\nModel '"<< this->Name() <<"' has been established successfully!";
+    cout << "\n============================================================================";
+    cout << endl;
+  
+} // end Initialize (regionfile,ModelTopology,VSet)
+
+
+
+
+
+/**
+        NEW! - all information about regions, boundaries or split boundaries comes from ModelTopology
+*/
+template<uint32_t dim>
+void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
+{
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( !vset.WithNeighbourConnectivity() )
+      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
+
+     // the VSet must be correct calling initialise
+     if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
+         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
+
+    // 1. building the finite element mesh and property storage
+    mesh_manager_.Initialize( Database(), vset );
+    const bool contiguous_model( mesh_manager_.IsContiguous() );
+    if ( !contiguous_model )
+      csmp_error.notice( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
+                         "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
+
+    // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
+    InputVariablesFrom( vset );
+
+    // 3. forming default computational domain called "Model" and regions
+    const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
+    const size_t elmts = this->FormModelRegion( place_into_unique_regions );
+    if ( elmts == 0U )
+      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Region 'Model' has zero elements.");
+
+    // 4. associating supplied subregions with regions (model subdomains)
+    this->FormRegionsFrom( mesh_topology );
+    this->FormBoundariesFrom( mesh_topology );
+    this->FormSplitBoundariesFrom( mesh_topology );
+	
+    this->RegionsOut();
+    this->BoundariesOut();
+    this->SplitBoundariesOut();
+
+    // 5. adding property storage to the Model
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
@@ -382,6 +412,24 @@ if ( mesh_manager_.InterFaces() > 0 )
   
 } // end Initialize (VSet / ModelTopology)
 
+// Testing the Regions that will become boundaries OK
+//this->Region("BACK").NodeAttributesToCSV();
+//this->Region("RIGHT").NodeAttributesToCSV();
+//this->Region("TOP").NodeAttributesToCSV();
+//this->Region("LEFT").NodeAttributesToCSV();
+//this->Region("BOTTOM").NodeAttributesToCSV();
+//this->Region("FRONT").NodeAttributesToCSV();
+
+// DEBUGGING
+// -----------------------------------------------------------------------------------------
+//VTK_Interface<dim>  vtk_output;
+//if ( this->Database().IsDefined("permeability") )
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
+//else
+//  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
+// -----------------------------------------------------------------------------------------
+
+
 
 
 
@@ -390,64 +438,54 @@ if ( mesh_manager_.InterFaces() > 0 )
     Initialises model from VSet. Very similar to Initialise(VSet,ModelTopology), but without
     the creation of regions other than 'Model'.
 
- @attention a fully valid VSet is expected by this method.
+ @attention a fully (boundary) flagged valid VSet is expected by this method.
 
 */
 template<uint32_t dim>
-void Model<dim>::Initialize( bool isoparametric_elements,
-                             VSet<dim>& vset,
-                             bool create_boundaries,
-                             bool non_box_shaped_model )
+void Model<dim>::Initialize( VSet<dim>& vset )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  // 1. checking for neighbor connectivity if necessary
+  if ( vset.Faces() > 0 ||
+       vset.InterFaces() > 0 )
+    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
+
+  // 1. checking for neighbor connectivity and boundary flags
   // the VSet must be correct calling initialise
-  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing.");
-                                              
-  // 2. building the finite element mesh and property storage
+  if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) ) {
+       csmp_error.notice( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now.");
+       if constexpr ( dim == 2 )
+         vset.EstablishElementConnectivity2D();
+       if constexpr ( dim == 3 )
+         vset.EstablishElementConnectivity3D();
+    }
+  // 2. checking whether BOX_BOUNDARY flags are there which are essential for a model without boundary domains
+  if ( vset.BFlags() <= 2 ) {
+       // computing a tolerance for the identification of BOX boundaries from the model coordinates
+       double tolerance = fabs( vset.X_Range().second );
+       tolerance = max( tolerance, fabs( vset.Y_Range().second ) );
+       tolerance = max( tolerance, fabs( vset.Z_Range().second ) );
+       tolerance *= 1.0e-5;
+       csmp_error.notice( WARNING, "Model<dim>::Initialize(VSet):", "'BOX_BOUNDARY' flags are incomplete.");
+       VSetConverter<dim>().EstablishBoundaryFlagsForBoxModel( vset, tolerance );
+    }
+
+  // 3. building the finite element mesh and property storage
   mesh_manager_.Initialize( Database(), vset );
   
-  // 3. forming default computational domain called "Model" or contiguous mutiple domains called "Model_#n"
+  // 4. forming default computational domain called "Model" or contiguous multiple domains called "Model_#n"
   const bool unique(true);
   const size_t elmts = this->FormModelRegion( unique );
   if ( elmts == 0U )
     csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   
-  cout << "\nModel<dim>::Initialize: mesh has been built successfully..." << endl;
+  cout << "\nModel<dim>::Initialize (VSet): mesh has been built successfully..." << endl;
 
-  // 4. assigning properties to mesh
+  // 5. assigning properties to mesh
   InputVariablesFrom( vset );
 
   cout << "\nModel<dim>::Initialize(VSet): ";
   cout << "Mesh has been built successfully..." << endl;
-
-  // 5. Forming Boundaries
-  if ( create_boundaries ) {
-      if ( !non_box_shaped_model && this->BoxShaped() ) {
-           this->EstablishBoxBoundaries();
-           if constexpr ( dim == 3U ) this->EstablishEdgeBoundariesOfBoxShapedModel();
-        }
-      else {
-          const bool contiguous_model( mesh_manager_.IsContiguous() );
-          if ( !contiguous_model  )
-            csmp_error.notice( WARNING, "Model<dim>::Initialize(topo,vset,bool,bool):",
-                               "model appears to contain domains that are not connected to one another and there are no SplitBoundaries!" );
-
-          if ( contiguous_model ) this->EstablishBoundariesFromRegions();
-          else
-            csmp_error.notice( ERROR, "Model::Intialise", "discontiguous model not handled yet");
-            
-          // here we do not want to keep faces at internal boundaries that might become SplitBoundary objects
-          // but we do want to create them on the outside of the model where the names of the input regions contain
-          // the string "BOUNDARY"
-          if ( this->ContainsBoundary("Model_Boundary") )
-          this->RemoveBoundary( this->Boundary("Model_Boundary") );
-        }
-       this->RebuildRegions();
-    }
-  else cout << "\nModel<dim>::Initialize: CSMP boundaries disabled." << endl;
 
   // 6. Adding potentially required property storage
   InitializeLocalVariableStorage();
@@ -466,26 +504,9 @@ if ( mesh_manager_.InterFaces() > 0 )
   cout << "\n===========================================================";
   cout << endl;
   
-} // end Initialize
+} // end Initialize(VSet)
 
 
-
-// Testing the Regions that will become boundaries OK
-//this->Region("BACK").NodeAttributesToCSV();
-//this->Region("RIGHT").NodeAttributesToCSV();
-//this->Region("TOP").NodeAttributesToCSV();
-//this->Region("LEFT").NodeAttributesToCSV();
-//this->Region("BOTTOM").NodeAttributesToCSV();
-//this->Region("FRONT").NodeAttributesToCSV();
-
-// DEBUGGING
-// -----------------------------------------------------------------------------------------
-//VTK_Interface<dim>  vtk_output;
-//if ( this->Database().IsDefined("permeability") )
-//  vtk_output.OutputDataToVTK( *this, this->Name(), string("permeability"), 1, true );
-//else
-//  vtk_output.OutputDataToVTK( *this, this->Name(), string("element variable 1"), 1, true );
-// -----------------------------------------------------------------------------------------
 
 
 

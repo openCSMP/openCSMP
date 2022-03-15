@@ -39,7 +39,7 @@ NimbleRegion_Test::NimbleRegion_Test( const string& model, const string& variabl
 
     quadrilaterator.QuadrilateralsFromRegularGrid(mesh_container, model.c_str(), 100., 100. );
 
-    model2D_ = new Model<2U>( mesh_container, variables_file.c_str(), true );
+    model2D_ = new Model<2U>( mesh_container, variables_file.c_str() );
 
     model2D_->InputPropertyValue("permeability", makeScalar(PLAIN, 1e-12));
     model2D_->InputPropertyValue("porosity", makeScalar(PLAIN, 0.25));

@@ -128,8 +128,11 @@ void PropertyData::PushBack( double val ) { data_.push_back( val ); }
 
 
 void PropertyData::PushBackFrom( const PropertyData& prop, size_t nth_value ) {
-  assert( place_ == prop.place_ && type_ == prop.type_ && dim_ == prop.dim_
-         && flag_stride_ == prop.flag_stride_ && data_stride_ == prop.data_stride_ );
+  assert( place_ == prop.place_ );
+  assert( type_ == prop.type_ );
+  assert( dim_ == prop.dim_ );
+  assert( flag_stride_ == prop.flag_stride_ );
+  assert( data_stride_ == prop.data_stride_ );
 
   for (auto i = 0; i < flag_stride_; ++i) {
     flags_.push_back(prop.flags_[nth_value * flag_stride_ + i]);

@@ -90,7 +90,7 @@ void SteadyStatePressureToVset_Example::Run()
          TRIANGLE_Interface  mesh_interface;
          mesh_interface.ReadTriangle2DMesh( file_name, mesh_container, isoparametric, extra_checks );
          if ( option2 == 2 ) VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
-         model = new Model<2U>( mesh_container, "example2.txt", true );
+         model = new Model<2U>( mesh_container, "example2.txt" );
       }
     // or else use an ANSYS mesh
     else {
@@ -106,7 +106,7 @@ void SteadyStatePressureToVset_Example::Run()
          // mesh_container.ScaleCoordinateToRange( 'x', 0., 0.005 );
          // mesh_container.ScaleCoordinateToRange( 'y', 0., 0.007 );
          if ( option2 == 2 ) VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
-         model = new Model<2U>( mesh_topology, mesh_container, "example2.txt" );
+         model = new Model<2U>( mesh_topology, mesh_container, "example2.txt", true );
       }
     mesh_container.Erase();
   
@@ -239,7 +239,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 12. Read in VSet file and build a second Region named 'example1_from_vset'
     // ---------------------------------------------------------------------------
     input_model.InputFrom( "example2", model_time );
-    Model<2U>  model_from_vset( input_model, "example2.txt", true );
+    Model<2U>  model_from_vset( input_model, "example2.txt" );
 
 
     // 13. Change Dirichlet boundary condition on the left side and assing pressure

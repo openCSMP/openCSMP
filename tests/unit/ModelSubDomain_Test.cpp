@@ -52,9 +52,9 @@ void ModelSubDomain_Test::run()
      if ( test_binary_file_recovery1 )
        {
          VSet<3U>   vset;
-         const bool skewed(false), isoparametric(true);
+         const bool skewed(false);
          test_Create_Prism_Hexa_VSet( vset, skewed );
-         Model<3U>   model1( vset, isoparametric );
+         Model<3U>   model1( vset );
         
          //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
          //model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
@@ -334,7 +334,7 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
 
-    Model<3U> model( vset, varFileName.c_str(), true );
+    Model<3U> model( vset, varFileName.c_str() );
 
     // 1. recreating the neighbor connectivity and comparing
     // -----------------------------------------------------

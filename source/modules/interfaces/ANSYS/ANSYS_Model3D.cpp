@@ -186,14 +186,9 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
     if ( use_regions_file )
       Model<3U>::Initialize( regions_file_prefix,
                              mesh_topology,
-                             vset,
-                             true, // create boundaries
-                             irregular_mesh );
+                             vset );
     else
-      Model<3U>::Initialize( mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+      Model<3U>::Initialize( mesh_topology, vset );
   }
 
   // -------------------------------------------------
@@ -301,14 +296,10 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
     if ( use_regions_file )
       Model<3U>::Initialize( regions_file_prefix,
                              mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
     else
       Model<3U>::Initialize( mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
 
   }
 

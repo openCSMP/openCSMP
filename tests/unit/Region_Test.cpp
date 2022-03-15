@@ -354,7 +354,7 @@ bool Region_Test::TestBoundaryFaceFunctionality()
   
     test_Create_Pyramid_Hexa_VSet( vset, skewed_elements );
   
-    Model<3U>  model1( vset, varFileName.c_str(), true );
+    Model<3U>  model1( vset, varFileName.c_str() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );
 
     // corner_points

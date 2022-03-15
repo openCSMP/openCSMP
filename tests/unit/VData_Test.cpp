@@ -9,6 +9,7 @@
 #include "VData_Test.h"
 #include "VData.h"
 #include "VSet.h"
+#include "VSetConverter.h"
 #include "Box.h"
 #include "ScalarVariable.h"
 // move to an integration test
@@ -323,8 +324,9 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
      vset.UpdatePropertyStorage();
      
      // checking whether equidimensional mesh connectivity is still intact
-     const bool isoparametric = true;
-     Model<3U> model( vset, "CSMP-1phase-variables.txt", isoparametric );
+     // to get isoparametric elements
+     VSetConverter<3U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( vset );
+     Model<3U> model( vset, "CSMP-1phase-variables.txt" );
      
      // making a Region of volumetric elements only
      Region<3U>&          model_domain = model.Region("Model");

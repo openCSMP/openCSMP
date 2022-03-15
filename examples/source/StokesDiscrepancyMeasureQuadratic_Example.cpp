@@ -78,7 +78,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
     // convert linear to quadratic elements
     VSetConverter<3U>().ConvertLinearToQuadraticTetrahedra( vset );
 
-    Model<3U>  model( mesh_topology, vset, "pore_flow_quadratic-variables" );
+    Model<3U>  model( mesh_topology, vset, "pore_flow_quadratic-variables", true );
 
     printModelDimensions( model, true );
 

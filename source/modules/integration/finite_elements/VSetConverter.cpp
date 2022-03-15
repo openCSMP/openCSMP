@@ -1,4 +1,5 @@
 #include "VSetConverter.h"
+#include "CSMP_ElementSpecifications.h"
 #include "VSet.h"
 #include "FiniteElementManager.h"
 #include "MJL_Point.h"
@@ -11,6 +12,45 @@
 using namespace std; 
 
 namespace csmp {
+
+
+    /// replaces straight-sided global element types with isoparametric ones
+template<uint32_t dim>
+void VSetConverter<dim>::ConvertElementTypesToOnesUsingLocalCoordinateSystem( VSet<dim>& vset )
+ {
+    // if the VSet already consists of an isoparametric element family, no conversion is needed
+    if ( vset.IsoparametricElementMesh() ) return;
+    
+    // looping over the element types converting them
+    for ( auto n{0}; n<vset.Vertices(); ++n )
+      vset.AddBFlag( n, CSMP_ElementSpecifications::CSMP_TypeUsingLocalCoordinates( vset.BFlag(n)) );
+    
+ } // end ConvertElementTypesToOnesUsingLocalCoordinateSystem
+
+
+
+// inline function definitions
+
+/**
+    Interpolation of variable values on the boundary, assuming that it lies in one
+    of the coordinate planes.
+*/
+template<uint32_t dim>
+double VSetConverter<dim>::BoundaryValue( const std::map<size_t,double>& bvals,
+                                          size_t nID1, size_t nID2 )
+ const
+  {
+      typename std::map<size_t,double>::const_iterator  bvit1(bvals.find(nID1)),
+                                                          bvit2(bvals.find(nID2));
+      assert( bvit1 != bvals.end() );
+      assert( bvit2 != bvals.end() );
+
+      return ((*bvit1).second + (*bvit2).second) / 2.;
+
+  } // end BoundaryValue
+                                         
+
+
 
 /**
 
@@ -2229,6 +2269,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
  } // end
     
 
+template class VSetConverter<1U>;
 template class VSetConverter<2U>;
 template class VSetConverter<3U>;
 

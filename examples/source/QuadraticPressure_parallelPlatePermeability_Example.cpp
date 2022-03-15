@@ -70,7 +70,7 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
 
     // 2. model construction using IsoarametricQuadraticTriangle elements
     // -------------------------------------------------------------------
-    Model<2U>  model( mesh_container, "example2.txt", true );
+    Model<2U>  model( mesh_container, "example2.txt" );
     mesh_container.Erase();
   
 

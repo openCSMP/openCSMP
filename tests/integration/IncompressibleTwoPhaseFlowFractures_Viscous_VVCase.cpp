@@ -738,7 +738,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
         VSet<dim> vset_comparison;
         double model_time_comparison(model_time);
         vset_comparison.InputFrom( (this->getName()+"_Comparison.vset").c_str(), model_time_comparison );
-        const Model<dim> model_comparison( vset_comparison, "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", true );
+        const Model<dim> model_comparison( vset_comparison, "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt" );
         VTU_Interface<dim> vtu_comparison( model_comparison);
         vtu_comparison.OutputDataToVTU( "IncompressibleTwoPhaseFlow_Viscous_Comparison", vtuOutputProps,"Model", time );
 

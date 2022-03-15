@@ -195,7 +195,7 @@ void MeshManager_Test::run()
       const bool   skewed_elements(false); // otherwise model is not a box anymore
       VSet<3U>     vset;
       test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
-      model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
+      model3d_ = new Model<3U>(vset, varFileName.c_str() );
       // TEST
       // ==========
       TestBasics();
@@ -283,7 +283,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     VSet<3U> vset;
     // testing with element 13 with face 4 on the LEFT outside
     test_Create_Prism_Hexa_VSet( vset, false );
-    Model<3U>    model( vset, "CSMP-variables.txt", true );
+    Model<3U>    model( vset, "CSMP-variables.txt" );
     const size_t ELMT{13}; // 13 in VSet
     Element<3>*  eptr = &(*next(model.Mesh().ElementsBegin(),ELMT));
     //eptr->Out();

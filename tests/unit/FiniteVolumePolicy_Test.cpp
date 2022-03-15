@@ -184,7 +184,7 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
     vset.Out();
 
     //create the super group
-   Model<2>  superGroup( vset, "fe_test_variables.txt", true );
+   Model<2>  superGroup( vset, "fe_test_variables.txt" );
 
  	 VectorVariable<2> vVariable(PLAIN,PLAIN, sqrt(2.)/2., sqrt(2.)/2.);
    _info(vVariable.Length());

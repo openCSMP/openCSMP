@@ -19,7 +19,7 @@ namespace csmp
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Model<dim>& model2,
-                                              const char* property1, const char* property2, const char* region ) const
+                                            const char* property1, const char* property2, const char* region ) const
 {
     double error( 0. );
 
@@ -43,13 +43,13 @@ double ModelComparator<dim>::CompareModels( const Model<dim>& model1, const Mode
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
-                                             const char* variablesFile1, const char* variablesFile2,
-                                             bool isoparametric, const char* region ) const
+                                           const char* variablesFile1, const char* variablesFile2,
+                                           bool isoparametric, const char* region ) const
 {
     double error( 0. );
 
-    Model<dim> model1( vset1, variablesFile1, isoparametric );
-    Model<dim> model2( vset2, variablesFile2, isoparametric );
+    Model<dim> model1( vset1, variablesFile1 );
+    Model<dim> model2( vset2, variablesFile2 );
 
     error = CompareModels( model1, model2, property1, property2, region );
 
@@ -59,8 +59,8 @@ double ModelComparator<dim>::CompareVSets( VSet<dim>& vset1, VSet<dim>& vset2, c
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareVSets( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
-                                             const char* variablesFile1, const char* variablesFile2,
-                                             bool isoparametric, const char* region ) const
+                                           const char* variablesFile1, const char* variablesFile2,
+                                           bool isoparametric, const char* region ) const
 {
     double error( 0. );
 
@@ -77,7 +77,7 @@ double ModelComparator<dim>::CompareVSets( const char* vset1File, const char* vs
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& model1, const Model<dim>& model2,
-                                                            const Index model1Key, const Index model2Key, const char* region ) const
+                                                          const Index model1Key, const Index model2Key, const char* region ) const
 {
     deque<ScalarVariable> model1Values;
     deque<ScalarVariable> model2Values;
@@ -115,7 +115,7 @@ double ModelComparator<dim>::CompareRegionScalarVariable( const Model<dim>& mode
 /// L2 norm comparison of two deques containing scalar variables
 template<uint32_t dim>
 double ModelComparator<dim>::CompareScalarDequesL2( const std::deque<ScalarVariable>& deque1,
-                                                      const std::deque<ScalarVariable>& deque2 ) const
+                                                    const std::deque<ScalarVariable>& deque2 ) const
 {
     double error( 0. );
 
@@ -180,7 +180,7 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariable( const Region<dim>& reg
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1, Model<dim>& model2,
-                                              const char* property1, const char* property2, const char* region )
+                                                           const char* property1, const char* property2, const char* region )
 {
     double error( 0. );
 
@@ -204,13 +204,13 @@ double ModelComparator<dim>::CompareModelsRenumberedNodes( Model<dim>& model1, M
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet<dim>& vset2, const char* property1, const char* property2,
-                                             const char* variablesFile1, const char* variablesFile2,
-                                             bool isoparametric, const char* region )
+                                                         const char* variablesFile1, const char* variablesFile2,
+                                                         bool isoparametric, const char* region )
 {
     double error( 0. );
 
-    Model<dim> model1( vset1, variablesFile1, isoparametric );
-    Model<dim> model2( vset2, variablesFile2, isoparametric );
+    Model<dim> model1( vset1, variablesFile1 );
+    Model<dim> model2( vset2, variablesFile2 );
 
     error = CompareModelsRenumberedNodes( model1, model2, property1, property2, region );
 
@@ -220,8 +220,8 @@ double ModelComparator<dim>::CompareVSetsRenumberedNodes( VSet<dim>& vset1, VSet
 
 template<uint32_t dim>
 double ModelComparator<dim>::CompareVSetsRenumberedNodes( const char* vset1File, const char* vset2File, const char* property1, const char* property2,
-                                             const char* variablesFile1, const char* variablesFile2,
-                                             bool isoparametric, const char* region )
+                                                         const char* variablesFile1, const char* variablesFile2,
+                                                         bool isoparametric, const char* region )
 {
     double error( 0. );
 
@@ -357,8 +357,8 @@ double ModelComparator<dim>::CompareVSetsAtPoints( VSet<dim>& vset1, VSet<dim>& 
 {
     double error( 0. );
 
-    Model<dim> model1( vset1, variablesFile1, isoparametric );
-    Model<dim> model2( vset2, variablesFile2, isoparametric );
+    Model<dim> model1( vset1, variablesFile1 );
+    Model<dim> model2( vset2, variablesFile2 );
 
     error = CompareModelsAtPoints( model1, model2, property1, property2, region );
 

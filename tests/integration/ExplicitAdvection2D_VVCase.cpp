@@ -63,7 +63,7 @@ namespace csmp {
     cout <<"Finished reading mesh..."<<endl;
     cout <<"Building Model..."<<endl;
 
-    Model<2U>  model2D( mesh_topology, mesh_container, (input_file_name+".txt").c_str() );
+    Model<2U>  model2D( mesh_topology, mesh_container, (input_file_name+".txt").c_str(), true );
     cout <<"Finished building model."<<endl;
 
     mesh_container.Erase();

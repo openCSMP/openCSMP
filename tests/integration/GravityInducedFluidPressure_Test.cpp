@@ -59,7 +59,7 @@ void GravityInducedFluidPressure_Test::InitialiseModel1D( double model_height )
     top_ = model_height; 
     mesher.BuildUniformMesh( mesh_container, model_height, N_ELEMENTS );
     delete model1D_;
-    model1D_ = new Model<1U>( mesh_container, "GravityInducedFluidPressure_Test-variables.txt", false );
+    model1D_ = new Model<1U>( mesh_container, "GravityInducedFluidPressure_Test-variables.txt" );
     Region<1U>& model_domain(model1D_->Region("Model"));
     model_domain.UpdateMemberIndexes();
     printModelDimensions( *model1D_ );

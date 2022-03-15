@@ -1092,9 +1092,13 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegi
 
 /**
 Forms regions using the element ID containers stored in the model topology
-object. The regions are numbered in their alphabetical order and these numbers are assigned to the material ID of the element class.
+object. The regions are numbered in their alphabetical order and corresponding numbers
+are assigned to the material ID of the element class.
 
-@note the material IDs may later be overwritten by rocktypes .
+@param ignore_domain_type_identifiers when true all topological entities are turned into regions
+even if the contain boundary names etc.
+
+@note the material IDs may later be overwritten by rocktypes.
 
 @section arguments Input Arguments
 
@@ -1120,13 +1124,14 @@ The method reports which regions are being formed.
 @todo for the debug version, put in a check that verifies that all element ids stored in the model topology are actually contained in the mesh.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology& topo )
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology& topo, bool ignore_domain_type_identifiers )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   // 1. getting the names of the regions
   std::list<std::string> regions;
-  topo.OutputRegions( regions );
+  if ( !ignore_domain_type_identifiers ) topo.OutputRegions( regions );
+  else topo.OutputAll( regions );
 
   // 2. assigning the regions to groups in the Model
   std::cout << "\nRegionInterface::FormRegionsFrom: Forming the regions: ";
