@@ -24,18 +24,17 @@ template<typename> class FEM_Data;
         5) pointer to potential  lower-dimensional intervening Element
 */
 template<uint32_t dim> ///
-struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > > {
+struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
     // constructor
-    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>,
-                  std::pair<Element<dim>*,size_t> > >& set )
-      : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
+    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& set )
+      : std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(set) {}
       
     typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
     // data members
     Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
     Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
-    size_t InnerFaceID( ifaceIterator it ) const { return (*it).first.second; }
-    size_t OuterFaceID( ifaceIterator it ) const { return (*it).second.second; }
+    uint32_t InnerFaceID( ifaceIterator it ) const { return (*it).first.second; }
+    uint32_t OuterFaceID( ifaceIterator it ) const { return (*it).second.second; }
 };
 
 

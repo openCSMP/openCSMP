@@ -708,6 +708,11 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   // establishing boundary node container
   this->CreateNodePointerVector();
   
+  // assigning the box boundary flag to nodes where they do not already have another flag (like EDGE etc)
+  for ( auto& nit : this->node_vec_ )
+    if ( nit->AtBoundary() == NOT )
+      nit->AtBoundary( boxBoundary );
+  
   // sorts node and cell vectors into interior and exterior ranges;
   // initialises boundary face vector bd_face_vec_
   this->IdentifyPerimeter();

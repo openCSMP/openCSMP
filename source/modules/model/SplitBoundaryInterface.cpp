@@ -456,7 +456,7 @@ std::pair<std::set<std::string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_
 
   // 2.2 grouping interface element pairs into ones that juxtapose specific regions against one another
   //     these will later become specific split boundaries
-  typedef set<pair<pair<Element<dim>*, size_t>, pair<Element<dim>*, size_t> > > INTERFACE_ELEMENT_PAIRS;
+  typedef set<pair<pair<Element<dim>*, uint32_t>, pair<Element<dim>*, uint32_t> > > INTERFACE_ELEMENT_PAIRS;
   map<pair<string, string>, INTERFACE_ELEMENT_PAIRS>  split_boundary_map;
   const csmp::Index reg_key( splitboundaryComplex->Database().StorageKey( "region number" ) );
 

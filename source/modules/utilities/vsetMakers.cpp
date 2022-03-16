@@ -1523,7 +1523,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 
     vset.EstablishZeroBasedNumbering();
-    vset.Out();
+    // vset.Out();
 }
 
 

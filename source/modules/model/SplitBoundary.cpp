@@ -165,6 +165,12 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // sorting node vector and making it unique
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  
+  // assigning the INTERNAL box boundary flag to nodes where they do not already have another flag (like EDGE etc)
+  for ( auto& nit : this->node_vec_ )
+    if ( nit->AtBoundary() == NOT )
+      nit->AtBoundary( INTERNAL );
+  
 
   // 4. sorting interfaces and nodes and building the boundary interface vector
   // ---------------------------------------------------------------------------------------------------

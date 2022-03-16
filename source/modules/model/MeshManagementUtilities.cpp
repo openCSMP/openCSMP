@@ -1889,7 +1889,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
        
     // 2. checking that all connections between nodes and cells are valid
     // ------------------------------------------------------------------
-    const string check2("\nAre all the nodes connected to the cell valid?\n");
+    const string check2("\nintegrityCheck: Are all the nodes connected to the cell valid?\n");
     // global cell-id,local node-id
     multimap<size_t,uint32_t>  missing_nodes;
     first = copy_of_first;
@@ -1911,9 +1911,44 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
     // TODO: write the missing nodes to a file
     
     
-    // 3. checking that all cells have at least one neighbor
+   // 3. checking node parent connectivity after removing duplicate nodes
+   // -------------------------------------------------------------------
+   const string check4("\nintegrityCheck: Are all the parent elements of the nodes valid?\n");
+   first_call = true;
+   shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
+   
+   for ( const auto& nit : shared_nodes ) {
+       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
+       else
+         for ( auto i{0}; i<nit->Parents(); ++i )
+            if ( nit->Parent(i) == nullptr ||
+                 nit->Parent(i)->FE() == nullptr ) {
+                 if ( first_call ) { cerr << check4; first_call=false; }
+                 cerr <<"\nNode "<< nit->Idx() <<": parents vector contains nullptr.";
+                 issues++;
+              }
+     }
+
+
+   // 4. node to node connectivity is tested
+   // --------------------------------------
+   const string check5("\nintegrityCheck: Are all node-to-node connections valid?\n");
+   first_call = true;
+   for ( const auto& nit : shared_nodes ) {
+       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
+       else
+         for ( auto i{0}; i<nit->Neighbors(); ++i )
+            if ( nit->Neighbor(i) == nullptr ) {
+                 if ( first_call ) { cerr << check5; first_call=false; }
+                 cerr <<"\nneighbor "<< i <<" of Node "<< nit->Idx() <<": is corrupt.";
+                 issues++;
+              }
+     }
+   
+   
+    // 5. checking that all cells have at least one neighbor
     // -----------------------------------------------------
-    const string check3("\nAre there cells without any neighbors?\n");
+    const string check3("\nintegrityCheck: Are there cells without any neighbors?\n");
     multimap<size_t,uint32_t>  missing_nbors;
     first = copy_of_first;
     first_call = true;
@@ -1937,51 +1972,17 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    // TODO: check the missing neighbors against position of elements and write results to file
 
 
-   // 4. checking node parent connectivity after removing duplicate nodes
-   // -------------------------------------------------------------------
-   const string check4("\nAre all the parent elements of the nodes valid?\n");
-   first_call = true;
-   shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
-   
-   for ( const auto& nit : shared_nodes ) {
-       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
-       else
-         for ( auto i{0}; i<nit->Parents(); ++i )
-            if ( nit->Parent(i) == nullptr ||
-                 nit->Parent(i)->FE() == nullptr ) {
-                 if ( first_call ) { cerr << check4; first_call=false; }
-                 cerr <<"\nNode "<< nit->Idx() <<": parents vector contains nullptr.";
-                 issues++;
-              }
-     }
-
-
-   // 5. node to node connectivity is tested
-   // --------------------------------------
-   const string check5("\nAre all node-to-node connections valid?\n");
-   first_call = true;
-   for ( const auto& nit : shared_nodes ) {
-       if ( nit == nullptr ) cerr <<"\ndetected 'nullptr' node.";
-       else
-         for ( auto i{0}; i<nit->Neighbors(); ++i )
-            if ( nit->Neighbor(i) == nullptr ) {
-                 if ( first_call ) { cerr << check5; first_call=false; }
-                 cerr <<"\nneighbor "<< i <<" of Node "<< nit->Idx() <<": is corrupt.";
-                 issues++;
-              }
-     }
-   
-   
     // 6. checking that all non-null neighbors of the cells are valid
     // --------------------------------------------------------------
-    cerr <<"\nAre all non-null nodes & cell neighbors of the cell valid?\n";
+    cerr <<"\nintegrityCheck: Are all non-null nodes & cell neighbors of the cell valid?\n";
     first = copy_of_first;
    
     while ( first != last ) {
            // printing message before potentially catastrophic failure occurs
-           cerr <<"\n"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" "<< (*first).BaryCenter();
+           cerr <<"\t"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" ("<< celltype <<"), barycenter: "<< (*first).BaryCenter() <<", node flags: ";
            for ( auto i{0}; i<(*first).Nodes(); ++i )
              cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
+           cerr << endl;
            // valid cell neighbors should not be corrupt
            for ( auto i{0}; i<(*first).Neighbors(); ++i ) {
                if ( (*first).Neighbor(i) != nullptr ) {

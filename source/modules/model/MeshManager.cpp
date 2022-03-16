@@ -1216,9 +1216,8 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
 
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
-   FiniteElement* fptr = fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) );
    typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( *eptr, fptr, fvm_manager_, local_face_id, lvars, ivars ) );
+     fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ), fvm_manager_, local_face_id, lvars, ivars ) );
 
    (*fit).Idx( face_number );
 
@@ -1453,10 +1452,11 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
         
          // 1.2 simplified construction of Face at model boundary
          bool boundary_face{true};
-         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit ) {
-              if ( (*nit)->AtBoundary() == NOT ) boundary_face = false;
-              break;
-           }
+         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit )
+           if ( (*nit)->AtBoundary() == NOT ) {
+                boundary_face = false;
+                break;
+             }
          if ( boundary_face ) { // finding higher dimensional neighbor and its face idx
               pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
               // creating Face, storing a pointer to it
