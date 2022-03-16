@@ -4,6 +4,7 @@
 #include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
 #include "FaceConstructionData.h"
+#include "Element.h"
 #include "Face.h"
 #include "Boundary.h"
 #include "Region.h"
@@ -2175,12 +2176,12 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
 	  for ( typename map<string,csmp::Region<dim> >::iterator
 		      it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )
       {
-        if (!IsBoundaryName(it->first))
+        if ( !IsBoundaryName(it->first) )
           continue;
-        if (!hasLowerDimensionalRepresentation(it->second))
+        if ( !hasLowerDimensionalRepresentation(it->second) )
           continue;
         if constexpr (dim == 3U ) {
-            if ( containsVolumeElements(model->Region("Model")) && !containsSurfaceElements(it->second) )
+            if ( !containsSurfaceElements(it->second) )
               continue;
           }
         if constexpr (dim == 2U ) {
@@ -2205,18 +2206,16 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
     // ------------------------------------------------------------------------------------
     // (no flagging for rebuilt of regions is necessary as they will be completely removed)
     for ( auto& it : eligibleRegions ) {
-         model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
+         // nor helpful and has side effects: model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
          model->RemoveRegion( it.first.c_str() );
       }
-
-// DEBUGGING - checked that there are no duplicates or nullptrs in the 'elmts_to_become_faces' vector
-//           - no elements numbered as follows are among the memory violations:  for ( auto& it : elmts_to_become_faces ) it->Idx(999);
 
     // 3. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                      elmts_to_become_faces.begin(),
                                                                      elmts_to_become_faces.end() );
+
     // 4. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -2238,11 +2237,11 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
       }
 
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
-    
     // if there are some unattributed faces left the method returs false
 	  return boundaries_created;
 
 } // end EstablishBoundariesFromRegions
+
 
 
 //        if ( !CreateExternalBoundaryFrom( it->first.c_str(), IRREGULAR ) )
@@ -2261,6 +2260,32 @@ bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces
 */
   
   
+// DEBUGGING - checked that there are no duplicates or nullptrs in the 'elmts_to_become_faces' vector
+//           - no elements numbered as follows are among the memory violations:  for ( auto& it : elmts_to_become_faces ) it->Idx(999);
+// - no issues uo to here here
+/*
+ {
+    csmp::Region<dim>& fracture_domain(model->Region("FRACTURE"));
+    for ( auto it=fracture_domain.ElementsBegin(); it!=fracture_domain.ElementsEnd(); ++it ) {
+          assert( (*it)->Idx() >= 0 );
+          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+            if ( (*it)->Neighbor(i) != nullptr )
+              cerr << (*it)->Neighbor(i)->Idx() <<" ";
+      }
+ }
+// are there shared elements or neighbors? - NO!
+csmp::Region<dim>& frac_domain(model->Region("FRACTURE"));
+for ( auto& it : elmts_to_become_faces ) {
+     if ( frac_domain.Contains( it ) )
+       cerr <<"region overlap at "<< it->Idx();
+       for ( auto i{0}; i<it->Neighbors(); ++i )
+         if ( it->Neighbor(i) != nullptr )
+           if ( frac_domain.Contains( it->Neighbor(i) ) )
+             cerr <<"neighbor overlap at "<< it->Neighbor(i)->Idx();
+  }
+*/
+
+
 
 
 /**

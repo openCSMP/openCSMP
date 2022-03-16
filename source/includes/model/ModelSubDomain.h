@@ -273,9 +273,9 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// arithmetic (number as opposed to volume weighted) average
-    double  Average( const char* property ) const;
-    bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
-    void CopyReplace( const char* from, const char* to );
+    double Average( const char* property ) const;
+    bool   CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
+    void   CopyReplace( const char* from, const char* to );
 
     // ----------------------------------------
     // output

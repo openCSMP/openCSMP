@@ -632,7 +632,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
     
    // 1. creating a search map from the nodes of the outer element
    //  key    inner local id, outer local node id
-   map<Point<dim>,pair<size_t,size_t> > outer_elmt_nodes;
+   map<Point<dim>,pair<uint32_t,uint32_t> > outer_elmt_nodes;
    // OUTER ELEMENT
    const auto n_nodes_outer_elmt(outer_nbor->Nodes());
    for ( auto i{0}; i<n_nodes_outer_elmt; ++i )
@@ -1850,6 +1850,7 @@ template void backupNeighborConnectivity( typename vector<Face<2>*>::const_itera
                                           
 
 
+
 /**
    Checks validity of FE policy, nodes, neighbors, node parents, node neighbors.
 */
@@ -1993,9 +1994,6 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
              }
          first++;
       }
-
-      
-      
       
    if ( issues > 0 ) return false;
    return true;
@@ -2055,7 +2053,52 @@ template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::c
          first++;
       }
 */
-                                          
+
+template<uint32_t dim, template<uint32_t> class CELL>
+bool integrityCheck( const plf::colony<CELL<dim> >& cells,
+                     typename std::vector<CELL<dim>*>::const_iterator first,
+                     typename std::vector<CELL<dim>*>::const_iterator last )
+ {
+    string  celltype("Element");
+    if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
+    if constexpr ( is_same< CELL<dim>,InterFace<dim> >::value ) celltype = "InterFace";
+    size_t issues{0};
+
+    // --------------------------------------------------------------
+    cerr <<"\nintegrityCheck: Are all non-null nodes & cell neighbors of the cell valid?\n";
+   
+    while ( first != last ) {
+           auto it = (*cells.get_iterator(*first));
+           // printing message before potentially catastrophic failure occurs
+           cerr <<"\t"<< parseAbbreviated_FE_Type( it.FE_Type() ) <<":"<< it.Idx() <<" ("<< celltype <<"), barycenter: "<< it.BaryCenter() <<", node flags: ";
+           for ( auto i{0}; i<it.Nodes(); ++i )
+             cerr <<" "<< parseBoundary( it.N(i)->AtBoundary() );
+           cerr << endl;
+           // valid cell neighbors should not be corrupt
+           for ( auto i{0}; i<it.Neighbors(); ++i ) {
+               if ( it.Neighbor(i) != nullptr ) {
+                    if ( !it.FE() ) { cerr <<"\nelement "<< it.Idx() <<" has corrupt FE pointer."; issues++; }
+                    if ( it.Neighbor(i)->Idx() >= 1e6 ) {
+                         cerr <<"\nis element "<< it.Idx() <<" neighbor idx="<< it.Neighbor(i)->Idx() <<" really this large?";
+                         issues++;
+                      }
+                 }
+             }
+         first++;
+      }
+      
+   return !( issues > 0 );
+    
+ } // end
+
+template bool integrityCheck<3,Element>( const plf::colony<Element<3>>&, vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator );
+//template bool integrityCheck<2,Element>( const plf::colony<Element<2>>&, vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
+//template bool integrityCheck<1,Element>( const plf::colony<Element<1>>&, vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
+
+
+
+
+
                                           
 template<uint32_t dim>
 pair<Point<dim>,Point<dim>>  boundingBox( typename vector<Node<dim>*>::const_iterator first, typename vector<Node<dim>*>::const_iterator last )

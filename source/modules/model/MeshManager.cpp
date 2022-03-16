@@ -1491,15 +1491,14 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      cout <<") deleting "<< n_faces_to_build <<" elements...\n";
      while ( erase_it != last )
        {
-          // null the element in the parent arrays of its nodes
+// POINTER REMAINS VALID AFTER DELETION:          cerr <<"\n\t"<< (*erase_it)->Idx();
+          // null the element parent pointers in the elements nodes
           for ( auto i{0}; i<(*erase_it)->Nodes(); ++i )
             (*erase_it)->N(i)->Unassign( (*erase_it) );
-          // get element pointer for colony
-          auto colony_it = elements_.get_iterator( *erase_it );
+          // get element pointer for colony and delete the element TODO: inefficient because this is done multiple times for each node
+          elements_.erase( elements_.get_iterator( *erase_it ) );
           // set the supplied element pointer to null TODO: this needs to be communicated to pointers of input regions?
           (*erase_it) = nullptr;
-          // delete the element
-          elements_.erase( colony_it );
           // increment iterator
           erase_it++;
        }
@@ -1507,9 +1506,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
-
-
-     
+/*
      // 3. cleaning up the node to parent connectivity
      // ----------------------------------------------
      // TODO: these are global changes! - do this only for nodes that are affected
@@ -1522,6 +1519,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      // --------------------------------------------------
      if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
+*/
+     UpdateConnectivity();
      
      return face_ptrs;
      
@@ -1547,7 +1546,9 @@ if ( InterFaces() > 0 ) {
       Sets neighbor pointers of cells surrounding the domain to 'nullptr' if they were pointing to cells within the domain.
       
       The intention of this method is to avoid that these pointers wil accidentially be derefefenced causing crashes
-      after the subdomain was deleted.
+      once the subdomain has been deleted.
+      
+      @todo: appears to have side effects.
       
       SKM 9/2/2022
 */
@@ -1555,6 +1556,9 @@ template<uint32_t dim>
 template<template<uint32_t> class CELL>
 size_t MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& subdomain )
  {
+ 
+ throw csmp::Exception( ERROR, "MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter:", "Not properly tested yet, may have side effects" );
+ 
     size_t n_detachments{0};
     const size_t n_cells{ subdomain.Elements() };
     for ( size_t i=subdomain.InteriorElements(); i < n_cells; ++i ) {
@@ -2055,25 +2059,25 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
  } // end BuildSurfaceElementConnectivity
                                         
 template void MeshManager<3>::BuildSurfaceConnectivity<Element>( typename vector<Element<3>*>::const_iterator,
-                                                                        typename vector<Element<3>*>::const_iterator );
+                                                                 typename vector<Element<3>*>::const_iterator );
 template void MeshManager<2>::BuildSurfaceConnectivity<Element>( typename vector<Element<2>*>::const_iterator,
-                                                                        typename vector<Element<2>*>::const_iterator );
+                                                                 typename vector<Element<2>*>::const_iterator );
 template void MeshManager<1>::BuildSurfaceConnectivity<Element>( typename vector<Element<1>*>::const_iterator,
-                                                                        typename vector<Element<1>*>::const_iterator );
+                                                                typename vector<Element<1>*>::const_iterator );
 
 template void MeshManager<3>::BuildSurfaceConnectivity<Face>( typename vector<Face<3>*>::const_iterator,
-                                                                     typename vector<Face<3>*>::const_iterator );
+                                                              typename vector<Face<3>*>::const_iterator );
 template void MeshManager<2>::BuildSurfaceConnectivity<Face>( typename vector<Face<2>*>::const_iterator,
-                                                                     typename vector<Face<2>*>::const_iterator );
+                                                              typename vector<Face<2>*>::const_iterator );
 template void MeshManager<1>::BuildSurfaceConnectivity<Face>( typename vector<Face<1>*>::const_iterator,
-                                                                     typename vector<Face<1>*>::const_iterator );
+                                                              typename vector<Face<1>*>::const_iterator );
 
 template void MeshManager<3>::BuildSurfaceConnectivity<InterFace>( typename vector<InterFace<3>*>::const_iterator,
-                                                                          typename vector<InterFace<3>*>::const_iterator );
+                                                                   typename vector<InterFace<3>*>::const_iterator );
 template void MeshManager<2>::BuildSurfaceConnectivity<InterFace>( typename vector<InterFace<2>*>::const_iterator,
-                                                                          typename vector<InterFace<2>*>::const_iterator );
+                                                                   typename vector<InterFace<2>*>::const_iterator );
 template void MeshManager<1>::BuildSurfaceConnectivity<InterFace>( typename vector<InterFace<1>*>::const_iterator,
-                                                                          typename vector<InterFace<1>*>::const_iterator );
+                                                                   typename vector<InterFace<1>*>::const_iterator );
 
 
  // TESTING
@@ -2240,10 +2244,10 @@ template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<
 template<uint32_t dim>
 void MeshManager<dim>::UpdateConnectivity()
  {
-    // SKM-FIX:  made extra pointer vectors just to get this to work before the new method is finished
+    // creating pointer vectors that are needed by BuildConnectivity() methods
     vector<Element<dim>*> element_ptrs;
     element_ptrs.reserve( elements_.size() );
-    for ( auto it : elements_ ) element_ptrs.push_back( &it );
+    for ( auto& it : elements_ ) element_ptrs.push_back( &it );
     BuildConnectivity<csmp::Element>( element_ptrs.begin(), element_ptrs.end() );
     element_ptrs.clear();
     
@@ -2263,10 +2267,10 @@ void MeshManager<dim>::UpdateConnectivity()
     // global node connectivity to parent elements
     // RebuildNodeParentElementRelationships( elements_.begin(), elements_.end() );
     // ----------------------------------------------------------------------------
+    // TODO: restrict this to the neighborhood where changes occurred
+
     // counting the parent elements of each node
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
-
-    // TODO: restrict this to the neighborhood where changes occurred
     for ( auto& it : elements_ ) {
         const auto nodes_end{it.NodesEnd()};
         for ( auto nit = it.NodesBegin(); nit != nodes_end; ++nit ) {
@@ -2293,7 +2297,7 @@ void MeshManager<dim>::UpdateConnectivity()
            }
          assert( n.first->Parents() >= 1 );
       }
-    
+    // TODO: extend the repairs to include NodeManifolds
     cerr <<"\nMeshManager::UpdateConnectivity: WARNING: node manifolds are not reestablished here yet.\n";
     
  } // end UpdateConnectivity

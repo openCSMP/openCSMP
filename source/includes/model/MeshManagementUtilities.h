@@ -184,6 +184,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
                      typename plf::colony<CELL<dim>>::const_iterator last );
 
+template<uint32_t dim, template<uint32_t> class CELL>
+bool integrityCheck( const plf::colony<CELL<dim> >&,
+                     typename std::vector<CELL<dim>*>::const_iterator first,
+                     typename std::vector<CELL<dim>*>::const_iterator last );
+
 /// finds the min max corners of the bounding box for the supplied range of nodes
 template<uint32_t dim>
 std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
