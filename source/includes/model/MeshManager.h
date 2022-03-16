@@ -163,7 +163,7 @@ public:
                                          const IntegrationPointVariables& face_integration_point_variables );
 
   /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
-  Face<dim>* const ConstructFaceFromElement( csmp::Element<dim>* eptr,
+  Face<dim>* const ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
                                              csmp::Element<dim>* inner_eptr,
                                              csmp::Element<dim>* outer_eptr,
                                              uint32_t adjacent_face_of_inner_element,

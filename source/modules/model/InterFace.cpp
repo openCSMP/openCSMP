@@ -738,7 +738,7 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
     @return A pointer to the Target node.
 */
 template<uint32_t dim>
-const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) const
+csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) const
 {
   assert( n < this->FE()->Nodes() );
   
@@ -769,49 +769,12 @@ const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) con
 
 
 
-template<uint32_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side )
-{
-  assert( n < this->FE()->Nodes() );
-  
-  // the number of nodes on a single side of the interface
-  const auto if_FE_nodes( this->FE()->Nodes() );
-
-  if ( side == INSIDE )
-    return node_connector_[n];
-
-  if ( side == OUTSIDE ) {
-    uint32_t outside_idx = n + if_FE_nodes;
-    if ( n < if_FE_nodes )
-      return node_connector_[outside_idx];
-    else {
-      outside_idx %= node_connector_.size();
-      return node_connector_[outside_idx];
-    }
-  }
-
-  assert( side == MIDDLE );
-  if ( middleElement_ != nullptr )
-    return middleElement_->N( n );
-
-  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side )", "Base Element does not exist!" );
-
-  return nullptr;
-}
-
 
 /**
     Access to all nodes of the interface.
 */
 template<uint32_t dim>
-csmp::Node<dim>*  InterFace<dim>::N( uint32_t n )
-{
-  assert( n < node_connector_.size() );
-  return node_connector_[n];
-}
-
-template<uint32_t dim>
-const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n ) const
+csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -823,15 +786,7 @@ const csmp::Node<dim>*  InterFace<dim>::N( uint32_t n ) const
     Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
 template<uint32_t dim>
-csmp::InterFace<dim>*  InterFace<dim>::Neighbor( uint32_t n )
-{
-  assert( interface_connector_.size() == this->Neighbors() );
-  assert( n < this->Neighbors() );
-  return interface_connector_[n];
-}
-
-template<uint32_t dim>
-const csmp::InterFace<dim>*  InterFace<dim>::Neighbor( uint32_t n ) const
+csmp::InterFace<dim>* const InterFace<dim>::Neighbor( uint32_t n ) const
 {
   assert( interface_connector_.size() == this->Neighbors() );
   assert( n < this->Neighbors() );
@@ -874,7 +829,7 @@ uint32_t  InterFace<dim>::ParentNodeNumber( uint32_t n, INTERFACE_SIDE side ) co
 
 // watch out if there is no base element this returns a nullptr pointer
 template<uint32_t dim>
-Element<dim>*  InterFace<dim>::Parent( INTERFACE_SIDE side ) const
+Element<dim>* const InterFace<dim>::Parent( INTERFACE_SIDE side ) const
 {
   if ( side == INSIDE )
     return innerParent_;
@@ -884,12 +839,12 @@ Element<dim>*  InterFace<dim>::Parent( INTERFACE_SIDE side ) const
 }
 
 template<uint32_t dim>
-Element<dim>*  InterFace<dim>::InnerParent() const
+Element<dim>* const InterFace<dim>::InnerParent() const
 {
   return innerParent_;
 }
 template<uint32_t dim>
-Element<dim>*  InterFace<dim>::OuterParent() const
+Element<dim>* const InterFace<dim>::OuterParent() const
 {
   return outerParent_;
 }

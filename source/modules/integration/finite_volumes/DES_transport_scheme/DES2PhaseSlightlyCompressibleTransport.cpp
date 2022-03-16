@@ -124,7 +124,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
     //check if node is truncated by domain boundary
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
   
-    const size_t parent_elements(nd->Parents());      
+    const auto parent_elements(nd->Parents());
     for ( auto i{0}; i<parent_elements; ++i ) {
         Element<dim>* const eptr = nd->Parent(i);
         
@@ -139,11 +139,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
             snw_gradient = 0.;
             p_gradient = 0.;     
         
-            for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
+            for ( auto j=0U; j<eptr->Nodes(); j++ ) {
                 const double sn = eptr->N(j)->Read(this->key_sCO2);
                 const double p = eptr->N(j)->Read(this->key_pf);
                 //const double p = eptr->N(j)->Read(this->this->key_rpf);
-                for ( size_t k=0U; k<dim; k++ ) {
+                for ( auto k=0U; k<dim; k++ ) {
                     if(this->with_capillary_spreading_) snw_gradient(k) += DN(k,j) * sn;
                     p_gradient(k) += -DN(k,j) * p;               
                 }
@@ -172,7 +172,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     
     double accumulation(0.), flux_balance(0.), outflow(0.);
         
-    const size_t v( (dim==1u) ? 0u : 1u );
+    const uint32_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> vD, facetNrml, gravity;
     const size_t node_parent_elements(nd->Parents());
     
@@ -180,7 +180,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
     
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    for ( auto t=0U; t<node_parent_elements; t++ )
     {
       Element<dim>* const eptr(nd->Parent(t));
       assert( eptr != NULL );
@@ -190,7 +190,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         
       } else {        
         
-        const size_t pnid(nd->ParentNodeNumber(t));
+        const auto pnid(nd->ParentNodeNumber(t));
         
         //eptr->Read( this->this->key_vt, vD);
         
@@ -222,12 +222,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         */         
         
         double inflow(0.), CO2_inflow (0.);
-        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
         for ( auto i{0}; i<sector_facets; i++ )
         {
-            const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+            const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+            const auto inside_node(eptr->FV()->InsideNode(iFacet));
+            const auto outside_node(eptr->FV()->OutsideNode(iFacet));
             
             eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
             const double  vD_n = vD.DotProduct(facetNrml);
@@ -381,7 +381,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
          // compute average fractional flow for the current finite volume
         double fn_avg = 0.;
         double sw = 1. - nd->Read(this->key_sCO2); //saturation aqueous phase at current node
-        for ( size_t t=0U; t<node_parent_elements; t++ )
+        for ( auto t=0U; t<node_parent_elements; t++ )
         {
             Element<dim>* const eptr(nd->Parent(t));
             fn_avg += this->flowfunctions_.f_at(eptr,1U,sw);

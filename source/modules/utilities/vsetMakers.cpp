@@ -1141,36 +1141,36 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
 */
 void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 {
-    const size_t iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
+    const int iNrOfElements(32/*26 hexahedrons + 6 pyramids*/);
     
   	IsoparametricLinearHexahedron iso_hexahedron;
   	IsoparametricLinearPyramid    iso_pyramid;
   	
   	//node dimensions of box
-  	const size_t iDim_k(4);//k - height
-  	const size_t iDim_j(4);//j - width
-  	const size_t iDim_i(4);//i - length
-  	const size_t iDim_k2(iDim_k*iDim_k);//k - height
-  	const size_t iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
-  	const size_t iPyramidsPlacement(13);
+  	const int iDim_k(4);//k - height
+  	const int iDim_j(4);//j - width
+  	const int iDim_i(4);//i - length
+  	const int iDim_k2(iDim_k*iDim_k);//k - height
+  	const int iDim_km1_2((iDim_k-1)*(iDim_k-1));//i - length
+  	const int iPyramidsPlacement(13);
   	
   	//this is a 3D model, it is a cube of hexahedron with six pyramid elements in the middle
   	
   	//elements 0->7 are hexahedrons
   	//elements 8->13 are pyramids
-    size_t nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
+    int              nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
   	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
     deque<uint32_t>  epes(iNrOfElements);  //element type per element
-    deque<int8_t>  etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
+    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
 
 // NB: the pyramid elements still need to be dealt with
 
-    for(size_t iElement = 0; iElement < 26U; iElement++)
+    for( int iElement = 0; iElement < 26U; iElement++ )
   	{
   	  npes[iElement]=iso_hexahedron.Nodes();
   	  epes[iElement]=iso_hexahedron.Neighbors();
   	}
-  	for(size_t iElement = 26U; iElement < 32U; iElement++)
+  	for( int iElement = 26U; iElement < 32U; iElement++ )
   	{
   	  npes[iElement]=iso_pyramid.Nodes();
   	  epes[iElement]=iso_pyramid.Neighbors();
@@ -1179,11 +1179,11 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //--------------------------ELEMENT TYPES
   	//add element types
     vector<int8_t> vecElementTypes(iNrOfElements);
-    for(size_t iElement = 0; iElement < 26U; iElement++)
+    for( int iElement = 0; iElement < 26U; iElement++ )
   	{
   	  vecElementTypes[iElement]= ISOPARAMETRIC_LINEAR_HEXAHEDRON;
   	}
-  	for(size_t iElement = 26U; iElement < 32U; iElement++)
+  	for( int iElement = 26U; iElement < 32U; iElement++ )
   	{
       vecElementTypes[iElement] = ISOPARAMETRIC_LINEAR_PYRAMID;
       etypes[iElement]          = ISOPARAMETRIC_LINEAR_PYRAMID;
@@ -1204,9 +1204,9 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	std::deque<double> py(nodes);
   	std::deque<double> pz(nodes);
   
-  	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for( int k = 0U; k < iDim_k; k++ ) //z
+  	for( int j = 0U; j < iDim_j; j++ ) //y
+  	for( int i = 0U; i < iDim_i; i++ ) //x
   	{
       if(bSkewed)
   	  {
@@ -1236,11 +1236,11 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //--------------------------ELEMENTS
     //define hexahedron elements (elements 0->31), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
-    for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+    for( int k = 0U; k < iDim_k-1; k++ ) //z
+  	for( int j = 0U; j < iDim_j-1; j++ ) //y
+  	for( int i = 0U; i < iDim_i-1; i++ ) //x
   	{
-  	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
+  	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      
      if(i==1 && j==1 && k==1) //its the center element (6 pyramids)
   	  continue;
@@ -1259,7 +1259,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	 deqElements[iElement][7]= 1+ iDim_k2*(k+1)+(iDim_j)*(j+1)+i;
     }
   	
-  	size_t node_center(64);
+  	int node_center(64);
     //element 26, assign nodes per element
     std::vector<int64_t> vecNodes(5);
     vecNodes[0]= 1+ 21;
@@ -1309,20 +1309,20 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     vecNodes[4]= 1+ node_center;
     deqElements[31]=vecNodes;
     
-    vset.AddPlist( deqElements.begin(),deqElements.end());
+    vset.AddPlist( deqElements.begin(), deqElements.end() );
 
     //---------------------------------NEIGHBORS
-    const int64_t   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k);
+    const int   iDim_i_(iDim_i), iDim_j_(iDim_j), iDim_k_(iDim_k);
     //define neighbors
     std::deque<std::vector<int64_t> >  deqElementNeighbors(iNrOfElements);
-    for( int64_t  k = 0U; k < iDim_k_-1; k++ ) //z
-  	for( int64_t  j = 0U; j < iDim_j_-1; j++ ) //y
-  	for( int64_t  i = 0U; i < iDim_i_-1; i++ ) //x
+    for( int  k = 0U; k < iDim_k_-1; k++ ) //z
+  	for( int  j = 0U; j < iDim_j_-1; j++ ) //y
+  	for( int  i = 0U; i < iDim_i_-1; i++ ) //x
   	{
   	 if(i==1 && j==1 && k==1) //its the center element (6 pyramids)
   	  continue;
   	 
-  	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
+  	 int64_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      
      if(iElement>iPyramidsPlacement)
       iElement--;
@@ -1330,7 +1330,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
      deqElementNeighbors[iElement].resize(6);
   
      //face 0
-     size_t iNeighbor(1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
+     int64_t iNeighbor(1+ iDim_km1_2*(k-1)+(iDim_j-1)*j+i);
      if(iNeighbor>iPyramidsPlacement)
       iNeighbor--;
      deqElementNeighbors[iElement][0U]= (k==0) ? BACK_OUTSIDE : iNeighbor;

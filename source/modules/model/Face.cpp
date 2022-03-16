@@ -42,7 +42,7 @@ namespace csmp {
     
 */
 template<uint32_t dim>
-Face<dim>::Face( Element<dim>& elmt,
+Face<dim>::Face( const Element<dim>& elmt,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
                  uint32_t inner_parent_face_id,
@@ -69,13 +69,13 @@ Face<dim>::Face( Element<dim>& elmt,
     // 0. verification that the lower-dimensional element and the element that will be transformed
     //    into a face have indeed matching nodes
 #ifdef DEBUG
-    const size_t           nodes_to_match(elmt.Nodes());
+    const uint32_t         nodes_to_match(elmt.Nodes());
     set<const Node<dim>*>  elmt_nodes;
-    for ( size_t j=0U; j<nodes_to_match; ++j )
+    for ( auto j=0U; j<nodes_to_match; ++j )
       elmt_nodes.insert( elmt.N(j) );
     // checking inner parent
-    size_t matching_nodes(0U);
-    for ( size_t j=0U; j<innerParent_->Nodes(); ++j ) {
+    uint32_t matching_nodes(0U);
+    for ( auto j=0U; j<innerParent_->Nodes(); ++j ) {
           assert( innerParent_->N(j) != nullptr );
           if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
             matching_nodes++;
@@ -84,7 +84,7 @@ Face<dim>::Face( Element<dim>& elmt,
     // checking outer parent
     if ( outerParent_ != nullptr ) {
         matching_nodes = 0U;
-        for ( size_t j=0U; j<innerParent_->Nodes(); ++j ) {
+        for ( auto j=0U; j<innerParent_->Nodes(); ++j ) {
               assert( innerParent_->N(j) != nullptr );
               if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
                 matching_nodes++;
@@ -101,7 +101,7 @@ Face<dim>::Face( Element<dim>& elmt,
 
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
-    const size_t nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
+    const auto nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
     for ( auto i{0}; i<nodes; ++i ) {
          // assignig the node
          assert( elmt.N(i) != nullptr );
@@ -244,7 +244,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // finding the face which is shared
     // --------------------------------
     bool  matching_face_found{false};
-    const size_t n_faces_inner{innerParent_->Faces()};
+    const auto n_faces_inner{innerParent_->Faces()};
     for ( auto i{0}; i<n_faces_inner; ++i )
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
@@ -261,8 +261,8 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            for ( auto k{0}; k < n_face_nodes; ++k )
              node_connector_[k] = inner_parent->N( fnids[k] );
            // finding the number of the shared face in the outer element
-           const size_t n_faces_outer{outerParent_->Faces()};
-           for ( size_t j{0}; j<n_faces_outer; ++j )
+           const auto n_faces_outer{outerParent_->Faces()};
+           for ( auto j{0}; j<n_faces_outer; ++j )
              if ( outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
@@ -858,33 +858,18 @@ typename std::vector<csmp::Face<dim>*>&  Face<dim>::NeighborElementVector()
 
 
 template<uint32_t dim>
-csmp::Node<dim>*  Face<dim>::N( uint32_t n )
+csmp::Node<dim>* const Face<dim>::N( uint32_t n ) const
   {
      assert( n < Nodes() );
      return node_connector_[n];
   }
-
-template<uint32_t dim>
-const csmp::Node<dim>*  Face<dim>::N( uint32_t n ) const
-  {
-     assert( n < Nodes() );
-     return node_connector_[n];
-  }
-
 
 
 /**
     watch out if there is no neighbor this returns a NULL pointer
 */
 template<uint32_t dim>
-csmp::Face<dim>*  Face<dim>::Neighbor( uint32_t n )
- {
-    assert( n < Neighbors() );
-    return face_connector_[n];
- }
-
-template<uint32_t dim>
-const csmp::Face<dim>*  Face<dim>::Neighbor( uint32_t n ) const
+csmp::Face<dim>* const Face<dim>::Neighbor( uint32_t n ) const
  {
     assert( n < Neighbors() );
     return face_connector_[n];
@@ -896,7 +881,7 @@ const csmp::Face<dim>*  Face<dim>::Neighbor( uint32_t n ) const
     connected to this face if they exist.
 */
 template<uint32_t dim>
-Element<dim>*  Face<dim>::Parent( INTERFACE_SIDE side ) const
+Element<dim>* const Face<dim>::Parent( INTERFACE_SIDE side ) const
  {
     assert( side != MIDDLE );
     assert( side != 0 );
@@ -909,7 +894,7 @@ Element<dim>*  Face<dim>::Parent( INTERFACE_SIDE side ) const
     inner parent is always initialised for a valid face
 */
 template<uint32_t dim>
-Element<dim>*  Face<dim>::InnerParent() const
+Element<dim>* const Face<dim>::InnerParent() const
  {
     assert( innerParent_ != nullptr );
     return innerParent_;
@@ -920,7 +905,7 @@ Element<dim>*  Face<dim>::InnerParent() const
     @attention outer parent will not be initialised if the Face lies on the outside boundary of the model
 */
 template<uint32_t dim>
-Element<dim>*  Face<dim>::OuterParent() const
+Element<dim>* const Face<dim>::OuterParent() const
  {
     return outerParent_;
  }

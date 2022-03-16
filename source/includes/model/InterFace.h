@@ -161,33 +161,30 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
 
     /// access to all nodes connected to the InterFace (inside nodes first)
-    csmp::Node<dim>* N( uint32_t n_local );
-    const csmp::Node<dim>* N( uint32_t n_local ) const;
+    csmp::Node<dim>* const N( uint32_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
-    csmp::Node<dim>* N( uint32_t n_local, INTERFACE_SIDE side );
-    const csmp::Node<dim>* N( uint32_t n_local, INTERFACE_SIDE side ) const;
+    csmp::Node<dim>* const N( uint32_t n_local, INTERFACE_SIDE side ) const;
 
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
 
     /// returns neighbor InterFace of interface
-    csmp::InterFace<dim>*  Neighbor( uint32_t );
-    const csmp::InterFace<dim>*  Neighbor( uint32_t ) const;
+    csmp::InterFace<dim>* const Neighbor( uint32_t ) const;
     
     /// on-the-fly 0..n-1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.)
     void           Idx( size_t ) const;
     size_t         Idx() const;
 
     /// access the higher dimensional elements on either side of interface; @attention returns nullptr if outside is not present
-    Element<dim>*  Parent( INTERFACE_SIDE ) const;
+    Element<dim>* const Parent( INTERFACE_SIDE ) const;
   
     /// higher-dimensional element located on side opposite to where the unit normal points; will always be present
-    Element<dim>*  InnerParent() const;
+    Element<dim>* const InnerParent() const;
   
     /// higher-dimensional element located on the side of the interface to which the unit normal points; @attention does not exist on model boundary
-    Element<dim>*  OuterParent() const;
+    Element<dim>* const OuterParent() const;
 
     /// Local node numbers in higher-dimensional adjacent elements; costly to compute
     uint32_t       ParentNodeNumber( uint32_t n_local, INTERFACE_SIDE side ) const;
@@ -209,7 +206,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
-    double       Area( INTERFACE_SIDE=MIDDLE ) const;
+    double         Area( INTERFACE_SIDE=MIDDLE ) const;
     
     /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
@@ -265,17 +262,17 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // Data members
     // ------------------------------------------------------------------------
 
-    mutable size_t idx_;                                ///< unique identifier for indexing operations
-    size_t         inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
-    size_t         outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
     Element<dim>*  innerParent_;                 ///< higher-dimensional parent element on side opposite to normal direction
     Element<dim>*  outerParent_;                 ///< higher-dimensional neighbor element in direction of interface normal
     Element<dim>*  middleElement_ = nullptr;     ///< pointer to lower-dimensional element that may have been inserted between the sides of InterFace.
     std::vector<Node<dim>*>       node_connector_;      ///< pointers to the nodes on inside followed by those on the outside
     std::vector<InterFace<dim>*>  interface_connector_; ///< neighbor interfaces; inside ones first, outside ones next, order determined by interface normal
+    mutable size_t idx_;                                ///< unique identifier for indexing operations
+    uint32_t       inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
+    uint32_t       outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE  current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
-    bool            collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
+    INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    bool           collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
 };
 

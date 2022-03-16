@@ -254,7 +254,7 @@ void MeshManager_Test::TestBasics()
 		_test(mesh.HybridElementMesh() == true);
 
 		// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
-		set<uint32_t> test_set;
+		set<size_t> test_set;
 		_test( detectElementsWithAllNodesOnBoundary( mesh, test_set ) == 0U );
 
 		// returns number of nodes=vertices in the current mesh

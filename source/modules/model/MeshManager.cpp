@@ -1060,7 +1060,7 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    Like ReplaceElementByFace, but without deletion of the original element.
 */
 template<uint32_t dim>
-Face<dim>* const MeshManager<dim>::ConstructFaceFromElement( csmp::Element<dim>* eptr,
+Face<dim>* const MeshManager<dim>::ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
                                                              csmp::Element<dim>* inner_eptr,
                                                              csmp::Element<dim>* outer_eptr,
                                                              uint32_t adjacent_face_of_inner_element,
@@ -1073,7 +1073,7 @@ Face<dim>* const MeshManager<dim>::ConstructFaceFromElement( csmp::Element<dim>*
    // 0. verifying the input
    // pointers
    if ( eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "element pointer not initialised");
+     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "pointer to lower-dimensional input element is not initialised");
      
    // is the element indeed lower dimensional?
    if constexpr ( dim == 3 )

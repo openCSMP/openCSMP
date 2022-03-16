@@ -59,7 +59,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     /// constructs model-interior face as an exact copy of the supplied lower-dimensional element; no neighbor faces yet
-    Face( Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
+    Face( const Element<dim>& dim_minus1_element, ///< supplies finite element policy & finite volume stencil information
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           uint32_t inner_parent_face_id,
@@ -170,25 +170,23 @@ class Face : public FiniteElementPolicy<dim,Face>,
     void Accept( csmp::Visitor<dim>& );
 
     /// access the nodes that are connected to the Face
-    csmp::Node<dim>*  N( uint32_t n_local );
-    const csmp::Node<dim>*  N( uint32_t n_local ) const;
+    csmp::Node<dim>* const N( uint32_t n_local ) const;
   
     /// access the neighbor faces of this face
-    csmp::Face<dim>*  Neighbor( uint32_t );
-    const csmp::Face<dim>*  Neighbor( uint32_t ) const;
+    csmp::Face<dim>* const Neighbor( uint32_t ) const;
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void           Idx( size_t ) const;
     size_t         Idx() const;
 
     /// access the higher dimensional elements on either side of face; @attention returns nullptr if outside is not present
-    Element<dim>*  Parent( INTERFACE_SIDE ) const;
+    Element<dim>* const Parent( INTERFACE_SIDE ) const;
   
     /// higher-dimensional element located on side opposite to where the unit normal points; will always be present
-    Element<dim>*  InnerParent() const;
+    Element<dim>* const InnerParent() const;
   
     /// higher-dimensional element located on the side of the face to which the unit normal points; @attention does not exist on model boundary
-    Element<dim>*  OuterParent() const;
+    Element<dim>* const OuterParent() const;
   
     /// returns which Face of the higher dimensional inner neighbor element this Face shares its nodes with
     /// local number of the face in the inner parent element, which borders against the interface
@@ -246,8 +244,8 @@ class Face : public FiniteElementPolicy<dim,Face>,
     // ------------------------------------------------------------------------
 
     mutable size_t           idx_;
-    uint32_t inner_parent_face_id_ = UNSPECIFIED;   ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
-    uint32_t outer_parent_face_id_ = UNSPECIFIED;   ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element, segm id if Face is line element in 3D
+    uint32_t outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element, segm id if Face is line element in 3D
     Element<dim>*            innerParent_;        ///< higher-dimensional neighbor in opposite direction of unit normal (always there)
     Element<dim>*            outerParent_;        ///< higher-dimensional neighbor element in direction of interface normal
     std::vector<Node<dim>*>  node_connector_;     ///< pointers to the nodes of the face

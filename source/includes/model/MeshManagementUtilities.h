@@ -71,7 +71,7 @@ bool isoparametricElementMesh( const Model<dim>& );
 
 /// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
 template<uint32_t dim>
-size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<uint32_t>& );
+size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
 
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<uint32_t dim>

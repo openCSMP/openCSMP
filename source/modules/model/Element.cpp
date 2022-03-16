@@ -537,15 +537,17 @@ double x = (*element.N(2))->x();
 
 @return return A pointer to the Target object, e.g. a Node.
 */
+/*
 template<uint32_t dim>
 const csmp::Node<dim>*  Element<dim>::N( uint32_t n ) const
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
 }
+*/
 
 template<uint32_t dim>
-csmp::Node<dim>*  Element<dim>::N( uint32_t n )
+csmp::Node<dim>*  const Element<dim>::N( uint32_t n ) const
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -561,14 +563,7 @@ numbering scheme).
 before you are trying to use it.
 */
 template<uint32_t dim>
-const csmp::Element<dim>*  Element<dim>::Neighbor( uint32_t n ) const
-{
-  assert( n < elmt_connector_.size() );
-  return elmt_connector_[n];
-}
-
-template<uint32_t dim>
-csmp::Element<dim>*  Element<dim>::Neighbor( uint32_t n )
+csmp::Element<dim>*  const Element<dim>::Neighbor( uint32_t n ) const
 {
   assert( n < elmt_connector_.size() );
   return elmt_connector_[n];
