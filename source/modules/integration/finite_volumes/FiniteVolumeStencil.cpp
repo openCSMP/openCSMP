@@ -1134,13 +1134,16 @@ void FiniteVolumeStencil<dim>::Out() const
      cout<<endl;
    }
      
-   cout<<endl<<" Facet physical normals inside the element: "<<endl;
-   for(uint32_t i=0; i<facet_normals.size(); i++) {
-     for(uint32_t j=0; j<dim; j++) {
-       cout<<" "<<facet_normals[i][j] ;
+   if ( !facet_normals.empty() && !facet_normals[0].empty() ) {
+       cout<<endl<<" Facet physical normals inside the element: "<<endl;
+       for(uint32_t i=0; i<facet_normals.size(); i++) {
+         if ( !facet_normals[i].empty() )
+           for(uint32_t j=0; j<dim; j++) {
+             cout<<" "<<facet_normals[i][j] ;
+         }
+         cout<<endl;
+       }
      }
-     cout<<endl;
-   }
 
     cout<<endl<<" Facet surrounding node in the element: "<<endl;
     for(uint32_t i=0; i<Sectors(); i++) {

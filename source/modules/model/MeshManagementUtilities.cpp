@@ -2155,25 +2155,17 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
                     issues++;
                   }
             }
-          else if ( n_connected_neighbors == 2 ) {
-                if ( !isLineElement(etype) &&
-                     !isTriangular(etype)  &&
-                     !isTetrahedral(etype) &&
-                     !isQuadrilateral(etype) &&
-                     !isPrism(etype) ) {
+          
+          if ( isQuadrilateral(etype) || isPrism(etype) ) {
+                if ( n_connected_neighbors < 2 ) {
                     cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;
                   }
             }
-          else if ( n_connected_neighbors == 3 ) {
-                if ( !isLineElement(etype) &&
-                     !isTriangular(etype)  &&
-                     !isTetrahedral(etype) &&
-                     !isQuadrilateral(etype) &&
-                     !isPrism(etype) &&
-                     !isHexahedral(etype) &&
-                     !isPyramid(etype) ) {
+          
+          if ( isHexahedral(etype) || isPyramid(etype) ) {
+                if ( n_connected_neighbors < 3 ) {
                     cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
                     cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
                     issues++;

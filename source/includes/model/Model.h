@@ -394,10 +394,11 @@ protected:
 
   /// builds model treating any topologic entities from regions file as unique regions; later converts correspondingly labelled ones into boundaries and split boundaries
   void Initialize( const char* regions_file_prefix, ///< use to select regions in ANSYS or other mesh
-                   ModelTopology&, VSet<dim>& );
+                   ModelTopology&, VSet<dim>& );    ///< must not contain any Face or InterFace objects which will be built by this method
 
   /// builds model  with regions, boundaries, and splitboundaries as identified by "BOX_BOUNDARY", "boundary" or "splitboundary" strings in the domain names
-  void Initialize( ModelTopology&, VSet<dim>& );
+  void Initialize( ModelTopology&, ///<  must store Region, Boundary, and SplitBoundary objects 
+                   VSet<dim>& );   ///< must store corresponding Element, Face and InterFace objects matching the idx integers stored in topology
 
   void InitializeLocalVariableStorage();
   bool UpdateSubdomainPropertyStorage();

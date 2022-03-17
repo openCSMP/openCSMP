@@ -24,15 +24,14 @@ using namespace std;
 
 namespace csmp {
 
-ModelBasics_Test::ModelBasics_Test( bool verbose )
-    : verbose_(verbose)
-    {
-    }
+ModelBasics_Test::ModelBasics_Test()
+  {
+  }
     
 
 ModelBasics_Test::~ModelBasics_Test()
-    {
-    }
+  {
+  }
     
 
 /**
@@ -41,11 +40,9 @@ ModelBasics_Test::~ModelBasics_Test()
 void ModelBasics_Test::run()
   {
      TestModelConstructionFromVSet();
-  
-     bool create_boundaries_from_faces{false};
-     _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
-     create_boundaries_from_faces = true;
-     _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
+     
+     // builds model from regions, converting lower-dimensional elements into faces
+     _test( TestWriteModelToDiskAndReadBack() );
  
    } // end run
 
@@ -81,15 +78,15 @@ bool ModelBasics_Test::TestModelConstructionFromVSet()
 
 
 
-bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces )
+bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
  {
      VSet<3U>      vset;
      ModelTopology topology;
      test_Create_FracBox( vset, topology );
 
-     // creating model with boundaries
-     const bool only_with_regions(true);
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", only_with_regions );
+     // creating model
+     const bool create_boundaries_from_faces{true};
+     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces );
      model.Name("FracBox");
      
      // assigning some dummy values to verify functionality
@@ -98,9 +95,9 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      model_domain.InputPropertyValue( "fluid pressure", makeScalar(ANY,1e5) );
      model_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-15) );
      matrix_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-12) );
-     //model.Out(); // crashes when trying to print normals to FV Stencil for ISO_LIN_HEX
-     model.RegionsOut(); // if boundaries are created, programme crashes here when trying to calculate volume of an element
-     
+
+     if ( verbose_ ) model.Out(); // crashes when trying to print normals to FV Stencil for ISO_LIN_HEX
+       
      // saving model to disk
      model.OutputToBinaryFile( "ModelBasics_Test" );
      
@@ -114,14 +111,13 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      _test( approximatelyEqual( pmax, 1.0e-12 ) );
      
      // testing fundamental assumption made working with default initialisations of 'size_t'
-     size_t default_uint = std::numeric_limits<uint32_t>::max();
-     _test( default_uint != UINT_MAX ); // should be false because UINT_MAX is not for size_t
+     uint32_t default_uint = std::numeric_limits<uint32_t>::max();
+     _test( std::numeric_limits<size_t>::max() != UINT_MAX ); // false because UINT_MAX is not for size_t
      _test( hasDefaultValueForUnassignedInteger( default_uint ) );
+     _test( default_uint == UINT_MAX );
      
      // some visual QC, using VTK
-     restored_model.RegionsOut();
-     restored_model.BoundariesOut();
-     //restored_model.Out(); // fails when trying to print normals to FV Stencil for ISO_LIN_HEX
+     if ( verbose_ ) restored_model.Out();
      
      return true;
  }

@@ -5338,8 +5338,10 @@ void MeshManager<dim>::Out() const
   list<CSMP_FEM_TYPE> etypes;
   fem_manager_.CurrentElementTypes( etypes );
   cout <<"\nFinite volume stencils: ";
-  for ( auto fit : etypes )
-  fvm_manager_.Stencil(fit)->Out();
+  for ( const auto& fit : etypes ) {
+       cout <<"\n"<< parseFiniteElementType( fit );
+       fvm_manager_.Stencil(fit)->Out();
+    }
   cout << endl;
   
   // node manifolds

@@ -433,20 +433,20 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------
      // making a set of element nodes to later identify faces by comparison
-     set<uint32_t>   node_set, test_set;
-     const size_t  nodes(e.Nodes());
-     for ( auto i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
-     map<const Element<dim>*,size_t>  nbor_elmts;
+     set<size_t> node_set, test_set;
+     const auto  nodes(e.Nodes());
+     for ( auto i{0}; i<nodes; ++i )    node_set.insert(e.N(i)->Idx());
+     map<const Element<dim>*,uint32_t>  nbor_elmts;
      vector<uint32_t> fnids;
      for ( auto i{0}; i<nodes; i++ ) {
-          const size_t parents(e.N(i)->Parents());
-          for ( size_t j=0U; j<parents; ++j ) {
+          const auto parents(e.N(i)->Parents());
+          for ( auto j=0U; j<parents; ++j ) {
                const Element<dim>* const eptr(e.N(i)->Parent(j));
-               const size_t faces(eptr->Faces());
-               for ( size_t k=0U; k<faces; ++k ) {
+               const auto faces(eptr->Faces());
+               for ( auto k=0U; k<faces; ++k ) {
                      eptr->FE()->NodesOfFace( k, fnids );
                      size_t fnodes(fnids.size());
-                     for ( size_t l=0U; l<fnodes; ++l )
+                     for ( auto l=0U; l<fnodes; ++l )
                        test_set.insert( eptr->N( fnids[l])->Idx() );
                      // if the face is shared the element and its face are recorded
                      if ( node_set == test_set ) {
@@ -464,11 +464,11 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     // -------------------------------------------------------------------------------------------------------------
     vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
-    typename map<const Element<dim>*,size_t>::const_iterator  nbit(nbor_elmts.begin());
+    typename map<const Element<dim>*,uint32_t>::const_iterator  nbit(nbor_elmts.begin());
     bool inside_elmt_found(false);
     bool outside_elmt_found(false);
-    pair<size_t,size_t> nbors;
-    pair<size_t,size_t> faces;
+    pair<size_t,size_t>     nbors;
+    pair<uint32_t,uint32_t> faces;
     pair<long,long>     materials;
 
     // first element
@@ -546,20 +546,20 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, std::vector<Element<dim
   // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
   // -----------------------------------------------------------------------------------------------------------------------------
   // making a set of element nodes to later identify faces by comparison
-  set<uint32_t>   node_set, test_set;
-  const size_t  nodes( e.Nodes() );
+  set<size_t>  node_set, test_set;
+  const size_t nodes( e.Nodes() );
   for ( auto i = 0U; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
   map<Element<dim>*, size_t>  nbor_elmts;
   vector<uint32_t> fnids;
   for ( auto i = 0U; i<nodes; i++ ) {
-    const size_t parents( e.N( i )->Parents() );
-    for ( size_t j = 0U; j<parents; ++j ) {
+    const auto parents( e.N( i )->Parents() );
+    for ( auto j = 0U; j<parents; ++j ) {
       Element<dim>* eptr( e.N( i )->Parent( j ) );
-      const size_t faces( eptr->Faces() );
-      for ( size_t k = 0U; k<faces; ++k ) {
+      const auto faces( eptr->Faces() );
+      for ( auto k = 0U; k<faces; ++k ) {
         eptr->FE()->NodesOfFace( k, fnids );
-        size_t fnodes( fnids.size() );
-        for ( size_t l = 0U; l<fnodes; ++l )
+        auto fnodes( fnids.size() );
+        for ( auto l = 0U; l<fnodes; ++l )
           test_set.insert( eptr->N( fnids[l] )->Idx() );
         // if the face is shared the element and its face are recorded
         if ( node_set == test_set ) {
@@ -683,10 +683,10 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
      // 1. looping over the parent elements of the nodes searching their faces for ones that are shared with the lower dimensional element
      // ----------------------------------------------------------------------------------------------------------------------------------
      // making a set of element nodes to later identify faces by comparison
-     set<uint32_t>   node_set, test_set;
+     set<size_t>   node_set, test_set;
    
      const size_t  nodes(e.Nodes());
-     for ( auto i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
+     for ( uint32_t i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
    
      const csmp::Element<dim>*  nbor_elmt(nullptr);
      vector<uint32_t>             fnids;
@@ -694,16 +694,16 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
      // since the same element may be discovered by each of the face nodes
      // the loop is stopped after the first discovery
      for ( auto i{0}; i<nodes; i++ ) {
-          const size_t parents(e.N(i)->Parents());
-          for ( size_t j=0U; j<parents; ++j ) {
+          const auto parents(e.N(i)->Parents());
+          for ( auto j=0U; j<parents; ++j ) {
                const Element<dim>* const eptr(e.N(i)->Parent(j));
                // only if the element is not the same and also of a different type
                if ( eptr != &e and
                     eptr->FE_Type() != e.FE_Type() and
                     eptr->Nodes() >= e.Nodes() )
                  {
-                   const size_t faces(eptr->Faces());
-                   for ( size_t k=0U; k<faces; ++k ) {
+                   const auto faces(eptr->Faces());
+                   for ( auto k=0U; k<faces; ++k ) {
                          eptr->FE()->NodesOfFace( k, fnids );
                          size_t fnodes(fnids.size());
                          for ( size_t l=0U; l<fnodes; ++l )
@@ -2058,28 +2058,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
 
-      // 3. disconnecting perimeter elements of the regions that will be deleted
-      //    from their equidimensional neighbors outside of the region
-      // -----------------------------------------------------------------------
-      if ( model->ContainsRegion("TOP") )
-        model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("TOP") );
-      if ( model->ContainsRegion("IRREGULAR") )
-        model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("TOP") );
-      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("BOTTOM") );
-      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("LEFT") );
-      model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("RIGHT") );
-      if constexpr ( dim == 3 ) {
-          model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("BACK") );
-          model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region("FRONT") );
-        }
-
-      // 4. getting MeshManager to create faces and delete pre-cursor elements
+      // 3. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
       vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                        elmts_to_become_faces.begin(),
                                                                        elmts_to_become_faces.end() );
 
-      // 5. creating the Boundaries from the faces
+      // 4. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };
 
@@ -2095,7 +2080,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
           AddBoundary( "FRONT", next(fit,front.first), next(fit,front.second), FRONT );
        }
       
-      // 6. removing the input regions
+      // 5. removing the input regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
       if ( top.first != top.second ) model->RemoveRegion( "TOP" );

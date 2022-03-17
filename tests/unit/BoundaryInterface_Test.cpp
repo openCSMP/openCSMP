@@ -480,8 +480,8 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
      @author SKM 
      @date March 2016
 */
-static size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
-                               set<string>& region_patches_found )
+static size_t findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
+                              set<string>& region_patches_found )
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
@@ -546,17 +546,17 @@ static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, c
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------
      // making a set of element nodes to later identify faces by comparison
-     set<uint32_t>   node_set, test_set;
+     set<size_t> node_set, test_set;
      const size_t  nodes(e.Nodes());
      for ( auto i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
-     map<const Element<3U>*,size_t>  nbor_elmts;
+     map<const Element<3U>*,uint32_t> nbor_elmts;
      vector<uint32_t> fnids;
      for ( auto i{0}; i<nodes; i++ ) {
-          const size_t parents(e.N(i)->Parents());
-          for ( size_t j=0U; j<parents; ++j ) {
+          const auto parents(e.N(i)->Parents());
+          for ( auto j=0U; j<parents; ++j ) {
                const Element<3U>* const eptr(e.N(i)->Parent(j));
-               const size_t faces(eptr->Faces());
-               for ( size_t k=0U; k<faces; ++k ) {
+               const auto faces(eptr->Faces());
+               for ( auto k=0U; k<faces; ++k ) {
                      eptr->FE()->NodesOfFace( k, fnids );
                      size_t fnodes(fnids.size());
                      for ( size_t l=0U; l<fnodes; ++l )
@@ -577,11 +577,11 @@ static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, c
     // -------------------------------------------------------------------------------------------------------------
     vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
-    map<const Element<3U>*,size_t>::const_iterator  nbit(nbor_elmts.begin());
+    map<const Element<3U>*,uint32_t>::const_iterator  nbit(nbor_elmts.begin());
     bool inside_elmt_found(false);
     bool outside_elmt_found(false);
-    pair<size_t,size_t> nbors;
-    pair<size_t,size_t> faces;
+    pair<size_t,size_t>     nbors;
+    pair<uint32_t,uint32_t> faces;
     pair<long,long>     materials;
 
     // first element
@@ -703,11 +703,11 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     model.Region("Model").UpdateMemberIndexes();
    
     // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,size_t>   patches;
+    map<pair<long,long>,uint32_t> patches;
     vector<FaceConstructionData>  face_construction_data;
-    map<size_t,string>            patch_names;
+    map<uint32_t,string>          patch_names;
     string                        patch_name;
-    size_t                        n_juxtapositions(0);
+    uint32_t                      n_juxtapositions(0);
 
     // 3. looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
@@ -718,7 +718,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
           FaceConstructionData  fdata(higherDimensionalNeighbors( *(*eit), mtrl_key ));
         
           // 3.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
-          pair<map<pair<long,long>,size_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
+          pair<map<pair<long,long>,uint32_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
           // incrementing number of juxtapositions and corresponding patch names
           if ( it.second == true ) {
                fdata.PatchNumber( (*it.first).second );
@@ -739,7 +739,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     // 4. creating labeled boundary patches from the face-defining data
     // ----------------------------------------------------------------
     // 4.1 making a map 'patch_numbers' from 'patch_names' to search for patch identifiers
-    map<string,size_t>  patch_numbers;
+    map<string,uint32_t>  patch_numbers;
     for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
       patch_numbers.insert( make_pair( (*it).second, (*it).first ) );
    
@@ -753,7 +753,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
       {
          assert( patch_numbers.find((*pit).first) != patch_numbers.end() );
-         const size_t patch_number((*patch_numbers.find((*pit).first)).second);
+         const uint32_t patch_number((*patch_numbers.find((*pit).first)).second);
          // reserving storage
          (*pit).second.reserve(face_construction_data.size());
          // looping over all face data assigning the ones that are suitable

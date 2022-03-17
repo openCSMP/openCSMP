@@ -201,8 +201,12 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset,
 {
    if ( treat_domains_as_regions_and_use_regions_file ) {
         const string regions_file_prefix(mesh_topology.ModelName());
+        // selects domains via regions file and converts lower-dimensional regions into Boundary objects
+        // (use if there are no Face or InterFace objects stored in VSet)
         Initialize( regions_file_prefix.c_str(), mesh_topology, vset );
      }
+   // identifies Region, Boundary, and SplitBoundary objects by their names, expecting that corresponding
+   // Element, Face and or Interface objects exist in VSet
    else Initialize( mesh_topology, vset );
 
 } // end VSet/ModelTopology constructor
@@ -219,9 +223,9 @@ Initialise( topology, vset, create boundary ...)
 
 Performs the following steps:
 
-0. eliminates unwanted mesh regions from topology and corresponding elements from vset
+0. Using the regions file, selects wanted mesh regions topology and corresponding elements from vset
 
-1. Reduces mesh specifications to actual desired element types as specified by the topology object
+1. Reduces mesh size and element types to those left over in the topology object
 
 2. initializing the finite-element manager
 
@@ -235,11 +239,11 @@ Performs the following steps:
 
 7. Associates supplied subregions with regions (model subdomains) -> done by FormRegionsFrom(topology)
 
-8. Forms Boundaries -> done by EstablishBoundaries()
+8. Forms Boundaries -> done by EstablishBoundaries() or EstablishBoxBoundaries() if the model is box-shaped
 
 9. Adds required property storage for regions and boundaries (however their properties are not initialised here)
 
-@attention MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR  EXTERNAL DATA  - including ANSYS_Model3D, SKUA etc.
+@attention MOST COMMONLY USED MODEL CONSTRUCTION METHOD FOR  INPUT FROM ANSYS via the CSP interface
  
 @attention a fully valid VSet is expected by this method.
 
@@ -253,7 +257,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.Faces() > 0 || vset.InterFaces() > 0 )
-       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "method works only for vsets without Face or InterFace objects.");
+       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
+                         "method works only for vsets without Face or InterFace objects as it creates them by itself from lower-dimensiona regions.");
       
      if ( !vset.WithNeighbourConnectivity() )
        csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
@@ -354,7 +359,10 @@ if ( mesh_manager_.InterFaces() > 0 )
 
 
 /**
-        NEW! - all information about regions, boundaries or split boundaries comes from ModelTopology
+    NEW (2022)! - builds model assuming that all information about regions, boundaries or split boundaries is stored in from ModelTopology.
+    
+    @note If the Model topology object enlists a Boundary object, the corresponding stored idx values are interpreted as Face ids,
+    noting that the all entries in the VSet are numbered consecutively and continuously starting with Element followed by Face and InterFace objects.
 */
 template<uint32_t dim>
 void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
@@ -2117,46 +2125,10 @@ void Model<dim>::Out() const
   cout << "\n\n\n\nModel<" << dim << ">::Out: ";
   database_.Out();
   mesh_manager_.Out();
-
-  cout << "\nunique Regions: ";
-  for ( typename map<string, csmp::Region<dim> >::const_iterator
-        gr_it = this->uniqueGroupMap_.begin(); gr_it != this->uniqueGroupMap_.end(); gr_it++ )
-  {
-    cout << "\n\t" << (*gr_it).first;
-    (*gr_it).second.Out();
-  }
-
-  if ( !this->groupMap_.empty() ) {
-    cout << "\n\n\nnon-unique Regions: ";
-    for ( typename map<string, csmp::Region<dim> >::const_iterator
-          gr_it = this->groupMap_.begin(); gr_it != this->groupMap_.end(); gr_it++ )
-    {
-      cout << "\n\t" << (*gr_it).first;
-      (*gr_it).second.Out();
-    }
-  }
-
-  // boundaries
-  if ( this->Boundaries() != 0U ) {
-    cout << "\n\n\nBoundaries: " << endl;
-    for ( typename map<std::string, csmp::Boundary<dim> >::const_iterator
-          it = this->BoundariesBegin(); it != this->BoundariesEnd(); it++ )
-    {
-      cout << "\n\t" << (*it).first;
-      (*it).second.Out();
-    }
-  }
-
-  // split boundaries
-  if ( this->SplitBoundaries() != 0U ) {
-    cout << "\n\n\nSplitBoundaries: " << endl;
-    for ( typename map<std::string, csmp::SplitBoundary<dim> >::const_iterator
-          it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); it++ )
-    {
-      cout << "\n\t" << (*it).first;
-      (*it).second.Out();
-    }
-  }
+  
+  this->RegionsOut();
+  this->BoundariesOut();
+  this->SplitBoundariesOut();
 
 } // end Out
 

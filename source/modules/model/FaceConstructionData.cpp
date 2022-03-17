@@ -13,7 +13,7 @@ namespace csmp {
 
 FaceConstructionData::FaceConstructionData( size_t  parent_element,
                                             std::pair<size_t,size_t>& neighbors,
-                                            std::pair<size_t,size_t>& nbor_faces,
+                                            std::pair<uint32_t,uint32_t>& nbor_faces,
                                             std::pair<long,long>&     materials,
                                             long material )
  : parent_element_(parent_element),
@@ -28,10 +28,10 @@ FaceConstructionData::FaceConstructionData( size_t  parent_element,
 
 FaceConstructionData::FaceConstructionData( size_t  parent_element,
                                             std::pair<size_t,size_t>& neighbors,
-                                            std::pair<size_t,size_t>& nbor_faces,
+                                            std::pair<uint32_t,uint32_t>& nbor_faces,
                                             std::pair<long,long>&     materials,
                                             long material,
-                                            size_t patch_number )
+                                            uint32_t patch_number )
  : parent_element_(parent_element),
    neighbors_(neighbors),
    nbor_faces_(nbor_faces),
@@ -78,7 +78,7 @@ size_t FaceConstructionData::InnerElement() const
  }
  
  
-size_t FaceConstructionData::InnerElementFace() const
+uint32_t FaceConstructionData::InnerElementFace() const
  {
     return nbor_faces_.first;
  }
@@ -91,7 +91,7 @@ size_t FaceConstructionData::OuterElement() const
  }
  
  
-size_t FaceConstructionData::OuterElementFace() const
+uint32_t FaceConstructionData::OuterElementFace() const
  {
     return nbor_faces_.second;
  }
@@ -122,14 +122,14 @@ pair<long,long> FaceConstructionData::Materials() const
  }
 
  
-void FaceConstructionData::PatchNumber( size_t number )
+void FaceConstructionData::PatchNumber( uint32_t number )
  {
      patch_number_ = number;
  }
 
 
  
-size_t FaceConstructionData::PatchNumber() const
+uint32_t FaceConstructionData::PatchNumber() const
  {
      return patch_number_;
  }

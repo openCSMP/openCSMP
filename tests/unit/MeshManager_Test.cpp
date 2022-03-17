@@ -139,7 +139,7 @@ void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_f
             model3d_->OutputToBinaryFile(model3d_name_.c_str());
             delete model3d_;
             model3d_ = new Model<3U>(model3d_name_);
-            
+        
             CheckModel3D();
            }
         delete model3d_;
@@ -811,7 +811,7 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
          for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
               (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
               // replacing local with global node ids
-              for ( auto& sit : segm_nodes ) sit = (*it)->N(sit)->Idx();
+              for ( auto& sit : segm_nodes ) sit = static_cast<uint32_t>((*it)->N(sit)->Idx());
               // storing the node-to-node connections avoiding duplicates
               assert( segm_nodes.size() == 2 ); // only linear segments are considered by this function
               size_t segm_node1{ subdomain.N(*segm_nodes.begin())->Idx() };
