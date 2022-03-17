@@ -5,13 +5,19 @@
 
 namespace csmp {
 
-void printVector( const std::vector<size_t>& array );
+void printVector( const std::vector<uint32_t>& array );
 void printVector( const std::vector<double>& array );
 void printVector( const std::vector<std::vector<double> >& array );
 void printVector( const char* headline, const std::vector<std::vector<double> >& array );
 
 template<typename T1, typename T2>
 void printMap( const std::map<T1,T2>& );
+
+
+/// reads vector<vector> from filestream where the elements of the vector are sequential (more methods in readWriteBinary.h)
+template<typename T>
+void readVectorOfVectors( std::ifstream&, size_t total_items, size_t entries_per_vector, std::deque<std::vector<T> >& file_records );
+
 
 
 

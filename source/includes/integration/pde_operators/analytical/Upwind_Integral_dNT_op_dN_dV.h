@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// Known as: element conductance matrix or K div^2 P
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -19,8 +19,8 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim> {
                            		  const char* trigger,
                            		  const double prefactor = 1. );
     
-    void ComputeContribution( const SIMPLEX& );
-    void GetOperands( const SIMPLEX& );
+    void ComputeContribution( const CELL& );
+    void GetOperands( const CELL& );
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT;

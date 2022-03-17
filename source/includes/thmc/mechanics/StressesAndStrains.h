@@ -8,9 +8,9 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Model;
-template<size_t> class StressesAndStrains;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
+template<uint32_t> class StressesAndStrains;
 
 // TODO: add Biot constraints as a post-processing step, Biot-Willis coefficient alpha or drained and undrained moduli are needed
 
@@ -28,10 +28,10 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
                         bool geomechanics_conventions=true  );
     
     /// get displacement values to compute {d} vector
-    virtual void GetOperands( Element<3U>& );
+    virtual void GetOperands( const Element<3U>& );
 
     /// {e} = [B]{d}, {s} = [D]{e} at integration points
-    virtual void ComputeContribution( Element<3U>& );
+    virtual void ComputeContribution( const Element<3U>& );
 
     /// write {e} to each elements
     virtual void WriteOperands( Element<3U>& );
@@ -39,7 +39,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
     void PrincipalStrainsAndStresses( bool yes_no );
     virtual StressesAndStrains<3U>* clone() const { return new StressesAndStrains<3U> (*this); }
   private:
-    const size_t  components_;  // stress strain components
+    const uint32_t  components_;  // stress strain components
     
     csmp::Index strain_key_, stress_key_,                  ///< tensor variables
                 strain1_key_, strain2_key_, strain3_key_,  ///< vector<double> variables (Eigenvectors)
@@ -51,7 +51,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U> {
                                           STRESS_, STRAIN_,
                                           EGP_, SGP_, PEGP_, PSGP_;
     std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double>                 IPSTRAIN_, IPSTRESS_,
+    std::vector<double>                   IPSTRAIN_, IPSTRESS_,
                                           NSTRAIN_,  NSTRESS_, 
                                           eps_, sigma_, sum_;
     TensorVariable<3U>                    ts_, evecs_;

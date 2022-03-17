@@ -134,7 +134,7 @@ void ErrorMetric_Example::assignLargestEigenValueOfTo( Model<3U>& sg, const char
     VectorVariable<3U>   evals;
     Region<3>&  sgref(sg.Region("Model"));
 
-    for ( vector<Node<3U>*>::iterator
+    for ( vector<Node<3U>*>::const_iterator
           nit=sgref.NodesBegin(); nit!=sgref.NodesEnd(); nit++ ) {
          (*nit)->Read( hes_key, ts );
 
@@ -169,8 +169,7 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
     ScalarVariable       emag;
     Region<3>&  sgref(sg.Region("Model"));
 
-    for ( vector<Element<3U>*>::iterator
-          eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
+    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
       {
          (*eit)->Read( hes_key, ts );
 
@@ -178,22 +177,22 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
          ts.Eigen( evals, evecs, true );
 
          // computing the element length in the directions of the eigenvectors
-         vc(0) = evecs(0,0), vc(1) = evecs(0,1), vc(2) = evecs(0,2);
+        vc(0) = evecs(0,0); vc(1) = evecs(0,1); vc(2) = evecs(0,2);
          const double  d1 = (*eit)->LengthInDirection( vc );
-         vc(0) = evecs(1,0), vc(1) = evecs(1,1), vc(2) = evecs(1,2);
+        vc(0) = evecs(1,0); vc(1) = evecs(1,1); vc(2) = evecs(1,2);
          const double  d2 = (*eit)->LengthInDirection( vc );
-         vc(0) = evecs(2,0), vc(1) = evecs(2,1), vc(2) = evecs(2,2);
+        vc(0) = evecs(2,0); vc(1) = evecs(2,1); vc(2) = evecs(2,2);
          const double  d3 = (*eit)->LengthInDirection( vc );
 
          // computing e = vT |H| v
-         vc(0) = d1, vc(1) = d2, vc(2) = d3;
+         vc(0) = d1; vc(1) = d2; vc(2) = d3;
          //    |H|    v
          ts = evecs * vc;
          //   vT  (|H| v)
          vc = vc * ts;
 
          // error metric for visualisation
-         for ( size_t j=0U; j<3U; j++ )  {
+         for ( auto j=0U; j<3U; j++ )  {
               evecs(0,j) *= d1 * evals(0);
               evecs(1,j) *= d2 * evals(1);
               evecs(2,j) *= d3 * evals(2);

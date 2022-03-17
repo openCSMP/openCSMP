@@ -14,11 +14,11 @@ namespace csmp {
 
 class MeshManager_Test;
 class ModelTopology;
-template<size_t> struct IndexToPointerMapping;
-template<size_t> class PropertyDatabase;
-template<size_t> class VSet;
-template<size_t> class NodeManifoldManager;
-template<size_t,template<size_t> class> class ModelSubDomain;
+template<uint32_t> struct IndexToPointerMapping;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class VSet;
+template<uint32_t> class NodeManifoldManager;
+template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
 /**
 @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
@@ -34,7 +34,7 @@ Region or Boundary objects merely contain pointers to these.
 
 TODO: which kind of mesh error diagnostics should the MeshManager implement? - should these be in a separate compilation unit?
 */
-template<size_t dim>
+template<uint32_t dim>
 class MeshManager {
 public:
   MeshManager();
@@ -124,7 +124,7 @@ public:
   // ==============================================================
   
   /// for all outside-facing CELL neighbor perimeter face pointers that are not nullptr,/ set  neighbors of the corresponding cell to null, getting subdomain ready for deletion
-  template<template<size_t> class CELL>
+  template<template<uint32_t> class CELL>
   size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
   
   /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
@@ -157,36 +157,36 @@ public:
   Face<dim>* const ReplaceElementByFace( csmp::Element<dim>* eptr,
                                          csmp::Element<dim>* inner_eptr,
                                          csmp::Element<dim>* outer_eptr,
-                                         size_t adjacent_face_of_inner_element,
-                                         size_t adjacent_face_of_outer_element,
+                                         uint32_t adjacent_face_of_inner_element,
+                                         uint32_t adjacent_face_of_outer_element,
                                          const LocalVariables& face_variables,
                                          const IntegrationPointVariables& face_integration_point_variables );
 
   /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
-  Face<dim>* const ConstructFaceFromElement( csmp::Element<dim>* eptr,
+  Face<dim>* const ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
                                              csmp::Element<dim>* inner_eptr,
                                              csmp::Element<dim>* outer_eptr,
-                                             size_t adjacent_face_of_inner_element,
-                                             size_t adjacent_face_of_outer_element,
+                                             uint32_t adjacent_face_of_inner_element,
+                                             uint32_t adjacent_face_of_outer_element,
                                              const LocalVariables& face_variables,
                                              const IntegrationPointVariables& face_integration_point_variables );
 
   /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
-  Face<dim>* const AddFace( Element<dim>* const inner_parent, size_t inner_parent_face_id,
-                            Element<dim>* const outer_parent, size_t outer_parent_face_id,
+  Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,
+                            Element<dim>* const outer_parent, uint32_t outer_parent_face_id,
                             const LocalVariables&,
                             const IntegrationPointVariables& );
 
   /// creates a lower-dimensional face with parents of adjacent higher-dimensional Face objects as parents; deduces element type
-  Face<dim>* const AddEdgeFace( Face<dim>* const adjacent_face1, size_t parent_elmt1_segm_id,
-                                Face<dim>* const adjacent_face2, size_t parent_elmt2_segm_id,
+  Face<dim>* const AddEdgeFace( Face<dim>* const adjacent_face1, uint32_t parent_elmt1_segm_id,
+                                Face<dim>* const adjacent_face2, uint32_t parent_elmt2_segm_id,
                                 const LocalVariables&,
                                 const IntegrationPointVariables&,
                                 const std::vector<Node<dim>*>& nodes );
 
   /// adds Face that caps a higher-dimensional Element at the model boundary
   Face<dim>* const AddBoundaryFace( csmp::Element<dim>* const innerParent,
-                                    size_t local_face_id,
+                                    uint32_t local_face_id,
                                     const LocalVariables&,
                                     const IntegrationPointVariables& ); ///< optional
 
@@ -196,8 +196,8 @@ public:
                                                 const IntegrationPointVariables& );
  
   /// For connecting node-matched mesh patches, creating / updating their node manifolds
-  InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, size_t inner_element_face_id,
-                                      Element<dim>* const outer_parent, size_t outer_element_face_id,
+  InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
+                                      Element<dim>* const outer_parent, uint32_t outer_element_face_id,
                                       const LocalVariables& interface_variables,
                                       const IntegrationPointVariables& interface_integration_point_variables );
 
@@ -212,21 +212,21 @@ public:
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds
-  template<template<size_t> class CELL>
-  void BuildConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                          typename std::vector<CELL<dim>*>::iterator last );
+  template<template<uint32_t> class CELL>
+  void BuildConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                          typename std::vector<CELL<dim>*>::const_iterator last );
 
-  template<template<size_t> class CELL>
-  void BuildVolumeConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                                typename std::vector<CELL<dim>*>::iterator last );
+  template<template<uint32_t> class CELL>
+  void BuildVolumeConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                                typename std::vector<CELL<dim>*>::const_iterator last );
                                        
-  template<template<size_t> class CELL>
-  void BuildSurfaceConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                                 typename std::vector<CELL<dim>*>::iterator last );
+  template<template<uint32_t> class CELL>
+  void BuildSurfaceConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                                 typename std::vector<CELL<dim>*>::const_iterator last );
                                         
-  template<template<size_t> class CELL>
-  void BuildLineConnectivity( typename std::vector<CELL<dim>*>::iterator first,
-                              typename std::vector<CELL<dim>*>::iterator last );
+  template<template<uint32_t> class CELL>
+  void BuildLineConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
+                              typename std::vector<CELL<dim>*>::const_iterator last );
 
   /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
   void RebuildNodeParentElementRelationships();

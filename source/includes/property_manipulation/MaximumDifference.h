@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class MaximumDifference : public Interrelation<dim> {
     Operand<dim>&   Var1; /// < total fluid pressure
     Operand<dim>&   Var2; /// < conductivity multiplier
@@ -22,7 +22,7 @@ class MaximumDifference : public Interrelation<dim> {
 };
 
 /// compare distributed variable values: calculates maximum difference between distributed variable values of the same type and placement; difference can be normalised
-template<size_t dim>
+template<uint32_t dim>
 double maximumDifference( const Model<dim>&,
                             const char* new_property, const char* old_property,
                             bool normalise );

@@ -201,7 +201,7 @@ void Region_Example::Run()
    cout <<"\n\n\nmain: FormRegionFrom()  forming a new region that contains the elements 10 to 100."<< endl;
    vector<size_t>  element_ids( 100U );
    size_t          ecount(10U);
-   for ( size_t i=0U; i<element_ids.size(); i++ ) element_ids[i] = ecount++;
+   for ( auto i{0}; i<element_ids.size(); i++ ) element_ids[i] = ecount++;
    // test 10: O.K.
    model.FormRegionFrom( "elements10to100", element_ids );
    //    ^^^^^^^^^^^^^^

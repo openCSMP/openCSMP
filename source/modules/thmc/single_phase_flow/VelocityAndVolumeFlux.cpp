@@ -29,8 +29,8 @@ variable database and errors are reported if they don't or if they
 have the wrong placement or type.  
  
 tested:  */
-template<size_t dim,class SIMPLEX>
-VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg,
+template<uint32_t dim,class CELL>
+VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
                                                             const char* oper,   // conductivity
                                                             const char* basic,  // porosity
                                                             const char* test,   // fluid pressure 
@@ -120,7 +120,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
    
    if ( WithLowerDimensionalElements(sg) ) {
-        csmp_error.notice( WARNING, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+        csmp_error.notice( WARNING, "VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux:",
                           "your model contains lower dimensional elements, have you taken care of a thickness attribute?" );
      }
     
@@ -134,8 +134,8 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux(  const Model<dim>& sg
     
     @param relative_density 'relative density' is the fluid density - a reference density, for instance 1000 kg/m3
 */
-template<size_t dim,class SIMPLEX>
-VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
+template<uint32_t dim,class CELL>
+VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                                                           const char* oper,   // conductivity
                                                           const char* basic,  // porosity
                                                           const char* test,   // fluid pressure 
@@ -230,7 +230,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
       }
    
    if ( WithLowerDimensionalElements(sg) )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux:",
                 "post-processing of gravity-influenced flows in the lower-dimensional elements will not work with this visitor." );
    
  } // end constructor
@@ -239,21 +239,20 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 
 
-template<size_t dim,class SIMPLEX>
-VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
-                                                    const char* oper,   // conductivity
-                                                    const char* basic,  // porosity
-                                                    const char* test,   // fluid pressure 
-                                                    const char* relative_density, // relative fluid density
-                                                    const char* prop_multiplier, // operand multiplier
-                                                    bool  node_averaging,
-													const char* velocity,
-													const char* pore_velocity,
-													const char* volume_flux,
-													const char* nodal_velocity,
-													const char* nodal_pore_velocity,
-													const char* nodal_volume_flux)
-
+template<uint32_t dim,class CELL>
+VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
+                                                        const char* oper,   // conductivity
+                                                        const char* basic,  // porosity
+                                                        const char* test,   // fluid pressure
+                                                        const char* relative_density, // relative fluid density
+                                                        const char* prop_multiplier, // operand multiplier
+                                                        bool  node_averaging,
+                                                        const char* velocity,
+                                                        const char* pore_velocity,
+                                                        const char* volume_flux,
+                                                        const char* nodal_velocity,
+                                                        const char* nodal_pore_velocity,
+                                                        const char* nodal_volume_flux)
   : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
     PF_(3),
     VELOFLUX_(dim+1),
@@ -344,7 +343,7 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
       }                                  
 
    if ( WithLowerDimensionalElements(sg) )
-     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux:",
+     throw csmp::Exception( ERROR, "VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux:",
                 "post-processing of gravity-influenced flows in the lower-dimensional elements will not work with this visitor." );
    
  } // end constructor
@@ -354,8 +353,8 @@ VelocityAndVolumeFlux<dim,SIMPLEX>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 /** Switch to verbose mode (results are reported to stdout).
 */
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
 
 
 /**
@@ -369,11 +368,11 @@ in the same range as the Darcy velocity.
 
 If the range constraint is violated, a message is printed to 'cout'.
 */
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
   {
      // velocity, interstitial velocity
-     for ( size_t i=0; i<dim; i++ )
+     for ( auto i=0; i<dim; i++ )
        {
           if ( velo_[i] < minmaxV_.first || velo_[i] > minmaxV_.second )
             throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
@@ -394,8 +393,8 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
 /**
     If there are elements from more than one spatial dimension in the model, we have a problem.
 */
-template<size_t dim,class SIMPLEX>
-bool VelocityAndVolumeFlux<dim,SIMPLEX>::WithLowerDimensionalElements( const Model<dim>& m ) const
+template<uint32_t dim,class CELL>
+bool VelocityAndVolumeFlux<dim,CELL>::WithLowerDimensionalElements( const Model<dim>& m ) const
  {
     std::pair<int32_t,int32_t>  dimensionality = m.Region("Model").ElementSpatialDimensions();
     if ( dimensionality.first > 1 ) return true;
@@ -407,8 +406,8 @@ bool VelocityAndVolumeFlux<dim,SIMPLEX>::WithLowerDimensionalElements( const Mod
 
 
 
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
     
@@ -451,7 +450,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
       }
     else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) 
       {
-         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
+         for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) {
 	          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
 	               MathOperatorLHS<dim>::MTRL[i].AssignToDiagonal( dim, 
 	               e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() ) );
@@ -475,7 +474,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       
-         for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
            {   
               MathOperatorLHS<dim>::MTRL[i].Resize(dim,dim);
               MathOperatorLHS<dim>::MTRL[i].Zero();
@@ -500,11 +499,9 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 A reference to the Element for which the post-processing is done.  
 */
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
 {
-   typename list<vector<double> >::const_iterator  lit;
-
    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
         if ( verbose_ )
           cout <<"\n\nVelocityAndVolumeFlux::ComputeContribution: Element: "<< e.Idx() << endl; 
@@ -517,11 +514,12 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
               // interpolation function derivatives at the nodes
               e.dN_AtBaryCenter( DERIV_ );
               velo_ = 0.;
-              for ( size_t i=0; i<e.Nodes(); i++ )
-                for ( size_t j=0; j<dim; j++ )
+              for ( auto i=0; i<e.Nodes(); i++ )
+                for ( auto j=0; j<dim; j++ )
                   velo_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim>::MTRL[0](j,j);
               
-              if ( with_gravity_ ) velo_(VERTICAL_AXIS_) -= ac_gravity_ * rhor_() * MathOperatorLHS<dim>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_);
+              if ( with_gravity_ )
+                velo_(VERTICAL_AXIS_) -= ac_gravity_ * rhor_() * MathOperatorLHS<dim>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_);
 
               // interstitial velocity    
               ivelo_  = velo_;
@@ -544,14 +542,13 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
         // -------------------------------------------------------------------------
         else 
           {
-             DERIV_.Resize(dim,e.Nodes());
+             DERIV_.Resize(dim,static_cast<uint32_t>(e.Nodes()));
              IPVF_.resize( e.FE()->IntegrationPoints()*(dim*2+1) );
              NVF_.resize( e.Nodes()*(dim*2+1) );
              // collecting averadge data for element variables
              velo_ = ivelo_ = flux_ = 0.;
-             size_t j;
              
-             for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+             for ( auto i=0; i<e.IntegrationPoints(); i++ )
                {
                   // if density driven flow is computed, calculate rho * g * z
                   // comput density at integration points and any multiplier as well
@@ -562,14 +559,16 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                           if ( !with_multiplier_ ) mult_fac_ = 1.; // more likely case first
                           else {
                                e.N_AtIntegrationPoint( i, IPOL_ );
-                               for ( mult_fac_=0., j=0; j<e.Nodes(); j++ )
+                               mult_fac_=0.;
+                               for ( auto j=0; j<e.Nodes(); j++ )
                                  mult_fac_ += IPOL_[j] * mult_vec_[j]();
                             }
                         }                      
                       // density nodal variable  
                       else if ( rhor_key_.place == NODE ) {
                           e.N_AtIntegrationPoint( i, IPOL_ );
-                          for ( rho_fac_=mult_fac_=0.0, j=0; j<e.Nodes(); j++ ) {
+                          rho_fac_=mult_fac_=0.0;
+                          for ( auto j=0; j<e.Nodes(); j++ ) {
                               if ( with_multiplier_ ) mult_fac_ += IPOL_[j] * mult_vec_[j]();
                               else                   mult_fac_ = 1.0;
                               rho_fac_  += IPOL_[j] * rho_vec_[j]();
@@ -588,13 +587,13 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                   fill( VELOFLUX_.begin(), VELOFLUX_.end(), 0.0 );
                   
                   if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT )
-                    for ( size_t n=0; n<e.Nodes(); n++ )
-                      for ( size_t j=0; j<dim; j++ )
+                    for ( auto n=0; n<e.Nodes(); n++ )
+                      for ( auto j=0; j<dim; j++ )
                         // -DERIV because fluid flows down pressure
                         VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[0](j,j);
                   else
-                     for ( size_t n=0; n<e.Nodes(); n++ )
-                      for ( size_t j=0; j<dim; j++ )
+                     for ( auto n=0; n<e.Nodes(); n++ )
+                      for ( auto j=0; j<dim; j++ )
                         VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
             
                   if ( with_gravity_ ) VELOFLUX_[VERTICAL_AXIS_] -= ac_gravity_ *
@@ -602,7 +601,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                                                                  mult_fac_;
 
                   // interstitial velocity & volume flux
-                  for ( size_t n=0; n<dim; n++ ) {
+                  for ( auto n=0; n<dim; n++ ) {
                        IVELOFLUX_[n]   = VELOFLUX_[n]/phi_();
                        VELOFLUX_[dim] += VELOFLUX_[n]*VELOFLUX_[n];
                        // summing integration point values for later averaging
@@ -623,7 +622,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                        // inserting velocity, volume flux, and interstitial velocity  
                        // into single STL vector:
                        // velocity & volume flux
-                       for ( size_t k=0; k<dim; k++ ) { 
+                       for ( auto k=0; k<dim; k++ ) { 
                             IPVF_[ i*components_ + k ] = VELOFLUX_[k];
                             IPVF_[ i*components_ + dim + 1 + k ] = IVELOFLUX_[k];
                          }
@@ -643,14 +642,14 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
              if ( e.Interpolation() == 1 and
                   e.IntegrationPoints() == 0 )
                {
-                  for ( size_t k=0; k<dim; k++ ) 
+                  for ( auto k=0; k<dim; k++ )
                     {
                        veloflux_[k]           = velo_[k];
                        veloflux_[dim + 1 + k] = ivelo_[k];
                     }
                   veloflux_[dim] = flux_();
                     
-                  for ( size_t i=0; i<e.Nodes(); i++ )
+                  for ( auto i=0; i<e.Nodes(); i++ )
                     temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
                }
              else
@@ -660,9 +659,9 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
                   // ---------------------------------------------------
                   e.ExtrapolateIntegrationPointVariableToNodes( components_, IPVF_, NVF_ );
      
-                  for ( size_t i=0; i<e.Nodes(); i++ )
+                  for ( auto i=0; i<e.Nodes(); i++ )
                     {
-                       for ( size_t k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
+                       for ( auto k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
                        temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
                     }
                }
@@ -675,16 +674,16 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
    //    node are averaged and stored in a vector for output.
    //    -------------------------------------------
    if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 && nodal_averaging_ ) {
-        RESULT_.Resize(components_,e.Nodes());
-        for ( size_t i=0; i<e.Nodes(); i++ ) {
+        RESULT_.Resize(components_,static_cast<uint32_t>(e.Nodes()));
+        for ( auto i=0; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( size_t j=0; j<components_; j++ )
+               for ( auto j=0; j<components_; j++ )
                  {  
                     // averaging velocity/flux components
-                    for ( sum_=0.0,
-                          lit =temp_veloflux_[ e.N(i)->Idx() ].begin();
+                    sum_=0.0;
+                    for ( auto lit =temp_veloflux_[ e.N(i)->Idx() ].begin();
                           lit!=temp_veloflux_[ e.N(i)->Idx() ].end(); lit++ )
                           sum_ += (*lit)[j];
                     sum_ /= static_cast<double>(temp_veloflux_[ e.N(i)->Idx() ].size());
@@ -720,8 +719,8 @@ of the Operands.
 A reference to the property memory manager and the Element for which the
 variables are output.
 */
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
  {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 )
       {
@@ -735,7 +734,7 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 )
       {
          if ( nodal_averaging_ )
-           for ( size_t i=0; i<e.Nodes(); i++ )
+           for ( auto i=0; i<e.Nodes(); i++ )
              // doing this operation only once per node
              if ( !node_output_[ e.N(i)->Idx() ] )
                {
@@ -764,41 +763,39 @@ void VelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
 
 
 
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
-                                                         size_t        col,
-                                                         VectorVariable<dim>& vc )
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
+                                                          uint32_t        col,
+                                                          VectorVariable<dim>& vc )
  {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i,col);
+    for ( auto i=0; i<dim; i++ ) vc(i) = INP(i,col);
  }
 
 
 
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
-                                                              size_t    col, 
-                                                              ScalarVariable& sc ) 
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
+                                                            uint32_t    col,
+                                                            ScalarVariable& sc )
  {
     sc() = INP(dim,col);
  }
 
  
 
-template<size_t dim,class SIMPLEX>
-void VelocityAndVolumeFlux<dim,SIMPLEX>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
-                                                                        size_t         col, 
-                                                                        VectorVariable<dim>& vc ) 
+template<uint32_t dim,class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
+                                                                   uint32_t col,
+                                                                   VectorVariable<dim>& vc )
  {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
+    for ( auto i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
  }
  
 
 
-
-
-template class VelocityAndVolumeFlux<1U,Element<1U> >;
-template class VelocityAndVolumeFlux<2U,Element<2U> >;
-template class VelocityAndVolumeFlux<3U,Element<3U> >;
+template class VelocityAndVolumeFlux<1U>;
+template class VelocityAndVolumeFlux<2U>;
+template class VelocityAndVolumeFlux<3U>;
 
 template class VelocityAndVolumeFlux<1U,Face<1U> >;
 template class VelocityAndVolumeFlux<2U,Face<2U> >;

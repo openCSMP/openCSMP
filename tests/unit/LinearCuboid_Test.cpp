@@ -33,7 +33,7 @@ namespace csmp {
       double tXY[8][3] = { -1,-1,1, 1,-1,1,  1,-1,-1, -1,-1,-1, -1,1,1, 1,1,1, 1,1,-1, -1,1,-1 };
 
       // Set Node coordinates
-      for (size_t i = 0; i < 8; ++i) {
+      for (auto i = 0; i < 8; ++i) {
            element_.N(i)->x(tXY[i][0]);
            element_.N(i)->y(tXY[i][1]);
            element_.N(i)->z(tXY[i][2]);
@@ -94,7 +94,7 @@ namespace csmp {
 void LinearCuboid_Test::TestInterpolationFunctionValues(const Element<3U>& e)
 	{
 		vector<double> IPOL(element_.Nodes()), xyz(3U);
-		for (size_t i = 0; i < e.Nodes(); i++) {
+		for (auto i = 0; i < e.Nodes(); i++) {
 			Point<3U> pt = e.N(i)->Coordinate();
 			xyz = pt.Coordinates();
 			e.N_AtGlobalPoint(IPOL, xyz);
@@ -114,7 +114,7 @@ void LinearCuboid_Test::TestSumShapesAtBaryCenter(const Element<3U>& e)
 		std::vector<double> M;
 		element_.N_AtBaryCenter(M);
 		double sum = 0.;
-		for (size_t i = 0; i < M.size(); ++i) sum += M[i];
+		for (auto i = 0; i < M.size(); ++i) sum += M[i];
 		_equal(sum, 1., tolerance_factor_);
 	}
 

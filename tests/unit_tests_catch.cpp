@@ -72,7 +72,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 
-#include "BinaryFileInterface_Test.h"
+// #include "BinaryFileInterface_Test.h" // alt: not in repository
 #include "VTU_Interface_Test.h"
 #include "FEM_Data_Test.h"
 #include "VData_Test.h"
@@ -150,7 +150,7 @@ TEST_CASE("Interfaces / containers tests", "[Interfaces]") {
 	TEST_SECTION(PropertyData)
   TEST_SECTION(VSet)
   TEST_SECTION(ColorPalette)
-	TEST_SECTION_V(MeshManager,true)
+	TEST_SECTION(MeshManager)
 }
 
 TEST_CASE("Finite elements and math operators", "[FiniteElements]"){
@@ -179,7 +179,7 @@ TEST_CASE("Model-related interdependent functionality", "[ModelFunctionality]") 
 	TEST_SECTION(InputDataManager)
 	TEST_SECTION(ANSYS_Model3D)
 	TEST_SECTION(PropertyHandle)
-	TEST_SECTION(BinaryFileInterface)
+	//TEST_SECTION(BinaryFileInterface)
 	TEST_SECTION(VTU_Interface)
 	TEST_SECTION(StatisticalAnalyzer)	
   TEST_SECTION(Boundary)

@@ -43,7 +43,7 @@ void ExampleSuite::Free()
 /// add example to suite (use heap)
 size_t ExampleSuite::RegisterExample( Example *example )
 {
-  // initialize example - sets database entries( Author, Category, Desrciption...)
+  // initialize example - sets database entries( Author, Category, Description...)
   example->Initialize();
   // get pointer to example category entry in map. If not contained yet, create one.
   // either way, an iterator to the respective map entry is established
@@ -153,14 +153,14 @@ void ExampleSuite::UICategoryMenu() const
 /// sorts examples in vector<Example*> depending on difficulty
 void ExampleSuite::SortExampleVector( vector<Example*>& examples )
 {
-  // finding all occuring diffiulties and establish an example vector for each
-  vector<size_t> difficulties;
+  // finding all occuring difficulties and establish an example vector for each
+  vector<uint32_t> difficulties;
   vector<vector<Example*>* > sortedExamples;
   bool newDifficulty;
   for( vector<Example*>::const_iterator it = examples.begin(); it != examples.end(); ++it )
   {
     newDifficulty = true;
-    for( vector<size_t>::iterator iit = difficulties.begin(); iit != difficulties.end(); ++iit )
+    for( vector<uint32_t>::iterator iit = difficulties.begin(); iit != difficulties.end(); ++iit )
       if( (*it)->GetDifficulty() == (*iit) )
         newDifficulty = false;
     if( newDifficulty )
@@ -169,7 +169,7 @@ void ExampleSuite::SortExampleVector( vector<Example*>& examples )
       sortedExamples.push_back( new vector<Example*>() );
     }
   }
-  // putting examples in their respectiv difficulty vector
+  // putting examples in their respective difficulty vector
   size_t index( 0 );
   for( vector<Example*>::const_iterator it = examples.begin(); it != examples.end(); ++it )
   {
@@ -201,7 +201,7 @@ void ExampleSuite::ExampleDetails( Example* example ) const
 void ExampleSuite::OstreamUnderlined( string text ) const
 {
   *ostream_ << endl << text << endl;
-  for( size_t i = 1; i <= text.length(); ++i )
+  for( auto i = 1; i <= text.length(); ++i )
     *ostream_ << "-";
   *ostream_ << endl;
 }
@@ -209,10 +209,10 @@ void ExampleSuite::OstreamUnderlined( string text ) const
 void ExampleSuite::OstreamDoubleUnderlined( string text ) const
 {
   *ostream_ << endl;
-  for( size_t i = 1; i <= text.length(); ++i )
+  for( auto i = 1; i <= text.length(); ++i )
     *ostream_ << "=";
   *ostream_ << endl << text << endl;
-  for( size_t i = 1; i <= text.length(); ++i )
+  for( auto i = 1; i <= text.length(); ++i )
     *ostream_ << "=";
   *ostream_ << endl;
 }

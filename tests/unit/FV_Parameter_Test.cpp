@@ -37,7 +37,7 @@ void FV_Parameter_Test::FV_ParameterCtor()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     
     FV_Parameter fv_parameter1;
     FV_Parameter fv_parameter2( sectors, facets, dim, true );
@@ -55,7 +55,7 @@ void FV_Parameter_Test::FV_ParameterCopyCtor()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double sec_vol0(10.5);
     double sec_vol1(2.7);
     double fct_area0(0.8);
@@ -128,7 +128,7 @@ void FV_Parameter_Test::FV_ParameterEqual()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double sec_vol0(10.5);
     double sec_vol1(2.7);
     double fct_area0(0.8);
@@ -202,7 +202,7 @@ void FV_Parameter_Test::FV_ParameterInitialize()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double fct_area0(0.8);
     double fct_area1(2.8);
     double fct_area2(5.8);
@@ -235,10 +235,10 @@ void FV_Parameter_Test::FV_ParameterResize()
 {
     size_t sectors1(2U);
     size_t facets1(4U);
-    size_t dim1(2U);
+    uint32_t dim1(2U);
     size_t sectors2(4U);
     size_t facets2(8U);
-    size_t dim2(3U);
+    uint32_t dim2(3U);
     
     FV_Parameter fv_parameter1( sectors1, facets1, dim1 );
     fv_parameter1.Resize( sectors2, facets2, dim2, true );
@@ -258,7 +258,7 @@ void FV_Parameter_Test::FV_ParameterSectorVolume()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double sec_vol0(10.5);
     double sec_vol1(2.7);
 
@@ -277,7 +277,7 @@ void FV_Parameter_Test::FV_ParameterFacetArea()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double fct_area0(0.8);
     double fct_area1(2.8);
     double fct_area2(5.8);
@@ -302,7 +302,7 @@ void FV_Parameter_Test::FV_ParameterFacetNormal()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
 
     std::vector<double> fct_normal0(dim);
     std::vector<double> fct_normal1(dim);
@@ -341,7 +341,7 @@ void FV_Parameter_Test::FV_ParameterFacetNormalVelocity()
 {
     size_t sectors(2U);
     size_t facets(4U);
-    size_t dim(2U);
+    uint32_t dim(2U);
     double fct_nvel0(-1.2);
     double fct_nvel1(3.2);
     double fct_nvel2(4.);

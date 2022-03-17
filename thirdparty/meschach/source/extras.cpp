@@ -402,7 +402,6 @@ void	Mupdate(int m,int n,double alpha,Real *x,Real *y,Real **A,int j0)
 void	Mmm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    int	i, j, k;
     /* Real	tmp, sum; */
 
     /****************************************
@@ -410,7 +409,7 @@ void	Mmm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real
 	for ( k = 0; k < p; k++ )
 	    Maxpy(n,alpha*A[i][Aj0+k],&(B[k][Bj0]),&(C[i][Cj0]));
     ****************************************/
-    for ( i = 0; i < m; i++ )
+    for ( auto i = 0; i < m; i++ )
 	Mvm(p,n,alpha,B,Bj0,&(A[i][Aj0]),1.0,&(C[i][Cj0]));
 }
 
@@ -418,14 +417,12 @@ void	Mmm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real
 void	Mmtrm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    int	i, j, k;
-
     /****************************************
     for ( i = 0; i < m; i++ )
 	for ( k = 0; k < p; k++ )
 	    Maxpy(n,alpha*A[k][Aj0+i],&(B[k][Bj0]),&(C[i][Cj0]));
     ****************************************/
-    for ( k = 0; k < p; k++ )
+    for ( auto k = 0; k < p; k++ )
 	Mupdate(m,n,alpha,&(A[k][Aj0]),&(B[k][Bj0]),C,Cj0);
 }
 
@@ -433,14 +430,12 @@ void	Mmtrm(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Re
 void	Mmmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    int	i, j, k;
-
     /****************************************
     for ( i = 0; i < m; i++ )
 	for ( j = 0; j < n; j++ )
 	    C[i][Cj0+j] += alpha*Mdot(p,&(A[i][Aj0]),&(B[j][Bj0]));
     ****************************************/
-    for ( i = 0; i < m; i++ ) std::cout <<".";
+    for ( auto i = 0; i < m; i++ ) std::cout <<".";
 /* WRONG	Mmv(n,p,alpha,&(A[i][Aj0]),B,Bj0,&(C[i][Cj0])); */
 }
 
@@ -448,11 +443,9 @@ void	Mmmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Re
 void	Mmtrmtr(int m,int n,int p,double alpha,Real **A, int Aj0,Real **B, int Bj0,Real **C,int Cj0)
 /* C is m x n */
 {
-    int	i, j, k;
-
-    for ( i = 0; i < m; i++ )
-	for ( j = 0; j < n; j++ )
-	    for ( k = 0; k < p; k++ )
-		C[i][Cj0+j] += A[i][Aj0+k]*B[k][Bj0+j];
+    for ( auto i = 0; i < m; i++ )
+	    for ( auto j = 0; j < n; j++ )
+	      for ( auto k = 0; k < p; k++ )
+		      C[i][Cj0+j] += A[i][Aj0+k]*B[k][Bj0+j];
 }
 

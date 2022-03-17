@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2O_Conductivity<dim>::IAPWS_H2O_Conductivity( const PropertyDatabase<dim>& pref ) 
       : Interrelation<dim>(pref),
         k( Interrelation<dim>::GlobalProperty("permeability") ),
@@ -17,7 +17,7 @@ IAPWS_H2O_Conductivity<dim>::IAPWS_H2O_Conductivity( const PropertyDatabase<dim>
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2O_Conductivity<dim>::Calculate()
  {
     k.AssignTo( perm );

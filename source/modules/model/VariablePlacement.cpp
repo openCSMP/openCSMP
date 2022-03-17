@@ -3,11 +3,12 @@
 #include "Node.h"
 #include "Exception.h"
 
+using namespace std;
 
 namespace csmp {
 
   template<>
-  void calculateN<1u>(const Element<1u>& e, const Point<1u>& p, double* coeff)
+  void calculateN<1u>(const Element<1u>& e, const Point<1u>& p, vector<double>& coeff )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -23,7 +24,7 @@ namespace csmp {
   }
 
   template<>
-  void calculateN<2u>(const Element<2u>& e, const Point<2u>& p, double* coeff)
+  void calculateN<2u>(const Element<2u>& e, const Point<2u>& p, vector<double>& coeff )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -43,7 +44,7 @@ namespace csmp {
   }
 
   template<>
-  void calculateN<3u>(const Element<3u>& e, const Point<3u>& p, double* coeff)
+  void calculateN<3u>(const Element<3u>& e, const Point<3u>& p, vector<double>& coeff )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -66,14 +67,15 @@ namespace csmp {
     }
   }
 
+/*
   template<>
   void
-  calculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double>* DN)
+  calculateDN(const Element<1u>& e, const Point<1u>& p, std::vector<double>* DN )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
       case LINE:
-        fe->dNr(p[0], DN[0]);
+        fe->dNr(p[0], DN[0] );
         fe->Jacobian( DN[0] );
         break;
 
@@ -87,12 +89,12 @@ namespace csmp {
 
   template<>
   void
-  calculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double>* DN)
+  calculateDN(const Element<2u>& e, const Point<2u>& p, std::vector<double>* DN )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
       case LINE:
-        fe->dNr(p[0], DN[0]);
+        fe->dNr(p[0], DN[0] );
         fe->Jacobian( DN[0] );
         break;
 
@@ -112,7 +114,7 @@ namespace csmp {
 
   template<>
   void
-  calculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double>* DN)
+  calculateDN(const Element<3u>& e, const Point<3u>& p, std::vector<double>& DN )
   {
     auto fe = e.FE();
     switch (e.FV()->Geometry()) {
@@ -137,18 +139,19 @@ namespace csmp {
                           "Element dimension must be 1, 2, or 3");
     }
   }
+*/
 
-  template<size_t dim>
+  template<uint32_t dim>
   Point<dim>
-  directedAreaOfFacet(const Element<dim>& e, size_t iFacet)
+  directedAreaOfFacet(const Element<dim>& e, uint32_t iFacet)
   {
     auto fv = e.FV();
     switch (fv->Geometry()) {
       case LINE:
       {
         Point<dim> normal;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0U; iNode < iNrNodes; ++iNode) {
           const Point<dim> n(e.N(iNode)->Coordinate());
           auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           normal += weights.first * n;
@@ -162,8 +165,8 @@ namespace csmp {
       {
         Point<dim> tangent;
         Point<dim> bitangent;
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0U; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0U; iNode < iNrNodes; ++iNode) {
           const Point<dim> n(e.N(iNode)->Coordinate());
           auto weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           tangent += weights.first * n;
@@ -180,8 +183,8 @@ namespace csmp {
       {
         Point<dim> v0(0.0);
         Point<dim> v1(0.0);
-        const size_t iNrNodes(e.Nodes());
-        for (size_t iNode = 0; iNode < iNrNodes; ++iNode) {
+        const auto iNrNodes(e.Nodes());
+        for (auto iNode = 0; iNode < iNrNodes; ++iNode) {
           auto xform_weights = fv->FacetNormalTransformationNodeWeights(iFacet, iNode);
           const Point<dim> n(e.N(iNode)->Coordinate());
           v0 += xform_weights.first * n;
@@ -197,8 +200,8 @@ namespace csmp {
     }
   }
 
-  template Point<1u> directedAreaOfFacet(const Element<1u>& e, size_t iFacet);
-  template Point<2u> directedAreaOfFacet(const Element<2u>& e, size_t iFacet);
-  template Point<3u> directedAreaOfFacet(const Element<3u>& e, size_t iFacet);
+  template Point<1u> directedAreaOfFacet(const Element<1u>&, uint32_t );
+  template Point<2u> directedAreaOfFacet(const Element<2u>&, uint32_t );
+  template Point<3u> directedAreaOfFacet(const Element<3u>&, uint32_t );
 
 }

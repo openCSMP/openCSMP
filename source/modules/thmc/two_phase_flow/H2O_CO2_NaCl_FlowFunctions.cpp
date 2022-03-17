@@ -20,14 +20,14 @@ namespace csmp {
     Returns true if both fluid phases co-exist and halite is absent.
     Else, returns false.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::ContinuousPhases( Element<dim>* const e, bool& aqueous, bool& carbonic, bool& halite ) const
  {
     assert( e != nullptr );
     const size_t nodes(e->Nodes());
     aqueous = carbonic = halite = true;
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          if ( isnan(s) && s <= numeric_limits<double>::epsilon()*2 ) aqueous = false;
          s = e->N(i)->Read( User()->key_sCO2 );
@@ -45,7 +45,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::ContinuousPhases( Element<dim>* const
  
  
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhaseSaturation( const Element<dim>* const e ) const
  {
     assert( e != nullptr );
@@ -70,7 +70,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhaseSaturation( 
  
     @return returns sum of sw + snw, which should be 1 - halite_saturation
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double  H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSaturations( Element<dim>* const e, double& sw, double& sn ) const
  {
     assert( e != nullptr );
@@ -79,7 +79,7 @@ double  H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSaturations( Element<di
    
     sw = sn = 0.;
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw += e->FE()->NRST[i] * s;
          s = e->N(i)->Read( User()->key_sCO2 );
@@ -104,7 +104,7 @@ double  H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSaturations( Element<di
     looking at the saturations offers more information ?
 
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhase( Element<dim>* const e, double& sw, double& rhow, double& muw ) const
  {
     assert( e != nullptr );
@@ -114,7 +114,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhase( Element<dim>
    
     sw = rhow = muw = 0.;
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
@@ -141,7 +141,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhase( Element<dim>
      @return true if method was able to interpolate a density and false if it was not.
 
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim>* const e,
                                                                      double& snw, double& rhon, double& mun ) const
  {
@@ -152,7 +152,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim
    
     snw = rhon = mun = 0.;
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
         // carbonic phase
         double sn = e->N(i)->Read( User()->key_sCO2 );
         snw  += e->FE()->NRST[i] * sn;
@@ -176,7 +176,7 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* const e,
                                                                   double& sw, double& rhow, double& muw,
                                                                   double& snw, double& rhon, double& mun ) const
@@ -189,7 +189,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* co
 
     sw = rhow = muw = snw = rhon = mun = 0.;
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( auto i=0; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
@@ -238,7 +238,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* co
     Saturation is always expected to have a value between 0..1.
 */
 // SKM OK
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
   {
      assert( e != nullptr );
@@ -249,7 +249,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Sw( Element<dim>* const e ) const
 
 
 // SKM OK
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Snw( Element<dim>* const e ) const
   {
      assert( e != nullptr );
@@ -263,8 +263,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Snw( Element<dim>* const e ) const
       Mobility of phase i, lambda_i = rho_i * kri(sw) / mu_i.
  
  */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const e, uint32_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -296,8 +296,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const e, si
  
     Using prescribed sw value, instead of value intepolated to element barycentre.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, size_t phase, double sw ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e, uint32_t phase, double sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -325,8 +325,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility_at( Element<dim>* const e,
 /**
     Mobility saturation derivative for phase i.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -349,8 +349,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* c
 /**
     Mobility saturation derivative for aqueous (i=0) or carbonic (i=1) phase.
  */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, size_t phase, double sw ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>* const e, uint32_t phase, double sw ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -374,7 +374,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative_at( Element<dim>
 /**
     Sum of mass mobilities (not multiplied with permeability).
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -403,7 +403,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility(Element<dim>* const e
     Sum of mobilities (not multiplied with permeability).
     Using prescribed sw value, instead of intepolated value.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility_at( Element<dim>* const e, double sw ) const
  {
     assert( e != nullptr );
@@ -435,7 +435,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility_at( Element<dim>* con
     Computes G = lamdba_w * lambda_n / (lambda_w + lambda_n), cf., van Duijn
     and de Neef (1998). Note that Initialize() must be called first.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const e ) const
  {
     assert( e != nullptr );
@@ -450,7 +450,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* cons
 /**
    Mobility product evaluated at the users supplied water saturation.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct_at( Element<dim>* const e, double sw ) const
  {
     assert( e != nullptr );
@@ -469,7 +469,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct_at( Element<dim>* c
  
     rhow*rhon*((diff(lw(sw), sw))*ln(sw)^2*rhon*sw+lw(sw)^2*rhow)/((rhow*lw(sw)+rhon*ln(sw))^2*sw);
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>* const e, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
@@ -505,7 +505,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<
   /**
       Saturation derivative of mobility product.
    */
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative_at( Element<dim>* const e, double sw ) const
   {
     assert( e != nullptr );
@@ -541,8 +541,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<
     (phase=1) phases using the relative k's. and viscosities. Note that
     Initialize() must be called first.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -564,8 +564,8 @@ Computes the fractional flow of the wetting (phase=0) and non-wetting
 (phase=1) phases using the prescribed water saturation value, in stead of the intepolated value.
 
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t phase, double sw ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( Element<dim>* const e, uint32_t phase, double sw ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -601,8 +601,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f_at( Element<dim>* const e, size_t
  
     @todo TODO: test whether this produces plausible results
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -641,8 +641,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t
  
     @todo check whether code for end-member cases has to be reinstated.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, size_t phase, double sw ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, uint32_t phase, double sw ) const
  {
     assert( e != nullptr );
     assert( sw >= 0. and sw <= 1. );
@@ -683,7 +683,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at( Element<dim>* const e, siz
      function at the current saturation of the wetting phase (see Helmig, 1997,
      p. 108, eqn. 3.74, term 2 (first part).
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const e ) const
 {
    assert( e != nullptr );
@@ -703,7 +703,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* 
  
      @param dip_vc the resulting gravity term is returned into the supplied vector.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( Element<dim>* const eptr,
                                                         VectorVariable<dim>& dip_vc ) const
  {
@@ -740,9 +740,9 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm( Element<dim>* const eptr
  
      @param dip_vc the resulting gravity term is returned into the supplied vector.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_phase( Element<dim>* const e,
-                                                                    VectorVariable<dim>& dip_vc, size_t phase ) const
+                                                                    VectorVariable<dim>& dip_vc, uint32_t phase ) const
  {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -772,7 +772,7 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_phase( Element<dim>
 /**
      Gravity term multiplied with lambda_overbar for the mass-based transport scheme.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( Element<dim>* const e,
                                                                 VectorVariable<dim>& dip_vc ) const
  {
@@ -792,7 +792,7 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_G( Element<dim>* co
  lamda_ div k g (rhw-rhn) must be dealt with separately, see Helmig, 1997,
  p. 108, eqn. 3.74, term 2 (second part).
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( Element<dim>* const e,
                                                                    VectorVariable<dim>& dip_vc ) const
  {
@@ -820,8 +820,8 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityMultiplier_dGds( Element<dim>*
      @discussion Diffusion caclulations make sense only for a higher order accurate transport scheme
      because the first-order scheme already is more diffusive than is physically realistic.
  */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* const e, uint32_t phase ) const
  {
     assert( e != nullptr );
    
@@ -859,7 +859,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::DiffusionMultiplier( Element<dim>* 
  
     @note lambda overbar contains the fluid densities and viscosities.
  */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const e ) const
 {
    assert( e != nullptr );
@@ -879,7 +879,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Eleme
 /**
     Same as CapillaryDiffusionMultiplier(), but for a user-specified aqueous phase saturation.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_at( Element<dim>* const e, double sw ) const
 {
    assert( e != nullptr );
@@ -897,7 +897,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_at( El
 
 
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Dpcds_at( Element<dim>* const e, double sw ) const
 {
    assert( e != nullptr );
@@ -907,8 +907,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Dpcds_at( Element<dim>* const e, do
  
 // TODO: create versions for tensor permeability
 /*
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase( Element<dim>* const e, uint32_t phase ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -927,8 +927,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier_Phase(
   // =============================================================================================================
   
     /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const eptr, size_t phase, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const eptr, uint32_t phase, uint32_t n ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -963,8 +963,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::Mobility( Element<dim>* const eptr,
     @discussion as currently implemented, the mobility derivative is zero outside of the range where both phases
     are mobile. Is this what we want?
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const eptr, size_t phase, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* const eptr, uint32_t phase, uint32_t n ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -999,8 +999,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityDerivative( Element<dim>* c
  
  
     /// lambda_t: sum of phase-mobility * density products
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility( Element<dim>* const eptr, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility( Element<dim>* const eptr, uint32_t n ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -1022,8 +1022,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TotalMobility( Element<dim>* const 
  
   
     /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const eptr, size_t node ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* const eptr, uint32_t node ) const
  {
     assert( eptr != nullptr );
     assert( node < eptr->Nodes() );
@@ -1039,8 +1039,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProduct( Element<dim>* cons
  
 
     /// d lambda overbar / dsw also known as dGds
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>* const e, size_t n, bool evaluate_numerically ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<dim>* const e, uint32_t n, bool evaluate_numerically ) const
  {
     assert( e != nullptr );
     assert( n < e->Nodes() );
@@ -1075,8 +1075,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MobilityProductDerivative( Element<
  
 
      /// fractional mass flow; 0=water, 1=non-wetting phase
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const eptr, size_t phase, size_t node ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const eptr, uint32_t phase, uint32_t node ) const
  {
     assert( eptr != nullptr );
     assert( node < eptr->Nodes() );
@@ -1103,8 +1103,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::f( Element<dim>* const eptr, size_t
     @attention In the absence of gravitational forces dfds is positive for the derivative w.r.t. the fractional flow of the aqueous phase
     and negative with regard to the fractional flow of the carbonic phase.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t phase, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, uint32_t phase, uint32_t n ) const
  {
     assert( e != nullptr );
     assert( n < e->Nodes() );
@@ -1145,8 +1145,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds( Element<dim>* const e, size_t
  
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const eptr, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* const eptr, uint32_t n ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -1162,8 +1162,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::AdvectionMultiplier( Element<dim>* 
     Computes kV * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
     The value of the vertical permeability is used only if k is a tensor property.
 */
-template<size_t dim, template<size_t> class USER>
-void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm(Element<dim>* const eptr, size_t n, VectorVariable<dim>& dip_vc ) const
+template<uint32_t dim, template<uint32_t> class USER>
+void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm(Element<dim>* const eptr, uint32_t n, VectorVariable<dim>& dip_vc ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -1204,8 +1204,8 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::GravityTerm(Element<dim>* const eptr,
     Saturation dependent mass diffusion coefficient for capillary spreading as a non-linear diffusion
     process. The nonlinearity stems from the saturation dependent dpc/ds.
 */
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const eptr, size_t n ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Element<dim>* const eptr, uint32_t n ) const
  {
     assert( eptr != nullptr );
     assert( n < eptr->Nodes() );
@@ -1224,8 +1224,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Eleme
   
   // TODO: debug all the following functions
   
-  template<size_t dim, template<size_t> class USER>
-  double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_Numerical( Element<dim>* const e, size_t phase, double h ) const
+  template<uint32_t dim, template<uint32_t> class USER>
+  double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_Numerical( Element<dim>* const e, uint32_t phase, double h ) const
   {
     assert( e != nullptr );
     assert( phase == 0U or phase == 1U );
@@ -1257,7 +1257,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::CapillaryDiffusionMultiplier( Eleme
    
    @todo check whether code for end-member cases has to be reinstated.
    */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at_Numerical( Element<dim>* const e, double sw, double h) const
   {
     assert( e != nullptr );
@@ -1275,7 +1275,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dfds_at_Numerical( Element<dim>* co
   
   
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dGds_Numerical( Element<dim>* const e, double h ) const
   {
     assert( e != nullptr );
@@ -1299,7 +1299,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dGds_Numerical( Element<dim>* const
 
 
 /// derivative of wetting phase mobility
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlwds_Numerical( Element<dim>* const e, double h ) const
  {
     assert( e != nullptr );
@@ -1314,7 +1314,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlwds_Numerical( Element<dim>* cons
 
 
 /// derivative of non-wetting phase mobility
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlnds_Numerical( Element<dim>* const e, double h ) const
  {
     assert( e != nullptr );
@@ -1335,7 +1335,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::dlnds_Numerical( Element<dim>* cons
   This can be more accurate by puting in the loop of more and more finer maxima serach algorithm.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InflectionPointSaturation( Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -1394,7 +1394,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InflectionPointSaturation( Element<
 
  */
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentPointSaturation( Element<dim>* const e ) const
   {
     assert( e != nullptr );
@@ -1420,7 +1420,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentPointSaturation( Element<dim
  The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book.
   
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( Element<dim>* const e, double S ) const
   {
      assert( e != nullptr );
@@ -1441,7 +1441,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::TangentOfFractionalFlowFunction( El
  Using the the SecantMethod to find the root of The Buckley- Leverett function See Eq. 1.86 in page 44 from Guinot book.
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::FindRootSecantMethod( Element<dim>* const e, double S1, double S2 ) const
   {
     assert( e != nullptr );
@@ -1472,8 +1472,8 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::FindRootSecantMethod( Element<dim>*
  @attension: Generally "MaxFractionalqFlowDerivative" is not speed. It is after Buckley-Leverett problem
  */
 
-template<size_t dim, template<size_t> class USER>
-double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MaxFractionalFlowDerivative( Element<dim>* const e, size_t phase ) const
+template<uint32_t dim, template<uint32_t> class USER>
+double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MaxFractionalFlowDerivative( Element<dim>* const e, uint32_t phase ) const
 {
   assert( e != nullptr );
   double S = InflectionPointSaturation(e);   // This is correct maximum fractional flow derivative of water phase.
@@ -1488,7 +1488,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::MaxFractionalFlowDerivative( Elemen
 
   
 /// shock speed base on Buckley Leverett theory
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeed( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -1500,7 +1500,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeed( Element<dim>* const e )
   
 
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockHeight( Element<dim>* const e ) const
 {
     assert( e != nullptr );
@@ -1533,7 +1533,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockHeight( Element<dim>* const e 
   
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeedAndHeight( Element<dim>* const e, double& speed, double& height) const
 {
     assert( e != nullptr );
@@ -1554,7 +1554,7 @@ void H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockSpeedAndHeight( Element<dim>* co
   
 */
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double H2O_CO2_NaCl_FlowFunctions<dim,USER>::ShockFrontVelocity( Element<dim>* const e ) const
   {
      assert( e != nullptr );

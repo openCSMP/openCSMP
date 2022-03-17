@@ -34,7 +34,7 @@ using namespace std;
 /// The second derivative d2f can optionally be supplied. If check_boundary is set to true, then boundary solutions can be solved also. The member function do_iteration, starts the iterative process. <br/>
 ///The file NewtonRaphson.cpp contains 3 examples of how this template class can be used. The source code for NewtonRaphson.cpp can be downloaded <a href="NewtonRaphson.cpp">here.</a><br/>
 
-template<size_t dim, template <size_t> class functor, class real>
+template<uint32_t dim, template <uint32_t> class functor, class real>
 class NewtonRaphsonSolve0 {
 
   // key attributes

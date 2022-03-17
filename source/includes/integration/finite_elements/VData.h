@@ -49,16 +49,17 @@ class VData {
     VData();
 
     /// constructor for hybrid element meshes 
-    VData( const std::deque<size_t>& npes, ///< just the sizes of the different vectors
-           const std::deque<size_t>& epes,
+    VData( const std::deque<uint32_t>& npes, ///< just the sizes of the different vectors
+           const std::deque<uint32_t>& epes,
            size_t nodes );
 
     /// constructor for meshes that only hold a single element type
-    VData( size_t nodes_per_element, size_t nbors_per_element, size_t nodes, size_t elmts );
+    VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nodes, size_t elmts );
     
+    /// if the mesh contains only a single element type it can be set with this method
     void SingleElementType( int8_t etype );
     
-    /// maps to CSMP_FEM_TYPE
+    /// CSMP_FEM_TYPEs for all the elements stored in the VData
     void ElementTypes( const std::vector<int8_t>& elmt_types );
     
     void AddElementTypes( std::vector<int8_t>::const_iterator first,
@@ -71,8 +72,8 @@ class VData {
     void Resize( size_t nodes_per_element, size_t nbors_per_element, int8_t etype, size_t nodes, size_t elmts );
    
     void Resize( const std::deque<int8_t>& etypes,
-                 const std::deque<size_t>& npes,  ///< sizes for resizing the member vectors
-                 const std::deque<size_t>& epes,
+                 const std::deque<uint32_t>& npes,  ///< sizes for resizing the member vectors
+                 const std::deque<uint32_t>& epes,
                  size_t nodes, size_t faces, size_t interfaces );
 
     /// for hybrid element meshes, increasing the storage for element types to the new size without invalidating existing types unless the storage is shrunk
@@ -80,13 +81,13 @@ class VData {
 
     void ResizeNodes( size_t nodes );
     void ResizePlist( size_t elements );
-    void ResizePlist( size_t elements, size_t nperelmt );
-    void ResizeElementNodes( size_t eid, size_t nperelmt );
-    void ResizePlist( const std::deque<size_t>& mixed_ele_plist );
+    void ResizePlist( size_t elements, uint32_t nperelmt );
+    void ResizeElementNodes( size_t eid, uint32_t nperelmt );
+    void ResizePlist( const std::deque<uint32_t>& mixed_ele_plist );
     void ResizePfverts( size_t elements );
-    void ResizePfverts( size_t elements, size_t nperelmt );
-    void ResizeElementNeighbors( size_t eid, size_t nperelmt );
-    void ResizePfverts( const std::deque<size_t>& mixed_ele_pfverts );
+    void ResizePfverts( size_t elements, uint32_t nperelmt );
+    void ResizeElementNeighbors( size_t eid, uint32_t nperelmt );
+    void ResizePfverts( const std::deque<uint32_t>& mixed_ele_pfverts );
     void ResizeBFlags( /* nodes */ );
 
     virtual ~VData();
@@ -119,7 +120,7 @@ class VData {
     /// number of element neighbors in a single element type mesh
     size_t ElementNeighbors() const;
   
-    /// number of nodes at model boundaries
+    /// reports the number of different nde flags stored as boundary flags in the model
     size_t BFlags() const;
   
     /// number of nodes stored for element, face or interface
@@ -164,10 +165,10 @@ class VData {
     void ScaleCoordinateToRange( char coordinate_axis, double cmin, double cmax ); 
     
     /// to set vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    void  P( size_t coordinate_axis, size_t i, double );
+    void  P( uint32_t coordinate_axis, size_t i, double );
 
     /// to get vertex=node coordinate of node i for user defined coordinate component (x,y, or z)
-    double  P( size_t coordinate_axis, size_t i ) const;
+    double  P( uint32_t coordinate_axis, size_t i ) const;
 
     /// set CSMP finite element type of element in 'pelmt' container
     void   ElementType( size_t eidx, int8_t type );
@@ -176,19 +177,19 @@ class VData {
     int8_t ElementType( size_t eidx ) const;
 
     /// assuming that all interpolation functions have same order, returns that order
-    size_t OrderOfFiniteElementInterpolationFunctions() const;
+    uint32_t OrderOfFiniteElementInterpolationFunctions() const;
  
     /// set node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    void   Plist( size_t eidx, size_t node, size_t val );
+    void   Plist( size_t eidx, uint32_t node, size_t val );
 
     /// get node index of element in serialised array of node ids; use pelmt to determine how many nodes there shoud be
-    int64_t  Plist( size_t eidx, size_t node ) const;
+    int64_t  Plist( size_t eidx, uint32_t node ) const;
   
     /// set neighbor element index (or boundary identifier) for neighbor i of element eidx
-    void   Pfvert( size_t eidx, size_t i, int64_t val );
+    void   Pfvert( size_t eidx, uint32_t i, int64_t val );
 
     /// get neighbor element index (or boundary identifier) for neighbor i of element eidx
-    int64_t  Pfvert( size_t eidx, size_t i ) const;
+    int64_t  Pfvert( size_t eidx, uint32_t i ) const;
 
     /// adds id (0..n-1) of boundary node and its BOX_BOUNDARY flag (negative integer)
     void AddBFlag( size_t node_id, std::int8_t bflag );
@@ -295,12 +296,6 @@ class VData {
     /// clear the container
     void Erase();
 
-    /// write mesh to supplied binary file
-    void OutBinary( std::fstream& ) const;
-  
-    /// read mesh from supplied binary file
-    void InBinary( std::fstream& );
-  
     /// wrtie connectivity structure to ASCII text file
     void OutASCII( const char* file ) const;
     
@@ -332,7 +327,13 @@ class VData {
     
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );
 
-  private:
+     /// write mesh to supplied binary file
+    void OutBinary( std::fstream& ) const;
+  
+    /// read mesh from supplied binary file
+    void InBinary( std::fstream& );
+  
+ private:
 
     bool                               hybrid_mesh_;      ///< mesh that consists of different element types
     std::vector<double>                px, py, pz;        ///< node coordinates

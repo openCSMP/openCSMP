@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 MaximumDifference<dim>::MaximumDifference( const PropertyDatabase<dim>& p,
                                            const char* variable1, const char* variable2 ) 
       : Interrelation<dim>(p),
@@ -20,7 +20,7 @@ MaximumDifference<dim>::MaximumDifference( const PropertyDatabase<dim>& p,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void MaximumDifference<dim>::Reset()
  {
     max_difference = 0.;
@@ -29,7 +29,7 @@ void MaximumDifference<dim>::Reset()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double  MaximumDifference<dim>::Value() const
  {
     return max_difference;

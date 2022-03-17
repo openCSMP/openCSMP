@@ -31,8 +31,8 @@ have the wrong placement or type.
 tested:  */
 
 
-template<size_t dim,class SIMPLEX>
-TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::TwoPhaseVelocityAndVolumeFlux(const Model<dim>& sg,
+template<uint32_t dim,class CELL>
+TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Model<dim>& sg,
                                                                    TwoPhaseModel<dim>& satfunc,
                                                                    const char* oper,           // conductivity
                                                                    const char* basic,          // porosity
@@ -226,11 +226,11 @@ in the same range as the Darcy velocity.
 
 If the range constraint is violated, a message is printed to 'cout'.
 */
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() const
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
 {
     // velocity, interstitial velocity
-    for ( size_t i=0; i<dim; i++ )
+    for ( auto i=0; i<dim; i++ )
     {
         if ( vt_[i] < minmaxV_.first || vt_[i] > minmaxV_.second ){
             cerr<<" 'velocity' value= "<< vt_[i]<<endl;
@@ -254,22 +254,22 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::TestRangeOfOutputVariables() co
 
 /** Switch to verbose mode (results are reported to stdout).
 */
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
-                                                                  size_t        col,
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
+                                                                  uint32_t        col,
                                                                   VectorVariable<dim>& vc )
 {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i,col);
+    for ( auto i=0; i<dim; i++ ) vc(i) = INP(i,col);
 }
 
 
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
-                                                                    size_t    col,
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
+                                                                    uint32_t    col,
                                                                     ScalarVariable& sc )
 {
     sc() = INP(dim,col);
@@ -277,12 +277,12 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ExtractVolumeFlux( const DenseM
 
 
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
-                                                                              size_t         col,
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
+                                                                              uint32_t         col,
                                                                               VectorVariable<dim>& vc )
         {
-    for ( size_t i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
+    for ( auto i=0; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
 }
 
 
@@ -299,8 +299,8 @@ of the Operands.
 A reference to the property memory manager and the Element for which the
 variables are output.
 */
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
 {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 )
     {
@@ -320,7 +320,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 )
     {
         if ( nodal_averaging_ )
-            for ( size_t i=0; i<e.Nodes(); i++ )
+            for ( auto i=0; i<e.Nodes(); i++ )
                 // doing this operation only once per node
                 if ( !node_output_[ e.N(i)->Idx() ] )
                 {
@@ -342,8 +342,8 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::WriteOperands( SIMPLEX& e )
 } // end WriteOperands
 
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeTotalMobilityRelativeDensityAndGravityTerm( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& e )
 {
 
     // Saturation Functions
@@ -395,13 +395,13 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeTotalMobilityRelativeDen
 
 
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 {
     if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
 
         // relative density, total mobility and gravity term
-        ComputeTotalMobilityRelativeDensityAndGravityTerm( e );
+        ComputeTotalMobilityRelativeDensityAndGravityTerm( const_cast<CELL&>(e) );
 
         // fluid pressure
         e.NodePropertyVector( MathOperatorLHS<dim>::TestOperandKey(), PF_ );
@@ -433,7 +433,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
         }else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ){
 
-            for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) {
+            for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) {
                 if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
                     MathOperatorLHS<dim>::MTRL[i].AssignToDiagonal( dim,
                                                                     e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() ) );
@@ -452,12 +452,12 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
         }
         else // if a nodal variable is dealt with
         {
-            if ( e.FE()->IntegrationPoints() == 0U )
+            if ( e.IntegrationPoints() == 0U )
                 throw csmp::Exception( FATAL_ERROR, "VelocityAndVolumeFlux<dim>::GetOperands",
                                        "The current finite element has no integration points",
                                        "Therefore nodal properties cannot be integrated.");
 
-            for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+            for ( auto i=0; i<e.IntegrationPoints(); i++ )
             {
                 MathOperatorLHS<dim>::MTRL[i].Resize(dim,dim);
                 MathOperatorLHS<dim>::MTRL[i].Zero();
@@ -478,8 +478,8 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 A reference to the Element for which the post-processing is done.  
 */
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
 {
     typename list<vector<double> >::const_iterator  lit;
 
@@ -506,23 +506,23 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
             // interpolation function derivatives at the nodes
 
-            for ( size_t i=0; i<e.Nodes(); i++ )
-                for ( size_t j=0; j<dim; j++ )
+            for ( auto i=0; i<e.Nodes(); i++ )
+                for ( auto j=0; j<dim; j++ )
                     vt_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim>::MTRL[0](j,j);
 
             if ( with_gravity_ ){
 
-                for( size_t xyz = 0; xyz < dim; ++xyz )
+                for( uint32_t xyz = 0; xyz < dim; ++xyz )
                     vt_( xyz ) += rhot_() * ac_gravity_ * gproj_[xyz];
             }
 
             if( with_capillary_ ){
 
-                for ( size_t i=0; i<e.Nodes(); i++ ){
+                for ( auto i=0; i<e.Nodes(); i++ ){
                     satFunc_.InitializeForNode(e,i);
                     satFunc_.EffectiveSaturation();
                     const double pc ( satFunc_.pc_Phase( ));
-                    for ( size_t j=0; j<dim; j++ )
+                    for ( auto j=0; j<dim; j++ )
                         vt_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
                 }
 
@@ -545,15 +545,15 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                 velo_nw_ = 0.;
                 velo_w_  = 0.;
 
-                for ( size_t i=0; i<e.Nodes(); i++ )
-                    for ( size_t j=0; j<dim; j++ ){
+                for ( auto i=0; i<e.Nodes(); i++ )
+                    for ( auto j=0; j<dim; j++ ){
                         velo_nw_(j) += PF_[i]() * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
                         velo_w_(j)  += PF_[i]() * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( wet_phase );
                     }
 
                 if ( with_gravity_ ){
 
-                    for( size_t xyz = 0; xyz < dim; ++xyz ){
+                    for( auto xyz = 0; xyz < dim; ++xyz ){
                         velo_nw_( xyz ) += satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase )* rho_nw_() * ac_gravity_ * gproj_[xyz];
                         velo_w_( xyz )  += satFunc_.Permeability() * satFunc_.MobilityPhase( wet_phase )    * rho_w_()  * ac_gravity_ * gproj_[xyz];
                     }
@@ -561,11 +561,11 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
                 if( with_capillary_ ){
 
-                    for ( size_t i=0; i<e.Nodes(); i++ ){
+                    for ( auto i=0; i<e.Nodes(); i++ ){
                         satFunc_.InitializeForNode(e,i);
                         satFunc_.EffectiveSaturation();
                         const double pc ( satFunc_.pc_Phase());
-                        for ( size_t j=0; j<dim; j++ )
+                        for ( auto j=0; j<dim; j++ )
                             velo_nw_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability()* satFunc_.MobilityPhase( non_wet_phase);
                     }
 
@@ -605,9 +605,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
             velo_nw_ = 0.0;
             velo_w_  = 0.0;
 
-            size_t j;
-
-            for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+            for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
             {
                 // if density driven flow is computed, calculate rho * g * z
                 // compute density at integration points and any multiplier as well
@@ -629,8 +627,8 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                         }else{
 
                             e.N_AtIntegrationPoint( i, IPOL_ );
-
-                            for ( mult_fac_=0., j=0; j<e.Nodes(); j++ )
+                            mult_fac_=0.;
+                            for ( auto j=0; j<e.Nodes(); j++ )
                                 mult_fac_ += IPOL_[j] * mult_vec_[j]();
 
                         }
@@ -646,7 +644,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                         rho_nw_fac_   = 0.0;
                         rho_w_fac_    = 0.0;
 
-                        for (  j=0; j<e.Nodes(); j++ ) {
+                        for ( auto j=0; j<e.Nodes(); j++ ) {
 
                             if ( with_multiplier_ ) mult_fac_ += IPOL_[j] * mult_vec_[j]();
                             else                    mult_fac_ = 1.0;
@@ -673,30 +671,30 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
                 if( with_capillary_ ){
 
-                    for ( size_t n=0; n<e.Nodes(); n++ ){
+                    for ( auto n=0; n<e.Nodes(); n++ ){
                         satFunc_.InitializeForNode(e,n);
                         satFunc_.EffectiveSaturation();
                         const double pc ( satFunc_.pc_Phase( ));
-                        for ( size_t j=0; j<dim; j++ )
+                        for ( auto j=0; j<dim; j++ )
                             VELOFLUX_[j] += ( PF_[n]() + pc ) * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
                     }
 
                 }else{
 
-                    for ( size_t n=0; n<e.Nodes(); n++ )
-                        for ( size_t j=0; j<dim; j++ )
+                    for ( auto n=0; n<e.Nodes(); n++ )
+                        for ( auto j=0; j<dim; j++ )
                             VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
 
                 }
 
                 if ( with_gravity_ ){
 
-                    for( size_t xyz = 0; xyz < dim; ++xyz )
+                    for( auto xyz = 0; xyz < dim; ++xyz )
                         VELOFLUX_[ xyz ] += mult_fac_ * rhot_fac_ * ac_gravity_ * gproj_[ xyz ];
                 }
 
                 // interstitial velocity & volume flux
-                for ( size_t n=0; n<dim; n++ ) {
+                for ( auto n=0; n<dim; n++ ) {
                     IVELOFLUX_[n]   = VELOFLUX_[n]/phi_();
                     VELOFLUX_[dim] += VELOFLUX_[n]*VELOFLUX_[n];
                     // summing integration point values for later averaging
@@ -718,15 +716,15 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                     fill( VELOFLUX_NW_.begin(), VELOFLUX_NW_.end(), 0.0 );
 
 
-                    for ( size_t n=0; n<e.Nodes(); n++ )
-                        for ( size_t j=0; j<dim; j++ ){
+                    for ( auto n=0; n<e.Nodes(); n++ )
+                        for ( auto j=0; j<dim; j++ ){
                             VELOFLUX_NW_[j] += PF_[n]() * -DERIV_(j,n) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
                             VELOFLUX_W_[j]  += PF_[n]() * -DERIV_(j,n) * satFunc_.Permeability() * satFunc_.MobilityPhase( wet_phase );
                         }
 
                     if ( with_gravity_ ){
 
-                        for( size_t xyz = 0; xyz < dim; ++xyz ){
+                        for( auto xyz = 0; xyz < dim; ++xyz ){
                             VELOFLUX_NW_[ xyz ] += satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase )* mult_fac_ * rho_nw_fac_ * ac_gravity_ * gproj_[xyz];
                             VELOFLUX_W_ [ xyz ] += satFunc_.Permeability() * satFunc_.MobilityPhase( wet_phase )    * mult_fac_ * rho_w_fac_  * ac_gravity_ * gproj_[xyz];
                         }
@@ -734,18 +732,18 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
                     if( with_capillary_ ){
 
-                        for ( size_t n=0; n<e.Nodes(); n++ ){
+                        for ( auto n=0; n<e.Nodes(); n++ ){
                             satFunc_.InitializeForNode(e,n);
                             satFunc_.EffectiveSaturation();
                             const double pc ( satFunc_.pc_Phase( ));
-                            for ( size_t j=0; j<dim; j++ )
+                            for ( auto j=0; j<dim; j++ )
                                 VELOFLUX_NW_[ j ] += pc  * -DERIV_(j,n) * satFunc_.Permeability()* satFunc_.MobilityPhase( non_wet_phase);
                         }
 
                     }
 
                     // interstitial velocity & volume flux
-                    for ( size_t n=0; n<dim; n++ ) {
+                    for ( auto n=0; n<dim; n++ ) {
                         // summing integration point values for later averaging
                         velo_nw_(n) += VELOFLUX_NW_[n];
                         velo_w_(n)  += VELOFLUX_W_[n];
@@ -765,7 +763,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                     // inserting velocity, volume flux, and interstitial velocity
                     // into single STL vector:
                     // velocity & volume flux
-                    for ( size_t k=0; k<dim; k++ ) {
+                    for ( auto k=0; k<dim; k++ ) {
                         IPVF_[ i*components_ + k ] = VELOFLUX_[k];
                         IPVF_[ i*components_ + dim + 1 + k ] = IVELOFLUX_[k];
                     }
@@ -794,14 +792,14 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
             // if the computed properties are constant on the element
             if ( e.Interpolation() == 1 )
             {
-                for ( size_t k=0; k<dim; k++ )
+                for ( auto k=0; k<dim; k++ )
                 {
                     veloflux_[k]           = vt_[k];
                     veloflux_[dim + 1 + k] = ivelo_[k];
                 }
                 veloflux_[dim] = flux_();
 
-                for ( size_t i=0; i<e.Nodes(); i++ )
+                for ( auto i=0; i<e.Nodes(); i++ )
                     temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
             }
             else
@@ -811,9 +809,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
                 // ---------------------------------------------------
                 e.ExtrapolateIntegrationPointVariableToNodes( components_, IPVF_, NVF_ );
 
-                for ( size_t i=0; i<e.Nodes(); i++ )
+                for ( auto i=0; i<e.Nodes(); i++ )
                 {
-                    for ( size_t k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
+                    for ( auto k=0; k<components_; k++ ) veloflux_[k] = NVF_[ i*components_ + k ];
                     temp_veloflux_[ e.N(i)->Idx() ].push_back( veloflux_ );
                 }
             }
@@ -835,11 +833,11 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 
         RESULT_.Resize(components_,e.Nodes());
 
-        for ( size_t i=0; i<e.Nodes(); i++ ) {
+        for ( auto i=0; i<e.Nodes(); i++ ) {
             // duplicate calculations are avoided via the boolean vector
             if ( !node_output_[ e.N(i)->Idx() ] )
             {
-                for ( size_t j=0; j<components_; j++ )
+                for ( auto j=0; j<components_; j++ )
                 {
                     // averaging velocity/flux components
                     for ( sum_=0.0,lit =temp_veloflux_[ e.N(i)->Idx() ].begin(); lit!=temp_veloflux_[ e.N(i)->Idx() ].end(); lit++ )
@@ -868,22 +866,21 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e
 // For node-centered calculations
 //////////////////////////////////////////////////
 
-template<size_t dim,class SIMPLEX>
-void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>& n_ref )
+template<uint32_t dim,class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<dim>& n_ref )
 {
-
     // initialize output value
     double value = 0.0;
 
-    size_t inside_node,outside_node;
+    uint32_t inside_node,outside_node;
     double vtn(0.0),facetArea(1.0);
     size_t advected_phase_n(2U), advected_phase_w(1U);
     const double zero(0.0); //can be num_epsilon or so
     //const double zero( std::numeric_limits<double>::min()); //can be num_epsilon or so
     //const double zero(1.0e-15); //can be num_epsilon or so
 
+    Element<dim>* eptr(nullptr);
     double sign(0.0);
-    Element<dim>* eptr;
 
     this->ApplicationCycle(1);
 
@@ -891,20 +888,20 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
         double fn(1.0);
 
-        for ( size_t t=0U; t<n_ref.Parents(); t++ )
+        for ( auto t=0U; t<n_ref.Parents(); t++ )
         {
             eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
-            size_t pnid(n_ref.ParentNodeNumber(t));
+            auto pnid(n_ref.ParentNodeNumber(t));
             cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1.0);
             eptr->Read(this->velo_key_,vt_);
 
             satFunc_.Initialize(*eptr);
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( auto k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
+                auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection
@@ -959,12 +956,11 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
         double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
 
-        for ( size_t t=0U; t<n_ref.Parents(); t++ )
+        for ( auto t=0U; t<n_ref.Parents(); t++ )
         {
-
             eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
-            size_t pnid(n_ref.ParentNodeNumber(t));
+            auto pnid(n_ref.ParentNodeNumber(t));
 //            size_t eid(eptr->Idx());
 
             cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1.0);
@@ -977,16 +973,16 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
 
             eptr->dN_AtBaryCenter( DN_ );
             dsdn_ = 0.0;
-            for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
+            for ( auto j=0U; j<eptr->Nodes(); j++ ) {
                  const double sn = eptr->N(j)->Read( this->TestOperandKey() );
-                 for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+                 for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
             }
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( auto k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
+                auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection
@@ -1117,11 +1113,11 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
         double vn_gravity_component_of_velocity (1.0), vw_gravity_component_of_velocity (1.0);
         double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
-        for ( size_t t=0U; t<n_ref.Parents(); t++ )
+        for ( auto t=0U; t<n_ref.Parents(); t++ )
         {
             eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
-            size_t pnid(n_ref.ParentNodeNumber(t));
+            auto pnid(n_ref.ParentNodeNumber(t));
 //            size_t eid(eptr->Idx());
 
             cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1.0);
@@ -1137,18 +1133,18 @@ void TwoPhaseVelocityAndVolumeFlux<dim,SIMPLEX>::ComputeContribution( Node<dim>&
                 eptr->dN_AtBaryCenter( DN_ );
 
                 dsdn_ = 0.0;
-                for ( size_t j=0U; j<eptr->Nodes(); j++ ) {
+                for ( auto j=0U; j<eptr->Nodes(); j++ ) {
                      const double sn = eptr->N(j)->Read( this->TestOperandKey() );
-                     for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+                     for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
                 }
 
             }
 
             // --------------------------------------------------------------------------
             // For all finite-volume facets
-            for ( size_t k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
+            for ( auto k=0U; k<eptr->FV()->FacetsPerSector(pnid); k++ )
             {
-                size_t i( eptr->FV()->FacetSurroundingSector(pnid,k) );
+                auto i( eptr->FV()->FacetSurroundingSector(pnid,k) );
 
                 // --------------------------------------------------------------------------
                 // Finite Volume Stencil information & total velocity projection

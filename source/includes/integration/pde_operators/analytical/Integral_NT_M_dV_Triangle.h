@@ -12,18 +12,17 @@ namespace csmp {
 @date 1999 */
 
 /// to map FV solution to FEM framework (Bijective Mapping)
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim> {
   public:
     Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>& p, const char* mapped_property );
     
-    virtual void GetOperands( const SIMPLEX& e );
-    virtual void ComputeContribution( const SIMPLEX& e );
+    virtual void GetOperands( const CELL& e );
+    virtual void ComputeContribution( const CELL& e );
   
   private:
     std::vector<ScalarVariable > NPROP;
-    std::vector<double>        xyz, ctr, IPOL;
-    double                     vol_div3;
+    double                       vol_div3;
 };
 
 

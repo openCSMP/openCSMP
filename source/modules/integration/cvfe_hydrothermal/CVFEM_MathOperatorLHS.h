@@ -14,7 +14,7 @@ namespace csmp {
 /// Base class for CVFEM Math Operators (LHS) that enable the use for control volume calculations as a post-processing step.
 
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_MathOperatorLHS : public MathOperatorLHS<dim> {
   public:
   

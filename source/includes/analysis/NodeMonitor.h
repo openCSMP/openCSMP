@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim> class Model;
+template<uint32_t dim> class Model;
 
 /**
     @brief Monitors node / finite volume properties over the course of a run
@@ -14,7 +14,7 @@ template<size_t dim> class Model;
     @author Stephan Matthai
     @date 2001
 */
-template<size_t dim>
+template<uint32_t dim>
 class NodeMonitor {
   public:
     /// defines nodes and scalar variables stored there that shall be monitored

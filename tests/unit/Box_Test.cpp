@@ -188,7 +188,7 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
     // ------------------------------
     VSet<2U> vset;
     test_Create_TrianglePatch_VSet( vset );
-    Model<2U>          model( vset, "CSMP-variables.txt", true );
+    Model<2U>          model( vset, "CSMP-variables.txt" );
     const Region<2U>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison
@@ -302,7 +302,6 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     const bool irregular_mesh(true);
     const bool binary_file(true);
     const bool use_regions_file(true);
-    const bool debug(true), verbose(true);
    
     ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
     Region<3U>    model_domain(model.Region("Model"));
@@ -318,7 +317,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( BACK,   3, backNormal );
 
     for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
-         for ( size_t j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
+         for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
                 const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
                 assert( flag != NOT );
                 // verifying alignment of the element's unit normal with that of the model boundary
@@ -502,7 +501,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
@@ -518,7 +517,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;
@@ -548,7 +547,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
     // Saving the model to disk
@@ -565,7 +564,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
     for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
-      for ( size_t i{0}; i<(*eit)->Neighbors(); ++i )
+      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
     delete mptr;

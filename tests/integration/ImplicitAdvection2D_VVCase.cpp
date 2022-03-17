@@ -49,7 +49,8 @@ int test_implicit_advection_2D()
     mesh_interface.Read_ANSYS_Mesh( "square", mesh_container, mesh_topology, binary_file, true );
     cerr <<"Finished reading mesh..."<<endl;
     cerr <<"Building Model..."<<endl;
-    Model<2U>  model2D( mesh_topology, mesh_container, "square.txt" );
+    const bool get_domain_info_from_regions_file{true};
+    Model<2U>  model2D( mesh_topology, mesh_container, "square.txt", get_domain_info_from_regions_file );
     cerr <<"Finished building model."<<endl;
 
     mesh_container.Erase();
@@ -60,7 +61,7 @@ int test_implicit_advection_2D()
     Standard_IO_Handler  stdio;
     printModelDimensions( model2D, true );
     MeshDiagnostics<2U>  mesh_check;
-    double             vol_min, vol_max;
+    double               vol_min, vol_max;
     mesh_check.ElementVolumeRange( model2D, vol_min, vol_max );
 
     // Configuring the built model (adding boundary condition info, etc, from input files:

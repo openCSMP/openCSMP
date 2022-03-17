@@ -21,7 +21,7 @@ for each quadrilateral finite element.
 Quadrilaterator::Quadrilaterator( bool harmonic_permeability_averaging )
  : harmonic(harmonic_permeability_averaging)
  {
-   cols = rows = n_vertices, n_elements = 0;
+   cols = rows = n_vertices = n_elements = 0;
  } 
 
 
@@ -56,7 +56,7 @@ double Quadrilaterator::HarmonicPermeabilityAverage( unsigned int m, unsigned in
 */
 size_t  Quadrilaterator::MapVertex( unsigned int m, unsigned int n ) const
  {
-    size_t vert;
+    size_t vert(UNSPECIFIED);
     
     // for the first and second line of data  
     if ( m == 1 ) {

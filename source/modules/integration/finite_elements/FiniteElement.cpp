@@ -35,7 +35,7 @@ FiniteElement::FiniteElement()
 FiniteElement::FiniteElement( CSMP_FEM_TYPE csp_fem_type,
                               bool isoparametric, 
                               bool uses_local_coordinates,  
-                              size_t order_of_shape_functions )
+                              uint32_t order_of_shape_functions )
  : XY(3,2), M(3,3), JAC(2,2), JINV(2,2), 
    isoparametric(isoparametric), 
    uses_local_coordinates(uses_local_coordinates),
@@ -181,15 +181,42 @@ bool isHexahedral( CSMP_FEM_TYPE etype )
       return true;
 
     return false;
- } 
+ }
+
+
+bool isPrism( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+      return true;
+
+    return false;
+ }
+
+
+bool isPyramid( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+      return true;
+
+    return false;
+ }
+
+ 
+ 
 
 
 void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
 size_t  FiniteElement::CurrentID() const      { return object_id; }
 
 /// initalizing to a value that makes sure that ID does not equal initial element idx
-size_t  FiniteElement::InitialID() { return std::numeric_limits<size_t>::max(); }
-
+size_t  FiniteElement::InitialID() { return std::numeric_limits<uint32_t>::max(); }
 
 bool  FiniteElement::Isoparametric() const        { return isoparametric; }
 
@@ -220,20 +247,20 @@ void  FiniteElement::ElementType( CSMP_FEM_TYPE etype ) { csp_fem_type = etype; 
 
 CSMP_FEM_TYPE  FiniteElement::ElementType() const { return csp_fem_type; }
 
- size_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
+ uint32_t  FiniteElement::OrderOfShapeFunctions() const { return order_of_shape_functions; }
 
- size_t  FiniteElement::Interpolation()    const { return itp; }
- size_t  FiniteElement::Dim()              const { return dim; }
- size_t  FiniteElement::Nodes()            const { return npe; }
- size_t  FiniteElement::Segments()         const { return spe; }
- size_t  FiniteElement::Faces()            const { return fpe; }
- size_t  FiniteElement::Neighbors()        const { return epe; }
- size_t  FiniteElement::NodesPerFace( size_t ) const { return npf; }
- size_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
- size_t  FiniteElement::IntegrationPoints() const { return gpe; }
+ uint32_t  FiniteElement::Interpolation()    const { return itp; }
+ uint32_t  FiniteElement::Dim()              const { return dim; }
+ uint32_t  FiniteElement::Nodes()            const { return npe; }
+ uint32_t  FiniteElement::Segments()         const { return spe; }
+ uint32_t  FiniteElement::Faces()            const { return fpe; }
+ uint32_t  FiniteElement::Neighbors()        const { return epe; }
+ uint32_t  FiniteElement::NodesPerFace( uint32_t ) const { return npf; }
+// uint32_t  FiniteElement::IntegrationPointNeighbors() const { return cne; }
+ uint32_t  FiniteElement::IntegrationPoints() const { return gpe; }
 
- double  FiniteElement::XYZ( size_t i, size_t j ) const { return XY(i,j); }
- void    FiniteElement::XYZ( size_t i, size_t j, double val ) { XY(i,j) = val; }
+ double  FiniteElement::XYZ( uint32_t i, uint32_t j ) const { return XY(i,j); }
+ void    FiniteElement::XYZ( uint32_t i, uint32_t j, double val ) { XY(i,j) = val; }
 
 
 
@@ -279,7 +306,7 @@ void FiniteElement::EdgeLengths( vector<double>& vec )
 
 
 
-void FiniteElement::NodesOfSegment( size_t sid, vector<size_t>& snids ) const
+void FiniteElement::NodesOfSegment( uint32_t sid, vector<uint32_t>& snids ) const
   {
      cout <<"\nFiniteElement::NodesOfSegment: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element segment with the entered (local) ID number. "<< endl;
@@ -289,7 +316,7 @@ void FiniteElement::NodesOfSegment( size_t sid, vector<size_t>& snids ) const
   }
 
 
-void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
+void FiniteElement::NodesOfFace( uint32_t fid, vector<uint32_t>& fnids ) const
   {
      cout <<"\nFiniteElement::NodesOfFace: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element face with the entered ID number. ";
@@ -301,7 +328,7 @@ void FiniteElement::NodesOfFace( size_t fid, vector<size_t>& fnids ) const
   }
 
 
-std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
+std::vector<uint32_t> FiniteElement::CornerNodesOfFace( uint32_t face_id ) const
  {
      cout <<"\nFiniteElement::CornerNodesOfFace: Returns the local node ID numbers of ";
      cout <<"the corner nodes of the element face with the entered ID number. ";
@@ -309,11 +336,11 @@ std::vector<size_t> FiniteElement::CornerNodesOfFace( size_t face_id ) const
      cout <<"the nodes with the same ID." << endl;
      cout <<"\ncalled by object: "<< object_id <<" for face "<< face_id << endl;
      throw invalid_argument("FiniteElement::CornerNodesOfFace");
-     return vector<size_t>{};
+     return vector<uint32_t>{};
  }
 
 
-vector<size_t>  FiniteElement::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  FiniteElement::NodesConnectedTo( uint32_t node_id ) const
   {
      cout <<"\nFiniteElement::NodesConnectedTo: Returns the local node ID numbers of ";
      cout <<"the corner nodes of the element face with the entered ID number. ";
@@ -321,14 +348,14 @@ vector<size_t>  FiniteElement::NodesConnectedTo( size_t node_id ) const
      cout <<"the nodes with the same ID." << endl;
      cout <<"\ncalled by object: "<< object_id <<" for node "<< node_id << endl;
      throw invalid_argument("FiniteElement::NodesConnectedTo");
-     return vector<size_t>{};
+     return vector<uint32_t>{};
   }
 
     
-void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
+void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM )
   {
      InstructUser("FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )");
-     M.Out();
+     DM.Out();
      cout <<"\ncalled by object: "<< object_id << endl;
      throw invalid_argument("FiniteElement::IntegraldNdN");
   }
@@ -337,8 +364,8 @@ void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )
   
 // other information
 
-void FiniteElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                vector<size_t>& fnids )
+void FiniteElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                vector<uint32_t>& fnids )
   {
      InstructUser("FiniteElement::ConsecutiveNodesAtBoundary");
      cout <<"\nnodes at boundary: "<< endl;
@@ -349,7 +376,7 @@ void FiniteElement::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
   }
 
 
-void FiniteElement::CornerNodes( vector<size_t>& ids ) const
+void FiniteElement::CornerNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::CornerNodes");
     out(ids);
@@ -357,21 +384,21 @@ void FiniteElement::CornerNodes( vector<size_t>& ids ) const
  }
  
  
-void FiniteElement::MidSideNodes( vector<size_t>& ids ) const
+void FiniteElement::MidSideNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::MidSideNodes");
     out(ids);
     throw invalid_argument("FiniteElement::MidSideNodes");
  }
 
-void FiniteElement::InteriorNodes( vector<size_t>& ids ) const
+void FiniteElement::InteriorNodes( vector<uint32_t>& ids ) const
  {
     InstructUser("FiniteElement::InteriorNodes");
     out(ids);
     throw invalid_argument("FiniteElement::InteriorNodes");
  }
 
-size_t FiniteElement::CornerNodes() const
+uint32_t FiniteElement::CornerNodes() const
  {
     InstructUser("FiniteElement::CornerNodes");
     throw invalid_argument("FiniteElement::CornerNodes");
@@ -379,14 +406,14 @@ size_t FiniteElement::CornerNodes() const
  }
  
  
-size_t FiniteElement::MidSideNodes() const
+uint32_t FiniteElement::MidSideNodes() const
  {
     InstructUser("FiniteElement::MidSideNodes");
     throw invalid_argument("FiniteElement::MidSideNodes");
     return 0;
  }
 
-size_t FiniteElement::InteriorNodes() const
+uint32_t FiniteElement::InteriorNodes() const
  {
     InstructUser("FiniteElement::InteriorNodes");
     throw invalid_argument("FiniteElement::InteriorNodes");
@@ -394,7 +421,7 @@ size_t FiniteElement::InteriorNodes() const
  }
 
 
-CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( size_t ) const
+CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( uint32_t ) const
   {
      /// @todo (2-P) Remove typid by name fct
      InstructUser("FiniteElement::ElementTypeOfFace");
@@ -406,7 +433,7 @@ CSMP_FEM_TYPE FiniteElement::ElementTypeOfFace( size_t ) const
   }
 
 
-CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( size_t ) const
+CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( uint32_t ) const
   {
      /// @todo (2-P) Remove typid by name fct
      InstructUser("FiniteElement::ElementTypeOfSegment");
@@ -435,12 +462,12 @@ void  FiniteElement::UnitNormal( vector<double>& ) const
     
     method expects that the XY matrix is initialised with node coordinates
 */
-void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
+void  FiniteElement::UnitNormalToFace( uint32_t, std::vector<double>& ) const
  {
      InstructUser("FiniteElement::UnitNormalToFace");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalToFace(size_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalToFace(uint32_t,vector<double>)");
  }
 
 
@@ -453,17 +480,17 @@ void  FiniteElement::UnitNormalToFace( size_t, std::vector<double>& ) const
      @note this method cannot be constant because it modifies matrices that are data members
      of the FiniteElement class.
 */
-void  FiniteElement::UnitNormalAtFaceBarycenter( size_t, std::vector<double>& )
+void  FiniteElement::UnitNormalAtFaceBarycenter( uint32_t, std::vector<double>& )
  {
      InstructUser("FiniteElement::UnitNormalAtFaceBarycenter");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter(size_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter(uint32_t,vector<double>)");
  }
 
 
 
-double FiniteElement::WeightAtIntegrationPoint( size_t ) const
+double FiniteElement::WeightAtIntegrationPoint( uint32_t ) const
   {
      throw invalid_argument("FiniteElement::WeightAtIntegrationPoint");
      return 0.5 * (1. / gpe); 
@@ -471,7 +498,7 @@ double FiniteElement::WeightAtIntegrationPoint( size_t ) const
 
 
 
-void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) const
+void  FiniteElement::IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const
  { 
     cout <<"\nFiniteElement::IntegrationPoint: called for integration point "<< i;
     cout <<" and output data vector 'xyz' of size "<< xyz.size() << endl;
@@ -483,7 +510,7 @@ void  FiniteElement::IntegrationPoint( size_t i, std::vector<double>& xyz ) cons
 
 
 
-void  FiniteElement::CounterClockwiseNodes( vector<size_t>& ids ) const
+void  FiniteElement::CounterClockwiseNodes( vector<uint32_t>& ids ) const
  {
      InstructUser("FiniteElement::CounterClockwiseNodes");
      out(ids);
@@ -499,7 +526,7 @@ Expects input vector to be of size nvars * gauss points and in format
   var1 @ gp2, var2 @ gp2, var3 @ gp2 for all gauss points, with nvar == 3 ]
 
   */
-void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( size_t nvars, 
+void  FiniteElement::ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                  const vector<double>&, 
                                                                  vector<double>& ) const
  {
@@ -527,13 +554,13 @@ void   FiniteElement::N( vector<double>& N, const vector<double>& xyz )
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (N vector<double>, xyz vector<double>):"<< endl;
     out( N );
-    for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::N");
  } 
 
 
-void   FiniteElement::N_AtIntegrationPoint( size_t ip, vector<double>& N )
+void   FiniteElement::N_AtIntegrationPoint( uint32_t ip, vector<double>& N )
  {
     InstructUser("FiniteElement::N_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -552,80 +579,80 @@ void   FiniteElement::N_AtBaryCenter( vector<double>& N )
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
  }
 
-void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& DM, DenseMatrix<DM_MIN>& K)
 {
 	InstructUser("FiniteElement::Integral_dNT_K_dN");
 	cout << "\nThis method is not defined for the FE element type which you are using" << endl;
 	cout << "\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):" << endl;
-	M.Out();
+	DM.Out();
 	throw invalid_argument("FiniteElement::dN");
 }
 
 
-void   FiniteElement::dN( DenseMatrix<DM_MIN>& M ) // coefficients 
+void   FiniteElement::dN( DenseMatrix<DM_MIN>& DM ) // coefficients
  {
     InstructUser("FiniteElement::dN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN");
  } 
     
     
-double FiniteElement::dN_At( DenseMatrix<DM_MIN>& M, const vector<double>& xyz  ) // derivatives at 'xy'
+double FiniteElement::dN_At( DenseMatrix<DM_MIN>& DM, const vector<double>& xyz  ) // derivatives at 'xy'
  {
     InstructUser("FiniteElement::dN_At");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
-    M.Out();
-    for ( size_t i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    DM.Out();
+    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::dN_At");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t gauss_point ) 
+double FiniteElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DM, uint32_t gauss_point )
  {
     InstructUser("FiniteElement::dN_AtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (gp, dof, DenseMatrix<DM_MIN> M):"<< endl;
     cout << gauss_point <<", "<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtIntegrationPoint");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node ) 
+double FiniteElement::dN_AtNode( DenseMatrix<DM_MIN>& DM, uint32_t node )
  {
     InstructUser("FiniteElement::dN_AtNode");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (node, dof, DenseMatrix<DM_MIN> M): ";
     cout << node <<", "<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtNode");
     return 0.0;
  } 
 
 
-double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& M ) 
+double FiniteElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DM )
  {
     InstructUser("FiniteElement::dN_AtBarycenter");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M): " << endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::dN_AtBarycenter");
     return 0.0;
  } 
     
 
-void   FiniteElement::IntegralNN( DenseMatrix<DM_MIN>& M )
+void   FiniteElement::IntegralNN( DenseMatrix<DM_MIN>& DM )
  {
     InstructUser("FiniteElement::IntegralNN");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M):"<< endl;
-    M.Out();
+    DM.Out();
     throw invalid_argument("FiniteElement::IntegralNN");
  } 
 
@@ -644,7 +671,7 @@ void   FiniteElement::OutputNodeDataToVTK( const char* file_name, const char* va
 
 
 
-void   FiniteElement::JacobianAtIntegrationPoint( size_t ip )
+void   FiniteElement::JacobianAtIntegrationPoint( uint32_t ip )
  {
     InstructUser("FiniteElement::JacobianAtIntegrationPoint");
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
@@ -673,21 +700,7 @@ void   FiniteElement::Nr( double r, vector<double>& NR ) const
 
 
 
-    // 1D
-void   FiniteElement::Nr( double r, double* NR ) const
- {
-    InstructUser("FiniteElement::Nr");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinate r: "<< r << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nr");
- }
-
-
-void   FiniteElement::dNr( double r, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -695,7 +708,7 @@ void   FiniteElement::dNr( double r, vector<double>& DNR ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinate r: "<< r << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
@@ -715,21 +728,7 @@ void   FiniteElement::Nrs( double r, double s, vector<double>& NRS ) const
     throw invalid_argument("FiniteElement::Nrs");
  }
 
-    // 2D
-void   FiniteElement::Nrs( double r, double s, double* NRS ) const
- {
-    InstructUser("FiniteElement::Nrs");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nrs");
- }
-
-
-void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r, double s, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -737,13 +736,13 @@ void   FiniteElement::dNr( double r, double s, vector<double>& DNR ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
 
 
-void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
+void   FiniteElement::dNs( double r, double s, vector<double>& vDNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -751,14 +750,14 @@ void   FiniteElement::dNs( double r, double s, vector<double>& DNS ) const
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s: "<< r <<" "<< s << endl;
-    out( DNS );
+    out( vDNS );
     cout << endl;
     throw invalid_argument("FiniteElement::dNs");
  }
 
 
     // 3D
-void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST ) const
+void   FiniteElement::Nrst( double r, double s, double t, vector<double>& vNRST ) const
  {
     InstructUser("FiniteElement::Nrst");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -766,27 +765,15 @@ void   FiniteElement::Nrst( double r, double s, double t, vector<double>& NRST )
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( NRST );
+    out( vNRST );
     cout << endl;
     throw invalid_argument("FiniteElement::Nrst");
  }
 
 
-    // 3D
-void   FiniteElement::Nrst( double r, double s, double t, double* NRST ) const
- {
-    InstructUser("FiniteElement::Nrst");
-    cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
-    if ( !uses_local_coordinates || !isoparametric )
-      cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
-    cout <<"\nMethod arguments: "<< endl;
-    cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    cout << endl;
-    throw invalid_argument("FiniteElement::Nrst");
- }
 
 
-void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) const
+void   FiniteElement::dNr( double r,  double s, double t, vector<double>& vDNR ) const
  {
     InstructUser("FiniteElement::dNr");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -794,13 +781,13 @@ void   FiniteElement::dNr( double r,  double s, double t, vector<double>& DNR ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNR );
+    out( vDNR );
     cout << endl;
     throw invalid_argument("FiniteElement::dNr");
  }
 
 
-void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) const
+void   FiniteElement::dNs( double r,  double s, double t, vector<double>& vDNS ) const
  {
     InstructUser("FiniteElement::dNs");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -808,13 +795,13 @@ void   FiniteElement::dNs( double r,  double s, double t, vector<double>& DNS ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNS );
+    out( vDNS );
     cout << endl;
     throw invalid_argument("FiniteElement::dNs");
  }
 
 
-void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) const
+void   FiniteElement::dNt( double r,  double s, double t, vector<double>& vDNT ) const
  {
     InstructUser("FiniteElement::dNt");
     cout <<"\nThis method is not defined for the FE element type which you are using."<< endl;
@@ -822,7 +809,7 @@ void   FiniteElement::dNt( double r,  double s, double t, vector<double>& DNT ) 
       cout <<"\tThis function uses local coordinates which do not exist for the current element type."<< endl;
     cout <<"\nMethod arguments: "<< endl;
     cout <<"\nLocal coordinates r,s,t: "<< r <<" "<< s <<" "<< t << endl;
-    out( DNT );
+    out( vDNT );
     cout << endl;
     throw invalid_argument("FiniteElement::dNt");
  }
@@ -870,13 +857,13 @@ are provided as pointers to inbuilt arrays of type 'double'.
 Whether a third argument is supplied or not determines whether a 2D
 or a 3D Jacobian is output.  
 
-@return The Jacobian matrix is returned into the protected matrix JAC.
+The Jacobian matrix is returned into the protected matrix JAC.
 */
 void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {
     JAC.Resize(dim,dim);
     JAC(0,0) = static_cast<double>(0.0);
-    for ( size_t j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
+    for ( auto j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
       
  } // end Jacobian (1D)
 
@@ -887,9 +874,9 @@ void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& 
  {
     JAC.Resize(dim,dim);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( auto i=0; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
-        for ( size_t j=0; j<npe; j++ )
+        for ( auto j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -903,9 +890,9 @@ void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& d
  {
     JAC.Resize(dim,dim);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( auto i=0; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
-        for ( size_t j=0; j<npe; j++ )
+        for ( auto j=0; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -951,7 +938,7 @@ double  FiniteElement::JacobianInverse()
 
     if ( dim == 2U ) {
          // compute determinant  
-         double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+         const double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
     
          // inversion of J
          const double dum = JAC(0,0) / detJ;
@@ -962,19 +949,17 @@ double  FiniteElement::JacobianInverse()
          
          if ( detJ <= 0. ) {
               cerr <<"\n\nFiniteElement::JacobianInverse(2D): element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
-              cerr << detJ << endl;
+              cerr << std::defaultfloat << detJ << endl;
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-              for ( size_t i=0; i<Nodes(); i++ )
+              for ( auto i=0; i<Nodes(); i++ )
                 {
-                  cerr<<" Node( "<<i<<" ): ";
-                  for ( size_t j=0; j<XY.Cols(); j++ )
+                  cerr<<" Node("<<i<<"): "<< std::scientific;
+                  for ( auto j=0; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
-                  cerr<<endl;
+                  cerr << std::defaultfloat << endl;
                 }
               csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                                 "the value of the Jacobian is negative; check node-numbering.");
-
-//              return fabs(detJ);
            }
       
          return detJ;
@@ -982,19 +967,19 @@ double  FiniteElement::JacobianInverse()
       
      // 3D case
      const double detJ = JAC(0,0) * ( JAC(1,1) * JAC(2,2) - JAC(1,2) * JAC(2,1) ) -
-                           JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
-                           JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
+                         JAC(0,1) * ( JAC(1,0) * JAC(2,2) - JAC(1,2) * JAC(2,0) ) +
+                         JAC(0,2) * ( JAC(1,0) * JAC(2,1) - JAC(1,1) * JAC(2,0) );        
 
      if ( detJ <= 0. ) {
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
-          std::cerr << detJ << std::endl;
+          std::cerr << std::defaultfloat << detJ << std::endl;
           cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-          for ( size_t i=0; i<Nodes(); i++ )
+          for ( auto i=0; i<Nodes(); i++ )
             {
-              cerr <<" Node( "<<i<<" ): ";
-              for ( size_t j=0; j<XY.Cols(); j++ )
+              cerr <<" Node("<<i<<"): "<< std::scientific;
+              for ( auto j=0; j<XY.Cols(); j++ )
                   cerr << XY(i,j) <<" ";
-              cerr <<endl;
+              cerr << std::defaultfloat << endl;
             }
           csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
                             "the value of the Jacobian is negative; check node-numbering.");
@@ -1061,7 +1046,7 @@ void  FiniteElement::Out() const
 /**
       Ordered in sequence of most common queries to speed up
 */
-ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
+CELL_SHAPE  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
   {
      if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE ) return SURFACE;
      if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return SURFACE;
@@ -1110,7 +1095,7 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
      if ( etype == CUBIC_TETRAHEDRON ) return VOLUME;
 
      cerr <<"\nparseFiniteElementDimension: Could not identify dimension of element type: "<< etype << endl;
-     return static_cast<ELEMENT_DIMENSION>(0);
+     return static_cast<CELL_SHAPE>(UNSPECIFIED);
 
  } // end parseFiniteElementDimension
 
@@ -1122,8 +1107,8 @@ ELEMENT_DIMENSION  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
 CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
   {
      if ( etype == UNKNOWN ) return UNKNOWN;
-	 if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
-	 if (etype == LINEAR_CUBOID) return LINEAR_CUBOID;
+	   if (etype == LINEAR_RECTANGLE) return LINEAR_RECTANGLE;
+	   if (etype == LINEAR_CUBOID) return LINEAR_CUBOID;
      if ( etype == LINEAR_BAR ) return LINEAR_BAR;    										
      if ( etype == QUADRATIC_BAR ) return QUADRATIC_BAR;
      if ( etype == CUBIC_BAR ) return CUBIC_BAR;										   
@@ -1169,7 +1154,7 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
      if ( etype == EXPERIMENTAL_ELEMENT ) return EXPERIMENTAL_ELEMENT; 
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return UNKNOWN;
  
  } // end parseFiniteElementType
@@ -1231,7 +1216,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == "ISOPARAMETRIC_CUBIC_HEXAHEDRON" ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
      if ( etype == "EXPERIMENTAL_ELEMENT" ) return EXPERIMENTAL_ELEMENT;
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return UNKNOWN;
 
  } // end parseFiniteElementType
@@ -1292,7 +1277,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "ISOPARAMETRIC_CUBIC_HEXAHEDRON";
      if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL_ELEMENT"; 
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return "UNKNOWN";
  
  } // end parseFiniteElementType
@@ -1349,7 +1334,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "IHEX^3";
      if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL";
 
-     cout <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
+     cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return "?";
  
  } // end parseAbbreviated_FE_Type
@@ -1362,7 +1347,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if (ftype == "UNIT_LINEAR_FACET") return UNIT_LINEAR_FACET;
      if (ftype == "TRIANGULAR_FACET") return TRIANGULAR_FACET;
      if (ftype == "QUADRILATERAL_FACET") return QUADRILATERAL_FACET;
-     cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+     cerr << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
      return static_cast<FV_FACET_TYPE>(0);
  }
 
@@ -1375,7 +1360,7 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
          case TRIANGULAR_FACET: return "TRIANGULAR_FACET";
          case QUADRILATERAL_FACET: return "QUADRILATERAL_FACET";
          default:
-             cout << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
+             cerr << "\nparseFacetType: Could not identify facet type " << ftype << '\n';
              return "(unknown)";
      }
  } // end parseFacetType

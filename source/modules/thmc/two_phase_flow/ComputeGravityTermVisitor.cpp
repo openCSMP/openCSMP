@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp{
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
                                                            TwoPhaseModel<dim>& saturationFunctions,
                                                            const char* gravityVectorTag,
@@ -31,7 +31,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
                                                            const char* gravityVectorTag,
                                                            const char* permeabilityTag, 
@@ -52,7 +52,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor( Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
                                                            Index gravityVector,
                                                            Index permeability,
@@ -73,7 +73,7 @@ ComputeGravityTermVisitor<dim>::ComputeGravityTermVisitor(Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit( Model<dim>* m ){
     if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Model<dim>*)"<<endl;
 #if defined(_OPENMP )
@@ -81,7 +81,7 @@ void ComputeGravityTermVisitor<dim>::Visit( Model<dim>* m ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
     if (this->Verbose()) cout <<" ComputeGravityTermVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
 
@@ -105,7 +105,7 @@ void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::Visit( Element<dim>* element )
 {
 #if !defined(_OPENMP)
@@ -113,16 +113,15 @@ void ComputeGravityTermVisitor<dim>::Visit( Element<dim>* element )
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element )
 {
-
     //! two cases are currently supported by the code
     //! 1) twophase with gravity on the ELEMENT
     //! 2) singlephase with gravity on the ELEMENT_INTEGRATION_POINT
     
-    ScalarVariable mu, rho;
-    double gravityTerm;
+    ScalarVariable      mu, rho;
+    double              gravityTerm = std::numeric_limits<double>::quiet_NaN();
     VectorVariable<dim> gravityVector;
     
     if (saturationFunctions_ != NULL)
@@ -198,7 +197,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
       // k/mu * rho * g
       gravityTerm = element->Read( permeabilityKey_ ) * gravityAcc_;
       // loop over element integration points
-      for (size_t ip=0;ip<element->IntegrationPoints (); ++ip)
+      for ( auto ip=0;ip<element->IntegrationPoints(); ++ip)
       {
         element->PropertyValueAtIntegrationPoint( singlePhaseDensityKey_, ip, rho );
         element->PropertyValueAtIntegrationPoint( singlePhaseViscosityKey_, ip, mu );
@@ -207,7 +206,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
       }
     }
     else // two phase -> ELEMENT
-      element->Store( gravityVectorKey_, gravityVector * gravityTerm);
+      element->Store( gravityVectorKey_, gravityVector * gravityTerm );
 
 }
 

@@ -8,9 +8,9 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 
-template<size_t dim>
+template<uint32_t dim>
 class FourarLenormand : public TwoPhaseModel<dim> {
   public:
     FourarLenormand( const PropertyDatabase<dim>& database, const char* fractureAperture );

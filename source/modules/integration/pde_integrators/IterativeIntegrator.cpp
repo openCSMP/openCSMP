@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 IterativeIntegrator<dim,COMPUTATION_DOMAIN>::IterativeIntegrator()
  : verbose_(false),
    max_iter_(100),
@@ -16,7 +16,7 @@ IterativeIntegrator<dim,COMPUTATION_DOMAIN>::IterativeIntegrator()
  {}
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 double IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
  {
     cout << "\nIterativeIntegrator< dim>::Residual: this method has not been defined yet."<< endl;
@@ -27,34 +27,34 @@ double IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Residual()
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::MaximalIterationNumber(size_t max_iter) {
   max_iter_ = max_iter;
 }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::TargetResidual(double target_residual) {
   target_residual_ = target_residual;
 }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Verbose(bool yesno) {
   verbose_ = yesno;
 }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( Interrelation<dim>* relation ) {
   assert(relation != 0);
   processes_.push_back(std::pair<Interrelation<dim>*, Visitor<dim>*>(relation, 0));
 }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( Visitor<dim>* visitor ) {
   assert(visitor != 0);
   processes_.push_back(std::pair<Interrelation< dim>*, Visitor< dim>*>(0, visitor));
 }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SetupEquations( COMPUTATION_DOMAIN<dim>& gref ) {
   this->EstablishMatrixSetup(gref);
   this->Accumulate(gref);
@@ -66,14 +66,14 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SetupEquations( COMPUTATION_DO
 }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SolveEquations( COMPUTATION_DOMAIN<dim>& gref ) {
   this->Solve();
   this->OutputResults(gref);
 }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::ApplyPostProcesses( COMPUTATION_DOMAIN<dim>& gref ) {
   for ( typename list<std::pair<Interrelation<dim>*, Visitor<dim>*> >::iterator 
         it = processes_.begin(); it != processes_.end(); ++it ) {
@@ -84,18 +84,18 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::ApplyPostProcesses( COMPUTATIO
 }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::MaximalIterationNumber() const {
   return max_iter_;
 }
 
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMAIN<dim>& sg )
  {
    SAMG_KeepMemory();
-   double res; 
+   double res = std::numeric_limits<double>::quiet_NaN(); 
    size_t i; 
   
   for ( i = 0U; i < max_iter_; ++i) {
@@ -131,7 +131,7 @@ size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMA
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepMemory() {
   SAMG_Settings* settings = GetSAMG_Settings();
   if (settings) {
@@ -141,7 +141,7 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepMemory() {
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepSettings() {
   SAMG_Settings* settings = GetSAMG_Settings();
   if (settings) {
@@ -151,7 +151,7 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepSettings() {
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SAMG_Settings* IterativeIntegrator<dim,COMPUTATION_DOMAIN>::GetSAMG_Settings() {
   SAMG_Settings* result(0);
   if (SAMG_Solver* samg_solver = dynamic_cast<SAMG_Solver*>(this->GetSolver())) {

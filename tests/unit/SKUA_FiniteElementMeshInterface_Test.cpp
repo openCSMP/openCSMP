@@ -117,7 +117,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     pfverts.reserve( domain.Elements() );
     for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
          vector<Element<3U>*> nbors( (*it)->Neighbors(), nullptr );
-         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr )
              nbors[i] = (*it)->Neighbor(i);
          pfverts.emplace_back( nbors );    
@@ -133,7 +133,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     size_t failed_comparisons(0U);
     vector<vector<Element<3U>*> >::const_iterator pfit(pfverts.begin());
     for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
-         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
                 if ( verbose ) {
                      //(*it)->Out();
@@ -167,16 +167,16 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNodePropertyAssignment( const Mod
                    cerr <<"\n\tnode number vs. number: "<< (*nit)->Read(nn_key) <<" vs. "<< (*nit)->Read(nu_key);
                    _equal( (*nit)->Read(nn_key), (*nit)->Read(nu_key), numeric_limits<double>::epsilon() );
                 }
-              ordered_nodes[ static_cast<size_t>((*nit)->Read(nn_key)) ] = (*nit);
+              ordered_nodes[ static_cast<uint32_t>((*nit)->Read(nn_key)) ] = (*nit);
            }
            
          bool problem_found(false);  
-         for ( size_t i=0U; i<ordered_nodes.size(); ++i ) {
+         for ( auto i{0}; i<ordered_nodes.size(); ++i ) {
               if ( ordered_nodes[i] == nullptr ) {
                   cerr <<"\nordered nodes map contains nullptr for node "<< i; 
                   problem_found = true;
                 }
-              else if ( i != static_cast<size_t>(ordered_nodes[i]->Read(nu_key)) ) {
+              else if ( i != static_cast<uint32_t>(ordered_nodes[i]->Read(nu_key)) ) {
                   cerr <<"\nmismatch: node "<< i <<": vs 'number' "<< ordered_nodes[i]->Read(nu_key);
                   problem_found = true;
                 }
@@ -198,13 +198,13 @@ void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model
          const Region<3U>& domain = model.Region("Model");
          vector<const Element<3U>*> ordered_elmts(domain.Elements());
          for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
-           ordered_elmts[ static_cast<size_t>((*it)->Read(eid_key)) ] = (*it);
+           ordered_elmts[ static_cast<uint32_t>((*it)->Read(eid_key)) ] = (*it);
            
          // reading the VSet material record
          for ( auto it=ordered_elmts.begin(); it!=ordered_elmts.end(); ++it ) {
               cerr <<"\nelmt "<< (*it)->Read( eid_key ) <<": ";
               // printing the neighbors of this element
-              for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+              for ( auto i{0}; i<(*it)->Neighbors(); ++i )
                 if ( (*it)->Neighbor(i) != nullptr )
                   cerr << (*it)->Neighbor(i)->Read( eid_key ) <<" ";
                 else 

@@ -14,7 +14,7 @@ namespace csmp {
 The operand defines the fluid density, and the mtrl variable would for 
 instance be the hydraulic conductivity.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNT_v_dV<dim,CELL>::NumIntegral_DNT_v_dV( const PropertyDatabase<dim>& pref,
                                                     const char* oper,       // e.g., Darcy velocity
                                                     const char* r_factor,
@@ -69,7 +69,7 @@ is used to compute the hydrostatic pressure contribution to a transient
 system. Do not use MultiplyWithTimeIncrement() in this case, since
 the acceleration of gravity must not be multiplied with delta t.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_v_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -120,13 +120,13 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     double detJ, fdensity;
     
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
          // interpolation functions to interpolate density and velocity
          e.N_AtIntegrationPoint( i, IPOL );
          detJ = e.dN_AtIntegrationPoint( DN, i );
@@ -135,7 +135,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
          
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
                // interpolating density multiplier to integration point
-               for ( size_t j=0; j<e.Nodes(); j++ ) 
+               for ( auto j=0; j<e.Nodes(); j++ ) 
                  fdensity += IPOL[j] * dens_nprop[j]();
 
                // multiply property value it with multipliers
@@ -152,7 +152,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
          DNT *= OPMAT;
 
          // assembling contribution to right-hand vector
-         for ( size_t j=0; j<e.Nodes(); j++ ) 
+         for ( auto j=0; j<e.Nodes(); j++ )
            MathOperatorRHS<dim>::RHS[j] = rfac() * DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ;
       }
 

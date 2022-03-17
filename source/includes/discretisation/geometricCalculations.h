@@ -21,21 +21,21 @@ namespace csmp {
 // TODO: useful functionality but needs documentation and refactoring.
 
 /// axes ( 1D ) - creates vector from p1 to p2 and normalises it to a length of 1; vector is returned into e1
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>&, const csmp::Point<dim>&, csmp::Point<dim>& e1 );
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>&, csmp::Point<dim>& );
 
 /// axes ( 2D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>&, const csmp::Point<dim>&, const csmp::Point<dim>&, csmp::Point<dim>& e1, csmp::Point<dim>& e2 );
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>&, csmp::Point<dim>& );
 
 /// axes ( 3D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>&, const csmp::Point<dim>&, const csmp::Point<dim>&, const csmp::Point<dim>&, csmp::Point<dim>& e1, csmp::Point<dim>& e2, csmp::Point<dim>& e3 );
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>& e3, const csmp::Point<dim>&, csmp::Point<dim>& );
 
 /// bar ( length )

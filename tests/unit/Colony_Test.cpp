@@ -108,7 +108,7 @@ bool Colony_Test::TestColonyWith_int()
    cout << endl;
 
    // more than doubling the size of the colony
-   for ( size_t i{0}; i<100; ++i )
+   for ( auto i{0}; i<100; ++i )
      element_container.insert( 99 );
 
    cout <<"\nmain: colony access via pointers after extra insertions into colony:\n";
@@ -118,7 +118,7 @@ bool Colony_Test::TestColonyWith_int()
    
    cout <<"\nmain: listing the elements of the colony using the next() iterator:\n";
    const size_t n_elements{ element_container.size() };
-   for ( size_t i{0}; i<n_elements; ++i )
+   for ( auto i{0}; i<n_elements; ++i )
      cout <<" "<< (*next( element_container.begin(), i ));
    cout << endl;
    

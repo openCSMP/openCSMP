@@ -48,7 +48,7 @@ void TwoPhaseModel_Test::run()
   cout << "\nTwoPhaseModel_Test: " << getName() << endl;
 
   Region<1>& model = model_->Region( "Model" );
-  for ( vector<Element<1U>*>::iterator it = model.ElementsBegin(); it != model.ElementsEnd(); ++it )
+  for ( auto it = model.ElementsBegin(); it != model.ElementsEnd(); ++it )
   {
   if ( upToElementNumber_ != 0 && distance( model.ElementsBegin(), it ) > upToElementNumber_  )
     break;
@@ -103,7 +103,7 @@ void TwoPhaseModel_Test::run()
 
     // write data
     twoPhaseModel_->Initialize( *(*it) ); // just in case
-    for( size_t i=0U;i<(*it)->Nodes();i++)
+    for( auto i{0};i<(*it)->Nodes();i++)
     {
         twoPhaseModel_->InitializeForNode( *(*it), i );
         twoPhaseModel_->EffectiveSaturation();

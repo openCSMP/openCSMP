@@ -7,11 +7,11 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Model;
-template<size_t,template<size_t> class> class ModelSubDomain;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
+template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
-template<size_t dim>
+template<uint32_t dim>
 class Interrelation {
   public:
     explicit Interrelation( const PropertyDatabase<dim>& p );
@@ -24,8 +24,8 @@ class Interrelation {
     void          Apply( Model<dim>& );                     
                          
     /// a simplex is any geometrical association of points
-    template<template<size_t> class SIMPLEX>
-    void          Apply( ModelSubDomain<dim,SIMPLEX>& );                     
+    template<template<uint32_t> class CELL>
+    void          Apply( ModelSubDomain<dim,CELL>& );                     
 
     virtual void  Calculate();
 
@@ -341,14 +341,14 @@ Interrelation. The constant iterators are also used inside of the
 Interrelation to avoid accidential modification of any property other
 than the result property. 
 */
-template<size_t dim>
+template<uint32_t dim>
 inline typename std::map<std::string,Operand<dim> >::const_iterator  
                           Interrelation<dim>::OperandsBegin() const
  { 
      return operand_list_.begin(); 
  }
 
-template<size_t dim>
+template<uint32_t dim>
 inline typename std::map<std::string,Operand<dim> >::const_iterator 
                             Interrelation<dim>::OperandsEnd() const
  {   
@@ -367,7 +367,7 @@ used as a key to store the Operands.
 
 Is used inside Apply() to modify the result property. 
 */
-template<size_t dim>
+template<uint32_t dim>
 inline typename std::map<std::string,Operand<dim> >::iterator  Interrelation<dim>::Result()
  { 
      return result_; 
@@ -399,7 +399,7 @@ the calculation. The default level is ELEMENT, but if you define
 Interrelations that only use node variables, the application 
 level is automatically set to NODE. 
 */
-template<size_t dim>
+template<uint32_t dim>
 inline PLACEMENT   Interrelation<dim>::ApplicationLevel()  const 
 { return application_level_; }
 
@@ -431,7 +431,7 @@ variable value.
 
 If the computed value is out of range, an error is reported. 
 */
-template<size_t dim>
+template<uint32_t dim>
 inline bool Interrelation<dim>::ResultWithinRange()
  {
     return (*result_).second.IsWithinRange();
@@ -465,7 +465,7 @@ variables inside of the CSP model.
 Use the method PrintValue() of the Operand class to output computed
 property values to screen. 
 */
-template<size_t dim>
+template<uint32_t dim>
 inline void Interrelation<dim>::Calculate()
  {
     std::cout<<"\nInterrelation::Calculate: Please overwrite this virtual function by own implementation..."<< std::endl;

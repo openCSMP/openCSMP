@@ -5,8 +5,9 @@
 
 namespace csmp {
 
-template<size_t> class Boundary;
-template<size_t> class SplitBoundary;
+class ModelTopology;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 
 /**
     Creation, management and deletion of SplitBoundary objects.
@@ -15,7 +16,7 @@ template<size_t> class SplitBoundary;
       1. internal model boundaries
       2. node-matched disconnected boundaries of the mesh
 */
-template<size_t dim, template<size_t> class SPLITBOUNDARY_COMPLEX>
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 class SplitBoundaryInterface {
   public:
     SplitBoundaryInterface() {}
@@ -41,6 +42,10 @@ class SplitBoundaryInterface {
     // -----------------------------------------------
     // SplitBoundary creation and deletion
     // -----------------------------------------------
+
+    /// uses the InterFace ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed
+    size_t FormSplitBoundariesFrom( const ModelTopology& );
+
     /// Creates SplitBoundaries detecting and connecting node-matched disconnected perimeter element faces in mesh (already created in ANSYS or other); these are grouped and named for regions
     std::pair<std::set<std::string>,bool>  DetectAndCreateSplitBoundaries();
     

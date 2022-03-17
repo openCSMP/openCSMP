@@ -19,8 +19,8 @@ void ConstraintPointToNodePropertyVisitor_Test::run()
 {
   enum{DIM=3U};
   // Assuring nodes numbered from 0..n-1
-  //Region<dim> region = model_.Region( "Model" );
-  model_.Region("Model").RenumberNodes();
+  Region<DIM>& model_domain = model_.Region( "Model" );
+  model_domain.RenumberNodes();
 
   // Creating test properties, initializing values
   PropertyHandle<DIM> cpointProperty( model_, "cpoint property", SCALAR, ELEMENT_INTEGRATION_POINT );
@@ -33,29 +33,17 @@ void ConstraintPointToNodePropertyVisitor_Test::run()
                                                     "node property", model_.Region("Model").Nodes());
 
   test.ApplyWeightingToExtrapolatedValues();
-  //model_.Region("Model").ExtrapolateConstraintPointToNodeProperty("cpoint property","node property");
-  model_.Region("Model").Accept(test);
+  model_domain.ExtrapolateIntegrationPointToNodeProperty("cpoint property","node property");
+  model_domain.Accept(test);
   //test.ApplyWeightingToExtrapolatedValues();
 
   double nodevalue(0.);
-  for (vector<Node<DIM>*>::iterator
-       it=  model_.Region("Model").NodesBegin();it!=model_.Region("Model").NodesEnd();it++)
+  for (vector<Node<DIM>*>::const_iterator it=model_domain.NodesBegin();it!=model_domain.NodesEnd();it++)
   {
     //std::cout<<"Value: "<<(*it)->Read(model_.Database().StorageKey("node property"))<<std::endl;
     nodevalue =(*it)->Read(model_.Database().StorageKey("node property"));
     _equal(nodevalue,1.,10e-14);
   }
-/*
-  for (vector<Element<DIM>*>::iterator
-       it=  model_.Region("Model").ElementsBegin();it!=model_.Region("Model").ElementsEnd();it++)
-  {
-
-    //std::cout<<"Value: "<<(*it)->Read(model_.Database().StorageKey("node property"))<<std::endl;
-    nodevalue =(*it)->Read(model_.Database().StorageKey("node property"));
-    _equal(nodevalue,1.,10e-14);
-  }
-*/
-  //_test( false );
 
 } // run
 

@@ -8,8 +8,8 @@ namespace csmp {
 
 class TwoPhaseModelwithHysteresis_Test : public Test {
   public:
-    TwoPhaseModelwithHysteresis_Test();
-    ~TwoPhaseModelwithHysteresis_Test();
+    TwoPhaseModelwithHysteresis_Test() = default;
+    ~TwoPhaseModelwithHysteresis_Test() = default;
   
     virtual void run();
     
@@ -18,16 +18,16 @@ class TwoPhaseModelwithHysteresis_Test : public Test {
     enum TestCases : std::int8_t { CapillaryPressure, DerivativeOfCapillaryPressure, krw, krn };
   
     std::string parseTestCases( TestCases cases)
-    {
-      if ( cases == CapillaryPressure ) return "CapillaryPressure";
-      if ( cases == DerivativeOfCapillaryPressure ) return "DerivativeOfCapillaryPressure";
-      if ( cases == krw ) return "krw";
-      if ( cases == krn ) return "krn";
-      return "NONE" ;
-    }
+      {
+        if ( cases == CapillaryPressure ) return "CapillaryPressure";
+        if ( cases == DerivativeOfCapillaryPressure ) return "DerivativeOfCapillaryPressure";
+        if ( cases == krw ) return "krw";
+        if ( cases == krn ) return "krn";
+        return "NONE" ;
+      }
   
     void runOverSaturationRange( TestCases  );
-    std::vector <std::pair< double64,double64 > > Extract_data( Model<1U>&, TestCases  ) ;
+    std::vector <std::pair< double,double > > Extract_data( Model<1U>&, TestCases  ) ;
     
 };
 

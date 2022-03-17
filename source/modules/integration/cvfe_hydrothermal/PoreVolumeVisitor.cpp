@@ -6,7 +6,7 @@ using namespace std;
 namespace csmp {
 
   /** custom constructor */
-  template<size_t dim>
+  template<uint32_t dim>
   PoreVolumeVisitor<dim>::PoreVolumeVisitor( Model<dim>& model, 
                                              const char* porosity,
                                              const char* volume,
@@ -35,12 +35,12 @@ namespace csmp {
   }
 
   /** deconstructor */
-  template<size_t dim>
+  template<uint32_t dim>
   PoreVolumeVisitor<dim>::~PoreVolumeVisitor() 
   {}
 
   /** visit function for Node */
-  template<size_t dim>
+  template<uint32_t dim>
   void PoreVolumeVisitor<dim>::Visit(Node<dim>* n) 
   { 
 
@@ -65,7 +65,7 @@ namespace csmp {
   }
 
   /** visit function for Region */
-  template<size_t dim>
+  template<uint32_t dim>
   void PoreVolumeVisitor<dim>::Visit(Region<dim>* n)
   {
 	  // no calcution for the region

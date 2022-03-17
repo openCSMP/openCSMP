@@ -7,8 +7,8 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
 
 /**
     Flexible collection of Element and Node object pointers
@@ -41,7 +41,7 @@ template<size_t> class Element;
  
     Design specifications in detail: NimbleRegion for use in PDE_Integrators?
 
-    0. Must be a template with integral parameter size_t dim
+    0. Must be a template with integral parameter uint32_t dim
  
     1. Be a suitable plugin into the PDE_Integrator, meaning that it has the methods:
  
@@ -54,7 +54,7 @@ template<size_t> class Element;
  
     2. InterFace / task share with DES algorithm to convey update information.
 */
-template<size_t dim>
+template<uint32_t dim>
 class NimbleRegion {
   public:
     /// for flexibility with regard to application domain
@@ -62,15 +62,15 @@ class NimbleRegion {
     
   public:
     /// construction of region from nodes, relying on existing node-parent-element connectivity to identify elements
-    NimbleRegion( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    NimbleRegion( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
 
     /// constructs region from supplied nodes, relying on existing node-parent-element connectivity to identify elements and perimeter nodes
-    void Update( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    void Update( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
 
     /// as above, but with different way to find perimeter (FAIL: perimeter incorrect for discontiguous patches)
-    void Update2( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    void Update2( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
     
-    void Update3( typename std::vector<Node<dim>*>::iterator first, typename std::vector<Node<dim>*>::iterator last );
+    void Update3( typename std::vector<Node<dim>*>::const_iterator first, typename std::vector<Node<dim>*>::const_iterator last );
   
 /* CARRY OUT DIAGNOSTICS WHETHER THESE INTERFACES ARE WORTH IMPLEMENTING
 
@@ -108,15 +108,10 @@ class NimbleRegion {
 
     // iterators
   
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        PerimeterNodesBegin();
-    typename std::vector<csmp::Node<dim>*>::iterator        NodesEnd();
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
 
-    typename std::vector<CellType*>::iterator               ElementsBegin();
-    typename std::vector<CellType*>::iterator               ElementsEnd();
     typename std::vector<CellType*>::const_iterator         ElementsBegin() const;
     typename std::vector<CellType*>::const_iterator         ElementsEnd() const;
   

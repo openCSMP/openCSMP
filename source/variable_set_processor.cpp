@@ -40,7 +40,7 @@ struct variable {
 string headerGuard(const char* fname)
 {
     string guard(fname);
-    for (size_t i = 0; i < guard.size(); ++i) {
+    for (auto i = 0; i < guard.size(); ++i) {
       guard[i] = toupper(guard[i]);
         if (guard[i] == '.') {
             guard[i] = '_';
@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
             << var.placement << "> key_" << var.notation << "; // " << var.name << "\n";
     }
 
-    ofs << "\n  template<size_t dim>\n";
+    ofs << "\n  template<uint32_t dim>\n";
     ofs << "  explicit " << argv[1] << "( const PropertyDatabase<dim>& db )\n";
     bool first = true;
     for (auto& var : vars) {

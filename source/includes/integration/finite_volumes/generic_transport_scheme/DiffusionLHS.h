@@ -23,7 +23,7 @@ diffusion into a sparse solution matrix.
 @date 6/12/2017
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class DiffusionLHS : public MatrixOperator<dim> {
   public:
     DiffusionLHS( const INDEX<SCALAR,ELEMENT>& diffusivity_key, 

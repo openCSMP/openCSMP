@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// to integrate over a gradient represented by a vector property
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_dNT_op_dV( const PropertyDatabase<dim>& pref, 

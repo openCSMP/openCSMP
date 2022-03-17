@@ -7,11 +7,11 @@
 namespace csmp {
 
 class FiniteElementManager;
-template<size_t> class PropertyDatabase;
-template<size_t> class MeshManager;
-template<size_t> class Boundary;
-template<size_t> class Element;
-template<size_t> class Region;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class MeshManager;
+template<uint32_t> class Boundary;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
 template<typename> class FEM_Data;
 
 /**
@@ -23,19 +23,18 @@ template<typename> class FEM_Data;
         4) local face number of element face that is located at interface to innner element
         5) pointer to potential  lower-dimensional intervening Element
 */
-template<size_t dim> ///
-struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > > {
+template<uint32_t dim> ///
+struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
     // constructor
-    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,size_t>,
-                  std::pair<Element<dim>*,size_t> > >& set )
-      : std::set<std::pair<std::pair<Element<dim>*,size_t>, std::pair<Element<dim>*,size_t> > >(set) {}
+    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& set )
+      : std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(set) {}
       
     typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
     // data members
     Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
     Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
-    size_t InnerFaceID( ifaceIterator it ) const { return (*it).first.second; }
-    size_t OuterFaceID( ifaceIterator it ) const { return (*it).second.second; }
+    uint32_t InnerFaceID( ifaceIterator it ) const { return (*it).first.second; }
+    uint32_t OuterFaceID( ifaceIterator it ) const { return (*it).second.second; }
 };
 
 
@@ -85,7 +84,7 @@ SplitBoundary objects permit the implementation of jump discontinuities in conti
 @note SplitBoundary has no BOX_BOUNDARY flag because it can only have the value INTERNAL anyway.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class SplitBoundary : public ModelSubDomain<dim,InterFace>,
                       public LocalVariableStorage<dim, SplitBoundary>
  {
@@ -119,6 +118,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // --------------------------------------------------
     // building of SplitBoundaries and their modification
     // --------------------------------------------------
+    
+    /// forms a split boundary from existing interfaces assuming that these are numbered n=elmts+faces .. interfaces-1
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( MeshManager<dim>&, Boundary<dim>& );
@@ -175,7 +177,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
 // function prototypes
 
-template<size_t dim, typename Var>
+template<uint32_t dim, typename Var>
 void inputNodePropertyValue( SplitBoundary<dim>&,
                              const PropertyDatabase<dim>&,
                              const char* input_prop,

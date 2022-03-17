@@ -12,8 +12,12 @@
 #include "Region.h"
 #include "Element.h"
 #include "Point.h"
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
+#else
+#include "GaussJordan_Solver.h"
+#endif
 #include "PDE_Integrator_UoM.h"
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
@@ -24,12 +28,136 @@ namespace csmp {
 
 // non member functions
 
+
+
+
+
+
+/** returns true if point is contained in the element or - if not - a pointer to the neighbor cell that is closest to the point of interest
+ 
+ @todo make this method general
+ */
+template<uint32_t dim>
+pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& point, size_t region_idx )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+
+    // only helps if the pointer was indeed set to zero
+    assert( elmt != nullptr );
+    assert( isTriangularElement(elmt->FE_Type()) ||
+            elmt->FE_Type() == ISOPARAMETRIC_LINEAR_TETRAHEDRON ); // equidimensional simplex elements only
+    
+    // getting the element interpolation function values; if all are positive, the point is contained in this element
+    vector<double> IPOL;
+    if constexpr( dim == 3 ) elmt->N_AtGlobalPoint( IPOL, vector<double>{point[0],point[1],point[2]} );
+    if constexpr( dim == 2 ) elmt->N_AtGlobalPoint( IPOL, vector<double>{point[0],point[1]} );
+    map<double,uint32_t>  nearest_nbor;
+    bool                  point_is_inside{true};
+
+    const size_t n_nodes{ IPOL.size() };
+    for ( auto i{0}; i<n_nodes; ++i ) {
+         nearest_nbor.insert( make_pair( IPOL[i], i ) );
+         if ( IPOL[i] < 0. ) point_is_inside = false;
+      }
+      
+    // if the point is contained in this element, 'true' and the element pointer are returned
+    if ( point_is_inside ) {
+         if ( region_idx != elmt->Idx() ) {
+              csmp_error.notice( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
+           }
+         else return make_pair( elmt, true );
+      }
+    
+    // if one of the interpolation functions is negative, the point is not contained
+    // and the neighbor element opposite of the node with the most negative interpolation function value is returned if any (else nullptr)
+    return make_pair( elmt->Neighbor( (*nearest_nbor.begin()).second ), false );
+ 
+ } // end
+  
+template pair<Element<3>*,bool>  containsPoint( Element<3>*, const Point<3>&, size_t );
+template pair<Element<2>*,bool>  containsPoint( Element<2>*, const Point<2>&, size_t );
+  
+
+
+
+/** returns true if point is contained in the element or - if not - a pointer to the neighbor cell that is closest to the point of interest
+ 
+ @todo make this method general
+ */
+template<uint32_t dim>
+pair<Element<dim>*,bool>  containsPointLinearTriangle( Element<dim>* elmt, const Point<dim>& point, size_t region_idx )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+
+    // only helps if the pointer was indeed set to zero
+    assert( elmt != nullptr );
+    assert( isTriangularElement(elmt->FE_Type()) ||
+            elmt->FE_Type() == ISOPARAMETRIC_LINEAR_TETRAHEDRON ); // equidimensional simplex elements only
+    
+    // getting the element interpolation function values; if all are positive, the point is contained in this element
+    vector<double> N(3);
+
+   // no sign is taken, thus method works with cw and ccw node numbering
+   elmt->CoordinateMatrix();
+   DenseMatrix<DM_MIN> XY( elmt->FE()->XY );
+   double ae2 = 1.0 / ( ( XY(1,0)*XY(2,1) + XY(0,0)*XY(1,1) + 
+                          XY(0,1)*XY(2,0) - XY(2,1)*XY(0,0) -
+                          XY(2,0)*XY(1,1) - XY(1,0)*XY(0,1) ) );
+
+   // calculation the coefficients of the element interpolation functions
+   array<double,3> a, b, c;
+   a[0] = XY(1,0) * XY(2,1) - XY(2,0) * XY(1,1);
+   a[1] = XY(2,0) * XY(0,1) - XY(0,0) * XY(2,1);
+   a[2] = XY(0,0) * XY(1,1) - XY(1,0) * XY(0,1); 
+   
+   b[0] = XY(1,1) - XY(2,1);
+   b[1] = XY(2,1) - XY(0,1);
+   b[2] = XY(0,1) - XY(1,1); 
+   
+   c[0] = XY(2,0) - XY(1,0);
+   c[1] = XY(0,0) - XY(2,0);
+   c[2] = XY(1,0) - XY(0,0); 
+
+   // summing the interpolation functions to get their value at (x,y)   
+   for ( uint32_t i=0; i<3; i++ )
+     N[i] = ae2 * (a[i] + b[i] * point[0] + c[i] * point[1]);
+    
+
+    map<double,uint32_t>  nearest_nbor;
+    bool                  point_is_inside{true};
+
+    const size_t  n_nodes{ N.size() };
+    for ( auto i{0}; i<n_nodes; ++i ) {
+         nearest_nbor.insert( make_pair( N[i], i ) );
+         if ( N[i] < 0. ) point_is_inside = false;
+      }
+      
+    // if the point is contained in this element, 'true' and the element pointer are returned
+    if ( point_is_inside ) {
+         if ( region_idx != elmt->Idx() ) {
+              csmp_error.notice( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
+           }
+         else return make_pair( elmt, true );
+      }
+    
+    // if one of the interpolation functions is negative, the point is not contained
+    // and the neighbor element opposite of the node with the most negative interpolation function value is returned if any (else nullptr)
+    return make_pair( elmt->Neighbor( (*nearest_nbor.begin()).second ), false );
+ 
+ } // end
+  
+template pair<Element<2>*,bool>  containsPointLinearTriangle( Element<2>*, const Point<2>&, size_t );
+  
+ 
+ 
+ 
+ 
 /**
     Using the supplied cell as a starting location,
     traverses the mesh until the target point is found or a model boundary is encountered
     recording nullptr
 */
-template<size_t dim>
+template<uint32_t dim>
 std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>& model,
                                                       string target_region,
                                                       const vector<Point<dim> >& points_to_search )
@@ -60,7 +188,7 @@ std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>& model,
         // searching
         bool target_cell_found{false};
         while (  !target_cell_found ) {
-             pair<Element<dim>*,bool>  result = containsPoint( cell, pt, cell->Idx() );
+             pair<Element<dim>*,bool>  result = containsPointLinearTriangle( cell, pt, cell->Idx() );
              // assigning the element found
              if ( result.second ) {
                   last_cell_found   = result.first;
@@ -82,65 +210,18 @@ template vector<Element<2>*>  findCellsEnclosingPoints( const Model<2>&, string,
 
 
 
-
-
-/** returns true if point is contained in the element or - if not - a pointer to the neighbor cell that is closest to the point of interest
- 
- @todo make this method general
- */
-template<size_t dim>
-pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& point, size_t region_idx )
- {
-    ErrorHandler& csmp_error( ErrorHandler::Instance() );
-
-    // only helps if the pointer was indeed set to zero
-    assert( elmt != nullptr );
-    assert( isTriangularElement(elmt->FE_Type()) ||
-            elmt->FE_Type() == ISOPARAMETRIC_LINEAR_TETRAHEDRON ); // equidimensional simplex elements only
-    
-    // getting the element interpolation function values; if all are positive, the point is contained in this element
-    vector<double> IPOL;
-    if constexpr( dim == 3 ) elmt->N_AtGlobalPoint( IPOL, vector<double>{point[0],point[1],point[2]} );
-    if constexpr( dim == 2 ) elmt->N_AtGlobalPoint( IPOL, vector<double>{point[0],point[1]} );
-    map<double,size_t>  nearest_nbor;
-    bool                point_is_inside{true};
-
-    const size_t n_nodes{ IPOL.size() };
-    for ( size_t i{0}; i<n_nodes; ++i ) {
-         nearest_nbor.insert( make_pair( IPOL[i], i ) );
-         if ( IPOL[i] < 0. ) point_is_inside = false;
-      }
-      
-    // if the point is contained in this element, 'true' and the element pointer are returned
-    if ( point_is_inside ) {
-         if ( region_idx != elmt->Idx() ) {
-              csmp_error.notice( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
-           }
-         else return make_pair( elmt, true );
-      }
-    
-    // if one of the interpolation functions is negative, the point is not contained
-    // and the neighbor element opposite of the node with the most negative interpolation function value is returned if any (else nullptr)
-    return make_pair( elmt->Neighbor( (*nearest_nbor.begin()).second ), false );
- 
- } // end
-  
-template pair<Element<3>*,bool>  containsPoint( Element<3>*, const Point<3>&, size_t );
-template pair<Element<2>*,bool>  containsPoint( Element<2>*, const Point<2>&, size_t );
-  
-  
   
   
   
 /// returns the Element's node that is closest to the supplied point
-template<size_t dim>
+template<uint32_t dim>
 Node<dim>*  nearestNode( Element<dim>* e, const Point<dim>& point )
  {
     // computes distances between point and the elements node points returning the closest node
     // distance, local node number
-    map<double,size_t>  node_distances;
-    const size_t n_nodes{ e->Nodes() };
-    for ( size_t i{0}; i<n_nodes; ++i )
+    map<double,uint32_t>  node_distances;
+    const uint32_t n_nodes{ e->Nodes() };
+    for ( auto i{0}; i<n_nodes; ++i )
       node_distances.insert( make_pair( point.DistanceTo( e->N(i)->Coordinate()),i) );
     
     return e->N( (*node_distances.begin()).second );
@@ -156,14 +237,14 @@ template Node<2>*  nearestNode( Element<2>*, const Point<2>& );
 
 
 PointPropertyToCellMapper2D::PointPropertyToCellMapper2D( string csv_file )
- : property_data_( csv_file, vector<string>{"x","y"}, vector<vector<double>>{ 1, vector<double>(2) } )
+ : property_data_( csv_file, vector<string>{}, vector<string>{}, vector<vector<double>>{ 1, vector<double>(2) } )
  {
     vector<string>          row_labels, col_headers;
     vector<vector<double>>  rows_of_columns;
     
     size_t n_entries = read_CSV_File( csv_file, row_labels, col_headers, rows_of_columns );
     
-    property_data_ = move( DataTable{ csv_file, row_labels, col_headers, rows_of_columns } );
+    property_data_ = move( DataTable( csv_file, row_labels, col_headers, rows_of_columns ) );
     
     // lazy evaluation of: cells_with_points_
     cells_with_points_.resize( n_entries, nullptr );
@@ -189,7 +270,7 @@ bool PointPropertyToCellMapper2D::MapPointsToCells( Model<2>& model, string targ
     const size_t cx = property_data_.ColumnIndex("x");
     vector<Point<2> >  points_to_search;
     points_to_search.reserve( property_data_.Rows() );
-    for ( size_t i{0}; i<property_data_.Rows(); ++i )
+    for ( auto i{0}; i<property_data_.Rows(); ++i )
       points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cx+1) ) );
       
     
@@ -197,7 +278,7 @@ bool PointPropertyToCellMapper2D::MapPointsToCells( Model<2>& model, string targ
     // ------------------------------------
     cells_with_points_ = findCellsEnclosingPoints( model, target_region, points_to_search );
 
-    return ( CellsWithPoints() == target.Elements() );
+    return !( CellsWithPoints() == target.Elements() );
 
  } // end MapPointsToCells
      
@@ -259,7 +340,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
     // creating the point search data
     points_to_search.reserve( property_data_.Rows() );
     point_values.reserve( property_data_.Rows() );
-    for ( size_t i{0}; i<property_data_.Rows(); ++i ) {
+    for ( auto i{0}; i<property_data_.Rows(); ++i ) {
          // assuming that the x, y coordinates reside in column 0 and 1
          points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cy) ) );
          point_values.emplace_back( property_data_(i,prop_idx) );
@@ -286,15 +367,20 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
                node->Store( prop_key_node, makeScalar( DIRICH, point_values[elmt] ) );
             }
         // extrapolating the values solving Laplace equation
+#ifdef CSMP_WITH_SAMG_SOLVER
         SAMG_Settings                    settings;
-        SAMG_Solver                      samg_solver( &settings );
-        PDE_Integrator_UoM<2,Region>     extrapolator( samg_solver );
+        SAMG_Solver                      solver( &settings );
+#else
+        GaussJordan_Solver solver;
+#endif
+        PDE_Integrator_UoM<2,Region>     extrapolator( solver );
         NumIntegral_dNT_dN_dV<2>      lhs( model.Database(), target_variable_node.c_str(), target_variable_node.c_str() );
         NumIntegral_SetRHS_to_Zero<2> rhs( model.Database(), target_variable_node.c_str() );
         extrapolator.Add( &lhs );
         extrapolator.Add( &rhs );
         // computation
         Region<2> target_domain(model.Region(target_region));
+        Out();
         extrapolator.IntegrateOver( target_domain );
 
         // interpolating nodal values back to the element barycentres in the region
@@ -319,11 +405,6 @@ void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string ta
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     Region<2U>    target_domain(model.Region(target_region.c_str()));
 
-    // assuming that which cells contain the points has already been established
-    if ( CellsWithPoints() < target_domain.Elements() )
-      csmp_error.notice( ERROR, "PointPropertyToCellMapper2D::MapNodeToPointData",
-                         "Not all cells of the target domain contain points");
-        
     const csmp::Index eprop_key = model.Database().StorageKey(target_variable.c_str());
     const csmp::Index nprop_key = model.Database().StorageKey((target_variable + " node").c_str());
 
@@ -377,12 +458,12 @@ void PointPropertyToCellMapper2D::Out() const
     const size_t cx = property_data_.ColumnIndex("x");
     const size_t cy = property_data_.ColumnIndex("y");
     const size_t cz = property_data_.ColumnIndex("z");
-    for ( size_t i{0}; i<property_data_.Rows(); ++i ) {
+    for ( auto i{0}; i<property_data_.Rows(); ++i ) {
          cout <<"("<< property_data_(i,cx) <<",";
          cout << property_data_(i,cy) <<",";
          cout << property_data_(i,cz) <<"): ";
          if ( cells_with_points_[i] == nullptr ) cout <<" ---\n";
-         else cout << parseFiniteElementType( cells_with_points_[i]->FE_Type() ) << cells_with_points_[i]->Idx() <<"\n";
+         else cout << parseFiniteElementType( cells_with_points_[i]->FE_Type() ) << " " << cells_with_points_[i]->Idx() <<"\n";
       }
  }
      

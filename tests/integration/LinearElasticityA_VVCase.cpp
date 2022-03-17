@@ -78,11 +78,13 @@ namespace csmp
       // setting up & solving linear elasticity fea problem
       #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Settings settings;
+      SAMG_Solver   solver (&settings);
       settings.Set_napproach(2); 
-      PDE_Integrator<DIM,Region> deformation( new SAMG_Solver(&settings) );
+      PDE_Integrator<DIM,Region> deformation( &solver  );
       //PDE_Integrator<DIM,Region> deformation( new LUdcmp_Solver() );
       #else
-      PDE_Integrator<DIM,Region> deformation( new CSMP_DEFAULT_LINEAR_SOLVER() );
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+      PDE_Integrator<DIM,Region> deformation( &solver );
       #endif
 
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );

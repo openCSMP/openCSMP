@@ -6,7 +6,7 @@ namespace csmp {
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 MassBasedStencilProcessor<dim>::MassBasedStencilProcessor( const csmp::Index& adv_lhs_key,
                                                            const csmp::Index& adv_rhs_key,
                                                            const csmp::Index& velo_key )
@@ -23,7 +23,7 @@ Initializes sector pore volume and facet flux vectors for
 current finite element = finite volume stencil.
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& param,
                                                           const Element<dim>& e ,
                                                           const VARIABLE_TYPE &vt,
@@ -36,7 +36,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
      if (vt==SCALAR){
          // getting all the node-related information
          // ----------------------------------------
-         for ( size_t i=0; i<e.Nodes(); i++ ) {
+         for ( auto i=0; i<e.Nodes(); i++ ) {
              // sector pore volumes
              this->sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -48,7 +48,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
          // -------------------------------------------------------
          this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -60,7 +60,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
          if (adv_rhs_key_.type==FLAGGEDARRAY){
              FlaggedArrayVariable fav;
              ArrayVariable av;
-             for ( size_t i=0; i<e.Nodes(); i++ ) {
+             for ( auto i=0; i<e.Nodes(); i++ ) {
                  // sector pore volumes
                  this->sector_pore_volume_[i] = param.SectorVolume( i );
 
@@ -74,7 +74,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
          }
          else{
              ArrayVariable av;
-             for ( size_t i=0; i<e.Nodes(); i++ ) {
+             for ( auto i=0; i<e.Nodes(); i++ ) {
                  // sector pore volumes
                  this->sector_pore_volume_[i] = param.SectorVolume( i );
 
@@ -89,7 +89,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
 
          this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -101,7 +101,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
      if (vt==FLAGGEDARRAY){
          if (adv_rhs_key_.type==FLAGGEDARRAY){
              FlaggedArrayVariable fav;
-             for ( size_t i=0; i<e.Nodes(); i++ ) {
+             for ( auto i=0; i<e.Nodes(); i++ ) {
                  // sector pore volumes
                  this->sector_pore_volume_[i] = param.SectorVolume( i );
                  // advected variable
@@ -116,7 +116,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
          {
              FlaggedArrayVariable fav;
              ArrayVariable av;
-             for ( size_t i=0; i<e.Nodes(); i++ )
+             for ( auto i=0; i<e.Nodes(); i++ )
              {
                  // sector pore volumes
                  this->sector_pore_volume_[i] = param.SectorVolume( i );
@@ -131,7 +131,7 @@ void MassBasedStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& pa
 
          this->facet_flux_.resize(e.FV()->Facets());
 
-         for ( size_t i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas

@@ -8,12 +8,12 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::IgnoreOperand( bool ignore )
   { ignore_operand = ignore; }
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
                                                                   const char* integral_multiplier,
                                                                   const char* test )
@@ -40,7 +40,7 @@ NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const Proper
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& pref,
                                                               const char* integral_multiplier,
                                                               const char* oper,     
@@ -74,7 +74,7 @@ NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::NumIntegral_DNT_rhsop_DN_dV( const Proper
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -102,7 +102,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
@@ -114,7 +114,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
         OPMAT.Resize( e.Nodes(), 1 );
         OPMAT = 1.;
     
-	    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+	    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
 	         detJ = e.dN_AtIntegrationPoint( DN, i );
 	         DN.Transposed( DNT );
 
@@ -125,7 +125,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 	         DNT *= OPMAT;
 
 	         // assembling contribution to right-hand vector
-	         for ( size_t j=0; j<e.Nodes(); j++ ) 
+	         for ( auto j=0; j<e.Nodes(); j++ )
 	           // multiplying with determinant and weights
 	           MathOperatorRHS<dim>::RHS[j] += DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ * multiplier(); 
 	      }
@@ -134,7 +134,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
     else {
         OPMAT.Resize( e.Nodes(), 1 );
     
-	    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+	    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
 	         detJ = e.dN_AtIntegrationPoint( DN, i );
 	         DN.Transposed( DNT );
 	         
@@ -143,13 +143,13 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 	             
 	         if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) OPMAT = eoperand();
 	         else
-             for ( size_t j=0; j<e.Nodes(); j++ ) OPMAT(j,0) = noperand[j]();
+             for ( auto j=0; j<e.Nodes(); j++ ) OPMAT(j,0) = noperand[j]();
                
 	         // collapse matrix into righthand vector format
 	         DNT *= OPMAT;
 
 	         // assembling contribution to right-hand vector
-	         for ( size_t j=0; j<e.Nodes(); j++ ) 
+	         for ( auto j=0; j<e.Nodes(); j++ ) 
 	           // multiplying with determinant and weights
 	           MathOperatorRHS<dim>::RHS[j] += 
 	              DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ * multiplier(); 

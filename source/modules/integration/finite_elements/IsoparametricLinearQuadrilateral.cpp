@@ -15,7 +15,7 @@ inside quad at convergence points . The weights of the integration points
 are set to 1 such that the integrated contributions add up to 1.  .
 */
 
-IsoparametricLinearQuadrilateral::IsoparametricLinearQuadrilateral( size_t dimensions )
+IsoparametricLinearQuadrilateral::IsoparametricLinearQuadrilateral( uint32_t dimensions )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, true, true, 1U ),
    use2Dto3Djacobi( !(dimensions==2) ),
@@ -55,8 +55,8 @@ IsoparametricLinearQuadrilateral::IsoparametricLinearQuadrilateral( size_t dimen
 
    // full 4-point integration basis
    const double sqRootOneThird=sqrt(1./3.);
-   rr[0] = sqRootOneThird,   rr[1] = -sqRootOneThird,   rr[2] = -sqRootOneThird,   rr[3] = sqRootOneThird;
-   ss[0] = sqRootOneThird,   ss[1] =  sqRootOneThird,   ss[2] = -sqRootOneThird,   ss[3] =-sqRootOneThird;
+   rr[0] = sqRootOneThird; rr[1] = -sqRootOneThird; rr[2] = -sqRootOneThird; rr[3] = sqRootOneThird;
+   ss[0] = sqRootOneThird; ss[1] =  sqRootOneThird; ss[2] = -sqRootOneThird; ss[3] =-sqRootOneThird;
 
    W[0]  = W[1]  = W[2]  =  W[3]  = 1.0;
 
@@ -78,7 +78,7 @@ IsoparametricLinearQuadrilateral::~IsoparametricLinearQuadrilateral()
 
 
 
-void IsoparametricLinearQuadrilateral::Dimensions( size_t dimensions )
+void IsoparametricLinearQuadrilateral::Dimensions( uint32_t dimensions )
  {
    dim = dimensions;
    if ( dim == 3 ) use2Dto3Djacobi = true;
@@ -217,7 +217,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 void
-IsoparametricLinearQuadrilateral::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+IsoparametricLinearQuadrilateral::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
  {
     assert( ip < gpe );
 
@@ -246,8 +246,8 @@ When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
 void
-IsoparametricLinearQuadrilateral::NodesOfFace( size_t face_id,
-                                               vector<size_t>& fnids ) const
+IsoparametricLinearQuadrilateral::NodesOfFace( uint32_t face_id,
+                                               vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
     if      ( face_id == 0 )
@@ -280,39 +280,39 @@ IsoparametricLinearQuadrilateral::NodesOfFace( size_t face_id,
 
 
 
-vector<size_t>  IsoparametricLinearQuadrilateral::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearQuadrilateral::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{0,1};
-        case 1: return vector<size_t>{1,2};
-        case 2: return vector<size_t>{2,3};
-        case 3: return vector<size_t>{3,0};
+        case 0: return vector<uint32_t>{0,1};
+        case 1: return vector<uint32_t>{1,2};
+        case 2: return vector<uint32_t>{2,3};
+        case 3: return vector<uint32_t>{3,0};
       }
     cerr <<"\nIsoparametricLinearQuadrilateral::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
 
-vector<size_t>  IsoparametricLinearQuadrilateral::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  IsoparametricLinearQuadrilateral::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,3};
-        case 1: return vector<size_t>{0,2};
-        case 2: return vector<size_t>{1,3};
-        case 3: return vector<size_t>{0,2};
+        case 0: return vector<uint32_t>{1,3};
+        case 1: return vector<uint32_t>{0,2};
+        case 2: return vector<uint32_t>{1,3};
+        case 3: return vector<uint32_t>{0,2};
         default:
           cerr <<"\nIsoparametricLinearQuadrilateral::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 void
-IsoparametricLinearQuadrilateral::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricLinearQuadrilateral::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -348,7 +348,7 @@ for the element (These integers are germane to all quadratic triangular
 elements in the mesh).
 */
 void
-IsoparametricLinearQuadrilateral::CornerNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearQuadrilateral::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(4);
     ids[0] = 0;
@@ -369,7 +369,7 @@ elements in the mesh).
 
 @todo (3) Check what should be assigned
 */
-void  IsoparametricLinearQuadrilateral::MidSideNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearQuadrilateral::MidSideNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(1);
     ids[0] = 0;
@@ -377,7 +377,7 @@ void  IsoparametricLinearQuadrilateral::MidSideNodes( std::vector<size_t>& ids )
  }
 
 
-void  IsoparametricLinearQuadrilateral::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+void  IsoparametricLinearQuadrilateral::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -388,14 +388,14 @@ void  IsoparametricLinearQuadrilateral::CounterClockwiseNodes( std::vector<size_
 
 
 CSMP_FEM_TYPE
-IsoparametricLinearQuadrilateral::ElementTypeOfFace( size_t )  const
+IsoparametricLinearQuadrilateral::ElementTypeOfFace( uint32_t )  const
  {
     return ISOPARAMETRIC_LINEAR_BAR;
  }
 
 
 
-double IsoparametricLinearQuadrilateral::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearQuadrilateral::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 void  IsoparametricLinearQuadrilateral::N_AtBaryCenter( std::vector<double>& N )
  {
@@ -425,7 +425,7 @@ IsoparametricLinearQuadrilateral::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( size_t i=0U; i<spe; i++ ) segms.insert( vec[i] );
+   for ( auto i{0}; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.rbegin()),
             segm2 = (*segms.rbegin());
@@ -453,7 +453,7 @@ double  IsoparametricLinearQuadrilateral::InnerRadius()
    double         sum(0.0), vol;
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<segms.size(); i++ ) sum += segms[i];
+   for ( uint32_t i=0; i<segms.size(); i++ ) sum += segms[i];
    sum /= 2.0;
    vol  = Volume();
    vol /= sum;
@@ -561,13 +561,12 @@ the area is computed.
 */
 double  IsoparametricLinearQuadrilateral::Volume()
 {
-    double  area;
-    size_t  i;
+    double  area{0.};
 
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          // getting interpolation function derivatives
          RS[0] = rr[i];
@@ -616,7 +615,7 @@ IsoparametricLinearQuadrilateral::dN( DenseMatrix<DM_MIN>& DN4 )
           vector<double> EFG(dim);
           double det_inverse;
 
-          for ( size_t i=0; i<npe; i++ ) {
+          for ( uint32_t i=0; i<npe; i++ ) {
                 RS[0] = NXY(i,0);
                 RS[1] = NXY(i,1);
 
@@ -635,7 +634,7 @@ IsoparametricLinearQuadrilateral::dN( DenseMatrix<DM_MIN>& DN4 )
 
      // if the quadralateral is 2D
      DenseMatrix<DM_MIN> TEMP(dim,1);
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
            dNr( NXY(i,0), NXY(i,1), DNR );
            dNs( NXY(i,0), NXY(i,1), DNS );
@@ -662,11 +661,11 @@ IsoparametricLinearQuadrilateral::ParametricToPhysical(std::vector<double>& rst,
 {
     Nrs(rst[0],rst[1], NRST );
 
-    for(size_t i=0; i<dim; i++) xyz[i]=0.0;
+    for(uint32_t i=0; i<dim; i++) xyz[i]=0.0;
 
         if(dim==2)
         {
-            for(size_t i=0; i<npe; i++)
+            for(uint32_t i=0; i<npe; i++)
             {
                 xyz[0]+=XY(i,0)*NRST[i];
                 xyz[1]+=XY(i,1)*NRST[i];
@@ -675,7 +674,7 @@ IsoparametricLinearQuadrilateral::ParametricToPhysical(std::vector<double>& rst,
         else if(dim==3)
         {
 
-            for(size_t i=0; i<npe; i++)
+            for(uint32_t i=0; i<npe; i++)
             {
                 xyz[0]+=XY(i,0)*NRST[i];
                 xyz[1]+=XY(i,1)*NRST[i];
@@ -706,7 +705,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( size_t i=1; i<spe; i++ )
+    for ( uint32_t i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -748,9 +747,9 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
         double minDistanceFromGivenPoint;
 
         const double constantMu               = 1.0;
-        const size_t numberOfFirstIterrations   = 5;
-        const size_t maxNumberOfIterrations     = 20;
-        const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
+        const uint32_t numberOfFirstIterrations   = 5;
+        const uint32_t maxNumberOfIterrations     = 20;
+        const uint32_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
         const double incrementR = 2.0/(numberOfFirstIterrations-1);
         const double incrementS = 2.0/(numberOfFirstIterrations-1);
@@ -758,10 +757,10 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = -1.0;
-        for(size_t i=0;i<numberOfFirstIterrations;i++)
+        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = -1.0;
-            for(size_t j=0;j<numberOfFirstIterrations;j++)
+            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
             {
                 ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -785,8 +784,8 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
 
                 if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                 {
-                    for(size_t i=0; i<2U; i++)
-                        rstHatK[i] = rstHatK_PlusOne[i];
+                    for(uint32_t k=0; k<2U; k++)
+                        rstHatK[k] = rstHatK_PlusOne[k];
 
                     minDistanceFromGivenPoint = distanceFromGivenPointL2;
                 }
@@ -815,7 +814,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
                                              distanceFromGivenPointLinf[1]*distanceFromGivenPointLinf[1] );
         }
 
-        size_t iteration = 1;
+        uint32_t iteration = 1;
 
         /// Newton-Raphson iterations
         while ( ( distanceFromGivenPointL2 > geometricTolerance ) && ( iteration < maxNumberOfIterrations ) )
@@ -849,7 +848,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
                 rstHatK_PlusOne[0] = rstHatK[0] - constantMu*(JINV(0,0)*(outxyz[0]-xyz[0]) + JINV(1,0)*(outxyz[1]-xyz[1]) +JINV(2,0)*(outxyz[2]-xyz[2]));
                 rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
 
-                for(size_t i=0; i<2; i++)
+                for(uint32_t i=0; i<2; i++)
                     rstHatK[i] = rstHatK_PlusOne[i];
 
                 ParametricToPhysical( rstHatK, outxyz);
@@ -864,7 +863,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
                 rstHatK_PlusOne[0] = rstHatK[0] - constantMu*(JINV(0,0)*(outxyz[0]-xyz[0]) + JINV(1,0)*(outxyz[1]-xyz[1]) );
                 rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) );
 
-                for(size_t i=0; i<2; i++)
+                for(uint32_t i=0; i<2; i++)
                     rstHatK[i] = rstHatK_PlusOne[i];
 
                 ParametricToPhysical( rstHatK, outxyz);
@@ -930,7 +929,7 @@ IsoparametricLinearQuadrilateral::PhysicalToParametric(
 
     }
 
-    for(size_t i=0; i<2; i++)
+    for(uint32_t i=0; i<2; i++)
         rSt[i] = rstHatK[i];
 }
 
@@ -966,7 +965,7 @@ IsoparametricLinearQuadrilateral::dN( DenseMatrix<DM_MIN>& DN2, const vector<dou
          static vector<double> EFG(dim);
          double det_inverse;
 
-          for ( size_t i=0; i<npe; i++ ) {
+          for ( uint32_t i=0; i<npe; i++ ) {
 
                 detJ = Jacobi( rst, EFG, JMAT );
                 det_inverse = 1.0 / ( detJ * detJ );
@@ -1030,8 +1029,8 @@ IsoparametricLinearQuadrilateral::Jacobi(	const vector<double>& rs,
  // compute 2x3 Jacobian matrix (expects 6x3 x-y-z coordinate matrix)
  J.Resize(2,dim);
  J.Zero();
- for ( size_t i=0; i<XY.Cols(); i++ )
-  for ( size_t j=0; j<XY.Rows(); j++ ) {
+ for ( uint32_t i=0; i<XY.Cols(); i++ )
+  for ( uint32_t j=0; j<XY.Rows(); j++ ) {
        J(0,i) += DNR[j] * XY(j,i);
        J(1,i) += DNS[j] * XY(j,i);
     }
@@ -1044,7 +1043,7 @@ IsoparametricLinearQuadrilateral::Jacobi(	const vector<double>& rs,
  EFG.resize(3);
  fill( EFG.begin(), EFG.end(), 0. );
 
- for ( size_t i=0; i<dim; i++ ) {
+ for ( uint32_t i=0; i<dim; i++ ) {
     EFG[0] += J(0,i) * J(0,i);
     EFG[1] += J(0,i) * J(1,i);
     EFG[2] += J(1,i) * J(1,i);
@@ -1066,8 +1065,8 @@ double IsoparametricLinearQuadrilateral::Jacobi( const vector<double>& rs )
     JMAT.Resize(2,dim);
     JMAT.Zero();
 
-    for ( size_t i=0; i<XY.Cols(); i++ )
-      for ( size_t j=0; j<XY.Rows(); j++ ) {
+    for ( uint32_t i=0; i<XY.Cols(); i++ )
+      for ( uint32_t j=0; j<XY.Rows(); j++ ) {
            JMAT(0,i) += DNR[j] * XY(j,i);
            JMAT(1,i) += DNS[j] * XY(j,i);
         }
@@ -1078,7 +1077,7 @@ double IsoparametricLinearQuadrilateral::Jacobi( const vector<double>& rs )
     // compute E, F, and g
     double E(0.0), F(0.0), G(0.0);
 
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( uint32_t i=0; i<dim; i++ ) {
          E += JMAT(0,i) * JMAT(0,i);
          F += JMAT(0,i) * JMAT(1,i);
          G += JMAT(1,i) * JMAT(1,i);
@@ -1166,7 +1165,7 @@ double
 IsoparametricLinearQuadrilateral::dN_AtIntegrationPoint(
                                             DenseMatrix<
                                             DM_MIN>& B,
-                                            size_t gauss_point )
+                                            uint32_t gauss_point )
  {
     double det;
 
@@ -1183,7 +1182,7 @@ IsoparametricLinearQuadrilateral::dN_AtIntegrationPoint(
 
          B.Resize(dim,npe);
 
-         for ( size_t i=0; i<npe; i++ )
+         for ( uint32_t i=0; i<npe; i++ )
            {
              B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
              B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1207,10 +1206,10 @@ IsoparametricLinearQuadrilateral::dN_AtIntegrationPoint(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1245,7 +1244,7 @@ double
 IsoparametricLinearQuadrilateral::dN_AtNode(
                                 DenseMatrix<
                                 DM_MIN>& B,
-                                size_t nd
+                                uint32_t nd
                                 )
  {
     double  det;
@@ -1263,7 +1262,7 @@ IsoparametricLinearQuadrilateral::dN_AtNode(
 
         B.Resize(dim,npe);
 
-        for ( size_t i=0; i<npe; i++ )
+        for ( uint32_t i=0; i<npe; i++ )
           {
             B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
             B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1288,10 +1287,10 @@ IsoparametricLinearQuadrilateral::dN_AtNode(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1318,7 +1317,7 @@ IsoparametricLinearQuadrilateral::dN_AtBarycenter(
 
         B.Resize(dim,npe);
 
-        for ( size_t i=0; i<npe; i++ )
+        for ( uint32_t i=0; i<npe; i++ )
           {
             B(0,i)  = det_inverse * JMAT(0,0) * ( EFG[2] * DNR[i] - EFG[1] * DNS[i] );
             B(0,i) += det_inverse * JMAT(1,0) * ( EFG[0] * DNS[i] - EFG[1] * DNR[i] );
@@ -1342,10 +1341,10 @@ IsoparametricLinearQuadrilateral::dN_AtBarycenter(
 
     // Compute global DN by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3];
 
     B = JINV * B;
 
@@ -1380,8 +1379,8 @@ integrals.
 
 */
 void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
-                                            const vector<size_t>& bnodes,
-                                            vector<size_t>& fnids )
+                                            const vector<uint32_t>& bnodes,
+                                            vector<uint32_t>& fnids )
  {
      // in 3D, all nodes may be at model boundary
      if ( use2Dto3Djacobi && bnodes.size() != 2 )
@@ -1396,7 +1395,7 @@ void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
 
      else if ( bnodes.size() < 2 ) {
            cout <<"\nnodes at boundary: ";
-           for ( size_t j=0; j<bnodes.size(); j++ ) cout << bnodes[j] <<" ";
+           for ( uint32_t j=0; j<bnodes.size(); j++ ) cout << bnodes[j] <<" ";
            cout << endl;
            throw csmp::Exception( ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
@@ -1437,8 +1436,8 @@ void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
 
 /*void
 IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
-                                            const vector<size_t>& bnodes,
-                                            vector<size_t>& fnids )
+                                            const vector<uint32_t>& bnodes,
+                                            vector<uint32_t>& fnids )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1505,19 +1504,19 @@ IsoparametricLinearQuadrilateral::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( uint32_t i=0; i<npe; i++ )
        {
 
         if(dim==2)
         {
-            for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+            for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
             ofs<<0.0;
             ofs << endl;
         }
         else
         if(dim==3)
         {
-            for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+            for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
             ofs << endl;
         }
        }
@@ -1547,7 +1546,7 @@ IsoparametricLinearQuadrilateral::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1557,16 +1556,16 @@ IsoparametricLinearQuadrilateral::OutputNodeDataToVTK( const char* file_name,
           // matrix DATA is vec-dim x 10
           if(dim==2)
           {
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs<<0.0<<" ";
                ofs << endl;
             }
           }
           else
           {
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
           }
@@ -1593,7 +1592,7 @@ to the nodes.  This involves the steps:
 */
 void
 IsoparametricLinearQuadrilateral::ExtrapolateIntegrationPointVariableToNodes(
-                                                        size_t nvars,
+                                                        uint32_t nvars,
                                                         const vector<double>& IVAR,
                                                         vector<double>& NVAR )
 const
@@ -1617,12 +1616,12 @@ const
 
   MATRIX_A(0,2)=MATRIX_A(1,3)=MATRIX_A(2,0)=MATRIX_A(3,1) =c;
 
- for ( size_t i=0; i<nvars; i++ )
+ for ( uint32_t i=0; i<nvars; i++ )
     {
-    for ( size_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
+    for ( uint32_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
     TEMP_N=MATRIX_A*TEMP_IP;
             //TEMP_N.Out();
-            for ( size_t j=0; j<npe; j++ )
+            for ( uint32_t j=0; j<npe; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);
             }
@@ -1635,7 +1634,7 @@ const
 
 /// integration point location transformed into global coordinates
 /// @warning  the matrix XYZ must be uptodate
-void  IsoparametricLinearQuadrilateral::IntegrationPoint( size_t ip,
+void  IsoparametricLinearQuadrilateral::IntegrationPoint( uint32_t ip,
                                                           vector<double>& xyz ) const
  {
     assert( ip < gpe );
@@ -1647,7 +1646,7 @@ void  IsoparametricLinearQuadrilateral::IntegrationPoint( size_t ip,
 
     // 2D
     if ( NXY.Cols() == 2U ) {
-          for( size_t i=0U; i<npe; i++ ) {
+          for( auto i{0}; i<npe; i++ ) {
                xyz[0] += XY(i,0) * NRST[i];
                xyz[1] += XY(i,1) * NRST[i];
             }
@@ -1656,7 +1655,7 @@ void  IsoparametricLinearQuadrilateral::IntegrationPoint( size_t ip,
 
     // 3D case
     xyz[2]=0.;
-    for( size_t i=0U; i<npe; i++ ) {
+    for( auto i{0}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -1679,7 +1678,7 @@ double  IsoparametricLinearQuadrilateral::JacobianInverse()
         static vector<double> EFG(dim);
         fill( EFG.begin(), EFG.end(), 0.0 );
 
-        for ( size_t i=0; i<dim; i++ ) {
+        for ( uint32_t i=0; i<dim; i++ ) {
             EFG[0] += JAC(0,i) * JAC(0,i);
             EFG[1] += JAC(0,i) * JAC(1,i);
             EFG[2] += JAC(1,i) * JAC(1,i);
@@ -1758,14 +1757,14 @@ void IsoparametricLinearQuadrilateral::UnitNormal( std::vector<double>& vc ) con
               Z31 = XY(0,2) - XY(2,2);
 
      // normal to quad
-    vc[0]  = -Y12*Z31 + Z12*Y31,
-    vc[1]  = -Z12*X31 + X12*Z31,
-    vc[2]  = -X12*Y31 + Y12*X31;
-    // normalization to unit length
-    double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
-    vc[0] /= length;
-    vc[1] /= length;
-    vc[2] /= length;
+     vc[0]  = -Y12*Z31 + Z12*Y31;
+     vc[1]  = -Z12*X31 + X12*Z31;
+     vc[2]  = -X12*Y31 + Y12*X31;
+     // normalization to unit length
+     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
+     vc[0] /= length;
+     vc[1] /= length;
+     vc[2] /= length;
  }
 
 
@@ -1778,7 +1777,7 @@ void IsoparametricLinearQuadrilateral::UnitNormal( std::vector<double>& vc ) con
     
     @test  - for 3D version
 */
-void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      // if this is a planar element in a 2D model
@@ -1832,8 +1831,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vect
      // the face normals are found as cross-products between element normal and edges
      // nodes 0 and 1
      if ( face == 0 ) {
-          Point<3> face(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           // (-) to flip the normal to the outside
           unrml[0] = -nrml[0];
@@ -1843,8 +1842,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vect
        }
      // nodes 1 and 2
      if ( face == 1 ) {
-          Point<3> face(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];
@@ -1853,8 +1852,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vect
        }
      // nodes 2 and 3
      if ( face == 2 ) {
-          Point<3> face(XY(3,0)-XY(2,0),XY(3,1)-XY(2,1),XY(3,2)-XY(2,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(3,0)-XY(2,0),XY(3,1)-XY(2,1),XY(3,2)-XY(2,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];
@@ -1863,8 +1862,8 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vect
        }
      // nodes 3 and 0
      if ( face == 3 ) {
-          Point<3> face(XY(0,0)-XY(3,0),XY(0,1)-XY(3,1),XY(0,2)-XY(3,2));
-          Point<3> nrml( crossProduct( enrml, face ) );
+          Point<3> fface(XY(0,0)-XY(3,0),XY(0,1)-XY(3,1),XY(0,2)-XY(3,2));
+          Point<3> nrml( crossProduct( enrml, fface ) );
           nrml.NormalizeLengthTo(/* 1 */);
           unrml[0] = -nrml[0];
           unrml[1] = -nrml[1];
@@ -1881,7 +1880,7 @@ void  IsoparametricLinearQuadrilateral::UnitNormalToFace( size_t face, std::vect
 
 
 
-void IsoparametricLinearQuadrilateral::JacobianAtIntegrationPoint( size_t gauss_point )
+void IsoparametricLinearQuadrilateral::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     if ( !use2Dto3Djacobi ) {
          dNr( rr[gauss_point], ss[gauss_point], DNR );
@@ -1913,14 +1912,14 @@ IsoparametricLinearQuadrilateral::IntegrationPointsFromParToPhys(DenseMatrix<DM_
  {
     IPPHYS.Resize(gpe,dim);
     vector<double> outxyz(dim);
-    const size_t numberOfParametricDims=2;
+    const uint32_t numberOfParametricDims=2;
     vector<double> rst(numberOfParametricDims);
 
-    for(size_t i=0;i<gpe;i++)
+    for(uint32_t i=0;i<gpe;i++)
         {
         rst[0]=rr[i];rst[1]=ss[i];
         ParametricToPhysical( rst, outxyz);
-        for(size_t j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
+        for(uint32_t j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
         }
    }
 
@@ -1950,7 +1949,7 @@ double  IsoparametricLinearQuadrilateral::JacobianDeterminant()
       std::vector<double> EFG(3);
       fill( EFG.begin(), EFG.end(), 0.0 );
 
-      for ( size_t i=0; i<dim; i++ )
+      for ( uint32_t i=0; i<dim; i++ )
        {
          EFG[0] += JAC(0,i) * JAC(0,i);
          EFG[1] += JAC(0,i) * JAC(1,i);

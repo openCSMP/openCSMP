@@ -3,6 +3,7 @@
 #include "Element.h"
 #include "Face.h"
 #include "Exception.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
@@ -13,7 +14,7 @@ namespace csmp {
 /** The operand defines the fluid density, and the mtrl variable would for
 instance be the hydraulic conductivity.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::NumIntegral_NT_mixed_op_dNi_dV( const PropertyDatabase<dim>& pref,
                                                             const char* nodal_mtrl_multiplier,
                                                             const char* oper, 
@@ -26,7 +27,7 @@ NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::NumIntegral_NT_mixed_op_dNi_dV( const 
     DNI(3),
     oper_nprop(3), 
     mtrl_nprop(3),
-    gravity(9.80665), // scalar acts to increase the pressure
+    gravity(ACC_GRAVITY), // scalar acts to increase the pressure
     mtrl_time_multiplier(1.0),
     xyz(2) // Y-direction
  {
@@ -50,15 +51,15 @@ NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::NumIntegral_NT_mixed_op_dNi_dV( const 
  }
 
 
-template<size_t dim,class CELL>
-void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::SpatialDerivative( size_t num_xyz )
+template<uint32_t dim,class CELL>
+void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::SpatialDerivative( uint32_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
     xyz = num_xyz;
  }
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::MaterialPropertyTimeMultiplier( double time_increment )
  {
     mtrl_time_multiplier = time_increment;
@@ -80,7 +81,7 @@ is used to compute the hydrostatic pressure contribution to a transient
 system. Do not use MultiplyWithTimeIncrement() in this case, since
 the acceleration of gravity must not be multiplied with delta t.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -125,7 +126,7 @@ property which is used as material multiplier.
 
 A reference to the finite-element from which the contribution is 
 computed.  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     double         ip_value, op_value, nmult_fac, detJ;

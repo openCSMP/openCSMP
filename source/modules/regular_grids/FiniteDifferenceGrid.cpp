@@ -631,7 +631,7 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, boo
     // stores rows, columns, and frame
     std::vector<int32_t> dim_int(4);
     // grid data
-    std::vector<double>    grid_data((static_cast<size_t>(size_x)+2*static_cast<size_t>(xfr)) * (static_cast<size_t>(size_y)+2*static_cast<size_t>(yfr)));
+    std::vector<double>    grid_data((static_cast<uint32_t>(size_x)+2*static_cast<uint32_t>(xfr)) * (static_cast<uint32_t>(size_y)+2*static_cast<uint32_t>(yfr)));
     size_t counter(0);
     
     // overall dimensions
@@ -900,8 +900,8 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
  {
     static double  xa[5], ya[5];
     int32_t        i;
-    double         a;
-    double         err;
+    double         a = std::numeric_limits<double>::quiet_NaN();
+   double          err{0.};
     
     // 1. outside normal boundaries
     // ----------------------------

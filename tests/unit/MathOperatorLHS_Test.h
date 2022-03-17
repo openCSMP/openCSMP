@@ -14,7 +14,9 @@ class MathOperatorLHS_Test : public Test
 public:
 	MathOperatorLHS_Test();
 	~MathOperatorLHS_Test();
-	void run(); // runs all the tests for the class (register other methods)
+  
+	void run(); // runs all the tests for the class (register other methods below)
+  
   void MathOperatorLHS_Ctor();
   void MathOperatorLHS_CopyCtor();
   void MathOperatorLHS_Equal();
@@ -37,8 +39,8 @@ public:
   void MathOperatorLHS_TestFunctionOperand();
     
 private:
-  double fTolerance;
-  Model1D<1U>* model_;
+  double               fTolerance_;
+  Model1D<1U>*         model_ = nullptr;
   PropertyDatabase<1>& database_;
   
 }; //end class

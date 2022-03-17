@@ -4047,7 +4047,7 @@ public:
 
 	inline plf::colony_limits block_limits() const PLF_NOEXCEPT
 	{
-		return plf::colony_limits(static_cast<size_t>(tuple_allocator_pair.min_group_capacity), static_cast<size_t>(group_allocator_pair.max_group_capacity));
+		return plf::colony_limits(static_cast<uint32_t>(tuple_allocator_pair.min_group_capacity), static_cast<uint32_t>(group_allocator_pair.max_group_capacity));
 	}
 
 
@@ -4650,7 +4650,7 @@ public:
 		}
 
 		// Special case for end group:
-		setup_data_cell(data, end_iterator.group_pointer, static_cast<size_t>(end_iterator.group_pointer->last_endpoint - end_iterator.group_pointer->elements), group_number);
+		setup_data_cell(data, end_iterator.group_pointer, static_cast<uint32_t>(end_iterator.group_pointer->last_endpoint - end_iterator.group_pointer->elements), group_number);
 
 		return data;
 	}

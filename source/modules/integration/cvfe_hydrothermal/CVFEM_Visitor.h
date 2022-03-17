@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_Visitor : public Visitor<dim> {
   public:
     CVFEM_Visitor( Model<dim>& model, const char* variable);

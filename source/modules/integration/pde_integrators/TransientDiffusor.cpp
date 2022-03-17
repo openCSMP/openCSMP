@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                               const char* diffusivity,
                                                               const char* diffusing_variable,
@@ -84,7 +84,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* diffusivity,
                                                                             const char* diffusing_variable,
@@ -165,7 +165,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
                                                                             const char* rhs_diffusivity,
@@ -251,7 +251,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 } // end constructor
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                               const char* diffusivity,
                                                               const char* diffusing_variable,
@@ -335,7 +335,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 // TODO: fix: rhs_diffusivity is never used
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
                                                                             const char* rhs_diffusivity,
@@ -427,7 +427,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 // TODO: fix: rhs_diffusivity is never used
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* lhs_diffusivity,
                                                                             const char* rhs_diffusivity,
@@ -524,7 +524,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
  {
     delete source_;
@@ -538,7 +538,7 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::~TransientDiffusor()
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplicit(
                                                                           Model<dim>& model,
                                                                           double time_increment,
@@ -558,7 +558,7 @@ void TransientDiffusor<dim,COMPUTATION_DOMAIN>::ComputeTransientStateFullyImplic
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void TransientDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -574,7 +574,7 @@ void TransientDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
 
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+    template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
     SAMG_Settings& TransientDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
      { return settings_; }
 #else

@@ -19,10 +19,10 @@ class TensorVariable<1U> {
                                                       
     ~TensorVariable();
     
-    double&        operator()( size_t i, size_t j );
-    const double&  operator()( size_t i, size_t j ) const;
-    void             Component( size_t, double );
-    double         Component( size_t i ) const;
+    double&        operator()( uint32_t i, uint32_t j );
+    const double&  operator()( uint32_t i, uint32_t j ) const;
+    void           Component( uint32_t, double );
+    double         Component( uint32_t i ) const;
 
     TensorVariable   operator+( double val ) const;
     TensorVariable   operator-( double val ) const;
@@ -63,28 +63,27 @@ class TensorVariable<1U> {
     bool             operator<( const TensorVariable& t ) const; 
     
     bool             IsWithinRange( double vmin, double vmax ) const;
-    VARIABLE_FLAG&   Flag( size_t i=0 );
-    VARIABLE_FLAG    Flag( size_t i=0 ) const;
-    size_t           Size() const;
+    VARIABLE_FLAG&   Flag( uint32_t i=0 );
+    VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
+    uint32_t         Size() const;
 
     /// no resizing but new values
-    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
     void             Identity();
-    double         MinElement() const;
-    double         MaxElement() const;
-    double         Determinant() const;
-    double         Trace() const;
+    double           MinElement() const;
+    double           MaxElement() const;
+    double           Determinant() const;
+    double           Trace() const;
     TensorVariable   Adjoint()     const;
     TensorVariable   Inverse()     const;
     TensorVariable   Transposed()  const;
     bool 		  	     EigenValues( VectorVariable<1U>& vecEigenvalues ) const;
     bool             Eigen( VectorVariable<1U>& vvEigenvalues, TensorVariable<1U>& tvEigenvectors, bool bNormalize ) const;
     bool             EigenNonSymmetric( VectorVariable<1U>& eigenVals, TensorVariable<1U>& eigenVecs ) const;
-    void             AssignToRow( size_t, VectorVariable<1U>& vc );
-    void             AssignToColumn( size_t, VectorVariable<1U>& vc );
+    void             AssignToRow( uint32_t, VectorVariable<1U>& vc );
+    void             AssignToColumn( uint32_t, VectorVariable<1U>& vc );
 
-	  VectorVariable<1U> Row( size_t ) const;
- 	  VectorVariable<1U> Column( size_t ) const;
+	  VectorVariable<1U> Row( uint32_t ) const;
+ 	  VectorVariable<1U> Column( uint32_t ) const;
 
     void             In();
     void             Out() const;
@@ -93,7 +92,7 @@ class TensorVariable<1U> {
 
   private:
     VARIABLE_FLAG  flag;
-    double       data;
+    double         data;
 };
 
 

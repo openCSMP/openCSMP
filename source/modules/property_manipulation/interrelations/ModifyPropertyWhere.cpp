@@ -14,7 +14,7 @@ the goal is to calculate the mass flux.
 @note If the property has the value of 'where', it is changed to the value of 'to'
 */
 
-template<size_t dim>
+template<uint32_t dim>
 ModifyPropertyWhere<dim>::ModifyPropertyWhere( const PropertyDatabase<dim>& p, 
                                                const char* prop, 
                                                double where, double to ) 

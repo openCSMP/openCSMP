@@ -188,7 +188,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // for all the coordinate directions
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<size_t>(j)] = (*lit)[i][j];
+                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
@@ -225,7 +225,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
               // --------------------------------------------------------------
               for ( j=0; j<3; j++ )
                 {
-                   coord[static_cast<size_t>(j)] = (*lit)[i][j];
+                   coord[static_cast<uint32_t>(j)] = (*lit)[i][j];
                    // convert double coordinate value to string and add to hash key
                    sprintf( num, "%lf", (*lit)[i][j] );
                    key += num;
@@ -239,7 +239,7 @@ void SKM_RhinoSurfaceReader::ObjectToPData( const string& obj_name,
                    cout <<"\nTerminating execution of ObjectToPData()." << endl;
                    return;
                 }
-              else ids[static_cast<size_t>(i)] = (*cit).second; 
+              else ids[static_cast<uint32_t>(i)] = (*cit).second; 
            }
          // assigning entry to plist
          plist[ n++ ] = ids;
@@ -257,8 +257,7 @@ void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_
                                                   vector<std::int8_t>& pbflags ) const
  {
      //  parent element id,  edge of p1 < p2
-     map<pair<size_t,size_t>,int64_t>              edge_map;
-     map<size_t,vector<int64_t> >::const_iterator  pit;
+     map<pair<size_t,size_t>,int64_t> edge_map;
      
      // just in case
      if ( !pfverts.empty() ) pfverts.erase( pfverts.begin(), pfverts.end() );
@@ -266,7 +265,7 @@ void SKM_RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<int64_
      
      // making duplicate edge list from plist where edges of opposite elements
      // have opposite node id numbers
-     for ( pit=plist.begin(); pit!=plist.end(); pit++ ) {
+     for ( auto pit=plist.begin(); pit!=plist.end(); pit++ ) {
           // edge 1 (01) counter-clockwise nodes
           edge_map.insert( make_pair( make_pair((*pit).second[0], (*pit).second[1]), static_cast<int32_t>((*pit).first) ) );
           // edge 2 (12)

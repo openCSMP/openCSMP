@@ -7,7 +7,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_PT_op_P_dV<dim,CELL>::NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& pref,
                                                      const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -53,7 +53,7 @@ in the special case, the integral of the testfunction products must be used
 
 Use this operator to compute capacitance, storage capacity etc. matrices.
  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -67,7 +67,6 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
     vector<double>  N( e.Nodes() );
     double          det( 0.0 );
     double          volume( 0.0 ); // NT.N = element volume
-    size_t   k(0);
     
     UNITY = 1.0;
     
@@ -80,10 +79,11 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
          {  
              volume = e.Volume();
              
+           int k{0};
              if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
                {   
-                 for ( size_t n=0; n<e.Nodes(); n++ ) 
-                   for ( size_t i=0; i<nodal_degrees_of_freedom; i++ )
+                 for ( auto n=0; n<e.Nodes(); n++ ) 
+                   for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
                      MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
                }
              else
@@ -94,35 +94,33 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
          }
          
-        // consistent formulation (not tested thus far)  
+        // TODO: consistent formulation (not tested thus far)
        else 
          {
-            for ( size_t i = 0; i<e.FE()->IntegrationPoints(); i++ )
+            for ( auto i = 0; i<e.FE()->IntegrationPoints(); i++ )
               {
                 e.N_AtIntegrationPoint( i, N );
                 det = e.det_JINV_AtIntegrationPoint( i );
 
-                for ( size_t j = 0; j < e.Nodes(); j++ )
-                  for ( size_t k = 0; k < e.Nodes(); k++ )
+                for ( auto j = 0; j < e.Nodes(); j++ )
+                  for ( auto k = 0; k < e.Nodes(); k++ )
                     {
                       if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
                         RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim>::MTRL[0](0,0) * N[k] * det;
                       else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE )
                         RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim>::MTRL[i](0,0) * N[k] * det;
                     }
-                for ( size_t j = 0; j < e.Nodes(); j++ )   
-                  RHS_TEMP(j,k) *= e.WeightAtIntegrationPoint(i);
+                for ( auto j = 0; j < e.Nodes(); j++ )   
+                  RHS_TEMP(j,i) *= e.WeightAtIntegrationPoint(i);
                  
                 RHS_TEMP *= UNITY; 
                  
-                for ( size_t l = 0; l < e.Nodes(); l++ )  
+                for ( auto l = 0; l < e.Nodes(); l++ )
                    MathOperatorRHS<dim>::RHS[l] += RHS_TEMP(l,1);
                 
                 RHS_TEMP.Resize( e.Nodes(), e.Nodes() );
               }
          }
-
-// nicePrint( RHS );
       
 } // end ComputeContribution
 

@@ -6,10 +6,10 @@
 
 namespace csmp {
 
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
 /**
  
@@ -164,7 +164,7 @@ log_phi.~PropertyHandle();
 @todo (3) A range of switch statements must be extended for type REGION, FACE, INTER_FACE (A)
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class PropertyHandle {
   public:
     PropertyHandle( Model<dim>& sg, const char* var_name,

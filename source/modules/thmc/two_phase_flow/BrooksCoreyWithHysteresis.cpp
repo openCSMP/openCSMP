@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
  : acc_gravity_(9.8066)
  {
@@ -20,7 +20,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis()
    in this case the material parameter is used as the lambda parameter
    of the Brooks-Corey model
 */
-template<size_t dim>
+template<uint32_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
                                                            const char* permeability,
                                                            double viscosity_nw, double viscosity_w,
@@ -60,7 +60,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabase<dim>& database,
                                                            const char* lamda, const char* pc_entry )
  : pd_key(database.StorageKey(pc_entry)),
@@ -106,7 +106,7 @@ BrooksCoreyWithHysteresis<dim>::BrooksCoreyWithHysteresis( const PropertyDatabas
 // linear & BC relperms, f's dfds's are O.K.
 
 /// not constant as it sets the saturation inflection point
-template<size_t dim>
+template<uint32_t dim>
 void BrooksCoreyWithHysteresis<dim>::InitializeAndStore( Element<dim>& e )
  {
     TwoPhaseModel<dim>::k_   = e.Read( TwoPhaseModel<dim>::perm_key_ );
@@ -158,7 +158,7 @@ void BrooksCoreyWithHysteresis<dim>::InitializeAndStore( Element<dim>& e )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::krw_Phase() const
  { 
     if ( TwoPhaseModel<dim>::seff_ <= 0. ) return static_cast<double>(0.);
@@ -170,7 +170,7 @@ double BrooksCoreyWithHysteresis<dim>::krw_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::krn_Phase() const
  { 
     if ( imbibing )
@@ -218,7 +218,7 @@ double BrooksCoreyWithHysteresis<dim>::krn_Phase() const
 
 
 // for the wetting phase
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double>(5.6); // as computed with dfds method
@@ -227,7 +227,7 @@ double BrooksCoreyWithHysteresis<dim>::MaxFractionalFlowDerivative() const
 
 // pc covers the full saturation range, pc is capped if sw<swr     
 // tested: O.K.     
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 {
    // compute sw_eff for which pc = 40MPa, seff_min = (pc/pd)^-lamda
@@ -242,7 +242,7 @@ double BrooksCoreyWithHysteresis<dim>::pc_Phase( size_t ) const
 
 // dpcdS covers the full saturation range, dpcdS is capped if sw<swr
 // tested: O.K.    
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
 {
    // the wetting phase has no capilllary pressure
@@ -263,7 +263,7 @@ double BrooksCoreyWithHysteresis<dim>::dpcds_Phase( size_t phase ) const
 
  
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::dfds() const 
 {
    const double seff = TwoPhaseModel<dim>::seff_;
@@ -289,7 +289,7 @@ double BrooksCoreyWithHysteresis<dim>::dfds() const
 
 
 // tested: O.K.
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::dGds() const 
 {
    // 2. compute dGdS for the Brooks-Corey model
@@ -327,7 +327,7 @@ double BrooksCoreyWithHysteresis<dim>::dGds() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
  {
     return BrooksCoreyFrontVelocity().ShockVelocityMultiplier( pm2, 
@@ -336,7 +336,7 @@ double BrooksCoreyWithHysteresis<dim>::ShockSpeed() const
 
 
 // look this one up in the book by Randy LeVeque
-template<size_t dim>
+template<uint32_t dim>
 double BrooksCoreyWithHysteresis<dim>::ShockHeight() const
  {
     cerr <<"\nBrooksCorey<dim>::ShockHeight: not implemented yet."<< endl;
@@ -346,8 +346,8 @@ double BrooksCoreyWithHysteresis<dim>::ShockHeight() const
 
 
 
-template<size_t dim>
-void BrooksCoreyWithHysteresis<dim>::Out( size_t phase ) const
+template<uint32_t dim>
+void BrooksCoreyWithHysteresis<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nBrooksCorey<"<< dim << ">::Out: Additional properties: "<< endl;

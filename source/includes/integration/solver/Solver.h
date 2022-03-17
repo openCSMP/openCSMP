@@ -96,9 +96,10 @@ public:
              const char* fname = "CSP_Vec" ) const;
 
   double  CalculateResidual( const SparseMatrix& A,
-                               const std::vector<double>& b,
-                               const std::vector<double>& x ) const;
+                             const std::vector<double>& b,
+                             const std::vector<double>& x ) const;
 
+  virtual void InputSolverSettings( SolverSettings& settings );
   virtual SolverSettings* GetSolverSettings();
 
 protected:
@@ -111,8 +112,10 @@ protected:
                                      std::vector<double>& b,
                                      std::vector<double>& x,
                                      size_t no_unknowns ) = 0;
+                                     
+  // TODO: add other options to interface with MTL, Eigen etc.
 
-  SolverSettings* solver_settings_;
+  SolverSettings* solver_settings_ = nullptr;
 
 private:
   bool  verbose_;

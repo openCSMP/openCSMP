@@ -10,7 +10,7 @@ namespace csmp {
 /**
 Creates vector from p1 to p2 and normalises it to a length of 1.
 */
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, csmp::Point<dim>& e1 )
 {
   e1 = pt2;
@@ -23,13 +23,13 @@ template void getCartesianAxes( const csmp::Point<1U>&, const csmp::Point<1U>&, 
 template void getCartesianAxes( const csmp::Point<2U>&, const csmp::Point<2U>&, csmp::Point<2U>& );
 template void getCartesianAxes( const csmp::Point<3U>&, const csmp::Point<3U>&, csmp::Point<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 )
 {
   pt2 = pt1;
   pt2 -= pt0;
   pt2[0] = csmp::dotProduct( pt2, e1 );
-  for ( size_t i = 1; i < dim; ++i )
+  for ( auto i = 1; i < dim; ++i )
     pt2[i] = 0.0;
 }
 
@@ -39,7 +39,7 @@ template void getCoordinate( const csmp::Point<3U>&, const csmp::Point<3U>&, con
 
 
 /// axes ( 2D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, const csmp::Point<dim>& pt3, csmp::Point<dim>& e1, csmp::Point<dim>& e2 )
 {
   /// Gram-Schmidt orthogonalization
@@ -55,14 +55,14 @@ template void getCartesianAxes( const csmp::Point<1U>&, const csmp::Point<1U>&, 
 template void getCartesianAxes( const csmp::Point<2U>&, const csmp::Point<2U>&, const csmp::Point<2U>&, csmp::Point<2U>&, csmp::Point<2U>& );
 template void getCartesianAxes( const csmp::Point<3U>&, const csmp::Point<3U>&, const csmp::Point<3U>&, csmp::Point<3U>&, csmp::Point<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 )
 {
   pt2 = pt1;
   pt2 -= pt0;
   pt2[0] = csmp::dotProduct( pt2, e1 );
   pt2[1] = csmp::dotProduct( pt2, e2 );
-  for ( size_t i = 2U; i < dim; ++i )
+  for ( auto i = 2U; i < dim; ++i )
     pt2[i] = 0.0;
 }
 
@@ -71,7 +71,7 @@ template void getCoordinate( const csmp::Point<2U>&, const csmp::Point<2U>&, con
 template void getCoordinate( const csmp::Point<3U>&, const csmp::Point<3U>&, const csmp::Point<3U>&, const csmp::Point<3U>&, csmp::Point<3U>& );
 
 /// axes ( 3D )
-template<size_t dim>
+template<uint32_t dim>
 void getCartesianAxes( const csmp::Point<dim>& pt1, const csmp::Point<dim>& pt2, const csmp::Point<dim>& pt3, const csmp::Point<dim>& pt4, csmp::Point<dim>& e1, csmp::Point<dim>& e2, csmp::Point<dim>& e3 )
 {
   /// Gram-Schmidt orthogonalization
@@ -93,7 +93,7 @@ template void getCartesianAxes( const csmp::Point<1U>&, const csmp::Point<1U>&, 
 template void getCartesianAxes( const csmp::Point<2U>&, const csmp::Point<2U>&, const csmp::Point<2U>&, const csmp::Point<2U>&, csmp::Point<2U>&, csmp::Point<2U>&, csmp::Point<2U>& );
 template void getCartesianAxes( const csmp::Point<3U>&, const csmp::Point<3U>&, const csmp::Point<3U>&, const csmp::Point<3U>&, csmp::Point<3U>&, csmp::Point<3U>&, csmp::Point<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 void getCoordinate( const csmp::Point<dim>& pt0, const csmp::Point<dim>& e1, const csmp::Point<dim>& e2, const csmp::Point<dim>& e3, const csmp::Point<dim>& pt1, csmp::Point<dim>& pt2 )
 {
   pt2 = pt1;
@@ -467,7 +467,7 @@ double unsignedVolume( const csmp::Point<3U>& pt1,
                        const csmp::Point<3U>& pt3,
                        const csmp::Point<3U>& pt4 )
 {
-  return std::abs( unsignedVolume( pt1, pt2, pt3, pt4 ) );
+  return std::abs( signedVolume( pt1, pt2, pt3, pt4 ) );
 }
 
 
@@ -588,22 +588,6 @@ double dihedralRadAngle( const csmp::Point<3U>& pt1, const csmp::Point<3U>& pt2,
 Check whether provided 4 point create tetrahedron or quadrilateral
 */
 
-bool isTetra( const csmp::Point<1U>& pt1,
-              const csmp::Point<1U>& pt2,
-              const csmp::Point<1U>& pt3,
-              const csmp::Point<1U>& pt4 )
-{
-  return false;
-}
-
-bool isTetra( const csmp::Point<2U>& pt1,
-              const csmp::Point<2U>& pt2,
-              const csmp::Point<2U>& pt3,
-              const csmp::Point<2U>& pt4 )
-{
-  return false;
-}
-
 bool isTetra( const csmp::Point<3U>& pt1,
               const csmp::Point<3U>& pt2,
               const csmp::Point<3U>& pt3,
@@ -623,21 +607,23 @@ Check whether provided 4 point create tetrahedron or quadrilateral.
 Return order of points which will give counter-clockwise numbering in a righthand-rule coordinate system.
 */
 
-bool isTetra( const csmp::Point<1U>& pt1,
+static bool isTetra( const csmp::Point<1U>& pt1,
               const csmp::Point<1U>& pt2,
               const csmp::Point<1U>& pt3,
               const csmp::Point<1U>& pt4,
               std::map<size_t, size_t>& order )
 {
+  // no tetra in 1D
   return false;
 }
 
-bool isTetra( const csmp::Point<2U>& pt1,
+static bool isTetra( const csmp::Point<2U>& pt1,
               const csmp::Point<2U>& pt2,
               const csmp::Point<2U>& pt3,
               const csmp::Point<2U>& pt4,
               std::map<size_t, size_t>& order )
 {
+  // no tetra in 1D
   return false;
 }
 

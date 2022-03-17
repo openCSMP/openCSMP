@@ -30,8 +30,8 @@ class FiniteVolumePolicy_Test : public Test {
     ~FiniteVolumePolicy_Test();
     void run(); // runs all the tests for the class (register other methods)
     void IsoparametricLinearLineElement_Test(double fTolerance, double fToleranceInternal);
-    template<size_t dim> void IsoparametricLinearTriangle_Test(double fTolerance, double fToleranceInternal);
-    template<size_t dim> void IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal);
+    template<uint32_t dim> void IsoparametricLinearTriangle_Test(double fTolerance, double fToleranceInternal);
+    template<uint32_t dim> void IsoparametricLinearQuadrilateral_Test(double fTolerance, double fToleranceInternal);
     void IsoparametricLinearTetrahedron_Test(double fTolerance, double fToleranceInternal);
     void IsoparametricLinearPyramid_Test(double fTolerance, double fToleranceInternal);
     void IsoparametricLinearPrism_Test(double fTolerance, double fToleranceInternal);

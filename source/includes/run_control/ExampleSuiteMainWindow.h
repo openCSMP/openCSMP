@@ -1,8 +1,10 @@
-#ifndef EXAMPLESUITEMAINWINDOW_H
-#define EXAMPLESUITEMAINWINDOW_H
+#ifndef CSMP_EXAMPLE_SUITE_MAIN_WINDOW_H
+#define CSMP_EXAMPLE_SUITE_MAIN_WINDOW_H
 
-#include "ui_ExampleSuiteMainWindow.h"
+#include "ExampleSuiteMainWindow.h"
 #include "ExampleSuite.h"
+
+// TODO: these needs the QT library, perhaps combine with our GUI
 
 namespace PL{
 
@@ -46,4 +48,4 @@ class ExampleSuiteMainWindow : public QMainWindow
 
 } // PL
 
-#endif // EXAMPLESUITEMAINWINDOW_H
+#endif // CSMP_EXAMPLE_SUITE_MAIN_WINDOW_H

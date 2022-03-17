@@ -1,4 +1,5 @@
 #include "EclipseModel.h"
+#include "ModelTopology.h"
 #include "Region.h"
 #include "ModelTime.h"
 #include "variableOperations.h"
@@ -50,7 +51,7 @@ void EclipseModel::Initialize()
 		csmp::VSet<3U>  vset;
 		bool isoparametric_elements(true);
 
-		csmp::ModelTopology   mesh_topology(isoparametric_elements);
+		csmp::ModelTopology  mesh_topology(isoparametric_elements);
 		
 		// =====================================================================
 		// 0. reads grid from ECLIPSE input files and converts into CSMP mesh
@@ -58,11 +59,10 @@ void EclipseModel::Initialize()
 		mesh_interface.SetProperties(eclipse_model_settings_.properties_);
 
 		// KEY METHOD here
-		mesh_interface.ReadFile(vset,
-			mesh_topology,
-			eclipse_model_settings_.mesh_file_prefix_,
-			eclipse_model_settings_.exclude_inactive_cells_,
-			eclipse_model_settings_.tetra_mesh_);
+		mesh_interface.ReadFile(  vset, mesh_topology,
+                              eclipse_model_settings_.mesh_file_prefix_,
+                              eclipse_model_settings_.exclude_inactive_cells_,
+                              eclipse_model_settings_.tetra_mesh_);
 
 		// =====================================================================
 		// 1. selectively read properties of interest, adding them to VSET
@@ -112,10 +112,8 @@ void EclipseModel::Initialize()
 		// =====================================================================
 		//    we won't use eclipse neighbor info since it includes neighbor information
 		//    of elements of different dimensionality (i.e. e volumetric element has a surface element neighbors )
-		const bool non_box_shaped_model(!mesh_topology.BoxShapedModel());
-
-		// all cells are lumped into the region "Eclipse Model" that is stored in the model topology
-		csmp::Model<3U>::Initialize(mesh_topology, vset, eclipse_model_settings_.create_boundaries_, non_box_shaped_model ); // 	}
+		//    all cells are lumped into the region "Eclipse Model" that is stored in the model topology
+		csmp::Model<3U>::Initialize( mesh_topology, vset );
 
    }
 	// ---------------------------------------------------
@@ -245,14 +243,14 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	csmp::ErrorHandler& error_handler(csmp::ErrorHandler::Instance());
 
 	auto& domain = this->Region(target_region);
-	vector<size_t>        fnids;
+	vector<uint32_t>        fnids;
 	multimap<size_t, pair<BOX_BOUNDARY, Node<3U>*> >  boundary_nodes;
 	vector<double>      nrml, nrml_right, nrml_left, nrml_top, nrml_bottom, nrml_front, nrml_back;
 	Box                   box;
 	double              minLength(0.71); // dot-product of 2 unit vectors at an angle >=45 degrees
 	BOX_BOUNDARY          bflag(NOT);
 
-	const size_t dim(3U);
+	const uint32_t dim(3U);
 	box.UnitNormalTo(BOTTOM, dim, nrml_bottom);
 	box.UnitNormalTo(TOP, dim, nrml_top);
 	box.UnitNormalTo(LEFT, dim, nrml_left);
@@ -271,7 +269,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 		// idea: loop over the faces of the cell and where there is no neighbor
 		// check in which direction the face normal is pointing, assign boundary flags accordingly
 		// if the element has more than one face at the boundary, idenfify it as an edge or a corner
-		for (size_t i = 0U; i<(*it)->Faces(); ++i)
+		for (auto i = 0U; i<(*it)->Faces(); ++i)
 			if ((*it)->Neighbor(i) == nullptr) {
 				// determining in which direction the face normal points
 				(*it)->UnitNormalToFace(i, nrml);
@@ -319,7 +317,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 
 		// testing
 		//cerr <<"\n("<< (*it)->Idx() <<"): ";
-		//for ( size_t n=0U; n<(*it)->Nodes(); ++n )
+		//for ( auto n=0U; n<(*it)->Nodes(); ++n )
 		//  cerr << parseBoundary( (*it)->N(n)->AtBoundary() ) <<" ";
 
 		// resetting

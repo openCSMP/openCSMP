@@ -21,7 +21,7 @@ namespace csmp {
 The method reports on the requirements that the input must meet
 to be parsed correctly.
 */
-template<size_t dim>
+template<uint32_t dim>
 void InputDataManager<dim>::Help() const
  {
     cout <<"\nInputDataManager (constructor): "<< endl;
@@ -114,7 +114,7 @@ The assignment process is verbose. The progress of the reading process
 is echoed to screen so that the last line which appears before a problem
 is reported contains the offending characters.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::ConfigureFRED_ModelFromFile( Model<dim>& model,
                                                          const char* fname,
                                                          map<string,vector<double> >& well_data,
@@ -215,7 +215,7 @@ with the ANSYS suite of simulation tools.
 The reading process is verbose. The method keeps the user informed
 about the progress and assigned property values are echoed to screen.
  */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::Configure_ANSYS_ModelFromFile( Model<dim>& model, const char* fname )
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -301,7 +301,7 @@ with the ANSYS suite of simulation tools.
 The reading process is verbose. The method keeps the user informed
 about the progress and assigned property values are echoed to screen.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::ConfigureIrregular_ANSYS_ModelFromFile( Model<dim>& model, const char* fname )
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -370,7 +370,7 @@ automatically before the file is opened.
 
 The reading process is verbose, potential errors are reported to screen.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::ConfigureRegionsFromFile( Model<dim>& model, const char* fname,
                                                       set<string>& groups )
 {
@@ -455,7 +455,7 @@ topography.
 The reading process is verbose. The title of the input file and
 potential parsing errors are reported.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::ConfigureFromFile( Model<dim>& model, const char* fname )
 {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
@@ -535,7 +535,7 @@ The method is verbose. Errors and monitors on the reading process are
 reported to stdout.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>::ConfigureFromFile(
         Model<dim>& model,
         const char* fname,
@@ -633,7 +633,7 @@ reported to stdout.
 @param [in] settings Computational settings
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>
 ::ConfigureFromFile( Model<dim>& model, const char* fname,
                      bool region_specifications,       // regionname from parameter range
@@ -683,7 +683,7 @@ bool InputDataManager<dim>
 /** Allows for the costumized configuration of CSMP models including a particualr configuration file
 Here we do not use the extension '-configuration.txt' which will be appended to the model name automatically.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>
 ::ConfigureFromSpecificFile( Model<dim>& model, const char* configuration_fname,
                      bool region_specifications,       // regionname from parameter range
@@ -737,7 +737,7 @@ Generic function which reads blocks of data marked by flags
 
 */
 
-template<size_t dim>
+template<uint32_t dim>
 bool InputDataManager<dim>
 ::ReadBlocks( Model<dim>& model,
               std::ifstream& ifs,

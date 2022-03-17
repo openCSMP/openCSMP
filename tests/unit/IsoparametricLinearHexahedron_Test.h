@@ -18,16 +18,22 @@ class IsoparametricLinearHexahedron_Test : public Test {
 		~IsoparametricLinearHexahedron_Test();
     
 		virtual void run();
-		double HexaVolUsingCSMP(double *Xcord, double *Ycord, double *Zcord, double &HexaVolumeUsingFVSectors, double &HexaVolumeUsingFVSectorsIPWeight_);
+  
+		double HexaVolUsingCSMP(double *Xcord, double *Ycord, double *Zcord,
+                            double &HexaVolumeUsingFVSectors, double &HexaVolumeUsingFVSectorsIPWeight);
+  
 		double HexaVolUsingTetCSMP(double *Xcord, double *Ycord, double *Zcord);
+  
 		double HexaVolAnalyticalSolution(double *Xcord, double *Ycord, double *Zcord);
+  
 		double TetVolFromCSMP(double *Xcord, double *Ycord, double *Zcord, int, int, int, int);
+  
 		double AnalyticalHexaVolume(double *Xcord, double *Ycord, double *Zcord);
+  
 		double AnalyticalTetVol(double *X, double *Y, double *Z, int p0, int p1, int p2, int p3);
 		//double HexaVolUsingFVSectors(double *X, double *Y, double *Z);
 
 	private:
-		double *Xcord, *Ycord, *Zcord;
 		double HexaVolumeUsingFVSectors_;
 		double HexaVolumeUsingFVSectorsIPWeight_;
 		bool verbose_;

@@ -34,7 +34,7 @@ namespace csmp {
  
     @tested OK SKM 17/8/19 
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Element<dim>* const eptr ) const
  {
    assert( eptr != nullptr );
@@ -44,9 +44,10 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Element<dim>* cons
    const double thickness = eptr->Read( User()->Notation.key_THI );
 
    // computing total facet fluxes by projecting vt onto facet normals
-   const size_t facets(eptr->FV()->Facets());
-   for ( size_t j=0U; j<facets; ++j ) {
-        eptr->Read( j, 0U, User()->Notation.key_fn, nrml_ );
+   const uint32_t ip1{0};
+   const auto facets(eptr->FV()->Facets());
+   for ( auto j=0U; j<facets; ++j ) {
+        eptr->Read( j, ip1, User()->Notation.key_fn, nrml_ );
         // projection (dot product)
         double facet_flux = nrml_[0] * vD_[0];
         if ( dim != 1U ) facet_flux += nrml_[1] * vD_[1];
@@ -54,15 +55,15 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Element<dim>* cons
         // multiplication with element thickness
         facet_flux *= thickness;
         // multiplication with facet area
-        facet_flux *= eptr->Read( j, 0U, User()->Notation.key_fA );
+        facet_flux *= eptr->Read( j, ip1, User()->Notation.key_fA );
 
         // storing the volumetric facet flux without altering the variables flag
         const VARIABLE_FLAG flag1 = eptr->Status( j, 0U, User()->Notation.key_ff );
         eptr->Store( j, 0U, User()->Notation.key_ff, makeScalar(flag1,facet_flux) );
 
         // accumulating the flux balances into FV's associated with the element's
-        const size_t inside_node  = eptr->FV()->InsideNode( j );
-        const size_t outside_node = eptr->FV()->OutsideNode( j );
+        const auto inside_node  = eptr->FV()->InsideNode( j );
+        const auto outside_node = eptr->FV()->OutsideNode( j );
      
          // facet edge node pair by node pair
         eptr->N(inside_node)->Read( User()->Notation.key_FB, sc_ );
@@ -135,28 +136,28 @@ if (error ) {
      The divergence of the transport velocity on the current FV = node,
      and its product with the transport variable is stored.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Node<dim>* const nd_ptr ) const
   {
     assert( nd_ptr != nullptr );
   
     double flux_balance(0.), accumulation(0.);
   
-    const size_t node_parent_elements(nd_ptr->Parents());
-    for ( size_t t=0U; t<node_parent_elements; ++t )
+    const auto node_parent_elements(nd_ptr->Parents());
+    for ( auto t=0U; t<node_parent_elements; ++t )
       {
         Element<dim>* const eptr(nd_ptr->Parent(t));
         assert( eptr != NULL );
-        const size_t pnid(nd_ptr->ParentNodeNumber(t));
+        const auto pnid(nd_ptr->ParentNodeNumber(t));
         eptr->Read( User()->Notation.key_V, vD_ );
         const double thickness = eptr->Read( User()->Notation.key_THI );
 
-        const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( size_t i=0U; i<sector_facets; i++ )
+        const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+        for ( auto i{0}; i<sector_facets; i++ )
           {
-             const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-             const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-             const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+             const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+             const auto inside_node(eptr->FV()->InsideNode(iFacet));
+             const auto outside_node(eptr->FV()->OutsideNode(iFacet));
 
              eptr->Read( iFacet, 0U, User()->Notation.key_fn, nrml_ );
              const double  vD_n = vD_.DotProduct(nrml_) * thickness;
@@ -204,7 +205,7 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Node<dim>* const n
     @attention This method is only for perimeter nodes
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::FluxBalancesAtBoundary( Node<dim>* const nd_ptr ) const
   {
      assert( nd_ptr != NULL );
@@ -275,19 +276,19 @@ void FluxEvaluator<dim,USER>::FluxBalancesAtBoundary( Node<dim>* const nd_ptr ) 
  
     @apply this method to the interior and halo stencils.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::TransportVariableFluxes( Element<dim>* const eptr ) const
  {
    assert( eptr != nullptr );
 
    // computing total facet fluxes by projecting vt onto facet normals
-   const size_t facets(eptr->FV()->Facets());
-   for ( size_t j=0U; j<facets; ++j ) {
+   const auto facets(eptr->FV()->Facets());
+   for ( auto j=0U; j<facets; ++j ) {
          // reading the facet flux
         double facet_flux = eptr->Read( j, 0U, User()->Notation.key_ff );
         // establishing the upstream direction
-        const size_t inside_node  = eptr->FV()->InsideNode( j );
-        const size_t outside_node = eptr->FV()->OutsideNode( j );
+        const auto inside_node  = eptr->FV()->InsideNode( j );
+        const auto outside_node = eptr->FV()->OutsideNode( j );
         if ( facet_flux < 0. ) facet_flux *= eptr->N(outside_node)->Read( User()->Notation.key_C0 );
         else                   facet_flux *= eptr->N(inside_node)->Read( User()->Notation.key_C0 );
 /*
@@ -317,19 +318,19 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxes( Element<dim>* const eptr 
 /**
     Also computes the outflow from each FV cell.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* const eptr ) const
  {
    assert( eptr != nullptr );
 
    // computing total facet fluxes by projecting vt onto facet normals
-   const size_t facets(eptr->FV()->Facets());
-   for ( size_t j=0U; j<facets; ++j ) {
+   const auto facets(eptr->FV()->Facets());
+   for ( auto j=0U; j<facets; ++j ) {
          // reading the facet flux
         double facet_flux = eptr->Read( j, 0U, User()->Notation.key_ff );
         // establishing the upstream direction
-        const size_t inside_node  = eptr->FV()->InsideNode( j );
-        const size_t outside_node = eptr->FV()->OutsideNode( j );
+        const auto inside_node  = eptr->FV()->InsideNode( j );
+        const auto outside_node = eptr->FV()->OutsideNode( j );
         if ( facet_flux < 0. ) {
              // outflow from the outside finite volume
              eptr->N(outside_node)->Read( User()->Notation.key_out_, sc_ );
@@ -370,18 +371,18 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* 
  
     @attention this method relies on precomputed facet fluxes.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 void FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr ) const
  {
      double flux_C0_products(0.);
  
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     const auto parent_elements(nptr->Parents());
+     for ( auto i{0}; i<parent_elements; ++i ) {
            const Element<dim>* const eptr = nptr->Parent(i);
-           const size_t sector_node      = nptr->ParentNodeNumber(i);
-           const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
-           for ( size_t j=0U; j<sector_facets; ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+           const auto sector_node      = nptr->ParentNodeNumber(i);
+           const auto sector_facets(eptr->FV()->FacetsPerSector(sector_node));
+           for ( auto j=0U; j<sector_facets; ++j ) {
+               const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
                const double facet_flux = sign * eptr->Read( facet, 0U, User()->Notation.key_ff );
@@ -403,13 +404,13 @@ void FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr
 
 /* volumetric flow- and variable flux balances
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr ) const
  {
      double flux_balance(0.), flux_C0_products(0.);
  
      const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     for ( auto i{0}; i<parent_elements; ++i ) {
            const Element<3U>* const eptr = nptr->Parent(i);
            const size_t sector_node      = nptr->ParentNodeNumber(i);
            const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
@@ -445,17 +446,17 @@ double FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const np
 
     @attention this method relies on precomputed facet fluxes.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double FluxEvaluator<dim,USER>::FluxBalanceAndOutFlow( Node<dim>* const nptr ) const
  {
      double flux_balance(0.), out_flow(0.), flux_C0_products(0.);
  
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     const auto parent_elements{nptr->Parents()};
+     for ( auto i{0}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-           for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+          const auto sector_node = nptr->ParentNodeNumber(i);
+           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+               const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
                const double facet_flux = sign * eptr->Read( facet, 0U, User()->Notation.key_ff );
@@ -486,17 +487,17 @@ double FluxEvaluator<dim,USER>::FluxBalanceAndOutFlow( Node<dim>* const nptr ) c
 
     @attention this method relies on precomputed facet fluxes.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double FluxEvaluator<dim,USER>::InFlow( const Node<dim>* const nptr ) const
  {
      double in_flow(0.);
  
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     const auto parent_elements(nptr->Parents());
+     for ( auto i{0}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-           for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+          const auto sector_node      = nptr->ParentNodeNumber(i);
+           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+               const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
                const double facet_flux = sign * eptr->Read( facet, 0U, User()->Notation.key_ff );
@@ -518,17 +519,17 @@ double FluxEvaluator<dim,USER>::InFlow( const Node<dim>* const nptr ) const
 
     @attention this method relies on precomputed facet fluxes.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double FluxEvaluator<dim,USER>::OutFlow( const Node<dim>* const nptr ) const
  {
      double out_flow(0.);
  
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     const auto parent_elements(nptr->Parents());
+     for ( auto i{0}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
-          const size_t sector_node      = nptr->ParentNodeNumber(i);
-           for ( size_t j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+          const auto sector_node      = nptr->ParentNodeNumber(i);
+           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+               const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
                const double facet_flux = sign * eptr->Read( facet, 0U, User()->Notation.key_ff );
@@ -546,18 +547,18 @@ double FluxEvaluator<dim,USER>::OutFlow( const Node<dim>* const nptr ) const
 /**
       Meters cubed, going in versus out.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double FluxEvaluator<dim,USER>::VolumetricFlowBalance( const Node<dim>* const nptr ) const
  {
      double volume_balance(0.);
  
-     const size_t parent_elements(nptr->Parents());
-     for ( size_t i=0U; i<parent_elements; ++i ) {
+     const auto parent_elements(nptr->Parents());
+     for ( auto i{0}; i<parent_elements; ++i ) {
            const Element<dim>* const eptr = nptr->Parent(i);
-           const size_t sector_node      = nptr->ParentNodeNumber(i);
-           const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
-           for ( size_t j=0U; j<sector_facets; ++j ) {
-               const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
+           const auto sector_node      = nptr->ParentNodeNumber(i);
+           const auto sector_facets(eptr->FV()->FacetsPerSector(sector_node));
+           for ( auto j=0U; j<sector_facets; ++j ) {
+               const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
                volume_balance += sign * eptr->Read( facet, 0U, User()->Notation.key_ff );
@@ -580,24 +581,23 @@ double FluxEvaluator<dim,USER>::VolumetricFlowBalance( const Node<dim>* const np
     by Advective_O1_FluxesBoundary().
     This method also writes the correct volumetric flow balances onto the nodes on the perimeter.
 */
-template<size_t dim, template<size_t> class USER>
-template<template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class USER>
+template<template<uint32_t> class CELL>
 void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( ModelSubDomain<dim,CELL>& subdomain, 
                                                                               vector<CELL<dim>*>& halo_stencils )
   {
      // 1. setting 'flux balance' and 'accumulation' variables to be accumulated on the nodes=FVs to zero
-     const typename vector<Node<dim>*>::iterator nodes_end(subdomain.NodesEnd());
-     for ( typename vector<Node<dim>*>::iterator
-           nit=subdomain.NodesBegin(); nit!=nodes_end; ++nit ) {
+     const auto nodes_end(subdomain.NodesEnd());
+     for ( auto nit=subdomain.NodesBegin(); nit!=nodes_end; ++nit ) {
            (*nit)->Store( User()->Notation.key_FB, makeScalar(ANY,0.) );
            (*nit)->Store( User()->Notation.key_acc_, makeScalar(ANY,0.) );
            (*nit)->Store( User()->Notation.key_out_, makeScalar(ANY,0.) );
        }
      // including the halo elements
      if ( !halo_stencils.empty() )
-       for ( typename vector<CELL<dim>*>::iterator it=halo_stencils.begin(); it!=halo_stencils.end(); ++it ) {
+       for ( auto it=halo_stencils.begin(); it!=halo_stencils.end(); ++it ) {
             const size_t nodes((*it)->Nodes());
-            for ( size_t i=0U; i<nodes; ++i ) {
+            for ( auto i{0}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( User()->Notation.key_FB, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( User()->Notation.key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( User()->Notation.key_out_, makeScalar(ANY,0.) );
@@ -605,9 +605,8 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
          }
 
      // 2. element-by-element processing of facet fluxes and flux balances
-     const typename vector<CELL<dim>*>::iterator elements_end(subdomain.ElementsEnd());
-     for ( typename vector<CELL<dim>*>::iterator
-           eit=subdomain.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain.ElementsEnd());
+     for ( auto eit=subdomain.ElementsBegin(); eit!=elements_end; ++eit )
        {
           // 1.1 computation of transport velocity from fluid pressure gradient
        
@@ -618,9 +617,8 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
  
      // 3. processing potential halo stencils
      if ( !halo_stencils.empty() ) {
-         const typename vector<CELL<dim>*>::iterator elements_end(halo_stencils.end());
-         for ( typename vector<CELL<dim>*>::iterator
-               eit=halo_stencils.begin(); eit!=elements_end; ++eit )
+         const auto halo_elements_end(halo_stencils.end());
+         for ( auto eit=halo_stencils.begin(); eit!=halo_elements_end; ++eit )
            {
               // 1.1 computation of transport velocity from fluid pressure gradient
            
@@ -631,8 +629,7 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
        }
 
      // 4. processing fluxes through the FVs on the regions perimeter computing outside facet fluxes as necessary
-     for ( typename vector<Node<dim>*>::iterator
-           nit=subdomain.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
+     for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=nodes_end; ++nit )
        {
           // computing volumetric flux balances and concentration-facet flux product balances.
           // At sliced boundaries 3-typed of conditions are applied:

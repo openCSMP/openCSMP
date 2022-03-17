@@ -194,8 +194,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -217,7 +217,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -228,7 +228,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double ms(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
            }
@@ -281,7 +281,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        // checking the element that contains this point
        Region<2U>& model_domain(model.Region("Model"));
 
-       for ( vector<Element<2U>*>::iterator it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
+       for ( auto it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -304,7 +304,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] < -0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -315,7 +315,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double ms(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               ms += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("mean stress"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -370,9 +370,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2>& mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -395,7 +394,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -406,7 +405,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmax(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -457,9 +456,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -482,7 +480,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -493,7 +491,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmax(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmax += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-x"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -548,9 +546,10 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
+       // TODO: refactor this crazy code
+       Region<2> mod_domain(model.Region("Model"));
 
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 
 //       cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -573,7 +572,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -584,7 +583,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmaxy(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }
@@ -637,9 +636,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
 
        // checking the element that contains this point
-
-       for ( vector<Element<2U>*>::iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it  )
-
+       Region<2> mod_domain(model.Region("Model"));
+       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
        {
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
 
@@ -661,7 +659,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        double area(0.);
        bool bvar=true;
-       for ( size_t i=0U; i<(*it)->Nodes(); i++ ) {
+       for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
            if ((*it)->FE()->NRST[i] <-0.001 ) bvar=false;
            area += (*it)->FE()->NRST[i];
 //                    cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
@@ -672,7 +670,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
            double sigmaxy(0.);
 
-           for ( size_t i=0U; i<(*it)->Nodes(); i++ ){
+           for ( auto i{0}; i<(*it)->Nodes(); i++ ){
               sigmaxy += (*it)->FE()->NRST[i] * (*it)->N(i)->Read( model.Database().StorageKey("stress-xy"));
 //              cout << " (*it)->FE()->NRST[i] " << (*it)->FE()->NRST[i] <<endl;
           }

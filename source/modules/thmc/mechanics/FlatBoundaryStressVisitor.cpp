@@ -30,7 +30,7 @@ namespace csmp {
     Application level is model so that all boundaries are visited
     followed by a visitation of their faces.
 */
-template<size_t dim>
+template<uint32_t dim>
 FlatBoundaryStressVisitor<dim>::FlatBoundaryStressVisitor( const Model<dim>& model,
                                                    bool overwrite_force_vector )
     : Visitor<dim>( BOUNDARY, FACE ),
@@ -55,7 +55,7 @@ FlatBoundaryStressVisitor<dim>::FlatBoundaryStressVisitor( const Model<dim>& mod
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 FlatBoundaryStressVisitor<dim>::~FlatBoundaryStressVisitor()
 {
 }
@@ -64,7 +64,7 @@ FlatBoundaryStressVisitor<dim>::~FlatBoundaryStressVisitor()
 /**
     To zero out initial values assigned to the boundary.
 */
-template<size_t dim>
+template<uint32_t dim>
 void FlatBoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
 {
    if ( overwrite_previous_forces_ ) {
@@ -85,7 +85,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Boundary<dim>* b )
     we get non-uniform stresses)
  
 */
-template<size_t dim>
+template<uint32_t dim>
 void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 {
    // 1. NORMAL STRESS COMPONENT
@@ -132,7 +132,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    // adding the normal stress as force contribution to the nodes of the face
    // for linear elements, nodal forces are applied at corner nodes by a factor of A/nodeNumbers
    // for quadratic elements, nodal forces are applied at mid-side nodes by a factor of A/midsideNodeNumbers
-   for (size_t i = BeginNodeNumber; i < BeginNodeNumber+nodeNumbers; i++) {
+   for (auto i = BeginNodeNumber; i < BeginNodeNumber+nodeNumbers; i++) {
       f->N(i)->Read(F_key_, vc_);
       vc_ += (nrml_ + vs_);
       f->N(i)->Store(F_key_, vc_);                                         // HA. Adds both shear and normal components to the nodal force vectors. 

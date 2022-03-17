@@ -6,7 +6,7 @@
 namespace csmp {
 
 class Matrix;
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 /**
  

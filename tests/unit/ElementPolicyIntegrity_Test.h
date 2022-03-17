@@ -28,7 +28,7 @@ namespace csmp {
     Building an Element only element
     with only the functionality that is stand-alone.
 */
-template<size_t dim>
+template<uint32_t dim>
 class ElementOnly {
   public:
     ElementOnly( size_t id, size_t nodes, size_t nbors )
@@ -76,7 +76,7 @@ class ElementOnly {
 };
 
 
-template<size_t dim>
+template<uint32_t dim>
 class ElementWithVariableStorage : public LocalVariableStorage<dim,Element> {
   public:
     // as above?
@@ -85,7 +85,7 @@ class ElementWithVariableStorage : public LocalVariableStorage<dim,Element> {
     void       NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
 };
 
-template<size_t dim>
+template<uint32_t dim>
 class ElementWithStorageAndFEM : public LocalVariableStorage<dim,Element>,
                                  public FiniteElementPolicy<dim,Element> {
 };

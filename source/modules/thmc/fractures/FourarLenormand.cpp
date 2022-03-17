@@ -7,13 +7,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FourarLenormand<dim>::FourarLenormand()
  {
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 FourarLenormand<dim>::FourarLenormand( const PropertyDatabase<dim>& database,
                                        const char* fractureAperture )
   :  TwoPhaseModel<dim>(database, "permeability",
@@ -26,7 +26,7 @@ FourarLenormand<dim>::FourarLenormand( const PropertyDatabase<dim>& database,
      assert( fractureApertureKey_.place == ELEMENT );
  }
 
-template<size_t dim>
+template<uint32_t dim>
 FourarLenormand<dim>::FourarLenormand( const PropertyDatabase<dim>& database,
                                        const char* fractureAperture,
                                        const char* permeability,
@@ -48,14 +48,14 @@ FourarLenormand<dim>::FourarLenormand( const PropertyDatabase<dim>& database,
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 FourarLenormand<dim>::~FourarLenormand()
  {
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FourarLenormand<dim>::Initialize( const Element<dim>& e )
  {
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -75,7 +75,7 @@ void FourarLenormand<dim>::Initialize( const Element<dim>& e )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::krw_Phase() const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -85,7 +85,7 @@ double FourarLenormand<dim>::krw_Phase() const
   return pow( se, 2 )/2 * ( 3-se );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::krn_Phase() const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -96,7 +96,7 @@ double FourarLenormand<dim>::krn_Phase() const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::dkrwds_Phase() const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -106,7 +106,7 @@ double FourarLenormand<dim>::dkrwds_Phase() const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::dkrnds_Phase() const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -116,7 +116,7 @@ double FourarLenormand<dim>::dkrnds_Phase() const
 }
 
 /// uses dummy aperture if key is not specified in according constructor
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::pc_Phase(  ) const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -144,7 +144,7 @@ double FourarLenormand<dim>::pc_Phase(  ) const
 }
 
 //dummy as above
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::dpcds_Phase( ) const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -159,7 +159,7 @@ double FourarLenormand<dim>::dpcds_Phase( ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::Sw_Phase( double pc ) const
 {
     // not unique solution
@@ -167,7 +167,7 @@ double FourarLenormand<dim>::Sw_Phase( double pc ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double FourarLenormand<dim>::dsdpc_Phase( double pc ) const
 {
     return 0.0;

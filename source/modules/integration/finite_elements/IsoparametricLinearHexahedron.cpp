@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integrationPoints )
+IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_HEXAHEDRON, true, true, 1U ),
     NXYZ(8,3), V_(28), Vx_(28), Vy_(28), Vz_(28),
@@ -84,7 +84,7 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integration
     W.resize(gpe);
     if( integrationPoints == 1 )
     {
-        IP(0,0) = 0.0,	IP(0,1) = 0.0, 	IP(0,2) = 0.0;
+        IP(0,0) = 0.0;	IP(0,1) = 0.0; 	IP(0,2) = 0.0;
         W[0] = 8.0;
     }
     else if( integrationPoints == 4 )
@@ -102,27 +102,27 @@ IsoparametricLinearHexahedron::IsoparametricLinearHexahedron( size_t integration
         double oneDivSqrtThree=1./sqrt(3.0);
         double sqrtTwoThirds=sqrt(2.0/3.0);
 
-        IP(0,0) = 0.0,              IP(0,1) = -sqrtTwoThirds, 	IP(0,2) = -oneDivSqrtThree;
-        IP(1,0) = 0.0,              IP(1,1) = sqrtTwoThirds,	IP(1,2) = -oneDivSqrtThree;
-        IP(2,0) = -sqrtTwoThirds,   IP(2,1) = 0.0, 				IP(2,2) =  oneDivSqrtThree;
-        IP(3,0) =  sqrtTwoThirds,   IP(3,1) = 0.0, 				IP(3,2) =  oneDivSqrtThree;
+        IP(0,0) = 0.0;              IP(0,1) = -sqrtTwoThirds; 	IP(0,2) = -oneDivSqrtThree;
+        IP(1,0) = 0.0;              IP(1,1) = sqrtTwoThirds;	IP(1,2) = -oneDivSqrtThree;
+        IP(2,0) = -sqrtTwoThirds;   IP(2,1) = 0.0; 				IP(2,2) =  oneDivSqrtThree;
+        IP(3,0) =  sqrtTwoThirds;   IP(3,1) = 0.0; 				IP(3,2) =  oneDivSqrtThree;
     }
     else if( integrationPoints == 8 )
     {
         // full 8-node integration scheme, see Akin, 1982, p.100
-        for(size_t i=0; i<integrationPoints;i++)
+        for(auto i=0; i<integrationPoints;i++)
             W[i] = 1.0;
 
-        double a1 = 0.577350269189626;
+        const double a1 = 0.577350269189626;
 
-        IP(0,0) =-a1,	IP(0,1) =-a1, 	IP(0,2) =-a1;
-        IP(1,0) = a1,	IP(1,1) =-a1, 	IP(1,2) =-a1;
-        IP(2,0) = a1,	IP(2,1) = a1, 	IP(2,2) =-a1;
-        IP(3,0) =-a1,	IP(3,1) = a1, 	IP(3,2) =-a1;
-        IP(4,0) =-a1,	IP(4,1) =-a1, 	IP(4,2) = a1;
-        IP(5,0) = a1,	IP(5,1) =-a1, 	IP(5,2) = a1;
-        IP(6,0) = a1,	IP(6,1) = a1, 	IP(6,2) = a1;
-        IP(7,0) =-a1,	IP(7,1) = a1, 	IP(7,2) = a1;
+        IP(0,0) =-a1;	IP(0,1) =-a1;	IP(0,2) =-a1;
+        IP(1,0) = a1;	IP(1,1) =-a1;	IP(1,2) =-a1;
+        IP(2,0) = a1;	IP(2,1) = a1;	IP(2,2) =-a1;
+        IP(3,0) =-a1;	IP(3,1) = a1;	IP(3,2) =-a1;
+        IP(4,0) =-a1;	IP(4,1) =-a1;	IP(4,2) = a1;
+        IP(5,0) = a1;	IP(5,1) =-a1;	IP(5,2) = a1;
+        IP(6,0) = a1;	IP(6,1) = a1;	IP(6,2) = a1;
+        IP(7,0) =-a1;	IP(7,1) = a1;	IP(7,2) = a1;
     }
     else
     {
@@ -163,13 +163,13 @@ Uses My coordinate system:
  Coordinate axes mapped, but work for cube at COFC??*/
 double
 IsoparametricLinearHexahedron::VolumeOfTetra(
-                            size_t verticeIndex1,
-                            size_t verticeIndex2,
-                            size_t verticeIndex3,
-                            size_t verticeIndex4 )
+                            uint32_t verticeIndex1,
+                            uint32_t verticeIndex2,
+                            uint32_t verticeIndex3,
+                            uint32_t verticeIndex4 )
 {
 
-    size_t i=verticeIndex1,j=verticeIndex2,k=verticeIndex3,l=verticeIndex4;
+    uint32_t i=verticeIndex1,j=verticeIndex2,k=verticeIndex3,l=verticeIndex4;
 
     double d1Times1=	 XY(j,2)*XY(k,0)*XY(l,1)-XY(j,2)*XY(k,1)*XY(l,0)-XY(j,0)*XY(k,2)*XY(l,1)+
                          XY(j,0)*XY(k,1)*XY(l,2)+XY(j,1)*XY(k,2)*XY(l,0)-XY(j,1)*XY(k,0)*XY(l,2);
@@ -214,7 +214,7 @@ for the element.
 
 */
 void
-IsoparametricLinearHexahedron::CornerNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearHexahedron::CornerNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(8);
     ids[0] = 0;
@@ -238,7 +238,7 @@ for the element.
 
 */
 void
-IsoparametricLinearHexahedron::CounterClockwiseNodes( std::vector<size_t>& ids ) const
+IsoparametricLinearHexahedron::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
@@ -254,7 +254,7 @@ IsoparametricLinearHexahedron::CounterClockwiseNodes( std::vector<size_t>& ids )
 
 
 void
-IsoparametricLinearHexahedron::NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const
+IsoparametricLinearHexahedron::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
  {
     snids.resize(2);
     if ( segm_id == 0 ) {
@@ -315,7 +315,7 @@ IsoparametricLinearHexahedron::NodesOfSegment( size_t segm_id, std::vector<size_
 
 */
 void
-IsoparametricLinearHexahedron::NodesOfFace( size_t face_id, vector<size_t>& fnids ) const
+IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(4);
 
@@ -366,51 +366,51 @@ IsoparametricLinearHexahedron::NodesOfFace( size_t face_id, vector<size_t>& fnid
  }
 
 
-vector<size_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{0,3,2,1};
-        case 1: return vector<size_t>{0,1,5,4};
-        case 2: return vector<size_t>{1,2,6,5};
-        case 3: return vector<size_t>{2,3,7,6};
-        case 4: return vector<size_t>{0,4,7,3};
-        case 5: return vector<size_t>{4,5,6,7};
+        case 0: return vector<uint32_t>{0,3,2,1};
+        case 1: return vector<uint32_t>{0,1,5,4};
+        case 2: return vector<uint32_t>{1,2,6,5};
+        case 3: return vector<uint32_t>{2,3,7,6};
+        case 4: return vector<uint32_t>{0,4,7,3};
+        case 5: return vector<uint32_t>{4,5,6,7};
       }
     cerr <<"\nIsoparametricLinearHexahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<size_t>  IsoparametricLinearHexahedron::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  IsoparametricLinearHexahedron::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,3,4};
-        case 1: return vector<size_t>{0,2,5};
-        case 2: return vector<size_t>{1,3,6};
-        case 3: return vector<size_t>{0,2,7};
-        case 4: return vector<size_t>{0,5,7};
-        case 5: return vector<size_t>{1,4,6};
-        case 6: return vector<size_t>{2,5,7};
-        case 7: return vector<size_t>{3,4,6};
+        case 0: return vector<uint32_t>{1,3,4};
+        case 1: return vector<uint32_t>{0,2,5};
+        case 2: return vector<uint32_t>{1,3,6};
+        case 3: return vector<uint32_t>{0,2,7};
+        case 4: return vector<uint32_t>{0,5,7};
+        case 5: return vector<uint32_t>{1,4,6};
+        case 6: return vector<uint32_t>{2,5,7};
+        case 7: return vector<uint32_t>{3,4,6};
         default:
           cerr <<"\nIsoparametricLinearHexahedron::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 
-CSMP_FEM_TYPE  IsoparametricLinearHexahedron::ElementTypeOfFace( size_t )  const
+CSMP_FEM_TYPE  IsoparametricLinearHexahedron::ElementTypeOfFace( uint32_t )  const
  {
     return ISOPARAMETRIC_LINEAR_QUADRILATERAL;
  }
 
 
 
-double IsoparametricLinearHexahedron::WeightAtIntegrationPoint( size_t i ) const { return W[i]; }
+double IsoparametricLinearHexahedron::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
 
 
@@ -428,7 +428,7 @@ double IsoparametricLinearHexahedron::VolumeOfHexa()
 
     cout<<" Vertices:"<<endl;
 
-    for(size_t i=0;i<8;i++)
+    for(uint32_t i=0;i<8;i++)
         cout<<" Hex N_"<<i<<", ("<< XY(i,0)<<","<<XY(i,1)<<","<<XY(i,2)<<");"<<endl;
 
     cout<<" Volumes : "<<VolumeOfTetra(0,1,3,4)<<" "<<VolumeOfTetra(4,1,3,5)<<" "<<VolumeOfTetra(4,5,3,7)
@@ -467,15 +467,15 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
      // 1. writing the faces and points as well of the element
      // -----------------------------------
      DenseMatrix<DM_MIN> COORD(XY);
-     vector<size_t> fnids(npf);
-     for(size_t i=0;i<fpe;i++)
+     vector<uint32_t> fnids(npf);
+     for(uint32_t i=0;i<fpe;i++)
      {
 
      NodesOfFace(i,fnids);
      rhinos<<"SrfPt ";
-        for(size_t j=0;j<npf;j++){
+        for(uint32_t j=0;j<npf;j++){
             rhinos<<"(";
-            for(size_t k=0;k<dim;k++)
+            for(uint32_t k=0;k<dim;k++)
                 if(k!=dim-1) rhinos<<COORD(fnids[j],k)<<",";
                     else
                      rhinos<<COORD(fnids[j],k)<<") ";
@@ -483,9 +483,9 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
         rhinos<<" "<<endl;
 
         if(NodesOn) {
-            for(size_t j=0;j<npf;j++){
+            for(uint32_t j=0;j<npf;j++){
                 rhinos<<"point (";
-                for(size_t k=0;k<dim;k++)
+                for(uint32_t k=0;k<dim;k++)
                 if(k!=dim-1) rhinos<<COORD(fnids[j],k)<<",";
                     else
                      rhinos<<COORD(fnids[j],k)<<") ";
@@ -499,12 +499,12 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
  if(IP_PointsVolOn) {
  DenseMatrix<DM_MIN>  IPPHYS;
  IntegrationPointsFromParToPhys(IPPHYS);
- for(size_t i=0;i<gpe;i++)
+ for(uint32_t i=0;i<gpe;i++)
     {
 
     rhinos<<"point (";
 
-    for(size_t k=0;k<dim;k++)
+    for(uint32_t k=0;k<dim;k++)
         if(k!=dim-1) rhinos<<IPPHYS(i,k)<<",";
                     else
                      rhinos<<IPPHYS(i,k)<<") ";
@@ -517,15 +517,15 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
  // 4. Output of the faces integration points, based on bool IP_PointsFaceOn
  // -----------------------------------
  if( IP_PointsFaceOn ) {
-   vector<size_t>  nIDs(npf);
+   vector<uint32_t>  nIDs(npf);
    rhinos<<"# Element's faces integration points: "<<endl;
-     for(size_t i=0;i<fpe;i++)
+     for(auto i=0;i<fpe;i++)
        {
         IsoparametricLinearQuadrilateral isoLinQuad(3);
         Element<3U>  element1( &isoLinQuad );
         vector<Node<3U> >  nodes(npf);
         NodesOfFace(i,fnids);
-        for(size_t j=0;j<npf;j++) {
+        for(uint32_t j=0;j<npf;j++) {
                  nodes[j].x(COORD(fnids[j],0));
                  nodes[j].y(COORD(fnids[j],1));
                  nodes[j].z(COORD(fnids[j],2));
@@ -537,15 +537,15 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
 
         DenseMatrix<DM_MIN>  IPPHYSQ;
         isoLinQuad.IntegrationPointsFromParToPhys(IPPHYSQ);
-        const size_t numberIPofQuad=4;
+        const auto numberIPofQuad=4;
         rhinos<<"# Face "<<i+1<<", area="<<element1.Volume()<<endl;
-            for(size_t i=0;i<numberIPofQuad;i++)
+            for(auto n=0;n<numberIPofQuad;n++)
             {
             rhinos<<"point (";
-            for(size_t k=0;k<dim;k++)
-            if(k!=dim-1) rhinos<<IPPHYSQ(i,k)<<",";
+            for(auto k=0;k<dim;k++)
+            if(k!=dim-1) rhinos<<IPPHYSQ(n,k)<<",";
                         else
-                         rhinos<<IPPHYSQ(i,k)<<") ";
+                         rhinos<<IPPHYSQ(n,k)<<") ";
             }
            rhinos<<endl;
       }
@@ -775,7 +775,7 @@ IsoparametricLinearHexahedron::dN( DenseMatrix<DM_MIN>& DN8 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( size_t i=0; i<npe; i++ )
+     for ( auto i=0; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -896,7 +896,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 */
 double
-IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
+IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd )
  {
     assert( nd < npe );
     dNr( NXYZ(nd,0), NXYZ(nd,1), NXYZ(nd,2), DNR );
@@ -910,14 +910,14 @@ IsoparametricLinearHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, size_t nd )
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -933,10 +933,10 @@ void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double>& rst,
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
-    for(size_t i=0; i<dim; i++)
+    for(auto i=0; i<dim; i++)
         xyz[i]=0.0;
 
-    for(size_t i=0; i<npe; i++)
+    for(auto i=0; i<npe; i++)
     {
         xyz[0]+=XY(i,0)*NRST[i];
         xyz[1]+=XY(i,1)*NRST[i];
@@ -947,7 +947,7 @@ void IsoparametricLinearHexahedron::ParametricToPhysical( vector<double>& rst,
 
 
 
-void IsoparametricLinearHexahedron::IntegrationPoint( size_t ip,
+void IsoparametricLinearHexahedron::IntegrationPoint( uint32_t ip,
                                                       vector<double>& xyz ) const
 {
    assert( ip < gpe );
@@ -956,7 +956,7 @@ void IsoparametricLinearHexahedron::IntegrationPoint( size_t ip,
    xyz.resize( XY.Cols() );
    xyz[0] = xyz[1] = xyz[2] = 0.;
 
-   for ( size_t i=0; i<npe; i++) {
+   for ( auto i=0; i<npe; i++) {
        xyz[0] += XY(i,0) * NRST[i];
        xyz[1] += XY(i,1) * NRST[i];
        xyz[2] += XY(i,2) * NRST[i];
@@ -974,9 +974,9 @@ vector<double> N(npe);
 
 Nrst(rst[0],rst[1],rst[2], N );
 
-for(size_t i=0; i<dim; i++) xyz[i]=0.0;
+for(auto i=0; i<dim; i++) xyz[i]=0.0;
 
-for(size_t i=0; i<npe; i++)
+for(auto i=0; i<npe; i++)
     {
     xyz[0]+=XY(i,0)*N[i];
     xyz[1]+=XY(i,1)*N[i];
@@ -1011,7 +1011,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
     vector<double> vec(spe);
     EdgeLengths( vec );
     double seg_max(vec[0]), seg_min(vec[0]);
-    for ( size_t i=1; i<spe; i++ )
+    for ( auto i=1; i<spe; i++ )
     {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
@@ -1044,9 +1044,9 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
         double minDistanceFromGivenPoint;
 
         const double constantMu               = 1.0;
-        const size_t numberOfFirstIterrations   = 5;
-        const size_t maxNumberOfIterrations     = 20;
-        const size_t numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
+        const auto numberOfFirstIterrations   = 5;
+        const auto maxNumberOfIterrations     = 20;
+        const auto numberOfIterationsWhenJacobiIsNotConstant = maxNumberOfIterrations ;
 
         const double incrementR = 2.0/(numberOfFirstIterrations-1);
         const double incrementS = 2.0/(numberOfFirstIterrations-1);
@@ -1055,13 +1055,13 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = -1.0;
-        for(size_t i=0;i<numberOfFirstIterrations;i++)
+        for(auto i=0;i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = -1.0;
-            for(size_t j=0;j<numberOfFirstIterrations;j++)
+            for(auto j=0;j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = -1.0;
-                for(size_t k=0;k<numberOfFirstIterrations;k++)
+                for(auto k=0;k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -1076,8 +1076,8 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(size_t i=0; i<dim; i++)
-                            rstHatK[i] = rstHatK_PlusOne[i];
+                        for(auto l=0; l<dim; l++)
+                            rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
                     }
@@ -1098,7 +1098,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
                                          distanceFromGivenPointLinf[1]*distanceFromGivenPointLinf[1] +
                                          distanceFromGivenPointLinf[2]*distanceFromGivenPointLinf[2] );
 
-        size_t iteration = 1;
+        auto iteration = 1;
 
         /// Newton-Raphson iterations
         while ( ( distanceFromGivenPointL2 > geometricTolerance ) && ( iteration < maxNumberOfIterrations ) )
@@ -1137,7 +1137,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(size_t i=0; i<dim; i++)
+            for(auto i=0; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -1194,7 +1194,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
 
     }
 
-    for(size_t i=0; i<dim; i++)
+    for(auto i=0; i<dim; i++)
         rSt[i] = rstHatK[i];
 
 }
@@ -1210,7 +1210,7 @@ IsoparametricLinearHexahedron::PhysicalToParametric(
      
      @test OK
 */
-void  IsoparametricLinearHexahedron::UnitNormalToFace( size_t face, std::vector<double>& unrml ) const
+void  IsoparametricLinearHexahedron::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
  {
      assert( face < Faces() );
      unrml.resize(3);
@@ -1302,7 +1302,7 @@ double  IsoparametricLinearHexahedron::AspectRatio()
    double seg_max(vec[0]), seg_min(vec[0]);
 
    // find largest segment
-   for ( size_t i=1; i<spe; i++ ) {
+   for ( auto i=1; i<spe; i++ ) {
         if ( vec[i] > seg_max ) seg_max = vec[i];
         if ( vec[i] < seg_min ) seg_min = vec[i];
      }
@@ -1412,13 +1412,12 @@ the area is computed.
 double
 IsoparametricLinearHexahedron::Volume()
 {
-    double   area; // determinant
-    size_t  i;
+    double   area{0.}; // determinant
 
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( area=0.0, i=0; i<gpe; i++ )
+    for ( auto i=0; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1448,7 +1447,7 @@ A reference to the parent Element, the number of the integration point.
 
 */
 inline void
-IsoparametricLinearHexahedron::N_AtIntegrationPoint( size_t ip, std::vector<double>& N )
+IsoparametricLinearHexahedron::N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N )
 
  {
     assert( ip < gpe );
@@ -1481,7 +1480,7 @@ of the Jacobian matrix since it is often needed in integration
 procedures.
 */
 double
-IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, size_t gauss_point )
+IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, uint32_t gauss_point )
  {
     // 1. compute local test-function derivative matrix at gauss point
     // get local shape function derivatives at Gauss point
@@ -1497,14 +1496,14 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, si
     // compose matrix DN = 3 x 8 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -1512,7 +1511,7 @@ IsoparametricLinearHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B, si
  }
 
  void
- IsoparametricLinearHexahedron::JacobianAtIntegrationPoint( size_t gauss_point )
+ IsoparametricLinearHexahedron::JacobianAtIntegrationPoint( uint32_t gauss_point )
  {
     dNr( IP(gauss_point,0), IP(gauss_point,1), IP(gauss_point,2), DNR );
     dNs( IP(gauss_point,0), IP(gauss_point,1), IP(gauss_point,2), DNS );
@@ -1556,7 +1555,7 @@ IsoparametricLinearHexahedron::InnerRadius()
    double          sum(0.0);
 
    EdgeLengths( segms );
-   for ( size_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( auto i=0; i<spe; i++ ) sum += segms[i];
 
    // Function will produce unreliable value for high aspect ratio elements
    if (AspectRatio()>4.0)
@@ -1574,7 +1573,7 @@ for the element.
 
 */
 void
-IsoparametricLinearHexahedron::MidSideNodes(std::vector<size_t>& ids) const
+IsoparametricLinearHexahedron::MidSideNodes(std::vector<uint32_t>& ids) const
  {
     cerr<<"\nIsoparametricLinearHexahedron::MidSideNodes: WARNING: MidSideNodes not present.\n"<<endl;
     ids[0]=0;
@@ -1606,8 +1605,8 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
 void
-IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<size_t>& bnodes,
-                                                           vector<size_t>& fnids )
+IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                           vector<uint32_t>& fnids )
  {
      fnids.resize(bnodes.size());
 
@@ -1634,14 +1633,14 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    B(0,0) = DNR[0], B(1,0) = DNS[0], B(2,0) = DNT[0];
-    B(0,1) = DNR[1], B(1,1) = DNS[1], B(2,1) = DNT[1];
-    B(0,2) = DNR[2], B(1,2) = DNS[2], B(2,2) = DNT[2];
-    B(0,3) = DNR[3], B(1,3) = DNS[3], B(2,3) = DNT[3];
-    B(0,4) = DNR[4], B(1,4) = DNS[4], B(2,4) = DNT[4];
-    B(0,5) = DNR[5], B(1,5) = DNS[5], B(2,5) = DNT[5];
-    B(0,6) = DNR[6], B(1,6) = DNS[6], B(2,6) = DNT[6];
-    B(0,7) = DNR[7], B(1,7) = DNS[7], B(2,7) = DNT[7];
+    B(0,0) = DNR[0]; B(1,0) = DNS[0]; B(2,0) = DNT[0];
+    B(0,1) = DNR[1]; B(1,1) = DNS[1]; B(2,1) = DNT[1];
+    B(0,2) = DNR[2]; B(1,2) = DNS[2]; B(2,2) = DNT[2];
+    B(0,3) = DNR[3]; B(1,3) = DNS[3]; B(2,3) = DNT[3];
+    B(0,4) = DNR[4]; B(1,4) = DNS[4]; B(2,4) = DNT[4];
+    B(0,5) = DNR[5]; B(1,5) = DNS[5]; B(2,5) = DNT[5];
+    B(0,6) = DNR[6]; B(1,6) = DNS[6]; B(2,6) = DNT[6];
+    B(0,7) = DNR[7]; B(1,7) = DNS[7]; B(2,7) = DNT[7];
 
     B = JINV * B;
 
@@ -1656,11 +1655,11 @@ IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     vector<double> outxyz(dim);
     vector<double> rst(dim);
 
-    for(size_t i=0;i<gpe;i++)
+    for(auto i=0;i<gpe;i++)
         {
         rst[0]=IP(i,0);rst[1]=IP(i,1);rst[2]=IP(i,2);
         ParametricToPhysical( rst, outxyz);
-        for(size_t j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
+        for(auto j=0;j<dim;j++) IPPHYS(i,j)=outxyz[j];
         }
    }
 
@@ -1688,7 +1687,7 @@ to the nodes.  This involves the steps:
 */
 void
 IsoparametricLinearHexahedron::ExtrapolateIntegrationPointVariableToNodes(
-                                                        size_t nvars,
+                                                        uint32_t nvars,
                                                         const vector<double>& IVAR,
                                                         vector<double>& NVAR
                                                                 )
@@ -1701,7 +1700,7 @@ const
    NVAR.resize( npe * nvars );
 
 /*
-  const size_t    dim1(2);
+  const auto    dim1(2);
   // 0. Building a finite element of specific shape
   // ----------------------------------------------
   LinearQuadrilateral     linear_quadrilateral(dim1);
@@ -1731,8 +1730,8 @@ const
 
   if(gpe==1)
   {
-    for ( size_t i=0; i<npe; i++ )
-      for ( size_t k=0; k<nvars; k++ )
+    for ( auto i=0; i<npe; i++ )
+      for ( auto k=0; k<nvars; k++ )
         NVAR[i*nvars + k] = IVAR[k];
   }
   else
@@ -1766,13 +1765,13 @@ const
      =MATRIX_A(4,2)=MATRIX_A(5,3)=MATRIX_A(6,0)=MATRIX_A(7,1)=d;
 
 
-  for ( size_t i=0; i<nvars; i++ )
+  for ( auto i=0; i<nvars; i++ )
     {
-        for ( size_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
+        for ( auto k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
             //TEMP_N.Out();
-            for ( size_t j=0; j<npe; j++ )
+            for ( auto j=0; j<npe; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);
             }
@@ -1834,9 +1833,9 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( size_t i=0; i<npe; i++ )
+     for ( auto i=0; i<npe; i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1867,7 +1866,7 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( size_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( auto i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1875,8 +1874,8 @@ IsoparametricLinearHexahedron::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( size_t i=0; i<DATA.Cols(); i++ ) {
-               for ( size_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( auto i=0; i<DATA.Cols(); i++ ) {
+               for ( auto j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }
@@ -1909,8 +1908,8 @@ void IsoparametricLinearHexahedron::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, De
 		  dxyz, 2*xpz - 4*dyz,
 	      dxyz};
 
-	size_t k(0), j;
-	for (size_t i = 0; i < 8; ++i) { // 8 = npe
+	uint32_t k(0), j;
+	for (auto i = 0; i < 8; ++i) { // 8 = npe
 		for (j = 0; j < i; ++j) M(i, j) = M(j, i);
 		for (j = i; j < 8; ++j) M(i, j) = V_[k++];
 	}

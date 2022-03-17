@@ -5,7 +5,7 @@
 
 namespace csmp  {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
 same as Variables_Test, but instead of using runtime csmp::Index variables, the typed compile time versions are used 

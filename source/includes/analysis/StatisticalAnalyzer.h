@@ -5,8 +5,8 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 typedef std::vector<std::pair<double,double> > HistogramBins;
 
@@ -18,7 +18,7 @@ typedef std::vector<std::pair<double,double> > HistogramBins;
      @uthor Stephan Matthai
      @date 2001
 */
-template<size_t dim>
+template<uint32_t dim>
 class StatisticalAnalyzer {
   public:
     StatisticalAnalyzer( const Model<dim>& );

@@ -11,8 +11,8 @@ namespace csmp {
 
 // * basic and test variable exchanged so that the line is indicated by the basic variable (as it is
 // * for the lhs operators)
-template<size_t dim,class SIMPLEX>
-Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
                                                                           const char* oper,
                                                                           const char* basic,
                                                                           const char* test,
@@ -62,8 +62,8 @@ Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::Upwind_Integral_dNT_rhsop_dN_dV( c
 
 
 
-template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -79,8 +79,8 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e
 
 
 
-template<size_t dim,class SIMPLEX>
-void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
@@ -98,8 +98,8 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SI
       
       
       // calculate upwinding coefficients and multiply them with operand matrix   
-      for (size_t i = 0; i < e.Nodes(); ++i) {
-          for (size_t j = 0; j < e.Nodes(); ++j) {;
+      for (auto i = 0; i < e.Nodes(); ++i) {
+          for (auto j = 0; j < e.Nodes(); ++j) {;
               if (i != j) {
                   const double decision = DNT(i, j)*(trigger_var_[j]() - trigger_var_[i]());
                   if      (decision > 0) DNT(i, j) *= upwind_var_[i]();
@@ -110,17 +110,17 @@ void Upwind_Integral_dNT_rhsop_dN_dV<dim,SIMPLEX>::ComputeContribution( const SI
           }
       }
     
-      for (size_t i = 0; i < e.Nodes(); ++i) {
+      for (auto i = 0; i < e.Nodes(); ++i) {
           DNT(i, i) = -DNT.RowSum(i);
       }
       
       // the matrix is contracted into a vector by multiplying with the basis vector
-      for (size_t i = 0; i < e.Nodes(); ++i) 
-        for (size_t j = 0; j < e.Nodes(); ++j) 
+      for (auto i = 0; i < e.Nodes(); ++i) 
+        for (auto j = 0; j < e.Nodes(); ++j) 
           MathOperatorRHS<dim>::RHS[i] += DNT(i,j) * basic_var_[j]();
           
       // scaling with prefactor
-      for (size_t i = 0; i < e.Nodes(); ++i)
+      for (auto i = 0; i < e.Nodes(); ++i)
         MathOperatorRHS<dim>::RHS[i] *= e.Volume() * prefactor_;
     }
     // lumped formulation  

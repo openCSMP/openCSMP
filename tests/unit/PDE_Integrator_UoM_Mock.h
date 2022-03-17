@@ -7,7 +7,8 @@ namespace csmp {
 
 class Solver;
 
-  template<size_t dim, template<size_t> class INTEGRATION_DOMAIN> class PDE_Integrator_UoM_Mock : 
+// TODO: What is this good for? - do we need it? - who created it?
+  template<uint32_t dim, template<uint32_t> class INTEGRATION_DOMAIN> class PDE_Integrator_UoM_Mock : 
     public PDE_Integrator_UoM <dim, INTEGRATION_DOMAIN> 
   {
   public:
@@ -29,10 +30,10 @@ class Solver;
     void OutputResultsTest(INTEGRATION_DOMAIN<dim>&);
     void AssignEssentialConditionsTest(INTEGRATION_DOMAIN<dim>&);
 
-    SparseMatrix const*           GetG() const;
+    SparseMatrix const*         GetG() const;
     std::vector<double> const*  GetRH() const;
     std::vector<double>*        GetX();
-    const std::vector<size_t>&    GetDOFIndex() const;
+    const std::vector<size_t>&  GetDOFIndex() const;
     
     friend class Transient_Test;
     friend class PDE_Integrator_UoM_Test;

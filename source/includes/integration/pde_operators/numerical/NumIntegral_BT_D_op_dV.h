@@ -11,7 +11,7 @@ namespace csmp {
 @date 1999 */
 
 /// vector solution variable: volume strain
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim> {
   public:
     //                                                                          for instance:                                           

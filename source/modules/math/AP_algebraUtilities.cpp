@@ -26,7 +26,7 @@ The area centroid of mass will be the intersection between c1c2 and c3c4;
 
 The main idea is to calculate the center of the area of the given quadrilateral.
 */
-template<size_t dim>
+template<uint32_t dim>
 void areaCenterOfMass(const vector<Point<dim> >& vecPoints, Point<dim>& vecCenter)
 {
 	//if vector<double> of points is empty, return an empty centroid
@@ -73,7 +73,7 @@ the given pair of 3d coordinates.
 
 Determine the point where two lines intersect.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool intersection(const Point<dim>& c1, const Point<dim>& c2, const Point<dim>& c3, const Point<dim>& c4, Point<dim>& vecIntersection)
 {
 	//assume that c1,c2,c3, and c4 are coplanar.
@@ -181,7 +181,7 @@ normal approximation (non-planar surface)
 using the "local surface normal" per approximation
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>& vecNormalAt, const size_t& iLevelOfRefinement, Point<dim>& vecNormal)
 {
 	// vecPolygon is of the form -> p1, p2, p3, p4, ... 
@@ -207,7 +207,7 @@ void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>&
 	   const size_t iSize(vecPoints.size());
 	   for(size_t iPt = 0U; iPt < iSize; iPt++)
 	   {
-		   for(size_t i = 0U; i < iLevelOfRefinement; i++)	
+		   for(auto i = 0U; i < iLevelOfRefinement; i++)	
 		   {
 			  const size_t iOffset((iPt+1)%iSize);
 			  
@@ -241,7 +241,7 @@ void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>&
 
 /// Reference: Ronald Goldman, "Area of Planar Polygons and Volume of Polyhedra" in Graphics Gems II (1994)
 
-template<size_t dim>
+template<uint32_t dim>
 bool areaOfPolygon(const vector< Point<dim> >& vecPolygon, const size_t& iNrOfFacetPoints, double& fArea)
 {
 	//if the polygon has only one point, we define the area as 1

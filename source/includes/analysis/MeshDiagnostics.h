@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim> class Model;
+template<uint32_t dim> class Model;
 
 /**
     @brief Common checks performed on a newly constructed mesh to detect issues.
@@ -18,7 +18,7 @@ template<size_t dim> class Model;
     @author Stephan Matthai
     @date 1999
 */
-template<size_t dim>
+template<uint32_t dim>
 class MeshDiagnostics {
   public:
     void ElementVolumeRange( const Model<dim>&, double& vmin, double& vmax ) const;
@@ -45,7 +45,7 @@ class MeshDiagnostics {
 
 
 /// checks input mesh for duplicate elements
-template<size_t dim>
+template<uint32_t dim>
 bool detectDuplicateElements( const Model<dim>& );
 
 

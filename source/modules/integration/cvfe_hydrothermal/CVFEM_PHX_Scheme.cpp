@@ -6,7 +6,7 @@ namespace csmp {
 
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravity )
    : model(model_ref),
      p_ref(model.Database()),
@@ -148,7 +148,7 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
 
   // create PropertyHandles for full reset variables
   
-  for (size_t i = 0U; i < names.full_reset_variables.size(); i++)
+  for (auto i = 0U; i < names.full_reset_variables.size(); i++)
      reset_properties.push_back(
         new PropertyHandle<dim>(model,("reset "+names.full_reset_variables[i]).c_str(),SCALAR,NODE));
 
@@ -232,35 +232,35 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
   } // end constructor 
 
 /** custom destructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_PHX_Scheme<dim>::~CVFEM_PHX_Scheme()
  {
-  for (size_t i = 0U; i < names.full_reset_variables.size(); i++)
+  for (auto i = 0U; i < names.full_reset_variables.size(); i++)
      delete reset_properties[i];
  }
 
 /** modifying maximum size of time step */
-template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double timestep)
+template<uint32_t dim>
+void CVFEM_PHX_Scheme<dim>::SetLargestTimeStep(double tstep )
     {
 
-      largest_timestep = dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
+      largest_timestep = dt = cfl_dt = current_dt = control_dt = old_dt = tstep;
       upwind_control.SetLargestTimeStep( largest_timestep );
       transport.SetLargestTimeStep( largest_timestep );
 
     } // end SetLargestTimeStep
 
 /** adjusting timestep */
-template<size_t dim>
-void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double timestep)
+template<uint32_t dim>
+void CVFEM_PHX_Scheme<dim>::ChangeTimeStepTo(double tstep )
     {
 
-      dt = cfl_dt = current_dt = control_dt = old_dt = timestep;
+      dt = cfl_dt = current_dt = control_dt = old_dt = tstep;
 
     } // end SetLargestTimeStep
 
 /** initialize fluid properties from current PTX conditions */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::InitialFluidPropertiesFromPTX()
     {
 
@@ -272,7 +272,7 @@ void CVFEM_PHX_Scheme<dim>::InitialFluidPropertiesFromPTX()
     } // end InitialFluidPropertiesFromPT
 
 /** preparation before transient calculations, calculating pressure gradient and updwind nodes from current status */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::PrepareTransientCalculations()
     {
 
@@ -285,7 +285,7 @@ void CVFEM_PHX_Scheme<dim>::PrepareTransientCalculations()
 
 
 /** main function to apply CVFEM scheme in transeint calculations, returns time step used for calculations */
-template<size_t dim>
+template<uint32_t dim>
 double CVFEM_PHX_Scheme<dim>::Apply()
     {
 
@@ -361,34 +361,34 @@ double CVFEM_PHX_Scheme<dim>::Apply()
     } // end Apply
 
 /** book keeping of variables for transient calculations */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::AdvanceTransientVariables( )
   {
-    for (size_t i = 0; i < names.transient_variables.size(); i++)
+    for (auto i = 0; i < names.transient_variables.size(); i++)
        model.CopyReplace( names.transient_variables[i].c_str(),
                        ("previous " + names.transient_variables[i]).c_str());
-    for (size_t i = 0; i < names.full_reset_variables.size(); i++)
+    for (auto i = 0; i < names.full_reset_variables.size(); i++)
        model.CopyReplace( names.full_reset_variables[i].c_str(),
                        ("reset " + names.full_reset_variables[i]).c_str());
   } // end AdvanceTransientVariables
 
 /** reset variables for transient pressure calculations */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::ResetVariables()
   {
-    for (size_t i = 0; i < names.transient_variables.size(); i++)
+    for (auto i = 0; i < names.transient_variables.size(); i++)
        model.CopyReplace( ("previous " + names.transient_variables[i]).c_str(),
                        names.transient_variables[i].c_str());
   } // end ResetVariables
 
 /** reset variables for transient calculations after thermal equilibration */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::FullReset()
   {
-    for (size_t i = 0; i < names.transient_variables.size(); i++)
+    for (auto i = 0; i < names.transient_variables.size(); i++)
        model.CopyReplace( ("previous " + names.transient_variables[i]).c_str(),
                        names.transient_variables[i].c_str());
-    for (size_t i = 0; i < names.full_reset_variables.size(); i++)
+    for (auto i = 0; i < names.full_reset_variables.size(); i++)
        model.CopyReplace( ("reset " + names.full_reset_variables[i]).c_str(),
                        names.full_reset_variables[i].c_str());
     model.Accept( pres_grad );
@@ -396,7 +396,7 @@ void CVFEM_PHX_Scheme<dim>::FullReset()
   } // end FullReset
 
 /** outer loop including advection and pressure diffion until mass-based time step criterion is met */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::AdvectionDiffusionLoops()
     {
 
@@ -425,7 +425,7 @@ void CVFEM_PHX_Scheme<dim>::AdvectionDiffusionLoops()
     } // end AdvectionDiffusionLoops
 
 /** inner loop including pressure diffion until cfl-based time step criterion is met */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::PressureLoop()
     {
       pressure_loop = true;
@@ -487,7 +487,7 @@ void CVFEM_PHX_Scheme<dim>::PressureLoop()
 
 /** application of CVFEM_visitors for consistency check - currently not in use */
 /*
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::ApplyCVFEM_Visitors()
     {
     
@@ -496,7 +496,7 @@ void CVFEM_PHX_Scheme<dim>::ApplyCVFEM_Visitors()
 //     model.AssignBoundaryFlags(LEdouble,names.conduction_visitor_variables[1].c_str(), DIRICH );
 //     model.AssignBoundaryFlags(RIGHT,names.conduction_visitor_variables[1].c_str(), DIRICH );
 
-      //********
+      // ********
       // CVFEM_Visitor
       mass_visitor.SetTimeIncrement( current_dt );
       enthalpy_visitor.SetTimeIncrement( current_dt );
@@ -513,7 +513,7 @@ void CVFEM_PHX_Scheme<dim>::ApplyCVFEM_Visitors()
 */
 
 /** thermal quilibration between fluid and rock */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::FluidRockEquilibration()
     {
 
@@ -526,7 +526,7 @@ void CVFEM_PHX_Scheme<dim>::FluidRockEquilibration()
 
 
 /** performing consistency check between CVFEM_visitors and FV calculations - currently not in use */
-/*template<size_t dim>
+/*template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::CheckForConsistency()
     {
     
@@ -566,7 +566,7 @@ void CVFEM_PHX_Scheme<dim>::CheckForConsistency()
 
 
 /** modify calculations of temperature-dependent heat capacity of the rock */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::TemperatureDependentHeatCapacityRock( double cpr_min_ext, double t_min_ext,
                                                double cpr_max_ext, double t_max_ext )
   {
@@ -576,7 +576,7 @@ void CVFEM_PHX_Scheme<dim>::TemperatureDependentHeatCapacityRock( double cpr_min
   } // end TemperatureDependentHeatCapacityRock
 
 /** switch on open top, specifying temperature, pressure and salinity of inflowing fluid */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double T_gradC, double p_Pa, double wt )
   {
 
@@ -587,7 +587,7 @@ void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double T_gradC, double p_Pa, double 
   } // end OpenBoundaries
 
 /** switch on open top, specifying salinity of inflowing fluid */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double wt )
   {
 
@@ -597,21 +597,21 @@ void CVFEM_PHX_Scheme<dim>::OpenBoundaries( double wt )
   } // end OpenBoundaries
 
 /** switch consostency check on or off */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::CheckConsistency( bool check )
   {
     check_consistency = check;
   } // end CheckConsistency
 
 /** switch brick wall limiter for fluid pressure on or off */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::SetBrickWallLimiterTo( bool limit )
   {
     brick_wall_limiter = limit;
   } // end SetBrickWallLimiterTo
 
 /** add further variables for FV calculations */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::AddAdvectionVariable( const char* balanced_variable,
                                                      const char* new_lhs_liquid, const char* new_rhs_liquid,
                                                      const char* new_lhs_vapor,  const char* new_rhs_vapor  )
@@ -623,7 +623,7 @@ void CVFEM_PHX_Scheme<dim>::AddAdvectionVariable( const char* balanced_variable,
   } // end AddAdvectionVariable
 
 /** modifying cfl criterion */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::Adjust_CFL_Criterion(double scale_factor, bool take_pore_velocity)
     {
       upwind_control.Adjust_CFL_Criterion(scale_factor,take_pore_velocity);
@@ -631,7 +631,7 @@ void CVFEM_PHX_Scheme<dim>::Adjust_CFL_Criterion(double scale_factor, bool take_
 
 
 /** access function to transient fluxes */
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::GetFacetFluxFromInsideNodeToOutsideNode( Element<dim>& e, unsigned int facet_idx,
                                                                      double& flux_liquid, double& flux_vapor )
    {

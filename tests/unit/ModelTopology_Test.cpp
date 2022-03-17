@@ -14,7 +14,7 @@ void ModelTopology_Test::run()
   if ( verbose ) cout << "\nUnit Test " << getName() << endl;
   typedef ANSYS_ElementSpecifications fem_specs;
   const bool isoparametric( true );
-  const size_t dim( 3 );
+  const uint32_t dim( 3 );
 
   // .)CONSTRUCTORS
   ModelTopology topology1; // isoparametric = false
@@ -46,11 +46,11 @@ void ModelTopology_Test::run()
   elmIDS.push_back( 5 );
   elmIDS.push_back( 6 );
   elmIDS.push_back( 7 );
-  _test( topology2.AddRegion( "Region1", femTypes, elmIDS ) );
-  _test( !topology2.AddRegion( "Region1", femTypes, elmIDS ) );
-  _test( topology2.Elements() == elms );
+  _test( topology2.AddDomain( "Region1", femTypes, elmIDS ) );
+  _test( !topology2.AddDomain( "Region1", femTypes, elmIDS ) );
+  _test( topology2.Cells() == elms );
   set<size_t> elmSet;
-  topology2.Elements( elmSet );
+  topology2.Cells( elmSet );
   _test( elmSet.size() == elms );
   const size_t elms2( 4 );
   elmIDS.push_back( 11 );
@@ -61,38 +61,38 @@ void ModelTopology_Test::run()
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3_X", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
-  _test( topology2.AddRegion( "Region2", femTypes, elmIDS ) );
+  _test( topology2.AddDomain( "Region2", femTypes, elmIDS ) );
 
   // .)RETURN FUNCTIONS 2
-  _test( topology2.Elements() == elms2+elms+elms );
-  _test( topology2.ElementsOfRegion( "Region2" ) == elms2+elms );
-  _test( topology2.ElementsOfRegion( "Region1" ) == elms );
-  vector<size_t>::const_iterator region1begin( topology2.ElementsOfRegionBegin( "Region1" ) );
-//  vector<size_t>::const_iterator region2end( topology2.ElementsOfRegionEnd( "Region2" ) );
+  _test( topology2.Cells() == elms2+elms+elms );
+  _test( topology2.CellsWithinDomain( "Region2" ) == elms2+elms );
+  _test( topology2.CellsWithinDomain( "Region1" ) == elms );
+  auto region1begin( topology2.CellsOfDomainBegin( "Region1" ) );
+//  vector<uint32_t>::const_iterator region2end( topology2.ElementsOfRegionEnd( "Region2" ) );
   _test( *region1begin == elmIDS[0] );
   set<string> femTypesReturn;
-  topology2.ElementTypesOfRegion( "Region2", femTypesReturn );
+  topology2.CellTypesOfDomain( "Region2", femTypesReturn );
   _test( femTypesReturn == femTypes );
-  _test( topology2.IsWithinRegion( "Region2", 12 ) );
-  _test( !topology2.IsWithinRegion( "Region1", 12 ) );
+  _test( topology2.IsWithinDomain( "Region2", 12 ) );
+  _test( !topology2.IsWithinDomain( "Region1", 12 ) );
   _test( topology2.Contains( "Region2" ) );
   _test( !topology2.Contains( "Region3" ) );
 
   // .)COPY&ASSIGNMENT CONSTRUCTORS
   ModelTopology topology4( topology2 );
   ModelTopology topology5 = topology2;
-  _test( topology4.Elements() == topology2.Elements() );
-  _test( topology5.Elements() == topology2.Elements() );
-  _test( topology4.IsWithinRegion( "Region2", 12 ) );
-  _test( !topology4.IsWithinRegion( "Region1", 12 ) );
+  _test( topology4.Cells() == topology2.Cells() );
+  _test( topology5.Cells() == topology2.Cells() );
+  _test( topology4.IsWithinDomain( "Region2", 12 ) );
+  _test( !topology4.IsWithinDomain( "Region1", 12 ) );
   _test( topology4.Contains( "Region2" ) );
   _test( !topology4.Contains( "Region3" ) );
-  _test( topology5.IsWithinRegion( "Region2", 12 ) );
-  _test( !topology5.IsWithinRegion( "Region1", 12 ) );
+  _test( topology5.IsWithinDomain( "Region2", 12 ) );
+  _test( !topology5.IsWithinDomain( "Region1", 12 ) );
   _test( topology5.Contains( "Region2" ) );
   _test( !topology5.Contains( "Region3" ) );
-  _test( !topology4.AddRegion( "Region1", femTypes, elmIDS ) );
-  _test( !topology5.AddRegion( "Region1", femTypes, elmIDS ) );
+  _test( !topology4.AddDomain( "Region1", femTypes, elmIDS ) );
+  _test( !topology5.AddDomain( "Region1", femTypes, elmIDS ) );
 
   // .)FEM TYPES
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
@@ -118,24 +118,24 @@ void ModelTopology_Test::run()
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
-  for( size_t i = 0; i < 23; ++i )
+  for( auto i = 0; i < 23; ++i )
     elmIDS.push_back( i );
   ModelTopology topology6( topology2 );
-  _test( topology6.AddRegion( "Region3", femTypes, elmIDS ) );
+  _test( topology6.AddDomain( "Region3", femTypes, elmIDS ) );
 
 
   // .)ELEMENT TYPES
   ModelTopology topTypes( topology6 );
   string oldType( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
-  topTypes.ChangeElementType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim ) );
+  topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim ) );
   set<string> region3Types;
-  topTypes.ElementTypesOfRegion( "Region3", region3Types );
+  topTypes.CellTypesOfDomain( "Region3", region3Types );
   for( set<string>::const_iterator it = region3Types.begin(); it != region3Types.end(); ++it )
     _test( *it != fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("HEXA_27", isoparametric, dim ) );
   // ISSUES, check with stephan
-  topology6.EliminateLineElements();
+  topology6.EliminateLineCells();
   set<string> top6types;
-  topology6.ElementTypesOfRegion( "Region3", top6types );
+  topology6.CellTypesOfDomain( "Region3", top6types );
   // ISSUES, check with stephan
   /*
   _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_2",isoparametric,dim) ) == top6types.end() );
@@ -158,12 +158,12 @@ void ModelTopology_Test::run()
   set<string> typesCheck;
   _test( 22 == topTypes.FiniteElementTypes( typesCheck ) );
   oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim );
-  topTypes.ChangeElementType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
+  topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
   _test( 23 == topTypes.FiniteElementTypes( typesCheck ) );
 
   // .)REGION OPS
   ModelTopology topology7( topology2 );
-  topology7.ReduceToRegions( "ModelTopology_Test" );
+  topology7.ReduceToDomains( "ModelTopology_Test" );
   _test( !topology7.Contains( "Region1" ) );
   list<string> exportRegions;
   exportRegions.push_back( "Region1" );
@@ -171,48 +171,48 @@ void ModelTopology_Test::run()
   _test( topology7.Contains( "Region1" ) );
   set<string> top7typesR1;
   set<string> top2typesR1;
-  topology7.ElementTypesOfRegion( "Region1", top7typesR1 );
-  topology2.ElementTypesOfRegion( "Region1", top2typesR1 );
+  topology7.CellTypesOfDomain( "Region1", top7typesR1 );
+  topology2.CellTypesOfDomain( "Region1", top2typesR1 );
   _test( top7typesR1 == top2typesR1 );
 
 
   // .) ELMT
-  _test( topology7.IsWithinRegion( "Region1", 2 ) );
-  _test( !topology7.IsWithinRegion( "Region1", 14 ) );
-  _test( topology7.CheckElementNumbering() );
+  _test( topology7.IsWithinDomain( "Region1", 2 ) );
+  _test( !topology7.IsWithinDomain( "Region1", 14 ) );
+  _test( topology7.CheckCellNumbering() );
   set<string> femTypes2;
   femTypes2.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TRI_3", isoparametric, dim ) );
   vector<size_t> elmtIDS2;
   elmtIDS2.push_back( 22 );
   elmtIDS2.push_back( 42 );
-  topology7.AddRegion( "Region4", femTypes2, elmtIDS2 );
-  _test( !topology7.CheckElementNumbering() );
+  topology7.AddDomain( "Region4", femTypes2, elmtIDS2 );
+  _test( !topology7.CheckCellNumbering() );
   map<size_t,size_t> oldNewIDs;
   oldNewIDs.insert( make_pair( 22, 15 ) );
   oldNewIDs.insert( make_pair( 42, 16 ) );
-  topology7.CreateNewElementNumbers( oldNewIDs );
-  _test( topology7.CheckElementNumbering() );
+  topology7.CreateNewCellNumbers( oldNewIDs );
+  _test( topology7.CheckCellNumbering() );
 
   // .)TOPOLOGY TYPE
   _test( !topology7.BoxShapedModel() );
   _test( !topology7.RectangleShapedModel() );
-  topology7.AddRegion( "LEFT", femTypes2, elmtIDS2 );
-  topology7.AddRegion( "RIGHT", femTypes2, elmtIDS2 );
-  topology7.AddRegion( "BOTTOM", femTypes2, elmtIDS2 );
-  topology7.AddRegion( "TOP", femTypes2, elmtIDS2 );
-  topology7.AddRegion( "FRONT", femTypes2, elmtIDS2 );
-  topology7.AddRegion( "BACK", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "LEFT", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "RIGHT", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "BOTTOM", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "TOP", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "FRONT", femTypes2, elmtIDS2 );
+  topology7.AddDomain( "BACK", femTypes2, elmtIDS2 );
   _test( topology7.BoxShapedModel() );
   _test( topology7.RectangleShapedModel() );
   _test( topology7.SolidModel() );
   _test( !topology7.LineModel() );
   _test( !topology7.SurfaceModel() );
-  _test( topology7.MinimumSpatialDimensionOfRegion( "Region1" ) == 0U );
-  _test( topology7.IsoparametricElements() == false );
+  _test( topology7.MinimumSpatialDimensionOfDomain( "Region1" ) == 0U );
+  _test( topology7.IsoparametricFiniteElements() == false );
   _test( topology7.QuadraticElementMesh() == false );
   _test( topology7.LinearElementMesh() == true );
-  topology7.TreatElementsAsIsoparametric();
-  _test( topology7.IsoparametricElements() == true );
+  topology7.UseIsoparametricFiniteElementTypes();
+  _test( topology7.IsoparametricFiniteElements() == true );
 
 
 } // run

@@ -16,7 +16,7 @@ for a vector solution variable like displacement which has u, v, w components.
 @date 1999 
 
 */
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_BT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_BT_op_dV( const PropertyDatabase<dim>&,

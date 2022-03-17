@@ -7,10 +7,10 @@
 namespace csmp {
 
 class FV_Parameter;
-template<size_t>  class Element;
-template<size_t>  class TwoPhaseModel;
+template<uint32_t>  class Element;
+template<uint32_t>  class TwoPhaseModel;
 
-template<size_t dim>
+template<uint32_t dim>
 struct StencilProcessor {
     ~StencilProcessor();
     /// advection only
@@ -125,24 +125,24 @@ struct StencilProcessor {
      void Out() const;
     
     // public variables   
-    size_t                 eidx_;               ///< local array index for the stencil
-    double               diff_coeff_, velo_mult_;
-    std::vector<double>  sector_pore_volume_; ///< the volume of each finite-volume sector multiplied by its porosity
-    std::vector<double>  facet_flux_;         ///< scalar volume flux across finite-volume facets
-    std::vector<double>  facet_flux_rhs_;
-    std::vector<size_t>    upstream_node_;      ///< inside or outside node local index
+    size_t                eidx_;               ///< local array index for the stencil
+    double                diff_coeff_, velo_mult_;
+    std::vector<double>   sector_pore_volume_; ///< the volume of each finite-volume sector multiplied by its porosity
+    std::vector<double>   facet_flux_;         ///< scalar volume flux across finite-volume facets
+    std::vector<double>   facet_flux_rhs_;
+    std::vector<uint32_t> upstream_node_;      ///< inside or outside node local index
 
     // interpolated values of advected quantity at facet integration points
     std::vector<double>  psi1_,      ///< transported variable at t+dt
-                           ipsi1_,     ///< interpolated transported variable (t+dt) (can be limited)
-                           theta_;     ///< limiter values for each FV facet
+                         ipsi1_,     ///< interpolated transported variable (t+dt) (can be limited)
+                         theta_;     ///< limiter values for each FV facet
                            
     // fluid sources (+) or sinks (-) due to deviations from conservative fluxes
     std::vector<double>  nodal_src_; ///< nodal source/sink term
     std::vector<double>  src_;       ///< sector / divergece related sources for lhs
     std::vector<double>  rhs_src_;   ///< sector / divergece related sources for rhs
     /// node position w.r.t. the finite volume facet normal
-    mutable size_t         inside_node_, outside_node_;
+    mutable uint32_t     inside_node_, outside_node_;
      
     // variable keys 
     csmp::Index            adv1_key_;      ///<  advected nodal quantity at t + dt

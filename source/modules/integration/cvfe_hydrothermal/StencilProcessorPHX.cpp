@@ -7,7 +7,7 @@ namespace csmp {
 
 
 /** custom destructor */
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessorPHX<dim>::StencilProcessorPHX( )
  {
    std::vector<double> g;
@@ -20,14 +20,14 @@ StencilProcessorPHX<dim>::StencilProcessorPHX( )
 
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 StencilProcessorPHX<dim>::~StencilProcessorPHX()
  {
  } // end destructor
 
 
 /** Calculating fluxes out of the control volumes, including gravity */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& param,
                                               const Element<dim>& e,
                                               DenseMatrix<DM_MIN>& upwind,
@@ -41,7 +41,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
    eidx_ = e.Idx();
    e.Read( k_key, perm_ );
 
-   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+   for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
  
         grav_ = param.FacetNormalProjection(i,gravity_);
@@ -81,7 +81,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
 
 
 /** Calculating fluxes out of the control volumes without a gravity component */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Parameter& param,
                                               const Element<dim>& e,
                                               DenseMatrix<DM_MIN>& upwind,
@@ -91,7 +91,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Paramete
   {
 
    eidx_ = e.Idx();
-   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+   for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
  
        e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -122,7 +122,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Paramete
   } // end DetermineFluxOutWithoutGravity  
 
 /** Calculating fluxes into the control volumes */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
                                               std::vector<std::vector<double> >& facet_flux,
                                               std::vector<double>& flux_in,
@@ -131,7 +131,7 @@ void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
   
    eidx_ = e.Idx();
 
-   for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+   for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
  
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -145,7 +145,7 @@ void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
   } // end DetermineFluxIn
 
 /** Calculating fluxes out of the control volumes without pre-defined upwind nodes */
-template<size_t dim>
+template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
                                               const Element<dim>& e,
                                               std::vector<std::vector<double> >& facet_flux,
@@ -157,7 +157,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
-     for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+     for ( auto i{0}; i<e.FV()->Facets(); i++ )
        {
  
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );

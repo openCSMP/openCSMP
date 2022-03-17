@@ -14,7 +14,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 class SlopeMechanics_Example : public Example {
   public:

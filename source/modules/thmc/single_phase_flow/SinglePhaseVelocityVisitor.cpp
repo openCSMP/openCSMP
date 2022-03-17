@@ -13,7 +13,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
                                                             const char* porosity,
                                                             const char* conductivity,
@@ -153,7 +153,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SinglePhaseVelocityVisitor<dim>::Visit(Model<dim>* model)
 {
     if (this->Verbose()) cout <<" SinglePhaseVelocityVisitor<dim>::Visit(Model<dim>*)"<<endl;
@@ -165,7 +165,7 @@ void SinglePhaseVelocityVisitor<dim>::Visit(Model<dim>* model)
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>* region)
 {
     if (this->Verbose()) cout <<" SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
@@ -190,7 +190,7 @@ void SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>* region)
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SinglePhaseVelocityVisitor<dim>::Visit(Element<dim>* e)
 {
 #if !defined(_OPENMP)
@@ -198,7 +198,7 @@ void SinglePhaseVelocityVisitor<dim>::Visit(Element<dim>* e)
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
 {
     std::vector<ScalarVariable >           PF, RHO;
@@ -242,7 +242,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
     else if ( conductivity_key_.place == ELEMENT_INTEGRATION_POINT )
     {
-        for ( size_t i=0; i<e->IntegrationPoints(); i++ )
+        for ( auto i=0; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
                 MTRL[i].AssignToDiagonal( dim, e->Read(i, conductivity_key_));
@@ -260,7 +260,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
     else if ( conductivity_key_.place == NODE )
     {
-        for ( size_t i=0; i<e->IntegrationPoints(); i++ )
+        for ( auto i=0; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
                 MTRL[i].AssignToDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
@@ -286,8 +286,8 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
         // ---------------------------------------------
         // vel = -(k/mu)*(grad p - rho*g*{g_unit})
         velo = 0.;
-        for ( size_t i=0; i<e->Nodes(); i++ )
-            for ( size_t j=0; j<dim; j++ )
+        for ( auto i=0; i<e->Nodes(); i++ )
+            for ( auto j=0; j<dim; j++ )
                 velo(j) += PF[i]() * DERIV(j,i) ;
 
         if (with_gravity_) {
@@ -295,7 +295,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
             // ---------------------------------------------
 
             if ( e->Interpolation() == 1U && velo_key_.place == ELEMENT){
-                for (size_t i = 0 ; i < dim ; i++)
+                for (auto i = 0 ; i < dim ; i++)
                     velo(i) -= gravity_unit_vector_(i) *gravitational_acceleration_* rho();
 
             }
@@ -306,7 +306,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
             }
         }
 
-        for ( size_t j=0; j<dim; j++ )
+        for ( auto j=0; j<dim; j++ )
             velo(j) *= -MTRL[0](j,j);
 
         if (ivelo_key_!=csmp::Index()) {
@@ -329,7 +329,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 SinglePhaseVelocityVisitor<dim>::~SinglePhaseVelocityVisitor()
 {}
 

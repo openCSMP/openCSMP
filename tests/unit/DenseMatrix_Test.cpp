@@ -33,9 +33,9 @@ void DenseMatrix_Test::run()
         B.Identity();
       if ( verbose_ ) B.Out();
     
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 if ( i==j ) _equal( B(i,j), 1., 1E-6 );
                 else        _equal( B(i,j), 0., 1E-6 );
@@ -106,9 +106,9 @@ void DenseMatrix_Test::run()
         ResC( 3, 2 ) = 4.;
         ResC( 3, 3 ) = 6.;
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 //cout << C(i, j) << "  ";
                 //cout << A(i, j) << endl;
@@ -146,9 +146,9 @@ void DenseMatrix_Test::run()
         ResA( 3, 3 ) = 5.;
 
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 //cout << D(i, j) << "  ";
                 //cout << A(i, j) << endl;
@@ -194,9 +194,9 @@ void DenseMatrix_Test::run()
         ResC( 3, 3 ) = 15.;
 
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResC(i,j), 1E-6 );
             }
@@ -218,9 +218,9 @@ void DenseMatrix_Test::run()
         if ( verbose_ ) C.Out();
 
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResC(i,j), 1E-6 );
             }
@@ -243,9 +243,7 @@ void DenseMatrix_Test::run()
 
         if ( verbose_ ) cout << "Test vector x =   ";
 
-        vector<double>::const_iterator it( x.begin() );
-        for ( vector<double>::const_iterator
-             it = x.begin(); it != x.end(); it++ )
+        for ( auto it = x.begin(); it != x.end(); it++ )
         {
             if ( verbose_ ) cout << *it << setw(5);
         }
@@ -253,12 +251,9 @@ void DenseMatrix_Test::run()
         if ( verbose_ ) cout << "\n\ny = A * x";
         y = A * x;
 
-        vector<double>::const_iterator it1(y.begin());
-
         if ( verbose_ ) cout << "\n\ny = ";
 
-        for (vector<double>::const_iterator
-             it1 = y.begin(); it1 != y.end(); it1++ )
+        for ( auto it1 = y.begin(); it1 != y.end(); it1++ )
         {
             if ( verbose_ ) cout << *it1 << setw(5);
         }
@@ -268,10 +263,7 @@ void DenseMatrix_Test::run()
         sol_y.push_back(7.);
         sol_y.push_back(9.5);
 
-        vector<double>::const_iterator itsol_y(sol_y.begin());
-
-        for (vector<double>::const_iterator
-             itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
+        for ( auto itsol_y = sol_y.begin(), it1 = y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
                 //cout << "\n" << *itsol_y << setw(7) << *it1;
                 _equal( *itsol_y, *it1, 1E-6);
@@ -290,7 +282,7 @@ void DenseMatrix_Test::run()
 
         if ( verbose_ ) cout << "\nA = ";
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
             if ( verbose_ ) cout << B(i,0) << setw(5);
 
@@ -298,12 +290,9 @@ void DenseMatrix_Test::run()
             solB.push_back(B(i,0));
         }
 
-        vector<double>::const_iterator itB( solB.begin() );
-
         //cout << endl << "\nA  " << setw(5) << "y";
 
-        for (vector<double>::const_iterator
-             itB = solB.begin(); itB != solB.end(); itB++, itsol_y++ )
+        for ( auto itB = solB.begin(), itsol_y = sol_y.begin(); itB != solB.end(); itB++, itsol_y++ )
         {
             //cout << "\n" << *itB << setw(7) << *it1;
             _equal( *itB, *itsol_y, 1E-6 );
@@ -327,7 +316,7 @@ void DenseMatrix_Test::run()
 
         if ( verbose_ ) cout << "Test array Ca";
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
             if ( verbose_ ) cout << "\n" << Ca[i];
 
 
@@ -335,7 +324,7 @@ void DenseMatrix_Test::run()
         D.operator *=( Ca );
         if ( verbose_ ) D.Out();
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
             if ( verbose_ ) cout << D(i,0) << setw(5);
 
@@ -394,9 +383,9 @@ void DenseMatrix_Test::run()
         ResAB( 3, 2 ) = 30.;
         ResAB( 3, 3 ) = 48.;
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResAB(i,j), 1E-6 );
             }
@@ -419,9 +408,9 @@ void DenseMatrix_Test::run()
     
         if ( verbose_ ) D.Out();
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( D(i,j), ResAB(i,j), 1E-6 );
             }
@@ -444,9 +433,9 @@ void DenseMatrix_Test::run()
 
         C = 1.;
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( B(i,j), C(i,j), 1E-6 );
             }
@@ -462,7 +451,7 @@ void DenseMatrix_Test::run()
         B.FillCol(2,5.5);
         if ( verbose_ ) B.Out();
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
             _equal( B(i,2), 5.5, 1E-6 );
         }
@@ -477,7 +466,7 @@ void DenseMatrix_Test::run()
         B.FillRow(2,3.3);
         B.Out();
 
-        for ( size_t j = 0; j < 4; j++ )
+        for ( auto j = 0; j < 4; j++ )
         {
             _equal( B(2,j), 3.3, 1E-6 );
         }
@@ -499,7 +488,7 @@ void DenseMatrix_Test::run()
         double ColSumB2 = B.ColSum(2);
         double CheckColSumB2 = 0.;
 
-        for ( size_t i = 0; i < 4; i++ )
+        for ( auto i = 0; i < 4; i++ )
         {
             CheckColSumB2 += B(i,2);
         }
@@ -518,7 +507,7 @@ void DenseMatrix_Test::run()
         double RowSumB2 = B.RowSum(2);
         double CheckRowSumB2 = 0.;
 
-        for ( size_t j = 0; j < 4; j++ )
+        for ( auto j = 0; j < 4; j++ )
         {
             CheckRowSumB2 += B(2,j);
         }
@@ -541,7 +530,7 @@ void DenseMatrix_Test::run()
     
           if ( verbose_ ) B.Out();
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
                 _equal( B(i,2), 0., 1E-6 );
             }
@@ -556,7 +545,7 @@ void DenseMatrix_Test::run()
             B.ZeroRow(2);
             if ( verbose_ ) B.Out();
 
-            for ( size_t j = 0; j < 4; j++ )
+            for ( auto j = 0; j < 4; j++ )
             {
                 _equal( B(2,j), 0., 1E-6 );
             }
@@ -571,9 +560,9 @@ void DenseMatrix_Test::run()
             B.Zero();
             if ( verbose_ ) B.Out();
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
-                for ( size_t j = 0; j < 4; j++ )
+                for ( auto j = 0; j < 4; j++ )
                 {
                     _equal( B(i,j), 0., 1E-6 );
                 }
@@ -597,9 +586,9 @@ void DenseMatrix_Test::run()
             B = C;
             if ( verbose_ ) B.Out();
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
-                for ( size_t j = 0; j < 4; j++ )
+                for ( auto j = 0; j < 4; j++ )
                 {
                     _equal( B(i,j), C(i,j), 1E-6 );
                 }
@@ -624,9 +613,9 @@ void DenseMatrix_Test::run()
                 F.Out();
               }
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
-                for ( size_t j = 0; j < 4; j++ )
+                for ( auto j = 0; j < 4; j++ )
                 {
                     _equal( F(i,j), A(j,i), 1E-6 );
                 }
@@ -665,9 +654,9 @@ void DenseMatrix_Test::run()
             ResF( 3, 2 ) = 29.7;
             ResF( 3, 3 ) = 22.5;
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
-                for ( size_t j = 0; j < 4; j++ )
+                for ( auto j = 0; j < 4; j++ )
                 {
                     _equal( ResF(i,j), F(i,j), 1E-6 );
                 }
@@ -709,9 +698,9 @@ void DenseMatrix_Test::run()
             ResG( 3, 2 ) = 57.2;
             ResG( 3, 3 ) = 21.2;
 
-            for ( size_t i = 0; i < 4; i++ )
+            for ( auto i = 0; i < 4; i++ )
             {
-                for ( size_t j = 0; j < 4; j++ )
+                for ( auto j = 0; j < 4; j++ )
                 {
                     _equal( ResG(i,j), G(i,j), 1E-6 );
                 }
@@ -761,9 +750,9 @@ void DenseMatrix_Test::run()
             DenseMatrix3x3 = TensorVariable2U;
             if ( verbose_ ) DenseMatrix3x3.Out();
 
-            for ( size_t i = 0; i < 2; i++ )
+            for ( auto i = 0; i < 2; i++ )
             {
-                for ( size_t j = 0; j < 2; j++ )
+                for ( auto j = 0; j < 2; j++ )
                 {
                     if ( i==j ) _equal( DenseMatrix3x3(i,j), 2., 1E-6 );
                     else        _equal( DenseMatrix3x3(i,j), 1., 1E-6 );
@@ -790,9 +779,9 @@ void DenseMatrix_Test::run()
             DenseMatrix3x3 = TensorVariable3U;
             if ( verbose_ ) DenseMatrix3x3.Out();
 
-            for ( size_t i = 0; i < 3; i++ )
+            for ( auto i = 0; i < 3; i++ )
             {
-                for ( size_t j = 0; j < 3; j++ )
+                for ( auto j = 0; j < 3; j++ )
                 {
                     if ( i==j ) _equal( DenseMatrix3x3(i,j), 3., 1E-6 );
                     else        _equal( DenseMatrix3x3(i,j), 2., 1E-6 );
@@ -869,9 +858,9 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3 *= ( TensorVariable3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( size_t i = 0; i < 3; i++ )
+                for ( auto i = 0; i < 3; i++ )
                 {
-                    for ( size_t j = 0; j < 3; j++ )
+                    for ( auto j = 0; j < 3; j++ )
                     {
                         _equal( DenseMatrix3x3(i,j), 35., 1E-6 );
                     }
@@ -1072,8 +1061,7 @@ void DenseMatrix_Test::run()
 
                 if ( verbose_ ) cout << "Test vector x";
 
-                for (vector<double>::const_iterator
-                     itx = x.begin(); itx != x.end(); itx++)
+                for ( itx = x.begin(); itx != x.end(); itx++)
                 {
                     if ( verbose_ ) cout << "\n" << *itx;
                 }
@@ -1081,8 +1069,7 @@ void DenseMatrix_Test::run()
                 if ( verbose_ ) cout << "\n\nDenseMatrix3x3.RowCondenseTo( x )";
                 DenseMatrix3x3.RowCondenseTo( x );
 
-                for (vector<double>::const_iterator
-                     itx = x.begin(); itx != x.end(); itx++)
+                for ( itx = x.begin(); itx != x.end(); itx++)
                 {
                     if ( verbose_ ) cout << "\n" << *itx ;
                     _equal( *itx, 27., 1E-6 );
@@ -1211,7 +1198,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignRow( 1, Point3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( size_t i = 0; i < 3; i++ )
+                for ( auto i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(1,i), 13.-i, 1E-6 );
                 }
@@ -1280,7 +1267,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignCol( 2, Point3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( size_t i = 0; i < 3; i++ )
+                for ( auto i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(i,2), 13.-i, 1E-6 );
                 }
@@ -1329,7 +1316,7 @@ void DenseMatrix_Test::run()
                     DenseMatrix3x3 *= ( Point2U );
                     if ( verbose_ ) DenseMatrix3x3.Out();
 
-                    for ( size_t i = 0; i < 2; i++ )
+                    for ( auto i = 0; i < 2; i++ )
                         _equal( DenseMatrix3x3(i,0), 110., 1E-6 );
 
 
@@ -1353,7 +1340,7 @@ void DenseMatrix_Test::run()
                     DenseMatrix3x3 *= ( Point3U );
                     if ( verbose_ ) DenseMatrix3x3.Out();
 
-                    for ( size_t i = 0; i < 3; i++ )
+                    for ( auto i = 0; i < 3; i++ )
                         _equal( DenseMatrix3x3(i,0), 180., 1E-6 );
 
 

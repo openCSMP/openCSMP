@@ -68,7 +68,7 @@ The memory that is consumed during the construction process is reported.
 Constructor for first-order scheme.
 
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFVTransport( // for entire model
                                                                     const char* group_name,
                                                                     Model<dim>& sg,
@@ -110,7 +110,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -120,7 +120,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFVTransport( 
                                                                     const char* group_name,
                                                                     Model<dim>& sg,
@@ -164,7 +164,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -225,7 +225,7 @@ the implicit transport module FiniteVolumeTransport.
 
 The memory that is consumed during the construction process is reported.
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFVTransport( // for entire model
                                                               const char* group_name,
                                                               Model<dim>& sg,
@@ -268,7 +268,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -277,7 +277,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
 /** Second-order constructor, with capillary spreading
 */
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFVTransport( // for entire model
                                                               const char* group_name,
                                                               Model<dim>& sg,
@@ -323,7 +323,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -336,7 +336,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     
      with standard variables, gravity and thickness attribute for lower-dim elements, no-pc
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFVTransport(
                                                                      const char* group_name,
                                                                      Model<dim>& sg,
@@ -373,7 +373,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( size_t i=0U; i<(*nit)->Parents(); i++ )
+      for ( auto i{0}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -384,7 +384,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 inline bool TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
                                                       const Element<dim>* const eptr ) const
  {
@@ -396,7 +396,7 @@ inline bool TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
 /** Frees all the allocated memory.
 
   */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::~TwoPhaseImplicitNodeCenteredFVTransport()
  {
  } 
@@ -404,43 +404,43 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::~TwoPhaseImplicitNodeCenteredF
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::DisableCapillarySpreading()
   {
      with_capillary_spreading_ = false;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::EnableCapillarySpreading()
   {
      with_capillary_spreading_ = true;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::DisableGravitationalForces()
   {
      with_gravitational_forces_ = false;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::EnableGravitationalForces()
   {
      with_gravitational_forces_ = true;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SetNoFlowBoundaryConditionKey(Model<dim>& sg,const char* reference_variable_to_no_flow_bc)
   {
      reference_variable_to_no_flow_bc_key_ = sg.Database().StorageKey(reference_variable_to_no_flow_bc);
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::ApplyLinearScheme()
   {
      nonlinear_scheme_ = false;
   }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::ApplyNonlinearScheme()
   {
     nonlinear_scheme_ = true;
@@ -448,20 +448,20 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::ApplyNonlinearScheme()
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MaxNewtonRahsonIterations(size_t max_newton_raphson_iteratons)
 {
     max_newton_raphson_iterations_ = max_newton_raphson_iteratons;
 }
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MaxLineSearchIterations(size_t max_line_search_iterations)
 {
     max_line_search_iterations_ = max_line_search_iterations;
 }
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TargetNewtonRaphsonResidual(double target_residual)
 {
     target_newton_raphson_residual_ = target_residual;
@@ -509,7 +509,7 @@ input max_time_increment which may be the case if there is no flow at all
 in the domain. Equally, the user is informed if the CFL increment is 
 less than a millisecond (usually a prohibitively small increment).  
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncrement( TwoPhaseModel<dim>& relperm,
                                                                                         double max_time_increment )
  {
@@ -633,7 +633,7 @@ and viscosities for the two phases have been specified correctly
 Falsely specified variables are reported and need to be fixed in the 
 specific CSP_variables.txt file used for the simulation.  
  */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::CheckTransportVariables() const
   {
      NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables();
@@ -677,7 +677,7 @@ which the diameter of the idealized spherical FV can be multiplied
 while the transport scheme is stable.  
 */
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 double  TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPhaseModel<dim>& relperm,
                                                                             double time_interval )
  {
@@ -718,7 +718,7 @@ double  TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TransportPhase( TwoPha
  } // end TransportPhase
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 SAMG_Settings& TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::GetSolverSettings()
  {
    return advector_.GetSolverSettings();
@@ -727,7 +727,7 @@ SAMG_Settings& TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::GetSolverSettin
 /// add extra functionality for laternative solver
 #endif
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AdjustSolverSettings()
  {
 #if CSMP_WITH_SAMG_SOLVER
@@ -759,7 +759,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AdjustSolverSettings()
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
@@ -768,7 +768,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
          // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
-        for ( size_t i=0U; i<(*nit)->Neighbors(); i++ ) {
+        for ( auto i{0}; i<(*nit)->Neighbors(); i++ ) {
              const double adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
              // if element value is smaller the current minimum is assigned etc.
              (*sit).first  = std::min( (*sit).first,  adv_var );
@@ -779,7 +779,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
  } // end MinMaxAdvectedProperty
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyIncludingTheCurrentNode()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
@@ -791,12 +791,12 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
          // 1. the advected property value at the current node is assigned to min-max pair
          (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
 
-         for(  size_t p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el->Nodes();i++){
+               for(auto i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -810,7 +810,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
 
  } // end MinMaxAdvectedPropertyIncludingTheCurrentNode
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExceptTheCurrentNode()
 {
    typename vector<pair<double,double> >::iterator  sit(this->SMINMAX.begin());
@@ -823,12 +823,12 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
          (*sit).first =std::numeric_limits<double>::max();
          (*sit).second = std::numeric_limits<double>::min();
 
-         for(  size_t p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(size_t i=0;i<current_el->Nodes();i++){
+               for(auto i=0;i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -853,7 +853,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
      
      @author who?
 */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::ComputePiecewiseConstantNodalSource()
  {
      size_t          n(0U);
@@ -887,7 +887,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::ComputePiecewiseConstantN
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AddSourceTerm()
  {
      size_t  n(0U);
@@ -950,7 +950,7 @@ performed by the first-order accurate scheme.
 Takes into account the "nodal fluid volume source" as a source of the transported phase
 distributed over the node-centered finite volume.
  */
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder( TwoPhaseModel<dim>& relperm,
                                                                                        double time_increment,
                                                                                        bool account_for_nodal_sources )
@@ -995,7 +995,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
  } // end SolveTransportEquation1stOrder
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1stOrder_NonlinearNewtonRaphson( TwoPhaseModel<dim>& relperm,
                                                                                                               double time_increment )
  {
@@ -1243,7 +1243,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
 
 
-template<size_t dim, template<size_t> class STP>
+template<uint32_t dim, template<uint32_t> class STP>
 void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>& sg,
                                                                                                                      TwoPhaseModel<dim>& relperm,
                                                                                                                      double time_increment )
@@ -1296,7 +1296,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
             this->gref_.Accept(ElmToNode);
             */
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-            this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+            this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
             for ( typename vector<Element<dim>*>::const_iterator
                   eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
             {
@@ -1423,7 +1423,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
             // looping over all FE-FV stencils
             if(this->with_lsmgrad_limiter_){
                 this->grad_advprop_limiter_->CalculateGenericNodalGradient();
-                this->grad_advprop_limiter_->CalculateSlopeLimiter(this->SMINMAX);
+                this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
 
                 for ( typename vector<Element<dim>*>::const_iterator
                     eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )

@@ -9,7 +9,7 @@ namespace csmp {
 /// @note for lambda=0, this implementation of Brooks-Corey model switches to linear
 /// @note for linear case capillary pressure is a constant value equal to entry pressure
 /// @note base class pm1 and pm2 are used for pd and lambda, respectively
-template<size_t dim>
+template<uint32_t dim>
 class BrooksCorey : public TwoPhaseModel<dim> {
   public:
 
@@ -88,7 +88,7 @@ class BrooksCorey : public TwoPhaseModel<dim> {
     virtual double ShockSpeed() const;
     virtual double ShockHeight() const;
     
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
 
     // brooks corey parameters
@@ -99,9 +99,9 @@ class BrooksCorey : public TwoPhaseModel<dim> {
 
   private:
 
-    csmp::Index          pd_key_, pc_max_key_, lamda_key_;
-    double             lambda_, entry_pressure_,pc_max_;
-    bool                 default_capillary_pressure_max_;
+    csmp::Index  pd_key_, pc_max_key_, lamda_key_;
+    double       lambda_, entry_pressure_,pc_max_;
+    bool         default_capillary_pressure_max_;
 
 };
 

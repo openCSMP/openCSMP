@@ -19,7 +19,7 @@ std::string parse( SPATIAL_DERIVATIVE );
     @note created to compute a grad P right-handside for a 2-step Stokes
     lubrication solver.
 */
-template<size_t dim, class CELL=Element<dim> >
+template<uint32_t dim, class CELL=Element<dim> >
 class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,

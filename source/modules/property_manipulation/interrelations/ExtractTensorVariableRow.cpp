@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractTensorVariableRow<dim>::ExtractTensorVariableRow( const PropertyDatabase<dim>& p,
                                                          const char* tens_var, 
                                                          const char* vector_var, 

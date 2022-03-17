@@ -18,6 +18,7 @@
 #include "ANSYS_Model3D.h"
 #include "MeshManagementUtilities.h"
 #include "compareFloats.h"
+#include "ModelComparator.h"
 
 using namespace std;
 
@@ -39,19 +40,43 @@ ModelBasics_Test::~ModelBasics_Test()
 */
 void ModelBasics_Test::run()
   {
-    bool create_boundaries_from_faces{false};
-    _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
-    create_boundaries_from_faces = true;
+     TestModelConstructionFromVSet();
+  
+     bool create_boundaries_from_faces{false};
      _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
-
-    // testing the repair of non-unique regions built using property constraints
-    TestRebuiltRegionsFromPropertyConstraints();
-    
-    cout <<"\nModelBasics_Test::run: raw size of local variable storage of Model: ";
-    cout << sizeof(LocalVariableStorage<3,Model>) << endl;
-    // around 100-bytes for empty storage, but only in the case where DEBUG is on!
+     create_boundaries_from_faces = true;
+     _test( TestWriteModelToDiskAndReadBack( create_boundaries_from_faces ) );
  
    } // end run
+
+
+
+bool ModelBasics_Test::TestModelConstructionFromVSet()
+ {
+    const  bool bSkewed{false};
+    VSet<3U>    vset, vset1;
+    test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+    
+    // does the VSet write/reads correctly?
+    double time0{3600.123}, time1;
+    vset.OutputTo( "ModelBasics_Test", time0 );
+    vset1.InputFrom( "ModelBasics_Test", time1 );
+    // testing
+    _test( vset1 == vset );
+    _test( approximatelyEqual(time0,time1) );
+    
+    // test: basic constructor
+    Model<3U>   model( vset, "CSMP-1phase-variables.txt" );
+    // save to native binary
+    model.OutputToBinaryFile( "ModelBasics_Test" );
+    // bring back from binary
+    set<string>  subset_variables; // all variables
+    Model<3U>    restored_model( string{"ModelBasics_Test"}, subset_variables );
+     
+    // compare = test
+    return true;
+    
+ } // end TestModelConstructionFromVSet
 
 
 
@@ -63,7 +88,8 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      test_Create_FracBox( vset, topology );
 
      // creating model with boundaries
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces, false );
+     const bool only_with_regions(true);
+     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", only_with_regions );
      model.Name("FracBox");
      
      // assigning some dummy values to verify functionality
@@ -88,7 +114,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      _test( approximatelyEqual( pmax, 1.0e-12 ) );
      
      // testing fundamental assumption made working with default initialisations of 'size_t'
-     size_t default_uint = std::numeric_limits<size_t>::max();
+     size_t default_uint = std::numeric_limits<uint32_t>::max();
      _test( default_uint != UINT_MAX ); // should be false because UINT_MAX is not for size_t
      _test( hasDefaultValueForUnassignedInteger( default_uint ) );
      
@@ -100,72 +126,6 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack( bool create_boundaries_f
      return true;
  }
  
- 
- 
- 
-bool ModelBasics_Test::TestRebuiltRegionsFromPropertyConstraints()
- {
-     const bool    using_isoparametric_elements{true};
-     ModelTopology topology( "FracBox", using_isoparametric_elements );
-     VSet<3U>      vset;
-     test_Create_FracBox( vset, topology );
-
-     const bool create_boundaries_from_faces{true}, box_shaped{false};
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces, box_shaped );
-     
-     // assigning some dummy values to verify functionality
-     Region<3U>& model_domain = model.Region("Model");
-     Region<3U>& matrix_domain = model.Region("MATRIX");
-     const csmp::Index phi_key = model.Database().StorageKey("porosity");
-     model_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-12) );
-     model_domain.InputPropertyValue( "porosity", makeScalar(ANY,1.0) ); // fracture
-     matrix_domain.InputPropertyValue( "porosity", makeScalar(ANY,0.4) ); // matrix
-     // elevating the porosity of some extra elements
-     for ( size_t eidx{50}; eidx<150; ++eidx )
-       matrix_domain.E(eidx)->Store( phi_key, makeScalar(ANY,0.8) );
-       
-     // building new region from PropertyConstraints
-     PropertyConstraints porosity_constraints( "porosity", 0.75, 0.85 );
-     porosity_constraints.AddConstraint( "permeability", 1.0e-12, 1.0e-12 );
-     
-     model.FormRegionFrom( "medium porosity", porosity_constraints );
-     const Region<3U>& medium_porosity_domain = model.Region("medium porosity");
-     _test( medium_porosity_domain.Elements() == 100 );
-
-     return true;
- }
-
-
-
-
- /**
-   Tests pointInVolumeElement:
-   
-   Tests prism_test model because it contains elements of all
-   types.
-   */
-  bool ModelBasics_Test::PointInVolumeElementTest()
-  {
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true, true );
-    
-    Point<3u> query(2434.0f, -1510.0f, 5400.0f);
-    
-    auto& gref = model.Region("Model");
-    
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
-      if (!(*eit)->IsVolumeElement()) {
-        continue;
-      }
-      const Point<3u> bctr = (*eit)->BaryCenter();
-      
-      Element<3u>* e = pointInVolumeElement(gref, bctr);
-      _test(e == *eit);
-    }
-    return true;
-  }
-  
-
 
 
 

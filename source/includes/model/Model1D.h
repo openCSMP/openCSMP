@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// Line model that is templatized so that it can also be placed into three-dimensional space
-template<size_t dim=1U>
+template<uint32_t dim=1U>
 class Model1D : public Model<dim> {
 
 public:

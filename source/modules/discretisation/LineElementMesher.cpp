@@ -10,14 +10,14 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 LineElementMesher<dim>::LineElementMesher()
   {
   }
 
 
 /// create an uniform mesh
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildUniformMesh( VSet<dim>& vset,
                     double length,
@@ -44,7 +44,7 @@ void LineElementMesher<dim>
 
 
 /// create a mesh size gradient
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildRefinedMesh( VSet<dim>& vset,
                     double length,
@@ -67,7 +67,7 @@ void LineElementMesher<dim>
 
 } // end Initialize (exponential refinement)
 
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildCustomMesh( VSet<dim>& vset,
                    const std::vector<double>& node_coordinates,
@@ -86,7 +86,7 @@ void LineElementMesher<dim>
 
 } // end Initialize
 
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>
 ::BuildCustomMesh( VSet<dim>& vset,
                    const std::vector<Point<dim> >& node_coordinates,
@@ -122,10 +122,10 @@ void LineElementMesher<dim>
   @author R. Manasipov
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
-                                        const Point<dim>& origin,
-                                        const Point<dim>& destination )
+                                                 const Point<dim>& origin,
+                                                 const Point<dim>& destination )
 {
     if( vset.Vertices() > 0 )
     {
@@ -139,8 +139,8 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
         // identify the direction of old line model
         std::set<Point<dim> > nodes;
         Point<dim> p( 0.0 );
-        for( size_t i =0U; i< n_vertices; i++ ) {
-            for( size_t dimension=0U; dimension<dim; dimension++ )
+        for( auto i =0U; i< n_vertices; i++ ) {
+            for( uint32_t dimension=0U; dimension<dim; dimension++ )
                 p[ dimension ] = vset.P(dimension,i);
             nodes.insert( p );
         }
@@ -153,8 +153,8 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
         // VSet - assigning new coordinates to all points
         double   distance( 0.0 );
         double   length_factor( length / old_length );
-        for( size_t i=0U; i<n_vertices; i++ ) {
-             for( size_t dimension=0U; dimension<dim; dimension++ )
+        for( auto i{0}; i<n_vertices; i++ ) {
+             for( uint32_t dimension=0U; dimension<dim; dimension++ )
                  p[ dimension ] = vset.P( dimension, i );
              distance  = (p - old_origin).Length();
              distance *= length_factor;
@@ -162,27 +162,29 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
              p += distance*direction;
 
              // assign new coordinate
-             for( size_t dimension=0U; dimension<dim; dimension++ )
+             for( uint32_t dimension=0U; dimension<dim; dimension++ )
                  vset.P( dimension, i, p[ dimension ] );
           }
     }
 
 } // end Initialize
 
-template<size_t dim>
+
+
+template<uint32_t dim>
 void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
                                       const std::vector<double>& splitnodes_x )
 {
     if( !splitnodes_x.empty() && ( vset.Vertices() > 0 ) )
     {
         // convert splitnode coordinates along x axis to generic Point format
-        std::set<Point<dim> > splitnodes;
+        set<Point<dim> > splitnodes;
         Point<dim> p( 0.0 );
         for( std::vector<double>::const_iterator it = splitnodes_x.begin(); it != splitnodes_x.end(); it++ )
         {
             p[ 0U ] = (*it);
-            for( size_t  dimension = 1U; dimension<dim; dimension++)
-                p[ dimension ] = 0.0;
+            for( auto dimension = 1U; dimension<dim; dimension++)
+              p[ dimension ] = 0.0;
             splitnodes.insert( p );
         }
 
@@ -192,16 +194,15 @@ void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
 } // InsertSplitNodes
 
 
-template<size_t dim>
-void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
-                                      std::set<Point<dim> >& splitnodes )
+template<uint32_t dim>
+void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset, set<Point<dim> >& splitnodes )
 {
     // add splitnodes and reestablish connectivety
     EstablishConnectivity( vset, splitnodes );
 
 } // InsertSplitNodes
 
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
                                   const std::vector<double>& splitnode_coordinates,
                                   const Point<dim>& origin,
@@ -216,11 +217,14 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
         AssignCornerPoints( vset, origin, destination );
 }
 
-template<size_t dim>
+
+
+
+template<uint32_t dim>
 void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
-                                  const std::vector<Point<dim> >& splitnode_coordinates,
-                                  const Point<dim>& origin,
-                                  const Point<dim>& destination )
+                                           const std::vector<Point<dim> >& splitnode_coordinates,
+                                           const Point<dim>& origin,
+                                           const Point<dim>& destination )
 {
     if( splitnode_coordinates.empty() )
         EstablishConnectivity( vset );
@@ -240,18 +244,10 @@ void LineElementMesher<dim>::CompleteMesh( VSet<dim>& vset,
 
 
 
-
-
-
-
-
-
-
-
 // BUILDING BLOCKS
 
 /// create an uniform mesh
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
                                           double length,
                                           size_t n_elements )
@@ -267,17 +263,20 @@ void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
                 n_elements );
 
    //1.1 VSet - assigning point x-coordinates
-   for ( size_t i=0U; i<n_vertices; i++ ){
+   for ( auto i{0}; i<n_vertices; i++ ){
        vset.P( 0U, i, dx * i );
-       for( size_t dimension=1U; dimension<dim; dimension++ )
+       for( uint32_t dimension=1U; dimension<dim; dimension++ )
            vset.P( dimension, i, 0.0 );
    }
 
  } // end UniformMesh
 
 
+
+
+
 /// create a refined mesh
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>
 ::RefinedMesh( VSet<dim>& vset,
                double length,
@@ -327,7 +326,7 @@ void LineElementMesher<dim>
                }
              const size_t elements( element_length.size() );
              delta_x /= static_cast<double>( elements );
-             for( size_t i = 0; i<elements; i++ )
+             for( auto i = 0; i<elements; i++ )
                 element_length[ i ] += delta_x;
              break;
           }
@@ -369,20 +368,23 @@ void LineElementMesher<dim>
           it=element_length.begin(); it!=element_length.end(); it++ )
       {
          vset.P( 0U, n, x );
-         for( size_t dimension=1U; dimension<dim; dimension++ )
+         for( uint32_t dimension=1U; dimension<dim; dimension++ )
              vset.P( dimension, n, 0.0 );
          n++;
          x += (*it);
       }
     // the last node
     vset.P( 0U, n, length );
-    for( size_t dimension=1U; dimension<dim; dimension++ )
+    for( uint32_t dimension=1U; dimension<dim; dimension++ )
         vset.P( dimension, n, 0.0 );
 }
 
-template<size_t dim>
-void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
-                                const std::vector<double>& node_coordinates )
+
+
+
+
+template<uint32_t dim>
+void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<double>& node_coordinates )
 {
     const size_t  n_vertices( node_coordinates.size() );
     const size_t  n_elements( n_vertices - 1 );
@@ -400,7 +402,7 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
     std::vector<double>::const_iterator last_coordinate( node_coordinates.end() );
     while( node_coordinate != last_coordinate ) {
          vset.P( 0U, counter, *node_coordinate );
-         for( size_t dimension=1U; dimension<dim; dimension++ )
+         for( uint32_t dimension=1U; dimension<dim; dimension++ )
              vset.P( dimension, counter, 0.0 );
          counter++;
          node_coordinate++;
@@ -408,9 +410,13 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
 
 } // end CustomMesh
 
-template<size_t dim>
-void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
-                                const std::vector<Point<dim> >& node_coordinates )
+
+
+
+
+
+template<uint32_t dim>
+void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset, const vector<Point<dim> >& node_coordinates )
 {
     const size_t  n_vertices( node_coordinates.size() );
     const size_t  n_elements( n_vertices - 1 );
@@ -427,7 +433,7 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
     typename std::vector<Point<dim> >::const_iterator node_coordinate( node_coordinates.begin());
     typename std::vector<Point<dim> >::const_iterator last_coordinate( node_coordinates.end() );
     while( node_coordinate != last_coordinate ) {
-         for( size_t dimension=0U; dimension<dim; dimension++ )
+         for( uint32_t dimension=0U; dimension<dim; dimension++ )
              vset.P( dimension, counter, (*node_coordinate)[ dimension ] );
          counter++;
          node_coordinate++;
@@ -449,9 +455,7 @@ void LineElementMesher<dim>::CustomMesh( VSet<dim>& vset,
     @attention for a 1D model which is oriented vertically the assignment of the
     second corner is not strictly correct.
 */
-
-
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 {
     if( vset.Vertices() > 0 )
@@ -491,25 +495,28 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
 
 } // EstablishConnectivity
 
+
+
+
+
 /**
     Inserting SplitNodes to 1D mesh, reestablishing the connectivity
 
     @author R. Manasipov
 */
-
-template<size_t dim>
+template<uint32_t dim>
 void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
                                            std::set<Point<dim> >& splitnodes )
 {
     if( vset.Vertices() > 0 )
     {
-        const size_t  n_vertices( vset.Vertices() );
+        size_t  n_vertices( vset.Vertices() );
 
         // collect the coordinates of  nodes
         std::set<Point<dim> > nodes;
         Point<dim> p( 0.0 );
-        for( size_t i =0U; i< n_vertices; i++ ) {
-            for( size_t dimension=0U; dimension<dim; dimension++ )
+        for( auto i =0U; i< n_vertices; i++ ) {
+            for( uint32_t dimension=0U; dimension<dim; dimension++ )
                 p[ dimension ] = vset.P(dimension,i);
             nodes.insert( p );
         }
@@ -534,8 +541,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             // add splitnodes to the original nodes
             nodes.insert( splitnodes.begin(), splitnodes.end() );
 
-            const size_t n_vertices( nodes.size() + splitnodes.size() );
-            const size_t n_elements( nodes.size() - 1U );
+            n_vertices        = nodes.size() + splitnodes.size();
+            size_t n_elements = nodes.size() - 1U;
 
             //1.0 VSet - refitting VSet
             vset.Resize( IsoparametricLinearLineElement().Nodes(),
@@ -548,7 +555,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             deque<vector<int64_t> > pfvert( n_elements, vector<int64_t>(2) );
 
             //2.1 PFVerts - assigning content
-            for ( size_t i=0U; i<n_elements; i++ ) {
+            for ( auto i{0}; i<n_elements; i++ ) {
                  pfvert[i][0] = i - 1U;
                  pfvert[i][1] = i + 1U;
               }
@@ -570,17 +577,17 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             {
                 if( splitnodes.find( *node_coordinate ) == splitnodes.end() )
                 {
-                    for( size_t dimension=0U; dimension<dim; dimension++ )
+                    for( uint32_t dimension=0U; dimension<dim; dimension++ )
                         vset.P( dimension, node_counter, (*node_coordinate)[dimension] );
                     node_counter++;
                 }
                 else
                 {
-                    for( size_t dimension=0U; dimension<dim; dimension++ )
+                    for( uint32_t dimension=0U; dimension<dim; dimension++ )
                         vset.P( dimension, node_counter, (*node_coordinate)[dimension] );
                     node_counter++;
 
-                    for( size_t dimension=0U; dimension<dim; dimension++ )
+                    for( uint32_t dimension=0U; dimension<dim; dimension++ )
                         vset.P( dimension, node_counter, (*node_coordinate)[dimension] );
                     node_counter++;
 

@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// PDE operator:  K div^2 T
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref, 

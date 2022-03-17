@@ -15,10 +15,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Boundary;
-template<size_t> class Model;
-template<size_t> class VectorVariable;
+template<uint32_t> class Element;
+template<uint32_t> class Boundary;
+template<uint32_t> class Model;
+template<uint32_t> class VectorVariable;
 
 enum class BOUNDARY_STRESS { SINGLE_VALUED, DEPTH_DEPENDENT /* TODO: TRIANGULAR? */ };
 
@@ -50,7 +50,7 @@ enum class BOUNDARY_STRESS { SINGLE_VALUED, DEPTH_DEPENDENT /* TODO: TRIANGULAR?
      
      @author SKM 29/9/2014
 */
-template<size_t dim>
+template<uint32_t dim>
 class BoundaryStressVisitor : public Visitor<dim> {
   public:
     /// by default, any entries into the RHS force vectors will get overwritten

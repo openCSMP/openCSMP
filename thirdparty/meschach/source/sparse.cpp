@@ -35,7 +35,7 @@
 
 using namespace std;
 
-static char	rcsid[] = "$Id: sparse.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
+//static char	rcsid[] = "$Id: sparse.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
 #define	MINROWLEN	10
 

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class PicardIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
   public:
     PicardIntegrator();

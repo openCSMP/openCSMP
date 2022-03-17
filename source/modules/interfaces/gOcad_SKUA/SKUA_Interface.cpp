@@ -95,7 +95,7 @@ void SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion( const Mod
  
      @author SKM
 */
-template<size_t dim>
+template<uint32_t dim>
 bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, const std::string& data_file )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -614,7 +614,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
           }
         if ( no_data_count == (items_per_line - first_prop) )
           // for any NO_DATA element record insert element number into the element number set
-          no_data_elmt_numbers.insert( static_cast<size_t>(elmt_num) );
+          no_data_elmt_numbers.insert( static_cast<uint32_t>(elmt_num) );
 
         // reading next line
         bc_ifs.getline( text_line, LMAX );

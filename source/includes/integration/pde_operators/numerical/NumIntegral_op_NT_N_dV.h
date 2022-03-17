@@ -13,7 +13,7 @@ namespace csmp {
 @date 2000 */
 
 /// "mass matrix", "fluid sources or sinks", or "capacitance matrix" for constant coefficients
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_op_NT_N_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_op_NT_N_dV( const PropertyDatabase<dim>& p, 
@@ -22,7 +22,7 @@ class NumIntegral_op_NT_N_dV : public MathOperatorRHS<dim> {
     virtual void ComputeContribution( const CELL& );
     
   private:
-    size_t  nodal_degrees_of_freedom;
+    uint32_t  nodal_degrees_of_freedom;
 };
 
 // copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger

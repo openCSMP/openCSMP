@@ -19,6 +19,7 @@
 #include "MapleInterface.h"
 
 #include "LineElementMesher.h"
+#include "VSetConverter.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #include "Gauss_Solver.h"
@@ -73,7 +74,7 @@ void TemperatureDensityPressure_Example::Run()
   // 1. builds 4km-tall 1D model
     // -------------------------------------------
     VSet<1U>       mesh_container;
-    const uint32_t   N_ELEMENTS(4000);  // 4,000 meter tall model
+    const size_t   N_ELEMENTS(4000);  // 4,000 meter tall model
     LineElementMesher<1U>   mesher;
     mesher.BuildUniformMesh( mesh_container, 1., N_ELEMENTS+1 );
 
@@ -83,11 +84,13 @@ void TemperatureDensityPressure_Example::Run()
 
     // creating elements into the positive x direction (meaning upwards, see later)
     vector<size_t>  elms;
-    for ( size_t i=0U; i<N_ELEMENTS; ++i ) elms.push_back(i);
-    mesh_topology.AddRegion( "ROCK", fem_types, elms );
+    for ( auto i{0}; i<N_ELEMENTS; ++i ) elms.push_back(i);
+    mesh_topology.AddDomain( "ROCK", fem_types, elms );
     elms.erase( elms.begin(), elms.end() );
 
-    Model<1U>  model( mesh_topology, mesh_container, "example17.txt" );
+    // to get isoparametric elements
+    VSetConverter<1U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
+    Model<1U>  model( mesh_topology, mesh_container, "example17.txt", true );
     printModelDimensions( model );
 
     // 2. Input of material properties and initial conditions

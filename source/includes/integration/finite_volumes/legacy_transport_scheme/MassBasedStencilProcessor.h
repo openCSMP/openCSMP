@@ -7,7 +7,7 @@
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 class MassBasedStencilProcessor : public ExplicitStencilProcessor<dim>{
 public:
 

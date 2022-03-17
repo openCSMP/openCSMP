@@ -46,7 +46,7 @@ short Triangulator::TestOutline( unsigned int m, unsigned int n,
      //    k7  k1  k4 
      //        k2  k3 
      //
-     k1 = k2 = k3 = k4 = numeric_limits<double>::infinity();
+     k1 = k2 = k3 = k4 = k5 = k6 = k7 = std::numeric_limits<double>::quiet_NaN();
      if ( m  > 0 && n  > 0 )     k1  = perm( (m-1), (n-1) );
      if ( m<m_mtrx && n  > 0 )   k2  = perm( (m),   (n-1) ); 
      if ( n<n_mtrx && m<m_mtrx ) k3  = perm( (m),   (n) );
@@ -78,7 +78,7 @@ conventions.
 */
 unsigned long Triangulator::MapVertex( unsigned int m, unsigned int n )
  {
-    unsigned long vert;
+    unsigned long vert = UNSPECIFIED;
     
     // for the first and second line of data  
     if ( m == 1 ) {
@@ -153,8 +153,7 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
                                    
    deque<vector<int64_t> >     plist( n_elements, vector<int64_t>(3) );
    deque<vector<int64_t> >     pfvert( n_elements, vector<int64_t>(3) );
-   // FEM_Data<ScalarVariable >  edata( ELEMENT, n_elements );
-   PropertyData               edata( ELEMENT, SCALAR, 2U );
+   PropertyData                edata( ELEMENT, SCALAR, 2U );
    edata.Resize( n_elements );
    
    // n counts the elements

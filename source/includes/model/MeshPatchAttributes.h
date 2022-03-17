@@ -23,18 +23,18 @@ namespace csmp {
 */
 class MeshPatchAttributes {
   public:
-    MeshPatchAttributes( size_t cells, ELEMENT_DIMENSION dim );
+    MeshPatchAttributes( size_t cells, CELL_SHAPE dim );
     
-    void              Cells( size_t );
-    size_t            Cells() const;
+    void       Cells( size_t );
+    size_t     Cells() const;
     
     /// whether this is a LINE, SURFACE or VOLUME mesh
-    void              Geometry( ELEMENT_DIMENSION );
-    ELEMENT_DIMENSION Geometry() const;
+    void       Geometry( CELL_SHAPE );
+    CELL_SHAPE Geometry() const;
     
   private:
-    size_t             cells_;          ///< number of cells in the patch
-    ELEMENT_DIMENSION  cell_dimension_; ///<  types of elements in the patch
+    size_t      cells_;          ///< number of cells in the patch
+    CELL_SHAPE  cell_dimension_; ///<  types of elements in the patch
 };
 
 } // end csmp

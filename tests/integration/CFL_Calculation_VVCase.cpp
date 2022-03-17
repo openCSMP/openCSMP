@@ -6,25 +6,25 @@ using namespace std;
 
 namespace csmp {
 
-template <size_t dim>
+template <uint32_t dim>
 CFL_Calculation_VVCase<dim>::CFL_Calculation_VVCase()
 {
 }
 
-template <size_t dim>
+template <uint32_t dim>
 CFL_Calculation_VVCase<dim>::~CFL_Calculation_VVCase()
 {
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 CFL_Calculation_VVCase<dim>::CFL_Calculation_VVCase(const char* prefix)
 {
     this->setName("SlightlyCompressibleSinglePhaseFlow2D_VVCase");
     prefix_=prefix;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void CFL_Calculation_VVCase<dim>::run()
 {
     if (dim!=0)

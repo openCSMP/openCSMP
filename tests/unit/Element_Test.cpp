@@ -129,20 +129,20 @@ void Element_Test::MoveSemanticsTest()
   csmp::Element<2U> e1_copy( e1 );
   _test( e1 == e1_copy );
   // are they having the same nodes & neighbors ?
-  for ( size_t i{0}; i<e1.Nodes(); ++i ) {
+  for ( auto i{0}; i<e1.Nodes(); ++i ) {
        _test( e1.N(i) == e1_copy.N(i) );
        _test( e1.N(i)->AtBoundary() == e1_copy.N(i)->AtBoundary() );
     }
-  for ( size_t i{0}; i<e1.Neighbors(); ++i )
+  for ( auto i{0}; i<e1.Neighbors(); ++i )
     _test( e1.Neighbor(i) == e1_copy.Neighbor(i) );
     
   // assignment
   csmp::Element<2U> e1_copy2 = e1;
   _test( e1 == e1_copy2 );
   // are they having the same nodes & neighbors ?
-  for ( size_t i{0}; i<e1.Nodes(); ++i )
+  for ( auto i{0}; i<e1.Nodes(); ++i )
     _test( e1.N(i) == e1_copy2.N(i) );
-  for ( size_t i{0}; i<e1.Neighbors(); ++i )
+  for ( auto i{0}; i<e1.Neighbors(); ++i )
     _test( e1.Neighbor(i) == e1_copy2.Neighbor(i) );
     
   // move constructor & assigment operator

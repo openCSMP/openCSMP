@@ -10,8 +10,8 @@ namespace csmp {
 	/** Accumulates the conductance matrix of the interpolation function
 	derivatives.
 	*/
-	template<size_t dim, class SIMPLEX>
-	Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>::Integral_dNT_op_dN_dV_Analytical(const PropertyDatabase<dim>& pref,
+	template<uint32_t dim, class CELL>
+	Integral_dNT_op_dN_dV_Analytical<dim, CELL>::Integral_dNT_op_dN_dV_Analytical(const PropertyDatabase<dim>& pref,
 		const char*  oper, const char*  basic, const char*  test)
 		: MathOperatorLHS<dim>(pref, oper, basic, test)
 	{
@@ -31,8 +31,8 @@ namespace csmp {
 				test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 	}
 
-	template<size_t dim, class SIMPLEX>
-	void Integral_dNT_op_dN_dV_Analytical<dim, SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+	template<uint32_t dim, class CELL>
+	void Integral_dNT_op_dN_dV_Analytical<dim, CELL>::ComputeContribution( const CELL& e )
     { 
       MathOperatorLHS<dim>::LHS.Resize(e.Nodes(), e.Nodes());
       e.Integral_dNT_K_dN(MathOperatorLHS<dim>::LHS , MathOperatorLHS<dim>::MTRL[0]); 

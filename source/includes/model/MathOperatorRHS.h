@@ -13,10 +13,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class PropertyDatabase;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class PropertyDatabase;
 
 /**
 @brief Base class for FE or FV integrals accumulated into righthand vector.
@@ -45,7 +45,7 @@ RULES for using righthand Mathoperators
       order as given above.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class MathOperatorRHS {
 
   protected:
@@ -173,14 +173,14 @@ class MathOperatorRHS {
     std::string                         name_;               ///< name of operator
 
     Parameter                           op;                  ///< material property operand
-    std::pair<Parameter, size_t>       top;                 ///< test function operand
+    std::pair<Parameter, size_t>        top;                 ///< test function operand
 
-    std::vector<double>               RHS;                 ///< solution vector<double> to be accumulated
+    std::vector<double>                 RHS;                 ///< solution vector<double> to be accumulated
     std::vector<size_t>                 IDT;                 ///< node-ID & global constraint points vector ( test operand )
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
-    std::vector<double>               IPOL;                ///< shape function vector
+    std::vector<double>                 IPOL;                ///< shape function vector
     std::vector<ScalarVariable >        SC;                  ///< node property vector<double> of scalars
     std::vector<VectorVariable<dim> >   VC;                  ///< vectors
     std::vector<TensorVariable<dim> >   TS;                  ///< tensors
@@ -207,7 +207,7 @@ class MathOperatorRHS {
 };
 
 // for multi-dimensional solution variables
-void transformNodeIndexVector( size_t dim, const csmp::Index&, std::vector<size_t>& );
+void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
 
 
 

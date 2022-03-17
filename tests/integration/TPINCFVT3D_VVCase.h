@@ -9,7 +9,7 @@
 
 namespace csmp{
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 struct TPINCFVT3D_TestData;
 
 class TPINCFVT3D_VVCase : public Test

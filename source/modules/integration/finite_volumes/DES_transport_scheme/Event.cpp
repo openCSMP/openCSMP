@@ -3,7 +3,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 Event<dim>::Event(Node<dim>* nd)
   : node_(nd),
     valid_(false),

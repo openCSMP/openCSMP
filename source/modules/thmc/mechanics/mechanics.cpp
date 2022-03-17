@@ -251,12 +251,12 @@ void sortEigenVectorsAndValues( VectorVariable<3U>& vc, TensorVariable<3U>& ts )
     if ( vc[0U] >= vc[1U] and vc[1U] >= vc[2U] ) return;
     
     // the eigenvalues and vectors are ordered using less
-    multimap<double,size_t>  eorder;
+    multimap<double,uint32_t>  eorder;
     eorder.insert( make_pair(vc[0U],0) );
     eorder.insert( make_pair(vc[1U],1) );
     eorder.insert( make_pair(vc[2U],2) );
     
-    multimap<double,size_t>::reverse_iterator  it(eorder.rbegin());
+    multimap<double,uint32_t>::reverse_iterator  it(eorder.rbegin());
     double v00 = ts( (*it).second, 0 );
     double v01 = ts( (*it).second, 1 );
     double v02 = ts( (*it).second, 2 );

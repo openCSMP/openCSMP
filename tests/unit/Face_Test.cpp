@@ -14,7 +14,7 @@ using namespace std;
 namespace csmp
 {
 
-  template<size_t dim>
+  template<uint32_t dim>
   bool faceUnitNormalPointsOutward( const Face<dim>& f )
     {
       VectorVariable<dim> faceUN( PLAIN, 0. ), faceToInner( PLAIN, 0. );
@@ -130,7 +130,7 @@ void Face_Test::run()
     
     // TODO: test this edge constructor
     /*
-    template<size_t dim>
+    template<uint32_t dim>
     Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                      const FiniteVolumeStencilManager<dim>& fvm_manager,
                      Element<dim>* const parent_of_face1,

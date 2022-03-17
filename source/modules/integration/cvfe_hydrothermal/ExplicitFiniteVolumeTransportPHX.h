@@ -14,7 +14,7 @@ namespace csmp {
 
 /// finitive volume calculations for one phase within the CVFEM scheme (Weis et al., Geofluids, 2014).
 
-template<size_t dim>
+template<uint32_t dim>
 class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTransport<dim> {
 
   public:
@@ -47,22 +47,23 @@ class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTranspor
     void  DetermineFacetFluxSinglePhase( );
     void  AdjustAndPerformFacetFlux( const double& time_factor );
 
-    double GetPropertyValue( unsigned int idx );
-    double GetFluxOut( unsigned int idx ); // return the main property
-    double GetFluxIn(  unsigned int idx ); // returns the main property
-    double GetFluxOut( unsigned int idx, unsigned int property ); // returns the indicated property of the property-vector
-    double GetFluxIn(  unsigned int idx, unsigned int property ); // returns the indicated property of the property-vector
-    double GetMainPropertyLHS( unsigned int idx );
-    double GetFacetFlux( Element<dim>& e, unsigned int facet_idx, unsigned int property = 0U);
-    std::vector<double> GetUpwindCoefficients( unsigned int eidx );
-    double GetProjectedVelocities( Element<dim>& e, size_t i);
+    double GetPropertyValue( size_t idx );
+    double GetFluxOut( size_t idx ); // return the main property
+    double GetFluxIn(  size_t idx ); // returns the main property
+    double GetFluxOut( size_t idx, uint32_t property ); // returns the indicated property of the property-vector
+    double GetFluxIn(  size_t idx, uint32_t property ); // returns the indicated property of the property-vector
+    double GetMainPropertyLHS( size_t idx );
+    double GetFacetFlux( Element<dim>& e, uint32_t facet_idx, uint32_t property = 0U);
+    std::vector<double> GetUpwindCoefficients( size_t eidx );
+    double GetProjectedVelocities( Element<dim>& e, uint32_t i );
 
-    double GetFacetNormalVelocity( size_t element, size_t facet );
-    double GetFacetNormalComponent( size_t element, size_t facet, size_t x_or_y_or_z );
-    double GetFacetArea( size_t element, size_t facet );
+    double GetFacetNormalVelocity( size_t element, uint32_t facet );
+    double GetFacetNormalComponent( size_t element, uint32_t facet, uint32_t x_or_y_or_z );
+    double GetFacetArea( size_t element, uint32_t facet );
 
   protected:
 
+// TODO: Why store these in here?
     Model<dim>& model_ref;
     Region<dim>& region_ref;
     StencilProcessorPHX<dim> stencilPHX;

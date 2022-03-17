@@ -17,10 +17,10 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
 enum AQUEOUS_PHASE : std::int8_t { XH2O=0, XCO2=1, XNACl_aq=2 }; ///< mass fractions stored
 enum CARBONIC_PHASE : std::int8_t { YCO2=0, YH2O=1 };
@@ -30,7 +30,7 @@ enum PHASES_CONTINUOUS_ACROSS_ELEMENT : std::int8_t { AQUEOUS, CARBONIC, HALITE,
                                                       CARBONIC_HALITE, AQUEOUS_CARBONIC_HALITE, NEITHER };
 
 /// returns phases which are present on all nodes of the element so that their physical properties can be interpolated
-template<size_t dim>
+template<uint32_t dim>
 PHASES_CONTINUOUS_ACROSS_ELEMENT  continuousPhases( const variables::VariableSet_CO2GeoSequestration&, const Element<dim>* );
 
 /// reports the PhaseStateFinder's system state inferred from continuity of the phases across the element
@@ -43,7 +43,7 @@ SYSTEM_STATE  elementState( PHASES_CONTINUOUS_ACROSS_ELEMENT );
    @todo lookup tables not considered yet.
    @todo salt only case fails
 */
-template<size_t dim>
+template<uint32_t dim>
 class PVTX_Calculator_H2O_CO2_NaCl {
   public:
     explicit PVTX_Calculator_H2O_CO2_NaCl( const variables::VariableSet_CO2GeoSequestration& );
@@ -128,22 +128,22 @@ class PVTX_Calculator_H2O_CO2_NaCl {
 
 // Member functions
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::AqueousPhaseDensity() const { return flash_.rho_aq(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::CarbonicPhaseDensity() const { return flash_.rho_carb(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::AqueousPhaseViscosity() const { return flash_.mu_aq(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::CarbonicPhaseViscosity() const { return flash_.mu_carb(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::AqueousPhaseCompressibility() const { return flash_.beta_aq(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double PVTX_Calculator_H2O_CO2_NaCl<dim>::CarbonicPhaseCompressibility() const { return flash_.beta_carb(); }
 
 } // end csmp

@@ -42,7 +42,7 @@ using namespace std;
 namespace csmp {
 
 // setting the dimensionality of the model
-const size_t DIM(2U);
+const uint32_t DIM(2U);
 
 bool createLowerDimensionalRegion( Model<DIM>& model, const char* name_of_new_region );
 void computeGasFlowProperties( Model<DIM>& model, const char* target_region );
@@ -116,9 +116,9 @@ void EffectiveStressDilatation2D_Example::Run()
   mesh_interface.Read_ANSYS_Mesh( bin_file, mesh_container, mesh_topology, binary_file, true );
   // mesh_topology.Out();
   // eliminating potentially unwanted regions
-  mesh_topology.ReduceToRegions( bin_file );
+  mesh_topology.ReduceToDomains( bin_file );
   map<size_t,size_t>  old_and_new_elmtids;
-  mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+  mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
   mesh_container.ReduceTo( old_and_new_elmtids );
   old_and_new_elmtids.clear();
 
@@ -129,7 +129,7 @@ void EffectiveStressDilatation2D_Example::Run()
 
   // 2.0 Building the "Model" with associated property storage (see variables file: example2.txt
   // -------------------------------------------------------------------------------------------
-  Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt" );
+  Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt", true );
   mesh_container.Erase();
   mesh_topology.Erase();
   
@@ -231,7 +231,7 @@ void EffectiveStressDilatation2D_Example::Run()
          well.Accept(well_influx);
          cout <<"\nRun: Cumulative flux into the well (t="<< model_time <<"): "<< well_influx.InFlux() <<" (m3).\n";
          cumulative_production = well_influx.InFlux() * time_increment;
-         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", static_cast<size_t>(rint(model_time/time_unit)) );
+         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", static_cast<uint32_t>(rint(model_time/time_unit)) );
          time_increment *= 1.2;
       }
   
@@ -299,7 +299,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_ioform( "f" );
     // set filename for SAMG file output other than default "level", idmp > 1 is required
     string currentDumpFileName( "transient_pf" );
-    currentDumpFileName.append( numberToString( static_cast<size_t>( model_time ) ) );
+    currentDumpFileName.append( numberToString( static_cast<uint32_t>( model_time ) ) );
     dynamic_cast<TransientDiffusionSolver<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_filnam_dump( currentDumpFileName );
 #endif
 
@@ -482,6 +482,7 @@ bool createLowerDimensionalRegion( Model<DIM>& model, const char* name_of_new_re
     set<size_t> element_idx;
     for ( vector<Element<DIM>*>::const_iterator it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
       if ( (*it)->FE()->IsLineElement() ) element_idx.insert( (*it)->Idx() );
+    
     vector<size_t> unique_idx( element_idx.begin(), element_idx.end() );
    
     if ( model.ContainsRegion( name_of_new_region ) ) return false;
@@ -517,8 +518,7 @@ void computeGasFlowProperties( Model<DIM>& model, const char* target_region )
     Region<DIM>& mref = model.Region(target_region);
     ScalarVariable  cf, mu;
 
-    for ( vector<Element<DIM>*>::iterator
-          it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
+    for ( auto it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
       {
          // retrieve input properties (knowing where they are placed)
          double phi = (*it)->Read( phi_key );

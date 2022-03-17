@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputDataToTecplotFile( const Model<dim>&  sg,
                            const char*        file_name,
@@ -20,7 +20,7 @@ void Tecplot_Interface<dim>
   } // end OutputDataToTecplotFile
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputDataToTecplotFile( const Model<dim>&  sg,
                            const char*        group_name,
@@ -31,7 +31,7 @@ void Tecplot_Interface<dim>
     this->OutputDataToTecplotFile(sg, sg.Region(group_name), file_name, var_name, timestep );
   }
     
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputGridToTecplotFile( const Model<dim>&  sg,
                            const char*        file_name,
@@ -41,7 +41,7 @@ void Tecplot_Interface<dim>
 } // end OutputDataToTecplotFile
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputGridToTecplotFile( const Model<dim>&  sg,
                            const char*        group_name,
@@ -51,7 +51,9 @@ void Tecplot_Interface<dim>
     this->OutputGridToTecplotFile(sg, sg.Region(group_name), file_name, timestep );
 }
     
-template<size_t dim>
+
+
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputDataToTecplotFile( const Model<dim>&  sg,
                            const Region<dim>& gref,
@@ -105,15 +107,15 @@ void Tecplot_Interface<dim>
      // 1. getting new node mapping and updating storage if geometry has changed
      // ------------------------------------------------------------------------
      if ( prop_key.place == NODE ) {
-         NodeBasedTopology( sg, elmt_ids, plist, node_mapping );
-         TransformPlist( sg, plist, transformed_plist );
+         NodeBasedTopology( sg, elmt_ids, plist_, node_mapping_ );
+         TransformPlist( sg, plist_, transformed_plist_ );
        }
      else {
-         PointBasedTopology( sg, elmt_ids, plist, node_mapping );
-         transformed_plist = plist;
+         PointBasedTopology( sg, elmt_ids, plist_, node_mapping_ );
+         transformed_plist_ = plist_;
        }
-     if ( prop_key.place == NODE ) NodeData( sg, prop_key, node_mapping, pxyz_data );
-     else                          ElementPointData( sg, prop_key, node_mapping, pxyz_data );
+     if ( prop_key.place == NODE ) NodeData( sg, prop_key, node_mapping_, pxyz_data_ );
+     else                          ElementPointData( sg, prop_key, node_mapping_, pxyz_data_ );
 
      // 2. opening data output file in ascii format
      // -------------------------------------------
@@ -165,9 +167,9 @@ void Tecplot_Interface<dim>
      // --------------------------------------
      typename map<size_t,vector<double> >::const_iterator  nit;
      size_t counter(1);
-     for ( nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+     for ( nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
-          for ( size_t i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( auto i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0.0 <<" ";
           // SCALAR
           if ( prop_key.type == SCALAR ) ofs << (*nit).second[3] <<" ";
@@ -184,12 +186,9 @@ void Tecplot_Interface<dim>
      // 4. writing CELLS (cell-size and member nodes (point))
      // -----------------------------------------------------
      if ( prop_key.place == NODE ) {
-         typename map<size_t,vector<size_t> >::const_iterator  eit;
-         typename vector<size_t>::const_iterator  it;
-
-         for ( eit=transformed_plist.begin(); eit!=transformed_plist.end(); eit++ )
+         for ( auto eit=transformed_plist_.begin(); eit!=transformed_plist_.end(); eit++ )
            {
-              for ( it=(*eit).second.begin(); it!=(*eit).second.end(); it++ ) ofs << *it+1 <<" ";
+              for ( auto it=(*eit).second.begin(); it!=(*eit).second.end(); it++ ) ofs << *it+1 <<" ";
               ofs << endl;
            }   
          ofs << endl;
@@ -201,7 +200,13 @@ void Tecplot_Interface<dim>
 
   } // end OutputDataToTecplotFile
 
-template<size_t dim>
+
+
+
+
+
+
+template<uint32_t dim>
 void Tecplot_Interface<dim>
 ::OutputGridToTecplotFile( const Model<dim>&  sg,
                            const Region<dim>& gref,
@@ -227,9 +232,9 @@ void Tecplot_Interface<dim>
     
     // 1. getting new node mapping and updating storage if geometry has changed
     // ------------------------------------------------------------------------
-    NodeBasedTopology( sg, elmt_ids, plist, node_mapping );
+    NodeBasedTopology( sg, elmt_ids, plist_, node_mapping_ );
     //TransformPlist( sg, plist, transformed_plist );
-    XyzData( sg, node_mapping, pxyz_data );
+    XyzData( sg, node_mapping_, pxyz_data_ );
     
     // 2. opening data output file in ascii format
     // -------------------------------------------
@@ -279,10 +284,10 @@ void Tecplot_Interface<dim>
     // 3. writing node coordinates
     // --------------------------------------
     typename map<size_t,vector<double> >::const_iterator  nit;
-    typename map<size_t,vector<double> >::const_iterator  nitEnd = pxyz_data.end();
-    for ( nit=pxyz_data.begin(); nit != nitEnd; nit++ )
+    typename map<size_t,vector<double> >::const_iterator  nitEnd = pxyz_data_.end();
+    for ( nit=pxyz_data_.begin(); nit != nitEnd; nit++ )
     {
-        for ( size_t i=0; i < 3U; i++ ){
+        for ( auto i=0; i < 3U; i++ ){
             ofs << (*nit).second[i];
         if( i != 2U )
             ofs <<" ";
@@ -295,10 +300,10 @@ void Tecplot_Interface<dim>
     // 4. writing element nodes connection list
     // --------------------------------------
     typename map<size_t,vector<size_t> >::const_iterator  elit;
-    typename map<size_t,vector<size_t> >::const_iterator  elitEnd = plist.end();
+    typename map<size_t,vector<size_t> >::const_iterator  elitEnd = plist_.end();
     typename vector<size_t>::const_iterator  elnit;
     typename vector<size_t>::const_iterator  elnitEnd;
-    for ( elit=plist.begin(); elit != elitEnd; elit++ )
+    for ( elit=plist_.begin(); elit != elitEnd; elit++ )
     {
         elnitEnd = (*elit).second.end();
         for ( elnit = (*elit).second.begin(); elnit != elnitEnd; )
@@ -334,7 +339,10 @@ void Tecplot_Interface<dim>
 
 
 
-template<size_t dim>
+
+
+
+template<uint32_t dim>
 void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
                                                 const vector<size_t>& elmt_ids,
                                                 map<size_t,vector<size_t> >& plist,
@@ -358,7 +366,7 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
       {
          const size_t eid( *lit );
          // getting node ids and renumbering them 0...n-1
-         for ( size_t i=0U; i<super_group.E( eid )->Nodes(); i++ ) {
+         for ( auto i{0}; i<super_group.E( eid )->Nodes(); i++ ) {
               pair<typename map<size_t,size_t>::iterator,bool>
                 node_it = node_nums.insert( make_pair( super_group.E( eid )->N(i)->Idx(), nodes ) );
               if ( node_it.second == true ) nodes++;
@@ -367,10 +375,9 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
          pentry.resize( super_group.E( eid )->Nodes() );
-         for ( size_t i=0; i<super_group.E( eid )->Nodes(); i++ )
+         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
            {
-              typename map<size_t,size_t>::const_iterator
-                nit = node_nums.find( super_group.E( eid )->N(i)->Idx() );
+              auto nit = node_nums.find( super_group.E( eid )->N(i)->Idx() );
               pentry[i] = (*nit).second;
            }
          
@@ -380,7 +387,7 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
          assert( pit.second == true );
          // initializing plist vector
          (*pit.first).second.reserve( super_group.E( eid )->Nodes() );
-         for ( size_t i=0; i<super_group.E( eid )->Nodes(); i++ )
+         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
            (*pit.first).second.push_back( pentry[i] );
       }   
      
@@ -388,7 +395,10 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+
+
+
+template<uint32_t dim>
 void Tecplot_Interface<dim>::PointBasedTopology( const Model<dim>& sg,
                                                  const vector<size_t>& elmt_ids,
                                                  map<size_t,vector<size_t> >& plist,
@@ -426,7 +436,7 @@ void Tecplot_Interface<dim>::PointBasedTopology( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
                                              const map<size_t,vector<size_t> >& plist,
                                              map<size_t,vector<size_t> >& tplist )
@@ -762,7 +772,7 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
  
  } // end TransformPlist
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
                                      const map<size_t,size_t>& node_nums,
                                      map<size_t,vector<double> >& pxyz_data )
@@ -794,7 +804,7 @@ void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
     
 } // end XyzData
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
                                       const csmp::Index& prop_key,
                                       const map<size_t,size_t>& node_nums,
@@ -842,7 +852,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
             (*dit.first).second.reserve(6);
             super_group.N( (*nit).first )->Read( prop_key, vc );
                 // variables have always 3 components since view screen is 3D
-            for ( size_t j=0; j<2; j++ ) (*dit.first).second.push_back( vc[j] );
+            for ( int j=0; j<2; j++ ) (*dit.first).second.push_back( vc[j] );
             if ( dim == 3 )            (*dit.first).second.push_back( vc[2] );
             else                       (*dit.first).second.push_back( 0.0 );
             }
@@ -853,8 +863,8 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
             super_group.N( (*nit).first )->Read( prop_key, ts );
                 // variables have always 3 components since view screen is 3D
             if ( dim == 3 )
-                for ( size_t k=0; k<3; k++ )
-                    for ( size_t l=0; l<3; l++ ) (*dit.first).second.push_back( ts(k,l) );
+                for ( auto k=0; k<3; k++ )
+                  for ( int l=0; l<3; l++ ) (*dit.first).second.push_back( ts(k,l) );
             else {
                 (*dit.first).second.push_back( ts(0,0) );
                 (*dit.first).second.push_back( ts(0,1) );
@@ -872,7 +882,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
 } // end NodeData
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
                                                const csmp::Index&     prop_key,
                                                const map<size_t,size_t>& node_nums,
@@ -915,10 +925,10 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
     // data values
     // -----------------------------------------------------------------------------------------
     typename map<size_t,vector<size_t> >::const_iterator  it;
-    typename vector<size_t>::const_iterator                  pit;
+    typename vector<size_t>::const_iterator               pit;
     typename map<size_t,vector<double> >::iterator        dit2;
 
-    for ( it=plist.begin(); it!=plist.end(); it++ )
+    for ( it=plist_.begin(); it!=plist_.end(); it++ )
       {
          if ( prop_key.type == SCALAR )
            {
@@ -938,7 +948,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
                    dit2 = pxyz_data.find( (*pit) );
                   (*dit2).second.reserve(6);
                    if ( dim == 3U )
-                     for ( size_t j=0; j<3; j++ ) (*dit2).second.push_back( vc[j] );
+                     for ( int j=0; j<3; j++ ) (*dit2).second.push_back( vc[j] );
                    else {
                         (*dit2).second.push_back( vc[0] );
                         (*dit2).second.push_back( vc[1] );
@@ -955,8 +965,8 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
                    dit2 = pxyz_data.find( (*pit) );
                   (*dit2).second.reserve(12);
                    if ( dim == 3U )
-                     for ( size_t k=0; k<3; k++ )
-                       for ( size_t l=0; l<3; l++ ) (*dit2).second.push_back( ts(k,l) );
+                     for ( auto k=0; k<3; k++ )
+                       for ( int l=0; l<3; l++ ) (*dit2).second.push_back( ts(k,l) );
                    else {
                       (*dit2).second.push_back( ts(0,0) );
                       (*dit2).second.push_back( ts(0,1) );

@@ -15,7 +15,7 @@ gravity term in transient flow: -S / dt  +  K     g   delta_rho grad Z
 
 @note only use in BE scheme where storage term is divided by time-increment
 */
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>& p, 
@@ -31,12 +31,12 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim> {
     virtual void MultiplyWithTimeFactor( double dt );
   
   private:
-    std::vector<double>                   IPOL;
-    DenseMatrix<DM_MIN>            DN;
-    csmp::Index                        mtrl1_key, mtrl2_key;
+    std::vector<double>           IPOL;
+    DenseMatrix<DM_MIN>           DN;
+    csmp::Index                   mtrl1_key, mtrl2_key;
     ScalarVariable                oper_eprop, mtrl1_prop, mtrl2_prop;
-    const double                          gravity;   // acceleration of gravity
-    const size_t                   xyz; // 1=x, 2=y
+    const double                  gravity;   // acceleration of gravity
+    const uint32_t                xyz; // 1=x, 2=y
     std::vector<ScalarVariable >  oper_nprop;
 };
 

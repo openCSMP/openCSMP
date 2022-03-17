@@ -20,7 +20,7 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 
 /**
     @brief 2-phase flow functions
@@ -47,7 +47,7 @@ template<size_t> class PropertyDatabase;
     TODO: specify through template parameter for what PLACEMENT/ipoint the flow functions shall be initialised
 */
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration,               ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
                              public BrooksCoreySaturationFunctions<dim,FlowFunctionsModule1>, ///< saturation function model
                              public TwoPhaseFlowFunctions<dim,FlowFunctionsModule1>,          ///< mobilities etc.
@@ -62,7 +62,7 @@ class FlowFunctionsModule1 : public variables::VariableSet_CO2GeoSequestration, 
 typedef FlowFunctionsModule1<3U>  ACGSS_SlightlyCompressible2PhaseFlowFunctions;
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule2 : public variables::VariableSet_CO2GeoSequestration,                             ///< all variables in transport scheme
                              public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsModule2>, ///< saturation function model
                              public TwoPhaseFlowFunctions<dim,FlowFunctionsModule2>,                        ///< mobilities etc.
@@ -77,7 +77,7 @@ typedef FlowFunctionsModule2<3U>  ACGSS_Hysteretic_SlightlyCompressible2PhaseFlo
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule3 : public variables::VariableSet_CO2GeoSequestration,
                              public ExperimentalSaturationFunctions<dim,FlowFunctionsModule3>,
                              public TwoPhaseFlowFunctions<dim,FlowFunctionsModule3>,
@@ -94,7 +94,7 @@ typedef FlowFunctionsModule3<3U>  ACGSS_Experimental_SlightlyCompressible2PhaseF
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule4 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctions<dim,FlowFunctionsModule4>,  ///< saturation function model
     public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule4>,      ///< mobilities etc.
@@ -108,7 +108,7 @@ class FlowFunctionsModule4 : public variables::VariableSet_CO2GeoSequestration, 
 typedef FlowFunctionsModule4<3U>  ACGSS_Compositional_H2O_CO2_NaCl_FlowFunctions;
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule5 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public BrooksCoreySaturationFunctionsWithHysteresis<dim,FlowFunctionsModule5>,  ///< saturation function model
     public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule5>,                    ///< mobilities etc.
@@ -123,7 +123,7 @@ typedef FlowFunctionsModule5<3U>  ACGSS_Hysteretic_Compositional_H2O_CO2_NaCl_Fl
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule6 : public variables::VariableSet_CO2GeoSequestration,
                              public ExperimentalSaturationFunctions<dim,FlowFunctionsModule6>,
                              public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule6>,
@@ -139,7 +139,7 @@ typedef FlowFunctionsModule6<3U>  ACGSS_Experimental_Compositional_H2O_CO2_NaCl_
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 class FlowFunctionsModule7 : public variables::VariableSet_CO2GeoSequestration,     ///< all variables in transport scheme (and determining the ones that will be included in the initialisation)
     public HeterogeneityAndRateAwareSaturationFunctions<dim,FlowFunctionsModule7>,  ///< saturation function model
     public H2O_CO2_NaCl_FlowFunctions<dim,FlowFunctionsModule7>,      ///< mobilities etc.

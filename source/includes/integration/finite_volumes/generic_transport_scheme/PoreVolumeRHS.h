@@ -22,7 +22,7 @@ namespace csmp {
    @author SKM
    @date 6/12/2016
 */
-template<size_t dim>
+template<uint32_t dim>
 class PoreVolumeRHS : public VectorOperator<dim> {
   public:
     PoreVolumeRHS( const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& spv_key,

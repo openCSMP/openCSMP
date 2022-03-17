@@ -9,8 +9,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::Integral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref,
                                                                       const char* oper,
                                                                       const char* velo, 
                                                                       const char* basic, 
@@ -47,8 +47,8 @@ Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::Integral_dNT_op_dN_NT_v_dN_dV( const
 Reads a scalar property describing the diffusion part and a vector
 variable describing the advection part of the operator.  
  */
-template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -62,18 +62,18 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               ScalarVariable  sc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), sc );
-              for ( size_t i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
+              for ( auto i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-              for ( size_t i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
+              for ( auto i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-              for ( size_t i=0; i<dim; i++ ) 
-                for ( size_t j=0; j<dim; j++ ) MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
+              for ( auto i=0; i<dim; i++ ) 
+                for ( auto j=0; j<dim; j++ ) MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
            }
       }
       
@@ -96,8 +96,8 @@ member matrix [C].
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // 1. Calculating the diffusion component
     // --------------------------------------
@@ -121,8 +121,8 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMP
     // --------------------------------------
     VXYZ /= nodes;
     
-    for ( size_t i=0; i<nodes; i++ )
-      for ( size_t j=0; j<nodes; j++ ) {
+    for ( auto i=0; i<nodes; i++ )
+      for ( auto j=0; j<nodes; j++ ) {
            MathOperatorLHS<dim>::LHS(i,j)   += B(0,j) * VXYZ[0];
            if ( dim != 1U ) 
              MathOperatorLHS<dim>::LHS(i,j) += B(1,j) * VXYZ[1]; 

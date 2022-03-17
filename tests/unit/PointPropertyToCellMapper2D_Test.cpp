@@ -1,4 +1,4 @@
-#include "ANSYS_Model2D_Test.h"
+#include "PointPropertyToCellMapper2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"
 
@@ -13,7 +13,7 @@ namespace csmp
 {
 
 
-void ANSYS_Model2D_Test::run()
+void PointPropertyToCellMapper2D_Test::run()
   {
     const bool verbose(false);
     
@@ -22,10 +22,10 @@ void ANSYS_Model2D_Test::run()
 
 
     DenseMatrix<DM_MIN> dm;
-    const vector<Element<2>*>::iterator elementsEnd( rref.ElementsEnd() );    
+    const auto elementsEnd( rref.ElementsEnd() );
     try
       {    
-        for( vector<Element<2>*>::iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
+        for( auto it = rref.ElementsBegin(); it != elementsEnd; ++it )
           (*it)->CoordinateMatrix();
       }
     catch(...)
@@ -39,8 +39,8 @@ void ANSYS_Model2D_Test::run()
     Index nodalKey( model.Database().StorageKey( "nodal variable" ) );
     rref.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 0. ) );
     size_t boundaryNodeCount( 0 );
-    const vector<Node<2>*>::iterator nodesEnd( rref.NodesEnd() );
-    for( vector<Node<2>*>::iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
+    const auto nodesEnd( rref.NodesEnd() );
+    for( auto it = rref.NodesBegin(); it != nodesEnd; ++it )
       {
         const BOX_BOUNDARY boxBoundary( (*it)->AtBoundary() );
         if( boxBoundary != NOT )

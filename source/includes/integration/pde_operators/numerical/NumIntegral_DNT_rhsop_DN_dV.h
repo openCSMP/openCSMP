@@ -18,7 +18,7 @@ into righthand side vector.
 @copyright 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts
 
 */
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 

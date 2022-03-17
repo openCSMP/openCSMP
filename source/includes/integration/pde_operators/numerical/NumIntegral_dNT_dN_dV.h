@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// PDE operator:  div^2 N = interpolation function derivate matrix squared.
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_dNT_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref, 

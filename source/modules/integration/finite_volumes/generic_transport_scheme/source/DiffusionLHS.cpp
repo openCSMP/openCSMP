@@ -14,7 +14,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 DiffusionLHS<dim>::DiffusionLHS( const INDEX<SCALAR,ELEMENT>& diffusivity_key, 
                                  const INDEX<SCALAR,NODE>& transported_variable_key  )
   : diff_key_(diffusivity_key),
@@ -24,7 +24,7 @@ DiffusionLHS<dim>::DiffusionLHS( const INDEX<SCALAR,ELEMENT>& diffusivity_key,
  }
 
 // NOT AVAILABLE
-template<size_t dim>
+template<uint32_t dim>
 void DiffusionLHS<dim>::AccumulateFiniteVolume( const Node<dim>&, SparseMatrix& ) const
  {
      throw csmp::Exception( ERROR, "DiffusionLHS<dim>::AccumulateStencil", "Use FEM diffusion operator instead!" );
@@ -35,7 +35,7 @@ void DiffusionLHS<dim>::AccumulateFiniteVolume( const Node<dim>&, SparseMatrix& 
      Uses the finite element framework of CSMP to compute the FE diffusion integral term and
      accumulate it into the solution matrix A of Ax=b.
 */
-template<size_t dim>
+template<uint32_t dim>
 void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& A ) const
  {
     // assuming a scalar diffusivity
@@ -53,7 +53,7 @@ void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix&
       }
  
     const size_t integration_points(fe.IntegrationPoints());
-    for ( size_t i=0U; i<integration_points; ++i )
+    for ( auto i{0}; i<integration_points; ++i )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

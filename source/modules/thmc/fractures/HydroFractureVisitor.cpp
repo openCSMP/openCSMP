@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 HydroFractureVisitor<dim>::HydroFractureVisitor( Model<dim>& sg )
   :  pref(sg.Database()),
      // property keys
@@ -28,7 +28,7 @@ HydroFractureVisitor<dim>::HydroFractureVisitor( Model<dim>& sg )
 
 
       
-template<size_t dim>
+template<uint32_t dim>
 HydroFractureVisitor<dim>::~HydroFractureVisitor() 
  {  
  }
@@ -36,7 +36,7 @@ HydroFractureVisitor<dim>::~HydroFractureVisitor()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void HydroFractureVisitor<dim>::Visit(Model<dim>* n)   
      { 
         char name[NAME_STRING];
@@ -51,20 +51,20 @@ void HydroFractureVisitor<dim>::Visit(Model<dim>* n)
 
 
 
-template<size_t dim>
-void  HydroFractureVisitor<dim>::HydroFracturedElements( vector<size_t>& elmts ) const
+template<uint32_t dim>
+void  HydroFractureVisitor<dim>::HydroFracturedElements( vector<uint32_t>& elmts ) const
  {
      elmts.clear();
      elmts.reserve(fractured.Size());
 
-     for ( size_t n=0U; n<fractured.Size(); n++ )
+     for ( auto n=0U; n<fractured.Size(); n++ )
        if ( fractured.GetBit(n) == true ) elmts.push_back( n );
        
      if ( elmts.empty() ) {
           cout <<"\nHydroFractureVisitor::HydroFracturedElements: Info: ";
           cout <<"No hydrofractured elements exist."<< endl; 
        }
-     vector<size_t>( elmts ).swap( elmts );
+     vector<uint32_t>( elmts ).swap( elmts );
  }
     
     
@@ -94,7 +94,7 @@ Otherwise an increased conductivity will not foster the flow.
 assigned. 
  
 */
-template<size_t dim>
+template<uint32_t dim>
 void HydroFractureVisitor<dim>::Visit( Element<dim>* n )   
   { 
      // 1. test whether at least one element node is overpressured

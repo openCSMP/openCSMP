@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 bool is_NO_DATA_Value( double value );
 void createInflowRegion( Model<2U>& );

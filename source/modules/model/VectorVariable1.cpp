@@ -37,57 +37,51 @@ VectorVariable<1U>&  VectorVariable<1U>::operator=( const VectorVariable<1U>& v 
 
 
 
-double& VectorVariable<1U>::operator()( size_t )
+double& VectorVariable<1U>::operator()( uint32_t )
 {
   return data;
 }
 
 
-const double& VectorVariable<1U>::operator()( size_t ) const
+const double& VectorVariable<1U>::operator()( uint32_t ) const
 {
   return data;
 }
 
 
-double  VectorVariable<1U>::operator[]( size_t ) const
+double  VectorVariable<1U>::operator[]( uint32_t ) const
 {
   return data;
 }
 
 
 
-void  VectorVariable<1U>::Component( size_t, double val )
+void  VectorVariable<1U>::Component( uint32_t, double val )
 {
   data = val;
 }
 
 
 
-double  VectorVariable<1U>::Component( size_t ) const
+double  VectorVariable<1U>::Component( uint32_t ) const
 {
   return data;
 }
 
-VARIABLE_FLAG& VectorVariable<1U>::Flag( size_t )
+VARIABLE_FLAG& VectorVariable<1U>::Flag( uint32_t )
 {
   return flag;
 }
 
-VARIABLE_FLAG VectorVariable<1U>::Flag( size_t ) const
+VARIABLE_FLAG VectorVariable<1U>::Flag( uint32_t ) const
 {
   return flag;
 }
 
-size_t VectorVariable<1U>::Size() const
+uint32_t VectorVariable<1U>::Size() const
 {
   return 1U;
 }
-
-void VectorVariable<1U>::Resize( size_t, double newValue )
-{
-  data = newValue;
-}
-
 
 VectorVariable<1U>::VectorVariable( VARIABLE_FLAG f, double val )
   : flag( f ), data( val )

@@ -338,16 +338,16 @@ void    zm_dump(FILE *fp,ZMAT *a)
      
      if ( a == ZMNULL )
      {  fprintf(fp,"ComplexMatrix: NULL\n");   return;         }
-     fprintf(fp,"ComplexMatrix: %d by %d @ 0x%lx\n",a->m,a->n,(long long)a);
+     fprintf(fp,"ComplexMatrix: %d by %d @ 0x%llx\n",a->m,a->n,(long long)a);
      fprintf(fp,"\tmax_m = %d, max_n = %d, max_size = %d\n",
 	     a->max_m, a->max_n, a->max_size);
      if ( a->me == (complex **)NULL )
      {  fprintf(fp,"NULL\n");           return;         }
-     fprintf(fp,"a->me @ 0x%lx\n",(long long)(a->me));
-     fprintf(fp,"a->base @ 0x%lx\n",(long long)(a->base));
+     fprintf(fp,"a->me @ 0x%llx\n",(long long)(a->me));
+     fprintf(fp,"a->base @ 0x%llx\n",(long long)(a->base));
      for ( i=0; i<a->m; i++ )   /* for each row... */
      {
-      fprintf(fp,"row %u: @ 0x%lx ",i,(long long)(a->me[i]));
+      fprintf(fp,"row %u: @ 0x%llx ",i,(long long)(a->me[i]));
 	  for ( j=0, tmp=1; j<a->n; j++, tmp++ )
 	  {             /* for each col in row... */
 	       fprintf(fp,zformat,a->me[i][j].re,a->me[i][j].im);
@@ -365,10 +365,10 @@ void    zv_dump(FILE *fp,ZVEC *x)
      
      if ( ! x )
      {  fprintf(fp,"ComplexVector: NULL\n");   return;         }
-     fprintf(fp,"ComplexVector: dim: %d @ 0x%lx\n",x->dim,(long long)(x));
+     fprintf(fp,"ComplexVector: dim: %d @ 0x%llx\n",x->dim,(long long)(x));
      if ( ! x->ve )
      {  fprintf(fp,"NULL\n");   return;         }
-     fprintf(fp,"x->ve @ 0x%lx\n",(long long)(x->ve));
+     fprintf(fp,"x->ve @ 0x%llx\n",(long long)(x->ve));
      for ( i=0, tmp=0; i<x->dim; i++, tmp++ )
      {
 	  fprintf(fp,zformat,x->ve[i].re,x->ve[i].im);

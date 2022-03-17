@@ -13,7 +13,7 @@ using namespace std;
 namespace csmp
 {
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
   const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
@@ -21,7 +21,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
     for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
         {
@@ -34,7 +34,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
     for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
         {
@@ -47,7 +47,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
 {
   VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
@@ -66,7 +66,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
         (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
       displacementPerpedicularToInterface *= shift;
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
         {
@@ -120,7 +120,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
     for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         if ( (*it)->InterveningElement() != NULL )
           (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
@@ -182,7 +182,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftInterfaceTips( Region<dim>& region, double shift )
 {
   Point<dim> displacement;
@@ -193,7 +193,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         displacement = baryCenter - (*it)->N( i )->Coordinate();
         displacement.NormalizeLengthTo( 1.0 );
@@ -207,7 +207,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );
-      for ( size_t i = 0; i < nodes; ++i )
+      for ( auto i = 0; i < nodes; ++i )
       {
         displacement = baryCenter - (*it)->N( i )->Coordinate();
         displacement.NormalizeLengthTo( 1.0 );
@@ -220,7 +220,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShift )
 {
   if ( dim == 2 )
@@ -239,7 +239,7 @@ void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShi
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
@@ -280,7 +280,7 @@ void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
 {
   if ( dim == 2 )
@@ -321,7 +321,7 @@ void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   if ( dim == 2 )
@@ -340,7 +340,7 @@ void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yS
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void scaleRegion( Region<dim>& region, double xScale, double yScale, double zScale )
 {
   Point<dim> min_point;
@@ -367,7 +367,7 @@ void scaleRegion( Region<dim>& region, double xScale, double yScale, double zSca
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary_Test::LoadModel( const std::string& model_name )
 {
   // Model initialization
@@ -402,7 +402,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary_Test::LoadModel( const std::string& model_name,
                                     std::vector<std::string>& regions )
 {
@@ -443,7 +443,7 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
                                               std::vector<std::string>& interfaces )
 {
@@ -553,7 +553,7 @@ void SplitBoundary_Test::InputFromFile( const char* file_name,
 
 
 /// Input name of regions to split
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary_Test::EstablishContiguousRegionsList( Model<dim>& model,
                                                          const std::set<string>& interface_basic_set,
                                                          std::set<string>& interface_sets )

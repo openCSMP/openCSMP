@@ -8,8 +8,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-PT_op<dim,SIMPLEX>::PT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
+template<uint32_t dim,class CELL>
+PT_op<dim,CELL>::PT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test)
  {
     MathOperatorRHS<dim>::Name("PT_op", oper, test );
@@ -29,8 +29,8 @@ PT_op<dim,SIMPLEX>::PT_op( const PropertyDatabase<dim>& pref, const char* oper, 
 Reads node data (=vector properties) for further processing
 by the ComputeContribution() method.  
 */
-template<size_t dim,class SIMPLEX>
-void PT_op<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void PT_op<dim,CELL>::GetOperands( const CELL& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), NODAL_FORCE );
    }
@@ -55,15 +55,15 @@ The result gets stored into the MathOperator right-hand vector.
 To compute nodal forces acting on the boundary of a model.
  
 */
-template<size_t dim,class SIMPLEX>
-void PT_op<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void PT_op<dim,CELL>::ComputeContribution( const CELL& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
   
    const size_t nodes(e.Nodes());
   
-   for ( size_t i=0U; i<nodes; i++ )
+   for ( auto i{0}; i<nodes; i++ )
      for ( size_t j=0U; j<dim; j++ )
          // forces must be divided by number of elements they will be accumulated from
          // to avoid multiple accumulation

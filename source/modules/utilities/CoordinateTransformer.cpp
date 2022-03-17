@@ -15,7 +15,7 @@ using namespace std;
 namespace csmp {
 
 /// initialises translations to zero and flip vector to 1
-template<size_t dim>
+template<uint32_t dim>
 CoordinateTransformer<dim>::CoordinateTransformer()
  {
     for ( size_t i=0; i<dim; i++ ) {
@@ -29,10 +29,10 @@ CoordinateTransformer<dim>::CoordinateTransformer()
 /** 
     processes translations etc. returning the point
 */
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::Transform( Point<dim>& p ) const
  {
-    for ( size_t i=0U; i<dim; i++ ) {
+    for ( auto i{0}; i<dim; i++ ) {
          p[i] += translation_[i];
          p[i] *= flip_[i];
       }
@@ -51,11 +51,11 @@ void CoordinateTransformer<dim>::Transform( Point<dim>& p ) const
 /** 
     processes translations etc. returning the point
 */
-template<size_t dim>
+template<uint32_t dim>
 Point<dim> CoordinateTransformer<dim>::Transform( const vector<double>& vec ) const
  {
     Point<dim>  p(vec);
-    for ( size_t i=0U; i<dim; i++ ) {
+    for ( auto i{0}; i<dim; i++ ) {
          p[i] += translation_[i];
          p[i] *= flip_[i];
       }
@@ -76,7 +76,7 @@ Point<dim> CoordinateTransformer<dim>::Transform( const vector<double>& vec ) co
 TODO: add center of rotation into class so that rotations can be processed
 
 /// clockwise rotation in degrees from 0..360
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::Rotate( size_t axis, double angle )
  {
     assert( axis < dim );
@@ -86,7 +86,7 @@ void CoordinateTransformer<dim>::Rotate( size_t axis, double angle )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::Translate( size_t coord, double distance_meters )
  {
     assert( coord < dim );
@@ -96,7 +96,7 @@ void CoordinateTransformer<dim>::Translate( size_t coord, double distance_meters
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::FlipAxis( size_t coord )
  {
     assert( coord < dim );
@@ -106,7 +106,7 @@ void CoordinateTransformer<dim>::FlipAxis( size_t coord )
 
 
 /// classical swap
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::ExchangeAxes( size_t axis_a, size_t axis_b )
  {
     // avoiding duplicates
@@ -118,10 +118,10 @@ void CoordinateTransformer<dim>::ExchangeAxes( size_t axis_a, size_t axis_b )
 
 
 /// sets to preserve input coordinate
-template<size_t dim>
+template<uint32_t dim>
 void CoordinateTransformer<dim>::Reset()
  {
-    for ( size_t i=0U; i<dim; i++ ) {
+    for ( auto i{0}; i<dim; i++ ) {
          translation_[i] = 0.;
          flip_[i] = 1.;
       }

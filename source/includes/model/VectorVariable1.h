@@ -20,11 +20,11 @@ class VectorVariable<1U> {
     ~VectorVariable();
     
     // access of vector elements
-    double&        operator()( size_t i );
-    const double&  operator()( size_t i ) const;
-    double         operator[]( size_t i ) const;
-    void             Component( size_t, double );
-    double         Component( size_t i ) const;
+    double&        operator()( uint32_t i );
+    const double&  operator()( uint32_t i ) const;
+    double         operator[]( uint32_t i ) const;
+    void           Component( uint32_t, double );
+    double         Component( uint32_t i ) const;
 
     VectorVariable   operator+( double val ) const; 
     VectorVariable   operator-( double val ) const;
@@ -64,19 +64,18 @@ class VectorVariable<1U> {
     bool             operator<( const VectorVariable& v ) const; 
   
     // Normal Methods
-    VARIABLE_FLAG&   Flag( size_t i=0 );
-    VARIABLE_FLAG    Flag( size_t i=0 ) const;
-    size_t           Size() const;
+    VARIABLE_FLAG&   Flag( uint32_t i=0 );
+    VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
+    uint32_t         Size() const;
   
-    void             Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
-    double         Length() const;
+    double           Length() const;
     Point<1U>        P() const;
     bool             IsWithinRange( double vmin, double vmax ) const;
     VectorVariable   Flip();
     void             Invert();
 
-    double         DotProduct( const csmp::Point<1U>& p ) const;
-    double         DotProduct( const VectorVariable& v ) const;
+    double           DotProduct( const csmp::Point<1U>& p ) const;
+    double           DotProduct( const VectorVariable& v ) const;
     VectorVariable   CrossProduct( const csmp::Point<1U>& p ) const;
     VectorVariable   CrossProduct( const VectorVariable& v ) const;
     VectorVariable   ProjectOnto( const std::vector<double>& v ) const;
@@ -94,7 +93,7 @@ class VectorVariable<1U> {
 
   private:
     VARIABLE_FLAG flag;
-    double      data;
+    double        data;
 };
 
 // copyright (c) 2001 by S.K. Matthai, S. Geiger & Stephen G. Roberts

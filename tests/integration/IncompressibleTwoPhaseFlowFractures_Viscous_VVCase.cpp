@@ -6,7 +6,7 @@
 using namespace std;
 
 namespace csmp {
-template<size_t dim>
+template<uint32_t dim>
 IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::IncompressibleTwoPhaseFlowFractures_Viscous_VVCase(const char* prefix, const char* twophase_model, const char* explicit_implicit, const char* first_second_order):
 tpncfvt_(NULL),
 relperm_model_(NULL),
@@ -104,7 +104,7 @@ steady_state_pressure_solver_(NULL)
     lu_solver_ = false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::~IncompressibleTwoPhaseFlowFractures_Viscous_VVCase()
 {
     delete model_;
@@ -118,7 +118,7 @@ IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::~IncompressibleTwoPhase
 //
 // Load Model Setup
 
-template<size_t dim>
+template<uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::LoadModel()
 {
 
@@ -139,7 +139,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::LoadModel()
 //
 // Variables Setup
 
-template<size_t dim>
+template<uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::VariablesSetup(){
 
     // fluid and rock properties
@@ -199,7 +199,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::VariablesSetup(){
 //
 // Model Setup
 
-template<size_t dim>
+template<uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ModelSetup(){
 
 
@@ -312,7 +312,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ModelSetup(){
 // Velocities calculations
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::UpdateSaturations( TwoPhaseModel<dim>& saturationFunctions )
  {
     ScalarVariable  sc, mob_t, thickness;
@@ -320,8 +320,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::UpdateSaturations(
     csmp::Region<dim>& mref( model_->Region( "Model" ) );
 
     // updating the saturation of water
-    const typename vector<Node<dim>*>::const_iterator nodesEnd( mref.NodesEnd() );
-    for ( typename vector<Node<dim>*>::iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
+    const auto nodesEnd( mref.NodesEnd() );
+    for ( auto it = mref.NodesBegin(); it != nodesEnd; ++it )
       {
          sc() = 1. - (*it)->Read( sn_idx_ );
          (*it)->Store(  sw_idx_, sc );
@@ -329,7 +329,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::UpdateSaturations(
 
 } // updateSaturationsAndComputeTotalMobility
 
-template<size_t dim>
+template<uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ComputeTotalMobility( TwoPhaseModel<dim>& saturationFunctions )
  {
     ScalarVariable  sc, mob_t, thickness;
@@ -337,8 +337,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ComputeTotalMobili
     csmp::Region<dim>& mref( model_->Region( "Model" ) );
 
     // computing the total mobility
-    const typename vector<Element<dim>*>::const_iterator elementsEnd( mref.ElementsEnd() );
-    for ( typename vector<Element<dim>*>::iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd( mref.ElementsEnd() );
+    for ( auto it = mref.ElementsBegin(); it != elementsEnd; ++it )
       {
          // setting up the relative permeability model
          saturationFunctions.Initialize( *(*it) );
@@ -378,7 +378,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ComputeTotalMobili
   =================================
   */
 
-template <size_t dim>
+template <uint32_t dim>
 void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 {
 
@@ -473,13 +473,6 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 	VariablesSetup();
 
 	ModelSetup();
-
-    typename vector<Node<dim>*>::iterator nodes_begin,nodes_end;
-    typename vector<Element<dim>*>::iterator elmnts_begin,elmnts_end;
-    nodes_begin=model_->Region("Model").NodesBegin();
-    nodes_end=model_->Region("Model").NodesEnd();
-    elmnts_begin=model_->Region("Model").ElementsBegin();
-    elmnts_end=model_->Region("Model").ElementsEnd();
 
     cout<<"\n"<<this->getName()<<" :"<<" Finished Building Model..."<<endl;
 
@@ -745,7 +738,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
         VSet<dim> vset_comparison;
         double model_time_comparison(model_time);
         vset_comparison.InputFrom( (this->getName()+"_Comparison.vset").c_str(), model_time_comparison );
-        const Model<dim> model_comparison( vset_comparison, "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt", true );
+        const Model<dim> model_comparison( vset_comparison, "IncompressibleTwoPhaseFlowFractures_Viscous_VVCase.txt" );
         VTU_Interface<dim> vtu_comparison( model_comparison);
         vtu_comparison.OutputDataToVTU( "IncompressibleTwoPhaseFlow_Viscous_Comparison", vtuOutputProps,"Model", time );
 
@@ -767,6 +760,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "<<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;
 
     // terminate
+    delete steady_state_pressure_solver_;
     cout << "\nThat's it..."<< endl;
 
 

@@ -8,8 +8,8 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class SIMPLEX>
-Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::Integral_op_NT_dN_orthogonal_dV(
+template<uint32_t dim,class CELL>
+Integral_op_NT_dN_orthogonal_dV<dim,CELL>::Integral_op_NT_dN_orthogonal_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  oper,  // fluid pressure
                                                           const char*  test ) // stream-function
@@ -46,15 +46,15 @@ nodal and element variables, respectively.
 
 The operand is read
 */
-template<size_t dim,class SIMPLEX>
-void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
 {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
 
     // read node variable which must be a scalar
     NPROP.resize( e.Nodes() );
-    for ( size_t i=0; i<e.Nodes(); i++ )
+    for ( auto i=0; i<e.Nodes(); i++ )
       NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim>::MaterialOperandKey() );
     
 } // end GetOperands
@@ -70,8 +70,8 @@ void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e
 
 In linear elasticity computations.  
 */
-template<size_t dim,class SIMPLEX>
-void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // resizing and initializing RHS vector to zero
     MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
@@ -96,19 +96,19 @@ void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( const SI
     // ------------------------------------------------------------------
      // interpolating basic property to integration points
      e.N_AtBaryCenter( IPOL );
-     for ( size_t j=0; j<e.Nodes(); j++ )
-       for ( size_t k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
+     for ( auto j=0; j<e.Nodes(); j++ )
+       for ( auto k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
        
      // global intpol. function derivative matrix and determinant of Jacobian matrix
      const double volume(e.Volume());
      
      // copying scaled derivative matrix so that spatial derivatives are rotated by 90o
-     if ( dim == 2U ) for ( size_t j=0; j<e.Nodes(); j++ ) {
+     if ( dim == 2U ) for ( auto j=0; j<e.Nodes(); j++ ) {
           DNORTHO(0,j) = -M(1,j) * volume; // dNdx = -dNdy P
           DNORTHO(1,j) =  M(0,j) * volume; // dNdy =  dNdx P
        }
 
-     else if ( dim == 3U ) for ( size_t j=0; j<e.Nodes(); j++ ) {
+     else if ( dim == 3U ) for ( auto j=0; j<e.Nodes(); j++ ) {
           DNORTHO(0,j) = -M(1,j) * volume; // dNdx = -dNdy P
           DNORTHO(1,j) =  M(0,j) * volume; // dNdy =  dNdx P
           if ( dim == 3U )
@@ -126,7 +126,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,SIMPLEX>::ComputeContribution( const SI
      // single column matrix
      RES = M * UNITY;
      
-     for ( size_t j=0; j<e.Nodes(); j++ ) 
+     for ( auto j=0; j<e.Nodes(); j++ ) 
        // minus since flow is always down pressure
        MathOperatorRHS<dim>::RHS[j] += -RES[j];
 

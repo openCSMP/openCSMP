@@ -8,7 +8,7 @@
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 class ExperimentalRT : public TwoPhaseModel<dim> {
 
 public:

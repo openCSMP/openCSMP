@@ -8,7 +8,7 @@ namespace csmp {
 
 /** Laplacian build with the interpolation function derivatives.
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_dNT_dN_dV<dim,CELL>::NumIntegral_dNT_dN_dV( const PropertyDatabase<dim>& pref,
                                                       const char*           basic, 
                                                       const char*           test ) 
@@ -39,7 +39,7 @@ NumIntegral_dNT_dN_dV<dim,CELL>::NumIntegral_dNT_dN_dV( const PropertyDatabase<d
 
 /** Laplacian operator of shape function derivatives squared.
  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -53,7 +53,7 @@ void NumIntegral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

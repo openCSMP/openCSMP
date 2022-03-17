@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// buoyancy for instance
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
   public:
     Upwind_Integral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& p, 
@@ -17,16 +17,16 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
                                    const char* trigger,
                                    const double prefactor = 1. );
     
-    virtual void GetOperands( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
     /// integration etc.
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
     
-    void SpatialDerivative( size_t xyz=2 );
+    void SpatialDerivative( uint32_t xyz=2 );
   
   private:
     DenseMatrix<DM_MIN>  DN, DNT, coords;
-    double                          gravity;   // acceleration of gravity
-    size_t                   xyz;       // 1=x, 2=y, 3=z
+    const double         gravity;   // acceleration of gravity
+    uint32_t             xyz;       // 1=x, 2=y, 3=z
     
     Parameter upwind_;
     Parameter trigger_;

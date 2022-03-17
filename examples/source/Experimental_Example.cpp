@@ -52,8 +52,6 @@ using namespace std;
 
 namespace csmp {
 
-const size_t DIM(3U);
-
 void Experimental_Example::Specifications()
   {
      SetTitle( "Experimental_Example" );
@@ -80,31 +78,29 @@ void Experimental_Example::Specifications()
 */
 void Experimental_Example::Run()
 {
-      enum{dim=2};
-      const double ym (1000.0), pr(0.3), P0(10.0);
-      bool quarterpoint = false;
-  
-      // Model configuration:
-      ANSYS_Model2D  model( "Fluid_Flower", false, true, false );    // Constractor for empty variables
-      for ( auto& E : model.Region("FRACTURE").CellVector() ) {
-          std::cout << "Nbrs -> " << E->ConnectedNeighbors() << std::endl;
-          if (E->ConnectedNeighbors() == 1){
-              E->Out();
-          }
-      }
-/*
-  // 1. create point property mapper - Fluid_Flower-points is a csv file
-  PointPropertyToCellMapper2D  mapper( "Fluid_Flower-points" );
-  mapper.Out();
+    string  variables_file("DES_2phase_variables.txt");
+    ANSYS_Model2D  model( "Fluid_Flower", variables_file.c_str(), false, true, true );
+    
+    model.RegionsOut();
+    model.BoundariesOut();
+    
+    //! Assignment of material properties, initial conditions, and boundary
+    InputDataManager<2>  model_configuration;
+    ComputationalSettings  run_settings;
 
-  // 2. Bring mode thickness data in interpolate them across the model
-  mapper.MapPointDataToElements( ansys_model, "Model", "thickness" );
-  vtk_output.OutputDataToVTK( ansys_model, "Fluid_Flower-thickness", "thickness",  0 );
+    // boolean flags set reading to: 2) default prop.values, 3) group prop.values, 4) essential conditions for box-shaped model
+    model_configuration.ConfigureFromFile( model, "Fluid_Flower", false,    // groupname from parameter range
+                                           true,    // default property values
+                                           true,    // regional property values
+                                           false,    // boundary conditions for box-shaped model
+                                           true,    // essential conditions for groups
+                                           true,    // csmp::Boundary properties
+                                           run_settings );
 
-  // 3. Output the interpolated values into another CSV file
-  mapper.MapNodeToPointData( ansys_model, "Model", "thickness" );
-  mapper.OutputPointDataToCSV_File( "Fluid_Flower-interpolated_thickness", "thickness" );
-*/
+
+    VTK_Interface<2>  vtk_output;
+    vtk_output.OutputDataToVTK( model, "Fluid_Flower-perm", "permeability",  0 );
+
 } // end Run
 
 } // csmp

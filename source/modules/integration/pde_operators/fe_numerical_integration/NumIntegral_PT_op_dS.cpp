@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
   
 
-template<size_t dim>
+template<uint32_t dim>
 NumIntegral_PT_op_dS<dim>::NumIntegral_PT_op_dS( const PropertyDatabase<dim>& pref,
                                                  const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test)
@@ -37,7 +37,7 @@ by the face unit normal and assumed to act inward if positive.
 @param f The element from which accumulation into the righthand vector takes place.
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void NumIntegral_PT_op_dS<dim>::GetOperands( const Face<dim>& f )
 {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -73,7 +73,7 @@ The result is returned into the MathOperatorRHS vector.
 @section application Application
 Within the PDE_Integrator framework to assign stress boundary conditions to a model.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
 {
    MathOperatorRHS<dim>::RHS.resize( f.Nodes() * dim );

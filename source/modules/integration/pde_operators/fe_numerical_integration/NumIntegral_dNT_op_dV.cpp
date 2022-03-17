@@ -8,7 +8,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<dim>& pref,
                                                            const char*             oper,
                                                            const char*             test )
@@ -32,7 +32,7 @@ NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<d
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -46,7 +46,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // ------------------------------------------------------------------
     if ( this->MaterialOperandPlacement() == ELEMENT || this->MaterialOperandPlacement() == FACE )
       {
-        for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ ) 
+        for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) 
           {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
@@ -64,21 +64,21 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
              // accumulating ME Gauss point integral contributions into element 
              // contribution to global conductance matrix
              
-             for ( size_t k=0; k < dim; k++ )
-                 for ( size_t j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
+             for ( auto k=0; k < dim; k++ )
+                 for ( auto j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
           }
       
       }
     if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
-         for ( size_t i=0U; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ )
            {
               double detJ = e.dN_AtIntegrationPoint( B, i, 1 );
               B.Transposed( BT );
               BT *= MathOperatorRHS<dim>::MTRL[i];
               BT *= e.WeightAtIntegrationPoint(i) * detJ;
-              for ( size_t k=0; k < dim; k++ )
-                for ( size_t j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
+              for ( auto k=0; k < dim; k++ )
+                for ( auto j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
            }
        }
 

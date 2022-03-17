@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp{
 
-template<size_t dim>
+template<uint32_t dim>
 GravityProjectionVisitor<dim>::GravityProjectionVisitor(
                                                         Model<dim>& m,
                                                         const Index& prop_idx,
@@ -41,46 +41,44 @@ GravityProjectionVisitor<dim>::GravityProjectionVisitor(
         vec_ = vec;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 GravityProjectionVisitor<dim>::~GravityProjectionVisitor()
 {
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Index GravityProjectionVisitor<dim>::Get_ResultIndex( )
 {
     return result_idx_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Index GravityProjectionVisitor<dim>::Get_PropertyIndex( )
 {
     return prop_idx_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Get_Result( Element<dim>* eptr, VectorVariable<dim>& result )
 {
     eptr->Read( result_idx_, result );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Visit( Model<dim>* m ){
     csmp::Region<dim>&  mref(m->Region("Model"));
-    for ( typename std::vector<csmp::Element<dim>*>::iterator
-          e_it=mref.ElementsBegin(); e_it!=mref.ElementsEnd(); e_it++ )
+    for ( auto e_it=mref.ElementsBegin(); e_it!=mref.ElementsEnd(); e_it++ )
         (*e_it)->Accept( *this );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Visit(Region<dim>* region ){
-    for ( typename std::vector<csmp::Element<dim>*>::iterator
-          e_it=region->ElementsBegin(); e_it!=region->ElementsEnd(); e_it++ )
+    for ( auto e_it=region->ElementsBegin(); e_it!=region->ElementsEnd(); e_it++ )
         (*e_it)->Accept( *this );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Visit( Element<dim>* eptr )
 {
     if( dim == 1U )

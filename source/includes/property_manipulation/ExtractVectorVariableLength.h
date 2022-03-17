@@ -17,7 +17,7 @@ namespace csmp {
   @date 6/2000
   */
 
-template<size_t dim>
+template<uint32_t dim>
 class ExtractVectorVariableLength : public Interrelation<dim> {
     Operand<dim>&        V;
     Operand<dim>&        S;
@@ -36,7 +36,7 @@ class ExtractVectorVariableLength : public Interrelation<dim> {
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline void ExtractVectorVariableLength<dim>::Calculate()
  {
     V.AssignTo( vc );

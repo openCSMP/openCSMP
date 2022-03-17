@@ -32,7 +32,7 @@ namespace csmp {
 RelativePermeabilityModel_Test::RelativePermeabilityModel_Test( bool verbose )
  : model_ptr_(0), verbose_(verbose)
  {
-    const uint32_t  N_ELEMENTS(100);
+    const size_t  N_ELEMENTS(100);
     model_ptr_ = new Model1D<1U>("Model1D", "CSMP-2phase-variables_upscaled.txt", 50., N_ELEMENTS );
     if ( verbose_ ) cerr << "Number of elemnts: " << model_ptr_ -> Mesh().Elements() << endl;
     // making some groups: rock (elements 1-40, 61-100) and fracture (elements 41-60)
@@ -279,8 +279,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
     model_ptr_->CopyReplace( "saturation oil", "previous saturation oil" );
     Region<1U>& sg(model_ptr_->Region("Model"));
     // generating a range of saturation values for water and oil
-    for ( vector<Node<1U>*>::iterator
-          it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
+    for ( auto it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
       {
          saturation() = 0. + sat_incr * (*it)->Idx();
          (*it)->Store( satw_key, saturation );
@@ -312,10 +311,8 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
     else ofs <<"sw\tseff\tkrw\tkrn\tmob_t\tfn\tG\tpc\tdiffusion-mult\tgravity-G-mult"<< endl;
 
     // computing multiphase flow properties and writing these to file
-    for ( vector<Element<1U>*>::iterator 
-          it=sg.ElementsBegin(); it!=sg.ElementsEnd(); it++ )
+    for ( auto it=sg.ElementsBegin(); it!=sg.ElementsEnd(); it++ )
       {
-
          // setting up the relative permeability model
          // ---------------------------------------------
          relperm.Initialize( *(*it) );
@@ -459,8 +456,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
     // restoring the original saturation values
 
     model_ptr_->CopyReplace( "previous saturation oil", "saturation oil" );
-    for ( vector<Node<1U>*>::iterator 
-          it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ ) {
+    for ( auto it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ ) {
          saturation() = 1. - (*it)->Read( satn_key );
          (*it)->Store( satw_key, saturation );
       }

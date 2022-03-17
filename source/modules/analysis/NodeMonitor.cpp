@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 NodeMonitor<dim>::NodeMonitor( const Model<dim>& sg, 
                                   const std::map<std::string,size_t>& monitored_nodes,
                                   const std::list<std::string>& properties_to_monitor )
@@ -31,14 +31,14 @@ NodeMonitor<dim>::NodeMonitor( const Model<dim>& sg,
  
  
  
-template<size_t dim>
+template<uint32_t dim>
 NodeMonitor<dim>::~NodeMonitor()
  {
  }
 
     
     
-template<size_t dim>
+template<uint32_t dim>
 void NodeMonitor<dim>::ScalarPropertyValues( const Model<dim>& sg, double time )
  {
     list<string>::const_iterator        lit;
@@ -62,7 +62,7 @@ void NodeMonitor<dim>::ScalarPropertyValues( const Model<dim>& sg, double time )
  
  
  
-template<size_t dim>
+template<uint32_t dim>
 void NodeMonitor<dim>::Reset() // zap all recorded values
  {
     // properties which are monitored
@@ -74,7 +74,7 @@ void NodeMonitor<dim>::Reset() // zap all recorded values
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeMonitor<dim>::EraseData() // zap all recorded values
  {
     values.erase( values.begin(), values.end() );
@@ -85,7 +85,7 @@ void NodeMonitor<dim>::EraseData() // zap all recorded values
 
     
     
-template<size_t dim>
+template<uint32_t dim>
 void NodeMonitor<dim>::Out( const char* text_file ) const
  {
     string  file(text_file);

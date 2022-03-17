@@ -23,7 +23,7 @@ Transient().
 @attention COMPUTATION_DOMAIN is used here because DOMAIN caused a clash
 with DOMAIN defined in <cmath>
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -61,7 +61,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
 /**
     Use this constructor wherever possible.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver& solver )
  : solver_(&solver),
    dim2_(dim*dim),
@@ -98,7 +98,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver& solver )
   The constructor will not manage the supplied pointer, i.e. delete the supplied object instance.
  
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver* solver )
  : solver_(solver),
    dim2_(dim*dim),
@@ -133,7 +133,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver* solver )
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::~PDE_Integrator()
  {
     if ( newed_Solver_object ) delete solver_;
@@ -157,7 +157,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::~PDE_Integrator()
 /** 
 @attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( const PDE_Integrator<dim,COMPUTATION_DOMAIN>& a )
  :
    #ifdef CSMP_WITH_SAMG_SOLVER
@@ -208,7 +208,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( const PDE_Integrator<dim
 
 @todo SKM: fix so that the copy construction also involves the Solver
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>& PDE_Integrator<dim,COMPUTATION_DOMAIN>::operator=( const PDE_Integrator<dim,COMPUTATION_DOMAIN>& a )
 {
   if ( &a != this ) {
@@ -257,7 +257,7 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>& PDE_Integrator<dim,COMPUTATION_DOMAIN>::
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain ) 
  { retain_matrix_=retain; }
 
@@ -269,7 +269,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool re
      Does not assume responsibility for the supplield solver 
      which must be deleted elsewhere if created on the heap.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver* new_solver ) {
   assert( new_solver != NULL );
   if ( solver_ != new_solver ) {
@@ -281,14 +281,14 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver* new_solver ) {
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 Solver* PDE_Integrator<dim,COMPUTATION_DOMAIN>::GetSolver() const {
   return solver_;
 }
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -314,7 +314,7 @@ rhs. You should therefore always limit the number of A. to those essential.
 Use this method if you want to re-use a previously defined steady-state
 PDE_Integrator.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 bool  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Transient() const
  { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
@@ -331,7 +331,7 @@ the PDE_Integrator to transient, this is done as well.
 Set the time-increment of an PDE_Integrator before you Apply() it to the
 Model or target Region objects.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void   PDE_Integrator<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
@@ -351,7 +351,7 @@ Solver object.
 To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
@@ -370,7 +370,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
       }
 
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
-   for ( size_t i=0U; i<rh_.size(); i++ )
+   for ( auto i{0}; i<rh_.size(); i++ )
      {
         cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
@@ -379,7 +379,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
    cout << endl;
 
    cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
-   for ( size_t i=0U; i<x_.size(); i++ )
+   for ( auto i{0}; i<x_.size(); i++ )
      {
         cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
@@ -425,7 +425,7 @@ Each PDE_Integrator needs at least one left and one righthand math operator.
 Define these before you pass the PDE_Integrator to the Model.
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
  {
     // The name for the algorithm is combined out of its operands
@@ -438,7 +438,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
 #endif
  }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
  {
     rhs_operators_[ op->Name() ] = op;
@@ -451,7 +451,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
  }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( MathOperatorLHS<dim>* op )
  {
     postpro_operators_[ op->Name() ] = op;
@@ -474,7 +474,7 @@ MathOperator interface method Out() is used. Thus, you influence the
 information that is output when you define your own PDE operator
 subclasses.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ListMathOperatorsLHS() const
  {
     typename map<string,MathOperatorLHS<dim>*>::const_iterator it;
@@ -487,7 +487,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ListMathOperatorsLHS() const
  }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ListMathOperatorsRHS() const
  {
     typename map<string,MathOperatorRHS<dim>*>::const_iterator it;
@@ -512,7 +512,7 @@ Use this method to extract the solution vector from the algorithm, for
 instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
   vector<double>( sol ).swap( sol );
@@ -535,7 +535,7 @@ solution obtained with this algorithm.
 NOTE: Make sure that you actually use an algebraic multigrid solver object and that the
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
@@ -565,7 +565,7 @@ of the already initialized solution matrix, because the memory of it
 (owing to the Meschach implementation) is not
 de-allocated before the programme terminates.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Reset( bool delete_math_operators )
  {
     if ( delete_math_operators ) {
@@ -605,7 +605,7 @@ the final residue of the solution (which could be compared to a
 signal-to-noise ratio) is several orders of magnitude lower than the
 initial residue. Otherwise the obtained solution is useless.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Solve()
  {
     solver_->Solve( G_, rh_, x_, dof_per_node_ );
@@ -713,7 +713,7 @@ the basic operand is placed on the nodes. This lies in the very nature
 of the finite-element method. If you are doing a finite-volume or
 other computation, just ignore this warning.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
 {
 
@@ -981,7 +981,7 @@ Warning: So far no conditions are assigned to elements, faces, segments
 
 The dependent variable must be placed on the nodes:
  */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
     size_t                  i, j;
@@ -1088,7 +1088,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
     
     @author SKM 1/10/2014
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ScaleEssentialConditions( double scale_factor )
  {
     scale_factor_ = scale_factor;
@@ -1151,7 +1151,7 @@ Warning: So far no conditions are assigned to elements, faces, segments
 
 The dependent variable must be placed on the nodes:
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( !setup_established_ )
@@ -1205,7 +1205,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                   VectorVariable<dim>  vc;
                   while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, vc );
-                        for ( size_t i=0U; i<dim; i++ )
+                        for ( auto i{0}; i<dim; i++ )
                           if ( vc.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * dim + i + offset;
                                G_.ZeroRow( position );
@@ -1220,7 +1220,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                  TensorVariable<dim>  ts;
                  while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, ts );
-                        for ( size_t i=0U; i<dim; i++ )
+                        for ( auto i{0}; i<dim; i++ )
                           if ( ts.Flag(i) == DIRICH ) 
                             for ( size_t j=0U; j<dim; j++ )
                               {
@@ -1239,7 +1239,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                         (*niter)->Read( prop_key, ar );
                         if ( ar.Flag() == DIRICH )
                         {
-                            for ( size_t i=0U; i<prop_key.dataDepth; i++ )
+                            for ( auto i{0}; i<prop_key.dataDepth; i++ )
                             {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
@@ -1255,7 +1255,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                   FlaggedArrayVariable  ar(prop_key.dataDepth);
                   while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, ar );
-                        for ( size_t i=0U; i<prop_key.dataDepth; i++ )
+                        for ( auto i{0}; i<prop_key.dataDepth; i++ )
                           if ( ar.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
@@ -1312,7 +1312,7 @@ with the time-increment.
 Accumulate() is executed internally when the PDE_Integrator is passed to the
 Model.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
     // setting up the index mapping from global to local node ID numbers
@@ -1424,11 +1424,11 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
         this->G_+=this->thread_G_[tid];
 
     for (size_t tid = 0 ; tid < omp_get_max_threads(); tid++)
-        for (size_t i = 0 ; i < this->rh_.size(); i++)
+        for (auto i = 0 ; i < this->rh_.size(); i++)
             this->rh_[i]=this->rh_[i]+this->thread_rh_[tid][i];
 
     //    G_.Out();
-    //    for (size_t i = 0; i<rh_.size();i++)
+    //    for (auto i = 0; i<rh_.size();i++)
     //        cout<<"rh:["<<i<<"]: "<<rh_[i]<<endl;
     //    exit(1);
 
@@ -1468,7 +1468,7 @@ LateAccumulate() is executed only in time-dependent calculations. The
 execution is invoked internally, when the PDE_Integrator is passed to the
 Model.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
     // accumulating as late addition into the righhand vector 'rhs'
@@ -1524,7 +1524,7 @@ do not define PostProcess(), you will get the info message:
 
 "no post-processing operations for REGION were defined in derived PDE_Integrator"
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( postpro_operators_.empty() ) return;
@@ -1570,7 +1570,7 @@ OutputResults() is executed internally, when a PDE_Integrator object is passed
 to the Model.
 
  */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref ) 
  {
    Index   prop_key;
@@ -1599,7 +1599,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  VectorVariable<dim>  vc;
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, vc );
-                      for ( size_t i=0U; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
+                      for ( auto i{0}; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
                       (*gfirst)->Store( prop_key, vc );
                       gfirst++;
                    }
@@ -1609,7 +1609,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  TensorVariable<dim>  ts;
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ts );
-                      for ( size_t i=0U; i<dim; i++ )
+                      for ( auto i{0}; i<dim; i++ )
                         for ( size_t k=0U; k<dim; k++ )
                           ts(i,k) = x_[ (*gfirst)->Idx() * dim2_ + i * dim + k + offset ];
                       (*gfirst)->Store( prop_key, ts );
@@ -1621,7 +1621,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  ArrayVariable  ar(prop_key.dataDepth);
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
+                      for ( auto i{0}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
                       (*gfirst)->Store( prop_key, ar );
                       gfirst++;
                    }
@@ -1631,7 +1631,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  FlaggedArrayVariable  ar(prop_key.dataDepth);
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ar );
-                      for ( size_t i=0U; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
+                      for ( auto i{0}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
                       (*gfirst)->Store( prop_key, ar );
                       gfirst++;
                    }
@@ -1653,7 +1653,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain, bool debug )
  {
     // 1. configure algorithm
@@ -1691,7 +1691,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( const char* file )
  {
     char  outfile[INFO_STRING];
@@ -1706,7 +1706,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
-     for ( size_t i=0U; i<G_.Rows(); i++ )
+     for ( auto i{0}; i<G_.Rows(); i++ )
        {
           for ( size_t j=0U; j<G_.Cols(); j++ )
             if ( G_.At(i,j) != 0. ) ofs << 1 <<" ";

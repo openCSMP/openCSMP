@@ -9,7 +9,7 @@
 namespace csmp {
 
 /// advection-dispersion matrices @note v-term is calculated from 'grad' test operand x multiplier
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
   public:
     NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
@@ -32,7 +32,7 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
     virtual void GetOperands( const CELL& );
     virtual void ComputeContribution( const CELL& );
     
-    void SpatialDerivative( size_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
+    void SpatialDerivative( uint32_t num_xyz ); // set gradZ direction to X=1, Y=2, Z=3
 
   private:
 
@@ -42,9 +42,9 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
     DenseMatrix<DM_MIN>               DN, DNT, ///< derivatives of basis functions
                                       VIP,     ///< 'v' (velocity) vector<double> variable
                                       EMULT;   ///< element based multiplier for 'v'
-    typename std::vector<double>    IPOL;    ///< basis function values (at integration point)
+    typename std::vector<double>      IPOL;    ///< basis function values (at integration point)
     typename std::vector<DenseMatrix<DM_MIN> >  NT3; ///< IPOL at integration points stored in columns of matrix NTNTNT
-    typename std::vector<double>    NMULT,   ///< node based scalar multiplier for 'v'
+    typename std::vector<double>      NMULT,   ///< node based scalar multiplier for 'v'
                                       NGRAD,   ///< variable to compute gradient of for calculation of 'v'
                                       RDENS;   ///< relative density if so specified
                     
@@ -56,8 +56,8 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
                     nmulti_key,  ///< key to node based scalar multiplier for 'v'
                     rrho_key;    ///< relative fluid density at nodes or similar operand
     bool            with_gravity;
-    const double  gravity;
-    size_t          xyz;
+    const double    gravity;
+    uint32_t        xyz;
 };
 
 }

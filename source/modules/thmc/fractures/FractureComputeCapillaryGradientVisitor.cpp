@@ -6,7 +6,7 @@ namespace csmp
 {
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   FractureComputeCapillaryGradientVisitor<dim>::FractureComputeCapillaryGradientVisitor( Model<dim> &model,
                                                                                          TwoPhaseModel<dim>& saturationFunctions,
                                                                                          const char* fracPcGradientTag,
@@ -20,7 +20,7 @@ namespace csmp
   {
   }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void FractureComputeCapillaryGradientVisitor<dim>::Visit( Element<dim>* element )
   {
       // setting up the relative permeability model

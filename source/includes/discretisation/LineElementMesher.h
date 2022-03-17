@@ -64,7 +64,7 @@ private:
      @author extended by Roman Manasipov
      @date 2002, 2012
 */
-template<size_t dim>
+template<uint32_t dim>
 class LineElementMesher {
   public:
     LineElementMesher( );

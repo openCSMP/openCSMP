@@ -42,7 +42,7 @@ namespace csmp {
 // TODO: use these to generate values at nodes as well (no interpolations required!)
 // TODO: does the capillary diffusion multiplier need multiplication with density
 // TODO: create tensor permeability versions of these functions
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class H2O_CO2_NaCl_FlowFunctions {
   public:
   
@@ -61,16 +61,16 @@ class H2O_CO2_NaCl_FlowFunctions {
     double Snw( Element<dim>* const e ) const;
 
     /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
-    double Mobility( Element<dim>* const, size_t phase ) const;
+    double Mobility( Element<dim>* const, uint32_t phase ) const;
     
     /// density * lambda_i: i=0 for water, 1 for the non-wetting phase (using prescribed sw)
-    double Mobility_at( Element<dim>* const, size_t phase, double sw ) const;
+    double Mobility_at( Element<dim>* const, uint32_t phase, double sw ) const;
 
     /// d lambda_i / dsw
-    double MobilityDerivative( Element<dim>* const, size_t phase ) const;
+    double MobilityDerivative( Element<dim>* const, uint32_t phase ) const;
  
     /// d lambda_i / dsw
-    double MobilityDerivative_at( Element<dim>* const, size_t phase, double sw ) const;
+    double MobilityDerivative_at( Element<dim>* const, uint32_t phase, double sw ) const;
                         
     /// lambda_t: sum of phase-mobility * density products
     double TotalMobility( Element<dim>* const ) const;
@@ -90,21 +90,21 @@ class H2O_CO2_NaCl_FlowFunctions {
     double MobilityProductDerivative_at( Element<dim>* const, double sw ) const;
 
      /// fractional mass flow; 0=water, 1=non-wetting phase
-    double f(Element<dim>* const, size_t phase ) const;
+    double f(Element<dim>* const, uint32_t phase ) const;
     
      /// fractional mass flow; 0=water, 1=non-wetting phase  (using prescribed sw)
-    double f_at(Element<dim>* const, size_t phase, double sw ) const;
+    double f_at(Element<dim>* const, uint32_t phase, double sw ) const;
     
     /// permeability
     double Permeability( Element<dim>* const ) const;
 
     /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double dfds( Element<dim>* const, size_t phase ) const;
+    double dfds( Element<dim>* const, uint32_t phase ) const;
     
-    double dfds_at( Element<dim>* const, size_t phase, double sw ) const;
+    double dfds_at( Element<dim>* const, uint32_t phase, double sw ) const;
     
     /// maximum value of fractional flow / saturation derivative
-    double MaxFractionalFlowDerivative( Element<dim>* const, size_t phase ) const;
+    double MaxFractionalFlowDerivative( Element<dim>* const, uint32_t phase ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
     double AdvectionMultiplier( Element<dim>* const ) const;
@@ -124,7 +124,7 @@ class H2O_CO2_NaCl_FlowFunctions {
     /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
     void GravityTerm(Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
     
-    void GravityMultiplier_phase( Element<dim>* const, VectorVariable<dim>& dip_vec, size_t phase ) const;
+    void GravityMultiplier_phase( Element<dim>* const, VectorVariable<dim>& dip_vec, uint32_t phase ) const;
   
     /// gravity multiplier, gmult = k * kri(sw)/mi * rho_i^2 * G (=mobility product); writes result on dip vector
     void GravityMultiplier_G( Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
@@ -133,7 +133,7 @@ class H2O_CO2_NaCl_FlowFunctions {
     void GravityMultiplier_dGds( Element<dim>* const, VectorVariable<dim>& dip_vec ) const;
 
     ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1
-    double DiffusionMultiplier( Element<dim>* const, size_t phase ) const;
+    double DiffusionMultiplier( Element<dim>* const, uint32_t phase ) const;
     
     /// mass diffusion coefficient for the non-linear diffusion of saturation due to the saturation dependent dpc/ds
     double CapillaryDiffusionMultiplier( Element<dim>* const ) const;
@@ -149,41 +149,41 @@ class H2O_CO2_NaCl_FlowFunctions {
     // NODE-BASED COMPUTATIONS using element parameters, but saturations and fluid properties from the current node
 
     /// density * lambda = kri(sw)/mu_i  of the phase i: 0 for water, 1 for the non-wetting phase
-    double Mobility( Element<dim>* const, size_t phase, size_t node ) const;
+    double Mobility( Element<dim>* const, uint32_t phase, uint32_t node ) const;
 
     /// d lambda_i / dsw
-    double MobilityDerivative( Element<dim>* const, size_t phase, size_t node ) const;
+    double MobilityDerivative( Element<dim>* const, uint32_t phase, uint32_t node ) const;
  
     /// lambda_t: sum of phase-mobility * density products
-    double TotalMobility( Element<dim>* const, size_t node ) const;
+    double TotalMobility( Element<dim>* const, uint32_t node ) const;
   
     /// lambda overbar: mobility product l_overbar = (li * rhow * lj * rhonw) / (li*rhow + lj*rhonw),  also known as G
-    double MobilityProduct( Element<dim>* const, size_t node ) const;
+    double MobilityProduct( Element<dim>* const, uint32_t node ) const;
 
     /// d lambda overbar / dsw also known as dGds
-    double MobilityProductDerivative( Element<dim>* const, size_t node, bool  evaluate_numerically=false ) const;
+    double MobilityProductDerivative( Element<dim>* const, uint32_t node, bool  evaluate_numerically=false ) const;
 
      /// fractional mass flow; 0=water, 1=non-wetting phase
-    double f( Element<dim>* const, size_t phase, size_t node ) const;
+    double f( Element<dim>* const, uint32_t phase, uint32_t node ) const;
 
     /// derivative of fractional flow w.r.t water saturation (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double dfds( Element<dim>* const, size_t phase, size_t node ) const;
+    double dfds( Element<dim>* const, uint32_t phase, uint32_t node ) const;
 
     /// multiplier for advection viscosity coefficient in the case of non-linear advection
-    double AdvectionMultiplier( Element<dim>* const, size_t node ) const;
+    double AdvectionMultiplier( Element<dim>* const, uint32_t node ) const;
 
     /// k * kri(sw)/mi * rho_i^2 projected onto the dip vector of the current element; writes result to dip vector
-    void     GravityTerm( Element<dim>* const, size_t node, VectorVariable<dim>& dip_vec ) const;
+    void     GravityTerm( Element<dim>* const, uint32_t node, VectorVariable<dim>& dip_vec ) const;
 
     ///  mass diffusion coefficient for CO2 in water saturated porous medium; use phase=1 and get from Element
   
     /// mass-based coefficient for non-linear diffusion of saturation due to saturation-dependent dpc/ds, @attention value can be zero
-    double CapillaryDiffusionMultiplier( Element<dim>* const, size_t node ) const;
+    double CapillaryDiffusionMultiplier( Element<dim>* const, uint32_t node ) const;
 
 
     // central difference derivatives of saturation and flow functions
   
-    double dfds_Numerical( Element<dim>* const, size_t phase, double delta_s = 0.001 ) const;
+    double dfds_Numerical( Element<dim>* const, uint32_t phase, double delta_s = 0.001 ) const;
       
     double dfds_at_Numerical( Element<dim>* const, double sw, double delta_s = 0.001 ) const;
       
@@ -210,8 +210,8 @@ class H2O_CO2_NaCl_FlowFunctions {
   
     /// returns halite saturation = volume fraction of salt
     double InterpolateSystem( Element<dim>* const,
-                                double& sw, double& rhow, double& muw,
-                                double& snw, double& rhon, double& mun ) const;
+                              double& sw, double& rhow, double& muw,
+                              double& snw, double& rhon, double& mun ) const;
 
     /// calculating the  Inflection point
     double InflectionPointSaturation( Element<dim>* const ) const;

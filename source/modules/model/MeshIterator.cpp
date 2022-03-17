@@ -16,7 +16,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 MeshIterator<dim,CELL>::MeshIterator( Node<dim>* root_node )
  : discovered_nodes_({root_node}),
    current_nodes_({root_node}) 
@@ -26,7 +26,7 @@ MeshIterator<dim,CELL>::MeshIterator( Node<dim>* root_node )
         const csmp::Node<dim>*  n_ptr( *current_nodes_.begin() );
         // for all parent elements of the current node
         const size_t parent_cells(n_ptr->Parents());
-        for ( size_t i = 0U; i<parent_cells; ++i ) {
+        for ( auto i = 0U; i<parent_cells; ++i ) {
             // for all the nodes of each parent element
             const size_t parent_nodes(n_ptr->Parent(i)->Nodes());
             for ( size_t j = 0U; j<parent_nodes; ++j )

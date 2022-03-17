@@ -9,7 +9,7 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 
 /**
  
@@ -184,7 +184,7 @@ K += PHI / 322.1 - 45.0;
 @endcode
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class Operand {
   public:
     Operand();

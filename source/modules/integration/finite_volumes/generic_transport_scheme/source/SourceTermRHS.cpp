@@ -15,7 +15,7 @@ using namespace std;
 namespace csmp {
 
     /// note that this source variable may be an element or a nodal one
-template<size_t dim>
+template<uint32_t dim>
 SourceTermRHS<dim>::SourceTermRHS( const csmp::INDEX<SCALAR,ELEMENT>& source_variable_key,
                                    const csmp::INDEX<SCALAR,NODE>& nodal_source_variable_key,
                                    const csmp::INDEX<SCALAR,NODE>& transported_variable_key  )
@@ -26,7 +26,7 @@ SourceTermRHS<dim>::SourceTermRHS( const csmp::INDEX<SCALAR,ELEMENT>& source_var
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SourceTermRHS<dim>::AccumulateFiniteVolume( const Node<dim>& n, std::vector<double>& rhs ) const
  {
     rhs[ n.Idx() ] += n.Read( nsrc_key_ ) * n.Read( adv_key_ );
@@ -34,7 +34,7 @@ void SourceTermRHS<dim>::AccumulateFiniteVolume( const Node<dim>& n, std::vector
   
 
     /// accumulates distributed values of the source term on the finite volume
-template<size_t dim>
+template<uint32_t dim>
 void SourceTermRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<double>& rhs ) const
  {
     double esource = e.Read( esrc_key_ );
@@ -42,7 +42,7 @@ void SourceTermRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<d
     
     const size_t nodes = e.Nodes();
     esource /= static_cast<double>(nodes);
-    for ( size_t i=0U; i<nodes; ++i )
+    for ( auto i{0}; i<nodes; ++i )
       rhs[ e.N(i)->Idx() ] += esource * e.N(i)->Read( adv_key_ );
  }
 

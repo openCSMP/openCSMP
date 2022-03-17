@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseFileBased<dim>::TwoPhaseFileBased( const char* fileName )
  : GRAVITY_(9.80665),
    LOWER_LIMIT_(1.0e-30),
@@ -18,7 +18,7 @@ TwoPhaseFileBased<dim>::TwoPhaseFileBased( const char* fileName )
     ReadFile(fileName);
  }
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseFileBased<dim>::TwoPhaseFileBased()
  : GRAVITY_(9.80665),
    LOWER_LIMIT_(1.0e-30),
@@ -27,7 +27,7 @@ TwoPhaseFileBased<dim>::TwoPhaseFileBased()
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseFileBased<dim>::TwoPhaseFileBased( const PropertyDatabase<dim>& database, 
                                            const std::vector<double>& seff,
                                            const std::vector<double>& krn,
@@ -51,7 +51,7 @@ TwoPhaseFileBased<dim>::TwoPhaseFileBased( const PropertyDatabase<dim>& database
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseFileBased<dim>::TwoPhaseFileBased( const PropertyDatabase<dim>& database, const char* fileName )
  : GRAVITY_(9.80665),
    catchPhrase_( "Pc" ),
@@ -68,7 +68,7 @@ TwoPhaseFileBased<dim>::TwoPhaseFileBased( const PropertyDatabase<dim>& database
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseFileBased<dim>::ReadFile( const char* fileName )
  {
    relpermFile_.open( fileName, ios::in | ios::binary);
@@ -82,7 +82,7 @@ void TwoPhaseFileBased<dim>::ReadFile( const char* fileName )
    cout << "\n---------------------------------------------------------";
    cout << "\nFile based two phase model setup based on following input:\n";
    cout << "\nSeff\tKrw\tKrn\tPc\n";
-   for( size_t i=0; i<seff_.size(); ++i )
+   for( uint32_t i=0; i<seff_.size(); ++i )
      cout << seff_.at( i ) << "\t" << krw_.at( i ) << "\t" << krn_.at( i ) << "\t" << pc_.at( i ) << endl;
    cout << "---------------------------------------------------------\n";
 
@@ -92,14 +92,14 @@ void TwoPhaseFileBased<dim>::ReadFile( const char* fileName )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseFileBased<dim>::~TwoPhaseFileBased()
  {
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TwoPhaseFileBased<dim>::Initialize( const Element<dim>& e )
  {
   TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -117,7 +117,7 @@ void TwoPhaseFileBased<dim>::Initialize( const Element<dim>& e )
  } // end Initialize
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::krw_Phase() const
  {
   double se = TwoPhaseModel<dim>::seff_;
@@ -133,7 +133,7 @@ double TwoPhaseFileBased<dim>::krw_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::krn_Phase() const
  {
   double se = TwoPhaseModel<dim>::seff_;
@@ -148,7 +148,7 @@ double TwoPhaseFileBased<dim>::krn_Phase() const
   return (krn_[i-1]-krn_[i])/(seff_[i-1]-seff_[i]) * (se - seff_[i-1])+krn_[i-1] ;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dkrwds_Phase() const
  {
   double se = TwoPhaseModel<dim>::seff_;
@@ -166,7 +166,7 @@ double TwoPhaseFileBased<dim>::dkrwds_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dkrnds_Phase() const
  {
   double se = TwoPhaseModel<dim>::seff_;
@@ -185,7 +185,7 @@ double TwoPhaseFileBased<dim>::dkrnds_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::pc_Phase( ) const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -202,7 +202,7 @@ double TwoPhaseFileBased<dim>::pc_Phase( ) const
   return (pc_[i-1]-pc_[i])/(seff_[i-1]-seff_[i]) * (se - seff_[i-1])+pc_[i-1] ;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dpcds_Phase( ) const
 {
   double se = TwoPhaseModel<dim>::seff_;
@@ -221,7 +221,7 @@ double TwoPhaseFileBased<dim>::dpcds_Phase( ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::Sw_Phase( double pc ) const
 {
 
@@ -246,7 +246,7 @@ double TwoPhaseFileBased<dim>::Sw_Phase( double pc ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dsdpc_Phase( double pc ) const
 {
 
@@ -266,27 +266,27 @@ double TwoPhaseFileBased<dim>::dsdpc_Phase( double pc ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double>(7.); // as computed with dfds_Phase method
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dfds() const
 {  
     return TwoPhaseModel<dim>::dfds_numerical();
 }  // end dfdS_Phase
 
 
-template<size_t dim>
+template<uint32_t dim>
 double TwoPhaseFileBased<dim>::dGds( ) const
 {
     return TwoPhaseModel<dim>::dGds_numerical();
 }
 
 /// internal helper function to find position in a given file
-template<size_t dim>
+template<uint32_t dim>
 streampos  TwoPhaseFileBased<dim>::findPosition( std::ifstream& file ) const{
 
   string catchPhrase;
@@ -299,7 +299,7 @@ streampos  TwoPhaseFileBased<dim>::findPosition( std::ifstream& file ) const{
 }
 
 /// reads line values to vector
-template<size_t dim>
+template<uint32_t dim>
 int32_t TwoPhaseFileBased<dim>::readData(){
 
   int32_t           count = 0;
@@ -322,12 +322,12 @@ int32_t TwoPhaseFileBased<dim>::readData(){
   return count;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 int32_t TwoPhaseFileBased<dim>::writeData(){
 
   ofstream file( "TwoPhaseFileBased.txt", ios::out );
   file << "Seff\tKrw\tKrn\tPc\n";
-  for( size_t i = 0; i<=10; ++i )
+  for( auto i = 0; i<=10; ++i )
     file << i*0.1 << "\t" << krwCurve_.Value( i*0.1 ) << "\t" << krnCurve_.Value( i*0.1 ) << "\t" << pcCurve_.Value( i*0.1 ) << endl;
 
   file.close();

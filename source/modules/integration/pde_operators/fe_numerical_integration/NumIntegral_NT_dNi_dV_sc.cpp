@@ -7,11 +7,11 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_dNi_dV_sc<dim,CELL>::~NumIntegral_NT_dNi_dV_sc() {}
 
 //constructor
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_dNi_dV_sc<dim,CELL>::NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
                                                                  const char*                  oper,
                                                                  const char*                  basic,
@@ -33,20 +33,20 @@ NumIntegral_NT_dNi_dV_sc<dim,CELL>::NumIntegral_NT_dNi_dV_sc( const PropertyData
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_dNi_dV_sc<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
  
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_dNi_dV_sc<dim,CELL>::Transposed()
  {
     transp_ = true;
  }
  
 //element contribution
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -58,13 +58,13 @@ void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL& e )
     double det;
     IPOL.resize( e.Nodes() );
     TEMP.Resize( e.Nodes(), e.Nodes() );
-    for ( size_t i=0; i<e.IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.IntegrationPoints(); i++ )
       {
          e.N_AtIntegrationPoint( i, IPOL );
          det = e.dN_AtIntegrationPoint( DN, i );
          //det = e.det_JINV_AtIntegrationPoint( i );
-         for ( size_t j=0; j<e.Nodes(); j++ )
-            for ( size_t k=0; k<e.Nodes(); k++ )
+         for ( auto j=0; j<e.Nodes(); j++ )
+            for ( auto k=0; k<e.Nodes(); k++ )
               transp_ ? TEMP(j,k) = IPOL[j] * DN(xyz_,k) : TEMP(j,k) = IPOL[k] * DN(xyz_,j);
          TEMP *= (det * e.WeightAtIntegrationPoint(i));
          MathOperatorLHS<dim>::LHS += TEMP;

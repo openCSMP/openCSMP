@@ -44,7 +44,7 @@
 
 namespace csmp {
 
-  template<size_t dim>
+  template<uint32_t dim>
   class IncompressibleTwoPhaseFlowFractures_Viscous_VVCase : public Test {
   public:
     

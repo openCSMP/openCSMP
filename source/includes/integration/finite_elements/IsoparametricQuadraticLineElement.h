@@ -9,42 +9,42 @@ class IsoparametricQuadraticLineElement : public FiniteElement {
 
 public:
 
-    explicit IsoparametricQuadraticLineElement( size_t dimensions=2 );
+    explicit IsoparametricQuadraticLineElement( uint32_t dimensions=2 );
     ~IsoparametricQuadraticLineElement();
 
     virtual double    Volume();
-    virtual void        CornerNodes( std::vector<size_t>& ids ) const;
-    virtual size_t      CornerNodes() const { return 4U; }
-    virtual void        MidSideNodes( std::vector<size_t>& ids ) const;
-    virtual size_t      MidSideNodes() const { return 4U; }
-    virtual void        NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
-    virtual void        NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
-    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;
-    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
+    virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t      CornerNodes() const { return 4U; }
+    virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t      MidSideNodes() const { return 4U; }
+    virtual void        NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
+    virtual void        NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+    virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
+    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual void        N_AtBaryCenter( std::vector<double>& N );
-    virtual void        CounterClockwiseNodes( std::vector<size_t>& ids ) const;
+    virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<size_t>& bnodes,
-                                                  std::vector<size_t>& fnids );
+    virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
+                                                  std::vector<uint32_t>& fnids );
 
-    // TODO: virtual void   UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
+    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
-    virtual double    WeightAtIntegrationPoint( size_t i ) const;
-    virtual void      N_AtIntegrationPoint( size_t IP, std::vector<double>& N );
-    virtual void      JacobianAtIntegrationPoint( size_t IP );
+    virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
+    virtual void      JacobianAtIntegrationPoint( uint32_t IP );
     virtual double    JacobianInverse(); // returns determinant J for values of previous function
     
     virtual void      dN( DenseMatrix<DM_MIN>& M );
-    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, size_t node );
-    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, size_t IP );
+    virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
+    virtual double    dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t IP );
     virtual double    dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
     virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
 
     virtual void      UnitNormal( std::vector<double>& vc ) const;
     
-    virtual void      IntegrationPoint( size_t i, std::vector<double>& xyz ) const;
-    virtual void      ExtrapolateIntegrationPointVariableToNodes( size_t nvars,
+    virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
+    virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR, 
                                                                   std::vector<double>& NVAR ) const; 
     virtual void        OutputNodeDataToVTK( const char* file_name,
@@ -60,7 +60,7 @@ public:
   private: 
 
     // Methods return determinants of Jacobians as scale factors: dx = J * dr
-    double            JacobianFor( const std::vector<double>& DNR, size_t spatial_dimension ) const;
+    double            JacobianFor( const std::vector<double>& DNR, uint32_t spatial_dimension ) const;
     double            Jacobian1D( const std::vector<double>& DNR ) const;
     double            Jacobian2D( const std::vector<double>& DNR ) const;
     double            Jacobian3D( const std::vector<double>& DNR ) const;

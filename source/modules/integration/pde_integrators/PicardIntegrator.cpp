@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PicardIntegrator<dim,COMPUTATION_DOMAIN>::PicardIntegrator() 
  : IterativeIntegrator<dim,COMPUTATION_DOMAIN>()
   {}
@@ -15,7 +15,7 @@ PicardIntegrator<dim,COMPUTATION_DOMAIN>::PicardIntegrator()
   
   
   
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 double PicardIntegrator<dim,COMPUTATION_DOMAIN>::Residual() 
 {
   resid_.resize(this->G_.Rows());

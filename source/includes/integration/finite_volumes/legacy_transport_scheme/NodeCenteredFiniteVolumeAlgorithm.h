@@ -8,14 +8,14 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Element;
-template<size_t> class TwoPhaseModel;
-template<size_t> class Region;
-template<size_t> struct StencilProcessor; // base class for element-based FV computations
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Element;
+template<uint32_t> class TwoPhaseModel;
+template<uint32_t> class Region;
+template<uint32_t> struct StencilProcessor; // base class for element-based FV computations
 class Solver;
 
-template<size_t dim>
+template<uint32_t dim>
 class NodeCenteredFiniteVolumeAlgorithm {
   public:
     explicit NodeCenteredFiniteVolumeAlgorithm( Region<dim>& );
@@ -145,52 +145,52 @@ class NodeCenteredFiniteVolumeAlgorithm {
   private:
     Region<dim>&           gref_;
     SparseMatrix           LHS;
-    std::vector<double>  RHS, RESULT;
+    std::vector<double>    RHS, RESULT;
     DenseMatrix<DM_MIN>    DN, DNT;
     Solver*                solver_;
-    const uint32_t           MAX_NODES_GAUSS_SOLVER;
+    const uint32_t         MAX_NODES_GAUSS_SOLVER;
     bool                   firstCall_;
     bool                   verbose_;
 };
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToLHS( size_t i, size_t j, double addition )
  { LHS.Add( i, j, addition ); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( size_t i, double addition )
  { RHS[i] += addition; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRESULT( size_t i, double addition )
  { RESULT[i] += addition; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline void NodeCenteredFiniteVolumeAlgorithm<dim>::AssignRESULT( size_t i, double fvresult )
  { RESULT[i] = fvresult; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double NodeCenteredFiniteVolumeAlgorithm<dim>::Result( size_t i ) const
  { return RESULT[i]; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline std::vector<double>&  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultVector()
  { return RESULT; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline std::vector<double>&  NodeCenteredFiniteVolumeAlgorithm<dim>::RHSVector()
  { return RHS; }
 
-template<size_t dim>
+template<uint32_t dim>
 inline typename std::vector<double>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsBegin()
  { return RESULT.begin(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline typename std::vector<double>::iterator  NodeCenteredFiniteVolumeAlgorithm<dim>::ResultsEnd()
  { return RESULT.end(); }
 
-template<size_t dim>
+template<uint32_t dim>
 inline double NodeCenteredFiniteVolumeAlgorithm<dim>::LHS_Value( size_t i,  size_t j ) const
  { return LHS(i,j); }
 

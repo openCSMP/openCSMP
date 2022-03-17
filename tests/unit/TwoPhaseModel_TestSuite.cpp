@@ -54,7 +54,7 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
     const double  sat_incr(1./model->Mesh().Nodes());
     ScalarVariable  saturation;
     // generating a range of saturation values for water and oil
-    for ( vector<Node<1U>*>::iterator
+    for ( vector<Node<1U>*>::const_iterator
           it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
       {
          saturation() = 0. + sat_incr * (*it)->Idx();
@@ -70,7 +70,7 @@ void TwoPhaseModel_TestSuite::run()
 
   free_ = false;
 
-  const uint32_t  N_ELEMENTS(100);
+  const size_t N_ELEMENTS(100);
   const double length(1.);
 
   // creating 1D TestModel with a matrix and fracture region

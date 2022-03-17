@@ -32,7 +32,7 @@ namespace csmp {
 /**
 Constructor for an empty boundary (no faces yet).
 */
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& pref, BOX_BOUNDARY flag )
   : ModelSubDomain<dim, Face>( boundaryname, pref ),
     boundaryFlag_( flag )
@@ -44,7 +44,7 @@ Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& 
 
 
 /// copy constructor
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( const Boundary& ed )
   : ModelSubDomain<dim, Face>( ed ),
     LocalVariableStorage<dim,Boundary>(ed),
@@ -54,7 +54,7 @@ Boundary<dim>::Boundary( const Boundary& ed )
 
 
 /// move constructor
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( Boundary&& ed )
   : ModelSubDomain<dim, Face>( move(ed) ),
     LocalVariableStorage<dim,Boundary>( move(ed) ),
@@ -77,7 +77,7 @@ are numbered consecutivly.
 
 @test nodes are assigned correctly, Face objects are not
 */
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
                          MeshManager<dim>& mesh,
                          const SubDomainInfo& info,
@@ -135,7 +135,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
         @attention assumes that the faces in SubDomainInfo are numbered from  elements..elements+faces-1
 */
 /*
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
                          const size_t& elements,
                          const std::deque<Node<dim>*>& nodes,
@@ -190,11 +190,11 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 */
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables Boundary<dim>::FaceIntegrationPointVariables() const
 { return this->pref_.IntegrationPointVariablesAt( FACE ); }
 
-template<size_t dim>
+template<uint32_t dim>
 LocalVariables Boundary<dim>::FaceVariables() const
 { return this->pref_.LocalVariablesAt( FACE ); }
 
@@ -209,7 +209,7 @@ neighbor faces.
 
 @note this constructor is mainly used for edges of line-element faces.
 */
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::Boundary( const string& boundary_name,
                          const PropertyDatabase<dim>& dbase_ref,
                          typename std::vector<Face<dim>*>::iterator facesBegin,
@@ -230,12 +230,12 @@ Boundary<dim>::Boundary( const string& boundary_name,
 Default dtor does not delete faces, even though constructed by Boundary. Need to call DeleteFaces explicitly!
 @todo FIX THIS CONCEPTUAL MISUNDERSTANDING ALL THE WAY THROUGH:  the faces are managed by the MeshManager
 */
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>::~Boundary()
 {
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
 {
   if ( &ed != this ) {
@@ -248,7 +248,7 @@ Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
 
 // LOCAL VARIABLE STORAGE INTERFACE
 
-template<size_t dim>
+template<uint32_t dim>
 bool Boundary<dim>::ValidVariable( const char* variableName ) const
   {
     const PLACEMENT p( this->pref_.Placement( variableName ) );
@@ -265,7 +265,7 @@ Visitation of boundary, like for any visitation,
 the application level determines where the visitation starts
 and where it ends.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Boundary<dim>::Accept( Visitor<dim>& v )
 {
   if ( v.ApplicationLevel() == MODEL || v.ApplicationLevel() == BOUNDARY )
@@ -279,13 +279,11 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
     case BOUNDARY:
       return;
     case FACE:
-      for ( typename vector<Face<dim>*>::iterator
-            it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
+      for ( auto it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
-      for ( typename vector<csmp::Node<dim>*>::iterator
-            nd_it = this->NodesBegin(); nd_it != this->NodesEnd(); nd_it++ )
+      for ( auto nd_it = this->NodesBegin(); nd_it != this->NodesEnd(); nd_it++ )
         (*nd_it)->Accept( v );
       return;
     default:
@@ -308,7 +306,7 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
       @author SKM
       @date 7/6/2020
 */
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
@@ -354,7 +352,7 @@ template void Boundary<3U>::InputPropertyValue( const char*, const FlaggedArrayV
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
@@ -416,7 +414,7 @@ Outs FEM_Data of provided variable type and placement to binary
 
 @return  true if it succeeds, false if it fails.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const
 {
@@ -466,7 +464,7 @@ by local id numbers.
 
 The idea is to extract the property data that corresponds to this group only.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) const
 {
@@ -499,7 +497,7 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( size_t i = 0U; i<(*eit)->IntegrationPoints(); i++ ) {
+        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ ) {
           (*eit)->Read( i, idx, var );
           data[counter + i] = var;
         }
@@ -560,7 +558,7 @@ Complimentary to Out(...) function.
 
 @return  true if it succeeds, false if it fails.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 bool Boundary<dim>::In( fstream& fp, PLACEMENT, VARIABLE_TYPE )
 {
@@ -601,7 +599,7 @@ from from the data container.
 
 Enable to store data to disk to faciliate persistance.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 void Boundary<dim>::InputVariableFrom( const char* property,
                                        const FEM_Data<Var>& vdata )
@@ -633,7 +631,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( size_t i = 0U; i<(*eit)->IntegrationPoints(); i++ )
+        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -701,7 +699,7 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
     Dispatched initialize method to establish node vector, perimeter entities,
     bflags and entity sorting.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
 {
   // assigns BOX_BOUNDARY flag to Boundary
@@ -709,6 +707,11 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
 
   // establishing boundary node container
   this->CreateNodePointerVector();
+  
+  // assigning the box boundary flag to nodes where they do not already have another flag (like EDGE etc)
+  for ( auto& nit : this->node_vec_ )
+    if ( nit->AtBoundary() == NOT )
+      nit->AtBoundary( boxBoundary );
   
   // sorts node and cell vectors into interior and exterior ranges;
   // initialises boundary face vector bd_face_vec_
@@ -726,9 +729,9 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   for ( auto it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); ++it )
   {
   cerr <<"\n\t"<< (*it)->Idx() <<" (";
-  for ( size_t i=0U; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
+  for ( auto i{0}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
   cerr <<"): ";
-  for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+  for ( auto i{0}; i<(*it)->Neighbors(); ++i )
   if ( (*it)->Neighbor(i) == nullptr ) cerr <<"nullptr ";
   else cerr << (*it)->Neighbor(i)->Idx() <<" ";
   }
@@ -743,7 +746,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
       
       @return returns true when part or all of the boundary is located on the model boundary.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool csmp::Boundary<dim>::IsExternal() const
 {
     for ( const auto& it : this->elmt_vec_ )
@@ -760,7 +763,7 @@ adds boundary flags to boundary nodes and elements if not already flagged as box
 
 @note changes BOX boundary flags for INTERIOR nodes along the boundary
 */
-template<size_t dim>
+template<uint32_t dim>
 void csmp::Boundary<dim>::AtBoundary( BOX_BOUNDARY boxBoundary )
 {
   boundaryFlag_ = boxBoundary;
@@ -776,7 +779,7 @@ second value returns the highest spatial dimension contained.
 
 @author SKM 1/11/2013
 */
-template<size_t dim>
+template<uint32_t dim>
 pair<int32_t, int32_t>  Boundary<dim>::FaceSpatialDimensions() const
 {
   return this->SpatialDimensions();
@@ -806,7 +809,7 @@ When establishing face connectivity(parent elements) the convention is as outlin
 the unit normal of the created face will point outward.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Boundary<dim>::CreateFrom( Region<dim>& region,
                                 MeshManager<dim>& meshManager,
                                 BOX_BOUNDARY boxBoundary )
@@ -879,7 +882,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   // processing the interior faces whose neighbors are all on the inside of the domain first
   for ( auto it=region.ElementsBegin(); it!=region.PerimeterElementsBegin(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( size_t i{0}; i<n_neighbors; ++i ) {
+       for ( auto i{0}; i<n_neighbors; ++i ) {
             // since the mapping between elements and faces only exists in this subdomain
             // outside elements cannot be considered
             assert ( (*it)->Neighbor(i) != nullptr );
@@ -891,7 +894,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   elmt = region.InteriorElements();
   for ( auto it=region.PerimeterElementsBegin(); it!=region.ElementsEnd(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( size_t i{0}; i<n_neighbors; ++i )
+       for ( auto i{0}; i<n_neighbors; ++i )
          // if the perimeter element neighbor is contained in the interior elements of region an assignment is made
          if ( (*it)->Neighbor(i) != nullptr && region.Contains( (*it)->Neighbor(i) ) )
            this->elmt_vec_[elmt]->Assign( i, this->elmt_vec_[ (*it)->Neighbor(i)->Idx()] );
@@ -916,7 +919,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 cerr <<"\n\nRegion "<< region.Name() <<"\n";
 for ( auto& it : region.CellVector() ) {
     cerr <<"\n\tElement "<< it->Idx() <<": nbors: ";
-    for ( size_t i{0}; i<it->Neighbors(); ++i )
+    for ( auto i{0}; i<it->Neighbors(); ++i )
       if ( it->Neighbor(i) == nullptr ) cerr <<" null";
       else cerr <<" "<< it->Neighbor(i)->Idx();
   }
@@ -925,13 +928,74 @@ cerr << endl;
 cerr <<"\n\nBoundary "<< region.Name() <<"\n";
 for ( auto& it : this->elmt_vec_ ) {
     cerr <<"\n\tFace "<< it->Idx() <<": nbors: ";
-    for ( size_t i{0}; i<it->Neighbors(); ++i )
+    for ( auto i{0}; i<it->Neighbors(); ++i )
       if ( it->Neighbor(i) == nullptr ) cerr <<" null";
       else cerr <<" "<< it->Neighbor(i)->Idx();
   }
 cerr << endl;
 */
 
+
+template<uint32_t dim>
+size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
+                                          vector<size_t>& cell_ids )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( cell_ids.empty() )
+    csmp_error.notice( ERROR, "Boundary<dim>::AccumulateByNumber",
+                      "user-supplied face-number vector is empty. Nothing is done." );
+
+  if ( !this->elmt_vec_.empty() ) {
+      csmp_error.notice( WARNING, "Boundary<dim>::AccumulateByNumber",
+                         "Boundary is not empty", "erasing all members..." );
+      this->elmt_vec_.clear();
+    }
+
+  // eliminating potential duplicates from element index vector
+#ifdef DEBUG
+  const size_t n_cells{cell_ids.size()};
+  sort( cell_ids.begin(), cell_ids.end() );
+  cell_ids.erase( unique( cell_ids.begin(), cell_ids.end() ), cell_ids.end() );
+  if ( cell_ids.size() < n_cells )
+    csmp_error.notice( WARNING, "Boundary<dim>::AccumulateByNumber",
+                      "user-supplied face ID set contained duplicates which were removed." );
+#endif
+  if ( cell_ids.size() > mesh.Faces() )
+    csmp_error.notice( ERROR, "Boundary<dim>::AccumulateByNumber",
+                       "user-supplied face-number vector is larger than range of index-to-element-pointer mapping." );
+
+  // creating the element vector for the region
+  // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
+  const auto offset = mesh.Elements();
+  this->elmt_vec_.reserve( cell_ids.size() );
+  for ( auto& idx : cell_ids ) {
+       Face<dim>* fptr = &(*next(mesh.FacesBegin(),idx-offset));
+       assert( fptr != nullptr );
+       assert( fptr->Idx() == idx );
+       this->elmt_vec_.push_back( fptr );
+    }
+    
+  // creating node vector
+  if ( this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
+  // filling the vector
+  for ( auto& it : this->elmt_vec_ ) {
+       const size_t n_nodes{it->Nodes()};
+       for ( auto i{0}; i<n_nodes; ++i ) {
+            assert( it->N(i) != nullptr );
+            this->node_vec_.push_back( it->N(i) );
+         }
+     }
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
+  this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
+
+} // end AccumulateByNumber
 
 
 
@@ -940,7 +1004,7 @@ cerr << endl;
 /**
     For post-processing the results of Divide. Here the assumption is made that the faces are already interconnected.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterator facesBegin,
                                 const typename vector<Face<dim>*>::const_iterator facesEnd )
 {
@@ -980,7 +1044,7 @@ in a 3D model are ignored.
 @author P. Lang, provisionally refactored SKM 7/6/2016
 @date Aug 2011
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Boundary<dim>::CreateAround( const Region<dim>& region,
                                   MeshManager<dim>& meshManager,
                                   BOX_BOUNDARY boxBoundary )
@@ -994,15 +1058,15 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
   this->elmt_vec_.reserve( region.PerimeterElements() );
 
   // looping over the perimeter elements of the region
-  for ( size_t i = region.InteriorElements(); i<region.Elements(); ++i )
+  for ( auto i = region.InteriorElements(); i<region.Elements(); ++i )
     {
       // ignoring dim-2 elements because they share the nodes with the higher-dim ones
       if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolumeElement() ) continue;
       if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurfaceElement() ) continue;
 
       // for each perimeter face
-      const size_t perimeter_faces( region.PerimeterFaces( i ) );
-      for ( size_t j = 0U; j<perimeter_faces; ++j ) {
+      const auto perimeter_faces( region.PerimeterFaces( i ) );
+      for ( auto j = 0U; j<perimeter_faces; ++j ) {
            // if this indeed an element at the model boundary
            if ( region.E(i)->Neighbor(j) == nullptr ) {
                this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
@@ -1011,9 +1075,9 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
            // if this will be a Face in the interior of the model
            else {
                // finding which face of the outer element will be at the boundary
-               size_t shared_face = UNSPECIFIED;
-               const size_t n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
-               for ( size_t k{0}; k<n_neighbors; ++k ) {
+               uint32_t shared_face = UNSPECIFIED;
+               const auto n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
+               for ( auto k{0}; k<n_neighbors; ++k ) {
                     if ( region.E(i)->Neighbor(j) == region.E(i) ) shared_face = k;
                     break;
                  }
@@ -1060,7 +1124,7 @@ This method assumes that the connectivity between the elements is up to date.
 Variable storage is assigned to the faces.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
                                    const Region<dim>& region2,
                                    MeshManager<dim>& meshManager )
@@ -1082,13 +1146,13 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   
   // for the perimeter elements of the region
   size_t contacting_elements{0};
-  for ( size_t i = region1.InteriorElements(); i < n_elements; ++i )
+  for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
     {
       Element<dim>* const ePtr = region1.E( i );
-      const size_t perimeter_faces( region1.PerimeterFaces(i) );
-      for ( size_t j = 0U; j < perimeter_faces; ++j )
+      const auto perimeter_faces( region1.PerimeterFaces(i) );
+      for ( auto j = 0U; j < perimeter_faces; ++j )
         {
-          const size_t face = region1.PerimeterFace( i, j );
+          const auto face = region1.PerimeterFace( i, j );
           Element<dim>*  ePtrNeighbor = ePtr->Neighbor( face );
 
           // checking whether neighbor element is part of the boundary of region2
@@ -1097,9 +1161,9 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
             if ( region2.IsPerimeterElement( ePtrNeighbor ) )
               {
                  // if the neighbor is in the boundary, the new Face is build
-                 size_t face2 = UNSPECIFIED;
-                 const size_t n_neighbors{ePtrNeighbor->Neighbors()};
-                 for ( size_t k{0}; k<n_neighbors; ++k ) {
+                 uint32_t face2 = UNSPECIFIED;
+                 const auto n_neighbors{ePtrNeighbor->Neighbors()};
+                 for ( auto k{0}; k<n_neighbors; ++k ) {
                       if ( ePtrNeighbor->Neighbor(k) == ePtr ) face2 = k;
                       break;
                    }
@@ -1156,7 +1220,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
     @attention method can only be applied in 3D and only on boundaries which are not lines themselves
     else the perimeter is not defined.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  Boundary<dim>::Perimeter() const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1165,14 +1229,14 @@ double  Boundary<dim>::Perimeter() const
                       "the perimeter of a Boundary is only defined when the boundary is a surface." );
 
   double          perimeter_length( 0. );
-  vector<size_t>  fnids;
+  vector<uint32_t>  fnids;
   size_t          n( this->InteriorElements() );
   
   for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
       if ( (*it)->IsLineElement() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }
-      for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
+      for ( auto i = 0U; i<this->PerimeterFaces( n ); i++ ) {
         (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
         perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
                              (*it)->N( fnids[0] )->Coordinate()).Length();
@@ -1184,7 +1248,7 @@ double  Boundary<dim>::Perimeter() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double  Boundary<dim>::Area() const
 {
   double  integrated_area( 0. );
@@ -1198,7 +1262,7 @@ double  Boundary<dim>::Area() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property ) const
 {
   csmp::Index prop_key = p.StorageKey( property );
@@ -1280,7 +1344,7 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Boundary<dim>::Out() const
 {
   // high-level output
@@ -1294,13 +1358,13 @@ void Boundary<dim>::Out() const
     if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized." );
     cout << "\t\t" << it->Idx() << ": " << it->Area() << ", ";
     // Nodes
-    for ( size_t i = 0U; i<it->Nodes(); ++i ) {
+    for ( auto i = 0U; i<it->Nodes(); ++i ) {
       const string str = (it->N( i ) == nullptr) ? "none" : to_string( it->N( i )->Idx() );
       cout << str << ",";
     }
     cout << "\t\t ";
     // Face neighbors
-    for ( size_t i = 0U; i<it->Neighbors(); ++i ) {
+    for ( auto i = 0U; i<it->Neighbors(); ++i ) {
       const string str = (it->Neighbor( i ) == nullptr) ? "none" : to_string( it->Neighbor( i )->Idx() );
       if ( i<it->Neighbors() - 1 ) cout << str << ":";
       else cout << str;
@@ -1316,11 +1380,10 @@ void Boundary<dim>::Out() const
   //for ( auto it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )  (*it)->Out();
 
   cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
-  vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
-  for ( size_t i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
+  auto  bit( this->bd_face_vec_.begin() );
+  for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
       cout << i << ":";
-      for ( vector<ONE_BYTE_NUMBER>::const_iterator
-            ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+      for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }
   cout << endl;
   

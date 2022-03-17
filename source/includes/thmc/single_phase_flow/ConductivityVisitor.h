@@ -12,11 +12,11 @@ namespace csmp
 {
 
   struct Index;
-  template<size_t> class Model;
+  template<uint32_t> class Model;
 
   /// PL 2012, Single-phase steady conductivity & transient diffusivity
   /// JEM 2015, modifications and updates
-  template<size_t dim>
+  template<uint32_t dim>
   class ConductivityVisitor : public Visitor<dim>
   {
   public:

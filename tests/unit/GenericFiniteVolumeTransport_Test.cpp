@@ -217,7 +217,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
           const double K((*it)->Read(K_key));
           double  dpdr(0.), dpds(0.), dpdt(0.);
           Point<3U> vD(0.);
-          for ( size_t i=0U; i<nodes; ++i ) {
+          for ( auto i{0}; i<nodes; ++i ) {
                const double p_node((*it)->N(i)->Read(p_key));
                dpdr   = DNR[i] * p_node;
                dpds   = DNS[i] * p_node;
@@ -229,12 +229,11 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
          
            double total_flux_physical = 0.0;
            double total_flux_parametric = 0.0;
-           bool touches_boundary = false;
 
           // 2. facet projections
           // --------------------
           const size_t facets=(*it)->Facets();
-          for ( size_t i=0U; i<facets; ++i ) {
+          for ( auto i{0}; i<facets; ++i ) {
               assert( (*it)->IsVolumeElement() );
               
                // 2.1 classic way of calculating facet fluxes in physical space
@@ -260,11 +259,11 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
               
               jacobian_at_point(it, (*it)->FacetPoint(i,0).Coordinates());
               
-              double jinvdet_ip = (*it)->FE()->JacobianInverse();
+//              double jinvdet_ip = (*it)->FE()->JacobianInverse();
               const DenseMatrix<DM_MIN>& jinv_ip = (*it)->FE()->JINV;
               
               Point<3u> facet_normal_remapped(jinv_ip * parametric_facet_normal.Coordinates());
-              double fnrlen = facet_normal_remapped.Length();
+//              double fnrlen = facet_normal_remapped.Length();
               facet_normal_remapped.NormalizeLengthTo(1.0);
               Point<3u> vDlocal(jinv_ip * vD.Coordinates());
               double projected_velocity_parametric = dotProduct(facet_normal_remapped, vDlocal);
@@ -413,7 +412,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          double vDmax(0.0);
          Point<3u> vDavg(0.0);
 
-         for (size_t j = 0; j < (*it)->Parents(); ++j) {
+         for ( auto j = 0; j < (*it)->Parents(); ++j) {
              auto e = (*it)->Parent(j);
              e->Read(v_key, vc);
              if (vDmax < vc.P().Length()) {
@@ -423,12 +422,12 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          }
          velocity_magnitude[(*it)->Idx()] = vDmax;
          vDavg.NormalizeLengthTo(1.0);
-         for (size_t j = 0; j < (*it)->Parents(); ++j) {
+         for ( auto j = 0; j < (*it)->Parents(); ++j) {
              auto e = (*it)->Parent(j);
 
-             const size_t child = (*it)->ParentNodeNumber(j);
+             const auto child = (*it)->ParentNodeNumber(j);
              
-             for (size_t k = 0; k < e->FV()->FacetsPerSector(child); ++k) {
+             for ( auto k = 0; k < e->FV()->FacetsPerSector(child); ++k) {
                  const auto facet = e->FV()->FacetSurroundingSector(child, k);
                  double costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
                  csa += costheta * e->FacetArea(facet);
@@ -485,17 +484,17 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            // pressure gradients / velocities
            const double K((*it)->Read(K_key));
            Point<3U> vD(0.);
-           for ( size_t i=0U; i<nodes; ++i ) {
+           for ( auto i{0}; i<nodes; ++i ) {
                const double p_node((*it)->N(i)->Read(p_key));
                vD[0] += -K * DNR[i] * p_node;
                vD[1] += -K * DNS[i] * p_node;
                vD[2] += -K * DNT[i] * p_node;
            }
-           double vDlength = vD.Length();
+//           double vDlength = vD.Length();
            
            jacobian_at_point(it, bctr.Coordinates());
            const DenseMatrix<DM_MIN> jac_bctr((*it)->FE()->JAC);
-           double jinvdet_bctr = (*it)->FE()->JacobianInverse();
+//           double jinvdet_bctr = (*it)->FE()->JacobianInverse();
            const DenseMatrix<DM_MIN> jinv_bctr((*it)->FE()->JINV);
            
            const Point<3U> vDproj(jinv_bctr * vD.Coordinates());
@@ -507,9 +506,9 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            // --------------------
            const size_t facets=(*it)->Facets();
            
-           auto fetype = (*it)->FE_Type();
+//           auto fetype = (*it)->FE_Type();
            
-           for ( size_t i=0U; i<facets; ++i ) {
+           for ( auto i{0}; i<facets; ++i ) {
                assert( (*it)->IsVolumeElement() );
                
                // 2.1 classic way of calculating facet fluxes in physical space
@@ -533,7 +532,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
                Point<3u> v0(0.0);
                Point<3u> v1(0.0);
-               for (size_t nn = 0; nn < (*it)->Nodes(); ++nn) {
+               for ( auto nn = 0; nn < (*it)->Nodes(); ++nn) {
                    auto xform_weights = (*it)->FV()->FacetNormalTransformationNodeWeights(i, nn);
                    const Point<3u> n((*it)->N(nn)->Coordinate());
                    v0 += xform_weights.first * n;
@@ -544,7 +543,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                double projected_velocity_parametric = dotProduct(parametric_normal_remapped, vDproj);
                double flux_parametric = projected_velocity_parametric * (*it)->FacetArea(i);
 
-               size_t inside_node, outside_node;
+               uint32_t inside_node, outside_node;
                (*it)->FV()->FacetEdgeNodes( i, inside_node, outside_node );
                
                _test( (*it)->N(inside_node)->Idx() < model_domain.Nodes() );
@@ -599,7 +598,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
      size_t weird_nodes = 0;
      double maxdelta = 0;
-     for (size_t i = 0; i < flux_balance_physical.size(); ++i) {
+     for (auto i = 0; i < flux_balance_physical.size(); ++i) {
          _test(directed_area_para[i].Length() < 1.0e-14);
          _test(directed_area_phys[i].Length() < 1.0e-14);
 
@@ -640,7 +639,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 /**
     Executing and testing all finite-volume related methods
 */
-bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3U>& advector3D, VTK_Interface<3U>& vtk_output )
+static bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3U>& advector3D, VTK_Interface<3U>& vtk_output )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -648,7 +647,6 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
   //----------------------------------------------------------------------
   //------------------------- TESTING METHODS ----------------------------
   //----------------------------------------------------------------------
-
 
           /*
           * -- TESTING OF NCFVT METHODS-----------------------
@@ -875,7 +873,7 @@ bool test_NCFVT_methods( Model<3U>& model3D, NodeCenteredFiniteVolumeTransport<3
 
 
 
-void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
+static void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
 {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -905,7 +903,7 @@ void testNodeCenteredFiniteVolumeStencils( Model<3U>& sg, VTK_Interface<3U>& vtk
   are reported to the variables "finite volume" and "nodal flux mismatch", respectively.
   do not use when surface elements are also present in model!
 */
-double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
+static double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -940,23 +938,23 @@ double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg 
   Region<3>&  gref(sg.Region("Model"));
 
   // for all interior nodes we calculate the normalised flux balance
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
+  for ( auto it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
        sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        (*it)->Store( prop_key, sc );
        emax = std::max( emax, fabs(sc()) );
     }
 
   // for all boundary nodes we set the balance to zero because we cannot evaluate it
-  for ( vector<Node<3U>*>::iterator it=gref.PerimeterNodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.PerimeterNodesBegin(); it!=gref.NodesEnd(); it++ )
     (*it)->Store( prop_key, sc=0. );
 
   // finding the worst finite volume and analyzing it
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - fabs((*it)->Read( prop_key ))) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( size_t i=0U; i<(*it)->Parents(); i++ )
+         for ( auto i{0}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }
@@ -974,7 +972,7 @@ double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3U>& sg 
 
 
 
-void advectVariableExplicit( Model<3U>& sg, bool second_order )
+static void advectVariableExplicit( Model<3U>& sg, bool second_order )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -1005,7 +1003,7 @@ void advectVariableExplicit( Model<3U>& sg, bool second_order )
 
 
 
-void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_order )
+static void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_order )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -1041,7 +1039,7 @@ void advectVariableExplicit( Model<3U>& sg, const char* region, bool second_orde
 
 
 
-void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
+static void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut )
  {
     // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
     //ostream &cout = *GetStream();
@@ -1072,7 +1070,7 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, VTK_Interface<3U>& vtkOut 
 
 
 // restricted to a group
-void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
+static void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -1100,7 +1098,7 @@ void advectVariableFirstOrderImplicit( Model<3U>& sg, const char* group )
 
 
 
-void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
+static void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -1128,7 +1126,7 @@ void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
 
 
 
- void advectVariableSecondOrderImplicitSecondOrderInTime( Model<3U>& sg, bool bijective_mapping )
+static  void advectVariableSecondOrderImplicitSecondOrderInTime( Model<3U>& sg, bool bijective_mapping )
    {
      // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
      //ostream &cout = *GetStream();
@@ -1161,7 +1159,7 @@ void advectVariableSecondOrderImplicit( Model<3U>& sg, bool bijective_mapping )
 
 
 
-void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
+static void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
  {
   // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
   //ostream &cout = *GetStream();
@@ -1189,7 +1187,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
   double        emax(0.);
   Region<3>&  gref(sg.Region("Model"));
 
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ ) {
        sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        if ( (*it)->AtBoundary() != NOT and (*it)->Status( pf_key ) == DIRICH )
          (*it)->Store( prop_key, sc=0. );
@@ -1199,12 +1197,12 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
     }
 
   // finding the worst finite volume and analyzing it
-  for ( vector<Node<3U>*>::iterator it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
+  for ( auto it=gref.NodesBegin(); it!=gref.NodesEnd(); it++ )
     if ( fabs(emax - (*it)->Read( prop_key )) <= numeric_limits<double>::epsilon() ) {
          cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: "<< endl;
          (*it)->Out();
          cout <<"\ncomposed of the element types: "<< endl;
-         for ( size_t i=0U; i<(*it)->Parents(); i++ )
+         for ( auto i{0}; i<(*it)->Parents(); i++ )
            cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;
          cout << endl << endl;
       }
@@ -1229,7 +1227,7 @@ void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
 // *************************************************************************************************
 
 
-void testSchemeAsComponent()
+static void testSchemeAsComponent()
   {
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
@@ -1341,14 +1339,14 @@ void testSchemeAsComponent()
 // TESTING SECTOR INTEGRATION POINT STORAGE
       const csmp::Index swt_key(model3D.Database().StorageKey("node number"));
       // sector storage: writing global node numbers to sector IP's and reading them out
-      for ( vector<Element<3U>*>::iterator it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
-        for ( size_t i=0U; i<(*it)->Sectors(); ++i )
+      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
+        for ( auto i{0}; i<(*it)->Sectors(); ++i )
           (*it)->Store( i, 0U, swt_key, makeScalar(PLAIN,(*it)->N(i)->Idx()) );
         
       // reading out node numbers and their double equivalents stored at the sector integration points
-      for ( vector<Element<3U>*>::iterator it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it ) {
+      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it ) {
            cerr <<"\nelement: "<< (*it)->Idx() << endl;
-           for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+           for ( auto i{0}; i<(*it)->Sectors(); ++i ) {
                 cerr << (*it)->N(i)->Idx() <<":";
                 cerr << (*it)->Read( i, 0U, swt_key ) <<" ";
              }
@@ -1360,18 +1358,18 @@ void testSchemeAsComponent()
       const csmp::Index fvphi_key(model3D.Database().StorageKey("fv pore volume"));
       // accumulating matching sector volumes with finite element volumes
       double volume(0.);
-      for ( vector<Node<3U>*>::iterator it=flow_domain.NodesBegin(); it!=flow_domain.NodesEnd(); ++it )
+      for ( auto it=flow_domain.NodesBegin(); it!=flow_domain.NodesEnd(); ++it )
         volume += (*it)->Read( fv_key );
       cerr <<"\nFV total volume: "<< volume;
 
       volume = 0.;
-      for ( vector<Element<3U>*>::iterator it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
-        for ( size_t i=0U; i<(*it)->Sectors(); ++i )
+      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
+        for ( auto i{0}; i<(*it)->Sectors(); ++i )
           volume += (*it)->Read( i, 0U, sv_key );
       cerr <<"\nFV total volume: "<< volume;
 
       double pvolume(0.);
-      for ( vector<Node<3U>*>::iterator it=flow_domain.NodesBegin(); it!=flow_domain.NodesEnd(); ++it )
+      for ( auto it=flow_domain.NodesBegin(); it!=flow_domain.NodesEnd(); ++it )
         pvolume += (*it)->Read( fvphi_key );
       cerr <<"\nFV total volume: "<< pvolume;
 
@@ -1397,13 +1395,6 @@ void testSchemeAsComponent()
       explicit_advector.AdvectVariable( time_interval );
       ticks = clock() - ticks;
       cout <<"\n\n\tCPU clock ticks used for advection step: "<< ticks << endl;
-
-
-
-
-
-
-
 
       switch( tmethod ) {
            case 1:

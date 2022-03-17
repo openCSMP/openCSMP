@@ -9,7 +9,7 @@ namespace csmp {
 //enum AVERAGE { WEIGHTED_AVERAGE, ARITHMETIC_MEAN, HARMONIC_MEAN, GEOMETRIC_MAIN };
 
 /// the usual kinds of averages
-template<size_t dim, typename var>
+template<uint32_t dim, typename var>
 class ArithmeticMean : public Interrelation<dim> {
     Operand<dim>&  I_;   // property to average
     Operand<dim>&  O_;   // property into which to write the result
@@ -18,7 +18,7 @@ class ArithmeticMean : public Interrelation<dim> {
     
   public:
     ArithmeticMean( const PropertyDatabase<dim>& p, const char* res_prop, const char* prop_to_avg );
-    void Calculate();
+    virtual void Calculate();
 };
 
 

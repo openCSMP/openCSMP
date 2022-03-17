@@ -65,7 +65,7 @@ typedef struct SPMAT {
 
 /* typedef struct SPVEC {               */
 /* 	int	dim, max_dim;                   */
-/* 	ms_pair	*elt;		/* elt[max_dim] */
+/* 	ms_pair	*elt;		 elt[max_dim] */
 /* 	       } SPVEC;                     */      
 
 #define	SMNULL	((SPMAT*)NULL)

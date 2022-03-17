@@ -6,13 +6,13 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
 /**
 
@@ -25,7 +25,7 @@ template<size_t> class Model;
    @date 2006
 
 */
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 class DataInputVisitor : public Visitor<dim> {
   public:
     DataInputVisitor( Model<dim>& sg, 

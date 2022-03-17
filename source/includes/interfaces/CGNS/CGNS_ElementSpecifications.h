@@ -22,10 +22,10 @@ class CGNS_ElementSpecifications {
     std::string  CGNS_TypeNameFrom_CSMP_TypeName( const std::string& CSMP_finite_element_type ) const;
 
     /// from cgns to csmp
-    csmp::CSMP_FEM_TYPE  CSMP_TypeFrom_CGNS_Type( int CGNS_finite_element_type, bool isoparametric, size_t dim ) const;
-    csmp::CSMP_FEM_TYPE  CSMP_TypeFrom_CGNS_TypeName( const std::string& CGNS_finite_element_type, bool isoparametric, size_t dim ) const;
-    std::string    CSMP_TypeNameFrom_CGNS_Type( int CGNS_finite_element_type, bool isoparametric, size_t dim ) const;
-    std::string    CSMP_TypeNameFrom_CGNS_TypeName( const std::string& CGNS_finite_element_type, bool isoparametric, size_t dim ) const;
+    csmp::CSMP_FEM_TYPE  CSMP_TypeFrom_CGNS_Type( int CGNS_finite_element_type, bool isoparametric, uint32_t dim ) const;
+    csmp::CSMP_FEM_TYPE  CSMP_TypeFrom_CGNS_TypeName( const std::string& CGNS_finite_element_type, bool isoparametric, uint32_t dim ) const;
+    std::string    CSMP_TypeNameFrom_CGNS_Type( int CGNS_finite_element_type, bool isoparametric, uint32_t dim ) const;
+    std::string    CSMP_TypeNameFrom_CGNS_TypeName( const std::string& CGNS_finite_element_type, bool isoparametric, uint32_t dim ) const;
 
 };
 

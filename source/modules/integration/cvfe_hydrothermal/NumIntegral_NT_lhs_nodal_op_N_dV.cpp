@@ -7,16 +7,16 @@ using namespace std;
 namespace csmp {
 
 /** default constructor */
-template<size_t dim, class SIMPLEX>
-NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::NumIntegral_NT_lhs_nodal_op_N_dV() {}
+template<uint32_t dim, class CELL>
+NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::NumIntegral_NT_lhs_nodal_op_N_dV() {}
 
 /** default destructor */
-template<size_t dim, class SIMPLEX>
-NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::~NumIntegral_NT_lhs_nodal_op_N_dV() {}
+template<uint32_t dim, class CELL>
+NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::~NumIntegral_NT_lhs_nodal_op_N_dV() {}
 
 /** custom constructor */
-template<size_t dim, class SIMPLEX>
-NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::NumIntegral_NT_lhs_nodal_op_N_dV( const PropertyDatabase<dim>& pref, 
+template<uint32_t dim, class CELL>
+NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::NumIntegral_NT_lhs_nodal_op_N_dV( const PropertyDatabase<dim>& pref, 
                                                               const char* oper,
                                                               const char* basic, 
                                                               const char* test )
@@ -45,8 +45,8 @@ NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::NumIntegral_NT_lhs_nodal_op_N_dV(
 }
 
 /** read in nodal vector of material operand */
-template<size_t dim, class SIMPLEX>
-void NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
+template<uint32_t dim, class CELL>
+void NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::GetOperands( CELL& e )
    { 
 
       e.NodePropertyVector( MathOperatorLHS<dim>::MaterialOperandKey(), VAR );
@@ -55,8 +55,8 @@ void NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::GetOperands( SIMPLEX& e )
 
 
 /** Calculate contributions to the capacitance matrix */
-template<size_t dim, class SIMPLEX>
-void NumIntegral_NT_lhs_nodal_op_N_dV<dim,SIMPLEX>::ComputeContribution( SIMPLEX& e )
+template<uint32_t dim, class CELL>
+void NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
  {
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim>::LHS.Zero();

@@ -65,13 +65,13 @@ namespace csmp {
       // TEST SETUP
       // ----------------------------------------------------------------------------
 
-      template<size_t dim>
+      template<uint32_t dim>
       void LoadModel( const std::string& model_name );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void LoadModel( const std::string& model_name, std::vector<std::string>& regions );
 
-      template<size_t dim>
+      template<uint32_t dim>
       void LoadContiguousModel( const std::string& model_name, std::vector<std::string>& fractures );
 
       /// reading fault modeling input data
@@ -87,7 +87,7 @@ namespace csmp {
       void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
                          
-      template<size_t dim>
+      template<uint32_t dim>
       void EstablishContiguousRegionsList( Model<dim>& model, 
                                            const std::set<std::string>& interface_basic_set,
                                            std::set<std::string>& interface_sets );

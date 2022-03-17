@@ -20,7 +20,7 @@ hierarchy the visitation begins, i.e. Model or Region etc.
 carries out the computation, for instance on the Node or on the Element.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Visitor<dim>::Visitor( PLACEMENT level, PLACEMENT target ) 
  : application_level_(level), 
    application_target_(target),
@@ -31,7 +31,7 @@ Visitor<dim>::Visitor( PLACEMENT level, PLACEMENT target )
                             "The application level of a Visitor cannot be lower down in hierarchy than the target; read documentation." );
  }
 
-template<size_t dim>
+template<uint32_t dim>
 Visitor<dim>::~Visitor()
 {
 }
@@ -52,11 +52,11 @@ The class of object that the visitor shall be applied to.
 of target.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Visitor<dim>::ApplicationLevel( PLACEMENT p ) 
  { application_level_ = p; }
 
-template<size_t dim>
+template<uint32_t dim>
 PLACEMENT  Visitor<dim>::ApplicationLevel() const 
  { return application_level_; }
 
@@ -75,12 +75,12 @@ of target.
 
 If the argument supplied is not applicable, the method reports an error.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Visitor<dim>::ApplicationTarget( PLACEMENT p )           
  { application_target_ = p; }
 
 
-template<size_t dim>
+template<uint32_t dim>
 csmp::PLACEMENT  Visitor<dim>::ApplicationTarget() const 
 { return application_target_; }
 
@@ -97,62 +97,62 @@ and perform the actions that are desired for the visitation.
 @param f is a pointer to the target Face (forming part of a boundary).
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Face<dim>* f )
  {
     cerr <<"\nVisitor::Visit(Face<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( InterFace<dim>* )
  {
     cerr <<"\nVisitor::Visit(InterFace<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
  
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Node<dim>* )
  {
     cerr <<"\nVisitor::Visit(Node<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Element<dim>* )
  {
     cerr <<"\nVisitor::Visit(Element<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
  
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Region<dim>* )
  {
     cerr <<"\nVisitor::Visit(Region<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Boundary<dim>* )
  {
     cerr <<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
  
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( SplitBoundary<dim>* )
  {
     cerr <<"\nVisitor::Visit(Boundary<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";
     cerr << endl;
  }
  
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::Visit( Model<dim>* )
  {
     cerr<<"\nVisitor::Visit(Model<dim>*): Method not implemented in the subclass of the Visitor class that you are using."<< endl;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void Visitor<dim>::SetInitialProperties( Model<dim>* )
  {
     cerr<<"\nVisitor::SetInitialProperties(Model<dim>*): Method not implemented in the subclass of the Visitor class that you are using.";

@@ -9,6 +9,9 @@
 #include "ErrorHandler.h"
 #include "EclipseInterface.h"
 #include "PolygonGrid.h"
+#include "VSet.h"
+#include "ModelTopology.h"
+
 
 #include "IsoparametricLinearHexahedron.h"
 #include "IsoparametricLinearPyramid.h"
@@ -104,7 +107,7 @@ void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zco
     // 1. Build pillars
     std::vector<double> zcoord;
     zcoord.reserve( 4 * (NZ_ + 1) );
-    for ( size_t i = 0; i <= NX_; ++i )
+    for ( auto i = 0; i <= NX_; ++i )
     {
       for ( size_t j = 0; j <= NY_; ++j )
       {
@@ -148,7 +151,7 @@ void CornerPointGrid::ConstructPillarsAndColumns( const std::vector<double>& zco
   {
     std::vector<ColumnCell> cells;
     cells.reserve( NZ_ );
-    for ( size_t i = 0; i < NX_; ++i )
+    for ( auto i = 0; i < NX_; ++i )
     {
       for ( size_t j = 0; j < NY_; ++j )
       {
@@ -210,10 +213,9 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
   // 1. Classify the cells
 
-  size_t skewCells = 0;
   for ( auto& index_column : columns_ ) {
     auto& column = index_column.second;
-    size_t i = index_column.first.first;
+    auto i = index_column.first.first;
     size_t j = index_column.first.second;
 
     const size_t iNrCells = column.cells_.size();
@@ -253,7 +255,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
   std::vector<Point<3U>> tp_pts;
   std::vector<Point<3U>> bt_pts;
-  for ( size_t i = 0; i <= NX_; ++i ) {
+  for ( auto i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
       Pillar& pillar = (*this)(i, j);      
       for ( size_t k = 0; k < pillar.GetNumPoints(); ++k ) {
@@ -283,7 +285,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
     for ( size_t k = 0; k < Col.cells_.size(); k++ ) {
       ColumnCell&  cell = Col.cells_[k];
       pair<size_t, size_t> index = column->first;
-      size_t i = index.first;
+      auto i = index.first;
       size_t j = index.second;
 
       generator_->setIJ( i, j );
@@ -381,6 +383,8 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
           if ( !ConstructEclipseCell1110( cell, i, j, k, cellAbove, cellBeneath ) )
             cout << "\n detected a broken cell: ECLIPSE_CELL_PYRAMID_3(" << i << "," << j << "," << k << ")";
           break;
+        default:
+           throw csmp::Exception( ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "switch(cellType) unhandled case");
       }
     }
   }
@@ -394,7 +398,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
 
   // 3. store node coordinates
   deque<double> x, y, z;
-  for ( size_t i = 0; i <= NX_; ++i ) {
+  for ( auto i = 0; i <= NX_; ++i ) {
     for ( size_t j = 0; j <= NY_; ++j ) {
       Pillar& pillar = (*this)(i, j);
       for ( size_t k = 0; k < pillar.GetNumPoints(); ++k ) {
@@ -430,7 +434,7 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   };
   
   vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
-  for ( size_t i = 0U; i < vset.Vertices(); ++i )
+  for ( auto i = 0U; i < vset.Vertices(); ++i )
     {
       vector<double> coord( 3U );
       for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
@@ -803,9 +807,9 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
                 invalid_pris++;
               }
               badPrisms_ += invalid_pris;
-
+              
               break;
-
+              
             case FACE_TYPE::SPLIT_13_OR_57:
               if ( generator_->ConstructPyramidOnFace( cell, 0, 4, 5, 1, centroid ) ) {
                 size_t eid = generator_->EmitPyramid( cell );
@@ -876,11 +880,13 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
               else {
                 invalid_tets++;
               }
-
+              
               badPyramids_ += invalid_pyrs;
               badTetrahedra_ += invalid_tets;
-
+              
               break;
+              
+            case FACE_TYPE::FULL_QUAD:
 
             default:
               throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "Hexahedron with unknown bottom face" );
@@ -959,12 +965,12 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
               else {
                 invalid_tets++;
               }
-
+              
               badPyramids_ += invalid_pyrs;
               badTetrahedra_ += invalid_tets;
-
+              
               break;
-
+              
             case FACE_TYPE::SPLIT_13_OR_57:
               if ( generator_->ConstructPrism( cell, 5, 4, 7, 1, 0, 3 ) ) {
                 size_t eid = generator_->EmitPrism( cell );
@@ -983,13 +989,15 @@ bool CornerPointGrid::ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, si
                 invalid_pris++;
               }
               badPrisms_ += invalid_pris;
-
+              
               break;
-
+              
             default:
               throw csmp::Exception( FATAL_ERROR, "CornerPointGrid::ConstructFiniteElementsFromColumns", "Hexahedron with unknown bottom face" );
           }
           break;
+        case FACE_TYPE::SPLIT_X:
+          throw csmp::Exception( ERROR, "CornerPointGrid::ConstructEclipseCell0000", "switch case FACE_TYPE::SPLIT_X not handled yet");
       }
     }
   }
@@ -1283,9 +1291,8 @@ bool CornerPointGrid::ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, si
     addElementToMap( i, j, k, eid );
     new_elements.push_back( eid );
   }
-  else {
-    invalid_elements++;
-  }
+  else invalid_elements++;
+
 
   badTetrahedra_ += invalid_elements;
 
@@ -1369,16 +1376,14 @@ The PolygonGridManager is used to construct the pillars.
 @todo regions are not recognised properly.
 */
 void CornerPointGrid::CreateModel( const std::string&     model_name,
-                                       csmp::VSet<3U>&       vset,
-                                       csmp::ModelTopology&   model_topology,
-                                       const std::vector<double>& zcorn,
-                                       std::set<std::string>& regions,
-                                       std::set<std::string>& faults,
-                                       std::set<std::string>& wells,
-                                       bool tetra_mesh, bool exclude_inactive_cells )
+                                   csmp::VSet<3U>&        vset,
+                                   csmp::ModelTopology&   model_topology,
+                                   const std::vector<double>& zcorn,
+                                   std::set<std::string>& regions,
+                                   std::set<std::string>& faults,
+                                   std::set<std::string>&  wells,
+                                   bool tetra_mesh, bool exclude_inactive_cells )
 {
-  csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
-
   // 1. Initialise grid specs
   InitializeGridSpecs();
 
@@ -1398,9 +1403,9 @@ void CornerPointGrid::addElementToMap( size_t i, size_t j, size_t k, size_t elem
 
 template<class VarType>
 void CornerPointGrid::WritePropertyToVSet( csmp::VSet<3U>&             vset,
-                                               const std::vector<VarType>& prop_data,
-                                               const std::string&          prop_name,
-                                               const csmp::PLACEMENT&      prop_place ) const
+                                           const std::vector<VarType>& prop_data,
+                                           const std::string&          prop_name,
+                                           const csmp::PLACEMENT&      prop_place ) const
 {
   /// correcting data cell id's due to existance of embedded cells
   VarType var;

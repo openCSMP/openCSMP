@@ -13,7 +13,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 SimulatorSetup<dim>::SimulatorSetup(std::string geometry_prefix,
                                     std::string project_name,
                                     vector<bool > options,
@@ -31,7 +31,7 @@ SimulatorSetup<dim>::SimulatorSetup(std::string geometry_prefix,
     property_at_point_(NULL)
 {}
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::Initialize(bool verbose)
 {
     this->Verbose(verbose);
@@ -57,7 +57,7 @@ void SimulatorSetup<dim>::Initialize(bool verbose)
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::LoadControlSimulatorSetupParameters()
 {
     //required parameters for control mechanisms to work.
@@ -80,7 +80,7 @@ void SimulatorSetup<dim>::LoadControlSimulatorSetupParameters()
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::CreateAllProperties(){
 
     // This function creates properties in the model assuming that, if restart is not an active option, the model is completely empty.
@@ -134,7 +134,7 @@ void SimulatorSetup<dim>::CreateAllProperties(){
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::CheckModel(){
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if (this->Verbose()) cout<<" SimulatorSetup<dim>::CheckModel()..."<<endl;
@@ -174,7 +174,7 @@ void SimulatorSetup<dim>::CheckModel(){
  * The parameter list is sorted following this addition.
  * Loading pre-existing variables will replace any existing parameters with the same name in the parameter list.
  */
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::AddPreExistingModelVariables()
 {
     map<string,csmp::Index> pre_existing_props_in_model;
@@ -203,7 +203,7 @@ void SimulatorSetup<dim>::AddPreExistingModelVariables()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorSetup<dim>::YesOrNo()
 {
     bool answer(false),yesorno(false);
@@ -225,7 +225,7 @@ bool SimulatorSetup<dim>::YesOrNo()
     return yesorno;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::ModelSetupFromConfigFile()
 {
     // -----------------------------------------------------------------------
@@ -283,7 +283,7 @@ void SimulatorSetup<dim>::ModelSetupFromConfigFile()
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorSetup<dim>::CheckVariables()
 {
 
@@ -377,7 +377,7 @@ bool SimulatorSetup<dim>::CheckVariables()
     return true;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorSetup<dim>::CheckProperties()
 {
     // Check placement, type and usage status of the variables
@@ -412,7 +412,7 @@ bool SimulatorSetup<dim>::CheckProperties()
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorSetup<dim>::CheckModelMinMaxCoordinates(){
     Point<dim> minp,maxp;
     this->GetModel()->MinMaxCoordinates(minp,maxp);
@@ -421,7 +421,7 @@ void SimulatorSetup<dim>::CheckModelMinMaxCoordinates(){
     cout<<" min :"; minp.Out();
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorSetup<dim>::CheckInputRanges(){
 
 
@@ -461,7 +461,7 @@ void SimulatorSetup<dim>::CheckInputRanges(){
 
 // Read output options as well as region types (whether they are wells, boundaries)
 
-template <size_t dim>
+template <uint32_t dim>
 bool SimulatorSetup<dim>::ReadOptionsFromRegionsFile()
 {
     std::string  text_line;
@@ -592,7 +592,7 @@ bool SimulatorSetup<dim>::ReadOptionsFromRegionsFile()
     return true;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
 {
     /** @todo This should probably use a map of well names vs which field is supposed to be used to read in the rates, as well as which phase, if other than single
@@ -633,14 +633,14 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
 
                     // The volume method calculates volume, surface, or length depending on the type of element that composes the well.
                     double wellvolume=model_->Region((*sit).c_str()).Volume();
-                    typename std::vector<Element<dim>* >::iterator ebegin=model_->Region((*sit).c_str()).ElementsBegin();
-                    typename std::vector<Element<dim>* >::iterator eend=model_->Region((*sit).c_str()).ElementsEnd();
+                    auto ebegin=model_->Region((*sit).c_str()).ElementsBegin();
+                    auto eend=model_->Region((*sit).c_str()).ElementsEnd();
                     // calculate volume flow rate per unit length of well (this assumes it is uniform throughout the well!)
                     /// Special Note: Here, we do not divide by the thickness (to get [m^3/(m^3*s)]) because the PDE_Integrator
                     /// does not multiply by any thickness when performing integrals over line elements. If it did,
                     /// then we would be cancelling our division by thickness here, with the multiplication by thickness when we
                     /// integrate the fluid volume source with FEM at the PDE_Integrator.  As a result, we do not need to divide by thickness.
-                    for ( typename std::vector<Element<dim>* >::iterator eit=ebegin;eit!=eend;eit++)
+                    for ( auto eit=ebegin;eit!=eend;eit++)
                         (*eit)->Store(this->Database().StorageKey(mit->second.second.c_str()) ,makeScalar(PLAIN,vflowrate()/wellvolume));
 
                     if (!containsLineElements(model_->Region((*sit).c_str()))) {
@@ -672,7 +672,7 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::OutputSampleVariablesFile(string filename)
 {
     ofstream fout(filename);
@@ -709,7 +709,7 @@ void SimulatorSetup<dim>::OutputSampleVariablesFile(string filename)
     // template
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::OutputSampleConfigurationFile()
 {
     ofstream fout(this->GetProjectName()+"-configuration.txt");
@@ -802,7 +802,7 @@ void SimulatorSetup<dim>::OutputSampleConfigurationFile()
                            " A sample configuration file has been output. Please restart the simulator." );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::OutputSampleRegionsFile()
 {
     //for input
@@ -829,7 +829,7 @@ void SimulatorSetup<dim>::OutputSampleRegionsFile()
         size_t num_regs=atoi(token.c_str()); // get the number of regions to read.
 
         getline(ifsext,stext_line); // skip one more line
-        size_t i = 0;
+        auto i = 0;
         while (i < num_regs) {
             getline(ifsext,stext_line);
             istringstream istdata(stext_line);
@@ -854,7 +854,7 @@ void SimulatorSetup<dim>::OutputSampleRegionsFile()
                            " A sample regions file has been output. Please restart the simulator." );
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::OutputParameterListCode()
 {
     ofstream fout("SimulatorSetupParameterListCode.txt");
@@ -888,7 +888,7 @@ void SimulatorSetup<dim>::OutputParameterListCode()
     // template
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::OutputParameterListToScreen()
 {
     parameter_list_.sort(compare_setup_parameter_nocase);
@@ -911,7 +911,7 @@ void SimulatorSetup<dim>::OutputParameterListToScreen()
     cout<<endl;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 vector<bool> SimulatorSetup<dim>::LoadDefaultOptions()
 {
 
@@ -920,7 +920,7 @@ vector<bool> SimulatorSetup<dim>::LoadDefaultOptions()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::LoadModel()
 {
     //****************************************************************************************************
@@ -1018,7 +1018,7 @@ void SimulatorSetup<dim>::LoadModel()
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::LoadMonitor()
 {
     // This is for the legacy output of the region monitor.
@@ -1043,7 +1043,7 @@ void SimulatorSetup<dim>::LoadMonitor()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 SimulatorSetup<dim>::~SimulatorSetup()
 {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -1099,7 +1099,7 @@ SimulatorSetup<dim>::~SimulatorSetup()
 #ifdef CSMP_WITH_SAMG_SOLVER
 /*
 Roman, 2014. Deactivate FEFV_Algorithm for reconstruction purposes
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::Add_DESCompatible_Integrator(std::string name)
 {
 
@@ -1114,7 +1114,7 @@ void SimulatorSetup<dim>::Add_DESCompatible_Integrator(std::string name)
 }
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::AddLegacy_FE_Integrator(std::string name)
 {
     if (solver_settings_.find(name)==solver_settings_.end())
@@ -1127,7 +1127,7 @@ void SimulatorSetup<dim>::AddLegacy_FE_Integrator(std::string name)
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::DeleteLegacy_FE_Integrator(std::string name)
 {
     if (solver_settings_.find(name)!=solver_settings_.end())
@@ -1146,7 +1146,7 @@ void SimulatorSetup<dim>::DeleteLegacy_FE_Integrator(std::string name)
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::AddLegacy_FEFV_Integrator(std::string name,vector<string> variables)
 {
     bool second_order_in_space(false),second_order_in_time(false);
@@ -1221,7 +1221,7 @@ void SimulatorSetup<dim>::AddLegacy_FEFV_Integrator(std::string name,vector<stri
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorSetup<dim>::QuietIntegrators()
 {
     for (auto iti = this->GetLegacy_FE_Integrators().begin(); iti != this->GetLegacy_FE_Integrators().end();iti++){
@@ -1232,7 +1232,7 @@ void SimulatorSetup<dim>::QuietIntegrators()
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 SAMG_Settings* SimulatorSetup<dim>::GetIntegratorSolverSettings(string name)
 {
     if (solver_settings_.find(name)==solver_settings_.end()){
@@ -1243,7 +1243,7 @@ SAMG_Settings* SimulatorSetup<dim>::GetIntegratorSolverSettings(string name)
 
 /*
 Roman, 2014. Deactivate FEFV_Algorithm for reconstruction purposes
-template<size_t dim>
+template<uint32_t dim>
 FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(SAMG_Solver* samg)
 {
     if (des_compatible_integrators_.find(samg)==des_compatible_integrators_.end()){
@@ -1254,7 +1254,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(SAMG_Solver
 }
 */
 
-template<size_t dim>
+template<uint32_t dim>
 PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_Solver* samg)
 {
     if (legacy_FE_integrators_.find(samg)==legacy_FE_integrators_.end()){
@@ -1264,7 +1264,7 @@ PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_So
     return legacy_FE_integrators_.at(samg);
 }
 
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeTransport<dim>* SimulatorSetup<dim>::GetLegacy_FEFV_Integrator(SAMG_Solver* samg)
 {
     if (legacy_FEFV_integrators_.find(samg)==legacy_FEFV_integrators_.end()){
@@ -1276,7 +1276,7 @@ NodeCenteredFiniteVolumeTransport<dim>* SimulatorSetup<dim>::GetLegacy_FEFV_Inte
 
 /*
 Roman, 2014. Deactivate FEFV_Algorithm for reconstruction purposes
-template<size_t dim>
+template<uint32_t dim>
 FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(string name)
 {
     if (name_samgsolver_.find(name)==name_samgsolver_.end()){
@@ -1298,7 +1298,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(string name
 }
 */
 
-template<size_t dim>
+template<uint32_t dim>
 PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string name)
 {
     if (name_samgsolver_.find(name)==name_samgsolver_.end())
@@ -1320,7 +1320,7 @@ PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string 
     return legacy_FE_integrators_.at(name_samgsolver_.at(name));
 }
 
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeTransport<dim>* SimulatorSetup<dim>::GetLegacy_FEFV_Integrator(string name)
 {
     if (name_samgsolver_.find(name)==name_samgsolver_.end()){

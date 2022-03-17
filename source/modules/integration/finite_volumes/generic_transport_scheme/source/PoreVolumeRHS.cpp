@@ -12,7 +12,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 PoreVolumeRHS<dim>::PoreVolumeRHS( const INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& spv_key,
                                    const INDEX<SCALAR,NODE>& fpv_key,
                                    const INDEX<SCALAR,NODE>& transported_variable_key )
@@ -28,7 +28,7 @@ PoreVolumeRHS<dim>::PoreVolumeRHS( const INDEX<SCALAR,SECTOR_INTEGRATION_POINT>&
  Furthermore this assumes that the node indexes have been updated for the computational
  domain.
  */
-template<size_t dim>
+template<uint32_t dim>
 void PoreVolumeRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<double>& rhs ) const
  {
     // assumptions
@@ -37,7 +37,7 @@ void PoreVolumeRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<d
 
     const size_t sector_ipoints(e.Sectors());
 
-    for (size_t i=0U; i < sector_ipoints; ++i ) 
+    for (auto i{0}; i < sector_ipoints; ++i ) 
       {
          const double sector_pore_volume = e.Read( i, 0U, spv_key_ );
          const double advected_var_value = e.N(i)->Read( adv_key_ );
@@ -54,7 +54,7 @@ void PoreVolumeRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<d
     Furthermore this assumes that the node indexes have been updated for the computational
     domain.
 */
-template<size_t dim>
+template<uint32_t dim>
 void PoreVolumeRHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, std::vector<double>& rhs ) const
  {
      const double pore_volume(fv.Read(fpv_key_));

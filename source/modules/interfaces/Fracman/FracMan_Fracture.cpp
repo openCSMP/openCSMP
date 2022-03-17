@@ -347,7 +347,7 @@ void FRACMAN_Fracture::Out() const
     if ( props.size() > 3 ) {
          list<double>::const_iterator  pit = props.begin();
          cout <<"\nOther property data:    "<< endl;
-         pit++, pit++, pit++;
+         pit++; pit++; pit++;
          
          while ( pit != props.end() ) {
               cout << (*pit) <<"  ";

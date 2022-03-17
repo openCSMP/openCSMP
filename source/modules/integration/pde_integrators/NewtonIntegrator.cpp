@@ -7,11 +7,11 @@
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 NewtonIntegrator<dim,COMPUTATION_DOMAIN>::NewtonIntegrator() :
   IterativeIntegrator<dim,COMPUTATION_DOMAIN>() {}
   
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 double NewtonIntegrator<dim,COMPUTATION_DOMAIN>::Residual() {
   return std::sqrt(std::inner_product( this->rh_.begin(), 
                                        this->rh_.end(),

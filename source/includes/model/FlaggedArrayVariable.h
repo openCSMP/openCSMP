@@ -68,7 +68,7 @@ class FlaggedArrayVariable
 
       FlaggedArrayVariable( const FlaggedArrayVariable& );
 
-      template<size_t dim>
+      template<uint32_t dim>
       FlaggedArrayVariable( const char* arrayPropertyName,
                             const PropertyDatabase<dim>& pd,
                             double defaultValue=std::numeric_limits<double>::quiet_NaN(),
@@ -126,10 +126,10 @@ class FlaggedArrayVariable
       bool           operator>=( const FlaggedArrayVariable& ) const;
 
       /// accessors to the data
-      double       operator[]( size_t ) const;
-      double&      operator()( size_t );
+      double         operator[]( size_t ) const;
+      double&        operator()( size_t );
       void           Component( size_t, double );
-      double       Component( size_t i ) const;
+      double         Component( size_t i ) const;
 
       size_t         Size() const;
       void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
@@ -167,7 +167,7 @@ class FlaggedArrayVariable
 
 
   /// Automatically sets size to corresponding index, flag to ANY
-  template<size_t dim>
+  template<uint32_t dim>
   FlaggedArrayVariable::FlaggedArrayVariable( const char* arrayPropertyName,
                                               const PropertyDatabase<dim>& pd,
                                               double defaultValue,

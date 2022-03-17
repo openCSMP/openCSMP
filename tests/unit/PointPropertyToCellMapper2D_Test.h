@@ -1,12 +1,11 @@
-#ifndef ANSYS_MODEL2D_TEST_H
-#define ANSYS_MODEL2D_TEST_H
+#ifndef POINT_PROPERTY_TO_CELL_MAPPER_2D_TEST_H
+#define POINT_PROPERTY_TO_CELL_MAPPER_2D_TEST_H
 
 #include "Test.h"
 
 namespace csmp{
 
-  // P. Lang 2011
-  class ANSYS_Model2D_Test : public Test
+  class PointPropertyToCellMapper2D_Test : public Test
     {
     public:
       virtual void run();
@@ -14,4 +13,4 @@ namespace csmp{
 
   } // csmp
 
-#endif // ANSYS_MODEL2D_TEST_H
+#endif // POINT_PROPERTY_TO_CELL_MAPPER_2D_TEST_H

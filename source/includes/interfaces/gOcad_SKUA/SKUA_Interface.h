@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 /**
 
@@ -32,7 +32,7 @@ class SKUA_Interface {
   // IMPORT INTERFACES
   
     /// region-by-region property assignment from column-based texfile (Kuncho Kurtev)
-    template<size_t dim>
+    template<uint32_t dim>
     bool ImportElementPropertyValuesFromSKUA( Model<dim>&, const std::string& data_file=std::string() );
 
 

@@ -6,10 +6,9 @@ namespace csmp {
 
 PDE_Integrator_Test::PDE_Integrator_Test()
  {
-    const bool       isoparametric(true);
-    ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
+    ANSYS_Interface  mesh_interface(true);  // true = isoparametric elements
     VSet<2U>         mesh_container;
-    ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
+    ModelTopology    mesh_topology(true);   // true = isoparametric elements
 
     // Building Region object from ANSYS data files
     cout <<"Reading mesh..."<<endl;
@@ -18,7 +17,8 @@ PDE_Integrator_Test::PDE_Integrator_Test()
     mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
     cout <<"Finished reading mesh..."<<endl;
     cout <<"Building Model..."<<endl;
-    sg_= new Model<2U>( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");
+    // to get isoparametric elements
+    sg_= new Model<2U>( mesh_topology, mesh_container, "CSMP-2phase-variables.txt", true );
 
     // Set values on nodes and elements
     //sg_->InputPropertyValue("fluid pressure", makeScalar(PLAIN,1.));

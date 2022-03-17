@@ -20,7 +20,7 @@ namespace csmp {
 
 /** Initializes LHS, XVEC, and RHS arrays.
 */
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeAlgorithm<dim>::NodeCenteredFiniteVolumeAlgorithm( Region<dim>& sg )
  : gref_(sg),
    RESULT( sg.Nodes(), 0. ),
@@ -49,7 +49,7 @@ NodeCenteredFiniteVolumeAlgorithm<dim>::NodeCenteredFiniteVolumeAlgorithm( Regio
 
  
  
-template<size_t dim>
+template<uint32_t dim>
 NodeCenteredFiniteVolumeAlgorithm<dim>::~NodeCenteredFiniteVolumeAlgorithm()
  {
     delete solver_;
@@ -66,7 +66,7 @@ re-initializes the righthand vector<double> to zero.
 
 The size of the computational problem = number of FVs.
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetLHS( size_t nodes )
  {
     LHS.Erase();
@@ -75,7 +75,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetLHS( size_t nodes )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetRHS( size_t nodes )
  {
     // if the RHS was used before
@@ -89,21 +89,21 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetRHS( size_t nodes )
     fill( RESULT.begin(), RESULT.end(), static_cast<double>(0.) );
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::ResetRow( size_t nid )
 {
     LHS.ZeroRow(nid);
     RHS[nid]=0.0;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::ZeroRHS( size_t nid )
 {
     RHS[nid]=0.0;
 }
 
 /// returns the settings object if SAMG is used to solve the matrix equations
-template<size_t dim>
+template<uint32_t dim>
 CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& NodeCenteredFiniteVolumeAlgorithm<dim>::GetSolverSettings()
 {
     return *dynamic_cast<CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS*>((solver_)->GetSolverSettings());
@@ -115,7 +115,7 @@ CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS& NodeCenteredFiniteVolumeAlgorithm<dim>::Get
       default.  I believe this needs re-consideration.  Rather , I would utilize SAMG_Solver even for small problems, with special
       settings.  -- Julian 24-09.2013
 */
-template<size_t dim>
+template<uint32_t dim>
 CSMP_DEFAULT_LINEAR_SOLVER* NodeCenteredFiniteVolumeAlgorithm<dim>::GetSolver()
     {
         return dynamic_cast<CSMP_DEFAULT_LINEAR_SOLVER*>(solver_);
@@ -133,11 +133,11 @@ the solution vector<double> as the upstream weighted first-order fluxes.
 To assign the higher order fluxes, the method needs access to the 
 current finite element and the associated FV stencil processor.  
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateFluxUpwindSaturationProducts( const StencilProcessor<dim>& es )
 {
    // for all finite-volume facets
-  for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+  for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
     {
        // identifying the finite volumes to which the flux will be distributed
        gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -180,11 +180,11 @@ at each facet integration point to define the higher order fluxes.
 To assign the higher order fluxes, the method needs access to the 
 current finite element and the associated FV stencil processor.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderFluxSaturationProducts( const StencilProcessor<dim>& es )
 {
    // for all finite-volume facets
-   for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+   for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
      {
          // identifying the finite volumes to which the flux will be distributed
          gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -208,12 +208,12 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderFluxSaturation
 @attention this method relies on uptodate Node indices.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DNT_op_DN_dV_LHS( 
                                                                            const StencilProcessor<dim>& es )
  {
 
-    for ( size_t i=0U; i<gref_.E(es.eidx_)->FE()->IntegrationPoints(); i++ )
+    for ( auto i{0}; i<gref_.E(es.eidx_)->FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
@@ -237,7 +237,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DNT_op_DN_dV_LHS
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DN_op_dS_LHS( const StencilProcessor<dim>& es )
  {
 
@@ -280,7 +280,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DN_op_dS_LHS( co
 /** Source term per finite volume sector is added to the diagonal of the
 matrix.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateSectorSourceTermsInLHS( const StencilProcessor<dim>& es ) 
  {
     for ( size_t i=0; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
@@ -318,7 +318,7 @@ finite-volume facet, there are the nodes i (inside) and j(outside).
 The current Element and uptodate FiniteVolumeProcessor are used to 
 retrieve the variables of interest.  
  */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcessor<dim>& es,
                                                                 double time_multiplier )
 {
@@ -369,7 +369,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateLHS( const StencilProcess
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
                                                                                        std::vector<double>& SAT0,
                                                                                        double time_multiplier)
@@ -410,7 +410,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrix_NonlinearNewtonRap
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonRaphson( const StencilProcessor<dim>& es,
                                                                                         std::vector<double>& SAT0,
                                                                                         double time_multiplier)
@@ -418,11 +418,11 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonR
     Element<dim>* e(gref_.E(es.eidx_));
     size_t NNodes(e->Nodes());
     // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
-    for ( size_t i=0U; i<NNodes; i++ )
+    for ( auto i{0}; i<NNodes; i++ )
       RHS[ e->N(i)->Idx() ] +=
             - ((es.psi1_[i] - SAT0[ e->N(i)->Idx() ]) * es.sector_pore_volume_[i]) / time_multiplier;
 
-    for ( size_t i=0U; i<NNodes; i++ )
+    for ( auto i{0}; i<NNodes; i++ )
         RHS[ e->N(i)->Idx() ] +=
             -es.facet_flux_rhs_[i]
             ;
@@ -436,7 +436,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidual_NonlinearNewtonR
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier,const csmp::Index& adv1_key)
  {
 
@@ -478,7 +478,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateMatrixAtBoundary_Nonlinea
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_NonlinearNewtonRaphson( const StencilProcessor<dim>& es, std::vector<double>& SAT0, size_t nid, size_t pnid, double time_multiplier, const csmp::Index& adv1_key)
  {
     if(gref_.N(pnid)->Status( adv1_key ) != DIRICH ){
@@ -498,7 +498,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateResidualAtBoundary_Nonlin
  } // end AccumulateResidual_NolinearNewtonRaphson
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::CompensateInflowOutFlowBoundaries(size_t nid,
                                                                        const double& inflow,
                                                                        const double& flux_balance)
@@ -529,13 +529,13 @@ timelevel are supplied by the vector<double> SAT0. The time-multiplier
 is needed to divide the finite-volume sector volume by.  
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcessor<dim>& es,
                                                             vector<double>& SAT0,
                                                             double time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
+     for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
        //                                           phi * sector volume
        RHS[ gref_.E(es.eidx_)->N(i)->Idx() ] += 
            (SAT0[ gref_.E(es.eidx_)->N(i)->Idx() ] * es.sector_pore_volume_[i]) / time_multiplier;
@@ -545,12 +545,12 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcess
 
 
 // simpler version for first-order method in time only, O.K.
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateRHS( const StencilProcessor<dim>& es,
                                                             double time_multiplier )
  {
      // fill righthandside with the  prop_t0 * pore_vol/time_increment  products
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
+     for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Sectors(); i++ )
        RHS[ gref_.E(es.eidx_)->N(i)->Idx() ] += (es.psi1_[i] * es.sector_pore_volume_[i]) / time_multiplier;
 
  } // end AccumulateRHS
@@ -587,11 +587,11 @@ temporal limiter value, theta, is supplied as a 7th method argument.
 
 In higher-order theta-limited transport scheme.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( const StencilProcessor<dim>& es )
  {
      // summing flux saturation products over the finite volume cell
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
+     for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
 	        // computing higher order flux
 	        const double  hflux(es.facet_flux_[i] * es.ipsi1_[i]);
           
@@ -604,7 +604,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( const Ste
 
  } // end AccumulateHigherOrderRHS (version for first-order-accurate method in time)
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS( 
                                                       const StencilProcessor<dim>& es,
                                                       const vector<vector<double> >& FACETFLUXES0,
@@ -638,13 +638,13 @@ products over faces.
 References to the current element, finite-volume stencil processor,
 and the fluxes integrated over the facets inside the current element.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<dim>& es )
  {
      const double zero(0.);
      double       uvar; // upstream value of advected variable
  
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+     for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
 	       // identifying the finite volumes to which the flux will be distributed
 	       gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -662,13 +662,13 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<dim>& es, vector<double>& SAT0  )
  {
      const double zero(0.);
      double       uvar; // upstream value of advected variable
 
-     for ( size_t i=0U; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
+     for ( auto i{0}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ )
        {
            // identifying the finite volumes to which the flux will be distributed
            gref_.E(es.eidx_)->FV()->FacetEdgeNodes( i, es.inside_node_, es.outside_node_ );
@@ -690,7 +690,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddToRHS( const StencilProcessor<di
 /** including potential point sources or sinks in the model.
  */
 /*
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes( 
                                                    const vector<double>& SAT0, 
                                                    const vector<double>& pore_volume,
@@ -728,7 +728,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes(
 
 // adds contribution to lefthandside no matter what !
 // CURRENTLY USED
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::AddDivergenceOfFluxes( const vector<double>& divsrc )
  {
      for ( size_t nidx=0; nidx<divsrc.size(); nidx++ )
@@ -749,7 +749,7 @@ This function compensates this negative balance.
 
 @warning THIS FUNCTION ACTUALLY ADDS CONTRIBUTIONS DUE TO NON_CONSERVATIVE OUTFLUXES To RHS
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::SubtractNonConservativeOutFluxesFromRHS( 
                                                                        TwoPhaseModel<dim>&  relperm,  
                                                                        const vector<double>& FLUX_BALANCE,
@@ -790,7 +790,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::SubtractNonConservativeOutFluxesFro
 /** The matrices and vectors are copied to condensed row storage and are then
 used by the AMG to find a solution.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void NodeCenteredFiniteVolumeAlgorithm<dim>::SolveMatrixEquation()
  {
 
@@ -831,7 +831,7 @@ is returned. If errors occur at more than 2 per cent of the nodes, an
 'out_of_range' exception is thrown.  
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
                                                                 const csmp::Index& adv_key, 
                                                                 bool show_range ,
@@ -970,7 +970,7 @@ Updates saturation water as well! - by default phase1 = wetting phase
 multiphase version - assumes range to be between 0 and 1
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyDatabase<dim>& p, 
                                                                 size_t result_phase,
                                                                 const csmp::Index& adv1_key, 
@@ -1082,7 +1082,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
  
   */
 
- template<size_t dim>
+ template<uint32_t dim>
  int32_t NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
                                                                                     size_t result_phase,
                                                                                     const csmp::Index& adv1_key,
@@ -1126,7 +1126,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults( const PropertyData
    @todo JM move these kinds of testing methods into the subclasses that are used for the testing:
      JM addition
 */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const PropertyDatabase<dim>& p,
                                                                              const csmp::Index& adv_key,
                                                                              bool show_range ) const
@@ -1194,7 +1194,7 @@ double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResultsWithL2NormRes( const
     Please contact me directly if these things are important.  It is NOT a testing method.
     I do my best to not perform any "sloppy" copying.
  */
-template<size_t dim>
+template<uint32_t dim>
 double NodeCenteredFiniteVolumeAlgorithm<dim>::OutputResults_NonlinearNewtonRaphson( const PropertyDatabase<dim>& p,
                                                                  size_t result_phase,
                                                                  const csmp::Index& adv1_key,

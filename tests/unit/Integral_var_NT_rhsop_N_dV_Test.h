@@ -32,7 +32,7 @@ namespace csmp {
     void calculateGlobalMatrix( SparseMatrix& sm, MathOperatorLHS<2U>& oper);
     void calculateGlobalRHS( std::vector<double>& rhs, MathOperatorRHS<2U>& oper);
 
-    Model<2U>*    sg_;
+    Model<2U>*    sg_  = nullptr;;
     const double  tol_;
     const bool    verbose_;
   };

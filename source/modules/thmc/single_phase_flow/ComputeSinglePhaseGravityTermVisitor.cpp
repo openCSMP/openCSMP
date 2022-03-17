@@ -12,7 +12,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ComputeSinglePhaseGravityTermVisitor<dim>::ComputeSinglePhaseGravityTermVisitor(Model<dim>& model,
                                                                                 const char* permeabilityTag,
                                                                                 const char* viscosityTag,
@@ -37,7 +37,7 @@ ComputeSinglePhaseGravityTermVisitor<dim>::ComputeSinglePhaseGravityTermVisitor(
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Model<dim>* m ){
     if (this->Verbose()) cout <<" ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Model<dim>*)"<<endl;
 #if defined(_OPENMP )
@@ -45,7 +45,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Model<dim>* m ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Region<dim>* region ){
     if (this->Verbose()) cout <<" ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Region<dim>*) : "<<region->Name()<<endl;
 
@@ -69,7 +69,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::Visit(Region<dim>* region ){
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Element<dim>* element )
 {
 #if !defined(_OPENMP)
@@ -77,7 +77,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::Visit( Element<dim>* element )
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element )
 {
 

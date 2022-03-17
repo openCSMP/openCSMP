@@ -83,8 +83,7 @@ void DESAdvectionDiffusion2D_Example::Run()
     // --------------------------------------------
     // 2.0 Create Model with isoparametric FEs
     // --------------------------------------------
-    Model<2U>                  model( mesh_container, "DES_variables.txt", true ); // true = isoparametric FEs
-    const PropertyDatabase<2>& p_ref = model.Database();
+    Model<2U>  model( mesh_container, "DES_variables.txt" ); // true = isoparametric FEs
 
     // give the model dimensions
     printModelDimensions( model, true );
@@ -130,7 +129,7 @@ void DESAdvectionDiffusion2D_Example::Run()
     // -----------------------------------------------------------------------------------------
     // 5.0 Interrelation to compute hydraulic conductivity from permeability and fixed viscosity
     // -----------------------------------------------------------------------------------------
-    ConstantFactor<2U,divides>  conductivity( p_ref, "conductivity", "permeability", 0.001 ); // viscosity 1 cp = 0.001 Pa s
+    ConstantFactor<2U,divides>  conductivity( model.Database(), "conductivity", "permeability", 0.001 ); // viscosity 1 cp = 0.001 Pa s
 
     // calculate values
     model.Apply( conductivity );
@@ -159,11 +158,11 @@ void DESAdvectionDiffusion2D_Example::Run()
     PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
 #endif
 
-    // LHS stiffness matrix                                 operand         basis function    test function
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+    // LHS stiffness matrix                                                         operand         basis function    test function
+    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
 
     // RHS mass matrix for integrating source term
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >    source_term( p_ref, "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U,Element<2U> >    source_term( model.Database(), "fluid volume source", "fluid pressure" );
 
     // use lumped formulation for all mass matrices (i.e., diagonalise matrices)
     source_term.LumpedFormulation(true);

@@ -78,7 +78,7 @@ void TransientPressure_Example::Run()
   // 2.0 Building the Region named "model"
   // set boolean for isoparametric elements to true
   // -----------------------------------------------
-  Model<2U>   model( mesh_container, "example4.txt", true );
+  Model<2U>   model( mesh_container, "example4.txt" );
 
   // 3.0 Input the initial Conditions
   // --------------------------------

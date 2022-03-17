@@ -30,7 +30,7 @@ namespace csmp {
 
    upstream weighted first-order space-time fluxes
 */
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim>& pref )
  : VARIABLE_SET(pref),
    Notation(*this)
@@ -68,7 +68,7 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
 
 
  */
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim>& pref, 
                                                       const set<csmp::ADE_TERM>& ADE_components )
  : VARIABLE_SET(pref),
@@ -141,7 +141,7 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
 /**
    delete all dynamic copies of  MathOperators from the heap
 */
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 IntegralEquation<dim,VARIABLE_SET>::~IntegralEquation()
  {
     for ( typename map<Operation,MatrixOperator<dim>*>::iterator
@@ -165,7 +165,7 @@ IntegralEquation<dim,VARIABLE_SET>::~IntegralEquation()
 \f{ \mathbf{u}_{\alpha} = -\frac{k_{r\alpha}}{\mu_\alpha} \mathbb{K}\left( \nabla p_\alpha - \rho_\alpha \mathbf{g}\right)\f}
 
 */
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, MatrixOperator<dim>* mop ) // makes internal copies of these operators
  {
     ErrorHandler& error_handler( ErrorHandler::Instance() );
@@ -184,7 +184,7 @@ void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, Matrix
  }
  
  
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, VectorOperator<dim>* vop )
  {
     ErrorHandler& error_handler( ErrorHandler::Instance() );
@@ -204,7 +204,7 @@ void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, Vector
 
 
 /// post-processing operations involving the solution variable (these will never have to be modified)
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 void IntegralEquation<dim, VARIABLE_SET>::AddPostProcess( MatrixOperator<dim>* mop )
  {
     ErrorHandler& error_handler( ErrorHandler::Instance() );
@@ -219,34 +219,34 @@ void IntegralEquation<dim, VARIABLE_SET>::AddPostProcess( MatrixOperator<dim>* m
  
 
 
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::MatrixOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::LHS_OperatorsBegin() const 
   { return mat_operators_.begin(); }
 
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::MatrixOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::LHS_OperatorsEnd() const 
   { return mat_operators_.end(); }
     
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::VectorOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::RHS_OperatorsBegin() const 
   { return vec_operators_.begin(); }
 
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::VectorOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::RHS_OperatorsEnd() const 
   { return vec_operators_.end(); }
     
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::PostProcessingOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::PostProcessingOperatorsBegin() const
  { return postpro_operators_.begin(); }
  
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 typename IntegralEquation<dim,VARIABLE_SET>::PostProcessingOperatorConstIterator IntegralEquation<dim,VARIABLE_SET>::PostProcessingOperatorsEnd() const
  { return postpro_operators_.end(); }
     
 
 
 
-template<size_t dim, class VARIABLE_SET>
+template<uint32_t dim, class VARIABLE_SET>
 void IntegralEquation<dim,VARIABLE_SET>::Out() const
  {
     cout <<"\nIntegralEquation<dim>::Out: ";

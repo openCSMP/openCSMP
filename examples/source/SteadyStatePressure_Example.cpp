@@ -162,12 +162,12 @@ void SteadyStatePressure_Example::Run()
 #endif
 
   // conductance matrix [K] on the left-hand side
-  Integral_dNT_op_dN_dV<2U,Element<2U> >    conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+  Integral_dNT_op_dN_dV<2U>    conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
   // source vector {Q} on the right-hand side
-  Integral_NT_op_N_dV<2U,Element<2U> >      source( model.Database(),  "fluid volume source", "fluid pressure" );
+  Integral_NT_op_N_dV<2U>      source( model.Database(),  "fluid volume source", "fluid pressure" );
   // post-processing operation to compute flow velocities
   const bool interpolate_values_to_nodes(true);
-  VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model,  "conductivity", "porosity", "fluid pressure", interpolate_values_to_nodes );
+  VelocityAndVolumeFlux<2U>    velocity( model,  "conductivity", "porosity", "fluid pressure", interpolate_values_to_nodes );
 
   // add PDE_Operators to the FE Algorithm
   total_pressure.Add( &conductance );
@@ -206,16 +206,17 @@ void SteadyStatePressure_Example::Run()
   // -------------------------------------------------------
   cout << "\nFORMING A REGION CALLED 'granite'" << endl;
   model.FormRegionFrom( "granite", "permeability", 1.0e-21, 1.0e-18 );
+  Region<2>& granite_domain(model.Region("granite"));
 
   // add fluid volume source term to region granite and repeat computation
   const double source_term(1.0e-13); // m3 m-2 s-1
-  model.Region("granite").InputPropertyValue( "fluid volume source", makeScalar(PLAIN,source_term) );
+  granite_domain.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,source_term) );
 
   // fixing pressure at perimeter of group
-  model.Region("granite").ChangePropertyStatus( "fluid pressure", DIRICH, PERIMETER );
+  granite_domain.ChangePropertyStatus( "fluid pressure", DIRICH, PERIMETER );
 
   // recomputing fluid pressure in the granite taking into account the source term
-  total_pressure.IntegrateOver( model.Region("granite") );
+  total_pressure.IntegrateOver( granite_domain );
 
   printRangeOfVariable( model, "granite", "fluid pressure" );
   printRangeOfVariable( model, "granite", "velocity" );

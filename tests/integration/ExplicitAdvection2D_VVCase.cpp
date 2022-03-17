@@ -63,7 +63,7 @@ namespace csmp {
     cout <<"Finished reading mesh..."<<endl;
     cout <<"Building Model..."<<endl;
 
-    Model<2U>  model2D( mesh_topology, mesh_container, (input_file_name+".txt").c_str() );
+    Model<2U>  model2D( mesh_topology, mesh_container, (input_file_name+".txt").c_str(), true );
     cout <<"Finished building model."<<endl;
 
     mesh_container.Erase();
@@ -74,7 +74,7 @@ namespace csmp {
     Standard_IO_Handler  stdio;
     printModelDimensions( model2D, true );
     MeshDiagnostics<2U>  mesh_check;
-    double             vol_min, vol_max;
+    double               vol_min, vol_max;
     mesh_check.ElementVolumeRange( model2D, vol_min, vol_max );
 
     // Configuring the built model (adding boundary condition info, etc, from input files:

@@ -13,7 +13,7 @@ Uses the method Initialize.
 
 */
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::CGNS_Model( const std::string& mesh_file_set,
                                const std::string& regions_file_prefix,
                                const std::string& variable_file,
@@ -30,7 +30,7 @@ Uses the method Initialize.
    }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::CGNS_Model( const std::string& mesh_file_set,
                                const std::string& variable_file,
                                bool use_regions_file,
@@ -47,7 +47,7 @@ Uses the method Initialize.
    }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::CGNS_Model( const std::string& mesh_file_set,
                                bool use_regions_file,
                                bool create_boundaries
@@ -62,7 +62,7 @@ Uses the method Initialize.
                   create_boundaries );
    }
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::CGNS_Model( const std::string& vset_dat_files,
                                const std::string& variable_file )
    : Model<dim>( vset_dat_files.c_str(), variable_file.c_str() )
@@ -70,19 +70,19 @@ Uses the method Initialize.
       this->Name(vset_dat_files.c_str());
    }
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::CGNS_Model( const std::string& vset_dat_files )
     : Model<dim>( vset_dat_files.c_str() )
     {
       this->Name(vset_dat_files.c_str());
     }
 
-  template<size_t dim>
+  template<uint32_t dim>
   CGNS_Model<dim>::~CGNS_Model()
     {
     }
 
-  template<size_t dim>
+  template<uint32_t dim>
   void CGNS_Model<dim>::Write_CGNS_Mesh( const std::string& mesh_file_set )
   {
       bool isoparametric_elements( true );
@@ -91,7 +91,7 @@ Uses the method Initialize.
   }
 
   /// Builds Model after it was constructed with the default constructor.
-  template<size_t dim>
+  template<uint32_t dim>
   void CGNS_Model<dim>::Initialize( const std::string& mesh_file_set,
                                     const std::string& regions_file_prefix,
                                     bool use_regions_file,

@@ -14,7 +14,7 @@ namespace csmp {
     @author Khoa Luat Tran (University of Melbourne)
     @date 17/4/2019
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 class PDE_Integrator_UoM : public PDE_Integrator<dim, COMPUTATION_DOMAIN> {
   public:
     /// only use this constructor

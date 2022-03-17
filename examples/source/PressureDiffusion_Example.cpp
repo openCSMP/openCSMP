@@ -93,8 +93,9 @@ void PressureDiffusion_Example::Run()
     // 2. Building model
     // boolean determines that isoparametric elements will be used
     // -----------------------------------------------------------
-    const bool isoparametric(true);
-    Model<2U>  model( mesh_container, "example3.txt", isoparametric );
+    // to get isoparametric elements
+    VSetConverter<2U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
+    Model<2U>  model( mesh_container, "example3.txt" );
     mesh_container.Erase();
     printModelDimensions( model, true );
 

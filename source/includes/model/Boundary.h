@@ -8,13 +8,13 @@ namespace csmp {
 
 class FiniteElementManager;
 class FaceConstructionData;
-template<size_t> class PropertyDatabase;
-template<size_t> class MeshManager;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class MeshManager;
 template<typename> class FEM_Data;
-template<size_t> class Point;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Region;
+template<uint32_t> class Point;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
 
 /**
 
@@ -47,7 +47,7 @@ targeting of variables like 'basal heat flow' etc.
 @date 2010
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class Boundary : public ModelSubDomain<dim, Face>,
                  public LocalVariableStorage<dim, Boundary>
  {
@@ -117,6 +117,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // ----------------------------------------
     //  boundary initialisation & modification
     // ----------------------------------------
+    
+    /// creates element pointers assuming that the order in which the elements are stored in the MeshManager matches that in the element_ids vector; no 'idx' searching
+    size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
     /// creating from supplied vector of faces
     bool CreateFrom( const typename std::vector<Face<dim>*>::const_iterator facesBegin,

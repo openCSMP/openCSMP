@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// invokes accumulation of zero right-hand side = "homogeneous" boundary conditions
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_SetRHS_to_Zero : public MathOperatorRHS<dim> {
   public:
     NumIntegral_SetRHS_to_Zero( const PropertyDatabase<dim>&,

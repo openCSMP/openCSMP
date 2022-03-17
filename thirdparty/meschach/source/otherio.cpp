@@ -146,7 +146,7 @@ static	int	y_n_dflt = TRUE;
 		if ( ( retcode==1 && low > high ) ||
 					( x >= low && x <= high ) )
 			return (double)x;
-		fprintf(stderr,"Please type an double in range [%g,%g].\n",	low,high);
+		fprintf(stderr,"Please type an double in range [%d,%d].\n",	low,high);
 	}
 }
 

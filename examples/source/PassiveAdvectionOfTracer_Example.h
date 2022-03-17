@@ -5,9 +5,9 @@
 
 namespace csmp {
 
-  template<size_t dim> class Model;
-  template<size_t dim> class VTK_Interface;
-  template<size_t dim> class NodeCenteredFiniteVolumeTransport;
+  template<uint32_t dim> class Model;
+  template<uint32_t dim> class VTK_Interface;
+  template<uint32_t dim> class NodeCenteredFiniteVolumeTransport;
 
 class  PassiveAdvectionOfTracer_Example : public Example {
   public:

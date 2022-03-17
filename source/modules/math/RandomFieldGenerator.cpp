@@ -9,14 +9,14 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 RandomFieldGenerator<dim>::RandomFieldGenerator()
  : m1_(0,0), m2_(0,0), m3_(0,0), pi_(csmp::PI), k_(0), fname("random_permeability_field.txt")
 {
 
 } 
 
-template<size_t dim>
+template<uint32_t dim>
 Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
 {
    // ascertain that we get a different distribution everytime we call this
@@ -43,7 +43,7 @@ Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
 {    
     std::random_device rd;
@@ -69,7 +69,7 @@ Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
   return m3_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double xl, double yl, double Lx, double Ly)
 {    
   const size_t cnt(m+2);
@@ -131,7 +131,7 @@ iteration will become inaccurate.
 
 <!------------------------------------------------------------------------>
 tested: O.K. */
-template<size_t dim>
+template<uint32_t dim>
 void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
 													  bool logarithmic, const char* region, size_t iterations )
 {
@@ -203,7 +203,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
         }
       for (size_t j=0; j<m; j++ ) {
           v3 = 1.0;
-          for (size_t k=0; k<m; k++ ) {
+          for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);
               t2 = std::cos(pi_ * v3 * bc[1]/Ly);
               t3 = std::pow((pi_ * v2 * xlength/Lx),2.0) + std::pow((pi_ * v3 * ylength/Ly),2.0);
@@ -229,7 +229,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 /*M <H4>Method:</H4><CODE>
 <!------------------------------------------------------------------------>
 void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* variable, double mean, double sigma, double xlength, double ylength, 
@@ -339,7 +339,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
         }
       for (size_t j=0; j<m; j++ ) {
           v3 = 1.0;
-          for (size_t k=0; k<m; k++ ) {
+          for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);
               t2 = std::cos(pi_ * v3 * bc[1]/Ly);
               t3 = std::pow((pi_ * v2 * xlength/Lx),2.0) + std::pow((pi_ * v3 * ylength/Ly),2.0);
@@ -364,7 +364,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
 {
 
@@ -393,7 +393,7 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
   
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
 {
 
@@ -424,7 +424,7 @@ void RandomFieldGenerator<dim>::OutputRandomNodeField( Model<dim>& mdl )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const char* variable )
 {
   
@@ -463,7 +463,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void RandomFieldGenerator<dim>::InputRandomNodeField( Model<dim>& mdl, const char* variable )
 {
 

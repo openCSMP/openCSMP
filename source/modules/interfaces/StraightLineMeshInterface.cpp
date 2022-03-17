@@ -8,13 +8,13 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StraightLineMeshInterface<dim>
 ::StraightLineMeshInterface( )
 {
 }
 
-template<size_t dim>
+template<uint32_t dim>
 StraightLineMeshInterface<dim>
 ::StraightLineMeshInterface( csmp::VSet<dim>& vset,
                              const std::string& mesh_file )
@@ -24,7 +24,7 @@ StraightLineMeshInterface<dim>
 
 // MODES
 
-template<size_t dim>
+template<uint32_t dim>
 void StraightLineMeshInterface<dim>
 ::WriteInfoFile()
 {
@@ -49,7 +49,7 @@ void StraightLineMeshInterface<dim>
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void StraightLineMeshInterface<dim>
 ::WriteSampleFile( std::ofstream& ofs)
 {
@@ -163,7 +163,7 @@ void StraightLineMeshInterface<dim>
   @author R. Manasipov
 */
 
-template<size_t dim>
+template<uint32_t dim>
 void StraightLineMeshInterface<dim>
 ::Initialize( csmp::VSet<dim>& vset, const std::string& fname )
 {
@@ -204,7 +204,7 @@ void StraightLineMeshInterface<dim>
 
 /// Generic function which reads blocks of data marked by keyword
 
-template<size_t dim>
+template<uint32_t dim>
 bool StraightLineMeshInterface<dim>
 ::ReadMesh( std::ifstream& ifs, char* text_line, size_t line_length,
             std::set<std::string>& keywords, std::string& keyword, std::vector<std::string>& keyword_params )
@@ -260,7 +260,7 @@ bool StraightLineMeshInterface<dim>
             }
         }
         if( width_of_transition_zone == 0.0 )
-            mesher.BuildUniformMesh( *vset_, length, static_cast<size_t>(length/dx_min) );
+            mesher.BuildUniformMesh( *vset_, length, static_cast<uint32_t>(length/dx_min) );
         else
             mesher.BuildRefinedMesh( *vset_, length, dx_min, dx_max, width_of_transition_zone, meshdens );
     }
@@ -277,14 +277,14 @@ bool StraightLineMeshInterface<dim>
                 token = strtok( text_line, delims );
                 p[0] = atof( token );
                 // read remaining coordinates or assign it to 0.0 if notning is present
-                for ( size_t dimension=1U; dimension < dim; dimension++ )
+                for ( uint32_t dimension=1U; dimension < dim; dimension++ )
                 {
                     token = strtok( NULL, delims );
                     if ( token != NULL )
                         p[ dimension ] = atof(token);
                     else
                     {
-                        for ( size_t i = dimension; i<dim; i++ )
+                        for ( auto i = dimension; i<dim; i++ )
                             p[ i ] = 0.0;
                         break;
                     }
@@ -314,14 +314,14 @@ bool StraightLineMeshInterface<dim>
                     token = strtok( text_line, delims );
                     p[0] = atof( token );
                     // read remaining coordinates or assign it to 0.0 if notning more is provided
-                    for ( size_t dimension=1U; dimension < dim; dimension++ )
+                    for ( uint32_t dimension=1U; dimension < dim; dimension++ )
                     {
                         token = strtok( NULL, delims );
                         if ( token != NULL )
                             p[ dimension ] = atof(token);
                         else
                         {
-                            for ( size_t i = dimension; i < dim; i++ )
+                            for ( auto i = dimension; i < dim; i++ )
                                 p[ i ] = 0.0;
                             break;
                         }
@@ -352,14 +352,14 @@ bool StraightLineMeshInterface<dim>
                 token = strtok( text_line, delims );
                 p[0] = atof( token );
                 // read remaining coordinates or assign it to 0.0 if notning more is provided
-                for ( size_t dimension=1U; dimension < dim; dimension++ )
+                for ( uint32_t dimension=1U; dimension < dim; dimension++ )
                 {
                     token = strtok( NULL, delims );
                     if ( token != NULL )
                         p[ dimension ] = atof(token);
                     else
                     {
-                        for ( size_t i = dimension; i<dim; i++ )
+                        for ( auto i = dimension; i<dim; i++ )
                             p[ i ] = 0.0;
                         break;
                     }

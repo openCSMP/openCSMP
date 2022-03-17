@@ -13,7 +13,7 @@
 namespace csmp{
 
 
-template<size_t dim>
+template<uint32_t dim>
 ConductivityVisitor<dim>::ConductivityVisitor(Model<dim>& model,
                                               const char* specific_saturated_hydraulic_conductivity, // this is without mult. by density
                                               const char* permeability,
@@ -61,14 +61,14 @@ ConductivityVisitor<dim>::ConductivityVisitor(Model<dim>& model,
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ConductivityVisitor<dim>::Visit( Model<dim>* m ){
 #if defined(_OPENMP )
     this->Visit(&m->Region("Model"));
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ConductivityVisitor<dim>::Visit(Region<dim>* region ){
 #if defined(_OPENMP )
 #pragma omp parallel
@@ -91,7 +91,7 @@ void ConductivityVisitor<dim>::Visit(Region<dim>* region ){
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void ConductivityVisitor<dim>::Visit( Element<dim>* element )
 {
 #if !defined(_OPENMP)
@@ -116,7 +116,7 @@ void ConductivityVisitor<dim>::Visit( Element<dim>* element )
 #endif
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ConductivityVisitor<dim>::ComputeContribution( Element<dim>* element )
 {
 #if defined(_OPENMP )

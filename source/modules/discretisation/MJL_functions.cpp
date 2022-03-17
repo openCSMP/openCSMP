@@ -155,7 +155,7 @@ Polygon* starShapedPolygon( const std::vector<mjl::Point>& pts ) // MJL, p. 110
  {
     if ( pts.empty() ) {
          cout <<"\nstarShapedPolygon: supplied point-list is empty; nothing was done."<< endl;
-         return NULL;
+         return nullptr;
       }
 
     std::vector<mjl::Point>::const_iterator  it=pts.begin();
@@ -213,7 +213,7 @@ Polygon* insertionHull( const std::vector<mjl::Point>& s ) // MJL, p. 114
 /// Laszlo, p. 158
 Polygon*  convexPolygonIntersect( Polygon& P, Polygon& Q )
  {
-    Polygon*               R;
+    Polygon*               R(nullptr);
     mjl::Point             iPnt, startPnt;
     POLYGON_CLASSIFICATION inflag(UNKNOWN);
     int                    phase(1);

@@ -12,7 +12,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 FemFromGridVisitor<dim>::FemFromGridVisitor( const PropertyDatabase<dim>& p, 
                                              const FiniteDifferenceGrid& g, 
                                              const char* var,
@@ -49,12 +49,12 @@ FemFromGridVisitor<dim>::FemFromGridVisitor( const PropertyDatabase<dim>& p,
 
 
       
-template<size_t dim>
+template<uint32_t dim>
 FemFromGridVisitor<dim>::~FemFromGridVisitor() 
  {  
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void FemFromGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x, 
                                                     double& min_y, double& max_y )
  {
@@ -71,7 +71,7 @@ void FemFromGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  FemFromGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update )
   {
      mjl::Point p1(XY(0,0),XY(0,1)), 
@@ -104,7 +104,7 @@ bool  FemFromGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  FemFromGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
   {
      // this method currently works only for regular rectangles
@@ -128,7 +128,7 @@ bool  FemFromGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void FemFromGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_type )
  {
     double     min_x, max_x, min_y, max_y;
@@ -163,7 +163,7 @@ void FemFromGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE f
 
 // Visit(Element* n) 
 // ------------------------
-template<size_t dim>
+template<uint32_t dim>
 void FemFromGridVisitor<dim>::Visit( Element<dim>* n )   
   { 
      // getting to element

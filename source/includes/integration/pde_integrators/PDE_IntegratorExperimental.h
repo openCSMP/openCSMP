@@ -37,8 +37,8 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class Boundary;
+template<uint32_t> class Model;
+template<uint32_t> class Boundary;
 
 /**
 
@@ -267,7 +267,7 @@ done in the following example:
 @endcode
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class PDE_IntegratorExperimental {
   public:
 
@@ -400,17 +400,17 @@ class PDE_IntegratorExperimental {
     std::map<Parameter,size_t>                   basic_operands_;
     std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations
 
-    SparseMatrix            G_;                        ///< solution matrix
+    SparseMatrix          G_;                        ///< solution matrix
     std::vector<double>   rh_;                       ///< righthand vector
     std::vector<double>   x_;                        ///< solution vector
-    std::vector<size_t>     DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
+    std::vector<size_t>   DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
     std::vector<double>   pivotVector_;              ///< terms recovered from eliminated rows
 
-    Solver*                 solver_;
+    Solver*               solver_;
 
-    size_t                  dof_per_node_;
-    bool                    setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
-    bool                    newed_Solver_object_;
+    size_t                dof_per_node_;
+    bool                  setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
+    bool                  newed_Solver_object_;
     double                time_increment_;
 
     struct SIZES {

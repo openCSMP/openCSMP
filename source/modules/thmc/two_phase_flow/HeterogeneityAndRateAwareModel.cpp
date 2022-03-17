@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 HeterogeneityAndRateAwareModel<dim>::HeterogeneityAndRateAwareModel( const PropertyDatabase<dim>& database,
                                                                      const bool sw_ro_mu_placement )
   
@@ -61,14 +61,14 @@ HeterogeneityAndRateAwareModel<dim>::HeterogeneityAndRateAwareModel( const Prope
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 HeterogeneityAndRateAwareModel<dim>::~HeterogeneityAndRateAwareModel()
  {
  }
  
  
 
-template<size_t dim>
+template<uint32_t dim>
 int32_t HeterogeneityAndRateAwareModel<dim>::RockType( const Element<dim>& e ) const {
      const double rock_type = e.Read(RRT_key_);
      assert( !isnan(rock_type) );
@@ -81,7 +81,7 @@ int32_t HeterogeneityAndRateAwareModel<dim>::RockType( const Element<dim>& e ) c
     Reads velocity variable, vt_, normalises it (vt_normalised_) and computes magnitude (vt_magnitude_).
     If the velocity is zero, horizontal flow will be indicated.
 */
-template<size_t dim>
+template<uint32_t dim>
 void HeterogeneityAndRateAwareModel<dim>::InitializeVelocity( const Element<dim>& e )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -115,7 +115,7 @@ void HeterogeneityAndRateAwareModel<dim>::InitializeVelocity( const Element<dim>
     
     @attention this method only deals with horizontal or vertical laminations; oblique directions are not considered.
 */
-template<size_t dim>
+template<uint32_t dim>
 void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -527,7 +527,7 @@ throw csmp::Exception( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize:",
 /**
       Intialises model for testing and plotting
 */
-template<size_t dim>
+template<uint32_t dim>
 void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double Sw, const VectorVariable<dim>& vt )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1010,7 +1010,7 @@ void HeterogeneityAndRateAwareModel<1U>::InitialisePermeability( const Element<1
 
 
 /// weighted permeability average for flow along layers
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::PermeabilityParallelToLaminations() const
  {
     assert( is_composite_ );
@@ -1020,7 +1020,7 @@ double HeterogeneityAndRateAwareModel<dim>::PermeabilityParallelToLaminations() 
  
  
 /// weigthed harmonic mean of permeability for flow across layers
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminations() const
  {
     assert( is_composite_ );
@@ -1038,7 +1038,7 @@ double HeterogeneityAndRateAwareModel<dim>::PermeabilityPerpendicularToLaminatio
         @attention if the flow velocity is zero, horizontal flow is assumed.
     
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const VectorVariable<dim>& vt_normalised ) const
  {
     assert( is_composite_ );
@@ -1066,7 +1066,7 @@ double HeterogeneityAndRateAwareModel<dim>::PermeabilityInFlowDirection( const V
  
     @note if the flow velocity magnitude is below threshold value, HORIZONAL is returned.
 */
-template<size_t dim>
+template<uint32_t dim>
 typename HeterogeneityAndRateAwareModel<dim>::FLOW_DIRECTION 
 HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection( const VectorVariable<dim>& vt ) const
  {
@@ -1083,12 +1083,12 @@ HeterogeneityAndRateAwareModel<dim>::ProminentFlowDirection( const VectorVariabl
 /**
     Returns the magnitude of the pressure gradient corrected for the hydrostatic component which causes no flow
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Element<dim>& e ) const
  {
     array<double,dim> gradP = {0.}; // the unspecified elements are initialised to zero
     e.dN_AtBaryCenter( DN_ );
-    for ( size_t i=0U; i<e.Nodes(); ++i ) {
+    for ( auto i{0}; i<e.Nodes(); ++i ) {
          const double pf = e.N(i)->Read( pf_key_ );
          for ( size_t j=0U; j<dim; ++j )
          gradP[j] += DN_(j,i) * pf;
@@ -1108,7 +1108,7 @@ double HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Ele
      pressure gradient form: Nc = k ||grad p|| / sigma; 
      @attention uses horizontal permeability only
 */
-template<size_t dim>
+template<uint32_t dim>
 double csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double pf_gradient_magnitude ) const
  {
      assert( pf_gradient_magnitude != UNSPECIFIED );
@@ -1125,7 +1125,7 @@ double csmp::HeterogeneityAndRateAwareModel<dim>::Nc_kgradP_Version( double pf_g
     @attention must always be called first because Seff must be communicated with the base class.
     @attention this method just transfers the saturation because the effective saturation is calculated later
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
  {
     TwoPhaseModel<dim>::sat_  = Sw_;
@@ -1143,7 +1143,7 @@ double HeterogeneityAndRateAwareModel<dim>::EffectiveSaturation() const
     lumping in the Kv/Kh ratio.
     The result is limited to greater than or equal to zero.
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
  {
     if ( !is_composite_ ) return krw_; // krw_VG( Sw_, m_VG_ );
@@ -1164,7 +1164,7 @@ double HeterogeneityAndRateAwareModel<dim>::krw_Phase() const
 /**
     CO2 relative permeability
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
  {
      if ( !is_composite_ ) return krn_; // krn_BC( Sw_ );
@@ -1185,7 +1185,7 @@ double HeterogeneityAndRateAwareModel<dim>::krn_Phase() const
 
 
 /// for the wetting phase
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::MaxFractionalFlowDerivative() const
  {
     return static_cast<double>(5.6); // as computed with dfds method
@@ -1203,7 +1203,7 @@ Not directionally dependent.
 @attention this pc function takes into account the effect of flow rate, which also shifts the irreducible saturations.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
  {
     //rocktype 16 uses BC
@@ -1241,7 +1241,7 @@ double HeterogeneityAndRateAwareModel<dim>::pc_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::pc_Phase_at(double sw) const
 {
     return pc_VG( sw, pd_, m_VG_, Swi_pc_ );   
@@ -1259,7 +1259,7 @@ double HeterogeneityAndRateAwareModel<dim>::pc_Phase_at(double sw) const
     @todo dpcdsw is zero as soon as one of the phases is immobile
     to avoid that CFL is influenced while capillary spreading is not possible.
 */
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
  {
     assert( Sw_ >= 0. );
@@ -1304,7 +1304,7 @@ double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase_at(double sw) const
  {
     assert( sw >= 0. );
@@ -1339,7 +1339,7 @@ double HeterogeneityAndRateAwareModel<dim>::dpcds_Phase_at(double sw) const
 /**
     writes textfile with sw, krw(sw,Nc), krn(sw,Nc), and pc(sw) values computed for (composite) rocktype in 0.05 saturation increments
 */
-template<size_t dim>
+template<uint32_t dim>
 void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const char* filename, 
                                                                           long RT, 
                                                                           const VectorVariable<dim>& vt )
@@ -1388,7 +1388,7 @@ void HeterogeneityAndRateAwareModel<dim>::WriteRelativePermeabilityTable( const 
     RVC = ((RVC_high_k * (L_high)) + (RVC_low_k * (L_low)))/(total thicknes=L);
 
 */
-template<size_t dim>
+template<uint32_t dim>
 double csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double Ncap ) const
  {
     const double rvc_low_k  = ((Ncap * TwoPhaseModel<dim>::ift_) * L_low_) / (dPc_ * k_low_);
@@ -1400,8 +1400,8 @@ double csmp::HeterogeneityAndRateAwareModel<dim>::RVC( double Ncap ) const
 
 
 
-template<size_t dim>
-void HeterogeneityAndRateAwareModel<dim>::Out( size_t phase ) const
+template<uint32_t dim>
+void HeterogeneityAndRateAwareModel<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout <<"\nHeterogeneityAndRateAwareModel<"<< dim << ">::Out(rocktype="<< rocktype_ <<"): return values of functions: "<< endl;

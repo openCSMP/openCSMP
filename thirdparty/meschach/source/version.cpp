@@ -62,9 +62,9 @@ void m_version()
 }
 
 /* $Log: version.c,v $
-/* Revision 1.1.1.1  2006/08/09 13:57:52  apaluszn
-/*
-/*
+ * Revision 1.1.1.1  2006/08/09 13:57:52  apaluszn
+ *
+ *
  * Revision 1.9  1994/03/24  00:04:05  des
  * Added notes on changes to spILUfactor() and px_inv().
  *

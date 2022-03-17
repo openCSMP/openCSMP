@@ -12,7 +12,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class UpwindControlVisitor : public Visitor<dim> {
   public:
     UpwindControlVisitor( Model<dim>& model, 
@@ -79,13 +79,13 @@ class UpwindControlVisitor : public Visitor<dim> {
     double distance, largest_time_step;
     double cfl_scaling;
 
-    size_t       xyz;       // 1=x, 2=y, 3=z
-    size_t       inside_node_, outside_node_;
+    uint32_t  xyz;       // 1=x, 2=y, 3=z
+    uint32_t  inside_node_, outside_node_;
     
     bool recalculate, flipping, grav, with_velocity, facet_cfl;
     bool cfl_with_pore_velocity;
 
-    size_t phases, facets; 
+    uint32_t phases, facets; 
 
 };
 

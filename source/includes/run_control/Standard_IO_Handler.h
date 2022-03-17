@@ -19,7 +19,7 @@ class Standard_IO_Handler {
     ~Standard_IO_Handler();
   
     /// prints question onto screen and collects input from user (stdin)
-    bool        YesNo( const char question[150] );
+    bool        YesNo( const std::string& question );
   
     /// prompts user to enter a floating point value which is collected from stdin returned
     double    RecordChoice( const char* question );

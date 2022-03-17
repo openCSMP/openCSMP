@@ -29,7 +29,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& pref )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
 {
@@ -37,7 +37,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname, const Property
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( const SplitBoundary& ed )
   : ModelSubDomain<dim, InterFace>( ed ),
     LocalVariableStorage<dim,SplitBoundary>( ed )
@@ -45,7 +45,7 @@ SplitBoundary<dim>::SplitBoundary( const SplitBoundary& ed )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( SplitBoundary&& ed )
   : ModelSubDomain<dim, InterFace>( move(ed) ),
     LocalVariableStorage<dim,SplitBoundary>( move(ed) )
@@ -53,7 +53,7 @@ SplitBoundary<dim>::SplitBoundary( SplitBoundary&& ed )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>& SplitBoundary<dim>::operator=( const SplitBoundary<dim>& ed )
 {
   if ( &ed != this ) {
@@ -73,7 +73,7 @@ SplitBoundary<dim>& SplitBoundary<dim>::operator=( const SplitBoundary<dim>& ed 
         @author SKM
         @date 21/9/21
 */
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
                                    MeshManager<dim>& mesh,
                                    const SubDomainInfo& info )
@@ -126,7 +126,7 @@ which already contain multiplicated yet collocated nodes (can be done in ANSYS).
 @author SKM 15/08/2018
 
 */
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    const FiniteElementManager& femgr,
@@ -161,10 +161,16 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // ---------------------------------------------------------------------------------------------------
   this->node_vec_.reserve( this->elmt_vec_.size() );
   for ( auto& it : this->elmt_vec_ )
-    for ( size_t i = 0U; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
+    for ( auto i = 0U; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
   // sorting node vector and making it unique
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  
+  // assigning the INTERNAL box boundary flag to nodes where they do not already have another flag (like EDGE etc)
+  for ( auto& nit : this->node_vec_ )
+    if ( nit->AtBoundary() == NOT )
+      nit->AtBoundary( INTERNAL );
+  
 
   // 4. sorting interfaces and nodes and building the boundary interface vector
   // ---------------------------------------------------------------------------------------------------
@@ -181,26 +187,26 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
 
 /// Does not delet interfaces, Delete() has to be called for this
-template<size_t dim>
+template<uint32_t dim>
 SplitBoundary<dim>::~SplitBoundary()
 {
 }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 IntegrationPointVariables  SplitBoundary<dim>::InterFaceIntegrationPointVariables() const
 { return this->pref_.IntegrationPointVariablesAt( INTER_FACE ); }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 LocalVariables  SplitBoundary<dim>::InterFaceVariables() const
 { return this->pref_.LocalVariablesAt( INTER_FACE ); }
 
 
 // LOCAL VARIABLE STORAGE INTERFACE
-template<size_t dim>
+template<uint32_t dim>
 bool SplitBoundary<dim>::ValidVariable( const char* variableName ) const
 {
   const PLACEMENT p( this->pref_.Placement( variableName ) );
@@ -213,7 +219,7 @@ bool SplitBoundary<dim>::ValidVariable( const char* variableName ) const
 // VISITORS INTERFACE
 
 /// visitation of a split boundary
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary<dim>::Accept( Visitor<dim>& v )
 {
   if ( v.ApplicationLevel() == MODEL || v.ApplicationLevel() == SPLIT_BOUNDARY )
@@ -228,13 +234,11 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
       return;
       // element, interface and interface are treated the same
     case INTER_FACE:
-      for ( typename vector<InterFace<dim>*>::iterator
-            it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
+      for ( auto it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
-      for ( typename vector<csmp::Node<dim>*>::iterator
-            nd_it = this->NodesBegin(); nd_it != this->NodesEnd(); nd_it++ )
+      for ( auto nd_it = this->NodesBegin(); nd_it != this->NodesEnd(); nd_it++ )
         (*nd_it)->Accept( v );
       return;
     default:
@@ -245,7 +249,7 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
 
 
 /// Returns the position of and adjacent region relative to the boundary. Relies on element Idx
-template<size_t dim>
+template<uint32_t dim>
 INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 {
   assert( !this->elmt_vec_.empty() );
@@ -277,7 +281,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
       @author SKM
       @date 7/6/2020
 */
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
@@ -321,7 +325,7 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 template<typename Var>
 void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
@@ -381,7 +385,7 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 /**
        Indiscriminately accumulates inside, outside and intervening nodes, if any.
 */
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
 {
   if ( this->elmt_vec_.empty() )
@@ -413,7 +417,7 @@ second value returns the highest spatial dimension contained.
 
 @author SKM 1/11/2013
 */
-template<size_t dim>
+template<uint32_t dim>
 pair<int32_t, int32_t>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 {
   return this->SpatialDimensions();
@@ -423,12 +427,76 @@ pair<int32_t, int32_t>  SplitBoundary<dim>::InterFaceSpatialDimensions() const
 
 
 
+template<uint32_t dim>
+size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
+                                               vector<size_t>& cell_ids )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( cell_ids.empty() )
+    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+                      "user-supplied interface-number vector is empty. Nothing is done." );
+
+  if ( !this->elmt_vec_.empty() ) {
+      csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+                         "SplitBoundary is not empty", "erasing all members..." );
+      this->elmt_vec_.clear();
+    }
+
+  // eliminating potential duplicates from element index vector
+#ifdef DEBUG
+  const size_t n_cells{cell_ids.size()};
+  sort( cell_ids.begin(), cell_ids.end() );
+  cell_ids.erase( unique( cell_ids.begin(), cell_ids.end() ), cell_ids.end() );
+  if ( cell_ids.size() < n_cells )
+    csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+                      "user-supplied interface ID set contained duplicates which were removed." );
+#endif
+  if ( cell_ids.size() > mesh.InterFaces() )
+    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+                       "user-supplied interface-number vector is larger than range of index-to-element-pointer mapping." );
+
+  // creating the element vector for the region
+  // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
+  const auto offset = mesh.Elements() + mesh.Faces();
+  this->elmt_vec_.reserve( cell_ids.size() );
+  for ( auto& idx : cell_ids ) {
+       InterFace<dim>* ifptr = &(*next(mesh.InterFacesBegin(),idx-offset));
+       assert( ifptr != nullptr );
+       assert( ifptr->Idx() == idx );
+       this->elmt_vec_.push_back( ifptr );
+    }
+    
+  // creating node vector
+  if ( this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
+  // filling the vector
+  for ( auto& it : this->elmt_vec_ ) {
+       const size_t n_nodes{it->Nodes()};
+       for ( auto i{0}; i<n_nodes; ++i ) {
+            assert( it->N(i) != nullptr );
+            this->node_vec_.push_back( it->N(i) );
+         }
+     }
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
+  this->IdentifyPerimeter();
+  
+  return this->elmt_vec_.size();
+
+} // end AccumulateByNumber
+
+
+
+
 /**
     Creates a split boundary from a boundary. Requires unique indices.
     @author SKM 1/11/2013
     @author SKM 21/9/2021
 */
-template<size_t dim>
+template<uint32_t dim>
 bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
                                       Boundary<dim>& boundary )
 {
@@ -470,7 +538,7 @@ bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
 Computes length (m) of the SplitBoundary object's perimeter curve.
 Operation makes sense only in 33 because the perimeter of a line are just its end points.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -482,11 +550,11 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   }
 
   double        perimeter_length( 0. );
-  vector<size_t>  fnids;
+  vector<uint32_t>  fnids;
   size_t          n( 0U );
 
   for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
-    for ( size_t i = 0U; i<this->PerimeterFaces( n ); i++ ) {
+    for ( auto i = 0U; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
       perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
                             (*it)->N( fnids[0] )->Coordinate()).Length();
@@ -501,7 +569,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 Is calculated on the basis of the Splitboundary bisector if the split nodes were
 moved apart in the simulation process; else a particular side is used.
 */
-template<size_t dim>
+template<uint32_t dim>
 double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
 {
   double  integrated_area( 0. );
@@ -546,7 +614,7 @@ objects, multiplying the boundary normal componet with their area.
 
 @author SKM 21/8/2018
 */
-template<size_t dim>
+template<uint32_t dim>
 double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property,
                                               INTERFACE_SIDE side ) const
 {
@@ -579,7 +647,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == ELEMENT ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double property_integral( 0. ), prop_value;
+      double prop_value;
       for ( auto& ife : this->elmt_vec_ ) {
         double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
@@ -597,7 +665,6 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == INTER_FACE ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double property_integral( 0. );
       for ( auto& ife : this->elmt_vec_ )
         property_integral += ife->Area() * ife->Read( prop_key );
 
@@ -607,11 +674,10 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == NODE ) {
       // the property value is interpolated to the interface integration points and then integrated
       // using their integration weights
-      double        property_integral( 0. );
       ScalarVariable  sc;
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
-        for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i ) {
+        for ( auto i = 0U; i<ife->IntegrationPoints(); ++i ) {
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * sc();
         }
@@ -621,10 +687,9 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
 
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
-      double property_integral( 0. );
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
-        for ( size_t i = 0U; i<ife->IntegrationPoints(); ++i )
+        for ( auto i = 0U; i<ife->IntegrationPoints(); ++i )
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
       }
       return property_integral;
@@ -669,7 +734,7 @@ Property assignment to nodes on either side of the interface or elements colocat
 
 @todo ugly implementation where the nodes get written too many times as their side of the interface is only known to the InterFace.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class Var>
 void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART part, INTERFACE_SIDE innerOuter )
 {
@@ -681,19 +746,19 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const V
   if ( part == COMPLETE ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == INTERIOR ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterElementsBegin() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == PERIMETER ) {
     const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
     for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterElementsBegin() ); ifit != ifEnd; ++ifit )
-      for ( size_t n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
+      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else
@@ -716,30 +781,28 @@ template void SplitBoundary<3>::InputNodePropertyValue( const char*, const Tenso
 
 // SCREEN OUTPUT
 
-template<size_t dim>
+template<uint32_t dim>
 void SplitBoundary<dim>::Out() const
 {
   cout << "\nSplitBoundary<dim>::Out(): ";
   cout << " member interfaces: interior=" << this->InteriorElements();
   cout << ", perimeter=" << this->elmt_vec_.size() - this->InteriorElements() << ": " << endl;
 
-  for ( typename vector<InterFace<dim>*>::const_iterator
-        it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+  for ( auto it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
     if ( (*it) == nullptr )
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out",
                              "member interface pointer not initialised" );
   }
 
   cout << "\n\n edge interfaces and their edges (current local numbering): " << endl;
-  vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit( this->bd_face_vec_.begin() );
-  for ( size_t i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
+  auto  bit( this->bd_face_vec_.begin() );
+  for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
     cout << "\ninterface " << i << ": edge numbers: ";
-    for ( vector<ONE_BYTE_NUMBER>::const_iterator
-          ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+    for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
   }
 
   cout << "\n\n edge nodes: " << this->node_vec_.size() - this->first_bd_node_ << " (current local numbering):" << endl;
-  for ( size_t i = this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
+  for ( auto i = this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
     if ( this->node_vec_[i] == nullptr )
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised." );
     else cout << this->node_vec_[i]->Idx() << " ";

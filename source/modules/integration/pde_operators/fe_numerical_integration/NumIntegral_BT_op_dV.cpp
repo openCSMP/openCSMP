@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_BT_op_dV<dim,CELL>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
                                                       const char*  oper, // pore pressure
                                                       const char*  test )
@@ -57,7 +57,7 @@ member Vec {V}.
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -70,7 +70,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
     // mapping element-placed operand from material matrix into 1-column matrix
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
-         for ( size_t i=0; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
+         for ( auto i=0; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
          if ( dim == 2U ) STR(2,0) = MathOperatorRHS<dim>::MTRL[0](0,1);
          else { // 3D, upper diagonal elements of symmetric tensor
               STR(3,0) = MathOperatorRHS<dim>::MTRL[0](0,1); // xy 
@@ -79,7 +79,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
            }
       }
 
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
@@ -120,11 +120,11 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          BT *= STR;
 
          // multiplying with determinant and weights
-         for ( size_t n=0; n<BT.Rows(); n++ ) 
+         for ( auto n=0; n<BT.Rows(); n++ ) 
            BT(n,0) *= e.WeightAtIntegrationPoint(i) * detJ; 
          
          // adding to result vector
-         for ( size_t n=0; n<BT.Rows(); n++ ) 
+         for ( auto n=0; n<BT.Rows(); n++ ) 
            MathOperatorRHS<dim>::RHS[n] += BT(n,0);
       }
 

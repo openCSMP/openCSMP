@@ -66,12 +66,11 @@ void RhinoMesh_Example::Run()
 
       PropertyData  permdata( ELEMENT, SCALAR, 3U );
       permdata.Reserve( mesh_container.Elements() );
-      for ( size_t i=0U; i<mesh_container.Elements(); ++i )
+      for ( auto i{0}; i<mesh_container.Elements(); ++i )
         pushBack( permdata, makeScalar( PLAIN, 1.0e-12 ) );
       mesh_container.AddData( "permeability", permdata );
 
-      const bool isoparametric(true);
-      Model<3U>  model3D( mesh_container, "example20.txt", isoparametric );
+      Model<3U>  model3D( mesh_container, "example20.txt" );
       mesh_container.Erase();
 
       printModelDimensions( model3D, true );
@@ -182,8 +181,7 @@ void RhinoMesh_Example::SideBoundaryConditions( Model<3U>& sg )
    Region<3>&   gref(sg.Region("Model"));
    const double tol(5.0e-1); // 50-cm match of the position of the nodes
 
-   for ( vector<Node<3U>*>::iterator
-         nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
+   for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
     {
       // for all boundary nodes
       // if x,y=0 a boundary value of 0. is assigned to the fluid pressure
@@ -216,8 +214,7 @@ void  RhinoMesh_Example::ConcentrationRectangle( Model<3U>& sg, double concentra
    csmp::Index  Skey = sg.Database().StorageKey("concentration");
    Region<3>&  gref(sg.Region("Model"));
 
-   for ( vector<Node<3U>*>::iterator
-         nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
+   for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++ )
      {
         if ( (*nit)->x() >= 20. && (*nit)->x() <= 80. &&
              (*nit)->y() >= 20. && (*nit)->y() <= 80. &&

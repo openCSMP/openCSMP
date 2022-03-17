@@ -9,8 +9,8 @@
 
 namespace csmp {
 
-  template<size_t> class Model;
-  template<size_t> class Interrelation;
+  template<uint32_t> class Model;
+  template<uint32_t> class Interrelation;
   class Standard_IO_Handler;
 
 
@@ -26,7 +26,7 @@ private:
   void analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
                             Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo );
 
-  template<size_t dim> double integrateDomainBoundaryFlux( Model<dim>& sg );
+  template<uint32_t dim> double integrateDomainBoundaryFlux( Model<dim>& sg );
 
 
 };

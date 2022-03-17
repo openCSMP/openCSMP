@@ -94,8 +94,7 @@ void StokesDiscrepancyMeasure_Example::Run()
     // we must now drop this Dirichlet boundary condition at inlet and outlet (i.e. FRONT and BACK of box-shaped model)
     // this is tricky because we do not want to drop them at the boundary of the boundary, so we can't use
     // the standard functions, but we must loop over the boundary nodes explicitly
-    for ( vector<Node<dim>*>::iterator
-          nit=gref.PerimeterNodesBegin(); nit!=gref.NodesEnd(); nit++ )
+    for ( auto nit=gref.PerimeterNodesBegin(); nit!=gref.NodesEnd(); nit++ )
       if ( (*nit)->AtBoundary() == FRONT  or  (*nit)->AtBoundary() == BACK )
         (*nit)->Status( pbf.Key(), PLAIN );
     // calculation
@@ -111,8 +110,7 @@ void StokesDiscrepancyMeasure_Example::Run()
     // the 'parabolic function' divided by viscosity is now mapped to the variable "element parabolic function"
     PropertyHandle<dim>  lapbc( model, "element parabolic function", SCALAR, ELEMENT );
     ScalarVariable  sc;
-    for ( vector<Element<dim>*>::iterator
-          eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
          (*eit)->PropertyValueAtBaryCenter( pbf.Key(), sc );
          (*eit)->Store( lapbc.Key(), (sc /= 1.) );
       }
@@ -180,8 +178,7 @@ void StokesDiscrepancyMeasure_Example::Run()
    PropertyHandle<dim>  term1( model, "term1", VECTOR, ELEMENT );
    TensorVariable<dim>  ts;
    VectorVariable<dim>  vc, vc2;
-   for ( vector<Element<dim>*>::iterator
-         eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+   for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
         // read hessian
         (*eit)->Read( hessian.Key(), ts );
         (*eit)->Read( grad.Key(), vc );
@@ -192,8 +189,7 @@ void StokesDiscrepancyMeasure_Example::Run()
 
   // computing term2: Laplacian of fluid pressure is found as sum of the diagonal terms of the Hessian (=its trace)
     PropertyHandle<dim>  lap_p( model, "laplacian of pressure", SCALAR, ELEMENT );
-    for ( vector<Element<dim>*>::iterator
-          nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+    for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
          // read Hessian from the nodes
          (*nit)->Read( hessian.Key(), ts );
          // add up the diagonal terms
@@ -211,8 +207,7 @@ void StokesDiscrepancyMeasure_Example::Run()
     printRangeOfVariable( model, channel_region.c_str(), "gradient of laplacian of pressure");
     vtk_output.OutputDataToVTK( model, "grad-laplacian-pressure", "gradient of laplacian of pressure", 1 );
 
-    for ( vector<Element<dim>*>::iterator
-          nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+    for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
          // read parabolic function psi
          (*nit)->Read( lapbc.Key(), sc );
          // read gradient of laplacian
@@ -232,8 +227,7 @@ void StokesDiscrepancyMeasure_Example::Run()
     PropertyHandle<dim>  E_mag( model, "Stokes Discrepancy Measure", SCALAR, ELEMENT );
 
     ScalarVariable  em;
-    for ( vector<Element<dim>*>::iterator
-          nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+    for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
          // take norm of grad p
          (*nit)->Read( gradp.Key(), vc );
          sc = vc.Length();

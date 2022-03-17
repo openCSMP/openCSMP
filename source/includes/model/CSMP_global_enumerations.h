@@ -15,7 +15,7 @@ CSMP global constants and enumerations
 */
 
 /// initialisation of const to maximum value that size_t can take
-const size_t NULL_IDX(std::numeric_limits<size_t>::max());
+const size_t NULL_IDX(std::numeric_limits<uint32_t>::max());
 const short  UNSPECIFIED(-1);
 
 /**
@@ -88,9 +88,11 @@ enum PLACEMENT : std::int8_t { UNDEFINED, // default
                                NODE
                             };
 
+/// to classify 
+enum CELL_SHAPE : std::int8_t { LINE=1, SURFACE=2, VOLUME=3, HYPER_DIMENSIONAL=4 };
 
 /// Side of lower-dimensional face or interface between two higher-dimensional elements ( INSIDE or OUTSIDE ) and a potential lower-dimensional parent element ( MIDDLE )
-enum INTERFACE_SIDE : std::int8_t
+enum INTERFACE_SIDE : std::int32_t
 {
     INSIDE  = -1,
     OUTSIDE =  1,
@@ -156,7 +158,7 @@ bool           faceVariable( PLACEMENT );
 bool           interFaceVariable( PLACEMENT );
 
 /// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
-template<size_t dim, template<size_t> class PLACE>
+template<uint32_t dim, template<uint32_t> class PLACE>
 PLACEMENT      parsePlacement();
 
 bool           isPlacedOnIntegrationPoint( PLACEMENT );

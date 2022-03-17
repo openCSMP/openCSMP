@@ -144,11 +144,11 @@ void Tutorial4_Example_Revisited::Run()
   settings.Set_ncycle( 50 );
 
   // FE algorithm with specialised SAMG settings
-  SAMG_Solver  samg_solver( &settings );
-  PDE_Integrator_UoM<2U, Region>  stokes_flow( samg_solver );
+  SAMG_Solver  solver( &settings );
+  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
 #else
-  CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-  PDE_Integrator_CRM<2U, Region>  stokes_flow( linear_solver );
+  CSMP_DEFAULT_LINEAR_SOLVER  solver;
+  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
 #endif
 
   // Stokes lubrication equation
@@ -269,7 +269,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
         area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
 
         // second loop to calculate and scale nodal flux
-        for ( size_t i = 0; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i = 0; i<(*eit)->Nodes(); i++ ) {
             // read existing flux at node i
             double tf = (*eit)->N(i)->Read( tf_key );
             // read existing source at node i

@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class IAPWS_H2O_Conductivity : public Interrelation<dim> {
     Operand<dim>&  k;     
     Operand<dim>&  K;  

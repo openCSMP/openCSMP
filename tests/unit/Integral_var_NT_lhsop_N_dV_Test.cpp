@@ -1,4 +1,6 @@
 #include "Integral_var_NT_lhsop_N_dV_Test.h"
+#include "vsetMakers.h"
+#include "VSetConverter.h"
 
 using namespace std;
 
@@ -6,32 +8,19 @@ namespace csmp {
 
 Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose ) : tol_(0.001), verbose_(verbose)
   {
-    const bool       isoparametric(true);
-    ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
-    VSet<2U>         mesh_container;
-    ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
+    VSet<2U>    mesh_container;
+    test_Create_TrianglePatch_VSet( mesh_container );
 
     // Building Region object from ANSYS data files
-    if ( verbose_ ) cout <<"Reading mesh..."<<endl;
-    string mesh_name("pde_integrator_test");
-  
-    const bool binary_file( true );
-    mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
-    if ( verbose_ ) {
-        cout <<"Finished reading mesh..."<<endl;
-        cout <<"Building Model..."<<endl;
-      }
-    sg_= new Model<2U> ( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");
+    string mesh_name("triangle_patch");
+    if ( verbose_ ) cout <<"\nIntegral_var_NT_lhsop_N_dV_Test: Building Model..."<<endl;
+    sg_= new Model<2U>( mesh_container, "CSMP-2phase-variables.txt" );
 
     // Set values on nodes
-    //sg_->InputUniformScalarValue("permeability", 1.0);
-    //sg_->InputUniformScalarValue("diffusivity", 1.0);
-    //sg_->InputUniformScalarValue("fluid pressure", 1.0);
-    //sg_->InputUniformScalarValue("total mobility", 1.0);
     sg_->InputPropertyValue("fluid pressure", makeScalar(PLAIN,1.));
     sg_->InputPropertyValue("diffusivity", makeScalar(PLAIN,1.));
     sg_->InputPropertyValue("permeability", makeScalar(PLAIN,1.));
-    sg_->InputPropertyValue("total mobility", makeScalar(PLAIN,1.));
+    sg_->InputPropertyValue("nodal fluid volume source", makeScalar(PLAIN,1.));
   }
 
 
@@ -56,7 +45,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                                      "diffusivity",
                                                      "fluid pressure",
                                                      "fluid pressure",
-                                                     "total mobility");
+                                                     "nodal fluid volume source");
 
     // Set values
     vector<double> mobility;
@@ -65,7 +54,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     mobility.push_back(3.0);
     mobility.push_back(4.0);
     mobility.push_back(5.0);
-    setNodeVariable(mobility, "total mobility");
+    setNodeVariable(mobility, "nodal fluid volume source");
 
     vector<double> conductivity;
     conductivity.push_back(1.0);
@@ -130,7 +119,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                             "diffusivity",
                                             "fluid pressure",
                                             "fluid pressure",
-                                            "total mobility");
+                                            "nodal fluid volume source");
     integral.LumpedFormulation(lumped);
     Integral_NT_lhsop_N_dV<2U,Element<2U> > simple(sg_->Database(),
                                       "diffusivity",
@@ -159,7 +148,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     calculateGlobalMatrix(sm_int, integral);
     calculateGlobalMatrix(sm_simp, simple);
     
-    for (size_t i = 0; i < sm_int.Rows(); ++i) {
+    for (auto i = 0; i < sm_int.Rows(); ++i) {
       for (size_t j = 0; j < sm_int.Cols(); ++j) {
         _equal(sm_int.At(i, j), sm_simp.At(i, j), tol_);
       }
@@ -171,9 +160,8 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                                    "diffusivity",
                                                    "fluid pressure",
                                                    "fluid pressure",
-                                                   "total mobility");
+                                                   "nodal fluid volume source");
     lumped.LumpedFormulation(true);
-    const size_t dof = sg_->Region("Model").Nodes();
 
     // Set values
     vector<double> mobility;
@@ -182,7 +170,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     mobility.push_back(2.0);
     mobility.push_back(2.0);
     mobility.push_back(5.0);
-    setNodeVariable(mobility, "total mobility");
+    setNodeVariable(mobility, "nodal fluid volume source");
     
     vector<double> conductivity;
     conductivity.push_back(1.0);
@@ -218,13 +206,13 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
                                                    "diffusivity",
                                                    "fluid pressure",
                                                    "fluid pressure",
-                                                   "total mobility");
+                                                   "nodal fluid volume source");
     lumped.LumpedFormulation(true);
     Integral_var_NT_lhsop_N_dV<2U,Element<2U> > consistent(sg_->Database(),
                                                        "diffusivity",
                                                        "fluid pressure",
                                                        "fluid pressure",
-                                                       "total mobility");
+                                                       "nodal fluid volume source");
     consistent.LumpedFormulation(false);
 
     const size_t dof = sg_->Region("Model").Nodes();
@@ -236,13 +224,13 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
 
     std::vector<double> vec(dof);
     std::fill(vec.begin(), vec.end(), 0.0);
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
         vec[i] += sm_consistent.At(i,j);
       }
     }
 
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       _equal(sm_lumped.At(i,i), vec[i], tol_*1.0e+03);
       for (size_t j = 0; j < dof; ++j) {
         if (i != j) _equal(sm_lumped.At(i, j), 0.0, tol_);
@@ -254,57 +242,53 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     //cout << "Consistent formulation" << endl;
     //sm_consistent.Out();
     //cout << "Diagonal sum" << endl;
-    //for (size_t i = 0; i < dof; ++i) {
+    //for (auto i = 0; i < dof; ++i) {
     //  cout << vec[i] << endl;
     //}
   }
 
   void Integral_var_NT_lhsop_N_dV_Test::showNodeVariable(const char* var_name) {
-    //std::deque<Node<2U> >::iterator it;
-    csmp::Index key(sg_->Database().StorageKey(var_name));
-    ScalarVariable sc;
-
+    const csmp::Index key(sg_->Database().StorageKey(var_name));
     unsigned int i = 0;
-    for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
-      (*it)->Read(key,sc);
-      if ( verbose_ ) cout << "Node " << i << ": " << sc() << endl;
-      ++i;
-    }
+    Region<2>& model_domain( sg_->Region("Model") );
+    for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
+        if ( verbose_ ) cout << "Node " << i << ": " << (*it)->Read(key) << endl;
+        ++i;
+      }
   }
 
   void Integral_var_NT_lhsop_N_dV_Test::setNodeVariable(vector<double>& var, const char* var_name) {
-    //std::deque<Node<2U> >::iterator it;
-    csmp::Index key(sg_->Database().StorageKey(var_name));
-
+    const csmp::Index key(sg_->Database().StorageKey(var_name));
     unsigned int i = 0;
-    for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
-      (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
-      ++i;
-    }
+    Region<2>& model_domain( sg_->Region("Model") );
+    // TODO: Test fails here because there are many more nodes in the model than supplied to setNodeVariable
+    assert( var.size() == model_domain.Nodes() );
+    for ( auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
+        (*it)->Store( key, makeScalar(PLAIN, var[i++]) );
+      }
   }
 
-  void Integral_var_NT_lhsop_N_dV_Test::setElementVariable(vector<double>& var, const char* var_name) {
-    //std::deque<Element<2U> >::iterator it;
-    csmp::Index key(sg_->Database().StorageKey(var_name));
-
+  void Integral_var_NT_lhsop_N_dV_Test::setElementVariable(vector<double>& var, const char* var_name)
+   {
+    const csmp::Index key(sg_->Database().StorageKey(var_name));
     unsigned int i = 0;
-    for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
-     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
-      ++i;
-    }
+    Region<2>& model_domain( sg_->Region("Model") );
+    assert( var.size() == model_domain.Elements() );
+    for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
+       (*it)->Store(key,ScalarVariable(PLAIN, var[i++]) );
+      }
   }
 
-  void Integral_var_NT_lhsop_N_dV_Test::calculateGlobalMatrix(SparseMatrix& sm, MathOperatorLHS<2U>& oper) {
+  void Integral_var_NT_lhsop_N_dV_Test::calculateGlobalMatrix( SparseMatrix& sm, MathOperatorLHS<2U>& oper ) {
+    Region<2>& model_domain( sg_->Region("Model") );
+    sm.Resize( model_domain.Nodes() );
     sm.Zero();
-    sm.Resize(sg_->Region("Model").Nodes());
     
-    //std::deque<Element<2U> >::iterator it;
-    for (vector<Element<2U>* >::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
-      oper.GetOperands( *(*it));
-      oper.ComputeContribution(*(*it));
-      oper.AssignToGlobal(*(*it), sm);
-    }
-
+    for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it ) {
+        oper.GetOperands( *(*it));
+        oper.ComputeContribution(*(*it));
+        oper.AssignToGlobal(*(*it), sm);
+      }
   }
 
 } // csmp

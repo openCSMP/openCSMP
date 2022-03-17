@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 GroundwaterDarcyVelocity<dim>::GroundwaterDarcyVelocity( const PropertyDatabase<dim>& p )
       : Interrelation<dim>(p),
         DH( Interrelation<dim>::GlobalProperty("hydraulic head gradient") ),
@@ -17,7 +17,7 @@ GroundwaterDarcyVelocity<dim>::GroundwaterDarcyVelocity( const PropertyDatabase<
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void GroundwaterDarcyVelocity<dim>::Calculate()
  {
     DH.AssignTo( head_grad );

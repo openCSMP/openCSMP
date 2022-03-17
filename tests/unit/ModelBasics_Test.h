@@ -13,7 +13,7 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
 class ModelBasics_Test: public Test {
   public:
@@ -23,10 +23,10 @@ class ModelBasics_Test: public Test {
       virtual void run();
       
   private:
+     // from VSet and variables file only
+     bool TestModelConstructionFromVSet();
+  
      bool TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces );
-     bool TestRebuiltRegionsFromPropertyConstraints();
-     /// tests that 'pointInVolumeElement()'  actually works using 'prism_test'
-     bool PointInVolumeElementTest();
   
   private:
     bool verbose_;

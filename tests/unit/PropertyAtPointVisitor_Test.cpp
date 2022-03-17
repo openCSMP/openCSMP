@@ -92,12 +92,10 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     ErfDensity  erfc_density;
     Model1D<1U> model1DRegion( mesh_name, varfile_name, length, dx_min, dx_max, width_of_transition_zone, &erfc_density );
     Element<1>* eptr;
-    vector<Element<1>*>::iterator elements_begin    = model1DRegion.Region("Model").ElementsBegin();
-    vector<Element<1>*>::iterator elements_end      = model1DRegion.Region("Model").ElementsEnd();
-    vector<Node<1>*>::iterator nodes_begin          = model1DRegion.Region("Model").NodesBegin();
-    vector<Node<1>*>::iterator nodes_end            = model1DRegion.Region("Model").NodesEnd();
-    sort(elements_begin,elements_end);
-    sort(nodes_begin,nodes_end);
+    auto elements_begin    = model1DRegion.Region("Model").ElementsBegin();
+    auto elements_end      = model1DRegion.Region("Model").ElementsEnd();
+    auto nodes_begin       = model1DRegion.Region("Model").NodesBegin();
+    auto nodes_end         = model1DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;
     // end Geometry
     // -----------------------------------
@@ -108,14 +106,14 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
-    for(vector<Node<1>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
+    for( auto nit=nodes_begin;nit!=nodes_end;nit++)
     {
         Point<1> node=(*nit)->Coordinate();
         pXYZ[index].push_back(node[0]);
         index++;
     }
     // BaryCenter's of the Element's
-    for(vector<Element<1>*>::iterator eit=elements_begin;eit!=elements_end;eit++)
+    for( auto eit=elements_begin;eit!=elements_end;eit++)
     {
         Point<1> bc=(*eit)->BaryCenter();
         pXYZ[index].push_back(bc[0]);
@@ -151,8 +149,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
         eptr->FE()->N(NI,pXYZ[i]);
 
         vector<double> xyz(1,0.0);
-        for ( size_t k=0; k<eptr->Nodes(); k++ )
-          for ( size_t j=0; j<1; j++ )
+        for ( auto k=0; k<eptr->Nodes(); k++ )
+          for ( auto j=0; j<1; j++ )
             xyz[j] +=  NI[k]* eptr->FE()->XYZ(k,j);
 
         if( std::abs(pXYZ[i][0]-xyz[0])>=tolerance )
@@ -185,12 +183,10 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
     if ( verbose_ ) cout <<"Building Model..."<<endl;
     ANSYS_Model2D model2DRegion( mesh_name,regionfile_name,varfile_name);
     Element<2>* eptr;
-    vector<Element<2>*>::iterator elements_begin    = model2DRegion.Region("Model").ElementsBegin();
-    vector<Element<2>*>::iterator elements_end      = model2DRegion.Region("Model").ElementsEnd();
-    vector<Node<2>*>::iterator nodes_begin          = model2DRegion.Region("Model").NodesBegin();
-    vector<Node<2>*>::iterator nodes_end            = model2DRegion.Region("Model").NodesEnd();
-    sort(elements_begin,elements_end);
-    sort(nodes_begin,nodes_end);
+    auto elements_begin    = model2DRegion.Region("Model").ElementsBegin();
+    auto elements_end      = model2DRegion.Region("Model").ElementsEnd();
+    auto nodes_begin       = model2DRegion.Region("Model").NodesBegin();
+    auto nodes_end         = model2DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;
     //------------------------------------
 
@@ -200,7 +196,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
     std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
-    for(vector<Node<2>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
+    for(auto nit=nodes_begin;nit!=nodes_end;nit++)
     {
         Point<2> node=(*nit)->Coordinate();
         pXYZ[index].push_back(node[0]);
@@ -208,7 +204,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
         index++;
     }
     // BaryCenter's of the Element's
-    for(vector<Element<2>*>::iterator eit=elements_begin;eit!=elements_end;eit++)
+    for(auto eit=elements_begin;eit!=elements_end;eit++)
     {
         Point<2> bc=(*eit)->BaryCenter();
         pXYZ[index].push_back(bc[0]);
@@ -245,8 +241,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
         eptr->FE()->N(NI,pXYZ[i]);
 
         vector<double> xyz(3,0.0);
-        for ( size_t k=0; k<eptr->Nodes(); k++ )
-          for ( size_t j=0; j<2; j++ )
+        for ( auto k=0; k<eptr->Nodes(); k++ )
+          for ( auto j=0; j<2; j++ )
             xyz[j] +=  NI[k]* eptr->FE()->XYZ(k,j);
 
         if( std::abs(pXYZ[i][0]-xyz[0])>=tolerance || std::abs(pXYZ[i][1]-xyz[1])>=tolerance )
@@ -283,12 +279,10 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
                                  varfile_name,
                                  true,true,true);
     Element<3>* eptr;
-    vector<Element<3>*>::iterator elements_begin    = model3DRegion.Region("Model").ElementsBegin();
-    vector<Element<3>*>::iterator elements_end      = model3DRegion.Region("Model").ElementsEnd();
-    vector<Node<3>*>::iterator nodes_begin          = model3DRegion.Region("Model").NodesBegin();
-    vector<Node<3>*>::iterator nodes_end            = model3DRegion.Region("Model").NodesEnd();
-    sort(elements_begin,elements_end);
-    sort(nodes_begin,nodes_end);
+    auto elements_begin    = model3DRegion.Region("Model").ElementsBegin();
+    auto elements_end      = model3DRegion.Region("Model").ElementsEnd();
+    auto nodes_begin       = model3DRegion.Region("Model").NodesBegin();
+    auto nodes_end         = model3DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;
     //------------------------------------
 
@@ -298,7 +292,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
     std::map<size_t,std::vector<double> > pXYZ;
     pXYZ.clear();
     // Nodes
-    for(vector<Node<3>*>::iterator nit=nodes_begin;nit!=nodes_end;nit++)
+    for(auto nit=nodes_begin;nit!=nodes_end;nit++)
     {
         Point<3> node=(*nit)->Coordinate();
         pXYZ[index].push_back(node[0]);
@@ -307,7 +301,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
         index++;
     }
     // BaryCenter's of the Element's
-    for(vector<Element<3>*>::iterator eit=elements_begin;eit!=elements_end;eit++)
+    for(auto eit=elements_begin;eit!=elements_end;eit++)
     {
         Point<3> bc=(*eit)->BaryCenter();
         pXYZ[index].push_back(bc[0]);
@@ -344,8 +338,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
         eptr->CoordinateMatrix();
         eptr->FE()->N(NI,pXYZ[i]);
         vector<double> xyz(3,0.0);
-        for ( size_t k=0; k<eptr->Nodes(); k++ )
-          for ( size_t j=0; j<3; j++ )
+        for ( auto k=0; k<eptr->Nodes(); k++ )
+          for ( auto j=0; j<3; j++ )
               xyz[j] +=  NI[k]*eptr->FE()->XYZ(k,j);
 
         if( std::abs(pXYZ[i][0]-xyz[0])>=tolerance || std::abs(pXYZ[i][1]-xyz[1])>=tolerance || std::abs(pXYZ[i][2]-xyz[2])>=tolerance)
@@ -369,7 +363,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
 void PropertyAtPointVisitor_Test::OutputElapsedTime( clock_t start, clock_t end )
 {
 
-    unsigned long millisec ( (end - start) * 1000 / CLOCKS_PER_SEC);
+    auto millisec ( (end - start) * 1000 / CLOCKS_PER_SEC);
 
     if ( verbose_ ) cout<<"\nElapsed Time = "<<millisec<<" ms ("<<(double)(millisec)/1000.<<" sec; "
                         <<(double)(millisec)/60000.<<" min; "<<(double)(millisec)/3600000.<<" hours)"<<endl;

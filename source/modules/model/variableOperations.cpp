@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 double dotProduct( const vector<double>& v1, const vector<double>& v2 )
   {
       assert( !v1.empty() );
@@ -166,16 +166,16 @@ VectorVariable<3U> crossProduct(  const VectorVariable<3U>& v1,  const VectorVar
     @author Julian Mindel 
     @date 20.04.2016
 */
-template<size_t dim>
+template<uint32_t dim>
 VectorVariable<dim> multiplyTensorByVector( const TensorVariable<dim>& ts, const VectorVariable<dim>& vc )
 {
     VectorVariable<dim> resultvec(ANY,0.0);
 
-    for (size_t i = 0U ; i < dim; ++i)
-        for (size_t j = 0U ; j < dim; ++j)
+    for (auto i = 0U ; i < dim; ++i)
+        for (auto j = 0U ; j < dim; ++j)
             resultvec(i)+=ts(i,j) * vc[j];
 
-    for (size_t i = 0U ; i < dim; ++i)
+    for (auto i = 0U ; i < dim; ++i)
         resultvec.Flag(i)=ts.Flag(i);
   
     return std::move(resultvec);
@@ -185,31 +185,31 @@ VectorVariable<dim> multiplyTensorByVector( const TensorVariable<dim>& ts, const
     this essentially carries out the same task as MultiplyTensorByVector, but has a meaningful name
     emphasizing the fact that only vectors that are horizontal/transposed can be multiplied by tensors.
 */
-template<size_t dim>
+template<uint32_t dim>
 VectorVariable<dim> multiplyHorizontalVectorByTensor( const VectorVariable<dim>& vc, const TensorVariable<dim>& ts )
 {
     VectorVariable<dim> resultvec(ANY,0.0);
 
-    for (size_t i = 0U ; i < dim; ++i)
-        for (size_t j = 0U ; j < dim; ++j)
+    for (auto i = 0U ; i < dim; ++i)
+        for (auto j = 0U ; j < dim; ++j)
             resultvec(i)+=vc[j] * ts(j,i);
 
-    for (size_t i = 0U ; i < dim; ++i)
+    for (auto i = 0U ; i < dim; ++i)
         resultvec.Flag(i)=vc.Flag(i);
 
     return std::move(resultvec);
 }
 
-template<size_t dim>
+template<uint32_t dim>
 TensorVariable<dim> multiplyTensorByTensor( const TensorVariable<dim>& ts, const TensorVariable<dim>& ts2 )
 {
     TensorVariable<dim> resulttensor(ANY,0.0);
 
-    for (size_t i = 0U ; i < dim; ++i)
-        for (size_t j = 0U ; j < dim; ++j)
-            for (size_t k = 0U ; k < dim; ++k)
+    for (auto i = 0U ; i < dim; ++i)
+        for (auto j = 0U ; j < dim; ++j)
+            for (auto k = 0U ; k < dim; ++k)
                 resulttensor(i,j)+=ts(i,k) * ts2(k,j);
-    for (size_t i = 0U ; i < dim; ++i)
+    for (auto i = 0U ; i < dim; ++i)
         resulttensor.Flag(i)=ts.Flag(i);
 
     return std::move(resulttensor);
@@ -217,11 +217,11 @@ TensorVariable<dim> multiplyTensorByTensor( const TensorVariable<dim>& ts, const
 
 
 
-template<size_t>
+template<uint32_t>
 bool isDiagonalTensor( const TensorVariable<1U>& ts ) { return true; }
 
 /// 2D version
-template<size_t>
+template<uint32_t>
 bool isDiagonalTensor( const TensorVariable<2U>& ts )
 {
   // if the off-diagonal elements are numerically zero
@@ -231,7 +231,7 @@ bool isDiagonalTensor( const TensorVariable<2U>& ts )
 }
 
 /// 3D version
-template<size_t>
+template<uint32_t>
 bool isDiagonalTensor( const TensorVariable<3U>& ts )
 {
   // if the off-diagonal elements are numerically zero
@@ -246,16 +246,16 @@ bool isDiagonalTensor( const TensorVariable<3U>& ts )
 
 // this wants to be a lambda function in the next method
 /// recovering and sorting to find minimum and maximum Eigen values
-template<size_t dim>
+template<uint32_t dim>
 void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tmax )
 {
   VectorVariable<dim>  evals;
 
   // doing simple case first
-  if ( isDiagonalTensor( ts ) ) for ( size_t i = 0U; i<dim; ++i ) evals( i ) = ts( i, i );
+  if ( isDiagonalTensor( ts ) ) for ( auto i = 0U; i<dim; ++i ) evals( i ) = ts( i, i );
   else ts.EigenValues( evals );
   std::set<double> min_max;
-  for ( size_t i = 0U; i<dim; i++ ) min_max.insert( evals[i] );
+  for ( auto i = 0U; i<dim; i++ ) min_max.insert( evals[i] );
   tmin = (*min_max.begin());
   tmax = (*min_max.rbegin());
 }
@@ -265,7 +265,7 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tma
 
 /// return angle in degrees
 /// this function was taken from an old one called AngleTo, and templetized
-template<size_t dim>
+template<uint32_t dim>
 double  angleBetween( const VectorVariable<dim>& v1, const VectorVariable<dim>& v2 )
 {
     double ab, a_dot_b;

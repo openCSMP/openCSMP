@@ -10,17 +10,17 @@ namespace csmp {
   @author S. Roberts
   @date 1999 */
 
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_NT_op_N_dV : public MathOperatorRHS<dim> {
   public:
     Integral_NT_op_N_dV( const PropertyDatabase<dim>& p, 
                          const char* oper, const char* test );
     
-    virtual void GetOperands( const SIMPLEX& );
+    virtual void GetOperands( const CELL& );
     // integration etc.
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
     
-    virtual Integral_NT_op_N_dV<dim,SIMPLEX>* clone() const { return new Integral_NT_op_N_dV<dim,SIMPLEX> (*this); }
+    virtual Integral_NT_op_N_dV<dim,CELL>* clone() const { return new Integral_NT_op_N_dV<dim,CELL> (*this); }
   private:
     DenseMatrix<DM_MIN>  INN;
     ScalarVariable      sc;

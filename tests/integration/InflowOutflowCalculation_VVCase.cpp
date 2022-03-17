@@ -17,19 +17,19 @@ using namespace std;
 namespace csmp
 {
 
-template<size_t dim>
+template<uint32_t dim>
 InflowOutflowCalculation_VVCase<dim>::InflowOutflowCalculation_VVCase()
   {
   }
 
-template<size_t dim>
+template<uint32_t dim>
 InflowOutflowCalculation_VVCase<dim>::InflowOutflowCalculation_VVCase( const char* prefix )
   {
     name_="InflowOutflowCalculation_VVCase";
     prefix_=prefix;
   }
 
-template<size_t dim>
+template<uint32_t dim>
 InflowOutflowCalculation_VVCase<dim>::~InflowOutflowCalculation_VVCase()
   {
   }
@@ -45,7 +45,7 @@ InflowOutflowCalculation_VVCase<dim>::~InflowOutflowCalculation_VVCase()
 
   =================================================================
 */
-template<size_t dim>
+template<uint32_t dim>
 void InflowOutflowCalculation_VVCase<dim>::run()
   {
     string input_file_name(prefix_);

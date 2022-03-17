@@ -16,7 +16,7 @@ using namespace std;
 
 namespace csmp {
   
-template<size_t dim>
+template<uint32_t dim>
 VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
                                    bool use_propblem_title_as_output_folder_name )
  : last_visualized_(static_cast<PLACEMENT>(UNSPECIFIED)), 
@@ -28,7 +28,7 @@ VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
 
  }
 
-template<size_t dim>
+template<uint32_t dim>
 VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
                                    const std::string& subFolderName,
                                    bool use_propblem_title_as_output_folder_name )
@@ -42,25 +42,25 @@ VTK_Interface<dim>::VTK_Interface( const std::string& problemTitle,
 
  }
 
-template<size_t dim>
+template<uint32_t dim>
 VTK_Interface<dim>::~VTK_Interface()
  {
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool VTK_Interface<dim>::NodeOutputOfElementData() const 
  {
     return node_output_of_element_data_;
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::NodeOutputOfElementData( bool yes_or_no )
  {
     node_output_of_element_data_ = yes_or_no;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 std::string VTK_Interface<dim>::OutputFileAndSubFolderName( const std::string& fileName )
 {
     if( toSubFolder_ || toFolder_ ){
@@ -89,7 +89,7 @@ std::string VTK_Interface<dim>::OutputFileAndSubFolderName( const std::string& f
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 template<class T>
 void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg, 
                                               const std::string& file_name,
@@ -120,7 +120,7 @@ template void VTK_Interface<3U>::OutputNodeDataToVTK(const Model<3U>&,const std:
 
 /** output of variables placed on the nodes to VTK
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class T>
 void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                                               const std::string& region,
@@ -135,7 +135,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // 0. creating list of consecutive element ID 0..n-1
      // -------------------------------------------------
      vector<size_t>  elmt_ids; elmt_ids.reserve( gref.Elements() );
-     for ( size_t n=0U; n<elmt_ids.capacity(); n++ ) elmt_ids.push_back(n); 
+     for ( auto n=0U; n<elmt_ids.capacity(); n++ ) elmt_ids.push_back(n); 
        
      //   reading node properties in alphabetical order
      // -----------------------------------------------
@@ -149,8 +149,8 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // 1. getting new node mapping and updating storage if geometry has changed
      // ------------------------------------------------------------------------
      if ( last_visualized_ != NODE ) {
-          NodeBasedTopology( gref, elmt_ids, plist, node_mapping );
-          TransformPlist( gref, plist, transformed_plist );
+          NodeBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+          TransformPlist( gref, plist_, transformed_plist_ );
           last_visualized_ = NODE;
        }
 
@@ -189,14 +189,14 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // -------------------------------------------------------
      variable = (*node_props.begin());
      replaceWhiteSpaceBy( variable, '_' );
-     NodeData( gref, prop_key, node_mapping, pxyz_data );
+     NodeData( gref, prop_key, node_mapping_, pxyz_data_ );
      
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
-     ofs <<"POINTS " << pxyz_data.size() <<" double"<< endl;
+     ofs <<"POINTS " << pxyz_data_.size() <<" double"<< endl;
      for ( map<size_t,vector<double> >::const_iterator
-           nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+           nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
-          for ( size_t i=0U; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( auto i{0}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0. <<"  ";
           ofs << endl;
        }
@@ -205,28 +205,25 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      // 4. getting total number of connections + numbers giving connections per element
      // -------------------------------------------------------------------------------
      size_t cell_list_size(0);                            
-     for ( deque<vector<size_t> >::const_iterator 
-           eit=transformed_plist.begin(); eit!=transformed_plist.end(); eit++ )
+     for ( auto eit=transformed_plist_.begin(); eit!=transformed_plist_.end(); eit++ )
        cell_list_size += (*eit).size() + 1U;
      
      // 5. writing CELLS (cell-size and member nodes (point))
      // -----------------------------------------------------
-     ofs <<"CELLS "<< transformed_plist.size() <<" "<< cell_list_size << endl;
-     for ( deque<vector<size_t> >::const_iterator
-           it=transformed_plist.begin(); it!=transformed_plist.end(); it++ )
+     ofs <<"CELLS "<< transformed_plist_.size() <<" "<< cell_list_size << endl;
+     for ( auto it=transformed_plist_.begin(); it!=transformed_plist_.end(); it++ )
        {
           ofs << (*it).size() <<" ";
-          for ( vector<size_t>::const_iterator 
-                i=(*it).begin(); i!=(*it).end(); i++ ) ofs << *i <<" ";
+          for ( auto i=(*it).begin(); i!=(*it).end(); i++ ) ofs << *i <<" ";
           ofs << endl;
        }   
      ofs << endl;
      
      // 6. writing CELL_TYPES
      // ---------------------
-     ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
+     ofs <<"CELL_TYPES "<< geometric_primitives_VTK_.size() << endl;
      for ( typename deque<VTK_TYPE>::const_iterator
-           vit=geometric_primitives_VTK.begin(); vit!=geometric_primitives_VTK.end(); vit++ ) ofs << (*vit) << endl;    
+           vit=geometric_primitives_VTK_.begin(); vit!=geometric_primitives_VTK_.end(); vit++ ) ofs << (*vit) << endl;
      ofs << endl;
 
      // 7. writing POINT_DATA point-type data values
@@ -242,7 +239,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
           line_break = 1;
           // getting the property data, but only after first set was written
           if ( first_iteration ) {
-               ofs <<"POINT_DATA "<< pxyz_data.size() << endl;
+               ofs <<"POINT_DATA "<< pxyz_data_.size() << endl;
                ofs.setf( ios::scientific );
                first_iteration = false;
             }
@@ -251,7 +248,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                variable = (*npit).c_str();
                replaceWhiteSpaceBy( variable, '_');
                // now only get data without coordinates
-               RetrieveData( gref, prop_key1, node_mapping, pxyz_data );
+               RetrieveData( gref, prop_key1, node_mapping_, pxyz_data_ );
                offset = 0; 
             }
        
@@ -262,7 +259,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                     ofs <<"SCALARS "<< variable <<" double"<< endl;
                     ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++, line_break++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++, line_break++ )
                       {
                          ofs << (*nit).second[offset] <<" ";
                          if ( line_break == 4 )
@@ -277,7 +274,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                case VECTOR:
                     ofs <<"VECTORS "<< variable <<" double"<< endl;
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
                       {
                          // variables have always 3 components since view screen is 3D
                          for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -289,7 +286,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
                case TENSOR:
                     ofs <<"TENSORS "<< variable <<" double"<< endl;
                     for ( map<size_t,vector<double> >::const_iterator
-                          nit=pxyz_data.begin(); nit!=pxyz_data.end(); nit++ )
+                          nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
                       {
                          // always 3x3 components in the tensors
                          for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -365,7 +362,7 @@ The original 'plist' is reassembled by braking more complex elements down
 into topological primitives which can be displayed in VTK. The new plist
 then also contains the new node IDs which the VTK_Interface uses 
 internally.   */
-template<size_t dim>
+template<uint32_t dim>
 template<class T>
 void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                                           const std::string& file_name,
@@ -435,7 +432,7 @@ quadratic triangle) in a counter clockwise order
 
 To visualize CSMP models using the Visualization Toolkit.
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class T>
 void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg, 
                                           const std::string& group_name,
@@ -476,32 +473,31 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
        {
           // SKM fix for element based vector and tensor data
           if ( prop_key.place == ELEMENT and prop_key.type != SCALAR ) {
-                geometric_primitives_VTK.clear();
-                geometric_primitives_VTK.resize( plist.size() );
-                fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_VERTEX );
-                transformed_plist.clear();
+                geometric_primitives_VTK_.clear();
+                geometric_primitives_VTK_.resize( plist_.size() );
+                fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_VERTEX );
+                transformed_plist_.clear();
                 // inserting just the element id into the plist
                 size_t eidx(0U);
-                for ( std::map<size_t,std::vector<size_t> >::const_iterator
-                      eit=plist.begin(); eit!=plist.end(); eit++ )
-                  // SKM FIX (only single point needs to be stored) transformed_plist.push_back((*eit).second);
-                  transformed_plist.push_back(vector<size_t>(1,eidx++));
+                for ( auto eit=plist_.begin(); eit!=plist_.end(); eit++ )
+                  // SKM FIX (only single point needs to be stored) transformed_plist_.push_back((*eit).second);
+                  transformed_plist_.emplace_back(vector<size_t>(1,eidx++));
             }
           else if ( prop_key.place == ELEMENT_INTEGRATION_POINT ) {
-            ElmtIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            ElmtIntegrationPointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
             // fill transform plist - AP Aug2006
-            transformed_plist.clear();
-            for ( auto& p : plist )
-              transformed_plist.push_back(p.second);
+            transformed_plist_.clear();
+            for ( auto& p : plist_ )
+              transformed_plist_.push_back(p.second);
           }
           else if ( prop_key.place == FACET_INTEGRATION_POINT ) {
-            FacetIntegrationPointBasedTopology( gref, elmt_ids, plist, node_mapping );
+            FacetIntegrationPointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
             use_cells = false;
-            transformed_plist.clear();
+            transformed_plist_.clear();
             size_t idx(0u);
-            for (auto& p : plist) {
+            for (auto& p : plist_) {
               for (auto q : p.second) {
-                transformed_plist.push_back(vector<size_t>(1, idx++));
+                transformed_plist_.emplace_back(vector<size_t>(1, idx++));
               }
             }
           }
@@ -510,25 +506,25 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
                             "Sector integration point placement not yet supported");
           }
           else {
-               NodeBasedTopology( gref, elmt_ids, plist, node_mapping );
-               TransformPlist( gref, plist, transformed_plist );
+               NodeBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+               TransformPlist( gref, plist_, transformed_plist_ );
             }
        }
      last_visualized_ = prop_key.place;
 
      // not the topology but only the data have to be updated
      if ( prop_key.place == NODE ) 
-       NodeData( gref, prop_key, node_mapping, pxyz_data );
+       NodeData( gref, prop_key, node_mapping_, pxyz_data_ );
      else if ( prop_key.place == ELEMENT_INTEGRATION_POINT
               || prop_key.place == FACET_INTEGRATION_POINT
               || prop_key.place == SECTOR_INTEGRATION_POINT )
-       IntegrationPointData( gref, prop_key, pxyz_data );
+       IntegrationPointData( gref, prop_key, pxyz_data_ );
      else if ( prop_key.place == ELEMENT  or  prop_key.place == FACE  or prop_key.place == INTER_FACE  ) {
           if ( prop_key.type != SCALAR ) {
-                PointBasedTopology( gref, elmt_ids, plist, node_mapping );
-                ElementPointData( gref, prop_key, node_mapping, pxyz_data );
+                PointBasedTopology( gref, elmt_ids, plist_, node_mapping_ );
+                ElementPointData( gref, prop_key, node_mapping_, pxyz_data_ );
             }
-          else NodeCoordinates( gref, node_mapping, pxyz_data );
+          else NodeCoordinates( gref, node_mapping_, pxyz_data_ );
        }
 
      // 2. write data into a stringstream
@@ -546,13 +542,13 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      // 3.2 writing coordinates
      // ---------------------------
      ofs <<"DATASET " << (use_cells ? "UNSTRUCTURED_GRID" : "POLYDATA") << endl;
-     ofs <<"POINTS " << pxyz_data.size() <<" double"<< endl;
+     ofs <<"POINTS " << pxyz_data_.size() <<" double"<< endl;
      
      typename map<size_t,vector<double> >::const_iterator  nit;
-     const typename map<size_t,vector<double> >::const_iterator  nit_end(pxyz_data.end());
-     for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+     const typename map<size_t,vector<double> >::const_iterator  nit_end(pxyz_data_.end());
+     for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
        {
-          for ( size_t i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( uint32_t i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2 ) ofs << 0.0 <<"  ";
           ofs << endl;
        }
@@ -562,29 +558,27 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
       // 3.3 getting total number of connections + numbers giving connections per element
       // -------------------------------------------------------------------------------
      size_t cell_list_size(0);
-     deque<vector<size_t> >::const_iterator  eit;
-     const deque<vector<size_t> >::const_iterator  eit_end(transformed_plist.end());
-     for ( eit=transformed_plist.begin(); eit!=eit_end; eit++ )
+     const auto eit_end(transformed_plist_.end());
+     for ( auto eit=transformed_plist_.begin(); eit!=eit_end; eit++ )
        cell_list_size += (*eit).size() + 1;
      
      // 3.4 writing CELLS (cell-size and member nodes (point))
      // -----------------------------------------------------
-     ofs <<"CELLS "<< transformed_plist.size() <<" "<< cell_list_size << endl;
-     for ( eit=transformed_plist.begin(); eit!=eit_end; eit++ )
+     ofs <<"CELLS "<< transformed_plist_.size() <<" "<< cell_list_size << endl;
+     for ( auto eit=transformed_plist_.begin(); eit!=eit_end; eit++ )
        {
           ofs << (*eit).size() <<" ";
-          for ( vector<size_t>::const_iterator
-                it=(*eit).begin(); it!=(*eit).end(); it++ ) ofs << *it <<" ";
+          for ( auto it=(*eit).begin(); it!=(*eit).end(); it++ ) ofs << *it <<" ";
           ofs << endl;
        }
      ofs << endl;
      
      // 3.5 writing CELL_TYPES
      // ----------------------
-     ofs <<"CELL_TYPES "<< geometric_primitives_VTK.size() << endl;
+     ofs <<"CELL_TYPES "<< geometric_primitives_VTK_.size() << endl;
      deque<VTK_TYPE>::const_iterator  vit;
-     const deque<VTK_TYPE>::const_iterator  vit_end(geometric_primitives_VTK.end());
-     for ( vit=geometric_primitives_VTK.begin(); vit!=vit_end; vit++ )
+     const deque<VTK_TYPE>::const_iterator  vit_end(geometric_primitives_VTK_.end());
+     for ( vit=geometric_primitives_VTK_.begin(); vit!=vit_end; vit++ )
        ofs << (*vit) << endl;
      ofs << endl;
     }
@@ -595,19 +589,19 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      size_t  offset(3U);
      if ( prop_key.type == SCALAR  and  (prop_key.place == ELEMENT  or prop_key.place == FACE  or prop_key.place == INTER_FACE ) ) {
           // resizing cell data record
-          CellData( gref, prop_key, plist, pxyz_data );
-//          assert( pxyz_data.size() == transformed_plist.size() );
-          ofs <<"CELL_DATA "<< transformed_plist.size() << endl;
+          CellData( gref, prop_key, plist_, pxyz_data_ );
+//          assert( pxyz_data_.size() == transformed_plist_.size() );
+          ofs <<"CELL_DATA "<< transformed_plist_.size() << endl;
           offset = 0U;
        }
-     else ofs <<"POINT_DATA "<< pxyz_data.size() << endl;
+     else ofs <<"POINT_DATA "<< pxyz_data_.size() << endl;
      ofs.setf( ios::scientific );
      switch( prop_key.type )
        {
           case SCALAR:
                ofs <<"SCALARS "<< variable <<" double"<< endl;
                ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++, line_break++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++, line_break++ )
                  {
                     ofs << (*nit).second[offset] <<" ";
                     if ( line_break == 4 ) {
@@ -619,7 +613,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
 
           case VECTOR:
                ofs <<"VECTORS "<< variable <<" double"<< endl;
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
                  {
                     // variables have always 3 components since view screen is 3D
                     for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -629,7 +623,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
            break;
           case TENSOR:
                ofs <<"TENSORS "<< variable <<" double"<< endl;
-               for ( nit=pxyz_data.begin(); nit!=nit_end; nit++ )
+               for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
                  {
                     // always 3x3 components in the tensors
                     for ( size_t j=offset; j<(*nit).second.size(); j++ ) 
@@ -771,26 +765,25 @@ VTK_TYPE parseElementType( CSMP_FEM_TYPE etype )
 /** The global element ID's are retained as keys of the 'plist' such that they
 can be used at a later stage to query the Model.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
                                             const vector<size_t>& elmt_ids,
                                             map<size_t,vector<size_t> >& plist,
                                             map<size_t,PointDescriptor>& node_nums )
  {
-    size_t             nodes(0U);
-    vector<size_t>     pentry(3);
+    size_t          nodes(0U);
+    vector<size_t>  pentry(3);
     
     plist.clear();
     node_nums.clear();
 
     // 1. creating unique node number list, and plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
-    vector<size_t>  empty_vec;       
-    for ( typename vector<size_t>::const_iterator
-          lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    vector<size_t>  empty_vec;
+    for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting node ids and renumbering them 0...n-1
-         for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
            PointDescriptor pt = { nodes, 0u };
            auto node_it = node_nums.insert( make_pair( sgref.E( (*lit) )->N(i)->Idx(), pt ) );
            if ( node_it.second ) nodes++;
@@ -799,7 +792,7 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
          pentry.resize( sgref.E( (*lit) )->Nodes() );
-         for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
               auto nit = node_nums.find( sgref.E( (*lit) )->N(i)->Idx() );
               pentry[i] = (*nit).second.element_or_node_;
            }
@@ -809,7 +802,7 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
          if ( pit.second == true ) {
               // initializing plist vector
               (*pit.first).second.reserve( sgref.E( (*lit) )->Nodes() );
-              for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) 
+              for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) 
                 (*pit.first).second.push_back( pentry[i] );
            }
       }   
@@ -836,7 +829,7 @@ the nodes of each element. To maximize efficiency in VTK flat shading
 should be used to display this kind of element data.  
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
                                                const vector<size_t>& elmt_ids,
                                                map<size_t,vector<size_t> >& plist,
@@ -852,12 +845,11 @@ void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
 
     // 1. creating unique node number list, and plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
-    for ( typename vector<size_t>::const_iterator 
-          lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting node ids and renumbering them including duplicates 0...elmts * npe's
          pentry.resize( sgref.E( (*lit) )->Nodes() );
-         for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
               node_nums[ nodes ] = sgref.E( (*lit) )->N(i)->Idx();
               pentry[i]          = nodes++;
            }
@@ -869,7 +861,7 @@ void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
          
          // initializing plist vector
          (*pit.first).second.reserve( sgref.E( (*lit) )->Nodes() );
-         for ( size_t i=0U; i<sgref.E( (*lit) )->Nodes(); i++ ) 
+         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) 
            (*pit.first).second.push_back( pentry[i] );
       }   
 
@@ -903,7 +895,7 @@ be strain, stress or similar computational variables.
 @todo SKM: sector integration point placements have to be added
  
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& sgref,
                                                        const vector<size_t>& elmt_ids,
                                                        map<size_t,vector<size_t> >&  clist,
@@ -922,12 +914,11 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
     //    plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
     size_t  cpoints(0U);
-    for ( typename vector<size_t>::const_iterator
-          lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting constraint point ids and data 
          pentry.resize( sgref.E( (*lit) )->IntegrationPoints() );
-         for ( size_t i=0U; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
+         for ( auto i{0}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
            {
               // associate the unique number of the constraint-point with the parent element 
               // for later retrieval in IntegrationPointData method
@@ -943,15 +934,15 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
          
          // initializing clist vector
          (*cit.first).second.reserve( sgref.E( (*lit) )->IntegrationPoints() );
-         for ( size_t i=0U; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
+         for ( auto i{0}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
            (*cit.first).second.push_back( pentry[i] );
       }  
       
     // 2. assigning the VTK type for the clist entries
     // -----------------------------------------------
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
-    geometric_primitives_VTK.resize( clist.size() );
-    fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
+    geometric_primitives_VTK_.resize( clist.size() );
+    fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_POLY_VERTEX );
 
   } // end ElmtIntegrationPointBasedTopology
 
@@ -976,7 +967,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
    be strain, stress or similar computational variables.
    
    */
-  template<size_t dim>
+  template<uint32_t dim>
   void VTK_Interface<dim>::FacetIntegrationPointBasedTopology( const Region<dim>& sgref,
                                                              const vector<size_t>& elmt_ids,
                                                              map<size_t,vector<size_t> >&  clist,
@@ -996,8 +987,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
     //    plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
     size_t  cpoints(0U);
-    for ( typename vector<size_t>::const_iterator
-         lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
     {
       // getting constraint point ids and data
       auto iNrFacets = sgref.E( (*lit) )->Facets();
@@ -1009,8 +999,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
       // inserting new element idx and empty vector<double> into the clist
       alpha_help.first  = (*lit);
       alpha_help.second = alpha_vec;
-      pair<typename map<size_t,vector<size_t> >::iterator,bool>
-      cit = clist.insert( alpha_help );
+      auto cit = clist.insert( alpha_help );
       assert( cit.second == true );
       
       // initializing clist vector
@@ -1022,9 +1011,9 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
     
     // 2. assigning the VTK type for the clist entries
     // -----------------------------------------------
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
-    geometric_primitives_VTK.resize( clist.size() );
-    fill( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end(), VTK_POLY_VERTEX );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
+    geometric_primitives_VTK_.resize( clist.size() );
+    fill( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end(), VTK_POLY_VERTEX );
     
   } // end IntegrationPointBasedTopology
   
@@ -1037,7 +1026,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
 /**
     Rebuilds 'plist' and 'node_nums' creating a one-to-one mapping between elements and data points.
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
                                              const vector<size_t>&  elmt_ids,
                                              map<size_t,vector<size_t> >&  plist,
@@ -1051,8 +1040,7 @@ void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
     
     // 1. creating unique point number list, and plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
-    for ( typename vector<size_t>::const_iterator
-          lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
+    for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting node ids and renumbering them including duplicates 0...elmts * npe's
         PointDescriptor pt = { sgref.E( (*lit) )->Idx(), 0u };
@@ -1071,7 +1059,7 @@ void VTK_Interface<dim>::PointBasedTopology( const Region<dim>& sgref,
 
 
 // only the coordinates of the nodes - no data
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::NodeCoordinates( const Region<dim>& sgref,
                                           const map<size_t,PointDescriptor>& node_nums,
                                           map<size_t,vector<double> >& pxyz_data )
@@ -1087,8 +1075,7 @@ void VTK_Interface<dim>::NodeCoordinates( const Region<dim>& sgref,
     for ( auto nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
-         pair<typename map<size_t,vector<double> >::iterator,bool>
-         dit = pxyz_data.insert( make_pair( (*nit).second.element_or_node_, empty_vec ) );
+         auto dit = pxyz_data.insert( make_pair( (*nit).second.element_or_node_, empty_vec ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -1128,7 +1115,7 @@ scalar, vector, or tensor type, the data segment of the vector<double> contains
 1, 3, ord 9 entries respectively.  
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
                                    const csmp::Index&  prop_key,
                                    const map<size_t,PointDescriptor>& node_nums,
@@ -1173,7 +1160,7 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
               (*dit.first).second.reserve(6);
               sgref.N( (*nit).first )->Read( prop_key, vc );
               // variables have always 3 components since view screen is 3D
-              for ( size_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+              for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
               if ( dim == 3U ) (*dit.first).second.push_back( vc[2] );
               else             (*dit.first).second.push_back( 0. );
            }
@@ -1184,8 +1171,8 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
               sgref.N( (*nit).first )->Read( prop_key, ts );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-              for ( size_t k=0U; k<3U; k++ )
-                for ( size_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+              for ( uint32_t k=0U; k<3U; k++ )
+                for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
               else {
                    (*dit.first).second.push_back( ts(0,0) );
                    (*dit.first).second.push_back( ts(0,1) );
@@ -1210,7 +1197,7 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
  clist contains the coordinates of the constraint points
  
  */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
                                                   const csmp::Index&  prop_key,
                                                   map<size_t,vector<double> >& pxyz_data )
@@ -1246,7 +1233,7 @@ void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
 clist contains the coordinates of the constraint points
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                                                    const csmp::Index&  prop_key,
                                                    map<size_t,vector<double> >& pxyz_data )
@@ -1269,11 +1256,10 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          // getting the coordinates of the constraint point
-         for ( size_t i=0U; i<(*it)->IntegrationPoints(); i++, cpoints++ ) 
+         for ( auto i{0}; i<(*it)->IntegrationPoints(); i++, cpoints++ ) 
            {
               // inserting new point into the cordinate map using new constraint-point coordinate number
-              pair<typename map<size_t,vector<double> >::iterator,bool>
-              dit = pxyz_data.insert( make_pair( cpoints, dentry ) );
+              auto dit = pxyz_data.insert( make_pair( cpoints, dentry ) );
               assert( dit.second == true );
               // making space for missing coordinates and at least one scalar variable value
               (*dit.first).second.reserve(4U);
@@ -1289,7 +1275,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                    (*dit.first).second.reserve(6U);
                    (*it)->Read( i, prop_key, vc );
                    // variables have always 3 components since view screen is 3D
-                   for ( size_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+                   for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
                    if ( dim == 3U ) (*dit.first).second.push_back( vc[2U] );
                    else             (*dit.first).second.push_back( 0. );
                  }
@@ -1299,8 +1285,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                    (*it)->Read( i, prop_key, ts );
                    // variables have always 3 components since view screen is 3D
                    if ( dim == 3U )
-                    for ( size_t k=0U; k<3U; k++ )
-                      for ( size_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+                    for ( uint32_t k=0U; k<3U; k++ )
+                      for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
                    else {
                          (*dit.first).second.push_back( ts(0,0) );
                          (*dit.first).second.push_back( ts(0,1) );
@@ -1326,7 +1312,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
    clist contains the coordinates of the constraint points
    
    */
-  template<size_t dim>
+  template<uint32_t dim>
   void VTK_Interface<dim>::FacetIntegrationPointData( const Region<dim>& gref,
                                                     const csmp::Index&  prop_key,
                                                     map<size_t,vector<double> >& pxyz_data )
@@ -1349,7 +1335,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
     {
       // getting the coordinates of the constraint point
-      for ( size_t i=0U; i<(*it)->Facets(); i++, cpoints++ )
+      for ( auto i{0}; i<(*it)->Facets(); i++, cpoints++ )
       {
         auto fv = (*it)->FV();
         // inserting new point into the cordinate map using new constraint-point coordinate number
@@ -1369,7 +1355,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
           (*dit.first).second.reserve(6U);
           (*it)->Read( i, 0u, prop_key, vc );
           // variables have always 3 components since view screen is 3D
-          for ( size_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+          for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
           if ( dim == 3U ) (*dit.first).second.push_back( vc[2U] );
           else             (*dit.first).second.push_back( 0. );
         }
@@ -1379,8 +1365,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
           (*it)->Read( i, 0u, prop_key, ts );
           // variables have always 3 components since view screen is 3D
           if ( dim == 3U )
-            for ( size_t k=0U; k<3U; k++ )
-              for ( size_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+            for ( uint32_t k=0U; k<3U; k++ )
+              for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
           else {
             (*dit.first).second.push_back( ts(0,0) );
             (*dit.first).second.push_back( ts(0,1) );
@@ -1408,7 +1394,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
 
 
 // just data without coordinates
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
                                       const csmp::Index&     prop_key,
                                       const map<size_t,PointDescriptor>& obj_nums,
@@ -1448,7 +1434,7 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
              sgref.N( (*nit).first )->Read( prop_key, vc );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-                for ( size_t j=0; j<3U; j++ ) (*dit.first).second.push_back( vc[j] );
+                for ( uint32_t j=0; j<3U; j++ ) (*dit.first).second.push_back( vc[j] );
               else {
                    (*dit.first).second.push_back( vc[0] );
                    (*dit.first).second.push_back( vc[1] );
@@ -1462,8 +1448,8 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
               sgref.N( (*nit).first )->Read( prop_key, ts );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-              for ( size_t k=0; k<3U; k++ )
-                for ( size_t l=0; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+              for ( uint32_t k=0; k<3U; k++ )
+                for ( uint32_t l=0; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
               else {
                    (*dit.first).second.push_back( ts(0,0) );
                    (*dit.first).second.push_back( ts(0,1) );
@@ -1487,7 +1473,7 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
                                       const csmp::Index&     prop_key,
                                       const map<size_t,size_t>& node_nums,
@@ -1525,15 +1511,13 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
     // 2. Looping through the plist, associating the element properties with the nodal pxyz_data     
     // data values
     // -----------------------------------------------------------------------------------------
-    for ( typename map<size_t,vector<size_t> >::const_iterator
-          it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist_.begin(); it!=plist_.end(); it++ )
       {
          if ( prop_key.type == SCALAR )
            {
               sgref.E( (*it).first )->Read( prop_key, sc );
               // looping over the element's node 
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
                    typename map<size_t,vector<double> >::iterator
                      dit2 = pxyz_data.find( (*pit) );
@@ -1543,14 +1527,12 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
          else if ( prop_key.type == VECTOR )
            {
               sgref.E( (*it).first )->Read( prop_key, vc );
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
-                   typename map<size_t,vector<double> >::iterator
-                     dit2 = pxyz_data.find( (*pit) );
+                   auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(6U);
                    if ( dim == 3U )
-                     for ( size_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
+                     for ( uint32_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
                    else {
                         (*dit2).second.push_back( vc[0] );
                         (*dit2).second.push_back( vc[1] );
@@ -1562,15 +1544,13 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
          else if ( prop_key.type == TENSOR )
            {
               sgref.E( (*it).first )->Read( prop_key, ts );
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
-                   typename map<size_t,vector<double> >::iterator
-                     dit2 = pxyz_data.find( (*pit) );
+                   auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(12U);
                    if ( dim == 3U )
-                     for ( size_t k=0; k<3U; k++ )
-                       for ( size_t l=0; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
+                     for ( uint32_t k=0; k<3U; k++ )
+                       for ( uint32_t l=0; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
                    else {
                       (*dit2).second.push_back( ts(0,0) );
                       (*dit2).second.push_back( ts(0,1) );
@@ -1597,7 +1577,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
     Finds the element barycenters, storing these points in 'pxyz_data' as the
     locations associated with the 'node_nums' where the property values will be stored.
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
                                            const csmp::Index&     prop_key,
                                            const map<size_t,PointDescriptor>& node_nums,
@@ -1619,8 +1599,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
     for ( auto nit=node_nums.begin(); nit!=node_nums.end(); nit++ )
       {
          // inserting new element into the cordinate map using new node coordinate number
-         pair<typename map<size_t,vector<double> >::iterator,bool>
-           dit = pxyz_data.insert( make_pair( (*nit).first, empty_vec ) );
+         auto dit = pxyz_data.insert( make_pair( (*nit).first, empty_vec ) );
          assert( dit.second == true );
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
@@ -1635,30 +1614,27 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
     // 2. Looping through the plist, associating the element properties with the nodal pxyz_data     
     // data values
     // -----------------------------------------------------------------------------------------
-    for ( typename map<size_t,vector<size_t> >::const_iterator
-          it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist_.begin(); it!=plist_.end(); it++ )
       {
          if ( prop_key.type == SCALAR )
            {
               sgref.E( (*it).first )->Read( prop_key, sc );
               // looping over the element's node 
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
-                   typename map<size_t,vector<double> >::iterator dit2 = pxyz_data.find( (*pit) );
+                   auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.push_back( sc() );
                 }
            }
          else if ( prop_key.type == VECTOR )
            {
               sgref.E( (*it).first )->Read( prop_key, vc );
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
-                   typename map<size_t,vector<double> >::iterator dit2 = pxyz_data.find( (*pit) );
+                   auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(6);
                    if ( dim == 3U )
-                     for ( size_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
+                     for ( uint32_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
                    else {
                         (*dit2).second.push_back( vc[0] );
                         (*dit2).second.push_back( vc[1] );
@@ -1670,14 +1646,13 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
          else if ( prop_key.type == TENSOR )
            {
               sgref.E( (*it).first )->Read( prop_key, ts );
-              for ( typename vector<size_t>::const_iterator
-                    pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
+              for ( auto pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
-                   typename map<size_t,vector<double> >::iterator dit2 = pxyz_data.find( (*pit) );
+                   auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(12);
                    if ( dim == 3U )
-                     for ( size_t k=0U; k<3U; k++ )
-                       for ( size_t l=0U; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
+                     for ( uint32_t k=0U; k<3U; k++ )
+                       for ( uint32_t l=0U; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
                    else {
                       (*dit2).second.push_back( ts(0,0) );
                       (*dit2).second.push_back( ts(0,1) );
@@ -1710,215 +1685,214 @@ tetrahedra, or hexahedra or pyramids for the the purpose of the visualization.
 @test SKM 26/8/14, updated for nonlinear VTK>4.2 element types
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                                          const map<size_t,vector<size_t> >&  plist,
                                          deque<vector<size_t> >&  tdeque )
  {
-    //                    triangle   tetrahedron  quadrilateral  hexahedron
-    vector<size_t>     pentry(3), tentry(4),   qentry(4),     hentry(8);
+    //              triangle   tetrahedron  quadrilateral  hexahedron
+    vector<size_t>  pentry(3), tentry(4),   qentry(4),     hentry(8);
  
     tdeque.erase( tdeque.begin(), tdeque.end() );
-    geometric_primitives_VTK.erase( geometric_primitives_VTK.begin(), geometric_primitives_VTK.end() );
+    geometric_primitives_VTK_.erase( geometric_primitives_VTK_.begin(), geometric_primitives_VTK_.end() );
    
-    for ( typename map<size_t,vector<size_t> >::const_iterator
-          it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist.begin(); it!=plist.end(); it++ )
       {
          switch ( sgref.E( (*it).first )->FE_Type() )
            {
               case LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
+                   geometric_primitives_VTK_.push_back(VTK_LINE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_LINEAR_BAR: // segment (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_LINE);
+                   geometric_primitives_VTK_.push_back(VTK_LINE);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_BAR: // double segment
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_EDGE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_EDGE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TRIANGLE3D: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_LINEAR_TRIANGLE: // triangle (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case LINEAR_TETRAHEDRON: // tetrahedron (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tdeque.push_back( (*it).second );
                 break;
               
               case ISOPARAMETRIC_LINEAR_TETRAHEDRON: // tetrahedron (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tdeque.push_back( (*it).second );
                 break;
               
               case QUADRATIC_TRIANGLE:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TRIANGLE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TRIANGLE);
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_QUADRATIC_TRIANGLE: // quadratic triangle
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TRIANGLE); // (=22)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TRIANGLE); // (=22)
                    tdeque.push_back( (*it).second );
                 break;
 
               // there is not matching VTK element type, hence conversion into 6 triangles
               case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE: // quadratic barycentric triangle (bubble node)
                    // triangle 1
-                   geometric_primitives_VTK.push_back(VTK_BIQUADRATIC_TRIANGLE); // (=32)
+                   geometric_primitives_VTK_.push_back(VTK_BIQUADRATIC_TRIANGLE); // (=32)
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON: // quadratic tetrahedron -> 13 tetrahedra
                    // ANSYS 10-noded tetrahedron
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_TETRA); // (=24)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_TETRA); // (=24)
                    tdeque.push_back( (*it).second );
                 break;
                 
               case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON: // barycentric quadratic tetrahedron -> 13 tetrahedra
                    // basal 3 outer tetrahedra
                    // tetrahedron 1
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[0]; tentry[1]=(*it).second[4]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[7];
                    tdeque.push_back( tentry );
                    // tetrahedron 2
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[1]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[4]; tentry[3]=(*it).second[8];
                    tdeque.push_back( tentry );
                    // tetrahedron 3
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[2]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[5]; tentry[3]=(*it).second[9];
                    tdeque.push_back( tentry );
                    // top 3 tetrahedra
                    // tetrahedron 4
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[7]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // tetrahedron 5
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[8]; tentry[1]=(*it).second[9]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // tetrahedron 6
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[7]; tentry[1]=(*it).second[10]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[3];
                    tdeque.push_back( tentry );
                    // intermediate 3 side tetrahedra
                    // tetrahedron 7
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[8]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 8
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[5]; tentry[1]=(*it).second[8]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 9
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[6]; tentry[1]=(*it).second[7]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[9];
                    tdeque.push_back( tentry );
                    // oblique 3 tetrahedra in the lower part of the parent tetrahedron
                    // tetrahedron 10
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[6]; tentry[2]=(*it).second[7]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // tetrahedron 11
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[10]; tentry[3]=(*it).second[8];
                    tdeque.push_back( tentry );
                    // tetrahedron 12
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[6]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[9]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                    // lower plane basal tetrahedron
                    // tetrahedron 13
-                   geometric_primitives_VTK.push_back(VTK_TETRA);
+                   geometric_primitives_VTK_.push_back(VTK_TETRA);
                    tentry[0]=(*it).second[4]; tentry[1]=(*it).second[5]; tentry[2]=(*it).second[6]; tentry[3]=(*it).second[10];
                    tdeque.push_back( tentry );
                 break;
 
 			  case LINEAR_RECTANGLE: // (vectors are just copied over)
-				  geometric_primitives_VTK.push_back(VTK_QUAD);
+				  geometric_primitives_VTK_.push_back(VTK_QUAD);
 				  tdeque.push_back((*it).second);
 				  break;
 
               case ISOPARAMETRIC_LINEAR_QUADRILATERAL: // (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_QUAD);
+                   geometric_primitives_VTK_.push_back(VTK_QUAD);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_LINEAR_PYRAMID: // (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_PYRAMID);
+                   geometric_primitives_VTK_.push_back(VTK_PYRAMID);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_LINEAR_PRISM: // Wedge (vectors are just copied over)
-                   geometric_primitives_VTK.push_back(VTK_WEDGE);
+                   geometric_primitives_VTK_.push_back(VTK_WEDGE);
                    tdeque.push_back( (*it).second );
                 break;
                 
 			  case LINEAR_CUBOID: // linear cuboid 
-				  geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+				  geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
 				  tdeque.push_back((*it).second);
 				  break;
 
               case ISOPARAMETRIC_LINEAR_HEXAHEDRON: // linear hexahedron 
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    tdeque.push_back( (*it).second );
                 break;
                
               case ISOPARAMETRIC_QUADRATIC_PRISM15:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_WEDGE);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_WEDGE);
                    tdeque.push_back( (*it).second );
                 break;
                
               case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_PYRAMID);
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_PYRAMID);
                    tdeque.push_back( (*it).second );
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20: // quadratic hexahedron
                    // like the 20-noded ANSYS hexahedron
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_HEXAHEDRON); // (=25)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_HEXAHEDRON); // (=25)
                    tdeque.push_back( (*it).second );
                  break;
                
               case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27: // quadratic hexahedron
                    //Linear hex 1 => 0,8,20,11,   12,22,26,24
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[0]; hentry[1] = (*it).second[8]; hentry[2] = (*it).second[20];
                    hentry[3] = (*it).second[11]; hentry[4] = (*it).second[12]; hentry[5] = (*it).second[21];
                    hentry[6] = (*it).second[26]; hentry[7] = (*it).second[24];
                    tdeque.push_back( hentry );
                    
                     //Linear hex 2 => 8,1,9,20,   21,13,22,26
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[8]; hentry[1] = (*it).second[1]; hentry[2] = (*it).second[9];
                    hentry[3] = (*it).second[20]; hentry[4] = (*it).second[21]; hentry[5] = (*it).second[13];
                    hentry[6] = (*it).second[22]; hentry[7] = (*it).second[26];
                    tdeque.push_back( hentry );
                 
                    //Linear hex 3 =>  20,9,2,10  26,22,14,23 
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[20]; hentry[1] = (*it).second[9]; hentry[2] = (*it).second[2];
                    hentry[3] = (*it).second[10]; hentry[4] = (*it).second[26]; hentry[5] = (*it).second[22];
                    hentry[6] = (*it).second[14]; hentry[7] = (*it).second[23];
                    tdeque.push_back( hentry );
                 
                    //Linear hex 4 =>  11,20,10,3  24,26,23,15
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[11]; hentry[1] = (*it).second[20]; hentry[2] = (*it).second[10];
                    hentry[3] = (*it).second[3]; hentry[4] = (*it).second[24]; hentry[5] = (*it).second[26];
                    hentry[6] = (*it).second[23]; hentry[7] = (*it).second[15];
@@ -1926,28 +1900,28 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                    
                    // Second layer of hexes
                    //Linear hex 5 =>  12,21,26,24  4,16,25,19
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[12]; hentry[1] = (*it).second[21]; hentry[2] = (*it).second[26];
                    hentry[3] = (*it).second[24]; hentry[4] = (*it).second[4]; hentry[5] = (*it).second[16];
                    hentry[6] = (*it).second[25]; hentry[7] = (*it).second[19];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 6 => 21,13,22,26,  16,5,17,25,
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[21]; hentry[1] = (*it).second[13]; hentry[2] = (*it).second[22];
                    hentry[3] = (*it).second[26]; hentry[4] = (*it).second[16]; hentry[5] = (*it).second[5];
                    hentry[6] = (*it).second[17]; hentry[7] = (*it).second[25];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 7 => 26,22,14,23,  25,17,6,18
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[26]; hentry[1] = (*it).second[22]; hentry[2] = (*it).second[14];
                    hentry[3] = (*it).second[23]; hentry[4] = (*it).second[25]; hentry[5] = (*it).second[17];
                    hentry[6] = (*it).second[6]; hentry[7] = (*it).second[18];
                    tdeque.push_back( hentry );
                    
                    //Linear hex 8 => 24,26,23,15  19,25,18,7
-                   geometric_primitives_VTK.push_back(VTK_HEXAHEDRON);
+                   geometric_primitives_VTK_.push_back(VTK_HEXAHEDRON);
                    hentry[0] = (*it).second[24]; hentry[1] = (*it).second[26]; hentry[2] = (*it).second[23];
                    hentry[3] = (*it).second[15]; hentry[4] = (*it).second[19]; hentry[5] = (*it).second[25];
                    hentry[6] = (*it).second[18]; hentry[7] = (*it).second[7];
@@ -1955,12 +1929,12 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
                 break;
 
               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL: // 8-noded quadratic quadrilateral
-                   geometric_primitives_VTK.push_back(VTK_QUADRATIC_QUAD); // (=23)
+                   geometric_primitives_VTK_.push_back(VTK_QUADRATIC_QUAD); // (=23)
                    tdeque.push_back( (*it).second  );
                 break;
                 
               case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9: // quadratic quadrilateral
-                   geometric_primitives_VTK.push_back(VTK_BIQUADRATIC_QUAD);
+                   geometric_primitives_VTK_.push_back(VTK_BIQUADRATIC_QUAD);
                    tdeque.push_back( (*it).second  );
                 break;
 
@@ -1990,7 +1964,7 @@ void VTK_Interface<dim>::TransformPlist( const Region<dim>& sgref,
    
    SKM fixed 1/9/2014 to include new VTK quadratic element types
 */ 
-template<size_t dim>
+template<uint32_t dim>
 void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
                                    const csmp::Index& prop_key,
                                    const map<size_t,vector<size_t> >& plist,
@@ -2008,8 +1982,7 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
 //?    size_t   n(0U);
     vector<double>  empty_vec;
 
-    for ( typename map<size_t,vector<size_t> >::const_iterator 
-          it=plist.begin(); it!=plist.end(); it++ )
+    for ( auto it=plist.begin(); it!=plist.end(); it++ )
       {
          // calculating into how many cells the element will be split up since the cell-data entry
          // must be multiplied by a corresponding number
@@ -2040,9 +2013,8 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
            }
        
          // creating new records in 'cell_data'
-         for ( size_t i=0U; i<fragments; i++ ) {
-              pair<typename map<size_t,vector<double> >::iterator,bool> dit =
-                                                   cell_data.insert( make_pair( n++, empty_vec ) );
+         for ( auto i{0}; i<fragments; i++ ) {
+              auto dit = cell_data.insert( make_pair( n++, empty_vec ) );
               assert( dit.second == true );
          
               // initializing the data members of this record
@@ -2054,15 +2026,15 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
                   (*dit.first).second.resize( 3U, 0. ); // initialization of empty vector<double> to zero
 	              VectorVariable<dim>  vc;
 	              sgref.E( (*it).first )->Read( prop_key, vc );
-                  for ( size_t j=0U; j<dim; j++ ) (*dit.first).second[j] = vc[j];
+                  for ( uint32_t j=0U; j<dim; j++ ) (*dit.first).second[j] = vc[j];
 	              }
 	            else if ( prop_key.type == TENSOR ) {
 	              TensorVariable<dim>  ts;
 	              sgref.E( (*it).first )->Read( prop_key, ts );
 	              (*dit.first).second.reserve(9U);
 	              if ( dim == 3U ) {
-                       for ( size_t k=0U; k<dim; k++ )
-	                     for ( size_t l=0U; l<dim; l++ ) (*dit.first).second.push_back( ts(k,l) );
+                       for ( uint32_t k=0U; k<dim; k++ )
+	                     for ( uint32_t l=0U; l<dim; l++ ) (*dit.first).second.push_back( ts(k,l) );
 	                }
 	              else { // dim == 2 (since interface does not work for 1D elements)
 	                   (*dit.first).second.push_back( ts(0,0) );
@@ -2087,7 +2059,7 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
 /**
     Outputs all subregion of model, with file_name preface and var-name attached
 */
-template<size_t dim>
+template<uint32_t dim>
 template<class T>
 void VTK_Interface<dim>::OutputRegionByRegionToVTK( const Model<dim>& model,
                                                     const std::string& initial_file_name,
@@ -2144,7 +2116,7 @@ template void VTK_Interface<3U>::OutputRegionByRegionToVTK(const Model<3U>&,cons
     For the user-defined discretised variable identified by key, method prints 
     the values stored on the given element to file.
 */
-template<size_t dim>
+template<uint32_t dim>
 void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
                           const char* file_name, const char* variable_name )
   {
@@ -2185,9 +2157,9 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      // NOTE: in VTK coordinates always are stored in single precision
      ofs <<"POINTS " << e.Nodes() <<" float"<< endl;
-     for ( size_t i=0; i<e.Nodes(); i++ )
+     for ( auto i=0; i<e.Nodes(); i++ )
        {
-          for ( size_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.;
           ofs << endl;
        }
@@ -2197,7 +2169,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      // -----------------------------------------------------
      ofs <<"CELLS "<< 1 <<" "<< e.Nodes()+1 << endl;
      ofs << e.Nodes() <<" ";
-     for ( size_t i=0; i<e.Nodes(); i++ ) ofs << i <<" ";
+     for ( auto i=0; i<e.Nodes(); i++ ) ofs << i <<" ";
      ofs << endl;
 
      // 4. writing CELL_TYPES - for the
@@ -2217,7 +2189,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA 1 x nodes
-           for ( size_t i=0; i<e.Nodes(); i++ ) ofs << e.N(i)->Read(key) <<" ";
+           for ( uint32_t i=0; i<e.Nodes(); i++ ) ofs << e.N(i)->Read(key) <<" ";
            ofs << endl;
        }
      else if ( key.type == VECTOR )
@@ -2226,8 +2198,8 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
           vector<VectorVariable<dim> > data;
           e.NodePropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( size_t i=0; i<e.Nodes(); i++ ) {
-               for ( size_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
+          for ( uint32_t i=0; i<e.Nodes(); i++ ) {
+               for ( uint32_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
                // variables have always 3 components since view screen is 3D
                if ( dim == 2 ) ofs << 0.;
                ofs << endl;
@@ -2239,9 +2211,9 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
           vector<TensorVariable<dim> > data;
           e.NodePropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( size_t i=0; i<e.Nodes(); i++ ) {
-               for ( size_t j=0; j<dim; j++ ) {
-                    for ( size_t k=0; k<dim; ++k ) {
+          for ( uint32_t i=0; i<e.Nodes(); i++ ) {
+               for ( uint32_t j=0; j<dim; j++ ) {
+                    for ( uint32_t k=0; k<dim; ++k ) {
                           ofs << data[i](j,k) <<" ";
                           if ( dim == 2 ) ofs << 0. <<" ";
                       }
@@ -2290,7 +2262,7 @@ quality of interpolation and the computed properties directly.
 The method will indicate if there is a problem in opening the output
 file.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void outputNodeDataToVTK( const Element<dim>& e,
                           const std::string& file_name, const std::string& var_name,
                           DenseMatrix<DM_MIN>& DATA ) 
@@ -2326,7 +2298,7 @@ template class VTK_Interface<3U>;
     
     @author SKM 5/7/14
 */
-template<size_t dim>
+template<uint32_t dim>
 void outputFaceNormalsToVTK( const Element<dim>& e, const char* file )
  {
     vector<double>    nrml;
@@ -2335,8 +2307,8 @@ void outputFaceNormalsToVTK( const Element<dim>& e, const char* file )
 
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
-    vector<size_t> fnids;
-    for ( size_t i=0; i<e.Faces(); i++ ) {
+    vector<uint32_t> fnids;
+    for ( auto i=0; i<e.Faces(); i++ ) {
          // computing and storing normal to face
          Point<dim> unormal = e.UnitNormalToFace( i );
          // scaling the normals (by empirical factor)
@@ -2421,7 +2393,7 @@ template void outputFaceNormalsToVTK( const Element<3>&, const char* );
     The integration points are coloured by number and are then output to VTK file.
     Point 1=0, point2=1...n-1.
 */
-template<size_t dim>
+template<uint32_t dim>
 void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file )
  {
      // 0. generating values, first integration point=0, second=1...
@@ -2429,7 +2401,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
     vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
     double display_value(0.);
-    for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
+    for ( auto i{0}; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
          display_value += 1.;
@@ -2504,7 +2476,7 @@ template void outputIntegrationPointsToVTK( const Element<3>&, const char* );
      
      File name is appended with element number and element type.
 */
-template<size_t dim>
+template<uint32_t dim>
 void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::Index& key,
                                       const char* variable_name, const char* file )
  {
@@ -2516,7 +2488,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
     vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
     double display_value(0.);
-    for ( size_t i=0U; i<element.IntegrationPoints(); i++ ) {
+    for ( auto i{0}; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
          display_value += 1.;
@@ -2575,7 +2547,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA 1 x nodes
-           for ( size_t i=0; i<element.IntegrationPoints(); i++ ) ofs << element.Read(i,key) <<" ";
+           for ( uint32_t i=0; i<element.IntegrationPoints(); i++ ) ofs << element.Read(i,key) <<" ";
            ofs << endl;
        }
      else if ( key.type == VECTOR )
@@ -2584,8 +2556,8 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
           vector<VectorVariable<dim> > data;
           element.IntegrationPointPropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( size_t i=0; i<element.Nodes(); i++ ) {
-               for ( size_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
+          for ( uint32_t i=0; i<element.Nodes(); i++ ) {
+               for ( uint32_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
                // variables have always 3 components since view screen is 3D
                if ( dim == 2 ) ofs << 0.;
                ofs << endl;
@@ -2597,9 +2569,9 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
           vector<TensorVariable<dim> > data;
           element.IntegrationPointPropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( size_t i=0; i<element.Nodes(); i++ ) {
-               for ( size_t j=0; j<dim; j++ ) {
-                    for ( size_t k=0; k<dim; ++k ) {
+          for ( uint32_t i=0; i<element.Nodes(); i++ ) {
+               for ( uint32_t j=0; j<dim; j++ ) {
+                    for ( uint32_t k=0; k<dim; ++k ) {
                           ofs << data[i](j,k) <<" ";
                           if ( dim == 2 ) ofs << 0. <<" ";
                       }
@@ -2691,7 +2663,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << subdomain.PerimeterNodes() <<" float"<< endl;
      for ( size_t i=subdomain.InteriorNodes(); i<subdomain.Nodes(); ++i ) {
-          for ( size_t j=0U; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
+          for ( uint32_t j=0U; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
           ofs << endl;
           // numbering the perimeter nodes in consecutive order from 0..n-1
           subdomain.N(i)->Idx( node_counter++ );
@@ -2704,7 +2676,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 2 options: triangle and quadrilateral
      size_t cell_list_size(0);
      for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
-       for ( size_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+       for ( uint32_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j));
              geometric_primitives_VTK.push_back( parseElementType(fem_type) );
              cell_list_size += ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE ||
@@ -2716,9 +2688,9 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 5. writing CELLS (cell-size and member nodes (point)) = plist equivalent
      // ------------------------------------------------------------------------
      ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
-     vector<size_t> fnids;
+     vector<uint32_t> fnids;
      for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
-       for ( size_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+       for ( uint32_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
              // writing out the number of nodes per face
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j) );
              if      ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE )    ofs << 3U <<" ";
@@ -2789,7 +2761,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                     size_t max_items_per_line(2U), items(0U);
                     for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
                           (*nit)->Read( prop_key, vc );
-                          for ( size_t n=0U; n<3U; ++n )
+                          for ( auto n=0U; n<3U; ++n )
                             ofs << vc[n] <<" ";
                           if ( items == max_items_per_line ) {
                               ofs <<"\n";
@@ -2806,8 +2778,8 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                     ofs <<"TENSORS "<< variable <<" double"<< endl;
                    for ( auto nit=subdomain.PerimeterNodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
                           (*nit)->Read( prop_key, ts );
-                          for ( size_t m=0U; m<3U; ++m )
-                            for ( size_t n=0U; n<3U; ++n )
+                          for ( uint32_t m=0U; m<3U; ++m )
+                            for ( uint32_t n=0U; n<3U; ++n )
                               ofs << ts(m,n) <<" ";
                        }
                     ofs << endl;
@@ -2831,7 +2803,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
 
 // VTK STUFF
 
-template<size_t dim>
+template<uint32_t dim>
 void  outputPropertiesOfRegionToVTK( const Model<dim>& sg,
                                      VTK_Interface<dim>& vtk,
                                      const char* group, long output_time )
@@ -2874,7 +2846,7 @@ void csmpBinaryToVTK( const char* modelBinFIleName )
   Model<3> model( bin_file_set );
 
   if ( !model.Database().IsDefined( propertyName.c_str() ) ) {
-    cerr << "\csmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
+    cerr << "\ncsmpBinaryToVTK: target property '" << propertyName << "' is undefined. Check name and try again.\n";
     return;
   }
   if ( !model.ContainsRegion( regionName.c_str() ) ) {

@@ -10,7 +10,7 @@ using namespace csmp::variables;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ImplicitTransport<dim>::ImplicitTransport( Model<dim>& model, const std::string& target_region, 
                                            const GoverningEquation<dim>& eqn, 
                                            bool second_order_in_space )
@@ -32,7 +32,7 @@ ImplicitTransport<dim>::ImplicitTransport( Model<dim>& model, const std::string&
 /**
      stub to FV auxiliary function
 */
-template<size_t dim>
+template<uint32_t dim>
 void ImplicitTransport<dim>::UpdateFluxesAndFluxBalances()
  {
     this->VolumetricFlowAndTransportVariableFluxBalances( ComputationDomain(), halo_cells_ );
@@ -44,7 +44,7 @@ void ImplicitTransport<dim>::UpdateFluxesAndFluxBalances()
 /**
     Computation of time increment, flux balance, and temporary new concentration.
 */
-template<size_t dim>
+template<uint32_t dim>
 double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_increment )
  {
      double dt_min(max_time_increment);
@@ -79,7 +79,7 @@ double ImplicitTransport<dim>::TimeIncrementAndFluxBalance( double max_time_incr
 /**
     Computation of time increment (default limited to 1 year).
 */
-template<size_t dim>
+template<uint32_t dim>
 double ImplicitTransport<dim>::TimeIncrement()
  {
     return TimeIncrementAndFluxBalance( 356. * 86400. );
@@ -92,7 +92,7 @@ double ImplicitTransport<dim>::TimeIncrement()
 /**
     Reports the volumetric flow into the computational region.
 */
-template<size_t dim>
+template<uint32_t dim>
 double ImplicitTransport<dim>::IncomingVolumetricFlow() const
  {
      double inflow(0.);
@@ -128,7 +128,7 @@ double ImplicitTransport<dim>::IncomingVolumetricFlow() const
  
     @todo SKM check whether the variable 'outflow' can be used for this, saving some computations.
 */
-template<size_t dim>
+template<uint32_t dim>
 double ImplicitTransport<dim>::OutgoingVolumetricFlow() const
  {
      double outflow(0.);
@@ -175,7 +175,7 @@ double ImplicitTransport<dim>::OutgoingVolumetricFlow() const
     5. tranfer of results into 'concentration', vacating 'new concentration' for 
        next assembly.
 */
-template<size_t dim>
+template<uint32_t dim>
 void ImplicitTransport<dim>::AdvectVariable( double time_interval )
  {
    // 1. evaluation of time increment

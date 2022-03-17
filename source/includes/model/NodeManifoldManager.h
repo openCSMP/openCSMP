@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t> class Node;
+template<uint32_t> class Node;
 
 /**
 @brief Policy of Model class for the management of manifolds that consist of multiplicated nodes
@@ -15,7 +15,7 @@ template<size_t> class Node;
 @note just storage management for manifolds; no targeted access.
 */
 
-template<size_t dim>
+template<uint32_t dim>
 class NodeManifoldManager {
   public:
        /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers

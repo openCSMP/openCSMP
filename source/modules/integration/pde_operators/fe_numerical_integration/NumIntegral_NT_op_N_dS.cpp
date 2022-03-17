@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_op_N_dS<dim,CELL>::NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>& pref,
                                                              const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -47,7 +47,7 @@ integral is naturally 1 as well.
 @attention accumulation takes place only for faces where the Material Operand is flagged Neumann.
 
 */
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -65,7 +65,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
               MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ||
               MathOperatorRHS<dim>::MaterialOperandPlacement() == INTER_FACE )
            {
-             for ( size_t j=0; j<e.Nodes(); j++ )
+             for ( auto j=0; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] =
                  // after having ascertained that the material property is a scalar
                  (MathOperatorRHS<dim>::MTRL[0](0,0) * area) / static_cast<double>(e.Nodes());
@@ -73,7 +73,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
            {
-             for ( size_t j=0; j<e.Nodes(); j++ )
+             for ( auto j=0; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
                  (MathOperatorRHS<dim>::MTRL[j](0,0) * area) / static_cast<double>(e.Nodes());
            }
@@ -85,7 +85,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          RHS_TEMP.Resize(e.Nodes(), e.Nodes());
          RHS_TEMP.Zero();
             
-         for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det(e.det_JINV_AtIntegrationPoint( i ));
@@ -108,8 +108,8 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
-         for ( size_t j=0; j<e.Nodes(); j++ )
-           for ( size_t k=0; k<e.Nodes(); k++ ) 
+         for ( auto j=0; j<e.Nodes(); j++ )
+           for ( auto k=0; k<e.Nodes(); k++ ) 
              MathOperatorRHS<dim>::RHS[j] += RHS_TEMP(j,k);
       }
  

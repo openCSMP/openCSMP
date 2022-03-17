@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim> class Model; 
+template<uint32_t dim> class Model; 
 
 /** 
     @brief Monitors value ranges and integrated property values in all regions of a model.
@@ -21,7 +21,7 @@ template<size_t dim> class Model;
     @author Stephan Matthai
     @date 1999
 */
-template<size_t dim>
+template<uint32_t dim>
 class RegionMonitor {
   public:
     RegionMonitor();

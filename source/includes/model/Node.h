@@ -7,9 +7,10 @@
 
 namespace csmp {
 
-template<size_t dim> class Visitor;
-template<size_t dim> class Element;
-template<size_t dim> class NodeManifold;
+template<uint32_t dim> class Visitor;
+template<uint32_t dim> class Element;
+template<uint32_t dim> class NodeManifold;
+class FiniteElement_TestData;
 
 /**
  
@@ -40,7 +41,7 @@ Uses Point<> template to represent the coordinate.
 Elements are registered as parents, Faces and InterFaces are not.
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class Node : public LocalVariableStorage<dim,Node> {
   public:
     Node();
@@ -63,11 +64,11 @@ class Node : public LocalVariableStorage<dim,Node> {
     // node to parent element connectivity (sorted vector that is searchable)
     
     /// assign new parent element where there is a  NOT_INITIALISED  slot in the parent element storage
-    void Assign( size_t parent_elmt_node_number, Element<dim>* parent_elmt );
+    void Assign( uint32_t parent_elmt_node_number, Element<dim>* parent_elmt );
     /// if found, sets matching parent element pointer to nullptr and the corresponding node number to NOT_INITIALIZED
     bool Unassign( Element<dim>* parent_elmt );
     /// changes parent element related containers to new size
-    void ResizeParentStorage( size_t parent_elements );
+    void ResizeParentStorage( uint32_t parent_elements );
     /// sorts parent vectors for searching
     void SortParents();
     /// removing parent elements that were previously assigned a nullptr
@@ -76,11 +77,11 @@ class Node : public LocalVariableStorage<dim,Node> {
     void EraseParents();
 
     /// returns how many elements share this node
-    size_t Parents() const;
+    uint32_t Parents() const;
     /// access to the (0..n-1) parent element
-    Element<dim>* Parent( size_t ) const;
+    Element<dim>* Parent( uint32_t ) const;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)
-    size_t ParentNodeNumber( size_t parent_element ) const;
+    uint32_t ParentNodeNumber( uint32_t parent_element ) const;
     /// checks whether Element is a parent of the node
     bool IsParent( const Element<dim>* const ) const;
     
@@ -107,20 +108,20 @@ class Node : public LocalVariableStorage<dim,Node> {
     void Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors=false );
 
     /// rebuilds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
-    size_t ReassignNeighbors();
+    uint32_t ReassignNeighbors();
 
     /// removes null pointers and potential duplicates returning the resulting number of neighbors
-    size_t UpdateNeighbors();
+    uint32_t UpdateNeighbors();
     
     bool IsNeighbor( const Node<dim>* const ) const;
     void AddNeighbor( Node<dim>* neighbor_node );
     void RemoveNeighbor( const Node<dim>* const neighbor_node );
     
     /// the number of corner nodes that this node is directly connected with via segments
-    size_t Neighbors() const;
+    uint32_t Neighbors() const;
     
     /// access to any of the neighbor nodes
-    Node<dim>* Neighbor( size_t ) const;
+    Node<dim>* Neighbor( uint32_t ) const;
 
 
     // basic functionality of the Node
@@ -138,9 +139,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     BOX_BOUNDARY AtBoundary() const;
 
     /// accessors/mutators for specific node coordinates x=0, y=1, z=2 (z exists only in 3D)
-    double  operator[]( size_t i ) const;
-    double& operator[]( size_t i );
-    double& operator()( size_t i );
+    double  operator[]( uint32_t i ) const;
+    double& operator[]( uint32_t i );
+    double& operator()( uint32_t i );
     
     void x( double );
     void y( double );
@@ -155,7 +156,7 @@ class Node : public LocalVariableStorage<dim,Node> {
 
   private:
     /// private because these operators are owned by the MeshManager
-    template<size_t> friend class MeshManager;
+    template<uint32_t> friend class MeshManager;
     void* operator new( size_t size );
     void  operator delete( void* );
   
@@ -168,32 +169,33 @@ class Node : public LocalVariableStorage<dim,Node> {
     std::vector<ONE_BYTE_NUMBER>   parent_node_indexes_;      ///< local parent node number (0...nodes-1)
     BOX_BOUNDARY                   at_boundary_;              ///< which model boundary the Node is on
     
-    friend class FiniteElement_TestData; // for testing 
+    friend class FiniteElement_TestData; // for testing
+    friend std::istream& operator >> ( std::istream&, FiniteElement_TestData& );
 };
 
 
 // FUNCTIONS INVOLVING NODES
 
 /// returns  elements that share face, inner side is reported first; outer next; face-nodes must be in correct order. Application: from nodes of lower-dimensional face find elements on in- and outside
-template<size_t dim>
+template<uint32_t dim>
 std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std::vector<Node<dim>*>::const_iterator first,
                                                                     typename std::vector<Node<dim>*>::const_iterator last );
 
 /// if there is only one parent element expected, then use this method instead of 'parentElementsSharedByFace'
-template<size_t dim>
+template<uint32_t dim>
 std::pair<Element<dim>*,size_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                 typename std::vector<Node<dim>*>::const_iterator last );
 
 /// prints Idx and boundary flag values of the nodes that this node is connected with
-template<size_t dim>
+template<uint32_t dim>
 void printNeighbors( const Node<dim>* const );
 
 /// prints current parent information and checks for duplicate parents
-template<size_t dim>
+template<uint32_t dim>
 void printParents( const Node<dim>* const );
 
 /// calculates the size of the Node excluding the dynamic contribution to the stored variables
-template<size_t dim>
+template<uint32_t dim>
 size_t sizeOf( const Node<dim>* const );
 
 } // csmp

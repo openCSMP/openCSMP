@@ -67,7 +67,7 @@ void LUdcmp_Solver::ludcmp( SparseMatrix& a,
           vv[i] = 1./big;
       }
 
-      long imax;
+  long imax{0};
 
       for(k=0; k<n; k++){
           big = 0.;
@@ -79,8 +79,8 @@ void LUdcmp_Solver::ludcmp( SparseMatrix& a,
               }
           }
           if( k != imax ){
-              for(size_t j=0; j<n; j++){
-                  cache = a( static_cast<size_t>(imax), j );
+              for( j=0; j<n; j++ ){
+                  cache = a( static_cast<uint32_t>(imax), j );
                   a.Assign( imax,j, a( k,j ));
                   a.Assign( k,j, cache);
               }
@@ -123,13 +123,13 @@ void LUdcmp_Solver::lubksb( SparseMatrix& a,
           sum = x[ip];
           x[ip] = x[i];
           if(ii != 0)
-              for(size_t j=ii-1; j<i; j++)
+              for( j=ii-1; j<i; j++)
                   sum -= a( i,j ) * x[j];
           else if (sum != 0.)
               ii = i+1;
           x[i] =sum;
       }
-      for( long i=n-1; i>=0; i--){
+      for( i=n-1; i>=0; i--){
           sum = x[i];
           for(j=i+1; j<n; j++)
               sum -= a( i,j ) * x[j];

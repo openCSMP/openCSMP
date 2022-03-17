@@ -84,10 +84,10 @@ void     vector_randomize( std::vector<double>& x, double scale_fac=1. );
 template<typename Var> void average( const std::vector<Var>&, Var& );
 
 /// FEM matrix transformations, for the case where the solution variable is a vector in 2D, Zienkewicz, volume 1, p. 22
-void  dN_To2DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
+void  dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& DN );
 
 /// FEM matrix transformations, for the case where the solution variable is a vector in 3D, Zienkewicz, volume 1, p. 133
-void  dN_To3DOF( size_t nodes, DenseMatrix<DM_MIN>& DN );
+void  dN_To3DOF( uint32_t nodes, DenseMatrix<DM_MIN>& DN );
 
 
 /// auxiliary functions for spline interpolation

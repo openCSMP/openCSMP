@@ -11,7 +11,7 @@ namespace csmp {
    - for lambda=0, this implementation of Brooks-Corey model switches to linear
      base class pm1 and pm2 are used for pd and lambda, respectively
  */
-template<size_t dim>
+template<uint32_t dim>
 class Corey : public TwoPhaseModel<dim> {
   public:
 
@@ -78,14 +78,14 @@ class Corey : public TwoPhaseModel<dim> {
     // maximum absolute value returned by dfdS
     virtual double MaxFractionalFlowDerivative() const;
 
-    virtual void Out( size_t phase ) const;
+    virtual void Out( uint32_t phase ) const;
 
   private:
 
     Corey();
-    Index           pd_key_, pc_max_key_,expw_key_, expn_key_, lambda_key_, krw_key_, krn_key_;
-    double        krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
-    bool            default_capillary_pressure_max_;
+    Index   pd_key_, pc_max_key_,expw_key_, expn_key_, lambda_key_, krw_key_, krn_key_;
+    double  krw_, krn_, expw_, expn_, lambda_, entry_pressure_,pc_max_;
+    bool    default_capillary_pressure_max_;
 
 };
 

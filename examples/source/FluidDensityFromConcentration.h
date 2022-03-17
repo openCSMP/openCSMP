@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class FluidDensityFromConcentration : public Interrelation<dim> {
     Operand<dim>&   DENS;    
     Operand<dim>&   CONC;    

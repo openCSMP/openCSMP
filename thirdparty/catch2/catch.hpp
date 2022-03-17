@@ -3666,7 +3666,7 @@ namespace Matchers {
                 // - then just call that directly
                 if (m_comparator.size() != v.size())
                     return false;
-                for (std::size_t i = 0; i < v.size(); ++i)
+                for (auto i = 0; i < v.size(); ++i)
                     if (m_comparator[i] != v[i])
                         return false;
                 return true;
@@ -3685,7 +3685,7 @@ namespace Matchers {
             bool match(std::vector<T, AllocMatch> const &v) const override {
                 if (m_comparator.size() != v.size())
                     return false;
-                for (std::size_t i = 0; i < v.size(); ++i)
+                for (auto i = 0; i < v.size(); ++i)
                     if (m_comparator[i] != approx(v[i]))
                         return false;
                 return true;
@@ -4306,7 +4306,7 @@ namespace Generators {
             m_chunk.reserve(m_chunk_size);
             if (m_chunk_size != 0) {
                 m_chunk.push_back(m_generator.get());
-                for (size_t i = 1; i < m_chunk_size; ++i) {
+                for (auto i = 1; i < m_chunk_size; ++i) {
                     if (!m_generator.next()) {
                         Catch::throw_exception(GeneratorException("Not enough values to initialize the first chunk"));
                     }
@@ -8714,7 +8714,7 @@ public:
 		auto operator *() const -> std::string {
 			std::string row, padding;
 
-			for (size_t i = 0; i < m_columns.size(); ++i) {
+			for (auto i = 0; i < m_columns.size(); ++i) {
 				auto width = m_columns[i].width();
 				if (m_iterators[i] != m_columns[i].end()) {
 					std::string col = *m_iterators[i];
@@ -8730,7 +8730,7 @@ public:
 			return row;
 		}
 		auto operator ++() -> iterator& {
-			for (size_t i = 0; i < m_columns.size(); ++i) {
+			for (auto i = 0; i < m_columns.size(); ++i) {
 				if (m_iterators[i] != m_columns[i].end())
 					++m_iterators[i];
 			}
@@ -8885,7 +8885,7 @@ namespace detail {
                     } else {
                         if( next[1] != '-' && next.size() > 2 ) {
                             std::string opt = "- ";
-                            for( size_t i = 1; i < next.size(); ++i ) {
+                            for( auto i = 1; i < next.size(); ++i ) {
                                 opt[1] = next[i];
                                 m_tokenBuffer.push_back( { TokenType::Option, opt } );
                             }
@@ -9609,7 +9609,7 @@ namespace detail {
             ParserInfo parseInfos[512];
 
             {
-                size_t i = 0;
+                auto i = 0;
                 for (auto const &opt : m_options) parseInfos[i++].parser = &opt;
                 for (auto const &arg : m_args) parseInfos[i++].parser = &arg;
             }
@@ -9620,7 +9620,7 @@ namespace detail {
             while( result.value().remainingTokens() ) {
                 bool tokenParsed = false;
 
-                for( size_t i = 0; i < totalParsers; ++i ) {
+                for( auto i = 0; i < totalParsers; ++i ) {
                     auto&  parseInfo = parseInfos[i];
                     if( parseInfo.parser->cardinality() == 0 || parseInfo.count < parseInfo.parser->cardinality() ) {
                         result = parseInfo.parser->parse(exeName, result.value().remainingTokens());
@@ -10628,7 +10628,7 @@ namespace Catch {
 
             const auto valueNames = Catch::Detail::parseEnums( allValueNames );
             assert( valueNames.size() == values.size() );
-            std::size_t i = 0;
+            auto i = 0;
             for( auto value : values )
                 enumInfo->m_values.emplace_back(value, valueNames[i++]);
 
@@ -10897,7 +10897,7 @@ namespace Catch {
         // nobody overwrote them in the meantime, and doesn't expect
         // their signal handlers to live past ours given that they
         // installed them after ours..
-        for (std::size_t i = 0; i < sizeof(signalDefs) / sizeof(SignalDefs); ++i) {
+        for (auto i = 0; i < sizeof(signalDefs) / sizeof(SignalDefs); ++i) {
             sigaction(signalDefs[i].id, &oldSigActions[i], nullptr);
         }
         // Return the old stack
@@ -10923,7 +10923,7 @@ namespace Catch {
     FatalConditionHandler::FatalConditionHandler() {
         assert(!altStackMem && "Cannot initialize POSIX signal handler when one already exists");
         if (altStackSize == 0) {
-            altStackSize = std::max(static_cast<size_t>(SIGSTKSZ), minStackSizeForErrors);
+            altStackSize = fmax(static_cast<uint32_t>(SIGSTKSZ), minStackSizeForErrors);
         }
         altStackMem = new char[altStackSize]();
     }
@@ -10945,7 +10945,7 @@ namespace Catch {
 
         sa.sa_handler = handleSignal;
         sa.sa_flags = SA_ONSTACK;
-        for (std::size_t i = 0; i < sizeof(signalDefs)/sizeof(SignalDefs); ++i) {
+        for (auto i = 0; i < sizeof(signalDefs)/sizeof(SignalDefs); ++i) {
             sigaction(signalDefs[i].id, &sa, &oldSigActions[i]);
         }
     }
@@ -11925,7 +11925,7 @@ namespace Catch {
     Capturer::~Capturer() {
         if ( !uncaught_exceptions() ){
             assert( m_captured == m_messages.size() );
-            for( size_t i = 0; i < m_captured; ++i  )
+            for( auto i = 0; i < m_captured; ++i  )
                 m_resultCapture.popScopedMessage( m_messages[i] );
         }
     }
@@ -13859,7 +13859,7 @@ namespace Catch {
 
     bool replaceInPlace( std::string& str, std::string const& replaceThis, std::string const& withThis ) {
         bool replaced = false;
-        std::size_t i = str.find( replaceThis );
+        auto i = str.find( replaceThis );
         while( i != std::string::npos ) {
             replaced = true;
             str = str.substr( 0, i ) + withThis + str.substr( i+replaceThis.size() );
@@ -14870,7 +14870,7 @@ namespace Catch {
 
     std::string TestSpecParser::preprocessPattern() {
         std::string token = m_patternName;
-        for (std::size_t i = 0; i < m_escapeChars.size(); ++i)
+        for (auto i = 0; i < m_escapeChars.size(); ++i)
             token = token.substr(0, m_escapeChars[i] - i) + token.substr(m_escapeChars[i] - i + 1);
         m_escapeChars.clear();
         if (startsWith(token, "exclude:")) {
@@ -14950,7 +14950,7 @@ namespace Catch {
 
             auto startTime = getCurrentNanosecondsSinceEpoch();
 
-            for( std::size_t i = 0; i < iterations; ++i ) {
+            for( auto i = 0; i < iterations; ++i ) {
 
                 uint64_t ticks;
                 uint64_t baseTicks = getCurrentNanosecondsSinceEpoch();
@@ -15063,7 +15063,7 @@ std::string fpToString( T value, int precision ) {
         << std::fixed
         << value;
     std::string d = rss.str();
-    std::size_t i = d.find_last_not_of( '0' );
+    auto i = d.find_last_not_of( '0' );
     if( i != std::string::npos && i != d.size()-1 ) {
         if( d[i] == '.' )
             i++;
@@ -16670,7 +16670,7 @@ void ConsoleReporter::printOpenHeader(std::string const& _name) {
 // if string has a : in first line will set indent to follow it on
 // subsequent lines
 void ConsoleReporter::printHeaderString(std::string const& _string, std::size_t indent) {
-    std::size_t i = _string.find(": ");
+    auto i = _string.find(": ");
     if (i != std::string::npos)
         i += 2;
     else

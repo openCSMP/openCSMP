@@ -4,10 +4,10 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV() {}
 
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
                                                                             UpwindControlVisitor<dim>& upwind_visitor,
                                                                             ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
@@ -55,7 +55,7 @@ CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_op_dN_d
                     
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands( Element<dim>& e )
  {
 
@@ -72,7 +72,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperands( Element<dim>& e )
     
  } // end GetOperands
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperandsCVFEM( Element<dim>& e,
                                           				      csmp::Index upwind_var_key )
  {
@@ -91,12 +91,12 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetOperandsCVFEM( Element<dim>&
                                       "Only nodal properties allowed" );
   }
 
- for (size_t i = 0; i < el_uvar.size(); i++)
+ for (auto i = 0; i < el_uvar.size(); i++)
     el_uvar[i]() *= upwind_var_multiplier[i]();
     
  } // end GetOperandsCVFEM
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<dim>& e )
  {
  
@@ -114,7 +114,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<di
 //   csmp_float detJ;
 
     // loop over facets of the element
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
        {
 
 //       detJ = e.dN( B, e.ConnectedFiniteVolumeStencil()->FacetEdgeMidPoint(i).Coordinates() );
@@ -147,7 +147,7 @@ void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::ComputeContribution( Element<di
 } // end ComputeContribution
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>::GetUpwindMatrix( Element<dim>& e )
 {
 

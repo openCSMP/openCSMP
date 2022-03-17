@@ -30,7 +30,7 @@ namespace csmp {
  * 3) it will also check that the existing monitor file has the same columns
  * 4) points 2) and 3) are a secondary feature if we can save all data to a restart file directly!!!
  */
-template<size_t dim>
+template<uint32_t dim>
 SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
                                         Model<dim>& model,
                                         bool restart,
@@ -192,10 +192,10 @@ SimulatorMonitor<dim>::SimulatorMonitor(string file_prefix,
 
 } // end constructor
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::CheckForDuplicateHeaders(){
     set<string> check;
-    size_t i = 0;
+    auto i = 0;
     for (auto it = values_column_headers_.begin(); it!= values_column_headers_.end();it++){
         cout<<i<<" value header: "<<*it<<endl;
         if (check.find(*it)==check.end()){
@@ -212,7 +212,7 @@ void SimulatorMonitor<dim>::CheckForDuplicateHeaders(){
     cin.get();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
     ifstream  ifs(file_name);
@@ -283,7 +283,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
             if (first_call){
                 values_.resize(data.size());
-                for (size_t i = 0 ; i < values_.size();i++){
+                for (auto i = 0 ; i < values_.size();i++){
                     values_[i].resize(values_column_headers_.size());
                     fill(values_[i].begin(), values_[i].end(),0.0);
                 }
@@ -292,10 +292,10 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
             // this check could be done during the reading process.  But since we would like to keep the old data throughout
             // the simulation anyway, we can do it separately.
-            vector<size_t> old_index_to_new_index(columnheaders.size());
+            vector<uint32_t> old_index_to_new_index(columnheaders.size());
             std::fill(old_index_to_new_index.begin(),old_index_to_new_index.end(),values_column_headers_.size());
 
-            for (size_t i = 0; i < columnheaders.size() ; i++)
+            for (auto i = 0; i < columnheaders.size() ; i++)
                 for (size_t j = 0 ; j < values_column_headers_.size(); j++)
                 {
                     if ( columnheaders[i].find(string(values_column_headers_[j]+"("))!=std::string::npos){
@@ -305,7 +305,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
                 }
 
             std::fill(rowdata_.begin(), rowdata_.end(),0.0);
-            for (size_t i = 0 ; i < data.size() ; i++){
+            for (auto i = 0 ; i < data.size() ; i++){
                 for (size_t j = 0; j < columnheaders.size() ; j++)
                     if (j < values_column_headers_.size())
                         values_[i][old_index_to_new_index[j]]=data[i][j];
@@ -315,7 +315,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 string SimulatorMonitor<dim>::UScoreForSpace(string text)
 {
     string property_column_header_entry=text;
@@ -327,8 +327,8 @@ string SimulatorMonitor<dim>::UScoreForSpace(string text)
     return property_column_header_entry;
 }
 
-template<size_t dim>
-void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector<size_t> &indexes)
+template<uint32_t dim>
+void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector<uint32_t> &indexes)
 {
     string property_column_header_entry=UScoreForSpace(property_regionname);
 
@@ -350,7 +350,7 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
     if the variable 'thickness' is defined in the PropertyDatabase, it is used to scale
     the element by element integrals.
 */
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
 {
     double  integral;
@@ -441,7 +441,7 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
     }
 } // end ScalarPropertyIntegrals
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
 {
     double  rmin, rmax;
@@ -493,7 +493,7 @@ void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
 
 /// this method reads values directly from the model
 ///
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double>& rowdata)
 {
     string read_value_key;
@@ -510,7 +510,7 @@ void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double>& rowdata)
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& rowdata){
 
     bool hasVolumeElements( HasVolumeElements( mref_ ) );
@@ -578,12 +578,12 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& row
 }
 
 ///
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::Monitor()
 {
     if (first_monitor_call_){
         rowdata_.resize(values_column_headers_.size());
-        for (size_t i = 0 ; i< rowdata_.size();i++)
+        for (auto i = 0 ; i< rowdata_.size();i++)
             rowdata_[i]=0.0;
         this->CalculateDimensionsAndPerimeters(rowdata_); // for now, volumes and areas are calculated only once.
     }
@@ -599,19 +599,19 @@ void SimulatorMonitor<dim>::Monitor()
     first_monitor_call_=false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ReadModelTime(vector<double>& rowdata)
 {
     double time = mref_.Read(mref_.Database().StorageKey("model time"));
 
     current_requested_monitor_time_=time;
-    for (size_t i = 0 ; i < model_time_indexes_.size();i++) {
+    for (auto i = 0 ; i < model_time_indexes_.size();i++) {
         rowdata[model_time_indexes_[i]]=time;
     }
     if (first_monitor_call_) last_requested_monitor_time_=time;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::ClearAllHeadersAndValues() // zap all recorded values
 {
     integrated_property_names_.clear();
@@ -622,13 +622,13 @@ void SimulatorMonitor<dim>::ClearAllHeadersAndValues() // zap all recorded value
 
 } // end ClearAllHeadersAndValues
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::EraseDataValuesOnly()
 {
     values_.clear();
 } // end EraseDataValuesOnly
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorMonitor<dim>::Out()
 {
     string  file_integrals(file_prefix_);
@@ -652,7 +652,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_integrals<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (size_t i = 0 ; i < values_.size();i++){
+            for  (auto i = 0 ; i < values_.size();i++){
                 for (auto hit = int_header_indexes_.begin();hit != int_header_indexes_.end();hit++)
                     ofs_integrals<<values_[i][*hit]<<"\t";
                 ofs_integrals<<endl;
@@ -668,7 +668,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_ranges<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (size_t i = 0 ; i < values_.size();i++){
+            for  (auto i = 0 ; i < values_.size();i++){
                 for (auto hit = range_header_indexes_.begin();hit != range_header_indexes_.end();hit++)
                     ofs_ranges<<values_[i][*hit]<<"\t";
                 ofs_ranges<<endl;
@@ -685,7 +685,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_single_value<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (size_t i = 0 ; i < values_.size();i++){
+            for  (auto i = 0 ; i < values_.size();i++){
                 for (auto hit = single_value_header_indexes_.begin();hit != single_value_header_indexes_.end();hit++)
                     ofs_single_value<<values_[i][*hit]<<"\t";
 
@@ -703,7 +703,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_areas_volumes<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (size_t i = 0 ; i < values_.size();i++){
+            for  (auto i = 0 ; i < values_.size();i++){
                 for (auto hit = dimensional_header_indexes_.begin();hit != dimensional_header_indexes_.end();hit++)
                     ofs_areas_volumes<<values_[i][*hit]<<"\t";
                 ofs_areas_volumes<<endl;
@@ -750,7 +750,7 @@ void SimulatorMonitor<dim>::Out()
 
 
 /// P. Lang: loops over all elements of all regions of model and returns true if IsVolumeElement()
-template<size_t dim>
+template<uint32_t dim>
 bool  SimulatorMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 {
     if( dim == 1U || dim == 2U )
@@ -767,12 +767,12 @@ bool  SimulatorMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 SimulatorMonitor<dim>::~SimulatorMonitor(){}
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorMonitor<dim>::is_number(const std::string& s)
 {
     std::string::const_iterator it = s.begin();

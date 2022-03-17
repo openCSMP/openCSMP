@@ -6,7 +6,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model, std::vector<std::string>* to_initialize_keys):
       Visitor<dim>( MODEL, NODE ),
       model_ (model),
@@ -69,7 +69,7 @@ ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model, std::vector<std::string>
   cout <<"\nThermalVisitor Constructor: Initialised"<< endl;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model,
                                      Index nCPT_key,
                                      Index cp_fluid_key,
@@ -124,12 +124,12 @@ ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 ThermalVisitor<dim>::~ThermalVisitor()
 {
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void ThermalVisitor<dim>::Visit( Model<dim>* )
 {
 }
@@ -137,7 +137,7 @@ void ThermalVisitor<dim>::Visit( Model<dim>* )
 /**
     This is the key part of this Node visitor.
 */
-template<size_t dim>
+template<uint32_t dim>
 void ThermalVisitor<dim>::Visit( Node<dim>* n )
 {
   // fluid properties need to be updated if T=DIRICH and pressure is not
@@ -229,7 +229,7 @@ void ThermalVisitor<dim>::Visit( Node<dim>* n )
 } // end Visit(node)
 
 
-template<size_t dim>
+template<uint32_t dim>
 void ThermalVisitor<dim>::ApplyTemperatureBoundaryConditionsToTransportedVariables( )
 {
   const typename vector<Node<dim>*>::const_iterator modelNodesEnd( model_.Region("Model").NodesEnd() );
@@ -253,7 +253,7 @@ Loops over the nodes writing basis fluid (from H2O-EOS) and rock properties ther
 @todo  if this visitor gets applied to another region than the model, all hell will break loose! - fix
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void ThermalVisitor<dim>::SetInitialProperties(Model<dim>* model)
 {
   const typename vector<Node<dim>*>::const_iterator modelNodesEnd( model_.Region("Model").NodesEnd() );

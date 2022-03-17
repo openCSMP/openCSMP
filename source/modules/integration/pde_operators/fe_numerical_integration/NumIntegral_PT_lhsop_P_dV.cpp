@@ -9,7 +9,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDatabase<dim>& pref,
                                                       const char* oper,  // density
                                                       const char* oper2, // porosity
@@ -53,7 +53,7 @@ NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDa
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -67,11 +67,11 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
          // reading density but using the porosity variable temporarily
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), phi );
-              for ( size_t i=0; i<dim; i++ ) 
+              for ( auto i=0; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = phi();
            }
       }
-    else for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    else for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
            MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
                                                                 i, MathOperatorLHS<dim>::MTRL[i] );
 
@@ -84,14 +84,14 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
 
 
 
-template<size_t dim,class CELL>
-void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& P )
+template<uint32_t dim,class CELL>
+void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& mP )
  {
-    P.Resize(1,nodal_degrees_of_freedom*N.size());
-    size_t k(0);
-    
-    for ( size_t i=0; i<N.size(); i++ ) 
-      for ( size_t j=0; j<static_cast<size_t>(nodal_degrees_of_freedom); j++ ) P(0,k++ ) = N[i];
+    mP.Resize(1,nodal_degrees_of_freedom * N.size());
+
+    int k(0);
+    for ( auto i=0; i<N.size(); i++ ) 
+      for ( auto j=0; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
 }
 
 
@@ -103,7 +103,7 @@ Computes the volume integral over the element interpolation functions
 times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 {
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes()*dim,e.Nodes()*dim);
@@ -112,7 +112,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
     vector<double>  N( e.Nodes() );
     double          det( 0.0 );
     
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       {
          e.N_AtIntegrationPoint( i, N );
          det = e.det_JINV_AtIntegrationPoint( i );
@@ -121,7 +121,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
          N_to_P( N, P );
          P.Transposed( PT );
          
-         for ( size_t j=0; j<P.Cols(); j++ )
+         for ( auto j=0; j<P.Cols(); j++ )
            if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT )   
              P(0,j) *= MathOperatorLHS<dim>::MTRL[0](0,0) * phi();
            else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE )

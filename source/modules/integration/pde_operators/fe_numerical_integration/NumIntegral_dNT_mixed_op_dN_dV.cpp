@@ -14,7 +14,7 @@ The Operand which is used here can be both, an element or a nodal variable
 which is then interpolated to the integration points to obtain the 
 integral properties.  
  */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             const char*           oper, 
                                                             const char*           nodal_oper_multiplier,
@@ -55,7 +55,7 @@ NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_dV( const 
 
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -90,7 +90,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
     ip_nmult.resize( e.FE()->IntegrationPoints() );
     
     // getting property values at the integration points assuming we have a scalar (which was verified earlier)
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       ip_nmult[i] = e.PropertyValueAtIntegrationPoint( nkey, i );
 
  } // end GetOperands
@@ -108,7 +108,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 In linear elasticity computations.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     double detJ;
@@ -121,7 +121,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( size_t i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

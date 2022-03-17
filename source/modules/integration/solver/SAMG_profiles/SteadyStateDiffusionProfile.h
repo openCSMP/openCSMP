@@ -7,8 +7,8 @@
 
 namespace csmp{
 
-template<size_t> class Model;
-template<size_t dim>
+template<uint32_t> class Model;
+template<uint32_t dim>
 class SteadyStateDiffusionProfile : public SAMG_Profile {
   public:
     SteadyStateDiffusionProfile( Model<dim>& model,

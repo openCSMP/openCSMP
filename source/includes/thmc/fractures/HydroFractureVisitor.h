@@ -14,7 +14,7 @@ namespace csmp {
 @date 1999
 */
 
-template<size_t dim>
+template<uint32_t dim>
 class HydroFractureVisitor : public Visitor<dim> {
   public:
     explicit HydroFractureVisitor( Model<dim>& sg );
@@ -23,7 +23,7 @@ class HydroFractureVisitor : public Visitor<dim> {
     virtual void Visit(Element<dim>* );   
     virtual void Visit(Model<dim>* ); 
     
-    void    HydroFracturedElements( std::vector<size_t>& ) const;
+    void    HydroFracturedElements( std::vector<uint32_t>& ) const;
 
   private:
      const PropertyDatabase<dim>&  pref;

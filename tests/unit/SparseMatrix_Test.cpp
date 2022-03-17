@@ -118,8 +118,7 @@ void SparseMatrix_Test::run()
         if ( verbose_ ) cout << "Test vector x =   ";
 
         vector<double>::const_iterator it( x.begin() );
-        for ( vector<double>::const_iterator
-             it = x.begin(); it != x.end(); it++ )
+        for ( it = x.begin(); it != x.end(); it++ )
         {
             if ( verbose_ ) cout << *it << setw(5);
         }
@@ -131,8 +130,7 @@ void SparseMatrix_Test::run()
 
         if ( verbose_ ) cout << "\n\ny = ";
 
-        for (vector<double>::const_iterator
-             it1 = y.begin(); it1 != y.end(); it1++ )
+        for ( it1 = y.begin(); it1 != y.end(); it1++ )
         {
             if ( verbose_ ) cout << *it1 << setw(5);
         }
@@ -144,8 +142,7 @@ void SparseMatrix_Test::run()
 
         vector<double>::const_iterator itsol_y(sol_y.begin());
 
-        for (vector<double>::const_iterator
-             itsol_y = sol_y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
+        for ( itsol_y = sol_y.begin(), it1=y.begin(); itsol_y != sol_y.end(); itsol_y++, it1++ )
             {
                 //cout << "\n" << *itsol_y << setw(7) << *it1;
                 _equal( *itsol_y, *it1, 1E-6);

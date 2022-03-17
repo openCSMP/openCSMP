@@ -6,7 +6,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 PoreVolumeLHS<dim>::PoreVolumeLHS( const INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& spv_key,
                                    const INDEX<SCALAR,NODE>& fpv_key )
   : spv_key_(spv_key),
@@ -15,13 +15,13 @@ PoreVolumeLHS<dim>::PoreVolumeLHS( const INDEX<SCALAR,SECTOR_INTEGRATION_POINT>&
   }
   
     
-template<size_t dim>
+template<uint32_t dim>
 void PoreVolumeLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix& A ) const 
  {
     assert( e.IntegrationPointsPerSector() == 1U );
     const size_t sector_ipoints(e.Sectors()); 
     
-    for ( size_t i=0U; i <sector_ipoints; ++i ) {
+    for ( auto i{0}; i <sector_ipoints; ++i ) {
         const double sector_pore_volume = e.Read( i, 0U, spv_key_ );
         const size_t   idx = e.N(i)->Idx();
         
@@ -30,7 +30,7 @@ void PoreVolumeLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix&
 }
   
 
-template<size_t dim>
+template<uint32_t dim>
 void PoreVolumeLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& A ) const 
  {
     const double fpv = fv.Read( fpv_key_ );

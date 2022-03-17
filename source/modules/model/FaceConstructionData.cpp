@@ -21,7 +21,7 @@ FaceConstructionData::FaceConstructionData( size_t  parent_element,
    nbor_faces_(nbor_faces),
    materials_(materials),
    material_(material),
-   patch_number_(numeric_limits<size_t>::max())
+   patch_number_(numeric_limits<uint32_t>::max())
  {
  }
 

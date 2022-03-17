@@ -12,7 +12,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class VolumeOutput_Visitor : public Visitor<dim> 
   {
   public:
@@ -27,14 +27,14 @@ class VolumeOutput_Visitor : public Visitor<dim>
 
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   VolumeOutput_Visitor<dim>::VolumeOutput_Visitor( Model<dim>& model)
     : Visitor<dim>( MODEL, ELEMENT ), model_( model )
     {
     }
 
 
-  template<size_t dim>
+  template<uint32_t dim>
   void VolumeOutput_Visitor<dim>::Visit( Element<dim>* element )
     {
       Index volumeKey( model_.Database().StorageKey( "conductivity" ) );
@@ -93,7 +93,6 @@ void CsmpIntro1_TestCase::run()
     _test( !model.ContainsBoundary("back") );
 
     // referencing regions
-    Region<DIM>& modelRegion( model.Region("Model") );
     Region<DIM>& matrixLeft( model.Region("MATRIX_LEFT") );
     Region<DIM>& matrixRight( model.Region("MATRIX_RIGHT") );
 

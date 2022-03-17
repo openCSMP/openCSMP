@@ -199,7 +199,7 @@ int main()
       
       // Model
       basic.addTest( new Node_Test() );
-      basic.addTest( new Element_Test(verbose));
+      basic.addTest( new Element_Test());
       basic.addTest( new Face_Test() );
       basic.addTest( new InterFace_Test() );
       basic.addTest( new ModelSubDomain_Test() );       

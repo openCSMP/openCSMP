@@ -90,23 +90,23 @@ void SteadyStatePressureToVset_Example::Run()
          TRIANGLE_Interface  mesh_interface;
          mesh_interface.ReadTriangle2DMesh( file_name, mesh_container, isoparametric, extra_checks );
          if ( option2 == 2 ) VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
-         model = new Model<2U>( mesh_container, "example2.txt", true );
+         model = new Model<2U>( mesh_container, "example2.txt" );
       }
     // or else use an ANSYS mesh
     else {
          ANSYS_Interface  mesh_interface(isoparametric);
          const bool binary_file( true );
          mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, true );
-         mesh_topology.ReduceToRegions( file_name );
+      mesh_topology.ReduceToDomains( file_name );
          map<size_t,size_t>  old_and_new_elmtids;
-         mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+         mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
          mesh_container.ReduceTo( old_and_new_elmtids );
          old_and_new_elmtids.clear();
          // optional: scaling the model to a target size
          // mesh_container.ScaleCoordinateToRange( 'x', 0., 0.005 );
          // mesh_container.ScaleCoordinateToRange( 'y', 0., 0.007 );
          if ( option2 == 2 ) VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
-         model = new Model<2U>( mesh_topology, mesh_container, "example2.txt" );
+         model = new Model<2U>( mesh_topology, mesh_container, "example2.txt", true );
       }
     mesh_container.Erase();
   
@@ -239,7 +239,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 12. Read in VSet file and build a second Region named 'example1_from_vset'
     // ---------------------------------------------------------------------------
     input_model.InputFrom( "example2", model_time );
-    Model<2U>  model_from_vset( input_model, "example2.txt", true );
+    Model<2U>  model_from_vset( input_model, "example2.txt" );
 
 
     // 13. Change Dirichlet boundary condition on the left side and assing pressure

@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 TransportStepSize<dim>::TransportStepSize( const PropertyDatabase<dim>& p, 
                                               const char* n_velo,
                                               const char* e_velo, 
@@ -23,12 +23,12 @@ TransportStepSize<dim>::TransportStepSize( const PropertyDatabase<dim>& p,
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 TransportStepSize<dim>::~TransportStepSize() {}
   
   
     
-template<size_t dim>
+template<uint32_t dim>
 double TransportStepSize<dim>::AdvectionTimeIncrement() const
  {
     if ( advection_increment == 0.0 )
@@ -41,7 +41,7 @@ double TransportStepSize<dim>::AdvectionTimeIncrement() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void TransportStepSize<dim>::Calculate()
  {
     // 1. Calculate peak velocity in the element

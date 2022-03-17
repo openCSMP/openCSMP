@@ -301,7 +301,7 @@ base class MathOperatorRHS must be overloaded, such that the nodal Operand
 can be retrieved. 
 */
 
-void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
+void StressesAndStrains<2U>::GetOperands( const Element<2U>& e )
 {
     vector<VectorVariable<2U> >  NVAR(e.Nodes());
     size_t                       k;
@@ -317,9 +317,9 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
          // and recording the elements spatial translation as the average of
          // its displacements
          DISPL_.Resize( e.Nodes()*2U, 1 );
-         k = 0, avg = 0.;
-         for ( size_t i=0; i<e.Nodes(); i++ ) {
-              for ( size_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
+         k = 0; avg = 0.;
+         for ( auto i=0; i<e.Nodes(); i++ ) {
+              for ( int j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
               avg         += NVAR[i];
            }
          avg /= static_cast<double>(e.Nodes());
@@ -378,7 +378,7 @@ void StressesAndStrains<2U>::GetOperands( Element<2U>& e )
 A reference to the Element for which the post-processing is done.  
 */
 
-void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
+void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
 {
    // 1. Computing STRAINS and STRESSES at the integration points from the nodal 
    //    displacements and the interpolation function derivative matrices
@@ -394,7 +394,7 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
         
         // 1.1 Computing the strains at the integration points
         // ---------------------------------------------------
-        for ( size_t i=0; i<e.IntegrationPoints(); i++ ) {
+        for ( auto i=0; i<e.IntegrationPoints(); i++ ) {
              //  getting DN matrices at the node points
             (e).dN_AtIntegrationPoint( EGP_, i, 2U );
              
@@ -418,7 +418,7 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
 
              // inserting strains and stresses sequentially into temporary 
              // STL vectors
-             for ( size_t k=0; k<components_; k++ ) {
+             for ( auto k=0; k<components_; k++ ) {
                   IPSTRAIN_[ i * components_ + k ] = EGP_(k,0);
                   IPSTRESS_[ i * components_ + k ] = SGP_(k,0);
                }
@@ -436,8 +436,8 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRESS_, NSTRESS_ );
      
              // extracting the nodal strain and stress components
-             for ( size_t i=0; i<e.Nodes(); i++ ) {
-                  for ( size_t k=0; k<components_; k++ ) {
+             for ( auto i=0; i<e.Nodes(); i++ ) {
+                  for ( auto k=0; k<components_; k++ ) {
                        eps_[k]   = NSTRAIN_[ i * components_ + k ];
                        sigma_[k] = NSTRESS_[ i * components_ + k ];
                     }
@@ -459,11 +459,11 @@ void StressesAndStrains<2U>::ComputeContribution( Element<2U>& e )
         STRAIN_.Resize(components_,e.Nodes());
         STRESS_.Resize(components_,e.Nodes());
 
-        for ( size_t i=0; i<e.Nodes(); i++ ) {
+        for ( auto i=0; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( size_t j=0U; j<components_; j++ ) 
+               for ( auto j=0; j<components_; j++ )
                  {  
                     // averaging strain components
                     double sum(0.);
@@ -519,7 +519,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
  {
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( size_t i=0U; i<e.IntegrationPoints(); i++ )
+      for ( auto i{0}; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------
@@ -566,7 +566,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
     // only once the strains and stresses have been computed, these can be output to Model<2U> 
     if ( MathOperatorLHS<2U>::ApplicationCycle() == 2U ) 
       {
-         for ( size_t i=0; i<e.Nodes(); i++ )
+         for ( auto i=0; i<e.Nodes(); i++ )
            // doing this operation only once per node
            if ( !node_output_[ e.N(i)->Idx()] )
              {
@@ -624,12 +624,6 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
 //    for ( typename vector::const_iterator 
 //          it=IPSTRAIN_.begin(); it!=IPSTRAIN_.end(); it++ ) cout << (*it) <<" ";
 
-
-
- 
-#ifndef _MSC_VER
-template class StressesAndStrains<2U>;
-#endif
 
 } // csmp
 

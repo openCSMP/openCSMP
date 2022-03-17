@@ -5,7 +5,7 @@
 namespace csmp
 {
 	struct Index;
-    template<size_t> class PropertyDatabase;
+    template<uint32_t> class PropertyDatabase;
     class PropertyDatabase_Test : public Test
     {
     public:

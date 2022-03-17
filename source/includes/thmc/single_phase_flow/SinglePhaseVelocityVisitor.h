@@ -20,7 +20,7 @@ namespace csmp {
 ///
 /// -- Julian M. 26-09-2015
 
-template<size_t dim>
+template<uint32_t dim>
 class SinglePhaseVelocityVisitor : public Visitor<dim> {
   public:
 

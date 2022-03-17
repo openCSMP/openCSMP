@@ -6,8 +6,8 @@
 using namespace std;
 namespace csmp
 {
-template<size_t dim,template<size_t> class SIMPLEX >
-void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,SIMPLEX>& sg,
+template<uint32_t dim,template<uint32_t> class CELL >
+void compute2PhaseMobilityAtBaryCenter( ModelSubDomain<dim,CELL>& sg,
                                         TwoPhaseModel<dim>& relperm)
 {
   ScalarVariable  sc, mob_t;

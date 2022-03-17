@@ -27,9 +27,9 @@ void VSet_Test::run()
   _test( vset1.PlistSize( 0 ) == 8 );
   _test( vset1.PlistSize( 1 ) == 8 );
   _test( vset1.ElementType( 0 ) == LINEAR_TETRAHEDRON );
-  std::deque<size_t> npe;
+  std::deque<uint32_t> npe;
   npe.push_back( 8 ); npe.push_back( 8 ); npe.push_back( 5 );
-  std::deque<size_t> epe;
+  std::deque<uint32_t> epe;
   epe.push_back( 6 ); epe.push_back( 6 ); epe.push_back( 5 );
   _test( vset1.MeshDimension() == 3 );
 
@@ -94,14 +94,14 @@ void VSet_Test::run()
   // .)DATA OPS
   // TODO: use PropertyData interface rather than the deprecated FEM_Data interface
   std::deque<double> px, py, pz;
-  for( size_t i = 0; i < 13; ++i )
+  for( auto i = 0; i < 13; ++i )
   {
     px.push_back( (double)i*10 );
     py.push_back( (double)i*10 );
     pz.push_back( (double)i*10 );
   }
   vset4.AddXYZ( px, py, pz );
-  for( size_t i = 0; i < 13; ++i )
+  for( auto i = 0; i < 13; ++i )
   {
     _test( vset4.Px( i ) == (double)i*10 );
     _test( vset4.Py( i ) == (double)i*10 );

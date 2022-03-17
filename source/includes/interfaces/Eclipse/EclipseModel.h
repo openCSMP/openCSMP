@@ -3,7 +3,6 @@
 
 #include <unordered_map>
 
-#include "CSMP_highLevelUtilities.h"
 #include "EclipseInterface.h"
 #include "Model.h"
 

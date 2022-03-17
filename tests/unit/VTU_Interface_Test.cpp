@@ -45,12 +45,12 @@ void VTU_Interface_Test::run()
   ArrayVariable av_elmnt(22);
   FlaggedArrayVariable fav_node(5);
   FlaggedArrayVariable fav_elmnt(22);
-  for(size_t i =0;i<5;i++)
+  for(auto i =0;i<5;i++)
   {
       av_node(i) = i;
       fav_node(i) = 2.*i;
   }
-  for(size_t i =0;i<22;i++)
+  for(auto i =0;i<22;i++)
   {
       av_elmnt(i) = 3.*i;
       fav_elmnt(i) = 4.*i;

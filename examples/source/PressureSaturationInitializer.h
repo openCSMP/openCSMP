@@ -6,8 +6,8 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Model;
 
 /**
 @author Sh. Bazrafkan
@@ -15,7 +15,7 @@ template<size_t> class Model;
 */
 
 /// Initialize the pressure and saturation for a model
-template<size_t dim>
+template<uint32_t dim>
 class PressureSaturationInitializer : public Visitor<dim> {
   
 public:

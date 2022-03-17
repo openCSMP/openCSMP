@@ -87,9 +87,8 @@ void LinearElasticity_Example::Run()
     VSetConverter<2U>  converter;
     converter.ConvertLinearToQuadraticTriangles( mesh_container );
 
-    const bool  use_isoparametric_elements(true);
     // 'example12.txt' is the text file that defines the variables used in this example
-    Model<2U>  model( mesh_container, "example12.txt", use_isoparametric_elements ); 
+    Model<2U>  model( mesh_container, "LinearElasticity_Example-variables.txt" );
     mesh_container.Erase();
     printModelDimensions( model, true );
 
@@ -103,7 +102,6 @@ void LinearElasticity_Example::Run()
     Region<2U>& model_domain(model.Region("Model"));
     double  volume = model_domain.Volume();
     cout <<"\nmain: The model has a volume of: "<< volume <<" m^3."<< endl;
-
 
   // ---------------------------------------------------------------------------------------
   // 3. Material properties, groups etc. & initial & essential conditions
@@ -151,12 +149,11 @@ void LinearElasticity_Example::Run()
     SAMG_Settings settings;
     settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
-    SAMG_Solver    samg_solver(&settings);
-    PDE_IntegratorExperimental<2U,Region>  deformation(samg_solver);
-//    PDE_Integrator_UoM<2U,Region>  deformation(samg_solver);
+    SAMG_Solver  solver(&settings);
+    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<2U,Region>  deformation(linear_solver);
+    CSMP_DEFAULT_LINEAR_SOLVER  solver;
+    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
 #endif
 
     PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );

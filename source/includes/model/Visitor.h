@@ -5,14 +5,14 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Element;
-template<size_t> class Model;
-template<size_t> class Region;
-template<size_t> class Boundary;
-template<size_t> class SplitBoundary;
+template<uint32_t> class Node;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
+template<uint32_t> class Region;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
 
 /**
 
@@ -54,7 +54,7 @@ Have a look at the AlterationVisitor of the equation of state visitors
 in order to understand this design pattern.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class Visitor {
   public:
     explicit Visitor( PLACEMENT level=MODEL, PLACEMENT target=ELEMENT );

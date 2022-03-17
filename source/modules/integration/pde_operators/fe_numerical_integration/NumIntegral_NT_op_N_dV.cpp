@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_op_N_dV<dim,CELL>::NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& pref,
                                                           const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
@@ -43,7 +43,7 @@ Computes the volume integral over the element interpolation functions
 times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -80,7 +80,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
          RHS_TEMP.Resize(e.Nodes(), e.Nodes());
          RHS_TEMP.Zero();
             
-         for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det(e.det_JINV_AtIntegrationPoint( i ));
@@ -103,8 +103,8 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
-         for ( size_t j=0; j<e.Nodes(); j++ )
-           for ( size_t k=0; k<e.Nodes(); k++ ) 
+         for ( auto j=0; j<e.Nodes(); j++ )
+           for ( auto k=0; k<e.Nodes(); k++ ) 
              MathOperatorRHS<dim>::RHS[j] += RHS_TEMP(j,k);
       }
    

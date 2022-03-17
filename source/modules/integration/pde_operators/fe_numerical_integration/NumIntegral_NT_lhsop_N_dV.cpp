@@ -9,7 +9,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 NumIntegral_NT_lhsop_N_dV<dim,CELL>::NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
                                                            const char* oper,
                                                            const char* basic,
@@ -50,7 +50,7 @@ C[n x n] = w(i) * { N[n x 1] * S[1 x 1] * N[1 x n] * |J[dim x dim]| }
 
 see, for instance, J.Istock p. 132.  
 */
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
@@ -67,13 +67,13 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
               MathOperatorLHS<dim>::MaterialOperandPlacement() == FACE ||
               MathOperatorLHS<dim>::MaterialOperandPlacement() == INTER_FACE)
            {
-            for ( size_t j=0; j<e.Nodes(); j++ )
+            for ( auto j=0; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
-            for ( size_t j=0; j<e.Nodes(); j++ )
+            for ( auto j=0; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
@@ -84,13 +84,13 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
          TEMP.Resize( e.Nodes(), e.Nodes() );    
 
          // consistent formulation
-         for ( size_t i=0U; i < e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det = e.det_JINV_AtIntegrationPoint( i );
                    
-              for ( size_t j=0U; j<e.Nodes(); j++ )
-                for ( size_t k=0U; k<e.Nodes(); k++ )
+              for ( auto j=0U; j<e.Nodes(); j++ )
+                for ( auto k=0U; k<e.Nodes(); k++ )
                   {
                     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ||
                          MathOperatorLHS<dim>::MaterialOperandPlacement() == FACE ||

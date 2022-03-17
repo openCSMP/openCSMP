@@ -5,11 +5,11 @@ using namespace std;
 namespace csmp {
 
 /** default destructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::~CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV() {}
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& pref, 
                                                                        UpwindControlVisitor<dim>& upwind_visitor,
                                                                        ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
@@ -55,7 +55,7 @@ CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::CVFEM_Upwind_NumIntegral_dNT_rhsop
                    
  }
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::GetOperands( Element<dim>& e )
 {
 
@@ -65,7 +65,7 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::GetOperands( Element<dim>& e 
   
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key )
 {
 
@@ -74,13 +74,13 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::GetOperandsCVFEM( Element<dim
   e.NodePropertyVector(upwind_.Key(), upwind_var_);
   e.NodePropertyVector(upwind_var_key, upwind_var_multiplier);
 
-  for (size_t i = 0; i < upwind_var_multiplier.size(); i++)
+  for (auto i = 0; i < upwind_var_multiplier.size(); i++)
      upwind_var_[i]() *= upwind_var_multiplier[i]();
   
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::ComputeContribution( Element<dim>& e )
 {
  
@@ -95,7 +95,7 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::ComputeContribution( Element<
 //    B *= operand;
     
     // loop over facets of the element
-    for ( size_t i=0U; i<e.FV()->Facets(); i++ )
+    for ( auto i{0}; i<e.FV()->Facets(); i++ )
        {
 
        e.dN_AtIntegrationPoint( B, i, 1 );
@@ -116,7 +116,7 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::ComputeContribution( Element<
        }
 }    
 
-template<size_t dim>
+template<uint32_t dim>
 void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim>::GetUpwindMatrix( Element<dim>& e )
 {
 

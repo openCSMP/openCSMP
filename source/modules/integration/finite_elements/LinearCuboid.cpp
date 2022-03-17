@@ -193,7 +193,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		// 0->6 1->(-7) 2->4 3->(-5) for N0 use node6 ....
 		DN.Resize(3, 8); //DN_size = dim x npe
 		const double vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
-		size_t ind[] = {6,7,4,5,2,3,0,1};
+		uint32_t ind[] = {6,7,4,5,2,3,0,1};
 		for (auto k = 0; k < 8; ++k) {
 			DN(0, k) = sgn[k]*(xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
 			DN(1, k) = sgn[k]*(xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
@@ -203,17 +203,17 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	}
 
 	/** Standard ordering is un-counter clockwise */
-	void LinearCuboid::CounterClockwiseNodes(std::vector<size_t>& ids) const
+	void LinearCuboid::CounterClockwiseNodes(std::vector<uint32_t>& ids) const
 	{
 		ids.resize(8);
 		ids[0] = 0; ids[1] = 3; ids[2] = 2; ids[3] = 1;
 		ids[4] = 4; ids[5] = 7; ids[6] = 6; ids[7] = 5;
 	}
 
-	void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, size_t partial) 
+	void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, uint32_t partial )
 	{
 		const double vol = Volume(), sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
-		const size_t ind[] = { 6,7,4,5,2,3,0,1 };
+		const uint32_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
 			case 0:	for (auto k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
@@ -224,7 +224,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		}	
 	}
 
-	void LinearCuboid::MidSideNodes(std::vector<size_t>& ids) const
+	void LinearCuboid::MidSideNodes(std::vector<uint32_t>& ids) const
 	{
 		cerr << "\nIsoparametricLinearCuboid::MidSideNodes WARNING: MidSideNodes not present " << endl;
 		ids[0] = 0;
@@ -273,7 +273,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		v = {dx,dz,dx,dz,dy,dy,dy,dy,dx,dz,dx,dz};
 	}
 
-	void LinearCuboid::CornerNodes(std::vector<size_t>& ids) const
+	void LinearCuboid::CornerNodes(std::vector<uint32_t>& ids) const
 	{
 		ids.resize(8);
 		ids[0] = 0; ids[1] = 1; ids[2] = 2; ids[3] = 3;
@@ -281,7 +281,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	}
 
 
-void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+void LinearCuboid::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const
 	{
 		snids.resize(2);
 		switch (segm_id) {
@@ -302,28 +302,28 @@ void LinearCuboid::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) co
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
-std::vector<size_t>  LinearCuboid::NodesConnectedTo( size_t node_id ) const
+std::vector<uint32_t>  LinearCuboid::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,3,4};
-        case 1: return vector<size_t>{0,2,5};
-        case 2: return vector<size_t>{1,3,6};
-        case 3: return vector<size_t>{0,2,7};
-        case 4: return vector<size_t>{0,5,7};
-        case 5: return vector<size_t>{1,4,6};
-        case 6: return vector<size_t>{2,5,7};
-        case 7: return vector<size_t>{3,4,6};
+        case 0: return vector<uint32_t>{1,3,4};
+        case 1: return vector<uint32_t>{0,2,5};
+        case 2: return vector<uint32_t>{1,3,6};
+        case 3: return vector<uint32_t>{0,2,7};
+        case 4: return vector<uint32_t>{0,5,7};
+        case 5: return vector<uint32_t>{1,4,6};
+        case 6: return vector<uint32_t>{2,5,7};
+        case 7: return vector<uint32_t>{3,4,6};
         default:
           cerr <<"\nLinearCuboid::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 // TODO: this is different from IsoparamLinHex - check basic conventions
-void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
+void LinearCuboid::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
 	{
 		fnids.resize(4);
 		switch (face_id) {
@@ -337,23 +337,23 @@ void LinearCuboid::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
 	}
 
 
-vector<size_t>  LinearCuboid::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  LinearCuboid::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{0,3,2,1};
-        case 1: return vector<size_t>{0,1,5,4};
-        case 2: return vector<size_t>{1,2,6,5};
-        case 3: return vector<size_t>{2,3,7,6};
-        case 4: return vector<size_t>{0,3,7,3};
-        case 5: return vector<size_t>{4,5,6,7};
+        case 0: return vector<uint32_t>{0,3,2,1};
+        case 1: return vector<uint32_t>{0,1,5,4};
+        case 2: return vector<uint32_t>{1,2,6,5};
+        case 3: return vector<uint32_t>{2,3,7,6};
+        case 4: return vector<uint32_t>{0,3,7,3};
+        case 5: return vector<uint32_t>{4,5,6,7};
       }
     cerr <<"\nLinearCuboid::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
-void LinearCuboid::UnitNormalToFace(size_t face, std::vector<double>& unrml ) const
+void LinearCuboid::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
 	{
 		unrml.resize(3);
 		switch (face) {
@@ -397,9 +397,9 @@ void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_n
 		DenseMatrix<DM_MIN> COORD(XY);
 		ofs << "DATASET UNSTRUCTURED_GRID" << endl;
 		ofs << "POINTS " << npe << " float" << endl;
-		for (size_t i = 0; i<npe; i++)
+		for (auto i = 0; i<npe; i++)
 		{
-			for (size_t j = 0; j<dim; j++) ofs << COORD(i, j) << " ";
+			for ( auto j = 0; j<dim; j++) ofs << COORD(i, j) << " ";
 			ofs << endl;
 		}
 		ofs << endl;
@@ -430,7 +430,7 @@ void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_n
 			ofs << "SCALARS " << var_name << " float" << endl;
 			ofs << "LOOKUP_TABLE default" << endl; // table must always be created
 												   // matrix DATA is 1x9
-			for (size_t i = 0; i<DATA.Cols(); i++) ofs << DATA(0, i) << " ";
+			for (auto i = 0; i<DATA.Cols(); i++) ofs << DATA(0, i) << " ";
 			ofs << endl;
 		}
 		else
@@ -438,8 +438,8 @@ void LinearCuboid::OutputNodeDataToVTK( const char* file_name, const char* var_n
 			ofs << "VECTORS " << var_name << " float" << endl;
 			// variables have always 3 components since view screen is 3D
 			// matrix DATA is vec-dim x 10
-			for (size_t i = 0; i<DATA.Cols(); i++) {
-				for (size_t j = 0; j<DATA.Rows(); j++) ofs << DATA(j, i) << "  ";
+			for (auto i = 0; i<DATA.Cols(); i++) {
+				for ( auto j = 0; j<DATA.Rows(); j++) ofs << DATA(j, i) << "  ";
 				ofs << endl;
 			}
 		}

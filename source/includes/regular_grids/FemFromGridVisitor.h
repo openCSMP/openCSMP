@@ -9,12 +9,12 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
+template<uint32_t> class PropertyDatabase;
 class FiniteDifferenceGrid;
-template<size_t> class DenseMatrix;
-template<size_t> class Element;
+template<uint32_t> class DenseMatrix;
+template<uint32_t> class Element;
 
-template<size_t dim>
+template<uint32_t dim>
 class FemFromGridVisitor : public Visitor<dim> {
   public:
     FemFromGridVisitor( const PropertyDatabase<dim>& p, 

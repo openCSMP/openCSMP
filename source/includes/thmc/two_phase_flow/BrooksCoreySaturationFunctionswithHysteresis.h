@@ -7,8 +7,8 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class PropertyDatabase;
+template<uint32_t> class Element;
+template<uint32_t> class PropertyDatabase;
 
   /**
    @brief The Brooks-Corey capillary pressure model and the Corey-Burdine relative permeability and their first derivatives.
@@ -61,7 +61,7 @@ template<size_t> class PropertyDatabase;
    @date May, 2019
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class BrooksCoreySaturationFunctionsWithHysteresis {
   public:
     enum FLUID_PHASE {H2O, CO2};

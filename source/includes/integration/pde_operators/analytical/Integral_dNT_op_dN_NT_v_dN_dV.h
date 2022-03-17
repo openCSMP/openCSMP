@@ -11,16 +11,16 @@ namespace csmp {
 @date 1999 */
 
 /// Diffusion - advection lefthandside PDE operator; works for Peclet numbers <1
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_dNT_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim> {
   public:
     Integral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
                                     const char* oper,  const char* velo, 
                                     const char* basic, const char* test );
     
-    virtual void GetOperands( const SIMPLEX& e );
+    virtual void GetOperands( const CELL& e );
     
-    virtual void ComputeContribution( const SIMPLEX& e );
+    virtual void ComputeContribution( const CELL& e );
   
   private:
     DenseMatrix<DM_MIN>  B, BT;

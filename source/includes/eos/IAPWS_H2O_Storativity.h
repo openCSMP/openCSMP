@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class IAPWS_H2O_Storativity : public Interrelation<dim> {
   public:
     IAPWS_H2O_Storativity( const PropertyDatabase<dim>& p, double z_rock=1.0e-12 );

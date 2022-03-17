@@ -29,7 +29,7 @@ void Point_Test::run()
 
 void Point_Test::Test_1D_Point()
  {
-   const size_t dim(1U);
+   const uint32_t dim(1U);
 
    // constructing point from vector
    vector<double>  a(1U,1.); 
@@ -163,7 +163,7 @@ void Point_Test::Test_1D_Point()
 
 void Point_Test::Test_2D_Point()
  {
-   const size_t dim(2U);
+   const uint32_t dim(2U);
 
    // constructing point from vector
    vector<double>  a(2U,1.); a[1]=2.;
@@ -300,7 +300,7 @@ void Point_Test::Test_2D_Point()
 
 void Point_Test::Test_3D_Point()
  {
-   const size_t dim(3U);
+   const uint32_t dim(3U);
 
    // constructing point from vector
    vector<double>  a(3U,1.); a[1]=2.; a[2]=3.;

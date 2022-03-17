@@ -52,15 +52,15 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     VSet<DIM> vset, vset2;
     ModelTopology mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
     
-    _test( mesh_topology.Elements() == vset.Elements() );
+    _test( mesh_topology.Cells() == vset.Elements() );
 
     // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", false );
     printModelDimensions( model, true );
     _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
     _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
     const bool   get_indices_from_stored_variables{true};
-    const size_t zero_errors{0};
+    const auto zero_errors{0};
     _test( model.Mesh().CheckElementConnectivity() == zero_errors );
     model.OutputMeshTo( vset2, get_indices_from_stored_variables );
     _test( vset2 == vset );
@@ -104,18 +104,18 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
 
     const bool binary_file( true ), recreate_bflags(true);
     mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, recreate_bflags );
-    // for ( size_t i{0}; i<vset.BFlags(); ++i )
+    // for ( auto i{0}; i<vset.BFlags(); ++i )
     //  cout <<" "<< static_cast<int>(vset.BoundaryFlag(i) );
     //cout << endl;
 
     // keep all mesh regions from topology and vset
     // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
-    mesh_topology.ReduceToRegions( input_file_name.c_str() );
+    mesh_topology.ReduceToDomains( input_file_name.c_str() );
     map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewElementNumbers( old_and_new_elmtids );
+    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
     vset.ReduceTo( old_and_new_elmtids );
     old_and_new_elmtids.clear();
-    _test( mesh_topology.Elements() == vset.Elements() );
+    _test( mesh_topology.Cells() == vset.Elements() );
     
     // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
     vset.RemovePfverts();
@@ -123,11 +123,11 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     
     // testing whether connectivity of the boundary faces has been achieved
     // looping over element faces that have a neighbor, reporting those where both nodes are at the boundary
-    size_t dodgy_neighbors{0};
+    auto dodgy_neighbors{0};
     for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
         CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
         // faces=neighbors
-        size_t face{0};
+        auto face{0};
         for ( auto j=vset.PfvertsBegin(eidx); j!=vset.PfvertsEnd(eidx); ++j, ++face )
           if ( isTriangularElement(etype) && (*j) >= 0 ) {
              // face 0
@@ -154,7 +154,8 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& 
     _test( dodgy_neighbors == 0 );
 
     // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt" );
+    const bool get_domain_info_from_regions_file{true};
+    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", get_domain_info_from_regions_file );
     printModelDimensions( model, true );
     
     // saving model to binary
@@ -269,8 +270,8 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     modelOutput3.InputPropertyValue( "faip vector", vv );
     modelOutput3.InputPropertyValue( "seip tensor", tv );
     Element<3>* ePtr = *modelOutput3.Region("Model").ElementsBegin();
-    for( size_t f(0); f < ePtr->Facets(); ++f )
-      for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+    for( auto f(0); f < ePtr->Facets(); ++f )
+      for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
@@ -280,16 +281,16 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
     
     ePtr = *modelInput3.Region("Model").ElementsBegin();
-    size_t ctr(0);
-    for( size_t f(0); f < ePtr->Facets(); ++f )
-      for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+    auto ctr(0);
+    for( auto f(0); f < ePtr->Facets(); ++f )
+      for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
       {
         ePtr->Read( f, fip, faipVectorKey, vvPlain );
         _test( vvPlain == vv );
         ++ctr;
       }
-    for( size_t s(0); s < ePtr->Sectors(); ++s )
-      for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+    for( auto s(0); s < ePtr->Sectors(); ++s )
+      for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
       {
         ePtr->Read( s, sip, seipTensorKey, tvPlain );
         _test( tvPlain == tv );
@@ -298,16 +299,16 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
       _test( ctr == 10 );
 
       NodeCenteredFiniteVolumeTransport<3> fvModule2( "Model", modelInput3, "diffusivity", "nodal variable", "element vector", "nodal variable", false, false );
-      for( size_t f(0); f < ePtr->Facets(); ++f )
-        for( size_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+      for( auto f(0); f < ePtr->Facets(); ++f )
+        for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
           ++ctr;
         }
     _test( ctr == 16 );
-    for( size_t s(0); s < ePtr->Sectors(); ++s )
-      for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+    for( auto s(0); s < ePtr->Sectors(); ++s )
+      for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
       {
         ePtr->Read( s, sip, seipTensorKey, tvPlain );
         _test( tvPlain == tv );
@@ -339,14 +340,14 @@ bool VSet_TestCase::Test_EstablishElementConnectivity2D()
     // comparison
     cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity2D: errors if any: ";
     auto itb=backup_vset.PfvertsBegin();
-    size_t elmt{0U}, vec_mismatches{0U};
+    auto elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
-        for ( size_t i=0U; i<(*it).size(); ++i )
+        for ( auto i{0}; i<(*it).size(); ++i )
           if ( (*it) != (*itb) ) {
                cerr <<"\n\t"<< elmt <<":";
-               for ( auto i : (*itb) ) cerr <<" "<< i;
+               for ( auto j : (*itb) ) cerr <<" "<< j;
                cerr <<" vs. ";
-               for ( auto i : (*it) ) cerr <<" "<< i;
+               for ( auto j : (*it) ) cerr <<" "<< j;
                vec_mismatches++;
             }
         elmt++;
@@ -381,14 +382,14 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
     // comparison - but only checking for the existing element neighbors since atBoundary(elmt) is not used further
     cout <<"\nVSet_TestCase::Test_EstablishElementConnectivity3D: errors if any: ";
     auto itb=backup_vset.PfvertsBegin();
-    size_t elmt{0U}, vec_mismatches{0U};
+    auto elmt{0U}, vec_mismatches{0U};
     for ( auto it=vset.PfvertsBegin(); it!=vset.PfvertsEnd(); ++it, ++itb ) {
-        for ( size_t i=0U; i<(*it).size(); ++i )
+        for ( auto i{0}; i<(*it).size(); ++i )
           if ( (*it)[i] >= 0 && (*it)[i] != (*itb)[i] ) {
                cerr <<"\n\t"<< elmt <<":";
-               for ( auto i : (*itb) ) cerr <<" "<< i;
+               for ( auto j : (*itb) ) cerr <<" "<< j;
                cerr <<" vs. ";
-               for ( auto i : (*it) ) cerr <<" "<< i;
+               for ( auto j : (*it) ) cerr <<" "<< j;
                vec_mismatches++;
             }
         elmt++;
@@ -411,8 +412,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
 void VSet_TestCase::BoundaryFlagsToVTK( VSet<3>& vset )
  {
     const string variable_file{"Vset_TestCase-variables.txt"};
-    const bool isoparametric{true};
-    Model<3> model( vset, variable_file.c_str(), isoparametric );
+    Model<3> model( vset, variable_file.c_str() );
     
     VTK_Interface<3>  vtk_out;
     

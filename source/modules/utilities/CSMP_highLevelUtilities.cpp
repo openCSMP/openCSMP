@@ -35,14 +35,14 @@ namespace csmp {
 void replaceWhiteSpaceBy( string& p, char ascii_char )
  {
     if ( !p.empty() )
-      for ( size_t i=0U; i<p.size(); i++ )
+      for ( auto i{0}; i<p.size(); i++ )
         if ( p[i] == ' ' || p[i] == '\t' ||
              p[i] == '\n' || p[i] == '\r' ) p[i] = ascii_char;
  }
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool isoparametricElementMesh( const Model<dim>& sg )
  {
    std::string  etype(parseFiniteElementType((*sg.Region("Model").ElementsBegin())->FE()->ElementType()));
@@ -130,10 +130,10 @@ size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
  
     stringstream  out("The targeted node with the coordinate (x,y,z): ");
     out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
-    out <<" returning node index="<< std::numeric_limits<size_t>::max() << endl;
+    out <<" returning node index="<< std::numeric_limits<uint32_t>::max() << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
      
 } // end find_node
 
@@ -155,7 +155,7 @@ size_t  findNode( const Model<2U>& sg, double nx, double ny,
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
      
 } // end find_node
 
@@ -173,7 +173,7 @@ size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
     out <<" returning node index="<< UINT_MAX << endl;
     throw csmp::Exception( WARNING, "findNode", out.str() );
     
-    return std::numeric_limits<size_t>::max();
+    return std::numeric_limits<uint32_t>::max();
      
 } // end find_node
 
@@ -191,7 +191,7 @@ size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
     
     @author SKM 22/9/2014.
 */
-template<size_t dim>
+template<uint32_t dim>
 long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, bool verbose )
  {
     const Region<dim>&  sgroup(sg.Region("Model"));
@@ -219,11 +219,11 @@ template long findNode( const Model<3U>&, const Point<3U>&, double, bool );
 
 
 /// prints sorted global element node numbers in a compact way
-template<size_t dim, template<size_t> class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void printNodes( const CELL<dim>& c )
  {
-    set<size_t> nodes;
-    for ( size_t i=0U; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    set<uint32_t> nodes;
+    for ( auto i{0}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
     cout <<" "<< c.Idx() <<": ";
     for ( auto& it : nodes ) cout << it <<",";
     cout <<" ";
@@ -247,13 +247,13 @@ size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,
  {
     assert( first != last );
 
-    set<size_t>  node_numbers;
+    set<uint32_t>  node_numbers;
     size_t       counts(0);
     
     while ( first != last ) {
          for ( vector<Node<1U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
-              pair<set<size_t>::iterator,bool>
+              pair<set<uint32_t>::iterator,bool>
               sit=node_numbers.insert(counts);
               if ( sit.second == true ) (*nit)->Idx( counts++ );
               else assert( (*nit)->Idx() == (*sit.first) );
@@ -274,13 +274,13 @@ size_t  renumberElementNodes( vector<Element<2U>*>::iterator first,
  {
     assert( first != last );
 
-    set<size_t>  node_numbers;
+    set<uint32_t>  node_numbers;
     size_t       counts(0);
     
     while ( first != last ) {
          for ( vector<Node<2U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
-              pair<set<size_t>::iterator,bool>
+              pair<set<uint32_t>::iterator,bool>
               sit=node_numbers.insert(counts);
               if ( sit.second == true ) (*nit)->Idx( counts++ );
               else assert( (*nit)->Idx() == (*sit.first) );
@@ -300,13 +300,13 @@ size_t  renumberElementNodes( vector<Element<3U>*>::iterator first,
  {
     assert( first != last );
 
-    set<size_t>  node_numbers;
+    set<uint32_t>  node_numbers;
     size_t       counts(0);
     
     while ( first != last ) {
          for ( vector<Node<3U>*>::const_iterator
                nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
-              pair<set<size_t>::iterator,bool>
+              pair<set<uint32_t>::iterator,bool>
               sit=node_numbers.insert(counts);
               if ( sit.second == true ) (*nit)->Idx( counts++ );
               else assert( (*nit)->Idx() == (*sit.first) );
@@ -362,7 +362,7 @@ void printRangeOf( const vector<pair<double,double> >&  data )
 /**
     replaces no-data values of target variable with nearest-neighbor values until there are none left, by default NAN's are no-data values
 */
-template<size_t dim>  
+template<uint32_t dim>  
 void nearestNeighborFill( Model<dim>& model, const char* target_region, const char* variable, double no_data_value )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -409,7 +409,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                        it=elementsMissingDataValues.begin(); it!=elementsMissingDataValues.end(); it++ )
                    {
                       set<pair<double,double> > valuesAndWeights;
-                      for ( size_t i=0U; i<(*it)->Neighbors(); i++ )
+                      for ( auto i{0}; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> bctr = (*it)->BaryCenter();
@@ -467,7 +467,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                        it=nodesMissingDataValues.begin(); it!=nodesMissingDataValues.end(); it++ )
                    {
                       set<pair<double,double> > valuesAndWeights;
-                      for ( size_t i=0U; i<(*it)->Neighbors(); i++ )
+                      for ( auto i{0}; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> nxyz = (*it)->Coordinate();
@@ -738,7 +738,7 @@ double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
 } // end
 
 
-template<size_t dim,class VarType>
+template<uint32_t dim,class VarType>
 void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
                                        const std::vector<VarType>& elmnt_data,
                                        std::vector<VarType>&       nodal_data )
@@ -974,7 +974,7 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 					case 'A': // weekday name
 						tm->tm_wday = -1;
 						working = false;
-						for (size_t i = 0; i < 7; ++i)
+						for (auto i = 0; i < 7; ++i)
 						{
 							size_t len = strlen(strp_weekdays[i]);
 							if (!strnicmp(strp_weekdays[i], s, len))
@@ -998,7 +998,7 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 					case 'h': // month name
 						tm->tm_mon = -1;
 						working = false;
-						for (size_t i = 0; i < 12; ++i)
+						for (auto i = 0; i < 12; ++i)
 						{
 							size_t len = strlen(strp_monthnames[i]);
 							if (!strnicmp(strp_monthnames[i], s, len))
@@ -1212,38 +1212,6 @@ std::vector<std::string> splitString( std::string str, char delimiter )
 
 
 
-/**
-      reads vector<vector> from filestream where the elements of the vector are sequential 
-*/   
-template<typename T>   
-void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_vector, deque<vector<T> >& file_records )
- {
-    file_records.clear();
-    // not in deque: file_records.reserve( total_items / entries_per_vector );
-    // reading plist
-    size_t item=0U; 
-    while ( item < total_items )
-      {
-         // node ID's in file range 0...nodes-1
-         vector<T> data;
-         data.reserve( entries_per_vector );
-         int32_t id;
-         for ( size_t i=0; i<entries_per_vector; ++i ) {
-              ifs >> id;
-              assert( id >= 0 && id << total_items ); // assumption that there are not more nodes that elements*nodes_per_element
-              data.push_back( id );
-              item++;
-           }
-         file_records.emplace_back( data );
-      }
-
-    if ( item != total_items )
-         throw csmp::Exception( ERROR, "readVectorOfVectors", 
-                               "File record of vector<vector<typename>> was not correctly read" );
-
- } // end read inlined vector
-
-template void readVectorOfVectors( ifstream&, size_t, size_t, deque<vector<size_t> >& );
 
 
 

@@ -19,7 +19,7 @@ Operator to be applied to boundary, with NEUMANN variables considered only. Scal
 towards inside of boundary.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class NumIntegral_PT_op_dS : public MathOperatorRHS<dim> {
   public:
     NumIntegral_PT_op_dS( const PropertyDatabase<dim>& p, 

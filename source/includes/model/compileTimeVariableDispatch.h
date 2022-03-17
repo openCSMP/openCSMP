@@ -16,33 +16,33 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
 
 namespace lvsCompileTimeDispatch {
 
     //=====================================================================================================================================================
     // Assert Indexes of Integration Points
 
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     void AssertFiniteVolumeIntegrationPointIndex(const STOREE<dim>* /* no IntegrationPointStoree */, size_t, size_t )
     {
         /* nothing to assert */
     }
-    template<size_t dim>
+    template<uint32_t dim>
     void AssertFiniteVolumeIntegrationPointIndex(const csmp::Element<dim>* e, size_t sector_or_facet, size_t ip)
     {
         assert(sector_or_facet < e->Facets() || sector_or_facet < e->Sectors() );
         assert(ip < e->IntegrationPointsPerSector() || ip < e->IntegrationPointsPerFacet());
     }
-    template<size_t dim>
+    template<uint32_t dim>
     void AssertFiniteVolumeIntegrationPointIndex(const csmp::Face<dim>* e, size_t sector_or_facet, size_t ip)
     {
         assert(sector_or_facet < e->Facets() || sector_or_facet < e->Sectors());
         assert(ip < e->IntegrationPointsPerSector() || ip < e->IntegrationPointsPerFacet());
     }
-    template<size_t dim>
+    template<uint32_t dim>
     void AssertFiniteVolumeIntegrationPointIndex(const csmp::InterFace<dim>* e, size_t sector_or_facet, size_t ip)
     {
         assert(sector_or_facet < e->Facets() || sector_or_facet < e->Sectors());
@@ -56,7 +56,7 @@ namespace lvsCompileTimeDispatch {
     /**
         templatized function to associate LocalVariableStorage with Model, Region, Boundary and SplitBoundary classes which all have no integration points. 
     */
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<size_t, size_t> containerNewSize( const STOREE<dim>*, const LocalVariables& lv, const IntegrationPointVariables& )
       {
          const size_t dataDepth(lv.totalDataDepth);
@@ -67,7 +67,7 @@ namespace lvsCompileTimeDispatch {
     /**
         templatized function for Element, Face and InterFace classes which have integration points.
     */
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerNewSize(const csmp::Element<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
     {
         const size_t dataDepth(lv.totalDataDepth
@@ -81,7 +81,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(dataDepth, flagDepth);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerNewSize(const csmp::Face<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
     {
         const size_t dataDepth(lv.totalDataDepth
@@ -95,7 +95,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(dataDepth, flagDepth);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerNewSize(const csmp::InterFace<dim>* e, const LocalVariables& lv, const IntegrationPointVariables& ipv)
     {
         const size_t dataDepth(lv.totalDataDepth
@@ -112,7 +112,7 @@ namespace lvsCompileTimeDispatch {
     //=====================================================================================================================================================
     // Total Depth of new data
     
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<size_t, size_t> containerTotalDataDepth( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
     {
         const size_t dataDepth(idx.localVariables.totalDataDepth);
@@ -120,7 +120,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(dataDepth, flagDepth);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerTotalDataDepth(const csmp::Element<dim>* e, const csmp::Index& idx)
     {
         const size_t dataDepth(idx.localVariables.totalDataDepth
@@ -134,7 +134,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(dataDepth, flagDepth);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerTotalDataDepth(const csmp::Face<dim>* f, const csmp::Index& idx)
     {
         const size_t dataDepth(idx.localVariables.totalDataDepth
@@ -148,7 +148,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(dataDepth, flagDepth);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerTotalDataDepth(const csmp::InterFace<dim>* f, const csmp::Index& idx)
     {
         const size_t dataDepth(idx.localVariables.totalDataDepth
@@ -169,7 +169,7 @@ namespace lvsCompileTimeDispatch {
         
                  Master template
     */
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<size_t, size_t> containerOffset( const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index& idx )
     {
         const size_t dataOffset(idx.dataOffset);
@@ -200,7 +200,7 @@ namespace lvsCompileTimeDispatch {
         
         @attention Index::offsetFactorSector is zero for sector integration point variables and 1 for facet integration point variables
     */
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerOffset( const csmp::Element<dim>* e, const csmp::Index& idx )
     {
         const size_t dataOffset(idx.dataOffset
@@ -218,7 +218,7 @@ namespace lvsCompileTimeDispatch {
 
 
     /// specialisation Face
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerOffset( const csmp::Face<dim>* f, const csmp::Index& idx )
     {
         const size_t dataOffset(idx.dataOffset
@@ -235,7 +235,7 @@ namespace lvsCompileTimeDispatch {
 
 
     /// specialisation InterFace
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerOffset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
     {
         const size_t dataOffset(idx.dataOffset
@@ -252,13 +252,13 @@ namespace lvsCompileTimeDispatch {
     //===================================================================================================================================================
     // Internal Cycles in new data container ( (1,1) for lvs,  (1,IPs) for ipvSimplex, ( Sectors, IPs ) for ipvSector and ( Facets, IPs ) for ipvFacet )
     
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<int, int> containerIPCycles(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
     {
         return std::make_pair(1, 1);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycles(const csmp::Element<dim>* e, const csmp::Index& idx)
     {
         const long cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
@@ -274,7 +274,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycle1, cycle2);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycles(const csmp::Face<dim>* f, const csmp::Index& idx)
     {
         const long cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
@@ -290,7 +290,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycle1, cycle2);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycles(const csmp::InterFace<dim>* f, const csmp::Index& idx)
     {
         const long cycle1((1 - idx.ipFactorSimplex - idx.ipFactorSector - idx.ipFactorFacet)
@@ -310,13 +310,13 @@ namespace lvsCompileTimeDispatch {
     //=====================================================================================================================================================
     // Offset within first cycle ( 0 for lvs and ipvSimplex, TotalIpvDepth for ipvSector and ipvFacet )
     
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<int, int> containerIPCycle1Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
     {
         return std::make_pair(static_cast<int>(0), static_cast<int>(0));
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycle1Offset(const csmp::Element<dim>* e, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSector  * e->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
@@ -328,7 +328,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycleDataOffset, cycleFlagOffset);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycle1Offset(const csmp::Face<dim>* f, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
@@ -340,7 +340,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycleDataOffset, cycleFlagOffset);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<int, int> containerIPCycle1Offset(const csmp::InterFace<dim>* f, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSector  * f->IntegrationPointsPerSector() * idx.integrationPointVariables.ipvSector.totalDataDepth
@@ -355,13 +355,13 @@ namespace lvsCompileTimeDispatch {
     //=====================================================================================================================================================
     // Offset within second cycle ( 0 for lvs, TotalDepth for ipvSimplex, Depth for ipvSector and ipvFacet )
     
-    template<size_t dim, template<size_t> class STOREE>
+    template<uint32_t dim, template<uint32_t> class STOREE>
     std::pair<size_t, size_t> containerIPCycle2Offset(const STOREE<dim>* /* noIntegrationPointStoree */, const csmp::Index&)
     {
         return std::make_pair(static_cast<int>(0), static_cast<int>(0));
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerIPCycle2Offset(const csmp::Element<dim>*, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth
@@ -375,7 +375,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycleDataOffset, cycleFlagOffset);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerIPCycle2Offset(const csmp::Face<dim>*, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth
@@ -389,7 +389,7 @@ namespace lvsCompileTimeDispatch {
         return std::make_pair(cycleDataOffset, cycleFlagOffset);
     }
 
-    template<size_t dim>
+    template<uint32_t dim>
     std::pair<size_t, size_t> containerIPCycle2Offset(const csmp::InterFace<dim>*, const csmp::Index& idx)
     {
         const long cycleDataOffset(idx.ipFactorSimplex * idx.integrationPointVariables.ipvSimplex.totalDataDepth

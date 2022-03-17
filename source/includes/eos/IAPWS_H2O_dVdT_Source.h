@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class IAPWS_H2O_dVdT_Source : public Interrelation<dim> {
     Operand<dim>&  T;     // temperature (oC)
     Operand<dim>&  preT;  // previous temperature (oC)

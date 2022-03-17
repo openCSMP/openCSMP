@@ -75,7 +75,7 @@ inline bool isSubvertical( const Element<2U>* const eptr, size_t face )
        
        @todo perhaps use sqrt() of values for a milder form of value compression
 */
-template<size_t dim>
+template<uint32_t dim>
 void smoothElementData( Model<dim>& model, 
                         const std::string& region_to_be_smoothed, 
                         const std::string& variable_name,
@@ -129,14 +129,14 @@ void smoothElementData( Model<dim>& model,
                    }
                  else if ( key.type == VECTOR ) { 
                        (*it)->Read( key, vc );
-                       for ( size_t i=0U; i<dim; ++i )
+                       for ( auto i{0}; i<dim; ++i )
                          vc(i) = log10( vc[i] );
                        (*it)->Store( log_key, vc );
                    }
                  else if ( key.type == TENSOR ) {
                       (*it)->Read( key, ts );
-                      for ( size_t i=0U; i<dim; ++i )
-                        for ( size_t j=0U; j<dim; ++j )
+                      for ( auto i{0}; i<dim; ++i )
+                        for ( auto j=0U; j<dim; ++j )
                           ts(i,j) = log10( ts(i,j) );
                       (*it)->Store( log_key, ts );
                    }
@@ -185,7 +185,7 @@ void smoothElementData( Model<dim>& model,
                     sum_of_weights += elmt_volume;
                     // sampling the element neighbors as long as they are inside of the target region
                     // and they sit across a subvertical face
-                    for ( size_t nbor=0U; nbor<(*it)->Neighbors(); ++nbor )
+                    for ( auto nbor=0U; nbor<(*it)->Neighbors(); ++nbor )
                       if ( isSubvertical( (*it), nbor ) && domain.Contains((*it)->Neighbor(nbor)) )
                         {
                            elmt_volume = (*it)->Neighbor(nbor)->Volume();
@@ -202,7 +202,7 @@ void smoothElementData( Model<dim>& model,
                   }
                 
                 // storing the smoothed values at the end of smoothing cycle
-                for ( size_t i=0U; i<domain.InteriorElements(); ++i ) {
+                for ( auto i{0}; i<domain.InteriorElements(); ++i ) {
                     if ( smoothed_vals[i] >= min_val_database && smoothed_vals[i] <= max_val_database )
                        domain.E(i)->Store( key, makeScalar( domain.E(i)->Status(key), smoothed_vals[i] ) );
                     else {
@@ -234,14 +234,14 @@ void smoothElementData( Model<dim>& model,
                   }
                 else if ( key.type == VECTOR ) { 
                       (*it)->Read( key, vc );
-                      for ( size_t i=0U; i<dim; ++i )
+                      for ( auto i{0}; i<dim; ++i )
                         vc(i) = pow( 10., vc[i] );
                       (*it)->Store( original_key, vc );
                   }
                 else if ( key.type == TENSOR ) {
                      (*it)->Read( key, ts );
-                     for ( size_t i=0U; i<dim; ++i )
-                       for ( size_t j=0U; j<dim; ++j )
+                     for ( auto i{0}; i<dim; ++i )
+                       for ( auto j=0U; j<dim; ++j )
                          ts(i,j) = pow( 10., ts(i,j) );
                      (*it)->Store( original_key, ts );
                   }
@@ -278,7 +278,7 @@ template void smoothElementData( Model<3U>&, const string&, const string&, int, 
 
     developed for SMOOTHING OF CRC3-CRC2 2D CROSS-SECTION (SKM5/2/2020)
 */
-template<size_t dim>
+template<uint32_t dim>
 void smoothPorosityAndPermeabilityDistribution( Model<dim>& model )
   {
      const int  smoothing_passes(1);
@@ -301,7 +301,7 @@ template void smoothPorosityAndPermeabilityDistribution( Model<3U>& );
 
 
 /// Edoardo Pezulli's neighbor extrapolation based method, that avoids Element and Node objects located at the region boundary
-template<size_t dim>
+template<uint32_t dim>
 void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::iterator first,
                                                typename vector<Element<dim>*>::iterator last )
  {
@@ -312,7 +312,7 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
      
     const typename vector<csmp::Element<dim>*>::iterator elmts_end(last);
     for ( typename vector<Element<dim>*>::iterator it=first; it!=elmts_end; ++it )
-      for ( size_t i=0U; i<(*it)->Nodes(); ++ i ) {
+      for ( auto i{0}; i<(*it)->Nodes(); ++ i ) {
            assert( (*it)->N(i) != nullptr );
            new_nodes.insert( (*it)->N(i) );
         }
@@ -334,7 +334,8 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
            for (typename set<Element<dim>*>::iterator eit = elmts_to_search.begin();
                 eit != elmts_to_search.end(); ++eit){
              //Searching all neighbors for unitialized element
-             for ( size_t nbor = 0; nbor < (*eit)->Neighbors(); ++nbor) {
+             const auto n_nbors{(*eit)->Neighbors()};
+             for ( uint32_t nbor = 0; nbor < n_nbors; ++nbor) {
                if ( (*eit)->Neighbor(nbor) != nullptr){                 //Only consider existing neighbors
                  //if neighbor element is not new it must be initilized
                  // TODO: search elements in sorted vector using binary search (vector specific method rather than algorithm)
@@ -348,13 +349,13 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
                    //getting nodes of closest uni-initialized element (assumed to be most relevant to original el)
                    std::vector<Node<dim>*> closest_nodes = (*eit)->NodeVector();
                    //Now initializing all new nodes in the new element
-                   for (size_t n_new = 0 ; n_new < (*it)->Nodes(); ++n_new){
+                   for (uint32_t n_new = 0 ; n_new < (*it)->Nodes(); ++n_new){
                      if ( find(new_nodes.begin(), new_nodes.end(), (*it)->N(n_new)) != new_nodes.end() ){
                        //Looking for node with same boundary flag if possible
                        BOX_BOUNDARY new_node_bound = (*it)->N(n_new)->AtBoundary();
                        //Getting all potential nodes and their box boundaries
                        std::multimap<BOX_BOUNDARY,Node<dim>*> potential_nodes;
-                       for (size_t n_found = 0; n_found < found_el->Nodes(); ++n_found){
+                       for (auto n_found = 0; n_found < found_el->Nodes(); ++n_found){
                            Node<dim>* potential_node = found_el->N(n_found);             //getting potential node from initialized element
                            //if node is also within an unitialized elm (then its closest)
                            if ( std::find(closest_nodes.begin(), closest_nodes.end(), potential_node) != closest_nodes.end() ){

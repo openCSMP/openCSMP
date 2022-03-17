@@ -246,16 +246,16 @@ public:
 
 	bool ConstructLine(ColumnCell& cell) {
 		vertexIDs[0] = 0;
-		auto p1 = getNodeCoord(cell, vertexIDs[0]);
-		grid.ConvertFromReservoirToCSMPcoordinateSystem(p1);
+		auto point_p1 = getNodeCoord(cell, vertexIDs[0]);
+		grid.ConvertFromReservoirToCSMPcoordinateSystem(point_p1);
 
 		vertexIDs[1] = 4;
-		auto p2 = getNodeCoord(cell, vertexIDs[1]);
-		grid.ConvertFromReservoirToCSMPcoordinateSystem(p2);
+    auto point_p2 = getNodeCoord(cell, vertexIDs[1]);
+		grid.ConvertFromReservoirToCSMPcoordinateSystem(point_p2);
 
 		line.XY.Resize(2U, 3U);
-		line.XY.AssignRow(0U, p1);
-		line.XY.AssignRow(0U, p2);
+		line.XY.AssignRow(0U, point_p1);
+		line.XY.AssignRow(0U, point_p2);
 				
 		return true;
 	}
@@ -270,7 +270,7 @@ public:
 
 	bool ConstructHexahedron(ColumnCell& cell) {
 		//std::cerr << "hexa: \n";				
-		for (size_t i = 0; i < 8; ++i) {
+		for (auto i = 0; i < 8; ++i) {
 			vertexIDs[i] = i;
 			auto p = getNodeCoord(cell, vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -280,8 +280,8 @@ public:
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 		}
 
-		size_t iNrIps = hexa.IntegrationPoints();
-		for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+		uint32_t iNrIps = hexa.IntegrationPoints();
+		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
 			hexa.JacobianAtIntegrationPoint(iIp);
 			double jacdet = hexa.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -308,7 +308,7 @@ public:
 		vertexIDs[4] = apex;
 
 		//std::cerr << "pyramid: \n";
-		for (size_t i = 0; i < 5; ++i) {
+		for (auto i = 0; i < 5; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -318,8 +318,8 @@ public:
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 		}
 
-		size_t iNrIps = pyra.IntegrationPoints();
-		for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+    uint32_t iNrIps = pyra.IntegrationPoints();
+		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
 			pyra.JacobianAtIntegrationPoint(iIp);
 			double jacdet = pyra.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -346,7 +346,7 @@ public:
 		vertexIDs[3] = apex;
 
 		//std::cerr << "tetra: \n";
-		for (size_t i = 0; i < 4; ++i) {
+		for (auto i = 0; i < 4; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
@@ -356,8 +356,8 @@ public:
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 		}
 
-		size_t iNrIps = tetra.IntegrationPoints();
-		for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+    uint32_t iNrIps = tetra.IntegrationPoints();
+		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
 			tetra.JacobianAtIntegrationPoint(iIp);
 			double jacdet = tetra.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -386,7 +386,7 @@ public:
 		vertexIDs[5] = getNodeID(cell, face5);
 
 		//std::cerr << "prism: \n";
-		for (size_t i = 0; i < 6; ++i) {
+		for (auto i = 0; i < 6; ++i) {
 			auto p = getGlobalNodeCoord(vertexIDs[i]);
 			grid.ConvertFromReservoirToCSMPcoordinateSystem(p);
 			prism.XYZ(i, 0, p[0]);
@@ -395,8 +395,8 @@ public:
 			//std::cerr << "p" << i << " = " << p[0] << ' ' << p[1] << ' ' << p[2] << '\n';
 		}
 
-		size_t iNrIps = prism.IntegrationPoints();
-		for (size_t iIp = 0; iIp < iNrIps; ++iIp) {
+		auto iNrIps = prism.IntegrationPoints();
+		for (auto iIp = 0; iIp < iNrIps; ++iIp) {
 			prism.JacobianAtIntegrationPoint(iIp);
 			double jacdet = prism.JacobianDeterminant();
 			//std::cerr << "jacdet = " << jacdet << '\n';
@@ -417,11 +417,11 @@ public:
 
 
 	// return a list of globalNodeID from local vertex index
-	std::vector<int64_t> getGlobalIDList(ColumnCell& cell, size_t size, const int64_t * vertexIDs) {
+	  std::vector<int64_t> getGlobalIDList(ColumnCell& cell, size_t list_size, const int64_t* vertexID ) {
 		std::vector<int64_t> nodeIDs;
-		nodeIDs.reserve(size);
-		for (int i = 0; i < size; ++i) {
-			nodeIDs.push_back(getNodeID(cell, vertexIDs[i]));
+		nodeIDs.reserve(list_size);
+		for (int i = 0; i < list_size; ++i) {
+			nodeIDs.push_back(getNodeID(cell, vertexID[i]));
 		}
 		return nodeIDs;
 	}

@@ -13,10 +13,10 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class Element;
-template<size_t> class Node;
-template<size_t> class Point;
+template<uint32_t> class Model;
+template<uint32_t> class Element;
+template<uint32_t> class Node;
+template<uint32_t> class Point;
 
 /**
        Using the point data in the supplied spreadsheet, PointPropertyToCellMapper2D
@@ -60,18 +60,18 @@ class PointPropertyToCellMapper2D {
 
 
   /// returns a vector of pointers to the cells that contain the points or NULL if there cells cannot be found
-  template<size_t dim>
+  template<uint32_t dim>
   std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>&,
                                                         std::string target_region,
                                                         const std::vector<Point<dim> >& points_to_search );
    
 
   /// returns true if point is contained in the element or - if not - a pointer to the neighbor cell that is closest to the point of interest
-  template<size_t dim>
+  template<uint32_t dim>
   std::pair<Element<dim>*,bool>  containsPoint( Element<dim>*, const Point<dim>&, size_t region_idx );
   
   /// returns the Element's node that is closest to the supplied point
-  template<size_t dim>
+  template<uint32_t dim>
   Node<dim>*  nearestNode( Element<dim>*, const Point<dim>& );
     
 

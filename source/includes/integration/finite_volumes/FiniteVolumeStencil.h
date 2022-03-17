@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t> class FiniteVolumeStencilManager;
+template<uint32_t> class FiniteVolumeStencilManager;
 
 
 /**
@@ -56,7 +56,7 @@ associated with specific finite elements. For tabulation of the points
 and weights if uses class FV_IntegrationPointsAndWeights ().
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class FiniteVolumeStencil {
   public:
     explicit FiniteVolumeStencil( const char* csp_finite_element_type );
@@ -64,94 +64,94 @@ class FiniteVolumeStencil {
     FiniteVolumeStencil& operator=( const FiniteVolumeStencil& );
     ~FiniteVolumeStencil();
     void      Initialize( const char* csp_finite_element_type );
-    void      Resize( size_t isrf, size_t srfs_per_node, size_t ivol, size_t spts, size_t vpts );
+    void      Resize( uint32_t isrf, uint32_t srfs_per_node, uint32_t ivol, uint32_t spts, uint32_t vpts );
   
     /// number of facets that delimited the FV sector on the insider of the parent finite element
-    size_t    FacetsPerSector( size_t iSector ) const;
+    uint32_t  FacetsPerSector( uint32_t iSector ) const;
   
     /// n-th facet that delimits the FV sector in the inside of the finite element
-    size_t    FacetSurroundingSector( size_t iSector, size_t n ) const;
+    uint32_t  FacetSurroundingSector( uint32_t iSector, uint32_t n ) const;
 
     /// reports the type of a facet
-    FV_FACET_TYPE FacetType( size_t iFacet ) const;
+    FV_FACET_TYPE FacetType( uint32_t iFacet ) const;
   
     /// choice of rst-integration point coordinate of the facet integration point
-    double  FacetIntegrationPoint( size_t iFacet, size_t ip, size_t r_or_s_or_t ) const;
+    double  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, uint32_t r_or_s_or_t ) const;
   
     /// rst coordinate of facet integration point in parametric space
-    void      FacetIntegrationPoint( size_t iFacet, size_t ip, std::vector<double>& rst ) const;
+    void    FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, std::vector<double>& rst ) const;
   
     /// returns rst coordinate of facet integration point in parametric space
-    const Point<dim>&  FacetIntegrationPoint( size_t iFacet, size_t ip ) const;
+    const Point<dim>&  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip ) const;
   
     /// integration weight of given integration point correlated with facet area and number of facet integration points
-    double  FacetIntegrationWeight( size_t iFacet, size_t ip ) const;
+    double  FacetIntegrationWeight( uint32_t iFacet, uint32_t ip ) const;
   
     /// scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space
-    double  FacetProjectionWeight( size_t iFacet, size_t ip ) const;
+    double  FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const;
   
     /// nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points
-    void      FacetEdgeNodes( size_t iFacet, size_t& inside_node, size_t& outside_node ) const;
+    void    FacetEdgeNodes( uint32_t iFacet, uint32_t& inside_node, uint32_t& outside_node ) const;
   
     /// opposite side of the outward pointing normal of the facet
-    size_t    InsideNode( size_t iFacet ) const;
+    uint32_t InsideNode( uint32_t iFacet ) const;
 
     /// same side as the outward pointing normal of the facet
-    size_t    OutsideNode( size_t iFacet ) const;
+    uint32_t OutsideNode( uint32_t iFacet ) const;
   
     /// point on the finite-element edge that is touched by the facet
-	  const Point<dim>& FacetEdgeMidPoint(size_t iFacet ) const;
+	  const Point<dim>& FacetEdgeMidPoint(uint32_t iFacet ) const;
   
     /// of finite element in parametric space
     const Point<dim>& Barycenter() const;
   
-    double  SectorIntegrationPoint( size_t iSector, size_t ip, size_t r_or_s_or_t ) const;
-    void      SectorIntegrationPoint( size_t iSector, size_t ip, std::vector<double>& rst ) const;
-    const Point<dim>&  SectorIntegrationPoint( size_t iSector, size_t ip ) const;
-    double  SectorIntegrationWeight( size_t iSector, size_t ip ) const;
-    const Point<dim>&  FacetPoint( size_t iFacet, size_t iPoint ) const;
-    size_t    FacetPoints( size_t iFacet ) const { return facet_points[iFacet].size(); }
+    double             SectorIntegrationPoint( uint32_t iSector, uint32_t ip, uint32_t r_or_s_or_t ) const;
+    void               SectorIntegrationPoint( uint32_t iSector, uint32_t ip, std::vector<double>& rst ) const;
+    const Point<dim>&  SectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
+    double             SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const;
+    const Point<dim>&  FacetPoint( uint32_t iFacet, uint32_t iPoint ) const;
+    uint32_t           FacetPoints( uint32_t iFacet ) const { return static_cast<uint32_t>(facet_points[iFacet].size()); }
 
     /// corner points of the (hexahedral) sector in parametric space
-    const Point<dim>&  SectorPoint( size_t iSector, size_t iPoint ) const;
+    const Point<dim>&  SectorPoint( uint32_t iSector, uint32_t iPoint ) const;
   
     /// pairs of sector edge points definining the intersection lines of the sector with the finite element faces
-    std::pair<Point<dim>,Point<dim> >  SectorEdgePoints( size_t iSector, size_t iEdge ) const;
+    std::pair<Point<dim>,Point<dim> >  SectorEdgePoints( uint32_t iSector, uint32_t iEdge ) const;
   
     /// pairs of the ids (0..n-1) of the sector edge point definining the intersection lines of the sector with the finite element faces
-    const std::pair<size_t,size_t>&  SectorEdge( size_t iSector, size_t iEdge ) const;
+    const std::pair<uint32_t,uint32_t>&  SectorEdge( uint32_t iSector, uint32_t iEdge ) const;
   
     /// number of corner points of the finite volume sector
-    size_t    SectorPoints( size_t iSector ) const;
+    uint32_t    SectorPoints( uint32_t iSector ) const;
   
     /// number of edges of the finite volume sector
-    size_t    SectorEdges( size_t iSector ) const; 
+    uint32_t    SectorEdges( uint32_t iSector ) const;
   
     /// number of finite-volume facets in the parent finite element
-    size_t    Facets() const;
+    uint32_t    Facets() const;
   
     /// number of finite-volume sectors in the parent finite element
-    size_t    Sectors() const;
+    uint32_t    Sectors() const;
   
     /// number of quadrature points of the finite volume facet i
-    size_t    IntegrationPointsPerFacet( size_t iFacet=0U ) const;
+    uint32_t    IntegrationPointsPerFacet( uint32_t iFacet=0U ) const;
   
     /// number of quadrature points of the finite volume sector i
-    size_t    IntegrationPointsPerSector( size_t iSector=0U ) const;
+    uint32_t    IntegrationPointsPerSector( uint32_t iSector=0U ) const;
   
     /// returns unit normal to facet in parametric space
-    const Point<dim>&  UnitParametricNormalTo( size_t iFacet ) const;
+    const Point<dim>&  UnitParametricNormalTo( uint32_t iFacet ) const;
   
     /// returns x,y or z component of unit normal in parametric space
-    double           UnitParametricNormalComponent( size_t iFacet, size_t x_or_y_or_z ) const;
+    double       UnitParametricNormalComponent( uint32_t iFacet, uint32_t x_or_y_or_z ) const;
 
-    std::pair<double,double>    FacetNormalTransformationNodeWeights( size_t iFacet, size_t iNode ) const;
+    std::pair<double,double>    FacetNormalTransformationNodeWeights( uint32_t iFacet, uint32_t iNode ) const;
   
     /// returns the parent element of the finite volume stencil
     const std::string& ParentElement() const { return parent_element_; }
 
     /// reports whether the parent element of the stencil is a line, surface or volume
-    ELEMENT_DIMENSION  Geometry() const;
+    CELL_SHAPE  Geometry() const;
 
     /// returns the data (private members) stored in this finite volume stencil
     void  Out() const;
@@ -159,26 +159,26 @@ class FiniteVolumeStencil {
   private:
     FiniteVolumeStencil() { /* do not use this default constructor */ };
     // TODO: flatten all these multidimensional arrays for faster access; use specific type for this
-    std::vector<std::pair<size_t,size_t> >  edges_of_element;             ///< = facets
-    std::vector<std::vector<size_t> >       facets_surrounding_node;      ///< [node][facet]
-    std::vector<std::vector<Point<dim> > >  facet_integration_points;     ///< [isrf][spts][dim]
-    std::vector<std::vector<double> >       facet_integration_weights;    ///< [isrf][spts]
-    std::vector<std::vector<double> >       facet_projection_weights;     ///< [isrf][spts]
-    std::vector<std::vector<double> >       facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
-    std::vector<Point<dim> >                facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<std::pair<uint32_t,uint32_t> >  edges_of_element;             ///< = facets
+    std::vector<std::vector<uint32_t> >         facets_surrounding_node;      ///< [node][facet]
+    std::vector<std::vector<Point<dim> > >      facet_integration_points;     ///< [isrf][spts][dim]
+    std::vector<std::vector<double> >           facet_integration_weights;    ///< [isrf][spts]
+    std::vector<std::vector<double> >           facet_projection_weights;     ///< [isrf][spts]
+    std::vector<std::vector<double> >           facet_normals;                ///< [isrf][dim] //[node*3][dim] -3d
+    std::vector<Point<dim> >                    facet_parametric_normals;     ///< [isrf][dim] //[node*3][dim] -3d
     std::vector<std::vector<std::pair<double,double>>> facet_normal_xforms; ///< [isrf][node]
-    std::vector<std::vector<Point<dim> > >  sector_integration_points;    ///< [ivol][vpts][dim]
-    std::vector<std::vector<double> >       sector_integration_weights;   ///< [ivol][vpts]
-    std::vector<Point<dim> >                facet_edge_midpoints;
-    Point<dim>					          	        barycenter;
-    std::vector<std::vector<Point<dim> > >  facet_points;
+    std::vector<std::vector<Point<dim> > >      sector_integration_points;    ///< [ivol][vpts][dim]
+    std::vector<std::vector<double> >           sector_integration_weights;   ///< [ivol][vpts]
+    std::vector<Point<dim> >                    facet_edge_midpoints;
+    Point<dim>					          	            barycenter;
+    std::vector<std::vector<Point<dim> > >      facet_points;
     ///< for each sector, all the points delimiting the sector in parametric space
-    std::vector<FV_FACET_TYPE>              facet_types;                  ///< [isrf]
-    std::vector<std::vector<Point<dim> > >  sector_points_;         
+    std::vector<FV_FACET_TYPE>                  facet_types;                  ///< [isrf]
+    std::vector<std::vector<Point<dim> > >      sector_points_;
     ///< for each sector, for each sector edge, the indices of the end points
-    std::vector<std::vector<std::pair<size_t,size_t> > >  sector_edges_;   
-    std::string                             parent_element_;              ///< name of parent finite element
-    ELEMENT_DIMENSION                       space_dimension_;             ///< line, surface, or volumetric parent element
+    std::vector<std::vector<std::pair<uint32_t,uint32_t> > >  sector_edges_;
+    std::string                                 parent_element_;              ///< name of parent finite element
+    CELL_SHAPE                                  space_dimension_;             ///< line, surface, or volumetric parent element
     
     friend class FiniteVolumeStencilManager<dim>;
 };

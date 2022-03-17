@@ -22,7 +22,7 @@ Transient().
 @attention COMPUTATION_DOMAIN is used here because DOMAIN caused a clash
 with DOMAIN defined in <cmath>
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental()
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -46,7 +46,7 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental()
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( Solver& solver )
  : solver_(&solver),
    newed_Solver_object_(false),
@@ -62,7 +62,7 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PDE_IntegratorExperimental( 
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::~PDE_IntegratorExperimental()
  {
     if ( newed_Solver_object_ ) delete solver_;
@@ -70,19 +70,19 @@ PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::~PDE_IntegratorExperimental(
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Verbose( bool verbose )
 { verbose_=verbose; }
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Verbose() const
 { return verbose_; }
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain ) 
  { retain_matrix_=retain; }
 
@@ -90,7 +90,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMat
 /**
     Default = false, switch on if size matters more than speed.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVectors( bool trim )
  {
      trim_vectors_ = trim;
@@ -102,7 +102,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVec
     If a solver was allocated earlier it is deleted before the new_solver is 
     connected to the Integrator.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SetSolver( Solver& new_solver ) {
    if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
    newed_Solver_object_ = false;
@@ -111,7 +111,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SetSolver( Solver& new_
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 Solver& PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::GetSolver() const {
   return *solver_;
 }
@@ -133,7 +133,7 @@ rhs. You should therefore always limit the number of A. to those essential.
 Use this method if you want to re-use a previously defined steady-state
 PDE_IntegratorExperimental.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 bool  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Transient() const
  { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
@@ -150,7 +150,7 @@ the PDE_IntegratorExperimental to transient, this is done as well.
 Set the time-increment of an PDE_IntegratorExperimental before you Apply() it to the
 Model or target Region objects.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void   PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
@@ -170,7 +170,7 @@ Solver object.
 To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
@@ -178,7 +178,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t
 
    cout.setf(ios::scientific);
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
-   for ( size_t i=0U; i<rh_.size(); i++ )
+   for ( auto i{0}; i<rh_.size(); i++ )
      {
         cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
@@ -187,7 +187,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t
    cout << endl;
 
    cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
-   for ( size_t i=0U; i<x_.size(); i++ )
+   for ( auto i{0}; i<x_.size(); i++ )
      {
         cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
@@ -229,7 +229,7 @@ name are added.
 Each PDE_IntegratorExperimental needs at least one left and one righthand math operator.
 Define these before you pass the PDE_IntegratorExperimental to the Model.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
  {
     // The name for the algorithm is combined out of its operands
@@ -238,7 +238,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<di
     setup_established_ = false;
  }
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
  {
     rhs_operators_[ op->Name() ] = op;
@@ -247,7 +247,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<di
  }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( MathOperatorRHS<dim>* op )
  {
     rhs_boundary_operators_[ op->Name() ] = op;
@@ -257,7 +257,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( Ma
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorRHS<dim>* op )
  {
     rhs_split_boundary_operators_[ op->Name() ] = op;
@@ -267,7 +267,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegra
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorLHS<dim>* op )
  {
     lhs_split_boundary_operators_[ op->Name() ] = op;
@@ -276,7 +276,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegra
  }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AddPostProcess( MathOperatorLHS<dim>* op )
  {
     postpro_operators_[ op->Name() ] = op;
@@ -295,7 +295,7 @@ MathOperator interface method Out() is used. Thus, you influence the
 information that is output when you define your own PDE operator
 subclasses.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ListMathOperatorsLHS() const
  {
     typename map<string,MathOperatorLHS<dim>*>::const_iterator it;
@@ -308,7 +308,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ListMathOperatorsLHS() 
  }
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::ListMathOperatorsRHS() const
  {
     typename map<string,MathOperatorRHS<dim>*>::const_iterator it;
@@ -333,7 +333,7 @@ Use this method to extract the solution vector from the algorithm, for
 instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
   vector<double>( sol ).swap( sol );
@@ -356,7 +356,7 @@ solution obtained with this algorithm.
 NOTE: Make sure that you actually use an algebraic multigrid solver object and that the
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
@@ -385,7 +385,7 @@ of the already initialized solution matrix, because the memory of it
 (owing to the Meschach implementation) is not
 de-allocated before the programme terminates.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Reset( bool delete_math_operators )
  {
     if ( delete_math_operators ) {
@@ -425,7 +425,7 @@ the final residue of the solution (which could be compared to a
 signal-to-noise ratio) is several orders of magnitude lower than the
 initial residue. Otherwise the obtained solution is useless.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Solve()
  {
     solver_->Solve( G_, rh_, x_, dof_per_node_ );
@@ -533,7 +533,7 @@ the basic operand is placed on the nodes. This lies in the very nature
 of the finite-element method. If you are doing a finite-volume or
 other computation, just ignore this warning.
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
  {
    // -------------------------------------------------------------------
@@ -642,7 +642,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
    //      indicating positions, i,j in solution matrix.
    // ----------------------------------------------------------------
    size_t       offset(0U);
-   const size_t dim2(dim * dim);
+   const uint32_t dim2(dim * dim);
    for ( operandsIterator
          iter=test_operands_.begin(); iter!=test_operands_.end(); iter++ )
      {
@@ -815,7 +815,7 @@ The dependent variable must be placed on the nodes:
 TODO: write alternative method that deals with the case when a boundary is only partially overlapping with the model domain.
 
  */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( !setup_established_ )
@@ -854,7 +854,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
                   VectorVariable<dim> vc;
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, vc);
-                      for ( size_t i = 0; i < dim; i++) {
+                      for ( auto i = 0; i < dim; i++) {
                           position = (*niter)->Idx() * dim + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= vc(i);
@@ -868,7 +868,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
                   const size_t        dim2(dim * dim);
                   while (niter != gref.NodesEnd()) {
                     (*niter)->Read(prop_key, ts);
-                    for ( size_t i = 0; i < dim; i++)
+                    for ( auto i = 0; i < dim; i++)
                       for ( size_t j = 0; j < dim; j++) {
                           position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                           position = DOF_indexes_[position];
@@ -882,7 +882,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
                   ArrayVariable  ar(prop_key.dataDepth);
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, ar);
-                      for ( size_t i = 0; i < prop_key.dataDepth; i++) {
+                      for ( auto i = 0; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= ar(i);
@@ -895,7 +895,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
                   FlaggedArrayVariable far(prop_key.dataDepth);
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, far);
-                      for ( size_t i = 0; i < prop_key.dataDepth; i++) {
+                      for ( auto i = 0; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= far(i);
@@ -926,7 +926,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AssignInitialConditions
 
     @author Luat Khoa Tran
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain)
  {
     const size_t rh_size(this->rh_.size());
@@ -972,7 +972,7 @@ Accumulate() is executed internally when the PDE_IntegratorExperimental is passe
 Model.
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
     // accumulating into the sparse matrix 'G'
@@ -1014,21 +1014,21 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
 /**
     determining whether the nodes of the supplied element are contained in the computational domain
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>& face )
  {
     const size_t nodes(face.Nodes());
-    for ( size_t i=0U; i<nodes; ++i )
+    for ( auto i{0}; i<nodes; ++i )
       if ( !comp_domain.IsPerimeterNode( face.N(i) ) ) return false;
     return true;
  }
 
 // same but for SplitBoundary objects
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<dim>& interface )
  {
     const size_t nodes(interface.Nodes());
-    for ( size_t i=0U; i<nodes; ++i )
+    for ( auto i{0}; i<nodes; ++i )
       if ( !comp_domain.IsPerimeterNode( interface.N(i) ) ) return false;
     return true;
  }
@@ -1041,7 +1041,7 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<
     TODO: include boundary conditions applied to LHS
     TODO: adopt method to handle InterFace objects (in split boundaries) as well
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
                                                                                        const Boundary<dim>& boundary )
  {
@@ -1071,7 +1071,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
 /**
     Coupling conditions / surface integrals applied to SplitBoundary objects
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
                                                                                             const SplitBoundary<dim>& boundary )
  {
@@ -1133,7 +1133,7 @@ Model.
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
     // accumulating as late addition into the righhand vector 'rhs'
@@ -1164,7 +1164,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const 
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
  
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
                                                                                            const Boundary<dim>& boundary )
  {
@@ -1192,7 +1192,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
 
 
 // same but for SplitBoundary objects
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
                                                                                                 const SplitBoundary<dim>& boundary )
  {
@@ -1251,7 +1251,7 @@ do not define PostProcess(), you will get the info message:
 
 "no post-processing operations for REGION were defined in derived PDE_IntegratorExperimental"
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<dim>& gref )
  {
     if ( postpro_operators_.empty() ) return;
@@ -1300,16 +1300,16 @@ to the Model.
 @attention Method relies on an 0..n contiguous node numbering in the region (computational domain).
 
  */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref ) 
  {
    size_t       position;
-   const size_t dim2(dim * dim);
+   const uint32_t dim2(dim * dim);
 
     for ( operandsIterator it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
      {
-        typename vector<Node<dim>*>::iterator  gfirst(gref.NodesBegin());
-        Index   prop_key = (*it).first.key;
+        auto         gfirst(gref.NodesBegin());
+        const Index  prop_key = (*it).first.key;
         if ( prop_key.place != NODE )
             throw csmp::Exception( ERROR, "PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
@@ -1332,7 +1332,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
               VectorVariable<dim>  vc;
               while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, vc);
-                  for (size_t i = 0U; i < dim; i++) {
+                  for (auto i = 0U; i < dim; i++) {
                       position = (*gfirst)->Idx() * dim + i + offset;
                       position = DOF_indexes_[position];
                       if (position != NULL_IDX) vc(i) = this->x_[position];
@@ -1346,7 +1346,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
             TensorVariable<dim>  ts;
             while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, ts);
-                  for (size_t i = 0U; i < dim; i++)
+                  for (auto i = 0U; i < dim; i++)
                     for (size_t k = 0U; k < dim; k++) {
                          position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
                          position = DOF_indexes_[position];
@@ -1361,7 +1361,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
             ArrayVariable  ar(prop_key.dataDepth);
             while (gfirst != gref.NodesEnd()) {
                  (*gfirst)->Read(prop_key, ar);
-                 for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                 for (auto i = 0U; i < prop_key.dataDepth; i++) {
                      position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
                      position = DOF_indexes_[position];
                      if (position != NULL_IDX) ar(i) = this->x_[position];
@@ -1375,7 +1375,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
               FlaggedArrayVariable  ar(prop_key.dataDepth);
               while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, ar);
-                  for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                  for (auto i = 0U; i < prop_key.dataDepth; i++) {
                       position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
                       position = DOF_indexes_[position];
                       if (position != NULL_IDX) ar(i) = this->x_[position];
@@ -1424,7 +1424,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
     
     7. Postprocessing (if respective pde operators were added to the PDE_Integrator).
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain, bool debug )
  {
     // 1. configure algorithm
@@ -1482,7 +1482,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTAT
     
     @author SKM 7/7/2015
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
                                                                         COMPUTATION_DOMAIN<dim>& domain,
                                                                         bool debug )
@@ -1558,7 +1558,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
    
 // SKM_TEST checks whether the contributions are written to the correct nodes
 //csmp::Index test_key = model.Database().StorageKey("test variable");
-//for ( size_t i=0U; i<domain.Nodes(); i++ )
+//for ( auto i{0}; i<domain.Nodes(); i++ )
 // domain.N(i)->Store( test_key, makeScalar(PLAIN, rh_[i] ) );
  
     // 8. invert global matrix
@@ -1594,7 +1594,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
     TODO: think about meaningful PDE operators for internal model boundaries
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Model<dim>& model,
                                                                                    const COMPUTATION_DOMAIN<dim>& subdomain,
                                                                                    list<string>& shared_boundaries )
@@ -1663,10 +1663,10 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
     @author Luat Khoa Tran
 
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    const size_t dim2(dim * dim);
+    const uint32_t dim2(dim * dim);
     DOF_indexes_.resize(this->rh_.size());
     fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
 
@@ -1707,7 +1707,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 break;
               case VECTOR:
                 while ( niter != gref.NodesEnd()) {
-                       for ( size_t i = 0U; i < dim; ++i ) {
+                       for ( auto i = 0U; i < dim; ++i ) {
                             position = (*niter)->Idx() * dim + i + offset;
                             if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
                             else {
@@ -1722,7 +1722,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 // tensors have flags only for their diagonal elements
                 while ( niter != gref.NodesEnd() )
                   {
-                     for (size_t i = 0U; i < dim; i++) {
+                     for (auto i = 0U; i < dim; i++) {
                         if ( (*niter)->Status(prop_key,i) == DIRICH )
                           for (size_t j = 0U; j < dim; j++) {
                                position = (*niter)->Idx() * dim2 + i * dim + j + offset;
@@ -1743,13 +1743,13 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 while (niter != gref.NodesEnd()) {
                     if ( (*niter)->Status(prop_key) == DIRICH )
                       {
-                        for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                        for (auto i = 0U; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           DOF_indexes_[position] = NULL_IDX;
                         }
                       }
                     else {
-                        for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                        for (auto i = 0U; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           DOF_indexes_[position] = DOF;
                           DOF = DOF + 1U;
@@ -1761,7 +1761,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
               case FLAGGEDARRAY:
                 while ( niter != gref.NodesEnd() )
                   {
-                     for (size_t i = 0U; i < prop_key.dataDepth; i++ )
+                     for (auto i = 0U; i < prop_key.dataDepth; i++ )
                         if ( (*niter)->Status(prop_key,i) == DIRICH ) {
                              position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                              DOF_indexes_[position] = NULL_IDX;
@@ -1802,7 +1802,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( const char* file )
  {
     char  outfile[INFO_STRING];
@@ -1817,7 +1817,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
-     for ( size_t i=0U; i<G_.Rows(); i++ )
+     for ( auto i{0}; i<G_.Rows(); i++ )
        {
           for ( size_t j=0U; j<G_.Cols(); j++ )
             if ( G_.At(i,j) != 0. ) ofs << 1 <<" ";
@@ -1867,7 +1867,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
     bool                    verbose_;
 
 */
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Out() const
  {
      cout <<"\nPDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Out:\n";

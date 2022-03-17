@@ -21,14 +21,14 @@
 
 namespace csmp {
 
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Region;
-template<size_t> class Boundary;
-template<size_t> class SplitBoundary;
-template<size_t> class Model;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Region;
+template<uint32_t> class Boundary;
+template<uint32_t> class SplitBoundary;
+template<uint32_t> class Model;
 
 /** for compile-time type compatibility checking between csmp enumerations and types
         
@@ -36,7 +36,7 @@ template<size_t> class Model;
         
         static_assert( TypeMatchesVariablePlacement<type, placement>::value, "type does not match variable placement");
  */
-template <template<size_t> class T, PLACEMENT IT> struct TypeMatchesVariablePlacement {
+template <template<uint32_t> class T, PLACEMENT IT> struct TypeMatchesVariablePlacement {
     enum { value = false };
  };
  
@@ -68,7 +68,7 @@ template <> struct TypeMatchesVariablePlacement<Model,MODEL> {
  
 
 /// For variables placed on the integration points (Gauss quadrature points) of Element, Face or InterFace objects
-template <template<size_t> class T, PLACEMENT IT> struct TypeMatchesFEM_IP_Placement {
+template <template<uint32_t> class T, PLACEMENT IT> struct TypeMatchesFEM_IP_Placement {
     enum { value = false };
  };
  
@@ -85,7 +85,7 @@ template <> struct TypeMatchesFEM_IP_Placement<InterFace,INTER_FACE_INTEGRATION_
 
 
 /// For variables placed on finite volume sector integration points
-template <template<size_t> class T, PLACEMENT IT> struct TypeMatchesFVM_SIP_Placement {
+template <template<uint32_t> class T, PLACEMENT IT> struct TypeMatchesFVM_SIP_Placement {
     enum { value = false };
  };
  
@@ -102,7 +102,7 @@ template <> struct TypeMatchesFVM_SIP_Placement<InterFace,INTER_FACE_SECTOR_INTE
 
 
 /// For variables placed on finite volume facet integration points
-template <template<size_t> class T, PLACEMENT IT> struct TypeMatchesFVM_FIP_Placement {
+template <template<uint32_t> class T, PLACEMENT IT> struct TypeMatchesFVM_FIP_Placement {
     enum { value = false };
  };
  
@@ -121,8 +121,8 @@ template <> struct TypeMatchesFVM_FIP_Placement<InterFace,INTER_FACE_FACET_INTEG
 class ScalarVariable;
 class ArrayVariable;
 class FlaggArrayariable;
-template<size_t> class VectorVariable;
-template<size_t> class TensorVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
 
 /** for compile-time type compatibility checking between csmp enumerations and types
         
@@ -134,7 +134,7 @@ template <class T, VARIABLE_TYPE IT> struct TypeMatchesVariableType {
     enum { value = false };
  };
 
-template <template<size_t> class T, VARIABLE_TYPE IT> struct TemplateTypeMatchesVariableType {
+template <template<uint32_t> class T, VARIABLE_TYPE IT> struct TemplateTypeMatchesVariableType {
     enum { value = false };
  };
  

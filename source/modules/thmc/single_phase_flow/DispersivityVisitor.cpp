@@ -10,7 +10,7 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg, 
                                                 const char* dispersivity, const char* pore_velocity, 
                                                 double diffusivity, double dispersion_long, 
@@ -43,7 +43,7 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
     		       
   }
 
-template<size_t dim>
+template<uint32_t dim>
 DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg, 
                                                  const char* dispersivity, const char* pore_velocity, 
                                                  const char* diffusivity,  const char* dispersion_long, 
@@ -82,12 +82,12 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 DispersivityVisitor< dim>::~DispersivityVisitor() 
  {}
 
 
-template<size_t dim>
+template<uint32_t dim>
 void DispersivityVisitor< dim>::Visit(Element< dim>* n)   
  {     
    
@@ -112,7 +112,7 @@ void DispersivityVisitor< dim>::Visit(Element< dim>* n)
    double cross_term(0.0);
 
    // diffusion
-   for ( size_t i=0; i<dim; i++ ) disp(i,i) = dp();
+   for ( auto i=0; i<dim; i++ ) disp(i,i) = dp();
 
    if ( v_abs != 0.0 ) {
        // xx

@@ -6,7 +6,7 @@ namespace csmp {
 
 
 // LINEAR RELATIVE PERMEABILITY MODEL
-template<size_t dim>
+template<uint32_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                               const char* permeability, 
                                               double viscosity_nw, double viscosity_w,
@@ -22,7 +22,7 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& datab
   {
   }
 
-template<size_t dim>
+template<uint32_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                          const char* permeability,
                                          double viscosity_nw, double viscosity_w,
@@ -42,7 +42,7 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& datab
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -64,7 +64,7 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel( const PropertyDatabase<dim>& data
  }
 
 // LINEAR RELATIVE PERMEABILITY MODEL
-template<size_t dim>
+template<uint32_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& database,
                                          const char* permeability,
                                          double viscosity_nw, double viscosity_w,
@@ -84,7 +84,7 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel(const PropertyDatabase<dim>& datab
     pc_max_ =  TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 LinearTwoPhaseModel<dim>::LinearTwoPhaseModel( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -108,14 +108,14 @@ LinearTwoPhaseModel<dim>::LinearTwoPhaseModel( const PropertyDatabase<dim>& data
 
 
 
-template<size_t dim> 
+template<uint32_t dim> 
 LinearTwoPhaseModel<dim>::~LinearTwoPhaseModel()
  {
  }
 
 
 /// Reading parameters for the linear relperm model
-template<size_t dim>
+template<uint32_t dim>
 void LinearTwoPhaseModel<dim>::Initialize( const Element<dim>& e )
  {
     TwoPhaseModel<dim>::swr_ = e.Read( TwoPhaseModel<dim>::swr_key_ );
@@ -149,7 +149,7 @@ void LinearTwoPhaseModel<dim>::Initialize( const Element<dim>& e )
  
  
  
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::krw_Phase() const
  {
     return TwoPhaseModel<dim>::seff_;
@@ -157,13 +157,13 @@ double LinearTwoPhaseModel<dim>::krw_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::krn_Phase() const
  {
     return 1. - TwoPhaseModel<dim>::seff_;
  } 
  
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dkrwds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -172,7 +172,7 @@ double LinearTwoPhaseModel<dim>::dkrwds_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dkrnds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -180,7 +180,7 @@ double LinearTwoPhaseModel<dim>::dkrnds_Phase() const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::pc_Phase( ) const
 {
     if ( TwoPhaseModel<dim>::seff_ <= 0. )
@@ -196,7 +196,7 @@ double LinearTwoPhaseModel<dim>::pc_Phase( ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dpcds_Phase( ) const
 {
     if ( ( TwoPhaseModel<dim>::seff_ < 0. ) || ( TwoPhaseModel<dim>::seff_ > 1. ) )
@@ -211,7 +211,7 @@ double LinearTwoPhaseModel<dim>::dpcds_Phase( ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::Sw_Phase( double pc ) const
 {
     // not unique solution
@@ -235,7 +235,7 @@ double LinearTwoPhaseModel<dim>::Sw_Phase( double pc ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dsdpc_Phase( double ) const
 {
     // not unique solution
@@ -249,7 +249,7 @@ double LinearTwoPhaseModel<dim>::dsdpc_Phase( double ) const
 
 
 /// for the wetting phase
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
 {
     // linear relperm model
@@ -263,7 +263,7 @@ double LinearTwoPhaseModel<dim>::MaxFractionalFlowDerivative() const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dfds() const
  {   
    //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double>(1.) ) )
@@ -280,7 +280,7 @@ double LinearTwoPhaseModel<dim>::dfds() const
  
  
 
-template<size_t dim>
+template<uint32_t dim>
 double LinearTwoPhaseModel<dim>::dGds( ) const
  {
    //if ( ( TwoPhaseModel<dim>::seff_ <= static_cast<double>(0.) ) || ( TwoPhaseModel<dim>::seff_ >= static_cast<double>(1.) ) )

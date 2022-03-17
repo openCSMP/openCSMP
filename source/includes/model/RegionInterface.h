@@ -7,9 +7,9 @@ namespace csmp {
 
 class PropertyConstraints;
 class ModelTopology;
-template<size_t> class Region;
-template<size_t> class Element;
-template<size_t> class Point;
+template<uint32_t> class Region;
+template<uint32_t> class Element;
+template<uint32_t> class Point;
 
 /**
 @brief Policy of the class model for the management of its labeled subdomains that
@@ -63,7 +63,7 @@ are not defined. A rule is needed to assign them in a consistent fashion
 TODO: @todo !!! all methods that create regions from regions must also copy potential regional property values to these
 
 */
-template<size_t dim, template<size_t> class REGION_COMPLEX>
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 class RegionInterface {
   public:
     RegionInterface() {}
@@ -143,8 +143,8 @@ class RegionInterface {
     /// treats the values of the property as discrete, forming one region per value and returning their names into the set; returns number of regions
     size_t FormRegionsFromPropertyValues( const char* prop, std::set<std::string>& region_names );
 
-    /// forms unique regions from the lists of element ids (0..n-1) stored in the model topology object, and assigns region number to the material ID of the elements; returns # of regions
-    size_t FormRegionsFrom( const ModelTopology& );
+    /// forms unique regions from the supplied element ids (0..n-1) stored in ModelTopology; assigns region number to element material IDs if empty; returns # of regions formed
+    size_t FormRegionsFrom( const ModelTopology&, bool ignore_domain_type_identifiers=false );
 
     // FROM THE 'MODEL' REGION THAT NEEDS TO BE CREATED BEFORE
 
@@ -164,7 +164,7 @@ class RegionInterface {
     size_t FormRegionFrom( const char* regionname, const std::set<std::string>& region_names );
 
     /// ; returns number of elements
-    template<template<size_t> class ElementComp>
+    template<template<uint32_t> class ElementComp>
     size_t FormRegionFrom( const char* regionname, ElementComp<dim> const& elementComp, const char* hostRegion = "Model" );
 
 

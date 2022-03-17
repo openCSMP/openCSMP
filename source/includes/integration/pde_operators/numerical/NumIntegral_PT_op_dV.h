@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// vector solution variable: integration of 'body forces', e.g., action of gravity
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref, const char* oper, const char* test );

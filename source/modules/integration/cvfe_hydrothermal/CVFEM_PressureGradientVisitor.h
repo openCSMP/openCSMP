@@ -14,7 +14,7 @@ namespace csmp {
 
 /// Calculating the pressure gradient within the CVFEM scheme (Weis et al., Geofluids, 2014).
 
-template<size_t dim>
+template<uint32_t dim>
 class CVFEM_PressureGradientVisitor : public Visitor<dim> {
   public:
     CVFEM_PressureGradientVisitor( Model<dim>& model, 

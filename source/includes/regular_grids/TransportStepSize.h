@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class TransportStepSize : public Interrelation<dim> {
   public:
     TransportStepSize( const PropertyDatabase<dim>& p, 

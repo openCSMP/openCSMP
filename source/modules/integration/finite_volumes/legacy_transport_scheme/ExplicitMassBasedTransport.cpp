@@ -7,7 +7,7 @@ namespace csmp{
 
 /// single-phase passive advection (group-restricted)
 /// with different lhs and rhs
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 ExplicitMassBasedTransport<dim,STP>::ExplicitMassBasedTransport(const char* group,
                                                                 Model<dim>& sg,
                                                                 const char* porosity,
@@ -31,7 +31,7 @@ ExplicitMassBasedTransport<dim,STP>::ExplicitMassBasedTransport(const char* grou
     ///
 } // end constructor (solute transport-only)
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const size_t var_comp_nr)
 {
     /// unneccessary for compressible flow(??) (there needs to be a better comment here! julian, july 2014)
@@ -98,7 +98,7 @@ void ExplicitMassBasedTransport<dim,STP>::AssignFluxBoundaryConditions(const siz
         }
 } // end AssignFluxBoundaryConditions
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 double  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
 {
     this->UpdateProjectedVelocitiesAndFluxBalances();
@@ -134,11 +134,11 @@ double  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
 /**
     Accumulates facet fluxes (volume * saturation) coming into the control volumes into the result vector.
 */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
     // for all finite-volume facets
-    for ( size_t i=0U; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
+    for ( auto i{0}; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         this->gref_.E(this->stencil_.eidx_)->FV()->FacetEdgeNodes( i, this->stencil_.inside_node_, this->stencil_.outside_node_ );
@@ -165,7 +165,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
     }
 }
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector<double>& RESULT)
 {
 #if defined(_OPENMP )
@@ -173,7 +173,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
     Element<dim>* ep = this->gref_.E(this->thread_stencil_processor_[tid]->eidx_);
 
     // for all finite-volume facets
-    for ( size_t i=0U; i<ep->FV()->Facets(); i++ )
+    for ( auto i{0}; i<ep->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         ep->FV()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );
@@ -201,7 +201,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
 #endif
 } // end AccumulateFluxUpwindProductsOMP
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval , const size_t var_comp_nr)
 {
     if (this->adv1_key_.type == SCALAR)
@@ -241,7 +241,7 @@ void ExplicitMassBasedTransport<dim,STP>::ComposeSolution(double time_interval ,
     }
 } // end ComposeSolution (passive advection case)
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double time_interval)
 {
     //TODO if porevolume changes -> updateporevolumes
@@ -260,7 +260,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable( double time_interval)
 
 } // end AdvectVariable
 
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
         double time_increment, bool output_result_range )
 {
@@ -333,7 +333,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
             } // end of accumulation
         }
         for  (size_t tid = 0 ; tid < omp_get_max_threads();tid++){
-            for (size_t i = 0 ; i < this->gref_.Nodes();i++)
+            for (auto i = 0 ; i < this->gref_.Nodes();i++)
                 this->RESULT[i]+=RESULT[tid][i];
         }
 #endif
@@ -368,7 +368,7 @@ Note, that in this case, AdvectVariable as created before the date in this docum
 contain subcycling of time intervals.  This statement is valid only for ExplicitMassBasedTransport.
 
  */
-template<size_t dim,template<size_t> class STP>
+template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AdvectVariableSingleStep( double time_increment,
                                                                     bool apply_flux_balance_correction,
                                                                     bool update_pore_volumes )

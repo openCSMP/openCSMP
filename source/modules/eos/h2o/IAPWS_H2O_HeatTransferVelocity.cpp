@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 IAPWS_H2O_HeatTransferVelocity<dim>::IAPWS_H2O_HeatTransferVelocity( const PropertyDatabase<dim>& pref ) 
       : Interrelation<dim>(pref),
         V( Interrelation<dim>::GlobalProperty("velocity") ),
@@ -21,7 +21,7 @@ IAPWS_H2O_HeatTransferVelocity<dim>::IAPWS_H2O_HeatTransferVelocity( const Prope
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void IAPWS_H2O_HeatTransferVelocity<dim>::Calculate()
  {
     V.AssignTo( vel );

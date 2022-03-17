@@ -8,7 +8,7 @@ namespace csmp {
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 PressureSaturationInitializer<dim>::PressureSaturationInitializer( Model<dim>& model,
                                                                    const char* water_saturation,
                                                                    const char* oil_saturation,
@@ -79,7 +79,7 @@ PressureSaturationInitializer<dim>::PressureSaturationInitializer( Model<dim>& m
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 PressureSaturationInitializer<dim>::~PressureSaturationInitializer()
 {
 } // end ~PressureSaturationInitializer
@@ -87,7 +87,7 @@ PressureSaturationInitializer<dim>::~PressureSaturationInitializer()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double PressureSaturationInitializer<dim>::FreeWaterLevel()
 {
     return ( water_oil_contact_ - entry_pressure_ /
@@ -98,7 +98,7 @@ double PressureSaturationInitializer<dim>::FreeWaterLevel()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double PressureSaturationInitializer<dim>::PressureAtFreeWaterLevel()
 {
 
@@ -120,7 +120,7 @@ double PressureSaturationInitializer<dim>::PressureAtFreeWaterLevel()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double PressureSaturationInitializer<dim>::WaterSaturationFromPhasePressures(double oil_pressure,
                                                                                double water_pressure)
 {
@@ -133,7 +133,7 @@ double PressureSaturationInitializer<dim>::WaterSaturationFromPhasePressures(dou
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PressureSaturationInitializer<dim>::Visit(Node<dim>* node)
 {
 

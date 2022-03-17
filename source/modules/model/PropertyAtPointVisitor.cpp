@@ -9,7 +9,7 @@ namespace csmp {
 
     @author Andrey Mezentsev (10/2004)
 */
-template<size_t dim>
+template<uint32_t dim>
 PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
                                                      const map <size_t, vector<double> > & inXYZ,
                                                      const char *propertyName )
@@ -61,37 +61,37 @@ PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 PropertyAtPointVisitor<dim>::~PropertyAtPointVisitor()
 {
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetDebugOn()
 {
     debug_ = true;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetContinueSearchOff()
 {
     continueSearch_ = false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetBruteForceOff()
 {
     bruteforce_ = false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetBruteForceOn()
 {
     bruteforce_ = true;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetPropertyKeys( const char* prop )
 {
     csmp::ErrorHandler& csmp_error(csmp::ErrorHandler::Instance());
@@ -105,7 +105,7 @@ void PropertyAtPointVisitor<dim>::SetPropertyKeys( const char* prop )
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyAtPointVisitor<dim>::CheckResults( )
 {
     bool success( ( numberOfPointsFound_ == numberOfPoints_ ) ? true: false );
@@ -123,7 +123,7 @@ bool PropertyAtPointVisitor<dim>::CheckResults( )
 /**
    returns NULL pointer if the element cannot be found
 */
-template<size_t dim>
+template<uint32_t dim>
 Element<dim>* PropertyAtPointVisitor<dim>::ElementThatContains( size_t point ) const
 {
     typename map<size_t,Element<dim>*>::const_iterator it=elements_found_.find(point);
@@ -131,13 +131,13 @@ Element<dim>* PropertyAtPointVisitor<dim>::ElementThatContains( size_t point ) c
     return (*it).second;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 map<size_t,size_t>&  PropertyAtPointVisitor<dim>::TargetFound()
 {
     return elements_ids_found_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt, ScalarVariable& sc )
 
 {
@@ -149,7 +149,7 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt, ScalarVariable& sc
     sc = (*it).second;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
                                                           VectorVariable<dim>& vc )
 {
@@ -161,7 +161,7 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
     vc = (*it).second;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
                                                           TensorVariable<dim>& ts )
 {
@@ -173,7 +173,7 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
     ts = (*it).second;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
                                                           ArrayVariable& av )
 
@@ -186,7 +186,7 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
     av = (*it).second;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
                                                           FlaggedArrayVariable& fav )
 
@@ -204,7 +204,7 @@ void PropertyAtPointVisitor<dim>::PropertyValueAt( size_t pt,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> currXyz,
                                                        Element<dim>* e, VectorVariable<dim> bc )
 {
@@ -217,14 +217,14 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> curr
     for ( size_t i=0; i<e->Nodes(); i++ )
     {
         distance = 0.0;
-        for ( size_t j=0; j<dim; j++ )
+        for ( auto j=0; j<dim; j++ )
             distance += (e->FE()->XYZ(i,j)- bc[j])*(e->FE()->XYZ(i,j)- bc[j]);
         distance = sqrt (distance );
         max_distance = std::max( max_distance, distance);
     }
 
     distance = 0.0;
-    for ( size_t j=0; j<dim; j++ )
+    for ( auto j=0; j<dim; j++ )
         distance += (currXyz[j]- bc[j])*(currXyz[j]- bc[j]);
     distance = sqrt (distance );
 
@@ -237,7 +237,7 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> curr
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<double> currXyz,
                                                               Element<dim>* e,
                                                               VectorVariable<dim> bc )
@@ -275,8 +275,8 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
                     std::cout<<"Point: x="<<currXyz[0]<<"; y="<<currXyz[1]<<std::endl;
 
                 vector<double> xyz(dim,0.0);
-                for ( size_t i=0; i<e->Nodes(); i++ ) {
-                    for ( size_t j=0; j<dim; j++ )
+                for ( auto i=0; i<e->Nodes(); i++ ) {
+                    for ( auto j=0; j<dim; j++ )
                         xyz[j] += NI_[i] * e->FE()->XYZ(i,j);
                 }
 
@@ -300,7 +300,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double> currXyz,Element<dim>* e, VectorVariable<dim> bc )
 {
 
@@ -310,8 +310,8 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
         //
         //go through the neighbouring elements of element e unless target is found
         //
-        set<size_t> listOfCheckedElements;  // set of previously checked elements for a given point
-        typename set<size_t>::iterator itChd;
+        set<uint32_t> listOfCheckedElements;  // set of previously checked elements for a given point
+        typename set<uint32_t>::iterator itChd;
         VectorVariable<dim> current_bc;
         typename vector<double>::const_iterator Nmin;
         typename vector<double>::const_iterator Nmax;
@@ -362,7 +362,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
                 minimumNi       = *Nmax;
 
                 // Visitation of the element neigbours in order to find the element with the min value of shape function
-                for( size_t i=0; i<CurrentElement_->Neighbors(); i++ )
+                for( auto i=0; i<CurrentElement_->Neighbors(); i++ )
                 {
                     // if not a boundary element
                     if( CurrentElement_->Neighbor(i) != NULL)
@@ -466,7 +466,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
 {
     if( continueSearch_ )
@@ -535,7 +535,7 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPV_ );
 
-                        for(size_t i=0;i<dim;i++)
+                        for(auto i=0;i<dim;i++)
                         {
                             propV_[itX->first](i)=0.0;
                             for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
@@ -551,9 +551,9 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPT_ );
-                        for(size_t i=0;i<dim;i++)
+                        for(auto i=0;i<dim;i++)
                         {
-                            for(size_t k=0;k<dim;k++)
+                            for(auto k=0;k<dim;k++)
                             {
                                 propT_[itX->first](i,k)=0.0;
                                 for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
@@ -623,13 +623,12 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::Visit(Model<dim>* m)
 {
 
-    csmp::Region<dim>&  sg(m->Region("Model"));
-    for ( typename vector<csmp::Element<dim>*>::iterator
-          el_it=sg.ElementsBegin(); el_it!=sg.ElementsEnd(); el_it++ )
+    csmp::Region<dim>&  res(m->Region("Model"));
+    for ( auto el_it=res.CellVector().begin(); el_it!=res.CellVector().end(); el_it++ )
        (*el_it)->Accept( *this );
 }
 

@@ -15,8 +15,8 @@ namespace csmp {
 The upwinding is based on the basic operand (which will be the pressure)
 variable.
 */
-template<size_t dim,class SIMPLEX>
-Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Jacobian_Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::Jacobian_Upwind_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             				const char* oper, 
                                                             				const char* basic, 
                                                             				const char* test,
@@ -81,8 +81,8 @@ Operand is.
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. Else, 
 */
-template<size_t dim,class SIMPLEX>
-void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -104,8 +104,8 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMP
 
 
 /// @todo compute Jacobian
-template<size_t dim,class SIMPLEX>
-void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -119,13 +119,13 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( co
     // generate delta vector
     // * can be replaced by STL algorithm
     vector<double>  delta_up(e.Nodes());
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
       delta_up[i] = el_d_upwind[i]() - el_upwind[i]();
     }
     
     // calculate DN as modified DNT by multiplying with p_k-p_i
     DN.Resize(e.Nodes(), e.Nodes());
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
       for (size_t k = 0; k < e.Nodes(); ++k) {
         DN(i, k) = DNT(i, k)*(el_test_orig[k]() - el_test_orig[i]());
       }
@@ -135,7 +135,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( co
     MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim>::LHS.Fill(0.0);
      
-    for (size_t i = 0; i < e.Nodes(); ++i) {
+    for (auto i = 0; i < e.Nodes(); ++i) {
       for (size_t k = 0; k < e.Nodes(); ++k) {
         if (i != k) {
           const double decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
@@ -160,7 +160,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( co
     
     // loop over j to get an column in the element tangent stiffness matrix
     for (size_t j = 0; j < e.Nodes(); ++j) {
-      for (size_t i = 0; i < e.Nodes(); ++i) {
+      for (auto i = 0; i < e.Nodes(); ++i) {
         for (size_t k = 0; k < e.Nodes(); ++k) {
           if (i != k) {
             fac_upwind = 0.0;

@@ -18,16 +18,16 @@ namespace csmp {
     variable.
 
 */
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_dNT_dN_dV : public MathOperatorRHS<dim> {
   public:
     Integral_dNT_dN_dV( const PropertyDatabase<dim>&, const char* test );
                         
     virtual ~Integral_dNT_dN_dV() {}
 
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void ComputeContribution( const CELL& );
   
-    virtual Integral_dNT_dN_dV<dim,SIMPLEX>* clone() const { return new Integral_dNT_dN_dV<dim,SIMPLEX> (*this); }
+    virtual Integral_dNT_dN_dV<dim,CELL>* clone() const { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, UNITY; 

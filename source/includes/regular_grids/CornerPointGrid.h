@@ -1,14 +1,57 @@
 #ifndef CORNER_POINT_GRID_UOM_H
 #define CORNER_POINT_GRID_UOM_H
 
-#include "VSet.h"
-#include "ModelTopology.h"
 #include "CornerPointCell.h"
-#include "CSMP_highLevelUtilities.h"
+#include "Pillar.h"
+
+/**
+   Hash table utility class for storing (i,j,k) coordinates, in this case the i,j,k indices of the CornerPointGrid
+*/
+struct ijk {
+  size_t  i, j, k;
+
+  bool operator<( const ijk& rhs ) const {
+      if ( i != rhs.i ) return i < rhs.i;
+      if ( j != rhs.j ) return j < rhs.j;
+      return j < rhs.j;
+    }
+
+  bool operator==( const ijk& rhs ) const {
+      return i == rhs.i && j == rhs.j && k == rhs.k;
+    }
+
+  ijk( uint32_t i, uint32_t j, uint32_t k )
+    : i( i ), j( j ), k( k ) {}
+};
+
+
+namespace std { // extending standard by template specialisation
+
+/** Hashtable support for ijk */
+template<> struct hash<ijk> {
+  size_t operator()( const ijk& key ) const
+    {
+      hash<size_t> h;
+      // (1 + sqrt 5) * 2^30
+      size_t s = 0xcf1bbcdd;
+      // Boost hash_combine function
+      s ^= h( key.i ) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      s ^= h( key.j ) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      s ^= h( key.k ) + 0x9e3779b9 + (s << 6) + (s >> 2);
+      return s;
+    }
+};
+
+} // end std
+
 
 namespace csmp {
 
 class CellGenerator;
+class ModelTopology;
+class ScalarVariable;
+template<uint32_t> class VSet;
+template<uint32_t> class Point;
 
 class  CellCenteredGrid
 {
@@ -52,7 +95,7 @@ public:
   ~CornerPointGrid();
 
   void CreateModel( const std::string&     model_name,
-                    csmp::VSet<3U>&       vset,
+                    csmp::VSet<3U>&        vset,
                     csmp::ModelTopology&   model_topology,
                     const std::vector<double>& zcorn,
                     std::set<std::string>& regions,
@@ -60,13 +103,13 @@ public:
                     std::set<std::string>& wells,
                     bool tetra_mesh,
                     bool exclude_inactive_cells
-                    );
+                 );
 
   template<class VarType>
-  void WritePropertyToVSet( csmp::VSet<3U>&            vset,
+  void WritePropertyToVSet( csmp::VSet<3U>&             vset,
                             const std::vector<VarType>& prop_data,
                             const std::string&          prop_name,
-                            const csmp::PLACEMENT&      prop_place ) const;
+                            const csmp::PLACEMENT&    prop_place ) const;
 
   /// return the number of blocks the grid has in the given direction
   size_t DimensionI() const { return NX_; }
@@ -76,7 +119,7 @@ public:
   void AssignDimensions( size_t nx, size_t ny, size_t nz );
 
   void Resize( size_t nx, size_t ny );
-  Pillar& operator()( size_t i, size_t j );
+  csmp::Pillar& operator()( size_t i, size_t j );
 
   std::vector<uint8_t>& GetCellActivity();
 
@@ -85,9 +128,8 @@ public:
   std::multimap<ijk, size_t>& IJKMap() { return elementMap; }
 
   void ConvertFromReservoirToCSMPcoordinateSystem( csmp::Point<3U>& pt ) const;
-
   bool ConstructLineElement( size_t& i, size_t& j, size_t& k, size_t& new_elemt_idx );
-  bool ConstructLineElement( ColumnCell& cell, size_t& i, size_t& j, size_t& k );
+  bool ConstructLineElement( csmp::ColumnCell& cell, size_t& i, size_t& j, size_t& k );
   CellGenerator* GetCellGenerator() { return generator_; }
 
 private:
@@ -95,8 +137,8 @@ private:
   size_t NY_; ///< max index of cell in y direction
   size_t NZ_; ///< max index of cell in z direction
 
-  std::vector<Pillar> pillars_;
-  std::map<std::pair<size_t, size_t>, Column> columns_;
+  std::vector<csmp::Pillar> pillars_;
+  std::map<std::pair<size_t, size_t>, csmp::Column> columns_;
   std::multimap<ijk, size_t> elementMap;
   CellGenerator* generator_;
 
@@ -110,21 +152,21 @@ private:
   void InitializeGridSpecs();
   void ConstructPillarsAndColumns( const std::vector<double>& zcorn );
   void ConstructFiniteElementsFromColumns( VSet<3U>& vset );
-  bool ConstructEclipseCell0000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_HEXAHEDRON
-  bool ConstructEclipseCell0001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_310_312
-  bool ConstructEclipseCell0010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_201_203
-  bool ConstructEclipseCell0011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_23
-  bool ConstructEclipseCell0100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_130_132
-  bool ConstructEclipseCell0101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_TETRAHEDRONS_130_132
-  bool ConstructEclipseCell0110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_12
-  bool ConstructEclipseCell0111( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_0
-  bool ConstructEclipseCell1000( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_021_023
-  bool ConstructEclipseCell1001( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_03
-  bool ConstructEclipseCell1010( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_TETRAHEDRONS_021_023
-  bool ConstructEclipseCell1011( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_1
-  bool ConstructEclipseCell1100( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_01
-  bool ConstructEclipseCell1101( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_2
-  bool ConstructEclipseCell1110( ColumnCell&  cell, size_t& i, size_t& j, size_t& k, ColumnCell* cellAbove, ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_3
+  bool ConstructEclipseCell0000( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_HEXAHEDRON
+  bool ConstructEclipseCell0001( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_310_312
+  bool ConstructEclipseCell0010( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_201_203
+  bool ConstructEclipseCell0011( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_23
+  bool ConstructEclipseCell0100( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_130_132
+  bool ConstructEclipseCell0101( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_TETRAHEDRONS_130_132
+  bool ConstructEclipseCell0110( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_12
+  bool ConstructEclipseCell0111( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_0
+  bool ConstructEclipseCell1000( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMIDS_021_023
+  bool ConstructEclipseCell1001( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_03
+  bool ConstructEclipseCell1010( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_TETRAHEDRONS_021_023
+  bool ConstructEclipseCell1011( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_1
+  bool ConstructEclipseCell1100( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PRISM_01
+  bool ConstructEclipseCell1101( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_2
+  bool ConstructEclipseCell1110( csmp::ColumnCell&  cell, size_t& i, size_t& j, size_t& k, csmp::ColumnCell* cellAbove, csmp::ColumnCell* cellBeneath ); //Eclipse cell type: ECLIPSE_CELL_PYRAMID_3
 
                                                                                                                                        // To add the degenerated elements into the map storage																															    
   void addElementToMap( size_t i, size_t j, size_t k, size_t elementID );

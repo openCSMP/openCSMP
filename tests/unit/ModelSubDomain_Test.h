@@ -12,6 +12,7 @@
 #include "Test.h"
 #include "ModelSubDomain.h"
 #include "CSMP_mathUtilities.h"
+#include "Box.h"
 
 namespace csmp {
 
@@ -23,7 +24,7 @@ class ModelSubDomain_Test : public Test {
     bool Test_EstablishNeighborConnectivity();
 
     /// compares node locations and connectivity
-    template<size_t dim,template<size_t> class simplicial_complex>
+    template<uint32_t dim,template<uint32_t> class simplicial_complex>
     bool CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>&,
                                  const ModelSubDomain<dim,simplicial_complex>&,
                                  bool verbose );
@@ -36,7 +37,7 @@ class ModelSubDomain_Test : public Test {
     - uses point locations for node comparison
 
 */
-template<size_t dim,template<size_t> class simplicial_complex>
+template<uint32_t dim,template<uint32_t> class simplicial_complex>
 bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>& domain1,
                                                   const ModelSubDomain<dim,simplicial_complex>& domain2,
                                                   bool verbose )
@@ -157,24 +158,24 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     _test( domain1.PerimeterElements() == domain2.PerimeterElements() );
    
     // are the interior elements the same ?
-    std::set<size_t>  interior_elmts1, interior_elmts2;
+    std::set<uint32_t>  interior_elmts1, interior_elmts2;
     for ( auto it=domain1.ElementsBegin(); it!=domain1.PerimeterElementsBegin(); ++it ) interior_elmts1.insert( (*it)->Idx() );
     for ( auto it=domain2.ElementsBegin(); it!=domain2.PerimeterElementsBegin(); ++it ) interior_elmts2.insert( (*it)->Idx() );
     _test( interior_elmts1 == interior_elmts2 );   
    
     // element connectivity (not assuming that elements are in same order)
-    std::set<std::vector<size_t> > plist_entries1;
+    std::set<std::vector<uint32_t> > plist_entries1;
     for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
-         std::vector<size_t> nodes( (*it)->Nodes() );
-         for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
+         std::vector<uint32_t> nodes( (*it)->Nodes() );
+         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
          plist_entries1.insert( move(nodes) );
       }
-    std::set<std::vector<size_t> > plist_entries2;
+    std::set<std::vector<uint32_t> > plist_entries2;
     for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
-         std::vector<size_t> nodes( (*it)->Nodes() );
-         for ( size_t i=0U; i<(*it)->Nodes(); ++i ) {
+         std::vector<uint32_t> nodes( (*it)->Nodes() );
+         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
 //std::cerr <<"\n"<< (*it)->Idx() <<": ";
@@ -195,19 +196,19 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     plist_entries2.clear();
    
     // comparing the element neighbor connectivity
-    std::set<std::vector<size_t> > pfverts_entries1;
+    std::set<std::vector<uint32_t> > pfverts_entries1;
     for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
-         std::vector<size_t> nbors( (*it)->Neighbors(),0 );
-         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+         std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
+         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
                 nbors[i] = (*it)->Neighbor(i)->Idx();
              }
          pfverts_entries1.insert( move(nbors) );
       }
-    std::set<std::vector<size_t> > pfverts_entries2;
+    std::set<std::vector<uint32_t> > pfverts_entries2;
     for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
-         std::vector<size_t> nbors( (*it)->Neighbors(),0 );
-         for ( size_t i=0U; i<(*it)->Neighbors(); ++i )
+         std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
+         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
                 nbors[i] = (*it)->Neighbor(i)->Idx();
              }

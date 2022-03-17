@@ -5,7 +5,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractVectorVariableComponent<dim>::ExtractVectorVariableComponent( const PropertyDatabase<dim>& p,
                                                                      const char* vec_var, 
                                                                      const char* scalar_var, 
@@ -41,7 +41,7 @@ ExtractVectorVariableComponent<dim>::ExtractVectorVariableComponent( const Prope
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 ExtractVectorVariableComponent<dim>::~ExtractVectorVariableComponent() {}
 
 

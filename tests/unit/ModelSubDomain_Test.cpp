@@ -52,9 +52,9 @@ void ModelSubDomain_Test::run()
      if ( test_binary_file_recovery1 )
        {
          VSet<3U>   vset;
-         const bool skewed(false), isoparametric(true);
+         const bool skewed(false);
          test_Create_Prism_Hexa_VSet( vset, skewed );
-         Model<3U>   model1( vset, isoparametric );
+         Model<3U>   model1( vset );
         
          //model1.CreateProperty( "box flag", "none", SCALAR, NODE );
          //model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
@@ -326,15 +326,15 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
     // adding 'element number' as a variable
     PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
     node_nums.Reserve( vset.Elements() );
-    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
 
-    Model<3U> model( vset, varFileName.c_str(), true );
+    Model<3U> model( vset, varFileName.c_str() );
 
     // 1. recreating the neighbor connectivity and comparing
     // -----------------------------------------------------
@@ -344,10 +344,10 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     
     bool no_mismatch(true);
     for ( vector<Element<3U>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
-      for ( size_t i=0U; i<(*it)->Neighbors(); ++i ) {
+      for ( auto i{0}; i<(*it)->Neighbors(); ++i ) {
            if ( (*it)->Neighbor(i) != nullptr ) {
-                const size_t elmt_id = static_cast<size_t>((*it)->Read( eid_key ));
-                const size_t nbor_id = static_cast<size_t>((*it)->Neighbor(i)->Read( eid_key ));
+                const size_t elmt_id = static_cast<uint32_t>((*it)->Read( eid_key ));
+                const size_t nbor_id = static_cast<uint32_t>((*it)->Neighbor(i)->Read( eid_key ));
                _test( nbor_id == vset.Pfvert( elmt_id, i ) );
                 if ( nbor_id != vset.Pfvert( elmt_id, i ) ) {
                      cerr <<"\nelmt "<< elmt_id <<":"<< i <<": vset vs. reconstructed neighbor: ";

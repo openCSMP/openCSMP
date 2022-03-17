@@ -9,10 +9,10 @@ using namespace std;
 
 namespace csmp {
 
-template <size_t dim>
+template <uint32_t dim>
 size_t SimulatorControl<dim>::outputVTU_counter_=0;
 
-template <size_t dim>
+template <uint32_t dim>
 SimulatorControl<dim>::SimulatorControl(SimulatorSetup<dim>* ss):
     simulator_setup_(ss),restart_(false),verbose_(ss->Verbose()),
     project_name_(ss->GetProjectName()),pdb_(ss->GetModel()->Database()),
@@ -32,7 +32,7 @@ SimulatorControl<dim>::SimulatorControl(SimulatorSetup<dim>* ss):
 {
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::Initialize()
 {
     cout<<" *****************************************************************"<<endl;
@@ -70,7 +70,7 @@ void SimulatorControl<dim>::Initialize()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double SimulatorControl<dim>::GetInitialSimulatorStartTimeFromIntervals()
 {
     double time = 10e52;
@@ -82,7 +82,7 @@ double SimulatorControl<dim>::GetInitialSimulatorStartTimeFromIntervals()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 string SimulatorControl<dim>::ParseTrueOrFalse(bool trueorfalse)
 {
     if (trueorfalse)
@@ -91,7 +91,7 @@ string SimulatorControl<dim>::ParseTrueOrFalse(bool trueorfalse)
         return "false";
 }
 
-template<size_t dim>
+template<uint32_t dim>
 string SimulatorControl<dim>::ParseWellMode(WELL_MODE mode)
 {
     if (mode==SHUTIN)
@@ -104,7 +104,7 @@ string SimulatorControl<dim>::ParseWellMode(WELL_MODE mode)
         return "UNKNOWN";
 }
 
-template<size_t dim>
+template<uint32_t dim>
 WELL_MODE SimulatorControl<dim>::ParseIntegerToWellMode(int32_t i)
 {
     if (i==0)
@@ -117,7 +117,7 @@ WELL_MODE SimulatorControl<dim>::ParseIntegerToWellMode(int32_t i)
         return SHUTIN; // for any other mode, the well is simply parsed as SHUT IN.
 }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t SimulatorControl<dim>::GetIntervalNumber(double current_time){
     //    auto ith = std::lower_bound(this->GetIntervals().begin(),this->GetIntervals().end(),make_pair(current_time,string("test_string")),
     //                                [](pair<double,string> lhs, pair<double,string> rhs) -> bool { return lhs.second < rhs.second; });
@@ -129,7 +129,7 @@ size_t SimulatorControl<dim>::GetIntervalNumber(double current_time){
     return int_number;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 string SimulatorControl<dim>::GetIntervalName(double current_time){
 
 //    auto ith = std::lower_bound(this->GetIntervals().begin(),this->GetIntervals().end(),make_pair(current_time,string("test_string")),
@@ -150,7 +150,7 @@ string SimulatorControl<dim>::GetIntervalName(double current_time){
     return int_name;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::QuietSolvers()
 {
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -169,7 +169,7 @@ void SimulatorControl<dim>::QuietSolvers()
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::OutputRestartFile(bool manually_triggered)
 {
     static size_t restartfilecounter(1);
@@ -194,13 +194,13 @@ void SimulatorControl<dim>::OutputRestartFile(bool manually_triggered)
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 ComputationalSettings& SimulatorControl<dim>::RunSettings()
 {
     return this->simulator_setup_->GetRunSettings();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::PrintRangeOfVariablesToScreen()
 {
     list<SimulatorSetupParameter>::iterator lit;
@@ -233,7 +233,7 @@ void SimulatorControl<dim>::PrintRangeOfVariablesToScreen()
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::UpdateCurrentRunTime()
 {
 #ifdef _OPENMP
@@ -249,7 +249,7 @@ void SimulatorControl<dim>::UpdateCurrentRunTime()
 #endif
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::Output()
 {
     // register the timestep, model time, and run time for possible output.
@@ -269,7 +269,7 @@ void SimulatorControl<dim>::Output()
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::OutputVariableToRegionVTUFiles()
 {
     /// @todo put conditional output options here (i.e. OutputTimes)
@@ -282,7 +282,7 @@ void SimulatorControl<dim>::OutputVariableToRegionVTUFiles()
     this->outputVTU_counter_++;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double SimulatorControl<dim>::GetCurrentIntervalEndTime(double current_simulation_time)
 {
     /** Here we look in the stored time interval start times to see which is the the closest
@@ -301,7 +301,7 @@ double SimulatorControl<dim>::GetCurrentIntervalEndTime(double current_simulatio
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double SimulatorControl<dim>::GetCurrentIntervalStartTime(double current_simulation_time)
 {
     /** Here we look in the stored time interval start times to see which is the the closest
@@ -318,7 +318,7 @@ double SimulatorControl<dim>::GetCurrentIntervalStartTime(double current_simulat
         return *possibleIntervalStartTimes.rbegin();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorControl<dim>::YesOrNo()
 {
     bool answer(false),yesorno(false);
@@ -340,7 +340,7 @@ bool SimulatorControl<dim>::YesOrNo()
     return yesorno;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorControl<dim>::CheckForDirichletEssentialCondition(csmp::Index key)
 {
     // checks that at least one node of the domain has a pressure condition.
@@ -354,7 +354,7 @@ bool SimulatorControl<dim>::CheckForDirichletEssentialCondition(csmp::Index key)
     return false;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool SimulatorControl<dim>::InteractiveInputNodeValue(csmp::Index key, SUBDOMAIN_PART sub)
 {
     cout<<" Please type in the coordinates of the point where you would like to set an essential condition "<<endl;
@@ -377,7 +377,7 @@ bool SimulatorControl<dim>::InteractiveInputNodeValue(csmp::Index key, SUBDOMAIN
 
 /// This function sets Dirichlet values on points closest to the supplied coordinates.  Note that
 /// This will only address those nodes in the interior of the model.
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SetReferencePointValuesModelInterior()
 {
     for (auto it = this->GetReferencePointsAndValues().begin(); it != this->GetReferencePointsAndValues().end();it++){
@@ -391,7 +391,7 @@ void SimulatorControl<dim>::SetReferencePointValuesModelInterior()
 
 /// This function sets Dirichlet values on points closest to the supplied coordinates.  Note that
 /// This will only address those nodes in the perimeter of the model.
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SetReferencePointValuesModelPerimeter()
 {
     for (auto it = this->GetReferencePointsAndValues().begin(); it != this->GetReferencePointsAndValues().end();it++){
@@ -403,7 +403,7 @@ void SimulatorControl<dim>::SetReferencePointValuesModelPerimeter()
     }
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SetThicknessFactorFromWellRadii()
 {
     ScalarVariable wellradius;
@@ -425,13 +425,13 @@ void SimulatorControl<dim>::SetThicknessFactorFromWellRadii()
 
         if (containsLineElements(wref)){
             wref.Read(this->wellRadius_,wellradius);
-            for (typename vector<Element<dim>* >::iterator eit=wref.ElementsBegin();eit!=wref.ElementsEnd();eit++)
+            for (auto eit=wref.ElementsBegin();eit!=wref.ElementsEnd();eit++)
                 (*eit)->Store(this->thickness_,makeScalar(PLAIN,wellradius()*wellradius()*PI));
         }
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 {
     map<int32_t,string> location_choice;
@@ -565,7 +565,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 }
 
 
-//template <size_t dim>
+//template <uint32_t dim>
 //void SimulatorControl<dim>::ManageTimeIntervals()
 //{
 //    cout<<"-----------------------------------------------------------"<<endl;
@@ -578,7 +578,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 //    std::string choice="";
 //    getline(cin, choice);
 //    cout<<endl;
-//    size_t nintervals=stringToNumber<size_t>(choice);
+//    size_t nintervals=stringToNumber<uint32_t>(choice);
 //    cout<<" You have chosen to establish "<<nintervals<<" time intervals."<<endl;
 //    cout.flush();
 
@@ -590,7 +590,7 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 //            cout<<" Values must be below the simulation duration: "<<this->GetSS()->GetRunSettings().Duration()<<" [s]"<<endl;
 //            this->interval_start_times_.clear();
 //            this->interval_start_times_.insert(make_pair(this->GetSS()->GetRunSettings().Duration()));
-//            for (size_t i = 0; i < nintervals-1;i++)
+//            for (auto i = 0; i < nintervals-1;i++)
 //            {
 //                cout<<" End time for interval "<<i+1<<"?: ";
 //                cout.flush();
@@ -611,26 +611,26 @@ void SimulatorControl<dim>::InteractivelyManageEssentialConditions()
 
 //}
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::TrimTimeIncrementWithOutputTime()
 {
     this->time_increment_=std::min(this->time_increment_,this->RunSettings().NearestOutputTime(this->GetSimulationTime())-this->GetSimulationTime());
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::TrimTimeIncrementWithMonitorTime()
 {
     if (!this->monitor_all_timesteps_)
         this->time_increment_=std::min(this->time_increment_,this->RunSettings().NearestMonitorTime(this->GetSimulationTime())-this->GetSimulationTime());
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::TrimTimeIncrementWithEndOfInterval()
 {
     this->time_increment_=this->GetIntervalEndTime()-this->GetSimulationTime();
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::ManageWellRates()
 {
     cout<<" Would you like to (re)set well rates? (y/n): ";
@@ -669,7 +669,7 @@ void SimulatorControl<dim>::ManageWellRates()
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 double SimulatorControl<dim>::GetRealInput(bool success)
 {
     std::string choice="";
@@ -684,7 +684,7 @@ double SimulatorControl<dim>::GetRealInput(bool success)
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 int32_t SimulatorControl<dim>::GetIntegerInput()
 {
     std::string choice="";
@@ -695,7 +695,7 @@ int32_t SimulatorControl<dim>::GetIntegerInput()
         return 0;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 string SimulatorControl<dim>::GetStringInput()
 {
     std::string choice="";
@@ -703,7 +703,7 @@ string SimulatorControl<dim>::GetStringInput()
     return choice;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetBoundaryFlag(const char* property_name, string boundary,VARIABLE_FLAG flag)
 {
     if (this->GetSS()->GetModel()->ContainsBoundary(boundary))
@@ -712,7 +712,7 @@ void SimulatorControl<dim>::SetBoundaryFlag(const char* property_name, string bo
         error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetBoundaryFlag()","Model does not contain boundary: ",boundary.c_str() );
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetPropertyFlagToTopBoundaries(const char* property_name, VARIABLE_FLAG flag)
 {
     for (auto itb=this->GetSS()->GetTopBoundaries().begin();itb!=this->GetSS()->GetTopBoundaries().end();itb++){
@@ -720,7 +720,7 @@ void SimulatorControl<dim>::SetPropertyFlagToTopBoundaries(const char* property_
     }
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string boundary,double value,VARIABLE_FLAG flag)
 {
     csmp::Index key=this->GetSS()->GetModel()->Database().StorageKey(prop_name);
@@ -730,7 +730,7 @@ void SimulatorControl<dim>::SetBoundaryValue(const char* prop_name,string bounda
         error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetBoundaryValue()","Only scalars may be set on the boundary","(for now)" );
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetRegionValue(string prop_name,string region,double value,VARIABLE_FLAG flag)
 {
     csmp::Index key=this->GetSS()->GetModel()->Database().StorageKey(prop_name.c_str());
@@ -740,7 +740,7 @@ void SimulatorControl<dim>::SetRegionValue(string prop_name,string region,double
         error_handler_.notice( EXCEPTION, "SimulatorControl<dim>::SetRegionValue()","Only scalars may be set","(for now)" );
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetRegionFlag(const char* prop_name,string region,VARIABLE_FLAG flag)
 {
     if (this->GetSS()->GetModel()->ContainsRegion(region.c_str()))
@@ -750,17 +750,17 @@ void SimulatorControl<dim>::SetRegionFlag(const char* prop_name,string region,VA
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetFlagNearestToPoint(Index key,double x, double y, double z, VARIABLE_FLAG flag)
 {
 
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double x, double y, double z, double value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub)
 {
-    typename vector<Node<dim>*>::iterator nodes_begin=this->GetSS()->GetModel()->Region("Model").NodesBegin();
-    typename vector<Node<dim>*>::iterator nodes_end;
+    auto nodes_begin=this->GetSS()->GetModel()->Region("Model").NodesBegin();
+    typename vector<Node<dim>*>::const_iterator nodes_end;
     if (sub==COMPLETE)
         nodes_end=this->GetSS()->GetModel()->Region("Model").NodesEnd();
     else if (sub==INTERIOR)
@@ -768,7 +768,7 @@ void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double x, double y,
     double mind(10e50),distance(0.);
 
     Node<dim>* n(nullptr);
-    for (typename vector<Node<dim>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++) {
+    for ( auto npit= nodes_begin; npit!=nodes_end;npit++) {
         distance=pow((pow(((*npit)->x()-x),2.0)+pow(((*npit)->y()-y),2.0)+pow(((*npit)->z()-z),2.0)),0.5);
         if (distance<mind) {
             n=*npit;
@@ -782,7 +782,7 @@ void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double x, double y,
 
 
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::BeginInterval()
 {
     this->SetIntervalStartTime(this->GetCurrentIntervalStartTime(this->GetSimulationTime()));
@@ -790,14 +790,14 @@ void SimulatorControl<dim>::BeginInterval()
     this->GetSS()->GetModel()->Store(pdb_.StorageKey("interval"),makeScalar(PLAIN,this->GetIntervalNumber(this->GetSimulationTime())));
 }
 
-template <size_t dim>
+template <uint32_t dim>
 bool SimulatorControl<dim>::AskUserToContinue()
 {
     cout<<"  Do you want to continue the simulation for another time interval? (y/n):";
     return this->YesOrNo();
 }
 
-template <size_t dim>
+template <uint32_t dim>
 bool SimulatorControl<dim>::CheckTimeIntervals()
 {
     cout<<" Simulation Start Time    [s]: "<<this->GetSimulationStartTime()<<endl;
@@ -826,7 +826,7 @@ bool SimulatorControl<dim>::CheckTimeIntervals()
 
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::CatchSignals()
 {
     SimulationSignalHandler sig;
@@ -866,7 +866,7 @@ void SimulatorControl<dim>::CatchSignals()
 
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::SetSimulationTime(double t)
 {
     this->simulationTime_=t;
@@ -874,7 +874,7 @@ void SimulatorControl<dim>::SetSimulationTime(double t)
 
 /// returns run-time, in seconds, since an initial reference point
 /// normally set by the BeginInterval() method.
-template <size_t dim>
+template <uint32_t dim>
 double SimulatorControl<dim>::CalculateCurrentRunTime()
 {
 
@@ -887,7 +887,7 @@ double SimulatorControl<dim>::CalculateCurrentRunTime()
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
 {
     cout<<" Syncing Output Times (monitor and vtu frames) to Model..."<<endl;
@@ -942,7 +942,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         Index avkey=this->GetSS()->GetModel()->Database().StorageKey("output times");
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Output times..."<<endl;
-        for (size_t i = 0 ; i < av.Size();i++)
+        for (auto i = 0 ; i < av.Size();i++)
             if (!isnan(av(i))){
                 cout<<" "<<i<<" time: "<<av(i)<<endl;
                 this->RunSettings().AddOutputTime(av(i));
@@ -956,7 +956,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
         Index avkey=this->GetSS()->GetModel()->Database().StorageKey("monitor times");
         this->GetSS()->GetModel()->Read(avkey,av);
         cout<<" Reading "<<av.Size()<<" Monitoring times..."<<endl;
-        for (size_t i = 0 ; i < av.Size();i++)
+        for (auto i = 0 ; i < av.Size();i++)
             if (!isnan(av(i)))
                 this->RunSettings().AddMonitorTime(av(i));
         this->GetSS()->GetModel()->DeleteProperty("monitor times");
@@ -980,7 +980,7 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
     cout<<" Done Setting Output Frequency."<<endl;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SetOutputTimes(size_t n, double starttime)
 {
     /** @todo double check if it isn't convenient to set the output intervals related
@@ -993,7 +993,7 @@ void SimulatorControl<dim>::SetOutputTimes(size_t n, double starttime)
     ots.insert(starttime);
 
     double outputtime(starttime);
-    for (size_t i = 0 ; i < n ;i++)
+    for (auto i = 0 ; i < n ;i++)
     {
         outputtime+=outputtimeinterval;
         ots.insert(outputtime);
@@ -1001,7 +1001,7 @@ void SimulatorControl<dim>::SetOutputTimes(size_t n, double starttime)
     this->RunSettings().SetOutputTimes(ots,false); // this will not overwrite existing output times.
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::SetMonitorTimes(size_t n, double starttime)
 {
     double outputtimeinterval=this->RunSettings().Duration()/static_cast<double>(n);
@@ -1011,7 +1011,7 @@ void SimulatorControl<dim>::SetMonitorTimes(size_t n, double starttime)
     ots.insert(starttime);
 
     double outputtime(starttime);
-    for (size_t i = 0 ; i < n ;i++)
+    for (auto i = 0 ; i < n ;i++)
     {
         outputtime+=outputtimeinterval;
         ots.insert(outputtime);
@@ -1020,7 +1020,7 @@ void SimulatorControl<dim>::SetMonitorTimes(size_t n, double starttime)
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::LoadMonitoringTimesFromRestartedModel()
 {
 
@@ -1028,12 +1028,12 @@ void SimulatorControl<dim>::LoadMonitoringTimesFromRestartedModel()
     ArrayVariable mtimes;
     this->GetSS()->GetModel()->Read(monitor_frames_Key_,mtimes);
     cout<<" Loading "<<mtimes.Size() <<" monitor times from restarted model.";
-    for (size_t i = 0 ; i < mtimes.Size() ;i++)
+    for (auto i = 0 ; i < mtimes.Size() ;i++)
         ots.insert(mtimes(i));
     this->RunSettings().SetMonitorTimes(ots,true); // this will not overwrite existing monitor times.
 }
 
-template <size_t dim>
+template <uint32_t dim>
 bool SimulatorControl<dim>::ReadControlOptions()
 {
     std::string  text_line;
@@ -1133,7 +1133,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 std::string time_unit(token.substr(0,1));
 
                 /// Note: These times will output monitoring as well!
-                for  (size_t i = 2 ; i < listoftokens.size();i++){
+                for  (auto i = 2 ; i < listoftokens.size();i++){
                     if (time_unit=="s")
                         time_value=std::stod(listoftokens[i]);
                     else if (time_unit=="h")
@@ -1159,7 +1159,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                 std::transform(token.begin(), token.end(), token.begin(), ::tolower);
                 std::string time_unit(token.substr(0,1));
 
-                for  (size_t i = 2 ; i < listoftokens.size();i++){
+                for  (auto i = 2 ; i < listoftokens.size();i++){
                     if (time_unit=="s")
                         time_value=std::stod(listoftokens[i]);
                     else if (time_unit=="h")
@@ -1217,7 +1217,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             // Read VTU output variables for the full model.
             if (tok1.find("VTU OUTPUT")!=std::string::npos) {
                 string vname;
-                for  (size_t i = 1 ; i < listoftokens.size();i++){
+                for  (auto i = 1 ; i < listoftokens.size();i++){
                     vname=listoftokens[i];
                     this->GetSS()->GetVTUPropList().push_back(vname);
                 }
@@ -1226,7 +1226,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
             // Read Monitor output variables for the full model.
             if (tok1.find("MONITOR RANGE")!=std::string::npos) {
                 string vname;
-                for  (size_t i = 1 ; i < listoftokens.size();i++){
+                for  (auto i = 1 ; i < listoftokens.size();i++){
                     vname=listoftokens[i];
                     if (this->Verbose()) cout<<" monitored range property names: "<<vname;
                     this->GetSS()->GetMonitoredRangePropList().push_back(vname);
@@ -1236,7 +1236,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("MONITOR INTEGRAL")!=std::string::npos) {
                 string vname;
-                for  (size_t i = 1 ; i < listoftokens.size();i++){
+                for  (auto i = 1 ; i < listoftokens.size();i++){
                     vname=listoftokens[i];
                     if (this->Verbose()) cout<<" monitored integral property names: "<<vname;
                     this->GetSS()->GetMonitoredIntegralPropList().push_back(vname);
@@ -1246,7 +1246,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
 
             if (tok1.find("MONITOR VALUE")!=std::string::npos) {
                 string vname;
-                for  (size_t i = 1 ; i < listoftokens.size();i++){
+                for  (auto i = 1 ; i < listoftokens.size();i++){
                     vname=listoftokens[i];
                     if (this->Verbose()) {cout<<" monitored value property names: "<<vname;}
                     if (this->GetSS()->GetModel()->Database().IsDefined(vname.c_str())){
@@ -1279,7 +1279,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
                     possible_boundaries.insert((*bit).first);
 
                 string subdomain_name;
-                for  (size_t i = 1 ; i < listoftokens.size();i++){
+                for  (auto i = 1 ; i < listoftokens.size();i++){
                     subdomain_name=listoftokens[i];
 
                     if ( possible_regions.find(subdomain_name) != possible_regions.end()
@@ -1332,7 +1332,7 @@ bool SimulatorControl<dim>::ReadControlOptions()
     return true;
 }
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double starttime)
 {
     if (starttime >= this->GetSimulationTime()){
@@ -1346,18 +1346,18 @@ void SimulatorControl<dim>::InsertNewTimeInterval(string interval_name,double st
 @todo  Hualp! -> use standard library
 
 */
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::OutputSimulationTimeToScreen(double time)
 {
-    size_t days    = std::floor(time/86400.0);
-    size_t hours   = floor(( time - days*86400 )/3600);
-    size_t minutes = floor((time-days*86400-hours*3600)/60);
-    size_t seconds = floor(time - days*86400 - hours*3600 - minutes*60);
+    auto days    = floor(time/86400.0);
+    auto hours   = floor(( time - days*86400 )/3600);
+    auto minutes = floor((time-days*86400-hours*3600)/60);
+    auto seconds = floor(time - days*86400 - hours*3600 - minutes*60);
     string stime = "[      ] Simulated time: "+std::to_string(days) +" days, "+std::to_string(hours)+" hours, "+std::to_string(minutes)+" minutes, "+std::to_string(seconds)+" seconds                    ";
     cout<<"\r"<<stime<<"\r["<<flush;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void SimulatorControl<dim>::OutputSampleControlFile()
 {
     ofstream fout(this->GetSS()->GetProjectName()+"-control.txt",std::ofstream::out | std::ofstream::app);
@@ -1448,7 +1448,7 @@ void SimulatorControl<dim>::OutputSampleControlFile()
         counter=0;
         map<string,set<PLACEMENT> >::iterator has_placement=token_to_placements.find(token);
         if (has_placement!=token_to_placements.end()){
-            size_t i = 0;
+            auto i = 0;
             for( std::list<SimulatorSetupParameter>::iterator pit = dictBegin; pit!=dictEnd; pit++){
                 if( has_placement->second.find(this->GetSS()->GetModel()->Database().StorageKey(pit->name.c_str()).place)!= has_placement->second.end()
                         && this->GetSS()->GetInternalVars().find(pit->name)== this->GetSS()->GetInternalVars().end()){
@@ -1478,7 +1478,7 @@ void SimulatorControl<dim>::OutputSampleControlFile()
             for ( auto bit=this->GetSS()->GetModel()->BoundariesBegin(); bit!=this->GetSS()->GetModel()->BoundariesEnd(); bit++ )
                 possible_subdomains.push_back((*bit).first);
 
-            for( size_t i = 0; i<possible_subdomains.size(); i++){
+            for( auto i = 0; i<possible_subdomains.size(); i++){
                 fout<<possible_subdomains[i]<<"\t";
                 if (counter > 6 || i == possible_subdomains.size()-1){
                     counter = 0;
@@ -1507,14 +1507,14 @@ void SimulatorControl<dim>::OutputSampleControlFile()
                            "Please check it and restart the simulator.");
 }
 
-template <size_t dim>
+template <uint32_t dim>
 double SimulatorControl<dim>::MaxDifferenceScalarNodalProperty(Index &snp1Key, Index& snp2Key )
 {
     Region<dim>& mref(this->GetSS()->GetModel()->Region("Model"));
 
     double diff(0.), max(0.);
-    const typename vector<Node<dim>*>::const_iterator nodesEnd( mref.NodesEnd() );
-    for( typename vector<Node<dim>*>::iterator it = mref.NodesBegin(); it != nodesEnd; ++it )
+    const auto nodesEnd( mref.NodesEnd() );
+    for( auto it = mref.NodesBegin(); it != nodesEnd; ++it )
     {
         diff = fabs( (*it)->Read(snp1Key) - (*it)->Read(snp2Key) );
         if (diff > max)
@@ -1524,7 +1524,7 @@ double SimulatorControl<dim>::MaxDifferenceScalarNodalProperty(Index &snp1Key, I
 }
 
 
-template <size_t dim>
+template <uint32_t dim>
 void SimulatorControl<dim>::Run()
 {
     error_handler_.notice( FATAL_ERROR, "SimulatorControl<dim>::Run",
@@ -1533,7 +1533,7 @@ void SimulatorControl<dim>::Run()
 
 
 
-template <size_t dim>
+template <uint32_t dim>
 SimulatorControl<dim>::~SimulatorControl()
 {
     delete(vtu_);

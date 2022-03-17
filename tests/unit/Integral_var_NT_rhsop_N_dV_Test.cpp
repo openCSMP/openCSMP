@@ -1,4 +1,6 @@
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
+#include "vsetMakers.h"
+#include "VSetConverter.h"
 
 using namespace std;
 
@@ -7,21 +9,13 @@ namespace csmp {
 Integral_var_NT_rhsop_N_dV_Test::Integral_var_NT_rhsop_N_dV_Test( bool verbose )
  : tol_(0.001), verbose_(verbose), sg_(nullptr)
 {
-  const bool       isoparametric(true);
-  ANSYS_Interface  mesh_interface(isoparametric);  // true = isoparametric elements
-  VSet<2U>         mesh_container;
-  ModelTopology    mesh_topology(isoparametric);   // true = isoparametric elements
+  VSet<2U>    mesh_container;
+  test_Create_TrianglePatch_VSet( mesh_container );
 
   // Building Region object from ANSYS data files
-  if ( verbose_ ) cout <<"Reading mesh..."<<endl;
-  string mesh_name("pde_integrator_test");
-  const bool binary_file( true );
-  mesh_interface.Read_ANSYS_Mesh( mesh_name.c_str(), mesh_container, mesh_topology, binary_file, true );
-  if ( verbose_ ) {
-      cout <<"Finished reading mesh..."<<endl;
-      cout <<"Building Model..."<<endl;
-    }
-  sg_= new Model<2U> ( mesh_topology, mesh_container, "CSMP-2phase-variables.txt");
+  string mesh_name("triangle_patch");
+  if ( verbose_ ) cout <<"\nIntegral_var_NT_rhsop_N_dV_Test: Building Model..."<<endl;
+  sg_= new Model<2U>( mesh_container, "CSMP-2phase-variables.txt" );
 
     // Set values on nodes
   sg_->InputPropertyValue("fluid pressure", makeScalar(PLAIN,1.));
@@ -158,7 +152,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     calculateGlobalMatrix(sm, lhs);
     std::vector<double> lhs_vec(dof);
     std::fill(lhs_vec.begin(), lhs_vec.end(), 0.0);
-    for (size_t i = 0; i < dof; ++i) {
+    for (auto i = 0; i < dof; ++i) {
       for (size_t j = 0; j < dof; ++j) {
         lhs_vec[i] += sm(i, j) * pressure[j];
       }
@@ -170,7 +164,7 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
     
     // Test for equality
     assert(lhs_vec.size() == rhs_vec.size());
-    for (size_t i = 0; i < lhs_vec.size(); ++i) {
+    for (auto i = 0; i < lhs_vec.size(); ++i) {
       _equal(lhs_vec[i], rhs_vec[i], tol_);
     } 
 }
@@ -181,7 +175,7 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     csmp::Index key(sg_->Database().StorageKey(var_name));
     ScalarVariable sc;
         
-    unsigned int i = 0;
+    unsigned int i = 0; // BARF!
     for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
         (*it)->Read(key,sc);
         if ( verbose_ ) cout << "Node " << i << ": " << sc() << endl;
@@ -193,8 +187,8 @@ void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double>& var, const
     //std::deque<Node<2U> >::iterator it;
     csmp::Index key(sg_->Database().StorageKey(var_name));
 
-    unsigned int i = 0;
-    for (vector<Node<2U>*>::iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
+    unsigned int i = 0; // MORE BARF!
+    for ( auto it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
         (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
         ++i;
     }
@@ -205,7 +199,7 @@ void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double>& var, co
   csmp::Index key(sg_->Database().StorageKey(var_name));
   
   unsigned int i = 0;
-  for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
+  for (auto it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
               
     ++i;

@@ -179,7 +179,7 @@ void ColorPalette::MakeGreyPalette()
   for( rgbIt  = rgbColors.begin(), i=0;
        rgbIt != rgbColors.end(); rgbIt++, i++ )
     {
-      j = static_cast<size_t>(i * step);
+      j = static_cast<uint32_t>(i * step);
       (*rgbIt)[0] = j;         // red
       (*rgbIt)[1] = j;         // green
       (*rgbIt)[2] = j;         // blue    
@@ -845,7 +845,7 @@ void ColorPalette::HSV_To_RGB( float& r, float& g, float& b,
     {
       if( h == 360.0F ) h = 0.0F;
       h /= 60.0F;
-      i = static_cast<size_t>(std::floor(h));
+      i = static_cast<uint32_t>(std::floor(h));
       f = h - i;
       p = v * ( 1.0F - s );
       q = v * ( 1.0F - ( s * f ) );
@@ -877,7 +877,7 @@ void ColorPalette::GiveRgb( float val, float* vessel )
   // Use as: glColor4Tv( GiveRgb( someValue, array[for 4] ) );
 
   // Cast data value to size_t for indexing vector
-  size_t which = static_cast<size_t>(val);
+  size_t which = static_cast<uint32_t>(val);
 
   // Safety
   if( which >= paletteSize )
@@ -901,7 +901,7 @@ void ColorPalette::GiveRgb( float val, float* vessel )
 // ------------------------------------------------------------------
 void ColorPalette::GiveHsv( float val, float* vessel )
 {
-   size_t which = static_cast<size_t>(val);
+   size_t which = static_cast<uint32_t>(val);
 
   // Safety
   if( which >= paletteSize )

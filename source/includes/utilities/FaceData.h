@@ -16,8 +16,8 @@ class FaceData {
     bool      operator<( const FaceData& ) const;
     size_t    operator[]( size_t ) const; // gives ordered node IDs
     
-    void      AssignKey( const std:: vector<size_t>& );
-    void      AssignNodeIDs( const std::vector<size_t>& );
+    void      AssignKey( const std:: vector<uint32_t>& );
+    void      AssignNodeIDs( const std::vector<uint32_t>& );
     void      AssignFirstNeighbor( int32_t );
     void      AssignSecondNeighbor( int32_t );
     void      AssignFirstNeighborFaceNumber( size_t );
@@ -34,8 +34,8 @@ class FaceData {
     void      Reset();
     
   private:
-    std::set<size_t>          key;      // ordered face-node IDs
-    std::vector<size_t>       nodes;    // node IDs in CCW order
+    std::set<uint32_t>          key;      // ordered face-node IDs
+    std::vector<uint32_t>       nodes;    // node IDs in CCW order
     std::pair<size_t,size_t>  efnumber; // face-number of connected elements
     std::pair<int32_t,int32_t>    nbors;    // ID numbers of connected elements
     CSMP_FEM_TYPE             etype;    // type of finite-element for the face
@@ -66,15 +66,15 @@ inline size_t FaceData::operator[]( size_t i ) const
  }
 
 
-inline void FaceData::AssignKey( const std::vector<size_t>& nids )
+inline void FaceData::AssignKey( const std::vector<uint32_t>& nids )
  {
-    for ( std::vector<size_t>::const_iterator it=nids.begin();
+    for ( std::vector<uint32_t>::const_iterator it=nids.begin();
           it!=nids.end(); it++ )
       key.insert( *it );  
  }
  
  
-inline void FaceData::AssignNodeIDs( const std::vector<size_t>& nids )
+inline void FaceData::AssignNodeIDs( const std::vector<uint32_t>& nids )
  {
     nodes.assign( nids.begin(), nids.end() );  
  }

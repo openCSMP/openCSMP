@@ -16,7 +16,7 @@ Default constructor of Model is called.
 Then if binary file option is set to true: the model get build from "bin_file".vset and "bin_file".dat files.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& input_file)
  : Model<dim>( input_file.c_str() )
  {
@@ -30,7 +30,7 @@ Model1D<dim>::Model1D( const std::string& input_file)
 Default constructor of Model is called.
 Then the model is build using the method Initialize.
 */
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::string& variable_file,
                        double length,
@@ -48,7 +48,7 @@ Model1D<dim>::Model1D( const std::string& name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        double length,
                        size_t   elements,
@@ -64,7 +64,7 @@ Model1D<dim>::Model1D( const std::string& name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D(const std::string& name,
                        const std::string& variable_file,
                        double length,
@@ -82,7 +82,7 @@ Model1D<dim>::Model1D(const std::string& name,
                 origin, destination );
  }
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D(const std::string& name,
                       double length,
                       double dx_min, double dx_max,
@@ -100,7 +100,7 @@ Model1D<dim>::Model1D(const std::string& name,
  
  
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::string& variable_file,
                        const std::vector<double>& node_coordinates,
@@ -117,7 +117,7 @@ Model1D<dim>::Model1D( const std::string& name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<double>& node_coordinates,
                        const std::vector<double>& splitnode_coordinates,
@@ -132,7 +132,7 @@ Model1D<dim>::Model1D( const std::string& name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::string& variable_file,
                        const std::vector<Point<dim> >& node_coordinates,
@@ -149,7 +149,7 @@ Model1D<dim>::Model1D( const std::string& name,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::Model1D( const std::string& name,
                        const std::vector<Point<dim> >& node_coordinates,
                        const std::vector<Point<dim> >& splitnode_coordinates,
@@ -163,7 +163,7 @@ Model1D<dim>::Model1D( const std::string& name,
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Model1D<dim>::~Model1D()
  {
  }
@@ -172,7 +172,7 @@ Model1D<dim>::~Model1D()
 
 
 /// creates mesh from VSet
-template<size_t dim>
+template<uint32_t dim>
 void Model1D<dim>::Initialize( VSet<dim>& vset )
 {
     // Create Model from Vset data and conectivity information
@@ -180,16 +180,12 @@ void Model1D<dim>::Initialize( VSet<dim>& vset )
     const bool non_box_shaped_model                 ( false );
     const bool isoparametric_elements               ( true  );
 
-    Model<dim>::Initialize( isoparametric_elements,
-                            vset,
-                            create_boundaries,
-                            non_box_shaped_model
-                          );
+    Model<dim>::Initialize( vset );
 }
 
 /// creates an uniform mesh
 
-template<size_t dim>
+template<uint32_t dim>
 void Model1D<dim>::Initialize( double length, size_t elements,
                                const std::vector<double>& splitnode_coordinates,
                                const Point<dim>& origin,
@@ -211,7 +207,7 @@ void Model1D<dim>::Initialize( double length, size_t elements,
 
 /// creates an exponentially refined mesh
 
-template<size_t dim>
+template<uint32_t dim>
 void Model1D<dim>::Initialize(double length, double dx_min, double dx_max, double width_of_transition_zone, MeshDensity* density,
                               const std::vector<double>& splitnode_coordinates,
                               const Point<dim>& origin,const Point<dim>& destination )
@@ -230,7 +226,7 @@ void Model1D<dim>::Initialize(double length, double dx_min, double dx_max, doubl
 
 /// creates a custom mesh with vector( 1D node coordinates )
 
-template<size_t dim>
+template<uint32_t dim>
 void Model1D<dim>::Initialize( const std::vector<double>& node_coordinates,
                                const std::vector<double>& splitnode_coordinates,
                                const Point<dim>& origin,
@@ -251,7 +247,7 @@ void Model1D<dim>::Initialize( const std::vector<double>& node_coordinates,
 
 /// creates a custom mesh with vector( 1D, 2D or 3D node coordinates )
 
-template<size_t dim>
+template<uint32_t dim>
 void Model1D<dim>::Initialize( const std::vector<Point<dim> >& node_coordinates,
                                const std::vector<Point<dim> >& splitnode_coordinates,
                                const Point<dim>& origin,

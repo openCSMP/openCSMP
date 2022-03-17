@@ -8,8 +8,8 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Model;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
 
 // TODO: add Biot constraints as a post-processing step, Biot-Willis coefficient alpha or drained and undrained moduli are needed
 
@@ -48,7 +48,7 @@ class StressesAndStrainsIP3D : public MathOperatorLHS<3U> {
                                           STRESS_, STRAIN_,
                                           EGP_, SGP_, PEGP_, PSGP_;
     std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double>                 IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
+    std::vector<double>                   IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
                                           NSTRAIN_,  NSTRESS_, 
                                           eps_, sigma_, sum_;
     TensorVariable<3U>                    ts_, evecs_;

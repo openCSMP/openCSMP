@@ -5,10 +5,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class Node;
 
 /**
 \brief     Vector operator
@@ -20,7 +20,7 @@ template<size_t> class Node;
 \copyright The University of Melbourne
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class VectorOperator {
   public:
     VectorOperator() : factor_(1.) {}

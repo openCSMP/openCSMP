@@ -6,34 +6,34 @@
 
 namespace csmp {
 
-template<size_t> class Model;
-template<size_t> class Region;
-template<size_t> class Element;
-template<size_t> class VTK_Interface;
+template<uint32_t> class Model;
+template<uint32_t> class Region;
+template<uint32_t> class Element;
+template<uint32_t> class VTK_Interface;
 
 /// for the given CSMP element type, finds the matching VTK geometric primitive
 VTK_TYPE parseElementType( CSMP_FEM_TYPE );
 
 /// prints the supplied node variable data DATA(dim x nodes) to file
-template<size_t dim>
+template<uint32_t dim>
 void outputNodeDataToVTK( const Element<dim>&, const std::string& file_name,
                           const std::string& var_name, DenseMatrix<DM_MIN>& DATA );
 
 /// prints node variable data to file
-template<size_t dim>
+template<uint32_t dim>
 void outputNodeDataToVTK( const Element<dim>&, const csmp::Index&,
                           const char* file_name, const char* var_name );
 
 /// prints the face normals scaled by element size to file
-template<size_t dim>
+template<uint32_t dim>
 void outputFaceNormalsToVTK( const Element<dim>&, const char* file );
 
 /// prints the variable values at the integration points to file
-template<size_t dim>
+template<uint32_t dim>
 void outputIntegrationPointDataToVTK( const Element<dim>&, const csmp::Index&, const char* var_name, const char* file );
 
 /// prints integration points to file, scalar data are the integration point numbers
-template<size_t dim>
+template<uint32_t dim>
 void outputIntegrationPointsToVTK( const Element<dim>&, const char* file );
 
 /// output the perimeter line of a region to VTK file
@@ -43,7 +43,7 @@ void outputRegionBoundaryToVTK( const Model<2U>&, const char* region, const char
 void outputRegionBoundaryToVTK( const Model<3U>&, const char* region, const char* file );
 
 /// all properties discretised on the model; region by region
-template<size_t dim>
+template<uint32_t dim>
 void  outputPropertiesOfRegionToVTK( const Model<dim>&,
                                      VTK_Interface<dim>&,
                                      const char* region, long output_time );
@@ -64,7 +64,7 @@ Known problems:
 @todo (3) Create and store connectivity only once and then just add new data blocks to files (A)
 */
 
-template<size_t dim>
+template<uint32_t dim>
 class VTK_Interface {
 
   public:
@@ -124,11 +124,11 @@ class VTK_Interface {
    bool toSubFolder_;                                        ///< output to subfolder
    std::string problemTitle_;                                ///< title that goes into xml header
    std::string subFolderName_;                               ///< name of subfolder
-   std::deque<VTK_TYPE>                     geometric_primitives_VTK;
-   std::map<size_t,std::vector<size_t> >    plist;
-   std::deque<std::vector<size_t> >         transformed_plist;
-   std::map<size_t,PointDescriptor>         node_mapping;
-   std::map<size_t,std::vector<double> >  pxyz_data;
+   std::deque<VTK_TYPE>                     geometric_primitives_VTK_;
+   std::map<size_t,std::vector<size_t> >    plist_;
+   std::deque<std::vector<size_t> >         transformed_plist_;
+   std::map<size_t,PointDescriptor>         node_mapping_;
+   std::map<size_t,std::vector<double> >    pxyz_data_;
    PLACEMENT                                last_visualized_;
    bool                                     node_output_of_element_data_;
 

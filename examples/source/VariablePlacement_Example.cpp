@@ -13,7 +13,7 @@ namespace csmp {
 
 
   // POLICIES
-  template<size_t dim>
+  template<uint32_t dim>
   class FromElementToElement{
   public:
     void Store( Element<dim>* e, const Index& i, double v )
@@ -22,7 +22,7 @@ namespace csmp {
     ScalarVariable cache;
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   class FromElementToNodes{
   public:
     void Store( Element<dim>* e, const Index& i, double v )
@@ -36,7 +36,7 @@ namespace csmp {
   };
 
   // 'BASE' CLASS
-  template<template<size_t> class StoragePolicy,template<size_t> class SIMPLEX, size_t dim = 3U>
+  template<template<uint32_t> class StoragePolicy,template<uint32_t> class SIMPLEX, uint32_t dim = 3U>
   class GenericStore : public StoragePolicy<dim>
   {
   public:
@@ -91,7 +91,7 @@ void VariablePlacement_Example::Run()
     // we loop over all elements to access the created properties
     Region<DIM>& rref = model.Region( "Model" );
     const vector<Element<DIM>*>::const_iterator elementsEnd = rref.ElementsEnd();
-    for( vector<Element<DIM>*>::iterator it = rref.ElementsBegin(); it != elementsEnd; ++ it)
+    for( vector<Element<DIM>*>::const_iterator it = rref.ElementsBegin(); it != elementsEnd; ++ it)
     {
       // now we may use the function object like an ordinary function
       storeToElement( *it, elementKey, 5. );

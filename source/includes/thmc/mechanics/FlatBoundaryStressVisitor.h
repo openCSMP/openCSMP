@@ -16,9 +16,9 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Boundary;
-template<size_t> class Model;
+template<uint32_t> class Element;
+template<uint32_t> class Boundary;
+template<uint32_t> class Model;
 
 /**
      /// This visitor is to apply forces on flat boundary faces. 
@@ -28,7 +28,7 @@ template<size_t> class Model;
 
 
 // see DOxygen doc further below
-template<size_t dim>
+template<uint32_t dim>
 class FlatBoundaryStressVisitor : public Visitor<dim> {
   public:
     /// by default, any entries into the RHS force vectors will get overwritten

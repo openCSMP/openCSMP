@@ -159,7 +159,7 @@ stress was measured.
     Weisstein, Eric W. "Rotation Matrix." From MathWorld--A Wolfram Web Resource.
     http://mathworld.wolfram.com/RotationMatrix.html 
     
-    @param axes   is either of the x, y or z coordinate axes in the Kartesian system
+    @param axis   is either of the x, y or z coordinate axes in the Kartesian system
     @param angle  is the angle in degress (0..360)
 */
 void StressRotate::Rotate( char axis, double angle ) 

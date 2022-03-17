@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class StokesEinsteinDiffusivity : public Interrelation<dim> {
     Operand<dim>&  T;         /// < temperature       [oC]
     Operand<dim>&  E;         /// < dynamic viscosity [Pa s-1]

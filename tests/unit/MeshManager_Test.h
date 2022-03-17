@@ -60,7 +60,7 @@ class MeshManager_Test : public Test {
 };
 
 // build sparsity pattern for testing the connectivity among nodes
-template<size_t dim> void nodeNeighbors( const Region<dim>&, std::vector<std::set<size_t>>& node_neighbors );
+template<uint32_t dim> void nodeNeighbors( const Region<dim>&, std::vector<std::set<size_t>>& node_neighbors );
 
 } // end csmp
 

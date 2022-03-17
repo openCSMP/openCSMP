@@ -9,9 +9,9 @@
 
 namespace csmp {
 
-template<size_t> class Model;
+template<uint32_t> class Model;
 
-template<size_t dim>
+template<uint32_t dim>
 class IAPWS_H2OPropertiesVisitor : public Visitor<dim> {
   public:
     /// custom constructor using internally predefined variable names for, H, cp, alpha, and beta

@@ -85,17 +85,16 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
     // CORE SECTION
     // setting up & solving linear pressure diffusion
     #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Solver* samgsolver=new SAMG_Solver();
-    SAMG_Settings samgsettings;
+    SAMG_Settings settings;
+    SAMG_Solver   solver( &settings );
     //samgsettings.Set_napproach(2);
-    samgsettings.Set_eps(1.0e-14);
-    samgsettings.Set_rel_eps(1.0e-12);
-    samgsolver->InputSolverSettings(&samgsettings);
+    settings.Set_eps(1.0e-14);
+    settings.Set_rel_eps(1.0e-12);
     #else
-    CSMP_DEFAULT_LINEAR_SOLVER* samgsolver = new CSMP_DEFAULT_LINEAR_SOLVER();
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
     #endif
 
-    PDE_Integrator<DIM,Region> pressure_diffusion(samgsolver);
+    PDE_Integrator<DIM,Region> pressure_diffusion( &solver );
 
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> > stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
     printRangeOfVariable(model,"fluid pressure");
@@ -121,11 +120,11 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
 
     //------------------------------------
     // VERIFICATION SECTION
-    csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
-    vector<Node<DIM>*>::iterator nodes_end=model.Region("Model").NodesEnd();
-    vector<Node<DIM>*>::iterator nodes_begin=model.Region("Model").NodesBegin();
+    const csmp::Index  p_key(model.Database().StorageKey("fluid pressure"));
+    auto nodes_end=model.Region("Model").NodesEnd();
+    auto nodes_begin=model.Region("Model").NodesBegin();
     double press;
-    for (vector<Node<DIM>*>::iterator npit= nodes_begin; npit!=nodes_end;npit++)
+    for (auto npit= nodes_begin; npit!=nodes_end;npit++)
     {
       press=(*npit)->Read(p_key);
       //if(verbose_)

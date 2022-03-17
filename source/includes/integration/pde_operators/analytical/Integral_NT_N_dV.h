@@ -11,14 +11,14 @@ namespace csmp {
 @date 1999 */
 
 /// integral test function products (no variable is actually used)
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_NT_N_dV : public MathOperatorLHS<dim> {
   public:
     // variable must be the same as in the RHS (it is not used to form integral)
     Integral_NT_N_dV( const PropertyDatabase<dim>& p, const char* test_variable );
     
-    virtual void GetOperands( const SIMPLEX& ) {}
-    virtual void ComputeContribution( const SIMPLEX& );
+    virtual void GetOperands( const CELL& ) {}
+    virtual void ComputeContribution( const CELL& );
 };
 
 

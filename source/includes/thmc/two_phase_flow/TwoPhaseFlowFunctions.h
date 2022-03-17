@@ -20,22 +20,22 @@ namespace csmp {
     Uses the SaturationFunctions and Fluid module and the
     constitutive relationships specified therein.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class TwoPhaseFlowFunctions {
   public:
     /// current water saturation initialised inside of the model
     double Sw( Element<dim>* const e ) const;
       
     /// lambda parameter: 0 for water, 1 for the non-wetting phase
-    double Mobility( Element<dim>* const, size_t phase ) const;
+    double Mobility( Element<dim>* const, uint32_t phase ) const;
     
     /// lambda parameter: 0 for water, 1 for the non-wetting phase (using prescribed sw)
-    double Mobility_at( Element<dim>* const, size_t phase, double sw ) const;
+    double Mobility_at( Element<dim>* const, uint32_t phase, double sw ) const;
 
     /// d lambda_i / dsw
-    double MobilityDerivative( Element<dim>* const, size_t phase, bool evaluate_numerically=false ) const;
+    double MobilityDerivative( Element<dim>* const, uint32_t phase, bool evaluate_numerically=false ) const;
  
-    double MobilityDerivative_at( Element<dim>* const, size_t phase, double sw ) const;
+    double MobilityDerivative_at( Element<dim>* const, uint32_t phase, double sw ) const;
                         
     /// lambda_t: sum of phase mobilities
     double TotalMobility(  Element<dim>* const ) const;
@@ -52,16 +52,16 @@ class TwoPhaseFlowFunctions {
     double MobilityProductDerivative_at( Element<dim>* const, double sw ) const;
 
      /// fractional flow; 0=water, 1=non-wetting phase
-    double f( Element<dim>* const, size_t phase ) const;
+    double f( Element<dim>* const, uint32_t phase ) const;
     
      /// fractional flow; 0=water, 1=non-wetting phase  (using prescribed sw)
-    double f_at( Element<dim>* const, size_t phase, double sw ) const;
+    double f_at( Element<dim>* const, uint32_t phase, double sw ) const;
     
     /// Permeability
     double Permeability(  Element<dim>* const ) const;
 
     /// derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn
-    double dfds(  Element<dim>* const, size_t phase ) const;
+    double dfds(  Element<dim>* const, uint32_t phase ) const;
     
     double dfds_at( Element<dim>* const, double sw ) const;
     

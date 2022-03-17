@@ -16,7 +16,7 @@ namespace csmp {
 /**
     Policy of the Implicit Transport for the post-processing of the computation.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class PostProcessor {
   public:
     void PostProcess();
@@ -31,5 +31,5 @@ class PostProcessor {
 
 #endif /* CSMP_POST_PROCESSOR_H */
 
-// template<size_t dim,template<size_t> class CELL> ModelSubDomain
+// template<uint32_t dim,template<uint32_t> class CELL> ModelSubDomain
 

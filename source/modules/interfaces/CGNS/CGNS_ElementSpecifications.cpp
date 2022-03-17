@@ -156,7 +156,7 @@ Note however that CGNS fits quadratic or cubic elements to the bounding
 curves. Thus, global interpolation will give incorrect results as
 it works only for straight-sided elements.
  */
-csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_Type( int etype, bool isoparametric, size_t dim ) const
+csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_Type( int etype, bool isoparametric, uint32_t dim ) const
  {
     if ( isoparametric ) {
         // bar elements
@@ -222,18 +222,18 @@ csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_Type( int et
 
  }
 
-csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_TypeName( const std::string& CGNS_element_type, bool isoparametric, size_t dim ) const
+csmp::CSMP_FEM_TYPE  CGNS_ElementSpecifications::CSMP_TypeFrom_CGNS_TypeName( const std::string& CGNS_element_type, bool isoparametric, uint32_t dim ) const
 {
     int etype( CGNS_Type( CGNS_element_type ) );
     return CSMP_TypeFrom_CGNS_Type( etype, isoparametric, dim );
 }
 
-std::string  CGNS_ElementSpecifications::CSMP_TypeNameFrom_CGNS_Type( int etype, bool isoparametric, size_t dim ) const
+std::string  CGNS_ElementSpecifications::CSMP_TypeNameFrom_CGNS_Type( int etype, bool isoparametric, uint32_t dim ) const
 {
     return std::string(csmp::parseFiniteElementType( CSMP_TypeFrom_CGNS_Type( etype, isoparametric, dim ) ) );
 }
 
-std::string  CGNS_ElementSpecifications::CSMP_TypeNameFrom_CGNS_TypeName( const std::string& CGNS_element_type, bool isoparametric, size_t dim ) const
+std::string  CGNS_ElementSpecifications::CSMP_TypeNameFrom_CGNS_TypeName( const std::string& CGNS_element_type, bool isoparametric, uint32_t dim ) const
 {
     return std::string(csmp::parseFiniteElementType( CSMP_TypeFrom_CGNS_TypeName( CGNS_element_type, isoparametric, dim ) ) );
 }

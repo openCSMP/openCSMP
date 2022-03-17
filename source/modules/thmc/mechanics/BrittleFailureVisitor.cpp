@@ -15,7 +15,7 @@ namespace csmp {
 /**
     @attention SKM 28/9/2014 - added documentation, fixed wrong output and formatted code
 */
-template<size_t dim>
+template<uint32_t dim>
 BrittleFailureVisitor<dim>::BrittleFailureVisitor( Model<dim>& model,
                                                    bool verbose )
     : Visitor<dim>( MODEL, ELEMENT ),
@@ -53,7 +53,7 @@ BrittleFailureVisitor<dim>::BrittleFailureVisitor( Model<dim>& model,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 BrittleFailureVisitor<dim>::~BrittleFailureVisitor()
 {
 }
@@ -70,7 +70,7 @@ BrittleFailureVisitor<dim>::~BrittleFailureVisitor()
  
     - G and B are calculated from E and nu assuming perfect linear elasticity
 */
-template<size_t dim>
+template<uint32_t dim>
 void BrittleFailureVisitor<dim>::InitializeInputProperties( Element<dim>* eptr )
   {
      if ( Stress_key_.place == ELEMENT )
@@ -108,7 +108,7 @@ void BrittleFailureVisitor<dim>::InitializeInputProperties( Element<dim>* eptr )
     
     @attention SKM 28/9/2014 - added case where stress is placed on the element.
 */
-template<size_t dim>
+template<uint32_t dim>
 void BrittleFailureVisitor<dim>::Visit( Element<dim>* e )
 {
    InitializeInputProperties( e );
@@ -116,7 +116,7 @@ void BrittleFailureVisitor<dim>::Visit( Element<dim>* e )
    // reading extra variables at integration points and calculating criteria
    if ( Stress_key_.place == ELEMENT_INTEGRATION_POINT ) {
         const size_t integration_points(e->FE()->IntegrationPoints());
-        for ( size_t i=0U; i<integration_points; i++ )
+        for ( auto i{0}; i<integration_points; i++ )
           {
             // 1. reading extra input variables
             if ( Pressure_key_.place != UNDEFINED )

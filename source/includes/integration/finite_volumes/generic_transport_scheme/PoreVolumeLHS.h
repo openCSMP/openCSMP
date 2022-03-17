@@ -8,7 +8,7 @@ namespace csmp {
 /**
     The pore volume is accumulated into the diagonal of the sparse (solution) matrix
 */
-template <size_t dim>
+template <uint32_t dim>
 class PoreVolumeLHS : public MatrixOperator<dim> {	
 	public: 
 	  PoreVolumeLHS( const csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT>& spv_key,

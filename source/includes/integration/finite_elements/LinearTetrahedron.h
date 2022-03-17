@@ -12,26 +12,26 @@ class LinearTetrahedron : public FiniteElement {
     virtual ~LinearTetrahedron();
 
     virtual double  Volume();
-    virtual void    CounterClockwiseNodes( std::vector<size_t>& ids ) const;
-    virtual size_t  CornerNodes() const  { return 4U; }
-    virtual void    CornerNodes( std::vector<size_t>& ids ) const;
-    virtual void    NodesOfSegment( size_t segm_id, std::vector<size_t>& snids ) const;
-    virtual void    NodesOfFace( size_t face_id, std::vector<size_t>& fnids ) const;
+    virtual void    CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  CornerNodes() const  { return 4U; }
+    virtual void    CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual void    NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
+    virtual void    NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
     
-    virtual std::vector<size_t>  CornerNodesOfFace( size_t face_id ) const;  
-    virtual std::vector<size_t>  NodesConnectedTo( size_t node_id ) const;
+    virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
+    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     
-    virtual CSMP_FEM_TYPE  ElementTypeOfFace( size_t face ) const;
-    virtual CSMP_FEM_TYPE  ElementTypeOfSegment( size_t /* segment */ ) const { return LINEAR_BAR; };
+    virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
+    virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return LINEAR_BAR; };
   
-    virtual void UnitNormalToFace( size_t face, std::vector<double>& unrml ) const;
+    virtual void UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
     
     virtual void N( std::vector<double>& N, const std::vector<double>& xyz );
     virtual void dN( DenseMatrix<DM_MIN>& M );
     virtual void IntegralNN( DenseMatrix<DM_MIN>& M );
 
   private:
-    size_t n( size_t i, size_t a );
+    uint32_t n( uint32_t i, uint32_t a );
     void   UpdateFor();
 };
 

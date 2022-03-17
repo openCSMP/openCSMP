@@ -14,7 +14,7 @@ namespace csmp {
 
  /// Calculating the volume and pore volume of a node-centered control volume.
 
-template<size_t dim>
+template<uint32_t dim>
 class PoreVolumeVisitor : public Visitor<dim> {
   public:
     PoreVolumeVisitor( Model<dim>&, 

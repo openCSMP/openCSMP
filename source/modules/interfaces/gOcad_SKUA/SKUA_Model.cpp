@@ -91,27 +91,25 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
         // element numbers
         PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
         elmt_nums.Reserve( vset.Elements() );
-        for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+        for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
         vset.AddData( "element number", elmt_nums );
       }
     if ( Database().IsDefined( "node number" ) ) {
         // node numbers
         PropertyData node_nums( NODE, SCALAR, 3U );
         node_nums.Reserve( vset.Vertices() );
-        for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+        for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
         vset.AddData( "node number", node_nums );
       }
 
     // 2. preserving numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
-    for ( size_t i = 0U; i<vertices; ++i )
+    for ( auto i = 0U; i<vertices; ++i )
       node_coords_.emplace_back( Point<3U>( vset.Px( i ), vset.Py( i ), vset.Pz( i ) ) );
 
     // 3. construct model based on obtained model topology and vset
-    Model<3U>::Initialize( mesh_topology,
-                           vset, true,
-                          !mesh_topology.BoxShapedModel() );
+    Model<3U>::Initialize( mesh_topology, vset );
                             
     // 4. Performing range check on the inmported properties
     ErrorHandler& csmp_error(ErrorHandler::Instance());
@@ -189,7 +187,7 @@ bool SKUA_Model::RestoreOriginalNodeNumbering( bool verbose )
 {
   // making a binary tree of the original node numbers, searchable for point coordinates
   map<Point<3U>, size_t>  original_node_numbers;
-  for ( size_t i = 0U; i<node_coords_.size(); ++i )
+  for ( auto i = 0U; i<node_coords_.size(); ++i )
     original_node_numbers.insert( make_pair( node_coords_[i], i ) );
 
   // renumbering the nodes of the model consecutively

@@ -12,9 +12,9 @@
 
 namespace csmp
 {
-  template<size_t> class Model;
+  template<uint32_t> class Model;
 
-  template<size_t dim> 
+  template<uint32_t dim> 
     class NaClH2OPropertiesVisitorPHX : public Visitor<dim> 
     {
     public:
@@ -480,7 +480,7 @@ namespace csmp
 
   // NaClH2OPropertiesVisitorPHX Methods ====================
 
-  template<size_t dim>
+  template<uint32_t dim>
     inline double  NaClH2OPropertiesVisitorPHX<dim>::EffectiveLiquidSaturationHalitePresent( double sat_liquid, double sat_vapor ) const
     {
       double seff;
@@ -497,7 +497,7 @@ namespace csmp
 
     } // end EffectiveSaturation
 
-  template<size_t dim>
+  template<uint32_t dim>
     inline double  NaClH2OPropertiesVisitorPHX<dim>::RelativePermeabilityLiquid( double sat_liquid, double sat_vapor ) const
     {
       double seff, sat_total(sat_liquid+sat_vapor);
@@ -513,13 +513,13 @@ namespace csmp
     } // end RelativePermeabilityLiquid
 
   //*** new TD May 2011
-  template<size_t dim>
+  template<uint32_t dim>
     inline void NaClH2OPropertiesVisitorPHX<dim>::SetMaximumCompressibilityCyclesAfterPhaseChange( double max )
     {
       max_after_phasechange_counter = max;
     }
 
-  template<size_t dim>
+  template<uint32_t dim>
     inline void NaClH2OPropertiesVisitorPHX<dim>::SetAdjustCompressibilityAfterPhaseChangeBoolTo( bool adjust )
     {
       adjust_compressibility_after_phasechange = adjust;

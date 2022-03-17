@@ -35,7 +35,7 @@ object should not be constructed from the main() file
 copyright (c) 2001 by Sebastian Geiger, Stephan K. Matthaei & Stephen G. Roberts 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class GenericNodePropertyGradientLimiter {
        
   public:
@@ -48,7 +48,7 @@ class GenericNodePropertyGradientLimiter {
     void CalculateGenericNodalGradient();
 
     // compute the gradient limiter
-    void CalculateSlopeLimiter( const std::vector<std::pair<double,double> >& MINMAX, int counter = 1 );
+    void CalculateSlopeLimiter( const Region<dim>&, const std::vector<std::pair<double,double> >& MINMAX, int counter = 1 );
 
     // setting the property key
     void SetPropertyKey( csmp::Index& key );
@@ -58,10 +58,9 @@ class GenericNodePropertyGradientLimiter {
 
     
   private:
-    Region<dim>                        gref_; ///< handle to the application domain of the limiter
     std::vector<PropertyHandle<dim>*>  limiter;
     GenericNodePropertyGradient<dim>   node_prop_grad;
-    double                           tolerance;
+    double                             tolerance;
     csmp::Index                        u_key;
     const csmp::Index                  grad_key, lim_key, mctr_key;
  };

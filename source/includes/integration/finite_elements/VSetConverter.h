@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 /**
     To convert linear to quadratic elements and to remove degenerate elements 
@@ -15,7 +15,7 @@ template<size_t> class VSet;
     @date 2001
  
 */
-template<size_t dim>
+template<uint32_t dim>
 class VSetConverter {
   public:
     /// the coordinates of the bounding box are initialized to Not A Number
@@ -24,6 +24,9 @@ class VSetConverter {
                       zmin(std::numeric_limits<double>::quiet_NaN()), zmax(std::numeric_limits<double>::quiet_NaN()) {};
 
     ~VSetConverter() {};
+    
+    /// replaces straight-sided global element types with isoparametric ones
+    void ConvertElementTypesToOnesUsingLocalCoordinateSystem( VSet<dim>& );
   
     /// applies the naming conventions TOP, BOTTOM etc. to sides, edges and cornier points of the box
     void EstablishBoundaryFlagsForBoxModel( VSet<dim>&, double tolerance=0.2 );
@@ -80,26 +83,6 @@ class VSetConverter {
  };
 
 
-// inline function definitions
-
-/**
-    Interpolation of variable values on the boundary, assuming that it lies in one 
-    of the coordinate planes.
-*/
-template<size_t dim>
-inline double VSetConverter<dim>::BoundaryValue( const std::map<size_t,double>& bvals, 
-                                                   size_t nID1, size_t nID2 ) 
- const
-  {
-      typename std::map<size_t,double>::const_iterator  bvit1(bvals.find(nID1)), 
-                                                          bvit2(bvals.find(nID2));
-      assert( bvit1 != bvals.end() );
-      assert( bvit2 != bvals.end() );
-
-      return ((*bvit1).second + (*bvit2).second) / 2.;
-
-  } // end BoundaryValue
-                                         
 
 
 

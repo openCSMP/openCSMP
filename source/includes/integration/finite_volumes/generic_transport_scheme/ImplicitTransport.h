@@ -13,11 +13,11 @@
 
 namespace csmp {
 
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
 // alias template (since C++11)
-template<size_t dim> 
+template<uint32_t dim> 
 using GoverningEquation = IntegralEquation<dim,variables::VariableSet_TracerTransfer>;
 
 /**
@@ -25,7 +25,7 @@ TODO: include thickness attributes to support computations with lower-dimensiona
 TODO: make this algorithm general so that it can also be applied to Boundary and SplitBoundary objects
 TODO: Implement bijective grid-to-grid mapping to loose grid orientation effects completely!
 */
-template<size_t dim>
+template<uint32_t dim>
 class ImplicitTransport : public GoverningEquation<dim>,
                           public Accumulator<dim,ImplicitTransport>,        // needs base class to get to the INDEX keys
                           public Integrator<dim,ImplicitTransport>,

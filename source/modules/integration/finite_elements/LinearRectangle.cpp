@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
+LinearRectangle::LinearRectangle(uint32_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
 	{
 		dim = dims;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */
@@ -39,9 +39,9 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 			-vol / 18.,  vol / 9.,  -vol / 18.,  vol / 36.,
 			vol / 36., -vol / 18.,  vol / 9.,  -vol / 18.,
 			-vol / 18.,  vol / 36., -vol / 18.,  vol / 9. };
-		size_t k(0);
-		for (size_t i = 0; i < 4; ++i)
-			for (size_t j = 0; j < 4; ++j)
+		uint32_t k(0);
+		for (auto i = 0; i < 4; ++i)
+			for (uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[k++];
 	}
 
@@ -49,18 +49,18 @@ LinearRectangle::LinearRectangle(size_t dims) :FiniteElement(LINEAR_RECTANGLE, f
 void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 	{
 		if (dim == 2) { Nrs(M, XY, xyz); return; }
-		size_t r = 0, s = 1; // Nodes on xy-plane
+		uint32_t r = 0, s = 1; // Nodes on xy-plane
 		if ((XY(0, 0) == XY(1, 0)) && (XY(1, 0) == XY(2, 0))) { r = 1; s = 2; } // nodes on yz-plane
 		else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 0; s = 2; } // nodes on xz-plane
 		M1_.Resize(npe, 2);
-		for (size_t i = 0; i < npe; ++i) { M1_(i, 0) = XY(i, r); M1_(i, 1) = XY(i, s); }
+		for (auto i = 0; i < npe; ++i) { M1_(i, 0) = XY(i, r); M1_(i, 1) = XY(i, s); }
 		Nrs(M, M1_, { xyz[r],xyz[s] });
 	}
 
 	// dN returns dN at barcy center of the element (Stephan's opinion)
 	void LinearRectangle::dN(DenseMatrix<DM_MIN>& DN) 
 	{
-		size_t r = 0, s = 1; // Nodes on xy-plane
+		uint32_t r = 0, s = 1; // Nodes on xy-plane
 		if (dim == 3){
 			if ((XY(0, 0) == XY(1, 0)) && (XY(1, 0) == XY(2, 0))) { r = 1; s = 2; } // nodes on yz-plane
 			else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 1; s = 2; } // nodes on xz-plane
@@ -70,22 +70,22 @@ void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 		double  rc = XY(0, r) + (XY(2, r) - XY(0, r))/sqrt(3.), sc = XY(0, s) + (XY(2, s) - XY(0, s))/sqrt(3.), //
 				area = (XY(1, r) - XY(0, r))*(XY(3, s) - XY(0, s));
 
-		size_t indV = 0;
+		uint32_t indV = 0;
 		V_ = { (sc - XY(2,s)) / area, -(sc - XY(3,s)) / area, (sc - XY(0,s)) / area, -(sc - XY(1,s)) / area,
 			   (rc - XY(2,r)) / area, -(rc - XY(3,r)) / area, (rc - XY(0,r)) / area, -(rc - XY(1,r)) / area };
 
 		DN.Resize(dim, npe);
 		DN.Zero();
 		for (auto i : { r , s })
-			for (size_t j = 0; j < npe; ++j)
+			for (uint32_t j = 0; j < npe; ++j)
 				DN(i, j) = V_[indV++];
 	}
 
 
-void LinearRectangle::CornerNodes(std::vector<size_t>& ids) const { ids = { 0, 1, 2, 3 }; }
+void LinearRectangle::CornerNodes(std::vector<uint32_t>& ids) const { ids = { 0, 1, 2, 3 }; }
 
 
-void LinearRectangle::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids) const
+void LinearRectangle::NodesOfSegment(uint32_t segm_id, std::vector<uint32_t>& snids) const
 	{
 		snids.resize(2);
 		if (segm_id == 0) {
@@ -111,7 +111,7 @@ void LinearRectangle::NodesOfSegment(size_t segm_id, std::vector<size_t>& snids)
 
 
 
-void LinearRectangle::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) const
+void LinearRectangle::NodesOfFace(uint32_t face_id, std::vector<uint32_t>& fnids) const
 	{
 		fnids.resize(2);
 		if (face_id == 0)
@@ -145,39 +145,39 @@ void LinearRectangle::NodesOfFace(size_t face_id, std::vector<size_t>& fnids) co
 
 
 
-vector<size_t>  LinearRectangle::CornerNodesOfFace( size_t face_id ) const
+vector<uint32_t>  LinearRectangle::CornerNodesOfFace( uint32_t face_id ) const
  {
 		switch (face_id) {
-        case 0: return vector<size_t>{0,1};
-        case 1: return vector<size_t>{1,2};
-        case 2: return vector<size_t>{2,3};
-        case 3: return vector<size_t>{3,0};
+        case 0: return vector<uint32_t>{0,1};
+        case 1: return vector<uint32_t>{1,2};
+        case 2: return vector<uint32_t>{2,3};
+        case 3: return vector<uint32_t>{3,0};
       }
     cerr <<"\nLinearRectangle::CornerNodesOfFace: face "<< face_id <<" does not exist.";
-    return vector<size_t>{};
+    return vector<uint32_t>{};
  }
 
 
 
-vector<size_t>  LinearRectangle::NodesConnectedTo( size_t node_id ) const
+vector<uint32_t>  LinearRectangle::NodesConnectedTo( uint32_t node_id ) const
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
-        case 0: return vector<size_t>{1,3};
-        case 1: return vector<size_t>{0,2};
-        case 2: return vector<size_t>{1,3};
-        case 3: return vector<size_t>{0,2};
+        case 0: return vector<uint32_t>{1,3};
+        case 1: return vector<uint32_t>{0,2};
+        case 2: return vector<uint32_t>{1,3};
+        case 3: return vector<uint32_t>{0,2};
         default:
           cerr <<"\nLinearRectangle::NodesConnectedTo: node "<< node_id <<" does not exist.";
       }
-    return vector<size_t>{};
+    return vector<uint32_t>{};
   }
 
 
 
 void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
 	{
-		size_t r = 0, s = 1; // Nodes on xy-plane
+		uint32_t r = 0, s = 1; // Nodes on xy-plane
 		if (dim == 3) {
 			if ((XY(0, 0) == XY(1, 0)) && (XY(1, 0) == XY(2, 0))) { r = 1; s = 2; } // nodes on yz-plane
 			else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 1; s = 2; } // nodes on xz-plane
@@ -194,10 +194,10 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 			   (1 - 1.5*vol)*C,	 -C + KrLs2,	     C,	               -C + KsLr2,
 			   -C + KrLs2,	      (1 - 1.5*vol)*C,	-C + KsLr2,		  	C};
 
-		size_t vind = 0;
+		uint32_t vind = 0;
 		M.Resize(4, 4);
-		for (size_t i = 0; i < 4; ++i)
-			for (size_t j = 0; j < 4; ++j)
+		for (auto i = 0; i < 4; ++i)
+			for (uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[vind++];
 	}
 
@@ -267,9 +267,9 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 			Z2 = XY(3, 2) - XY(0, 2);
 		// Second : cross product (normal to quad)
 		vc.resize(3);
-		vc[0] = Z2*Y1 - Y2*Z1,
-		vc[1] = Z1*X2 - X1*Z2,
-		vc[2] = Y2*X1 - X2*Y1 ;
+    vc[0] = Z2*Y1 - Y2*Z1;
+    vc[1] = Z1*X2 - X1*Z2;
+		vc[2] = Y2*X1 - X2*Y1;
 		// Third : normalization to unit length
 		double length = sqrt(vc[0] * vc[0] + vc[1] * vc[1] + vc[2] * vc[2]);
 		vc[0] /= length;

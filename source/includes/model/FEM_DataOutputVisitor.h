@@ -7,14 +7,14 @@
 namespace csmp {
 
 struct Index;
-template<size_t> class PropertyDatabase;
-template<size_t> class Node;
-template<size_t> class Element;
-template<size_t> class Region;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Node;
+template<uint32_t> class Element;
+template<uint32_t> class Region;
 template<typename> class FEM_Data;
 
 /// replaces value of property a with propery b
-template<typename Var, size_t dim>
+template<typename Var, uint32_t dim>
 class FEM_DataOutputVisitor : public Visitor<dim> {
   public:
     FEM_DataOutputVisitor( const PropertyDatabase<dim>&, 

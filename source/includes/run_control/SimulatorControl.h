@@ -18,7 +18,7 @@ enum WELL_MODE { SHUTIN, PRODUCER, INJECTOR };
     @todo SKM move to applications, geothermal energy storage simulator
 
 */
-template <size_t dim>
+template <uint32_t dim>
 class SimulatorControl
 {
 public:

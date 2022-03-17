@@ -4,7 +4,7 @@
 #include "Test.h"
 
 namespace csmp{
-template <size_t dim>
+template <uint32_t dim>
 class CFL_Calculation_VVCase : public Test
 {
 public:

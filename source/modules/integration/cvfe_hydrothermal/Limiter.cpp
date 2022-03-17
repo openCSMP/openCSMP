@@ -5,7 +5,7 @@ using namespace std;
 namespace csmp {
 
 /** custom constructor */
-template<size_t dim>
+template<uint32_t dim>
 Limiter<dim>::Limiter( const PropertyDatabase<dim>& p,
 					    const char* prop, double min_value, double max_value )
       : Interrelation<dim>(p),
@@ -19,7 +19,7 @@ Limiter<dim>::Limiter( const PropertyDatabase<dim>& p,
  }
 
 /** Limit values to specified range between min_value and max_value */
-template<size_t dim>
+template<uint32_t dim>
 void Limiter<dim>::Calculate()
  {
 

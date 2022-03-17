@@ -117,22 +117,22 @@ public:
   TensorVariable&  operator=( TensorVariable&& ) = default;
 
   /// read/write access to the elements of the tensor
-  double&        operator()( size_t i, size_t j );
+  double&        operator()( uint32_t i, uint32_t j );
 
   /// read-only access to the elements of the tensor
-  const double&  operator()( size_t i, size_t j ) const;
+  const double&  operator()( uint32_t i, uint32_t j ) const;
 
   /// alternative mutator of tensor elements 0..8 accessing them sequentially row by row
-  void      Component( size_t, double );
+  void      Component( uint32_t, double );
 
   /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
-  double  Component( size_t i ) const;
+  double  Component( uint32_t i ) const;
 
   /// number of entries in tensor (dim x dim = 9 in this 3D case)
-  size_t  Size() const { return 9U; }
+  uint32_t  Size() const { return 9U; }
 
   /// assigns second argument to all elements of the tensor, first argument is not used; @todo remove
-  void Resize( size_t, double newValue = std::numeric_limits<double>::quiet_NaN() );
+  void Resize( uint32_t, double newValue = std::numeric_limits<double>::quiet_NaN() );
 
   TensorVariable   operator+( double val ) const;
   TensorVariable   operator-( double val ) const;
@@ -195,7 +195,7 @@ public:
   bool              IsWithinRange( double vmin, double vmax ) const;
 
   /// returns the flag of the diagonal tensor element of choice
-  VARIABLE_FLAG     Flag( size_t i = 0 ) const;
+  VARIABLE_FLAG     Flag( uint32_t i = 0 ) const;
 
   /// returns smallest element in tensor (this is zero if the tensor is diagonal)
   double          MinElement() const;
@@ -242,19 +242,19 @@ public:
   void              DiagonalValues( const VectorVariable<3U>& );
 
   /// assigns vector variable to row i of the tensor
-  void              AssignToRow( size_t i, VectorVariable<3U>& );
+  void              AssignToRow( uint32_t i, VectorVariable<3U>& );
 
   /// assigns vector variable to column j of the tensor
-  void              AssignToColumn( size_t j, VectorVariable<3U>& );
+  void              AssignToColumn( uint32_t j, VectorVariable<3U>& );
 
   /// returns row iRow into the argument VectorVariable
-  VectorVariable<3U> Row( size_t iRow ) const;
+  VectorVariable<3U> Row( uint32_t iRow ) const;
 
   /// returns column iCol into the argument VectorVariable
-  VectorVariable<3U> Column( size_t iCol ) const;
+  VectorVariable<3U> Column( uint32_t iCol ) const;
 
   /// accessor/mutator of the flags of the diagonal elements of the tensor
-  VARIABLE_FLAG&    Flag( size_t i = 0 );
+  VARIABLE_FLAG&    Flag( uint32_t i = 0 );
 
   /// converts tensor into identity matrix
   void              Identity();
@@ -272,7 +272,7 @@ public:
   bool              Out( std::fstream& fp ) const;
 
 private:
-  std::array<VARIABLE_FLAG, 3U>            flag;
+  std::array<VARIABLE_FLAG, 3U>           flag;
   std::array<std::array<double, 3U>, 3U>  data;
 };
 
@@ -285,7 +285,7 @@ Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts );
 
 
 /// ostream operator for exporting the tensor to cout or file streams
-template<size_t dim>
+template<uint32_t dim>
 std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
 
 

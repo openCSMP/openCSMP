@@ -10,39 +10,39 @@
 
 
 namespace csmp {
-  template<size_t dim, VARIABLE_TYPE vt>
+  template<uint32_t dim, VARIABLE_TYPE vt>
   struct VariableTypeTraits
   {
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   struct VariableTypeTraits<dim,SCALAR>
   {
     typedef double ReturnType;
     typedef ScalarVariable VariableType;
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   struct VariableTypeTraits<dim,VECTOR>
   {
     typedef Point<dim> ReturnType;
     typedef VectorVariable<dim> VariableType;
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   struct VariableTypeTraits<dim,TENSOR>
   {
     typedef TensorVariable<dim> VariableType;
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   struct VariableTypeTraits<dim,ARRAY>
   {
     typedef std::vector<double> ReturnType;
     typedef ArrayVariable VariableType;
   };
 
-  template<size_t dim>
+  template<uint32_t dim>
   struct VariableTypeTraits<dim,FLAGGEDARRAY>
   {
     typedef FlaggedArrayVariable VariableType;

@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class HydrostaticPressure : public Interrelation<dim> {
     Operand<dim>&    P;    // absolute fluid pressure
     Operand<dim>&    E;    // vertical elevation (zero at model base)

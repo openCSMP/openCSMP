@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-template<size_t> class VSet;
+template<uint32_t> class VSet;
 
 // MISSING
 // TODO: test read / write of VSet/VData with faces and interfaces

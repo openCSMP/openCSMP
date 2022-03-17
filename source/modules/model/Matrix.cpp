@@ -16,7 +16,7 @@ Matrix& Matrix::operator=( const Matrix& mat )
          rows  = mat.rows;
          cols  = mat.cols;
 
-         for ( size_t i=0U; i<rows; i++ )
+         for ( auto i{0}; i<rows; i++ )
            for ( size_t j=0U; j<cols; j++ ) 
              data[i][j] = mat.data[i][j]; 
       }
@@ -29,7 +29,7 @@ Matrix& Matrix::operator=( const Matrix& mat )
 
 Matrix& Matrix::operator=( double val )
  {
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val; 
       
     return *this;
@@ -69,7 +69,7 @@ Matrix::~Matrix()
 
 Matrix&  Matrix::operator*=( double val )
  {
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] *= val;
        
     return *this;
@@ -93,7 +93,7 @@ Matrix&
          // C++ named return value optimization
          Matrix  temp( rows, 3U );
     
-         for ( size_t i=0U; i<rows; i++ )
+         for ( auto i{0}; i<rows; i++ )
            for ( size_t j=0U; j<3U; j++ ) {
                  temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<3U; k++ ) 
@@ -142,7 +142,7 @@ Matrix&  Matrix::operator*=( const Matrix& mat )
     //Matrix  temp( rows, mat.cols );
     Matrix  temp( cols, mat.rows ,0.0);
 
-    for ( size_t i=0U; i<cols; i++ )
+    for ( auto i{0}; i<cols; i++ )
     {
       for ( size_t j=0U; j<mat.rows; j++ ) {
         //temp.data[i][j] = static_cast<double>(0.0);
@@ -176,7 +176,7 @@ Matrix::operator*=( const TensorVariable<2U>& ts )
          // C++ named return value optimization
          Matrix  temp( rows, 2U );
     
-         for ( size_t i=0U; i<rows; i++ )
+         for ( auto i{0}; i<rows; i++ )
            for ( size_t j=0U; j<2U; j++ ) {
                  temp.data[i][j] = static_cast<double>(0.0);
                  for ( size_t k=0U; k<2U; k++ ) 
@@ -216,7 +216,7 @@ void Matrix::RowCondenseTo( std::vector<double>& vec ) const
 Matrix& Matrix::operator+=( const Matrix& mat )
  {
     CheckSizes( mat, "Matrix::operator+=" );
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] += mat.data[i][j]; 
       
     return *this;
@@ -231,7 +231,7 @@ Matrix& Matrix::operator+=( const Matrix& mat )
 Matrix& Matrix::operator-=( const Matrix& mat )
  {
     CheckSizes( mat, "Matrix::operator-=" );
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] -= mat.data[i][j]; 
       
     return *this;
@@ -249,7 +249,7 @@ Matrix  Matrix::operator+( const Matrix& mat ) const
     CheckSizes( mat, "Matrix::operator+" );
     Matrix  temp(cols,rows);
     
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
         temp.data[i][j] = data[i][j] + mat.data[i][j]; 
       
@@ -265,7 +265,7 @@ Matrix Matrix::operator-( const Matrix& mat ) const
     CheckSizes( mat, "Matrix::operator-" );
     Matrix  temp(cols,rows);
     
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
         temp.data[i][j] = data[i][j] - mat.data[i][j]; 
       
@@ -356,7 +356,7 @@ Matrix  Matrix::operator*( const Matrix& mat ) const
     // use STANDARD return value optimization
     Matrix  temp( rows, mat.cols );
     //temp.Out(3);
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<mat.cols; j++ ) {
            temp.data[i][j] = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.rows; k++ ) 
@@ -441,7 +441,7 @@ Matrix::MultiplyWithTransposedOf( const Matrix& B, Matrix& RES ) const
     RES.Resize( rows, B.rows );
     double  sum;
     
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<B.rows; j++ ) {
            sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<cols; k++ ) 
@@ -471,7 +471,7 @@ Matrix::MultiplyTransposedOfWith( const Matrix& B, Matrix& RES ) const
     RES.Resize( cols, B.cols );
     double  sum;
     
-    for ( size_t i=0U; i<cols; i++ )
+    for ( auto i{0}; i<cols; i++ )
       for ( size_t j=0U; j<B.cols; j++ ) {
            sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<B.rows; k++ ) 
@@ -492,7 +492,7 @@ Matrix::TransposedProduct( Matrix& RES ) const
     RES.Resize( cols, cols );
     double  sum;
     
-    for ( size_t i=0U; i<cols; i++ )
+    for ( auto i{0}; i<cols; i++ )
       for ( size_t j=0U; j<cols; j++ ) {
            sum = static_cast<double>(0.0);
            for ( size_t k=0U; k<rows; k++ ) 
@@ -565,7 +565,7 @@ Matrix  operator*( const Matrix& a, const Matrix& b )
 #endif
     Matrix  temp( a.Rows(), b.Cols() );
     
-    for ( size_t i=0U; i<a.Rows(); i++ )
+    for ( auto i{0}; i<a.Rows(); i++ )
       for ( size_t j=0U; j<b.Cols(); j++ ) {
            temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<b.Rows(); k++ ) 
@@ -633,7 +633,7 @@ Matrix  operator*( const vector<double>& vec, const Matrix& mat )
       }
     Matrix  temp( vec.size(), mat.Cols() );
     
-    for ( size_t i=0U; i<vec.size(); i++ )
+    for ( auto i{0}; i<vec.size(); i++ )
       for ( size_t j=0U; j<mat.Cols(); j++ ) {
            temp(i,j) = static_cast<double>(0.0);
            for ( size_t k=0U; k<mat.Rows(); k++ ) 
@@ -665,7 +665,7 @@ void Matrix::Resize( size_t m, size_t n )
     cols = n;    
     data.resize(m);
     vector<vector<double> >( data ).swap( data );
-    for ( size_t i=0U; i<m; i++ ) {
+    for ( auto i{0}; i<m; i++ ) {
          data[i].resize(n);
          vector<double>( data[i] ).swap( data[i] );
       }
@@ -677,7 +677,7 @@ void Matrix::Resize( size_t m, size_t n )
 
 void Matrix::Identity()
  {
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
         if ( i == j ) data[i][j] = static_cast<double>(1.0);
         else          data[i][j] = static_cast<double>(0.0);         
@@ -689,7 +689,7 @@ void Matrix::Identity()
 
 void Matrix::Zero()
  {
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) 
         data[i][j] = static_cast<double>(0.0);
  }
@@ -728,7 +728,7 @@ void Matrix::ZeroCol( size_t col )
 
 void Matrix::Fill( double val )
  {
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) data[i][j] = val;
  }
 
@@ -751,7 +751,7 @@ void Matrix::FillRow( size_t row, double val )
 
 void Matrix::FillCol( size_t col, double val )
  {
-    if ( col < cols ) for ( size_t i=0U; i<rows; i++ ) data[i][col] = val;
+    if ( col < cols ) for ( auto i{0}; i<rows; i++ ) data[i][col] = val;
     else {
       std::cout <<"\nMatrix<double>::FillCol: ";
       std::cout <<"Target column does not exist: "<< col << std::endl;
@@ -766,7 +766,7 @@ void Matrix::Transposed( Matrix& M ) const
  {
     M.Resize(cols,rows);
  
-    for ( size_t i=0U; i<rows; i++ )
+    for ( auto i{0}; i<rows; i++ )
       for ( size_t j=0U; j<cols; j++ ) M.data[j][i] = data[i][j];
  }
 
@@ -801,7 +801,7 @@ double   Matrix::ColSum( size_t col ) const
     double  sum(0.0);
  
     if ( col < cols ) {
-         for ( size_t i=0U; i<rows; i++ ) sum += data[i][col];
+         for ( auto i{0}; i<rows; i++ ) sum += data[i][col];
          return sum;
       }
 
@@ -960,7 +960,7 @@ size_t Matrix::Cols() const { return cols; }
 #ifndef NDEBUG
 /// checks whether row and column numbers are compatible with the size of the matrix
 bool Matrix::CheckRange( size_t m, size_t n,
-                                const char* originator ) const
+                         const char* originator ) const
  {
     if ( m >= rows ) {
          std::cerr <<"\n"<< originator <<" row index violation, index="<< m;
@@ -982,7 +982,7 @@ bool Matrix::CheckRange( size_t m, size_t n,
 
 /// checks whether the righthand matrix has the same size as the lefthand one in the calculation
 bool Matrix::CheckSizes( const Matrix& mat, 
-                                const char* originator ) const
+                         const char* originator ) const
  {
     if ( rows != mat.rows ) {
          std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
@@ -1064,7 +1064,7 @@ void Matrix::ExportTo( TensorVariable<3U>& ts ) const
     ts(2,2) = data[2][2];
  }
 
-void Matrix::LUDecomposition(std::vector<size_t>& index, double& d)
+void Matrix::LUDecomposition(std::vector<uint32_t>& index, double& d)
 {
     const double TINY(1.0e-20);
     int i,imax(0),j,k;
@@ -1120,7 +1120,7 @@ void Matrix::LUDecomposition(std::vector<size_t>& index, double& d)
 
 }
 
-void Matrix::LUBackSubstitution(std::vector<size_t>& index, std::vector<double> &b)
+void Matrix::LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double> &b)
 {
 
    if (index.size() != rows or b.size() != rows) {
@@ -1169,7 +1169,7 @@ std::vector<double>  Matrix::ReturnCol( size_t col ) const
  {
     std::vector<double> col_vals(rows,0.);
     if ( col < cols ) {
-        for ( size_t i=0U; i<rows; i++ ) col_vals[i] = data[i][col];
+        for ( auto i{0}; i<rows; i++ ) col_vals[i] = data[i][col];
       }
     else {
         std::cout <<"\nMatrix<double>::ReturnCol: ";
@@ -1187,7 +1187,7 @@ void Matrix::AssignToRow( size_t row, std::vector<double>& vec )
       std::cout <<"Vector must have same length as number of cols: " << std::endl;
       return;
      }
-    if ( row < rows ) for ( size_t i=0U; i<cols; i++ ) data[row][i] = vec[i];
+    if ( row < rows ) for ( auto i{0}; i<cols; i++ ) data[row][i] = vec[i];
     else {
       std::cout <<"\nMatrix<double>::AssignToRow: ";
       std::cout <<"Target column does not exist: "<< row << std::endl;
@@ -1203,7 +1203,7 @@ void Matrix::AssignToCol( size_t col, std::vector<double>& vec )
     std::cout <<"Vector must have same length as number of rows: " << std::endl;
     return;
   }
-  if ( col < cols ) for ( size_t i=0U; i<rows; i++ ) data[i][col] = vec[i];
+  if ( col < cols ) for ( auto i{0}; i<rows; i++ ) data[i][col] = vec[i];
   else {
     std::cout <<"\nMatrix<double>::AssignToCol: ";
     std::cout <<"Target column does not exist: "<< col << std::endl;

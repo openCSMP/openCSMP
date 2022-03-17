@@ -7,14 +7,14 @@
 namespace csmp {
 
 /// Known as: streaming potential source term: grad . [L grad pf]
-template<size_t dim,class SIMPLEX=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim> {
   public:
     Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref, 
                                const char* oper, const char* test, const char* grad_var );
 
-    virtual void GetOperands( const SIMPLEX& e );
-    virtual void ComputeContribution( const SIMPLEX& e );
+    virtual void GetOperands( const CELL& e );
+    virtual void ComputeContribution( const CELL& e );
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, VAR; 

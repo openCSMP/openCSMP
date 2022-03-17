@@ -84,9 +84,9 @@ Criterion:  comparison with TOUGH
     tol = 1.;
 
     // computes C-norm of the difference (sum of the absolute values)
-    for (size_t ind=0; ind<nPoints; ind++ )
+    for (size_t ind2=0; ind2<nPoints; ind2++ )
     {
-      pAt.PropertyValueAt(ind, result);
+      pAt.PropertyValueAt(ind2, result);
       res += fabs(result() - values[ind]);
     }
 

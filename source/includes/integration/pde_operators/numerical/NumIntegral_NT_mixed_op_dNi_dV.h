@@ -11,7 +11,7 @@ namespace csmp {
 @date 1999 */
 
 /// for instance for calculation of hydrostatic gradient
-template<size_t dim,class CELL>
+template<uint32_t dim,class CELL>
 class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_mixed_op_dNi_dV( const PropertyDatabase<dim>& p, 
@@ -23,20 +23,20 @@ class NumIntegral_NT_mixed_op_dNi_dV : public MathOperatorRHS<dim> {
     virtual void GetOperands( const CELL& );
     virtual void ComputeContribution( const CELL& );
     
-    void SpatialDerivative( size_t xyz=2 );
+    void SpatialDerivative( uint32_t xyz=2 );
     
     /// do not use MultiplyWithTimeIncrement() here since this would multiply
     /// the whole contribution
     void MaterialPropertyTimeMultiplier( double time_increment );
   
   private:
-    std::vector<double>         IPOL, DNI;
+    std::vector<double>           IPOL, DNI;
     DenseMatrix<DM_MIN>           DN;
     Index                         mtrl_key, nmult_key;
     ScalarVariable                oper_eprop, eprop;
-    const double                gravity;   // acceleration of gravity
-    size_t                        xyz; // 1=x, 2=y, 3=z
-    double                      mtrl_time_multiplier;
+    const double                  gravity;   // acceleration of gravity
+    uint32_t                      xyz; // 1=x, 2=y, 3=z
+    double                        mtrl_time_multiplier;
     std::vector<ScalarVariable >  oper_nprop, mtrl_nprop;
 };
 

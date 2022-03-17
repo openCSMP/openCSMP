@@ -8,7 +8,7 @@ namespace csmp {
 
 // generic non-specialized operators for the class
 
-template<size_t dim>
+template<uint32_t dim>
 bool Point<dim>::operator<( const Point<dim>& )  const
  {
    cerr <<"\nPoint<dim>::operator<() not defined for generic case."<< endl;
@@ -16,7 +16,7 @@ bool Point<dim>::operator<( const Point<dim>& )  const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool Point<dim>::operator>( const Point<dim>& )  const
  {
    cerr <<"\nPoint<dim>::operator>() not defined for generic case."<< endl;
@@ -25,7 +25,7 @@ bool Point<dim>::operator>( const Point<dim>& )  const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void  Point<dim>::NormalizeLengthTo( double len )
  {
     *this /= Length(); 
@@ -62,21 +62,21 @@ ostream&  operator<<( ostream& stream, const Point<3U>& pt )
 // MEMBER DEFINITIONS
 
 // ---------------------------------------------------------------------------
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>::~Point()
  {
  }
 
 /*
-template<size_t dim>
-double& Point<dim>::operator[](size_t i)
+template<uint32_t dim>
+double& Point<dim>::operator[](uint32_t i)
  {
     return xyz_[i];
  }
  
  
-template<size_t dim>
-double Point<dim>::operator[](size_t i) const
+template<uint32_t dim>
+double Point<dim>::operator[](uint32_t i) const
  {
     return xyz_[i];
  }
@@ -109,12 +109,12 @@ Point<1U>::~Point()
  }
 
 
-double& Point<1U>::operator[](size_t)
+double& Point<1U>::operator[](uint32_t)
  {
     return x_;
  }
 
-const double& Point<1U>::operator[](size_t) const
+const double& Point<1U>::operator[](uint32_t) const
  {
     return x_;
  }
@@ -339,12 +339,12 @@ Point<2U>::~Point()
  }
 
 
-double& Point<2U>::operator[]( size_t i )
+double& Point<2U>::operator[]( uint32_t i )
  {
     return (i == 0U) ? x_ : y_;
  }
 
-const double& Point<2U>::operator[]( size_t i ) const
+const double& Point<2U>::operator[]( uint32_t i ) const
  {
     return (i == 0U) ? x_ : y_;
  }
@@ -592,12 +592,12 @@ Point<3U>::~Point()
  {
  }
 
-double& Point<3U>::operator[]( size_t i )
+double& Point<3U>::operator[]( uint32_t i )
  {
     return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
  }
 
-const double& Point<3U>::operator[]( size_t i ) const
+const double& Point<3U>::operator[]( uint32_t i ) const
  {
     return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
  }
@@ -832,27 +832,27 @@ void Point<3U>::Out() const
 //    GENERIC INLINE FUNCTIONS
 //
 // -------------------------------------------------------------------------------
-template<size_t dim>
+template<uint32_t dim>
 double  Point<dim>::DistanceTo( const Point& pt ) const
  {
     return Point<dim>( pt - *this ).Length();
  }
 
 /*
-template<size_t dim>
+template<uint32_t dim>
 Point<dim> operator-( double val, const Point<dim>& pt )
  {
     Point<dim> temp(val);
     return (temp - pt);
  } 
 
-template<size_t dim>
+template<uint32_t dim>
 Point<dim> operator+( double val, const Point<dim>& pt )
  {
     return (pt + val);
  } 
   
-template<size_t dim>
+template<uint32_t dim>
 Point<dim> operator*( double val, const Point<dim>& pt )
  {
     return (pt * val);
@@ -911,7 +911,7 @@ Point<3U> operator*( double val, const Point<3U>& pt )
  }   
 
 
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  midPoint( const Point<dim>& p1, const Point<dim>& p2 )
  { 
     return (Point<dim>( p1 + p2 ) / 2.);
@@ -1001,7 +1001,7 @@ Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 )
 // operators and other functions involving points
 //
 // ----------------------------------------------------------------------------------------
-template<size_t dim>
+template<uint32_t dim>
 Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
   {
      cerr <<"\ncrossProduct<dim>: not defined for generic case."<< endl;
@@ -1016,7 +1016,7 @@ Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
        
           acute_angle = (angle > 90.) ? 180. -angle : angle;
 */
-template<size_t dim>
+template<uint32_t dim>
 double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
  {
     const Point<dim> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
@@ -1024,7 +1024,7 @@ double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const 
     // a . b
     // -----
     double ab{0.};
-    for ( size_t i{0}; i<dim; ++i ) ab += a[i] * b[i];
+    for ( auto i{0}; i<dim; ++i ) ab += a[i] * b[i];
     
     // ||a||  ||b||
     // ------------

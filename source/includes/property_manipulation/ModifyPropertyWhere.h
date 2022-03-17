@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class ModifyPropertyWhere : public Interrelation<dim> {
     Operand<dim>&  k;
     double                if_value, to_value;
@@ -19,7 +19,7 @@ class ModifyPropertyWhere : public Interrelation<dim> {
 };
 
 
-template<size_t dim>
+template<uint32_t dim>
 inline void ModifyPropertyWhere<dim>::Calculate()
  {
     if ( k == if_value ) k = to_value;

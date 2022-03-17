@@ -26,7 +26,7 @@ namespace csmp {
  
     @attention the fluid properties must be initialised elsewhere by an equation of state.
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 class Fluid {
   public:
     /// default constructor that tests the phase-state key

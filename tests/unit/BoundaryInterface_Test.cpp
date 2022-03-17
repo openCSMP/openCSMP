@@ -36,7 +36,7 @@ void BoundaryInterface_Test::run()
       string  input_file("fault_boundary_test");	  
       //input_file = "hex2_s"; // hexahedral element test model
       //input_file = "prism_test"; // hexahedral element test model	  
-      const size_t dim(3);
+      const uint32_t dim(3);
 
       // ------------------------------
       // 1. Building the CSMP Model
@@ -74,8 +74,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -93,8 +93,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -112,8 +112,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -131,8 +131,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -150,8 +150,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -169,8 +169,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -313,7 +313,7 @@ bool BoundaryInterface_Test::TestRegionContactDetection( const Model<3U>& model 
     
     @parameter vector of region names to retrieve them from the integer keys
 */
-template<size_t dim>
+template<uint32_t dim>
 size_t countAndLabelRegions( Model<dim>& model, const char* region_identifier, std::vector<std::string>& region_names )
  {
     // setting element variable up to identify all unique regions - uniquely
@@ -359,7 +359,7 @@ template size_t countAndLabelRegions( Model<3U>&, const char*, std::vector<std::
     may return false if the surface contains a cusp (>90^o kink).
  
 */
-bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
+static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain )
  {
     vector<double> normal(3U), nbor_normal(3U);
    
@@ -369,7 +369,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
       if ( (*it)->IsSurfaceElement() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
-           for ( size_t i=0U; i<neighbors; ++i )
+           for ( auto i{0}; i<neighbors; ++i )
              // only valid neighbor elements are considered
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
@@ -411,7 +411,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
      @attention  where the boundary just intersects a layer (same material on either side), the layer name appears
      only once. The second instance is replaced by INTERSECTION.
 */
-std::string internalBoundaryNameFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
+static std::string internalBoundaryNameFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
  {
      assert( fdata.ElementMaterial() < region_names.size() );
      std::string boundary_name( region_names[ fdata.ElementMaterial() ] );
@@ -480,8 +480,8 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
      @author SKM 
      @date March 2016
 */
-size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
-                        set<string>& region_patches_found )
+static size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
+                               set<string>& region_patches_found )
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
@@ -539,19 +539,19 @@ size_t  findBoundaries( const Model<3U>& model, const set<string>& intersected_r
      TODO: output the numbers of matching faces of the discovered the elements so that they can later be connected
  
 */
-FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
+static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
  {
      assert( e.IsSurfaceElement() );
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------
      // making a set of element nodes to later identify faces by comparison
-     set<size_t>   node_set, test_set;
+     set<uint32_t>   node_set, test_set;
      const size_t  nodes(e.Nodes());
-     for ( size_t i=0U; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
+     for ( auto i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
      map<const Element<3U>*,size_t>  nbor_elmts;
-     vector<size_t> fnids;
-     for ( size_t i=0U; i<nodes; i++ ) {
+     vector<uint32_t> fnids;
+     for ( auto i{0}; i<nodes; i++ ) {
           const size_t parents(e.N(i)->Parents());
           for ( size_t j=0U; j<parents; ++j ) {
                const Element<3U>* const eptr(e.N(i)->Parent(j));
@@ -763,7 +763,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
       }
     // 4.4 trimming excess storage of the face-data vectors
     for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
-      //std::vector<size_t>(elementIds).swap(elementIds);
+      //std::vector<uint32_t>(elementIds).swap(elementIds);
       vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
 
 /* TESTING

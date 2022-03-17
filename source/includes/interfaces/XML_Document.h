@@ -30,9 +30,9 @@ public:
   void AddInfo( const char* comment );
 
   void InsertData( const char* data );
-  void LineBreak( size_t n = 1 ) { for( size_t i = 0; i < n; ++i ) WriteToData( "\n" ); }
-  void Tab( size_t n = 1 ) { for( size_t i = 0; i < n; ++i ) WriteToData( "\t" ); }
-  void BringToLevel() { for( size_t i = 0; i < Level(); ++i ) WriteToData( "\t"); }
+  void LineBreak( size_t n = 1 ) { for( auto i = 0; i < n; ++i ) WriteToData( "\n" ); }
+  void Tab( size_t n = 1 ) { for( auto i = 0; i < n; ++i ) WriteToData( "\t" ); }
+  void BringToLevel() { for( auto i = 0; i < Level(); ++i ) WriteToData( "\t"); }
 
   /// returns the number of characters in current line
   size_t CurrentLineCharacterCount() const { return data_.size() - data_.rfind( "\n" ); }

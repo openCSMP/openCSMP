@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 StokesEinsteinDiffusivity<dim>::StokesEinsteinDiffusivity( 
                                       const PropertyDatabase<dim>& p, 
                                       const char* species_diffusivity, 
@@ -36,7 +36,7 @@ StokesEinsteinDiffusivity<dim>::StokesEinsteinDiffusivity(
 
 /// Calculating the diffusivity of the target species from temperature,
 /// fluid viscosity and R0
-template<size_t dim>
+template<uint32_t dim>
 void StokesEinsteinDiffusivity<dim>::Calculate()
  {
     T.AssignTo( Tc );

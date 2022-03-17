@@ -9,11 +9,11 @@
 
 namespace csmp {
 
-template<size_t> class PropertyDatabase;
-template<size_t> class Region;
-template<size_t> class Model;
+template<uint32_t> class PropertyDatabase;
+template<uint32_t> class Region;
+template<uint32_t> class Model;
 
-template<size_t dim>
+template<uint32_t dim>
 class DESAdvectionDiffusion {
 
   public:

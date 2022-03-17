@@ -25,6 +25,7 @@ namespace csmp {
 
 CGNS_Interface::CGNS_Interface( bool isoparametric_mesh )
     :file_type_(CG_FILE_ADF2),
+     csmp_elmt_specs_(),
      isoparametric_( isoparametric_mesh ),
      interactive_property_assignment_(false)
  {
@@ -70,7 +71,7 @@ void CGNS_Interface::Clear()
 /**
 Reads simple 3-D unstructured grid from a CGNS file
 */
-template<size_t dim>
+template<uint32_t dim>
 int CGNS_Interface::Read_CGNS_Mesh( const std::string&   filename,
                                     csmp::VSet<dim>&     vset,
                                     csmp::ModelTopology& mesh_topology )
@@ -100,7 +101,7 @@ template int CGNS_Interface::Read_CGNS_Mesh( const std::string&,csmp::VSet<2U>&,
 template int CGNS_Interface::Read_CGNS_Mesh( const std::string&,csmp::VSet<3U>&,csmp::ModelTopology& );
 
 
-template<size_t dim>
+template<uint32_t dim>
 int CGNS_Interface::ReadUnstructMesh( int cgfile, const std::string& filename, csmp::VSet<dim>& vset, csmp::ModelTopology&   mesh_topology )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -155,7 +156,7 @@ template int CGNS_Interface::ReadUnstructMesh<2U>( int,const std::string&,csmp::
 template int CGNS_Interface::ReadUnstructMesh<3U>( int,const std::string&,csmp::VSet<3U>&,csmp::ModelTopology& );
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::ReadCoords( int cgfile, int cgbase, int cgzone, int total_num_coords, csmp::VSet<dim>& vset, csmp::ModelTopology&   mesh_topology  )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -193,7 +194,7 @@ template void CGNS_Interface::ReadCoords<1U>( int,int,int,int,csmp::VSet<1U>&,cs
 template void CGNS_Interface::ReadCoords<2U>( int,int,int,int,csmp::VSet<2U>&,csmp::ModelTopology& );
 template void CGNS_Interface::ReadCoords<3U>( int,int,int,int,csmp::VSet<3U>&,csmp::ModelTopology& );
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total_num_elements, csmp::VSet<dim>& vset, csmp::ModelTopology&   mesh_topology  )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -221,7 +222,7 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
     csmp::CSMP_FEM_TYPE csmp_fem_type;
     std::string csmp_fem_type_name;
     std::string section_name;
-    std::pair<typename std::map<std::vector<size_t>,std::pair<size_t,size_t> >::iterator,bool> eit;
+    std::pair<typename std::map<std::vector<uint32_t>,std::pair<size_t,size_t> >::iterator,bool> eit;
     for ( cgsect=1; cgsect <= nsections; ++cgsect )
     {
         char sname[33];
@@ -230,7 +231,7 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
         section_name = sname;
         //cg_ElementDataSize(cgfile,cgbase,cgzone,cgsect,&element_data_size);
         num_elements = iend - istart + 1;
-        std::vector<size_t> section_element_ids;
+        std::vector<uint32_t> section_element_ids;
         if( error_handler.Verbose() )
         {
             std::cout<<"\nCGNS_Interface::ReadCoordsAndElements():Reading section data...\n";
@@ -247,18 +248,18 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
             /// filling fem types and element nodes
             cg_elements_read(cgfile,cgbase,cgzone,cgsect,elements,parent_data);
             std::set<std::string>    section_element_types;
-            size_t i = 0;
+            auto i = 0;
             while( i < element_data_size )
             {
                 csmp_fem_type = elmt_specs_.CSMP_TypeFrom_CGNS_Type( elements[i++], isoparametric_, dim );
                 csmp_fem_type_name = csmp_elmt_specs_.CSMP_TypeName( csmp_fem_type );
                 nperelmt = csmp_elmt_specs_.NodesPerElementOfType( csmp_fem_type );
-                std::vector<size_t> nids( nperelmt );
+                std::vector<uint32_t> nids( nperelmt );
                 size_t iend = i + nperelmt;
                 size_t j = 0;
                 while( i < iend )
                     nids[j++] = elements[i++] - 1;
-                eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<size_t>(csmp_fem_type), 0 ) ) );
+                eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
                 /// if element was not yet considered
                 if ( eit.second )
                 {
@@ -293,15 +294,15 @@ void CGNS_Interface::ReadElements( int cgfile, int cgbase, int cgzone, int total
                     std::cout<<"   reading element data for this element\n";
                 cg_elements_read(cgfile,cgbase,cgzone,cgsect,elements,parent_data);
                 /// filling fem types and element nodes
-                std::vector<size_t> nids( nperelmt );
-                size_t i = 0;
+                std::vector<uint32_t> nids( nperelmt );
+                auto i = 0;
                 while( i < element_data_size )
                 {
                     size_t iend = i + nperelmt;
                     size_t j = 0;
                     while( i < iend )
                         nids[j++] = elements[i++] - 1;
-                    eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<size_t>(csmp_fem_type), 0 ) ) );
+                    eit = element_ids_.insert( std::make_pair( nids, std::make_pair(static_cast<uint32_t>(csmp_fem_type), 0 ) ) );
                     if ( eit.second )
                     {
                         (*eit.first).second.second = global_eid_++;
@@ -342,7 +343,7 @@ an isoparametric model shall be created or not.
 
 The method converts the argument VSet.
 */
-template<size_t dim>
+template<uint32_t dim>
 void Convert_CGNS_To_CSMP_FiniteElementTypes( csmp::VSet<dim>& vset, bool isoparametric )
  {
     CGNS_ElementSpecifications  elmt_specs;
@@ -350,7 +351,7 @@ void Convert_CGNS_To_CSMP_FiniteElementTypes( csmp::VSet<dim>& vset, bool isopar
     if ( !vset.HybridElementTypeMesh() )
       vset.ElementType( 0U, elmt_specs.CSMP_TypeFrom_CGNS_Type( vset.ElementType(0U), isoparametric, dim ) );
     else
-      for ( size_t i=0U; i<vset.ElementTypes(); i++ )
+      for ( auto i{0}; i<vset.ElementTypes(); i++ )
         vset.ElementType( i, elmt_specs.CSMP_TypeFrom_CGNS_Type( vset.ElementType(i), isoparametric, dim ) );
 
  } // end
@@ -363,7 +364,7 @@ template void Convert_CGNS_To_CSMP_FiniteElementTypes( csmp::VSet<3U>&,bool );
 Writess simple 3-D unstructured grid to CGNS file
 */
 
-template<size_t dim>
+template<uint32_t dim>
 int CGNS_Interface::Write_CGNS_Mesh( const std::string&      filename,
                                      const csmp::Model<dim>& model )
 {
@@ -402,7 +403,7 @@ template int CGNS_Interface::Write_CGNS_Mesh( const std::string&,const csmp::Mod
 template int CGNS_Interface::Write_CGNS_Mesh( const std::string&,const csmp::Model<2U>& );
 template int CGNS_Interface::Write_CGNS_Mesh( const std::string&,const csmp::Model<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 int CGNS_Interface::WriteUnstructMesh( const std::string& filename, int cgfile, const csmp::Model<dim>& model )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -429,7 +430,7 @@ template int CGNS_Interface::WriteUnstructMesh<1U>( const std::string&,int,const
 template int CGNS_Interface::WriteUnstructMesh<2U>( const std::string&,int,const csmp::Model<2U>& );
 template int CGNS_Interface::WriteUnstructMesh<3U>( const std::string&,int,const csmp::Model<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::WriteBase( const std::string& filename, int cgfile, int& cgbase )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -473,7 +474,7 @@ template void CGNS_Interface::WriteBase<2U>( const std::string&,int,int& );
 template void CGNS_Interface::WriteBase<3U>( const std::string&,int,int& );
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::WriteZone( const std::string& filename, int cgfile, int cgbase, int& cgzone, const csmp::Model<dim>& model )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -509,7 +510,7 @@ template void CGNS_Interface::WriteZone<2U>( const std::string&,int,int,int&,con
 template void CGNS_Interface::WriteZone<3U>( const std::string&,int,int,int&,const csmp::Model<3U>& );
 
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::WriteCoords( int cgfile, int cgbase, int cgzone, const csmp::Model<dim>& model )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -574,7 +575,7 @@ template void CGNS_Interface::WriteCoords<1U>( int,int,int,const csmp::Model<1U>
 template void CGNS_Interface::WriteCoords<2U>( int,int,int,const csmp::Model<2U>& );
 template void CGNS_Interface::WriteCoords<3U>( int,int,int,const csmp::Model<3U>& );
 
-template<size_t dim>
+template<uint32_t dim>
 void CGNS_Interface::WriteSubDomains( int cgfile, int cgbase, int cgzone, const csmp::Model<dim>& model )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );
@@ -600,7 +601,7 @@ template void CGNS_Interface::WriteSubDomains<1U>( int,int,int,const csmp::Model
 template void CGNS_Interface::WriteSubDomains<2U>( int,int,int,const csmp::Model<2U>& );
 template void CGNS_Interface::WriteSubDomains<3U>( int,int,int,const csmp::Model<3U>& );
 
-template<size_t dim,template <size_t> class SIMPLEX>
+template<uint32_t dim,template <uint32_t> class SIMPLEX>
 void CGNS_Interface::WriteElements( int cgfile, int cgbase, int cgzone, const csmp::ModelSubDomain<dim,SIMPLEX>& subDomain )
 {
     csmp::ErrorHandler& error_handler( csmp::ErrorHandler::Instance() );

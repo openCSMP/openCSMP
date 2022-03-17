@@ -42,14 +42,14 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
       elmt_nums.Reserve( vset.Elements() );
-      for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
-      for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
@@ -58,15 +58,11 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
     if ( use_regions_file )
       Model<2U>::Initialize( regions_file_prefix,
                              mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
     else
       // 3.2 using all regions from the ANSYS model
       Model<2U>::Initialize( mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
   }
 
   // --------------------------------------_-----------  
@@ -150,16 +146,18 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {
       // element numbers
-      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+      const uint32_t dim{2};
+      PropertyData elmt_nums( ELEMENT, SCALAR, dim );
       elmt_nums.Reserve( vset.Elements() );
-      for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
       // node numbers
-      PropertyData node_nums( NODE, SCALAR, 2U );
+      const uint32_t dim{2};
+      PropertyData node_nums( NODE, SCALAR, dim );
       node_nums.Reserve( vset.Vertices() );
-      for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
@@ -169,14 +167,10 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     if ( use_regions_file )
       Model<2U>::Initialize( regions_file_prefix,
                              mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
     else
       Model<2U>::Initialize( mesh_topology,
-                             vset,
-                             true, // create_boundaries
-                             irregular_mesh );
+                             vset );
   }
 
   // --------------------------------------_-----------  

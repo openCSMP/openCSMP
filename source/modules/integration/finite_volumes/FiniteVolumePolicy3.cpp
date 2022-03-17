@@ -22,7 +22,7 @@ It initialises the private variable of the class, associated with the element an
 updates Coordinate Matrix of the element.
 
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 FiniteVolumePolicy<3U,CELL>::FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* fvptr )
  : fvptr_(fvptr)
  {
@@ -33,7 +33,7 @@ FiniteVolumePolicy<3U,CELL>::FiniteVolumePolicy( const csmp::FiniteVolumeStencil
     Connects policy to a finite-volume stencil that must match the parent element.
     Check is performed in DEBUG mode that the stencil matches parent element.
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 void FiniteVolumePolicy<3U,CELL>::AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* fvptr )
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -47,7 +47,7 @@ void FiniteVolumePolicy<3U,CELL>::AssignFiniteVolume( const csmp::FiniteVolumeSt
 
 // FV STENCIL INFO
 
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 const FiniteVolumeStencil<3U>* const FiniteVolumePolicy<3U,CELL>::FV() const
  {
     return fvptr_;
@@ -55,32 +55,32 @@ const FiniteVolumeStencil<3U>* const FiniteVolumePolicy<3U,CELL>::FV() const
 
 
 /// Returns number of sectors, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class CELL>
-size_t FiniteVolumePolicy<3U,CELL>::Sectors() const
+template<template<uint32_t> class CELL>
+uint32_t FiniteVolumePolicy<3U,CELL>::Sectors() const
   {
     if( fvptr_ != nullptr ) return fvptr_->Sectors();
     return 0;
   }
 
 /// Returns number of facets, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class CELL>
-size_t FiniteVolumePolicy<3U,CELL>::Facets() const
+template<template<uint32_t> class CELL>
+uint32_t FiniteVolumePolicy<3U,CELL>::Facets() const
   {
     if( fvptr_ != nullptr ) return fvptr_->Facets();
     return 0;
   }
 
 /// Returns number of integration points per sector, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class CELL>
-size_t FiniteVolumePolicy<3U,CELL>::IntegrationPointsPerSector() const
+template<template<uint32_t> class CELL>
+uint32_t FiniteVolumePolicy<3U,CELL>::IntegrationPointsPerSector() const
   {
     if( fvptr_ != nullptr ) return fvptr_->IntegrationPointsPerSector();
     return 0;
   }
 
 /// Returns number of integration points per facet, 0 if no FiniteVolumeStencil assigned
-template<template<size_t> class CELL>
-size_t FiniteVolumePolicy<3U,CELL>::IntegrationPointsPerFacet() const
+template<template<uint32_t> class CELL>
+uint32_t FiniteVolumePolicy<3U,CELL>::IntegrationPointsPerFacet() const
   {
     if( fvptr_ != nullptr ) return fvptr_->IntegrationPointsPerFacet();
     return 0;
@@ -95,8 +95,8 @@ size_t FiniteVolumePolicy<3U,CELL>::IntegrationPointsPerFacet() const
 
 
 /// SKM add-on (no rst vector needed !)
-template<template<size_t> class CELL>
-void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( size_t iFacet, size_t ip ) const
+template<template<uint32_t> class CELL>
+void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, uint32_t ip ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
     assert( iFacet < fvptr_->Facets());
@@ -129,8 +129,8 @@ void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( size_t iFacet, size
 
  
 /// SKM add-on
-template<template<size_t> class CELL>
-void FiniteVolumePolicy<3U,CELL>::N_AtSectorIntegrationPoint( size_t iSector, size_t ip ) const
+template<template<uint32_t> class CELL>
+void FiniteVolumePolicy<3U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
     assert( iSector < fvptr_->Sectors());
@@ -177,7 +177,7 @@ derivateves: stl vectors DNR,DNS,DNT. For example, before constructing
 the Jacobian matrix of the transformation rst->xyz the user should always
 call this method.
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 void FiniteVolumePolicy<3U,CELL>::Local_dN_At( const Point<3U>& rst ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -202,12 +202,12 @@ void FiniteVolumePolicy<3U,CELL>::Local_dN_At( const Point<3U>& rst ) const
 /**
      @attention SKM: Caution! - not clear what FEM matrices have to do with FV traits
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
                                                 DenseMatrix<DM_MIN>& DN ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
-    const size_t nodes(e->Nodes());
+    const uint32_t nodes(e->Nodes());
     assert( e != nullptr );
     e->CoordinateMatrix();
 
@@ -219,7 +219,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          e->FE()->Jacobian( e->FE()->DNR, e->FE()->DNS, e->FE()->DNT );
 
          DN.Resize(3U,nodes);
-         for ( size_t i=0U; i<nodes; i++ ) {
+         for ( auto i{0}; i<nodes; i++ ) {
               DN(0U,i) = e->FE()->DNR[i];
               DN(1U,i) = e->FE()->DNS[i];
               DN(2U,i) = e->FE()->DNT[i];
@@ -235,8 +235,8 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          // compute Jacobian matrix
          e->FE()->JAC.Resize(2U,3U);
          e->FE()->JAC.Zero();
-         for ( size_t i=0U; i<3U; i++ )
-           for ( size_t j=0U; j<nodes; j++ ) {
+         for ( auto i{0}; i<3U; i++ )
+           for ( uint32_t j=0U; j<nodes; j++ ) {
                 e->FE()->JAC(0U,i) += e->FE()->DNR[j] *
                                                          e->FE()->XY(j,i);
                 e->FE()->JAC(1U,i) += e->FE()->DNS[j] *
@@ -246,7 +246,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          // using equation J' = ( E * g - F^2 )^0.5 see CELL-development-in-CSP.doc equation (15)
          // compute E, F, and g
          double  efg0(0.), efg1(0.), efg2(0.);
-         for ( size_t i=0; i<3U; i++ ) {
+         for ( uint32_t i=0; i<3U; i++ ) {
               efg0 += e->FE()->JAC(0U,i) * e->FE()->JAC(0U,i);
               efg1 += e->FE()->JAC(0U,i) * e->FE()->JAC(1U,i);
               efg2 += e->FE()->JAC(1U,i) * e->FE()->JAC(1U,i);
@@ -254,7 +254,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          double  detJ(sqrt(efg0 * efg2 - efg1 * efg1));
          double  det_inverse(1. / (detJ * detJ));
 
-         for ( size_t i=0; i<nodes; i++ ) {
+         for ( uint32_t i=0; i<nodes; i++ ) {
               DN(0U,i)  = det_inverse * e->FE()->JAC(0U,0U) *
                         (efg2 * e->FE()->DNR[i] - efg1 * e->FE()->DNS[i] );
               DN(0U,i) += det_inverse * e->FE()->JAC(1U,0U) *
@@ -309,10 +309,10 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
 For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 double FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
-                                                 size_t iFacet,
-                                                 size_t ip,
+                                                 uint32_t iFacet,
+                                                 uint32_t ip,
                                                  const csmp::Index& prop_key ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -332,8 +332,8 @@ double FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
     double  sum(static_cast<double>(0.));
 
     assert( e != nullptr );
-    const size_t nodes(e->Nodes());
-    for ( size_t i=0; i<nodes; i++ )
+    const uint32_t nodes(e->Nodes());
+    for ( uint32_t i=0; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
     return sum;
@@ -356,10 +356,10 @@ volumetric sector of FE, composing FV.
 For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 volume sector integration point only.
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( size_t iSector,
-                                                                                 size_t ip,
-                                                                                 const csmp::Index& prop_key ) const
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( uint32_t iSector,
+                                                                            uint32_t ip,
+                                                                            const csmp::Index& prop_key ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
 
@@ -376,8 +376,8 @@ double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( size
     assert( e != nullptr );
     // interpolating property to integration point
     double  sum(0.);
-    const size_t nodes(e->Nodes());
-    for ( size_t i=0; i<nodes; i++ )
+    const uint32_t nodes(e->Nodes());
+    for ( uint32_t i=0; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
     return sum;
@@ -391,12 +391,12 @@ double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( size
 /**
     @attention Does not work for array variables at the moment.
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 template<class Var>
 void FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint( const csmp::Index& prop_key,
-                                                                           size_t iFacet,
-                                                                           size_t ip,
-                                                                           Var& var ) const
+                                                                        uint32_t iFacet,
+                                                                        uint32_t ip,
+                                                                        Var& var ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
 
@@ -414,46 +414,50 @@ void FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint( const cs
     // interpolating property to integration point
     Var temp;
     var = 0;
-    temp.Resize( prop_key.dataDepth );
-    var.Resize( prop_key.dataDepth, 0. );
-  
+    
+    // only if we are dealing with an array or flagged array variable
+    if constexpr( TypeMatchesVariableType<Var,ARRAY>::value || TypeMatchesVariableType<Var,FLAGGEDARRAY>::value ) {
+        temp.Resize( prop_key.dataDepth );
+        var.Resize( prop_key.dataDepth, 0. );
+      }
+      
     assert( e != nullptr );
-    const size_t nodes(e->Nodes());
-    for ( size_t i=0; i<nodes; i++ ) {
+    const uint32_t nodes(e->Nodes());
+    for ( uint32_t i=0; i<nodes; i++ ) {
         e->N(i)->Read( prop_key, temp );
         var += temp * e->FE()->NRST[i];
     }
 
 } // end PropertyValueAtFacetIntegrationPoint
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
-
-
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
 
 
-template<template<size_t> class CELL>
+
+
+template<template<uint32_t> class CELL>
 template<class Var>
 void  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( const csmp::Index& prop_key,
-                                                                             size_t iSector,
-                                                                             size_t ip,
+                                                                             uint32_t iSector,
+                                                                             uint32_t ip,
                                                                              Var& var ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -469,39 +473,41 @@ void  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( const 
     N_AtSectorIntegrationPoint( iSector, ip );
     Var temp;
     var = 0;
-// for ArrayVariables
-    temp.Resize( prop_key.dataDepth );
-    var.Resize( prop_key.dataDepth, 0. );
+
+    if constexpr( TypeMatchesVariableType<Var,ARRAY>::value || TypeMatchesVariableType<Var,FLAGGEDARRAY>::value ) {
+        temp.Resize( prop_key.dataDepth );
+        var.Resize( prop_key.dataDepth, 0. );
+      }
 
     assert( e != nullptr );
 
-    const size_t nodes(e->Nodes());
-    for ( size_t i=0; i < nodes; i++ ) {
+    const uint32_t nodes(e->Nodes());
+    for ( uint32_t i=0; i < nodes; i++ ) {
          e->N(i)->Read( prop_key, temp );
          var += temp * e->FE()->NRST[i];
       }
 
  } // end PropertyValueAtSectorIntegrationPoint
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ScalarVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, VectorVariable<3U>& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, TensorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ScalarVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, VectorVariable<3U>& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, TensorVariable<3U>& ) const;
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, ArrayVariable& ) const;
 
-template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
-template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, size_t, size_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Element>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,Face>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
+template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtSectorIntegrationPoint( const Index&, uint32_t, uint32_t, FlaggedArrayVariable& ) const;
 
 
 
@@ -520,8 +526,8 @@ finite volume sector.
 As the method calculates the value of the surface integral for given property and
 facet, the value is returned by the method.
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::FacetIntegral( size_t iSector,
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::FacetIntegral( uint32_t iSector,
                                                          const csmp::Index& prop_key ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -534,8 +540,8 @@ double  FiniteVolumePolicy<3U,CELL>::FacetIntegral( size_t iSector,
     e->CoordinateMatrix();
 
     double  integral(static_cast<double>(0.));
-    for ( size_t iFacet=0U; iFacet<fvptr_->FacetsPerSector(iSector); iFacet++ )
-      for ( size_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
+    for ( uint32_t iFacet=0U; iFacet<fvptr_->FacetsPerSector(iSector); iFacet++ )
+      for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
              // 1. take integration point location from FV stencil
              fvptr_->FacetIntegrationPoint( iFacet, j, e->FE()->NRST );
              // 2. Compute the Jacobian
@@ -567,8 +573,8 @@ volume sector of finite element.
 As the method calculates the value of the volume integral for the given property and
 volume sector, the value is returned by the method.
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::SectorIntegral( size_t iSector,
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::SectorIntegral( uint32_t iSector,
                                                           const csmp::Index& prop_key ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
@@ -581,7 +587,7 @@ double  FiniteVolumePolicy<3U,CELL>::SectorIntegral( size_t iSector,
     e->CoordinateMatrix();
 
     double fIntegral(0.);
-    for ( size_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+    for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST );
         fIntegral += PropertyValueAtSectorIntegrationPoint( iSector, j, prop_key ) *
@@ -628,9 +634,9 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 
 */
-template<template<size_t> class CELL>
+template<template<uint32_t> class CELL>
 double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal(
-                                                 size_t iFacet,
+                                                 uint32_t iFacet,
                                                  const VectorVariable<3U>& vc
                                                  ) const
 {
@@ -668,8 +674,8 @@ is more efficient.
 For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( uint32_t iFacet,
                                                                const csmp::Index& prop_key
                                                              ) const
 {
@@ -689,7 +695,7 @@ double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
       }
 
     //3. If not, interpolate node property to integration point
-    const size_t ip(0U);
+    const uint32_t ip(0U);
     fvptr_->FacetIntegrationPoint( iFacet, ip, e->FE()->NRST );
     assert( e != nullptr );
     e->N_At( Point<3U>(e->FE()->NRST) );
@@ -698,8 +704,8 @@ double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( size_t iFacet,
     double sum1(static_cast<double>(0.));
     double sum2(static_cast<double>(0.));
 
-    const size_t nodes(e->Nodes());
-    for ( size_t i=0; i<nodes; i++ ) {
+    const uint32_t nodes(e->Nodes());
+    for ( uint32_t i=0; i<nodes; i++ ) {
          e->N(i)->Read( prop_key, vc );
          sum0 += e->FE()->NRST[i] * vc[0];
          sum1 += e->FE()->NRST[i] * vc[1];
@@ -731,8 +737,8 @@ Method calculates the volume for the given volumetric sector.
 Method automatically takes into account composite nature of the sector at the apex of
 the pyramid.
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::SectorVolume( size_t iSector ) const
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::SectorVolume( uint32_t iSector ) const
  {
    const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
 
@@ -742,7 +748,7 @@ double  FiniteVolumePolicy<3U,CELL>::SectorVolume( size_t iSector ) const
    e->CoordinateMatrix();
 
    double fVolume(0.);
-   for ( size_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+   for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST);
         fVolume += fvptr_->SectorIntegrationWeight(iSector, j) *
@@ -766,8 +772,8 @@ If the element is a surface element, then only two points describe the facet,
 therefore, only the distance between these two points will be calculated.
 
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::FacetArea( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::FacetArea( uint32_t iFacet ) const
 {
    const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
    assert( iFacet < fvptr_->Facets());
@@ -818,8 +824,8 @@ For current implementation index ip is constrained to 0 only, i.e-> the
 FVPEM method is working with 1 facet integration point only.
 
 */
-template<template<size_t> class CELL>
-Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( uint32_t iFacet ) const
 {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
 #ifndef NDEBUG
@@ -870,16 +876,16 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( size_t iFacet ) const
 
 
 
-template<template<size_t> class CELL>
-  Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( size_t iFacet, size_t iPoint ) const
+template<template<uint32_t> class CELL>
+  Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetPoint( uint32_t iFacet, uint32_t iPoint ) const
   {
       const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
       return e->RstToXYZ(fvptr_->FacetPoint(iFacet,iPoint));
   }
 
 
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( uint32_t iFacet ) const
 {
   const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
   if(e->IsLineElement()) return 1.;
@@ -943,8 +949,8 @@ double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( size_t iFacet ) const
 /**
     Maps the normal from parametric space to physical space using a 1D to 3D Jacobian in a volumetric element
 */
-template<template<size_t> class CELL>
-Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( uint32_t iFacet ) const
 {
   const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
   assert( e != nullptr );
@@ -1046,15 +1052,15 @@ finite element.
 The method is applicable to the algorithm of the parametric calculation of fluxes.
 It should be used  together with the method  ParametricProjectionOnFacetNormal().
 */
-template<template<size_t> class CELL>
-double  FiniteVolumePolicy<3U,CELL>::ParametricFacetArea( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+double  FiniteVolumePolicy<3U,CELL>::ParametricFacetArea( uint32_t iFacet ) const
 {
   assert(iFacet<fvptr_->Facets());
 
   double  area(static_cast<double>(0.));
   
   // loop that loops only if there are indeed multiple integration points
-  for ( size_t j=0; j<fvptr_->IntegrationPointsPerFacet(); j++ )
+  for ( uint32_t j=0; j<fvptr_->IntegrationPointsPerFacet(); j++ )
     area += fvptr_->FacetIntegrationWeight( iFacet, j );
 
   return area;
@@ -1078,8 +1084,8 @@ find outwards pointing normal to the facet, not taking care of the orientation o
 boundary loop of the facet. Dot product of the reference normal and any normal in physical
 or parametric realisation can be used to define outward pointing normal.
 */
-template<template<size_t> class CELL>
-Point<3U>  FiniteVolumePolicy<3U,CELL>::ParametricFacetNormal( size_t iFacet ) const
+template<template<uint32_t> class CELL>
+Point<3U>  FiniteVolumePolicy<3U,CELL>::ParametricFacetNormal( uint32_t iFacet ) const
 {
   assert(iFacet<fvptr_->Facets());
 

@@ -7,7 +7,7 @@
 namespace csmp {
 
 /// relative permeability and capillary pressure, assuming a linear model
-template<size_t dim>
+template<uint32_t dim>
 class LinearTwoPhaseModel : public TwoPhaseModel<dim>{
   public:
     /// constructor for constant capillary pressure equal to entry pressure

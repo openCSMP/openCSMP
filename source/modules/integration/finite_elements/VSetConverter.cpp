@@ -1,4 +1,5 @@
 #include "VSetConverter.h"
+#include "CSMP_ElementSpecifications.h"
 #include "VSet.h"
 #include "FiniteElementManager.h"
 #include "MJL_Point.h"
@@ -11,6 +12,45 @@
 using namespace std; 
 
 namespace csmp {
+
+
+    /// replaces straight-sided global element types with isoparametric ones
+template<uint32_t dim>
+void VSetConverter<dim>::ConvertElementTypesToOnesUsingLocalCoordinateSystem( VSet<dim>& vset )
+ {
+    // if the VSet already consists of an isoparametric element family, no conversion is needed
+    if ( vset.IsoparametricElementMesh() ) return;
+    
+    // looping over the element types converting them
+    for ( auto n{0}; n<vset.Vertices(); ++n )
+      vset.AddBFlag( n, CSMP_ElementSpecifications::CSMP_TypeUsingLocalCoordinates( vset.BFlag(n)) );
+    
+ } // end ConvertElementTypesToOnesUsingLocalCoordinateSystem
+
+
+
+// inline function definitions
+
+/**
+    Interpolation of variable values on the boundary, assuming that it lies in one
+    of the coordinate planes.
+*/
+template<uint32_t dim>
+double VSetConverter<dim>::BoundaryValue( const std::map<size_t,double>& bvals,
+                                          size_t nID1, size_t nID2 )
+ const
+  {
+      typename std::map<size_t,double>::const_iterator  bvit1(bvals.find(nID1)),
+                                                          bvit2(bvals.find(nID2));
+      assert( bvit1 != bvals.end() );
+      assert( bvit2 != bvals.end() );
+
+      return ((*bvit1).second + (*bvit2).second) / 2.;
+
+  } // end BoundaryValue
+                                         
+
+
 
 /**
 
@@ -44,7 +84,7 @@ node-numbering graph-tree traversal should be used to improve the matrix
 occupancy and to reduce the number of nodes which are far off the 
 diagonal.  
 */
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset ) 
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -59,9 +99,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
                           parseFiniteElementType(parseFiniteElementTypeEnum(vset.ElementType(0U))) );
           return;
        }
-     bool  debug(false);
+     const bool  debug(false);
      map<pair<double,double>,int64_t>  nodeIDs;
-     typename map<pair<double,double>,int64_t>::iterator  ndit;
+ //    typename map<pair<double,double>,int64_t>::iterator  ndit;
      double x, y;
 
      xmin = xmax = vset.Px(0);
@@ -70,7 +110,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      // 1. mapping already existing node points O.K.
      // ---------------------------------------
      const size_t n_nodes{vset.Vertices()};
-     for ( size_t i=0U; i<n_nodes; i++ )
+     for ( auto i{0}; i<n_nodes; i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -85,9 +125,8 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      //    after flagging the corner nodes
      // -----------------------------------------------------
      FlagCornerNodes( vset );
+     vector<int8_t>  bflags( vset.BFlagsBegin(), vset.BFlagsEnd() );
      
-     vector<std::int8_t>  bflags( vset.BFlagsBegin(), vset.BFlagsEnd() );
-
      // 3. looping through plist:
      // -------------------------
      //  - expanding node-ID vectors for each element
@@ -97,11 +136,11 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      //    (faceverts stay exactly as they were before)
      // to test whether new node point is already part of the mesh or whether
      // it must be created     
-     size_t  nID(nodeIDs.size()); // new node ID tracker
-     int8_t  bflag;
+     size_t              nID(nodeIDs.size()); // new node ID tracker
+     int8_t              bflag;
+     map<size_t,int8_t>  new_bflags;
 
-     for ( typename deque<vector<int64_t> >::iterator
-           pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
+     for ( auto pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
       {
          // The Plist node ID vector is resized and the new node coordinates are entered
          (*pit).reserve(6);
@@ -112,8 +151,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
  
          if ( debug ) cout <<"\nmidpoint face 1 (nodes:"<< (*pit)[0] <<","<< (*pit)[1] <<"): "<< x <<", "<< y;
  
-         pair<map<pair<double,double>,int64_t>::iterator, bool>
-           test_it = nodeIDs.insert( make_pair(make_pair(x,y),nID) );
+         auto test_it = nodeIDs.insert( make_pair(make_pair(x,y),nID) );
          // if the middle-node point already exists in the list
          // the node ID which was found for it inside the map is used
          if ( !test_it.second ) (*pit).push_back( (*test_it.first).second );
@@ -121,10 +159,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
           {
               if ( debug ) cout <<"\nNew coordinates, Node 4("<< nID <<"): "<< x <<", "<< y << endl;
               // If new point lies at the model boundary a boundary flag is assigned to the new point
-              if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[0], (*pit)[1] )) != 0 ) 
-                {
-                   vset.AddBFlag( nID, bflag );
-                }
+              new_bflags.insert( make_pair( nID, TestForBoundaryFlags( bflags, (*pit)[0], (*pit)[1] ) ) );
              (*pit).push_back( nID++ );
           }
          // node 5 is initialized as middle node of triangle face 2
@@ -139,10 +174,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
           {
               if ( debug ) cout <<"\nNew coordinates, Node 5("<< nID <<"): "<< x <<", "<< y << endl;
               // If new point lies at the model boundary a boundary flag is assigned to the new point
-              if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[1], (*pit)[2] )) != 0 ) 
-                {
-                   vset.AddBFlag( nID, bflag );
-                }
+              new_bflags.insert( make_pair( nID, TestForBoundaryFlags( bflags, (*pit)[1], (*pit)[2] ) ) );
              (*pit).push_back( nID++ );
           }
          // node 6 is initialized as middle node of triangle face 3
@@ -157,10 +189,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
           {
               if ( debug ) cout <<"\nNew coordinates, Node 6("<< nID <<"): "<< x <<", "<< y << endl;
               // If new point lies at the model boundary a boundary flag is assigned to the new point
-              if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[2], (*pit)[0] )) != 0 ) 
-                {
-                   vset.AddBFlag( nID, bflag );
-                }
+              new_bflags.insert( make_pair( nID, TestForBoundaryFlags( bflags, (*pit)[2], (*pit)[0] )) );
              (*pit).push_back( nID++ );
           }
       }
@@ -168,26 +197,32 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
     // testing whether the new numbers are O.K.
     if ( debug ) {
          cout <<"\nListing old and new nodes and their coordinates:";
-         for ( ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )   
+         for ( auto ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ )   
            cout <<"\nx,y,id: "<< (*ndit).first.first <<", "<< (*ndit).first.second <<": "<< (*ndit).second;
          cout << endl << endl;
       }
- 
+      
+    // adding the new unique and ordered bflags to the vector and re-assigning it to VSet
+    assert( (*new_bflags.begin()).first == bflags.size() );
+    bflags.resize( nID, NOT );
+    for ( auto f : new_bflags )
+      bflags[ f.first ] = f.second;
        
-    // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
-    // -------------------------------------------------------------------
+       
+    // 4. Creating new 'px', 'py', and 'bflag' arrays and assigning them to VSet<dim>
+    // ------------------------------------------------------------------------------
     deque<double>  px( nodeIDs.size() ),
-                     py( nodeIDs.size() ),  // new node-point coordinates
-                     pz( nodeIDs.size() );
+                   py( nodeIDs.size() ),  // new node-point coordinates
+                   pz( nodeIDs.size() );
     
-    for ( typename map<pair<double,double>,int64_t>::const_iterator
-          nit=nodeIDs.begin(); nit!=nodeIDs.end(); ++nit )
+    for ( auto nit=nodeIDs.begin(); nit!=nodeIDs.end(); ++nit )
       {
          px[ (*nit).second ] = (*nit).first.first;
          py[ (*nit).second ] = (*nit).first.second;
          pz[ (*nit).second ] = 0.;
       }  
     vset.AddXYZ( px, py, pz );
+    vset.AddBFlags( bflags.begin(), bflags.end() );
     
     // 5. Converting CSMP finite element types 
     // ------------------------------------------------------------------------
@@ -213,7 +248,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
 
 
 /// as ConvertLinearToQuadraticTriangles() but for surface elements in 3D space
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset ) 
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -354,9 +389,9 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
     if ( debug ) 
       {
          cout <<"\nListing old and new nodes and their coordinates:";
-         for ( auto ndit=nodeIDs.begin(); ndit!=nodeIDs.end(); ndit++ ) {
-              cout <<"\nx,y,z,id: "<< (*ndit).first.X() <<", "<< (*ndit).first.Y() <<", "<< (*ndit).first.Z();
-              cout  <<": "<< (*ndit).second;
+         for ( auto ndit2=nodeIDs.begin(); ndit2!=nodeIDs.end(); ndit2++ ) {
+              cout <<"\nx,y,z,id: "<< (*ndit2).first.X() <<", "<< (*ndit2).first.Y() <<", "<< (*ndit2).first.Z();
+              cout  <<": "<< (*ndit2).second;
            }
          cout << endl << endl;
       }
@@ -427,7 +462,7 @@ long convergence times. In this case, an algorithm like the Cuthill-McKhee
 node-numbering graph-tree traversal should be used to improve the matrix 
 occupancy and to reduce the number of nodes which are far off the 
 diagonal.   */
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset ) 
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -487,8 +522,8 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
      // to test whether new node point is already part of the mesh or whether
      // it must be created     
      double  cx, cy;
-     size_t    nID(nodeIDs.size()); // new node ID tracker
-     int32_t     bflag;
+     size_t  nID(nodeIDs.size()); // new node ID tracker
+     int8_t  bflag;
 
      for ( typename deque<vector<int64_t> >::iterator
            pit=vset.PlistBegin(); pit!=vset.PlistEnd(); pit++ )
@@ -640,67 +675,71 @@ on the model boundary.
 At this stage the corner nodes have not been identified yet !.
  
 tested: O.K. */
-template<size_t dim>
+template<uint32_t dim>
 int8_t  VSetConverter<dim>::TestForBoundaryFlags( const vector<std::int8_t>& bflags,
                                                   size_t nID1, size_t nID2 ) const
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-      std::int8_t  flag1, flag2;
       assert( !bflags.empty() );
       assert( nID1 < bflags.size() );
       assert( nID2 < bflags.size() );
       
+      // since this is about the insertion of midside nodes
+      std::int8_t  flag1, flag2;
       if ( bflags[nID1] < 0 ) flag1 = bflags[nID1];
       else 
-      return 0;
+      return NOT;
 
       if ( bflags[nID2] < 0 ) flag2 = bflags[nID2];
       else 
-      return 0;
+      return NOT;
       
       // TWO DIMENSIONAL CASE
       // side boundaries
-      if ( flag1 == TOP_OUTSIDE    && flag2 == TOP_OUTSIDE )    return TOP_OUTSIDE;
-      if ( flag1 == BOTTOM_OUTSIDE && flag2 == BOTTOM_OUTSIDE ) return BOTTOM_OUTSIDE;
-      if ( flag1 == LEFT_OUTSIDE   && flag2 == LEFT_OUTSIDE )   return LEFT_OUTSIDE;
-      if ( flag1 == RIGHT_OUTSIDE  && flag2 == RIGHT_OUTSIDE )  return RIGHT_OUTSIDE;
+      if ( flag1 == TOP_OUTSIDE    && flag2 == TOP_OUTSIDE )    return TOP;
+      if ( flag1 == BOTTOM_OUTSIDE && flag2 == BOTTOM_OUTSIDE ) return BOTTOM;
+      if ( flag1 == LEFT_OUTSIDE   && flag2 == LEFT_OUTSIDE )   return LEFT;
+      if ( flag1 == RIGHT_OUTSIDE  && flag2 == RIGHT_OUTSIDE )  return RIGHT;
       // corner boundaries
-      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MAXX )   return TOP_OUTSIDE;
-      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MINXZ )  return TOP_OUTSIDE;
-      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN )        return BOTTOM_OUTSIDE;
-      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXX )   return BOTTOM_OUTSIDE;
-      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MIN )        return LEFT_OUTSIDE;
-      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MAX_MINXZ )  return LEFT_OUTSIDE;
-      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MIN_MAXX )   return RIGHT_OUTSIDE;
-      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX_MAXX )   return RIGHT_OUTSIDE;
+      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MAXX )   return TOP;
+      if ( flag1 == TOP_OUTSIDE    && flag2 == CNR_MAX_MINXZ )  return TOP;
+      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN )        return BOTTOM;
+      if ( flag1 == BOTTOM_OUTSIDE && flag2 == CNR_MIN_MAXX )   return BOTTOM;
+      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MIN )        return LEFT;
+      if ( flag1 == LEFT_OUTSIDE   && flag2 == CNR_MAX_MINXZ )  return LEFT;
+      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MIN_MAXX )   return RIGHT;
+      if ( flag1 == RIGHT_OUTSIDE  && flag2 == CNR_MAX_MAXX )   return RIGHT;
       // permutations
-      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MAXX )   return TOP_OUTSIDE;
-      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MINXZ )  return TOP_OUTSIDE;
-      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN )        return BOTTOM_OUTSIDE;
-      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXX )   return BOTTOM_OUTSIDE;
-      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN )        return LEFT_OUTSIDE;
-      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MAX_MINXZ )  return LEFT_OUTSIDE;
-      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MIN_MAXX )   return RIGHT_OUTSIDE;
-      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX_MAXX )   return RIGHT_OUTSIDE;
+      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MAXX )   return TOP;
+      if ( flag2 == TOP_OUTSIDE    && flag1 == CNR_MAX_MINXZ )  return TOP;
+      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN )        return BOTTOM;
+      if ( flag2 == BOTTOM_OUTSIDE && flag1 == CNR_MIN_MAXX )   return BOTTOM;
+      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MIN )        return LEFT;
+      if ( flag2 == LEFT_OUTSIDE   && flag1 == CNR_MAX_MINXZ )  return LEFT;
+      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MIN_MAXX )   return RIGHT;
+      if ( flag2 == RIGHT_OUTSIDE  && flag1 == CNR_MAX_MAXX )   return RIGHT;
       // special cases for boundaries that are only one element long 
-      if ( flag1 == CNR_MAX_MAXX && flag2 == CNR_MAX_MINXZ )    return TOP_OUTSIDE;
-      if ( flag1 == CNR_MIN      && flag2 == CNR_MIN_MAXX )     return BOTTOM_OUTSIDE;
-      if ( flag1 == CNR_MIN      && flag2 == CNR_MAX_MINXZ )    return LEFT_OUTSIDE;
-      if ( flag1 == CNR_MIN_MAXX && flag2 == CNR_MAX_MAXX )     return RIGHT_OUTSIDE;
-      if ( flag2 == CNR_MAX_MAXX && flag1 == CNR_MAX_MINXZ )    return TOP_OUTSIDE;
-      if ( flag2 == CNR_MIN      && flag1 == CNR_MIN_MAXX )     return BOTTOM_OUTSIDE;
-      if ( flag2 == CNR_MIN      && flag1 == CNR_MAX_MINXZ )    return LEFT_OUTSIDE;
-      if ( flag2 == CNR_MIN_MAXX && flag1 == CNR_MAX_MAXX )     return RIGHT_OUTSIDE;
+      if ( flag1 == CNR_MAX_MAXX && flag2 == CNR_MAX_MINXZ )    return TOP;
+      if ( flag1 == CNR_MIN      && flag2 == CNR_MIN_MAXX )     return BOTTOM;
+      if ( flag1 == CNR_MIN      && flag2 == CNR_MAX_MINXZ )    return LEFT;
+      if ( flag1 == CNR_MIN_MAXX && flag2 == CNR_MAX_MAXX )     return RIGHT;
+      if ( flag2 == CNR_MAX_MAXX && flag1 == CNR_MAX_MINXZ )    return TOP;
+      if ( flag2 == CNR_MIN      && flag1 == CNR_MIN_MAXX )     return BOTTOM;
+      if ( flag2 == CNR_MIN      && flag1 == CNR_MAX_MINXZ )    return LEFT;
+      if ( flag2 == CNR_MIN_MAXX && flag1 == CNR_MAX_MAXX )     return RIGHT;
       // irregular boundaries
-      if ( flag1 == IRREGULAR_OUTSIDE  && flag2 == IRREGULAR_OUTSIDE ) return IRREGULAR_OUTSIDE;
+      if ( flag1 == IRREGULAR_OUTSIDE  && flag2 == IRREGULAR_OUTSIDE ) return IRREGULAR;
 
+if constexpr ( dim == 3 )
+  throw csmp::Exception( ERROR, "VSetConverter<dim>::TestForBoundaryFlags", "3D case not implemented yet ");
+  
       // degenerate cases that should have been picked up by the boundary flagger
       // beforehand
       csmp_error.notice( WARNING, "VSetConverter<dim>::TestForBoundaryFlags:",
                                   "Unable to parse boundary flags.");
       
-      cout <<"\nflags: flag1="<< flag1 <<", flag2="<< flag2 << endl;
+      cout <<"\nflags: flag1="<< parseBoundary( static_cast<BOX_BOUNDARY>(flag1) ) <<", flag2="<< parseBoundary( static_cast<BOX_BOUNDARY>(flag2) ) << endl;
 
       return NOT;
       
@@ -709,7 +748,7 @@ int8_t  VSetConverter<dim>::TestForBoundaryFlags( const vector<std::int8_t>& bfl
 
 
 // tested: O.K. SKM 4/3/02
-template<size_t dim>
+template<uint32_t dim>
 int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
                                              size_t nID1, size_t nID2 ) const
   {
@@ -1004,7 +1043,7 @@ int8_t  VSetConverter<dim>::BoundaryFlags3D( const vector<std::int8_t>& bflags,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 int8_t  VSetConverter<dim>::TestForBoundaryFlags3D( double x, double y, double z ) const
   {
      assert( dim == 3U );
@@ -1086,7 +1125,7 @@ int8_t  VSetConverter<dim>::TestForBoundaryFlags3D( double x, double y, double z
 
 
 // tested: O.K.
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensional ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1101,24 +1140,24 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
          size_t n_node(0U);
          for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
            {
-              if ( (*bit) == 0U  or  (*bit) == IRREGULAR ) {
+              if ( (*bit) < INTERNAL ) {
                    csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (2D case)",
-                                     "Skipping node, the boundary flag of which could not be identified" );
-                   cout <<"\nNode "<< n_node <<", flagged: "<< (*bit) << endl;
+                                     "Skipping node, the BOX_boundary flag of which could not be identified" );
+                   cerr <<"\nNode "<< n_node <<", flagged: "<< parseBoundary( static_cast<BOX_BOUNDARY>(*bit) ) << endl;
                 }
-              else
+              else if ( (*bit) != NOT )
                 {
                    // CNR1
-                   if ( vset.Px( n_node ) == xmin && vset.Py( n_node ) == ymin )
+                   if ( approximatelyEqual( vset.Px( n_node ), xmin ) && approximatelyEqual( vset.Py( n_node ), ymin ) )
                      { (*bit) = CNR_MIN; flagging_count++; }
                    // CNR2
-                   else if ( vset.Px( n_node ) == xmax && vset.Py( n_node ) == ymin )
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmax ) && approximatelyEqual( vset.Py( n_node ), ymin ) )
                      { (*bit) = CNR_MIN_MAXX; flagging_count++; }
                    // CNR3
-                   else if ( vset.Px( n_node ) == xmax && vset.Py( n_node ) == ymax )
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmax ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
                      { (*bit) = CNR_MAX_MAXX; flagging_count++; }
                    // CNR4
-                   else if ( vset.Px( n_node ) == xmin && vset.Py( n_node ) == ymax )
+                   else if ( approximatelyEqual( vset.Px( n_node ), xmin ) && approximatelyEqual( vset.Py( n_node ), ymax ) )
                      { (*bit) = CNR_MAX_MINXZ; flagging_count++; }
                 }
            }
@@ -1137,12 +1176,12 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
      size_t n_node(0U);
      for ( auto bit=vset.BFlagsBegin(); bit!=vset.BFlagsEnd(); bit++, n_node++ )
        {
-          if ( (*bit) == 0U  or  (*bit) == IRREGULAR ) {
+          if ( (*bit) < INTERNAL ) {
                csmp_error.notice( WARNING, "VSetConverter<dim>::FlagCornerNodes (3D case)",
                                          "Skipping node, the boundary flag of which could not be identified" );
                cout <<"\nNode "<< n_node <<", flagged: "<< (*bit) << endl;
             }
-          else
+          else if ( (*bit) != NOT )
             {
                if ( approximatelyEqual( vset.Pz( n_node ), zmin, tol ) )
                  { 
@@ -1188,7 +1227,7 @@ void VSetConverter<dim>::FlagCornerNodes( VSet<dim>& vset, bool three_dimensiona
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vset ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1208,7 +1247,7 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
     // 1. while looping over all triangles build ordered triangles using the first three
     //    nodes
     typename deque<vector<int64_t> >::iterator  pit(vset.PlistBegin());
-    vector<size_t>  pdata(6U);
+    vector<size_t>    pdata(6U);
     typename deque<vector<int64_t> >::iterator  fit(vset.PfvertsBegin());
     vector<int64_t>   pfvert(3U);
     map<mjl::Point,size_t>  ordered_nodes;
@@ -1217,7 +1256,7 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
       {
          // finding node of triangle origin
          ordered_nodes.clear();
-         for ( size_t i=0U; i<3U; i++ )
+         for ( auto i{0}; i<3U; i++ )
            ordered_nodes[ mjl::Point(vset.Px((*pit)[i]), vset.Py((*pit)[i])) ] = i;
          size_t  offset = (*ordered_nodes.begin()).second;
                                                    
@@ -1252,10 +1291,10 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
                 } 
          
               // reassigning the new node list to the plist
-              for ( size_t i=0U; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
+              for ( auto i{0}; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
          
               // reorganizing the neighbor element list 'pfverts' as well
-              for ( size_t i=0U; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
+              for ( auto i{0}; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
            }
          pit++;
          fit++;
@@ -1271,7 +1310,7 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
      Finds edges in boxed shaped model and gibes them a BOX_BOUDARY_FLAG
      dependent on their location.
 */
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double tol ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1379,7 +1418,7 @@ void VSetConverter<dim>::FlagEdges( VSet<dim>& vset, double tol ) const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSet<dim>& vset ) const
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1400,7 +1439,7 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
     // 1. while looping over all triangles build ordered triangles using the first three
     //    nodes
     typename deque<vector<int64_t> >::iterator  pit(vset.PlistBegin());
-    vector<size_t>                             pdata(7);
+    vector<size_t>                              pdata(7);
     typename deque<vector<int64_t> >::iterator  fit(vset.PfvertsBegin());
     vector<int64_t>                             pfvert(3);
     map<mjl::Point,size_t>                     ordered_nodes;
@@ -1410,7 +1449,7 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
       {
          // finding node of triangle origin
          ordered_nodes.erase( ordered_nodes.begin(), ordered_nodes.end() );
-         for ( size_t i=0U; i<3U; i++ )
+         for ( auto i{0}; i<3U; i++ )
            ordered_nodes[ mjl::Point(vset.Px((*pit)[i]), vset.Py((*pit)[i])) ] = i;
          size_t offset = (*ordered_nodes.begin()).second;
                                                    
@@ -1530,7 +1569,7 @@ diagonal.
 
  
 tested: */
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset ) 
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1799,15 +1838,14 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
     // 4. Creating new 'px' and 'py' arrays and assigning them to VSet<dim>
     // -------------------------------------------------------------------
     deque<double>  px( nodeIDs.size() ),
-                      py( nodeIDs.size() ),  // new node-point coordinates
-                      pz( nodeIDs.size() );
-    map<mjl::Point3D,size_t>::const_iterator  nit;
+                   py( nodeIDs.size() ),  // new node-point coordinates
+                   pz( nodeIDs.size() );
 
-    for ( auto nit=nodeIDs.begin(); nit!=nodeIDs.end(); nit++ )
+    for ( auto n : nodeIDs )
       {
-         px[ (*nit).second ] = (*nit).first.x_;
-         py[ (*nit).second ] = (*nit).first.y_;
-         pz[ (*nit).second ] = (*nit).first.z_;
+         px[ n.second ] = n.first.x_;
+         py[ n.second ] = n.first.y_;
+         pz[ n.second ] = n.first.z_;
       }  
     vset.AddXYZ( px, py, pz );
     
@@ -1880,7 +1918,7 @@ basis of simple tetrahedral element meshes.
 
  
 // tested: O.K. SKM 4/3/02 */
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset ) 
   {
      cout <<"\nVSetConverter<dim>::ConvertLinearToQuadraticTetrahedra: Warning: Output node numbering ";
@@ -2156,7 +2194,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
 
 // brute force approach: based on their position the nodes are flagged as boundary nodes
 // tested: O.K.
-template<size_t dim>
+template<uint32_t dim>
 void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, double tol )
  {
      // 0. getting rid of the existing boundary conditions
@@ -2173,7 +2211,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
 
      double  x, y, z;
 
-     for ( size_t i=0U; i<vset.Vertices(); i++ )  
+     for ( auto i{0}; i<vset.Vertices(); i++ )  
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -2189,7 +2227,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
      // making new boundary conditions
      vector<std::int8_t>  new_bflags( vset.Vertices(), 0 );
 
-     for ( size_t i=0U; i<vset.Vertices(); i++ )  
+     for ( auto i{0}; i<vset.Vertices(); i++ )  
        if ( approximatelyEqual(vset.Px(i),xmin,tol) ||
             approximatelyEqual(vset.Px(i),xmax,tol) ||
             approximatelyEqual(vset.Py(i),ymin,tol) ||
@@ -2231,6 +2269,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
  } // end
     
 
+template class VSetConverter<1U>;
 template class VSetConverter<2U>;
 template class VSetConverter<3U>;
 

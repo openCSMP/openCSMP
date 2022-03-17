@@ -195,7 +195,7 @@ void MeshManager_Test::run()
       const bool   skewed_elements(false); // otherwise model is not a box anymore
       VSet<3U>     vset;
       test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
-      model3d_ = new Model<3U>(vset, varFileName.c_str(), true);
+      model3d_ = new Model<3U>(vset, varFileName.c_str() );
       // TEST
       // ==========
       TestBasics();
@@ -283,7 +283,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     VSet<3U> vset;
     // testing with element 13 with face 4 on the LEFT outside
     test_Create_Prism_Hexa_VSet( vset, false );
-    Model<3U>    model( vset, "CSMP-variables.txt", true );
+    Model<3U>    model( vset, "CSMP-variables.txt" );
     const size_t ELMT{13}; // 13 in VSet
     Element<3>*  eptr = &(*next(model.Mesh().ElementsBegin(),ELMT));
     //eptr->Out();
@@ -292,9 +292,9 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     // getting an inner face in the 3D model that is not on the boundary
     vector<Node<3>*> face_nodes;
     Element<3>*      inner_eptr(nullptr), *outer_eptr(nullptr);
-    for ( size_t i{0}; i<eptr->Neighbors(); ++i )
+    for ( auto i{0}; i<eptr->Neighbors(); ++i )
      if ( eptr->Neighbor(i) != nullptr ) {
-          vector<size_t> fnids;
+          vector<uint32_t> fnids;
           eptr->FE()->NodesOfFace(i,fnids);
           face_nodes.reserve( fnids.size() );
           for (size_t j{0}; j<fnids.size(); ++j )
@@ -314,7 +314,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     _test( parents.second == outer_eptr );
     
     // now testing for face 4 that is on the left outside
-    vector<size_t> fnids;
+    vector<uint32_t> fnids;
     eptr->FE()->NodesOfFace(4,fnids);
     face_nodes.resize( fnids.size() );
     for (size_t j{0}; j<fnids.size(); ++j )
@@ -436,8 +436,8 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     
     // checking that NodesOfSegment() and  CornerNodesPerSegmentForElementOfType() give the same answer
     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
-         for ( size_t i{0}; i < (*it)->FE()->Segments(); ++i ) {
-              vector<size_t> node_vec;
+         for ( auto i{0}; i < (*it)->FE()->Segments(); ++i ) {
+              vector<uint32_t> node_vec;
               (*it)->FE()->NodesOfSegment( i, node_vec );
               sort( node_vec.begin(), node_vec.end() );
               pair<size_t,size_t> node_pair =
@@ -455,8 +455,8 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     // -----------------------------------------------
     
     // creating a node connectivity list to check the Node::Neighbor method
-    vector<set<size_t>>  node_neighbors;
-    nodeNeighbors( model_domain, node_neighbors );
+    vector<set<size_t>>  node_neighbor_ids;
+    nodeNeighbors( model_domain, node_neighbor_ids );
     
 //    cout <<"\nTest_MeshTraversal3D: storage requirements for the nodes (bytes):";  // OK - around 250 bytes per node
 //    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
@@ -478,12 +478,12 @@ bool MeshManager_Test::Test_MeshTraversal3D()
          // recording the current connectivity
          vector<Node<3>*>  node_neighbors;
          node_neighbors.reserve( (*nit)->Neighbors() );
-         for ( size_t i{0}; i < (*nit)->Neighbors(); ++i )
+         for ( auto i{0}; i < (*nit)->Neighbors(); ++i )
            node_neighbors.push_back( (*nit)->Neighbor(i) );
          // rebuilding the connectivity
          _test( (*nit)->ReassignNeighbors() == node_neighbors.size() );
          // comparing the sorted node pointers with one another
-         for ( size_t i{0}; i < (*nit)->Neighbors(); ++i )
+         for ( auto i{0}; i < (*nit)->Neighbors(); ++i )
            _test( (*nit)->Neighbor(i) == node_neighbors[i] );
       }    
 
@@ -528,8 +528,8 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 		while (!current_nodes.empty()) {
 			const csmp::Node<3U>*  n_ptr(*current_nodes.begin());
-			for (size_t i = 0U; i < n_ptr->Parents(); i++) {
-				for (size_t j = 0U; j < n_ptr->Parent(i)->Nodes(); j++) {
+			for (auto i = 0U; i < n_ptr->Parents(); i++) {
+				for (auto j = 0U; j < n_ptr->Parent(i)->Nodes(); j++) {
 					if (j != n_ptr->ParentNodeNumber(i)) {
 						pair<typename set<csmp::Node<3U>*>::iterator, bool>
 							new_node = discovered_nodes.insert(n_ptr->Parent(i)->N(j));
@@ -594,8 +594,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   // create new PYRAMID element
   int32_t material_id(1); // new element's rock_tye
   vector<Node<3U>*>  nodes = {ptr_n1,ptr_n2,ptr_n3,ptr_n4,ptr_n5};
-  Element<3U>*       neptr( &(*next(mesh.ElementsBegin(),4)) ); // just a neighbor to try
-	Element<3U>*	ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
+	Element<3U>*	     ptr_e1 = mesh.AddElement( ISOPARAMETRIC_LINEAR_PYRAMID, elmt_vars, intp_vars, nodes, material_id );
 
 	// assign new element as a parent to its nodes (TODO: should be done when nodes are connected
   ptr_n1->ResizeParentStorage( n1.Parents()+1 );
@@ -643,7 +642,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
   // element 4
   Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
   Face<3U>*    fptr1(nullptr), *fptr2(nullptr);
-  for ( size_t i=0U; i<eptr->Faces(); i++ )
+  for ( auto i{0}; i<eptr->Faces(); i++ )
     {
        // if the face is at the boundary, we construct a boundary face
        if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
@@ -652,8 +651,8 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
          }
        // if the face is within model, we construct a normal face
        if ( eptr->Neighbor(i) != nullptr && !interior_face_constructed ) {
-            size_t opposite_face = UNSPECIFIED;
-            for ( size_t j{0}; j<eptr->Neighbor(i)->Faces(); ++j ) {
+            uint32_t opposite_face = UNSPECIFIED;
+            for ( auto j{0}; j<eptr->Neighbor(i)->Faces(); ++j ) {
                  if ( eptr->Neighbor(i)->Neighbor(j) == eptr ) opposite_face = j;
                  break;
               }
@@ -707,31 +706,31 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
   InterFace<3U>*     ifptr(nullptr);
   vector<InterFace<3U>*> iface_ptrs;
   iface_ptrs.reserve( eptr->Faces() );
-  for ( size_t i=0U; i<eptr->Faces(); i++ )
+  for ( auto i{0}; i<eptr->Faces(); i++ )
     {
        if ( eptr->Neighbor(i) != nullptr && !interface_constructed ) {
-            vector<size_t> fnids;
+            vector<uint32_t> fnids;
             // getting the nodes for the inside of the future interface
             eptr->FE()->NodesOfFace( i, fnids );
             vector<Node<3U>*> inside_nodes;
             inside_nodes.reserve( fnids.size() );
-            for ( size_t j=0U; j<fnids.size(); ++j )
+            for ( auto j=0U; j<fnids.size(); ++j )
               inside_nodes.push_back( eptr->N( fnids[j] ) );
             // duplicating these nodes to get nodes for the inside element and the other side
             vector<Node<3U>*> middle_nodes, outside_nodes;
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
-            for ( size_t j=0U; j<fnids.size(); ++j ) {
+            for ( auto j=0U; j<fnids.size(); ++j ) {
                  Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, ManifoldType::INTERFACE );
                  middle_nodes.push_back( mnptr );
                  Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, ManifoldType::INTERFACE );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes
-            pair<size_t,size_t> face_ids1 = findAdjacentElementFaces( eptr, eptr->Neighbor(i) );
+            pair<uint32_t,uint32_t> face_ids1 = findAdjacentElementFaces( eptr, eptr->Neighbor(i) );
             _test( i == face_ids1.first );
             // find matching faces via neighbor element pointers (faster)
-            pair<size_t,size_t> face_ids2 = findAdjacentFacesFromNeighbors( eptr, eptr->Neighbor(i) );
+            pair<uint32_t,uint32_t> face_ids2 = findAdjacentFacesFromNeighbors( eptr, eptr->Neighbor(i) );
             _test( face_ids1.first == face_ids2.first );
             _test( face_ids1.first == face_ids2.second );
             //                        inner  outer
@@ -795,7 +794,7 @@ bool MeshManager_Test::TestEraseAllPrimitives()
       
       @test OK SKM 8/12/21
 */
-template<size_t dim>
+template<uint32_t dim>
 void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neighbors )
  {
     if ( !node_neighbors.empty() ) node_neighbors.clear();
@@ -804,12 +803,12 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
     // 1. get continuous indices to access the sets contained in the node_neighbor vectors
     subdomain.RenumberNodes();
  
-    vector<size_t> segm_nodes;
+    vector<uint32_t> segm_nodes;
 
     const auto elmtsEnd{ subdomain.ElementsEnd() };
     for ( auto it=subdomain.ElementsBegin(); it!=elmtsEnd; ++it ) {
-         const size_t n_segments{ (*it)->Segments() };
-         for ( size_t segm_id{0}; segm_id < n_segments; ++segm_id ) {
+         const auto n_segments{ (*it)->Segments() };
+         for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
               (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
               // replacing local with global node ids
               for ( auto& sit : segm_nodes ) sit = (*it)->N(sit)->Idx();

@@ -15,7 +15,7 @@ class FiniteElementManager;
 @author Adriana Paluszny
 @date 2001
 */
-template<size_t dim>
+template<uint32_t dim>
 class FiniteVolumeStencilManager {
   public:
     /// creates finite volume stencil objects for the element types supported by the current finite-element manager

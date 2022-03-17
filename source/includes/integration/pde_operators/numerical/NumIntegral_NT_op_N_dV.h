@@ -18,7 +18,7 @@ namespace csmp {
 @note use only for scalar-type dependent variables (1 DOF per node)
 
 */
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& p, 
@@ -29,7 +29,7 @@ class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim> {
     virtual NumIntegral_NT_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_op_N_dV<dim,CELL> (*this); }
     
   private:
-    size_t  nodal_degrees_of_freedom;
+    uint32_t  nodal_degrees_of_freedom;
 
     DenseMatrix<DM_MIN>  N, NT, 
                          RHS_TEMP;

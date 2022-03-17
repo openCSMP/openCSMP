@@ -13,7 +13,7 @@ namespace csmp {
 
 /// class to handle two-phase flow caclulations of FV part within the CVFEM scheme (Weis et al., Geofluids, 2014).
 
-template<size_t dim>
+template<uint32_t dim>
 class TwoPhaseTransportPHX {
   public:
 

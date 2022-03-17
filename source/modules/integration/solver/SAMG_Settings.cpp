@@ -1096,7 +1096,7 @@ void SAMG_Settings::Set_filnam_dump( const std::string& filnam_dump ){
     filnam_dump_ = filnam_dump;
     filnam_dump_length_ = static_cast<int32_t>(filnam_dump_.length());
     const char *ch = filnam_dump_.c_str();
-    for( size_t i = 0; i < filnam_dump_length_; ++i ){
+    for( auto i = 0; i < filnam_dump_length_; ++i ){
         filnam_dump_Array_[i] = int( ch[i] );
     }
     ExplicitSecondary( true );

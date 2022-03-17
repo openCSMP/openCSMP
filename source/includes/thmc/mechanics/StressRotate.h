@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-template<size_t> class TensorVariable;
+template<uint32_t> class TensorVariable;
 
 
 class StressRotate {

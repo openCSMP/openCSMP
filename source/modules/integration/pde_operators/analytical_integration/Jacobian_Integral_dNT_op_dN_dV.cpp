@@ -14,8 +14,8 @@ namespace csmp {
 The upwinding is based on the basic operand (which will be the pressure)
 variable.
 */
-template<size_t dim,class SIMPLEX>
-Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::Jacobian_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
+template<uint32_t dim,class CELL>
+Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::Jacobian_Integral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref,
                                                             				const char* oper, 
                                                             				const char* basic, 
                                                             				const char* test,
@@ -71,8 +71,8 @@ Operand is.
 When the property is an element property, it will be put into the
 first vector entry MTRL[0]. Else, 
 */
-template<size_t dim,class SIMPLEX>
-void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
  {
     // this integral is only for analytically integrated finite elements
     assert( e.FE()->UsesLocalCoordinates() == false );
@@ -95,8 +95,8 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::GetOperands( const SIMPLEX& e 
 
 
 /// @todo (3) Compute Jacobian
-template<size_t dim,class SIMPLEX>
-void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     e.dN( DN );
     // transpose the shape function derivative matrix
@@ -114,7 +114,7 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,SIMPLEX>::ComputeContribution( const SIM
     const double global_factor = prefactor_ * e.Volume() / (delta_ * static_cast<double>(e.Nodes()) );
     for (size_t j = 0; j < e.Nodes(); ++j) {
       const double j_factor = el_d_lambda[j]() - el_lambda[j]();
-      for (size_t i = 0; i < e.Nodes(); ++i) {
+      for (auto i = 0; i < e.Nodes(); ++i) {
         for (size_t k = 0; k < e.Nodes(); ++k) {
           res_(i, j) += DNT(i, k) * el_test_orig[k]() * j_factor * global_factor;
         }

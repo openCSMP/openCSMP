@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 class ConcentrationFluidVolumeSource : public Interrelation<dim> {
     Operand<dim>&  CONCP;    
     Operand<dim>&  CONCN;    
@@ -23,7 +23,7 @@ class ConcentrationFluidVolumeSource : public Interrelation<dim> {
     
 };
 
-template<size_t dim>
+template<uint32_t dim>
 inline void ConcentrationFluidVolumeSource<dim>::TimeIncrement( double time_increment ) 
 { dt = time_increment; }
 

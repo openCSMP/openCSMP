@@ -4,7 +4,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 QuartzPrecipitation<dim>::QuartzPrecipitation( const PropertyDatabase<dim>& p, double time_increment ) 
       : Interrelation<dim>(p), dt(time_increment),
         F( Interrelation<dim>::GlobalProperty("velocity") ),
@@ -28,7 +28,7 @@ QuartzPrecipitation<dim>::QuartzPrecipitation( const PropertyDatabase<dim>& p, d
    time. This product gives the amount of quartz that is dissolved
    or precipitated
    */
-template<size_t dim>
+template<uint32_t dim>
 void QuartzPrecipitation<dim>::Calculate()
  {
      // 1. getting input data for the calculation 

@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 RegionMonitor<dim>::RegionMonitor()
     : divide_by_volume_(false),
       pore_volume_integral_(false),
@@ -21,7 +21,7 @@ RegionMonitor<dim>::RegionMonitor()
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg, 
                                    const string& first_integral_property,
                                    const string& first_range_property,
@@ -41,7 +41,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg, 
                                    const list<string>& to_integrate_over_groups,
                                    const list<string>& to_find_ranges_in_groups,
@@ -122,7 +122,7 @@ RegionMonitor<dim>::RegionMonitor( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg, 
                                            const list<string>& to_integrate_over_groups,
                                            const list<string>& to_find_ranges_in_groups,
@@ -193,7 +193,7 @@ void RegionMonitor<dim>::DefineProperties( const Model<dim>& sg,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 RegionMonitor<dim>::~RegionMonitor()
 {
 }
@@ -202,7 +202,7 @@ RegionMonitor<dim>::~RegionMonitor()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::DivideIntegralPropertiesByRegionVolumes( bool doit )
 {
     divide_by_volume_ = doit;
@@ -215,7 +215,7 @@ void RegionMonitor<dim>::DivideIntegralPropertiesByRegionVolumes( bool doit )
  *  region names!!
  */
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property,
                                                             string regionname)
 {
@@ -230,7 +230,7 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property,
     ext_calc_properties_column_headers_.insert(property_column_header_entry);
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property_regionname)
 {
 
@@ -243,7 +243,7 @@ void RegionMonitor<dim>::InsertExternallyCalculatedProperty(string property_regi
     ext_calc_properties_column_headers_.insert(property_column_header_entry);
 }
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            string property,
                                                            string regionname,
@@ -269,7 +269,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
                                                            string property_regionname,
                                                            double value )
@@ -300,7 +300,7 @@ void RegionMonitor<dim>::InsertPreCalculatedPropertyValue( double time,
     
     @attention non-unique regions that bear the name of model boundaries are ignored.
 */
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double time )
 {
     double  integral;
@@ -379,7 +379,7 @@ void RegionMonitor<dim>::ScalarPropertyIntegrals( const Model<dim>& sg, double t
 
     @attention non-unique regions that bear the name of model boundaries are ignored.
 */
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double time )
 {
     double  rmin, rmax;
@@ -409,7 +409,7 @@ void RegionMonitor<dim>::ScalarPropertyRanges( const Model<dim>& sg, double time
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::Reset() // zap all recorded values
 {
     integral_properties_.clear();
@@ -422,7 +422,7 @@ void RegionMonitor<dim>::Reset() // zap all recorded values
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::EraseData() // zap all recorded values
 {
     integrals_.clear();
@@ -436,7 +436,7 @@ void RegionMonitor<dim>::EraseData() // zap all recorded values
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void RegionMonitor<dim>::Out( const char* text_file ) const
 {
     string  file(text_file);
@@ -573,7 +573,7 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
 
 /// P. Lang: loops over all elements of all regions of model and returns true if IsVolumeElement()
-template<size_t dim>
+template<uint32_t dim>
 bool  RegionMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 {
     if( dim == 1U || dim == 2U ) return false;

@@ -7,7 +7,7 @@ namespace csmp{
 
 /// First-order constructor
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::
               TwoPhaseImplicitNodeCenteredFVTransProfile( const char* group_name,
                                                           Model<dim>& model,
@@ -39,7 +39,7 @@ TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::
 
 /// Second-order constructor
 
-template<size_t dim>
+template<uint32_t dim>
 TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::
               TwoPhaseImplicitNodeCenteredFVTransProfile( const char* group_name,
                                                           Model<dim>& model,
@@ -71,7 +71,7 @@ TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::AdjustSolverSettings() {
 
   std::cout <<"\n\n*** TwoPhaseImplicitNodeCenteredFVTransProfile::AdjustSolverSettings ***\n\n";
@@ -145,19 +145,19 @@ After the first solution has converged with an absolut convergence set at the ro
 convergence criterion, either absolute or residual, is subsequently used as stopping criterion. Absolute convergence
 is defined by "res <= eps". Relative convergence is defined by "res <= eps.res0" (res0 = starting residual).
 */
-template<size_t dim>
+template<uint32_t dim>
 bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double modelTime )
 {
   throw;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 bool TwoPhaseImplicitNodeCenteredFVTransProfile<dim>::Solve( double modelTime, TwoPhaseModel<dim>& saturationFunctions, double timeInterval )
 {
     /// SAMG output to file
     #ifdef SAMG_OUTPUT_TO_FILE
         std::string currentDumpFileName( dumpFileName_ );
-        currentDumpFileName.append( numberToString( static_cast<size_t>( modelTime ) ) );
+        currentDumpFileName.append( numberToString( static_cast<uint32_t>( modelTime ) ) );
         this->Solver().GetSolverSettings().Set_filnam_dump( currentDumpFileName );
     #endif
 

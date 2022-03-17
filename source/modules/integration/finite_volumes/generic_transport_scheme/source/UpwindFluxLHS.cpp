@@ -7,7 +7,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim>
+template<uint32_t dim>
 UpwindFluxLHS<dim>::UpwindFluxLHS( const csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT>& vol_flow_across_facet )
  : ff_key_(vol_flow_across_facet)
 {
@@ -17,14 +17,14 @@ UpwindFluxLHS<dim>::UpwindFluxLHS( const csmp::INDEX<SCALAR,FACET_INTEGRATION_PO
 /**
        Upwinded first-order in space and time.
 */
-template<size_t dim>
+template<uint32_t dim>
 void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& mat ) const
 {
-    const size_t facets(fe.Facets());
-    for (size_t i(0); i < facets; ++i) 
+    const auto facets(fe.Facets());
+    for (auto i(0); i < facets; ++i)
       {
-         const size_t inside_node(fe.FV()->InsideNode(i));
-         const size_t outside_node(fe.FV()->OutsideNode(i));
+         const auto inside_node(fe.FV()->InsideNode(i));
+         const auto outside_node(fe.FV()->OutsideNode(i));
          auto w = fe.FV()->FacetIntegrationWeight(i, 0U);
          double facet_flux = w * fe.Read( i, 0U, ff_key_ );
 
@@ -50,20 +50,20 @@ void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void UpwindFluxLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& mat ) const
  {
-    const size_t node_parent_elements(fv.Parents());
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    const auto node_parent_elements(fv.Parents());
+    for ( auto t=0U; t<node_parent_elements; t++ )
     {
       Element<dim>* const eptr(fv.Parent(t));   
-      const size_t pnid(fv.ParentNodeNumber(t)); 
-      const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-      for ( size_t i=0U; i<sector_facets; i++ )
+      const auto pnid(fv.ParentNodeNumber(t));
+      const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+      for ( auto i{0}; i<sector_facets; i++ )
       {
-          const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-          const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-          const size_t outside_node(eptr->FV()->OutsideNode(iFacet)); 
+          const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+          const auto inside_node(eptr->FV()->InsideNode(iFacet));
+          const auto outside_node(eptr->FV()->OutsideNode(iFacet));
           auto w = eptr->FV()->FacetIntegrationWeight(iFacet, 0U);   
           double facet_flux = w * eptr->Read( iFacet, 0U, ff_key_ );
           if (pnid != inside_node) facet_flux *= -1.;

@@ -271,7 +271,7 @@ void Tutorial3_Example::Run()
       }
 
     // final output
-    time = static_cast<size_t>(model_time/day);
+    time = static_cast<uint32_t>(model_time/day);
     matlab.Write2DMatlabFile(  model, "saturation_oil", "saturation oil", time );
     matlab.Write2DMatlabFile(  model, "fluid_pressure", "fluid pressure", time );
     vtu.OutputDataToVTU( "fluid_pressure", "fluid pressure",    "Model", time );
@@ -303,7 +303,7 @@ void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>
     // 1. Computing the saturation of water = 1 - So
     //    loop over the FE nodes
     Region<2U>& mref = mdl.Region("Model");
-    for ( vector<Node<2U>* >::iterator nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
+    for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
       {
          // read in So, compute Sw and store back to nodes along with the flag of So
          sw = one - (*nit)->Read( sato_key );
@@ -313,8 +313,7 @@ void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>
 
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    for ( vector<Element<2U>* >::const_iterator
-          eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( auto eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
       {
          // 1. setting up the relative permeability model
          // ---------------------------------------------

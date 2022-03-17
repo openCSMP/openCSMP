@@ -5,14 +5,14 @@ using namespace std;
 namespace csmp {
 
 
-template<size_t dim>
+template<uint32_t dim>
 Corey<dim>::Corey()
  {
  }
  
 
 
-template<size_t dim>
+template<uint32_t dim>
 Corey<dim>::Corey( const PropertyDatabase<dim>& database )
  : expn_key_(database.StorageKey("corey exponent oil")),
    expw_key_(database.StorageKey("corey exponent water")),
@@ -32,7 +32,7 @@ Corey<dim>::Corey( const PropertyDatabase<dim>& database )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Corey<dim>::Corey( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -61,7 +61,7 @@ Corey<dim>::Corey( const PropertyDatabase<dim>& database,
    pc_max_ =  TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_;
 }
 
-template<size_t dim>
+template<uint32_t dim>
 Corey<dim>::Corey( const PropertyDatabase<dim>& database,
                                const char* permeability,
                                const char* viscosity_nw, const char* viscosity_w,
@@ -92,7 +92,7 @@ Corey<dim>::Corey( const PropertyDatabase<dim>& database,
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Corey<dim>::~Corey()
  {
  }
@@ -102,7 +102,7 @@ Corey<dim>::~Corey()
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Corey<dim>::Initialize( const Element<dim>& e )
  {
     TwoPhaseModel<dim>::swr_   = e.Read( TwoPhaseModel<dim>::swr_key_ ); // irreducible water
@@ -138,7 +138,7 @@ void Corey<dim>::Initialize( const Element<dim>& e )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::krw_Phase() const
  { 
  
@@ -150,7 +150,7 @@ double Corey<dim>::krw_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::krn_Phase() const
  { 
     if ( TwoPhaseModel<dim>::seff_ <= 0. ) return krn_;
@@ -159,7 +159,7 @@ double Corey<dim>::krn_Phase() const
     return krn_ * std::pow( 1.0 - TwoPhaseModel<dim>::seff_, expn_ ) ;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::dkrwds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -168,7 +168,7 @@ double Corey<dim>::dkrwds_Phase() const
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::dkrnds_Phase() const
  {
     const double seff_mult( 1.0/ (1.0 - TwoPhaseModel<dim>::swr_ - TwoPhaseModel<dim>::snr_ ) );
@@ -176,7 +176,7 @@ double Corey<dim>::dkrnds_Phase() const
  }
 
 /// pc covers the full saturation range, pc is capped based on maximum dpcds
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::pc_Phase( ) const
 {
     // linear relperm model
@@ -216,7 +216,7 @@ double Corey<dim>::pc_Phase( ) const
 
 
 /// dpcdS covers the full saturation range, dpcds is capped based on maximum dpcds
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::dpcds_Phase( ) const
 {
 
@@ -252,7 +252,7 @@ double Corey<dim>::dpcds_Phase( ) const
 
 }
     
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::Sw_Phase( double pc ) const
 {
 
@@ -306,7 +306,7 @@ double Corey<dim>::Sw_Phase( double pc ) const
 
 }
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::dsdpc_Phase( double pc ) const
 {
 
@@ -340,7 +340,7 @@ double Corey<dim>::dsdpc_Phase( double pc ) const
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Corey<dim>::MaxFractionalFlowDerivative() const
 {
     // this is NOT the maximum of dfdS !!
@@ -352,8 +352,8 @@ double Corey<dim>::MaxFractionalFlowDerivative() const
 }
 
 
-template<size_t dim>
-void Corey<dim>::Out( size_t phase ) const
+template<uint32_t dim>
+void Corey<dim>::Out( uint32_t phase ) const
  {
     TwoPhaseModel<dim>::Out(phase);
     cout << "\nCorey<csp_float," << dim << ">::Out: Additional properties: " << endl;

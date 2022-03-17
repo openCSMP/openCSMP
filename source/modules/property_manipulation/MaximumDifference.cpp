@@ -14,7 +14,7 @@ namespace csmp {
 
 // INLINE METHODS
 
-template<size_t dim>
+template<uint32_t dim>
 void MaximumDifference<dim>::Calculate()
  {
     Var1.AssignTo( var1 );
@@ -32,7 +32,7 @@ template class MaximumDifference<3U>;
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 double maximumDifference( const Model<dim>& sg,
                           const char* new_property, const char* old_property, bool normalise )
  {
@@ -71,7 +71,7 @@ double maximumDifference( const Model<dim>& sg,
 
    else if ( new_key.place == ELEMENT_INTEGRATION_POINT ) {
        for ( auto eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ )
-         for ( size_t i=0U; i<(*eit)->IntegrationPoints(); i++ )
+         for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
            {
              (*eit)->Read( i, new_key, new_prop );
              (*eit)->Read( i, old_key, old_prop );

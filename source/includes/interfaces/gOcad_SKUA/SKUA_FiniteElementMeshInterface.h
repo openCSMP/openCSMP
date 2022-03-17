@@ -8,8 +8,8 @@ namespace csmp {
 
 class ModelTopology;
 class SKUA_ElementSpecifications;
-template<size_t> class VSet;
-template<size_t> class Model;
+template<uint32_t> class VSet;
+template<uint32_t> class Model;
 
 /**
  
@@ -277,20 +277,20 @@ class SKUA_FiniteElementMeshInterface {
       ~SKUA_FiniteElementMeshInterface();
       
       /// Reading SKUA mesh from .asc and .dat files; deduces irregular if more than the top surface is warped (IRREGULAR)
-      template<size_t dim>
+      template<uint32_t dim>
       void Read_SKUA_Mesh( const std::string& mesh_file_set,
                            VSet<dim>&,
                            ModelTopology&,
                            bool binary_input_file );
   protected:
     /// ascii format
-    template<size_t dim>
+    template<uint32_t dim>
     void ReadMeshASCII( const std::string& meshfile,
                         VSet<dim>&,
                         ModelTopology& );
 
     /// binary format - use  binary interfaces for efficient reading of large files
-    template<size_t dim>
+    template<uint32_t dim>
     void ReadMeshBinary( const std::string& meshfile,
                          VSet<dim>&,
                          ModelTopology& );
@@ -305,35 +305,35 @@ class SKUA_FiniteElementMeshInterface {
     bool ReadRegionsAndElementTypesASCII( std::ifstream& ifs );
 
     /// ASCI data file
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPelementASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPlistASCII( std::ifstream&, VSet<dim>&, bool test_for_consecutive_node_numbering=true );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPfvertsASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPmaterialASCII( std::ifstream&, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPropertyRecordsASCII( std::ifstream&, VSet<dim>& );
 
     /// Binary data file
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadNodeCoordinatesBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadBoundaryFlagsAndConditionsBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPelementBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPlistBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPfvertsBinary( FILE*, VSet<dim>& );
-    template<size_t dim>
+    template<uint32_t dim>
     bool ReadPmaterialBinary( FILE*, VSet<dim>& );
-//    TODO: template<size_t dim>
+//    TODO: template<uint32_t dim>
 //    bool ReadPropertyRecordBinary( FILE*, VSet<dim>& );
 
     /// removes any object and data records potentially held in the interface
@@ -348,7 +348,7 @@ class SKUA_FiniteElementMeshInterface {
     //          region name   type of elements
     std::multimap<std::string,std::string>           object_specs_;
     //          region name   element ids
-    std::multimap<std::string,std::vector<size_t> >  object_elements_;
+    std::multimap<std::string,std::vector<uint32_t> >  object_elements_;
     bool  isoparametric_;
     bool  extra_checks_on_binary_file_ = true;
 };

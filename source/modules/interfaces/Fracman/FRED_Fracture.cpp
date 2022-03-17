@@ -347,7 +347,7 @@ void FRED_Fracture::Out() const
     if ( props.size() > 3 ) {
          list<double>::const_iterator  pit = props.begin();
          cout <<"\nOther property data:    "<< endl;
-         pit++, pit++, pit++;
+         pit = next(pit,3);
          
          while ( pit != props.end() ) {
               cout << (*pit) <<"  ";

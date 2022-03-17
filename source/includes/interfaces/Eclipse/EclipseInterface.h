@@ -1,11 +1,16 @@
 #ifndef ECLIPSE_INTERFACE_UOM_H
 #define ECLIPSE_INTERFACE_UOM_H
 
+#include "CornerPointCell.h"
 #include "CornerPointGrid.h"
 
-#include "CSMP_highLevelUtilities.h"
-
 namespace csmp {
+
+class ModelTopology;
+class Parameter;
+template<uint32_t> class VSet;
+
+
 
 /// @file EclipseInterface.h - glue that creates a file-based interface between CSMP and Eclipse
 
@@ -98,9 +103,9 @@ struct EclipseWell
 struct EclipseWellPathEntry
 {
   ijk cell;
-  CORNER_POINT_CELL_FACE_INDEX from, to;
+  ::csmp::CORNER_POINT_CELL_FACE_INDEX from, to;
 
-  EclipseWellPathEntry( const ijk& cell, CORNER_POINT_CELL_FACE_INDEX from, CORNER_POINT_CELL_FACE_INDEX to )
+  EclipseWellPathEntry( const ijk& cell, ::csmp::CORNER_POINT_CELL_FACE_INDEX from, ::csmp::CORNER_POINT_CELL_FACE_INDEX to )
     : cell( cell ), from( from ), to( to )
   {
   }
@@ -114,16 +119,16 @@ struct EclipseWellPath
 
 struct EclipseFault
 {
-  std::vector< std::pair<ijk, CORNER_POINT_CELL_FACE_INDEX> > fault;
+  std::vector< std::pair<ijk, ::csmp::CORNER_POINT_CELL_FACE_INDEX> > fault;
 
   void Reserve( size_t count )
   {
     fault.reserve( count );
   }
 
-  void Add( size_t i, size_t j, size_t k, CORNER_POINT_CELL_FACE_INDEX face )
+  void Add( size_t i, size_t j, size_t k, ::csmp::CORNER_POINT_CELL_FACE_INDEX face )
   {
-    fault.emplace_back( ijk( i, j, j ), face );
+    fault.emplace_back( std::make_pair( ijk( i, j, j ), face ) );
   }
 };
 
@@ -139,8 +144,8 @@ public:
   ~EclipseInterface();
 
   /// MASTER METHOD not only reads the Eclipse input files, but also creates grid objects and converts them into CSMP cells / mesh
-  bool ReadFile( csmp::VSet<3U>& vset,
-                 csmp::ModelTopology& model_topology,
+  bool ReadFile( VSet<3U>& vset,
+                 ModelTopology& model_topology,
                  const std::string& fname,
                  bool exclude_inactive_cells,
                  bool tetra_mesh );
@@ -158,13 +163,13 @@ public:
   void AddWell( const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point );
 
 #if 0
-  void AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids );
+  void AddWellFacePath( const std::string& well_name, const std::vector<uint32_t>& cell_ids );
 
-  void AddWellFacePath( const std::string& well_name, const std::vector<size_t>& cell_ids,
+  void AddWellFacePath( const std::string& well_name, const std::vector<uint32_t>& cell_ids,
                         const std::vector<std::pair<size_t, size_t> >& face_ids );
 
   /// inserts a well path that penetrates the edges following the sides of the supplied cells
-  void AddWellEdgePath( const std::string& well_name, const std::vector<size_t>& cell_ids,
+  void AddWellEdgePath( const std::string& well_name, const std::vector<uint32_t>& cell_ids,
                         const std::vector<std::pair<size_t, size_t> >& edge_ids );
 #endif
 
@@ -206,7 +211,7 @@ private:
   bool ReadFaultTransmissibilityMultipliers( std::ifstream& ifs, char* text_line, size_t line_length );
   bool ReadBoxData( std::ifstream& ifs, char* text_line, size_t line_length );
   bool ReadScalarProperty( std::ifstream& ifs, char* text_line, size_t line_length, std::vector<csmp::ScalarVariable>& prop_data );
-  bool ReadTensorProperty( std::ifstream& ifs, char* text_line, size_t line_length, std::vector<csmp::TensorVariable<3U> >& prop_data,
+  bool ReadTensorProperty( std::ifstream& ifs, char* text_line, size_t line_length, std::vector<::csmp::TensorVariable<3U> >& prop_data,
                            const std::string& compx_name, const std::string& compy_name, const std::string& compz_name );
 
   // Properties operations
@@ -217,39 +222,39 @@ private:
                                   const CornerPointGrid& grid,
                                   const std::vector<csmp::ScalarVariable>& scalar_data,
                                   const std::string& property_name,
-                                  const csmp::PLACEMENT& place );
+                                 const ::csmp::PLACEMENT& place );
 
   void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
                                   const CornerPointGrid& grid,
-                                  const std::vector<csmp::VectorVariable<3U> >& vector_data,
+                                 const std::vector<::csmp::VectorVariable<3U> >& vector_data,
                                   const std::string& property_name,
-                                  const csmp::PLACEMENT& place );
+                                 const ::csmp::PLACEMENT& place );
 
   void WriteScalarPropertyToVSet( csmp::VSet<3U>& vset,
                                   const CornerPointGrid& grid,
-                                  const std::vector<csmp::TensorVariable<3U> >& tensor_data,
+                                 const std::vector<::csmp::TensorVariable<3U> >& tensor_data,
                                   const std::string& property_name,
-                                  const csmp::PLACEMENT& place );
+                                  const ::csmp::PLACEMENT& place );
 
   void WriteVectorPropertyToVSet( csmp::VSet<3U>& vset,
                                   const CornerPointGrid& grid,
-                                  const std::vector<csmp::VectorVariable<3U> >& vector_data,
+                                  const std::vector<::csmp::VectorVariable<3U> >& vector_data,
                                   const std::string& property_name,
-                                  const csmp::PLACEMENT& place );
+                                  const ::csmp::PLACEMENT& place );
 
   void WriteTensorPropertyToVSet( csmp::VSet<3U>& vset,
                                   const CornerPointGrid& grid,
-                                  const std::vector<csmp::TensorVariable<3U> >& tensor_data,
+                                  const std::vector<::csmp::TensorVariable<3U> >& tensor_data,
                                   const std::string& property_name,
-                                  const csmp::PLACEMENT& place );
+                                  const ::csmp::PLACEMENT& place );
 
   void SaveVectorProperty( size_t component,
                            const std::vector<csmp::ScalarVariable>& scalar_data,
-                           std::vector<csmp::VectorVariable<3U> >&  vector_data );
+                           std::vector<::csmp::VectorVariable<3U> >&  vector_data );
 
   void SaveTensorProperty( size_t component,
                            const std::vector<csmp::ScalarVariable>& scalar_data,
-                           std::vector<csmp::TensorVariable<3U> >&  vector_data );
+                           std::vector<::csmp::TensorVariable<3U> >&  vector_data );
   void ClearBefore();
   void ClearAfter();
 
@@ -282,7 +287,7 @@ private:
 
 #if 0
   // local mesh block
-  std::vector<size_t>         box_;
+  std::vector<uint32_t>         box_;
 #endif
 
   // properties data
@@ -290,7 +295,7 @@ private:
   std::vector<csmp::ScalarVariable>       ntg_;
   std::vector<csmp::ScalarVariable>       poro_;
   std::vector<csmp::ScalarVariable>       perm_;
-  std::vector<csmp::TensorVariable<3U>>   permxyz_;  
+  std::vector<::csmp::TensorVariable<3U>>   permxyz_;
   std::map<std::string, double>           multflt_;
   std::vector<csmp::ScalarVariable>       pressure_;
   std::vector<csmp::ScalarVariable>       swat_;
@@ -397,55 +402,55 @@ public:
 
   /// properties setup
   void SatNumPropertySetup( const std::string& prop_name = "satnum",
-                            const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                            const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                            const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                            const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void PvtNumPropertySetup( const std::string& prop_name = "ptvnum",
-                            const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                            const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                            const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                            const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   /// usually this is called "rocknum"
   void RockNumPropertySetup( const std::string& prop_name = "rocktype",
-                             const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                             const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                             const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                             const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void EqlNumPropertySetup( const std::string& prop_name = "eqlnum",
-                            const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                            const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                            const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                            const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void FipNumPropertySetup( const std::string& prop_name = "fipnum",
-                            const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                            const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                            const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                            const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void NtgPropertySetup( const std::string& prop_name = "ntg",
-                         const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                         const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                         const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                         const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void PoroPropertySetup( const std::string& prop_name = "porosity",
-                          const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                          const csmp::PLACEMENT& prop_place = csmp::ELEMENT );
+                          const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                          const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT );
 
   void PermPropertySetup( const std::string& prop_name = "permeability",
-                          const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                          const csmp::PLACEMENT& prop_place = csmp::ELEMENT,
+                          const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                          const ::csmp::PLACEMENT& prop_place = ::csmp::ELEMENT,
                           const std::string& prop_unit = "m2" );
 
   void PressurePropertySetup( const std::string& prop_name = "pressure",
-                              const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                              const csmp::PLACEMENT& prop_place = csmp::NODE,
+                              const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                              const ::csmp::PLACEMENT& prop_place = ::csmp::NODE,
                               const std::string& prop_unit = "Pa" );
 
   void SwatPropertySetup( const std::string& prop_name = "saturation water",
-                          const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                          const csmp::PLACEMENT& prop_place = csmp::NODE );
+                          const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                          const ::csmp::PLACEMENT& prop_place = ::csmp::NODE );
 
   void SoilPropertySetup( const std::string& prop_name = "saturation oil",
-                          const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                          const csmp::PLACEMENT& prop_place = csmp::NODE );
+                          const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                          const ::csmp::PLACEMENT& prop_place = ::csmp::NODE );
 
   void SgasPropertySetup( const std::string& prop_name = "saturation gas",
-                          const csmp::VARIABLE_TYPE& prop_type = csmp::SCALAR,
-                          const csmp::PLACEMENT& prop_place = csmp::NODE );
+                          const ::csmp::VARIABLE_TYPE& prop_type = ::csmp::SCALAR,
+                          const ::csmp::PLACEMENT& prop_place = ::csmp::NODE );
 
   /// mesh setting
   std::string           mesh_file_prefix_;       ///< name of model or main mesh file
@@ -540,7 +545,7 @@ int readEclipseFaultTransmissibilityMultipliers( size_t NX, size_t NY, size_t NZ
                                                  std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                                                  );
 
-int readEclipseBoxData( std::vector<size_t>& box_data,
+int readEclipseBoxData( std::vector<uint32_t>& box_data,
                         std::ifstream& ifs, char* text_line, size_t line_length, bool verbose
                         );
 
@@ -556,22 +561,22 @@ void addWellPath( size_t NX, size_t NY, size_t NZ,
 
 void addWellPath( const std::string& well_name,
                   const std::vector<ijk>& cell_ids,
-                  const std::vector<std::pair<ijk, CORNER_POINT_CELL_FACE_INDEX> >& face_ids,
+                  const std::vector<std::pair<ijk, ::csmp::CORNER_POINT_CELL_FACE_INDEX> >& face_ids,
                   std::map<std::string, EclipseWellPath>& well_path );
 
 void addWellPath( const std::string& well_name,
                   const std::vector<ijk>& cell_ids,
-                  std::pair<ijk, CORNER_POINT_CELL_FACE_INDEX> face_ids,
+                  std::pair<ijk, ::csmp::CORNER_POINT_CELL_FACE_INDEX> face_ids,
                   std::map<std::string, EclipseWellPath>& well_path );
 
 void addWellPath( const std::string& well_name,
                   const std::vector<ijk>& cell_ids,
-                  std::pair<CORNER_POINT_CELL_FACE_INDEX, CORNER_POINT_CELL_FACE_INDEX> face_ids,
-                  std::map<std::string, EclipseWellPath>& well_path );
+                  std::pair<::csmp::CORNER_POINT_CELL_FACE_INDEX, ::csmp::CORNER_POINT_CELL_FACE_INDEX> face_ids,
+                  std::map<std::string, std::vector<std::pair<size_t, std::pair<size_t, size_t> > > >& well_path );
 
 void addWellPath( const std::string& well_name,
                   const ijk& cell_ids,
-                  std::pair<ijk, CORNER_POINT_CELL_FACE_INDEX> face_id,
+                  std::pair<ijk, ::csmp::CORNER_POINT_CELL_FACE_INDEX> face_id,
                   std::map<std::string, EclipseWellPath>& well_path );
 
 }// end namespace csmp

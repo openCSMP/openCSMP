@@ -16,10 +16,10 @@
 
 namespace csmp {
 
-template<size_t> class Element;
-template<size_t> class Face;
-template<size_t> class InterFace;
-template<size_t> class PropertyDatabase;
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+template<uint32_t> class InterFace;
+template<uint32_t> class PropertyDatabase;
 
 /**
 @brief Base class for FE or FVM integrals for the lefthandside (matrix).
@@ -34,7 +34,7 @@ To be able to write PDE equations in finite element form, using the
 PDE_Integrator class. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 class MathOperatorLHS {
   public:
 
@@ -118,11 +118,12 @@ class MathOperatorLHS {
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const Element<dim>&,
                                               const csmp::Index&,
-                                              size_t ip,
+                                              uint32_t ip,
                                               DenseMatrix<DM_MIN>& );
+                                              
     void          PropertyAtIntegrationPoint( const Face<dim>&,
                                               const csmp::Index&,
-                                              size_t ip,
+                                              uint32_t ip,
                                               DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
@@ -163,8 +164,8 @@ class MathOperatorLHS {
     std::string                         name_;   ///< name of operator
 
     Parameter                           op;      ///< material property operand
-    std::pair<Parameter, size_t>       bop;     ///< basic function operand and calculation offset
-    std::pair<Parameter, size_t>       top;     ///< test function operand and calculation offset
+    std::pair<Parameter, size_t>        bop;     ///< basic function operand and calculation offset
+    std::pair<Parameter, size_t>        top;     ///< test function operand and calculation offset
 
     DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
     std::vector<size_t>                 IDT;     ///< node-ID & global constraint points vector ( test operand )
@@ -172,7 +173,7 @@ class MathOperatorLHS {
 
     std::vector<DenseMatrix<DM_MIN> >   MTRL;    ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;   ///< shape function derivative matrix
-    std::vector<double>               IPOL;    ///< shape function vector
+    std::vector<double>                 IPOL;    ///< shape function vector
     std::vector<ScalarVariable >        SC;      ///< node property vector<double> of scalars
     std::vector<VectorVariable<dim> >   VC;      ///< vectors
     std::vector<TensorVariable<dim> >   TS;      ///< tensors
@@ -193,7 +194,6 @@ class MathOperatorLHS {
     // time-dependent multipliers
     bool                                time_multiply_;
     bool                                time_divide_;
-
 };
 
 

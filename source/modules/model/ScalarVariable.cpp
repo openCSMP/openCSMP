@@ -231,13 +231,13 @@ ScalarVariable  operator/( const ScalarVariable& l, const ScalarVariable& r )
 }
 
 
-template<size_t dim>
+template<uint32_t dim>
 VectorVariable<dim>  operator*( const ScalarVariable& l, const VectorVariable<dim>& r )
 {
   return r * l();
 }
 
-template<size_t dim>
+template<uint32_t dim>
 TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVariable<dim>& r )
 {
   return r * l();

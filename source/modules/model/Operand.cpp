@@ -15,7 +15,7 @@ have no name, its output flag will be PLAIN, the essential flag DIRICH,
 and the value rangle will be  -1.0e+50 to 1.0e+50. The calculation offset
 will be zero. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand()
  : name_("undefined"),
    omin(-1.0e+50),
@@ -40,7 +40,7 @@ and the essential flag will be DIRICH.
 the Operand shall be associated. This index must correspond to a physical
 variable which is already known to the PropertyDatabase. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx )
  : name_("undefined"),
    prop_key_(idx),
@@ -53,7 +53,7 @@ Operand<dim>::Operand( const csmp::Index& idx )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const Operand<dim>& op ) 
  {
     *this = op;
@@ -76,7 +76,7 @@ a reference of which is passed as a second argument to the constructor.
 If the property database cannot identify the variable by its name, it
 will report an error and the Operand will not be initialized properly. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const char* var, const PropertyDatabase<dim>& p )
  : name_(var),
    prop_key_(p.StorageKey(var)),
@@ -119,7 +119,7 @@ if one can, to avoid the creation of temporaries all together.
 
 Temporary variables in mathematical expressions involving Operands. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx, const ScalarVariable& sc )
     : name_("tmp"), 
       prop_key_(idx),
@@ -132,7 +132,7 @@ Operand<dim>::Operand( const csmp::Index& idx, const ScalarVariable& sc )
  } // end 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx, const VectorVariable<dim>& vc )
     : name_("tmp"), 
       prop_key_(idx),
@@ -145,7 +145,7 @@ Operand<dim>::Operand( const csmp::Index& idx, const VectorVariable<dim>& vc )
 } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx, const TensorVariable<dim>& ts )
     : name_("tmp"), 
       prop_key_(idx),
@@ -158,7 +158,7 @@ Operand<dim>::Operand( const csmp::Index& idx, const TensorVariable<dim>& ts )
  } // end 
  
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx, const ArrayVariable& ar )
     : name_("tmp"),
       prop_key_(idx),
@@ -170,7 +170,7 @@ Operand<dim>::Operand( const csmp::Index& idx, const ArrayVariable& ar )
  {
  } // end
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>::Operand( const csmp::Index& idx, const FlaggedArrayVariable& ar )
     : name_("tmp"),
       prop_key_(idx),
@@ -182,7 +182,7 @@ Operand<dim>::Operand( const csmp::Index& idx, const FlaggedArrayVariable& ar )
  {
  } // end
 
-template<size_t dim>
+template<uint32_t dim>
  Operand<dim>::~Operand()
  {
  }
@@ -206,7 +206,7 @@ template<size_t dim>
  Operand variable to a variable of the wrong type.
  
  */
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::AssignTo( ScalarVariable& s ) const
   {
      if ( prop_key_.type == SCALAR ) {
@@ -225,7 +225,7 @@ void Operand<dim>::AssignTo( ScalarVariable& s ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::AssignTo( VectorVariable<dim>& v ) const
   {
      if ( prop_key_.type == VECTOR ) {
@@ -244,7 +244,7 @@ void Operand<dim>::AssignTo( VectorVariable<dim>& v ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::AssignTo( TensorVariable<dim>& t ) const
   {
      if ( prop_key_.type == TENSOR ) {
@@ -263,7 +263,7 @@ void Operand<dim>::AssignTo( TensorVariable<dim>& t ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::AssignTo( ArrayVariable& a ) const
   {
      if ( prop_key_.type == ARRAY ) {
@@ -282,7 +282,7 @@ void Operand<dim>::AssignTo( ArrayVariable& a ) const
   }
 
 
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::AssignTo( FlaggedArrayVariable& a ) const
   {
      if ( prop_key_.type == FLAGGEDARRAY ) {
@@ -325,7 +325,7 @@ The method checks for self-assigment before setting the internal data.
 
 The copy constructor and for duplication of Operands. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const Operand<dim>& op ) 
  {
     // check for self assigment
@@ -349,7 +349,7 @@ Operand<dim>&  Operand<dim>::operator=( const Operand<dim>& op )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const ScalarVariable& s )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ = s;
@@ -363,7 +363,7 @@ Operand<dim>&  Operand<dim>::operator=( const ScalarVariable& s )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const VectorVariable<dim>& vc )
  {
     if ( prop_key_.type != VECTOR )
@@ -375,7 +375,7 @@ Operand<dim>&  Operand<dim>::operator=( const VectorVariable<dim>& vc )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const TensorVariable<dim>& ts )
  {
     if ( prop_key_.type != TENSOR )
@@ -386,7 +386,7 @@ Operand<dim>&  Operand<dim>::operator=( const TensorVariable<dim>& ts )
     return *this;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const ArrayVariable& ar )
  {
     if ( prop_key_.type != ARRAY )
@@ -397,7 +397,7 @@ Operand<dim>&  Operand<dim>::operator=( const ArrayVariable& ar )
     return *this;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( const FlaggedArrayVariable& ar )
  {
     if ( prop_key_.type != FLAGGEDARRAY )
@@ -412,40 +412,40 @@ Operand<dim>&  Operand<dim>::operator=( const FlaggedArrayVariable& ar )
 
 
 
-template<size_t dim>
+template<uint32_t dim>
 std::string   Operand<dim>::Name() const { return name_; }
 
-template<size_t dim>
+template<uint32_t dim>
 void          Operand<dim>::Name( const char* s ) { name_ = s; }
 
-template<size_t dim>
+template<uint32_t dim>
 const csmp::Index& Operand<dim>::Key() const { return prop_key_; }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t     Operand<dim>::Index() const { return prop_key_.index; }
 
-template<size_t dim>
+template<uint32_t dim>
 PLACEMENT     Operand<dim>::Placement() const { return prop_key_.place; }
 
-template<size_t dim>
+template<uint32_t dim>
 VARIABLE_TYPE Operand<dim>::Type() const { return prop_key_.type; }
 
-template<size_t dim>
+template<uint32_t dim>
 size_t     Operand<dim>::CalculationOffset() const { return calc_offset_; }
 
-template<size_t dim>
+template<uint32_t dim>
 void          Operand<dim>::CalculationOffset( size_t o ) { calc_offset_=o; }
 
-template<size_t dim>
+template<uint32_t dim>
 void          Operand<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output_ = c; }
 
-template<size_t dim>
+template<uint32_t dim>
 VARIABLE_FLAG    Operand<dim>::OutputCondition() const { return flag_output_; }
 
-template<size_t dim>
+template<uint32_t dim>
 VARIABLE_FLAG    Operand<dim>::EssentialCondition() const { return flag_essential_; }
 
-template<size_t dim>
+template<uint32_t dim>
 void          Operand<dim>::EssentialCondition( VARIABLE_FLAG c ) { flag_essential_ = c; }
 
 
@@ -474,7 +474,7 @@ Erratic assignments may halt the program and lead to an error report
 including the name of the Operand to which the assignment was
 attempted.
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator=( double val )
 {
     switch ( prop_key_.type )
@@ -533,7 +533,7 @@ for expressions like:
 Op1 += Op2 * 322.4;
 @endcode
  */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator+( double val ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -551,7 +551,7 @@ Operand<dim>  Operand<dim>::operator+( double val ) const
  }
  
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator-( double val ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -569,7 +569,7 @@ Operand<dim>  Operand<dim>::operator-( double val ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator*( double val ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -587,7 +587,7 @@ Operand<dim>  Operand<dim>::operator*( double val ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator/( double val ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -648,7 +648,7 @@ errors may be reported, for instance, when you try to add a tensor to
 a scalar variable. Mathematically meaningful operations, like multiplying
 a right-side vector with a left-side tensor, are enabled. 
  */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator+( const Operand<dim>& op ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -666,7 +666,7 @@ Operand<dim>  Operand<dim>::operator+( const Operand<dim>& op ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator-( const Operand<dim>& op ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -684,7 +684,7 @@ Operand<dim>  Operand<dim>::operator-( const Operand<dim>& op ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator*( const Operand<dim>& op ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -702,7 +702,7 @@ Operand<dim>  Operand<dim>::operator*( const Operand<dim>& op ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>  Operand<dim>::operator/( const Operand<dim>& op ) const
  {
     if ( prop_key_.type == SCALAR )
@@ -749,7 +749,7 @@ errors may be reported, for instance, when you try to add a tensor to
 a scalar variable. Mathematically meaningful operations, like multiplying
 a right-side vector with a left-side tensor, are enabled. 
  */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ += val;
@@ -762,7 +762,7 @@ Operand<dim>&  Operand<dim>::operator+=( double val )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ -= val;
@@ -775,7 +775,7 @@ Operand<dim>&  Operand<dim>::operator-=( double val )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ *= val;
@@ -788,7 +788,7 @@ Operand<dim>&  Operand<dim>::operator*=( double val )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( double val )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ /= val;
@@ -831,7 +831,7 @@ a scalar variable. Mathematically meaningful operations, like multiplying
 a right-side vector with a left-side tensor, are enabled. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const ScalarVariable& sc )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ += sc;
@@ -844,7 +844,7 @@ Operand<dim>&  Operand<dim>::operator+=( const ScalarVariable& sc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const ScalarVariable& sc )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ -= sc;
@@ -857,7 +857,7 @@ Operand<dim>&  Operand<dim>::operator-=( const ScalarVariable& sc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const ScalarVariable& sc )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ *= sc;
@@ -870,7 +870,7 @@ Operand<dim>&  Operand<dim>::operator*=( const ScalarVariable& sc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const ScalarVariable& sc )
  {
     if      ( prop_key_.type == SCALAR ) scalar_storage_ /= sc;
@@ -917,7 +917,7 @@ is also a vector. If this is not the case the program will be
 terminated and a fatal error will be reported. 
 
  */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR )
@@ -938,7 +938,7 @@ Operand<dim>&  Operand<dim>::operator+=( const VectorVariable<dim>& vc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
@@ -959,7 +959,7 @@ Operand<dim>&  Operand<dim>::operator-=( const VectorVariable<dim>& vc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
@@ -980,7 +980,7 @@ Operand<dim>&  Operand<dim>::operator*=( const VectorVariable<dim>& vc )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const VectorVariable<dim>& vc )
  {
     if      ( prop_key_.type == SCALAR ) 
@@ -1000,7 +1000,7 @@ Operand<dim>&  Operand<dim>::operator/=( const VectorVariable<dim>& vc )
  } // end
 
 /// Array
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1021,7 +1021,7 @@ Operand<dim>&  Operand<dim>::operator+=( const ArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1042,7 +1042,7 @@ Operand<dim>&  Operand<dim>::operator-=( const ArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1063,7 +1063,7 @@ Operand<dim>&  Operand<dim>::operator*=( const ArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const ArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1084,7 +1084,7 @@ Operand<dim>&  Operand<dim>::operator/=( const ArrayVariable& ar )
  } // end
 
 /// Flagged Array
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1105,7 +1105,7 @@ Operand<dim>&  Operand<dim>::operator+=( const FlaggedArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1126,7 +1126,7 @@ Operand<dim>&  Operand<dim>::operator-=( const FlaggedArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1147,7 +1147,7 @@ Operand<dim>&  Operand<dim>::operator*=( const FlaggedArrayVariable& ar )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const FlaggedArrayVariable& ar )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1200,7 +1200,7 @@ also be a TensorVariable. If this is not the case the program will be
 terminated and a fatal error will be reported. 
 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ += ts;
@@ -1221,7 +1221,7 @@ Operand<dim>&  Operand<dim>::operator+=( const TensorVariable<dim>& ts )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ -= ts;
@@ -1242,7 +1242,7 @@ Operand<dim>&  Operand<dim>::operator-=( const TensorVariable<dim>& ts )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ *= ts;
@@ -1263,7 +1263,7 @@ Operand<dim>&  Operand<dim>::operator*=( const TensorVariable<dim>& ts )
  } // end
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const TensorVariable<dim>& ts )
  {
     if      ( prop_key_.type == TENSOR ) tensor_storage_ /= ts;
@@ -1317,7 +1317,7 @@ errors may be reported, for instance, when you try to add a tensor to
 a scalar variable. Mathematically meaningful operations, like multiplying
 a right-side vector with a left-side tensor, are enabled. 
 */
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator+=( const Operand<dim>& op )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1366,7 +1366,7 @@ Operand<dim>&  Operand<dim>::operator+=( const Operand<dim>& op )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator-=( const Operand<dim>& op )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1414,7 +1414,7 @@ Operand<dim>&  Operand<dim>::operator-=( const Operand<dim>& op )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator*=( const Operand<dim>& op )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1461,7 +1461,7 @@ Operand<dim>&  Operand<dim>::operator*=( const Operand<dim>& op )
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 Operand<dim>&  Operand<dim>::operator/=( const Operand<dim>& op )
  {
     if      ( prop_key_.type == SCALAR )
@@ -1562,7 +1562,7 @@ To make it easier to track down where this error occurred, the name of
 the Operand involved in the comparison will be reported as well. 
 Remember, however, that temporary Operands have no distinct names. 
 */
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator>( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() > val);
@@ -1573,7 +1573,7 @@ bool  Operand<dim>::operator>( double val ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator<( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() < val);
@@ -1584,7 +1584,7 @@ bool  Operand<dim>::operator<( double val ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator>=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() >= val);
@@ -1595,7 +1595,7 @@ bool  Operand<dim>::operator>=( double val ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator<=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_() <= val);
@@ -1606,7 +1606,7 @@ bool  Operand<dim>::operator<=( double val ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return approximatelyEqual( scalar_storage_(), val );
@@ -1617,7 +1617,7 @@ bool  Operand<dim>::operator==( double val ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( double val ) const
  {
     if ( prop_key_.type == SCALAR ) return !approximatelyEqual( scalar_storage_(), val );
@@ -1629,7 +1629,7 @@ bool  Operand<dim>::operator!=( double val ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( const ScalarVariable& sc ) const 
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ == sc);
@@ -1639,7 +1639,7 @@ bool  Operand<dim>::operator==( const ScalarVariable& sc ) const
     return false;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( const ScalarVariable& sc ) const 
  {
     if ( prop_key_.type == SCALAR ) return (scalar_storage_ != sc);
@@ -1650,7 +1650,7 @@ bool  Operand<dim>::operator!=( const ScalarVariable& sc ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( const VectorVariable<dim>& vc ) const
  {
     if ( prop_key_.type == VECTOR ) return (vector_storage_ == vc);
@@ -1661,7 +1661,7 @@ bool  Operand<dim>::operator==( const VectorVariable<dim>& vc ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( const VectorVariable<dim>& vc ) const
  {
     if ( prop_key_.type == VECTOR ) return (vector_storage_ != vc);
@@ -1672,7 +1672,7 @@ bool  Operand<dim>::operator!=( const VectorVariable<dim>& vc ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( const TensorVariable<dim>& ts ) const
  {
     if ( prop_key_.type == TENSOR ) return (tensor_storage_ == ts);
@@ -1683,7 +1683,7 @@ bool  Operand<dim>::operator==( const TensorVariable<dim>& ts ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( const TensorVariable<dim>& ts ) const 
  {
     if ( prop_key_.type == TENSOR ) return (tensor_storage_ != ts);
@@ -1693,7 +1693,7 @@ bool  Operand<dim>::operator!=( const TensorVariable<dim>& ts ) const
     return false;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( const ArrayVariable& ar ) const
  {
     if ( prop_key_.type == ARRAY ) return (array_storage_ == ar);
@@ -1704,7 +1704,7 @@ bool  Operand<dim>::operator==( const ArrayVariable& ar ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( const ArrayVariable& ar ) const
  {
     if ( prop_key_.type == ARRAY ) return (array_storage_ != ar);
@@ -1714,7 +1714,7 @@ bool  Operand<dim>::operator!=( const ArrayVariable& ar ) const
     return false;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( const FlaggedArrayVariable& ar ) const
  {
     if ( prop_key_.type == FLAGGEDARRAY ) return (flagged_array_storage_ == ar);
@@ -1725,7 +1725,7 @@ bool  Operand<dim>::operator==( const FlaggedArrayVariable& ar ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( const FlaggedArrayVariable& ar ) const
  {
     if ( prop_key_.type == FLAGGEDARRAY ) return (flagged_array_storage_ != ar);
@@ -1735,7 +1735,7 @@ bool  Operand<dim>::operator!=( const FlaggedArrayVariable& ar ) const
     return false;
  }
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator>( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
@@ -1761,7 +1761,7 @@ bool  Operand<dim>::operator>( Operand<dim>& op ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator<( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
@@ -1787,7 +1787,7 @@ bool  Operand<dim>::operator<( Operand<dim>& op ) const
  }
  
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator>=( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
@@ -1813,7 +1813,7 @@ bool  Operand<dim>::operator>=( Operand<dim>& op ) const
  }
 
  
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator<=( Operand<dim>& op ) const
  {
     if ( prop_key_.type != op.prop_key_.type )
@@ -1839,7 +1839,7 @@ bool  Operand<dim>::operator<=( Operand<dim>& op ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator==( Operand<dim>& op ) const 
  {
     if ( prop_key_.type != op.prop_key_.type )
@@ -1864,7 +1864,7 @@ bool  Operand<dim>::operator==( Operand<dim>& op ) const
  }
 
 
-template<size_t dim>
+template<uint32_t dim>
 bool  Operand<dim>::operator!=( Operand<dim>& op ) const 
  {
     return !(*this == op);
@@ -1895,7 +1895,7 @@ of Interrelations, before the calculated values are stored in the
 MemoryManager. This is a fundamental CSP feature, prohibiting error
 propagation in complex simulations.
 */
-template<size_t dim>
+template<uint32_t dim>
 bool Operand<dim>::IsWithinRange() const
  {
     if ( prop_key_.type == SCALAR )
@@ -1953,7 +1953,7 @@ tested for whether it lies in the permitted range.
 If the value is out of range the method prints a message to 'stderr'
 and outputs the violating variable value(s).
 */
-template<size_t dim>
+template<uint32_t dim>
 template<typename cspT>
 bool Operand<dim>::IsWithinRange( const cspT& val ) const
  {
@@ -1972,14 +1972,14 @@ bool Operand<dim>::IsWithinRange( const cspT& val ) const
  } // end IsWithinRange
 
 
-template<size_t dim>
+template<uint32_t dim>
 double Operand<dim>::MinValue() const
 {
     return omin;
 
 } // end MinValue
 
-template<size_t dim>
+template<uint32_t dim>
 double Operand<dim>::MaxValue() const
 {
     return omax;
@@ -2005,7 +2005,7 @@ useful for testing a derived Interrelation before using it in
 computations.  
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void Operand<dim>::PrintValue() const
  {
     if      ( prop_key_.type == SCALAR )        scalar_storage_.Out();
@@ -2022,7 +2022,7 @@ void Operand<dim>::PrintValue() const
 /** Standard CSP method to check the state of an Operand by printing it to stdout.
 
 */
-template<size_t dim>
+template<uint32_t dim>
 void  Operand<dim>::Out() const 
  {
     string stype    = parseType(prop_key_.type);

@@ -11,8 +11,8 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,class SIMPLEX>
-PointSource_rhsop<dim,SIMPLEX>::PointSource_rhsop( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
+template<uint32_t dim,class CELL>
+PointSource_rhsop<dim,CELL>::PointSource_rhsop( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
   : MathOperatorRHS<dim>(pref,oper,test),
     SRC_(8)
  {
@@ -35,13 +35,13 @@ PointSource_rhsop<dim,SIMPLEX>::PointSource_rhsop( const PropertyDatabase<dim>& 
 
 
 /// reads the values of basic operand from element nodes
-template<size_t dim,class SIMPLEX>
-void PointSource_rhsop<dim,SIMPLEX>::GetOperands( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void PointSource_rhsop<dim,CELL>::GetOperands( const CELL& e )
    { 
       e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), SRC_ );
        
       // taking into account that the point source contributes to several elements
-      for ( size_t i=0U; i<e.Nodes(); i++ )
+      for ( auto i{0}; i<e.Nodes(); i++ )
         SRC_[i]() /= static_cast<double>(e.N(i)->Parents());
         
    } // end GetOperands
@@ -59,11 +59,11 @@ of of them. This is already done in the GetOperands() method.
 
 @param e The current element from which the value is accumulated.
 */
-template<size_t dim,class SIMPLEX>
-void PointSource_rhsop<dim,SIMPLEX>::ComputeContribution( const SIMPLEX& e )
+template<uint32_t dim,class CELL>
+void PointSource_rhsop<dim,CELL>::ComputeContribution( const CELL& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
-   for ( size_t i=0U; i<e.Nodes(); i++ )
+   for ( auto i{0}; i<e.Nodes(); i++ )
      MathOperatorRHS<dim>::RHS[i] = SRC_[i]();
      
 } // end ComputeContribution

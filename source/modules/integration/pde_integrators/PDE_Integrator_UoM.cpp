@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::PDE_Integrator_UoM( Solver& solver )
  : PDE_Integrator<dim,COMPUTATION_DOMAIN>(&solver)
 {
@@ -18,14 +18,14 @@ PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::PDE_Integrator_UoM( Solver& solver )
 
 
 
-template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::~PDE_Integrator_UoM()
  {
     // are we sure that any newed solver object in the base class is deleted ?
  }
 
 
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COMPUTATION_DOMAIN<dim>& gref)
 {
     // -------------------------------------------------------------------
@@ -246,7 +246,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
 /**
     Needed to overwrite base clase method because DOF_indexes_ yield different positions in matrices and right-hand vector.
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const COMPUTATION_DOMAIN<dim>& gref)
   {
     size_t                  i, j;
@@ -357,7 +357,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const 
   
   
   
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_DOMAIN<dim>& gref)
   {
     // setting up the index mapping from global to local node ID numbers
@@ -470,18 +470,18 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
       this->G_ += this->thread_G_[tid];
 
     for (size_t tid = 0; tid < omp_get_max_threads(); tid++)
-      for (size_t i = 0; i < this->rh_.size(); i++)
+      for (auto i = 0; i < this->rh_.size(); i++)
         this->rh_[i] = this->rh_[i] + this->thread_rh_[tid][i];
 
     //    G_.Out();
-    //    for (size_t i = 0; i<rh_.size();i++)
+    //    for (auto i = 0; i<rh_.size();i++)
     //        cout<<"rh:["<<i<<"]: "<<rh_[i]<<endl;
     //    exit(1);
 
 #endif
   } // end Accumulate
 
-  template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+  template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
   void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EnumerateAndFixMatrixSize(const COMPUTATION_DOMAIN<dim>& gref) {
     DOF_indexes_.resize(this->rh_.size());
     fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
@@ -534,7 +534,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             VectorVariable<dim>  vc;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, vc);
-              for (size_t i = 0U; i < dim; i++) {
+              for (auto i = 0U; i < dim; i++) {
                 position = (*niter)->Idx() * dim + i + offset;
                 if (vc.Flag(i) == DIRICH) {
                   DOF_indexes_[position] = NULL_IDX;
@@ -552,7 +552,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             TensorVariable<dim>  ts;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ts);
-              for (size_t i = 0U; i < dim; i++) {
+              for (auto i = 0U; i < dim; i++) {
                 if (ts.Flag(i) == DIRICH) {
                   for (size_t j = 0U; j < dim; j++) {
                     position = (*niter)->Idx() * this->dim2_ + i * dim + j + offset;
@@ -577,13 +577,13 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
               (*niter)->Read(prop_key, ar);
               if (ar.Flag() == DIRICH)
               {
-                for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                for (auto i = 0U; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
                 }
               }
               else {
-                for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+                for (auto i = 0U; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = DOF;
                   DOF = DOF + 1;
@@ -597,7 +597,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             FlaggedArrayVariable  ar(prop_key.dataDepth);
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ar);
-              for (size_t i = 0U; i < prop_key.dataDepth; i++)
+              for (auto i = 0U; i < prop_key.dataDepth; i++)
                 if (ar.Flag(i) == DIRICH) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
@@ -632,7 +632,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
  
 
 
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTATION_DOMAIN<dim>& gref)
   {
     // accumulating as late addition into the righhand vector 'rhs'
@@ -661,7 +661,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     Overriding method of the base class because a mapping is required from the smaller solution vector
     back onto the computational domain.
 */
-  template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+  template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
   void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::OutputResults(COMPUTATION_DOMAIN<dim>& gref)
   {
     Index   prop_key;
@@ -670,7 +670,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsIterator
           it = this->basic_operands_.begin(); it != this->basic_operands_.end(); it++ )
       {
-        typename vector<Node<dim>*>::iterator  gfirst(gref.NodesBegin());
+        auto gfirst(gref.NodesBegin());
         prop_key = (*it).first.key;
         offset = (*it).second;
 
@@ -694,7 +694,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
           VectorVariable<dim>  vc;
           while (gfirst != gref.NodesEnd()) {
             (*gfirst)->Read(prop_key, vc);
-            for (size_t i = 0U; i < dim; i++) {
+            for (auto i = 0U; i < dim; i++) {
               position = (*gfirst)->Idx() * dim + i + offset;
               position = DOF_indexes_[position];
               if (position != NULL_IDX) {
@@ -711,7 +711,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         TensorVariable<dim>  ts;
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ts);
-          for (size_t i = 0U; i < dim; i++)
+          for (auto i = 0U; i < dim; i++)
             for (size_t k = 0U; k < dim; k++) {
               position = (*gfirst)->Idx() * this->dim2_ + i * dim + k + offset;
               position = DOF_indexes_[position];
@@ -729,7 +729,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         ArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+          for (auto i = 0U; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
@@ -745,7 +745,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         FlaggedArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (size_t i = 0U; i < prop_key.dataDepth; i++) {
+          for (auto i = 0U; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
@@ -773,7 +773,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
 /**
     New aspect as compared with the base class: reduction of matrix and rhs size.
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain )
   {
     //0. renumber nodes
@@ -814,7 +814,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOM
 /**
     ??? - document
 */
-template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain) {
 	  for (size_t i(0); i < this->rh_.size(); ++i) {
 		     this->rh_[i] += pivotVector_[i];

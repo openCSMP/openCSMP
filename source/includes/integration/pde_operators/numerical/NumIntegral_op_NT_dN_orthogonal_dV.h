@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// streamfunction operand for the RHS
-template<size_t dim,class CELL=Element<dim> >
+template<uint32_t dim,class CELL=Element<dim> >
 class NumIntegral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim> {
   public:
     NumIntegral_op_NT_dN_orthogonal_dV( const PropertyDatabase<dim>& pref, 

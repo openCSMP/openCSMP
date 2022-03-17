@@ -19,7 +19,7 @@ namespace csmp {
     @date 2007
     @note refactored by SKM 20/12/2016
 */
-template<size_t dim>
+template<uint32_t dim>
 class Point {
   public:
     /// initialises point to default position of zero
@@ -51,41 +51,41 @@ class Point {
     Point& operator/=( double );
   
     /// accessor and mutator of point (0=x coordinate, 1=y...)
-    double& operator[](size_t);
+    double& operator[](uint32_t);
   
     /// accessor of point (0=x coordinate, 1=y...)
-    const double& operator[](size_t) const;
+    const double& operator[](uint32_t) const;
   
     /// compares points using epsilon from numeric_limits
-    bool      operator==( const Point& ) const;
-    bool      operator!=( const Point& ) const;
+    bool operator==( const Point& ) const;
+    bool operator!=( const Point& ) const;
   
     /// comparison of position in space; ascertains spatial proximity ordering in associative containers
-    bool      operator<( const Point& ) const;
+    bool operator<( const Point& ) const;
 
     /// comparison of position in space; ascertains spatial proximity ordering in associative containers
-    bool      operator>( const Point& ) const;
+    bool operator>( const Point& ) const;
   
     /// change the coordinates of an existing point to those stored in the supplied STL vector
-    void      Set( const std::vector<double>& );
+    void Set( const std::vector<double>& );
   
     /// returns the offset of th point from the origin of the coordinate system
-    double  Length() const;
+    double Length() const;
   
     /// returns the square of the distance of the point from the origin of the coordinate system
-    double  SquaredLength() const;
+    double SquaredLength() const;
   
     /// enforce offset of point from coordinate origin (when point is used to store a vector)
-    void      NormalizeLengthTo( double len=1. );
+    void NormalizeLengthTo( double len=1. );
   
     /// return distance between current and other point
-    double  DistanceTo( const Point& ) const;
+    double DistanceTo( const Point& ) const;
   
     /// checks whether points coincide within the giving tolerance
-    bool      CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
+    bool CoincidesWithWithinTolerance( const Point&, double tolerance=1.0e-5 ) const;
   
     /// checks whether point lies on a straight line between the supplied to points
-    bool      IsBetween( const Point& pt1, const Point& pt2 );
+    bool IsBetween( const Point& pt1, const Point& pt2 );
   
     /// returns point coordinates into an STL vector
     std::vector<double> Coordinates() const;
@@ -96,35 +96,35 @@ class Point {
 
 
 /// subtracts coordinates of point (3nd arg) from double (1st arg)
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  operator-( double, const Point<dim>& );
 
 /// adds point coordinates
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  operator+( double, const Point<dim>& );
 
 /// multiplies the coordinates of the 2 points
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  operator*( double, const Point<dim>& );
 
 /// writes the point coordinates to an output stream
-template<size_t dim>
+template<uint32_t dim>
 std::ostream&  operator<<( std::ostream&, const Point<dim>& );
 
 /// returns the midpoint of the 2 points
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  midPoint( const Point<dim>&, const Point<dim>& );
 
 /// treating the points as vectors originating in the origin, computes their scalar product
-template<size_t dim>
+template<uint32_t dim>
 double  dotProduct( const Point<dim>&, const Point<dim>& );
 
 /// treating the points as vectors originating in the origin, computes their cross product vector
-template<size_t dim>
+template<uint32_t dim>
 Point<dim>  crossProduct( const Point<dim>&, const Point<dim>& );
 
 /// returns the angle in degrees between the line segments that start with the first point and terminate at the last point of thedge, ignoring edge direction
-template<size_t dim>
+template<uint32_t dim>
 double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const std::pair<Point<dim>,Point<dim> >& edge2 );
 
 
@@ -165,21 +165,21 @@ class Point<1U> {
     Point<1U>& operator-=( double );
     Point<1U>& operator*=( double );
     Point<1U>& operator/=( double );
-    double&  operator[](size_t);
-    const double&  operator[](size_t) const;
+    double&  operator[](uint32_t);
+    const double&  operator[](uint32_t) const;
     bool   operator==( const Point<1U>& ) const;
     bool   operator!=( const Point<1U>& ) const;
     bool   operator<( const Point<1U>& ) const;
     bool   operator>( const Point<1U>& ) const;
     void   Set( const std::vector<double>& );
-    double  Length() const;
-    double  SquaredLength() const;
-    void      NormalizeLengthTo( double len=1. );
-    double  DistanceTo( const Point<1U>& ) const;
-    bool      CoincidesWithWithinTolerance( const Point<1U>&, double tolerance=1.0e-5 ) const;
-    bool      IsBetween( const Point& pt1, const Point& pt2 );
+    double Length() const;
+    double SquaredLength() const;
+    void   NormalizeLengthTo( double len=1. );
+    double DistanceTo( const Point<1U>& ) const;
+    bool   CoincidesWithWithinTolerance( const Point<1U>&, double tolerance=1.0e-5 ) const;
+    bool   IsBetween( const Point& pt1, const Point& pt2 );
     std::vector<double> Coordinates() const;
-    void                  Out() const;
+    void   Out() const;
 
     friend Point<1U> operator-( double, const Point<1U>& );
     friend Point<1U> operator+( double, const Point<1U>& );
@@ -219,8 +219,8 @@ class Point<2U> {
     Point<2U>& operator-=( double );
     Point<2U>& operator*=( double );
     Point<2U>& operator/=( double );
-    double&  operator[](size_t);
-    const double&  operator[](size_t) const;
+    double&  operator[](uint32_t);
+    const double&  operator[](uint32_t) const;
     bool   operator==( const Point<2U>& ) const;
     bool   operator!=( const Point<2U>& ) const;
     bool   operator<( const Point<2U>& ) const;
@@ -277,8 +277,8 @@ class Point<3U> {
     Point<3U>& operator-=( double );
     Point<3U>& operator*=( double );
     Point<3U>& operator/=( double );
-    double&  operator[](size_t);
-    const double&  operator[](size_t) const;
+    double&  operator[](uint32_t);
+    const double&  operator[](uint32_t) const;
     bool     operator==( const Point<3U>& ) const;
     bool     operator!=( const Point<3U>& ) const;
     bool     operator<( const Point<3U>& ) const;
@@ -303,7 +303,7 @@ class Point<3U> {
 };
 
 /// The length of the exterior product.
-template<size_t dim>
+template<uint32_t dim>
 double exteriorProductLength( const Point<dim>& p1, const Point<dim>& p2 );
 
 Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 );

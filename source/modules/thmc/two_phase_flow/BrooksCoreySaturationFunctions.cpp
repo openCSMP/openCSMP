@@ -11,7 +11,7 @@ namespace csmp {
 /**
    The default constructor of Brooks Corey Saturation Functions class
 */
-template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctions<dim,USER>::BrooksCoreySaturationFunctions()
+template<uint32_t dim, template<uint32_t> class USER> BrooksCoreySaturationFunctions<dim,USER>::BrooksCoreySaturationFunctions()
   {
   }
 
@@ -19,7 +19,7 @@ template<size_t dim, template<size_t> class USER> BrooksCoreySaturationFunctions
 
 
 /// get seff at the element barycentre
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( Element<dim>* const e ) const
   {
     const double sH2O = e->PropertyValueAtBaryCenter( User()->key_sH2O );
@@ -36,7 +36,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation( Element<di
 
 
 /// get seff from the supplied saturation value
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -49,7 +49,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::EffectiveSaturation_at( Element
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::pc( Element<dim>* const e ) const
   {
     assert( !isnan(e->Read(User()->key_bcp) ) );
@@ -94,7 +94,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::pc( Element<dim>* const e ) con
  
  
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -143,7 +143,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::pc_at( Element<dim>* const e, d
   
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) const
   {
     assert( !isnan(e->Read(User()->key_bcp) ) );
@@ -179,7 +179,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dpcds( Element<dim>* const e ) 
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -218,7 +218,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dpcds_at( Element<dim>* const e
 
   
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::krw( Element<dim>* const e ) const
  {
     const double bcp(e->Read(User()->key_bcp));
@@ -236,7 +236,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::krw( Element<dim>* const e ) co
   
    
  
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -256,7 +256,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::krw_at( Element<dim>* const e, 
 
 
   
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::krn( Element<dim>* const e ) const
   {
     const double bcp(e->Read(User()->key_bcp));
@@ -274,7 +274,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::krn( Element<dim>* const e ) co
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -300,7 +300,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::krn_at( Element<dim>* const e, 
  calculating the 1st derivative of water relative permeability
  
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e ) const
   {
     assert( !isnan(e->Read(User()->key_bcp) ) );
@@ -322,7 +322,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrwds( Element<dim>* const e )
    calculating the 1st derivative of water relative permeability for any water saturation
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -346,7 +346,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at( Element<dim>* const 
   calculating the 1st derivative of oil relative permeability
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e ) const
   {
     const double seff_mult( 1./ (1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)) );
@@ -370,7 +370,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds( Element<dim>* const e )
    calculating the 1st derivative of oil relative permeability for any water saturations
    
 */
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const e, double sw ) const
   {
     assert( sw >= 0. );
@@ -394,7 +394,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
   
   // Numerical derivative added
   
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctions<dim,USER>::dkrwds_Numerical( Element<dim>* const e, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
@@ -412,7 +412,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
   
  
   
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctions<dim,USER>::dkrwds_at_Numerical( Element<dim>* const e, double sw, double h ) const
   {
     assert( sw >= 0. );
@@ -435,7 +435,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
    
   
   
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_Numerical( Element<dim>* const e, double h ) const
   {
     const double dSedSw(1./(1. - e->Read(User()->key_srH2O) - e->Read(User()->key_srCO2)));
@@ -454,7 +454,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
   
   
   
-  template<size_t dim, template<size_t> class USER>
+  template<uint32_t dim, template<uint32_t> class USER>
   double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at_Numerical( Element<dim>* const e, double sw, double h ) const
   {
     assert( sw >= 0. );
@@ -474,7 +474,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
   
   
   // helper function for numerical differentiation
-  double pcBC( double sw, double swr, double snr, double bcp, double pd )
+ static double pcBC( double sw, double swr, double snr, double bcp, double pd )
   {
      const double pc_max(1.0e7), dpcds_max(1.0e6);
      const double seff( sw - swr / (1. - swr -snr) );
@@ -505,7 +505,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dkrnds_at( Element<dim>* const 
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( Element<dim>* const e, double h ) const
   {
    const double sw(e->PropertyValueAtBaryCenter(User()->key_sH2O));
@@ -525,7 +525,7 @@ double BrooksCoreySaturationFunctions<dim,USER>::dpcds_Numerical( Element<dim>* 
 
 
 
-template<size_t dim, template<size_t> class USER>
+template<uint32_t dim, template<uint32_t> class USER>
 double BrooksCoreySaturationFunctions<dim,USER>::dpcds_at_Numerical( Element<dim>* const e, double sw, double h ) const
  {
    assert( sw >= 0. );

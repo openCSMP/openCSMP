@@ -26,7 +26,7 @@ and must always be present. Make this dynamic, loading elements only on demand.
 class FiniteElementManager {
   public:
     FiniteElementManager();
-    FiniteElementManager( size_t dimensions, 
+    FiniteElementManager( uint32_t dimensions, 
                           size_t interpolation_order,
                           bool isoparametric );
 
@@ -34,7 +34,7 @@ class FiniteElementManager {
     FiniteElementManager& operator=( const FiniteElementManager& mgr );
     ~FiniteElementManager();
 
-    void InitializeElements( size_t dim, size_t interpolation_order, bool isoparametric );
+    void InitializeElements( uint32_t dim, size_t interpolation_order, bool isoparametric );
     
     size_t            Dimensions() const;
     bool              ContainsElementType( CSMP_FEM_TYPE etype ) const;

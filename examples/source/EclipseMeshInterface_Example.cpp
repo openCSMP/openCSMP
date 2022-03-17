@@ -88,7 +88,7 @@ namespace csmp {
 		// 3. eliminating any potentially disfunctional elements / cells from the model
 		// ----------------------------------------------------------------------------
 		// elements that have a negative Jacobian determinant are assumed to be degenerate and flagged for deletion
-		vector<size_t> degenerate_elements;
+		vector<uint32_t> degenerate_elements;
 		int volume_e_removed(0U), surface_e_removed(0U), line_e_removed(0U);
 		for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
 			// find broken elements
