@@ -2209,6 +2209,8 @@ boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front
          // nor helpful and has side effects: model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
          model->RemoveRegion( it.first.c_str() );
       }
+      
+    assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
 
     // 3. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------

@@ -1506,6 +1506,29 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     return face_ptrs;
+     
+ } // end ReplaceElementsByFaces
+
+
+/*
+#ifdef MESH_MANAGER_DEBUG
+integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
+if ( Faces() > 0 )
+  integrityCheck<dim,Face>( FacesBegin(), FacesEnd() );
+if ( InterFaces() > 0 ) {
+      integrityCheck<dim,InterFace>( InterFacesBegin(), InterFacesEnd() );
+     // add test for node manifolds
+  }
+#endif
+*/
+
 /*
      // 3. cleaning up the node to parent connectivity
      // ----------------------------------------------
@@ -1520,23 +1543,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
 */
-     UpdateConnectivity();
-     
-     return face_ptrs;
-     
- } // end ReplaceElementsByFaces
 
-/*
-#ifdef MESH_MANAGER_DEBUG
-integrityCheck<dim,Element>( ElementsBegin(), ElementsEnd() );
-if ( Faces() > 0 )
-  integrityCheck<dim,Face>( FacesBegin(), FacesEnd() );
-if ( InterFaces() > 0 ) {
-      integrityCheck<dim,InterFace>( InterFacesBegin(), InterFacesEnd() );
-     // add test for node manifolds
-  }
-#endif
-*/
 
 
 

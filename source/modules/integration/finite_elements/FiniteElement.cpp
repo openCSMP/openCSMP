@@ -181,7 +181,35 @@ bool isHexahedral( CSMP_FEM_TYPE etype )
       return true;
 
     return false;
- } 
+ }
+
+
+bool isPrism( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_PRISM ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM15 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PRISM18 ||
+         etype == ISOPARAMETRIC_CUBIC_PRISM ||
+         etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON )
+      return true;
+
+    return false;
+ }
+
+
+bool isPyramid( CSMP_FEM_TYPE etype )
+ {
+    if ( etype == ISOPARAMETRIC_LINEAR_PYRAMID ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID13 ||
+         etype == ISOPARAMETRIC_QUADRATIC_PYRAMID14 ||
+         etype == ISOPARAMETRIC_CUBIC_PYRAMID )
+      return true;
+
+    return false;
+ }
+
+ 
+ 
 
 
 void    FiniteElement::CurrentID( size_t id ) { object_id = id; }

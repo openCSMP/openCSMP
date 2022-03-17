@@ -2092,8 +2092,104 @@ bool integrityCheck( const plf::colony<CELL<dim> >& cells,
  } // end
 
 template bool integrityCheck<3,Element>( const plf::colony<Element<3>>&, vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator );
-//template bool integrityCheck<2,Element>( const plf::colony<Element<2>>&, vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
-//template bool integrityCheck<1,Element>( const plf::colony<Element<1>>&, vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
+template bool integrityCheck<2,Element>( const plf::colony<Element<2>>&, vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
+template bool integrityCheck<1,Element>( const plf::colony<Element<1>>&, vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
+
+
+/**
+      Checks whether volume elements are indeed connected with volume ones, surface ones with surface elements, and line elements with line ones.
+      Also checks that elements have a minimum number of neighbors:  line,triangle, tetra->1, quadrilaterals,prism->2, hexa->3, pyramid->1
+*/
+template<uint32_t dim>
+size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator first,
+                          typename std::vector<Element<dim>*>::const_iterator last )
+  {
+     size_t issues{0};
+     while( first != last ) {
+          const CSMP_FEM_TYPE etype = (*first)->FE_Type();
+          int n_connected_neighbors{0};
+          
+          // 1. checking that elements have equivalent types as neighbors
+          for ( auto i{0}; i<(*first)->Neighbors(); ++i )
+            if ( (*first)->Neighbor(i) ) {
+                 if constexpr ( dim == 3 ) {
+                      if ( (*first)->IsVolumeElement() && !(*first)->Neighbor(i)->IsVolumeElement() ) {
+                           cerr <<"\nconnectivityCheck: volume Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
+                           issues++;
+                        }
+                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                           cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
+                           issues++;
+                        }
+                      if ( (*first)->IsLineElement() && !(*first)->Neighbor(i)->IsLineElement() ) {
+                           cerr <<"\nconnectivityCheck: line Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
+                           cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
+                           issues++;
+                        }
+                   }
+                 if constexpr ( dim == 2 ) {
+                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                           cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a line element!";
+                           issues++;
+                        }
+                   }
+                 // n such issues in 1-dimensional model
+                 n_connected_neighbors++;
+              }
+              
+          // 2. checking that the elements have the minimum plausible number of neighbors
+          if ( n_connected_neighbors == 0 ) { // no neighbors
+               cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+               cerr <<" has "<< n_connected_neighbors <<" neighbor(s).";
+               issues++;
+            }
+          else if ( n_connected_neighbors == 1 ) {
+                // minimum number of neighbors is 1
+                if ( !isLineElement(etype) &&
+                     !isTriangular(etype)  &&
+                     !isTetrahedral(etype) ) {
+                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
+                    issues++;
+                  }
+            }
+          else if ( n_connected_neighbors == 2 ) {
+                if ( !isLineElement(etype) &&
+                     !isTriangular(etype)  &&
+                     !isTetrahedral(etype) &&
+                     !isQuadrilateral(etype) &&
+                     !isPrism(etype) ) {
+                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
+                    issues++;
+                  }
+            }
+          else if ( n_connected_neighbors == 3 ) {
+                if ( !isLineElement(etype) &&
+                     !isTriangular(etype)  &&
+                     !isTetrahedral(etype) &&
+                     !isQuadrilateral(etype) &&
+                     !isPrism(etype) &&
+                     !isHexahedral(etype) &&
+                     !isPyramid(etype) ) {
+                    cerr <<"\nconnectivityCheck: Element "<< (*first)->Idx() <<": "<< parseAbbreviated_FE_Type(etype);
+                    cerr <<" has only "<< n_connected_neighbors <<" neighbor(s).";
+                    issues++;
+                  }
+              }
+          
+          first++;
+       }
+       
+     return issues;
+       
+  } // end connectivityCheck
+
+template size_t connectivityCheck<3>( vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator );
+template size_t connectivityCheck<2>( vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator );
+template size_t connectivityCheck<1>( vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator );
 
 
 

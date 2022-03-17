@@ -188,6 +188,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( const plf::colony<CELL<dim> >&,
                      typename std::vector<CELL<dim>*>::const_iterator first,
                      typename std::vector<CELL<dim>*>::const_iterator last );
+                     
+/// check whether the right types of elements have been connected with one another; counts violations also considering elements without minimum number of neighbors
+template<uint32_t dim>
+size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator first,
+                          typename std::vector<Element<dim>*>::const_iterator last );
 
 /// finds the min max corners of the bounding box for the supplied range of nodes
 template<uint32_t dim>
