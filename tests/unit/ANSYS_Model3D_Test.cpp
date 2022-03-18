@@ -208,7 +208,8 @@ namespace csmp
       for( vector<Node<3>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
         {
         const BOX_BOUNDARY boxBoundary( (*it)->AtBoundary() );
-        if( boxBoundary == LEFT or boxBoundary == RIGHT or boxBoundary == TOP or boxBoundary == BOTTOM  or boxBoundary == FRONT or boxBoundary == BACK )
+        if( boxBoundary == LEFT or boxBoundary == RIGHT or boxBoundary == TOP or
+            boxBoundary == BOTTOM  or boxBoundary == FRONT or boxBoundary == BACK )
           (*it)->Store( nodalKey, makeScalar( PLAIN, 1.0 ) );
         else
           continue;   
@@ -289,8 +290,8 @@ namespace csmp
           _test( ctrFaIps == 6 );
           
           size_t ctrSeIps(0);
-          for( size_t s(0); s < ePtr->Sectors(); ++s )
-            for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+          for( auto s(0); s < ePtr->Sectors(); ++s )
+            for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
             {
               ePtr->Read( s, sip, seipTensorKey, tvPlain );
               _test( tvPlain == tv );
@@ -317,8 +318,8 @@ namespace csmp
             ++ctrFaIps;
           }
 
-          for( size_t s(0); s < ePtr->Sectors(); ++s )
-            for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+          for( auto s(0); s < ePtr->Sectors(); ++s )
+            for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
             {
               ePtr->Read( s, sip, seipTensorKey, tvPlain );
               _test( tvPlain == tv );
@@ -330,5 +331,52 @@ namespace csmp
 
        if ( verbose ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
     }
+    
+    
+    
+    
+    
+void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
+ {
+   Model<3>* model3d_(0);
+   string    model3d_name_;
+   
+    // ansys 3d model - discontiguous
+   if ( !contiguous ) {
+        cout << "\n-------------------------------------------------------";
+        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
+        cout << "\n-------------------------------------------------------";
+        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
+        model3d_name_ = "ModelDykeAllLayersSplit";
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
+ 
+        //writing ansys model to file deleting it and then recreating a csmp native model from the file
+        if ( reconstruct_from_file ) {
+            model3d_->OutputToBinaryFile(model3d_name_.c_str());
+            delete model3d_;
+            model3d_ = new Model<3U>(model3d_name_);
+           }
+        delete model3d_;
+        model3d_ = nullptr;
+        return;
+     }
+
+    // ansys 3d model - contiguous
+    cout << "\n-------------------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
+    cout << "\n-------------------------------------------------------";
+    string varFileName = "CSMP-variables.txt";
+    model3d_name_ = "prism_test";
+    model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
+
+    if ( reconstruct_from_file ) {
+        // writing ansys model to file deleting it and then recreating a csmp native model from the file
+        model3d_->OutputToBinaryFile(model3d_name_.c_str());
+        delete model3d_;
+        model3d_ = new Model<3U>(model3d_name_);
+      }
+  
+ } // end create_ANSYS3D_Model
+    
 
   } // csmp

@@ -217,7 +217,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( cells.size() <= cells_contiguous_subset.size() ) {
-           std::cout <<"\nModel<" << dim << ">::findStandAloneMeshPatches: ";
+           std::cout <<"\nfindStandAloneMeshPatches: ";
            std::cout <<"mesh is already contiguous, nothing was done."<< std::endl;
            
            // creating name for contiguous patch from finite-element type

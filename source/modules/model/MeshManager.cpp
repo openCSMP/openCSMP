@@ -5089,7 +5089,7 @@ bool  MeshManager<dim>::HybridElementMesh() const
        @date 2018
 */
 template<uint32_t dim>
-int32_t  MeshManager<dim>::CheckElementConnectivity() const
+size_t  MeshManager<dim>::CheckElementConnectivity() const
 {
   cout <<"\nMeshManager::CheckElementConnectivity: checking mesh..."<< endl;
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -5100,7 +5100,7 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
   // --------------------------------------------------------------------
   // 3. detecting whether region contains lower-dimensional elements
   // --------------------------------------------------------------------
-  int32_t errors(0);
+  size_t errors(0);
 
   bool with_volume_elements( false );
   bool with_surface_elements( false );

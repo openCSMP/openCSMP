@@ -1,6 +1,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "meshManagementUtilities.h"
 
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
@@ -128,5 +129,48 @@ void ANSYS_Model2D_Test::run()
     (*modelBinIn1.Region("Model").NodesBegin())->Read( nodalArrayKey, avBin );
     _test( avBin == av );
   }
+  
+  
+  
+ void create_ANSYS2D_Model( bool reconstruct_from_file )
+ {
+    string model2d_name_ = "box2d_fault";
+    string varFileName = "CSMP-variables.txt";
+    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
+
+    // ansys 2d model - contiguous
+    cout << "\n------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+    cout << "\n------------------------------------------";
+    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+    set<Element<2>*> elements;
+    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
+    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+    std::map<std::string,std::vector<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+    std::map<std::string,std::vector<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    
+    if (reconstruct_from_file) {
+        model2d_->OutputToBinaryFile(model2d_name_.c_str());
+        delete model2d_;
+        model2d_ = new Model<2U>(model2d_name_);
+        MeshManager<2>& mesh(model2d_->Mesh());
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
+        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+      }
+      
+ } // end create_ANSYS2D_Model
+ 
 
 } // csmp

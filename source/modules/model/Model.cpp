@@ -27,6 +27,8 @@
 
 #include <chrono>
 
+// #define CSMP_MODEL_DEBUG
+
 using namespace std;
 
 namespace csmp {
@@ -339,7 +341,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-#ifdef DEBUG
+#ifdef CSMP_MODEL_DEBUG
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
@@ -405,7 +407,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     InitializeLocalVariableStorage();  // for the model
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
-#ifdef DEBUG
+#ifdef CSMP_MODEL_DEBUG
 integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );

@@ -2967,7 +2967,7 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
       @author SKM
       @date 2/2/22
 */
-void test_Create_FracBox( VSet<3U>& vset, ModelTopology& topology )
+void test_Create_FracBox( ModelTopology& topology, VSet<3U>& vset )
  {
     set<string> femTypes_matrix{"ISOSPARAMETRIC_LINEAR_TETRAHEDRON"},
                 femTypes_surfaces{"ISOSPARAMETRIC_LINEAR_TRIANGLE"},

@@ -15,18 +15,33 @@
 namespace csmp {
 
 /**
+   Testing checklist
+   - buid mesh from VSet
+   - verify node connectivity (nodes connected to eachother)
+   - verify node numbering through basic calculations
+   - verify neighbor connectivity (all volume elements with eachother, all surface ...)
+   - creation and deletion of Face objects
+   
+
+
+  Test Dependencies
+    @todo FiniteElementManager_Test
+    @todo FiniteVolumeManager_Test
+
     @author SKM
     @date 23/8/2018
 */
 class MeshManager_Test : public Test {
   public:
     MeshManager_Test();
-    virtual ~MeshManager_Test() { delete model2d_; delete model3d_; }
+    virtual ~MeshManager_Test() {}
     
     virtual void run();
   
   private:
+  
     void TestBasics();
+    
     bool TestEntityNumberingFunction();
     bool TestElementDeletionAndInsertion();
     bool TestFaceDeletionAndInsertion();
@@ -41,7 +56,10 @@ class MeshManager_Test : public Test {
     void Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_CSMP_binary_file );
 
     // checks whether all nodes, elements etc can be reached
-    void CheckModel3D();
+    bool CheckConnectivityOfModel3D( Model<3>& );
+    
+    template<uint32_t dim>
+    bool TestNodeNeighborConnectivity( const Model<dim>& );
     
     // using VSetMakers to create and compare input data
     bool Test_BuiltElementConnectivity2D();
@@ -50,13 +68,6 @@ class MeshManager_Test : public Test {
     // floodfill etc.
     bool Test_MeshTraversal3D();
 
-
-  private:
-    std::string model2d_name_;
-    std::string model3d_name_;
-
-    Model<2U>*  model2d_ = nullptr;
-    Model<3U>*  model3d_ = nullptr;
 };
 
 // build sparsity pattern for testing the connectivity among nodes

@@ -251,7 +251,7 @@ public:
                  typename std::vector<Face<dim>*>::iterator last );
 
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
-  int32_t CheckElementConnectivity() const;
+  size_t CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen
   void Out() const;

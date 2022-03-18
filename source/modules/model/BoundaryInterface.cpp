@@ -350,7 +350,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
 
 
 /**
-    Creates boundary from Faces that already know their parent elements.
+    Creates boundary from Faces that already know their parent elements and are interconnected to one another!
     
     The connectivity between the Faces is (re)established.
     
@@ -368,12 +368,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
  {
     BOUNDARY_COMPLEX<dim>* const boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>* const>(this) );
     assert( boundaryComplex != nullptr );
-
-    // creating the connectivity among the new faces
-    if constexpr ( dim == 3 )
-      boundaryComplex->Mesh().template BuildSurfaceConnectivity<Face>( facesBegin, facesEnd );
-    if constexpr ( dim == 2 )
-      boundaryComplex->Mesh().template BuildLineConnectivity<Face>( facesBegin, facesEnd );
 
     // inserting boundary if it does not existing yet
     auto it = boundaryMap_.insert( std::make_pair( boundary_name, csmp::Boundary<dim>( boundary_name,
@@ -2096,25 +2090,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
   }
-
-
-#ifdef DEBUG
-// checking the connectivity of the input box-boundary regions
-/* all elements have neighbors in 'prism_test'
-Region<dim>& back_ref = boundaryComplex->Region("BACK");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( back_ref.ElementsBegin(), back_ref.ElementsEnd() );
-Region<dim>& bottom_ref = boundaryComplex->Region("BOTTOM");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( bottom_ref.ElementsBegin(), bottom_ref.ElementsEnd() );
-Region<dim>& right_ref = boundaryComplex->Region("RIGHT");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( right_ref.ElementsBegin(), right_ref.ElementsEnd() );
-Region<dim>& top_ref = boundaryComplex->Region("TOP");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( top_ref.ElementsBegin(), top_ref.ElementsEnd() );
-Region<dim>& left_ref = boundaryComplex->Region("LEFT");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( left_ref.ElementsBegin(), left_ref.ElementsEnd() );
-Region<dim>& front_ref = boundaryComplex->Region("FRONT");
-boundaryComplex->Mesh().template BuildSurfaceElementConnectivity<Element>( front_ref.ElementsBegin(), front_ref.ElementsEnd() );
-*/
-#endif
 
 
 

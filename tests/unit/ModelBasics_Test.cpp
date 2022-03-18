@@ -82,7 +82,7 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
  {
      VSet<3U>      vset;
      ModelTopology topology;
-     test_Create_FracBox( vset, topology );
+     test_Create_FracBox( topology, vset );
 
      // creating model
      const bool create_boundaries_from_faces{true};

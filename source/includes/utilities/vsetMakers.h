@@ -49,7 +49,7 @@ namespace csmp {
     
     // more complex models created externally but available as VSets
     // -------------------------------------------------------------
-    void test_Create_FracBox( VSet<3U>&, ModelTopology&  );
+    void test_Create_FracBox( ModelTopology&, VSet<3U>& );
 }
 
 #endif

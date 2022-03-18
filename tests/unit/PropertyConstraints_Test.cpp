@@ -57,7 +57,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
      const bool    using_isoparametric_elements{true};
      ModelTopology topology( "FracBox", using_isoparametric_elements );
      VSet<3U>      vset;
-     test_Create_FracBox( vset, topology );
+     test_Create_FracBox( topology, vset );
 
      const bool create_boundaries_from_faces{true}, box_shaped{false};
      Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", false );
