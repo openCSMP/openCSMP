@@ -1110,7 +1110,7 @@ std::pair<uint32_t,uint32_t>  CSMP_ElementSpecifications::CornerNodesPerSegmentF
                case 0: return std::make_pair( 0, 1 );
                case 1: return std::make_pair( 1, 2 );
                case 2: return std::make_pair( 2, 3 );
-               case 3: return std::make_pair( 3, 4 );
+               case 3: return std::make_pair( 3, 0 );
                default:
                  std::cerr <<"\nCSMP_ElementSpecifications::CornerNodesPerSegmentForElementOfType: ";
                  std::cerr <<"segment id="<< segm_id <<" out of range.\n";

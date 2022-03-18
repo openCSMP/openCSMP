@@ -3455,7 +3455,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
     // looping over the elements to get the corner nodes of their segments
     for ( size_t elmt{0}; elmt < n_elements; ++elmt ) {
          // getting the element type
-         const auto CSMP_FE_type = (HybridElementTypeMesh()) ? pelmt[elmt] : pelmt[0];
+         const auto CSMP_FE_type = (HybridElementTypeMesh()) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
          if ( !higher_order_elements && CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 1 ) {
               csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
               higher_order_elements = true;

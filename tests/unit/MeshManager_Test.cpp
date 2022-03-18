@@ -220,6 +220,15 @@ void MeshManager_Test::TestBasics()
   const double volume = (xyz_max[0]-xyz_min[0]) * (xyz_max[1]-xyz_min[1]) *  (xyz_max[2]-xyz_min[2]);
   _test( approximatelyEqual(model_domain.Volume(),volume) );
   
+  // does this also work correctly in 2D?
+  VSet<2> vset2D;
+  test_Create_MeshPatchWithLineElements_VSet( vset2D );
+  Model<2> model2D( vset2D, "CSMP-variables.txt" ); // needs "element number" and "node number"
+  model2D.Name("MeshPatchWithLineElements");
+  const Region<2>&  model_domain2D(model2D.Region("Model"));
+  const double area{ 6. * 5. };
+  _test( approximatelyEqual(model_domain2D.Volume(),area) );
+  
   // do all nodes have the expected neighbors?
   vector<set<size_t>>  node_neighbors;
   nodeNeighbors( model_domain, node_neighbors );
