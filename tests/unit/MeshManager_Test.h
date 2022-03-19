@@ -41,11 +41,16 @@ class MeshManager_Test : public Test {
   private:
   
     void TestBasics();
-    
-    bool TestEntityNumberingFunction();
+ 
     bool TestElementDeletionAndInsertion();
     bool TestFaceDeletionAndInsertion();
     bool TestInterFaceDeletionAndInsertion();
+
+    /// rectangle with through-going subhorizontal split boundary and oblique s.b. cutting it
+    bool TestCompleteModel2D();
+    
+    bool TestEntityNumberingFunction( Model<3>& );
+    
     bool TestEraseAllPrimitives();
     
     // method with the same name

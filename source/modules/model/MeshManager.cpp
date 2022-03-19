@@ -313,7 +313,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
       typename deque<vector<int64_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-      size_t elmt_idx(0);
+      size_t elmt_idx{0};
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
@@ -324,7 +324,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
-              const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
+              const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( auto j = 0U; j < nodes; ++j )
                 (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
                 
@@ -345,7 +345,6 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( auto j = 0U; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
-              (*eit).Material_ID( vset.Pmtrl( elmt_idx ) );
               elmt_idx++;
               first++;
             }
@@ -428,7 +427,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        else
          {
             if ( csmp_error.Verbose() )
-              cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
+              cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their equidimensional and higher-dimensional neighbors..." << endl;
             const int64_t  n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
@@ -479,7 +478,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
                  // assigning inner and outer higher-dimensional neighbors
                  e.Assign( innerElement, outerElement );
-                 // and the corresponding face numbers
+                 // and the corresponding face numbers of these higher dimensional elements
                  e.ParentFaceID( INSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 2U )) );
                  if ( outerElement )
                    e.ParentFaceID( OUTSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 3U )) );
@@ -530,14 +529,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
               }
             // outside
-            const size_t nodes2x(nodes + nodes);
-            for ( auto j = nodes; j<nodes2x; ++j ) {
-                 const size_t node(vset.Plist( interface_idx, j ));
+            for ( auto j = 0U; j<nodes; ++j ) {
+                 const size_t node(vset.Plist( interface_idx, j+nodes ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
-                 (*ifit).Assign( j, &(*next(nodes_.begin(),node-nodes)), OUTSIDE );
+                 (*ifit).Assign( j, &(*next(nodes_.begin(),node)), OUTSIDE );
               }
             ++interface_idx;
             ++first;

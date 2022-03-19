@@ -10,8 +10,7 @@
 #include "MeshManager_Test.h"
 #include "MeshManagementUtilities.h"
 #include "vsetMakers.h"
-#include "ANSYS_Model3D.h"
-#include "ANSYS_Model2D.h"
+#include "VTU_Interface.h"
 #include "Region.h"
 #include "Element.h"
 #include "compareFloats.h"
@@ -134,6 +133,12 @@ void MeshManager_Test::run()
   _test(Test_parentElementsSharedByFace()); // OK
 
   _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
+  
+	cout << "\n----------------------------------------------------";
+	cout << "\nMeshManager_Test::TestCompleteModel2D";
+	cout << "\n(elements,faces,interfaces,regions,boundaries, split boundaries)";
+	cout << "\n----------------------------------------------------";
+  _test( TestCompleteModel2D() );
 
   // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
   VSet<3U>      vset;
@@ -167,7 +172,7 @@ void MeshManager_Test::run()
 	cout << "\n------------------------------------------------";
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
 	cout << "\n------------------------------------------------";
-	_test(TestEntityNumberingFunction(/* 'prism_test */));
+	_test(TestEntityNumberingFunction( model ) ); // originally using 'prism_test'
 
 	_test(TestEraseAllPrimitives());
  
@@ -238,8 +243,48 @@ void MeshManager_Test::TestBasics()
 
 
 
+/**
+       2D test case for rectangular model of 2 domains separated by SplitBoundary.
+       Extra partitally penetrating split boundary crosses dividing SplitBoundary.
+       
+       @author SKM
+       @date 19/3/22
+*/
+bool MeshManager_Test::TestCompleteModel2D()
+ {
+    VSet<2U>       vset;
+    ModelTopology  topo = test_Create_BoundarySplitBoundaryPatch( vset );
+    const bool     treat_all_domains_as_regions{false};
+    Model<2>       model( topo, vset, "CSMP-variables.txt", treat_all_domains_as_regions );
+    
+    // testing that the model has the right area (also checks element orientations)
+    const Region<2>&  model_domain(model.Region("Model"));
+    const double model_area{ 4.5 * 7. };
+    _test( model_domain.Volume() == model_area );
+    
+    // can such a model be output to VTU?
+    VTU_Interface<2>  vtu_out( model );
+    vtu_out.OutputDataToVTU( "SPLIT22_BASIC", "permeability", "Model", 0 );
+    
+    // saving model to disk and bringing it back
+    model.OutputToBinaryFile( model.Name() );
+    set<string>  subset_variables; // all variables
+    Model<3U>    restored_model( string{model.Name()}, subset_variables );
+    double       pmin, pmax;
+    restored_model.MinMaxOf( "permeability", pmin, pmax );
+    _test( approximatelyEqual(pmin,10e-13) );
+    _test( approximatelyEqual(pmax,10e-12) );
+    restored_model.MinMaxOf( "node number", pmin, pmax );
+    _test( approximatelyEqual(pmin,0) );
+    _test( approximatelyEqual(pmax,vset.Vertices()) );
+    
+    return true;
+    
+ } // end TestCompleteModel
 
-// method with the same name
+
+
+// tests method with the same name
 bool MeshManager_Test::Test_parentElementsSharedByFace()
  {
     VSet<3U> vset;
@@ -459,17 +504,10 @@ bool MeshManager_Test::Test_MeshTraversal3D()
         Mesh traversal as implemented by Junchul Kim in 2019
      uses 'prism_test' as test model
 */
-bool MeshManager_Test::TestEntityNumberingFunction()
+bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
 {
-  // creating prism_model with box boundaries, writing it to file and bringing it back
-  string varFileName = "CSMP-variables.txt";
-  string model3d_name = "prism_test";
-  ANSYS_Model3D model(model3d_name.c_str(), varFileName.c_str() );
-  model.OutputToBinaryFile(model3d_name.c_str());
-  Model<3>      model3d( model3d_name );
-  
 	// renumbering nodes via Model region
-	Region<3U>& model_domain(model3d.Region("Model"));
+	Region<3U>& model_domain(model.Region("Model"));
 	model_domain.UpdateMemberIndexes();
 	vector<size_t>  node_numbers_Model;
 	node_numbers_Model.reserve(model_domain.Nodes());
@@ -482,11 +520,11 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 	// renumbering nodes
 	const bool in_a_single_sequence(true);
-  MeshManager<3>& mesh(model3d.Mesh());
+  MeshManager<3>& mesh(model.Mesh());
 	mesh.AssignUniqueNumbers(in_a_single_sequence);
 	// checking the numbering
 	vector<size_t>  nodes_renumbered;
-	nodes_renumbered.reserve(model3d.Mesh().Nodes());
+	nodes_renumbered.reserve(model.Mesh().Nodes());
 	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model.Name() << "': renumbered nodes:\n";
 	{
 		set<csmp::Node<3U>*>    discovered_nodes;

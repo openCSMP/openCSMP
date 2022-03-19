@@ -219,22 +219,17 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
     vector<int8_t> vecElementTypes(1);
     vecElementTypes[0]= ISOPARAMETRIC_LINEAR_TRIANGLE;
   	
-    const size_t   nodes(9); // number of nodes
-  	deque<uint32_t>  npes(10);  // number of nodes per element
-    deque<uint32_t>  epes(10);  // elements per element
-  	IsoparametricLinearTriangle iso_tria;
-    npes[0]=iso_tria.Nodes();
-  	epes[0]=iso_tria.Neighbors();
-    deque<int8_t>   etypes(1,ISOPARAMETRIC_LINEAR_TRIANGLE);
+    const size_t   n_nodes(9), n_elmts{10};
+    const uint32_t nodes_per_elmt{3}, nbors_per_elmt{3};
+  	vset.Resize( nodes_per_elmt, nbors_per_elmt, ISOPARAMETRIC_LINEAR_TRIANGLE, n_nodes, n_elmts );
     
-  	vset.Resize( etypes, npes, epes, nodes, 0, 0 );
   	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
   	//-----------------------NODES
   	//define nodes
-  	std::deque<double> px(nodes);
-  	std::deque<double> py(nodes);
-  	std::deque<double> pz(nodes);
+  	std::deque<double> px(n_nodes);
+  	std::deque<double> py(n_nodes);
+  	std::deque<double> pz(n_nodes);
   	
   	px[0]=0.;                 py[0]=100.;               pz[0]=0.;
   	px[1]=52.73842909594504;  py[1]=100.;               pz[1]=0.;
@@ -569,6 +564,124 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
 
 
+/// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary
+ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
+ {
+    //--------------------------ELEMENT TYPES
+  	//add element types
+    const CSMP_FEM_TYPE T(ISOPARAMETRIC_LINEAR_TRIANGLE), Q(ISOPARAMETRIC_LINEAR_QUADRILATERAL), P(ISOPARAMETRIC_LINEAR_BAR);
+    deque<int8_t> vecElementTypes = { Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q, // elements
+                                      P,P,P, P,P,P,P,P, P,P,P, P,P,P,P,P,P,  // faces
+                                      P,P,P,P, P,P,P };                      // interfaces
+    const int n_cells{43};
+  	assert( vecElementTypes.size() == n_cells );
+    const size_t     n_nodes(35); // number of nodes
+  	deque<uint32_t>  npes(n_cells,4);  // default: number of nodes per element
+    deque<uint32_t>  epes(n_cells,4);  // default: nbors per element
+    for ( auto i{0}; i<vecElementTypes.size(); ++i ) {
+         if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
+              npes[i] = 3;
+              epes[i] = 3;
+           }
+         else if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_BAR ) {
+              npes[i] = 2;
+              epes[i] = 2;
+           }
+      }
+    const int n_faces{17}, n_interfaces{7};
+  	vset.Resize( vecElementTypes, npes, epes, n_nodes, n_faces, n_interfaces );
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+
+  	//-----------------------NODES
+  	//define node coordinates
+  	std::deque<double> px = { 0,1,3,4.5, 0,1,3,4.5, 0,1.5, 0,2,2,3,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.5,3,4.5, 0,1.5,3,4.5 };
+    assert( px.size() == n_nodes );
+  	std::deque<double> py = { 7,7,7,7, 5.5,5.5,5.5,5.5, 4.5,4.5, 3.5,3.5,3.5,3.5,3.5, 2.5,2.3,2.2,2.2,2.1,2, 2.5,2.3,2.2,2.2,2.1,2, 1,1,1,1, 0,0,0,0 };
+    assert( py.size() == n_nodes );
+  	std::deque<double> pz(n_nodes,0.);
+  	  	  	
+  	vset.AddXYZ( px, py, pz );
+  	
+  	//--------------------------NODE BOUNDARY FLAGS
+    BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL}, N{NOT};
+    vector<int8_t> bflags = { CNR4,U,U,CNR3, L,N,N,R, L,I, L,I,I,N,R, L,I,I,I,I,R, L,I,I,I,I,R, L,N,I,R, CNR1,B,B,CNR2 };
+    assert( bflags.size() == n_nodes );
+    vset.AddBFlags( bflags.begin(), bflags.end() );
+
+
+  	//--------------------------ELEMENTS
+  	// define nodes per element
+    deque< vector<int64_t> > plist = { {0,4,5,1}, {1,5,6,2}, {2,6,7,3}, {4,8,9,5}, {5,9,6}, {8,10,11,9}, {9,12,13,6}, {6,13,14,7}, {10,15,16,11}, {11,16,17}, // elements
+                                       {12,18,19,13}, {13,19,20,14}, {21,27,28,22}, {28,29,23,22}, {24,29,25}, {25,29,30,26}, {27,31,32,28}, {28,32,33,29}, {29,33,34,30},
+                                       {31,32}, {32,33}, {33,34}, {34,30}, {30,26}, {20,14}, {14,7}, {7,3}, {3,2}, {2,1}, {1,0}, {0,4}, {4,8}, {8,10}, {10,15}, {21,27}, {27,31}, // faces
+                                       {15,16,22,21}, {16,17,23,22}, {18,19,25,24}, {19,20,26,20}, {11,9,9,12}, {17,11,12,18}, {29,23,24,29} };
+    assert( plist.size() == n_cells );
+    vset.AddPlist( plist.begin(), plist.end() );
+
+     //---------------------------------NEIGHBORS
+    //define neighbors per element
+    deque<vector<int64_t> > pfverts = { {L,3,1,U}, {0,4,2,U}, {1,7,R,U}, {L,5,4,0}, {6,1,3}, {L,8,I,3}, {5,10,7,4}, {6,11,R,2}, {L,I,9,5}, {I,I,8}, // element neighbors
+                                        {I,I,11,6}, {10,I,R,7}, {L,16,13,I}, {12,17,I,I}, {15,I,I}, {14,18,R,I}, {L,B,17,12}, {16,B,18,13}, {17,B,R,15},
+                                        // face neighbors: { face-nbors, connected high-dim elmts, local face ids of high dim elmts }
+                                        {20,35,16,B,1,B}, {21,19,17,B,1,B}, {22,20,18,B,1,B},
+                                        {23,21,18,R,2,R}, {24,22,15,R,2,R}, {25,23,11,R,2,R}, {26,24,7,R,2,R}, {27,25,2,R,2,R},
+                                        {28,26,2,U,3,U}, {29,27,1,U,3,U}, {30,28,0,U,3,U},
+                                        {31,29,0,L,0,L}, {32,30,3,L,0,L}, {33,31,5,L,0,L}, {34,32,8,L,0,L}, {35,33,12,L,0,L}, {19,34,16,L,0,L},
+                                        // interface neigbhors: like faces
+                                        {37,L,8,12,1,3}, {I,36,9,13,0,3}, {39,I,10,14,1,1}, {R,38,11,15,1,3},
+                                        {41,I,5,6,2,0}, {I,40,9,10,1,0}, {I,I,13,14,2,2} };
+    assert( pfverts.size() == n_cells );
+    vset.AddPfverts( pfverts.begin(), pfverts.end() );
+
+    // creating a matching model topology
+    ModelTopology mesh_topology( "SPLIT22_BASIC", true );
+    
+    // surface elements fall in 2 domains "lower" and "upper"
+    mesh_topology.AddDomain( "lower", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+                              vector<size_t>{ 12,13,14,15,16,17,18 } );
+    mesh_topology.AddDomain( "upper", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+                              vector<size_t>{ 0,1,2,3,4,5,6,7,8,9,10,11 } );
+    // boundaries
+    mesh_topology.AddDomain( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{19,20,21} );
+    mesh_topology.AddDomain( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{22,23,24,25,26} );
+    mesh_topology.AddDomain( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{27,28,29} );
+    mesh_topology.AddDomain( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{30,31,32,33,34,35} );
+
+    // split boundaries
+    mesh_topology.AddDomain( "horizontal_splitboundary", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38,39} );
+    mesh_topology.AddDomain( "inclined_split_boundary", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{40,41,42} );
+
+    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.InterFaces() );
+    assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+
+    // adding corresponding materials to VSet
+    const size_t n_elements{19};
+    vector<int32_t> pmtrl = { 1,1,1,1,1,1,1,1,1,1,1,1, 2,2,2,2,2,2,2 };
+    assert( pmtrl.size() == n_elements );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+    // adding node and element numbers for comparisons
+    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, 2U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+    // permeability
+    PropertyData perm( ELEMENT, SCALAR, 2U );
+    perm.Reserve( vset.Elements() );
+    for ( auto i = 0U; i<mesh_topology.CellsWithinDomain("upper"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
+    for ( auto i = 0U; i<mesh_topology.CellsWithinDomain("lower"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
+    vset.AddData( "permeability", perm );
+
+    vset.Out();
+    
+    return mesh_topology;
+    
+ } // end test_Create_BoundarySplitBoundaryPatch
 
 
 

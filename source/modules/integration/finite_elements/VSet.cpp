@@ -81,10 +81,18 @@ void VSet<dim>::Resize( uint32_t nodes_per_element,
                         size_t nodes,
                         size_t elmts )
 {
+  // ascertaining that the information matches the other entries in the VSet
+  if ( HybridElementTypeMesh() )
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "this method is only for single-element type meshes.");
+
+  if ( Elements() > 0 && ElementType(0) != csmp_etype )
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "element type does not match the ones stored in VData.");
+
 	VData::Resize(nodes_per_element, nbors_per_element, csmp_etype, nodes, elmts);
   pmtrl_.resize( elmts );
+  
   if ( !property_map_.empty() )
-    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "resizing of property map not handled yet.");
 }
 
 
@@ -99,17 +107,33 @@ void VSet<dim>::Resize( const deque<int8_t>& etypes,
                         const deque<uint32_t>& epes,
                         size_t nodes, size_t faces, size_t interfaces )
 {
+  if ( etypes.size() == 1 )
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "use this method only for hybride meshes with multiple element types" );
+
+  if ( etypes.size() != npes.size() || npes.size() != epes.size() )
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "supplied deques must all have the same size equal to the number of finite elements that VSet shall have");
+
+  // resizing the polygonal data
 	VData::Resize(etypes, npes, epes, nodes, faces, interfaces);
+
+  if ( etypes.size() != TotalNumberOfCells() )
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "element types does not match number of finite elements in 'plist'");
+
   pmtrl_.resize( epes.size() - faces - interfaces );
+  
   if ( !property_map_.empty() )
-    cerr <<"\nVSet<"<< dim <<">::Resize: resizing of property map not handled yet.\n";
+    throw csmp::Exception( ERROR, "VSet<dim>::Resize", "resizing of property map not handled yet.");
 }
+
+
 
 
 template<uint32_t dim>
 VSet<dim>::~VSet()
 {
 }
+
+
 
 
 /**
