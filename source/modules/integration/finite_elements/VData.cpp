@@ -3577,14 +3577,15 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
         // creating a new entry in the manifold map or getting an iterator to an existing one
         // map<size_t,set<pair<size_t,int8_t> > > vertexManifoldIndices
         for ( auto i{0}; i<iface_nodes; ++i ) {
+              // recording which vertices are collocated
+              pair<size_t,size_t> vertex_pair = { static_cast<size_t>((*it)[i]), static_cast<size_t>((*it)[plist_entries-i-1]) };
+              if ( vertex_pair.first > vertex_pair.second )
+                swap( vertex_pair.first, vertex_pair.second );
+              manifold_vertices.insert( vertex_pair );
               // collecting the manifold vertices together with their classifiers
               manifold_vertex_classifications.insert( make_pair( (*it)[i], INSIDE ) );
               manifold_vertex_classifications.insert( make_pair( (*it)[plist_entries-i-1], OUTSIDE ) );
-              // recording which vertices are collocated
-              pair<size_t,size_t> vertex_pair = { static_cast<size_t>((*it)[i]), static_cast<size_t>((*it)[plist_entries-i-1]) };
-              if ( vertex_pair.first > vertex_pair.second ) swap( vertex_pair.first, vertex_pair.second );
-              manifold_vertices.insert( vertex_pair );
-         }
+          }
       }
       
    // 3. matching the InterFace vertices to potential intervening elements
@@ -3634,7 +3635,7 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
         set<pair<size_t,int8_t> > vertices_with_attributes;
         // for all the stored vertices
         for ( auto& sit : mit.second ) {
-              auto attribute_it = manifold_vertex_classifications.find( mit.first );
+              auto attribute_it = manifold_vertex_classifications.find( sit );
               // the vertex must be present in map
               assert( attribute_it != manifold_vertex_classifications.end() );
               vertices_with_attributes.insert( make_pair( sit, (*attribute_it).second ) );

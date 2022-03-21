@@ -40,7 +40,7 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
 // checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
 for ( auto& nit : indices ) {
     set<size_t> mnodes;
-    for ( auto mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
+    for ( const auto& mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
     // if the key node is not contained this is reported
     if ( mnodes.find(nit.first) == mnodes.end() )
         csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
@@ -49,23 +49,26 @@ for ( auto& nit : indices ) {
 #endif
 
     // creating the node manifolds
-    // NB:    node_id, connected nodes and their INTERFACE_SIDE identifiers
+    // NB: node_id, connected nodes and their INTERFACE_SIDE identifiers
     //     map<size_t,set<pair<size_t,int8_t> > >
     vector<Node<dim>*>      nodes;
     vector<INTERFACE_SIDE>  iface_sides;
-    for ( auto nit : indices ) {
+    for ( const auto& nit : indices ) {
         const size_t n_nodes(nit.second.size());
         nodes.reserve( n_nodes );
         iface_sides.reserve( n_nodes );
-        for ( auto mf_nodes : nit.second ) {
+        for ( auto& mf_nodes : nit.second ) {
              nodes.push_back( &(*next(mesh_nodes.begin(),mf_nodes.first)) );
              assert( nodes.back()->Idx() == mf_nodes.first );
              iface_sides.push_back( static_cast<INTERFACE_SIDE>(mf_nodes.second) );
           }
-        // geometric qualifier is determined through a consistency check once the manifold is in place
-        typename plf::colony<NodeManifold<dim>>::iterator mit =
-          node_manifolds_.emplace( NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
-        (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
+        // a manifold requires at least two nodes
+        if ( nodes.size() >=2U ) {
+            typename plf::colony<NodeManifold<dim>>::iterator mit =
+              node_manifolds_.emplace( NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
+            // geometric qualifier is determined through a consistency check once the manifold is in place
+            (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
+          }
         // cleaning up (note that clear keeps the allocated memory!)
         nodes.clear();
         iface_sides.clear();
@@ -73,6 +76,7 @@ for ( auto& nit : indices ) {
       
     cout <<"\nNodeManifoldManager(custom ctor): constructed "<< node_manifolds_.size();
     cout <<" node manifolds from the input data.\n";
+    Out();
     
  } // end custom constructor
 

@@ -19,8 +19,8 @@ NodeManifold<dim>::~NodeManifold()
 
 
 template<uint32_t dim>
-NodeManifold<dim>::NodeManifold( const std::vector<Node<dim>*>& nodes,
-                                 const std::vector<INTERFACE_SIDE>& sides,
+NodeManifold<dim>::NodeManifold( const vector<Node<dim>*>& nodes,
+                                 const vector<INTERFACE_SIDE>& sides,
                                  ManifoldType classifier )
  : parent_geometry_(classifier)
 {
@@ -62,7 +62,7 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
       
       @todo use more diagnostics, e.g., element types (line, surface, volume)
       @todo use also the material IDs that come together at that node
-      @todo use std::initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
+      @todo use initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
 */
 template<uint32_t dim>
 ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
@@ -88,7 +88,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
       }
       
     // 1. most common case: manifold is located somewhere on a split boundary
-    const uint32_t  collocated_nodes = nmf.Branches();
+    const auto collocated_nodes = nmf.Branches();
     if ( collocated_nodes == 2 && mnd_ptr == nullptr ) {
          // classification is plausible
          if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
@@ -191,13 +191,13 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             for (size_t j = i + 1; j < n_branches; ++j) {
                 double second = branches_[j].first->Read(index);
                 assert(!isnan(second));
-                if (first > second) std::swap(branches_[i], branches_[j]);
+                if (first > second) swap(branches_[i], branches_[j]);
             }
         }
     // if the variable is associated with the parent elements
     } else if(index.place==ELEMENT) {
         for (auto i = 0; i < branches_.size(); ++i) {
-            //double first = std::numeric_limits<double>::quiet_NaN();
+            //double first = numeric_limits<double>::quiet_NaN();
             double first_value(0.);
             size_t first_count(0);
             for( auto e = 0; e < branches_[i].first->Parents(); e++) {
@@ -215,7 +215,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             assert(!isnan(first_value));
 
             for ( auto j = i + 1; j < n_branches; ++j) {
-                //double second = std::numeric_limits<double>::quiet_NaN();
+                //double second = numeric_limits<double>::quiet_NaN();
                 double second_value(0.);
                 uint32_t second_count(0);
                 for( auto e = 0; e < branches_[j].first->Parents(); e++) {
@@ -231,8 +231,8 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
                 assert(second_count != 0);
                 second_value /= second_count;
                 assert(!isnan(second_value));                
-                //if (first > second) std::swap(nodes_[i], nodes_[j]);
-                if (first_value > second_value) std::swap(branches_[i], branches_[j]);
+                //if (first > second) swap(nodes_[i], nodes_[j]);
+                if (first_value > second_value) swap(branches_[i], branches_[j]);
             }
         } 
     } else {
@@ -362,12 +362,11 @@ bool NodeManifold<dim>::Remove( Node<dim>* nd )
 template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
-  std::cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the IDs:\t";
+  cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the Idx:\t";
   for (auto const& node : branches_ )
-    {
-      std::cout <<"\n\t"<< parseSide(node.second) <<": "<< node.first->Idx() << "\t";
-    }
-  std::cout << std::endl;
+    cout <<"\n\t"<< node.first->Idx() <<": "<< parseSide(node.second) << "\t";
+
+  cout << endl;
 }
 
 template class NodeManifold<1U>;
