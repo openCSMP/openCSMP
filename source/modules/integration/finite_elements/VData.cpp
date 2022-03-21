@@ -3550,70 +3550,99 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
     
     Checks for collocated vertices into transfer data structure.
 */
-bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
+size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
  {
-    indexes.clear();
-    
-    // if there are no interfaces, method returns false
+    // 0.  if there are no interfaces, method returns false
     if (  first_interface_ == first_face_ ) {
          cerr <<"\nVData::ExtractNodeManifolds: does not contain any manifolds.\n";
-         return false;
+         return 0;
       }
+
+    // 1. creating some temporary containers
+    // 1.1 all manifold vertices encountered with their side classifiers
+    map<size_t,INTERFACE_SIDE>  manifold_vertex_classifications;
+    // 1.2 all collocated manifold vertices are stored in sets
+    set<pair<size_t,size_t> >   manifold_vertices;
       
-   // creating manifold data from the interface node indices stored in plist
-   //for ( auto it=PelmtInterfacesBegin(); it!=PelmtEnd(); ++it ) - element type info
+   // 2. creating manifold data from the interface node indices stored in plist
    for ( auto it=PlistInterFacesBegin(); it!=PlistInterFacesEnd(); ++it )
      {
-        // the first half of the interface vertices represents inside nodes
+        // the first half of the interface vertices represent inside nodes in CCW order outside looking in
+        // the second half of the indices represent the outside nodes in matching albeit reverse order
         assert( !(*it).empty() );
-        const size_t plist_entries((*it).size());
+        const auto plist_entries((*it).size());
         assert( (plist_entries & 1) == 0 /* even number */ );
-        const size_t iface_nodes(plist_entries/2);
+        const auto iface_nodes(plist_entries/2);
         
         // creating a new entry in the manifold map or getting an iterator to an existing one
         // map<size_t,set<pair<size_t,int8_t> > > vertexManifoldIndices
-        for ( size_t i=1U; i<iface_nodes; ++i ) {
-              const pair<size_t,int8_t> vertex( make_pair( (*it)[i], INSIDE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
-          }
-        for ( size_t i=iface_nodes; i<plist_entries; ++i ) {
-               const pair<size_t,int8_t> vertex( make_pair( (*it)[i], OUTSIDE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
-          }
-     }
-     
-   // now trying to match the vertices of intervening elements, if any
-   deque<int64_t> intervening_elmts;
-   for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
-         assert( (*it).size() > 2U );
-         // the last entry in each pfvert record is the index of the intervening element or bflag
-         const ssize_t idx = (*it).back();
-         if ( idx >= 0 ) // if there is an intervening element
-           intervening_elmts.push_back( idx );
-     }
-     
-   // if there are intervening elements, they are added to the manifolds
-   if ( !intervening_elmts.empty() ) {
-        for ( auto elmt : intervening_elmts )
-          for ( auto it=PlistBegin(elmt); it!=PlistEnd(elmt); ++it ) {
-              const pair<size_t,int8_t> vertex( make_pair( (*it), MIDDLE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it), set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
-          }
-     }
+        for ( auto i{0}; i<iface_nodes; ++i ) {
+              // collecting the manifold vertices together with their classifiers
+              manifold_vertex_classifications.insert( make_pair( (*it)[i], INSIDE ) );
+              manifold_vertex_classifications.insert( make_pair( (*it)[plist_entries-i-1], OUTSIDE ) );
+              // recording which vertices are collocated
+              pair<size_t,size_t> vertex_pair = { static_cast<size_t>((*it)[i]), static_cast<size_t>((*it)[plist_entries-i-1]) };
+              if ( vertex_pair.first > vertex_pair.second ) swap( vertex_pair.first, vertex_pair.second );
+              manifold_vertices.insert( vertex_pair );
+         }
+      }
       
-   return true;
+   // 3. matching the InterFace vertices to potential intervening elements
+   size_t interface{Elements()+Faces()};
+   for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
+         assert( (*it).size() > 6U ); // 6=minimum nbors, +2 higher-dim elmts +2 face_ids
+         // the last entry in each pfvert record is the index of the intervening element or bflag
+         const auto elmt_idx = (*it).back();
+         if ( elmt_idx >= 0 ) {// if there is an intervening element
+             auto nodes_of_elmt{ plist[interface].size() / 2 };
+             // the nodes of the intervening element match (in position and order) those of the INSIDE of the Interface
+             for ( auto i{0}; i<nodes_of_elmt; ++i ) {
+                  manifold_vertex_classifications.insert( make_pair( plist[elmt_idx][i], MIDDLE ) );
+                  pair<size_t,size_t> vertex_pair = { plist[interface][i], plist[elmt_idx][i] };
+                  if ( vertex_pair.first > vertex_pair.second ) swap( vertex_pair.first, vertex_pair.second );
+                  manifold_vertices.insert( vertex_pair );
+                }
+           }
+         interface++;
+     }
+     
+   // 4. consolidating the manifold vertex pairs into singles, pairs, and multiples needed for later classification
+   map<size_t,set<size_t> > manifold_node_clusters;
+   for ( const auto& it : manifold_vertices ) {
+        // adding all permutations of indices into map while elimating duplicates at the same time
+        auto insert_it = manifold_node_clusters.insert( make_pair( it.first, set<size_t>{ it.first, it.second } ) );
+        if ( !insert_it.second )
+          (*insert_it.first).second.insert( it.second );
+     }
+   // up to here we only get a maximum of three entries before the original pairs do not know of each other
+   // this is fixed in the following second pass
+   for ( const auto& it : manifold_vertices )
+     // if the second number of the pair is not a cluster key
+     if ( manifold_node_clusters.count( it.second ) == 0 )
+       {  // the first number is searched for in the cluster sets (it must be in one of them)
+          for ( auto& cit : manifold_node_clusters )
+            if ( cit.second.find( it.first ) != cit.second.end() ) {
+                 // if it is found, the missing number 2 is inserted
+                 cit.second.insert( it.second );
+                 break;
+              }
+       }
+       
+   // 5. populating the output datastructure: map<size_t,set<pair<size_t,INTERFACE_SIDE> > >
+   if ( !indexes.empty() ) indexes.clear();
+   for ( auto& mit : manifold_node_clusters ) {
+        set<pair<size_t,int8_t> > vertices_with_attributes;
+        // for all the stored vertices
+        for ( auto& sit : mit.second ) {
+              auto attribute_it = manifold_vertex_classifications.find( mit.first );
+              // the vertex must be present in map
+              assert( attribute_it != manifold_vertex_classifications.end() );
+              vertices_with_attributes.insert( make_pair( sit, (*attribute_it).second ) );
+          }
+        indexes.insert( make_pair( mit.first, vertices_with_attributes ) );
+     }
+   
+   return manifold_node_clusters.size();
    
  } // end ExtractNodeManifolds
 

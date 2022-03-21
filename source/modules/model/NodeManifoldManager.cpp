@@ -39,7 +39,7 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
 #ifdef DEBUG
 // checking that the key nodes in vertexManifoldIndices map are also contained in the corresponding sets
 for ( auto& nit : indices ) {
-    set<uint32_t> mnodes;
+    set<size_t> mnodes;
     for ( auto mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
     // if the key node is not contained this is reported
     if ( mnodes.find(nit.first) == mnodes.end() )

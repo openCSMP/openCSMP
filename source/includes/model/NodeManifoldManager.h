@@ -18,7 +18,7 @@ template<uint32_t> class Node;
 template<uint32_t dim>
 class NodeManifoldManager {
   public:
-       /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+       /// vertex manifolds indices for construction: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
     typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
     
     /// Re-constructor when node manifolds are read back from a CSMP native binary fileset

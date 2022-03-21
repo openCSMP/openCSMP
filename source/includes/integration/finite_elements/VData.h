@@ -286,9 +286,9 @@ class VData {
     
     /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
     typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
-    
-    /// checks for collocated vertices into transfer data structure
-    bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
+
+    /// checks for collocated vertices and collects them into transfer data structure; returns number of manifolds found
+    size_t ExtractNodeManifolds( vertexManifoldIndices& ) const;
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );

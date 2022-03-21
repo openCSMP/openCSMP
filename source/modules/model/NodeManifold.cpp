@@ -68,34 +68,36 @@ template<uint32_t dim>
 ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
  {
     // diagnostics: go over all possible cases excluding the ones that are not possible
-    const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
-    const bool   with_middle_node = (mnd_ptr == nullptr) ? false : true;
-    const size_t collocated_nodes = nmf.Branches();
     const ManifoldType te = nmf.GeometricClassifier();
 
     // extended diagnostics: checking the parent elements for their types
-    const size_t connected_elmts(mnd_ptr->Parents());
-    size_t       line_counter(0U), surf_counter(0U);
-//                 vol_counter(0U); // track inner and outer nodes
-    // in the case of a fracture manifold (we can have an endpoint...)
-    if ( with_middle_node )
-      for ( auto i{0}; i<connected_elmts; ++i ) {
-           if ( mnd_ptr->Parent(i)->IsLineElement() ) line_counter++;
-           else surf_counter++;
-        }
-    const bool line_elmt_manifold = (line_counter == connected_elmts) ? true : false;
-    const bool surf_elmt_manifold = (surf_counter == connected_elmts) ? true : false;
-
-    // most common: somewhere on a split boundary
-    if ( collocated_nodes == 2 && !with_middle_node ) {
+    const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
+    bool line_elmt_manifold{false}, surf_elmt_manifold{false};
+    int connected_elmts(0);
+    if ( mnd_ptr ) {
+         connected_elmts = mnd_ptr->Parents();
+         size_t line_counter(0U), surf_counter(0U);
+         // vol_counter(0U); // track inner and outer nodes
+         // in the case of a fracture manifold (we can have an endpoint...)
+         for ( auto i{0}; i<connected_elmts; ++i ) {
+              if ( mnd_ptr->Parent(i)->IsLineElement() ) line_counter++;
+              else surf_counter++;
+           }
+         if      ( line_counter == connected_elmts ) line_elmt_manifold = true;
+         else if ( surf_counter == connected_elmts ) surf_elmt_manifold = true;
+      }
+      
+    // 1. most common case: manifold is located somewhere on a split boundary
+    const uint32_t  collocated_nodes = nmf.Branches();
+    if ( collocated_nodes == 2 && mnd_ptr == nullptr ) {
          // classification is plausible
          if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
          // current classification is probably not correct
          return ManifoldType::NOT_CLASSIFIED;
       }
       
-    // if there is a middle node which is only connected to line elements
-    if ( collocated_nodes == 2 && with_middle_node ) {
+    // 2. if there is a middle node which is only connected to line elements
+    if ( collocated_nodes == 2 && mnd_ptr ) {
          // classification is plausible
          if ( line_elmt_manifold ) {
               if ( te == ManifoldType::POINT2 && connected_elmts == 2 ) return te;
@@ -103,28 +105,25 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
               if ( te == ManifoldType::POINT3 && connected_elmts == 3 ) return te;
               else return ManifoldType::NOT_CLASSIFIED;
            }
-         else if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+         if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+         if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
          // current classification is probably not correct
          return ManifoldType::NOT_CLASSIFIED;
       }
       
-    // perimeter of SplitBoundary with fracture inside that terminates in a volume
-    if ( collocated_nodes == 2 && with_middle_node ) {
-         if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
+    // 3. split boundary T junction
+    if ( collocated_nodes == 3 && !mnd_ptr ) {
+         if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT ||
+              te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
          else return ManifoldType::NOT_CLASSIFIED;
       }
-    // split boundary T junction
-    if ( collocated_nodes == 3 && !with_middle_node ) {
-         if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT || te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
-         else return ManifoldType::NOT_CLASSIFIED;
-      }
-    // simple split boundary intersection
-    if ( collocated_nodes >= 4 && !with_middle_node ) {
+    // 4. simple split boundary intersection
+    if ( collocated_nodes >= 4 && !mnd_ptr ) {
          if ( te == ManifoldType::INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BINTERSECTION_POINT ) return te;
          else return ManifoldType::NOT_CLASSIFIED;
       }
-    // multiple intersecting split boundaries
-    if ( collocated_nodes >= 5 && !with_middle_node ) {
+    // 5. multiple intersecting split boundaries
+    if ( collocated_nodes >= 5 && !mnd_ptr ) {
          if ( te == ManifoldType::MULTI_INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BPOINTX ) return te;
          else return ManifoldType::NOT_CLASSIFIED;
       }
@@ -201,7 +200,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             //double first = std::numeric_limits<double>::quiet_NaN();
             double first_value(0.);
             size_t first_count(0);
-            for(size_t e = 0; e < branches_[i].first->Parents(); e++) {
+            for( auto e = 0; e < branches_[i].first->Parents(); e++) {
                 //if( (dim==2 && nodes_[i]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[i]->Parent(e)->IsVolumeElement()) ) {
                 if( !isnan(branches_[i].first->Parent(e)->Read(index)) ) {
                     //first = nodes_[i]->Parent(e)->Read(index);
@@ -215,11 +214,11 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             first_value /= first_count;
             assert(!isnan(first_value));
 
-            for (size_t j = i + 1; j < n_branches; ++j) {
+            for ( auto j = i + 1; j < n_branches; ++j) {
                 //double second = std::numeric_limits<double>::quiet_NaN();
                 double second_value(0.);
-                size_t second_count(0);                
-                for(size_t e = 0; e < branches_[j].first->Parents(); e++) {
+                uint32_t second_count(0);
+                for( auto e = 0; e < branches_[j].first->Parents(); e++) {
                     //if( (dim==2 && nodes_[j]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[j]->Parent(e)->IsVolumeElement()) ) {
                     if( !isnan(branches_[j].first->Parent(e)->Read(index)) ) {
                         //second = nodes_[j]->Parent(e)->Read(index);

@@ -878,16 +878,14 @@ uint32_t  InterFace<dim>::OuterParentFaceID() const
 template<uint32_t dim>
 uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 {
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    return inner_parent_face_id_;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( outerParent_ != nullptr );
-    return outer_parent_face_id_;
-  }
+  if ( side == INSIDE ) {
+      assert( innerParent_ != nullptr );
+      return inner_parent_face_id_;
+    }
+  else if ( side == OUTSIDE ) {
+      assert( outerParent_ != nullptr );
+      return outer_parent_face_id_;
+    }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
@@ -902,16 +900,16 @@ uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 template<uint32_t dim>
 void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
 {
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    inner_parent_face_id_ = idx;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( outerParent_ != nullptr );
-    outer_parent_face_id_ = idx;
-  }
+  if ( side == INSIDE ) {
+      assert( innerParent_ != nullptr );
+      inner_parent_face_id_ = idx;
+      return;
+    }
+  else if ( side == OUTSIDE ) {
+      assert( outerParent_ != nullptr );
+      outer_parent_face_id_ = idx;
+      return;
+    }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
