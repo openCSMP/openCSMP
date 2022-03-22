@@ -19,8 +19,8 @@ NodeManifold<dim>::~NodeManifold()
 
 
 template<uint32_t dim>
-NodeManifold<dim>::NodeManifold( const std::vector<Node<dim>*>& nodes,
-                                 const std::vector<INTERFACE_SIDE>& sides,
+NodeManifold<dim>::NodeManifold( const vector<Node<dim>*>& nodes,
+                                 const vector<INTERFACE_SIDE>& sides,
                                  ManifoldType classifier )
  : parent_geometry_(classifier)
 {
@@ -62,71 +62,100 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
       
       @todo use more diagnostics, e.g., element types (line, surface, volume)
       @todo use also the material IDs that come together at that node
-      @todo use std::initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
+      @todo use initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
 */
 template<uint32_t dim>
 ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
  {
     // diagnostics: go over all possible cases excluding the ones that are not possible
-    const ManifoldType te = nmf.GeometricClassifier();
+    const ManifoldType te       = nmf.GeometricClassifier();
+    const auto collocated_nodes = nmf.Branches();
+    
+    // Manifolds in 2D models
+    // ----------------------
+    if constexpr ( dim == 2 )
+      {
+         // anywhere along a split boundary
+         if ( collocated_nodes == 2 ) {
+             // if the classification is plausible, nothing is done
+             if ( te == ManifoldType::INTERFACE ) {
+                  bool isBPOINT1{true};
+                  for ( auto i{0}; i<collocated_nodes; ++i ) {
+                       if ( nmf.N(i)->AtBoundary() == NOT ||
+                            nmf.N(i)->AtBoundary() == INTERNAL ) isBPOINT1 = false;
+                       break;
+                    }
+                  if ( isBPOINT1 ) return ManifoldType::BPOINT1;
+                  return te;
+               }
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+        // intersections of split boundaries
+        if ( collocated_nodes >= 3 ) {
+             // special case: an isolated manifold point (POINTX) like for a well
+             if ( nmf.N(0)->Neighbors() == 0 ) return ManifoldType::POINTX;
+             return ManifoldType::INTERSECTION_POINT;
+          }
+         // TODO: deal with single-point manifolds
+      } // end 2D models
 
-    // extended diagnostics: checking the parent elements for their types
-    const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
-    bool line_elmt_manifold{false}, surf_elmt_manifold{false};
-    int connected_elmts(0);
-    if ( mnd_ptr ) {
-         connected_elmts = mnd_ptr->Parents();
-         size_t line_counter(0U), surf_counter(0U);
-         // vol_counter(0U); // track inner and outer nodes
-         // in the case of a fracture manifold (we can have an endpoint...)
-         for ( auto i{0}; i<connected_elmts; ++i ) {
-              if ( mnd_ptr->Parent(i)->IsLineElement() ) line_counter++;
-              else surf_counter++;
-           }
-         if      ( line_counter == connected_elmts ) line_elmt_manifold = true;
-         else if ( surf_counter == connected_elmts ) surf_elmt_manifold = true;
-      }
+    // Manifolds in 3D models
+    // ----------------------
+    // extended diagnostics: checking intervening element to determine manifold type
+    if constexpr ( dim == 3 )
+      {
+        // 1. most common case: manifold is located somewhere on a split boundary
+        if ( collocated_nodes == 2 ) {
+             // classification is plausible
+             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+          
+        // 2. if there is a middle node which is only connected to line elements
+        if ( collocated_nodes == 2 && nmf.MIDDLE_Node() )
+          {
+             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
+
+             const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
+             bool line_elmt_manifold{true}, surf_elmt_manifold{true};
+             const uint32_t connected_elmts = mnd_ptr->Parents();
+             
+             // in the case of a fracture manifold (we can have an endpoint...)
+             for ( auto i{0}; i<connected_elmts; ++i ) {
+                  assert( mnd_ptr->Parent(i) );
+                  if ( !mnd_ptr->Parent(i)->IsLineElement() ) line_elmt_manifold = false;
+                  if ( !mnd_ptr->Parent(i)->IsSurfaceElement() ) surf_elmt_manifold = false;
+               }
+             // classification is plausible
+             if ( line_elmt_manifold ) {
+                  if ( te == ManifoldType::POINT2 && connected_elmts == 2 ) return te;
+                  if ( te == ManifoldType::POINT3 && connected_elmts == 3 ) return te;
+               }
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+          
+        // 3. split boundary T junction
+        if ( collocated_nodes == 3 ) {
+             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT ||
+                  te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
+        // 4. simple split boundary intersection
+        if ( collocated_nodes >= 4 ) {
+             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
+        // 5. multiple intersecting split boundaries
+        if ( collocated_nodes >= 5 ) {
+             if ( te == ManifoldType::MULTI_INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BPOINTX ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
       
-    // 1. most common case: manifold is located somewhere on a split boundary
-    const uint32_t  collocated_nodes = nmf.Branches();
-    if ( collocated_nodes == 2 && mnd_ptr == nullptr ) {
-         // classification is plausible
-         if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
-         // current classification is probably not correct
-         return ManifoldType::NOT_CLASSIFIED;
-      }
-      
-    // 2. if there is a middle node which is only connected to line elements
-    if ( collocated_nodes == 2 && mnd_ptr ) {
-         // classification is plausible
-         if ( line_elmt_manifold ) {
-              if ( te == ManifoldType::POINT2 && connected_elmts == 2 ) return te;
-              else return ManifoldType::NOT_CLASSIFIED;
-              if ( te == ManifoldType::POINT3 && connected_elmts == 3 ) return te;
-              else return ManifoldType::NOT_CLASSIFIED;
-           }
-         if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
-         if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
-         // current classification is probably not correct
-         return ManifoldType::NOT_CLASSIFIED;
-      }
-      
-    // 3. split boundary T junction
-    if ( collocated_nodes == 3 && !mnd_ptr ) {
-         if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT ||
-              te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
-         else return ManifoldType::NOT_CLASSIFIED;
-      }
-    // 4. simple split boundary intersection
-    if ( collocated_nodes >= 4 && !mnd_ptr ) {
-         if ( te == ManifoldType::INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BINTERSECTION_POINT ) return te;
-         else return ManifoldType::NOT_CLASSIFIED;
-      }
-    // 5. multiple intersecting split boundaries
-    if ( collocated_nodes >= 5 && !mnd_ptr ) {
-         if ( te == ManifoldType::MULTI_INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BPOINTX ) return te;
-         else return ManifoldType::NOT_CLASSIFIED;
-      }
+      } // end 3D manifolds
       
     // all other cases
     return te;
@@ -191,13 +220,13 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             for (size_t j = i + 1; j < n_branches; ++j) {
                 double second = branches_[j].first->Read(index);
                 assert(!isnan(second));
-                if (first > second) std::swap(branches_[i], branches_[j]);
+                if (first > second) swap(branches_[i], branches_[j]);
             }
         }
     // if the variable is associated with the parent elements
     } else if(index.place==ELEMENT) {
         for (auto i = 0; i < branches_.size(); ++i) {
-            //double first = std::numeric_limits<double>::quiet_NaN();
+            //double first = numeric_limits<double>::quiet_NaN();
             double first_value(0.);
             size_t first_count(0);
             for( auto e = 0; e < branches_[i].first->Parents(); e++) {
@@ -215,7 +244,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             assert(!isnan(first_value));
 
             for ( auto j = i + 1; j < n_branches; ++j) {
-                //double second = std::numeric_limits<double>::quiet_NaN();
+                //double second = numeric_limits<double>::quiet_NaN();
                 double second_value(0.);
                 uint32_t second_count(0);
                 for( auto e = 0; e < branches_[j].first->Parents(); e++) {
@@ -231,8 +260,8 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
                 assert(second_count != 0);
                 second_value /= second_count;
                 assert(!isnan(second_value));                
-                //if (first > second) std::swap(nodes_[i], nodes_[j]);
-                if (first_value > second_value) std::swap(branches_[i], branches_[j]);
+                //if (first > second) swap(nodes_[i], nodes_[j]);
+                if (first_value > second_value) swap(branches_[i], branches_[j]);
             }
         } 
     } else {
@@ -362,12 +391,11 @@ bool NodeManifold<dim>::Remove( Node<dim>* nd )
 template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
-  std::cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the IDs:\t";
+  cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the Idx:\t";
   for (auto const& node : branches_ )
-    {
-      std::cout <<"\n\t"<< parseSide(node.second) <<": "<< node.first->Idx() << "\t";
-    }
-  std::cout << std::endl;
+    cout <<"\n\t"<< node.first->Idx() <<": "<< parseSide(node.second) << "\t";
+
+  cout << endl;
 }
 
 template class NodeManifold<1U>;

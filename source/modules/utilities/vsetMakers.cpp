@@ -592,7 +592,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
   	vset.Resize( vecElementTypes, npes, epes, n_nodes, n_faces, n_interfaces );
   	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
 
-  	//-----------------------NODES
+  	//-----------------------NODES (36)
   	//define node coordinates
   	std::deque<double> px = { 0,1,3,4.5, 0,1,3,4.5, 0,1.5, 0,2,2,3,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.4,2.4,2.4,3.5,4.5, 0,1.5,3,4.5, 0,1.5,3,4.5 };
     assert( px.size() == n_nodes );
