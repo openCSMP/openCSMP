@@ -221,8 +221,8 @@ void ParallelPlateFracture_Example::Run()
     printRangeOfVariable( *model, "conductivity" );
 
 
-    // 10. Output the results to VTK and JPG files
-    // --------------------------------------------
+    // 10. Output the results to VTK files
+    // -----------------------------------
     vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    1 );
     vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          1 );
     vtk_output.OutputDataToVTK( *model, "nvelocity",      "nodal velocity",    1 );
