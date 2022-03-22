@@ -41,7 +41,7 @@ int main()
             examplesSuite.RegisterExample( new StatisticalAnalyzer_Example() );
             examplesSuite.RegisterExample( new Visitor_Example() );
             examplesSuite.RegisterExample( new DenseMatrix_Example() );
-            examplesSuite.RegisterExample( new SteadyStatePressureToVset_Example() );
+            examplesSuite.RegisterExample( new ParallelPlateFracture_Example() );
             examplesSuite.RegisterExample( new PressureDiffusion_Example() );
             examplesSuite.RegisterExample( new LinearElasticity_Example() );
             examplesSuite.RegisterExample( new TopographyDrivenFlow_Example() );

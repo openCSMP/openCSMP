@@ -142,8 +142,8 @@ void SteadyStatePressure_Example::Run()
   text_output.OutputDataAsTextColumnsNumbered( model, "conductivity", "conductivity" );
 
   JPEG_Interface jpg_output;
-
-  jpg_output.OutputDataToJPG( model, "conductivity", "conductivity", 0 );
+// undefined behaviour caused here!
+//  jpg_output.OutputDataToJPG( model, "conductivity", "conductivity", 0 );
 
 
   // 6. Building PDE_Integrator "total_pressure" by applying the PDE operator subclasses
@@ -195,8 +195,8 @@ void SteadyStatePressure_Example::Run()
   vtk_output.OutputDataToVTK( model, "nvolume-flux",   "nodal volume flux", 0 );
 
   // JPG output (only scalar variables can be visualized)
-  jpg_output.OutputDataToJPG( model, "fluid-pressure", "fluid pressure",    0 );
-  jpg_output.OutputDataToJPG( model, "volume-flux",    "volume flux",       0 );
+//  jpg_output.OutputDataToJPG( model, "fluid-pressure", "fluid pressure",    0 );
+//  jpg_output.OutputDataToJPG( model, "volume-flux",    "volume flux",       0 );
 
 
   // 8. Form a Group named "granite" in order to access
