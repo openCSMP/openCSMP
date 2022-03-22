@@ -52,17 +52,17 @@ template<uint32_t dim,class CELL>
 void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.FE()->Isoparametric() == true );
+    assert( e.UsesLocalCoordinates() == true );
 
     // initialize output matrix
     MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim>::LHS.Zero();
 
     // if the agregated finite element is a simplex, the Jacobian and element-interpolation derivative matrix is constant throughout it
-    const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
-    const bool piecewise_constant_material(this->MaterialOperandPlacement() == ELEMENT or
-                                           this->MaterialOperandPlacement() == REGION or
-                                           this->MaterialOperandPlacement() == FACE);
+    const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1 );
+    const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT or
+                                            this->MaterialOperandPlacement() == REGION or
+                                            this->MaterialOperandPlacement() == FACE );
    
     if ( is_simplex_element_type && piecewise_constant_material ) {
          const double detJ = e.dN_AtBaryCenter( B_ );
@@ -72,7 +72,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
          BT_ *= MathOperatorLHS<dim>::MTRL[0];
          // multiplying BT . B 
          BT_ *= B_;
-         // multiplying with determinant and weights (ASSUMING that these weights are all the same for simplices)
+         // multiplying with determinant and weights (ASSUMING that for simplices these weights are all the same)
          BT_ *= e.WeightAtIntegrationPoint(0) * e.IntegrationPoints() * detJ;
          MathOperatorLHS<dim>::LHS += BT_;
          return;

@@ -47,28 +47,32 @@ template<uint32_t dim,class CELL>
 void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.FE()->Isoparametric() == true );
+    assert( e.UsesLocalCoordinates() == true );
 
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+
+    const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT ||
+                                            this->MaterialOperandPlacement() == FACE    ||
+                                            this->MaterialOperandPlacement() == REGION );
+
+    const uint32_t n_nodes{ e.Nodes() }, n_ipoints{ e.IntegrationPoints() };
 
     // lumped formulation: only the midside nodes are used in the lumped approach
     if ( MathOperatorRHS<dim>::LumpedFormulation() ) 
       {
          const double volume(e.Volume()); // NT . N
          
-         if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ||
-              MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ||
-              MathOperatorRHS<dim>::MaterialOperandPlacement() == INTER_FACE)
+         if ( piecewise_constant_material )
            {
-             for ( size_t j=0U; j<e.Nodes(); j++ )
+             for ( auto j=0U; j<n_nodes; j++ )
                MathOperatorRHS<dim>::RHS[j] = 
                  (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
-                   MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
+                   MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
            {
-             for ( size_t j=0U; j<e.Nodes(); j++ )
+             for ( auto j=0U; j<n_nodes; j++ )
                MathOperatorRHS<dim>::RHS[j] = 
                  (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
@@ -77,35 +81,61 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // consistent formulation
     else
       {
-         RHS_TEMP.Resize(e.Nodes(), e.Nodes());
-         RHS_TEMP.Zero();
+         RHS_TEMP_.Resize(e.Nodes(), e.Nodes());
+         RHS_TEMP_.Zero();
             
-         for ( auto i{0}; i < e.FE()->IntegrationPoints(); i++ )
+         // if the finite element is a linear simplex element, its Jacobian and element-interpolation derivative matrix
+         // are constant throughout it
+         const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1 );
+       
+         if ( is_simplex_element_type ) {
+              // initialising the interpolation function matrix
+              e.N_AtBaryCenter( e.FE()->NRST );
+              const double detJ = e.det_JINV_AtIntegrationPoint(0);
+              // forming NT * mtrl
+              NT_.Resize(n_nodes,1U);
+              if ( piecewise_constant_material )
+                for ( auto j=0U; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
+              else {// node or integration point
+                  for ( auto i{0}; i < n_ipoints; i++ )
+                    for ( auto j=0U; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
+                }
+              // forming Wj * detJ * N
+              N_.Resize(1U,n_nodes);
+              for ( auto j=0U; j<n_nodes; j++ )
+                N_(0U,j) = e.FE()->NRST[j] * detJ * e.WeightAtIntegrationPoint(0);
+              
+              // forming the mass matrix NT op N
+              RHS_TEMP_ = NT_ * N_;
+              return;
+           }
+
+
+         // if the element is not a simplex
+         for ( auto i{0}; i < n_ipoints; i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det(e.det_JINV_AtIntegrationPoint( i ));
               // forming NT * mtrl
-              NT.Resize(e.Nodes(),1U);
-              if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or
-                   MathOperatorRHS<dim>::MaterialOperandPlacement() == REGION  or
-                   MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ) 
-                for ( size_t j=0U; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
+              NT_.Resize(n_nodes,1U);
+              if ( piecewise_constant_material )
+                for ( auto j=0U; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
               else // node or integration point                            ^^^
-                for ( size_t j=0U; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
-              // forming Wj * detJ * N                                                 ^^^
-              N.Resize(1U,e.Nodes());
-              for ( size_t j=0U; j<e.Nodes(); j++ ) N(0U,j) = e.FE()->NRST[j] * det * 
-                                               e.WeightAtIntegrationPoint(i);;
+                for ( auto j=0U; j<n_nodes; j++ ) NT_(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
+              // forming Wj * detJ * N                                                     ^^^
+              N_.Resize(1U,n_nodes);
+              for ( auto j=0U; j<n_nodes; j++ ) N_(0U,j) = e.FE()->NRST[j] * det *
+                                                           e.WeightAtIntegrationPoint(i);
               
               // forming the mass matrix NT op N
-              RHS_TEMP += NT * N;
+              RHS_TEMP_ += NT_ * N_;
            }
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
-         for ( auto j=0; j<e.Nodes(); j++ )
-           for ( auto k=0; k<e.Nodes(); k++ ) 
-             MathOperatorRHS<dim>::RHS[j] += RHS_TEMP(j,k);
+         for ( auto j=0; j<n_nodes; j++ )
+           for ( auto k=0; k<n_nodes; k++ )
+             MathOperatorRHS<dim>::RHS[j] += RHS_TEMP_(j,k);
       }
    
 } // end ComputeContribution

@@ -20,7 +20,7 @@ class NumIntegral_dNT_op_dV : public MathOperatorRHS<dim> {
     virtual NumIntegral_dNT_op_dV<dim,CELL>* clone() const { return new NumIntegral_dNT_op_dV<dim,CELL> (*this); }
     
   private:
-    DenseMatrix<DM_MIN>  B, BT; 
+    DenseMatrix<DM_MIN>  B_, BT_; 
 };
 
 } // csmp

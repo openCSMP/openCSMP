@@ -10,10 +10,10 @@ namespace csmp {
 
 template<uint32_t dim,class CELL>
 NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<dim>& pref,
-                                                           const char*             oper,
-                                                           const char*             test )
+                                                        const char*             oper,
+                                                        const char*             test )
   : MathOperatorRHS<dim>(pref,oper,test),
-    B(dim,3), BT(3,dim)
+    B_(dim,3), BT_(3,dim)
 {
     MathOperatorRHS<dim>::Name("NumIntegral_dNT_op_dV", oper, test );
     
@@ -36,49 +36,76 @@ template<uint32_t dim,class CELL>
 void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.FE()->Isoparametric() == true );
+    assert( e.UsesLocalCoordinates() == true );
 
     // initialize output matrix
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 
-    //  There is only one case, where matrial property is an element property
-    // ------------------------------------------------------------------
+    // if the finite element is a linear simplex element, its Jacobian and element-interpolation derivative matrix
+    // are constant throughout it
+    const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1 );
+    const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT ||
+                                            this->MaterialOperandPlacement() == FACE    ||
+                                            this->MaterialOperandPlacement() == REGION );
+    const uint32_t n_nodes{ e.Nodes() };
+   
+    if ( is_simplex_element_type && piecewise_constant_material ) {
+         const double detJ = e.dN_AtBaryCenter( B_ );
+         // transposing B -> BT  O.K.
+         B_.Transposed( BT_ );
+         // multiply  BT . MTRL
+         BT_ *= MathOperatorRHS<dim>::MTRL[0];
+         // multiplying BT . B
+         BT_ *= B_;
+         // multiplying with determinant and weights (ASSUMING that for simplices these weights are all the same)
+         BT_ *= e.WeightAtIntegrationPoint(0) * e.IntegrationPoints() * detJ;
+         // row sum diagonalisation of matrix into right-hand vector
+         for ( auto k=0; k < dim; k++ )
+           for ( auto j=0; j<n_nodes; j++ )
+             MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
+         return;
+      }
+
+
+    //  When this is not a simplex element but the material property is an element property
+    // ------------------------------------------------------------------------------------
     if ( this->MaterialOperandPlacement() == ELEMENT || this->MaterialOperandPlacement() == FACE )
       {
         for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) 
           {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
-             double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
+             double detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
 
              // transposing B -> BT 
-             B.Transposed( BT );
+             B_.Transposed( BT_ );
 
              // multiply  BT . MTRL
-             BT *= this->MTRL[0];
+             BT_ *= this->MTRL[0];
                  
              // multiplying with determinant and weights
-             BT *= e.WeightAtIntegrationPoint(i) * detJ; 
+             BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
 
-             // accumulating ME Gauss point integral contributions into element 
-             // contribution to global conductance matrix
-             
+             // row sum diagonalisation of matrix into right-hand vector
              for ( auto k=0; k < dim; k++ )
-                 for ( auto j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
+               for ( auto j=0; j<n_nodes; j++ )
+                 MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
           }
-      
+        return;
       }
+      
     if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
          for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ )
            {
-              double detJ = e.dN_AtIntegrationPoint( B, i, 1 );
-              B.Transposed( BT );
-              BT *= MathOperatorRHS<dim>::MTRL[i];
-              BT *= e.WeightAtIntegrationPoint(i) * detJ;
+              double detJ = e.dN_AtIntegrationPoint( B_, i, 1 );
+              B_.Transposed( BT_ );
+              BT_ *= MathOperatorRHS<dim>::MTRL[i];
+              BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
               for ( auto k=0; k < dim; k++ )
-                for ( auto j=0; j<e.Nodes(); j++ ) MathOperatorRHS<dim>::RHS[j] += BT(j,k);
+                for ( auto j=0; j<n_nodes; j++ )
+                  MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
            }
        }
 
