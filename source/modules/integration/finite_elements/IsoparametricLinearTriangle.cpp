@@ -25,7 +25,6 @@ IsoparametricLinearTriangle::IsoparametricLinearTriangle( uint32_t dimensions,
     NXY_(3,dimensions),
     JMAT_(dimensions,dimensions),
     RS_(2)
-
 {    
     dim = dimensions;
     itp = 1;
@@ -1525,8 +1524,10 @@ double  IsoparametricLinearTriangle::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         std::cerr <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
-         std::cerr << detJ << std::endl;
+         cerr <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         cerr << detJ << std::endl;
+         cerr <<"node coordinate matrix:";
+         this->XY.Out();
          throw std::range_error("IsoparametricLinearTriangle::JacobianInverse");
     }
 

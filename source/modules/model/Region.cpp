@@ -1225,7 +1225,6 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iter
 
   this->elmt_vec_.assign( start, end );
   
-  // uses vector in creation
   this->CreateNodePointerVector();
   
   this->IdentifyPerimeter();
@@ -1247,7 +1246,6 @@ size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterato
 
   this->elmt_vec_.assign( start, end );
 
-    // uses vector in creation
   this->CreateNodePointerVector();
 
   this->IdentifyPerimeter();
@@ -1441,13 +1439,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
                          feature, "placement could not be identified; REGION is not an option" );
     } // end switch
 
-  this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
+  // removing duplicate nodes (unique needs vector to be sorted)
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  
+  this->IdentifyPerimeter();
+
   this->elmt_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
     
-  this->IdentifyPerimeter();
-
   return this->elmt_vec_.size();
 
 } // end AccumulateWithinRange
@@ -1493,10 +1493,12 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
       start++;
     }
 
+  // removing duplicate nodes (unique needs vector to be sorted)
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
   this->IdentifyPerimeter();
   
-  this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
-  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
   this->elmt_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
 
@@ -1560,12 +1562,16 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
             this->node_vec_.push_back( it->N(i) );
          }
      }
+
   // removing duplicates and trimming excess memory from node vector
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
 
   this->IdentifyPerimeter();
   
+  this->elmt_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
+
   return this->elmt_vec_.size();
 
 } // end AccumulateByNumber
@@ -1622,9 +1628,8 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
     this->elmt_vec_.clear();
   }
 
+  // test whether there are consecutive duplicated elements
   sort( element_ids.begin(), element_ids.end() );
-
-  // if in debug mode, tests whether there are consecutive duplicated elements
   vector<size_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
   if ( new_end != element_ids.end() )
     element_ids.erase( new_end, element_ids.end() );
@@ -1655,6 +1660,9 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
 
   this->IdentifyPerimeter();
   
+  this->elmt_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
+
   return this->elmt_vec_.size();
 
 } // end AccumulateByNumber
@@ -1717,6 +1725,9 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
 
     this->IdentifyPerimeter();
     
+    this->elmt_vec_.shrink_to_fit();
+    this->node_vec_.shrink_to_fit();
+
     return ptrs_to_removed_elements.size();
 
  } // end RemoveByNumber
@@ -1755,6 +1766,9 @@ size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator 
 
     this->IdentifyPerimeter();
       
+    this->elmt_vec_.shrink_to_fit();
+    this->node_vec_.shrink_to_fit();
+
     return n_elements - this->elmt_vec_.size();
  
   } // end RemoveRange
@@ -1879,7 +1893,6 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
   vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
 
   this->CreateNodePointerVector();
-  establishNeighborConnectivity( this->elmt_vec_ );
   this->IdentifyPerimeter();
   this->UpdateMemberIndexes();
 

@@ -26,6 +26,7 @@
 #include "VTK_Interface.h"
 
 #include <chrono>
+#include <filesystem>
 
 // #define CSMP_MODEL_DEBUG
 

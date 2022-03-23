@@ -1916,6 +1916,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
    // -------------------------------------------------------------------
    const string check4("\nintegrityCheck: Are all the parent elements of the nodes valid?\n");
    first_call = true;
+   sort( shared_nodes.begin(), shared_nodes.end() );
    shared_nodes.erase( unique(shared_nodes.begin(), shared_nodes.end()), shared_nodes.end() );
    
    for ( const auto& nit : shared_nodes ) {

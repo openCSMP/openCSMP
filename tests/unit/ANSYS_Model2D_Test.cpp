@@ -1,7 +1,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"
-#include "meshManagementUtilities.h"
+#include "MeshManagementUtilities.h"
 
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
