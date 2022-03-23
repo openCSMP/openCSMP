@@ -260,7 +260,7 @@ bool MeshManager_Test::TestCompleteModel2D()
     // testing that the model has the right area (also checks element orientations)
     const Region<2>&  model_domain(model.Region("Model"));
     const double model_area{ 4.5 * 7. };
-    _test( model_domain.Volume() == model_area );
+    _test( approximatelyEqual(model_domain.Volume(),model_area) );
     
     // can such a model be output to VTU?
     VTU_Interface<2>  vtu_out( model );

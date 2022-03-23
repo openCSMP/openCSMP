@@ -795,7 +795,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // --------------------------------------------------
     // 4. partitioning the node vector
     // --------------------------------------------------
-    assert( this->node_vec_.size() > boundary_nodes.size() );
+    assert( this->node_vec_.size() >= boundary_nodes.size() );
     this->first_bd_node_ = this->node_vec_.size() - boundary_nodes.size();
     
     // rebuilding and sorting the node vector (noting that set nodes are already sorted)
@@ -4996,22 +4996,25 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Nod
 /// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
 PLACEMENT modelSubdomainType( const std::string& subdomain_name )
   {
-     // method isDiag.. needs upper case
+     // 1. method isDiag.. needs upper case
      if ( isDiagnosticBoxBoundaryClassifier(subdomain_name) ) return BOUNDARY;
      
      // making the search case insensitive search
      string lowercase_name;
      for ( auto& it : subdomain_name )
        lowercase_name += tolower( it );
-      
-     if ( lowercase_name.find("boundary") != string::npos )
-       return BOUNDARY;
 
-     // split boundary first because boundary is a substring of splitboundary
+     // 2. split boundary first because boundary is a substring of splitboundary
+     // (before boundaries to avoid ambiguity due to shared string 'boundary'
      if ( lowercase_name.find("splitboundary") != string::npos ||
           lowercase_name.find("split_boundary") != string::npos ||
-          lowercase_name.find("split boundary") != string::npos )
+          lowercase_name.find("split boundary") != string::npos ||
+          lowercase_name.find("split-boundary") != string::npos )
        return SPLIT_BOUNDARY;
+
+     // 3. boundaries as identified by name string
+     if ( lowercase_name.find("boundary") != string::npos )
+       return BOUNDARY;
      
      return REGION;
 

@@ -384,7 +384,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.notice( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
-                         "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
+                        "model contains disconnected mesh patches. They will be connected with SplitBoundary objects." );
 
     // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
     InputVariablesFrom( vset );
