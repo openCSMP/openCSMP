@@ -255,7 +255,7 @@ bool MeshManager_Test::TestCompleteModel2D()
     VSet<2U>       vset;
     ModelTopology  topo = test_Create_BoundarySplitBoundaryPatch( vset );
     const bool     treat_all_domains_as_regions{false};
-    Model<2>       model( topo, vset, "CSMP-variables.txt", treat_all_domains_as_regions );
+    Model<2>       model( topo, vset, "CSMP-1phase-variables.txt", treat_all_domains_as_regions );
     
     // testing that the model has the right area (also checks element orientations)
     const Region<2>&  model_domain(model.Region("Model"));

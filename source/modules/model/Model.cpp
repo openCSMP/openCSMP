@@ -2450,7 +2450,7 @@ template<uint32_t dim>
 void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  if ( this->uniqueGroupMap_.empty() ) {
+  if ( this->uniqueRegionMap_.empty() ) {
     csmp_error.notice( ERROR, "Model<dim>::Apply",
                        "cannot apply Interrelation because there is no unique group in model" );
     return;
@@ -2464,14 +2464,13 @@ void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
 
   // if "Model" is the only unique group, the interrelation is applied to it
   // else it is passed to all unique regions
-  if ( this->uniqueGroupMap_.find( region ) != this->uniqueGroupMap_.end() ) {
+  if ( this->uniqueRegionMap_.find( region ) != this->uniqueRegionMap_.end() ) {
     this->Region( region ).Apply( relation );
     return;
   }
 
-  for ( typename map<std::string, csmp::Region<dim> >::iterator
-        it = this->uniqueGroupMap_.begin(); it != this->uniqueGroupMap_.end(); it++ )
-    (*it).second.Apply( relation );
+  for ( auto& it : this->uniqueRegionMap_ )
+    it.second.Apply( relation );
 
 } // end Apply (Interrelation)
 

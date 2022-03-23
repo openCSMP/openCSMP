@@ -970,7 +970,9 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   const auto offset = mesh.Elements();
   this->elmt_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
-       Face<dim>* fptr = &(*next(mesh.FacesBegin(),idx-offset));
+       const auto face = idx - offset;
+       assert( face < mesh.Faces() );
+       Face<dim>* fptr = &(*next(mesh.FacesBegin(),face));
        assert( fptr != nullptr );
        assert( fptr->Idx() == idx );
        this->elmt_vec_.push_back( fptr );
