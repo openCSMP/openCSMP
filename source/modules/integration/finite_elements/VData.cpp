@@ -3632,7 +3632,7 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
    // 5. populating the output datastructure: map<size_t,set<pair<size_t,INTERFACE_SIDE> > >
    if ( !indexes.empty() ) indexes.clear();
    for ( auto& mit : manifold_node_clusters ) {
-        set<pair<size_t,int8_t> > vertices_with_attributes;
+        set<pair<size_t,INTERFACE_SIDE> > vertices_with_attributes;
         // for all the stored vertices
         for ( auto& sit : mit.second ) {
               auto attribute_it = manifold_vertex_classifications.find( sit );

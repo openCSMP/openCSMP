@@ -784,32 +784,49 @@ template void SplitBoundary<3>::InputNodePropertyValue( const char*, const Tenso
 template<uint32_t dim>
 void SplitBoundary<dim>::Out() const
 {
-  cout << "\nSplitBoundary<dim>::Out(): ";
-  cout << " member interfaces: interior=" << this->InteriorElements();
-  cout << ", perimeter=" << this->elmt_vec_.size() - this->InteriorElements() << ": " << endl;
+  ErrorHandler& csmp_err( ErrorHandler::Instance() );
+  cout <<"\nSplitBoundary<dim>::Out(): '"<< this->Name()<<"'";
+  cout <<"\n\t"<<"InterFace objects: interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements();
+  // TODO: output inside and outside Node objects separately
+  cout <<"\n\t"<<"Node objects: interior: " << this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
 
-  for ( auto it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
-    if ( (*it) == nullptr )
-      throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out",
-                             "member interface pointer not initialised" );
-  }
+  size_t elmt_idx{0};
+  double geom_measure{0};
+  for ( const auto& it : this->elmt_vec_ ) {
+        if ( it == nullptr ) {
+             cerr <<" interface pointer "<< elmt_idx <<" not valid.";
+             csmp_err.notice( ERROR, "SplitBoundary<dim>::Out", "'nullptr' detected" );
+          }
+        else {
+             geom_measure += it->Area();
+          }
+       elmt_idx++;
+    }
+  if constexpr( dim == 2 ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
+  if constexpr( dim == 3 ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
 
-  cout << "\n\n edge interfaces and their edges (current local numbering): " << endl;
+  cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );
   for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
-    cout << "\ninterface " << i << ": edge numbers: ";
-    for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
-  }
+      cout << "\n\t\t"<<"interface "<< i <<": edge numbers: ";
+      for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
+    }
 
-  cout << "\n\n edge nodes: " << this->node_vec_.size() - this->first_bd_node_ << " (current local numbering):" << endl;
+  cout <<"\n\n\t"<<"perimeter NodeManifold objects: "<< this->node_vec_.size() - this->first_bd_node_ <<" (current numbering):";
+  cout <<"\n\n\t";
   for ( auto i = this->first_bd_node_; i<this->node_vec_.size(); i++ ) {
-    if ( this->node_vec_[i] == nullptr )
-      throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised." );
-    else cout << this->node_vec_[i]->Idx() << " ";
-  }
-
+      if ( this->node_vec_[i] == nullptr )
+        throw csmp::Exception( ERROR, "SplitBoundary<dim>::Out", "member node pointer not initialised." );
+      else {
+          if ( this->node_vec_[i]->IsManifold() )
+            this->node_vec_[i]->Manifold()->Out();
+          else
+            cout << this->node_vec_[i]->Idx() <<" ("<< parseBoundary( this->node_vec_[i]->AtBoundary() ) <<") ";
+        }
+    }
   cout << endl;
-}
+  
+} // endf
 
 
 template class SplitBoundary<1>;

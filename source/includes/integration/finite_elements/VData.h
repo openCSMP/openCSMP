@@ -285,7 +285,7 @@ class VData {
     // PERSISTANCE (storing mesh in binary file)
     
     /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    typedef std::map<size_t,std::set<std::pair<size_t,INTERFACE_SIDE> > > vertexManifoldIndices;
 
     /// checks for collocated vertices and collects them into transfer data structure; returns number of manifolds found
     size_t ExtractNodeManifolds( vertexManifoldIndices& ) const;

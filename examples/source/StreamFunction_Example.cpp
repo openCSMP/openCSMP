@@ -167,7 +167,7 @@ rref.E(5)->CoordinateMatrix();
 DenseMatrix<DM_MIN> DATA;
 DATA.Resize(1,6);
 // nodal fluid pressure
-for ( size_t j=0; j<rref.E(5)->Nodes(); j++ ) DATA(0,j) = rref.E(5)->N(j)->Read( pf_key );
+for ( auto j=0; j<rref.E(5)->Nodes(); j++ ) DATA(0,j) = rref.E(5)->N(j)->Read( pf_key );
 rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
 
 
@@ -356,7 +356,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   // ------------------------------------------------------------------------------
   vector<ScalarVariable>  PF(10);
   ScalarVariable          K; // hydraulic conductivity
-  vector<double>        IPVF(4), NVF(10);
+  vector<double>          IPVF(4), NVF(10);
   DenseMatrix<DM_MIN>     DERIV;
   // storage for the extrapolated nodal velocities for each individual element
   // elements nodes velocity components
@@ -383,7 +383,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
 
               // getting the material properties, K and phi into the equation
               for ( auto n=0; n<(*eit)->Nodes(); n++ )
-                for ( size_t j=0; j<dim; j++ )
+                for ( auto j=0; j<dim; j++ )
                   // -DERIV because fluid flows down pressure
                   IPVF[ i*dim + j ] += PF[n]() * -DERIV(j,n) * K();
            }

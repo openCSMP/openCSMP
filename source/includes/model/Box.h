@@ -140,9 +140,9 @@ bool isBACK( BOX_BOUNDARY );
 
 /// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
 template<uint32_t dim, template<uint32_t> class CELL>
-BOX_BOUNDARY atBoundary( const CELL<dim>* const, size_t boundary_face );
+BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );
 
-/// returns whether the cell is at the model boundary; this is so if all nodes of a line or surface element are flagged boundary or one face of a volume element
+/// returns whether the cell is at the model boundary as inferred if all nodes of a line or surface element are flagged boundary or one face of a volume element is
 template<uint32_t dim, template<uint32_t> class CELL>
 bool atBoundary( const CELL<dim>* const );
 

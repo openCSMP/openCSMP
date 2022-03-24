@@ -685,13 +685,24 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
      
   // ------------------------------------------------------------------------------
-  // 8. reconstructing NodeManifolds if any
+  // 8. Constructing NodeManifolds if any
   // -------------------------------------------------------------------------------
    if ( !interfaces_.empty() ) {
        VData::vertexManifoldIndices  indexes;
        vset.ExtractNodeManifolds( indexes );
        node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
      }
+     
+#ifdef DEBUG
+if ( !interfaces_.empty() ) {
+   cerr <<"\nMeshManager: current node manifolds:\n";
+   for ( const auto& nit : nodes_ ) {
+        cerr <<" "<< nit.Idx();
+        if ( nit.IsManifold() )
+          nit.Manifold()->Out();
+     }
+  }
+#endif
 
    return true;
   
@@ -1279,7 +1290,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      if ( (*ifp).N(i,INSIDE) != (*ifp).N(i,OUTSIDE) ) {
          // 1. if both nodes are not yet manifolds
          if ( !(*ifp).N(i,INSIDE)->IsManifold() && !(*ifp).N(i,OUTSIDE)->IsManifold() ) {
-              node_manifold_manager_->NewManifold( (*ifp).N(i,INSIDE), (*ifp).N(i,OUTSIDE), ManifoldType::INTERFACE );
+              node_manifold_manager_->MergeManifolds( (*ifp).N(i,INSIDE)->Manifold(), (*ifp).N(i,OUTSIDE)->Manifold() );
               continue;
            }
          // 2. if both nodes are already manifolds, they are merged into single one
@@ -1294,12 +1305,12 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
          //    because the second is not a manifold
          if ( (*ifp).N(i,INSIDE)->IsManifold() ) {
               // the outside node is added to it
-              (*ifp).N(i,INSIDE)->Manifold()->Add( (*ifp).N(i,OUTSIDE), OUTSIDE, ManifoldType::INTERSECTION );
+              (*ifp).N(i,INSIDE)->Manifold()->Add( (*ifp).N(i,OUTSIDE), OUTSIDE );
            }
          // 4. if the outside node is already a manifold
          else if ( (*ifp).N(i,OUTSIDE)->IsManifold() ) {
               // the inside node is added to the outside nodes manifold
-              (*ifp).N(i,OUTSIDE)->Manifold()->Add( (*ifp).N(i,INSIDE), INSIDE, ManifoldType::INTERSECTION );
+              (*ifp).N(i,OUTSIDE)->Manifold()->Add( (*ifp).N(i,INSIDE), INSIDE );
            }
        }
    
@@ -1381,11 +1392,11 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
          // if we are already dealing with a manifold, the geomtric classifier is retained
-         nptr_inside->Manifold()->Add( &(*nit), new_node_side, nptr_inside->Manifold()->GeometricClassifier() );
-         (*nit).Assign( nptr_inside->Manifold() );
+         nptr_inside->Manifold()->Add( &(*nit), new_node_side );
+         (*nit).Assign( (*nptr_inside->Manifold()) );
       }
     else // a new manifold is created with the provided geometric classifier
-      node_manifold_manager_->NewManifold( nptr_inside, &(*nit), geometry );
+      node_manifold_manager_->MergeManifolds( nptr_inside->Manifold(), (*nit).Manifold() );
 
     return &(*nit);
   }

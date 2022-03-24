@@ -1,4 +1,5 @@
 #include "NodeManifold.h"
+#include "plf_colony.h"
 #include "Node.h"
 #include "Element.h"
 #include "Exception.h"
@@ -11,27 +12,26 @@ namespace csmp {
 template<uint32_t dim>
 NodeManifold<dim>::~NodeManifold()
 {
-   // disconnecting the node pointers so that no damage is done
-   for ( auto& nit : branches_ )
-     nit.first = static_cast<Node<dim>*>(nullptr);
+   // before destruction you should disconnect the nodes from the manifold, like so
+   // for ( auto& nit : branches_ )
+   //  nit.first = static_cast<Node<dim>*>(nullptr);
 }
 
 
 
 template<uint32_t dim>
-NodeManifold<dim>::NodeManifold( const vector<Node<dim>*>& nodes,
-                                 const vector<INTERFACE_SIDE>& sides,
+NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
+                                 const set<pair<size_t,INTERFACE_SIDE> >& manifold_nodes,
                                  ManifoldType classifier )
  : parent_geometry_(classifier)
 {
-    const size_t n_branches(nodes.size());
+    const size_t n_branches(manifold_nodes.size());
     assert( n_branches >= 2 );
-    assert( n_branches == sides.size() );
     branches_.reserve( n_branches );
-    for( auto i{0}; i<n_branches; ++i ) {
-         branches_.push_back( make_pair( nodes[i], sides[i] ) );
-         nodes[i]->Assign(this);
-      }
+
+    for ( const auto& nit : manifold_nodes )
+      branches_.emplace_back( make_pair( &(*next(nodes.begin(),nit.first)), nit.second ) );
+
     // sorting branches using the node pointers as keys (default of sort)
     sort( branches_.begin(), branches_.end() );
 }
@@ -46,119 +46,48 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes, ManifoldType geometry )
 {
     assert( branches_.size() >= 2 );
     for( auto& nd : branches_ )
-      nd.first->Assign(this);
+      nd.first->Assign( *this );
 }
 
 
 
-
-
-
-
-/**
-   Check whether the current topologic classification of the NodeManifold (still) makes sense
-   
-      Idea: dependent on topology there are only so many options
-      
-      @todo use more diagnostics, e.g., element types (line, surface, volume)
-      @todo use also the material IDs that come together at that node
-      @todo use initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
-*/
 template<uint32_t dim>
-ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
+NodeManifold<dim>::NodeManifold( const NodeManifold& nmf )
+ : branches_(nmf.branches_),
+   parent_geometry_(nmf.parent_geometry_)
  {
-    // diagnostics: go over all possible cases excluding the ones that are not possible
-    const ManifoldType te       = nmf.GeometricClassifier();
-    const auto collocated_nodes = nmf.Branches();
-    
-    // Manifolds in 2D models
-    // ----------------------
-    if constexpr ( dim == 2 )
-      {
-         // anywhere along a split boundary
-         if ( collocated_nodes == 2 ) {
-             // if the classification is plausible, nothing is done
-             if ( te == ManifoldType::INTERFACE ) {
-                  bool isBPOINT1{true};
-                  for ( auto i{0}; i<collocated_nodes; ++i ) {
-                       if ( nmf.N(i)->AtBoundary() == NOT ||
-                            nmf.N(i)->AtBoundary() == INTERNAL ) isBPOINT1 = false;
-                       break;
-                    }
-                  if ( isBPOINT1 ) return ManifoldType::BPOINT1;
-                  return te;
-               }
-             // current classification is probably not correct
-             return ManifoldType::NOT_CLASSIFIED;
-          }
-        // intersections of split boundaries
-        if ( collocated_nodes >= 3 ) {
-             // special case: an isolated manifold point (POINTX) like for a well
-             if ( nmf.N(0)->Neighbors() == 0 ) return ManifoldType::POINTX;
-             return ManifoldType::INTERSECTION_POINT;
-          }
-         // TODO: deal with single-point manifolds
-      } // end 2D models
+ }
 
-    // Manifolds in 3D models
-    // ----------------------
-    // extended diagnostics: checking intervening element to determine manifold type
-    if constexpr ( dim == 3 )
-      {
-        // 1. most common case: manifold is located somewhere on a split boundary
-        if ( collocated_nodes == 2 ) {
-             // classification is plausible
-             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
-             // current classification is probably not correct
-             return ManifoldType::NOT_CLASSIFIED;
-          }
-          
-        // 2. if there is a middle node which is only connected to line elements
-        if ( collocated_nodes == 2 && nmf.MIDDLE_Node() )
-          {
-             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
-             if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
 
-             const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
-             bool line_elmt_manifold{true}, surf_elmt_manifold{true};
-             const uint32_t connected_elmts = mnd_ptr->Parents();
-             
-             // in the case of a fracture manifold (we can have an endpoint...)
-             for ( auto i{0}; i<connected_elmts; ++i ) {
-                  assert( mnd_ptr->Parent(i) );
-                  if ( !mnd_ptr->Parent(i)->IsLineElement() ) line_elmt_manifold = false;
-                  if ( !mnd_ptr->Parent(i)->IsSurfaceElement() ) surf_elmt_manifold = false;
-               }
-             // classification is plausible
-             if ( line_elmt_manifold ) {
-                  if ( te == ManifoldType::POINT2 && connected_elmts == 2 ) return te;
-                  if ( te == ManifoldType::POINT3 && connected_elmts == 3 ) return te;
-               }
-             // current classification is probably not correct
-             return ManifoldType::NOT_CLASSIFIED;
-          }
-          
-        // 3. split boundary T junction
-        if ( collocated_nodes == 3 ) {
-             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT ||
-                  te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
-             else return ManifoldType::NOT_CLASSIFIED;
-          }
-        // 4. simple split boundary intersection
-        if ( collocated_nodes >= 4 ) {
-             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BINTERSECTION_POINT ) return te;
-             else return ManifoldType::NOT_CLASSIFIED;
-          }
-        // 5. multiple intersecting split boundaries
-        if ( collocated_nodes >= 5 ) {
-             if ( te == ManifoldType::MULTI_INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BPOINTX ) return te;
-             else return ManifoldType::NOT_CLASSIFIED;
-          }
-      
-      } // end 3D manifolds
-      
-    // all other cases
-    return te;
+template<uint32_t dim>
+NodeManifold<dim>::NodeManifold( NodeManifold&& nmf )
+ : branches_( move(nmf.branches_) ),
+   parent_geometry_( move(nmf.parent_geometry_) )
+ {
+ }
+
+
+
+template<uint32_t dim>
+NodeManifold<dim>& NodeManifold<dim>::operator=( const NodeManifold<dim>& nmf )
+ {
+    if ( this != &nmf ) {
+         branches_        = nmf.branches_;
+         parent_geometry_ = nmf.parent_geometry_;
+      }
+    return *this;
+ }
+ 
+ 
+
+template<uint32_t dim>
+NodeManifold<dim>& NodeManifold<dim>::operator=( NodeManifold<dim>&& nmf )
+ {
+    if ( this != &nmf ) {
+         branches_        = move(nmf.branches_);
+         parent_geometry_ = move(nmf.parent_geometry_);
+      }
+    return *this;
  }
 
 
@@ -286,9 +215,10 @@ size_t NodeManifold<dim>::Branches() const
 
 
 template<uint32_t dim>
-Node<dim>* const NodeManifold<dim>::N( size_t index ) const
+Node<dim>* const NodeManifold<dim>::N( size_t branch ) const
 {
-  return branches_[index].first;
+  assert( branch < branches_.size() );
+  return branches_[branch].first;
 }
 
 
@@ -296,6 +226,7 @@ Node<dim>* const NodeManifold<dim>::N( size_t index ) const
 template<uint32_t dim>
 INTERFACE_SIDE NodeManifold<dim>::InterFaceSide( size_t branch ) const
  {
+   assert( branch < branches_.size() );
    return branches_[branch].second;
  }
 
@@ -332,7 +263,7 @@ vector<Node<dim>*>  NodeManifold<dim>::NodesLocatedAt( INTERFACE_SIDE side ) con
 
 
 template<uint32_t dim>
-bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType geometry )
+bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -354,10 +285,10 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType ge
     // making sure that the vector does not grow by multiples of 2
     if ( branches_.capacity() == branches_.size() ) branches_.reserve( branches_.size() + 1 );
     branches_.push_back( make_pair(nd,side) );
-    nd->Assign(this);
+    nd->Assign( *this );
     
     // reviewing topology of node after insertion to see whether change is necessary
-    parent_geometry_ = consistencyCheck( *this );
+    // Do this after multiple additions: parent_geometry_ = consistencyCheck( *this );
 
     return true;
 
@@ -367,12 +298,12 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side, ManifoldType ge
 
 
 template<uint32_t dim>
-bool NodeManifold<dim>::Remove( Node<dim>* nd )
+bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
 {
    for ( auto& nit : branches_ )
      if ( nit.first == nd ) {
          // disconnecting the node from the manifold
-         nd->Assign( static_cast<NodeManifold<dim>*>(nullptr) );
+         nit.first = nullptr;
          // removing the Node entry from the branch list
          branches_.erase( remove( branches_.begin(), branches_.end(), nit ) );
          return true;
@@ -391,15 +322,130 @@ bool NodeManifold<dim>::Remove( Node<dim>* nd )
 template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
-  cout << "NodeManifold: "<< parse(parent_geometry_) <<" with nodes with the Idx:\t";
-  for (auto const& node : branches_ )
-    cout <<"\n\t"<< node.first->Idx() <<": "<< parseSide(node.second) << "\t";
-
+  cout << "\nNodeManifold: "<< parse(parent_geometry_) <<" with nodes (indices):\t";
+  assert( Branches() >= 2 );
+  for ( auto i{0}; i<Branches(); i++ ) {
+      if ( NodeManifold<dim>::N(i) )
+        cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": "<< parseSide( InterFaceSide(i) ) << "\t";
+      else
+        cerr <<"\nNodeManifold<dim>::Out: branch node pointer is a null pointer.";
+    }
   cout << endl;
 }
 
 template class NodeManifold<1U>;
 template class NodeManifold<2U>;
 template class NodeManifold<3U>;
+
+
+/**
+   Check whether the current topologic classification of the NodeManifold (still) makes sense
+   
+      Idea: dependent on topology there are only so many options
+      
+      @todo use more diagnostics, e.g., element types (line, surface, volume)
+      @todo use also the material IDs that come together at that node
+      @todo use initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
+*/
+template<uint32_t dim>
+ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
+ {
+    // diagnostics: go over all possible cases excluding the ones that are not possible
+    const ManifoldType te       = nmf.GeometricClassifier();
+    const auto collocated_nodes = nmf.Branches();
+    
+    // Manifolds in 2D models
+    // ----------------------
+    if constexpr ( dim == 2 )
+      {
+         // anywhere along a split boundary
+         if ( collocated_nodes == 2 ) {
+             // if the classification is plausible, nothing is done
+             if ( te == ManifoldType::INTERFACE ) {
+                  bool isBPOINT1{true};
+                  for ( auto i{0}; i<collocated_nodes; ++i ) {
+                       if ( nmf.N(i)->AtBoundary() == NOT ||
+                            nmf.N(i)->AtBoundary() == INTERNAL ) isBPOINT1 = false;
+                       break;
+                    }
+                  if ( isBPOINT1 ) return ManifoldType::BPOINT1;
+                  return te;
+               }
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+        // intersections of split boundaries
+        if ( collocated_nodes >= 3 ) {
+             // special case: an isolated manifold point (POINTX) like for a well
+             if ( nmf.N(0)->Neighbors() == 0 ) return ManifoldType::POINTX;
+             return ManifoldType::INTERSECTION_POINT;
+          }
+         // TODO: deal with single-point manifolds
+      } // end 2D models
+
+    // Manifolds in 3D models
+    // ----------------------
+    // extended diagnostics: checking intervening element to determine manifold type
+    if constexpr ( dim == 3 )
+      {
+        // 1. most common case: manifold is located somewhere on a split boundary
+        if ( collocated_nodes == 2 ) {
+             // classification is plausible
+             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+          
+        // 2. if there is a middle node which is only connected to line elements
+        if ( collocated_nodes == 2 && nmf.MIDDLE_Node() )
+          {
+             if ( te == ManifoldType::INTERFACE || te == ManifoldType::BEDGE || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             if ( te == ManifoldType::EDGE || te == ManifoldType::END_POINT || te == ManifoldType::INTERSECTION_POINT ) return te;
+
+             const Node<dim>* const mnd_ptr = nmf.MIDDLE_Node();
+             bool line_elmt_manifold{true}, surf_elmt_manifold{true};
+             const uint32_t connected_elmts = mnd_ptr->Parents();
+             
+             // in the case of a fracture manifold (we can have an endpoint...)
+             for ( auto i{0}; i<connected_elmts; ++i ) {
+                  assert( mnd_ptr->Parent(i) );
+                  if ( !mnd_ptr->Parent(i)->IsLineElement() ) line_elmt_manifold = false;
+                  if ( !mnd_ptr->Parent(i)->IsSurfaceElement() ) surf_elmt_manifold = false;
+               }
+             // classification is plausible
+             if ( line_elmt_manifold ) {
+                  if ( te == ManifoldType::POINT2 && connected_elmts == 2 ) return te;
+                  if ( te == ManifoldType::POINT3 && connected_elmts == 3 ) return te;
+               }
+             // current classification is probably not correct
+             return ManifoldType::NOT_CLASSIFIED;
+          }
+          
+        // 3. split boundary T junction
+        if ( collocated_nodes == 3 ) {
+             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::BINTERSECTION_POINT ||
+                  te == ManifoldType::BPOINT2 || te == ManifoldType::BPOINTX ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
+        // 4. simple split boundary intersection
+        if ( collocated_nodes >= 4 ) {
+             if ( te == ManifoldType::INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BINTERSECTION_POINT ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
+        // 5. multiple intersecting split boundaries
+        if ( collocated_nodes >= 5 ) {
+             if ( te == ManifoldType::MULTI_INTERSECTION || te == ManifoldType::POINTX || te == ManifoldType::BPOINTX ) return te;
+             else return ManifoldType::NOT_CLASSIFIED;
+          }
+      
+      } // end 3D manifolds
+      
+    // all other cases
+    return te;
+ }
+
+template ManifoldType  consistencyCheck( const NodeManifold<3>& );
+template ManifoldType  consistencyCheck( const NodeManifold<2>& );
+template ManifoldType  consistencyCheck( const NodeManifold<1>& );
 
 }// csmp

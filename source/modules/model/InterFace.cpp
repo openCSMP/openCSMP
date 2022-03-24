@@ -376,7 +376,6 @@ template<uint32_t dim>
 void InterFace<dim>::Assign( Element<dim>* const parentElement, uint32_t faceId, INTERFACE_SIDE side )
 {
   assert( parentElement != nullptr );
-  assert( side != MIDDLE );
 
   if ( side == INSIDE ) {
       innerParent_ = parentElement;
@@ -462,7 +461,7 @@ void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
 template<uint32_t dim>
 uint32_t InterFace<dim>::ConnectedNeighbors() const
 {
-  uint32_t connections( interface_connector_.size() );
+  uint32_t connections = static_cast<uint32_t>(interface_connector_.size());
   for ( auto& f : interface_connector_ )
     if ( f == nullptr ) connections--;
   return connections;
@@ -750,6 +749,7 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
   if ( side == OUTSIDE ) {
     uint32_t outside_idx = n + if_FE_nodes;
+// TODO: suspicious branching
     if ( n < if_FE_nodes )
       return node_connector_[outside_idx];
     else {
@@ -943,15 +943,15 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+  if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
+
+  if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
+
   if ( side == MIDDLE ) {
        if ( middleElement_ != nullptr ) return middleElement_->Volume();
        csmp_error.notice( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
        return numeric_limits<double>::signaling_NaN();
     }
-
-  if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
-
-  if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
 
   // error
   return std::numeric_limits<double>::signaling_NaN();

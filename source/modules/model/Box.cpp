@@ -1403,7 +1403,7 @@ static bool isIn( const set<BOX_BOUNDARY>& bflags, initializer_list<BOX_BOUNDARY
       @test OK
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
+BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
  {
     assert( eptr != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1449,11 +1449,15 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
               const BOX_BOUNDARY flag1 = (*flag_it);
               flag_it++;
               const BOX_BOUNDARY flag2 = (*flag_it);
+              // intersections between internal and external boundaries
+              if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
+              if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
+              // corner cases
               if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
               if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
-              for ( auto boundary : eflags )
+              for ( const auto& boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
               csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
@@ -1461,7 +1465,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
          // in 2D, a face can only have 2D nodes unless this is a higher order element
          else if ( eflags.size() >= 3U ) {
               // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
-              if ( eptr->FE()->OrderOfShapeFunctions() == 1 ) {
+              if ( eptr->Interpolation() == 1 ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
                    for ( auto i{0}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
@@ -1496,6 +1500,9 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
                    const BOX_BOUNDARY flag1 = (*flag_it);
                    flag_it++;
                    const BOX_BOUNDARY flag2 = (*flag_it);
+                   // intersections between internal and external boundaries
+                   if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
+                   if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
                    // if there is a corner involved, the other flag is chosen because an element face cannot span a corner
                    if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
                    if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
@@ -1519,9 +1526,9 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
     
  } // end atBoundary
 
-template BOX_BOUNDARY atBoundary( const Element<1U>* const, size_t );
-template BOX_BOUNDARY atBoundary( const Element<2U>* const, size_t  );
-template BOX_BOUNDARY atBoundary( const Element<3U>* const, size_t  );
+template BOX_BOUNDARY atBoundary( const Element<1U>* const, uint32_t );
+template BOX_BOUNDARY atBoundary( const Element<2U>* const, uint32_t  );
+template BOX_BOUNDARY atBoundary( const Element<3U>* const, uint32_t  );
 
 // TESTING
 /*
@@ -1547,7 +1554,7 @@ bool atBoundary( const CELL<dim>* const cptr )
               return false;
        }
      else { // equidimensional elements
-          const size_t n_nbors{ cptr->Neighbors() };
+          const auto n_nbors{ cptr->Neighbors() };
           for ( auto i{0}; i<n_nbors; ++i )
             if ( cptr->Neighbor(i) == nullptr )
               return true;
@@ -1561,7 +1568,6 @@ bool atBoundary( const CELL<dim>* const cptr )
 template bool atBoundary( const Element<1U>* const );
 template bool atBoundary( const Element<2U>* const );
 template bool atBoundary( const Element<3U>* const );
-
 
 
 

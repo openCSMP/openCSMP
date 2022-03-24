@@ -206,7 +206,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
-    double         Area( INTERFACE_SIDE=MIDDLE ) const;
+    double         Area( INTERFACE_SIDE=INSIDE ) const;
     
     /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;

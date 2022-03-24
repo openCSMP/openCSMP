@@ -89,7 +89,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     // node manifolds (where nodes have been multiplicated at material interfaces)
     
     /// connects the node to other topologically collocated nodes if any
-    void Assign( NodeManifold<dim>* const );
+    void Assign( NodeManifold<dim>& );
     
     /// access to manifold if any; returns nullptr if the node is not a manifold
     bool IsManifold() const;

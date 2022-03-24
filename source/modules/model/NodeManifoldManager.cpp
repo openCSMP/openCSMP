@@ -1,4 +1,5 @@
 #include "NodeManifoldManager.h"
+#include "NodeManifold.h"
 #include "ErrorHandler.h"
 #include "Node.h"
 #include "binaryReadWrite.h"
@@ -51,32 +52,20 @@ for ( auto& nit : indices ) {
     // creating the node manifolds
     // NB: node_id, connected nodes and their INTERFACE_SIDE identifiers
     //     map<size_t,set<pair<size_t,int8_t> > >
-    vector<Node<dim>*>      nodes;
-    vector<INTERFACE_SIDE>  iface_sides;
     for ( const auto& nit : indices ) {
-        const size_t n_nodes(nit.second.size());
-        nodes.reserve( n_nodes );
-        iface_sides.reserve( n_nodes );
-        for ( auto& mf_nodes : nit.second ) {
-             nodes.push_back( &(*next(mesh_nodes.begin(),mf_nodes.first)) );
-             assert( nodes.back()->Idx() == mf_nodes.first );
-             iface_sides.push_back( static_cast<INTERFACE_SIDE>(mf_nodes.second) );
-          }
+        const size_t  n_nodes(nit.second.size());
         // a manifold requires at least two nodes
-        if ( nodes.size() >=2U ) {
+        if ( n_nodes >= 2U ) {  // indices: map<size_t,set<pair<size_t,int8_t> > >
             typename plf::colony<NodeManifold<dim>>::iterator mit =
-              node_manifolds_.emplace( NodeManifold<dim>( nodes, iface_sides, ManifoldType::INTERFACE ) );
+              node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, nit.second, ManifoldType::INTERFACE ) );
             // geometric qualifier is determined through a consistency check once the manifold is in place
             (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
           }
-        // cleaning up (note that clear keeps the allocated memory!)
-        nodes.clear();
-        iface_sides.clear();
       }
       
     cout <<"\nNodeManifoldManager(custom ctor): constructed "<< node_manifolds_.size();
     cout <<" node manifolds from the input data.\n";
-    // Out();
+    Out();
     
  } // end custom constructor
 
@@ -116,22 +105,55 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
 
 
 
-
 /**
-    Creates double-node manifold with the classified meanings.
-      
-      @attention one can later add nodes to this manifold using  NodeManifold's methods
+    Tries to replace the two manifolds by a single one that connects all of  their nodes;
+    succeeds if the two share nodes. Will return true in this case;
+    Fixes all node connections.
+    
+    @return true if it was possible to merge the manifolds because they did share nodes.
+    
+    @param nmf1  if the operation is successful, the enlarged manifold is returned into the first manifold pointer, else both manifolds remain untouched.
 */
 template<uint32_t dim>
-NodeManifold<dim>* const NodeManifoldManager<dim>::NewManifold( Node<dim>* const inside,
-                                                                Node<dim>* const outside,
-                                                                ManifoldType geom )
+bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeManifold<dim>* nmf2 )
  {
-    typename plf::colony<NodeManifold<dim>>::iterator nit =
-      node_manifolds_.emplace( NodeManifold<dim>( vector<Node<dim>*>({inside,outside}),
-                                                  vector<INTERFACE_SIDE>({INSIDE,OUTSIDE}), geom ) );
-    return &(*nit);
- }
+    assert( nmf1 != nullptr );
+    assert( nmf2 != nullptr );
+    
+    // 1. do the manifolds share nodes
+    // -------------------------------
+    // (the set of their node pointers must be smaller than the sum of their branches)
+    set<const Node<dim>* const>  connected_nodes;
+    const auto n_nodes_nmf1{ nmf1->Branches() };
+    for ( auto i{0}; i<n_nodes_nmf1; ++i ) {
+         assert( nmf1->N(i) != nullptr );
+         connected_nodes.insert( nmf1->N(i) );
+      }
+    const auto n_nodes_nmf2{ nmf2->Branches() };
+    for ( auto i{0}; i<n_nodes_nmf2; ++i ) {
+         assert( nmf2->N(i) != nullptr );
+         connected_nodes.insert( nmf2->N(i) );
+      }
+    // if there are no shared nodes, merging is not possible
+    if ( (n_nodes_nmf1 + n_nodes_nmf2) >=  connected_nodes.size() ) return false;
+    
+    // 2. merging the manifolds into nmf1, deleting nmf2
+    // -------------------------------------------------
+    for ( auto i{0}; i<n_nodes_nmf2; ++i )
+      nmf1->Add( nmf2->N(i), nmf2->InterFaceSide(i) );
+     
+     // 3. reclassifying the manifold geometry
+     // --------------------------------------
+     nmf1->GeometricClassifier( consistencyCheck( *nmf1 ) );
+     
+     // 4. deleting the merged manifold 2
+     // ---------------------------------
+     node_manifolds_.erase( node_manifolds_.get_iterator(nmf2) );
+ 
+     return true;
+     
+ } // end MergeManifolds
+
 
 
 
@@ -158,9 +180,13 @@ void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_nam
    
    @attention the new Manifold does not get sorted
 */
+/* REFACTOR
 template<uint32_t dim>
 bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeManifold<dim>* mnf2 )
   {
+     assert( mnf1 != nullptr );
+     assert( mnf2 != nullptr );
+     
      // 1. making sure that the two manifolds actually share nodes
      size_t sum_nodes = mnf1->Branches() + mnf2->Branches();
      vector<pair<Node<dim>*,INTERFACE_SIDE> > combined_manifolds;
@@ -196,7 +222,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
      return true;
      
   } // end MergeManifolds
-  
+*/
  
 
 
@@ -307,7 +333,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
       //   (the entries will have been sorted by variable values)
       {
         // name of variable that was used for sorting the nodes
-        const string sort_variable(node_sorting_variable);
+        const string sort_variable{ node_sorting_variable };
         binaryFileWrite( fp, sort_variable );
         // sorted nodes
         vector<uint32_t>  manifold_node_list;
@@ -401,27 +427,25 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     // ------------------------------------
     // 3. reconstructing the node manifolds 
     // ------------------------------------
-    vector<Node<dim>*>     nodes;
-    vector<INTERFACE_SIDE> sides;
+    set<pair<size_t,INTERFACE_SIDE> > manifold_nodes;
     size_t counter(0U);
     for ( auto i{0}; i<manifolds; ++i ) {
-         const size_t n_branches( nodes_per_manifold[i] );
-         nodes.reserve( n_branches );
-         sides.reserve( n_branches );
-         for ( size_t j=0U; j<n_branches; ++j ) {
+         const auto n_branches( nodes_per_manifold[i] );
+         for ( auto j=0U; j<n_branches; ++j ) {
               assert( nodes_of_manifolds[counter] < mesh_nodes.size() );
-              nodes.push_back( &(*next(mesh_nodes.begin(),nodes_of_manifolds[counter])) );
               assert( topo_of_nodes[counter] <= OUTSIDE );
-              sides.push_back( static_cast<INTERFACE_SIDE>(topo_of_nodes[counter]) );
+              manifold_nodes.insert( make_pair( nodes_of_manifolds[counter],
+                                                static_cast<INTERFACE_SIDE>(topo_of_nodes[counter]) ) );
               counter++;
            }
          assert( manifold_topology[i] < static_cast<int8_t>(ManifoldType::NOT_CLASSIFIED) );
          const ManifoldType topology = static_cast<ManifoldType>(manifold_topology[i]) ;
-         node_manifolds_.emplace( NodeManifold<dim>( nodes, sides, topology ) );
+         node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, manifold_nodes, topology ) );
       }
     
     return current_sort_variable_;
  }
+    
     
 
 template<uint32_t dim>

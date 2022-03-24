@@ -746,9 +746,9 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
     /// mesh specs
     const size_t num_elements( vset.Elements() );
     const size_t num_nodes( vset.Vertices() );
-    size_t eid;
+    uint32_t eid;
     size_t nid;
-    size_t enodes;
+    uint32_t enodes;
 
     /// fem data
     int fem_type;

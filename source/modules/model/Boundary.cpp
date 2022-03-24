@@ -1350,7 +1350,7 @@ template<uint32_t dim>
 void Boundary<dim>::Out() const
 {
   // high-level output
-  cout << "\n" << "Boundary<" << dim << ">::Out: (" << parseBoundary( boundaryFlag_ ) << ") '" << this->Name();
+  cout << "\n"<<"Boundary<" << dim << ">::Out: (" << parseBoundary( boundaryFlag_ ) << ") '" << this->Name();
   cout << "', Face objects interior: " << this->InteriorElements() << ", perimeter: " << this->PerimeterElements() << endl;
   cout << "   Node objects interior: " << this->InteriorNodes() << ", perimeter: " << this->PerimeterNodes() << endl;
 

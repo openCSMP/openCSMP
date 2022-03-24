@@ -45,6 +45,7 @@ Node<dim>::Node( const Node<dim>& nd )
   : xyz_(nd.xyz_), idx_(nd.idx_),
     parent_element_pointers_(nd.parent_element_pointers_),
     neighbor_node_pointers_(nd.neighbor_node_pointers_),
+    manifold_(nd.manifold_),
     parent_node_indexes_(nd.parent_node_indexes_),
     at_boundary_(nd.at_boundary_)
   {
@@ -62,6 +63,7 @@ Node<dim>::Node( Node<dim>&& nd )
     idx_{nd.idx_},
     parent_element_pointers_{ move(nd.parent_element_pointers_) },
     neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
+    manifold_{ move(nd.manifold_) },
     parent_node_indexes_{ move(nd.parent_node_indexes_) },
     at_boundary_{nd.at_boundary_}
   {
@@ -93,6 +95,7 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          at_boundary_             = nd.at_boundary_;
          parent_element_pointers_ = nd.parent_element_pointers_;
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
+         manifold_                = nd.manifold_;
          parent_node_indexes_     = nd.parent_node_indexes_;
          this->LVS( move( nd.LVS() ) );
       }
@@ -116,6 +119,7 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     at_boundary_             = nd.at_boundary_;
     parent_element_pointers_ = move( nd.parent_element_pointers_ );
     neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
+    manifold_                = move( nd.manifold_ );
     parent_node_indexes_     = move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
@@ -582,7 +586,7 @@ double          Node<dim>::z() const { return xyz_[2u]; }
 
 /// access to manifold if any; returns nullptr if the node is not a manifold
 template<uint32_t dim>
-bool Node<dim>::IsManifold() const { return (manifold_ == nullptr); }
+bool Node<dim>::IsManifold() const { return (manifold_ != nullptr); }
 
 
 template<uint32_t dim>
@@ -590,10 +594,9 @@ NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
 
 
 template<uint32_t dim>
-void Node<dim>::Assign( NodeManifold<dim>* const md )
+void Node<dim>::Assign( NodeManifold<dim>& nmf )
  {
-    assert( md != nullptr );
-    manifold_ = md;
+    manifold_ = &nmf;
  }
 
 
