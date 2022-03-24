@@ -65,7 +65,7 @@ for ( auto& nit : indices ) {
       
     cout <<"\nNodeManifoldManager(custom ctor): constructed "<< node_manifolds_.size();
     cout <<" node manifolds from the input data.\n";
-    Out();
+    // Out();
     
  } // end custom constructor
 
