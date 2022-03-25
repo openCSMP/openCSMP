@@ -693,7 +693,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
      }
      
-#ifdef DEBUG
+#ifdef MESH_MANAGER_DEBUG
 if ( !interfaces_.empty() ) {
    cerr <<"\nMeshManager: current node manifolds:\n";
    for ( const auto& nit : nodes_ ) {

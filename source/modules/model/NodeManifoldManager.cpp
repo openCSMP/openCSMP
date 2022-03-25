@@ -60,6 +60,9 @@ for ( auto& nit : indices ) {
               node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, nit.second, ManifoldType::INTERFACE ) );
             // geometric qualifier is determined through a consistency check once the manifold is in place
             (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
+            // assigning the new NodeManifold to the nodes it points to
+            for ( auto i{0}; i<(*mit).Branches(); i++ )
+              (*mit).N(i)->Assign( (*mit) );
           }
       }
       
