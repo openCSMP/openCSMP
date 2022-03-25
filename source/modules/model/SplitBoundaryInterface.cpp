@@ -217,21 +217,20 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
      
   // 1. writing number of splitboundaries
   {
-     BinaryFileSectionWrite sect(fp, "SPLITBDRY");
+     BinaryFileSectionWrite sect(fp, "SPLITBDR");
   
      const uint64_t  records( this->SplitBoundaries() );
      fp.write( reinterpret_cast<const char*>(&records), sizeof(uint64_t) );
 
-     for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
+     for ( auto bit{ SplitBoundariesBegin() }; bit != SplitBoundariesEnd(); ++bit )
        {
           BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
-    
+          cout <<"'"<< (*bit).first <<"' ";
+          cout.flush();
           (*bit).second.WriteDomainIndexesToBinaryFile( fp );
-          cout << (*bit).first << " ";
           // NB: splitboundary objects have no BOX_BOUNDARY flag values because these always default to INTERNAL.
           // writing the stored variables
-            domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
-            cout << (*bit).first <<" ";
+          domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
        }
    }
 
@@ -283,7 +282,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   MeshManager<dim>& mesh( splitBoundaryComplex.Mesh() );
 
   {
-    BinaryFileSectionRead sect(fp, "SPLITBDRY");
+    BinaryFileSectionRead sect(fp, "SPLITBDR");
    
     uint64_t  records(0);  // region records
     // getting number of unique region records from file

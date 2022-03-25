@@ -604,6 +604,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
   	
   	//--------------------------NODE BOUNDARY FLAGS
     BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL}, N{NOT};
+    //                          0  1 2  3    4 5 6 7  8 9 1011121314 151617181920 212223242526 27282930  31  32 33  34
     vector<int8_t> bflags = { CNR4,U,U,CNR3, L,N,N,R, L,I, L,I,I,N,R, L,I,I,I,I,R, L,I,I,I,I,R, L,N,I,R, CNR1,B,B,CNR2 };
     assert( bflags.size() == n_nodes );
     vset.AddBFlags( bflags.begin(), bflags.end() );

@@ -16,7 +16,8 @@ namespace csmp {
 */
 template<uint32_t dim>
 Node<dim>::Node()
-    : idx_(ULONG_MAX),
+    : idx_(numeric_limits<size_t>::max()),
+      manifold_(nullptr),
       at_boundary_(NOT)
   {
   }
@@ -31,6 +32,7 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
  : LocalVariableStorage<dim,Node>(lvs),
    xyz_(pt),
    idx_(idx),
+   manifold_(nullptr),
    at_boundary_(boundary_flag)
  {
  }
@@ -60,12 +62,12 @@ Node<dim>::Node( const Node<dim>& nd )
 template<uint32_t dim>
 Node<dim>::Node( Node<dim>&& nd )
   : xyz_{ move(nd.xyz_) },
-    idx_{nd.idx_},
+    idx_{ move(nd.idx_) },
     parent_element_pointers_{ move(nd.parent_element_pointers_) },
     neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
     manifold_{ move(nd.manifold_) },
     parent_node_indexes_{ move(nd.parent_node_indexes_) },
-    at_boundary_{nd.at_boundary_}
+    at_boundary_{ move(nd.at_boundary_) }
   {
     this->LVS( move(nd.LVS()) );
   }
@@ -76,9 +78,7 @@ Node<dim>::Node( Node<dim>&& nd )
 template<uint32_t dim>
 Node<dim>::~Node()
  {
-    if ( manifold_ != nullptr )
-      manifold_->Remove( this );
-      
+//    if ( manifold_ != nullptr ) manifold_->Remove( this );
 //    cerr <<"\nNode "<< Idx() <<": called destructor.";
  }
 
@@ -542,12 +542,16 @@ void  Node<dim>::SortParents() {
 
 template<uint32_t dim>
 void  Node<dim>::Idx( size_t idx_to_assign ) const
- { idx_ = idx_to_assign; }
+ {
+    idx_ = idx_to_assign;
+ }
 
 
 template<uint32_t dim>
 size_t   Node<dim>::Idx() const
- { return idx_; }
+ {
+    return idx_;
+ }
 
 
 
@@ -801,7 +805,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
             printParents( (*first) );
           ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
 
-          return make_pair( (*shared_parents.begin()), UINT_MAX );
+          return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
        }
     if (  shared_parents.size() > 1 ) {
     
@@ -826,7 +830,7 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
          ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
 
-         return make_pair( (*shared_parents.begin()), UINT_MAX );
+         return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
       }
     
     

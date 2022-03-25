@@ -1324,7 +1324,7 @@ size_t  Face<dim>::ParentNodeNumber( size_t n ) const
      Reports the local number (0..faces-1) of the face of the inner higher-dimensional parent element that
      matches the nodes of the Face object (also in terms of the sequence of these nodes).
      
-     @return local face number of UINT_MAX if no index could be found.
+     @return local face number or max() uint if no index could be found.
 
      @attention assumes that the Face has valid nodes and its inner parent element is connected
 */

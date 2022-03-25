@@ -561,6 +561,11 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string
 		BinaryFileSectionRead sect(fp, "VSETCONN");
 		cout << "\nVSet<dim>::InputFrom: reading finite element mesh..." << endl;
 		InBinary(fp);
+    // consistency check
+    if ( SpatialDimension() != dim ) {
+        throw csmp::Exception( ERROR, "VSet<dim>::InputFrom",
+                              "mismatch between spatial dimension of VData (mesh) and VSet<(spatial) dim>.");
+      }
 	}
 
 	// 4. reading material / rocktype identifiers ('pmtrl' keys from the elements)

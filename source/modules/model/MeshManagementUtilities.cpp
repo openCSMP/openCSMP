@@ -636,7 +636,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // OUTER ELEMENT
    const auto n_nodes_outer_elmt(outer_nbor->Nodes());
    for ( auto i{0}; i<n_nodes_outer_elmt; ++i )
-     outer_elmt_nodes.insert( make_pair( outer_nbor->N(i)->Coordinate(), make_pair(UINT_MAX,i) ) );
+     outer_elmt_nodes.insert( make_pair( outer_nbor->N(i)->Coordinate(), make_pair(numeric_limits<uint32_t>::max(),i) ) );
    
    // 2. searching for the shared nodes
    const auto n_nodes_inner_elmt(inner_nbor->Nodes());
@@ -650,7 +650,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // 3. creating face_node ID search keys for the inner and outer elements
    set<uint32_t> inner_nodes, outer_nodes;
    for ( auto& it : outer_elmt_nodes )
-     if ( it.second.first != UINT_MAX ) {
+     if ( it.second.first != numeric_limits<uint32_t>::max() ) {
           inner_nodes.insert( it.second.first );
           outer_nodes.insert( it.second.second );
        }
@@ -1728,7 +1728,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
      
      // setting edge node Idx to UINT_MAX so that processed edge nodes can be detected
      // without the use of another container
-     for ( const auto& nit : edge_nodes ) nit->Idx( UINT_MAX );
+     for ( const auto& nit : edge_nodes ) nit->Idx( numeric_limits<size_t>::max() );
      
      // loop over the parent elements of the nodes
      size_t temp_idx{0};
@@ -1743,7 +1743,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
                  const auto n_node_nbors{ nit->Neighbors() };
                  for( auto j{0}; j<n_node_nbors; ++j ) {
                    assert( nit->Neighbor(j) != nullptr );
-                   if (  nit->Neighbor(j)->Idx() == UINT_MAX && // if the node has not been encountered before
+                   if (  nit->Neighbor(j)->Idx() == numeric_limits<size_t>::max() && // if the node has not been encountered before
                          binary_search( edge_nodes.begin(), edge_nodes.end(), nit->Neighbor(j) ) )
                      {
                         // we have found a volumetric element whose edge contains 2 of the edge_nodes
@@ -1767,7 +1767,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
      // the segment Idx values are assigned to the elements
      if ( find_segment_ids ) {
          for ( auto& it : segm_parents ) {
-              it.first->Idx( UINT_MAX );
+              it.first->Idx( numeric_limits<size_t>::max() );
               const auto n_segments{ it.first->Segments() };
               for ( auto segm{0}; segm < n_segments; ++segm ) {
                    vector<uint32_t> snids;

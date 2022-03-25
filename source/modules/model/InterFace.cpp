@@ -15,7 +15,7 @@ namespace csmp {
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -33,7 +33,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -55,7 +55,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),

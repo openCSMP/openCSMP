@@ -98,6 +98,9 @@ class VData {
     
     /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
     bool   operator==( const VData& ) const;
+    
+    /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
+    int SpatialDimension() const;
 
     /// returns number of nodes in the mesh
     size_t Vertices() const;

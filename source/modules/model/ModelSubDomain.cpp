@@ -4750,7 +4750,7 @@ void ModelSubDomain<dim,CELL>::WriteDomainIndexesToBinaryFile( fstream& fp ) con
     // 2. writing the interior element records of the region
     std::vector<uint32_t> IDs( distance(ElementsBegin(), PerimeterElementsBegin() ) );
     transform( ElementsBegin(), PerimeterElementsBegin(),
-               IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } );
+               IDs.begin(), []( const CELL<dim>* const ptr ){ return ptr->Idx(); } ); // tested: OK
     binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter element records of the region

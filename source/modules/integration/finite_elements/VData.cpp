@@ -9,6 +9,7 @@
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "CSMP_ElementSpecifications.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -233,6 +234,32 @@ bool  VData::IsoparametricElementMesh() const
          return false;
      return true;
  }
+
+
+/// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
+int VData::SpatialDimension() const
+ {
+   // 1. looking at the element types
+   if ( !HybridElementTypeMesh() )
+     return CSMP_ElementSpecifications::MinimumSpatialDimension( pelmt[0] );
+     
+   uint32_t spatial_dim{1};
+   for ( auto i : pelmt ) {
+        spatial_dim = max( spatial_dim, CSMP_ElementSpecifications::MinimumSpatialDimension(i) );
+        if (  spatial_dim == 3 ) break;
+     }
+     
+   // 2. taking the Z-coordinate range as an additional criterion
+   const pair<double,double>  Z_range = Z_Range();
+   if ( approximatelyEqual(Z_range.first,Z_range.second) && spatial_dim == 2 ) return 2;
+   
+   if ( spatial_dim == 3 && approximatelyEqual(Z_range.first,Z_range.second) )
+     throw csmp::Exception( ERROR, "VData::SpatialDimension",
+                           "while mesh contains volume elements, Z-coordinate range is zero");
+   return spatial_dim;
+   
+ } // end SpatialDimension
+
 
 
 

@@ -1318,7 +1318,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
              git=BoundariesBegin(); git!=BoundariesEnd(); ++git )
          {
             BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
-
+            cout <<"'"<< (*git).first <<"' ";
+            cout.flush();
             // 1.1 writing the entire connectivity structure to the binary file
             (*git).second.WriteDomainIndexesToBinaryFile( fp );
             // 1.2 writing the boundary flags
@@ -1328,7 +1329,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::OutputBoundariesToBinary( const ch
             fp.write( reinterpret_cast<const char*>(&bflag), sizeof( int8_t ) );
             // 1.3 writing the stored variables
             domainVariablesOut( fp, (*git).second, boundaryComplex.Database() );
-            cout << (*git).first <<" ";
          }
      }
 

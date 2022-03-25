@@ -340,7 +340,8 @@ bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-  fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
+  if ( elements > 0 )
+    fp.write( reinterpret_cast<const char*>(&stl_ctner[0]), bytes * elements );
 
 	return true;
 }
@@ -366,8 +367,9 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for ( typename std::deque<T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
-		fp.write(reinterpret_cast<const char*>(&(*it)), bytes);
+  if ( elements > 0 )
+	  for ( typename std::deque<T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
+		  fp.write(reinterpret_cast<const char*>(&(*it)), bytes);
 
 	return true;
 }
@@ -529,9 +531,10 @@ bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_c
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all elements
-	for ( typename std::deque<std::vector<T> >::const_iterator
-		    it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
-		binaryFileWrite(fp, (*it) );
+  if ( elements > 0 )
+    for ( typename std::deque<std::vector<T> >::const_iterator
+          it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
+      binaryFileWrite(fp, (*it) );
 
 	return true;
 }
@@ -665,13 +668,14 @@ bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
 	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
 
 	// writing all key-value pairs
-	for ( typename std::map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-    {
-      key = (*it).first;
-      val = (*it).second;
-      fp.write( reinterpret_cast<const char*>(&key), bytesM );
-      fp.write( reinterpret_cast<const char*>(&val), bytesT );
-    }
+  if ( elements > 0 )
+    for ( typename std::map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+      {
+        key = (*it).first;
+        val = (*it).second;
+        fp.write( reinterpret_cast<const char*>(&key), bytesM );
+        fp.write( reinterpret_cast<const char*>(&val), bytesT );
+      }
 	return true;
 }
 
@@ -808,13 +812,14 @@ bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner
 	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all key-value pairs
-	for ( typename std::unordered_map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-    {
-      key = (*it).first;
-      val = (*it).second;
-      fp.write( reinterpret_cast<const char*>(&key), bytesM );
-      fp.write( reinterpret_cast<const char*>(&val), bytesT );
-    }
+  if ( elements > 0 )
+    for ( typename std::unordered_map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+      {
+        key = (*it).first;
+        val = (*it).second;
+        fp.write( reinterpret_cast<const char*>(&key), bytesM );
+        fp.write( reinterpret_cast<const char*>(&val), bytesT );
+      }
 	return true;
 }
 
@@ -949,12 +954,13 @@ bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_c
 	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
 
 	// writing all elements
-	for ( typename std::map<M, std::vector<T> >::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-    {
-      val = (*it).first;
-      fp.write( reinterpret_cast<const char*>(&val), bytes );
-      binaryFileWrite(fp, (*it).second );
-    }
+  if ( elements > 0 )
+    for ( typename std::map<M, std::vector<T> >::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
+      {
+        val = (*it).first;
+        fp.write( reinterpret_cast<const char*>(&val), bytes );
+        binaryFileWrite(fp, (*it).second );
+      }
 	return true;
 }
 
