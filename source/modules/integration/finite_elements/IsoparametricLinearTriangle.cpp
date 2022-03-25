@@ -1374,7 +1374,7 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
     if ( DATA.Rows() == 1 ){
       ofs <<"SCALARS "<< var_name <<" float"<< endl;
       ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-      // matrix DATA is 1x9
+      // matrix DATA is 1 x nodes
          for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
       ofs << endl;
     }
@@ -1526,8 +1526,15 @@ double  IsoparametricLinearTriangle::JacobianInverse()
     if ( detJ <= 0 ) {
          cerr <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
          cerr << detJ << std::endl;
-         cerr <<"node coordinate matrix:";
+         cerr <<"(are the nodes perhaps numbered clockwise?), node coordinate matrix:";
          this->XY.Out();
+         string file_name{ parseFiniteElementType( ElementType() ) };
+         file_name += CurrentID();
+         // to print a scalar, the data matrix only needs 1 row
+         DenseMatrix<DM_MIN> DATA( 1, Nodes() );
+         // values increase linearly from first to last node (so that node numbering direction can be seen)
+         for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
+         OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
          throw std::range_error("IsoparametricLinearTriangle::JacobianInverse");
     }
 

@@ -2482,7 +2482,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                     const size_t node1 = plist[elmt_idx][1];
                     plist[elmt_idx][0] = node1;
                     plist[elmt_idx][1] = node0;
-                    int64_t  swap          = pfverts[elmt_idx][1];
+                    int64_t  swap        = pfverts[elmt_idx][1];
                     pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
                     pfverts[elmt_idx][0] = swap;
                  }
