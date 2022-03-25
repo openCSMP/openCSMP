@@ -29,8 +29,12 @@ NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
     assert( n_branches >= 2 );
     branches_.reserve( n_branches );
 
-    for ( const auto& nit : manifold_nodes )
-      branches_.emplace_back( make_pair( &(*next(nodes.begin(),nit.first)), nit.second ) );
+    for ( const auto& nit : manifold_nodes ) {
+         // connecting the new manifold to its nodes
+         branches_.emplace_back( make_pair( &(*next(nodes.begin(),nit.first)), nit.second ) );
+         // connecting the nodes to this new manifold
+         // DOES NOT WORK because Manifold not in node manifold manager yet:  (*next(nodes.begin(),nit.first)).Assign( *this );
+      }
 
     // sorting branches using the node pointers as keys (default of sort)
     sort( branches_.begin(), branches_.end() );

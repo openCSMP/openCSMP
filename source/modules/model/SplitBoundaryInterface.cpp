@@ -217,21 +217,20 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
      
   // 1. writing number of splitboundaries
   {
-     BinaryFileSectionWrite sect(fp, "SPLITBDRY");
+     BinaryFileSectionWrite sect(fp, "SPLITBDR");
   
      const uint64_t  records( this->SplitBoundaries() );
      fp.write( reinterpret_cast<const char*>(&records), sizeof(uint64_t) );
 
-     for ( auto bit( this->SplitBoundariesBegin() ); bit != this->SplitBoundariesEnd(); ++bit )
+     for ( auto bit{ SplitBoundariesBegin() }; bit != SplitBoundariesEnd(); ++bit )
        {
           BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
-    
+          cout <<"'"<< (*bit).first <<"' ";
+          cout.flush();
           (*bit).second.WriteDomainIndexesToBinaryFile( fp );
-          cout << (*bit).first << " ";
           // NB: splitboundary objects have no BOX_BOUNDARY flag values because these always default to INTERNAL.
           // writing the stored variables
-            domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
-            cout << (*bit).first <<" ";
+          domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
        }
    }
 
@@ -283,7 +282,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
   MeshManager<dim>& mesh( splitBoundaryComplex.Mesh() );
 
   {
-    BinaryFileSectionRead sect(fp, "SPLITBDRY");
+    BinaryFileSectionRead sect(fp, "SPLITBDR");
    
     uint64_t  records(0);  // region records
     // getting number of unique region records from file
@@ -1009,15 +1008,30 @@ Prints current SplitBoundaries to screen
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() const
-{
-  cout << "\nSplitBoundaryInterface::SplitBoundariesOut: current split boundaries in the model: " << splitBoundaryMap_.size();
-  // std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_
-  for ( auto it = splitBoundaryMap_.begin(); it != splitBoundaryMap_.end(); ++it ) {
-      cout << "\n\n\tSplitBoundary: " << (*it).first << "\n";
-      (*it).second.Out();
-    }
-  cout << endl;
-  cout.flush();
+  {
+     const SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<const SPLITBOUNDARY_COMPLEX<dim>*>(this));
+
+     cout <<"\nSplitBoundaryInterface<"<< dim <<",SplitBoundary<InterFace>>::SplitBoundariesOut: ";
+     if ( SplitBoundaries() == 0 ) {
+          cout <<"\tmodel does not contain any split boundaries.\n\n";
+          return;
+       }
+     cout <<"split boundaries of ";
+     if ( model->BoxShaped() ) cout <<"box-shaped model:\n";
+     else cout <<"irregularly-shaped model:\n";
+     for ( auto bit=SplitBoundariesBegin(); bit!=SplitBoundariesEnd(); ++bit ) {
+          cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
+          cout <<" "<< (*bit).second.Elements() <<" interfaces, ";
+          // in 3D a boudary is a surface
+           if constexpr ( dim == 3 ) {
+                cout <<"area (m2): "<< (*bit).second.Area();
+                cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
+             }
+           if constexpr ( dim == 2 )
+             cout <<" length (m): "<< (*bit).second.Area();
+       }
+     cout << endl << endl;
+     cout.flush();
 
 } // end Out
 

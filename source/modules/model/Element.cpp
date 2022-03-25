@@ -37,7 +37,7 @@ them properly.
 template<uint32_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
@@ -52,7 +52,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
                        const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
@@ -73,7 +73,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )

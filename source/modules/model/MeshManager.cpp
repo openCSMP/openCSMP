@@ -303,6 +303,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
           for ( auto j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
+          // TODO: for some reason the move constructor is not called here (copy elision, but?)
           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
         }
     }
@@ -693,7 +694,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
      }
      
-#ifdef DEBUG
+#ifdef MESH_MANAGER_DEBUG
 if ( !interfaces_.empty() ) {
    cerr <<"\nMeshManager: current node manifolds:\n";
    for ( const auto& nit : nodes_ ) {
@@ -2361,19 +2362,18 @@ template<uint32_t dim>
 void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
 {
   size_t n( 0U );
-  for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& nd ) { nd.Idx( n++ ); } );
 
   n = 0U; // resetting the counter
-  for_each( elements_.begin(), elements_.end(), [&n]( Element<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( elements_.begin(), elements_.end(), [&n]( Element<dim>& e ) { e.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( faces_.begin(), faces_.end(), [&n]( Face<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( faces_.begin(), faces_.end(), [&n]( Face<dim>& f ) { f.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( interfaces_.begin(), interfaces_.end(), [&n]( InterFace<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( interfaces_.begin(), interfaces_.end(), [&n]( InterFace<dim>& i ) { i.Idx( n++ ); } );
 
 } // end AssignUniqueNumbers
-
 
 
 

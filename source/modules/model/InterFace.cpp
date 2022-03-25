@@ -15,7 +15,7 @@ namespace csmp {
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -33,7 +33,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -55,7 +55,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -716,6 +716,45 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
 {
   return interface_connector_;
 }
+
+
+
+/**
+    END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects (perimeter InterFaces)
+    terminating within models where INSIDE and OUTSIDE nodes are identical.
+    
+    @param n_local either a node on the inside or on the outside of the interface,
+    which is the same as that on the opposite side if the node is on the perimeter (3D) or at a free-standing end point (2D) of a SplitBoundary.
+*/
+template<uint32_t dim>
+bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
+ {
+    assert( n_local < node_connector_.size() );
+    const auto n_nodes = this->FE()->Nodes();
+    
+    // if this is an inside node
+    if ( n_local < n_nodes ) {
+         // assuming that all the node pointers are valid
+         assert( this->N(n_local) != nullptr );
+         assert( this->N(n_nodes - n_local) != nullptr );
+         if ( this->N(n_local) ==  this->N(n_nodes - n_local) )
+           return true;
+      }
+
+    // if this is an outside node
+    if ( n_local >= n_nodes ) {
+         // assuming that all the node pointers are valid
+         assert( this->N(n_local) != nullptr );
+         assert( this->N(n_local - n_nodes) != nullptr );
+         if ( this->N(n_local) ==  this->N(n_local - n_nodes) )
+           return true;
+      }
+
+    return false;
+    
+ } // end
+
+
 
 
 /**

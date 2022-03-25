@@ -169,6 +169,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
+    
+    /// END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects terminating within models where INSIDE and OUTSIDE nodes are identical
+    bool IsEndPointNode( uint32_t n_local ) const;
 
     /// returns neighbor InterFace of interface
     csmp::InterFace<dim>* const Neighbor( uint32_t ) const;

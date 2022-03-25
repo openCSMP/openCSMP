@@ -269,7 +269,7 @@ bool MeshManager_Test::TestCompleteModel2D()
     // saving model to disk and bringing it back
     model.OutputToBinaryFile( model.Name() );
     set<string>  subset_variables; // all variables
-    Model<3U>    restored_model( string{model.Name()}, subset_variables );
+    Model<2U>    restored_model( string{model.Name()}, subset_variables );
     double       pmin, pmax;
     restored_model.MinMaxOf( "permeability", pmin, pmax );
     _test( approximatelyEqual(pmin,10e-13) );
