@@ -123,7 +123,8 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     // 1. do the manifolds share nodes
     // -------------------------------
     // (the set of their node pointers must be smaller than the sum of their branches)
-    set<const Node<dim>* const>  connected_nodes;
+    //set<const Node<dim>* const>  connected_nodes;
+    set<const Node<dim>*>  connected_nodes;
     const auto n_nodes_nmf1{ nmf1->Branches() };
     for ( auto i{0}; i<n_nodes_nmf1; ++i ) {
          assert( nmf1->N(i) != nullptr );

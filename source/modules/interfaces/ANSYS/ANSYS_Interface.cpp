@@ -1302,7 +1302,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
     const size_t   nodes(vset.Vertices());
     for ( size_t i=0; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
-         if ( ival < min29 || ival > zero ) {
+         if ( ival < min29 ) {
               csmp_error.notice( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
               ival = IRREGULAR;
            }
@@ -1472,7 +1472,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     
     if ( entries != n_pfverts_entries_expected ) {
          std::cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt");
+         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt; will be replaced automatically");
       }
     if ( csmp_error.Verbose() ) {
          std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
