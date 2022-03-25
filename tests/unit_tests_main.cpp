@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-//#define CATCH_CONFIG_RUNNER
-//#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
+#define CATCH_CONFIG_RUNNER
+#define RUNNING_UNDER_CATCH // read: http://hiltmon.com/blog/2014/10/26/simple-c-plus-plus-testing-with-catch-in-xcode/ tutorial how to use with XCode
 
 #include "Test.h" // includes catch.hpp
 #include "TestSuite.h"

@@ -1300,7 +1300,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         cout.flush();
     }
     int32_t        ival;
-    const int32_t  min29(MULTIPLE_BOUNDARIES), zero(NOT);
+    const int32_t  min29(MULTIPLE_BOUNDARIES);
     const size_t   nodes(vset.Vertices());
     size_t         flag_value_errors{0U};
     for ( size_t i=0; i<nodes; i++ ){
@@ -1479,8 +1479,13 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX );
     
     if ( entries != n_pfverts_entries_expected ) {
+<<<<<<< HEAD
          cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
          csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt");
+=======
+         std::cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
+         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt; will be replaced automatically");
+>>>>>>> 0bf23b0a96670a13193d296206d558a329272f04
       }
     if ( csmp_error.Verbose() ) {
          cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;
