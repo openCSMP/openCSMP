@@ -280,7 +280,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   cout << "input VSet contains the following finite element types:\n\t";
   for ( typename set<CSMP_FEM_TYPE>::const_iterator
         iit = input_etypes.begin(); iit != input_etypes.end(); iit++ ) {
-      cerr << parseFiniteElementType( (*iit) ) << "  ";
+      cout << parseFiniteElementType( (*iit) ) << "  ";
       if ( !fem_manager_.ContainsElementType( *iit ) ) {
         cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( *iit ) << endl;
         fem_manager_.Out();

@@ -2468,7 +2468,9 @@ size_t VData::RenumberElementsCounterClockwise2D()
           // NB: in line elements the element neighbor also is opposite to the node with the same number, e.g.,
           //     [nd0]-line element0-[nd1]-line element1-[nd2] -> elm1 1 is opposite to nd0
           bool end_of_polyline(false);
-          while ( end_of_polyline == false )
+          const size_t chain_length = polylines.size();
+          size_t line_segment_counter{0U};
+          while ( end_of_polyline == false && line_segment_counter < chain_length )
             {
                // is the neighbor element is correctly oriented its first node will be shared with the second node of the previous line element
                assert( pfverts[elmt_idx][1] >= 0 );
@@ -2492,6 +2494,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                // exit condition (if both nodes od line element are o the BOX_BOUNDARY)
                if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 )
                  end_of_polyline = true;
+               line_segment_counter++;
             }
             
        } // for line_elements
