@@ -541,18 +541,19 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
           {
             // identifying the boundary faces and their nodes
             // (each face potentially has a neighbor element)
-            long  nbors_that_belong_to_group(eit->Neighbors());
-            for (auto i = 0U; i<eit->Faces(); i++)
+            auto nbors_that_belong_to_group{ eit->Neighbors() };
+            const auto n_faces{ eit->Faces() };
+            for ( auto i{0U}; i<n_faces; i++ )
               // if the face is at a model boundary or has a neighbor that does not belong to the region
-              if ( eit->Neighbor(i) == nullptr ||
-                  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i)) )
+              if ( !eit->Neighbor(i) || !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i)) )
                 {
                   // boundary faces
                   boundary_faces.insert( make_pair( eit, i ) );
                   // boundary nodes
                   assert( eit->FE() != nullptr );
                   eit->FE()->NodesOfFace(i, fnids);
-                  for ( auto j=0U; j<fnids.size(); ++j ) {
+                  const auto n_face_nodes{ fnids.size() };
+                  for ( auto j{0U}; j<n_face_nodes; ++j ) {
                        assert( eit->N( fnids[j] ) );
                        boundary_nodes.insert( eit->N( fnids[j] ) );
                     }
@@ -589,22 +590,25 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
               if ( parseFiniteElementDimension( eit->FE_Type() ) == elmt_dim.second )
                 {
                    // creating a subset with their nodes
-                   for ( auto i{0}; i<eit->Nodes(); ++i ) {
+                   const auto n_nodes{ eit->Nodes() };
+                   for ( auto i{0U}; i<n_nodes; ++i ) {
                         assert( eit->N(i) != nullptr );
                         highest_dim_elmt_nodes.insert( eit->N(i) );
                      }
                    // if the element has faces that lie on the region boundary
                    // it is considered a boudary element
                    long  nbors_that_belong_to_group(eit->Neighbors());
-                   for ( auto i{0}; i<eit->Faces(); ++i )
+                   const auto n_faces{ eit->Faces() };
+                   for ( auto i{0U}; i<n_faces; ++i )
                      // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
-                     if ( eit->Neighbor(i) == nullptr        or  !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i) ) )
+                     if ( !eit->Neighbor(i) || !binary_search( this->elmt_vec_.begin(), this->elmt_vec_.end(), eit->Neighbor(i) ) )
                        {
                           // the element pointer and the face number are used to create a unique key for the discovered boundary face
                           boundary_faces.insert( make_pair( eit, i ) );
                           // recording the nodes of the boundary face as boundary nodes
                           eit->FE()->NodesOfFace( i, fnids );
-                          for ( size_t j=0U; j<fnids.size(); ++j )
+                          const auto n_face_nodes{ fnids.size() };
+                          for ( size_t j=0U; j<n_face_nodes; ++j )
                             boundary_nodes.insert( eit->N(fnids[j]) );
 
                           nbors_that_belong_to_group--;
@@ -627,10 +631,12 @@ cout.flush();
          // 1.3  processing lower dimensional elements and their nodes in the subdomain
          // ---------------------------------------------------------------------------
          // 1.3.1 nodes that are not contained in the higher-dimensional element subset are identified as extra boundary node
-         for ( auto& it : lesser_dim_elmts )
-           for ( auto i{0}; i<it->Nodes(); ++i )
-             if ( highest_dim_elmt_nodes.find( it->N(i) ) == highest_dim_elmt_nodes.end() )
-               boundary_nodes.insert( it->N(i) );
+         for ( auto& it : lesser_dim_elmts ) {
+              const auto n_nodes{ it->Nodes() };
+              for ( auto i{0U}; i<n_nodes; ++i )
+                if ( highest_dim_elmt_nodes.find( it->N(i) ) == highest_dim_elmt_nodes.end() )
+                  boundary_nodes.insert( it->N(i) );
+           }
 
          // 1.3.2 finding the lesser dimensional elements on the region boundary
          set<CELL<dim>*> lesser_dim_elmts_detached; // to distinguish stand-alone lower dimensional mesh
@@ -649,9 +655,9 @@ cout.flush();
               // if individual nodes stick out the parent element sticks out as well.
               if ( exterior_nodes >= 1U ) {
                    // adding boundary elements and boundary faces
-                   for ( auto i{0}; i<(*it)->Faces(); ++i )
-                     if ( (*it)->Neighbor(i) == nullptr  or
-                          lesser_dim_elmts.find( static_cast<CELL<dim>*>((*it)->Neighbor(i)) ) == lesser_dim_elmts.end() ) {
+                   const auto n_faces{ (*it)->Faces() };
+                   for ( auto i{0U}; i<n_faces; ++i )
+                     if ( !(*it)->Neighbor(i) || lesser_dim_elmts.find( static_cast<CELL<dim>*>((*it)->Neighbor(i)) ) == lesser_dim_elmts.end() ) {
                           // the element is a boundary element that sticks out of the region
                           boundary_elmts.insert( (*it) );
                           boundary_faces.insert( make_pair( (*it), i ) );
@@ -668,7 +674,8 @@ cout.flush();
               else {
                    // line elements (assuming that the faces correspond to the nodes)
                    if ( (*it)->IsLineElement() ) {
-                        for ( auto i{0}; i<(*it)->Nodes(); ++i )
+                        const auto n_nodes{ (*it)->Nodes() };
+                        for ( auto i{0}; i<n_nodes; ++i )
                           // if the node is a boundary noode
                           if ( boundary_nodes.find( (*it)->N(i) ) != boundary_nodes.end() ) {
                                boundary_elmts.insert( (*it) );
@@ -679,14 +686,16 @@ cout.flush();
                    // surface elements (this will only be possible in a 3D model) are on the boundary
                    // if they share at least one face with it
                    else {
-                        for ( auto i{0}; i<(*it)->Faces(); ++i ) {
+                        const auto n_faces{ (*it)->Faces() };
+                        for ( auto i{0}; i<n_faces; ++i ) {
                              (*it)->FE()->NodesOfFace( i, fnids );
-                            size_t  bnodes(0U);
-                            for ( size_t j=0U; j<fnids.size(); ++j )
+                            size_t  bnodes{0U};
+                            const auto n_face_nodes{ fnids.size() };
+                            for ( auto j{0U}; j<n_face_nodes; ++j )
                               if ( boundary_nodes.find( (*it)->N(fnids[j]) ) != boundary_nodes.end() )
                                 bnodes++;
                             // if all the nodes of at least one face lie at the boundary, so does the element
-                            if ( bnodes == fnids.size() ) {
+                            if ( bnodes == n_face_nodes ) {
                                  boundary_elmts.insert( (*it) );
                                  // boundary faces
                                  boundary_faces.insert( make_pair( (*it), i ) );
@@ -740,7 +749,7 @@ cout.flush();
 // TESTING - is there an element with a boundary face that is not in the boundary element vector and vice versa
 bool no_error_yet(true);
 set<CELL<dim>*> elmts_with_bfaces;
-for ( typename set<pair<CELL<dim>*,size_t> >::const_iterator it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
+for ( auto it=boundary_faces.begin(); it!=boundary_faces.end(); ++it ) {
       if ( boundary_elmts.find( (*it).first ) == boundary_elmts.end() ) {
            if ( no_error_yet ) {
                 cerr <<"\nboundary face parent elements vs. boundary elements:\n";
@@ -793,7 +802,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
 
 
     // --------------------------------------------------
-    // 4. partitioning the node vector
+    // 4. building and partitioning the node vector
     // --------------------------------------------------
     assert( this->node_vec_.size() >= boundary_nodes.size() );
     this->first_bd_node_ = this->node_vec_.size() - boundary_nodes.size();
@@ -801,10 +810,10 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // rebuilding and sorting the node vector (noting that set nodes are already sorted)
     // ---------------------------------------------------------------------------------
     sort( this->node_vec_.begin(), this->node_vec_.end() );
-    // a temp vector is created
+    // a temporary new node vector is created
     vector<csmp::Node<dim>*>  temp;
     temp.reserve(this->node_vec_.size());
-    // the interior nodes are inserted
+    // all nodes that are not in the boundary node vector are considered as interior nodes
     for ( const auto& nit : this->node_vec_ ) {
           assert( nit );
           if ( boundary_nodes.find(nit) == boundary_nodes.end() )

@@ -1479,13 +1479,9 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX );
     
     if ( entries != n_pfverts_entries_expected ) {
-<<<<<<< HEAD
          cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt");
-=======
-         std::cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt; will be replaced automatically");
->>>>>>> 0bf23b0a96670a13193d296206d558a329272f04
+         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
+                           "neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced");
       }
     if ( csmp_error.Verbose() ) {
          cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;

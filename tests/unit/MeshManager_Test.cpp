@@ -272,11 +272,11 @@ bool MeshManager_Test::TestCompleteModel2D()
     Model<2U>    restored_model( string{model.Name()}, subset_variables );
     double       pmin, pmax;
     restored_model.MinMaxOf( "permeability", pmin, pmax );
-    _test( approximatelyEqual(pmin,10e-13) );
-    _test( approximatelyEqual(pmax,10e-12) );
+    _test( approximatelyEqual(pmin,1.0e-13) );
+    _test( approximatelyEqual(pmax,1.0e-12) );
     restored_model.MinMaxOf( "node number", pmin, pmax );
     _test( approximatelyEqual(pmin,0) );
-    _test( approximatelyEqual(pmax,vset.Vertices()) );
+    _test( approximatelyEqual(pmax,vset.Vertices()-1U) );
     
     return true;
     
