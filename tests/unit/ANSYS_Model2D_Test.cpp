@@ -213,18 +213,18 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
           n_missing_nbors++;
     _test( n_missing_nbors <= contiguous );
 
-    // 4. getting pointers to the elements at the end of the line-element sequence and checking these elements
+    // 4. getting pointers to the elements at the opposite ends of the line-element sequence and checking these elements
     // interface 1
     {
       auto eit1{ *interface1.PerimeterElementsBegin() };
-      auto eit2{ &(*next(eit1,1)) };
+      auto eit2{ (*next(interface1.ElementsEnd(),-1)) };
       _test( eit1->ConnectedNeighbors() == 1 );
       _test( eit2->ConnectedNeighbors() == 1 );
       // establishing the direction in which the line-element sequence is to be traversed
       // (perimeter element 1 is expected to be at beginning)
       bool at_end{false};
       if ( eit1->Neighbor(0) == nullptr ) {
-          _test( eit1->N(1)->AtBoundary() != NOT  );
+          _test( eit1->N(1)->AtBoundary() != NOT  ); // fail
           at_end = true;
         }
       else _test( eit1->N(0)->AtBoundary() != NOT  );
@@ -232,9 +232,9 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     // interface 2
     {
       auto eit1{ *interface2.PerimeterElementsBegin() };
-      auto eit2{ &(*next(eit1,1)) };
+      auto eit2{ (*next(interface1.ElementsEnd(),-1)) };
       _test( eit1->ConnectedNeighbors() == 1 );
-      _test( eit2->ConnectedNeighbors() == 1 );
+      _test( eit2->ConnectedNeighbors() == 1 ); 
       // establishing the direction in which the line-element sequence is to be traversed
       // (perimeter element 1 is expected to be at beginning)
       bool at_end{false};
@@ -251,7 +251,7 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
       // interface 1
       const auto n_elmts{ interface1.Elements() };
       auto eit1{ *interface1.PerimeterElementsBegin() }; // one end
-      auto eit2{ &(*next(eit1,1)) };                     // opposite end
+      auto eit2{ (*next(interface1.ElementsEnd(),-1)) }; // opposite end
       bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
     
       interface1.RenumberNodes();
@@ -280,7 +280,7 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
       // interface2
       const auto n_elmts{ interface2.Elements() };
       auto eit1{ *interface2.PerimeterElementsBegin() }; // one end
-      auto eit2{ &(*next(eit1,1)) };                     // opposite end
+      auto eit2{ (*next(interface1.ElementsEnd(),-1)) }; // opposite end
       bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
     
       interface2.RenumberNodes();
