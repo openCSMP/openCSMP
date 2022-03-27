@@ -216,16 +216,16 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( uint32_t segm_id, std::v
 */
 void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
-    if ( face_id > 1U )
-      std::cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: There are only 2 faces present."<< std::endl;
+    assert( face_id <= 1U );
     fnids.resize(1U);
-    fnids[0] = face_id;
+    fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
 
 
 vector<uint32_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
-    assert( face_id <= 1 );
+    assert( face_id <= 1U );
+    if ( face_id == 1U ) return vector<uint32_t>{0U};
     return vector<uint32_t>{face_id};
  }
 

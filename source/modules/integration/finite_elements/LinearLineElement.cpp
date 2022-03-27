@@ -63,19 +63,19 @@ void LinearLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>&
  }
 
 
-/// SKM fixed 10/6/2014
+/// the Face of a line element is located opposite to the node with the same number
 void  LinearLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
-    if ( face_id > 1U )
-      std::cerr <<"\nLinearLineElement::NodesOfFace: There are only 2 faces present, corresponding to the nodes."<< std::endl;
+    assert( face_id <= 1 );
     fnids.resize(1U);
-    fnids[0] = face_id;
+    fnids[0] = ( face_id == 0U ) ? 1U : 0U;
  }
 
 
 vector<uint32_t>  LinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
+    if ( face_id == 1U ) return vector<uint32_t>{0U};
     return vector<uint32_t>{face_id};
  }
 

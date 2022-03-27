@@ -232,15 +232,15 @@ void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vect
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Conventions: 
        - the faces have only a single node
-       - node 0 corresponds to first face 0
-       - node 1 corresponds to second face 1
+       - node 0 corresponds to first face 0 opposite to it
+       - node 1 corresponds to second face 1 opposite to node 1
 */
 void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
                                                    vector<uint32_t>& fnids ) const
  {
     assert( face_id <= 1U );
     fnids.resize(1U);
-    fnids[0] = face_id;
+    fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
 
 
@@ -248,6 +248,7 @@ void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
 vector<uint32_t>  IsoparametricLinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
+    if ( face_id == 1U ) return vector<uint32_t>{0U};
     return vector<uint32_t>{face_id};
  }
 

@@ -196,7 +196,24 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     _test( interface2.PerimeterElements() == 2 );
     _test( interface1.PerimeterNodes() == 2 );
     _test( interface2.PerimeterNodes() == 2 );
-    // getting pointers to the elements at the end of the line-element sequence
+    
+    // 3. Are the regions contiguous (all elements are interconnected except for those at the end
+    int contiguous{2}, n_missing_nbors{0};
+    // interface 1
+    for ( auto it=interface1.ElementsBegin(); it!=interface1.ElementsEnd(); ++it )
+      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+        if ( (*it)->Neighbor(i) == nullptr )
+          n_missing_nbors++;
+    _test( n_missing_nbors <= contiguous );
+    // interface 2
+    n_missing_nbors = 0;
+    for ( auto it=interface2.ElementsBegin(); it!=interface2.ElementsEnd(); ++it )
+      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+        if ( (*it)->Neighbor(i) == nullptr )
+          n_missing_nbors++;
+    _test( n_missing_nbors <= contiguous );
+
+    // 4. getting pointers to the elements at the end of the line-element sequence and checking these elements
     // interface 1
     {
       auto eit1{ *interface1.PerimeterElementsBegin() };
@@ -228,9 +245,8 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
       else _test( eit1->N(0)->AtBoundary() != NOT  );
     }
     
-    // 3. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
-
-    // traversing until end is discovered, but terminating after at most as many steps that the region has elements
+    // 5. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
+    //    (traversing until end is discovered, but terminating after at most as many steps that the region has elements)
     {
       // interface 1
       const auto n_elmts{ interface1.Elements() };
