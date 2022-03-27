@@ -564,6 +564,9 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
 
 
 
+
+
+
 /// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary
 ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
  {

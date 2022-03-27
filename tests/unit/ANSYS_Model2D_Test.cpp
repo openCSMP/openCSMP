@@ -128,7 +128,14 @@ void ANSYS_Model2D_Test::run()
     ArrayVariable avBin( "nodal array", modelBinIn1.Database() );
     (*modelBinIn1.Region("Model").NodesBegin())->Read( nodalArrayKey, avBin );
     _test( avBin == av );
-  }
+    
+    // ADVANCED FUNCTIONALITY TESTS in relation to ANSYS models
+    // --------------------------------------------------------
+    // SKM (27/3/22)
+    // assunming that the line-element connectivity was rebuilt when the model was created
+    Test_CreateConsistentLineElementOrientations2D();
+    
+  } // end run
   
   
   
@@ -172,5 +179,115 @@ void ANSYS_Model2D_Test::run()
       
  } // end create_ANSYS2D_Model
  
+ 
+
+
+void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
+ {
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. accessing the line-element regions representing the boundaries between layers
+    Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    
+    // 2. The endpoints of these regions must be at the vertical model boundaries
+    _test( interface1.PerimeterElements() == 2 );
+    _test( interface2.PerimeterElements() == 2 );
+    _test( interface1.PerimeterNodes() == 2 );
+    _test( interface2.PerimeterNodes() == 2 );
+    // getting pointers to the elements at the end of the line-element sequence
+    // interface 1
+    {
+      auto eit1{ *interface1.PerimeterElementsBegin() };
+      auto eit2{ &(*next(eit1,1)) };
+      _test( eit1->ConnectedNeighbors() == 1 );
+      _test( eit2->ConnectedNeighbors() == 1 );
+      // establishing the direction in which the line-element sequence is to be traversed
+      // (perimeter element 1 is expected to be at beginning)
+      bool at_end{false};
+      if ( eit1->Neighbor(0) == nullptr ) {
+          _test( eit1->N(1)->AtBoundary() != NOT  );
+          at_end = true;
+        }
+      else _test( eit1->N(0)->AtBoundary() != NOT  );
+    }
+    // interface 2
+    {
+      auto eit1{ *interface2.PerimeterElementsBegin() };
+      auto eit2{ &(*next(eit1,1)) };
+      _test( eit1->ConnectedNeighbors() == 1 );
+      _test( eit2->ConnectedNeighbors() == 1 );
+      // establishing the direction in which the line-element sequence is to be traversed
+      // (perimeter element 1 is expected to be at beginning)
+      bool at_end{false};
+      if ( eit1->Neighbor(0) == nullptr ) {
+          _test( eit1->N(1)->AtBoundary() != NOT  );
+          at_end = true;
+        }
+      else _test( eit1->N(0)->AtBoundary() != NOT  );
+    }
+    
+    // 3. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
+
+    // traversing until end is discovered, but terminating after at most as many steps that the region has elements
+    {
+      // interface 1
+      const auto n_elmts{ interface1.Elements() };
+      auto eit1{ *interface1.PerimeterElementsBegin() }; // one end
+      auto eit2{ &(*next(eit1,1)) };                     // opposite end
+      bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
+    
+      interface1.RenumberNodes();
+      Element<2>* e_curr = eit1;
+      int         steps{0};
+      
+      if ( traverse_forward ) {
+           while ( e_curr != eit2 && steps < n_elmts ) {
+                assert( e_curr->Neighbor(0) != nullptr );
+                _test( e_curr->N(1)->Idx() == e_curr->Neighbor(0)->N(0)->Idx() );
+                e_curr = e_curr->Neighbor(0);
+                steps++;
+             }
+        }
+      else { // traverse backwards
+           while ( e_curr != eit2 && steps < n_elmts ) {
+                assert( e_curr->Neighbor(1) != nullptr );
+                _test( e_curr->N(0)->Idx() == e_curr->Neighbor(1)->N(1)->Idx() );
+                e_curr = e_curr->Neighbor(1);
+                steps++;
+             }
+        }
+    }
+    // ----------------------------------------------------------------------------
+    {
+      // interface2
+      const auto n_elmts{ interface2.Elements() };
+      auto eit1{ *interface2.PerimeterElementsBegin() }; // one end
+      auto eit2{ &(*next(eit1,1)) };                     // opposite end
+      bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
+    
+      interface2.RenumberNodes();
+      Element<2>* e_curr = eit1;
+      int         steps{0};
+      
+      if ( traverse_forward ) {
+           while ( e_curr != eit2 && steps < n_elmts ) {
+                assert( e_curr->Neighbor(0) != nullptr );
+                _test( e_curr->N(1)->Idx() == e_curr->Neighbor(0)->N(0)->Idx() );
+                steps++;
+             }
+        }
+      else { // traverse backwards
+           while ( e_curr != eit2 && steps < n_elmts ) {
+                assert( e_curr->Neighbor(1) != nullptr );
+                _test( e_curr->N(0)->Idx() == e_curr->Neighbor(1)->N(1)->Idx() );
+                steps++;
+             }
+        }
+    }
+    
+ } // end Test_CreateConsistentLineElementOrientations2D
+
 
 } // csmp

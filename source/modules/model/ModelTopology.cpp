@@ -1965,7 +1965,7 @@ void  ModelTopology::RenumberCells( const map<size_t,size_t>& eid_mapping )
     @param check_range allows user to check the newly generated range again.
 */
 template<uint32_t dim>
-void  ModelTopology::RenumberCells(csmp::VSet<dim>& vset, bool check_range )
+void  ModelTopology::RenumberCells( VSet<dim>& vset, bool check_range )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

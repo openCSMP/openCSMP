@@ -33,7 +33,7 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
     //    eliminating unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
  
-    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the line element orientations right
+    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the neighbor connectivity right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
 
