@@ -2463,13 +2463,17 @@ size_t VData::RenumberElementsCounterClockwise2D()
                 continue;
              }
 
-           // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
-           BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>( pfverts[elmt_idx][1] );
-           // its neighbor-free side must be at an internal or external boundary
+           // checking the node flagging
+           int bflag{MULTIPLE}, no_nbor{0};
+           if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
+           else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
+           // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
            if ( bflag >= 0 ) {
                 cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
-                cerr <<"'pfvert["<< elmt_idx <<"][1]' entry for neighbour element 1: "<< pfverts[elmt_idx][1];
-                cerr <<" not correct: ["<< pfverts[elmt_idx][0] <<","<< pfverts[elmt_idx][1] <<"].";
+                cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
+                cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
+                cerr <<" should be equivalent to boundary flag of the adjacent node: ";
+                cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
              }
            assert( bflag >= MULTIPLE );
 
@@ -2545,7 +2549,6 @@ size_t VData::RenumberElementsCounterClockwise2D()
       //       - for the ones surrounding the model the one consistent with the counter-clockwise numbering of the higher-dim. ele is stored
       //       - the only line elements left now, are those forming part of loops, these must be consistent in their orientation with
       //         the faces of the elements that they surround.
-      // TODO: the sum of the elements in polylines must be equivalent to the total number of line elements in the model
       if ( !polylines.empty() ) {
           cout <<"\n\nVData::CreateConsistentLineElementOrientations2D: processed "<< polylines.size() <<" polylines with the line elements:"<< endl;
           for ( auto it : polylines ) {
