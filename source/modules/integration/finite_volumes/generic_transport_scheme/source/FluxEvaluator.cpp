@@ -46,7 +46,7 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Element<dim>* cons
    // computing total facet fluxes by projecting vt onto facet normals
    const uint32_t ip1{0};
    const auto facets(eptr->FV()->Facets());
-   for ( auto j=0U; j<facets; ++j ) {
+   for ( auto j{0U}; j<facets; ++j ) {
         eptr->Read( j, ip1, User()->Notation.key_fn, nrml_ );
         // projection (dot product)
         double facet_flux = nrml_[0] * vD_[0];
@@ -153,7 +153,7 @@ void FluxEvaluator<dim,USER>::Advective_O1_FluxesAndBalances( Node<dim>* const n
         const double thickness = eptr->Read( User()->Notation.key_THI );
 
         const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( auto i{0}; i<sector_facets; i++ )
+        for ( auto i{0U}; i<sector_facets; i++ )
           {
              const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
              const auto inside_node(eptr->FV()->InsideNode(iFacet));
@@ -283,7 +283,7 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxes( Element<dim>* const eptr 
 
    // computing total facet fluxes by projecting vt onto facet normals
    const auto facets(eptr->FV()->Facets());
-   for ( auto j=0U; j<facets; ++j ) {
+   for ( auto j{0U}; j<facets; ++j ) {
          // reading the facet flux
         double facet_flux = eptr->Read( j, 0U, User()->Notation.key_ff );
         // establishing the upstream direction
@@ -325,7 +325,7 @@ void FluxEvaluator<dim,USER>::TransportVariableFluxesAndBalances( Element<dim>* 
 
    // computing total facet fluxes by projecting vt onto facet normals
    const auto facets(eptr->FV()->Facets());
-   for ( auto j=0U; j<facets; ++j ) {
+   for ( auto j{0U}; j<facets; ++j ) {
          // reading the facet flux
         double facet_flux = eptr->Read( j, 0U, User()->Notation.key_ff );
         // establishing the upstream direction
@@ -377,11 +377,11 @@ void FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const nptr
      double flux_C0_products(0.);
  
      const auto parent_elements(nptr->Parents());
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
            const Element<dim>* const eptr = nptr->Parent(i);
            const auto sector_node      = nptr->ParentNodeNumber(i);
            const auto sector_facets(eptr->FV()->FacetsPerSector(sector_node));
-           for ( auto j=0U; j<sector_facets; ++j ) {
+           for ( auto j{0U}; j<sector_facets; ++j ) {
                const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -410,11 +410,11 @@ double FluxEvaluator<dim,USER>::FluxBalancesFromFacetFluxes( Node<dim>* const np
      double flux_balance(0.), flux_C0_products(0.);
  
      const size_t parent_elements(nptr->Parents());
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
            const Element<3U>* const eptr = nptr->Parent(i);
            const size_t sector_node      = nptr->ParentNodeNumber(i);
            const size_t sector_facets(eptr->FV()->FacetsPerSector(sector_node));
-           for ( size_t j=0U; j<sector_facets; ++j ) {
+           for ( size_t j{0U}; j<sector_facets; ++j ) {
                const size_t facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -452,10 +452,10 @@ double FluxEvaluator<dim,USER>::FluxBalanceAndOutFlow( Node<dim>* const nptr ) c
      double flux_balance(0.), out_flow(0.), flux_C0_products(0.);
  
      const auto parent_elements{nptr->Parents()};
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
           const auto sector_node = nptr->ParentNodeNumber(i);
-           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+           for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -493,10 +493,10 @@ double FluxEvaluator<dim,USER>::InFlow( const Node<dim>* const nptr ) const
      double in_flow(0.);
  
      const auto parent_elements(nptr->Parents());
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
           const auto sector_node      = nptr->ParentNodeNumber(i);
-           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+           for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -525,10 +525,10 @@ double FluxEvaluator<dim,USER>::OutFlow( const Node<dim>* const nptr ) const
      double out_flow(0.);
  
      const auto parent_elements(nptr->Parents());
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
           const Element<dim>* const eptr = nptr->Parent(i);
           const auto sector_node      = nptr->ParentNodeNumber(i);
-           for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+           for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -553,11 +553,11 @@ double FluxEvaluator<dim,USER>::VolumetricFlowBalance( const Node<dim>* const np
      double volume_balance(0.);
  
      const auto parent_elements(nptr->Parents());
-     for ( auto i{0}; i<parent_elements; ++i ) {
+     for ( auto i{0U}; i<parent_elements; ++i ) {
            const Element<dim>* const eptr = nptr->Parent(i);
            const auto sector_node      = nptr->ParentNodeNumber(i);
            const auto sector_facets(eptr->FV()->FacetsPerSector(sector_node));
-           for ( auto j=0U; j<sector_facets; ++j ) {
+           for ( auto j{0U}; j<sector_facets; ++j ) {
                const auto facet = eptr->FV()->FacetSurroundingSector( sector_node, j );
                const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                // facet flux already is the product with element thickness
@@ -597,7 +597,7 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
      if ( !halo_stencils.empty() )
        for ( auto it=halo_stencils.begin(); it!=halo_stencils.end(); ++it ) {
             const size_t nodes((*it)->Nodes());
-            for ( auto i{0}; i<nodes; ++i ) {
+            for ( auto i{0U}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( User()->Notation.key_FB, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( User()->Notation.key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( User()->Notation.key_out_, makeScalar(ANY,0.) );

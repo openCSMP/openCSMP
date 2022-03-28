@@ -289,7 +289,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
     fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
     if ( records > 0 )
       // reading the regions sequentially
-      for ( auto i{0}; i<records; ++i )
+      for ( auto i{0U}; i<records; ++i )
         {
            BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
@@ -749,7 +749,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) {
           const size_t n_nodes((*it)->Nodes());
           // looping over the nodes on the inside of the interface which must be manifolds
-          for ( auto i{0}; i<n_nodes; ++i ) {
+          for ( auto i{0U}; i<n_nodes; ++i ) {
                assert( (*it)->N(i)->IsManifold() );
                pair<typename set<Node<dim>*>::iterator,bool> nit=unique_new_nodes.insert( (*it)->N(i) );
                // if the node is not yet contained in 'unique_new_nodes' it is created and added, but only if
@@ -1064,7 +1064,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDiscon
          const auto outer_parent_face_id = (*it)->OuterParentFaceID();
          (*it)->FE()->NodesOfFace( outer_parent_face_id, fnids );
          size_t n_nodes{fnids.size()};
-         for ( auto i{0}; i<n_nodes; ++i ) {
+         for ( auto i{0U}; i<n_nodes; ++i ) {
               assert( (*it)->OuterParent()->N( fnids[i] )->IsManifold() );
               NodeManifold<dim>* nmanifold = (*it)->OuterParent()->N( fnids[i] )->Manifold();
               vector<Node<dim>*> node_vec = nmanifold->NodesLocatedAt( OUTSIDE );

@@ -534,7 +534,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             VectorVariable<dim>  vc;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, vc);
-              for (auto i = 0U; i < dim; i++) {
+              for (auto i{0U}; i < dim; i++) {
                 position = (*niter)->Idx() * dim + i + offset;
                 if (vc.Flag(i) == DIRICH) {
                   DOF_indexes_[position] = NULL_IDX;
@@ -552,15 +552,15 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             TensorVariable<dim>  ts;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ts);
-              for (auto i = 0U; i < dim; i++) {
+              for (auto i{0U}; i < dim; i++) {
                 if (ts.Flag(i) == DIRICH) {
-                  for (size_t j = 0U; j < dim; j++) {
+                  for (size_t j{0U}; j < dim; j++) {
                     position = (*niter)->Idx() * this->dim2_ + i * dim + j + offset;
                     DOF_indexes_[position] = NULL_IDX;
                   }
                 }
                 else {
-                  for (size_t j = 0U; j < dim; j++) {
+                  for (size_t j{0U}; j < dim; j++) {
                     position = (*niter)->Idx() * this->dim2_ + i * dim + j + offset;
                     DOF_indexes_[position] = DOF;
                     DOF = DOF + 1;
@@ -577,13 +577,13 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
               (*niter)->Read(prop_key, ar);
               if (ar.Flag() == DIRICH)
               {
-                for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                for (auto i{0U}; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
                 }
               }
               else {
-                for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                for (auto i{0U}; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = DOF;
                   DOF = DOF + 1;
@@ -597,7 +597,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             FlaggedArrayVariable  ar(prop_key.dataDepth);
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ar);
-              for (auto i = 0U; i < prop_key.dataDepth; i++)
+              for (auto i{0U}; i < prop_key.dataDepth; i++)
                 if (ar.Flag(i) == DIRICH) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
@@ -694,7 +694,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
           VectorVariable<dim>  vc;
           while (gfirst != gref.NodesEnd()) {
             (*gfirst)->Read(prop_key, vc);
-            for (auto i = 0U; i < dim; i++) {
+            for (auto i{0U}; i < dim; i++) {
               position = (*gfirst)->Idx() * dim + i + offset;
               position = DOF_indexes_[position];
               if (position != NULL_IDX) {
@@ -711,7 +711,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         TensorVariable<dim>  ts;
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ts);
-          for (auto i = 0U; i < dim; i++)
+          for (auto i{0U}; i < dim; i++)
             for (size_t k = 0U; k < dim; k++) {
               position = (*gfirst)->Idx() * this->dim2_ + i * dim + k + offset;
               position = DOF_indexes_[position];
@@ -729,7 +729,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         ArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (auto i = 0U; i < prop_key.dataDepth; i++) {
+          for (auto i{0U}; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
@@ -745,7 +745,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         FlaggedArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (auto i = 0U; i < prop_key.dataDepth; i++) {
+          for (auto i{0U}; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {

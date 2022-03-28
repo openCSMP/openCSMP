@@ -221,7 +221,7 @@ void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
          const auto  nodes(e.Nodes());
 //         vc_ = NVAR_[0];
 //         for ( size_t i=1U; i<nodes; i++ ) vc_ += NVAR_[i];
-//         for ( auto i{0}; i<nodes; i++ ) NVAR_[i] - vc_;
+//         for ( auto i{0U}; i<nodes; i++ ) NVAR_[i] - vc_;
 
          // 3. collecting nodal displacements into a matrix of size nodes * dof x 1
          // and recording the elements spatial translation as the average of
@@ -229,8 +229,8 @@ void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
          // ----------------------------
          DISPL_.Resize( nodes * 3U, 1 );
          uint32_t k(0U);
-         for ( auto i=0; i<nodes; i++ )
-           for ( auto j=0; j<3; j++ ) DISPL_(k++,0) = NVAR_[i](j);
+         for ( auto i{0U}; i<nodes; i++ )
+           for ( auto j{0U}; j<3; j++ ) DISPL_(k++,0) = NVAR_[i](j);
 
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 3U;
@@ -307,7 +307,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
         
         // 1.1 Computing the strains at the integration points
         // ---------------------------------------------------
-        for ( auto i=0; i<integration_points; i++ )
+        for ( auto i{0U}; i<integration_points; i++ )
           {
              //  getting DN matrices at the node points
              e.dN_AtIntegrationPoint( EGP_, i, 3U );
@@ -357,7 +357,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRAIN_, NSTRAIN_ );
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRESS_, NSTRESS_ );
          
-             for ( auto i=0; i<e.Nodes(); i++ )
+             for ( auto i{0U}; i<e.Nodes(); i++ )
                {
                   // extracting the nodal strain and stress components
                   for ( auto k=0; k<components_; k++ ) {
@@ -382,11 +382,11 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
         STRAIN_.Resize(components_,e.Nodes());
         STRESS_.Resize(components_,e.Nodes());
 
-        for ( auto i=0; i<e.Nodes(); i++ ) {
+        for ( auto i{0U}; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( auto j=0; j<components_; j++ )
+               for ( auto j{0U}; j<components_; j++ )
                  {  
                     // averaging strain components
                     double sum(0.);
@@ -456,7 +456,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
         // 1. accumulating and averaging the strain & stress values
         // --------------------------------------------------------
         // accumulation
-        for ( auto i=0; i<e.IntegrationPoints(); i++ ) {
+        for ( auto i{0U}; i<e.IntegrationPoints(); i++ ) {
               convertTo( IPSTRAIN_, i, ts_ );
               IP_STRAIN_TENSOR_ += ts_;
               convertTo( IPSTRESS_, i, ts_ );
@@ -514,7 +514,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
     // --------------------------------
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( auto i=0; i<e.IntegrationPoints(); i++ )
+      for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------

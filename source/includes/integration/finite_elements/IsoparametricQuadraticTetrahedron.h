@@ -74,7 +74,7 @@ class IsoparametricQuadraticTetrahedron : public FiniteElement {
 
   private:
     /// returns interpolation function values at barycenter of the element faces
-    std::array<double, 10> N_AtFaceBarycenter(uint32_t i) const;
+    std::array<double, 10> N_AtFaceBarycenter( uint32_t i) const;
 
     /// returns coordinates of barycenters of the element faces
     void FaceBarycenterCoordinates( uint32_t face, std::vector<double>& barycenterCoord );

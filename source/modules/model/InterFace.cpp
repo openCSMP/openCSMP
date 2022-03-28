@@ -444,7 +444,7 @@ template<uint32_t dim>
 void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
   {
     if ( e_ptr == nullptr ) return;
-    for ( auto i = 0U; i < interface_connector_.size(); i++ )
+    for ( auto i{0U}; i < interface_connector_.size(); i++ )
       if ( e_ptr == interface_connector_[i] ) {
           interface_connector_[i] = nullptr;
           break;
@@ -530,7 +530,7 @@ std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
       innerParent_->FE()->NodesOfFace( face, nids );
       set<Point<dim> >  face_key;
       const auto nodes(nids.size());
-      for ( uint32_t j = 0U; j<nodes; ++j )
+      for ( uint32_t j{0U}; j<nodes; ++j )
         face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
       inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
     }
@@ -540,7 +540,7 @@ std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
     outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
     const auto nodes(nids.size());
-    for ( uint32_t j = 0U; j<nodes; ++j )
+    for ( uint32_t j{0U}; j<nodes; ++j )
       face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
@@ -846,12 +846,12 @@ uint32_t  InterFace<dim>::ParentNodeNumber( uint32_t n, INTERFACE_SIDE side ) co
 
   if ( side == INSIDE ) {
     // finding the parent element that corresponds to inside element
-    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i{0U}; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == innerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
   else if ( side == OUTSIDE ) {
-    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i{0U}; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == outerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
@@ -1096,7 +1096,7 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_S
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i = 0U; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i, side )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -1109,7 +1109,7 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
   const auto n_nodes( Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i = 0U; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -1231,7 +1231,7 @@ void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Va
   const auto  n_nodes( this->FE()->Nodes() );
   V.resize( n_nodes );
 
-  for ( auto i = 0U; i<n_nodes; i++ )
+  for ( auto i{0U}; i<n_nodes; i++ )
     N( i, side )->Read( idx, V[i] );
 }
 
@@ -1265,18 +1265,18 @@ void  InterFace<dim>::Out() const
   cout << "\nInternal data: ";
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
-  for ( auto i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, INSIDE )->AtBoundary() );
     cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
   }
-  for ( auto i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
     cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
   cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
-  for ( auto i = 0U; i<this->Neighbors(); i++ )
+  for ( auto i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Idx() << ":";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
@@ -1306,12 +1306,12 @@ void  InterFace<dim>::Out() const
     }
 
     cout << "\n Connected Node objects, side 1 of interface: ";
-    for ( auto i = 0U; i<this->Nodes(); i++ )
+    for ( auto i{0U}; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
     cout << "\n Connected Node objects, side 2 of interface: ";
-    for ( auto i = 0U; i<this->Nodes(); i++ )
+    for ( auto i{0U}; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
@@ -1333,7 +1333,7 @@ void  InterFace<dim>::Out() const
     cout << "\tUnit Normal:            ";
     VectorVariable<dim> un( PLAIN, 0. );
     UnitNormal( un );
-    for ( auto i = 0U; i<dim; i++ ) cout << un[i] << ", ";
+    for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
     cout << endl;
 
 } // end Out

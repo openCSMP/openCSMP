@@ -60,7 +60,7 @@ template<uint32_t dim, class CELL>
 void CVFEM_PointSource_rhsop<dim,CELL>::ComputeContribution( CELL& e )
 {
    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
-   for ( auto i=0; i<e.Nodes(); i++ )
+   for ( auto i{0U}; i<e.Nodes(); i++ )
      MathOperatorRHS<dim>::RHS[i] = SRC_[i]();
      
 } // end ComputeContribution

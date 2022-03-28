@@ -674,7 +674,7 @@ void PVTX_Calculator_H2O_CO2_NaCl<dim>::InterpolateInputVariablesToBaryCenter( c
     Xbulk_ = Pf_ = ToC_ = 0.;
     double NaCl(0.);
     // interpolation
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          // pressure and temperature
          Pf_  += IPOL_[i] * e->N(i)->Read( props_.key_pf );
          ToC_ += IPOL_[i] * e->N(i)->Read( props_.key_T );
@@ -735,7 +735,7 @@ double PVTX_Calculator_H2O_CO2_NaCl<dim>::MaxEntryPressureOfParentElements( cons
     assert( n != nullptr );
     double pd(0.);
    
-    for ( auto i{0}; i<n->Parents(); ++i ) {
+    for ( auto i{0U}; i<n->Parents(); ++i ) {
          const Element<dim>* eptr(n->Parent(i));
          assert( eptr != nullptr );
          pd = max( pd, eptr->Read(props_.key_pd) );
@@ -764,8 +764,8 @@ PHASES_CONTINUOUS_ACROSS_ELEMENT  continuousPhases( const variables::VariableSet
     assert( eptr != nullptr );
     int aqueous(0), carbonic(0), salt(0);
 
-    const size_t nodes(eptr->Nodes());
-    for ( auto i{0}; i<nodes; ++i ) {
+    const auto nodes{eptr->Nodes()};
+    for ( auto i{0U}; i<nodes; ++i ) {
          const SYSTEM_STATE state(static_cast<SYSTEM_STATE>(static_cast<int>(eptr->N(i)->Read(props.key_nPHS))));
          // counting the phases
          if      ( state == SYSTEM_STATE::aq   ) aqueous++;

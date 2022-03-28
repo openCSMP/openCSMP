@@ -132,7 +132,7 @@ DataTable  DataTable::ExtractSubTable( const set<string>& rows, const set<string
     bool   is_first_row{true};
     size_t col{0}, row{0};
     
-    for ( auto i{0}; i<table[0].size(); ++i )
+    for ( auto i{0U}; i<table[0].size(); ++i )
       {
          if ( rows.find( row_identifiers_[i] ) != rows.end() ) {
              row_labels[row] = row_identifiers_[i];
@@ -193,8 +193,8 @@ DataTable  DataTable::ExtractSubTable( const vector<int>& cols, const vector<int
     
     // table data
     row = 0;
-    for ( auto i{0}; i<rows.size(); ++i ) {
-         for ( auto j{0}, k{0}; j<cols.size(); ++j )
+    for ( auto i{0U}; i<rows.size(); ++i ) {
+         for ( auto j{0U}, k{0U}; j<cols.size(); ++j )
            table[row][k++] = table_[ rows[i] ][ cols[j] ];
          row++;
       }
@@ -320,7 +320,7 @@ size_t  read_CSV_File( string filename,
          rows_of_columns.emplace_back( vector<double>{ x, y, z } );
 
          // reading the property values
-         for ( auto i{0}; i<n_properties; i++ ) {
+         for ( auto i{0U}; i<n_properties; i++ ) {
               double data_value = atof(strtok(NULL,delims));
               // TODO: perhaps add a value check against property database here
               rows_of_columns[row_count].push_back( data_value );

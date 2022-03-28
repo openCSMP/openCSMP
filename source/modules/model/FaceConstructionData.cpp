@@ -145,6 +145,7 @@ void FaceConstructionData::Out() const
     cout << nbor_faces_.first <<" and "<< nbor_faces_.second;
     cout <<"\n\tinteger codified juxtaposed regions: "<< materials_.first <<" and "<< materials_.second;
     cout <<" as well as parent region: "<< material_;
+    cout << endl;
  }
 
 

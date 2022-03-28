@@ -206,7 +206,7 @@ void TransportVisitor2D::Visit( Element<2U>* n )
           // getting x and y velocity components at point
           // by summing up the testfunction values at the point
           double  dvx(0.), dvy(0.);
-          for ( auto i{0}; i<n->Nodes(); i++ ) {
+          for ( auto i{0U}; i<n->Nodes(); i++ ) {
                dvx += n->FE()->NRST[i] * P[i](0);
                dvy += n->FE()->NRST[i] * P[i](1);
             }

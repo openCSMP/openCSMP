@@ -155,7 +155,7 @@ IsoparametricQuadraticHexahedron::IsoparametricQuadraticHexahedron( uint32_t int
     {
         // full 8-node Gauss integration scheme, see Akin, 1982, p.100
         // for extrapolation it should be used only!
-        for(uint32_t i=0; i<integrationPoints;i++)
+        for( uint32_t i{0U}; i<integrationPoints;i++)
             W[i]=1.0;
 
         const double a1=0.577350269189626;
@@ -497,9 +497,9 @@ IsoparametricQuadraticHexahedron::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -556,7 +556,7 @@ IsoparametricQuadraticHexahedron::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -564,8 +564,8 @@ IsoparametricQuadraticHexahedron::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }
@@ -926,7 +926,7 @@ IsoparametricQuadraticHexahedron::dN( DenseMatrix<DM_MIN>& DN27 )
     //DenseMatrix<DM_MIN> DERIVS(dim,npe);
 
      // Jacobian transformation to global coordinate system
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
 
        dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -1097,7 +1097,7 @@ IsoparametricQuadraticHexahedron::dN_AtNode( DenseMatrix<DM_MIN>& B, uint32_t nd
     // compose matrix DN = 3 x 10 in global coordinates
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
-    for(uint32_t inode=0;inode<npe; inode++)
+    for( uint32_t inode=0;inode<npe; inode++)
     { B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
@@ -1112,9 +1112,9 @@ IsoparametricQuadraticHexahedron::ParametricToPhysical(std::vector<double> &rst,
 {
 Nrst(rst[0],rst[1],rst[2], NRST );
 
-for(uint32_t i=0; i<dim; i++) xyz[i]=0.0;
+for( uint32_t i{0U}; i<dim; i++) xyz[i]=0.0;
 
-for(uint32_t i=0; i<npe; i++)
+for( uint32_t i{0U}; i<npe; i++)
     {
     xyz[0]+=XY(i,0)*NRST[i];
     xyz[1]+=XY(i,1)*NRST[i];
@@ -1184,13 +1184,13 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = -1.0;
-        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
+        for( uint32_t i{0U};i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = -1.0;
-            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
+            for( uint32_t j{0U};j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = -1.0;
-                for(uint32_t k=0;k<numberOfFirstIterrations;k++)
+                for( uint32_t k{0U};k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -1205,7 +1205,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t l=0; l<dim; l++)
+                        for( uint32_t l=0; l<dim; l++)
                             rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -1266,7 +1266,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(uint32_t i=0; i<dim; i++)
+            for( uint32_t i{0U}; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -1342,7 +1342,7 @@ IsoparametricQuadraticHexahedron::PhysicalToParametric(
 
     }
 
-    for(uint32_t i=0; i<dim; i++)
+    for( uint32_t i{0U}; i<dim; i++)
         rSt[i] = rstHatK[i];
 
 }
@@ -1474,7 +1474,7 @@ IsoparametricQuadraticHexahedron::Volume()
     // numerical integration:
     // looping over the 6 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( auto i=0; i<gpe; i++ )
+    for ( auto i{0U}; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1562,7 +1562,7 @@ IsoparametricQuadraticHexahedron::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& B,
     B.Resize(dim,npe);
 
     // Forming maTRIX delta Akin, p.420
-    for(uint32_t inode=0;inode<npe; inode++)
+    for( uint32_t inode=0;inode<npe; inode++)
     {B(0,inode) = DNR[inode]; B(1,inode) = DNS[inode]; B(2,inode) = DNT[inode]; }
 
     B = JINV * B;
@@ -1658,7 +1658,7 @@ IsoparametricQuadraticHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
     // by multiplication of JINV with local DN
     B.Resize(dim,npe);
 
-    for(uint32_t i=0; i<npe; i++)
+    for( uint32_t i{0U}; i<npe; i++)
     {
       B(0,i) = DNR[i]; B(1,i) = DNS[i]; B(2,i) = DNT[i];
     }
@@ -1693,7 +1693,7 @@ IsoparametricQuadraticHexahedron::InnerRadius()
    double                 sum(0.0);
 
    EdgeLengths( segms );
-   for ( uint32_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( uint32_t i{0U}; i<spe; i++ ) sum += segms[i];
 
    // Function will produce unrelible value for high aspect ratio elements
    if(AspectRatio()>4.0)
@@ -1798,13 +1798,13 @@ IsoparametricQuadraticHexahedron::ExtrapolateIntegrationPointVariableToNodes(
 
   const uint32_t cornerNodes=8;
 
-  for ( uint32_t i=0; i<nvars; i++ )
+  for ( uint32_t i{0U}; i<nvars; i++ )
     {
-        for ( uint32_t k=0; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
+        for ( uint32_t k{0U}; k<gpe; k++ ) TEMP_IP(k,0)=IVAR[k*nvars +i];
 
             TEMP_N=MATRIX_A*TEMP_IP;
             //TEMP_N.Out();
-            for ( uint32_t j=0; j<cornerNodes; j++ )
+            for ( uint32_t j{0U}; j<cornerNodes; j++ )
             {
                 NVAR[j*nvars+i]=TEMP_N(j,0);
             }
@@ -1877,16 +1877,16 @@ IsoparametricQuadraticHexahedron::IntegralNN( DenseMatrix<DM_MIN>& IntNN )
         //         products of element properties PROP(1,i), Ni and GDER.
         // Interpolate nodal values (properties) to IPs - function here
 
-        //for(uint32_t j=0;j<dim;j++)
+        //for( uint32_t j{0U};j<dim;j++)
         //	{
         //		BEHAT(1,i)+=PROP(index,1)*Ni[i]*GDER(j,i);
         //	}
 
         //????????????????????????????????
         // Laplace equation on the 27_node hexa ===> should be NumIntegral...object ?
-        //for(uint32_t j=0;j<gpe;j++)
+        //for( uint32_t j{0U};j<gpe;j++)
         //	{
-        //	for(uint32_t k=0;k<gpe;i++)
+        //	for( uint32_t k{0U};k<gpe;i++)
         //		BEHAT(k,j)+=ValOfJacobian * W[i]*(GDER(1,k)*GDER(1,j)+GDER(2,k)*GDER(2,j)+GDER(0,k)*GDER(0,j));
         // 	}
         // should be here - IP values (properties)*Ni*GDER
@@ -1914,7 +1914,7 @@ void  IsoparametricQuadraticHexahedron::IntegrationPoint( uint32_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( auto i{0}; i<npe; i++ ) {
+    for( auto i{0U}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];

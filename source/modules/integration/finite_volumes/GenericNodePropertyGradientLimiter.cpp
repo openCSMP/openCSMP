@@ -133,7 +133,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const Regio
 
                     // at that parent element, loop over all facets that belong to the current node/fv
                     // -------------------------------------------------------------------------------
-                    for ( auto i{0}; i < gref.E(global_el_id)->FV()->FacetsPerSector(nloc_id); i++ ) {
+                    for ( auto i{0U}; i < gref.E(global_el_id)->FV()->FacetsPerSector(nloc_id); i++ ) {
 
                          // at that facet, get local facet_id used for determining distance:
                          auto local_facet_id = gref.E(global_el_id)->FV()->FacetSurroundingSector( nloc_id,i );
@@ -144,7 +144,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const Regio
                          // construct linear interpolant:
                          val_left  = val1();
 
-                         for ( auto j=0;j<dim;j++)
+                         for ( auto j{0U};j<dim;j++)
                            val_left += grad[j] * dist[j];
 
                          /*

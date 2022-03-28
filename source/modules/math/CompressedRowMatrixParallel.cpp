@@ -237,7 +237,7 @@ void CompressedRowMatrixParallel::ComputeVariableIndicesForBroadcast( uint32_t n
             temp2=sendlist.size();
             temp.assign(sendlist.begin(), sendlist.end());
             // loop over set and store values in isndlist
-            for(uint32_t i=0U; i<temp.size(); i++)
+            for( uint32_t i=0U; i<temp.size(); i++)
               isndlists.push_back(temp[i]);
           }
 

@@ -161,7 +161,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // ---------------------------------------------------------------------------------------------------
   this->node_vec_.reserve( this->elmt_vec_.size() );
   for ( auto& it : this->elmt_vec_ )
-    for ( auto i = 0U; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
+    for ( auto i{0U}; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
   // sorting node vector and making it unique
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
@@ -398,7 +398,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
   // creating the node index vector
   set<csmp::Node<dim>*>  nodes_set;
   for ( typename vector<InterFace<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
-    for ( typename vector<Node<dim>*>::size_type i = 0U; i<(*it)->FE()->Nodes(); i++ )
+    for ( typename vector<Node<dim>*>::size_type i{0U}; i<(*it)->FE()->Nodes(); i++ )
     {
       nodes_set.insert( (*it)->N( i, INSIDE ) );
       nodes_set.insert( (*it)->N( i, OUTSIDE ) );
@@ -472,8 +472,8 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
   for ( auto& it : this->elmt_vec_ ) {
-       const size_t n_nodes{it->Nodes()};
-       for ( auto i{0}; i<n_nodes; ++i ) {
+       const auto n_nodes{it->Nodes()};
+       for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
@@ -554,7 +554,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   size_t          n( 0U );
 
   for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
-    for ( auto i = 0U; i<this->PerimeterFaces( n ); i++ ) {
+    for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
       perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
                             (*it)->N( fnids[0] )->Coordinate()).Length();
@@ -677,7 +677,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       ScalarVariable  sc;
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
-        for ( auto i = 0U; i<ife->IntegrationPoints(); ++i ) {
+        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ) {
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * sc();
         }
@@ -689,7 +689,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // the property value is integrated using corresponding integration weights
       for ( auto& ife : this->elmt_vec_ ) {
         const double interface_area = ife->Area( side );
-        for ( auto i = 0U; i<ife->IntegrationPoints(); ++i )
+        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i )
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
       }
       return property_integral;

@@ -73,7 +73,7 @@ class FaceConstructionData {
     const std::pair<uint32_t,uint32_t> nbor_faces_; ///< matching faces on inside (first) and outside (second)
     const std::pair<long,long>         materials_;  ///< integer codified juxtaposed regions
     const long                         material_;   ///< of the element from which the Face shall be constructed
-    uint32_t patch_number_;                           ///< unique identifier for the internal boundary patch this data relates to
+    uint32_t patch_number_;                         ///< unique identifier for the internal boundary patch this data relates to
 };
 
 

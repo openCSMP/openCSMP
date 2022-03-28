@@ -116,7 +116,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
     
     // read in xy coordinates and log k from file, find node with same xy coordinates, store log k and k
-    for ( size_t i=0; i<super_group.Nodes(); i++ ) {
+    for ( size_t i{0U}; i<super_group.Nodes(); i++ ) {
         ifs >> xval >> yval >> perm;
         xy(0) = xval;
         xy(1) = yval;
@@ -287,7 +287,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // and scaled (if necessary) resolution. Map all uniformly gridded k-values to the FD Grid
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityField: \nTransferring k-data to FiniteDifferenceGrid" << endl;
     FiniteDifferenceGrid k_field( xyz_max[0], xyz_max[1],  xres, yres );
-    for ( size_t i=0; i<kvec.size(); i++ ) {
+    for ( size_t i{0U}; i<kvec.size(); i++ ) {
         k_field(static_cast<int>(xvec[i]/dx),static_cast<int>(yvec[i]/dy) ) = pow( 10., kvec[i] );
       }
     
@@ -327,7 +327,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         (*eit)->Read( perm_key, perm );
         if ( isnan( perm() ) ) {
             k_avg = counter = 0.;
-            for ( size_t i=0; i<(*eit)->Neighbors(); i++ ) {
+            for ( size_t i{0U}; i<(*eit)->Neighbors(); i++ ) {
                 if ( (*eit)->Neighbor(i) != NULL ) {
                     (*eit)->Neighbor(i)->Read( perm_key, perm );
                     if ( !isnan( perm() ) ) {

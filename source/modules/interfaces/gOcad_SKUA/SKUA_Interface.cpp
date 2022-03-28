@@ -249,7 +249,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
                      if ( elmt_it != elmt_correspondance_map.end() ) {
                           Element<dim>* eptr = (*elmt_it).second;
                           // the property values are assigned to it
-                          for ( size_t i=0; i<(*et).second.size(); ++i ) {
+                          for ( size_t i{0U}; i<(*et).second.size(); ++i ) {
                                VARIABLE_FLAG flag = eptr->Status(prop_keys[i]);
                                if ( (*et).second[i].first == true && flag != DIRICH )
                                  eptr->Store( prop_keys[i], makeScalar( flag, (*et).second[i].second ) );
@@ -321,11 +321,11 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
     else if ( var_key.type == VECTOR ) ofs << var_name <<"[0]\t"<< var_name <<"[1]\t"<< var_name <<"[2]\n";
     else if ( var_key.type == TENSOR ) {
          int counter(0);
-         for ( size_t i=0; i<3U; i++ )
-           for ( size_t j=0; j<3U; j++ ) ofs << var_name <<"["<< counter++ <<"]\t";
+         for ( size_t i{0U}; i<3U; i++ )
+           for ( size_t j{0U}; j<3U; j++ ) ofs << var_name <<"["<< counter++ <<"]\t";
       }
     else { // ARRAY variable
-         for ( size_t i=0; i<var_key.index; i++ ) ofs << var_name <<"["<< i <<"]\t";
+         for ( size_t i{0U}; i<var_key.index; i++ ) ofs << var_name <<"["<< i <<"]\t";
       }
     ofs <<"\n";
    
@@ -349,14 +349,14 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
               else if ( var_key.type == TENSOR ) {
                    TensorVariable<3U> ts;
                    (*it)->Read( var_key, ts );
-                   for ( size_t i=0; i<3U; i++ )
-                     for ( size_t j=0; j<3U; j++ ) ofs << ts(i,j) <<"\t";
+                   for ( size_t i{0U}; i<3U; i++ )
+                     for ( size_t j{0U}; j<3U; j++ ) ofs << ts(i,j) <<"\t";
                    ofs <<"\n";
                 }
               else { // ARRAY variable
                    ArrayVariable  ary;
                    (*it)->Read( var_key, ary );
-                   for ( size_t i=0; i<ary.Size(); i++ ) ofs << ary[i] <<"\t";
+                   for ( size_t i{0U}; i<ary.Size(); i++ ) ofs << ary[i] <<"\t";
                    ofs <<"\n";
                 }
            }

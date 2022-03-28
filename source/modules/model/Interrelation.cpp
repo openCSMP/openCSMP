@@ -756,7 +756,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
        {
           for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
             // looping over the constraint points inside the current element    
-            for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) 
+            for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) 
               {
                 // 1. Get the Operands
                 // -------------------

@@ -35,8 +35,8 @@ Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
   std::uniform_real_distribution<> rndist(0,1);
   
   m1_.Resize(m,n);
-  for(size_t i=0; i<m; i++) {
-      for(size_t j=0; j<n; j++)
+  for(size_t i{0U}; i<m; i++) {
+      for(size_t j{0U}; j<n; j++)
           m1_(i,j) = rndist(gen);
     } 
   return m1_;
@@ -61,8 +61,8 @@ Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
   std::normal_distribution<> rndist(0,1);
   
   m3_.Resize(m,n);
-  for (size_t i=0; i<m; i++) {
-      for (size_t j=0; j<n; j++) {
+  for (size_t i{0U}; i<m; i++) {
+      for (size_t j{0U}; j<n; j++) {
           m3_(i,j) = rndist(gen);
       }
   }
@@ -76,8 +76,8 @@ double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double 
   const double t1(pi_*xl/Lx), t2(pi_*yl/Ly), pi2(2.0*pi_);
   Matrix M1(cnt, cnt), M2(cnt, cnt);
   
-  for ( size_t i=0; i<cnt; i++ )
-      for (size_t j=0; j<cnt; j++ ) {
+  for ( size_t i{0U}; i<cnt; i++ )
+      for (size_t j{0U}; j<cnt; j++ ) {
           M1(i,j) = static_cast<double>(j)*t1;
           M2(i,j) = static_cast<double>(i)*t2;
         }
@@ -86,8 +86,8 @@ double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double 
   M2 *= M2;
 
   double sigma(0.0);
-  for ( size_t i=0; i<cnt; i++ )
-      for (size_t j=0; j<cnt; j++ )
+  for ( size_t i{0U}; i<cnt; i++ )
+      for (size_t j{0U}; j<cnt; j++ )
         sigma += std::exp(-(M1(i,j)+M2(i,j))/pi2);
   
   return std::sqrt(sigma);
@@ -192,7 +192,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
       sc = (1.0/sqrtLxLy*R(0,0));
       bc = (*it)->BaryCenter(); // xy coordinates of bary centre
       v1 = v2 = v3 = 1.0;
-      for (size_t i=0;i<m; i++) {
+      for (size_t i{0U};i<m; i++) {
           t1 = std::cos(pi_ * v1 * bc[0]/Lx);
           t2 = std::exp(-std::pow((pi_ * v1 * xlength/Lx),2.0)/pi2);
           t3 = std::cos(pi_ * v1 * bc[1]/Ly);
@@ -201,7 +201,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
           sc += term * t3 * t4 * R(i+1,0);
           v1 += 1.0;
         }
-      for (size_t j=0; j<m; j++ ) {
+      for (size_t j{0U}; j<m; j++ ) {
           v3 = 1.0;
           for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);
@@ -328,7 +328,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
       bc[0] = (*it)->x();
       bc[1] = (*it)->y();
       v1 = v2 = v3 = 1.0;
-      for (size_t i=0;i<m; i++) {
+      for (size_t i{0U};i<m; i++) {
           t1 = std::cos(pi_ * v1 * bc[0]/Lx);
           t2 = std::exp(-std::pow((pi_ * v1 * xlength/Lx),2.0)/pi2);
           t3 = std::cos(pi_ * v1 * bc[1]/Ly);
@@ -337,7 +337,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
           sc += term * t3 * t4 * R(i+1,0);
           v1 += 1.0;
         }
-      for (size_t j=0; j<m; j++ ) {
+      for (size_t j{0U}; j<m; j++ ) {
           v3 = 1.0;
           for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);

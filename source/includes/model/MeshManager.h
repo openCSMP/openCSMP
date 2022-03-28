@@ -104,12 +104,6 @@ public:
   typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsBegin() const;
   typename plf::colony<NodeManifold<dim> >::const_iterator NodeManifoldsEnd() const;
 
-/* not for colony
-  Node<dim>* const      N( size_t ) const;
-  Element<dim>* const   E( size_t ) const;
-  Face<dim>* const      F( size_t ) const;
-  InterFace<dim>* const I( size_t ) const;
-*/
   /// direct access for backward compatibility
   const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 

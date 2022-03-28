@@ -94,11 +94,11 @@ void FV_Parameter::Out() const
     cout <<"\nFV_Parameter::Out: Data of finite-volume stencil: ";
 
     cout <<"area, unit normal, and velocity magnitude on the finite volume facets: "<< endl;
-    for ( auto i=0; i<facet_v_and_A_.size(); i++ ) {
+    for ( auto i{0U}; i<facet_v_and_A_.size(); i++ ) {
          //      facet                        area
          cout <<"f"<< i+1 <<": A "<< facet_v_and_A_[i].second <<", fn";
          // unit normal
-         for ( size_t j=0; j<facet_unit_normal_[i].size(); j++ )
+         for ( size_t j{0U}; j<facet_unit_normal_[i].size(); j++ )
            cout <<" "<< facet_unit_normal_[i][j];
          cout <<", v ";
          // velocity
@@ -106,7 +106,7 @@ void FV_Parameter::Out() const
       }
 
     cout <<"sector volumes: "<< endl;
-    for ( auto i=0; i<sector_volume_.size(); i++ )
+    for ( auto i{0U}; i<sector_volume_.size(); i++ )
       cout << i+1 <<": "<< sector_volume_[i] << endl;
     cout << endl;
     cout.flush();

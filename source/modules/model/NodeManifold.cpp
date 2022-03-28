@@ -328,7 +328,7 @@ void NodeManifold<dim>::Out() const
 {
   cout << "\nNodeManifold: "<< parse(parent_geometry_) <<" with nodes (indices):\t";
   assert( Branches() >= 2 );
-  for ( auto i{0}; i<Branches(); i++ ) {
+  for ( auto i{0U}; i<Branches(); i++ ) {
       if ( NodeManifold<dim>::N(i) )
         cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": "<< parseSide( InterFaceSide(i) ) << "\t";
       else
@@ -367,7 +367,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
              // if the classification is plausible, nothing is done
              if ( te == ManifoldType::INTERFACE ) {
                   bool isBPOINT1{true};
-                  for ( auto i{0}; i<collocated_nodes; ++i ) {
+                  for ( auto i{0U}; i<collocated_nodes; ++i ) {
                        if ( nmf.N(i)->AtBoundary() == NOT ||
                             nmf.N(i)->AtBoundary() == INTERNAL ) isBPOINT1 = false;
                        break;
@@ -411,7 +411,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
              const uint32_t connected_elmts = mnd_ptr->Parents();
              
              // in the case of a fracture manifold (we can have an endpoint...)
-             for ( auto i{0}; i<connected_elmts; ++i ) {
+             for ( auto i{0U}; i<connected_elmts; ++i ) {
                   assert( mnd_ptr->Parent(i) );
                   if ( !mnd_ptr->Parent(i)->IsLineElement() ) line_elmt_manifold = false;
                   if ( !mnd_ptr->Parent(i)->IsSurfaceElement() ) surf_elmt_manifold = false;

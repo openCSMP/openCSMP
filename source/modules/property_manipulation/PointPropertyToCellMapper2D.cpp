@@ -54,8 +54,8 @@ pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& p
     map<double,uint32_t>  nearest_nbor;
     bool                  point_is_inside{true};
 
-    const size_t n_nodes{ IPOL.size() };
-    for ( auto i{0}; i<n_nodes; ++i ) {
+    const auto n_nodes{ IPOL.size() };
+    for ( auto i{0U}; i<n_nodes; ++i ) {
          nearest_nbor.insert( make_pair( IPOL[i], i ) );
          if ( IPOL[i] < 0. ) point_is_inside = false;
       }
@@ -119,7 +119,7 @@ pair<Element<dim>*,bool>  containsPointLinearTriangle( Element<dim>* elmt, const
    c[2] = XY(1,0) - XY(0,0); 
 
    // summing the interpolation functions to get their value at (x,y)   
-   for ( uint32_t i=0; i<3; i++ )
+   for ( uint32_t i{0U}; i<3; i++ )
      N[i] = ae2 * (a[i] + b[i] * point[0] + c[i] * point[1]);
     
 
@@ -270,7 +270,7 @@ bool PointPropertyToCellMapper2D::MapPointsToCells( Model<2>& model, string targ
     const size_t cx = property_data_.ColumnIndex("x");
     vector<Point<2> >  points_to_search;
     points_to_search.reserve( property_data_.Rows() );
-    for ( auto i{0}; i<property_data_.Rows(); ++i )
+    for ( auto i{0U}; i<property_data_.Rows(); ++i )
       points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cx+1) ) );
       
     
@@ -340,14 +340,14 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
     // creating the point search data
     points_to_search.reserve( property_data_.Rows() );
     point_values.reserve( property_data_.Rows() );
-    for ( auto i{0}; i<property_data_.Rows(); ++i ) {
+    for ( auto i{0U}; i<property_data_.Rows(); ++i ) {
          // assuming that the x, y coordinates reside in column 0 and 1
          points_to_search.emplace_back( Point<2>( property_data_(i,cx), property_data_(i,cy) ) );
          point_values.emplace_back( property_data_(i,prop_idx) );
       }
 
    if ( !extrapolation_needed ) {
-        for ( size_t elmt{0}; elmt < cells_with_points_.size(); ++elmt )
+        for ( size_t elmt{0U}; elmt < cells_with_points_.size(); ++elmt )
           if ( cells_with_points_[elmt] != nullptr )
             cells_with_points_[elmt]->Store( prop_key, makeScalar( FIELD_DATA, point_values[elmt] ) );
      }
@@ -361,7 +361,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
         model.CreateProperty( target_variable_node.c_str(), "extrapolated", SCALAR, NODE );
         const csmp::Index prop_key_node = model.Database().StorageKey( target_variable_node.c_str() );
         // assigning Dirichlet constraints to the nearest nodes
-        for ( size_t elmt{0}; elmt < cells_with_points_.size(); ++elmt )
+        for ( size_t elmt{0U}; elmt < cells_with_points_.size(); ++elmt )
           if ( cells_with_points_[elmt] != nullptr ) {
                Node<2>* node = nearestNode( cells_with_points_[elmt], points_to_search[elmt] );
                node->Store( prop_key_node, makeScalar( DIRICH, point_values[elmt] ) );
@@ -420,7 +420,7 @@ void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string ta
     if ( !property_data_.ContainsColumn( target_variable) ) property_data_.AppendColumn( target_variable );
     const size_t col_idx = property_data_.ColumnIndex( target_variable );
     
-    for ( size_t point{0}; point < property_data_.Rows(); ++point )
+    for ( size_t point{0U}; point < property_data_.Rows(); ++point )
       if ( cells_with_points_[point] != nullptr ) {
            double prop_val = cells_with_points_[point]->PropertyValueAtBaryCenter( nprop_key );
            property_data_(point,col_idx) = prop_val;

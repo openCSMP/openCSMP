@@ -429,18 +429,18 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
      // making a set of element nodes to later identify faces by comparison
      set<size_t> node_set, test_set;
      const auto  nodes(e.Nodes());
-     for ( auto i{0}; i<nodes; ++i )    node_set.insert(e.N(i)->Idx());
+     for ( auto i{0U}; i<nodes; ++i )    node_set.insert(e.N(i)->Idx());
      map<const Element<dim>*,uint32_t>  nbor_elmts;
      vector<uint32_t> fnids;
-     for ( auto i{0}; i<nodes; i++ ) {
+     for ( auto i{0U}; i<nodes; i++ ) {
           const auto parents(e.N(i)->Parents());
-          for ( auto j=0U; j<parents; ++j ) {
+          for ( auto j{0U}; j<parents; ++j ) {
                const Element<dim>* const eptr(e.N(i)->Parent(j));
                const auto faces(eptr->Faces());
-               for ( auto k=0U; k<faces; ++k ) {
+               for ( auto k{0U}; k<faces; ++k ) {
                      eptr->FE()->NodesOfFace( k, fnids );
                      size_t fnodes(fnids.size());
-                     for ( auto l=0U; l<fnodes; ++l )
+                     for ( auto l{0U}; l<fnodes; ++l )
                        test_set.insert( eptr->N( fnids[l])->Idx() );
                      // if the face is shared the element and its face are recorded
                      if ( node_set == test_set ) {
@@ -471,7 +471,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     faces.first = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.first, fnrml );
     double dotproduct(0.);
-    for ( size_t k=0U; k<dim; ++k )
+    for ( size_t k{0U}; k<dim; ++k )
       dotproduct += enrml[k] * fnrml[k];
    
     // if the projection is negative, the first element lies on the outside
@@ -498,7 +498,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     faces.second = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.second, fnrml );
     dotproduct = 0.;
-    for ( size_t k=0U; k<dim; ++k )
+    for ( size_t k{0U}; k<dim; ++k )
       dotproduct += enrml[k] * fnrml[k];
 
    // if the projection is negative, the second element lies on the outside
@@ -542,12 +542,12 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& 
   // making a set of element nodes to later identify faces by comparison
   set<size_t>  node_set, test_set;
   const size_t nodes( e.Nodes() );
-  for ( auto i = 0U; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
+  for ( auto i{0U}; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
   map<Element<dim>*, size_t>  nbor_elmts;
   vector<uint32_t> fnids;
-  for ( auto i = 0U; i<nodes; i++ ) {
+  for ( auto i{0U}; i<nodes; i++ ) {
     const auto parents( e.N( i )->Parents() );
-    for ( auto j = 0U; j<parents; ++j ) {
+    for ( auto j{0U}; j<parents; ++j ) {
       Element<dim>* eptr( e.N( i )->Parent( j ) );
       const auto faces( eptr->Faces() );
       for ( auto k = 0U; k<faces; ++k ) {
@@ -687,9 +687,9 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
    
      // since the same element may be discovered by each of the face nodes
      // the loop is stopped after the first discovery
-     for ( auto i{0}; i<nodes; i++ ) {
+     for ( auto i{0U}; i<nodes; i++ ) {
           const auto parents(e.N(i)->Parents());
-          for ( auto j=0U; j<parents; ++j ) {
+          for ( auto j{0U}; j<parents; ++j ) {
                const Element<dim>* const eptr(e.N(i)->Parent(j));
                // only if the element is not the same and also of a different type
                if ( eptr != &e and
@@ -697,10 +697,10 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
                     eptr->Nodes() >= e.Nodes() )
                  {
                    const auto faces(eptr->Faces());
-                   for ( auto k=0U; k<faces; ++k ) {
+                   for ( auto k{0U}; k<faces; ++k ) {
                          eptr->FE()->NodesOfFace( k, fnids );
                          size_t fnodes(fnids.size());
-                         for ( size_t l=0U; l<fnodes; ++l )
+                         for ( size_t l{0U}; l<fnodes; ++l )
                            test_set.insert( eptr->N( fnids[l] )->Idx() );
                          // if the face is shared the element and its face are recorded
                          if ( node_set == test_set ) {
@@ -847,7 +847,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // checking that the region is not located at the model boundary
     size_t boundary_elements(0);
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
-      for ( auto i{0}; i<(*eit)->Neighbors(); ++i ) {
+      for ( auto i{0U}; i<(*eit)->Neighbors(); ++i ) {
            const BOX_BOUNDARY bflag = (*eit)->AtBoundary(i);
            if ( bflag != NOT and bflag != INTERNAL and bflag != IRREGULAR ) boundary_elements++;
         }
@@ -879,11 +879,11 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     model.Region("Model").UpdateMemberIndexes();
    
     // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,size_t>   patches;
+    map<pair<long,long>,uint32_t> patches;
     vector<FaceConstructionData>  face_construction_data;
     map<long,string>              patch_names;
     string                        patch_name;
-    long                          n_juxtapositions(0);
+    uint32_t                      n_juxtapositions(0);
 
     // 2.1 looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
@@ -894,7 +894,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
           FaceConstructionData  fdata(higherDimensionalNeighbors( *(*eit), mtrl_key ));
         
           // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
-          pair<map<pair<long,long>,size_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
+          pair<map<pair<long,long>,uint32_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
           // incrementing number of juxtapositions and corresponding patch names
           if ( it.second == true ) {
                fdata.PatchNumber( (*it.first).second );
@@ -960,19 +960,21 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     for ( map<string,vector<FaceConstructionData> >::const_iterator
           it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it ) {
         face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
+
+// TESTING TODO: write function which compares the face construction data
+
         // for each of the new patches
         for ( vector<FaceConstructionData>::const_iterator
               pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit ) {
              // creating the faces
              // ------------------
              // storing pointers to the new faces in the vector from which the boundary will be constructed
-             Face<dim>* const faceObj = model.Mesh().ReplaceElementByFace( model_domain.E((*pit).Element()),
-                                                                           model_domain.E((*pit).InnerElement()),
-                                                                           model_domain.E((*pit).OuterElement()),
+             face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
+                                                                           model_domain.E( (*pit).InnerElement() ),
+                                                                           model_domain.E( (*pit).OuterElement() ),
                                                                            (*pit).InnerElementFace(),
                                                                            (*pit).OuterElementFace(),
-                                                                           lvsFaces, lvsIntegrationPoints );
-			       face_vector.push_back(faceObj);
+                                                                           lvsFaces, lvsIntegrationPoints ) );
 			    }
 
 			  // remembering which faces make up the patch
@@ -999,7 +1001,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
         {
            // creating face key from idx's of face
            (*it)->FE()->NodesOfFace( face, fnids ); 
-           for ( size_t j=0U; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
+           for ( size_t j{0U}; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
            // inserting newly generated keys into multimap
            if ( (*it)->IsSurfaceElement() )
              surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
@@ -1083,7 +1085,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // using map<size_t,string>  patch_names   from above
-    for ( auto i{0}; i<patch_names.size(); ++i )
+    for ( auto i{0U}; i<patch_names.size(); ++i )
        // creating the boundary patch
        AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
 
@@ -1098,7 +1100,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
          const size_t parent_elements((*nit)->Parents());
          // copying those node parent pointers to the temporary vector which shall be kept
-         for ( auto i{0}; i<parent_elements; ++i ) {
+         for ( auto i{0U}; i<parent_elements; ++i ) {
               if ( (*nit)->Parent(i)->IsSurfaceElement() and subdomain.Contains( (*nit)->Parent(i) ) )
                 continue;
               else
@@ -1387,7 +1389,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::InputBoundariesFromBinary( const c
        fp.read( reinterpret_cast<char*>(&records), sizeof(uint64_t ) );
        if ( records > 0 )
           // reading the regions sequentially
-          for ( auto i{0}; i<records; ++i )
+          for ( auto i{0U}; i<records; ++i )
             {
                BinaryFileSectionRead hdr(fp, "ONE_BDRY");
 
@@ -1585,12 +1587,12 @@ static void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::
     vector<uint32_t>  fnids;
     // looping over the Face edges on the boundary, creating the keys from sets of node pointers
     for ( size_t i=boundary.InteriorElements(); i<boundary.Elements(); ++i )
-      for ( size_t j=0U; j<boundary.PerimeterFaces(i); ++j )
+      for ( size_t j{0U}; j<boundary.PerimeterFaces(i); ++j )
         {
             const size_t pface = boundary.PerimeterFace(i,j);
             boundary.E(i)->FE()->NodesOfFace( pface, fnids );
             set<Node<3U>*>  key;
-            for ( size_t k=0U; k<fnids.size(); ++k )
+            for ( size_t k{0U}; k<fnids.size(); ++k )
               key.insert( boundary.E(i)->N( fnids[k] ) );
             perimeter_keys.insert( make_pair(key,boundary.E(i)) );
               
@@ -1626,7 +1628,7 @@ static void createLineFaceConnectivity( vector<Face<3U>*>& line_faces )
    
     for ( auto& it : line_faces ) {
          set<Face<3U>*> parents{it};
-         for ( auto i{0}; i<it->Nodes(); ++i ) {
+         for ( auto i{0U}; i<it->Nodes(); ++i ) {
               // inserting a new set or inserting a face pointer into the set if the node key already exists
               auto nit = parent_faces.insert( make_pair( it->N(i), parents ) );
               if ( !nit.second )
@@ -1673,14 +1675,14 @@ static void createLineFaceConnectivity( vector<Face<3U>*>& line_faces )
              Face<3U>* edge1 = (*it.second.begin());
              Face<3U>* edge2 = (*it.second.rbegin());
              // finding the node in the first Face = line element
-             for ( auto i{0}; i<edge1->Nodes(); ++i )
+             for ( auto i{0U}; i<edge1->Nodes(); ++i )
                if ( it.first == edge1->N(i) ) {
                     // assigning the opposite neighbor
                     edge1->Assign( i, edge2 );
                     break;
                  }
              // finding node number in second Face
-             for ( auto i{0}; i<edge2->Nodes(); ++i )
+             for ( auto i{0U}; i<edge2->Nodes(); ++i )
                if ( it.first == edge2->N(i) ) {
                     // assigning neighbors
                     edge2->Assign( i, edge1 );
@@ -1739,16 +1741,16 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
                // 2.1 parent element of Face 1
                // ----------------------------
                // establishing the face-node sequence of the inner element face that will be shared with the new Face object
-               for ( auto i{0}; i<parent1->Segments(); ++i ) {
+               for ( auto i{0U}; i<parent1->Segments(); ++i ) {
                     vector<uint32_t> snids; // local segment node ids
                     parent1->FE()->NodesOfSegment( i, snids );
                     set<csmp::Node<3U>*> nset;
-                    for ( size_t k=0U; k<snids.size(); ++k ) nset.insert( parent1->N(snids[k]) );
+                    for ( size_t k{0U}; k<snids.size(); ++k ) nset.insert( parent1->N(snids[k]) );
                     if ( nset == (*it1).first ) {
                           segment_id_parent1 = i;
                           // capturing the segment nodes for the construction of the Face object
                           segment_nodes.reserve( snids.size() );
-                          for ( size_t j=0U; j<snids.size(); ++j )
+                          for ( size_t j{0U}; j<snids.size(); ++j )
                             segment_nodes.push_back( parent1->N(snids[j]) );
                           assert( segment_nodes.size() >= 2U );
                           // 2.2 parent of Face 2
@@ -2230,7 +2232,7 @@ bool hasNullPointer = find( elmts_to_become_faces.begin(), elmts_to_become_faces
     csmp::Region<dim>& fracture_domain(model->Region("FRACTURE"));
     for ( auto it=fracture_domain.ElementsBegin(); it!=fracture_domain.ElementsEnd(); ++it ) {
           assert( (*it)->Idx() >= 0 );
-          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+          for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
             if ( (*it)->Neighbor(i) != nullptr )
               cerr << (*it)->Neighbor(i)->Idx() <<" ";
       }
@@ -2240,7 +2242,7 @@ csmp::Region<dim>& frac_domain(model->Region("FRACTURE"));
 for ( auto& it : elmts_to_become_faces ) {
      if ( frac_domain.Contains( it ) )
        cerr <<"region overlap at "<< it->Idx();
-       for ( auto i{0}; i<it->Neighbors(); ++i )
+       for ( auto i{0U}; i<it->Neighbors(); ++i )
          if ( it->Neighbor(i) != nullptr )
            if ( frac_domain.Contains( it->Neighbor(i) ) )
              cerr <<"neighbor overlap at "<< it->Neighbor(i)->Idx();
@@ -2440,7 +2442,7 @@ void BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromNodeFlag
 
   // for all element faces on the model boundary
   for ( size_t eid{model_domain.InteriorElements()}; eid < model_domain.Elements(); ++eid )
-    for ( auto j{0}; j < model_domain.PerimeterFaces(eid); ++j ) {
+    for ( auto j{0U}; j < model_domain.PerimeterFaces(eid); ++j ) {
          const auto face_id{ model_domain.PerimeterFace(eid,j) };
          // getting the boundary flag of the face
          const BOX_BOUNDARY bflag = atBoundary( model_domain.E(eid), face_id );

@@ -69,29 +69,29 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                 case VECTOR: {
                      VectorVariable<dim>  vc;
                      sg.Read( prop_key, vc );
-                     for ( auto j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                     for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                      fprintf( fp, "\n");
                     }
                   break;
                 case TENSOR: { 
                      TensorVariable<dim>  ts;
                      sg.Read( prop_key, ts );
-                     for ( auto j=0U; j<dim; j++ )
-                       for ( auto k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                     for ( auto j{0U}; j<dim; j++ )
+                       for ( auto k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                      fprintf( fp, "\n");
                   }
                   break;
                 case ARRAY: {
                      ArrayVariable ary;
                      sg.Read( prop_key, ary );
-                     for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                     for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                      fprintf( fp, "\n");
                   }
                   break;
                 case FLAGGEDARRAY: {
                      FlaggedArrayVariable ary;
                      sg.Read( prop_key, ary );
-                     for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                     for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                      fprintf( fp, "\n");
                   }
                   break;
@@ -117,29 +117,29 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case VECTOR: {
                          VectorVariable<dim>  vc;
                          (*it).second.Read( prop_key, vc );
-                         for ( auto j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                         for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                          fprintf( fp, "\n");
                         }
                       break;
                     case TENSOR: { 
                          TensorVariable<dim>  ts;
                          (*it).second.Read( prop_key, ts );
-                         for ( auto j=0U; j<dim; j++ )
-                           for ( auto k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                         for ( auto j{0U}; j<dim; j++ )
+                           for ( auto k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -161,29 +161,29 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case VECTOR: {
                          VectorVariable<dim>  vc;
                          (*it).second.Read( prop_key, vc );
-                         for ( auto j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                         for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                          fprintf( fp, "\n");
                         }
                       break;
                     case TENSOR: { 
                          TensorVariable<dim>  ts;
                          (*it).second.Read( prop_key, ts );
-                         for ( auto j=0U; j<dim; j++ )
-                           for ( auto k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                         for ( auto j{0U}; j<dim; j++ )
+                           for ( auto k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -213,29 +213,29 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case VECTOR: {
                          VectorVariable<dim>  vc;
                          (*it).second.Read( prop_key, vc );
-                         for ( auto j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                         for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                          fprintf( fp, "\n");
                         }
                       break;
                     case TENSOR: { 
                          TensorVariable<dim>  ts;
                          (*it).second.Read( prop_key, ts );
-                         for ( auto j=0U; j<dim; j++ )
-                           for ( auto k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                         for ( auto j{0U}; j<dim; j++ )
+                           for ( auto k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -259,29 +259,29 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& sg,
                     case VECTOR: {
                          VectorVariable<dim>  vc;
                          (*it).second.Read( prop_key, vc );
-                         for ( auto j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                         for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                          fprintf( fp, "\n");
                         }
                       break;
                     case TENSOR: { 
                          TensorVariable<dim>  ts;
                          (*it).second.Read( prop_key, ts );
-                         for ( auto j=0U; j<dim; j++ )
-                           for ( auto k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                         for ( auto j{0U}; j<dim; j++ )
+                           for ( auto k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*it).second.Read( prop_key, ary );
-                         for ( size_t j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( size_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -316,7 +316,6 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
      strcpy( file_name, fname );
      strcat( file_name, ".txt");
      FILE                                           *fp;
-     uint32_t                                        j, k;
      csmp::Index                                     prop_key = sg.Database().StorageKey(s);
      ScalarVariable                                  sc;
      VectorVariable<dim>                             vc, center;
@@ -353,26 +352,26 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                        break;
                      case VECTOR: 
                           (*nit)->Read( prop_key, vc );
-                          for ( j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                          for ( uint32_t j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                           fprintf( fp, "\n" );
                        break;
                      case TENSOR: 
                           (*nit)->Read( prop_key, ts );
-                          for ( j=0; j<dim; j++ ) 
-                            for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                          for ( uint32_t j=0U; j<dim; j++ )
+                            for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*nit)->Read( prop_key, ary );
-                         for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*nit)->Read( prop_key, ary );
-                         for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -388,7 +387,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
-              for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+              for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
                 fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -407,26 +406,26 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                        break;
                      case VECTOR: 
                           (*eit)->Read( i, prop_key, vc );
-                          for ( j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                          for ( uint32_t j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                           fprintf( fp, "\n" );
                        break;
                      case TENSOR: 
                           (*eit)->Read( i, prop_key, ts );
-                          for ( j=0; j<dim; j++ ) 
-                            for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                          for ( uint32_t j=0U; j<dim; j++ )
+                            for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                       break;
                     case ARRAY: {
                          ArrayVariable ary;
                          (*eit)->Read( i, prop_key, ary );
-                         for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
                     case FLAGGEDARRAY: {
                          FlaggedArrayVariable ary;
                          (*eit)->Read( i, prop_key, ary );
-                         for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                         for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                          fprintf( fp, "\n");
                       }
                       break;
@@ -444,13 +443,13 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( auto i{0}; i<(*eit)->Nodes(); ++i )
+                for ( uint32_t i{0U}; i<(*eit)->Nodes(); ++i )
                 {
                   // printing the element id first
                   fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                   
                   // printing the sector integration point coordinates in global coordinates
-                  for ( j=1U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
+                  for ( uint32_t j=1U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                        fprintf( fp, " | " );
                        Point<dim> pt((*eit)->RstToXYZ((*eit)->FV()->SectorPoint(i,j)));
                        fprintf( fp, "%E\t", pt[0] );
@@ -461,43 +460,43 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                             for ( j=0U; j<(*eit)->FV()->SectorPoints(i); ++j )
+                             for ( auto j{0U}; j<(*eit)->FV()->SectorPoints(i); ++j )
                               (*eit)->Read( i, prop_key, sc );
                             fprintf( fp, "%E\n", sc() );
                          break;
                        case VECTOR: 
-                            for ( j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
+                            for ( auto j{0U}; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, vc );
                                  fprintf( fp, " | " );
-                                 for ( k=0; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
+                                 for ( auto k=0; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
                               }
                             fprintf( fp, "|\n" );
                          break;
                        case TENSOR: 
-                            for ( j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
+                            for ( auto j{0U}; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ts );
                                  fprintf( fp, " | " );
-                                 for ( k=0; k<dim; ++k )
-                                   for ( size_t l=0; l<dim; ++l ) fprintf( fp, "%E\t", ts(k,l) );
+                                 for ( uint32_t k{0U}; k<dim; ++k )
+                                   for ( uint32_t l{0U}; l<dim; ++l ) fprintf( fp, "%E\t", ts(k,l) );
                               }
                             fprintf( fp, "|\n" );
                         break;
                       case ARRAY: {
                             ArrayVariable ary;
-                            for ( j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
+                            for ( auto j{0U}; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
-                                 for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
+                                 for ( uint32_t k{0U}; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
                               }
                            fprintf( fp, " |\n");
                         }
                         break;
                       case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
-                            for ( j=0U; j<(*eit)->FV()->SectorPoints(i); ++j ) {
+                            for ( uint32_t j{0U}; j<(*eit)->FV()->SectorPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, "|" );
-                                 for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
+                                 for ( uint32_t k{0U}; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
                               }
                            fprintf( fp, " |\n");
                         }
@@ -518,13 +517,13 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
-                for ( auto i{0}; i<(*eit)->FV()->Facets(); ++i )
+                for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
                 {
                   // printing the element id first
                   fprintf( fp, "%u\t", static_cast<size_t>((*eit)->Idx()) );
                   
                   // printing the facet integration point locations in global coordinates
-                  for ( j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
+                  for ( uint32_t j=1U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                        fprintf( fp, " | " );
                        Point<dim> pt((*eit)->RstToXYZ((*eit)->FV()->FacetPoint(i,j)));
                        fprintf( fp, "%E\t", pt[0] );
@@ -535,43 +534,43 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                   switch (prop_key.type)
                     {
                        case SCALAR:
-                             for ( j=0U; j<(*eit)->FV()->FacetPoints(i); ++j )
+                             for ( uint32_t j{0U}; j<(*eit)->FV()->FacetPoints(i); ++j )
                               (*eit)->Read( i, prop_key, sc );
                             fprintf( fp, "%E\n", sc() );
                          break;
                        case VECTOR: 
-                            for ( j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
+                            for ( uint32_t j{0U}; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, vc );
                                  fprintf( fp, " | " );
-                                 for ( k=0; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
+                                 for ( uint32_t k{0U}; k<dim; ++k ) fprintf( fp, "%E\t", vc(k) );
                               }
                             fprintf( fp, "|\n" );
                          break;
                        case TENSOR: 
-                            for ( j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
+                            for ( uint32_t j{0U}; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ts );
                                  fprintf( fp, " | " );
-                                 for ( k=0; k<dim; ++k )
-                                   for ( size_t l=0; l<dim; ++l ) fprintf( fp, "%E\t", ts(k,l) );
+                                 for ( uint32_t k{0U}; k<dim; ++k )
+                                   for ( uint32_t l=0; l<dim; ++l ) fprintf( fp, "%E\t", ts(k,l) );
                               }
                             fprintf( fp, " |\n" );
                         break;
                       case ARRAY: {
                             ArrayVariable ary;
-                            for ( j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
+                            for ( uint32_t j{0U}; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
-                                 for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
+                                 for ( uint32_t k{0U}; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
                               }
                            fprintf( fp, "|\n");
                         }
                         break;
                       case FLAGGEDARRAY: {
                             FlaggedArrayVariable ary;
-                            for ( j=0U; j<(*eit)->FV()->FacetPoints(i); ++j ) {
+                            for ( uint32_t j{0U}; j<(*eit)->FV()->FacetPoints(i); ++j ) {
                                  (*eit)->Read( i, j, prop_key, ary );
                                  fprintf( fp, " | " );
-                                 for ( k=0U; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
+                                 for ( uint32_t k{0U}; k<ary.Size(); ++k ) fprintf( fp, "%E\t", ary(k) );
                               }
                            fprintf( fp, " |\n");
                         }
@@ -604,26 +603,26 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                         break;
                       case VECTOR: 
                            (*eit)->Read( prop_key, vc );
-                           for ( j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                           for ( uint32_t j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                            fprintf( fp, "\n");
                         break;
                       case TENSOR: 
                            (*eit)->Read( prop_key, ts );
-                           for ( j=0; j<dim; j++ ) 
-                             for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                           for ( uint32_t j=0U; j<dim; j++ )
+                             for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                            fprintf( fp, "\n");
                         break;
                       case ARRAY: {
                            ArrayVariable ary;
                            (*eit)->Read( prop_key, ary );
-                           for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                           for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                            fprintf( fp, "\n");
                         }
                         break;
                       case FLAGGEDARRAY: {
                            FlaggedArrayVariable ary;
                            (*eit)->Read( prop_key, ary );
-                           for ( j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                           for ( uint32_t j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                            fprintf( fp, "\n");
                         }
                         break;
@@ -716,16 +715,16 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
           var_keys[var_count] = model.Database().StorageKey( (*pit).c_str() );
           if ( var_keys[var_count].type == SCALAR ) fprintf( fp, "%s\t", (*pit).c_str() );
           else if ( var_keys[var_count].type == VECTOR ) {
-                 for ( auto i{0}; i<dim; i++ )
+                 for ( auto i{0U}; i<dim; i++ )
                    fprintf( fp, "%s%u\t", (*pit).c_str(), i );
             }
           else if ( var_keys[var_count].type == TENSOR ) {
-                 for ( auto i{0}; i<dim; i++ )
-                   for ( auto j=0U; j<dim; j++ )
+                 for ( auto i{0U}; i<dim; i++ )
+                   for ( auto j{0U}; j<dim; j++ )
                      fprintf( fp, "%s%u%u\t", (*pit).c_str(), i, j );
             }
           else if ( var_keys[var_count].type == ARRAY or var_keys[var_count].type == FLAGGEDARRAY ) {
-                 for ( auto i{0}; i<var_keys[var_count].dataDepth; i++ )
+                 for ( auto i{0U}; i<var_keys[var_count].dataDepth; i++ )
                    fprintf( fp, "%s%u\t", (*pit).c_str(), i );
             }
           var_count++;
@@ -764,20 +763,20 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                              break;
                            case VECTOR: 
                                 (*nit)->Read( (*vt), vc );
-                                for ( auto j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                                for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                              break;
                            case TENSOR: 
                                 (*nit)->Read( (*vt), ts );
-                                for ( auto j=0; j<dim; j++ )
+                                for ( auto j{0U}; j<dim; j++ )
                                   for ( auto k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                             break;
                           case ARRAY:
                                (*nit)->Read( (*vt), ary );
-                               for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                               for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                             break;
                           case FLAGGEDARRAY:
                                (*nit)->Read( (*vt), fary );
-                               for ( auto j=0U; j<fary.Size(); j++ ) fprintf( fp, "%E\t", fary(j) );
+                               for ( auto j{0U}; j<fary.Size(); j++ ) fprintf( fp, "%E\t", fary(j) );
                             break;
                           default:
                             throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
@@ -809,20 +808,20 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
                                break;
                              case VECTOR:
                                   (*eit)->Read( (*vt), vc );
-                                  for ( auto j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                                  for ( auto j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                                break;
                              case TENSOR:
                                   (*eit)->Read( (*vt), ts );
-                                  for ( auto j=0; j<dim; j++ )
+                                  for ( auto j{0U}; j<dim; j++ )
                                     for ( auto k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                                break;
                              case ARRAY:
                                   (*eit)->Read( (*vt), ary );
-                                  for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                                  for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                                break;
                              case FLAGGEDARRAY:
                                   (*eit)->Read( (*vt), ary );
-                                  for ( auto j=0U; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
+                                  for ( auto j{0U}; j<ary.Size(); j++ ) fprintf( fp, "%E\t", ary(j) );
                                break;
                              default:
                                throw csmp::Exception( ERROR, "TextInterface<dim>::OutputDataAsTextColumns:",
@@ -883,11 +882,10 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
      strcpy( file_name, fname );
      strcat( file_name, ".txt");
      FILE*                fp;
-     size_t               j, k;
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
      TensorVariable<dim>  ts;
-     vector<double>     xyz;
+     vector<double>       xyz;
 
      // 2. Getting the file ready
      if ((fp = fopen ( file_name,"wt")) == NULL ) {
@@ -919,13 +917,13 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                        break;
                      case VECTOR: 
                           (*nit)->Read( prop_key, vc );
-                          for ( j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                          for ( uint32_t j{0U}; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                           fprintf( fp, "\n" );
                        break;
                      case TENSOR: 
                           (*nit)->Read( prop_key, ts );
-                          for ( j=0U; j<dim; j++ ) 
-                            for ( k=0U; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                          for ( uint32_t j{0U}; j<dim; j++ )
+                            for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                      default:
                        throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
@@ -939,7 +937,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
-              for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+              for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
                 fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
@@ -959,13 +957,13 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                        break;
                      case VECTOR: 
                           (*eit)->Read( i, prop_key, vc );
-                          for ( j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                          for ( uint32_t j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                           fprintf( fp, "\n" );
                        break;
                      case TENSOR: 
                           (*eit)->Read( i, prop_key, ts );
-                          for ( j=0; j<dim; j++ ) 
-                            for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                          for ( uint32_t j=0U; j<dim; j++ )
+                            for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                           fprintf( fp, "\n" );
                      default:
                        throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
@@ -994,13 +992,13 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
                         break;
                       case VECTOR: 
                            (*eit)->Read( prop_key, vc );
-                           for ( j=0; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
+                           for ( uint32_t j=0U; j<dim; j++ ) fprintf( fp, "%E\t", vc(j) );
                            fprintf( fp, "\n");
                         break;
                       case TENSOR: 
                            (*eit)->Read( prop_key, ts );
-                           for ( j=0; j<dim; j++ ) 
-                             for ( k=0; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
+                           for ( uint32_t j=0U; j<dim; j++ )
+                             for ( uint32_t k{0U}; k<dim; k++ ) fprintf( fp, "%E\t", ts(j,k) );
                            fprintf( fp, "\n");
                      default:
                        throw csmp::Exception( WARNING, "TextInterface::OutputDataAsTextColumnsNumbered",
@@ -1235,8 +1233,8 @@ void  TextInterface::ReadPixelTextImage256( const char* fname, Matrix& data )
       throw csmp::Exception( FATAL_ERROR, "TextInterface::ReadPixelTextImage256", 
                                           "Input file could not be opened");
       
-     for ( auto i{0}; i<data.Rows(); i++ )
-       for ( size_t j=0U; j<data.Cols(); j++ )
+     for ( auto i{0U}; i<data.Rows(); i++ )
+       for ( size_t j{0U}; j<data.Cols(); j++ )
          {   
            ifs >> value;
            data(i, j) = value ;

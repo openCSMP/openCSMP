@@ -111,7 +111,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
                  const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
                  ids.clear();
-                 for(auto i=0; i<current_el->Nodes(); i++)
+                 for(auto i{0U}; i<current_el->Nodes(); i++)
                    if(current_n_id!=current_el->N(i)->Idx())
                      ids.push_back(current_el->N(i)->Idx());
 
@@ -250,7 +250,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
                  const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
                  ids.clear();
-                 for( auto i=0;i<current_el->Nodes(); i++ )
+                 for( auto i{0U};i<current_el->Nodes(); i++ )
                      if(current_n_id!=current_el->N(i)->Idx()) ids.push_back(current_el->N(i)->Idx());
 
                  // insert into vector without duplicates:
@@ -310,7 +310,7 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 
         // loop over sectors
         // -------------------
-        for( auto i{0}; i < (*eit)->FV()->Sectors(); i++ ){
+        for( auto i{0U}; i < (*eit)->FV()->Sectors(); i++ ){
 
               //get the global node id for the current segment
               glob_n_id = ids[ i ];
@@ -333,7 +333,7 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
                   volume_ = (*eit)->SectorVolume( i );
 
                   temp_ = VectorVariable<dim>( PLAIN,  0.0);
-                  for( uint32_t k=0; k<dim; k++ )
+                  for( uint32_t k{0U}; k<dim; k++ )
                       temp_.Component(k,current_bc[k] * volume_);
 
                   center_of_mass_[ glob_n_id ].first += temp_;
@@ -343,7 +343,7 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
         }
      }
 
-     for( auto i = 0U;  i< gref_.Nodes(); i++ )
+     for( size_t i{0U}; i < gref_.Nodes(); i++ )
      {
         //  center_of_mass_[ i ].first.Out();
         //  calculate center: sum_i(x_i * A_i) / sum_i(A_i)
@@ -513,7 +513,7 @@ double GenericNodePropertyGradient<dim>::SizeOf() const
   storage += static_cast<double>(sum_y2.size()) * sizeof(double);
   storage += static_cast<double>(det.size())    * sizeof(double);
 
-  for ( size_t i=0; i<distance.size(); i++ )
+  for ( size_t i{0U}; i<distance.size(); i++ )
       storage += static_cast<double>(distance[i].size()) * 2.0 * sizeof(double);
 
   return storage;
@@ -883,7 +883,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericLeastSquareSums()
             GenericCenterOfMass( (*nit), xyz2 );
 
             // subtract x,y,z-coordinate_neighbour_center - x,y,z-coordinate_current_fv
-            for(auto i{0};i<DIM;i++)
+            for(auto i{0U};i<DIM;i++)
                 dxyz.Component(i, xyz2[i]-xyz1[i]);
 
             // save the distance to the neighboring FVs; Used in CalculateNodalGradient
@@ -1000,7 +1000,7 @@ void GenericNodePropertyGradient<3U>::CalculateGenericNodalGradient()
 
                     // computing temporary variables for least squares calculation; needed for RHS of LGS
                     // NOTE: id's are the same as in CalculateLeastSquares since list is gone thorugh in same order
-                    for(auto i{0};i<DIM;i++)
+                    for(auto i{0U};i<DIM;i++)
                         dcxyz.Component(i, dcxyz[i]+dc*distance[ node_id ][id][i]);
 
                 }

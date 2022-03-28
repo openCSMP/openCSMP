@@ -85,7 +85,7 @@ void GridNode::AssignPoint( const csmp::Point<3U>& pt )
 std::ostream&  operator<<( std::ostream& stream, const GridNode& gn )
  {
      stream <<" idx: "<< gn.GetIdx() <<", xyz: ";
-     for ( auto i{0}; i<3U; i++ ) std::cout << gn[i] <<" ";
+     for ( auto i{0U}; i<3U; i++ ) std::cout << gn[i] <<" ";
      return stream;
  }
  
@@ -442,7 +442,7 @@ void PolygonGridManager::Clear()
 {
     /// delete nodes
     const size_t num_nodes( grid_nodes_.size() );
-    for(size_t i=0; i<num_nodes; ++i)
+    for(size_t i{0U}; i<num_nodes; ++i)
       {
           if( grid_nodes_[i] != NULL )
             {

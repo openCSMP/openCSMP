@@ -81,11 +81,11 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
             if ( id_vec.size() != (*eit)->Neighbors() ) id_vec.resize((*eit)->Neighbors());
             id = (*eit)->Neighbors()-1;
             // reorder element ids
-            for ( auto i=0; i<(*eit)->Neighbors(); i++ ) {
+            for ( auto i{0U}; i<(*eit)->Neighbors(); i++ ) {
                 if ( (*eit)->Neighbor(i) != NULL ) id_vec[id-i] = (*eit)->Neighbor(i)->Idx();
                 else                               id_vec[id-i] = 0;
               }
-            for ( size_t i=0; i<id_vec.size(); i++ ) {
+            for ( size_t i{0U}; i<id_vec.size(); i++ ) {
                 if ( id_vec[i] > 0 ) (*eit)->Assign( i, sgref.E(id_vec[i]-1) );
                 else                 (*eit)->Assign( i, static_cast<Element<dim>*>(nullptr) );
               }
@@ -348,7 +348,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                     (*eit)->N(i)->Read( key, vc );
                  
                     // for each variable component
-                    for ( size_t j=0U; j<dim; j++ )
+                    for ( size_t j{0U}; j<dim; j++ )
                       {
                          double value(numeric_limits<double>::quiet_NaN());
                          // finding status-flagged nodes and reading their stored values

@@ -138,7 +138,7 @@ template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
     // for all finite-volume facets
-    for ( auto i{0}; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
+    for ( auto i{0U}; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         this->gref_.E(this->stencil_.eidx_)->FV()->FacetEdgeNodes( i, this->stencil_.inside_node_, this->stencil_.outside_node_ );
@@ -173,7 +173,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
     Element<dim>* ep = this->gref_.E(this->thread_stencil_processor_[tid]->eidx_);
 
     // for all finite-volume facets
-    for ( auto i{0}; i<ep->FV()->Facets(); i++ )
+    for ( auto i{0U}; i<ep->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         ep->FV()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );

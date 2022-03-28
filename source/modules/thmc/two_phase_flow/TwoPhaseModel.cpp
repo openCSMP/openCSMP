@@ -634,7 +634,7 @@ void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
  {
     if ( interpolate_fluid_properties_ ) {
          mun_ = muw_ = rhn_ = rhw_ = sat_ = static_cast<double>(0.);
-         for ( auto i{0}; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
               sat_ += e.FE()->NRST[i] * e.N(i)->Read( sat_key_ );
               mun_ += e.FE()->NRST[i] * e.N(i)->Read( mun_key_ );
               muw_ += e.FE()->NRST[i] * e.N(i)->Read( muw_key_ );
@@ -644,7 +644,7 @@ void TwoPhaseModel<dim>::InterpolateNodeProperties( const Element<dim>& e )
       }
     else {
          sat_ = static_cast<double>(0.);
-         for ( auto i{0}; i<e.Nodes(); i++ )
+         for ( auto i{0U}; i<e.Nodes(); i++ )
            sat_ += e.FE()->NRST[i] * e.N(i)->Read( sat_key_ );
       }
  }

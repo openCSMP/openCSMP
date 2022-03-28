@@ -269,7 +269,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 		// idea: loop over the faces of the cell and where there is no neighbor
 		// check in which direction the face normal is pointing, assign boundary flags accordingly
 		// if the element has more than one face at the boundary, idenfify it as an edge or a corner
-		for (auto i = 0U; i<(*it)->Faces(); ++i)
+		for (auto i{0U}; i<(*it)->Faces(); ++i)
 			if ((*it)->Neighbor(i) == nullptr) {
 				// determining in which direction the face normal points
 				(*it)->UnitNormalToFace(i, nrml);
@@ -282,7 +282,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 				else if (dotProduct<3U>(nrml, nrml_back) >= minLength) bflag = BACK;
 				// getting the nodes for flagging the faces
 				(*it)->FE()->NodesOfFace(i, fnids);
-				for (auto j = 0U; j<fnids.size(); ++j) {
+				for (auto j{0U}; j<fnids.size(); ++j) {
 					(*it)->N(fnids[j])->AtBoundary(bflag);
 					// storing the nodes to determine which ones lie on EDGES (duplicates) or even corners (triplicates)
 					//                           local node #              flag   local node #

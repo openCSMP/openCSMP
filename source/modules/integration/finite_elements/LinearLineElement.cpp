@@ -543,8 +543,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ ) {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+     for ( uint32_t i{0U}; i<npe; i++ ) {
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -574,7 +574,7 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -582,8 +582,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

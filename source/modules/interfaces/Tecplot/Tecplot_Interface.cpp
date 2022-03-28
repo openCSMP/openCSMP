@@ -169,7 +169,7 @@ void Tecplot_Interface<dim>
      size_t counter(1);
      for ( nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
-          for ( auto i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( auto i{0U}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0.0 <<" ";
           // SCALAR
           if ( prop_key.type == SCALAR ) ofs << (*nit).second[3] <<" ";
@@ -287,7 +287,7 @@ void Tecplot_Interface<dim>
     typename map<size_t,vector<double> >::const_iterator  nitEnd = pxyz_data_.end();
     for ( nit=pxyz_data_.begin(); nit != nitEnd; nit++ )
     {
-        for ( auto i=0; i < 3U; i++ ){
+        for ( auto i{0U}; i < 3U; i++ ){
             ofs << (*nit).second[i];
         if( i != 2U )
             ofs <<" ";
@@ -366,7 +366,7 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
       {
          const size_t eid( *lit );
          // getting node ids and renumbering them 0...n-1
-         for ( auto i{0}; i<super_group.E( eid )->Nodes(); i++ ) {
+         for ( auto i{0U}; i<super_group.E( eid )->Nodes(); i++ ) {
               pair<typename map<size_t,size_t>::iterator,bool>
                 node_it = node_nums.insert( make_pair( super_group.E( eid )->N(i)->Idx(), nodes ) );
               if ( node_it.second == true ) nodes++;
@@ -375,7 +375,7 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
          pentry.resize( super_group.E( eid )->Nodes() );
-         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
+         for ( auto i{0U}; i<super_group.E( eid )->Nodes(); i++ )
            {
               auto nit = node_nums.find( super_group.E( eid )->N(i)->Idx() );
               pentry[i] = (*nit).second;
@@ -387,7 +387,7 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
          assert( pit.second == true );
          // initializing plist vector
          (*pit.first).second.reserve( super_group.E( eid )->Nodes() );
-         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
+         for ( auto i{0U}; i<super_group.E( eid )->Nodes(); i++ )
            (*pit.first).second.push_back( pentry[i] );
       }   
      

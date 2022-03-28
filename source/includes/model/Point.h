@@ -51,10 +51,10 @@ class Point {
     Point& operator/=( double );
   
     /// accessor and mutator of point (0=x coordinate, 1=y...)
-    double& operator[](uint32_t);
+    double& operator[]( uint32_t);
   
     /// accessor of point (0=x coordinate, 1=y...)
-    const double& operator[](uint32_t) const;
+    const double& operator[]( uint32_t) const;
   
     /// compares points using epsilon from numeric_limits
     bool operator==( const Point& ) const;
@@ -165,8 +165,8 @@ class Point<1U> {
     Point<1U>& operator-=( double );
     Point<1U>& operator*=( double );
     Point<1U>& operator/=( double );
-    double&  operator[](uint32_t);
-    const double&  operator[](uint32_t) const;
+    double&  operator[]( uint32_t);
+    const double&  operator[]( uint32_t) const;
     bool   operator==( const Point<1U>& ) const;
     bool   operator!=( const Point<1U>& ) const;
     bool   operator<( const Point<1U>& ) const;
@@ -219,8 +219,8 @@ class Point<2U> {
     Point<2U>& operator-=( double );
     Point<2U>& operator*=( double );
     Point<2U>& operator/=( double );
-    double&  operator[](uint32_t);
-    const double&  operator[](uint32_t) const;
+    double&  operator[]( uint32_t);
+    const double&  operator[]( uint32_t) const;
     bool   operator==( const Point<2U>& ) const;
     bool   operator!=( const Point<2U>& ) const;
     bool   operator<( const Point<2U>& ) const;
@@ -277,8 +277,8 @@ class Point<3U> {
     Point<3U>& operator-=( double );
     Point<3U>& operator*=( double );
     Point<3U>& operator/=( double );
-    double&  operator[](uint32_t);
-    const double&  operator[](uint32_t) const;
+    double&  operator[]( uint32_t);
+    const double&  operator[]( uint32_t) const;
     bool     operator==( const Point<3U>& ) const;
     bool     operator!=( const Point<3U>& ) const;
     bool     operator<( const Point<3U>& ) const;

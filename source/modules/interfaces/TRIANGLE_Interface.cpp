@@ -109,7 +109,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
     // creating the storage for the scalar permeability values
     PropertyData mesh_regions( ELEMENT, SCALAR, 2U );
     mesh_regions.Reserve( evalues.size(), evalues.size() );
-    for ( auto i{0}; i<evalues.size(); i++ )
+    for ( size_t i{0U}; i<evalues.size(); i++ )
       pushBack( mesh_regions, makeScalar(PLAIN,evalues[i]) );
 
     evalues.erase( evalues.begin(), evalues.end() );
@@ -220,7 +220,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
 
     PropertyData mesh_regions( ELEMENT, SCALAR, 2U );
     mesh_regions.Reserve( evalues.size(), evalues.size() );
-    for ( auto i{0}; i<evalues.size(); i++ )
+    for ( size_t i{0U}; i<evalues.size(); i++ )
       pushBack( mesh_regions, makeScalar(PLAIN,evalues[i]) );
 
     evalues.erase( evalues.begin(), evalues.end() );
@@ -236,7 +236,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     
     deque<uint32_t>  ndele(total_elements); // nodes per element and neighbours per element are identical for BAR and TRIA
                        
-    for ( auto i=0; i<plist_tria.size(); i++ )
+    for ( auto i{0U}; i<plist_tria.size(); i++ )
       ndele[i] = 3U; 
     for ( auto i=plist_tria.size(); i<total_elements; i++ )
       ndele[i] = 2U; 
@@ -252,7 +252,7 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
     vset.AddData( "permeability", mesh_regions );
     
     vector<int8_t> elmt_types(total_elements);
-    for ( auto i{0}; i<tria_elements; i++ )
+    for ( size_t i{0U}; i<tria_elements; i++ )
       //vset.ElementType( i, ISOPARAMETRIC_LINEAR_TRIANGLE );
       elmt_types[i] = ISOPARAMETRIC_LINEAR_TRIANGLE;
     for ( size_t i=tria_elements; i<total_elements; i++ )
@@ -364,7 +364,7 @@ void TRIANGLE_Interface::ReadNodeDataFile( const char* file,
     ifs >> nodes >> dim >> node_attributes >> boundary_markers;
     
     // reading the body of data
-    for( auto i{0}; i<nodes; i++ )
+    for( size_t i{0U}; i<nodes; i++ )
       {
          //     id    x-coordinate   y-coordinate   
          ifs >> id >> xval >> yval; // node attributes
@@ -437,10 +437,10 @@ void TRIANGLE_Interface::ReadElementDataFile( const char* file,
     vector<int64_t>  pdata(points_per_element);
     
     // reading the pdata
-    for ( auto i{0}; i<elements; i++ )
+    for ( size_t i{0U}; i<elements; i++ )
        {
           ifs >> id;
-          for ( auto j{0}; j<points_per_element; j++ )
+          for ( auto j{0U}; j<points_per_element; j++ )
             {
                ifs     >> pval;
                pdata[j] = pval;
@@ -494,7 +494,7 @@ void TRIANGLE_Interface::ReadPolyDataFile( const char* file,
     vector<int64_t>  pdata(2); // bar elements have 2 nodes per element.
     
     // reading the pdata
-    for ( auto i{0}; i<segments; i++ )
+    for ( size_t i{0U}; i<segments; i++ )
        {
           ifs >> id;
           for ( int j=0; j<2; j++ )
@@ -565,10 +565,10 @@ void TRIANGLE_Interface::ReadNeighborDataFile( const char* file,
     vector<int64_t> nbors( neighbors_per_element );
     
     // reading the faceverts as being opposite to the nodes in the triangles
-    for ( auto i=0; i<elements; i++ )
+    for ( auto i{0U}; i<elements; i++ )
       {
          ifs >> id;
-         for ( auto j=0; j<neighbors_per_element; j++ )
+         for ( auto j{0U}; j<neighbors_per_element; j++ )
            {
               ifs     >> nid;
               nbors[j] = nid; 
@@ -1207,13 +1207,13 @@ void TRIANGLE_Interface::ListZeroPropertyValueElements( vector<double>& evalues,
  
     cout <<"\nTRIANGLE_Interface::ListZeroPropertyValueElements: Searching for elements with zero ";
     cout <<"'permeability' values..."<< endl;
-    for ( auto i{0}; i<evalues.size(); i++ )
+    for ( size_t i{0U}; i<evalues.size(); i++ )
       if ( evalues[i] == 0. )
         {
            map<size_t,vector<int64_t> >::const_iterator it=plist.find(i+1U);
            assert( it != plist.end() );
            avgx = avgy = 0.0;
-           for ( size_t j=0; j<(*it).second.size(); j++ ) {
+           for ( size_t j{0U}; j<(*it).second.size(); j++ ) {
                 avgx += x[ (*it).second[j]-1 ];
                 avgy += y[ (*it).second[j]-1 ];
              }

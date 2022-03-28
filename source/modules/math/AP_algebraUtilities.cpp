@@ -207,7 +207,7 @@ void localSurfaceNormal(const vector< Point<dim> >& vecPoints, const Point<dim>&
 	   const size_t iSize(vecPoints.size());
 	   for(size_t iPt = 0U; iPt < iSize; iPt++)
 	   {
-		   for(auto i = 0U; i < iLevelOfRefinement; i++)	
+		   for(auto i{0U}; i < iLevelOfRefinement; i++)	
 		   {
 			  const size_t iOffset((iPt+1)%iSize);
 			  

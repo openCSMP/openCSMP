@@ -33,8 +33,8 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
     const double phi = e.Read( key_PHI_ );
     const double ct  = e.Read( key_CT_ );
 
-    const size_t sectors(e.Sectors());
-    for ( auto i{0}; i<sectors; ++i ) 
+    const auto sectors{ e.Sectors() };
+    for ( auto i{0U}; i<sectors; ++i )
      {
         const double sector_PV = (interpolate_pf_to_sector_ip_) ? e.Read( i, 0U, key_SPV_ ) : e.SectorVolume(i) * phi;  
         double pf0(0.), pf1(0.);
@@ -43,7 +43,7 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
              const size_t s_ip(0U), n_nodes(e.Nodes()); // sector integration point and element nodes
              e.N_AtSectorIntegrationPoint( i, s_ip );
              // interpolate pressures to sector integration point
-             for ( size_t j=0U; j<n_nodes; ++j ) {
+             for ( size_t j{0U}; j<n_nodes; ++j ) {
                   pf0 += e.FE()->NRST[j] * e.N(j)->Read( key_PF0_ );
                   pf1 += e.FE()->NRST[j] * e.N(j)->Read( key_PF1_ );
                }
@@ -70,21 +70,21 @@ void FluidCompressibilitySourceLHS<dim>::AccumulateStencil( const Element<dim>& 
   void FluidCompressibilitySourceLHS<dim>::AccumulateFiniteVolume( const Node<dim>& fv, SparseMatrix& mat ) const
   {
     // getting properties from parent elements
-    const size_t parent_elements(fv.Parents());
-    for ( auto i{0}; i<parent_elements; ++i ) {
+    const auto parent_elements{fv.Parents()};
+    for ( auto i{0U}; i<parent_elements; ++i ) {
         const Element<dim>* const eptr = fv.Parent(i);
-        const size_t n_node = fv.ParentNodeNumber(i); 
+        const auto n_node = fv.ParentNodeNumber(i);
 
         const double sector_PV = (interpolate_pf_to_sector_ip_) ? eptr->Read( n_node, 0U, key_SPV_ ) : 
-                                                                    eptr->SectorVolume(n_node) * eptr->Read( key_PHI_ );  
+                                                                  eptr->SectorVolume(n_node) * eptr->Read( key_PHI_ );
         const double ct = eptr->Read( key_CT_ ); 
         double pf0(0.), pf1(0.);
         // getting pressures p0 and p1 at sector integration points 
         if ( interpolate_pf_to_sector_ip_ == true ) {
-             const size_t s_ip(0U), n_nodes(eptr->Nodes()); // sector integration point and element nodes
+             const auto s_ip(0U), n_nodes(eptr->Nodes()); // sector integration point and element nodes
              eptr->N_AtSectorIntegrationPoint( n_node, s_ip );
              // interpolate pressures to sector integration point
-             for ( size_t j=0U; j<n_nodes; ++j ) {
+             for ( auto j{0U}; j<n_nodes; ++j ) {
                   pf0 += eptr->FE()->NRST[j] * eptr->N(j)->Read( key_PF0_ );
                   pf1 += eptr->FE()->NRST[j] * eptr->N(j)->Read( key_PF1_ );
                }

@@ -8,7 +8,7 @@ namespace csmp {
 void printVector( const std::vector<uint32_t>& v )
  {
      cout <<"\nuint vector: size/capacity: "<< v.size() <<"/"<< v.capacity() <<"members:"<< endl;
-     for ( auto i{0}; i<v.size(); i++ )
+     for ( size_t i{0U}; i<v.size(); i++ )
        cout << v[i] <<" ";
      cout << endl;
  }
@@ -18,7 +18,7 @@ void printVector( const std::vector<uint32_t>& v )
 void printVector( const std::vector<double>& v )
  {
      cout <<"\ndouble vector: size/capacity: "<< v.size() <<"/"<< v.capacity() <<"members:"<< endl;
-     for ( auto i{0}; i<v.size(); i++ )
+     for ( size_t i{0U}; i<v.size(); i++ )
        cout << v[i] <<" ";
      cout << endl;
  }
@@ -76,7 +76,7 @@ void printVector( const char* headline, const vector<vector<double> >& array )
     cout.setf(ios::scientific);
     long prec = cout.precision(2L);
     
-    for ( n=0, it=array.begin(); it!=array.end(); it++, n++ ) {
+    for ( n=0U, it=array.begin(); it!=array.end(); it++, n++ ) {
          for ( tit=(*it).begin(); tit!=(*it).end(); tit++ ) cout << (*tit) <<" "; 
          if ( n < 3U ) cout <<"  ";
          else {
@@ -109,7 +109,7 @@ void readVectorOfVectors( ifstream& ifs, size_t total_items, size_t entries_per_
          vector<T> data;
          data.reserve( entries_per_vector );
          int32_t id;
-         for ( size_t i=0; i<entries_per_vector; ++i ) {
+         for ( size_t i{0U}; i<entries_per_vector; ++i ) {
               ifs >> id;
               assert( id >= 0 && id << total_items ); // assumption that there are not more nodes that elements*nodes_per_element
               data.push_back( id );

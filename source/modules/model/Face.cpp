@@ -71,11 +71,11 @@ Face<dim>::Face( const Element<dim>& elmt,
 #ifdef DEBUG
     const uint32_t         nodes_to_match(elmt.Nodes());
     set<const Node<dim>*>  elmt_nodes;
-    for ( auto j=0U; j<nodes_to_match; ++j )
+    for ( auto j{0U}; j<nodes_to_match; ++j )
       elmt_nodes.insert( elmt.N(j) );
     // checking inner parent
     uint32_t matching_nodes(0U);
-    for ( auto j=0U; j<innerParent_->Nodes(); ++j ) {
+    for ( auto j{0U}; j<innerParent_->Nodes(); ++j ) {
           assert( innerParent_->N(j) != nullptr );
           if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
             matching_nodes++;
@@ -84,7 +84,7 @@ Face<dim>::Face( const Element<dim>& elmt,
     // checking outer parent
     if ( outerParent_ != nullptr ) {
         matching_nodes = 0U;
-        for ( auto j=0U; j<innerParent_->Nodes(); ++j ) {
+        for ( auto j{0U}; j<innerParent_->Nodes(); ++j ) {
               assert( innerParent_->N(j) != nullptr );
               if ( elmt_nodes.find( innerParent_->N(j) ) != elmt_nodes.end() )
                 matching_nodes++;
@@ -102,7 +102,7 @@ Face<dim>::Face( const Element<dim>& elmt,
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
     const auto nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
-    for ( auto i{0}; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          // assignig the node
          assert( elmt.N(i) != nullptr );
          Assign( i, elmt.N(i) );
@@ -153,7 +153,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // --------------------------------
     bool  matching_face_found{false};
     const size_t n_faces_inner{innerParent_->Faces()};
-    for ( auto i{0}; i<n_faces_inner; ++i )
+    for ( auto i{0U}; i<n_faces_inner; ++i )
       // if the faces match
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
@@ -171,7 +171,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
              node_connector_[k] = inner_parent->N( fnids[k] );
            // finding the number of the shared face in the outer element
            const auto n_faces_outer{outerParent_->Faces()};
-           for ( auto j{0}; j<n_faces_outer; ++j )
+           for ( auto j{0U}; j<n_faces_outer; ++j )
              if ( outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
@@ -245,7 +245,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     // --------------------------------
     bool  matching_face_found{false};
     const auto n_faces_inner{innerParent_->Faces()};
-    for ( auto i{0}; i<n_faces_inner; ++i )
+    for ( auto i{0U}; i<n_faces_inner; ++i )
       if ( inner_parent->Neighbor(i) == outer_parent ) {
            inner_parent_face_id_ = i;
            // assigning the finite element
@@ -262,7 +262,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
              node_connector_[k] = inner_parent->N( fnids[k] );
            // finding the number of the shared face in the outer element
            const auto n_faces_outer{outerParent_->Faces()};
-           for ( auto j{0}; j<n_faces_outer; ++j )
+           for ( auto j{0U}; j<n_faces_outer; ++j )
              if ( outer_parent->Neighbor(j) == inner_parent ) {
                   outer_parent_face_id_ = j;
                   break;
@@ -351,7 +351,7 @@ Face<dim>::Face( Element<dim>& e,
     // nodes of the Element object from wich this Face is constructed
     e.FE()->NodesOfFace( boundary_face, fnids );
     const auto n_nodes{fnids.size()};
-    for ( auto j=0U; j<n_nodes; ++j ) {
+    for ( auto j{0U}; j<n_nodes; ++j ) {
          assert( e.N( fnids[j] ) != nullptr );
          node_connector_[j] = e.N( fnids[j] );
       }
@@ -592,7 +592,7 @@ template<uint32_t dim>
 bool Face<dim>::Unassign( const Face<dim>* const f_ptr )
 {
   if ( f_ptr == nullptr ) return false;
-	for ( auto i{0}; i < face_connector_.size(); ++i )
+	for ( auto i{0U}; i < face_connector_.size(); ++i )
 		if ( f_ptr == face_connector_[i] )
       {
          face_connector_[i] = nullptr;
@@ -670,7 +670,7 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // creating a search key for Face
     set<Node<dim>*>  face_nds;
     const size_t face_nodes(Nodes());
-    for ( auto i{0}; i<face_nodes; ++i ) {
+    for ( auto i{0U}; i<face_nodes; ++i ) {
          // are the nodes there?
          assert( this->N(i) != nullptr );
          face_nds.insert( this->N(i) );
@@ -688,9 +688,9 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
          set<Node<dim>*>  parent_nds;
         
          // inner parent
-         for ( auto i{0}; i<faces; ++i ) {
+         for ( auto i{0U}; i<faces; ++i ) {
               innerParent_->FE()->NodesOfFace( i, nodes_of_face );
-              for ( size_t j=0U; j<nodes_of_face.size(); ++j )
+              for ( size_t j{0U}; j<nodes_of_face.size(); ++j )
                 parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
               // checking
               if ( face_nds == parent_nds ) {
@@ -703,9 +703,9 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
          // outer parent if any
          if ( outerElement != nullptr ) {
-             for ( auto i{0}; i<faces; ++i ) {
+             for ( auto i{0U}; i<faces; ++i ) {
                   outerParent_->FE()->NodesOfFace( i, nodes_of_face );
-                  for ( size_t j=0U; j<nodes_of_face.size(); ++j )
+                  for ( size_t j{0U}; j<nodes_of_face.size(); ++j )
                     parent_nds.insert( outerParent_->N( nodes_of_face[j] ) );
                   // checking
                   if ( face_nds == parent_nds ) {
@@ -731,9 +731,9 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     set<Node<dim>*>  parent_nds;
     
     // inner parent
-    for ( auto i{0}; i<segments; ++i ) {
+    for ( auto i{0U}; i<segments; ++i ) {
          innerParent_->FE()->NodesOfSegment( i, nodes_of_segm );
-         for ( size_t j=0U; j<nodes_of_segm.size(); ++j )
+         for ( size_t j{0U}; j<nodes_of_segm.size(); ++j )
            parent_nds.insert( innerParent_->N( nodes_of_segm[j] ) );
          // checking wether line element matches edge dim+2 element
          if ( face_nds == parent_nds ) {
@@ -746,9 +746,9 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // outer parent
     if ( outerElement != nullptr ) {
-        for ( auto i{0}; i<segments; ++i ) {
+        for ( auto i{0U}; i<segments; ++i ) {
              outerParent_->FE()->NodesOfSegment( i, nodes_of_segm );
-             for ( size_t j=0U; j<nodes_of_segm.size(); ++j )
+             for ( size_t j{0U}; j<nodes_of_segm.size(); ++j )
                parent_nds.insert( outerParent_->N( nodes_of_segm[j] ) );
              // checking wether line element matches edge dim+2 element
              if ( face_nds == parent_nds ) {
@@ -769,7 +769,7 @@ template<uint32_t dim>
 void Face<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
     if ( nd_ptr == nullptr ) return;
-    for ( auto i = 0U; i < node_connector_.size(); i++ )
+    for ( auto i{0U}; i < node_connector_.size(); i++ )
         if ( nd_ptr == node_connector_[i] ) {
             node_connector_[i] = nullptr;
             break;
@@ -819,7 +819,7 @@ void Face<dim>::Accept( csmp::Visitor<dim>& vis )
       }
     if ( vis.ApplicationTarget() == NODE ) {
          size_t n_nodes(this->Nodes());
-         for ( auto i = 0U; i< n_nodes; i++ )
+         for ( auto i{0U}; i< n_nodes; i++ )
              this->N(i)->Accept( vis );
          return;
       }
@@ -1042,7 +1042,7 @@ void  Face<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
   {
     const auto n_nodes{ Nodes() };
     XY.Resize( n_nodes, dim );
-    for ( auto i{0}; i<n_nodes; ++i )
+    for ( auto i{0U}; i<n_nodes; ++i )
         XY.AssignRow( i, N(i)->Coordinate() );
 
   } // end CoordinateMatrix
@@ -1128,7 +1128,7 @@ double  Face<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) 
     assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
     const auto n_nodes{ Nodes() };
-    for ( auto i=0; i<n_nodes; ++i ) {
+    for ( auto i{0U}; i<n_nodes; ++i ) {
         // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
         double fTemp(vecDirection.DotProduct( N(i)->Coordinate() ));
         fTemp /= fMagnitudeOfDirection;
@@ -1165,7 +1165,7 @@ void  Face<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V
     const auto  n_nodes{ Nodes() };
     V.resize(n_nodes);
 
-    for ( auto i{0}; i<n_nodes; i++ )
+    for ( auto i{0U}; i<n_nodes; i++ )
       N(i)->Read( idx, V[i] );
  }
 
@@ -1210,14 +1210,14 @@ void  Face<dim>::Out() const
     cout <<"\nInternal data: "<< endl;
 
     cout <<"\n\tconnected nodes with boundary flags:  ";
-    for ( auto i{0}; i<this->Nodes(); i++ ) {
+    for ( auto i{0U}; i<this->Nodes(); i++ ) {
          str = parseBoundary(N(i)->AtBoundary());
          cout << N(i)->Idx() <<":"<< str <<"  ";
       }
     cout << endl;
 
     cout <<"\n\tconnected neighbor Face types / boundary flags:\n";
-    for ( auto i{0}; i<this->Neighbors(); i++ )
+    for ( auto i{0U}; i<this->Neighbors(); i++ )
       if ( Neighbor(i) != NULL ) {
            cout <<"\t\t"<< Idx() <<":";
            cout << parseFiniteElementType(Neighbor(i)->FE_Type()) <<": ";
@@ -1358,9 +1358,9 @@ size_t Face<dim>::ParentFaceNumber(INTERFACE_SIDE side) const
     vector<uint32_t> fnids;
     set<uint32_t>    face_key_n;
     const size_t faces(parent->Faces());
-    for ( auto i{0}; i<faces; ++i ) {
+    for ( auto i{0U}; i<faces; ++i ) {
          parent->FE()->NodesOfFace( i, fnids );
-         for ( size_t j=0U; j<fnids.size(); ++j )
+         for ( size_t j{0U}; j<fnids.size(); ++j )
            face_key_n.insert( parent->N( fnids[j] )->Idx() );
          // has a matching face been found?
          if ( face_key == face_key_n ) return i;

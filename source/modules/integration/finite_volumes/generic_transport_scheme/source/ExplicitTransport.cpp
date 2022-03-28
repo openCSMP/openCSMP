@@ -83,7 +83,7 @@ size_t ExplicitTransport<dim>::CollectHaloStencils()
          // at the model boundary,  adding those parent elements to the halo
          // which are not contained in the subdomain
          if ( (*nit)->AtBoundary() == NOT )
-           for ( auto i{0}; i<(*nit)->Parents(); ++i )
+           for ( auto i{0U}; i<(*nit)->Parents(); ++i )
              if ( !subdomain_.Contains( (*nit)->Parent(i) ) )
                halo_elmts_.push_back( (*nit)->Parent(i) );
       }
@@ -128,7 +128,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
      if ( HasHaloStencils() )
        for ( typename vector<Element<dim>*>::iterator it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const auto nodes((*it)->Nodes());
-            for ( auto i{0}; i<nodes; ++i ) {
+            for ( auto i{0U}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( key_FB, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_out_, makeScalar(ANY,0.) );
@@ -206,7 +206,7 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
      if ( HasHaloStencils() )
        for ( auto it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const auto nodes((*it)->Nodes());
-            for ( auto i{0}; i<nodes; ++i ) {
+            for ( auto i{0U}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_out_, makeScalar(ANY,0.) );
               }
@@ -390,7 +390,7 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                const auto nid((*nit)->ParentNodeNumber(t));
 
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
-               for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
+               for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
                     auto iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                     double velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
                     if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;

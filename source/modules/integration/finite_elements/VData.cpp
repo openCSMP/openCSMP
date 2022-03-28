@@ -52,10 +52,10 @@ VData::VData( const deque<uint32_t>& npes,
     first_face_(npes.size()),
     first_interface_(npes.size())
  {
-    for ( auto i{0}; i<epes.size(); i++ )
+    for ( auto i{0U}; i<epes.size(); i++ )
       plist[i]   = vector<int64_t>(npes[i]);
          
-    for ( auto i{0}; i<epes.size(); i++ )
+    for ( auto i{0U}; i<epes.size(); i++ )
       pfverts[i] = vector<int64_t>(epes[i]);
  }
 
@@ -73,9 +73,9 @@ VData::VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nod
     first_face_(elmts),
     first_interface_(elmts)
 {
-    for ( auto i{0}; i<elmts; i++ )
+    for ( size_t i{0U}; i<elmts; i++ )
       plist.push_back( vector<int64_t>(nodes_per_element) );
-    for ( size_t k=0U; k<elmts; k++ )
+    for ( size_t k{0U}; k<elmts; k++ )
       pfverts.push_back( vector<int64_t>(nbors_per_element) );
 }
 
@@ -603,10 +603,10 @@ void VData::Resize( size_t nodes_per_element,
     plist.clear();
     pfverts.clear();
 
-    for ( auto i{0}; i<elmts; ++i ) {
+    for ( size_t i{0U}; i<elmts; ++i ) {
          plist.push_back( vector<int64_t>(nodes_per_element) );
       }
-    for ( size_t k=0U; k<elmts; ++k )
+    for ( size_t k{0U}; k<elmts; ++k )
       pfverts.push_back( vector<int64_t>(nbors_per_element) );
       
     hybrid_mesh_ = false;
@@ -668,10 +668,10 @@ to be included into the supplied deques.
     
     pelmt.assign( etypes.begin(), etypes.end() );
     
-    for ( auto i{0}; i<nrCells; i++ )
+    for ( auto i{0U}; i<nrCells; i++ )
       plist.emplace_back( vector<int64_t>(npes[i],UINT_MAX) );
     
-    for ( auto i{0}; i<nrCells; i++ )
+    for ( auto i{0U}; i<nrCells; i++ )
       pfverts.emplace_back( vector<int64_t>(epes[i],IRREGULAR) );
     
     if ( etypes.size() > 1U ) hybrid_mesh_ = true;
@@ -769,7 +769,7 @@ void VData::ResizePlist( size_t elements )
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
       plist.push_back( empty_vec );
    
     // if there were no faces or interfaces initially
@@ -824,7 +824,7 @@ void VData::ResizePlist( size_t elements, uint32_t nperelmt )
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         plist.push_back( empty_vec );
 
     // mono-element meshes can have no faces nor interfaces
@@ -863,13 +863,13 @@ void VData::ResizePlist( const deque<uint32_t>& mixed_ele_plist )
     vector<int64_t>  empty_vec;
     size_t          n_last(mixed_ele_plist[0]);
 
-    for ( auto i{0}; i<mixed_ele_plist.size(); ++i )
+    for ( auto i{0U}; i<mixed_ele_plist.size(); ++i )
       {
          if ( !hybrid_mesh_  and  n_last != mixed_ele_plist[i] ) hybrid_mesh_ = true;
          // extending member vectors in place (avoiding copying)
          plist.push_back( empty_vec );
          plist[i].reserve( (n_last=mixed_ele_plist[i]) );
-         for ( size_t j=0; j<n_last; ++j ) plist[i].push_back( 0 );
+         for ( size_t j{0U}; j<n_last; ++j ) plist[i].push_back( 0 );
       }
 
     // if there were no faces or interfaces initially
@@ -903,7 +903,7 @@ void VData::ResizePfverts( size_t elements )
     const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );
 }
 
@@ -922,7 +922,7 @@ void VData::ResizePfverts( size_t elements, uint32_t nperelmt )
     const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );
 }
 
@@ -953,12 +953,12 @@ void VData::ResizePfverts( const deque<uint32_t>& mixed_ele_pfverts )
          pfverts.erase( pfverts.begin(), pfverts.end() );
       }
 
-    for ( size_t i=0; i<mixed_ele_pfverts.size(); ++i )
+    for ( size_t i{0U}; i<mixed_ele_pfverts.size(); ++i )
       {
          // extending member vectors in place (avoiding copying)
          pfverts.push_back( empty_vec );
          pfverts[i].reserve( mixed_ele_pfverts[i] );
-         for ( size_t j=0U; j<mixed_ele_pfverts[i]; j++ ) pfverts[i].push_back( flag_other );
+         for ( size_t j{0U}; j<mixed_ele_pfverts[i]; j++ ) pfverts[i].push_back( flag_other );
       }
 
  } // end ResizePfverts
@@ -1288,7 +1288,7 @@ void VData::OutASCII( const char* file ) const
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
      ofs <<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
-     for ( auto i{0}; i<px.size(); i++ )
+     for ( auto i{0U}; i<px.size(); i++ )
        ofs << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
@@ -1308,7 +1308,7 @@ void VData::OutASCII( const char* file ) const
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           ofs << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) ofs << (*pt)[j] <<"\t";
+          for ( size_t j{0U}; j<(*pt).size(); j++ ) ofs << (*pt)[j] <<"\t";
           ofs << endl;
        }
 
@@ -1320,7 +1320,7 @@ void VData::OutASCII( const char* file ) const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           ofs << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) ofs << (*ft)[j] <<"\t";
+          for ( size_t j{0U}; j<(*ft).size(); j++ ) ofs << (*ft)[j] <<"\t";
           ofs << endl;
        }
 
@@ -1349,7 +1349,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // vector<int8_t> pelmt;
     const size_t n_elmts{pelmt.size()};
     ofs <<"\ndeque<int8_t>  etypes{";
-    for ( auto i{0}; i<n_elmts; ++i ) {
+    for ( auto i{0U}; i<n_elmts; ++i ) {
          ofs << static_cast<int>(pelmt[i]);
          if ( i < n_elmts-1 ) ofs <<",";
       }
@@ -1405,7 +1405,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
 
     //------------------------------BOUNDARY FLAGS
     ofs <<"\n\nvector<int8_t>  bflags{";
-    for ( auto i{0}; i<Vertices(); ++i ) {
+    for ( size_t i{0U}; i<Vertices(); ++i ) {
          ofs << static_cast<int>(BFlag(i));
          if ( i <Vertices()-1 ) ofs <<",";
       }
@@ -1418,7 +1418,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // Plist( size_t eidx, size_t node, size_t val );
     for ( size_t eidx{0}; eidx<plist.size(); ++eidx ) {
         ofs <<"\n\tplist["<< eidx <<"] = { ";
-        for ( size_t node{0}; node<plist[eidx].size(); ++node ) {
+        for ( auto node{0U}; node<plist[eidx].size(); ++node ) {
              ofs << plist[eidx][node];
              if ( node < plist[eidx].size()-1 ) ofs <<", ";
           }
@@ -1432,7 +1432,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // Pfverts( size_t eidx, size_t neighbor, size_t val );
     for ( size_t eidx{0}; eidx<pfverts.size(); ++eidx ) {
         ofs <<"\n\tpfverts["<< eidx <<"] = { ";
-        for ( size_t nbor{0}; nbor<pfverts[eidx].size(); ++nbor ) {
+        for ( auto nbor{0U}; nbor<pfverts[eidx].size(); ++nbor ) {
              ofs << pfverts[eidx][nbor];
              if ( nbor < pfverts[eidx].size()-1 ) ofs <<", ";
           }
@@ -1474,7 +1474,7 @@ void VData::Out() const
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
      cout<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
-     for ( auto i{0}; i<px.size(); i++ )
+     for ( auto i{0U}; i<px.size(); i++ )
        cout << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
@@ -1494,7 +1494,7 @@ void VData::Out() const
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
+          for ( size_t j{0U}; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
           cout << endl;
        }
 
@@ -1506,7 +1506,7 @@ void VData::Out() const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) {
+          for ( size_t j{0U}; j<(*ft).size(); j++ ) {
                if ( (*ft)[j] >= 0 )
                  cout << (*ft)[j] <<"\t ";
                else {
@@ -1564,7 +1564,7 @@ void VData::InText( std::ifstream& ifs )
           vector<double>( pz ).swap( pz );
        }
 
-     for ( auto i{0}; i<nnodes; i++ ) {
+     for ( size_t i{0U}; i<nnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           px[i] = atof(strtok( text_line, delims ));
@@ -1587,7 +1587,7 @@ void VData::InText( std::ifstream& ifs )
      else                hybrid_mesh_ = true;
      if ( hybrid_mesh_ ) pelmt.reserve(nelements);
      
-     for ( auto i{0}; i<nelements; i++ ) {
+     for ( size_t i{0U}; i<nelements; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           int64_t  etype = atoi(strtok( text_line, delims ));
@@ -1597,7 +1597,7 @@ void VData::InText( std::ifstream& ifs )
           assert( npe > 2 );
           plist[i].resize( static_cast<uint32_t>(npe) );
           vector<int64_t>( plist[i] ).swap( plist[i] );
-          for ( size_t j=0U; j<static_cast<uint32_t>(npe); j++ )
+          for ( size_t j{0U}; j<static_cast<uint32_t>(npe); j++ )
             plist[i][j] = atoi(strtok(NULL,delims));
        }
      
@@ -1610,13 +1610,13 @@ void VData::InText( std::ifstream& ifs )
      assert( nelements == npe );
      pfverts.resize( static_cast<int64_t>(nelements) );
      deque<vector<int64_t> >( pfverts ).swap( pfverts );
-     for ( auto i{0}; i<static_cast<uint32_t>(nelements); i++ ) {
+     for ( auto i{0U}; i<static_cast<uint32_t>(nelements); i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           npe = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
           pfverts[i].resize( static_cast<uint32_t>(npe) );
           vector<int64_t>( pfverts[i] ).swap( pfverts[i] );
-          for ( size_t j=0; j<static_cast<uint32_t>(npe); j++ )
+          for ( size_t j{0U}; j<static_cast<uint32_t>(npe); j++ )
             pfverts[i][j] = atoi(strtok(NULL,delims));
        }
      
@@ -1628,7 +1628,7 @@ void VData::InText( std::ifstream& ifs )
      size_t nbnodes = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
      assert( static_cast<int>(nbnodes) <= nnodes );
      bflags.resize(nnodes,0);
-     for ( auto i{0}; i<nbnodes; i++ ) {
+     for ( auto i{0U}; i<nbnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           size_t nid   = atoi(strtok( text_line, delims ));
@@ -1729,15 +1729,15 @@ void VData::ScaleCoordinateToRange( char coordinate_axis, double cmin, double cm
     double  new_range = cmax   - cmin;  
 
     if ( coordinate_axis == 'x' || coordinate_axis == 'X' )
-      for ( size_t i=0; i<px.size(); i++ )
+      for ( size_t i{0U}; i<px.size(); i++ )
         px[i] = cmin + ((px[i] - oldmin)/old_range) * new_range;
 
     else if ( coordinate_axis == 'y' || coordinate_axis == 'Y' )
-      for ( size_t i=0; i<py.size(); i++ )
+      for ( size_t i{0U}; i<py.size(); i++ )
         py[i] = cmin + ((py[i] - oldmin)/old_range) * new_range;
 
     else if ( coordinate_axis == 'z' || coordinate_axis == 'Z' )
-      for ( size_t i=0; i<pz.size(); i++ )
+      for ( size_t i{0U}; i<pz.size(); i++ )
         pz[i] = cmin + ((pz[i] - oldmin)/old_range) * new_range;
  } 
  
@@ -1762,7 +1762,7 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(pelmt == vd.pelmt) ) {
          cerr<<"\nVData::operator== failed 'pelmt' comparison.";
          if ( pelmt.size() != vd.pelmt.size() ) cerr <<"\nelement type records have different sizes.\n";
-         for ( auto i{0}; i<pelmt.size(); ++i )
+         for ( size_t i{0U}; i<pelmt.size(); ++i )
            if ( pelmt[i] != vd.pelmt[i] )
              cerr <<"\n\t\t"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": "<< static_cast<int>(pelmt[i]) <<" vs "<< static_cast<int>(vd.pelmt[i]);
          cerr << endl << endl;
@@ -1771,7 +1771,7 @@ bool  VData::operator==( const VData& vd ) const
     
     if ( !(plist == vd.plist) ) {
          cerr<<"\nVData::operator== failed 'plist' comparison.";
-         for ( auto i{0}; i<plist.size(); ++i )
+         for ( size_t i{0U}; i<plist.size(); ++i )
            if ( plist[i] != vd.plist[i] ) {
                 if ( plist[i].size() != vd.plist[i].size() ) cerr <<"\ncell "<< i <<" nodes-per-element records have different sizes.\n";
                 else {
@@ -1786,7 +1786,7 @@ bool  VData::operator==( const VData& vd ) const
     
     if ( !(pfverts == vd.pfverts) ) {
          cerr<<"\nVData::operator== failed 'pfverts' comparison.\n";
-         for ( auto i{0}; i<pfverts.size(); ++i )
+         for ( size_t i{0U}; i<pfverts.size(); ++i )
            if ( pfverts[i] != vd.pfverts[i] ) {
                 if ( pfverts[i].size() != vd.pfverts[i].size() ) cerr <<"\n\tcell "<< i <<" element-neighbor records have different sizes.\n";
                 else {
@@ -1802,7 +1802,7 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(bflags == vd.bflags) ) {
          cerr<<"\nVData::operator== failed 'bflags' comparison.";
          if ( bflags.size() != vd.bflags.size() ) cerr <<"\n\tboundary flag records have different sizes.\n";
-         for ( auto i{0}; i<bflags.size(); ++i )
+         for ( size_t i{0U}; i<bflags.size(); ++i )
            if ( bflags[i] != vd.bflags[i] )
              cerr <<"\n\t\tnode flag "<< i <<": "<< static_cast<int>(bflags[i]) <<" vs "<< static_cast<int>(vd.bflags[i]);
          cerr << endl << endl;
@@ -2398,7 +2398,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  // and storing their nodes in correct order for later comparisons
                  if ( isTriangularElement( etype ) ) {
                       const size_t faces{3};
-                      for ( auto i{0}; i < faces; ++i )
+                      for ( auto i{0U}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) { // face 0
@@ -2415,7 +2415,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  // quadrilaterals
                  else if ( isQuadrilateralElement( etype ) ) {
                       const size_t faces{4};
-                      for ( auto i{0}; i < faces; ++i )
+                      for ( auto i{0U}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) { // face 0
@@ -3046,7 +3046,7 @@ size_t VData::SwitchCornerTriangles2D()
                    pair<size_t,size_t> face_nds;
                    size_t              cnr_nd(UINT_MAX);
                    int64_t               nb_idx(UINT_MAX);
-                   for ( auto i{0}; i<3; ++i ) {
+                   for ( auto i{0U}; i<3; ++i ) {
                         if ( pfverts[elmt_idx][i] >= 0 ) {
                              nb_idx = pfverts[elmt_idx][i];
                              switch ( i ) {
@@ -3164,7 +3164,7 @@ void VData::EstablishElementConnectivity3D()
                // creating face key of node pointers from indices of face nodes
                set<size_t> key;
                const auto nodes(CSMP_ElementSpecifications::NodesPerFaceForElementOfType( etype, face ) );
-               for ( auto j=0U; j<nodes; ++j ) {
+               for ( auto j{0U}; j<nodes; ++j ) {
                     // inserting the global  node numbers into the key
                     const size_t face_node = plist[elmt_idx][ CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, j ) ];
                     key.insert( face_node );
@@ -3471,7 +3471,7 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
      // if this a tetrahedral only mesh no checks have to be performed
      if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
        {
-          for ( auto i{0}; i<n_elements; ++i ) {
+          for ( size_t i{0U}; i<n_elements; ++i ) {
                long n_neighbors{0}, neighbor(UNSPECIFIED);
                for ( size_t j{0}; j<PfvertsSize(i); ++j )
                  if ( Pfvert(i,j) >= 0 ) {
@@ -3484,7 +3484,7 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
             }
        }
      else { // for hybrid element type meshes the element type needs to be checked
-          for ( auto i{0}; i<n_elements; ++i ) {
+          for ( size_t i{0U}; i<n_elements; ++i ) {
                long n_neighbors{0}, neighbor(UNSPECIFIED);
                for ( size_t j{0}; j<PfvertsSize(i); ++j )
                  if ( Pfvert(i,j) >= 0 ) {
@@ -3654,7 +3654,7 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
         
         // creating a new entry in the manifold map or getting an iterator to an existing one
         // map<size_t,set<pair<size_t,int8_t> > > vertexManifoldIndices
-        for ( auto i{0}; i<iface_nodes; ++i ) {
+        for ( auto i{0U}; i<iface_nodes; ++i ) {
               // recording which vertices are collocated
               pair<size_t,size_t> vertex_pair = { static_cast<size_t>((*it)[i]), static_cast<size_t>((*it)[plist_entries-i-1]) };
               if ( vertex_pair.first > vertex_pair.second )
@@ -3675,7 +3675,7 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
          if ( elmt_idx >= 0 ) {// if there is an intervening element
              auto nodes_of_elmt{ plist[interface].size() / 2 };
              // the nodes of the intervening element match (in position and order) those of the INSIDE of the Interface
-             for ( auto i{0}; i<nodes_of_elmt; ++i ) {
+             for ( auto i{0U}; i<nodes_of_elmt; ++i ) {
                   manifold_vertex_classifications.insert( make_pair( plist[elmt_idx][i], MIDDLE ) );
                   pair<size_t,size_t> vertex_pair = { plist[interface][i], plist[elmt_idx][i] };
                   if ( vertex_pair.first > vertex_pair.second ) swap( vertex_pair.first, vertex_pair.second );
@@ -3797,7 +3797,7 @@ void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
     n_cnr = vdata.Plist(cnr,n_cnr);
     // establishing extra node of opposite tetrahedron 'nbor' (more robust to rely on node numbers only)
     size_t n4{UINT_MAX};
-    for ( auto i{0}; i<n_nodes; ++i )
+    for ( auto i{0U}; i<n_nodes; ++i )
       if ( vdata.Plist(nbr,i) != n0 &&
            vdata.Plist(nbr,i) != n1 &&
            vdata.Plist(nbr,i) != n2 &&
@@ -3985,7 +3985,7 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
      const size_t npe = distance(vdata.PlistBegin(eidx),vdata.PlistEnd(eidx));
      assert( npe == 4 );
      ofs <<"POINTS " << npe <<" double"<< endl;
-     for ( auto i=0; i<npe; i++ )
+     for ( auto i{0U}; i<npe; i++ )
        ofs << vdata.Px(vdata.Plist(eidx,i)) <<" "<< vdata.Py(vdata.Plist(eidx,i)) <<" "<< vdata.Pz(vdata.Plist(eidx,i)) << endl;
      ofs << endl;
 
@@ -4008,7 +4008,7 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
      // ofs.setf( ios::scientific );
      ofs <<"SCALARS "<< var_name <<" double"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-     for ( auto i=0; i<npe; i++ ) ofs << vdata.Plist(eidx,i) <<" ";
+     for ( auto i{0U}; i<npe; i++ ) ofs << vdata.Plist(eidx,i) <<" ";
      ofs << endl;
      ofs.close();
      cout <<"\nelementToVTK: file '"<< file_name <<"' written successfully."<< endl;

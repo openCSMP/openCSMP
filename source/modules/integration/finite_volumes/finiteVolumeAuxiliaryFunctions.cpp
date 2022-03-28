@@ -222,7 +222,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     global_c.assign( dim, 0.0);
 
     // transform local c's to global c's
-    for (uint32_t m = 0; m<e.Nodes(); m++)
+    for ( uint32_t m = 0; m<e.Nodes(); m++)
         for (auto n = 0; n<dim; n++){
           global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
@@ -232,11 +232,11 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     e.N(inside_node)->Read( grad_sn_key, grad_sn_inside_node);
     e.N(inside_node)->Read( grad_sn_limiter_key, limiter_sn_inside_node);
 
-    for(auto l=0U;l<dim;l++)
+    for(auto l{0U};l<dim;l++)
         distance_inside_node.Component(l,global_c[l]-mass_center_inside_node[l]);
 
     double sn_linear_increment_inside_node=0.0;
-    for(uint32_t l=0U;l<dim;l++)
+    for( uint32_t l{0U};l<dim;l++)
         sn_linear_increment_inside_node+=grad_sn_inside_node[l]*distance_inside_node[l];
 
     limited_sn_inside_node = sn_inside_node + limiter_sn_inside_node()*sn_linear_increment_inside_node;
@@ -246,11 +246,11 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     e.N(outside_node)->Read( grad_sn_key, grad_sn_outside_node);
     e.N(outside_node)->Read( grad_sn_limiter_key, limiter_sn_outside_node);
 
-    for(uint32_t l=0U;l<dim;l++)
+    for( uint32_t l{0U};l<dim;l++)
         distance_outside_node.Component(l,global_c[l]-mass_center_outside_node[l]);
 
     double sn_linear_increment_outside_node=0.0;
-    for(uint32_t l=0U;l<dim;l++)
+    for( uint32_t l{0U};l<dim;l++)
         sn_linear_increment_outside_node+=grad_sn_outside_node[l]*distance_outside_node[l];
 
     limited_sn_outside_node = sn_outside_node  + limiter_sn_outside_node()*sn_linear_increment_outside_node;
@@ -307,11 +307,11 @@ double limitProperty_LSMGRAD( const Element<dim>& e,
     e.N(upstream_node)->Read( grad_sn_key, grad_sn_upstream_node);
     e.N(upstream_node)->Read( grad_sn_limiter_key, limiter_sn_upstream_node);
 
-    for(auto l=0U;l<dim;l++)
+    for(auto l{0U};l<dim;l++)
         distance_upstream_node.Component(l,global_c[l]-mass_center_upstream_node[l]);
 
     double sn_linear_increment_upstream_node=0.0;
-    for(auto l=0U;l<dim;l++)
+    for(auto l{0U};l<dim;l++)
         sn_linear_increment_upstream_node+=grad_sn_upstream_node[l]*distance_upstream_node[l];
 
     return sn_upstream_node + limiter_sn_upstream_node()*sn_linear_increment_upstream_node;
@@ -603,7 +603,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
          // --------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
          const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
-         for ( auto i{0}; i<sectors; ++i ) {
+         for ( auto i{0U}; i<sectors; ++i ) {
               // sector pore volume
               const double sector_volume = (*it)->SectorVolume(i);
               (*it)->Store( i, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
@@ -620,7 +620,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
 
          // 2. computing facet normals and areas
          // ------------------------------------
-         for ( auto j{0}; j<facets; ++j ) {
+         for ( auto j{0U}; j<facets; ++j ) {
               // computing facet areas
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -650,13 +650,13 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
    
    for ( typename vector<Node<dim>*>::const_iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const auto parent_elements((*nit)->Parents());
-        for ( auto i{0}; i<parent_elements; ++i ) {
+        for ( auto i{0U}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // ---------------------------------
              // computing facet normals and areas
              // ---------------------------------
              const auto facets(eptr->Facets());
-             for ( auto j=0U; j<facets; ++j ) {
+             for ( auto j{0U}; j<facets; ++j ) {
                   // computing facet areas
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -672,7 +672,7 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
              // ---------------------------------------
              const double porosity = eptr->Read( phi_key ) * eptr->Read( thi_key );
              const auto sectors(eptr->Sectors());
-             for ( auto j=0U; j<sectors; ++j ) {
+             for ( auto j{0U}; j<sectors; ++j ) {
                   const double sector_volume = eptr->SectorVolume(j);
                   eptr->Store( j, 0U, sv_key, makeScalar( PLAIN, sector_volume ) );
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
@@ -692,10 +692,10 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
             {
                const auto parent_elements((*nit)->Parents());
                double flux_balance(0.);
-               for ( auto i{0}; i<parent_elements; ++i ) {
+               for ( auto i{0U}; i<parent_elements; ++i ) {
                     const Element<dim>* const eptr = (*nit)->Parent(i);
                     const auto sector_node = (*nit)->ParentNodeNumber(i);
-                    for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
+                    for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector_node); ++j ) {
                          const auto facet  = eptr->FV()->FacetSurroundingSector( sector_node, j );
                          const double sign = (sector_node==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
                          const double facet_flux = sign * eptr->Read( facet, 0U, ff_key );
@@ -732,7 +732,7 @@ template<uint32_t dim>
 double sectorFlux( const Element<dim>* const eptr, uint32_t sector, const csmp::Index& flux_key )
  {
    double sector_flux(0.);
-   for ( auto j=0U; j<eptr->FV()->FacetsPerSector(sector); ++j ) {
+   for ( auto j{0U}; j<eptr->FV()->FacetsPerSector(sector); ++j ) {
          const auto facet  = eptr->FV()->FacetSurroundingSector( sector, j );
          const double sign = (sector==eptr->FV()->InsideNode(facet)) ? 1. : -1.;
          const double facet_flux = sign * eptr->Read( facet, 0U, flux_key );
@@ -779,7 +779,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
          // ------------------------------------------------------------------
          // (scaled by the cell thickness attribute=1 for volumetric elements)
          const double phi = (*it)->Read( phi_key ) * (*it)->Read( thi_key );
-         for ( auto i{0}; i<sectors; ++i ) {
+         for ( auto i{0U}; i<sectors; ++i ) {
               // sector pore volume
               const double sector_volume = (*it)->SectorVolume(i);
               (*it)->Store( i, 0U, spv_key, makeScalar( PLAIN, phi * sector_volume ) );
@@ -793,7 +793,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
 
          // 2. computing facet normals and areas
          // ------------------------------------
-         for ( auto j=0U; j<facets; ++j ) {
+         for ( auto j{0U}; j<facets; ++j ) {
               // computing facet areas
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -813,13 +813,13 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
  
    for ( typename vector<Node<dim>*>::const_iterator nit=gref.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const auto parent_elements((*nit)->Parents());
-        for ( auto i{0}; i<parent_elements; ++i ) {
+        for ( auto i{0U}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // ---------------------------------
              // computing facet normals and areas
              // ---------------------------------
              const auto facets(eptr->Facets());
-             for ( auto j=0U; j<facets; ++j ) {
+             for ( auto j{0U}; j<facets; ++j ) {
                   // computing facet areas
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, fa_key, makeScalar( PLAIN, facet_area ) );
@@ -835,7 +835,7 @@ void initializeBasicFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref
              // ---------------------------------------
              const double porosity = eptr->Read( phi_key );
              const auto sectors(eptr->Sectors());
-             for ( auto j=0U; j<sectors; ++j ) {
+             for ( auto j{0U}; j<sectors; ++j ) {
                   const double sector_volume = eptr->SectorVolume(j);
                   eptr->Store( j, 0U, spv_key, makeScalar( PLAIN, sector_volume * porosity ) );
                }

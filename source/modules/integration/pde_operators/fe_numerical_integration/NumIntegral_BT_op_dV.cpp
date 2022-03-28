@@ -70,7 +70,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
     // mapping element-placed operand from material matrix into 1-column matrix
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
-         for ( auto i=0; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
+         for ( auto i{0U}; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
          if ( dim == 2U ) STR(2,0) = MathOperatorRHS<dim>::MTRL[0](0,1);
          else { // 3D, upper diagonal elements of symmetric tensor
               STR(3,0) = MathOperatorRHS<dim>::MTRL[0](0,1); // xy 
@@ -79,7 +79,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
            }
       }
 
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

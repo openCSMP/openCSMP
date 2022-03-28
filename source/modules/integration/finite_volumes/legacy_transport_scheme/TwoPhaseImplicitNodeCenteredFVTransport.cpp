@@ -110,7 +110,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -164,7 +164,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -268,7 +268,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -323,7 +323,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -373,7 +373,7 @@ TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseImplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
 
@@ -564,12 +564,12 @@ double TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
                {
                    fill( gradPc.begin(), gradPc.end(), 0. );
                    (*(*eit)).dN_AtBaryCenter( DN );
-                   for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
+                   for ( size_t j{0U}; j<(*eit)->Nodes(); j++ ) {
                        double sn = (*eit)->N(j)->Read( this->adv1_key_ );
                        relperm.SaturationWettingPhase( 1. - sn );
                        relperm.EffectiveSaturation();
                        double pc = relperm.pc_Phase( );
-                       for ( size_t k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
+                       for ( size_t k{0U}; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                    }
                    // getting the maximum capillary flux (G= lambda overbar)
                    double  magnitude_grad_pc(gradPc[0]); // 1D
@@ -768,7 +768,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
          // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
-        for ( auto i{0}; i<(*nit)->Neighbors(); i++ ) {
+        for ( auto i{0U}; i<(*nit)->Neighbors(); i++ ) {
              const double adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
              // if element value is smaller the current minimum is assigned etc.
              (*sit).first  = std::min( (*sit).first,  adv_var );
@@ -796,7 +796,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i=0;i<current_el->Nodes();i++){
+               for(auto i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -828,7 +828,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i=0;i<current_el->Nodes();i++){
+               for(auto i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));

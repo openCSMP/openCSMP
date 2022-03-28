@@ -107,7 +107,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
      if (vt==SCALAR){
          // getting all the node-related information
          // ----------------------------------------
-         for ( auto i=0; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -118,7 +118,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
          // -------------------------------------------------------
          facet_flux_.resize(e.FV()->Facets());
 
-         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i{0U}; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -128,7 +128,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
      }
      else if (vt==ARRAY){
          ArrayVariable av;
-         for ( auto i=0; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -140,7 +140,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
          // -------------------------------------------------------
          facet_flux_.resize(e.FV()->Facets());
 
-         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i{0U}; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -150,7 +150,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
      }
      if (vt==FLAGGEDARRAY){
          FlaggedArrayVariable fav;
-         for ( size_t i=0; i<e.Nodes(); i++ ) {
+         for ( size_t i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -162,7 +162,7 @@ void ExplicitStencilProcessor<dim>::InitializeFirstOrder(const FV_Parameter& par
          // -------------------------------------------------------
          facet_flux_.resize(e.FV()->Facets());
 
-         for ( auto i=0; i<e.FV()->Facets(); i++ ) {
+         for ( auto i{0U}; i<e.FV()->Facets(); i++ ) {
              // project the velocities onto the facet normals to get
              // fluxes once the projections have been multiplied with
              // the surface areas
@@ -191,7 +191,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
  {
      eidx_ = e.Idx();
             
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -239,7 +239,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionSolution2(
 
      double  limited_psi_inside_node, limited_psi_outside_node;
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -305,7 +305,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      double psi_outside_node = std::numeric_limits<double>::quiet_NaN();
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( auto j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j{0U}; j<DN_.Cols(); j++ ) {
           if (vt == SCALAR)  
             psi_node = e.N(j)->Read( adv1_key_ );
           else if (vt == ARRAY)
@@ -321,10 +321,10 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
             psi_node = fav[var_comp_nr];
           }
 
-          for ( auto k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( auto k{0U}; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -400,12 +400,12 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      e.dN_AtBaryCenter( DN_ );
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( auto j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j{0U}; j<DN_.Cols(); j++ ) {
           double psi_node = e.N(j)->Read( adv1_key_ );
-          for ( auto k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( auto k{0U}; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
             
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -466,12 +466,12 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitAdvectionDiffusionSolutio
      e.dN_AtBaryCenter( DN_ );
 
      fill( grad_.begin(), grad_.end(), zero );
-     for ( auto j=0U; j<DN_.Cols(); j++ ) {
+     for ( auto j{0U}; j<DN_.Cols(); j++ ) {
           double psi_node = e.N(j)->Read( adv1_key_ );
-          for ( size_t k=0U; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
+          for ( size_t k{0U}; k<dim; k++ ) grad_[k] += DN_(k,j) * psi_node;
      }
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -579,12 +579,12 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1_Visc(
 
      e.dN_AtBaryCenter( DN_ );
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( auto j=0; j<e.Nodes(); j++ ) {
+     for ( auto j{0U}; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
           for ( auto k=0; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           const double sn_inside_node  = e.N(inside_node_)->Read( adv1_key_ );
@@ -740,7 +740,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
  {
      eidx_ = e.Idx();
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           // --------------------------------------------------------
@@ -796,7 +796,7 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2_Visc(
 
      double limited_sn_inside_node(1.0), limited_sn_outside_node(1.0);
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
           // --------------------------------------------------------
@@ -865,22 +865,22 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      e.dN_AtBaryCenter( DN_ );
 
      fill( pc_grad_.begin(), pc_grad_.end(), 0. );
-     for ( size_t j=0U; j<e.Nodes(); j++ ) {
+     for ( size_t j{0U}; j<e.Nodes(); j++ ) {
           relperm.SaturationWettingPhase( 1. - e.N(j)->Read( adv1key_ ) );
           const double pc_at_node = relperm.pc_Phase(NONWETTING_PHASE);
-          for ( size_t k=0U; k<dim; k++ ) pc_grad_[k] += DN_(k,j) * pc_at_node;
+          for ( size_t k{0U}; k<dim; k++ ) pc_grad_[k] += DN_(k,j) * pc_at_node;
      }*/
 
      relperm.Initialize( e );
      e.dN_AtBaryCenter( DN_ );
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( auto j=0U; j<e.Nodes(); j++ ) {
+     for ( auto j{0U}; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
-          for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+          for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -1004,13 +1004,13 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
      e.dN_AtBaryCenter( DN_ );
 
      fill( dsdn_.begin(), dsdn_.end(), 0. );
-     for ( auto j=0U; j<e.Nodes(); j++ ) {
+     for ( auto j{0U}; j<e.Nodes(); j++ ) {
           const double sn = e.N(j)->Read( adv1_key_);
-          for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+          for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
      }
 
 
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -1126,14 +1126,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution1(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
     {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -1325,14 +1325,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
     {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -1545,14 +1545,14 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolution2(
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
     {
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -1756,16 +1756,16 @@ void  ExplicitStencilProcessor<dim>::AccumulateExplicitTwoPhaseSolutionAtBoundar
 
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
     // now the saturation dependent properties are computed
     // for all FACETS per SECTOR surrounding the finite volume at the boundary
-    for ( auto k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
+    for ( auto k{0U}; k<e.FV()->FacetsPerSector(pnid); k++ )
       {
         auto i( e.FV()->FacetSurroundingSector(pnid,k) );
 
@@ -1839,12 +1839,12 @@ void  ExplicitStencilProcessor<dim>::Out() const
     // outputting data of object
     cout <<"Finite volume stencil data."<< endl;
     cout <<"\n\tassociated sectors, pore volumes, and advected property values: ";
-    for ( auto i{0}; i<sector_pore_volume_.size(); i++ )
+    for ( auto i{0U}; i<sector_pore_volume_.size(); i++ )
       cout <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
           
     if ( !src_.empty() ) {
          cout <<"\n\nFacet integrated source terms:";
-         for ( size_t i=0; i<src_.size(); i++ )
+         for ( size_t i{0U}; i<src_.size(); i++ )
          cout <<"\n\tfacet "<< i+1 <<": "<< src_[i];
       }
         

@@ -381,7 +381,7 @@ The method acts on the input character string.
 bool isBlankLine( const char* str )
 {
    const size_t strlength = strlen( str );
-   for ( auto i{0}; i<strlength; ++i )
+   for ( auto i{0U}; i<strlength; ++i )
      if ( !isblank( str[i] ) ) return false;
 
    return true;
@@ -434,7 +434,7 @@ bool isCommentLine( char* str )
     return true;
 
   // if the comment identifier is somewhere in the line
-  for ( auto i = 0U; i<strlength; i++ )
+  for ( auto i{0U}; i<strlength; i++ )
     {
        if ( str[i] == '#' || str[i] == '%' ) {
             str[i] = '\0';
@@ -969,9 +969,9 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, uint32_t& position, 
 
       flags[0] = parseCondition( flag_name = token );
       const size_t depth2( depth*depth );
-      for ( auto i = 0U; i<depth; i++ )
+      for ( auto i{0U}; i<depth; i++ )
       {
-        for ( size_t j = 0U; j<depth; j++ )
+        for ( size_t j{0U}; j<depth; j++ )
         {
           if ( !(i == 0) || !(j == 0) )
           {
@@ -3438,7 +3438,7 @@ size_t  read_CSV_File( string filename, vector<string>& col_titles, vector<vecto
          rows_of_columns.emplace_back( vector<double>{ x, y, z } );
 
          // reading the property values
-         for ( auto i{0}; i<n_properties; i++ ) {
+         for ( size_t i{0U}; i<n_properties; i++ ) {
               double data_value = atof(strtok(NULL,delims));
               // TODO: perhaps add a value check against property database here
               rows_of_columns[row_count].push_back( data_value );

@@ -178,7 +178,7 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
             // regular triangles
             if ( (*it2)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE or
                  (*it2)->FE_Type() == LINEAR_TRIANGLE ) {
-                    for ( auto i=0; i<(*it2)->Nodes(); i++ ) {
+                    for ( auto i{0U}; i<(*it2)->Nodes(); i++ ) {
                         if ( i<((*it2)->Nodes()-1) )
                             elements << (*it2)->N(i)->Idx()+1 << "\t";
 	                else
@@ -195,7 +195,7 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
                             elements << (*it2)->N(i)->Idx()+1 << endl;
 	              }
 	            // lower triangle
-                    for ( auto i=0; i<(*it2)->Nodes(); i++ ) {
+                    for ( auto i{0U}; i<(*it2)->Nodes(); i++ ) {
                         if ( i<((*it2)->Nodes()-2) )
                             elements << (*it2)->N(i)->Idx()+1 << "\t";
                         if ( i==((*it2)->Nodes()-1) )

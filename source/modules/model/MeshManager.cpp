@@ -273,7 +273,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( 0U ) ) );
 
   if ( vset.HybridElementTypeMesh() )
-    for ( auto i = 0U; i<vset.TotalNumberOfCells(); ++i )
+    for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++i )
       input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( i ) ) );
 
   cout << "\nMeshManager<" << dim << ">::Initialize: ";
@@ -302,7 +302,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-          for ( auto j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
+          for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
           // TODO: for some reason the move constructor is not called here (copy elision, but?)
           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
         }
@@ -326,7 +326,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j = 0U; j < nodes; ++j )
+              for ( auto j{0U}; j < nodes; ++j )
                 (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
                 
               // assign the material
@@ -345,7 +345,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j = 0U; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
+              for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
               elmt_idx++;
               first++;
             }
@@ -364,7 +364,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const size_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
 //assert( n_neighbors == distance(vset.PfvertsBegin(e.Idx()),vset.PfvertsEnd(e.Idx())) );
 
-            for ( auto j = 0U; j < n_neighbors; ++j ) {
+            for ( auto j{0U}; j < n_neighbors; ++j ) {
                   const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
                   if ( index >= n_elmts ) {
                        cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
@@ -410,7 +410,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                           fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
-            for ( auto j = 0U; j<nodes; ++j ) {
+            for ( auto j{0U}; j<nodes; ++j ) {
                 const size_t node = vset.Plist( face_idx, j );
                 assert( node < n_nodes );
                 (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
@@ -435,7 +435,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  // Equidimensional Face neighbors first
                  // ------------------------------------
                  const auto neighbors( e.Neighbors() );
-                 for ( auto j = 0U; j<neighbors; ++j )
+                 for ( auto j{0U}; j<neighbors; ++j )
                    {
                       // if there is a neighbor (as is the case if the stored index is greater than zero)
                       // (e->Idx() starts with elements=first face)
@@ -521,7 +521,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const auto nodes( (*ifit).FE()->Nodes() );
             // assigning nodes
             // inside
-            for ( auto j = 0U; j<nodes; ++j ) {
+            for ( auto j{0U}; j<nodes; ++j ) {
                  const size_t node(vset.Plist( interface_idx, j ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
@@ -530,7 +530,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
               }
             // outside
-            for ( auto j = 0U; j<nodes; ++j ) {
+            for ( auto j{0U}; j<nodes; ++j ) {
                  const size_t node(vset.Plist( interface_idx, j+nodes ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
@@ -562,7 +562,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
               // 1. Assigning equidimensional InterFace-type neighbors first
               // -----------------------------------------------------------
               const auto neighbors( itf.Neighbors() );
-              for ( auto j = 0U; j<neighbors; ++j )
+              for ( auto j{0U}; j<neighbors; ++j )
                 {
                    // if there is a neighbor (as is the case if the stored index is greater than zero)
                    const int64_t  index( vset.Pfvert( iface_idx, j ) );
@@ -647,13 +647,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
     }
 
   // reserving the memory for the parent storage and zeroing parent vector for next step
-  auto i{0};
+  auto i{0U};
   for ( auto& n : nodes_ )
     n.ResizeParentStorage( parent_elmts_per_node[i++] );
 
    // assigning the parent element information to the nodes
    for ( auto& e : elements_ )
-       for ( auto j = 0U; j<e.Nodes(); ++j )
+       for ( auto j{0U}; j<e.Nodes(); ++j )
          e.N( j )->Assign( j, &e );
        
    // sorting the parent element pointers stored by the nodes for searching
@@ -782,7 +782,7 @@ void MeshManager<dim>::RebuildNodeParentElementRelationships()
    // assigning the parent element information to the nodes
    for ( auto& e : elements_ ) {
         const size_t n_nodes{ e.Nodes() };
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           e.N( j )->Assign( j, &e );
      }
 
@@ -858,7 +858,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
      {
         // tree travel: looping the neighbor nodes of the current node, finding the one that is the closest to the point
         const size_t n_nbors( nptr->Neighbors() );
-        for ( auto i{0}; i<n_nbors; ++i )
+        for ( auto i{0U}; i<n_nbors; ++i )
           distances.insert( make_pair( pt.DistanceTo( nptr->Neighbor(i)->Coordinate() ), i ) );
         // since map defaults to less, its first entry is the node we want
         nptr = nptr->Neighbor( static_cast<uint32_t>((*distances.begin()).second) );
@@ -908,7 +908,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
 
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
 
 
@@ -916,7 +916,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
   // ------------------------------------------------------------------------------------------------------ 
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
-  for ( auto i{0}; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
@@ -974,7 +974,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    // 2. checking the validity of the node vector in debug mode
 #ifdef DEBUG
    // node vector
-   for ( auto i{0}; i<ifptr->FE()->Nodes(); ++i ) {
+   for ( auto i{0U}; i<ifptr->FE()->Nodes(); ++i ) {
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
@@ -994,7 +994,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    
    // 4. connecting the nodes to the element
    const size_t n_nodes( ifptr->FE()->Nodes() );
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
      
    // 5. Connecting the intervening element to interface
@@ -1286,7 +1286,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 
    // 3. assigning node manifolds
    const size_t n_nodes{(*ifp).FE()->Nodes()};
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      // if the inside node is different from the outside node so that there needs to be a manifold
      if ( (*ifp).N(i,INSIDE) != (*ifp).N(i,OUTSIDE) ) {
          // 1. if both nodes are not yet manifolds
@@ -1352,7 +1352,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
 #ifdef DEBUG
    // verifying that the nodes on the inside matching those of the face
-   for ( auto i{0}; i<fptr->Nodes(); ++i ) {
+   for ( auto i{0U}; i<fptr->Nodes(); ++i ) {
         assert( (*ifp).N(i) != nullptr );
         assert( (*ifp).N(i,INSIDE) != nullptr );
         assert( fptr->N(i) == (*ifp).N(i,INSIDE) );
@@ -1507,7 +1507,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
        {
 // POINTER REMAINS VALID AFTER DELETION:          cerr <<"\n\t"<< (*erase_it)->Idx();
           // null the element parent pointers in the elements nodes
-          for ( auto i{0}; i<(*erase_it)->Nodes(); ++i )
+          for ( auto i{0U}; i<(*erase_it)->Nodes(); ++i )
             (*erase_it)->N(i)->Unassign( (*erase_it) );
           // get element pointer for colony and delete the element TODO: inefficient because this is done multiple times for each node
           elements_.erase( elements_.get_iterator( *erase_it ) );
@@ -1584,7 +1584,7 @@ size_t MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<di
     const size_t n_cells{ subdomain.Elements() };
     for ( size_t i=subdomain.InteriorElements(); i < n_cells; ++i ) {
          const uint32_t n_perim_faces( subdomain.PerimeterFaces(i) );
-         for ( auto j{0}; j < n_perim_faces; ++j ) {
+         for ( auto j{0U}; j < n_perim_faces; ++j ) {
               auto p_face = subdomain.PerimeterFace( i, j );
               // detaching outside neighbor, if any
               if ( subdomain.E(i)->Neighbor(p_face) != nullptr ) {
@@ -1725,7 +1725,7 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
           // the element deletion
           const auto n_parents{nit->Parents()};
           size_t n_active_parents{0};
-          for ( auto j{0}; j<n_parents; ++j )
+          for ( auto j{0U}; j<n_parents; ++j )
            if ( nit->Parent(j) != nullptr )
              n_active_parents++;
 
@@ -2009,7 +2009,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
-                     for ( auto i{0}; i < n_combinations; ++i ) {
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
@@ -2171,7 +2171,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
-                     for ( auto i{0}; i < n_combinations; ++i ) {
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           const double angle = angleBetweenLineCells( ptr1, ptr2 );
@@ -2310,7 +2310,7 @@ void MeshManager<dim>::UpdateConnectivity()
          for ( const auto& it : n.second ) {
            size_t n_nodes{it->Nodes()};
            // assigning them to the node
-           for ( auto j=0U; j<n_nodes; ++j )
+           for ( auto j{0U}; j<n_nodes; ++j )
              if ( n.first == it->N(j) ) {
                  it->N(j)->Assign( j, it );
                  break;
@@ -2601,7 +2601,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // elements
   for ( const auto& e : elements_ ) {
       const auto n_nodes{e.Nodes()};
-      for ( auto j = 0U; j<n_nodes; ++j )
+      for ( auto j{0U}; j<n_nodes; ++j )
         vset.Plist( eidx, j, (e.N( j )->Idx()) );
       pmtrl[eidx] = e.Material_ID();
       ++eidx;
@@ -2613,7 +2613,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !faces_.empty() )
     for ( const auto& f : faces_ ) {
         const auto n_nodes{f.Nodes()};
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j )->Idx()) );
         ++eidx;
       }
@@ -2622,7 +2622,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !interfaces_.empty() )
     for ( const auto& f : interfaces_ ) {
         const auto n_nodes{f.Nodes()};
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j )->Idx()) );
         ++eidx;
       }
@@ -2636,7 +2636,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& e : elements_ ) {
       const auto neighbors{e.Neighbors()};
       assert( neighbors <= 6 );
-      for ( auto j{0}; j<neighbors; ++j ) {
+      for ( auto j{0U}; j<neighbors; ++j ) {
             const Element<dim>* const ptr = e.Neighbor(j);
             if ( ptr ) {
                 assert( ptr->Idx() < elements_.size() );
@@ -2654,7 +2654,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& f : faces_ ) {
       // equidimensional neighbors first
       const auto neighbors{ f.Neighbors() };
-      for ( auto j = 0U; j<neighbors; ++j ) {
+      for ( auto j{0U}; j<neighbors; ++j ) {
            const Face<dim>* const ptr = f.Neighbor(j);
            // if the neighbor exists (which it must on the inside of the Face)
            if ( ptr != nullptr )
@@ -2690,7 +2690,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     //    they are written in the order in which they are stored in the interface
     //    To simplify things there is always an entry for the intervening element even if there is none.
     const auto neighbors{ f.Neighbors() };
-    for ( auto j = 0U; j<neighbors; ++j ) {
+    for ( auto j{0U}; j<neighbors; ++j ) {
          if ( f.Neighbor(j) != nullptr )
            vset.Pfvert( eidx, j, f.Idx() );
          else
@@ -2927,7 +2927,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2938,7 +2938,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2949,7 +2949,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2960,7 +2960,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2971,7 +2971,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3008,9 +3008,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3022,9 +3022,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3036,9 +3036,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3050,9 +3050,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3064,9 +3064,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
                 const auto sectors( it.Sectors() );
-                for ( auto i = 0U; i<sectors; ++i ) {
+                for ( auto i{0U}; i<sectors; ++i ) {
                   const auto ips_per_sector( it.IntegrationPointsPerSector() );
-                  for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                  for ( auto j{0U}; j<ips_per_sector; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3104,9 +3104,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3118,9 +3118,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3132,9 +3132,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3146,9 +3146,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3160,9 +3160,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3266,7 +3266,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3277,7 +3277,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3288,7 +3288,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3299,7 +3299,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3310,7 +3310,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3348,9 +3348,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3362,9 +3362,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3376,9 +3376,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3390,9 +3390,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3404,9 +3404,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3445,9 +3445,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3459,9 +3459,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3473,9 +3473,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3487,9 +3487,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3501,9 +3501,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3604,7 +3604,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3615,7 +3615,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3626,7 +3626,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3637,7 +3637,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3648,7 +3648,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3684,9 +3684,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3698,9 +3698,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3712,9 +3712,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3726,9 +3726,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3740,9 +3740,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3779,9 +3779,9 @@ break;
                 ScalarVariable value;
                 for ( const auto& it : interfaces_ ) {
                   const auto facets( it.Facets() );
-                  for ( auto i = 0U; i<facets; ++i ) {
+                  for ( auto i{0U}; i<facets; ++i ) {
                     const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                    for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                    for ( auto j{0U}; j<ips_per_facet; ++j ) {
                       it.Read( i, j, (*pit).second, value );
                       pushBack( data, value );
                     }
@@ -3793,9 +3793,9 @@ break;
               VectorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3807,9 +3807,9 @@ break;
               TensorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3821,9 +3821,9 @@ break;
               ArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3835,9 +3835,9 @@ break;
               FlaggedArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -4041,7 +4041,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U ); // running index
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4054,7 +4054,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4067,7 +4067,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4080,7 +4080,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4093,7 +4093,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4126,9 +4126,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4143,9 +4143,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4160,9 +4160,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4177,9 +4177,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4194,9 +4194,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4230,9 +4230,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           for ( auto& e : elements_ ) {
             if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
             const auto facets( e.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 read( (*pit).second, entry, value );
                 e.Store( i, j, key, value );
                 entry++;
@@ -4247,9 +4247,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4264,9 +4264,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4281,9 +4281,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4298,9 +4298,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4404,7 +4404,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4417,7 +4417,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4430,7 +4430,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4443,7 +4443,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4456,7 +4456,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4488,9 +4488,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4504,9 +4504,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4520,9 +4520,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4536,9 +4536,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4552,9 +4552,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4587,9 +4587,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4603,9 +4603,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4619,9 +4619,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4635,9 +4635,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4651,9 +4651,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4761,7 +4761,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4774,7 +4774,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4787,7 +4787,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4800,7 +4800,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4813,7 +4813,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4845,9 +4845,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4861,9 +4861,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4877,9 +4877,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4893,9 +4893,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4909,9 +4909,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4944,9 +4944,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4960,9 +4960,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4976,9 +4976,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4992,9 +4992,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -5008,9 +5008,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -5149,14 +5149,14 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
       // identifying the boundary faces and their nodes
       // (each face potentially has a neighbor element)
       long  nbors_that_belong_to_group( eit.Neighbors() );
-      for ( auto i = 0U; i<eit.Faces(); i++ )
+      for ( auto i{0U}; i<eit.Faces(); i++ )
         // if the face is at a model boundary
         if ( eit.Neighbor( i ) == nullptr )
           {
             // boundary nodes
             assert( eit.FE() != NULL );
             eit.FE()->NodesOfFace( i, fnids );
-            for ( size_t j = 0U; j<fnids.size(); ++j )
+            for ( size_t j{0U}; j<fnids.size(); ++j )
               boundary_nodes.insert( eit.N( fnids[j] ) );
             // counting neighbors
             nbors_that_belong_to_group--;
@@ -5188,14 +5188,14 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
       if ( parseFiniteElementDimension( eit.FE_Type() ) == highest_spatial_dim )
       {
         // creating a subset with their nodes
-        for ( auto i = 0U; i<eit.Nodes(); ++i ) {
+        for ( auto i{0U}; i<eit.Nodes(); ++i ) {
           assert( eit.N( i ) != nullptr );
           highest_dim_elmt_nodes.insert( eit.N( i ) );
         }
         // if the element has faces that lie on the region boundary
         // it is considered a boudary element
         long  nbors_that_belong_to_group( eit.Neighbors() );
-        for ( auto i = 0U; i<eit.Faces(); ++i )
+        for ( auto i{0U}; i<eit.Faces(); ++i )
           // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
           if ( eit.Neighbor( i ) == nullptr )
             {
@@ -5219,7 +5219,7 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
         // lower-dimensional elements with nodes that do not belong to the node set of the
         // higher dimensional elements must be boundary elements
         size_t  exterior_nodes( 0U );
-        for ( auto i = 0U; i<e->Nodes(); ++i )
+        for ( auto i{0U}; i<e->Nodes(); ++i )
           if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
             exterior_nodes++;
 
@@ -5275,7 +5275,7 @@ void MeshManager<dim>::Out() const
   cout << "\nELEMENTS: " << endl;
   for ( const auto& e : elements_ ) {
          string bound("NOT");
-         for ( auto i{0}; i<e.Neighbors(); ++i )
+         for ( auto i{0U}; i<e.Neighbors(); ++i )
            if ( e.Neighbor(i) == nullptr ) {
                 bound = parseBoundary( atBoundary(&e,i) );
                 break;
@@ -5283,10 +5283,10 @@ void MeshManager<dim>::Out() const
          cout << "\nElement ID: " << e.Idx() <<" ("<< parseFiniteElementType(e.FE_Type());
          cout <<"), Boundary flag: " << bound << endl;
          cout << "Member Nodes: " << endl;
-         for ( auto i = 0U; i < e.Nodes(); i++ )
+         for ( auto i{0U}; i < e.Nodes(); i++ )
            cout << e.N( i )->Idx() << "\t";
          cout << "\nNeighbor elements: " << endl;
-         for ( auto i = 0U; i < e.Neighbors(); i++ )
+         for ( auto i{0U}; i < e.Neighbors(); i++ )
            if ( e.Neighbor( i ) != nullptr )
              cout << e.Neighbor( i )->Idx() << "\t";
            else
@@ -5301,10 +5301,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : faces_ ) {
         cout << "\nFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i = 0U; i < f.Nodes(); i++ )
+        for ( auto i{0U}; i < f.Nodes(); i++ )
           cout << f.N( i )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i = 0U; i < f.Neighbors(); i++ )
+        for ( auto i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != nullptr )
             cout << f.Neighbor( i )->Idx() << "\t";
           else
@@ -5320,10 +5320,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : interfaces_ ) {
         cout << "\nInterFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i = 0U; i < f.Nodes(); i++ )
+        for ( auto i{0U}; i < f.Nodes(); i++ )
           cout << f.N( i )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i = 0U; i < f.Neighbors(); i++ )
+        for ( auto i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != NULL )
             cout << f.Neighbor( i )->Idx() << "\t";
           else

@@ -122,7 +122,7 @@ const
 
            // normalizing by area, i.e. how much of total area has this characteristic
            // ------------------------------------------------------------------------
-           for ( size_t i=0; i<result.size(); i++ ) result[i].second /= total_volume;
+           for ( size_t i{0U}; i<result.size(); i++ ) result[i].second /= total_volume;
             
            // 3. storing result map and zeroing vector for next region
            //---------------------------------------------------------
@@ -205,7 +205,7 @@ const
                              }
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -226,7 +226,7 @@ const
                    break;
                 case ELEMENT_INTEGRATION_POINT:
                      for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
-                       for ( size_t j=0U; j<(*it)->IntegrationPoints(); j++ )
+                       for ( size_t j{0U}; j<(*it)->IntegrationPoints(); j++ )
                          {
                             if ( prop_key.type == SCALAR ) {
                                   val = (*it)->Read( j, prop_key );
@@ -240,7 +240,7 @@ const
                                   val = ts.Determinant();
                                }
 
-                            size_t i=0;
+                            size_t i{0U};
                             for ( typename HistogramBins::const_iterator
                                   vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                             {
@@ -277,7 +277,7 @@ const
                                 val = ts.Determinant();
                              }
                              
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -384,7 +384,7 @@ const
                              }
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -438,7 +438,7 @@ const
                              }
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -479,7 +479,7 @@ const
                              }
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -590,7 +590,7 @@ const
                 
                 // 1.2 binning the value
                 // ---------------------
-                size_t i=0;
+                size_t i{0U};
                 for ( typename HistogramBins::const_iterator
                      vit=bins.begin(); vit!=bins.end(); vit++, i++ ) {
                     if (vit == bins.begin()) {
@@ -763,7 +763,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
                              }
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -893,7 +893,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {
@@ -1011,7 +1011,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                           // 1.2 binning the value
                           // ---------------------
-                          size_t i=0;
+                          size_t i{0U};
                           for ( typename HistogramBins::const_iterator
                                 vit=bins.begin(); vit!=bins.end(); vit++, i++ )
                           {

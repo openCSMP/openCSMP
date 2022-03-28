@@ -72,20 +72,20 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
       {
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               double sc = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
-              for ( auto i=0; i<dim; i++ ) 
+              for ( auto i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = sc;
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-              for ( auto i=0; i<dim; i++ ) 
+              for ( auto i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-              for ( auto i=0; i<dim; i++ ) 
-                for ( auto j=0; j<dim; j++ ) 
+              for ( auto i{0U}; i<dim; i++ ) 
+                for ( auto j{0U}; j<dim; j++ ) 
                   MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
            }
       }
@@ -156,12 +156,12 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
         // 2. Compute "velocity" 'VIP' matrix NT3 NTNTNT_V at integration point
         // --------------------------------------------------------------------
         VIP.Zero();
-        for ( size_t j=0U; j<dim; j++ ) VIP(j,j) = velo_[j];
+        for ( size_t j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
 
         e.N_AtIntegrationPoint( i, IPOL );
 
         NT3.Resize(e.Nodes(),dim);
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( size_t j{0U}; j<e.Nodes(); j++ ) {
              NT3(j,0) = IPOL[j];
              if ( dim == 2U ) NT3(j,1) = IPOL[j];
              if ( dim == 3U ) NT3(j,2) = IPOL[j];

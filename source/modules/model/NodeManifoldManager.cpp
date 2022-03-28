@@ -61,7 +61,7 @@ for ( auto& nit : indices ) {
             // geometric qualifier is determined through a consistency check once the manifold is in place
             (*mit).GeometricClassifier( consistencyCheck( (*mit) ) );
             // assigning the new NodeManifold to the nodes it points to
-            for ( auto i{0}; i<(*mit).Branches(); i++ )
+            for ( auto i{0U}; i<(*mit).Branches(); i++ )
               (*mit).N(i)->Assign( (*mit) );
           }
       }
@@ -129,12 +129,12 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     //set<const Node<dim>* const>  connected_nodes;
     set<const Node<dim>*>  connected_nodes;
     const auto n_nodes_nmf1{ nmf1->Branches() };
-    for ( auto i{0}; i<n_nodes_nmf1; ++i ) {
+    for ( auto i{0U}; i<n_nodes_nmf1; ++i ) {
          assert( nmf1->N(i) != nullptr );
          connected_nodes.insert( nmf1->N(i) );
       }
     const auto n_nodes_nmf2{ nmf2->Branches() };
-    for ( auto i{0}; i<n_nodes_nmf2; ++i ) {
+    for ( auto i{0U}; i<n_nodes_nmf2; ++i ) {
          assert( nmf2->N(i) != nullptr );
          connected_nodes.insert( nmf2->N(i) );
       }
@@ -143,7 +143,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     
     // 2. merging the manifolds into nmf1, deleting nmf2
     // -------------------------------------------------
-    for ( auto i{0}; i<n_nodes_nmf2; ++i )
+    for ( auto i{0U}; i<n_nodes_nmf2; ++i )
       nmf1->Add( nmf2->N(i), nmf2->InterFaceSide(i) );
      
      // 3. reclassifying the manifold geometry
@@ -195,7 +195,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeMani
      size_t sum_nodes = mnf1->Branches() + mnf2->Branches();
      vector<pair<Node<dim>*,INTERFACE_SIDE> > combined_manifolds;
      combined_manifolds.reserve(sum_nodes);
-     for ( auto i{0}; i<mnf1->Branches(); ++i )
+     for ( auto i{0U}; i<mnf1->Branches(); ++i )
        combined_manifolds.push_back( make_pair( mnf1->N(i), mnf1->InterFaceSide(i) ) );
 
      // making the vector unique
@@ -340,11 +340,11 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         const string sort_variable{ node_sorting_variable };
         binaryFileWrite( fp, sort_variable );
         // sorted nodes
-        vector<uint32_t>  manifold_node_list;
+        vector<size_t>  manifold_node_list;
         manifold_node_list.reserve( n_manifold_node_entries );
         for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
-             for ( auto i{0}; i<entries; ++i )
+             for ( size_t i{0U}; i<entries; ++i )
                manifold_node_list.push_back( nmf.N(i)->Idx() );
           }
         binaryFileWrite( fp, manifold_node_list );
@@ -355,7 +355,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         manifold_node_topo_list.reserve( n_manifold_node_entries );
         for ( auto& nmf : node_manifolds_ ) {
              const size_t entries(nmf.Branches());
-             for ( auto i{0}; i<entries; ++i )
+             for ( size_t i{0U}; i<entries; ++i )
                manifold_node_topo_list.push_back( nmf.InterFaceSide(i) );
           }
         binaryFileWrite( fp, manifold_node_topo_list );
@@ -435,7 +435,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     size_t counter(0U);
     for ( auto i{0}; i<manifolds; ++i ) {
          const auto n_branches( nodes_per_manifold[i] );
-         for ( auto j=0U; j<n_branches; ++j ) {
+         for ( auto j{0U}; j<n_branches; ++j ) {
               assert( nodes_of_manifolds[counter] < mesh_nodes.size() );
               assert( topo_of_nodes[counter] <= OUTSIDE );
               manifold_nodes.insert( make_pair( nodes_of_manifolds[counter],

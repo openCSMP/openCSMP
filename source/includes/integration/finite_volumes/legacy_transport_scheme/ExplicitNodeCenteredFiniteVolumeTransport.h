@@ -1036,7 +1036,7 @@ double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const 
 
     p.RangeOf( p.Name(adv_key), rmin, rmax );
     if (this->adv1_key_.type==SCALAR){
-        for ( size_t i=0; i<RESULT.size(); i++ ) {
+        for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
             amin = std::min( amin, RESULT[i] );
             amax = std::max( amax, RESULT[i] );
@@ -1060,7 +1060,7 @@ double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const 
     }
     else if (this->adv1_key_.type==ARRAY){
         ArrayVariable av;
-        for ( size_t i=0; i<RESULT.size(); i++ ) {
+        for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
             amin = std::min( amin, RESULT[i] );
             amax = std::max( amax, RESULT[i] );
@@ -1092,7 +1092,7 @@ double ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::OutputResults( const 
     }
     else if (this->adv1_key_.type==FLAGGEDARRAY){
         FlaggedArrayVariable fav;
-        for ( size_t i=0; i<RESULT.size(); i++ ) {
+        for ( size_t i{0U}; i<RESULT.size(); i++ ) {
             // recording output range
             amin = std::min( amin, RESULT[i] );
             amax = std::max( amax, RESULT[i] );

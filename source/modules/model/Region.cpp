@@ -432,7 +432,7 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   this->UpdateMemberIndexes();
 
   // 1. assigning coordinate values
-  for ( auto i = 0U; i<this->node_vec_.size(); i++ ) {
+  for ( size_t i{0U}; i<this->node_vec_.size(); i++ ) {
     vset.Px( i, this->node_vec_[i]->x() );
     if ( dim != 1U ) vset.Py( i, this->node_vec_[i]->y() );
     if ( dim == 3U ) vset.Pz( i, this->node_vec_[i]->z() );
@@ -441,13 +441,13 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   for ( typename vector<csmp::Element<dim>*>::const_iterator
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
     // mapping global to local node numbers
-    for ( auto i = 0U; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
+    for ( auto i{0U}; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
 
   // 3. writing the neighbor per element map (pfverts)
   counter = 0U;
   for ( typename vector<csmp::Element<dim>*>::const_iterator
         eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
-    for ( auto i = 0U; i<(*eit)->Neighbors(); i++ )
+    for ( auto i{0U}; i<(*eit)->Neighbors(); i++ )
       if ( (*eit)->Neighbor( i ) != NULL )
         vset.Pfvert( counter, i, static_cast<int32_t>((*eit)->Neighbor( i )->Idx()) );
       else {
@@ -785,7 +785,7 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       data.Reset( idx, this->IntegrationPoints(), var );
       size_t counter( 0U );
       for ( const auto& eit : this->elmt_vec_ )
-        for ( auto i = 0U; i<eit->IntegrationPoints(); i++ ) {
+        for ( auto i{0U}; i<eit->IntegrationPoints(); i++ ) {
           eit->Read( i, idx, var );
           data[counter] = var;
           ++counter;
@@ -797,9 +797,9 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
+        for ( auto j{0U}; j<(*eit)->Sectors(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -812,9 +812,9 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
+        for ( auto j{0U}; j<(*eit)->Facets(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -916,7 +916,7 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -927,9 +927,9 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
+        for ( auto j{0U}; j<(*eit)->Sectors(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -942,9 +942,9 @@ void Region<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
+        for ( auto j{0U}; j<(*eit)->Facets(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -1292,7 +1292,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
       {
         this->elmt_vec_.push_back( &(*it) );
         const size_t n_nodes{ (*it).Nodes() };
-        for ( auto i = 0U; i<n_nodes; ++i )
+        for ( auto i{0U}; i<n_nodes; ++i )
           node_set.insert( (*it).N(i) );
       }
 
@@ -1355,14 +1355,14 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             bool applies = false;
             const auto n_nodes{ (*start).Nodes() };
-            for ( auto j = 0U; j<n_nodes; j++ )
+            for ( auto j{0U}; j<n_nodes; j++ )
               if ( (*start).N( j )->IsWithinRange( prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1371,7 +1371,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case ELEMENT_INTEGRATION_POINT:
         while ( start != end ) {
             bool applies = false;
-            for ( auto j = 0U; j<(*start).IntegrationPoints(); j++ )
+            for ( auto j{0U}; j<(*start).IntegrationPoints(); j++ )
               if ( (*start).IsWithinRange( j, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1379,7 +1379,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1390,7 +1390,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerSector() == 1 );
             auto n_sectors{ (*start).FV()->Sectors() };
-            for ( auto j = 0U; j<n_sectors; j++ )
+            for ( auto j{0U}; j<n_sectors; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1398,7 +1398,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1409,7 +1409,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerFacet() == 1 );
             const auto n_facets{ (*start).FV()->Facets() };
-            for ( auto j = 0U; j<n_facets; j++ )
+            for ( auto j{0U}; j<n_facets; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
@@ -1417,7 +1417,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( applies == true ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1428,7 +1428,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             if ( (*start).IsWithinRange( prop_key, min, max ) ) {
                 this->elmt_vec_.push_back( &(*start) );
                 const auto n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1479,7 +1479,7 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
       size_t check{0};
       const auto n_nodes{ (*start).Nodes() };
       // all nodes have to be inside for the element selection criterion to be fulfilled
-      for ( auto j = 0U; j<n_nodes; j++ ) {
+      for ( auto j{0U}; j<n_nodes; j++ ) {
           Point<dim>  p = (*start).N( j )->Coordinate();
           if ( p.IsBetween( xyz_min, xyz_max ) ) check++;
         }
@@ -1487,7 +1487,7 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
       // the element becomes part of the new group
       if ( check == n_nodes ) {
           this->elmt_vec_.push_back( &(*start) );
-          for ( auto i = 0U; i < n_nodes; i++ )
+          for ( auto i{0U}; i < n_nodes; i++ )
             this->node_vec_.push_back( (*start).N(i) );
         }
       start++;
@@ -1557,7 +1557,7 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   // filling the vector
   for ( auto& it : this->elmt_vec_ ) {
        const size_t n_nodes{it->Nodes()};
-       for ( auto i{0}; i<n_nodes; ++i ) {
+       for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
@@ -1649,7 +1649,7 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
       // add element with the correct id to the region
       this->elmt_vec_.push_back( (*start) );
       // add its nodes as well
-      for ( auto i = 0U; i<(*start)->Nodes(); i++ )
+      for ( auto i{0U}; i<(*start)->Nodes(); i++ )
         node_set.insert( (*start)->N( i ) );
     }
     start++;
@@ -1852,7 +1852,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
     {
       ePtr = region1.E( i );
       const auto perimeter_faces( region1.PerimeterFaces( i ) );
-      for ( auto j = 0U; j < perimeter_faces; ++j )
+      for ( auto j{0U}; j < perimeter_faces; ++j )
         {
           const auto face = region1.PerimeterFace( i, j );
           ePtrNeighbor = ePtr->Neighbor( face );
@@ -2437,7 +2437,7 @@ while ( reit != this->ElementsEnd() )
 {
 (*reit)->UnitNormal( un );
 std::cerr<<" UN = (";
-for( size_t i=0; i<dim; i++)
+for( size_t i{0U}; i<dim; i++)
 std::cerr<< " "<< un[i];
 std::cerr<<" )\n";
 reit++;
@@ -2550,7 +2550,7 @@ double  Region<dim>::SurfaceArea() const
     // for all elements located on the region boundary
     for ( auto i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
       // since each element can have multiple boundary faces
-      for ( uint32_t j = 0U; j<(*bit).size(); j++ ) {
+      for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
         const uint32_t face( (*bit)[j] );
         this->elmt_vec_[i]->FE()->NodesOfFace( face, fnids );
         const CSMP_FEM_TYPE etype( this->elmt_vec_[i]->FE()->ElementTypeOfFace( face ) );
@@ -2580,9 +2580,9 @@ double  Region<dim>::SurfaceArea() const
   // in 2D the face is a segment the length of which has to be used
   else if ( dim == 2U ) {
     // for all surface elements on the region boundary (excluding line elements)
-    for ( auto i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
+    for ( size_t i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
       if ( this->elmt_vec_[i]->FE()->IsSurfaceElement() )
-        for ( size_t j = 0U; j<(*bit).size(); j++ ) {
+        for ( size_t j{0U}; j<(*bit).size(); j++ ) {
           this->elmt_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
           area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
         }

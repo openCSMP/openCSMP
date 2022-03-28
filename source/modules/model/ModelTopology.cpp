@@ -1619,7 +1619,7 @@ void  ModelTopology::PropertiesOfDomains( const char* regions_file,
          region = strtok( text_line, delims2 );
          // if the region is part of the current model its properties are read
          if ( Contains(region.c_str()) ) {
-               for ( auto i{0}; i<properties.size(); i++ ) {
+               for ( auto i{0U}; i<properties.size(); i++ ) {
                     val = atof( strtok( NULL, delims2 ) );
                     prop_vals.push_back( val );
                  }

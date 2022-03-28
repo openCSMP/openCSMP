@@ -83,8 +83,8 @@ void ModelPreProcessor2D::ModelToMatrix( const string& file_name, size_t rows, s
 /*
     ofstream ofs( file_name );
  
-    for (  auto i{0}; i<n_cells_y; ++i ) {
-         for ( size_t j=0U; j<n_cells_x; ++j ) ofs <<"1\t";
+    for (  size_t i{0U}; i<n_cells_y; ++i ) {
+         for ( size_t j{0U}; j<n_cells_x; ++j ) ofs <<"1\t";
          ofs <<"\n";
       }
 

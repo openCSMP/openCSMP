@@ -196,7 +196,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      for ( map<size_t,vector<double> >::const_iterator
            nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
-          for ( auto i{0}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( auto i{0U}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0. <<"  ";
           ofs << endl;
        }
@@ -548,7 +548,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      const typename map<size_t,vector<double> >::const_iterator  nit_end(pxyz_data_.end());
      for ( nit=pxyz_data_.begin(); nit!=nit_end; nit++ )
        {
-          for ( uint32_t i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( uint32_t i{0U}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2 ) ofs << 0.0 <<"  ";
           ofs << endl;
        }
@@ -783,7 +783,7 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
     for ( auto lit=elmt_ids.begin(); lit!=elmt_ids.end(); lit++ )
       {
          // getting node ids and renumbering them 0...n-1
-         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0U}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
            PointDescriptor pt = { nodes, 0u };
            auto node_it = node_nums.insert( make_pair( sgref.E( (*lit) )->N(i)->Idx(), pt ) );
            if ( node_it.second ) nodes++;
@@ -792,7 +792,7 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
          pentry.resize( sgref.E( (*lit) )->Nodes() );
-         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0U}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
               auto nit = node_nums.find( sgref.E( (*lit) )->N(i)->Idx() );
               pentry[i] = (*nit).second.element_or_node_;
            }
@@ -802,7 +802,7 @@ void VTK_Interface<dim>::NodeBasedTopology( const Region<dim>& sgref,
          if ( pit.second == true ) {
               // initializing plist vector
               (*pit.first).second.reserve( sgref.E( (*lit) )->Nodes() );
-              for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) 
+              for ( auto i{0U}; i<sgref.E( (*lit) )->Nodes(); i++ )
                 (*pit.first).second.push_back( pentry[i] );
            }
       }   
@@ -849,7 +849,7 @@ void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
       {
          // getting node ids and renumbering them including duplicates 0...elmts * npe's
          pentry.resize( sgref.E( (*lit) )->Nodes() );
-         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
+         for ( auto i{0U}; i<sgref.E( (*lit) )->Nodes(); i++ ) {
               node_nums[ nodes ] = sgref.E( (*lit) )->N(i)->Idx();
               pentry[i]          = nodes++;
            }
@@ -861,7 +861,7 @@ void VTK_Interface<dim>::ElementBasedTopology( const Region<dim>& sgref,
          
          // initializing plist vector
          (*pit.first).second.reserve( sgref.E( (*lit) )->Nodes() );
-         for ( auto i{0}; i<sgref.E( (*lit) )->Nodes(); i++ ) 
+         for ( auto i{0U}; i<sgref.E( (*lit) )->Nodes(); i++ )
            (*pit.first).second.push_back( pentry[i] );
       }   
 
@@ -918,7 +918,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
       {
          // getting constraint point ids and data 
          pentry.resize( sgref.E( (*lit) )->IntegrationPoints() );
-         for ( auto i{0}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
+         for ( auto i{0U}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ )
            {
               // associate the unique number of the constraint-point with the parent element 
               // for later retrieval in IntegrationPointData method
@@ -934,7 +934,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointBasedTopology( const Region<dim>& s
          
          // initializing clist vector
          (*cit.first).second.reserve( sgref.E( (*lit) )->IntegrationPoints() );
-         for ( auto i{0}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ ) 
+         for ( auto i{0U}; i<sgref.E( (*lit) )->IntegrationPoints(); i++ )
            (*cit.first).second.push_back( pentry[i] );
       }  
       
@@ -1160,7 +1160,7 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
               (*dit.first).second.reserve(6);
               sgref.N( (*nit).first )->Read( prop_key, vc );
               // variables have always 3 components since view screen is 3D
-              for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+              for ( uint32_t j{0U}; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
               if ( dim == 3U ) (*dit.first).second.push_back( vc[2] );
               else             (*dit.first).second.push_back( 0. );
            }
@@ -1171,8 +1171,8 @@ void VTK_Interface<dim>::NodeData( const Region<dim>& sgref,
               sgref.N( (*nit).first )->Read( prop_key, ts );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-              for ( uint32_t k=0U; k<3U; k++ )
-                for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+              for ( uint32_t k{0U}; k<3U; k++ )
+                for ( uint32_t l{0U}; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
               else {
                    (*dit.first).second.push_back( ts(0,0) );
                    (*dit.first).second.push_back( ts(0,1) );
@@ -1256,7 +1256,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
       {
          // getting the coordinates of the constraint point
-         for ( auto i{0}; i<(*it)->IntegrationPoints(); i++, cpoints++ ) 
+         for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++, cpoints++ )
            {
               // inserting new point into the cordinate map using new constraint-point coordinate number
               auto dit = pxyz_data.insert( make_pair( cpoints, dentry ) );
@@ -1275,7 +1275,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                    (*dit.first).second.reserve(6U);
                    (*it)->Read( i, prop_key, vc );
                    // variables have always 3 components since view screen is 3D
-                   for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+                   for ( uint32_t j{0U}; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
                    if ( dim == 3U ) (*dit.first).second.push_back( vc[2U] );
                    else             (*dit.first).second.push_back( 0. );
                  }
@@ -1285,8 +1285,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
                    (*it)->Read( i, prop_key, ts );
                    // variables have always 3 components since view screen is 3D
                    if ( dim == 3U )
-                    for ( uint32_t k=0U; k<3U; k++ )
-                      for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+                    for ( uint32_t k{0U}; k<3U; k++ )
+                      for ( uint32_t l{0U}; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
                    else {
                          (*dit.first).second.push_back( ts(0,0) );
                          (*dit.first).second.push_back( ts(0,1) );
@@ -1335,7 +1335,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
     {
       // getting the coordinates of the constraint point
-      for ( auto i{0}; i<(*it)->Facets(); i++, cpoints++ )
+      for ( auto i{0U}; i<(*it)->Facets(); i++, cpoints++ )
       {
         auto fv = (*it)->FV();
         // inserting new point into the cordinate map using new constraint-point coordinate number
@@ -1355,7 +1355,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
           (*dit.first).second.reserve(6U);
           (*it)->Read( i, 0u, prop_key, vc );
           // variables have always 3 components since view screen is 3D
-          for ( uint32_t j=0U; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
+          for ( uint32_t j{0U}; j<2U; j++ ) (*dit.first).second.push_back( vc[j] );
           if ( dim == 3U ) (*dit.first).second.push_back( vc[2U] );
           else             (*dit.first).second.push_back( 0. );
         }
@@ -1365,8 +1365,8 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
           (*it)->Read( i, 0u, prop_key, ts );
           // variables have always 3 components since view screen is 3D
           if ( dim == 3U )
-            for ( uint32_t k=0U; k<3U; k++ )
-              for ( uint32_t l=0U; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
+            for ( uint32_t k{0U}; k<3U; k++ )
+              for ( uint32_t l{0U}; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
           else {
             (*dit.first).second.push_back( ts(0,0) );
             (*dit.first).second.push_back( ts(0,1) );
@@ -1434,7 +1434,7 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
              sgref.N( (*nit).first )->Read( prop_key, vc );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-                for ( uint32_t j=0; j<3U; j++ ) (*dit.first).second.push_back( vc[j] );
+                for ( uint32_t j{0U}; j<3U; j++ ) (*dit.first).second.push_back( vc[j] );
               else {
                    (*dit.first).second.push_back( vc[0] );
                    (*dit.first).second.push_back( vc[1] );
@@ -1448,7 +1448,7 @@ void VTK_Interface<dim>::RetrieveData( const Region<dim>& sgref,
               sgref.N( (*nit).first )->Read( prop_key, ts );
               // variables have always 3 components since view screen is 3D
               if ( dim == 3U )
-              for ( uint32_t k=0; k<3U; k++ )
+              for ( uint32_t k{0U}; k<3U; k++ )
                 for ( uint32_t l=0; l<3U; l++ ) (*dit.first).second.push_back( ts(k,l) );
               else {
                    (*dit.first).second.push_back( ts(0,0) );
@@ -1532,7 +1532,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
                    auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(6U);
                    if ( dim == 3U )
-                     for ( uint32_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
+                     for ( uint32_t j{0U}; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
                    else {
                         (*dit2).second.push_back( vc[0] );
                         (*dit2).second.push_back( vc[1] );
@@ -1549,7 +1549,7 @@ void VTK_Interface<dim>::ElementData( const Region<dim>& sgref,
                    auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(12U);
                    if ( dim == 3U )
-                     for ( uint32_t k=0; k<3U; k++ )
+                     for ( uint32_t k{0U}; k<3U; k++ )
                        for ( uint32_t l=0; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
                    else {
                       (*dit2).second.push_back( ts(0,0) );
@@ -1634,7 +1634,7 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
                    auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(6);
                    if ( dim == 3U )
-                     for ( uint32_t j=0; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
+                     for ( uint32_t j{0U}; j<3U; j++ ) (*dit2).second.push_back( vc[j] );
                    else {
                         (*dit2).second.push_back( vc[0] );
                         (*dit2).second.push_back( vc[1] );
@@ -1651,8 +1651,8 @@ void VTK_Interface<dim>::ElementPointData( const Region<dim>& sgref,
                    auto dit2 = pxyz_data.find( (*pit) );
                    (*dit2).second.reserve(12);
                    if ( dim == 3U )
-                     for ( uint32_t k=0U; k<3U; k++ )
-                       for ( uint32_t l=0U; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
+                     for ( uint32_t k{0U}; k<3U; k++ )
+                       for ( uint32_t l{0U}; l<3U; l++ ) (*dit2).second.push_back( ts(k,l) );
                    else {
                       (*dit2).second.push_back( ts(0,0) );
                       (*dit2).second.push_back( ts(0,1) );
@@ -2013,7 +2013,7 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
            }
        
          // creating new records in 'cell_data'
-         for ( auto i{0}; i<fragments; i++ ) {
+         for ( auto i{0U}; i<fragments; i++ ) {
               auto dit = cell_data.insert( make_pair( n++, empty_vec ) );
               assert( dit.second == true );
          
@@ -2026,15 +2026,15 @@ void VTK_Interface<dim>::CellData( const Region<dim>& sgref,
                   (*dit.first).second.resize( 3U, 0. ); // initialization of empty vector<double> to zero
 	              VectorVariable<dim>  vc;
 	              sgref.E( (*it).first )->Read( prop_key, vc );
-                  for ( uint32_t j=0U; j<dim; j++ ) (*dit.first).second[j] = vc[j];
+                  for ( uint32_t j{0U}; j<dim; j++ ) (*dit.first).second[j] = vc[j];
 	              }
 	            else if ( prop_key.type == TENSOR ) {
 	              TensorVariable<dim>  ts;
 	              sgref.E( (*it).first )->Read( prop_key, ts );
 	              (*dit.first).second.reserve(9U);
 	              if ( dim == 3U ) {
-                       for ( uint32_t k=0U; k<dim; k++ )
-	                     for ( uint32_t l=0U; l<dim; l++ ) (*dit.first).second.push_back( ts(k,l) );
+                       for ( uint32_t k{0U}; k<dim; k++ )
+	                     for ( uint32_t l{0U}; l<dim; l++ ) (*dit.first).second.push_back( ts(k,l) );
 	                }
 	              else { // dim == 2 (since interface does not work for 1D elements)
 	                   (*dit.first).second.push_back( ts(0,0) );
@@ -2157,9 +2157,9 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      // NOTE: in VTK coordinates always are stored in single precision
      ofs <<"POINTS " << e.Nodes() <<" float"<< endl;
-     for ( auto i=0; i<e.Nodes(); i++ )
+     for ( auto i{0U}; i<e.Nodes(); i++ )
        {
-          for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( auto j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.;
           ofs << endl;
        }
@@ -2169,7 +2169,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      // -----------------------------------------------------
      ofs <<"CELLS "<< 1 <<" "<< e.Nodes()+1 << endl;
      ofs << e.Nodes() <<" ";
-     for ( auto i=0; i<e.Nodes(); i++ ) ofs << i <<" ";
+     for ( auto i{0U}; i<e.Nodes(); i++ ) ofs << i <<" ";
      ofs << endl;
 
      // 4. writing CELL_TYPES - for the
@@ -2189,7 +2189,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA 1 x nodes
-           for ( uint32_t i=0; i<e.Nodes(); i++ ) ofs << e.N(i)->Read(key) <<" ";
+           for ( uint32_t i{0U}; i<e.Nodes(); i++ ) ofs << e.N(i)->Read(key) <<" ";
            ofs << endl;
        }
      else if ( key.type == VECTOR )
@@ -2198,8 +2198,8 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
           vector<VectorVariable<dim> > data;
           e.NodePropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( uint32_t i=0; i<e.Nodes(); i++ ) {
-               for ( uint32_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
+          for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
+               for ( uint32_t j{0U}; j<dim; j++ ) ofs << data[i](j) <<" ";
                // variables have always 3 components since view screen is 3D
                if ( dim == 2 ) ofs << 0.;
                ofs << endl;
@@ -2211,9 +2211,9 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
           vector<TensorVariable<dim> > data;
           e.NodePropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( uint32_t i=0; i<e.Nodes(); i++ ) {
-               for ( uint32_t j=0; j<dim; j++ ) {
-                    for ( uint32_t k=0; k<dim; ++k ) {
+          for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
+               for ( uint32_t j{0U}; j<dim; j++ ) {
+                    for ( uint32_t k{0U}; k<dim; ++k ) {
                           ofs << data[i](j,k) <<" ";
                           if ( dim == 2 ) ofs << 0. <<" ";
                       }
@@ -2308,7 +2308,7 @@ void outputFaceNormalsToVTK( const Element<dim>& e, const char* file )
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
     vector<uint32_t> fnids;
-    for ( auto i=0; i<e.Faces(); i++ ) {
+    for ( auto i{0U}; i<e.Faces(); i++ ) {
          // computing and storing normal to face
          Point<dim> unormal = e.UnitNormalToFace( i );
          // scaling the normals (by empirical factor)
@@ -2401,7 +2401,7 @@ void outputIntegrationPointsToVTK( const Element<dim>& element, const char* file
     vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
     double display_value(0.);
-    for ( auto i{0}; i<element.IntegrationPoints(); i++ ) {
+    for ( auto i{0U}; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
          display_value += 1.;
@@ -2488,7 +2488,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
     vector<pair<Point<dim>,double> >  ipoint_data(element.IntegrationPoints()); // locations in physical space
     // convention: integration points get values equivalent to their number 0..n-1
     double display_value(0.);
-    for ( auto i{0}; i<element.IntegrationPoints(); i++ ) {
+    for ( auto i{0U}; i<element.IntegrationPoints(); i++ ) {
          Point<dim> xyz = element.IntegrationPoint(i);
          ipoint_data[i] = make_pair( xyz, display_value );
          display_value += 1.;
@@ -2547,7 +2547,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA 1 x nodes
-           for ( uint32_t i=0; i<element.IntegrationPoints(); i++ ) ofs << element.Read(i,key) <<" ";
+           for ( uint32_t i{0U}; i<element.IntegrationPoints(); i++ ) ofs << element.Read(i,key) <<" ";
            ofs << endl;
        }
      else if ( key.type == VECTOR )
@@ -2556,8 +2556,8 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
           vector<VectorVariable<dim> > data;
           element.IntegrationPointPropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( uint32_t i=0; i<element.Nodes(); i++ ) {
-               for ( uint32_t j=0; j<dim; j++ ) ofs << data[i](j) <<" ";
+          for ( uint32_t i{0U}; i<element.Nodes(); i++ ) {
+               for ( uint32_t j{0U}; j<dim; j++ ) ofs << data[i](j) <<" ";
                // variables have always 3 components since view screen is 3D
                if ( dim == 2 ) ofs << 0.;
                ofs << endl;
@@ -2569,9 +2569,9 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
           vector<TensorVariable<dim> > data;
           element.IntegrationPointPropertyVector( key, data );
           // matrix DATA is vec-dim x nodes
-          for ( uint32_t i=0; i<element.Nodes(); i++ ) {
-               for ( uint32_t j=0; j<dim; j++ ) {
-                    for ( uint32_t k=0; k<dim; ++k ) {
+          for ( uint32_t i{0U}; i<element.Nodes(); i++ ) {
+               for ( uint32_t j{0U}; j<dim; j++ ) {
+                    for ( uint32_t k{0U}; k<dim; ++k ) {
                           ofs << data[i](j,k) <<" ";
                           if ( dim == 2 ) ofs << 0. <<" ";
                       }
@@ -2663,7 +2663,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << subdomain.PerimeterNodes() <<" float"<< endl;
      for ( size_t i=subdomain.InteriorNodes(); i<subdomain.Nodes(); ++i ) {
-          for ( uint32_t j=0U; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
+          for ( uint32_t j{0U}; j<3U; ++j ) ofs << (*subdomain.N(i))[j] <<" ";
           ofs << endl;
           // numbering the perimeter nodes in consecutive order from 0..n-1
           subdomain.N(i)->Idx( node_counter++ );
@@ -2676,7 +2676,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 2 options: triangle and quadrilateral
      size_t cell_list_size(0);
      for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
-       for ( uint32_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+       for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j));
              geometric_primitives_VTK.push_back( parseElementType(fem_type) );
              cell_list_size += ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE ||
@@ -2690,7 +2690,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
      vector<uint32_t> fnids;
      for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
-       for ( uint32_t j=0U; j<subdomain.PerimeterFaces(i); ++j ) {
+       for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              // writing out the number of nodes per face
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j) );
              if      ( fem_type == ISOPARAMETRIC_LINEAR_TRIANGLE )    ofs << 3U <<" ";
@@ -2698,7 +2698,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
              else if ( fem_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) ofs << 6U <<" ";
              // writing out the node numbers (indexes)
              subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j), fnids );
-             for ( size_t k=0U; k<fnids.size(); ++k )
+             for ( size_t k{0U}; k<fnids.size(); ++k )
                ofs << subdomain.E(i)->N( fnids[k] )->Idx() <<" ";
              ofs << endl;
          }

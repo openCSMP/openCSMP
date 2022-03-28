@@ -84,7 +84,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // ------------------------------------------------------------------
     if ( piecewise_constant_material )
       {
-        for ( auto i{0}; i<e.IntegrationPoints(); i++ ) {
+        for ( auto i{0U}; i<e.IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
              const double detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
@@ -103,7 +103,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
       }
     else { // NODE or ELEMENT_INTEGRATION_POINT material placements
         double detJ = ( is_simplex_element_type ) ? e.dN_AtBaryCenter( B_ ) : 0.;
-        for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) {
+        for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
              if ( !is_simplex_element_type ) detJ = e.dN_AtIntegrationPoint( B_, i, SCALAR );
              B_.Transposed( BT_ );
              BT_ *= MathOperatorLHS<dim>::MTRL[i];
@@ -119,7 +119,7 @@ void NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
 //cout <<"\nNumIntegral_dNT_op_dN_dV: on Element "<< e.Idx() << endl;
 //MathOperatorLHS<dim>::LHS.Out();
 
-// for ( auto i{0}; i<this->LHS.Rows(); i++ )
+// for ( auto i{0U}; i<this->LHS.Rows(); i++ )
 //   if ( this->LHS(i,i) < numeric_limits::epsilon() ) 
 //     cout <<"\nNumIntegral_dNT_op_dN_dV: zero element in diagonal of element matrix."; 
 

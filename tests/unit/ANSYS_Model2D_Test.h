@@ -13,6 +13,9 @@ class ANSYS_Model2D_Test : public Test
       
     // same test as in VData_Test, but with a more realistic model created in ANSYS
     void Test_CreateConsistentLineElementOrientations2D();
+    
+    // tests the creation of an internal boundary from the line-element regions
+    void Test_CreatInternalBoundary();
   };
 
 } // csmp

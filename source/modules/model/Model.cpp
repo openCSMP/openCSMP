@@ -1566,21 +1566,21 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
     if ( isSide( boundary ) ) {
       for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
         if ( belongsToSide( boundary, (*nit)->AtBoundary() ) )
-          for ( auto i = 0U; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
+          for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
     }
 
     if ( isEdge( boundary ) ) {
       for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
         if ( belongsToEdge( boundary, (*nit)->AtBoundary() ) )
-          for ( auto i = 0U; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
+          for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
     }
 
     if ( isCorner( boundary ) ) {
       for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
         if ( (*nit)->AtBoundary() == boundary )
-          for ( auto i = 0U; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
+          for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
     }
   }
@@ -1746,7 +1746,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   VectorVariable<dim>  res( bvalues[0] ); // getting the flags
   for ( typename vector<VectorVariable<dim> >::const_iterator
         vit = bvalues.begin(); vit != bvalues.end(); vit++ )
-    for ( auto i = 0U; i<dim; i++ )
+    for ( auto i{0U}; i<dim; i++ )
       if ( (*vit).Flag( i ) != res.Flag( i ) )
         throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                "inconsistent flagging of boundary vector variables" );
@@ -3343,7 +3343,7 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
     // smoothing
     Region<dim> ref = model.Region(region);
    
-    for ( auto i{0}; i<n_smoothing_cycles; i++ ) {
+    for ( auto i{0U}; i<n_smoothing_cycles; i++ ) {
          ref.ExtrapolateElementToNodeProperty( element_var, temp_node_var );
          ref.InterpolateNodeToElementProperty( temp_node_var, element_var );
       }
@@ -3428,7 +3428,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_v
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
                     eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
-                for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    (*eit)->Read( i, prop_key, sc );
                    sc -= rngen(gen);
@@ -3489,7 +3489,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
                     eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
-                for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    double value = static_cast<double>( (*eit)->Status(prop_key) );
                    (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
@@ -3558,7 +3558,7 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
                         nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
                     {
                        (*nit)->Read( flag_key, vc );
-                       for ( auto i{0}; i<dim; ++ i )
+                       for ( auto i{0U}; i<dim; ++ i )
                          vc(i) = static_cast<double>( vc.Flag(i) );
                        (*nit)->Store( prop_key, vc );
                     }
@@ -3659,7 +3659,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // 1. counting the surrounding values that are different from el-value
                double     sc_sum(0U);
                unsigned int counter(0U);
-               for ( auto i{0}; i<super_group.E(n)->Neighbors(); i++ ) {
+               for ( auto i{0U}; i<super_group.E(n)->Neighbors(); i++ ) {
                    assert( super_group.E(n)->Neighbor(i) != nullptr );
                    if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) {
                         sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
@@ -3751,7 +3751,7 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
     // 1. plist
     for ( uint32_t i=0U; i<gref.Elements(); i++ )
       {
-         for ( uint32_t j=0U; j<gref.E(i)->Nodes(); j++ )
+         for ( uint32_t j{0U}; j<gref.E(i)->Nodes(); j++ )
            if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
                  cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->N(j)->Idx();
                  cerr <<" vs. vset nid: "<< vset.Plist( gref.E(i)->Idx(), j );
@@ -3762,7 +3762,7 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
     // 2. pfverts
     for ( uint32_t i=0U; i<gref.Elements(); i++ )
       {
-         for ( uint32_t j=0U; j<gref.E(i)->Neighbors(); j++ )
+         for ( uint32_t j{0U}; j<gref.E(i)->Neighbors(); j++ )
            if ( gref.E(i)->Neighbor(j) and
                 static_cast<int32_t>(gref.E(i)->Neighbor(j)->Idx()) != vset.Pfvert( gref.E(i)->Idx(), j ) ) {
                  cerr <<"\ncompareConnectivity: plist inconsistency: sg node id: "<< gref.E(i)->Neighbor(j)->Idx();
@@ -3831,7 +3831,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  break;
                case ELEMENT_INTEGRATION_POINT:
                   for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
-                    for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ ) {
+                    for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
                       }
@@ -3862,7 +3862,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  break;
                case ELEMENT_INTEGRATION_POINT:
                   for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
-                    for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ ) {
+                    for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
                       }
@@ -3914,7 +3914,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                break;
              case ELEMENT_INTEGRATION_POINT:
                 for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
-                  for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ ) {
+                  for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                        (*it)->Read( i, prop_key, vc );
                         const double vmagnitude = vc.Length();
                         assert( vmagnitude > 0. );

@@ -318,7 +318,7 @@ uint32_t  Node<dim>::ReassignNeighbors()
     set<Node<dim>*>  current_nbors;
     const auto       n_parents{ Parents() };
     
-    for ( auto i{0}; i < n_parents; ++i )
+    for ( auto i{0U}; i < n_parents; ++i )
       if ( Parent(i) != nullptr &&
            Parent(i)->IsEquidimensional() ) {
            for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
@@ -624,7 +624,7 @@ void Node<dim>::Out() const
 #ifndef NDEBUG
     if ( parent_node_indexes_.size() > 0u ) {
          cout <<"\nElement objects sharing the node / node position therein:\n"<< endl;
-         for ( auto i{0}; i<Parents(); i++ ) {
+         for ( auto i{0U}; i<Parents(); i++ ) {
               if ( Parent(i) == NULL ) cout <<"NONE (null pointer) ";
               else Parent(i)->Out();
               cout <<"(node "<< ParentNodeNumber(i) <<"), ";
@@ -666,7 +666,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     assert( (*nit)->Parents() > 0 );
     const auto n_parents{(*nit)->Parents()};
     set<Element<dim>*> shared_parents;
-    for ( auto i{0}; i<n_parents; ++i ) {
+    for ( auto i{0U}; i<n_parents; ++i ) {
          assert( (*nit)->Parent(i) != nullptr );
          if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
          if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -680,7 +680,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     while ( nit != nodesEnd ) {
          set<Element<dim>*> temp;
          const auto parents{(*nit)->Parents()};
-         for ( auto i{0}; i<parents; ++i ) {
+         for ( auto i{0U}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
               if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
               if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -784,7 +784,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     set<Element<dim>*> shared_parents;
 
     // creating set of parent elements shared by first and second node
-    for ( auto i{0}; i<n_parents; ++i )
+    for ( auto i{0U}; i<n_parents; ++i )
       if ( (*nit)->Parent(i) ) {
            if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
            if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -865,7 +865,7 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
          eptr->FE()->NodesOfSegment( segm, snids );
          const auto n_segm_nodes{ snids.size() };
          bool all_nodes_are_contained{true};
-         for ( auto j{0}; j<n_segm_nodes; ++j )
+         for ( auto j{0U}; j<n_segm_nodes; ++j )
            if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
                 all_nodes_are_contained = false;
                 break;
@@ -896,7 +896,7 @@ void printNeighbors( const Node<dim>* const nptr )
     assert( nptr->Parents() > 0 );
     
     cout <<"\nnode "<< nptr->Idx() <<":";
-    for ( auto i{0}; i<n_nbors; ++i ) {
+    for ( auto i{0U}; i<n_nbors; ++i ) {
          const Node<dim>* const nd_nbor = nptr->Neighbor(i);
          if ( nd_nbor == nullptr ) cout <<" NULL";
          else cout <<" "<< nd_nbor->Idx(); // <<":"<< parseBoundary( nd_nbor->AtBoundary() );
@@ -923,7 +923,7 @@ void printParents( const Node<dim>* const nptr )
     set<Element<dim>*> parents;
     
     cout <<"\nNode "<< nptr->Idx();
-    for ( auto i{0}; i<n_parents; ++i ) {
+    for ( auto i{0U}; i<n_parents; ++i ) {
          if ( nptr->Parent(i) == nullptr ) cout <<" NULL";
          else {
               cout <<" "<< parseAbbreviated_FE_Type( nptr->Parent(i)->FE_Type() );

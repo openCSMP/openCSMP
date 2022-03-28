@@ -9,7 +9,7 @@ class IsoparametricLinearPyramid : public FiniteElement {
 
   public:
 
-    explicit IsoparametricLinearPyramid(uint32_t integrationPoints=8 /* 1 or 8 */);
+    explicit IsoparametricLinearPyramid( uint32_t integrationPoints=8 /* 1 or 8 */);
     ~IsoparametricLinearPyramid();
 
     virtual double    Volume();

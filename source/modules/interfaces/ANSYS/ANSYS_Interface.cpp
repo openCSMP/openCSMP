@@ -460,7 +460,7 @@ void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametr
     if ( !vset.HybridElementTypeMesh() )
       vset.ElementType( 0U, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
     else
-      for ( auto i{0}; i<vset.ElementTypes(); i++ )
+      for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
         vset.ElementType( i, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(i), isoparametric, dim ) );
 
  } // end
@@ -722,7 +722,7 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
                else { 
                     auto rit = object_elements_.insert( make_pair(object_name,empty_list) );
                     (*rit).second.reserve( n_elements );
-                    for ( auto i{0}; i<n_elements; i++ ) {
+                    for ( size_t i{0U}; i<n_elements; i++ ) {
                          // expecting that elements are numbered 0...n-1
                          ifs >> n; 
                          (*rit).second.push_back( n );
@@ -794,15 +794,15 @@ bool ANSYS_Interface::ReadNodeCoordinatesASCII( ifstream& ifs, VSet<dim>& vset )
                                     "No node coordinates are specified in file" );
          return false;
       }
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> X[i];
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> X[i];
 
     // Py record
     deque<double> Y(n_nodes);
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> Y[i];
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> Y[i];
     
     // Pz record
     deque<double> Z(n_nodes);
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> Z[i];
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> Z[i];
      
     if( csmp_error.Verbose() )
     {
@@ -858,7 +858,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream& ifs, VSet<d
 
     AdvancePastCommentLine( ifs );
 
-    for ( auto i{0}; i<bconds.size(); i++ ) {
+    for ( size_t i{0U}; i<bconds.size(); i++ ) {
          ifs >> flag;
          if ( flag != 0 ) {
               bconds[i] = true;
@@ -871,7 +871,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream& ifs, VSet<d
     AdvancePastCommentLine( ifs );
 
     // Pbvals record
-    for ( size_t i=0; i<bconds.size(); i++ ) {
+    for ( size_t i{0U}; i<bconds.size(); i++ ) {
          ifs >> bvalue;
 //         if ( bconds[i] ) vset.AddBValue( i+1, bvalue ); ignoring these values
       }
@@ -923,7 +923,7 @@ bool ANSYS_Interface::ReadPelementASCII( ifstream& ifs, VSet<dim>& vset )
 
     vector<int8_t> elmt_types;
     elmt_types.reserve(records);
-    for ( auto i{0}; i<records; i++ ) {
+    for ( size_t i{0U}; i<records; i++ ) {
         ifs >> etype;
         elmt_types.push_back( etype );
       }
@@ -977,7 +977,7 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
     // now the vset can be resized according to the new information
     deque<uint32_t>  ndele(vset.ElementTypes());
                        
-    for ( auto i{0}; i<vset.ElementTypes(); i++ )
+    for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
       ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
     vset.ResizePlist( ndele );
 
@@ -1006,7 +1006,7 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
          (*it.first).second.reserve(nodes);
          
          // node ID's in file range 0...nodes-1
-         for ( size_t i=0; i<nodes; i++ ) {
+         for ( size_t i{0U}; i<nodes; i++ ) {
               ifs >> id;
               assert( id < n_nodes );
               (*it.first).second.push_back( id );
@@ -1059,7 +1059,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
    
     // making an array of numbers of neighbors of each element
     deque<uint32_t>  nbors( vset.ElementTypes() );
-    for ( auto i{0}; i<vset.ElementTypes(); ++i )
+    for ( size_t i{0U}; i<vset.ElementTypes(); ++i )
       nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
     vset.ResizePfverts( nbors );
 
@@ -1094,7 +1094,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
          (*it.first).second.reserve(neighbors);
 
          // element ID's in file range 0...elements-1
-         for ( size_t i=0; i<neighbors; ++i ) {
+         for ( size_t i{0U}; i<neighbors; ++i ) {
               int32_t  idx;
               ifs >> idx;
               if ( ifs.bad() ) {
@@ -1209,7 +1209,7 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     const size_t  dbytes  = sizeof(double);
     size_t        entries(0);
 
@@ -1244,7 +1244,7 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
     vset.ResizeNodes( entries );
 
     // assign node coordinates
-    for ( auto i{0}; i<entries; i++ ) {
+    for ( size_t i{0U}; i<entries; i++ ) {
          vset.Px( i, px[i] );
          vset.Py( i, py[i] ); // ANSYS models will always have a three coordinate's
          vset.Pz( i, pz[i] ); // ANSYS models will always have a three coordinate's
@@ -1303,7 +1303,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
     const int32_t  min29(MULTIPLE_BOUNDARIES);
     const size_t   nodes(vset.Vertices());
     size_t         flag_value_errors{0U};
-    for ( size_t i=0; i<nodes; i++ ){
+    for ( size_t i{0U}; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
          if ( ival < min29 ) {
               ival = IRREGULAR;
@@ -1326,7 +1326,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
         cout.flush();
       }
     double dval;
-    for ( size_t i=0; i<nodes; i++ )
+    for ( size_t i{0U}; i<nodes; i++ )
       fread( (void*) &dval, dbytes, 1U, fp );
 
     return true;
@@ -1346,7 +1346,7 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // reading element-type information record 'pelement' (unsigned int)
@@ -1362,7 +1362,7 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
     int32_t*   pelmt = new int32_t[ entries ];
     fread( (void*) pelmt, ibytes, entries, fp );
     // checking the validity of the element types (valid range 2-23)
-    for ( size_t i=0; i<entries; i++ )
+    for ( size_t i{0U}; i<entries; i++ )
       if ( pelmt[i] < 2 || pelmt[i] > 23 )
         throw csmp::Exception( ERROR,
                               "ANSYS_Interface::ReadPelementBinary",
@@ -1390,7 +1390,7 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
@@ -1399,7 +1399,7 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     // now the vset can be resized according to the new information
     deque<uint32_t>  ndele(nelements);
     size_t              n_plist_entries_expected{0};
-    for ( auto i{0}; i<nelements; ++i ) {
+    for ( size_t i{0U}; i<nelements; ++i ) {
          ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
          n_plist_entries_expected += ndele[i];
       }
@@ -1428,8 +1428,8 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     size_t  nentry(0U);
 
     // the elements of the plist (node ids) are assigned
-    for ( auto i{0}; i<nelements; i++, it++ )
-      for ( size_t j=0U; j<ndele[i]; j++ )
+    for ( size_t i{0U}; i<nelements; i++, it++ )
+      for ( size_t j{0U}; j<ndele[i]; j++ )
           (*it)[j] = plist[nentry++];
 
     delete[] plist;
@@ -1451,7 +1451,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     int64_t       entries(0);
 
     // setting up the storage for 'pfverts' in VSet
@@ -1459,8 +1459,8 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
     // making an array of with the number of neighbors for each element
     deque<uint32_t>  nbors( nelements );
-    size_t              n_pfverts_entries_expected{0};
-    for ( auto i{0}; i<nelements; ++i ) {
+    size_t           n_pfverts_entries_expected{0};
+    for ( size_t i{0U}; i<nelements; ++i ) {
          assert( vset.ElementType(i) >= -128 );
          assert( vset.ElementType(i) <=  128 );
          nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
@@ -1506,10 +1506,10 @@ cerr << endl;
     // ---------------------------------------------------------------
     deque<vector<int64_t> >::iterator it(vset.PfvertsBegin());
     size_t  n_entry(0U);
-    for ( size_t i=0; i<nelements; i++, ++it ) {
+    for ( size_t i{0U}; i<nelements; i++, ++it ) {
         // minimum number of neighbors per element
         assert( nbors[i] >= 2 );
-        for ( size_t j=0U; j<nbors[i]; j++ ) {
+        for ( size_t j{0U}; j<nbors[i]; j++ ) {
              // ignoring extra entries if ANSYS pfverts array is too short
              // later uses VData::EstablishNeighborConnectivity3D() to fix things up
              if ( n_entry >= entries ) break;
@@ -1541,7 +1541,7 @@ size_t i(0);
        ft=vset.PfvertsBegin(); ft!=vset.PfvertsEnd(); ft++, i++ )
    {
       cout << i <<": \t";
-      for ( size_t j=0U; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
+      for ( size_t j{0U}; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
       cout << endl;
    }
 */
@@ -1556,7 +1556,7 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // reading material information 'pmtrl'

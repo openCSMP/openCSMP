@@ -323,14 +323,14 @@ double IsoparametricLinearLineElement::Volume()
 
    // 2-dimensional models
    if ( dim == 2U )
-     for ( auto i=0; i<gpe; i++ ) {
+     for ( auto i{0U}; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian2D( DNR );
        }
 
    // 3-dimensional models
    else if ( dim == 3U )
-     for ( auto i=0; i<gpe; i++ ) {
+     for ( auto i{0U}; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian3D( DNR );
        }
@@ -338,7 +338,7 @@ double IsoparametricLinearLineElement::Volume()
    // in this case the length of the element is equivalent to
    // the sum of the Jacobian determinants at the integration points
    else if ( dim == 1U )
-     for ( auto i=0; i<gpe; i++ ) {
+     for ( auto i{0U}; i<gpe; i++ ) {
           dNr( IP[i], DNR );
           len += W[i] * Jacobian1D( DNR );
        }
@@ -475,10 +475,10 @@ void IsoparametricLinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
      // using M matrix for temporary storage
      dN_AtNode( M, 0 );
      // creating entries for first column of DN
-     for ( auto i=0; i<dim; i++ ) DN(i,0) = M(i,0);
+     for ( auto i{0U}; i<dim; i++ ) DN(i,0) = M(i,0);
      dN_AtNode( M, 1 );
      // creating entries for first column of DN
-     for ( auto i=0; i<dim; i++ ) DN(i,1) = M(i,1);
+     for ( auto i{0U}; i<dim; i++ ) DN(i,1) = M(i,1);
 
   } // end dN
 
@@ -879,8 +879,8 @@ void  IsoparametricLinearLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
         M *= EPROP;
 
         EPROP.Resize(dim,npe);
-        for ( auto i=0; i<dim; i++ )
-          for ( auto j=0; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
+        for ( auto i{0U}; i<dim; i++ )
+          for ( auto j{0U}; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
 
         return;
      }
@@ -1024,8 +1024,8 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( auto i=0; i<npe; i++ ) {
-          for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+     for ( auto i{0U}; i<npe; i++ ) {
+          for ( auto j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -1055,7 +1055,7 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( auto i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( auto i{0U}; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1063,8 +1063,8 @@ void IsoparametricLinearLineElement::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( auto i=0; i<DATA.Cols(); i++ ) {
-               for ( auto j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( auto i{0U}; i<DATA.Cols(); i++ ) {
+               for ( auto j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

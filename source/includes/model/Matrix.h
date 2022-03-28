@@ -107,7 +107,7 @@ class Matrix {
     void LUBackSubstitution(std::vector<uint32_t>& index, std::vector<double>& b);
   
   private:
-   size_t                               rows, cols;
+   size_t                             rows, cols;
    std::vector<std::vector<double> >  data;
    
    bool  CheckRange( size_t m, size_t n, const char* originator ) const;

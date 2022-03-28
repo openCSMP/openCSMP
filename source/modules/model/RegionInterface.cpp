@@ -540,7 +540,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
       fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
       if ( records > 0 )
           // reading the regions sequentially
-          for ( auto i = 0U; i<records; i++ )
+          for ( auto i{0U}; i<records; i++ )
             {
               BinaryFileSectionRead hdr( fp, "ONE_REGN" );
               // reading name and element indices for each unique region
@@ -575,7 +575,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
     fp.read( reinterpret_cast<char*>(&records), sizeof( int64_t  ) );
     if ( records > 0 )
       // reading the regions sequentially
-      for ( auto i = 0U; i<records; i++ )
+      for ( auto i{0U}; i<records; i++ )
         {
           BinaryFileSectionRead hdr( fp, "ONE_REGN" );
           // reading name and element indices for each unique region
@@ -707,7 +707,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
       break;
     case ELEMENT_INTEGRATION_POINT:
       for ( auto eit : model_domain.CellVector() ) {
-        for ( auto i = 0U; i < eit->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i < eit->IntegrationPoints(); i++ )
           {
             double sc = eit->Read( i, prop_key );
             groups[sc] = "undefined";
@@ -1401,7 +1401,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   for ( auto eit = gref.ElementsBegin(); eit != eend; eit++ ) {
     auto e = *eit;
     const size_t  neighbors( e->Neighbors() );
-    for ( auto i = 0U; i<neighbors; i++ )
+    for ( auto i{0U}; i<neighbors; i++ )
       if ( e->Neighbor( i ) != NULL )
         unionFind.SameComponent( e, e->Neighbor( i ) );
   }
@@ -2485,6 +2485,11 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelRegions( const char* r
 
 
 
+
+
+
+
+
 /**
 Finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
 
@@ -2533,7 +2538,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
       if ( nptr != nullptr and subdomain_b.IsPerimeterElement( nptr ) ) {
         // finding which face is the perimeter face in the neighbor element
         size_t opposite_pface( numeric_limits<size_t>::max() );
-        for ( auto i = 0U; i<nptr->Faces(); ++i )
+        for ( auto i{0U}; i<nptr->Faces(); ++i )
           if ( nptr->Neighbor( i ) == subdomain_a.E( eid ) ) {
             opposite_pface = i;
             break;

@@ -240,7 +240,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-    for ( int32_t i = 0U; i < nnu_; i++ ) {
+    for ( int32_t i{0U}; i < nnu_; i++ ) {
       u_[i] = x[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // initial guess for the solution vector
       f_[i] = b[i%nsys_*(nnu_ / nsys_) + i / nsys_]; // right-hand side
     }
@@ -249,7 +249,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-    for ( int32_t i = 0U; i<nnu_; i++ ) {
+    for ( int32_t i{0U}; i<nnu_; i++ ) {
       u_[i] = x[i]; // initial guess for the solution vector
       f_[i] = b[i]; // right-hand side
     }
@@ -664,7 +664,7 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 
   // solver returned ok so lets place contents back into x
   if ( settings_->UsePointBasedApproach() )
-    for ( auto i = 0U; i < nnu_; i++ )
+    for ( auto i{0U}; i < nnu_; i++ )
       x[i%nsys_*(nnu_ / nsys_) + i / nsys_] = u_[i];
   else x = u_;
 
@@ -786,7 +786,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #if defined(_OPENMP )
 #pragma omp parallel for // algorithm has been done this way to complete idea of "first touch".
 #endif
-        for ( int32_t i = 0U; i < nnu_; i++ ) {
+        for ( int32_t i{0U}; i < nnu_; i++ ) {
             u_[i] = x[i%nsys_*(nnu_/nsys_)+i/nsys_]; // initial guess for the solution vector
             f_[i] = b[i%nsys_*(nnu_/nsys_)+i/nsys_]; // right-hand side
         }
@@ -1202,7 +1202,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 
     // solver returned ok so lets place contents back into x
     if ( settings_->UsePointBasedApproach() )
-        for ( auto i = 0U; i < nnu_; i++ )
+        for ( auto i{0U}; i < nnu_; i++ )
             x[i%nsys_*(nnu_/nsys_)+i/nsys_] = u_[i];
     else x = u_;
 
@@ -1297,11 +1297,11 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     out_file += ".amg";
     ofs.open(out_file.c_str());
     // this order is O.K. because the indices are not printed
-    for ( auto i{0}; i<nnu_+1U; i++ ) ofs << crmat_.ia[i] << endl;
-    for ( auto i{0}; i<nna_;    i++ ) ofs << crmat_.ja[i] << endl;
+    for ( size_t i{0U}; i<nnu_+1U; i++ ) ofs << crmat_.ia[i] << endl;
+    for ( size_t i{0U}; i<nna_;    i++ ) ofs << crmat_.ja[i] << endl;
     ofs.setf(ios::scientific);
     long prec = ofs.precision(15);
-    for ( auto i{0}; i<nna_;   i++ ) ofs << crmat_.a[i] << endl;
+    for ( size_t i{0U}; i<nna_;   i++ ) ofs << crmat_.a[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();
@@ -1318,7 +1318,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     ofs.open(out_file.c_str());
     ofs.setf(ios::scientific);
     prec = ofs.precision(15);
-    for ( size_t i=0; i<nnu_; i++ ) ofs << f_[i] << endl;
+    for ( size_t i{0U}; i<nnu_; i++ ) ofs << f_[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();
@@ -1335,7 +1335,7 @@ bool  SAMG_Solver::Write_SAMG_TextInputFile( const char* file ) const
     ofs.open(out_file.c_str());
     ofs.setf(ios::scientific);
     prec = ofs.precision(15);
-    for ( size_t i=0; i<u_.size(); i++ ) ofs << u_[i] << endl;
+    for ( size_t i{0U}; i<u_.size(); i++ ) ofs << u_[i] << endl;
     ofs.unsetf( ios::scientific );
     ofs.precision(prec);
     ofs.close();

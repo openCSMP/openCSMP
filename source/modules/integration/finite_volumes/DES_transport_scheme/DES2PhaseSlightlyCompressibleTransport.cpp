@@ -125,7 +125,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
   
     const auto parent_elements(nd->Parents());
-    for ( auto i{0}; i<parent_elements; ++i ) {
+    for ( auto i{0U}; i<parent_elements; ++i ) {
         Element<dim>* const eptr = nd->Parent(i);
         
         if(truncated_node == 1 && (this->halo_stencils_.find(eptr) != this->halo_stencils_.end())) { //ignore if parent element located outside domain
@@ -139,11 +139,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeGradient
             snw_gradient = 0.;
             p_gradient = 0.;     
         
-            for ( auto j=0U; j<eptr->Nodes(); j++ ) {
+            for ( auto j{0U}; j<eptr->Nodes(); j++ ) {
                 const double sn = eptr->N(j)->Read(this->key_sCO2);
                 const double p = eptr->N(j)->Read(this->key_pf);
                 //const double p = eptr->N(j)->Read(this->this->key_rpf);
-                for ( auto k=0U; k<dim; k++ ) {
+                for ( auto k{0U}; k<dim; k++ ) {
                     if(this->with_capillary_spreading_) snw_gradient(k) += DN(k,j) * sn;
                     p_gradient(k) += -DN(k,j) * p;               
                 }
@@ -223,7 +223,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         
         double inflow(0.), CO2_inflow (0.);
         const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
-        for ( auto i{0}; i<sector_facets; i++ )
+        for ( auto i{0U}; i<sector_facets; i++ )
         {
             const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
             const auto inside_node(eptr->FV()->InsideNode(iFacet));
@@ -735,7 +735,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
     
     size_t PEPList_size = this->PEPList.size();
     
-    for(auto i = 0U; i < PEPList_size; ++i)
+    for( size_t i{0U}; i < PEPList_size; ++i)
     {
         auto it = this->PEPList.begin()+i;
         this->ComputeGradients ((*it));
@@ -744,14 +744,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
     #pragma omp parallel num_threads(num_threads)
     {
         #pragma omp for schedule(dynamic)
-        for(auto i = 0U; i < PEPList_size; ++i)
+        for( size_t i{0U}; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             ComputeRateofChange((*it));  
         };
     }
 
-    for(auto i = 0U; i < PEPList_size; ++i)
+    for( size_t i{0U}; i < PEPList_size; ++i)
     {
         auto it = this->PEPList.begin()+i;
         Event<dim>* event = *it;     
@@ -784,7 +784,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
         
         T_begin = omp_get_wtime();
         time_increment = time_interval; 
-        for(auto i = 0U; i < PEPList_size; ++i)
+        for( size_t i{0U}; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             this->ComputeGradients ((*it));
@@ -793,14 +793,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim>::AdvectVariable_TDS_parallel( d
         #pragma omp parallel num_threads(num_threads)
         {        
             #pragma omp for schedule(dynamic)     
-            for(auto i = 0U; i < PEPList_size; ++i)
+            for( size_t i{0U}; i < PEPList_size; ++i)
             {
                 auto it = this->PEPList.begin()+i;
                 ComputeRateofChange((*it));;
             }
         }        
         
-        for(auto i = 0U; i < PEPList_size; ++i)
+        for( size_t i{0U}; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             ArrayVariable array2;
@@ -1002,7 +1002,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
                 
         size_t PEPList_size = this->PEPList.size();
         
-        for(auto i = 0U; i < PEPList_size; ++i)
+        for( size_t i{0U}; i < PEPList_size; ++i)
         {
             auto it = this->PEPList.begin()+i;
             Event<dim>* event = *it;   
@@ -1015,7 +1015,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             std::vector<Event<dim>*> privateList;
             
             #pragma omp for schedule(dynamic)
-            for(auto i = 0U; i < PEPList_size; ++i)
+            for( size_t i{0U}; i < PEPList_size; ++i)
             {
                 
                 auto it = this->PEPList.begin()+i;
@@ -1032,7 +1032,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         } 
         
         size_t tempList_size = tempList.size();
-        for(auto i = 0U; i < tempList_size; ++i)
+        for( size_t i{0U}; i < tempList_size; ++i)
         {
             auto it = tempList.begin()+i;
             Event<dim>* event = *it;                 

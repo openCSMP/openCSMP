@@ -360,7 +360,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     const size_t   nodes(22); // number of nodes
   	deque<uint32_t>  npes(45,3);  // default: number of nodes per triangle
     deque<uint32_t>  epes(45,3);  // default: elements per triangle
-    for ( auto i{0}; i<vecElementTypes.size(); ++i ) {
+    for ( size_t i{0U}; i<vecElementTypes.size(); ++i ) {
          if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
               npes[i] = 4;
               epes[i] = 4;
@@ -547,12 +547,12 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
 
     // vset.Out();
@@ -581,7 +581,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     const size_t     n_nodes(35); // number of nodes
   	deque<uint32_t>  npes(n_cells,4);  // default: number of nodes per element
     deque<uint32_t>  epes(n_cells,4);  // default: nbors per element
-    for ( auto i{0}; i<vecElementTypes.size(); ++i ) {
+    for ( size_t i{0U}; i<vecElementTypes.size(); ++i ) {
          if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
               npes[i] = 3;
               epes[i] = 3;
@@ -667,18 +667,18 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
     vset.AddData( "node number", node_nums );
     // permeability
     PropertyData perm( ELEMENT, SCALAR, 2U );
     perm.Reserve( vset.Elements() );
-    for ( auto i = 0U; i<mesh_topology.CellsWithinDomain("upper"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
-    for ( auto i = 0U; i<mesh_topology.CellsWithinDomain("lower"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
+    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("upper"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-13 ) );
+    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("lower"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
     vset.AddData( "permeability", perm );
 
     vset.Out();
@@ -820,8 +820,8 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
   	std::deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
  // 	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -848,8 +848,8 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     //define hexahedron elements (elements 0->26), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
       
@@ -901,8 +901,8 @@ void test_Create_Hexahedra_VSet(VSet<3U>& vset, bool bSkewed )
     //nodes at edges:
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1049,8 +1049,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	double delta_x = x_length/static_cast<double>(x_dimension);
   	double delta_y = y_length/static_cast<double>(y_dimension);
   	
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  if(bSkewed)
   	  {
@@ -1069,8 +1069,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     //--------------------------ELEMENTS
     //define quad elements (elements 0->26), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
-    for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+    for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 const size_t iElement((iDim_i-1)*j+i);
       
@@ -1120,8 +1120,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
   	//nodes at corners:
     //nodes at edges:
   	//nodes at faces:
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1154,8 +1154,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
     cout << "\n\tIntroduce Slit Nodes...";
     
     //go over elements, introduce slit
-    for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+    for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{ 
      const bool over_slit  = (j == y_dimension/2       && i >= x_dimension-depth_of_slit);
      const bool under_slit = (j == (y_dimension/2 - 1) && i >= x_dimension-depth_of_slit);
@@ -1322,8 +1322,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	std::deque<double> pz(nodes);
   
   	for( int k = 0U; k < iDim_k; k++ ) //z
-  	for( int j = 0U; j < iDim_j; j++ ) //y
-  	for( int i = 0U; i < iDim_i; i++ ) //x
+  	for( int j{0U}; j < iDim_j; j++ ) //y
+  	for( int i{0U}; i < iDim_i; i++ ) //x
   	{
       if(bSkewed)
   	  {
@@ -1354,8 +1354,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //define hexahedron elements (elements 0->31), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for( int k = 0U; k < iDim_k-1; k++ ) //z
-  	for( int j = 0U; j < iDim_j-1; j++ ) //y
-  	for( int i = 0U; i < iDim_i-1; i++ ) //x
+  	for( int j{0U}; j < iDim_j-1; j++ ) //y
+  	for( int i{0U}; i < iDim_i-1; i++ ) //x
   	{
   	 int iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
      
@@ -1433,8 +1433,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //define neighbors
     std::deque<std::vector<int64_t> >  deqElementNeighbors(iNrOfElements);
     for( int  k = 0U; k < iDim_k_-1; k++ ) //z
-  	for( int  j = 0U; j < iDim_j_-1; j++ ) //y
-  	for( int  i = 0U; i < iDim_i_-1; i++ ) //x
+  	for( int  j{0U}; j < iDim_j_-1; j++ ) //y
+  	for( int  i{0U}; i < iDim_i_-1; i++ ) //x
   	{
   	 if(i==1 && j==1 && k==1) //its the center element (6 pyramids)
   	  continue;
@@ -1558,8 +1558,8 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //nodes at edges:
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -1683,8 +1683,8 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     size_t iElement = 0;
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	  if(i==1 && j==1) //its a prism
   	  { 
@@ -1714,8 +1714,8 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   
     vector<int8_t> vecElementTypes(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	  if(i==1 && j==1) //its a prism
   	  {
@@ -1740,8 +1740,8 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
   	std::deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -1771,8 +1771,8 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     
     iElement = 0;
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 
      //size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2081,8 +2081,8 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     //nodes at edges:
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -2239,7 +2239,7 @@ void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     bflags[61] = CNR8;
     
     // verification of boundary flags
-    for ( auto i{0}; i<vset.Vertices(); ++i ) {
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) {
          if ( vset.BoundaryFlag(i) != bflags[i] )
 // original data were not correct:   cerr <<"\n\t"<< (int)vset.BoundaryFlag(i) <<" vs. "<< (int)bflags[i];
          vset.AddBFlag( i, bflags[i] );
@@ -2389,8 +2389,8 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
   	std::deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2421,8 +2421,8 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     //define prism elements (elements 0->54), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 //lower element
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2454,8 +2454,8 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     //define neighbors
     std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for(int64_t  k = 0U; k < iDim_k-1; k++) //z
-  	for(int64_t  j = 0U; j < iDim_j-1; j++) //y
-  	for(int64_t  i = 0U; i < iDim_i-1; i++) //x
+  	for(int64_t  j{0U}; j < iDim_j-1; j++) //y
+  	for(int64_t  i{0U}; i < iDim_i-1; i++) //x
   	{
   	 //lower element
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2510,8 +2510,8 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
     //nodes at edges:
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -2728,8 +2728,8 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   	std::deque<double> pz(nodes);
   
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
 //  	  const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2750,8 +2750,8 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
   	
   	//add barycenters, one barycenter per cell
   	for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	  //this unused inside node boolean stays, just in case, in the future, we only want to skew internal nodes
   	  //const bool inside_node (!(i == 0 || j == 0 || k == 0 || i == iDim_i-1 || j == iDim_j-1 || k == iDim_k-1));
@@ -2778,8 +2778,8 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     //define pyramid elements (elements 0->54), assign nodes per element
     std::deque<std::vector<int64_t> > deqElements(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 //we have 6 pyramids per cell
   	 
@@ -2857,8 +2857,8 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     //define neighbors
     std::deque<std::vector<int64_t> > deqElementNeighbors(iNrOfElements);
     for(size_t k = 0U; k < iDim_k-1; k++) //z
-  	for(size_t j = 0U; j < iDim_j-1; j++) //y
-  	for(auto i = 0U; i < iDim_i-1; i++) //x
+  	for(size_t j{0U}; j < iDim_j-1; j++) //y
+  	for(auto i{0U}; i < iDim_i-1; i++) //x
   	{
   	 //pyramid 0
   	 size_t iElement(iDim_km1_2*k+(iDim_j-1)*j+i);
@@ -2990,8 +2990,8 @@ void test_Create_Pyramid_VSet( VSet<3U>& vset, bool bSkewed )
     //nodes at edges:
   	//nodes at faces:
   	for(size_t k = 0U; k < iDim_k; k++) //z
-  	for(size_t j = 0U; j < iDim_j; j++) //y
-  	for(auto i = 0U; i < iDim_i; i++) //x
+  	for(size_t j{0U}; j < iDim_j; j++) //y
+  	for(auto i{0U}; i < iDim_i; i++) //x
   	{
   	  int8_t bBoundary = NOT;
   	  
@@ -6972,14 +6972,14 @@ vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
 PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
 elmt_nums.Reserve( vset.Elements() );
 
-for ( auto i = 0U; i<vset.Elements(); ++i )
+for ( auto i{0U}; i<vset.Elements(); ++i )
   pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
 vset.AddData( "element number", elmt_nums );
 
 PropertyData node_nums( NODE, SCALAR, 3U );
 node_nums.Reserve( vset.Vertices() );
 
-for ( auto i = 0U; i<vset.Vertices(); ++i )
+for ( auto i{0U}; i<vset.Vertices(); ++i )
   pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
 vset.AddData( "node number", node_nums ); } // end test_Create_FracBox
 

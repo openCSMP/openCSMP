@@ -69,14 +69,14 @@ Point<dim>::~Point()
 
 /*
 template<uint32_t dim>
-double& Point<dim>::operator[](uint32_t i)
+double& Point<dim>::operator[]( uint32_t i)
  {
     return xyz_[i];
  }
  
  
 template<uint32_t dim>
-double Point<dim>::operator[](uint32_t i) const
+double Point<dim>::operator[]( uint32_t i) const
  {
     return xyz_[i];
  }
@@ -109,12 +109,12 @@ Point<1U>::~Point()
  }
 
 
-double& Point<1U>::operator[](uint32_t)
+double& Point<1U>::operator[]( uint32_t)
  {
     return x_;
  }
 
-const double& Point<1U>::operator[](uint32_t) const
+const double& Point<1U>::operator[]( uint32_t) const
  {
     return x_;
  }
@@ -1024,7 +1024,7 @@ double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const 
     // a . b
     // -----
     double ab{0.};
-    for ( auto i{0}; i<dim; ++i ) ab += a[i] * b[i];
+    for ( auto i{0U}; i<dim; ++i ) ab += a[i] * b[i];
     
     // ||a||  ||b||
     // ------------

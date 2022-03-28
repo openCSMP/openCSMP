@@ -98,8 +98,8 @@ void RectangularGrid::ProjectCellCentersToCrossSection( const Point<3U>& lower_l
     global_coordinates.clear();
     global_coordinates.reserve( n_cells_x_ * n_cells_y_ );
  
-    for ( auto i{0}; i<n_cells_y_; ++i )
-      for ( size_t j=0U; j<n_cells_x_; ++j ) {
+    for ( size_t i{0U}; i<n_cells_y_; ++i )
+      for ( size_t j{0U}; j<n_cells_x_; ++j ) {
            // performing the coordinate transformation
            Point<3U> rs = (*this)(i,j);
            Point<3U> cell_center_xyz = rectangle.RstToXYZ( rs );
@@ -130,7 +130,7 @@ void RectangularGrid::WriteGridAsIntegerMatrix( const char* file_name ) const
     ofstream ofs( file_name );
  
     for (  auto i{0}; i<n_cells_y_; ++i ) {
-         for ( size_t j=0U; j<n_cells_x_; ++j ) ofs <<"1\t";
+         for ( size_t j{0U}; j<n_cells_x_; ++j ) ofs <<"1\t";
          ofs <<"\n";
       }
 

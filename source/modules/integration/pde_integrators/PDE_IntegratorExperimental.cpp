@@ -178,7 +178,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t
 
    cout.setf(ios::scientific);
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
-   for ( auto i{0}; i<rh_.size(); i++ )
+   for ( size_t i{0U}; i<rh_.size(); i++ )
      {
         cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
@@ -187,7 +187,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t
    cout << endl;
 
    cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
-   for ( auto i{0}; i<x_.size(); i++ )
+   for ( size_t i{0U}; i<x_.size(); i++ )
      {
         cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
@@ -1018,7 +1018,7 @@ template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>& face )
  {
     const size_t nodes(face.Nodes());
-    for ( auto i{0}; i<nodes; ++i )
+    for ( auto i{0U}; i<nodes; ++i )
       if ( !comp_domain.IsPerimeterNode( face.N(i) ) ) return false;
     return true;
  }
@@ -1028,7 +1028,7 @@ template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<dim>& interface )
  {
     const size_t nodes(interface.Nodes());
-    for ( auto i{0}; i<nodes; ++i )
+    for ( auto i{0U}; i<nodes; ++i )
       if ( !comp_domain.IsPerimeterNode( interface.N(i) ) ) return false;
     return true;
  }
@@ -1332,7 +1332,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
               VectorVariable<dim>  vc;
               while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, vc);
-                  for (auto i = 0U; i < dim; i++) {
+                  for (auto i{0U}; i < dim; i++) {
                       position = (*gfirst)->Idx() * dim + i + offset;
                       position = DOF_indexes_[position];
                       if (position != NULL_IDX) vc(i) = this->x_[position];
@@ -1346,7 +1346,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
             TensorVariable<dim>  ts;
             while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, ts);
-                  for (auto i = 0U; i < dim; i++)
+                  for (auto i{0U}; i < dim; i++)
                     for (size_t k = 0U; k < dim; k++) {
                          position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
                          position = DOF_indexes_[position];
@@ -1361,7 +1361,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
             ArrayVariable  ar(prop_key.dataDepth);
             while (gfirst != gref.NodesEnd()) {
                  (*gfirst)->Read(prop_key, ar);
-                 for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                 for (auto i{0U}; i < prop_key.dataDepth; i++) {
                      position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
                      position = DOF_indexes_[position];
                      if (position != NULL_IDX) ar(i) = this->x_[position];
@@ -1375,7 +1375,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTAT
               FlaggedArrayVariable  ar(prop_key.dataDepth);
               while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, ar);
-                  for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                  for (auto i{0U}; i < prop_key.dataDepth; i++) {
                       position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
                       position = DOF_indexes_[position];
                       if (position != NULL_IDX) ar(i) = this->x_[position];
@@ -1558,7 +1558,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<di
    
 // SKM_TEST checks whether the contributions are written to the correct nodes
 //csmp::Index test_key = model.Database().StorageKey("test variable");
-//for ( auto i{0}; i<domain.Nodes(); i++ )
+//for ( size_t i{0U}; i<domain.Nodes(); i++ )
 // domain.N(i)->Store( test_key, makeScalar(PLAIN, rh_[i] ) );
  
     // 8. invert global matrix
@@ -1707,7 +1707,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 break;
               case VECTOR:
                 while ( niter != gref.NodesEnd()) {
-                       for ( auto i = 0U; i < dim; ++i ) {
+                       for ( auto i{0U}; i < dim; ++i ) {
                             position = (*niter)->Idx() * dim + i + offset;
                             if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
                             else {
@@ -1722,13 +1722,13 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 // tensors have flags only for their diagonal elements
                 while ( niter != gref.NodesEnd() )
                   {
-                     for (auto i = 0U; i < dim; i++) {
+                     for (auto i{0U}; i < dim; i++) {
                         if ( (*niter)->Status(prop_key,i) == DIRICH )
-                          for (size_t j = 0U; j < dim; j++) {
+                          for (size_t j{0U}; j < dim; j++) {
                                position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                DOF_indexes_[position] = NULL_IDX;
                             }
-                        else for (size_t j = 0U; j < dim; j++) {
+                        else for (size_t j{0U}; j < dim; j++) {
                                   position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                   DOF_indexes_[position] = DOF;
                                   DOF = DOF + 1U;
@@ -1743,13 +1743,13 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
                 while (niter != gref.NodesEnd()) {
                     if ( (*niter)->Status(prop_key) == DIRICH )
                       {
-                        for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           DOF_indexes_[position] = NULL_IDX;
                         }
                       }
                     else {
-                        for (auto i = 0U; i < prop_key.dataDepth; i++) {
+                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           DOF_indexes_[position] = DOF;
                           DOF = DOF + 1U;
@@ -1761,7 +1761,7 @@ void PDE_IntegratorExperimental<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeElimin
               case FLAGGEDARRAY:
                 while ( niter != gref.NodesEnd() )
                   {
-                     for (auto i = 0U; i < prop_key.dataDepth; i++ )
+                     for (auto i{0U}; i < prop_key.dataDepth; i++ )
                         if ( (*niter)->Status(prop_key,i) == DIRICH ) {
                              position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                              DOF_indexes_[position] = NULL_IDX;
@@ -1817,9 +1817,9 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMap
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
-     for ( auto i{0}; i<G_.Rows(); i++ )
+     for ( size_t i{0U}; i<G_.Rows(); i++ )
        {
-          for ( size_t j=0U; j<G_.Cols(); j++ )
+          for ( size_t j{0U}; j<G_.Cols(); j++ )
             if ( G_.At(i,j) != 0. ) ofs << 1 <<" ";
             else                   ofs << 0 <<" ";
           ofs << endl;

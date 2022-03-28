@@ -431,7 +431,7 @@ double ModelComparator<dim>::CompareRegionScalarVariableAtPoints( Model<dim>& mo
     // L2 norm comparison
     size_t numberOfPoints( points.size() );
     ScalarVariable scalarValue( PLAIN, 0. );
-    for (size_t i=0; i< numberOfPoints; i++ )
+    for (size_t i{0U}; i< numberOfPoints; i++ )
     {
         pAt.PropertyValueAt(i, scalarValue);
         error += (scalarValue() - values[i]())*(scalarValue() - values[i]());
@@ -458,7 +458,7 @@ void ModelComparator<dim>::ReadRegionNodalScalarVariableAndNodeCoordinates( cons
     for( auto it = region.NodesBegin(); it != nodesEnd; ++it )
     {
         (*it)->Read( propKey, scalarValue );
-        for(auto i{0};i<dim;i++)
+        for(auto i{0U};i<dim;i++)
             points[index].push_back((*it)->operator[](i));
 
         values[index] = scalarValue ;

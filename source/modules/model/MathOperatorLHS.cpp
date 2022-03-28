@@ -791,7 +791,7 @@ namespace csmp {
 			if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
 				MTRL.resize(e_ref.FE()->IntegrationPoints());
 				const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-				for (auto i = 0U; i < n_integration_points; i++)
+				for (auto i{0U}; i < n_integration_points; i++)
 				{
 					if (MaterialOperandType() == SCALAR)
 						MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -823,7 +823,7 @@ namespace csmp {
 			// if the operand is placed on the node  
 			else if (MaterialOperandPlacement() == NODE) {
 				const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-				for (auto i = 0U; i < n_integration_points; i++)
+				for (auto i{0U}; i < n_integration_points; i++)
 					PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
 			}
 			else
@@ -871,7 +871,7 @@ namespace csmp {
 			if (MaterialOperandPlacement() == FACE_INTEGRATION_POINT) {
 				MTRL.resize(e_ref.FE()->IntegrationPoints());
 				const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-				for (auto i = 0U; i < n_integration_points; i++)
+				for (auto i{0U}; i < n_integration_points; i++)
 				{
 					if (MaterialOperandType() == SCALAR)
 						MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -903,7 +903,7 @@ namespace csmp {
 			// if the operand is placed on the node
 			else if (MaterialOperandPlacement() == NODE) {
 				const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-				for (auto i = 0U; i < n_integration_points; i++)
+				for (auto i{0U}; i < n_integration_points; i++)
 					PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
 			}
 			else
@@ -986,7 +986,7 @@ namespace csmp {
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes()); // ii
 		IDB.resize(e.Nodes()); // jj
-		for (auto i = 0U; i < e.Nodes(); i++) {
+		for (auto i{0U}; i < e.Nodes(); i++) {
 			IDT[i] = e.N(i)->Idx();
 			IDB[i] = IDT[i];
 		}
@@ -994,7 +994,7 @@ namespace csmp {
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector(dim, TestOperandKey(), IDT);
 
-		for (auto i = 0U; i < IDT.size(); i++) {
+		for (auto i{0U}; i < IDT.size(); i++) {
 			IDT[i] += this->TestOperandOffset();
 			IDT[i] = DOF_indexes[IDT[i]];
 		}
@@ -1002,7 +1002,7 @@ namespace csmp {
 		if (BasicOperandType() != SCALAR)
 			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
 
-		for (auto i = 0U; i < IDB.size(); i++) {
+		for (auto i{0U}; i < IDB.size(); i++) {
 			IDB[i] += this->BasicOperandOffset();
 			IDB[i] = DOF_indexes[IDB[i]];
 		}
@@ -1072,7 +1072,7 @@ namespace csmp {
 				"Multiply Accumulate has not been supported yet");
 
 			//if (IDT[i] != NULL_IDX) {
-			//  for (size_t j = 0U; j<LHS.Cols(); j++)
+			//  for (size_t j{0U}; j<LHS.Cols(); j++)
 			//    if (IDB[j] != NULL_IDX) {
 			//      G.MultiplyEntryWith(IDT[i],
 			//        IDB[j],
@@ -1082,9 +1082,9 @@ namespace csmp {
 		}
 		else if (add_accumulate_ || add_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++) {
+			for (auto i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j = 0U; j < LHS.Cols(); j++) {
+					for (auto j{0U}; j < LHS.Cols(); j++) {
 						if (IDB[j] == NULL_IDX) {
 							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j]* factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
 						}
@@ -1097,9 +1097,9 @@ namespace csmp {
 				}
 			}
 
-			/*for (auto i = 0U; i<LHS.Rows(); i++)
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
 			  if (IDT[i] != NULL_IDX) {
-				for (size_t j = 0U; j < LHS.Cols(); j++)
+				for (size_t j{0U}; j < LHS.Cols(); j++)
 				  if (IDB[j] != NULL_IDX) {
 					G.Add(IDT[i],
 					  IDB[j],
@@ -1109,9 +1109,9 @@ namespace csmp {
 		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++) {
+			for (auto i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j = 0U; j < LHS.Cols(); j++) {
+					for (auto j{0U}; j < LHS.Cols(); j++) {
 						if (IDB[j] == NULL_IDX) {
 							pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
 						}
@@ -1124,9 +1124,9 @@ namespace csmp {
 				}
 			}
 
-			/*for (auto i = 0U; i<LHS.Rows(); i++)
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
 			  if (IDT[i] != NULL_IDX) {
-				for (size_t j = 0U; j < LHS.Cols(); j++)
+				for (size_t j{0U}; j < LHS.Cols(); j++)
 				  if (IDB[j] != NULL_IDX) {
 					G.Add(IDT[i],
 					  IDB[j],
@@ -1151,7 +1151,7 @@ namespace csmp {
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes());
 		IDB.resize(e.Nodes());
-		for (auto i = 0U; i < e.Nodes(); i++) {
+		for (auto i{0U}; i < e.Nodes(); i++) {
 			IDT[i] = e.N(i)->Idx();
 			IDB[i] = IDT[i];
 		}
@@ -1159,7 +1159,7 @@ namespace csmp {
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector(dim, TestOperandKey(), IDT);
 
-		for (auto i = 0U; i < IDT.size(); i++) {
+		for (auto i{0U}; i < IDT.size(); i++) {
 			IDT[i] += this->TestOperandOffset();
 			IDT[i] = DOF_indexes[IDT[i]];
 		}
@@ -1168,7 +1168,7 @@ namespace csmp {
 		if (BasicOperandType() != SCALAR)
 			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
 
-		for (auto i = 0U; i < IDB.size(); i++) {
+		for (auto i{0U}; i < IDB.size(); i++) {
 			IDB[i] += this->BasicOperandOffset();
 			IDB[i] = DOF_indexes[IDB[i]];
 		}
@@ -1235,9 +1235,9 @@ namespace csmp {
 			throw csmp::Exception(ERROR,
 				"MathOperatorLHS<dim>::AssignToGlobal(face):",
 				"Multiply Accumulate has not been supported yet");
-			/*for (auto i = 0U; i<LHS.Rows(); i++)
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
 			  if (IDT[i] != NULL_IDX) {
-				for (size_t j = 0U; j<LHS.Cols(); j++)
+				for (size_t j{0U}; j<LHS.Cols(); j++)
 				  if (IDB[j] != NULL_IDX) {
 					G.MultiplyEntryWith(IDT[i],
 					  IDB[j],
@@ -1247,9 +1247,9 @@ namespace csmp {
 		}
 		else if (add_accumulate_ || add_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++) {
+			for (auto i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j = 0U; j < LHS.Cols(); j++) {
+					for (auto j{0U}; j < LHS.Cols(); j++) {
 						if (IDB[j] == NULL_IDX) {
 							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey())
 						}
@@ -1262,9 +1262,9 @@ namespace csmp {
 				}
 			}
 
-			/*for (auto i = 0U; i<LHS.Rows(); i++)
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
 			  if (IDT[i] != NULL_IDX) {
-				for (size_t j = 0U; j < LHS.Cols(); j++)
+				for (size_t j{0U}; j < LHS.Cols(); j++)
 				  if (IDB[j] != NULL_IDX) {
 					G.Add(IDT[i],
 					  IDB[j],
@@ -1274,9 +1274,9 @@ namespace csmp {
 		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++) {
+			for (auto i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
-					for (auto j = 0U; j < LHS.Cols(); j++) {
+					for (auto j{0U}; j < LHS.Cols(); j++) {
 						if (IDB[j] == NULL_IDX) {
 							pivotVector[IDT[i]] += LHS(i, j) * nodal_values[j] * factor_; // notice the sign
 						}
@@ -1288,9 +1288,9 @@ namespace csmp {
 					}
 				}
 			}
-			/*for (auto i = 0U; i<LHS.Rows(); i++)
+			/*for (auto i{0U}; i<LHS.Rows(); i++)
 			  if (IDT[i] != NULL_IDX) {
-				for (size_t j = 0U; j < LHS.Cols(); j++)
+				for (size_t j{0U}; j < LHS.Cols(); j++)
 				  if (IDB[j] != NULL_IDX) {
 					G.Add(IDT[i],
 					  IDB[j],
@@ -1321,7 +1321,7 @@ namespace csmp {
 
 		IDT.resize(e.Nodes());
 		IDB.resize(e.Nodes());
-		for (auto i = 0U; i < e.Nodes(); i++) {
+		for (auto i{0U}; i < e.Nodes(); i++) {
 			IDT[i] = e.N(i)->Idx();
 			IDB[i] = IDT[i];
 		}
@@ -1329,37 +1329,37 @@ namespace csmp {
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector(dim, TestOperandKey(), IDT);
 
-		for (auto i = 0U; i < IDT.size(); i++)
+		for (auto i{0U}; i < IDT.size(); i++)
 			IDT[i] += this->TestOperandOffset();
 
 		if (BasicOperandType() != SCALAR)
 			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
 
-		for (auto i = 0U; i < IDB.size(); i++)
+		for (auto i{0U}; i < IDB.size(); i++)
 			IDB[i] += this->BasicOperandOffset();
 
 		// perform assignment from local matrix to global matrix
 
 		if (multiply_accumulate_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.MultiplyEntryWith(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (add_accumulate_ || add_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						-LHS(i, j) * factor_);
@@ -1378,7 +1378,7 @@ namespace csmp {
 
 		IDT.resize(e.Nodes());
 		IDB.resize(e.Nodes());
-		for (auto i = 0U; i < e.Nodes(); i++) {
+		for (auto i{0U}; i < e.Nodes(); i++) {
 			IDT[i] = e.N(i)->Idx();
 			IDB[i] = IDT[i];
 		}
@@ -1386,37 +1386,37 @@ namespace csmp {
 		if (TestOperandType() != SCALAR)
 			transformNodeIndexVector(dim, TestOperandKey(), IDT);
 
-		for (auto i = 0U; i < IDT.size(); i++)
+		for (auto i{0U}; i < IDT.size(); i++)
 			IDT[i] += this->TestOperandOffset();
 
 		if (BasicOperandType() != SCALAR)
 			transformNodeIndexVector(dim, BasicOperandKey(), IDB);
 
-		for (auto i = 0U; i < IDB.size(); i++)
+		for (auto i{0U}; i < IDB.size(); i++)
 			IDB[i] += this->BasicOperandOffset();
 
 		// perform assignment from local matrix to global matrix
 
 		if (multiply_accumulate_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.MultiplyEntryWith(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (add_accumulate_ || add_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						LHS(i, j) * factor_);
 		}
 		else if (subtract_accumulate_ || subtract_accumulate_later_)
 		{
-			for (auto i = 0U; i < LHS.Rows(); i++)
-				for (auto j = 0U; j < LHS.Cols(); j++)
+			for (auto i{0U}; i < LHS.Rows(); i++)
+				for (auto j{0U}; j < LHS.Cols(); j++)
 					G.Add(IDT[i],
 						IDB[j],
 						-LHS(i, j) * factor_);

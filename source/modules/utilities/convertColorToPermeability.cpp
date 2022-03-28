@@ -27,8 +27,8 @@ void convertColorToPermeability( double sc, Matrix& perm )
  {
    const size_t m = perm.Rows(), n = perm.Cols();
 
-   for ( size_t i=0; i <m; i++)
-     for ( size_t j=0; j <n; j++)
+   for ( size_t i{0U}; i <m; i++)
+     for ( size_t j{0U}; j <n; j++)
        {
  		    /* COLOR - PERMEABILITY CONVERSION */ 
  		    if      ( perm(i,j) == 0   ) perm( i,j) = (sc * WHITE);

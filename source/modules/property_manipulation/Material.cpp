@@ -108,7 +108,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
          // removing completely isolated elements
          const int32_t mtrl_ID = (*it)->Material_ID();
          bool  nbor_with_same_ID(false);
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+         for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr && (*it)->Neighbor(i)->Material_ID() == mtrl_ID ) {
                 nbor_with_same_ID = true;
                 break;

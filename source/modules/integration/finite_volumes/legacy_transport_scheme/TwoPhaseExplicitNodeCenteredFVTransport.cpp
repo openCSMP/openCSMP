@@ -98,7 +98,7 @@ TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::TwoPhaseExplicitNodeCenteredFV
     // establishing the halo stencils
     for ( typename vector<Node<dim>*>::const_iterator
           nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++ )
-      for ( auto i{0}; i<(*nit)->Parents(); i++ )
+      for ( auto i{0U}; i<(*nit)->Parents(); i++ )
         if ( !IsInteriorStencil( (*nit)->Parent(i) ) )
           halo_stencils_.insert( (*nit)->Parent(i) );
     
@@ -252,12 +252,12 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
                {
                    fill( gradPc.begin(), gradPc.end(), 0. );
                    (*(*eit)).dN_AtBaryCenter( DN );
-                   for ( auto j=0U; j<(*eit)->Nodes(); j++ ) {
+                   for ( auto j{0U}; j<(*eit)->Nodes(); j++ ) {
                        double sn = (*eit)->N(j)->Read( this->adv1_key_ );
                        relperm.SaturationWettingPhase( 1. - sn );
                        relperm.EffectiveSaturation();
                        double pc = relperm.pc_Phase( );
-                       for ( auto k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
+                       for ( auto k{0U}; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                    }
                    // getting the maximum capillary flux (G= lambda overbar)
                    double  magnitude_grad_pc(gradPc[0]); // 1D
@@ -372,7 +372,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
     ScalarVariable   sc;
 
     this->pref_.RangeOf( this->pref_.Name(adv_key), rmin, rmax );
-    for ( auto i{0}; i<RESULT.size(); i++ ) {
+    for ( auto i{0U}; i<RESULT.size(); i++ ) {
          // recording output range
          amin = std::min( amin, RESULT[i] );
          amax = std::max( amax, RESULT[i] );
@@ -429,7 +429,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::OutputResults( const cs
     ScalarVariable  sc;
 
     this->pref_.RangeOf( this->pref_.Name(adv2_key), rmin, rmax );
-      for ( auto i{0}; i<RESULT.size(); i++ )
+      for ( auto i{0U}; i<RESULT.size(); i++ )
          {
             // recording output range
             amin = std::min( amin, RESULT[i] );
@@ -490,7 +490,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedProperty()
          nit=this->gref_.NodesBegin(); nit!=this->gref_.NodesEnd(); nit++, sit++ ) {
          // 1. the advected property value at the current node is assigned to min-max pair
         (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
-        for ( auto i{0}; i<(*nit)->Neighbors(); i++ ) {
+        for ( auto i{0U}; i<(*nit)->Neighbors(); i++ ) {
              const double adv_var((*nit)->Neighbor(i)->Read( this->adv1_key_ ));
              // if element value is smaller the current minimum is assigned etc.
              (*sit).first  = std::min( (*sit).first,  adv_var );
@@ -519,7 +519,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
                global_neighb_el_id = (*nit)->Parent(p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i=0;i<current_el->Nodes();i++){
+               for(auto i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -551,7 +551,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i=0;i<current_el->Nodes();i++){
+               for(auto i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -690,7 +690,7 @@ bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::FractionalFlowThroughBoun
          relperm.EffectiveSaturation();
 
          // for all FACETS per SECTOR surrounding the finite volume at the boundary
-         for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ )
+         for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ )
            {
               auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
               uint32_t inside_node = eptr->FV()->InsideNode( iFacet );
@@ -794,16 +794,16 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AssignGenericFlowBoundary
 
                           e->dN_AtBaryCenter( DN );
                           dsdn = 0.;
-                          for ( auto j=0U; j<e->Nodes(); j++ ) {
+                          for ( auto j{0U}; j<e->Nodes(); j++ ) {
                                const double sn = e->N(j)->Read( this->adv1_key_);
-                               for ( auto k=0U; k<dim; k++ ) dsdn[k] += DN(k,j) * sn;
+                               for ( auto k{0U}; k<dim; k++ ) dsdn[k] += DN(k,j) * sn;
                           }
 
                       }
 
                       // now the saturation dependent properties are computed
                       // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                      for ( auto i{0}; i<e->FV()->FacetsPerSector(pnid); i++ )
+                      for ( auto i{0U}; i<e->FV()->FacetsPerSector(pnid); i++ )
                         {
                            auto     iFacet( e->FV()->FacetSurroundingSector(pnid,i) );
                            uint32_t inside_node,outside_node;
@@ -928,7 +928,7 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::DivergenceFreeCorrection(
                    relperm.EffectiveSaturation();
 
                    // for all FACETS per SECTOR surrounding the finite volume at the boundary
-                   for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ ){
+                   for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ ){
                         auto     iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                         uint32_t inside_node,outside_node;
                         eptr->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );

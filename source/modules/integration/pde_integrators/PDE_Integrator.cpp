@@ -358,9 +358,9 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
 
    cout.setf(ios::scientific);
 
-   for ( size_t i=0; i<G_.Rows(); i++ )
+   for ( size_t i{0U}; i<G_.Rows(); i++ )
       {
-         for ( size_t j=0; j<G_.Cols(); j++ )
+         for ( size_t j{0U}; j<G_.Cols(); j++ )
            {
               cout.precision(precision);
               if ( G_.At(i,j) >= 0 ) cout <<" ";
@@ -370,7 +370,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
       }
 
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
-   for ( auto i{0}; i<rh_.size(); i++ )
+   for ( size_t i{0U}; i<rh_.size(); i++ )
      {
         cout.precision(precision);
         if ( rh_[i] >= 0. ) cout <<" ";
@@ -379,7 +379,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
    cout << endl;
 
    cout <<"\n\nGlobal solution vector of length: "<< x_.size() << endl;
-   for ( auto i{0}; i<x_.size(); i++ )
+   for ( size_t i{0U}; i<x_.size(); i++ )
      {
         cout.precision(precision);
         if ( x_[i] >= 0 ) cout <<" ";
@@ -1205,7 +1205,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                   VectorVariable<dim>  vc;
                   while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, vc );
-                        for ( auto i{0}; i<dim; i++ )
+                        for ( auto i{0U}; i<dim; i++ )
                           if ( vc.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * dim + i + offset;
                                G_.ZeroRow( position );
@@ -1220,9 +1220,9 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                  TensorVariable<dim>  ts;
                  while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, ts );
-                        for ( auto i{0}; i<dim; i++ )
+                        for ( auto i{0U}; i<dim; i++ )
                           if ( ts.Flag(i) == DIRICH ) 
-                            for ( size_t j=0U; j<dim; j++ )
+                            for ( auto j{0U}; j<dim; j++ )
                               {
                                 size_t  position = (*niter)->Idx() * dim2_ + i * dim + j + offset;
                                 G_.ZeroRow( position );
@@ -1239,7 +1239,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                         (*niter)->Read( prop_key, ar );
                         if ( ar.Flag() == DIRICH )
                         {
-                            for ( auto i{0}; i<prop_key.dataDepth; i++ )
+                            for ( auto i{0U}; i<prop_key.dataDepth; i++ )
                             {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
@@ -1255,7 +1255,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const CO
                   FlaggedArrayVariable  ar(prop_key.dataDepth);
                   while ( niter != gref.NodesEnd() ) {
                         (*niter)->Read( prop_key, ar );
-                        for ( auto i{0}; i<prop_key.dataDepth; i++ )
+                        for ( auto i{0U}; i<prop_key.dataDepth; i++ )
                           if ( ar.Flag(i) == DIRICH ) {
                                size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                                G_.ZeroRow( position );
@@ -1599,7 +1599,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  VectorVariable<dim>  vc;
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, vc );
-                      for ( auto i{0}; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
+                      for ( auto i{0U}; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
                       (*gfirst)->Store( prop_key, vc );
                       gfirst++;
                    }
@@ -1609,8 +1609,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  TensorVariable<dim>  ts;
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ts );
-                      for ( auto i{0}; i<dim; i++ )
-                        for ( size_t k=0U; k<dim; k++ )
+                      for ( auto i{0U}; i<dim; i++ )
+                        for ( auto k{0U}; k<dim; k++ )
                           ts(i,k) = x_[ (*gfirst)->Idx() * dim2_ + i * dim + k + offset ];
                       (*gfirst)->Store( prop_key, ts );
                       gfirst++;
@@ -1621,7 +1621,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  ArrayVariable  ar(prop_key.dataDepth);
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ar );
-                      for ( auto i{0}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
+                      for ( auto i{0U}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
                       (*gfirst)->Store( prop_key, ar );
                       gfirst++;
                    }
@@ -1631,7 +1631,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
                  FlaggedArrayVariable  ar(prop_key.dataDepth);
                  while ( gfirst != gref.NodesEnd() ) {
                       (*gfirst)->Read( prop_key, ar );
-                      for ( auto i{0}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
+                      for ( auto i{0U}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
                       (*gfirst)->Store( prop_key, ar );
                       gfirst++;
                    }
@@ -1706,9 +1706,9 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
-     for ( auto i{0}; i<G_.Rows(); i++ )
+     for ( size_t i{0U}; i<G_.Rows(); i++ )
        {
-          for ( size_t j=0U; j<G_.Cols(); j++ )
+          for ( size_t j{0U}; j<G_.Cols(); j++ )
             if ( G_.At(i,j) != 0. ) ofs << 1 <<" ";
             else                   ofs << 0 <<" ";
           ofs << endl;

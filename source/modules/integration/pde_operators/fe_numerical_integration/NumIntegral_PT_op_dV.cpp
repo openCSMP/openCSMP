@@ -56,8 +56,8 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( auto i=0; i<e.Nodes(); i++ )
-          for ( auto j=0; j<dim; j++ ) BFORCE[k++] = forces[i][j];
+        for ( auto i{0U}; i<e.Nodes(); i++ )
+          for ( auto j{0U}; j<dim; j++ ) BFORCE[k++] = forces[i][j];
      }
    else // Element property
      {
@@ -67,15 +67,15 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( auto i=0; i<e.Nodes(); i++ )
-          for ( auto j=0; j<dim; j++ ) BFORCE[k++] = vc[j];
+        for ( auto i{0U}; i<e.Nodes(); i++ )
+          for ( auto j{0U}; j<dim; j++ ) BFORCE[k++] = vc[j];
     }
 
    // zeroing the corner nodes again (only for quadratic triangle in 2D
    // where number of midside nodes is equal to corner nodes)
    if ( e.FE_Type() == QUADRATIC_TRIANGLE ||
         e.FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
-     for ( auto i=0; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
+     for ( auto i{0U}; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
 
 } // end GetOperands
 
@@ -122,13 +122,13 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
          const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
-         for ( auto i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
+         for ( auto i{0U}; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
          const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
-         for ( auto i=0; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
+         for ( auto i{0U}; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
            MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
      }
     

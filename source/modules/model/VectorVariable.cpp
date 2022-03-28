@@ -731,7 +731,7 @@ VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const VectorVariable<3U>& v
 template<uint32_t dim>
 ostream&  operator<<( ostream& stream, const VectorVariable<dim>& o )
 {
-  for ( auto i = 0U; i<dim; i++ )
+  for ( auto i{0U}; i<dim; i++ )
     stream << o[i] << " (" << parseStatus( o.Flag( i ) ) << ") ";
 
   return stream;

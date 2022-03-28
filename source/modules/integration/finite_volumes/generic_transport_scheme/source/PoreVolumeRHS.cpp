@@ -37,7 +37,7 @@ void PoreVolumeRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<d
 
     const size_t sector_ipoints(e.Sectors());
 
-    for (auto i{0}; i < sector_ipoints; ++i ) 
+    for (auto i{0U}; i < sector_ipoints; ++i ) 
       {
          const double sector_pore_volume = e.Read( i, 0U, spv_key_ );
          const double advected_var_value = e.N(i)->Read( adv_key_ );

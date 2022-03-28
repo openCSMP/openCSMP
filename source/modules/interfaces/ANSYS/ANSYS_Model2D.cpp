@@ -42,14 +42,14 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
@@ -149,7 +149,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
       const uint32_t dim{2};
       PropertyData elmt_nums( ELEMENT, SCALAR, dim );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
@@ -157,7 +157,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
       const uint32_t dim{2};
       PropertyData node_nums( NODE, SCALAR, dim );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 

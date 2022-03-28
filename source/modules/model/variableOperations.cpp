@@ -252,10 +252,10 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tma
   VectorVariable<dim>  evals;
 
   // doing simple case first
-  if ( isDiagonalTensor( ts ) ) for ( auto i = 0U; i<dim; ++i ) evals( i ) = ts( i, i );
+  if ( isDiagonalTensor( ts ) ) for ( auto i{0U}; i<dim; ++i ) evals( i ) = ts( i, i );
   else ts.EigenValues( evals );
   std::set<double> min_max;
-  for ( auto i = 0U; i<dim; i++ ) min_max.insert( evals[i] );
+  for ( auto i{0U}; i<dim; i++ ) min_max.insert( evals[i] );
   tmin = (*min_max.begin());
   tmax = (*min_max.rbegin());
 }

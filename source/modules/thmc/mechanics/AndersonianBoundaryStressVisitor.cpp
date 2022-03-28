@@ -135,7 +135,7 @@ void AndersonianBoundaryStressVisitor::Visit( Face<3U>* f )
      faceStressVector *= -1.;
   
    // adding the stress forces augmented by the overburden stress to the nodal forces of the nodes of the face
-   for ( auto i{0}; i<face_nodes; i++ ) {
+   for ( auto i{0U}; i<face_nodes; i++ ) {
         // overburden stress
         f->N(i)->Read( Sv_key_, Sv_ );
         Sv_ /= nodes;

@@ -68,7 +68,7 @@ DataInputVisitor<Var,dim>::~DataInputVisitor()
 template<typename Var, uint32_t dim>
 void DataInputVisitor<Var,dim>::Visit( Model<dim>* gptr )
  { 
-    for ( auto i{0}; i<variable_.Size(); i++ )
+    for ( auto i{0U}; i<variable_.Size(); i++ )
       variable_.Component( i, input_data_ref_[ counter_++ ] );
       
     gptr->Store( prop_key_, variable_ );
@@ -78,7 +78,7 @@ void DataInputVisitor<Var,dim>::Visit( Model<dim>* gptr )
 template<typename Var, uint32_t dim>
 void DataInputVisitor<Var,dim>::Visit( Region<dim>* gptr ) 
  { 
-    for ( auto i{0}; i<variable_.Size(); i++ )
+    for ( auto i{0U}; i<variable_.Size(); i++ )
       variable_.Component( i, input_data_ref_[ counter_++ ] );
       
     gptr->Store( prop_key_, variable_ );
@@ -89,15 +89,15 @@ template<typename Var, uint32_t dim>
 void DataInputVisitor<Var,dim>::Visit( Element<dim>* eptr ) 
  { 
     if ( prop_key_.place == ELEMENT ) {
-         for ( auto i{0}; i<variable_.Size(); i++ )
+         for ( auto i{0U}; i<variable_.Size(); i++ )
            variable_.Component( i, input_data_ref_[ counter_++ ] );
          eptr->Store( prop_key_, variable_ );
          return;
       }
     // IntegrationPoint properties
     /// TODO: @todo SKM: other placements like FV integration points are not considered here yet
-    for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
-         for ( size_t j=0U; j<variable_.Size(); j++ )
+    for ( auto i{0U}; i<eptr->IntegrationPoints(); i++ ) {
+         for ( auto j{0U}; j<variable_.Size(); j++ )
            variable_.Component( j, input_data_ref_[ counter_++ ] );
          eptr->Store( i, prop_key_, variable_ );
       }
@@ -108,7 +108,7 @@ template<typename Var, uint32_t dim>
 void DataInputVisitor<Var,dim>::Visit( Face<dim>* eptr )
   {
     if ( prop_key_.place == FACE ) {
-      for ( auto i{0}; i<variable_.Size(); i++ )
+      for ( auto i{0U}; i<variable_.Size(); i++ )
         variable_.Component( i, input_data_ref_[ counter_++ ] );
       eptr->Store( prop_key_, variable_ );
       return;
@@ -116,8 +116,8 @@ void DataInputVisitor<Var,dim>::Visit( Face<dim>* eptr )
     // IntegrationPoint properties
     assert( prop_key_.place == FACE_INTEGRATION_POINT );
     /// TODO: @todo SKM: other placements like FV integration points are not considered here yet
-    for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
-      for ( size_t j=0U; j<variable_.Size(); j++ )
+    for ( auto i{0U}; i<eptr->IntegrationPoints(); i++ ) {
+      for ( size_t j{0U}; j<variable_.Size(); j++ )
         variable_.Component( j, input_data_ref_[ counter_++ ] );
       eptr->Store( i, prop_key_, variable_ );
     }
@@ -128,7 +128,7 @@ template<typename Var, uint32_t dim>
 void DataInputVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
   {
     if ( prop_key_.place == INTER_FACE ) {
-      for ( auto i{0}; i<variable_.Size(); i++ )
+      for ( auto i{0U}; i<variable_.Size(); i++ )
         variable_.Component( i, input_data_ref_[ counter_++ ] );
       eptr->Store( prop_key_, variable_ );
       return;
@@ -136,8 +136,8 @@ void DataInputVisitor<Var,dim>::Visit( InterFace<dim>* eptr )
     // IntegrationPoint properties
     assert( prop_key_.place == INTER_FACE_INTEGRATION_POINT );
     /// TODO: @todo SKM: other placements like FV integration points are not considered here yet
-    for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
-      for ( size_t j=0U; j<variable_.Size(); j++ )
+    for ( auto i{0U}; i<eptr->IntegrationPoints(); i++ ) {
+      for ( auto j{0U}; j<variable_.Size(); j++ )
         variable_.Component( j, input_data_ref_[ counter_++ ] );
       eptr->Store( i, prop_key_, variable_ );
     }
@@ -150,7 +150,7 @@ void DataInputVisitor<Var,dim>::Visit( Node<dim>* nptr )
  {
      const size_t offset(nptr->Idx() * variable_.Size());
  
-     for ( auto i{0}; i<variable_.Size(); i++ )
+     for ( auto i{0U}; i<variable_.Size(); i++ )
        variable_.Component( i, input_data_ref_[ offset + i ] );
 
      nptr->Store( prop_key_, variable_ );

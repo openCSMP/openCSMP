@@ -962,11 +962,11 @@ Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts )
 template<uint32_t dim>
 ostream&  operator<<( ostream& stream, const TensorVariable<dim>& o )
 {
-  for ( auto i = 0U; i<dim; i++ )
+  for ( auto i{0U}; i<dim; i++ )
   {
     stream << "flag" << i + 1U << ": " << parseStatus( o.Flag( i ) );
     stream << ", row" << i + 1U << ":";
-    for ( uint32_t j = 0U; j<dim; j++ )
+    for ( uint32_t j{0U}; j<dim; j++ )
       stream <<" "<< o( i, j );
     stream <<"; ";
 

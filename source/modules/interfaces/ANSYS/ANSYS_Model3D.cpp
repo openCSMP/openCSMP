@@ -164,7 +164,7 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
       const uint32_t dim{3};
       PropertyData elmt_nums( ELEMENT, SCALAR, dim );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
@@ -172,14 +172,14 @@ void ANSYS_Model3D::InitializeANSYS( bool isoparametric,
       const uint32_t dim{3};
       PropertyData node_nums( NODE, SCALAR, dim );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
     // 2. preserving numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
-    for ( auto i = 0U; i<vertices; ++i )
+    for ( size_t i{0U}; i<vertices; ++i )
       node_coords_.push_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
@@ -275,21 +275,21 @@ void ANSYS_Model3D::InitializeANSYS( const char* mesh_file_set,
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 3U );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
     // 2. preserving originally numbered node coordinates in a vector
     const size_t vertices( vset.Vertices() );
     node_coords_.reserve( vertices );
-    for ( auto i = 0U; i<vertices; ++i )
+    for ( size_t i{0U}; i<vertices; ++i )
       node_coords_.emplace_back( Point<3U>{ vset.Px( i ), vset.Py( i ), vset.Pz( i ) } );
 
     // 3. construct model based on obtained model topology and vset
@@ -366,7 +366,7 @@ bool ANSYS_Model3D::RestoreOriginalNodeNumbering( bool verbose )
   assert( !node_coords_.empty() );
   // making a binary tree of the original node numbers, searchable for point coordinates
   map<Point<3U>, size_t>  original_node_numbers;
-  for ( auto i = 0U; i<node_coords_.size(); ++i )
+  for ( size_t i{0U}; i<node_coords_.size(); ++i )
     original_node_numbers.insert( make_pair( node_coords_[i], i ) );
 
   // renumbering the nodes of the model consecutively

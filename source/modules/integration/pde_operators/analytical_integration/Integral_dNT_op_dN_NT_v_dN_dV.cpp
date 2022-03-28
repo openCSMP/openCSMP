@@ -62,18 +62,18 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               ScalarVariable  sc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), sc );
-              for ( auto i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
+              for ( auto i{0U}; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-              for ( auto i=0; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
+              for ( auto i{0U}; i<dim; i++ ) MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
            }
          if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-              for ( auto i=0; i<dim; i++ ) 
-                for ( auto j=0; j<dim; j++ ) MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
+              for ( auto i{0U}; i<dim; i++ ) 
+                for ( auto j{0U}; j<dim; j++ ) MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
            }
       }
       
@@ -121,8 +121,8 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL& e
     // --------------------------------------
     VXYZ /= nodes;
     
-    for ( auto i=0; i<nodes; i++ )
-      for ( auto j=0; j<nodes; j++ ) {
+    for ( auto i{0U}; i<nodes; i++ )
+      for ( auto j{0U}; j<nodes; j++ ) {
            MathOperatorLHS<dim>::LHS(i,j)   += B(0,j) * VXYZ[0];
            if ( dim != 1U ) 
              MathOperatorLHS<dim>::LHS(i,j) += B(1,j) * VXYZ[1]; 

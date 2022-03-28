@@ -467,7 +467,7 @@ void  FiniteElement::UnitNormalToFace( uint32_t, std::vector<double>& ) const
      InstructUser("FiniteElement::UnitNormalToFace");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalToFace(uint32_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalToFace( uint32_t,vector<double>)");
  }
 
 
@@ -485,7 +485,7 @@ void  FiniteElement::UnitNormalAtFaceBarycenter( uint32_t, std::vector<double>& 
      InstructUser("FiniteElement::UnitNormalAtFaceBarycenter");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;
      cout <<"\nyou need to overload (=define) the method in the desired FiniteElement subclass"<< endl;
-     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter(uint32_t,vector<double>)");
+     throw invalid_argument("FiniteElement::UnitNormalAtFaceBarycenter( uint32_t,vector<double>)");
  }
 
 
@@ -554,7 +554,7 @@ void   FiniteElement::N( vector<double>& N, const vector<double>& xyz )
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (N vector<double>, xyz vector<double>):"<< endl;
     out( N );
-    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    for ( auto i{0U}; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::N");
  } 
@@ -605,7 +605,7 @@ double FiniteElement::dN_At( DenseMatrix<DM_MIN>& DM, const vector<double>& xyz 
     cout <<"\nThis method is not defined for the FE element type which you are using"<< endl;
     cout <<"\nMethod arguments for single-element mesh output, input (DenseMatrix<DM_MIN> M, vector<double> xyz):"<< endl;
     DM.Out();
-    for ( auto i=0; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
+    for ( auto i{0U}; i<xyz.size(); i++ ) cout << xyz[i] <<" ";
     cout << endl;
     throw invalid_argument("FiniteElement::dN_At");
     return 0.0;
@@ -863,7 +863,7 @@ void  FiniteElement::Jacobian( const vector<double>& dnr ) // 1D
  {
     JAC.Resize(dim,dim);
     JAC(0,0) = static_cast<double>(0.0);
-    for ( auto j=0; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
+    for ( auto j{0U}; j<npe; j++ ) JAC(0,0) += dnr[j] * XY(j,0);
       
  } // end Jacobian (1D)
 
@@ -874,9 +874,9 @@ void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& 
  {
     JAC.Resize(dim,dim);
 
-    for ( auto i=0; i<dim; i++ ) {
+    for ( auto i{0U}; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
-        for ( auto j=0; j<npe; j++ )
+        for ( auto j{0U}; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -890,9 +890,9 @@ void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& d
  {
     JAC.Resize(dim,dim);
 
-    for ( auto i=0; i<dim; i++ ) {
+    for ( auto i{0U}; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
-        for ( auto j=0; j<npe; j++ )
+        for ( auto j{0U}; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -951,10 +951,10 @@ double  FiniteElement::JacobianInverse()
               cerr <<"\n\nFiniteElement::JacobianInverse(2D): element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
               cerr << std::defaultfloat << detJ << endl;
               cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-              for ( auto i=0; i<Nodes(); i++ )
+              for ( auto i{0U}; i<Nodes(); i++ )
                 {
                   cerr<<" Node("<<i<<"): "<< std::scientific;
-                  for ( auto j=0; j<XY.Cols(); j++ )
+                  for ( auto j{0U}; j<XY.Cols(); j++ )
                       cerr << XY(i,j) <<" ";
                   cerr << std::defaultfloat << endl;
                 }
@@ -974,10 +974,10 @@ double  FiniteElement::JacobianInverse()
           std::cerr <<"\n\nFiniteElement::JacobianInverse(3D): element "<< CurrentID() <<": erroneous determinant of 3D Jacobian matrix: ";
           std::cerr << std::defaultfloat << detJ << std::endl;
           cerr <<"\ncaused by element of type: "<< parseFiniteElementType(csp_fem_type) << endl;
-          for ( auto i=0; i<Nodes(); i++ )
+          for ( auto i{0U}; i<Nodes(); i++ )
             {
               cerr <<" Node("<<i<<"): "<< std::scientific;
-              for ( auto j=0; j<XY.Cols(); j++ )
+              for ( auto j{0U}; j<XY.Cols(); j++ )
                   cerr << XY(i,j) <<" ";
               cerr << std::defaultfloat << endl;
             }

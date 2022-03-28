@@ -773,7 +773,7 @@ namespace csmp {
       if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT) {
         MTRL.resize(e_ref.FE()->IntegrationPoints());
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i = 0U; i < n_integration_points; i++)
+        for (auto i{0U}; i < n_integration_points; i++)
         {
           if (MaterialOperandType() == SCALAR)
             MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -805,7 +805,7 @@ namespace csmp {
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i = 0U; i < n_integration_points; i++)
+        for (auto i{0U}; i < n_integration_points; i++)
           PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
       }
       else
@@ -853,7 +853,7 @@ namespace csmp {
       if (MaterialOperandPlacement() == FACE_INTEGRATION_POINT) {
         MTRL.resize(e_ref.FE()->IntegrationPoints());
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i = 0U; i < n_integration_points; i++)
+        for (auto i{0U}; i < n_integration_points; i++)
         {
           if (MaterialOperandType() == SCALAR)
             MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
@@ -885,7 +885,7 @@ namespace csmp {
       // if the operand is placed on the node
       else if (MaterialOperandPlacement() == NODE) {
         const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i = 0U; i < n_integration_points; i++)
+        for (auto i{0U}; i < n_integration_points; i++)
           PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
       }
       else
@@ -972,7 +972,7 @@ namespace csmp {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
-    for (auto i = 0U; i < nodes; i++)
+    for (auto i{0U}; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -980,20 +980,20 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (auto i = 0U; i < dof; i++)
+    for (auto i{0U}; i < dof; i++)
       IDT[i] += this->TestOperandOffset();
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] *= RHS[i] * factor_;
 
     else if (add_accumulate_ || add_accumulate_later_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] += RHS[i] * factor_;
 
     else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
@@ -1008,7 +1008,7 @@ namespace csmp {
     const size_t nodes(e.Nodes());
 
     IDT.resize(nodes);
-    for (auto i = 0U; i < nodes; i++)
+    for (auto i{0U}; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1016,21 +1016,21 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (auto i = 0U; i < dof; i++)
+    for (auto i{0U}; i < dof; i++)
       IDT[i] += this->TestOperandOffset();
 
     // perform assignment from local matrix to global matrix
 
     if (multiply_accumulate_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] *= RHS[i] * factor_;
 
     else if (add_accumulate_ || add_accumulate_later_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] += RHS[i] * factor_;
 
     else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
@@ -1057,7 +1057,7 @@ namespace csmp {
     // map local to global indexes for test and basic operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
-    for (auto i = 0U; i < nodes; i++)
+    for (auto i{0U}; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1065,26 +1065,26 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (auto i = 0U; i < dof; i++) {
+    for (auto i{0U}; i < dof; i++) {
       IDT[i] += this->TestOperandOffset();
        IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
     }
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_) {
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] *= RHS[i] * factor_;
         }
     }
     else if (add_accumulate_ || add_accumulate_later_){
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] += RHS[i] * factor_;
         }
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (auto i = 0U; i < dof; i++)
+      for (auto i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] -= RHS[i] * factor_;
         }
@@ -1102,7 +1102,7 @@ namespace csmp {
     const size_t nodes(e.Nodes());
 
     IDT.resize(nodes);
-    for (auto i = 0U; i < nodes; i++)
+    for (auto i{0U}; i < nodes; i++)
       IDT[i] = e.N(i)->Idx();
 
     if (TestOperandType() != SCALAR)
@@ -1110,7 +1110,7 @@ namespace csmp {
 
     const size_t dof(IDT.size());
 
-    for (auto i = 0U; i < dof; i++) {
+    for (auto i{0U}; i < dof; i++) {
       IDT[i] += this->TestOperandOffset();
       IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
     }
@@ -1118,21 +1118,21 @@ namespace csmp {
     // perform assignment from local matrix to global matrix
 
     if (multiply_accumulate_) {
-      for (auto i = 0U; i < dof; i++) {
+      for (auto i{0U}; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] *= RHS[i] * factor_;
         }
       }
     }
     else if (add_accumulate_ || add_accumulate_later_) {
-      for (auto i = 0U; i < dof; i++) {
+      for (auto i{0U}; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] += RHS[i] * factor_;
         }
       }
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (auto i = 0U; i < dof; i++) {
+      for (auto i{0U}; i < dof; i++) {
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] -= RHS[i] * factor_;
         }
@@ -1197,7 +1197,7 @@ namespace csmp {
       // new elements are set to zero
       N.resize(N.size() * dim, 0U); // new size of N vector
       for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
-        for ( auto j = 0U; j < dim; j++)
+        for ( auto j{0U}; j < dim; j++)
           N[ k-- ] = ((N[i] + 1) * dim - j) - 1;
       return;
     }
@@ -1218,7 +1218,7 @@ namespace csmp {
       N.resize(N.size() * length, 0U); // new size of N vector ( length of array * number of nodes )
       for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
         // cycle for one node through all the array variable components
-        for ( auto j = 0U; j < length; j++)
+        for ( auto j{0U}; j < length; j++)
           N[ k-- ] = ((N[i] + 1) * length - j) - 1;
       return;
     }

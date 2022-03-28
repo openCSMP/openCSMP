@@ -65,7 +65,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
               MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ||
               MathOperatorRHS<dim>::MaterialOperandPlacement() == INTER_FACE )
            {
-             for ( auto j=0; j<e.Nodes(); j++ )
+             for ( auto j{0U}; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] =
                  // after having ascertained that the material property is a scalar
                  (MathOperatorRHS<dim>::MTRL[0](0,0) * area) / static_cast<double>(e.Nodes());
@@ -73,7 +73,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
            {
-             for ( auto j=0; j<e.Nodes(); j++ )
+             for ( auto j{0U}; j<e.Nodes(); j++ )
                MathOperatorRHS<dim>::RHS[j] = 
                  (MathOperatorRHS<dim>::MTRL[j](0,0) * area) / static_cast<double>(e.Nodes());
            }
@@ -94,12 +94,12 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
               if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT or
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == REGION  or
                    MathOperatorRHS<dim>::MaterialOperandPlacement() == FACE ) 
-                for ( size_t j=0U; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
+                for ( size_t j{0U}; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
               else // node or integration point                            ^^^
-                for ( size_t j=0U; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
+                for ( size_t j{0U}; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[i](0,0) * e.FE()->NRST[j];
               // forming Wj * detJ * N                                                 ^^^
               N.Resize(1U,e.Nodes());
-              for ( size_t j=0U; j<e.Nodes(); j++ )
+              for ( size_t j{0U}; j<e.Nodes(); j++ )
                 N(0U,j) = e.FE()->NRST[j] * det * e.WeightAtIntegrationPoint(i);
               
               // forming the mass matrix NT op N
@@ -108,7 +108,7 @@ void NumIntegral_NT_op_N_dS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
-         for ( auto j=0; j<e.Nodes(); j++ )
+         for ( auto j{0U}; j<e.Nodes(); j++ )
            for ( auto k=0; k<e.Nodes(); k++ ) 
              MathOperatorRHS<dim>::RHS[j] += RHS_TEMP(j,k);
       }

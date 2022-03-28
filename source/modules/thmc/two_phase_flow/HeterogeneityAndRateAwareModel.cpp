@@ -1088,16 +1088,16 @@ double HeterogeneityAndRateAwareModel<dim>::PressureGradientMagnitude( const Ele
  {
     array<double,dim> gradP = {0.}; // the unspecified elements are initialised to zero
     e.dN_AtBaryCenter( DN_ );
-    for ( auto i{0}; i<e.Nodes(); ++i ) {
+    for ( auto i{0U}; i<e.Nodes(); ++i ) {
          const double pf = e.N(i)->Read( pf_key_ );
-         for ( size_t j=0U; j<dim; ++j )
+         for ( size_t j{0U}; j<dim; ++j )
          gradP[j] += DN_(j,i) * pf;
       }
     // elimination of the hydrostatic pressure gradient
     gradP[dim-1U] -= TwoPhaseModel<dim>::acc_gravity_ * (Sw_*TwoPhaseModel<dim>::rhw_ + (1.-Sw_)*TwoPhaseModel<dim>::rhn_);
     // magnitude of the reduced pressure gradient
     double grad_p_magnitude(0.);
-    for ( size_t j=0U; j<dim; ++j ) grad_p_magnitude += gradP[j] * gradP[j];
+    for ( size_t j{0U}; j<dim; ++j ) grad_p_magnitude += gradP[j] * gradP[j];
     return sqrt(grad_p_magnitude);
 
 } // end PressureGradientMagnitude

@@ -35,9 +35,9 @@ void LU_BackSubstitution( const DenseMatrix<dim>& A, std::vector<double>& z )
     const auto n(A.Rows());
 
     for (auto k=0;k<n;k++){
-        for(auto i=0;i<n;i++){
+        for(auto i{0U};i<n;i++){
             if (i==k){z[i]=1;} else {z[i]=0;}
-            for(auto j=0;j<i;j++){
+            for(auto j{0U};j<i;j++){
                 z[i]=z[i]-A(i,j)*z[j];
             }
             std::cout<<z[i]<< std::endl;

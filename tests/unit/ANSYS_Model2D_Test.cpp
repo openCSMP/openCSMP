@@ -135,6 +135,8 @@ void ANSYS_Model2D_Test::run()
     // assunming that the line-element connectivity was rebuilt when the model was created
     Test_CreateConsistentLineElementOrientations2D();
     
+    Test_CreatInternalBoundary();
+    
   } // end run
   
   
@@ -234,7 +236,7 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
       auto eit1{ *interface2.PerimeterElementsBegin() };
       auto eit2{ (*next(interface1.ElementsEnd(),-1)) };
       _test( eit1->ConnectedNeighbors() == 1 );
-      _test( eit2->ConnectedNeighbors() == 1 ); 
+      _test( eit2->ConnectedNeighbors() == 1 );
       // establishing the direction in which the line-element sequence is to be traversed
       // (perimeter element 1 is expected to be at beginning)
       bool at_end{false};
@@ -304,6 +306,36 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     }
     
  } // end Test_CreateConsistentLineElementOrientations2D
+
+
+
+
+
+/**
+    For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
+*/
+void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
+{
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. accessing the line-element regions representing the boundaries between layers
+    Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    size_t elmts_region2{ interface2.Elements() };
+    
+    bool remove_original_region{false};
+    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
+    Boundary<2U> boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
+    _test( boundary1.Elements() == interface1.Elements() );
+    
+    remove_original_region=true;
+    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
+    Boundary<2U> boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
+    _test( boundary2.Elements() == elmts_region2 );
+
+} // end Test_CreatInternalBoundary
+
 
 
 } // csmp

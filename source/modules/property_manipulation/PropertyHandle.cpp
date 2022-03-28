@@ -275,7 +275,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
 	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
 	                            if ( (*eit)->Status( i, key ) == flag_output ) 
 	                              (*eit)->Store( i, key, makeScalar( flag_output, (*eit)->Read( i, opkey )) );
 	                     break;
@@ -305,7 +305,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
 	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
 	                          if ( (*eit)->Status( i, key ) == flag_output ) {
 	                               (*eit)->Read( i, opkey, vc );	                          
 	                               (*eit)->Store( i, key, vc );
@@ -341,7 +341,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
 	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
   	                            {
   	                               (*eit)->Read( i, opkey, ts );	                          
   	                               (*eit)->Store( i, key, ts );
@@ -439,7 +439,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, sc );
                      break;
                    case ELEMENT:        
@@ -463,7 +463,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, vc );
                      break;
                    case ELEMENT:        
@@ -487,7 +487,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, ts );
                      break;
                    case ELEMENT:        
@@ -533,7 +533,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
@@ -554,7 +554,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, vc );
                      break;
                    case ELEMENT:        
@@ -575,7 +575,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key, ts );
                      break;
                    case ELEMENT:        
@@ -615,7 +615,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
@@ -634,16 +634,16 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                    case NODE:
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ ) {
                              (*nit)->Read( key, temp );
-                             for ( auto j=0U; j<dim; j++ )
+                             for ( auto j{0U}; j<dim; j++ )
                                if ( (*nit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
                              (*nit)->Store( key, temp );
                           }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) {
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
                                (*eit)->Read( i, key, temp );
-                               for ( auto j=0U; j<dim; j++ )
+                               for ( auto j{0U}; j<dim; j++ )
                                  if ( (*eit)->Status(i, key, j ) == flag_output ) temp(j) = vc[j];
                                (*eit)->Store( i, key, vc );
                             }
@@ -652,7 +652,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                    case ELEMENT:        
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ ) {
                              (*eit)->Read( key, temp );
-                             for ( auto j=0U; j<dim; j++ )
+                             for ( auto j{0U}; j<dim; j++ )
                                if ( (*eit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
                              (*eit)->Store( key, vc );
                           }
@@ -698,7 +698,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
@@ -724,7 +724,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key, 0 ) == flag_output ) (*eit)->Store( i, key, ts );
                      break;
                    case ELEMENT:        
@@ -1434,7 +1434,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key,    sc1 );
                                  (*eit)->Read( i, opkey, sc2 );
@@ -1470,7 +1470,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1506,7 +1506,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -1626,7 +1626,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -1664,7 +1664,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1700,7 +1700,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -1808,7 +1808,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -1861,7 +1861,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1897,7 +1897,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -2012,7 +2012,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -2050,7 +2050,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -2086,7 +2086,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -2204,7 +2204,7 @@ void  PropertyHandle<dim>::Squared()
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
@@ -2239,7 +2239,7 @@ void  PropertyHandle<dim>::Squared()
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
                                  vc *= vc;
@@ -2272,7 +2272,7 @@ void  PropertyHandle<dim>::Squared()
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
                                  ts *= ts;
@@ -2616,7 +2616,7 @@ void  PropertyHandle<dim>::Log10()
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
@@ -2645,17 +2645,17 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
                            {
                                (*nit)->Read( key, vc );
-                               for ( auto i=0; i<dim; i++ )
+                               for ( auto i{0U}; i<dim; i++ )
                                  if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
                                (*nit)->Store( key, vc );
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
-                                 for ( auto j=0; j<dim; j++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( vc(j) > 0.0 ) vc(j)=log10( vc(j) );
                                  (*eit)->Store( i, key, vc );
                               }
@@ -2664,7 +2664,7 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
-                               for ( auto i=0; i<dim; i++ )
+                               for ( auto i{0U}; i<dim; i++ )
                                  if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
                                (*eit)->Store( key, vc );
                            }
@@ -2681,8 +2681,8 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
                            {
                                (*nit)->Read( key, ts );
-                               for ( auto i=0; i<dim; i++ )
-                                 for ( auto j=0; j<dim; j++ )
+                               for ( auto i{0U}; i<dim; i++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                (*nit)->Store( key, ts );
                             }
@@ -2692,8 +2692,8 @@ void  PropertyHandle<dim>::Log10()
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
-                                 for ( auto i=0; i<dim; i++ )
-                                   for ( auto j=0; j<dim; j++ )
+                                 for ( auto i{0U}; i<dim; i++ )
+                                   for ( auto j{0U}; j<dim; j++ )
                                      if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                  (*eit)->Store( ip, key, ts );
                               }
@@ -2702,8 +2702,8 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
-                               for ( auto i=0; i<dim; i++ )
-                                 for ( auto j=0; j<dim; j++ )
+                               for ( auto i{0U}; i<dim; i++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                (*eit)->Store( key, ts );
                             }

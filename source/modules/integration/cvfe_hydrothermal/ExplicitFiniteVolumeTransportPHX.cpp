@@ -33,7 +33,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
    cout << "\n Constructing ExplicitFiniteVolumeTransportPHX " << endl;
 
    // resize flux and property vectors
-   for ( size_t i=0; i<lhs_property.size(); i++ )
+   for ( size_t i{0U}; i<lhs_property.size(); i++ )
        {
         flux_in_vectors[i].resize(region_ref.Nodes());
         flux_out_vectors[i].resize(region_ref.Nodes());
@@ -54,7 +54,7 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
     pl_key.resize( lhs_property.size() );
     pr_key.resize( rhs_property.size() );
 
-    for ( size_t i=0; i<lhs_property.size(); i++ ) {
+    for ( size_t i{0U}; i<lhs_property.size(); i++ ) {
 	    pl_key[i] =  model.Database().StorageKey( lhs_property[i].c_str() );
 	    pr_key[i] =  model.Database().StorageKey( rhs_property[i].c_str() );
 	    
@@ -88,7 +88,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::ComposeAdvection( )
  {
 
      for ( size_t nidx=0U; nidx<region_ref.Nodes(); nidx++ )
-       for ( size_t i=0; i<flux_in_vectors.size(); i++ )
+       for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
           {
             property_vectors[i][nidx] -= flux_in_vectors[i][nidx];
             property_vectors[i][nidx] -= flux_out_vectors[i][nidx];
@@ -104,7 +104,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::WriteResults( )// const
     double                   pmin(0), pmax(0), value(0);
     ScalarVariable   sc;
     
-    for ( size_t i=0; i<property_vectors.size(); i++ )
+    for ( size_t i{0U}; i<property_vectors.size(); i++ )
       {
         model_ref.Database().RangeOf( model_ref.Database().Name(pl_key[i]), pmin, pmax );
 	    for ( size_t idx=0; idx<property_vectors[i].size(); idx++ )
@@ -212,17 +212,17 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double& 
     vector<FV_Parameter>::const_iterator      fvt;
     typename vector<Element<dim>*>::const_iterator  eit;
 
-    for ( size_t i=0; i<flux_in_vectors.size(); i++ )
+    for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
       {
        fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double>(0.) );
        fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double>(0.) );
        fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double>(0.) );
        fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double>(1.) );
-       for ( size_t j=0; j<facet_flux_vectors[i].size(); j++ )
+       for ( size_t j{0U}; j<facet_flux_vectors[i].size(); j++ )
            fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double>(0.) );       
       }
     
-    for ( size_t i=0; i<flux_out_vectors.size(); i++ )
+    for ( size_t i{0U}; i<flux_out_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
         for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )
@@ -256,7 +256,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateOutflowPerPoreVolume()
           { 
             size_t idx = (*fvit)->Idx();
    		      pore_vol = (*fvit)->Read( pv_key);
-            for( size_t i=0; i<flux_out_vectors.size(); i++ ) {
+            for( size_t i{0U}; i<flux_out_vectors.size(); i++ ) {
                 property_vectors[i][idx] = (*fvit)->Read( pl_key[i] );
                 flux_out_vectors[i][idx] *= internal_time_step;
                 flux_out_vectors[i][idx] /= pore_vol; 
@@ -295,7 +295,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AdjustFluxOut( const double& time_
           fvit!=region_ref.NodesEnd(); fvit++ )
           { 
             size_t idx = (*fvit)->Idx();
-            for ( size_t i=0; i<flux_out_vectors.size(); i++ )
+            for ( size_t i{0U}; i<flux_out_vectors.size(); i++ )
                {
                  flux_out_vectors[i][idx] *= time_factor;
                  if (flux_out_vectors[i][idx] > 0.)
@@ -320,7 +320,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::CalculateFluxIn( )
     vector<FV_Parameter>::const_iterator      fvt;
     typename vector<Element<dim>*>::const_iterator  eit;
     
-    for ( size_t i=0; i<flux_in_vectors.size(); i++ )
+    for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
         for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )
@@ -343,7 +343,7 @@ void ExplicitFiniteVolumeTransportPHX<dim>::CalculateInflowPerPoreVolume()
           { 
             size_t idx = (*fvit)->Idx();
    		    pore_vol = (*fvit)->Read( pv_key );
-            for ( size_t i=0; i<flux_in_vectors.size(); i++ )
+            for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
                {
                 flux_in_vectors[i][idx] *= internal_time_step;
                 flux_in_vectors[i][idx] /= pore_vol; 
@@ -505,17 +505,17 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFluxSinglePhase( )
     vector<FV_Parameter>::const_iterator      fvt;
     typename vector<Element<dim>*>::const_iterator  eit;
 
-    for ( size_t i=0; i<flux_in_vectors.size(); i++ )
+    for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
       {
        fill(    flux_in_vectors[i].begin(),    flux_in_vectors[i].end(), static_cast<double>(0.) );
        fill(   flux_out_vectors[i].begin(),   flux_out_vectors[i].end(), static_cast<double>(0.) );
        fill(   property_vectors[i].begin(),   property_vectors[i].end(), static_cast<double>(0.) );
        fill(mass_balance_vectors[i].begin(),mass_balance_vectors[i].end(), static_cast<double>(1.) );
-       for ( size_t j=0; j<facet_flux_vectors[i].size(); j++ )
+       for ( size_t j{0U}; j<facet_flux_vectors[i].size(); j++ )
            fill( facet_flux_vectors[i][j].begin(), facet_flux_vectors[i][j].end(), static_cast<double>(0.) );
       }
 
-    for ( size_t i=0; i<flux_out_vectors.size(); i++ )
+    for ( size_t i{0U}; i<flux_out_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
         for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )

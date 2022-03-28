@@ -466,7 +466,7 @@ bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
         
     	T val;
       // writing all elements
-      for ( auto i = 0U; i<elements; i++ )
+      for ( size_t i{0U}; i<elements; i++ )
         {
           // counting the successfully read elements
           fp.read( reinterpret_cast<char*>(&val), bytes );

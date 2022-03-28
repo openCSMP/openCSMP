@@ -57,7 +57,7 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
            {    
               for ( auto n=0; n<e.Nodes(); n++ ) 
-                for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
+                for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
                   MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
            }
          // if a nodal property is accumulated, the integration must be performed 
@@ -69,12 +69,12 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
              for ( auto n=0; n<e.FE()->IntegrationPoints(); n++ )
                { 
                   if ( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
-                    for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
+                    for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
                       MathOperatorRHS<dim>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                     MathOperatorRHS<dim>::MTRL[n](i,i) * volume) / e.Nodes();
                   else if ( MathOperatorRHS<dim>::MaterialOperandType() == TENSOR )
-                     for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
-                       for ( auto j=0; j<nodal_degrees_of_freedom; j++ )
+                     for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
+                       for ( auto j{0U}; j<nodal_degrees_of_freedom; j++ )
                          MathOperatorRHS<dim>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                       MathOperatorRHS<dim>::MTRL[n](i,j) * volume) / e.Nodes();
               }

@@ -65,7 +65,7 @@ void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::Visit( Node<dim>* nd )
   if ( !domain_ptr_->IsPerimeterNode(nd) ) return;
   
   // looping over the parent elements
-  for ( auto i{0}; i<nd->Parents(); ++i )
+  for ( auto i{0U}; i<nd->Parents(); ++i )
     {
        // ascertain that the pointer is valid
        if ( Element<dim>* const eptr = nd->Parent(i) )
@@ -75,12 +75,12 @@ void RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::Visit( Node<dim>* nd )
               // getting the flux variable
               eptr->Read( flux_key_, vt_ );
               // find out which node were are on from a view-point of the parent element
-              const size_t parent_nd(nd->ParentNodeNumber(i));
+              const auto parent_nd(nd->ParentNodeNumber(i));
               assert( eptr->FV() != NULL /* if so the FV stencils may not have been initialized yet */ );
-              const size_t n_sector_facets(eptr->FV()->FacetsPerSector(parent_nd));
-              for ( size_t j=0U; j<n_sector_facets; j++ )
+              const auto n_sector_facets(eptr->FV()->FacetsPerSector(parent_nd));
+              for ( auto j{0U}; j<n_sector_facets; j++ )
                 {
-                   const size_t facet = eptr->FV()->FacetSurroundingSector( parent_nd, j );
+                   const auto facet = eptr->FV()->FacetSurroundingSector( parent_nd, j );
                    // if the sector node is the inside node then an incoming flux will create a positive source term
                    const double  fsign = (parent_nd == nd->Parent(i)->FV()->InsideNode(facet)) ? -1. : 1.;
                    FVinflux_ += fsign * eptr->FacetArea(facet) * eptr->ProjectionOnFacetNormal(facet,vt_) * delta_t_;

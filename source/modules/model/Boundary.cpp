@@ -497,7 +497,7 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ ) {
+        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
           (*eit)->Read( i, idx, var );
           data[counter + i] = var;
         }
@@ -631,7 +631,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
       {
-        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -729,9 +729,9 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   for ( auto it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); ++it )
   {
   cerr <<"\n\t"<< (*it)->Idx() <<" (";
-  for ( auto i{0}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
+  for ( auto i{0U}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
   cerr <<"): ";
-  for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+  for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
   if ( (*it)->Neighbor(i) == nullptr ) cerr <<"nullptr ";
   else cerr << (*it)->Neighbor(i)->Idx() <<" ";
   }
@@ -882,7 +882,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   // processing the interior faces whose neighbors are all on the inside of the domain first
   for ( auto it=region.ElementsBegin(); it!=region.PerimeterElementsBegin(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( auto i{0}; i<n_neighbors; ++i ) {
+       for ( auto i{0U}; i<n_neighbors; ++i ) {
             // since the mapping between elements and faces only exists in this subdomain
             // outside elements cannot be considered
             assert ( (*it)->Neighbor(i) != nullptr );
@@ -894,7 +894,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   elmt = region.InteriorElements();
   for ( auto it=region.PerimeterElementsBegin(); it!=region.ElementsEnd(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
-       for ( auto i{0}; i<n_neighbors; ++i )
+       for ( auto i{0U}; i<n_neighbors; ++i )
          // if the perimeter element neighbor is contained in the interior elements of region an assignment is made
          if ( (*it)->Neighbor(i) != nullptr && region.Contains( (*it)->Neighbor(i) ) )
            this->elmt_vec_[elmt]->Assign( i, this->elmt_vec_[ (*it)->Neighbor(i)->Idx()] );
@@ -919,7 +919,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 cerr <<"\n\nRegion "<< region.Name() <<"\n";
 for ( auto& it : region.CellVector() ) {
     cerr <<"\n\tElement "<< it->Idx() <<": nbors: ";
-    for ( auto i{0}; i<it->Neighbors(); ++i )
+    for ( auto i{0U}; i<it->Neighbors(); ++i )
       if ( it->Neighbor(i) == nullptr ) cerr <<" null";
       else cerr <<" "<< it->Neighbor(i)->Idx();
   }
@@ -928,7 +928,7 @@ cerr << endl;
 cerr <<"\n\nBoundary "<< region.Name() <<"\n";
 for ( auto& it : this->elmt_vec_ ) {
     cerr <<"\n\tFace "<< it->Idx() <<": nbors: ";
-    for ( auto i{0}; i<it->Neighbors(); ++i )
+    for ( auto i{0U}; i<it->Neighbors(); ++i )
       if ( it->Neighbor(i) == nullptr ) cerr <<" null";
       else cerr <<" "<< it->Neighbor(i)->Idx();
   }
@@ -983,8 +983,8 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
   for ( auto& it : this->elmt_vec_ ) {
-       const size_t n_nodes{it->Nodes()};
-       for ( auto i{0}; i<n_nodes; ++i ) {
+       const auto n_nodes{it->Nodes()};
+       for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
@@ -1068,7 +1068,7 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
 
       // for each perimeter face
       const auto perimeter_faces( region.PerimeterFaces( i ) );
-      for ( auto j = 0U; j<perimeter_faces; ++j ) {
+      for ( auto j{0U}; j<perimeter_faces; ++j ) {
            // if this indeed an element at the model boundary
            if ( region.E(i)->Neighbor(j) == nullptr ) {
                this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
@@ -1152,7 +1152,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
     {
       Element<dim>* const ePtr = region1.E( i );
       const auto perimeter_faces( region1.PerimeterFaces(i) );
-      for ( auto j = 0U; j < perimeter_faces; ++j )
+      for ( auto j{0U}; j < perimeter_faces; ++j )
         {
           const auto face = region1.PerimeterFace( i, j );
           Element<dim>*  ePtrNeighbor = ePtr->Neighbor( face );
@@ -1238,7 +1238,7 @@ double  Boundary<dim>::Perimeter() const
       if ( (*it)->IsLineElement() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }
-      for ( auto i = 0U; i<this->PerimeterFaces( n ); i++ ) {
+      for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
         (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
         perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
                              (*it)->N( fnids[0] )->Coordinate()).Length();
@@ -1360,13 +1360,13 @@ void Boundary<dim>::Out() const
     if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized." );
     cout << "\t\t" << it->Idx() << ": " << it->Area() << ", ";
     // Nodes
-    for ( auto i = 0U; i<it->Nodes(); ++i ) {
+    for ( auto i{0U}; i<it->Nodes(); ++i ) {
       const string str = (it->N( i ) == nullptr) ? "none" : to_string( it->N( i )->Idx() );
       cout << str << ",";
     }
     cout << "\t\t ";
     // Face neighbors
-    for ( auto i = 0U; i<it->Neighbors(); ++i ) {
+    for ( auto i{0U}; i<it->Neighbors(); ++i ) {
       const string str = (it->Neighbor( i ) == nullptr) ? "none" : to_string( it->Neighbor( i )->Idx() );
       if ( i<it->Neighbors() - 1 ) cout << str << ":";
       else cout << str;

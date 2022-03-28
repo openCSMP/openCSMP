@@ -62,7 +62,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          BT_ *= e.WeightAtIntegrationPoint(0) * e.IntegrationPoints() * detJ;
          // row sum diagonalisation of matrix into right-hand vector
          for ( auto k=0; k < dim; k++ )
-           for ( auto j=0; j<n_nodes; j++ )
+           for ( auto j{0U}; j<n_nodes; j++ )
              MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
          return;
       }
@@ -89,7 +89,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
              // row sum diagonalisation of matrix into right-hand vector
              for ( auto k=0; k < dim; k++ )
-               for ( auto j=0; j<n_nodes; j++ )
+               for ( auto j{0U}; j<n_nodes; j++ )
                  MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
           }
         return;
@@ -104,7 +104,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
               BT_ *= MathOperatorRHS<dim>::MTRL[i];
               BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
               for ( auto k=0; k < dim; k++ )
-                for ( auto j=0; j<n_nodes; j++ )
+                for ( auto j{0U}; j<n_nodes; j++ )
                   MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
            }
        }

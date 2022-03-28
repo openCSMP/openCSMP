@@ -814,12 +814,12 @@ void VSet<dim>::OutCPP17( const char* cpp_file ) const
     // adding node and element numbers for comparisons
     ofs <<"\n\nPropertyData elmt_nums( ELEMENT, SCALAR, 2U );";
     ofs <<"\nelmt_nums.Reserve( vset.Elements() );";
-    ofs <<"\n\nfor ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\n\nfor ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );";
     ofs <<"\nvset.AddData( \"element number\" , elmt_nums );";
     // node numbers
     ofs <<"\n\nPropertyData node_nums( NODE, SCALAR, 2U );";
     ofs <<"\nnode_nums.Reserve( vset.Vertices() );";
-    ofs <<"\n\nfor ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );";
+    ofs <<"\n\nfor ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );";
     ofs <<"\nvset.AddData( \"node number\", node_nums );";
  
  } // end OutCPP17

@@ -148,7 +148,7 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
 
   // create PropertyHandles for full reset variables
   
-  for (auto i = 0U; i < names.full_reset_variables.size(); i++)
+  for (auto i{0U}; i < names.full_reset_variables.size(); i++)
      reset_properties.push_back(
         new PropertyHandle<dim>(model,("reset "+names.full_reset_variables[i]).c_str(),SCALAR,NODE));
 
@@ -235,7 +235,7 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
 template<uint32_t dim>
 CVFEM_PHX_Scheme<dim>::~CVFEM_PHX_Scheme()
  {
-  for (auto i = 0U; i < names.full_reset_variables.size(); i++)
+  for (auto i{0U}; i < names.full_reset_variables.size(); i++)
      delete reset_properties[i];
  }
 
