@@ -1311,11 +1311,10 @@ IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
                                                   const char* var_name,
                                                   DenseMatrix<DM_MIN>& DATA ) const
  {
-     char  outfile[NAME_STRING], elmt[30];
-     strcpy( outfile, file_name );
-     sprintf( elmt, "%lu", CurrentID() );
-     strcat( outfile, elmt );
-     strcat( outfile, ".vtk" );
+     assert( file_name != nullptr );
+     string  outfile(file_name), elmt(to_string(CurrentID()));
+     outfile += elmt;
+     outfile +=".vtk";
 
      // 0. opening data output file in ascii format
      ofstream ofs;
@@ -1529,7 +1528,6 @@ double  IsoparametricLinearTriangle::JacobianInverse()
          cerr <<"(are the nodes perhaps numbered clockwise?), node coordinate matrix:";
          this->XY.Out();
          string file_name{ parseFiniteElementType( ElementType() ) };
-         file_name += CurrentID();
          // to print a scalar, the data matrix only needs 1 row
          DenseMatrix<DM_MIN> DATA( 1, Nodes() );
          // values increase linearly from first to last node (so that node numbering direction can be seen)
