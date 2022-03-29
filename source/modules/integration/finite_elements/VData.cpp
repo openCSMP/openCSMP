@@ -1012,36 +1012,32 @@ bool VData::CheckFix()
 
    // plist
    // -----
-   for ( deque<vector<int64_t> >::const_iterator
-         pit=plist.begin(); pit!=plist.end(); pit++ )
-     for ( vector<int64_t>::const_iterator
-           it=(*pit).begin(); it!=(*pit).end(); it++ )
-       if ( *it > Vertices() )
+   for ( const auto& pit : plist )
+     for ( const auto& it : pit )
+       if ( it > Vertices() )
          {
-            cerr <<"\nVData::Check: Wrong node ID in plist: ";
-            cerr << *it <<" versus n-nodes: "<< Vertices() << endl;
+            cerr <<"\nVData::Check: Wrong node number (index) in plist: ";
+            cerr << it <<" versus n-nodes: "<< Vertices() << endl;
             ok = false;
          }
 
    // pfverts
    // -------
-   for ( deque<vector<int64_t> >::iterator
-         fpit=pfverts.begin(); fpit!=pfverts.end(); fpit++ )
-     for ( vector<int64_t>::iterator
-           fit=(*fpit).begin(); fit!=(*fpit).end(); fit++ ) {
-       if ( *fit > static_cast<int64_t>(Elements()) )
+   for ( auto& fpit : pfverts )
+     for ( auto& fit : fpit ) {
+       if ( fit > static_cast<int64_t>(Elements()) )
          {
-            cerr <<"\nVData::Check: Non-existant high element ID in pfverts: ";
-            cerr << *fit <<" versus n-elements: "<< Elements() << endl;
+            cerr <<"\nVData::Check: Non-existant high element number (index) in pfverts: ";
+            cerr << fit <<" versus n-elements: "<< Elements() << endl;
             ok = false;
          }
-       if ( *fit < REGION_BOUNDARY )
+       if ( fit < REGION_BOUNDARY )
          {
             if ( ok ) {
-                 cerr <<"\n\n\n\nVData::Check: Too low boundary flag ID in pfverts: ";
-                 cerr << *fit <<" versus n-elements: "<< Elements() << endl << endl;
+                 cerr <<"\n\n\n\nVData::Check: Too low boundary flag number (index) in pfverts: ";
+                 cerr << fit <<" versus n-elements: "<< Elements() << endl << endl;
               }
-            *fit = REGION_BOUNDARY;
+            fit = REGION_BOUNDARY;
             ok = false;
          }
        }  

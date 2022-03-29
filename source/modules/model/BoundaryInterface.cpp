@@ -945,8 +945,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  3.1 creating the required face objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    Region<dim>&  model_domain(model.Region("Model"));
-    const size_t new_faces_required(subdomain.Elements());
+    Region<dim>&       model_domain(model.Region("Model"));
+    const size_t       new_faces_required(subdomain.Elements());
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
     const size_t original_faces(model.Mesh().Faces());
@@ -958,25 +958,24 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
    
     size_t patch_counter(0);	
     for ( map<string,vector<FaceConstructionData> >::const_iterator
-          it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it ) {
-        face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
+          it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it )
+      {
+         face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
 
 // TESTING TODO: write function which compares the face construction data
 
-        // for each of the new patches
-        for ( vector<FaceConstructionData>::const_iterator
-              pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit ) {
-             // creating the faces
-             // ------------------
-             // storing pointers to the new faces in the vector from which the boundary will be constructed
-             face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
-                                                                           model_domain.E( (*pit).InnerElement() ),
-                                                                           model_domain.E( (*pit).OuterElement() ),
-                                                                           (*pit).InnerElementFace(),
-                                                                           (*pit).OuterElementFace(),
-                                                                           lvsFaces, lvsIntegrationPoints ) );
-			    }
-
+         // for each of the new patches
+         for ( vector<FaceConstructionData>::const_iterator
+               pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit )
+            // creating the faces
+            // ------------------
+            // storing pointers to the new faces in the vector from which the boundary will be constructed
+            face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
+                                                                          model_domain.E( (*pit).InnerElement() ),
+                                                                          model_domain.E( (*pit).OuterElement() ),
+                                                                          (*pit).InnerElementFace(),
+                                                                          (*pit).OuterElementFace(),
+                                                                          lvsFaces, lvsIntegrationPoints ) );
 			  // remembering which faces make up the patch
         face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
         patch_counter++;
@@ -988,119 +987,33 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    cout << "\n\tEstablishing neighbor connectivity among faces as it is needed to build the boundaries...\n";
-    // 3.2.1 building search map for face neighbors
-    // --------------------------------------------
-    //       key             face number neighbor
-    multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >  surface_neighbor_keys, line_neighbor_keys;
-    vector<uint32_t>   fnids;
-    set<Node<dim>*>  key;
-
-    for ( typename vector<Face<dim>*>::const_iterator it=face_vector.begin(); it!= face_vector.end(); ++it )
-      for ( size_t face=0U; face<(*it)->Faces(); face++ ) 
-        {
-           // creating face key from idx's of face
-           (*it)->FE()->NodesOfFace( face, fnids ); 
-           for ( size_t j{0U}; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
-           // inserting newly generated keys into multimap
-           if ( (*it)->IsSurfaceElement() )
-             surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else // for all line elements
-             line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           key.clear();
-        }
-
-    // 3.2.2 building face neigborhoods
-    // --------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    cout << "\n\tBuilding face neighbor connectivity...";
-
-    // 3.2.2.1 line faces
-    // ---------------------
-    if ( !line_neighbor_keys.empty() ) {
-        Face<dim>* e1Ptr(nullptr);
-        Face<dim>* e2Ptr(nullptr);
-        cout << "\n\t\tline elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(line_neighbor_keys.begin()),
-                                                                             it2(line_neighbor_keys.begin());
-        it2++;
-        while ( it2 != line_neighbor_keys.end() )
-          { 
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-                   // assigning eachothers faces
-                   //     face pointer                   nbor face idx  neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // line faces
-    
-    // 3.2.2.2 surface faces
-    // ------------------------
-    if ( !surface_neighbor_keys.empty() ) {
-        Face<dim>* e1Ptr(NULL);
-        Face<dim>* e2Ptr(NULL);
-        cout << "\n\t\tsurface elements...";
-        //                key              n-face neighbor
-        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
-                                                                              it2(surface_neighbor_keys.begin());
-        it2++;
-        while ( it2 != surface_neighbor_keys.end() ) {
-              if ( (*it1).first == (*it2).first )
-                {
-                   assert( (*it1).second.second != nullptr );
-                   assert( (*it2).second.second != nullptr );
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   ++it1;
-                   ++it2;
-                }
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          } 
-      } // etablish neighbors of surface faces
+    if ( remove_original_region ) {
+//         model.Delete<dim>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+      }
+     // TODO: these are global changes! - do this only for nodes that are affected
+     model.Mesh().UpdateConnectivity();
    
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // using map<size_t,string>  patch_names   from above
-    for ( auto i{0U}; i<patch_names.size(); ++i )
+    for ( size_t i{0U}; i<patch_names.size(); ++i )
        // creating the boundary patch
        AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
 
     face_ptr_per_patch.clear();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. If the Face objects were constructed from lower-dimensional Elements - for nodes located on the new boundary,
+    // 5. Since the Face objects were constructed from lower-dimensional Elements - for nodes located on that new boundary,
     //    update / recreate the parent element vectors of the nodes on the boundary so that these no longer include
     //    neither the elements from which the Boundary was created nor the new faces.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    map<Element<dim>*,size_t>  parents_to_keep;
+    map<Element<dim>*,uint32_t>  parents_to_keep;
     for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
-         const size_t parent_elements((*nit)->Parents());
+         const auto parent_elements((*nit)->Parents());
          // copying those node parent pointers to the temporary vector which shall be kept
-         for ( auto i{0U}; i<parent_elements; ++i ) {
+         for ( uint32_t i{0U}; i<parent_elements; ++i ) {
               if ( (*nit)->Parent(i)->IsSurfaceElement() and subdomain.Contains( (*nit)->Parent(i) ) )
                 continue;
               else
@@ -1124,8 +1037,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 7. Remove parent region of the boundary from “Model” and into the non-unique list of regions so that it does not get included into computations.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    model.RemoveFromRegion( "Model", dim_1_region );
-    model.MoveToNonUniqueRegions( dim_1_region );
+    if ( !remove_original_region ) {
+         model.RemoveFromRegion( "Model", dim_1_region );
+         model.MoveToNonUniqueRegions( dim_1_region );
+      }
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 8. (optional) remove parent region (including its elements) if no longer required.
@@ -1154,6 +1069,106 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
 
 
 
+
+
+/* OLD CODE THAT WAS USED TO CREATE THE CONNECTIVITY BETWEEN FACES NOW DONE IN THE MESH MANAGER
+
+    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
+    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    cout << "\n\tEstablishing neighbor connectivity among faces as it is needed to build the boundaries...\n";
+    // 3.2.1 building search map for face neighbors
+    // --------------------------------------------
+    //       key             face number neighbor
+    multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >  surface_neighbor_keys, line_neighbor_keys;
+    vector<uint32_t>   fnids;
+    set<Node<dim>*>  key;
+
+    for ( typename vector<Face<dim>*>::const_iterator it=face_vector.begin(); it!= face_vector.end(); ++it )
+      for ( uint32_t face{0U}; face<(*it)->Faces(); face++ )
+        {
+           // creating face key from idx's of face
+           (*it)->FE()->NodesOfFace( face, fnids );
+           for ( uint32_t j{0U}; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
+           // inserting newly generated keys into multimap
+           if ( (*it)->IsSurfaceElement() )
+             surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
+           else // for all line elements
+             line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
+           key.clear();
+        }
+
+    // 3.2.2 building face neigborhoods
+    // --------------------------------
+    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
+    cout << "\n\tBuilding face neighbor connectivity...";
+
+    // 3.2.2.1 line faces
+    // ---------------------
+    if ( !line_neighbor_keys.empty() ) {
+        Face<dim>* e1Ptr(nullptr);
+        Face<dim>* e2Ptr(nullptr);
+        cout << "\n\t\tline elements...";
+        //                key              n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(line_neighbor_keys.begin()),
+                                                                             it2(line_neighbor_keys.begin());
+        it2++;
+        while ( it2 != line_neighbor_keys.end() )
+          {
+              // if there is a pair of valid neighbor elements, neighbor assignments are made
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
+                   // assigning eachothers faces
+                   //     face pointer                   nbor face idx  neighbor pointer
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
+                   
+                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
+                   ++it1;
+                   ++it2;
+                }
+              // both iterators are advanced
+              if ( it2 == line_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // line faces
+    
+    // 3.2.2.2 surface faces
+    // ------------------------
+    if ( !surface_neighbor_keys.empty() ) {
+        Face<dim>* e1Ptr(NULL);
+        Face<dim>* e2Ptr(NULL);
+        cout << "\n\t\tsurface elements...";
+        //                key              n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
+                                                                              it2(surface_neighbor_keys.begin());
+        it2++;
+        while ( it2 != surface_neighbor_keys.end() ) {
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
+                   ++it1;
+                   ++it2;
+                }
+              if ( it2 == surface_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // etablish neighbors of surface faces
+*/
 
 
 

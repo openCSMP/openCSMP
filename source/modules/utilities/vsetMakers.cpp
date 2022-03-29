@@ -379,7 +379,7 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
   	std::deque<double> px(nodes);
   	std::deque<double> py(nodes);
   	std::deque<double> pz(nodes,0.);
-  	std::deque<int8_t>   bflags(nodes,NOT);
+  	std::deque<int8_t> bflags(nodes,NOT);
   	
   	px[0]=0.;    py[0]=5.;    bflags[0] = CNR4;
   	px[1]=2.;    py[1]=5.;    bflags[1] = TOP;

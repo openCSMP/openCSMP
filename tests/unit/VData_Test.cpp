@@ -383,9 +383,17 @@ void VData_Test::Test_CreateConsistentLineElementOrientations2D()
     // checking that the node0 of the next element is equal to node1 of the current one
     _test( vset2.Plist( 25, 1) ==  vset2.Plist( 29, 0) );
     _test( vset2.Plist( 29, 1) ==  vset2.Plist( 31, 0) );
-   //    domain( "FRAC2", {26,27,28}
+    //    domain( "FRAC2", {26,27,28}
     _test( vset2.Plist( 26, 1) ==  vset2.Plist( 27, 0) );
     _test( vset2.Plist( 27, 1) ==  vset2.Plist( 28, 0) );
+
+    // testing that the endpoints of the interfaces are correct
+    // FRAC1
+    _test( vset2.Plist( 25, 0) ==  5 );
+    _test( vset2.Plist( 31, 1) == 15 );
+    // FRAC2
+    _test( vset2.Plist( 26, 0) ==  8 );
+    _test( vset2.Plist( 28, 1) == 21 );
     
  } // end Test_CreateConsistentLineElementOrientations2D
 

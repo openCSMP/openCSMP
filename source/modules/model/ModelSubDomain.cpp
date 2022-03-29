@@ -4716,26 +4716,25 @@ void ModelSubDomain<dim,CELL>::Out() const
     cout <<"\n\tperimeter faces="<< perimeter_faces;
     cout <<"\n\tdetailed listing of elements and nodes:";
 
-    for ( typename vector<CELL<dim>*>::const_iterator
-          it=elmt_vec_.begin(); it!=elmt_vec_.end(); it++ ) {
-         if ( (*it) == nullptr )
+    for ( const auto& it : elmt_vec_ ) {
+         if ( it == nullptr )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::Out",
                                  "member element pointer not initialised");
 //         else (*it)->Out();
       }
 
-    cout <<"\n\n perimeter elements and their perimeter faces (current local numbering): "<< endl;
+    cout <<"\n\n"<<"perimeter elements and their perimeter faces (current local numbering): "<< endl;
     auto  bit{ bd_face_vec_.begin() };
     for ( size_t i=InteriorElements(); i<elmt_vec_.size(); i++, bit++ ) {
-         cout <<"\nelement "<< i <<": edge face numbers: ";
+         cout <<"\n\t\t"<<"element "<< i <<" ("<< parseFiniteElementType( elmt_vec_[i]->FE_Type() ) <<"): edge face numbers: ";
          for ( auto ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";
       }
 
-    cout <<"\n\n perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
+    cout <<"\n\n"<<"perimeter nodes: "<< node_vec_.size() - first_bd_node_ <<" (current local numbering):"<< endl;
     for ( size_t i=first_bd_node_; i<node_vec_.size(); i++ ) {
          if ( node_vec_[i] == nullptr )
            throw csmp::Exception( ERROR, "ModelSubDomain<dim>::Out", "member node pointer not initialised.");
-         else cout << node_vec_[i]->Idx() <<" ";
+         else cout <<"\n\t\t"<<"node "<< node_vec_[i]->Idx() <<" ("<< parseBoundary( node_vec_[i]->AtBoundary() ) <<")";
       }
 
     cout << endl;
