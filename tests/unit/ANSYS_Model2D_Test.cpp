@@ -133,7 +133,7 @@ void ANSYS_Model2D_Test::run()
     // --------------------------------------------------------
     // SKM (27/3/22)
     // assunming that the line-element connectivity was rebuilt when the model was created
-//    Test_printLineElementRegion();
+    Test_printLineElementRegion();
     
     Test_CreateConsistentLineElementOrientations2D();
     
@@ -232,6 +232,8 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     // 1. accessing the line-element regions representing the boundaries between layers
     Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
     
+    // 2. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
+    //    (traversing until end is discovered, but terminating after at most as many steps that the region has elements)
     if ( verbose_ ) {
          interface1.Out();
          const bool renumber_elmts{true};
@@ -240,13 +242,13 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
          _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Elements() );
       }
     
-    // 2. The endpoints of these regions must be at the vertical model boundaries
+    // 3. The endpoints of these regions must be at the vertical model boundaries
     _test( interface1.PerimeterElements() == 2 );
     _test( interface2.PerimeterElements() == 2 );
     _test( interface1.PerimeterNodes() == 2 );
     _test( interface2.PerimeterNodes() == 2 );
     
-    // 3. Are the regions contiguous (all elements are interconnected except for those at the end
+    // 4. Are the regions contiguous (all elements are interconnected except for those at the end
     int contiguous{2}, n_missing_nbors{0};
     // interface 1
     for ( auto it=interface1.ElementsBegin(); it!=interface1.ElementsEnd(); ++it )
@@ -288,71 +290,7 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
       bool forward_at_end       = ( eit2->Neighbor(0) == nullptr ) ? true : false;
       _test( forward_at_beginning == forward_at_end );
     }
-    
-    // 5. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
-    //    (traversing until end is discovered, but terminating after at most as many steps that the region has elements)
-    {
-      // interface 1
-      const auto n_elmts{ interface1.Elements() };
-      auto eit1{ *interface1.PerimeterElementsBegin() }; // one end
-      auto eit2{ (*next(interface1.ElementsEnd(),-1)) }; // opposite end
-      bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
-    
-      interface1.RenumberNodes();
-      Element<2>* e_curr = eit1;
-      int         steps{0};
-      
-      if ( traverse_forward ) {
-           while ( e_curr != (*interface1.ElementsEnd()) && steps < n_elmts ) {
-                assert( e_curr->Neighbor(0) != nullptr );
-                _test( e_curr->N(1)->Idx() == e_curr->Neighbor(0)->N(0)->Idx() );
-                e_curr = e_curr->Neighbor(0);
-                steps++;
-             }
-        }
-      else { // traverse backwards
-           _test( eit2->Neighbor(1) != nullptr );
-           e_curr = eit2;
-           while ( e_curr != eit1 && steps < n_elmts ) {
-                assert( e_curr->Neighbor(1) != nullptr );
-                _test( e_curr->N(0)->Idx() == e_curr->Neighbor(1)->N(1)->Idx() );
-                e_curr = e_curr->Neighbor(1);
-                steps++;
-             }
-        }
-      _test( steps == n_elmts - 1 );
-    }
-    // ----------------------------------------------------------------------------
-    {
-      // interface2
-      const auto n_elmts{ interface2.Elements() };
-      auto eit1{ *interface2.PerimeterElementsBegin() }; // one end
-      auto eit2{ (*next(interface2.ElementsEnd(),-1)) }; // opposite end
-      bool traverse_forward = ( eit1->Neighbor(0) != nullptr ) ? true : false;
-    
-      interface2.RenumberNodes();
-      Element<2>* e_curr = eit1;
-      int         steps{0};
-      
-      if ( traverse_forward ) {
-           while ( e_curr != eit2 && steps < n_elmts ) {
-                assert( e_curr->Neighbor(0) != nullptr );
-                _test( e_curr->N(1)->Idx() == e_curr->Neighbor(0)->N(0)->Idx() );
-                steps++;
-             }
-        }
-      else { // traverse backwards
-           _test( eit2->Neighbor(1) != nullptr );
-           e_curr = eit2;
-           while ( e_curr != eit1 && steps < n_elmts ) {
-                assert( e_curr->Neighbor(1) != nullptr );
-                _test( e_curr->N(0)->Idx() == e_curr->Neighbor(1)->N(1)->Idx() );
-                steps++;
-             }
-        }
-      _test( steps == n_elmts - 1 );
-    }
-    
+        
  } // end Test_CreateConsistentLineElementOrientations2D
 
 
