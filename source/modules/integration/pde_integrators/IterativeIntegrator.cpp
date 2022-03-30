@@ -96,7 +96,7 @@ size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMA
  {
    SAMG_KeepMemory();
    double res = std::numeric_limits<double>::quiet_NaN(); 
-   size_t i; 
+   uint32_t i{0U}; 
   
   for ( i{0U}; i < max_iter_; ++i) {
     SetupEquations(sg);

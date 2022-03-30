@@ -143,7 +143,6 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
-vset.Out();
     
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

@@ -2373,22 +2373,21 @@ size_t VData::RenumberElementsCounterClockwise2D()
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
       int64_t                               elmt_idx{0U};
-      size_t                                n_line_elmts{0};
 
        while( eit != end ) {
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
             // only recording line elements that are located at the beginning or end of a polyline = line element chain
             if ( isLineElement( etype ) ) {
-                  // end of polyline inside of model (no neighbor at node 1)
-                  if ( pfverts[elmt_idx][0] < 0 && (bflags[ plist[elmt_idx][1] ] == NOT || bflags[ plist[elmt_idx][1] ] == INTERNAL) )
-                    line_elmts.insert( elmt_idx );
-                  // beginning of polyline
-                  if ( pfverts[elmt_idx][1] < 0 && (bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][0] ] == INTERNAL) )
-                    line_elmts.insert( elmt_idx );
-                  // line elements or line element loops on the model boundary
-                  if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 )
-                    boundary_line_elmts.insert( elmt_idx );
-                 n_line_elmts++;
+                  // line elements with a single neighbor at the beginning or end of polyline
+                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) || (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
+                    // but only, if that neighbor is located on the inside of the model
+                    if ( bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][1] ] == NOT ) {
+                         line_elmts.insert( elmt_idx );
+                      }
+                  // line elements on the model boundary
+                 if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 ) {
+                       boundary_line_elmts.insert( elmt_idx );
+                    }
               }
             // if this is a surface element  
             else {
@@ -2541,7 +2540,6 @@ size_t VData::RenumberElementsCounterClockwise2D()
                cout << endl;
             }
           cout << endl;
-          assert( n_line_elmts == processed_elmts.size() + boundary_line_elmts.size() );
         }
       else {
            cerr <<"\nVData::CreateConsistentLineElementOrientations: WARNING: No changes were made. Unable to process line element chains. ";
