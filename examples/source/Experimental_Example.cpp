@@ -87,7 +87,7 @@ void Experimental_Example::Run()
           if ( j == 1 ) break;
       }
       
-#if 0
+//#if 0
     // ODLING 720 x 720 meter
     string         variables_file("CSMP-1phase-variables.txt");
     ANSYS_Model2D  model( "odling720x720", variables_file.c_str(), false, true, true );
@@ -99,10 +99,10 @@ void Experimental_Example::Run()
                                              true,            // boundary conditions for box-shaped model
                                              true );          // essential conditions for regions
                                            // default: boundary conditions for arbitrary-shaped model
-#endif
+//#endif
 
     // FLUID FLOWER TESTCASE
-//#if 0
+#if 0
     string  variables_file("DES_2phase_variables.txt");
     ANSYS_Model2D  model( "Fluid_Flower", variables_file.c_str(), false, true, true );
     
@@ -117,7 +117,7 @@ void Experimental_Example::Run()
                                            true,            // boundary conditions for box-shaped model
                                            true );          // essential conditions for regions
                                            // default: boundary conditions for arbitrary-shaped model
-//#endif
+#endif
 
 } // end Run
 
