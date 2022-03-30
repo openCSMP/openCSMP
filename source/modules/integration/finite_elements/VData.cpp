@@ -2327,6 +2327,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
    The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements,
    which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
    
+   @attention this method expects that there already is connectivity information for line elements
+   
    @attention if the line elements do not know their neighbors already, this method will not work!
    
    @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
@@ -2375,13 +2377,13 @@ size_t VData::RenumberElementsCounterClockwise2D()
 
        while( eit != end ) {
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
-            // only recording line elementa that are located at the beginning or end of a polyline = line element chain
+            // only recording line elements that are located at the beginning or end of a polyline = line element chain
             if ( isLineElement( etype ) ) {
-                  // end of polyline inside of model (no neighbor at node 0
-                  if ( pfverts[elmt_idx][0] < 0 && bflags[ plist[elmt_idx][1] ] == 0 )
+                  // end of polyline inside of model (no neighbor at node 1)
+                  if ( pfverts[elmt_idx][0] < 0 && (bflags[ plist[elmt_idx][1] ] == NOT || bflags[ plist[elmt_idx][1] ] == INTERNAL) )
                     line_elmts.insert( elmt_idx );
                   // beginning of polyline
-                  if ( pfverts[elmt_idx][1] < 0 && bflags[ plist[elmt_idx][0] ] == 0 )
+                  if ( pfverts[elmt_idx][1] < 0 && (bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][0] ] == INTERNAL) )
                     line_elmts.insert( elmt_idx );
                   // line elements or line element loops on the model boundary
                   if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 )
@@ -2445,21 +2447,21 @@ size_t VData::RenumberElementsCounterClockwise2D()
       map<int64_t ,deque<int64_t> > polylines;
       set<int64_t>                  processed_elmts;
       
-      // looping over the line elements that are missing one neighbor, i.e., are at the beginning or end of a chain
+      // looping over the line elements that are missing one neighbor, starting at the beginning or end of a chain
       for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
         {
-           // getting the index of the element
+           // getting index of element and skipping elements that have already been processed
            elmt_idx = (*it);
            if ( processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
 
-           // if this is an isolated line element with no neighbors or a line element that has alreay been processed it is skipped
+           // isolated line elements (no neighbors) are skipped as well
            if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) {
                 polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
                 processed_elmts.insert( elmt_idx );
                 continue;
              }
 
-         // storing the element as the first in the line element sequence
+         // storing the element as the first in a new line element sequence
           auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
           // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
@@ -2491,10 +2493,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
                    (*chain_it.first).second.push_back( elmt_idx );
                    // and record it as processed
                    auto inserted = processed_elmts.insert( elmt_idx );
-                   // checking that we are not visiting the same element again
+                   // checking that we are not visiting a previously visited element again
                    assert( inserted.second == true );
                    // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][0] < 0L || bflags[ plist[elmt_idx][0] ] < 0 )
+                   if ( pfverts[elmt_idx][0] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
                      end_of_polyline = true;
                 }
                continue;
@@ -2503,8 +2505,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
           // backward chain traversal
           // -------------------------------
           if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L ) {
-              bool end_of_polyline(false);
-              while ( end_of_polyline == false )
+              bool beginning_of_polyline(false);
+              while ( beginning_of_polyline == false )
                 {
                    // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
                    bool flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
@@ -2520,8 +2522,8 @@ size_t VData::RenumberElementsCounterClockwise2D()
                    auto inserted = processed_elmts.insert( elmt_idx );
                    assert( inserted.second == true );
                    // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][1] < 0L || bflags[ plist[elmt_idx][0] ] < 0 )
-                     end_of_polyline = true;
+                   if ( pfverts[elmt_idx][1] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
+                     beginning_of_polyline = true;
                 }
             }
        } // for line_elements
@@ -2550,6 +2552,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
       //
       // getting the surface element deque ready for binary_search
       sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
+      
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
       for ( auto it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
         {
@@ -2565,10 +2568,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
              }
            // this is a line element with no surface element next to it?
            else {
-                cerr <<"\nCreateConsistentLineElementOrientations: line element "<< *it <<" at border with the nodes:\n\t\t";
+                cerr <<"\nCreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
                 cerr << plist[*it][0] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][0]])) <<"), ";
                 cerr << plist[*it][1] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][1]])) <<"), ";
-                cerr <<" has no higher-dimensional neighbor; its orientation was left untouched.\n";
+                cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
              }
            
         } // end boundary_line_elmts
