@@ -2541,9 +2541,12 @@ size_t VData::RenumberElementsCounterClockwise2D()
                cout << endl;
             }
           cout << endl;
+          assert( n_line_elmts == processed_elmts.size() + boundary_line_elmts.size() );
         }
-      assert( n_line_elmts == processed_elmts.size() + boundary_line_elmts.size() );
-      
+      else {
+           cerr <<"\nVData::CreateConsistentLineElementOrientations: WARNING: No changes were made. Unable to process line element chains. ";
+           cerr <<"\n\n\t\t"<<"line elements processed: "<< processed_elmts.size() << endl;
+        }
       
       // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
       // --------------------------------------------------------------------------------------------------------------------------------
@@ -2568,7 +2571,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
              }
            // this is a line element with no surface element next to it?
            else {
-                cerr <<"\nCreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
+                cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
                 cerr << plist[*it][0] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][0]])) <<"), ";
                 cerr << plist[*it][1] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][1]])) <<"), ";
                 cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";

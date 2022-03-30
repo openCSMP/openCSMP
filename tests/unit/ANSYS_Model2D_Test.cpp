@@ -17,13 +17,10 @@ namespace csmp
 
 void ANSYS_Model2D_Test::run()
   {
-    Test_printLineElementRegion();
-
     const bool verbose(false);
     
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
     Region<2>& rref( model.Region( "Model" ) );
-
 
     DenseMatrix<DM_MIN> dm;
     const vector<Element<2>*>::const_iterator elementsEnd( rref.ElementsEnd() );
@@ -136,7 +133,7 @@ void ANSYS_Model2D_Test::run()
     // --------------------------------------------------------
     // SKM (27/3/22)
     // assunming that the line-element connectivity was rebuilt when the model was created
-    Test_printLineElementRegion();
+//    Test_printLineElementRegion();
     
     Test_CreateConsistentLineElementOrientations2D();
     
@@ -230,16 +227,17 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
  {
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
     string varFileName = "CSMP-variables.txt";
-    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+    ANSYS_Model2D  model( model2d_name_.c_str(), varFileName.c_str() );
      
     // 1. accessing the line-element regions representing the boundaries between layers
     Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
     
     if ( verbose_ ) {
          interface1.Out();
-         //printLineElementRegion( model, interface1.Name().c_str() );
+         const bool renumber_elmts{true};
+         _test( printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts ) == interface1.Elements() );
          interface2.Out();
-         //printLineElementRegion( model, interface2.Name().c_str() );
+         _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Elements() );
       }
     
     // 2. The endpoints of these regions must be at the vertical model boundaries
