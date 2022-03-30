@@ -47,7 +47,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
                                      size_t        psize )
- : super_group(sg),
+ : model_domain(sg),
    group(sg.Region("Model")),
    group_name("Model"),
    flag_output(ANY),
@@ -95,7 +95,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
                                      size_t        psize )
- : super_group(sg),
+ : model_domain(sg),
    group(sg.Region(group)),
    group_name(group),
    flag_output(ANY),
@@ -137,7 +137,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
 */
 template<uint32_t dim>
 PropertyHandle<dim>::PropertyHandle( const PropertyHandle<dim>& op )
- : super_group(op.super_group),
+ : model_domain(op.model_domain),
    group_name(op.group_name),
    group(op.group),
    var_name(op.var_name),
@@ -162,7 +162,7 @@ template<uint32_t dim>
 PropertyHandle<dim>::~PropertyHandle()
  {
     if ( new_variable_created ) 
-      super_group.DeleteProperty( var_name.c_str() );
+      model_domain.DeleteProperty( var_name.c_str() );
     
  } // end destructor
 
@@ -257,8 +257,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
     
        VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
        TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-       csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
-       csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+       csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
+       csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
     
        // these combinations of properties are not possible   
        if ( key.place != opkey.place )
@@ -520,7 +520,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
     sc = s;
     vc = s;
     ts = s;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -601,7 +601,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
  {
     ScalarVariable  sc(flag_output,vc.Length());
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -684,7 +684,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
  {
     ScalarVariable  sc(flag_output,strtod("NAN",NULL));
     sc() = ts.Determinant();
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -752,7 +752,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
 template<uint32_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVariable<dim> >& vc ) 
  {
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != VECTOR ) {
          throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of vectors )", 
@@ -781,7 +781,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
   
     FEM_Data<VectorVariable<dim> >  var_data( key.place, vc );
 
-    super_group.InputVariableFrom( super_group.Database().Name(key), var_data );
+    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
       
     return *this; 
 
@@ -792,7 +792,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
 template<uint32_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVariable<dim> >& ts ) 
  {
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != TENSOR ) {
          throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of tensors )", 
@@ -821,7 +821,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVa
   
     FEM_Data<TensorVariable<dim> >  var_data( key.place, ts );
 
-    super_group.InputVariableFrom( super_group.Database().Name(key), var_data );
+    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
       
     return *this; 
 
@@ -867,7 +867,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
     VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t i, j;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -992,7 +992,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
     VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t  i, j;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1120,7 +1120,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
     VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t  i, j;
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1245,7 +1245,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());   
     uint32_t  i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1404,8 +1404,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator+=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
  
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -1535,43 +1535,43 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
 
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempIPVariable;
     }
     else if (key.place == FACET_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempFIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempFIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToFacetIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempFIPVariable;
     }
@@ -1596,8 +1596,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator-=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -1728,37 +1728,37 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempIPVariable;
     }
@@ -1783,8 +1783,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator*=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     ScalarVariable                     sc1, sc2;
     VectorVariable<dim>                     vc1, vc2;
@@ -1925,38 +1925,38 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-       PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), opkey.type, key.place );
+       PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), opkey.type, key.place );
        group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
        (*this) *= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT) // P. Lang EDIT
     {
         string opVarName(  op.VariableName() );
-        PropertyHandle<dim> tempNodeVariable( super_group, (opVarName + "_temp").c_str(), opkey.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, (opVarName + "_temp").c_str(), opkey.type, key.place );
         group.ExtrapolateElementToNodeProperty( op.VariableName(), (opVarName + "_temp").c_str() );
         (*this) *= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT) /// @todo (1-F) key.type, key.place should be opkey.type, key.place
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempIPVariable;
     }
@@ -1981,8 +1981,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator/=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -2114,37 +2114,37 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempIPVariable;
     }
@@ -2186,7 +2186,7 @@ void  PropertyHandle<dim>::Squared()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2315,7 +2315,7 @@ void  PropertyHandle<dim>::Sqrt()
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2457,7 +2457,7 @@ void  PropertyHandle<dim>::Ln()
     TensorVariable<dim>                      ts;
     uint32_t  i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2598,7 +2598,7 @@ void  PropertyHandle<dim>::Log10()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2738,7 +2738,7 @@ void  PropertyHandle<dim>::Exp()
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2876,7 +2876,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -3015,7 +3015,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -3157,7 +3157,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Sin()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
@@ -3310,7 +3310,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Cos()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3461,7 +3461,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Tan()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3609,7 +3609,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Acos()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3757,7 +3757,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Asin()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3906,7 +3906,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Atan()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -4057,7 +4057,7 @@ Range() calls the MinMaxOf() interface of the Model.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Range( double& omin, double& omax ) const
  {
-    super_group.MinMaxOf( var_name.c_str(), omin, omax );
+    model_domain.MinMaxOf( var_name.c_str(), omin, omax );
  }
 
 
@@ -4097,7 +4097,7 @@ bool  PropertyHandle<dim>::IsWithinRange() const
       }
     double  omin, omax, pmin, pmax;
     group.MinMaxOf( var_name.c_str(), omin, omax );
-    super_group.Database().RangeOf(  var_name.c_str(), pmin, pmax );
+    model_domain.Database().RangeOf(  var_name.c_str(), pmin, pmax );
     if ( omin >= pmin && omax <= pmax ) return true;
 
     return false;

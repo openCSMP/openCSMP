@@ -226,7 +226,7 @@ class PropertyHandle {
     void Out( const char* text_file_name ) const;
   
   private:
-    Model<dim>&           super_group;
+    Model<dim>&           model_domain;
     std::string           group_name; 
     Region<dim>&          group;
     std::string           var_name;

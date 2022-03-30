@@ -44,7 +44,7 @@ template<uint32_t dim, typename ForwardIt>
 double fluxThroughFiniteVolumes( ForwardIt nodesBegin, ForwardIt nodesEnd, Index const& velocityKey );
 
 
-double  diffusionVelocity( const Region<1>& super_group,
+double  diffusionVelocity( const Region<1>& model_domain,
                              const Node<1U>* const nd,
                              const std::set<uint32_t>& ngraph_entry,
                              const csmp::Index& advected_var_key );

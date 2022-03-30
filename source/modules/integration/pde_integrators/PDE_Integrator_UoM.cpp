@@ -407,7 +407,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_lhs = this->thread_lhs_operators_[tid].begin(); it_lhs != this->thread_lhs_operators_[tid].end(); it_lhs++) {
         if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater()) {
 #pragma omp for
-          for (int32_t e = 0; e < gref.Elements(); e++)
+          for ( size_t e = 0; e < gref.Elements(); e++)
           {
             //                    cout<<"element: "<<e<<endl;
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
@@ -442,7 +442,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_rhs = this->thread_rhs_operators_[tid].begin(); it_rhs != this->thread_rhs_operators_[tid].end(); it_rhs++) {
         if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater()) {
 #pragma omp for
-          for (int32_t e = 0; e < gref.Elements(); e++)
+          for ( size_t e = 0; e < gref.Elements(); e++)
           {
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
             fe_tmp = eit->FE(); //save old pointer.

@@ -620,15 +620,15 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
 }
 
 static Element<3U>* GetRandomElement(const csmp::Region<3U>& gref){
-  long emax = gref.Elements();
-  long rand = std::rand() % emax;
+  size_t emax = gref.Elements();
+  size_t rand = std::rand() % emax;
   Element<3U>* elmt = gref.E(rand);
   return elmt;
 }
 
 static void OutputVector(std::vector<double>& vec){
-  const auto vec_size(vec.size());
-  for( auto i = 0; i < vec_size;++i ){
+  const auto vec_size{vec.size()};
+  for( auto i{0U}; i < vec_size;++i ){
     cout << "Position: " << i << " Value: "<<vec[i]<<" ";
   }
   cout << endl;
@@ -638,20 +638,11 @@ static void OutputVector(std::vector<double>& vec){
 static double SumVec(const std::vector<double>& vec){
   double sum = 0;
   const auto vec_size(vec.size());
-  for(auto i = 0; i < vec_size; ++i){
+  for(auto  i{0U}; i < vec_size; ++i){
     sum = sum + vec[i];
   }
   return sum;
 }
-
-// ASSUMES that tolerance of 1e-6 is good enough; true for all kinds of variables ???
-static bool CheckRMS( const std::vector<double>& vec ){
-  const double e(1.0e-6);
-  if(fabs(1.-SumVec(vec))<e) return true;
-  return false;
-}
-
-
 
 
 
@@ -668,10 +659,10 @@ static pair<Element<3U>*,bool>  EvaluateBarycentricCoordinates( Element<3U>* ele
   Element<3U>* next_element(NULL);
   std::vector<double> coordinates;
   
-  for(auto i = 1; i <=nodes;++i){
+  for(auto i{1U}; i <=nodes;++i){
     coordinates.push_back(RESULT[i]);
   }
-  for(auto i = 0; i < coordinates.size();++i){
+  for(auto i{0U}; i < coordinates.size();++i){
     if(coordinates[i] >= (0.0-e) && coordinates[i] <= (1.0+e) ){
       pos_position.push_back(i);
     }
@@ -706,7 +697,7 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
   std::pair<Element<3U>*,Node<3U>*> return_vals;
   size_t num_nodes;
   std::map<double,csmp::Element<3U>*> face_list;
-  size_t iteration = 0;
+  int iteration = 0;
   
   std::vector<double> pos_position;
   ScalarVariable sp;

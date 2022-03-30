@@ -491,27 +491,28 @@ ModelTopology test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     deqElementNeighbors[22] = { BOTTOM, 17, 21 };
     deqElementNeighbors[23] = { BOTTOM, 24, 17 };
     deqElementNeighbors[24] = { BOTTOM, 20, 23 };
-    // for line elements, the faces/neighbors are located with the corner nodes
-    deqElementNeighbors[25] = { INTERNAL, 29 };
-    deqElementNeighbors[26] = { INTERNAL, 27 };
-    deqElementNeighbors[27] = { 26, 28 };
-    deqElementNeighbors[28] = { 27, INTERNAL };
-    deqElementNeighbors[29] = { 25, 31 };
+    // for line elements, the faces/neighbors are located with the corner nodes,
+    // but opposite to the nodes with the same number
+    deqElementNeighbors[25] = { 29, INTERNAL };
+    deqElementNeighbors[26] = { 27, INTERNAL };
+    deqElementNeighbors[27] = { 28, 26 };
+    deqElementNeighbors[28] = { INTERNAL, 27 };
+    deqElementNeighbors[29] = { 31, 25 };
     deqElementNeighbors[30] = { INTERNAL, INTERNAL };
-    deqElementNeighbors[31] = { 29, INTERNAL };
-    deqElementNeighbors[32] = { INTERNAL, BOTTOM };
-    deqElementNeighbors[33] = { 44, 34 }; // boundary edges
-    deqElementNeighbors[34] = { 33, 35 };
-    deqElementNeighbors[35] = { 34, 36 };
-    deqElementNeighbors[36] = { 35, 37 };
-    deqElementNeighbors[37] = { 36, 38 };
-    deqElementNeighbors[38] = { 37, 39 };
-    deqElementNeighbors[39] = { 38, 40 };
-    deqElementNeighbors[40] = { 39, 41 };
-    deqElementNeighbors[41] = { 40, 42 };
-    deqElementNeighbors[42] = { 41, 43 };
-    deqElementNeighbors[43] = { 42, 44 };
-    deqElementNeighbors[44] = { 43, 33 };
+    deqElementNeighbors[31] = { INTERNAL, 29 };
+    deqElementNeighbors[32] = { BOTTOM, INTERNAL };
+    deqElementNeighbors[33] = { 34, 44 }; // boundary edges
+    deqElementNeighbors[34] = { 35, 33 };
+    deqElementNeighbors[35] = { 36, 34 };
+    deqElementNeighbors[36] = { 37, 35 };
+    deqElementNeighbors[37] = { 38, 36 };
+    deqElementNeighbors[38] = { 39, 37 };
+    deqElementNeighbors[39] = { 40, 38 };
+    deqElementNeighbors[40] = { 41, 39 };
+    deqElementNeighbors[41] = { 42, 40 };
+    deqElementNeighbors[42] = { 43, 41 };
+    deqElementNeighbors[43] = { 44, 42 };
+    deqElementNeighbors[44] = { 33, 43 };
   	
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
 

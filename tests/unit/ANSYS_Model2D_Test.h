@@ -13,6 +13,9 @@ class ANSYS_Model2D_Test : public Test
     public:
       virtual void run();
       
+      // using line element VSet
+      void Test_printLineElementRegion();
+       
       // same test as in VData_Test, but with a more realistic model created in ANSYS
       void Test_CreateConsistentLineElementOrientations2D();
       

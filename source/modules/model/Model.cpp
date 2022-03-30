@@ -1478,25 +1478,25 @@ void Model<dim>::InputBoundaryValue( BOX_BOUNDARY boundary, const char* input_pr
     throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryValue: input variable:", input_prop,
                            "method can only be applied to node variables." );
 
-  csmp::Region<dim>&  super_group( this->Region( "Model" ) );
+  csmp::Region<dim>&  model_domain( this->Region( "Model" ) );
 
   if ( isSide( boundary ) ) {
     for ( typename vector<Node<dim>*>::const_iterator
-          nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+          nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
       if ( belongsToSide( boundary, (*nit)->AtBoundary() ) ) (*nit)->Store( prop_key, value );
     return;
   }
 
   if ( isEdge( boundary ) ) {
     for ( typename vector<Node<dim>*>::const_iterator
-          nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+          nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
       if ( belongsToEdge( boundary, (*nit)->AtBoundary() ) ) (*nit)->Store( prop_key, value );
     return;
   }
 
   if ( isCorner( boundary ) ) {
     for ( typename vector<Node<dim>*>::const_iterator
-          nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+          nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
       if ( (*nit)->AtBoundary() == boundary ) (*nit)->Store( prop_key, value );
     return;
   }
@@ -1538,23 +1538,23 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
     throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags: ",
                            "method can only be applied to node variables" );
 
-  csmp::Region<dim>&  super_group( this->Region( "Model" ) );
+  csmp::Region<dim>&  model_domain( this->Region( "Model" ) );
 
   if ( prop_key.type == SCALAR ) {
     if ( isSide( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( belongsToSide( boundary, (*nit)->AtBoundary() ) ) (*nit)->Status( prop_key, flags[0] );
       return;
     }
 
     if ( isEdge( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( belongsToEdge( boundary, (*nit)->AtBoundary() ) ) (*nit)->Status( prop_key, flags[0] );
       return;
     }
 
     if ( isCorner( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( (*nit)->AtBoundary() == boundary ) (*nit)->Status( prop_key, flags[0] );
       return;
     }
@@ -1564,21 +1564,21 @@ void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property
       throw csmp::Exception( ERROR, "Model<dim>::InputBoundaryFlags (vector variable): ",
                              "boundary flag vector has the wrong number of entries" );
     if ( isSide( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( belongsToSide( boundary, (*nit)->AtBoundary() ) )
           for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
     }
 
     if ( isEdge( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( belongsToEdge( boundary, (*nit)->AtBoundary() ) )
           for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
     }
 
     if ( isCorner( boundary ) ) {
-      for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ )
+      for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ )
         if ( (*nit)->AtBoundary() == boundary )
           for ( auto i{0U}; i<dim; i++ ) (*nit)->Status( prop_key, i, flags[i] );
       return;
@@ -1622,7 +1622,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
       throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                              "inconsistent flagging of scalar boundary values" );
 
-  csmp::Region<dim>&  super_group( this->Region( "Model" ) );
+  csmp::Region<dim>&  model_domain( this->Region( "Model" ) );
 
   assert( bvalues.size() >= 2U );
   double  v1 = bvalues[0]();
@@ -1635,7 +1635,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   if constexpr ( dim == 2U ) {
     assert( isSide( side ) );
     boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
-    for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+    for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
       res() = linearInterpolate( make_pair( xyz_min, v1 ), make_pair( xyz_max, v2 ), (*nit)->Coordinate() );
       (*nit)->Store( prop_key, res );
     }
@@ -1654,7 +1654,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     {
       case LEFT:   // YZ PLANE
         boundaryMinMaxCoordinates( LEFT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1662,7 +1662,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case RIGHT:  // YZ PLANE
         boundaryMinMaxCoordinates( RIGHT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1670,7 +1670,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BACK:   // XY PLANE
         boundaryMinMaxCoordinates( BACK, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1678,7 +1678,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case FRONT:  // XY PLANE
         boundaryMinMaxCoordinates( FRONT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1686,7 +1686,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case TOP:    // XZ PLANE
         boundaryMinMaxCoordinates( TOP, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1694,7 +1694,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BOTTOM: // XZ PLANE
         boundaryMinMaxCoordinates( BOTTOM, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res() = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1, v2, v3, v4 );
           (*nit)->Store( prop_key, res );
         }
@@ -1713,7 +1713,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   }
   else {  // if edge
     boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
-    for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+    for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
       res() = linearInterpolate( make_pair( xyz_min, v1 ), make_pair( xyz_max, v2 ), (*nit)->Coordinate() );
       (*nit)->Store( prop_key, res );
     }
@@ -1751,7 +1751,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
         throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                "inconsistent flagging of boundary vector variables" );
 
-  csmp::Region<dim>&  super_group( this->Region( "Model" ) );
+  csmp::Region<dim>&  model_domain( this->Region( "Model" ) );
 
   assert( bvalues.size() >= 2U );
   VectorVariable<dim>  v1 = bvalues[0];
@@ -1764,7 +1764,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   if ( dim == 2U ) {
     assert( isSide( side ) );
     boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
-    for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+    for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
       res( 0 ) = linearInterpolate( make_pair( xyz_min, v1[0] ), make_pair( xyz_max, v2[0] ), (*nit)->Coordinate() );
       res( 1 ) = linearInterpolate( make_pair( xyz_min, v1[1] ), make_pair( xyz_max, v2[1] ), (*nit)->Coordinate() );
       (*nit)->Store( prop_key, res );
@@ -1784,7 +1784,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
     {
       case LEFT:   // YZ PLANE
         boundaryMinMaxCoordinates( LEFT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1794,7 +1794,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case RIGHT:  // YZ PLANE
         boundaryMinMaxCoordinates( RIGHT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 1, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1804,7 +1804,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BACK:   // XY PLANE
         boundaryMinMaxCoordinates( BACK, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1814,7 +1814,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case FRONT:  // XY PLANE
         boundaryMinMaxCoordinates( FRONT, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 0, 1, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1824,7 +1824,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case TOP:    // XZ PLANE
         boundaryMinMaxCoordinates( TOP, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1834,7 +1834,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
 
       case BOTTOM: // XZ PLANE
         boundaryMinMaxCoordinates( BOTTOM, xyz_min, xyz_max );
-        for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+        for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
           res( 0 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[0], v2[0], v3[0], v4[0] );
           res( 1 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[1], v2[1], v3[1], v4[1] );
           res( 2 ) = bilinearInterpolate( 0, 2, xyz_min, xyz_max, (*nit)->Coordinate(), v1[2], v2[2], v3[2], v4[2] );
@@ -1855,7 +1855,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   }
   else {  // if edge
     boundaryMinMaxCoordinates( side, xyz_min, xyz_max );
-    for ( auto nit = super_group.NodesBegin(); nit != super_group.NodesEnd(); nit++ ) {
+    for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); nit++ ) {
       res( 0 ) = linearInterpolate( make_pair( xyz_min, v1[0] ), make_pair( xyz_max, v2[0] ), (*nit)->Coordinate() );
       res( 1 ) = linearInterpolate( make_pair( xyz_min, v1[1] ), make_pair( xyz_max, v2[1] ), (*nit)->Coordinate() );
       res( 2 ) = linearInterpolate( make_pair( xyz_min, v1[2] ), make_pair( xyz_max, v2[2] ), (*nit)->Coordinate() );
@@ -3643,15 +3643,15 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
     map<size_t,ScalarVariable > new_sc_data;
     ScalarVariable              sc;
 
-    csmp::Region<2>&  super_group(sg.Region("Model"));
+    csmp::Region<2>&  model_domain(sg.Region("Model"));
 
-    for ( auto n=0U; n<super_group.Elements(); n++ )
+    for ( auto n=0U; n<model_domain.Elements(); n++ )
        {
           //  for elements that are not located at model boundary
-          if ( atBoundary( super_group.E(n) ) == NOT )
+          if ( atBoundary( model_domain.E(n) ) == NOT )
             {
                // getting the scalar variable data
-               super_group.E(n)->Read( prop_key, sc );
+               model_domain.E(n)->Read( prop_key, sc );
               
                // checking whether element-property should be changed
                // because the element is located at a region boundary
@@ -3659,10 +3659,10 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // 1. counting the surrounding values that are different from el-value
                double     sc_sum(0U);
                unsigned int counter(0U);
-               for ( auto i{0U}; i<super_group.E(n)->Neighbors(); i++ ) {
-                   assert( super_group.E(n)->Neighbor(i) != nullptr );
-                   if ( sc() > super_group.E(n)->Neighbor(i)->Read( prop_key ) ) {
-                        sc_sum += super_group.E(n)->Neighbor(i)->Read( prop_key );
+               for ( auto i{0U}; i<model_domain.E(n)->Neighbors(); i++ ) {
+                   assert( model_domain.E(n)->Neighbor(i) != nullptr );
+                   if ( sc() > model_domain.E(n)->Neighbor(i)->Read( prop_key ) ) {
+                        sc_sum += model_domain.E(n)->Neighbor(i)->Read( prop_key );
                         counter++;
                      }
                  }
@@ -3680,7 +3680,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
      // this implies that isolated squares are removed
      for ( map<size_t,ScalarVariable >::iterator
            sc_it=new_sc_data.begin(); sc_it!=new_sc_data.end(); sc_it++ )
-       super_group.E( (*sc_it).first )->Store( prop_key, (*sc_it).second );
+       model_domain.E( (*sc_it).first )->Store( prop_key, (*sc_it).second );
        
      cout <<"\n\nstripDomainEdgesFor<2U>::StripDomainEdgesFor: "<< new_sc_data.size() <<" '"<< el_prop;
      cout <<"' domain-edge elements have been modified to create a smoother boundary."<< endl;
@@ -3749,7 +3749,7 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
     if ( gref.Nodes() != vset.Vertices() ) cout <<"\ncompareConnectivity: node number mismatch."<< endl;
   
     // 1. plist
-    for ( uint32_t i=0U; i<gref.Elements(); i++ )
+    for ( size_t i=0U; i<gref.Elements(); i++ )
       {
          for ( uint32_t j{0U}; j<gref.E(i)->Nodes(); j++ )
            if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
@@ -3760,7 +3760,7 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
       }
     
     // 2. pfverts
-    for ( uint32_t i=0U; i<gref.Elements(); i++ )
+    for ( size_t i=0U; i<gref.Elements(); i++ )
       {
          for ( uint32_t j{0U}; j<gref.E(i)->Neighbors(); j++ )
            if ( gref.E(i)->Neighbor(j) and

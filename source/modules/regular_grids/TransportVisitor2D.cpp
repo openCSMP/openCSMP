@@ -104,7 +104,7 @@ void TransportVisitor2D::MinMaxCoordinates( double& min_x, double& max_x,
  {
     min_x = max_x = XY(0,0);
     min_y = max_y = XY(0,1);
-    for ( size_t i=1U; i<XY.Rows(); i++ )
+    for ( uint32_t i=1U; i<XY.Rows(); i++ )
       {
          if ( XY(i,0) < min_x ) min_x = XY(i,0);
          if ( XY(i,0) > max_x ) max_x = XY(i,0);
@@ -359,7 +359,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
     
     csmp::Index                prop_key1 = sg.Database().StorageKey( prop );
     static bool                checked  = false;
-    Region<2>&       super_group(sg.Region("Model"));
+    Region<2>&       model_domain(sg.Region("Model"));
     ScalarVariable  res;
     
     // checking whether grid dimension match that of Model mesh
@@ -384,7 +384,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
          return;
       }
     if ( prop_key1.place == NODE ) {
-        for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
+        for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ ) {
              res.Flag() = (*nit)->Status( prop_key1 );
              res = grid( (*nit)->x(), (*nit)->y(), false );
              (*nit)->Store( prop_key1, res ); 
@@ -393,7 +393,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
       }
 
     // visitor gets arithmetic means from grid if element properties need to be calculated
-    FemFromGridVisitor<2U>  reader( sg.Database(), grid, prop, super_group.Elements() );
+    FemFromGridVisitor<2U>  reader( sg.Database(), grid, prop, model_domain.Elements() );
 
     if ( prop_key1.place == ELEMENT ) sg.Accept( reader );
     else
@@ -451,7 +451,7 @@ void  TransportVisitor2D::WritePropertyToGrid( Model<2U>& sg,
                                                const char* prop )
  {
     static bool                checked(false);
-    const Region<2>&  super_group(sg.Region("Model"));
+    const Region<2>&  model_domain(sg.Region("Model"));
     
     // checking whether grid dimension match that of Model mesh
     if ( !checked ) {
@@ -469,7 +469,7 @@ void  TransportVisitor2D::WritePropertyToGrid( Model<2U>& sg,
          checked = true;
       }
       
-     FemToGridVisitor<2U>  writer( sg.Database(), grid, prop, super_group.Elements() );
+     FemToGridVisitor<2U>  writer( sg.Database(), grid, prop, model_domain.Elements() );
      writer.OverWrite( true );
      writer.OutputProperty( prop );
      sg.Accept( writer );

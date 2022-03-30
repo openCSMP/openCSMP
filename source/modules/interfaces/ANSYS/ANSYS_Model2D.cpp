@@ -171,7 +171,8 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     else
       Model<2U>::Initialize( mesh_topology,
                              vset );
-  }
+  } // end try
+
 
   // --------------------------------------_-----------  
   // catching all possible standard and CSMP exceptions

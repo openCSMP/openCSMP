@@ -311,7 +311,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                                              const Model<dim>& sg,
                                              const char* fname, const char* s ) const
  {
-     const Region<dim>  super_group(sg.Region(region));
+     const Region<dim>  model_domain(sg.Region(region));
      char  file_name[200];
      strcpy( file_name, fname );
      strcat( file_name, ".txt");
@@ -339,7 +339,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
             else if ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
             else if ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
-            for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
+            for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ )
               {
                 fprintf( fp, "%E\t", (*nit)->x() );
                 if ( dim != 1U ) fprintf( fp, "%E\t", (*nit)->y() );
@@ -386,7 +386,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
               for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
@@ -440,7 +440,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( uint32_t i{0U}; i<(*eit)->Nodes(); ++i )
@@ -514,7 +514,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
@@ -588,7 +588,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
              if ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+             for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
               {
                  Point<dim>  ctr((*eit)->BaryCenter());
                  fprintf( fp, "%E\t", ctr[0] );
@@ -876,7 +876,7 @@ template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const Model<dim>& sg,
                                                      const char* fname, const char* s ) const
  {
-     const Region<dim>  super_group(sg.Region(region));
+     const Region<dim>  model_domain(sg.Region(region));
      csmp::Index                prop_key = sg.Database().StorageKey(s);
      char  file_name[200];
      strcpy( file_name, fname );
@@ -903,7 +903,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             if      ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
             else if ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
             else if ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
-            for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ )
+            for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ )
               {
                 fprintf( fp, "%6.0lu\t",  (*nit)->Idx() );
                 fprintf( fp, "%E\t", (*nit)->x() );
@@ -936,7 +936,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
               for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
@@ -976,7 +976,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
              if      ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ )
+             for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
               {
                  fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                  xyz = ((*eit)->BaryCenter()).Coordinates();

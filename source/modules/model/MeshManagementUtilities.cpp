@@ -8,6 +8,7 @@
 
 #include "MeshManagementUtilities.h"
 #include "MeshManager.h"
+#include "Model.h"
 #include "Region.h"
 #include "Element.h"
 #include "Node.h"
@@ -2432,6 +2433,90 @@ template size_t collocatedNodes( const Element<1>* const );
 template size_t collocatedNodes( const Element<2>* const );
 template size_t collocatedNodes( const Element<3>* const );
 
+
+
+/// pretty prints line elements as a chain from beginning to end
+template<uint32_t dim>
+size_t printLineElementRegion( const Model<dim>& model, const char* region_name, bool renumber_nodes )
+ {
+    const Region<dim>& line_domain( model.Region(region_name) );
+    if ( renumber_nodes ) line_domain.RenumberNodes();
+    
+    const Element<dim>* eptr1 = (*line_domain.PerimeterElementsBegin());
+    const Element<dim>* eptr2 = (*prev(line_domain.ElementsEnd(),1));
+    
+    const Element<dim>* previous_ptr{nullptr};
+    size_t              traversed_elmts{0U};
+    
+    bool forward = ( eptr1->Neighbor(0) != nullptr ) ? true : false;
+    
+    cout <<"\n\nprintLineElementRegion: '"<< region_name <<"': printing chain of elements ";
+    if ( forward ) {
+         cout <<"in forward direction:"<< endl;
+         while( eptr1 != nullptr ) {
+              if ( !eptr1->IsLineElement() )
+                throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
+              // Ideally (where the numbers are nodes and the labels are BOX_BOUNDARY flags)
+              // we should get something like: TOP 1--0 0--11 11--12...56--56 BOTTOM
+              if ( !eptr1->Neighbor(1) )
+                cout <<"  "<< parseBoundary( eptr1->N(0)->AtBoundary() ) <<" "<< eptr1->N(0)->Idx();
+              else cout << eptr1->N(0)->Idx();
+              cout <<"->-";
+              if ( !eptr1->Neighbor(0) )
+                cout << eptr1->N(1)->Idx() <<" "<< parseBoundary( eptr1->N(1)->AtBoundary() ) <<" ";
+              else cout << eptr1->N(1)->Idx();
+              cout <<" ";
+              // advancing along the polyline
+              previous_ptr = eptr1;
+              eptr1 = eptr1->Neighbor(0);
+              // if progress stops
+              if ( previous_ptr == eptr1 ) {
+                   cout <<"\n| broken chain; ending after "<< traversed_elmts;
+                   cout <<" elements vs. "<< line_domain.Elements() <<" in total."<< endl;
+                   break;
+                }
+              traversed_elmts++;
+           }
+      }
+    // backward
+    else {
+         cout <<"from back to front:"<< endl;
+         while( eptr2 != nullptr ) {
+              if ( !eptr2->IsLineElement() )
+                throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
+              if ( !eptr2->Neighbor(0) )
+                cout <<"  "<< parseBoundary( eptr2->N(1)->AtBoundary() ) <<" "<< eptr2->N(1)->Idx();
+              else cout << eptr2->N(1)->Idx();
+              cout <<"-<-";
+              if ( !eptr2->Neighbor(1) )
+                cout << eptr1->N(0)->Idx() <<" "<< parseBoundary( eptr2->N(0)->AtBoundary() ) <<" ";
+              else cout << eptr2->N(0)->Idx();
+              cout <<" ";
+              // advancing along the polyline
+              previous_ptr = eptr2;
+              eptr2 = eptr2->Neighbor(1);
+              // if progress stops
+              if ( previous_ptr == eptr2 ) {
+                   cout <<"\n| broken chain; ending after "<< traversed_elmts;
+                   cout <<" elements vs. "<< line_domain.Elements() <<" in total."<< endl;
+                   break;
+                }
+              traversed_elmts++;
+           }
+      }
+      
+   // checking
+   if ( traversed_elmts < line_domain.Elements() ) {
+        cout <<"\n"<<"printLineElementRegion('"<< region_name <<"'): only "<< traversed_elmts <<" of "<< line_domain.Elements();
+        cout <<" total were discovered by neighbor to neighbor traversal. Broken connectivity?"<< endl;
+     }
+  
+   return traversed_elmts;
+    
+ } // end printLineElementRegion
+
+template size_t printLineElementRegion( const Model<3U>&, const char*, bool );
+template size_t printLineElementRegion( const Model<2U>&, const char*, bool );
 
 
 } // end csmp

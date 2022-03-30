@@ -14,7 +14,7 @@ worksheet.
 void writeVariableToMapleTextFile( const Model<1U>& sg, 
                                    const char* variable, uint32_t timestep, double time )
  {
-    const Region<1>  super_group(sg.Region("Model"));
+    const Region<1>  model_domain(sg.Region("Model"));
     char   num[30];  sprintf( num, "%u", timestep );
     string fname(variable);
     fname += "-maple-dataset";
@@ -41,8 +41,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
     ofs << dataset <<" := [ ";
 
     if ( prop_key.place == NODE ) {
-        const auto  nit_last(--super_group.NodesEnd());
-	      for ( auto nit=super_group.NodesBegin(); nit!=super_group.NodesEnd(); nit++ ) {
+        const auto  nit_last(--model_domain.NodesEnd());
+	      for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ ) {
 	           ofs <<"["<< (*nit)->x();
 	           ofs <<","<< (*nit)->Read( prop_key );
 	           if ( nit != nit_last ) ofs <<"],";
@@ -53,8 +53,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key.place == ELEMENT ) {
-        const auto  eit_last(--super_group.ElementsEnd());
-	      for ( auto eit=super_group.ElementsBegin(); eit!=super_group.ElementsEnd(); eit++ ) {
+        const auto  eit_last(--model_domain.ElementsEnd());
+	      for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
 	           Point<1U>  x((*eit)->BaryCenter());
 	           ofs <<"["<< x[0];
 	           ofs <<","<< (*eit)->Read( prop_key );
@@ -104,7 +104,7 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
                                     const char* variable1, const char* variable2, 
                                     uint32_t timestep, double time )
  {
-    const Region<1>  super_group(sg.Region("Model"));
+    const Region<1>  model_domain(sg.Region("Model"));
     char   num[30];  sprintf( num, "%u", timestep );
     string fname(variable1);
     fname += "-";
@@ -138,10 +138,10 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
     // NB: nodes will not necessarily be in the order of their coordinates
     //     so a line graph will not work
     if ( prop_key.place == NODE ) {
-	      for ( auto i{0}; i<super_group.Nodes(); i++ ) {
-	           ofs <<"["<< super_group.N(i)->x();
-	           ofs <<","<< super_group.N(i)->Read( prop_key );
-	           if ( i < super_group.Nodes()-1U ) ofs <<"],";
+	      for ( auto i{0}; i<model_domain.Nodes(); i++ ) {
+	           ofs <<"["<< model_domain.N(i)->x();
+	           ofs <<","<< model_domain.N(i)->Read( prop_key );
+	           if ( i < model_domain.Nodes()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }
@@ -149,11 +149,11 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key.place == ELEMENT ) {
-	      for ( auto i{0}; i<super_group.Elements(); i++ ) {
-	           Point<1U> x(super_group.E(i)->BaryCenter());
+	      for ( size_t i{0U}; i<model_domain.Elements(); i++ ) {
+	           Point<1U> x(model_domain.E(i)->BaryCenter());
 	           ofs <<"["<< x[0];
-	           ofs <<","<< super_group.E(i)->Read( prop_key );
-	           if ( i < super_group.Elements()-1U ) ofs <<"],";
+	           ofs <<","<< model_domain.E(i)->Read( prop_key );
+	           if ( i < model_domain.Elements()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }
@@ -175,10 +175,10 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
     ofs << dataset2 <<" := [ ";
     
     if ( prop_key2.place == NODE ) {
-	      for ( auto i{0}; i<super_group.Nodes(); i++ ) {
-	           ofs <<"["<< super_group.N(i)->x();
-	           ofs <<","<< super_group.N(i)->Read( prop_key2 );
-	           if ( i < super_group.Nodes()-1U ) ofs <<"],";
+	      for ( size_t i{0U}; i<model_domain.Nodes(); i++ ) {
+	           ofs <<"["<< model_domain.N(i)->x();
+	           ofs <<","<< model_domain.N(i)->Read( prop_key2 );
+	           if ( i < model_domain.Nodes()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }
@@ -186,11 +186,11 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key2.place == ELEMENT ) {
-	      for ( auto i{0}; i<super_group.Elements(); i++ ) {
-	           Point<1U>  x(super_group.E(i)->BaryCenter());
+	      for ( size_t i{0U}; i<model_domain.Elements(); i++ ) {
+	           Point<1U>  x(model_domain.E(i)->BaryCenter());
 	           ofs <<"["<< x[0];
-	           ofs <<","<< super_group.E(i)->Read( prop_key2 );
-	           if ( i < super_group.Elements()-1U ) ofs <<"],";
+	           ofs <<","<< model_domain.E(i)->Read( prop_key2 );
+	           if ( i < model_domain.Elements()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }

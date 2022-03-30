@@ -2319,7 +2319,7 @@ void MeshManager<dim>::UpdateConnectivity()
          assert( n.first->Parents() >= 1 );
       }
     // TODO: extend the repairs to include NodeManifolds
-    cerr <<"\nMeshManager::UpdateConnectivity: WARNING: node manifolds are not reestablished here yet.\n";
+    ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not updated by this method yet");
     
  } // end UpdateConnectivity
 

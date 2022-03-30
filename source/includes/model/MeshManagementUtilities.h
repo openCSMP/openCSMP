@@ -199,6 +199,10 @@ template<uint32_t dim>
 std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
                                                typename std::vector<Node<dim>*>::const_iterator last );
 
+/// pretty prints line elements as a chain from beginning to end; returns number of elements printed
+template<uint32_t dim>
+size_t  printLineElementRegion( const Model<dim>&, const char* region_name, bool renumber_nodes );
+
 } // end csmp
 
 #endif /* CSMP_MESH_MANAGEMENT_UTILITIES_H */

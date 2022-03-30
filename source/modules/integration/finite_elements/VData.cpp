@@ -2459,21 +2459,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                 continue;
              }
 
-           // checking the node flagging
-           int bflag{MULTIPLE}, no_nbor{0};
-           if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
-           else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
-           // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
-           if ( bflag >= 0 ) {
-                cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
-                cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
-                cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
-                cerr <<" should be equivalent to boundary flag of the adjacent node: ";
-                cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
-             }
-           assert( bflag >= MULTIPLE );
-
-          // storing the element as the first in the line element sequence
+         // storing the element as the first in the line element sequence
           auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
           // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
@@ -2590,6 +2576,23 @@ size_t VData::RenumberElementsCounterClockwise2D()
   } // end CreateConsistentLineElementOrientations
 
 
+
+ // checking the node flagging for the case that the line elements are Faces or InterFaces
+ /*
+ int bflag{MULTIPLE}, no_nbor{0};
+ if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
+ else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
+ // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
+ if ( bflag >= 0 ) {
+      cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
+      cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
+      cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
+      cerr <<" should be equivalent to boundary flag of the adjacent node: ";
+      cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
+   }
+ assert( bflag >= MULTIPLE );
+*/
+ 
 
 
 
@@ -2771,14 +2774,14 @@ void  VData::EstablishElementConnectivity2D()
              else {
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
-                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 0
-                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<int64_t>{elmt_idx} ) );
+                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1 (on the side of neighbor 0)
+                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it0.second )
                     (*it0.first).second.insert( elmt_idx );
                   
-                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1
-                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
+                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 0 (opposite neighbor 1)
+                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it1.second )
                     (*it1.first).second.insert( elmt_idx );
@@ -2898,18 +2901,19 @@ void  VData::EstablishElementConnectivity2D()
             {
                 const size_t n_connections(it.second.size()-1);
                 
-                // 1. isolated line elements terminating either at an inside node (INTERNAL) or at the BOX_BOUNDARY
+                // 1. isolated line elements terminating either at an inside node (NOT) or at the BOX_BOUNDARY
                 // --------------------------------------------------------------------------------------------------
                 if ( n_connections == 0U ) {
                      const size_t elmt = (*it.second.begin());
-                     // if there is no neighbor element corresponding to the first node
-                     if ( it.first == plist[elmt][0] ) {
+                     // if there is no neighbor element opposite to the zeroeth node
+                     if ( it.first == plist[elmt][1] ) {
                           // identifying the boundary that the missing neighbor is located at
+                          // (note: although we are not at a BOX_BOUNDARY we need a negative flag, else CSMP infers elmt #0=NOT)
                           pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
                        }
-                     else if ( it.first == plist[elmt][1] ) {
-                          // the missing neighbor is located at a boundary
-                          pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                     else if ( it.first == plist[elmt][0] ) {
+                          // the missing neighbor may be located at a model boundary
+                          pfverts[elmt][1] = (bflags[ plist[elmt][0] ]==0) ? INTERNAL : bflags[ it.first ];
                        }
                      else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
                   }
@@ -2920,11 +2924,11 @@ void  VData::EstablishElementConnectivity2D()
                      const size_t elmt2 = (*it.second.rbegin());
                      // processing the neighbors
                      // line element 1
-                     if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                     else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                     if ( it.first      == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                     else if ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
                      // line element 2
-                     if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                     else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                     if ( it.first      == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                     else if ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
                   }
                 // 3. line element manifolds (multiple line elements)
                 // --------------------------------------------------------------------------------------------------
@@ -2964,12 +2968,12 @@ void  VData::EstablishElementConnectivity2D()
                                 assigned_elements.find(elmt2) == assigned_elements.end() )
                              {
                                 // finding the correct side of edge1
-                                if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                                else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                                if      ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                                else if ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
                                 assigned_elements.insert( elmt1 );
                                 // and edge2
-                                if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                                else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                                if      ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                                else if ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
                                 assigned_elements.insert( elmt2 );
                              }
                         }
@@ -2978,16 +2982,20 @@ void  VData::EstablishElementConnectivity2D()
                            // making sure that there only is a single unassigned element
                            assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                            // finding the yet-to-be-assigned element
-                           size_t unassigned_elmt{UINT_MAX};
+                           size_t unassigned_elmt = numeric_limits<size_t>::max();
                            for ( auto& leit : joint_line_elmts )
                              if ( assigned_elements.find(leit) == assigned_elements.end() ) {
                                   unassigned_elmt = leit;
                                   break;
                                }
-                           assert ( unassigned_elmt != UINT_MAX );
+                           assert ( unassigned_elmt != numeric_limits<size_t>::max() );
                            // finding the correct side of the line element and assigning the vertex bflag to irt
-                           if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
-                           else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
+                           if   ( it.first == plist[unassigned_elmt][1] ) {
+                                 pfverts[unassigned_elmt][0] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
+                              }
+                           if ( it.first == plist[unassigned_elmt][0] ) {
+                                 pfverts[unassigned_elmt][1] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
+                              }
                         }
                   }
                               
@@ -3021,6 +3029,13 @@ void  VData::EstablishElementConnectivity2D()
 */
 size_t VData::SwitchCornerTriangles2D()
  {
+    if ( HybridElementTypeMesh() ) {
+         cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: mesh contains corner-spanning triangles,";
+         cout <<" therefore this method cannot be applied because it cannot simultaneously fix the adjacent line elements that may also be contained in it.\n";
+         cout <<" Please improve method. or fix corner elements in meshing tool."<< endl;
+         return 0U;
+      }
+      
     size_t switched_triangles{0};
     
     if ( pfverts.empty() || pfverts.size() != plist.size() ) {

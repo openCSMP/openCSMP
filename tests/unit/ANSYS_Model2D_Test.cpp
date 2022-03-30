@@ -2,6 +2,7 @@
 #include "Region.h"
 #include "Boundary.h"
 #include "MeshManagementUtilities.h"
+#include "vsetMakers.h"
 
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
@@ -16,6 +17,8 @@ namespace csmp
 
 void ANSYS_Model2D_Test::run()
   {
+    Test_printLineElementRegion();
+
     const bool verbose(false);
     
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
@@ -133,6 +136,8 @@ void ANSYS_Model2D_Test::run()
     // --------------------------------------------------------
     // SKM (27/3/22)
     // assunming that the line-element connectivity was rebuilt when the model was created
+    Test_printLineElementRegion();
+    
     Test_CreateConsistentLineElementOrientations2D();
     
     Test_CreatInternalBoundary();
@@ -182,6 +187,43 @@ void ANSYS_Model2D_Test::run()
  } // end create_ANSYS2D_Model
  
  
+ 
+ 
+ 
+       // using line element VSet
+void ANSYS_Model2D_Test::Test_printLineElementRegion()
+ {
+    // verifying function with predefined correct dataset
+    {
+      VSet<2U>      vset;
+      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+       
+      // works fine
+      const bool renumber_nodes{false};
+      _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC3", renumber_nodes ) == 1 ); // only one element
+    }
+ 
+    // rebuilding neighbor connectivty and line element connectivity
+    {
+      VSet<2U>      vset;
+      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      vset.EstablishElementConnectivity2D(); // also deals with line-element orientations
+      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+       
+      const bool renumber_nodes{false};
+      _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC3", renumber_nodes ) == 1 ); // only one element
+    }
+    
+} // end Test_printLineElementRegion
+
+ 
+ 
+ 
 
 
 void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
@@ -195,7 +237,9 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     
     if ( verbose_ ) {
          interface1.Out();
+         //printLineElementRegion( model, interface1.Name().c_str() );
          interface2.Out();
+         //printLineElementRegion( model, interface2.Name().c_str() );
       }
     
     // 2. The endpoints of these regions must be at the vertical model boundaries
