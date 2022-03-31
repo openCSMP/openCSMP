@@ -80,14 +80,39 @@ void Experimental_Example::Run()
 {
     cout <<"\nHello World and size of uint_fast32_t: "<< sizeof(uint_fast32_t) << endl;
     cout <<"\nauto i{0}: "<< sizeof(uint_fast32_t) << endl;
-    vector<double> doubs(1e9,2e-4);
+    vector<double> doubs(2,2e-4);
     for ( auto j{0}; j<doubs.size(); j++ ) {
           doubs[j] = 2.3;
           cout <<"\n\tsize of vector loop variable j: "<< sizeof(j) << endl;
           if ( j == 1 ) break;
       }
       
-//#if 0
+    // INSERTING AN INTERNAL BOUNDARY IN 2D MODEL
+    string         variables_file("CSMP-1phase-variables.txt");
+    ANSYS_Model2D  model( "BoxHalfs2D", variables_file.c_str(), false, true, true );
+    Region<2U>&    line(model.Region("STANDARD"));
+    size_t         n_boundary_line_elements{ line.Elements() };
+    size_t         n_faces_after_built{ model.Mesh().Faces() };
+    // assigning some permeability values to the halves
+    model.Region("MATRIX_LEFT").InputPropertyValue("permeability", makeScalar(PLAIN,1e-12) );
+    model.Region("MATRIX_RIGHT").InputPropertyValue("permeability", makeScalar(PLAIN,1e-13) );
+    
+    // create Boundary and remove lower-dimensional region
+    model.CreateInternalBoundaryFrom("STANDARD");
+    
+    if ( model.Mesh().Faces() - n_faces_after_built != n_boundary_line_elements )
+      cerr <<"main: model contains different number of faces than elements in line element boundary\n";
+    
+    // visualising model and boundary
+    VTU_Interface<2U>  vtu_out( model, "Testing_OpenCSMP" );
+    
+    vtu_out.OutputDataToVTU( "BoxHalfs2D_test", "permeability", "Model", 0 );
+    
+    Boundary<2U>& line_boundary(model.Boundary("STANDARD_BOUNDARY0_MATRIX_LEFT_MATRIX_RIGHT"));
+    line_boundary.Out();
+    vtu_out.OutputDataToVTU( "line_elmt_region", "permeability", line_boundary, 0 );
+      
+#if 0
     // ODLING 720 x 720 meter
     string         variables_file("CSMP-1phase-variables.txt");
     ANSYS_Model2D  model( "odling720x720", variables_file.c_str(), false, true, true );
@@ -99,7 +124,7 @@ void Experimental_Example::Run()
                                              true,            // boundary conditions for box-shaped model
                                              true );          // essential conditions for regions
                                            // default: boundary conditions for arbitrary-shaped model
-//#endif
+#endif
 
     // FLUID FLOWER TESTCASE
 #if 0
