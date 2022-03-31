@@ -850,16 +850,16 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& initial_file_name,
     
     for( set<string>::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )
     {
+        const PLACEMENT variablePlacement( model_.Database().Placement( it->c_str() ) );
         // the right part of this if statement was added to be able to output variables placed on the MODEL
-        if( !subDomain.ValidVariable( it->c_str() ) && model_.Database().Placement(it->c_str()) != MODEL)
+        if( !subDomain.ValidVariable( it->c_str() ) && variablePlacement != MODEL)
         {
             if ( csmp_error.Verbose() ) {
-                cerr << "\n VTU_Interface<dim>::OutputDataToVTU: Output property '" << *it;
-                cerr << "' not accessible (placement?) in domain " << DomainName( subDomain ) << endl;
+                cerr << "\n VTU_Interface<dim>::OutputDataToVTU: Output property '" << *it <<"' ("<< parsePlacement(variablePlacement) <<")";
+                cerr << " not accessible in domain "<< DomainName( subDomain ) << endl;
               }
             continue;
         }
-        const PLACEMENT variablePlacement( model_.Database().Placement( it->c_str() ) );
         const VARIABLE_TYPE variableType( model_.Database().Type( it->c_str() ) );
         //if( variableType != SCALAR && variableType != VECTOR && variableType != TENSOR && variableType != ARRAY && variableType != FLAGGEDARRAY)
         //    throw csmp::Exception( ERROR, "VTU_Interface<dim>::OutputDataToVTU", "Output for scalar, vector, tensor, array and flagged array variables only" );

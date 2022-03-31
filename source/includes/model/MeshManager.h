@@ -235,8 +235,8 @@ public:
                  typename std::vector<Node<dim>*>::iterator last );
 
   /// deletes the supplied range of elements, and orphaned nodes if any; the parent element storage of the nodes is rebuild; @note all input pointers are nulled
-  size_t Delete( typename std::vector<Element<dim>*>::iterator first,
-                 typename std::vector<Element<dim>*>::iterator last );
+  size_t Delete( typename std::vector<Element<dim>*>::const_iterator first,
+                 typename std::vector<Element<dim>*>::const_iterator last );
 
   size_t Delete( typename std::vector<InterFace<dim>*>::iterator first,
                  typename std::vector<InterFace<dim>*>::iterator last );

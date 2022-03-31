@@ -913,11 +913,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       }
     assert( face_construction_data.size() == subdomain.Elements() );
 
-// TESTING
-//cout <<"\nFaceConstruction data:\n";
-//for ( auto fcd : face_construction_data )
-//  fcd.Out();
-
    
     // 2.2 creating labeled boundary patches from the face-defining data
     // -----------------------------------------------------------------
@@ -996,9 +991,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) {
-//         model.Delete<dim>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
-      }
+    // TODO: this does not set the subdomain pointers to zero; don't touch them
+    //if ( remove_original_region )
+    //  model.Mesh().Delete( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+      
      // TODO: these are global changes! - do this only for nodes that are affected
      model.Mesh().UpdateConnectivity();
    
