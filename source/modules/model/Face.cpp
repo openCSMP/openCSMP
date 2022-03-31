@@ -241,8 +241,29 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
       }
     assert( inner_parent->Neighbor(inner_parent_face_id) == outer_parent->Neighbor(outer_parent_face_id) );
     
-    // finding the face which is shared
-    // --------------------------------
+    // creating local storage for face and face integration point variables
+    if ( this->UsesLocalCoordinates() )
+        this->ResizePropertyStorage( ep, ip );
+    else
+        this->ResizePropertyStorage( ep );
+      
+ } // end (constructor that infers face from higher-dimensional parent elements)
+
+
+
+/*
+   // checking the type of element
+   if ( feptr->ElementType() != outer_parent->FE()->ElementTypeOfFace(i) ) {
+        cerr <<"\nFace<"<< dim <<">(ctor: face between parents): mismatch of supplied FiniteElement ";
+        cerr <<"and element type of shared face: ";
+        cerr << parseFiniteElementType( feptr->ElementType() ) <<" vs ";
+        cerr << parseFiniteElementType( outer_parent->FE()->ElementTypeOfFace(i) );
+     }
+*/
+
+/*
+    // finding face which is shared between parents
+    // --------------------------------------------
     bool  matching_face_found{false};
     const auto n_faces_inner{innerParent_->Faces()};
     for ( auto i{0U}; i<n_faces_inner; ++i )
@@ -281,28 +302,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
          outerParent_ = nullptr;
          return;
       }
-
-    // creating local storage for face and face integration point variables
-    if ( this->UsesLocalCoordinates() )
-        this->ResizePropertyStorage( ep, ip );
-    else
-        this->ResizePropertyStorage( ep );
-      
- } // end (constructor that infers face from higher-dimensional parent elements)
-
-
-
-/*
-   // checking the type of element
-   if ( feptr->ElementType() != outer_parent->FE()->ElementTypeOfFace(i) ) {
-        cerr <<"\nFace<"<< dim <<">(ctor: face between parents): mismatch of supplied FiniteElement ";
-        cerr <<"and element type of shared face: ";
-        cerr << parseFiniteElementType( feptr->ElementType() ) <<" vs ";
-        cerr << parseFiniteElementType( outer_parent->FE()->ElementTypeOfFace(i) );
-     }
 */
-
-
 
 
 

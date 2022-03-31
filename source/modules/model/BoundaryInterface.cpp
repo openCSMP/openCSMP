@@ -392,6 +392,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 
 
 /**
+     Method used by CreateInternalBoundaryFrom( dim_minus1_region...
+
      higherDimensionalNeighbors() - finds the higher-dim neighbor elements of 
      a dim-1 element embedded within the higher-dim mesh.
      
@@ -415,21 +417,24 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
      application
      - use this function for finding neighbors of a surface element that sits on the inside of another region
      
-     TODO: output the numbers of matching faces of the discovered the elements so that they can later be connected
- 
+     @author SKM
+     @date 2016
+  
 */
 template<uint32_t dim>
 FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const csmp::Index& mtrl_key )
  {
      if constexpr ( dim == 2 ) assert( e.IsLineElement() );
      if constexpr ( dim == 3 ) assert( e.IsSurfaceElement() );
+     assert( mtrl_key.place != UNDEFINED );
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------
      // making a set of element nodes to later identify faces by comparison
      set<size_t> node_set, test_set;
      const auto  nodes(e.Nodes());
-     for ( auto i{0U}; i<nodes; ++i )    node_set.insert(e.N(i)->Idx());
+     for ( auto i{0U}; i<nodes; ++i )   node_set.insert(e.N(i)->Idx());
+     // neighbor elements and their faces
      map<const Element<dim>*,uint32_t>  nbor_elmts;
      vector<uint32_t> fnids;
      for ( auto i{0U}; i<nodes; i++ ) {
@@ -452,70 +457,55 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
                  }
             }
        }
+
+#ifdef DEBUG
+    // VERIFICATION
     assert( nbor_elmts.size() == 2U );
-   
-    // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
-    // -------------------------------------------------------------------------------------------------------------
+    const auto e1{ nbor_elmts.begin() };
+    const auto e2{ nbor_elmts.rbegin() };
+    assert( (*e1).first->Neighbor( (*e1).second ) == (*e2).first );
+    assert( (*e2).first->Neighbor( (*e2).second ) == (*e1).first );
+#endif
+
+    // 2. finding the inside neighbors by projecting face normals onto lower dim element normal
+    // ----------------------------------------------------------------------------------------
     vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
-    typename map<const Element<dim>*,uint32_t>::const_iterator  nbit(nbor_elmts.begin());
-    bool inside_elmt_found(false);
-    bool outside_elmt_found(false);
-    pair<size_t,size_t>     nbors;
-    pair<uint32_t,uint32_t> faces;
-    pair<long,long>     materials;
+    const auto nbor1{ nbor_elmts.begin() };
+    const auto nbor2{ nbor_elmts.rbegin() };
+    enum POSITION { INNER_ELMT, OUTER_ELMT };
+    //                             inside first           outside second
+    pair<size_t,size_t>     nbors{ (*nbor1).first->Idx(), (*nbor2).first->Idx() };
+    pair<uint32_t,uint32_t> faces{ (*nbor1).second, (*nbor2).second };
+    pair<long,long>         materials{ (*nbor1).first->Read( mtrl_key ), (*nbor2).first->Read( mtrl_key ) };
 
     // first element
     // -------------
-    assert( (*nbit).first != nullptr );
-    faces.first = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.first, fnrml );
+    (*nbor1).first->UnitNormalToFace( faces.first, fnrml );
     double dotproduct(0.);
-    for ( size_t k{0U}; k<dim; ++k )
-      dotproduct += enrml[k] * fnrml[k];
+    for ( auto k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
    
     // if the projection is negative, the first element lies on the outside
-    if ( dotproduct < 0. ) {
-         nbors.second       = (*nbit).first->Idx();
-         if ( mtrl_key.place != UNDEFINED )
-           materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         outside_elmt_found = true;
-      }
-    else {
-         nbors.first        = (*nbit).first->Idx();
-         if ( mtrl_key.place != UNDEFINED )
-           materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         inside_elmt_found  = true;
-      }
-    nbit++;
-
-
-// TODO: SKM: this could be done without 2 normal projections for speedup
+    POSITION  epos_elmt1 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
 
     // second element
     // --------------
-    assert( (*nbit).first != nullptr );
-    faces.second = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.second, fnrml );
+    (*nbor2).first->UnitNormalToFace( faces.second, fnrml );
     dotproduct = 0.;
-    for ( size_t k{0U}; k<dim; ++k )
-      dotproduct += enrml[k] * fnrml[k];
+    for ( auto k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
 
-   // if the projection is negative, the second element lies on the outside
-    if ( dotproduct < 0. ) {
-         // checking that we have no duplication here
-         assert( outside_elmt_found == false );
-         nbors.second     = (*nbit).first->Idx();
-         if ( mtrl_key.place != UNDEFINED )
-           materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
+    POSITION  epos_elmt2 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
+
+    // checking that we have no duplication here
+    assert( epos_elmt1 != epos_elmt2 );
+
+    // swapping sides if necessary
+    if ( epos_elmt1 != INNER_ELMT ) {
+         swap( nbors.first, nbors.second );
+         swap( faces.first, faces.second );
+         swap( materials.first, materials.second );
       }
-    else {
-         assert( inside_elmt_found == false );
-         nbors.first      = (*nbit).first->Idx();
-         if ( mtrl_key.place != UNDEFINED )
-           materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
-      }
-   
+
     // initialise with nbors, their faces, adjacent materials, and patch numbers
     if ( mtrl_key.place != UNDEFINED )
       return FaceConstructionData( e.Idx(), nbors,  faces, materials,
@@ -526,246 +516,8 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
  } // end higherDimensionalNeighbors
 
 
-/**
-higherDimensionalNeighbors() - finds the higher-dim neighbor elements of
-a dim-1 element embedded within the higher-dim mesh.
-
-one inside element idx or two inside-outside element idxs are stored in the parameter 'in_out_elements'.
-
-assumptions
-- assumes that the nodes and elements in the entire model domain are numbered continuously
-*/
-template<uint32_t dim>
-bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& in_out_elements )
-{
-  // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
-  // -----------------------------------------------------------------------------------------------------------------------------
-  // making a set of element nodes to later identify faces by comparison
-  set<size_t>  node_set, test_set;
-  const uint32_t nodes( e.Nodes() );
-  for ( auto i{0U}; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
-  map<Element<dim>*,uint32_t>  nbor_elmts;
-  vector<uint32_t> fnids;
-  for ( auto i{0U}; i<nodes; i++ ) {
-    const auto parents( e.N( i )->Parents() );
-    for ( auto j{0U}; j<parents; ++j ) {
-      Element<dim>* eptr( e.N( i )->Parent( j ) );
-      const auto faces( eptr->Faces() );
-      for ( auto k{0U}; k<faces; ++k ) {
-        eptr->FE()->NodesOfFace( k, fnids );
-        auto fnodes( fnids.size() );
-        for ( auto l = 0U; l<fnodes; ++l )
-          test_set.insert( eptr->N( fnids[l] )->Idx() );
-        // if the face is shared the element and its face are recorded
-        if ( node_set == test_set ) {
-          // storing a pointer to this element and its local face number
-          // making sure that no duplicate is received
-          nbor_elmts.insert( make_pair( eptr, k ) );
-        }
-        test_set.clear();
-      }
-    }
-  }
-
-  if( nbor_elmts.size() == 1U ){
-    typename map<Element<dim>*,uint32_t>::const_iterator  nbit( nbor_elmts.begin() );
-    assert( (*nbit).first != nullptr );
-    in_out_elements.push_back( (*nbit).first );
-  }
-  else if ( nbor_elmts.size() == 2U ) {
-    // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
-    // -------------------------------------------------------------------------------------------------------------
-    vector<double>  enrml, fnrml;
-    e.UnitNormal( enrml );
-    typename map<Element<dim>*,uint32_t>::const_iterator  nbit( nbor_elmts.begin() );
-    bool inside_elmt_found( false );
-    bool outside_elmt_found( false );
-    pair<Element<dim>*, Element<dim>*> nbors;
-    pair<uint32_t,uint32_t> faces;
-
-    // first element
-    // -------------
-    assert( (*nbit).first != nullptr );
-    faces.first = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.first, fnrml );
-    double dotproduct( 0. );
-    for ( size_t k = 0U; k < dim; ++k )
-      dotproduct += enrml[k] * fnrml[k];
-
-    // if the projection is negative, the first element lies on the outside
-    if ( dotproduct < 0. ) {
-      nbors.second = (*nbit).first;
-    }
-    else {
-      nbors.first = (*nbit).first;
-    }
-    nbit++;
-    
-    // second element
-    // --------------
-    assert( (*nbit).first != nullptr );
-    faces.second = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.second, fnrml );
-    dotproduct = 0.;
-    for ( auto k{0U}; k < dim; ++k )
-      dotproduct += enrml[k] * fnrml[k];
-
-    // if the projection is negative, the second element lies on the outside
-    if ( dotproduct < 0. ) {
-      // checking that we have no duplication here
-      assert( outside_elmt_found == false );
-      nbors.second = (*nbit).first;
-    }
-    else {
-      assert( inside_elmt_found == false );
-      nbors.first = (*nbit).first;
-    }
-
-    in_out_elements.push_back( nbors.first );
-    in_out_elements.push_back( nbors.second );
-    
-  }
-  else{
-    return false;
-  }
-
-  return true;
-} // end higherDimensionalNeighbors
-
-template<> bool  higherDimensionalNeighbors( const Element<1U>& e, vector<Element<1U>*>& )
-{
-  throw logic_error( "higherDimensionalNeighbor(in BoundaryInterface: there should be no boundaries in 1D model" );
-  return false;
-}
-
-template bool  higherDimensionalNeighbors( const Element<2U>&, vector<Element<2U>*>& );
-template bool  higherDimensionalNeighbors( const Element<3U>&, vector<Element<3U>*>& );
 
 
-
-/**
-     higherDimensionalNeighbor() - finds a higher-dimensional element, one face of which
-     matches  the input supplied lower-dimensional element.
-     
-     @return pointer to the higher-dimensional adjacent element or NULL when not found.
-     
-     @return face of the higher-dimensional element that matches the lower-dim element
-     
-     @return material ID of the higher-dimensional element; if it does not exist, NaN is returned.
-     @note an undefined material key is accepted, but in this case NaN will be returned.
- 
-     The discovered element is considered to be located on the inside of the lower-dim element,
-     hence its normal ought to be pointing away from it, else there is an orientation problem.
- 
-     @attention assumptions
-     - assumes that the nodes and elements in the entire model domain are numbered continuously
-     
-     application
-     - use this function for finding the higher-dimensional neighbor of a surface element that sits on the
-       outside boundary of the model
- 
-     @test SKM 22/8/2018 - fixed a bug where element returned had lower spatial dimensional than supplied
-     element.
- 
-*/
-template<uint32_t dim>
-const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, const csmp::Index& mtrl_key,
-                                                     uint32_t& local_face_number_of_e, double& material_ID  )
- {
-     if constexpr ( dim == 3 ) assert( e.IsSurfaceElement() );
-     if constexpr ( dim == 2 ) assert( e.IsLineElement() );
-     assert( mtrl_key.type == SCALAR );
-     assert( mtrl_key.place == ELEMENT || mtrl_key.place == UNDEFINED );
-
-     // 1. looping over the parent elements of the nodes searching their faces for ones that are shared with the lower dimensional element
-     // ----------------------------------------------------------------------------------------------------------------------------------
-     // making a set of element nodes to later identify faces by comparison
-     set<size_t>   node_set, test_set;
-   
-     const size_t  nodes(e.Nodes());
-     for ( uint32_t i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
-   
-     const csmp::Element<dim>*  nbor_elmt(nullptr);
-     vector<uint32_t>           fnids;
-   
-     // since the same element may be discovered by each of the face nodes
-     // the loop is stopped after the first discovery
-     for ( auto i{0U}; i<nodes; i++ ) {
-          const auto parents(e.N(i)->Parents());
-          for ( auto j{0U}; j<parents; ++j ) {
-               const Element<dim>* const eptr(e.N(i)->Parent(j));
-               // only if the element is not the same and also of a different type
-               if ( eptr != &e and
-                    eptr->FE_Type() != e.FE_Type() and
-                    eptr->Nodes() >= e.Nodes() )
-                 {
-                   const auto faces(eptr->Faces());
-                   for ( auto k{0U}; k<faces; ++k ) {
-                         eptr->FE()->NodesOfFace( k, fnids );
-                         size_t fnodes(fnids.size());
-                         for ( size_t l{0U}; l<fnodes; ++l )
-                           test_set.insert( eptr->N( fnids[l] )->Idx() );
-                         // if the face is shared the element and its face are recorded
-                         if ( node_set == test_set ) {
-                              // storing the pointer to this element and its local face number
-                              // making sure that no duplicates are received
-                              nbor_elmt = eptr;
-                              local_face_number_of_e = k;
-                              break;
-                           }
-                         test_set.clear();
-                     }
-                 }
-            }
-       }
-    assert( nbor_elmt != nullptr );
-
-     if constexpr ( dim == 3 ) {
-           if (e.IsVolumeElement())
-             assert( nbor_elmt->IsVolumeElement() );
-           else if (e.IsSurfaceElement())
-             assert( nbor_elmt->IsVolumeElement() );
-           else if (e.IsLineElement())
-             assert( nbor_elmt->IsSurfaceElement() or  nbor_elmt->IsVolumeElement() );
-       }
-     if constexpr ( dim == 2 ) {
-           if (e.IsSurfaceElement())
-             assert( nbor_elmt->IsSurfaceElement() );
-           else if (e.IsLineElement())
-             assert( nbor_elmt->IsSurfaceElement() );
-       }
-   
-    // 2. drawing the results
-    // -------------------------------------------------------------------------------------------------------------
-    material_ID = ( nbor_elmt != nullptr && mtrl_key.place != UNDEFINED )
-                  ? nbor_elmt->Read(mtrl_key) : numeric_limits<double>::quiet_NaN();
-   
-    return move(nbor_elmt);
-   
- } // end higherDimensionalNeighbor
-
-
-// STUB
-template<>
-const Element<1U>* const higherDimensionalNeighbor( const Element<1U>& e, const csmp::Index&, uint32_t&, double& )
- {
-    throw logic_error("higherDimensionalNeighbor(in BoundaryInterface: there should not be any boundaries in a 1D model.");
-    return &e;
- }
-
-
-template const Element<2U>* const higherDimensionalNeighbor( const Element<2U>&, const csmp::Index&, uint32_t&, double& );
-template const Element<3U>* const higherDimensionalNeighbor( const Element<3U>&, const csmp::Index&, uint32_t&, double& );
-
-// TESTING
-/*
-if ( dim == 2 && nbor_elmt->IsLineElement() ) {
-     cerr <<"\nhigherDimensionalNeighbor: potentially found duplicate edge elements; candidates are:\n";
-     e.Out();
-     cerr <<"\n\nand:\n";
-     nbor_elmt->Out();
-  }
-*/   
 
 
 
@@ -895,7 +647,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
       {
           // 2.1.1 identifying neighbors, facing relations, and juxtaposed materials for current element
-          FaceConstructionData  fdata(higherDimensionalNeighbors( *(*eit), mtrl_key ));
+          FaceConstructionData  fdata( higherDimensionalNeighbors( *(*eit), mtrl_key ) );
         
           // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
           pair<map<pair<long,long>,uint32_t>::iterator,bool>  it=patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
@@ -1073,8 +825,13 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
  } // end CreateInternalBoundaryFrom
 
 
-
-
+// DEBUGGING
+/*
+vector<double> unrml;
+(*eit)->UnitNormal( unrml );
+if ( eit == subdomain.ElementsBegin() ) cerr <<"\n"<< subdomain.Name() <<" printing element normals:";
+cerr <<"\n\t\t"<< (*eit)->Idx() <<": "<< unrml[0] <<" "<< unrml[1];
+*/
 
 /* OLD CODE THAT WAS USED TO CREATE THE CONNECTIVITY BETWEEN FACES NOW DONE IN THE MESH MANAGER
 
