@@ -2621,6 +2621,8 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 2 )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
+          else if ( rdim.second == 1 )
+            cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
      cout <<"\n\tNon-unique regions of model:\n";
@@ -2632,6 +2634,8 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 2 )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
+          else if ( rdim.second == 1 )
+            cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
      cout << endl << endl;

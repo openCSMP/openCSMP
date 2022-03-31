@@ -3034,8 +3034,8 @@ void  VData::EstablishElementConnectivity2D()
 size_t VData::SwitchCornerTriangles2D()
  {
     if ( HybridElementTypeMesh() ) {
-         cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: mesh contains corner-spanning triangles,";
-         cout <<" therefore this method cannot be applied because it cannot simultaneously fix the adjacent line elements that may also be contained in it.\n";
+         cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: while mesh contains corner-spanning triangles ";
+         cout <<" this method cannot be applied because it cannot simultaneously fix the adjacent line elements yet that are contained in the VSet.\n";
          cout <<" Please improve method. or fix corner elements in meshing tool."<< endl;
          return 0U;
       }

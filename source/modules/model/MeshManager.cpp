@@ -1679,8 +1679,8 @@ size_t MeshManager<dim>::Delete( typename vector<Node<dim>*>::iterator first,
     
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
-                                 typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::const_iterator first,
+                                 typename vector<Element<dim>*>::const_iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1710,7 +1710,7 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
                auto colony_it{ elements_.get_iterator( const_cast<Element<dim>*>(*first) ) };
                assert( colony_it!= elements_.end() );
                elements_.erase( colony_it );
-               (*first) = nullptr;
+ //              (*first) = nullptr;
                first++;
             }
        }

@@ -478,13 +478,13 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
     if ( dotproduct < 0. ) {
          nbors.second       = (*nbit).first->Idx();
          if ( mtrl_key.place != UNDEFINED )
-           materials.second   = static_cast<long>((*nbit).first->Read( mtrl_key ));
+           materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
          outside_elmt_found = true;
       }
     else {
          nbors.first        = (*nbit).first->Idx();
          if ( mtrl_key.place != UNDEFINED )
-           materials.first    = static_cast<long>((*nbit).first->Read( mtrl_key ));
+           materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
          inside_elmt_found  = true;
       }
     nbit++;
@@ -522,6 +522,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
                                    static_cast<long>(e.Read( mtrl_key)) );
     else
       return FaceConstructionData( e.Idx(), nbors, faces, materials, -1 );
+      
  } // end higherDimensionalNeighbors
 
 
@@ -541,16 +542,16 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& 
   // -----------------------------------------------------------------------------------------------------------------------------
   // making a set of element nodes to later identify faces by comparison
   set<size_t>  node_set, test_set;
-  const size_t nodes( e.Nodes() );
+  const uint32_t nodes( e.Nodes() );
   for ( auto i{0U}; i<nodes; ++i ) node_set.insert( e.N( i )->Idx() );
-  map<Element<dim>*, size_t>  nbor_elmts;
+  map<Element<dim>*,uint32_t>  nbor_elmts;
   vector<uint32_t> fnids;
   for ( auto i{0U}; i<nodes; i++ ) {
     const auto parents( e.N( i )->Parents() );
     for ( auto j{0U}; j<parents; ++j ) {
       Element<dim>* eptr( e.N( i )->Parent( j ) );
       const auto faces( eptr->Faces() );
-      for ( auto k = 0U; k<faces; ++k ) {
+      for ( auto k{0U}; k<faces; ++k ) {
         eptr->FE()->NodesOfFace( k, fnids );
         auto fnodes( fnids.size() );
         for ( auto l = 0U; l<fnodes; ++l )
@@ -567,7 +568,7 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& 
   }
 
   if( nbor_elmts.size() == 1U ){
-    typename map<Element<dim>*, size_t>::const_iterator  nbit( nbor_elmts.begin() );
+    typename map<Element<dim>*,uint32_t>::const_iterator  nbit( nbor_elmts.begin() );
     assert( (*nbit).first != nullptr );
     in_out_elements.push_back( (*nbit).first );
   }
@@ -576,11 +577,11 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& 
     // -------------------------------------------------------------------------------------------------------------
     vector<double>  enrml, fnrml;
     e.UnitNormal( enrml );
-    typename map<Element<dim>*, size_t>::const_iterator  nbit( nbor_elmts.begin() );
+    typename map<Element<dim>*,uint32_t>::const_iterator  nbit( nbor_elmts.begin() );
     bool inside_elmt_found( false );
     bool outside_elmt_found( false );
     pair<Element<dim>*, Element<dim>*> nbors;
-    pair<size_t, size_t> faces;    
+    pair<uint32_t,uint32_t> faces;
 
     // first element
     // -------------
@@ -606,7 +607,7 @@ bool  higherDimensionalNeighbors( const Element<dim>& e, vector<Element<dim>*>& 
     faces.second = (*nbit).second;
     (*nbit).first->UnitNormalToFace( faces.second, fnrml );
     dotproduct = 0.;
-    for ( size_t k = 0U; k < dim; ++k )
+    for ( auto k{0U}; k < dim; ++k )
       dotproduct += enrml[k] * fnrml[k];
 
     // if the projection is negative, the second element lies on the outside
@@ -640,6 +641,8 @@ template<> bool  higherDimensionalNeighbors( const Element<1U>& e, vector<Elemen
 template bool  higherDimensionalNeighbors( const Element<2U>&, vector<Element<2U>*>& );
 template bool  higherDimensionalNeighbors( const Element<3U>&, vector<Element<3U>*>& );
 
+
+
 /**
      higherDimensionalNeighbor() - finds a higher-dimensional element, one face of which
      matches  the input supplied lower-dimensional element.
@@ -667,7 +670,7 @@ template bool  higherDimensionalNeighbors( const Element<3U>&, vector<Element<3U
 */
 template<uint32_t dim>
 const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, const csmp::Index& mtrl_key,
-                                                     size_t& local_face_number_of_e, double& material_ID  )
+                                                     uint32_t& local_face_number_of_e, double& material_ID  )
  {
      if constexpr ( dim == 3 ) assert( e.IsSurfaceElement() );
      if constexpr ( dim == 2 ) assert( e.IsLineElement() );
@@ -683,7 +686,7 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
      for ( uint32_t i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
    
      const csmp::Element<dim>*  nbor_elmt(nullptr);
-     vector<uint32_t>             fnids;
+     vector<uint32_t>           fnids;
    
      // since the same element may be discovered by each of the face nodes
      // the loop is stopped after the first discovery
@@ -741,17 +744,18 @@ const Element<dim>* const higherDimensionalNeighbor( const Element<dim>& e, cons
    
  } // end higherDimensionalNeighbor
 
+
 // STUB
 template<>
-const Element<1U>* const higherDimensionalNeighbor( const Element<1U>& e, const csmp::Index&, size_t&, double& )
+const Element<1U>* const higherDimensionalNeighbor( const Element<1U>& e, const csmp::Index&, uint32_t&, double& )
  {
-    throw logic_error("higherDimensionalNeighbor(in BoundaryInterface: there should be no boundaries in 1D model");
+    throw logic_error("higherDimensionalNeighbor(in BoundaryInterface: there should not be any boundaries in a 1D model.");
     return &e;
  }
 
 
-template const Element<2U>* const higherDimensionalNeighbor( const Element<2U>&, const csmp::Index&, size_t&, double& );
-template const Element<3U>* const higherDimensionalNeighbor( const Element<3U>&, const csmp::Index&, size_t&, double& );
+template const Element<2U>* const higherDimensionalNeighbor( const Element<2U>&, const csmp::Index&, uint32_t&, double& );
+template const Element<3U>* const higherDimensionalNeighbor( const Element<3U>&, const csmp::Index&, uint32_t&, double& );
 
 // TESTING
 /*
@@ -837,7 +841,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
           ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", "model contains no unique regions; cannot proceed." );
           return make_pair( set<string>({}), false );
       }
-    // verifying that we are indeed dealing with a region of surface elements only and that their normals all point into same direction
+    // verifying that we are indeed dealing with a region of surface or line elements only and that their normals all point into same direction
     Region<dim>&  subdomain(model.Region(dim_1_region));
     if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
@@ -908,7 +912,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
           face_construction_data.push_back( fdata );
       }
     assert( face_construction_data.size() == subdomain.Elements() );
-   
+
    
     // 2.2 creating labeled boundary patches from the face-defining data
     // -----------------------------------------------------------------
@@ -962,23 +966,23 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       {
          face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
 
-// TESTING TODO: write function which compares the face construction data
-
          // for each of the new patches
          for ( vector<FaceConstructionData>::const_iterator
                pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit )
-            // creating the faces
-            // ------------------
-            // storing pointers to the new faces in the vector from which the boundary will be constructed
-            face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
-                                                                          model_domain.E( (*pit).InnerElement() ),
-                                                                          model_domain.E( (*pit).OuterElement() ),
-                                                                          (*pit).InnerElementFace(),
-                                                                          (*pit).OuterElementFace(),
-                                                                          lvsFaces, lvsIntegrationPoints ) );
-			  // remembering which faces make up the patch
-        face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
-        patch_counter++;
+           {
+              // creating the faces
+              // ------------------
+              // storing pointers to the new faces in the vector from which the boundary will be constructed
+              face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
+                                                                            model_domain.E( (*pit).InnerElement() ),
+                                                                            model_domain.E( (*pit).OuterElement() ),
+                                                                            (*pit).InnerElementFace(),
+                                                                            (*pit).OuterElementFace(),
+                                                                            lvsFaces, lvsIntegrationPoints ) );
+              // remembering which faces make up the patch
+              face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
+           }
+         patch_counter++;
       }
     patch_simplexes.clear();
     cout << "\n\tAdded "<< model.Mesh().Faces() - original_faces <<" faces to mesh.\n";
@@ -987,9 +991,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) {
-//         model.Delete<dim>( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
-      }
+    // TODO: this does not set the subdomain pointers to zero; don't touch them
+    //if ( remove_original_region )
+    //  model.Mesh().Delete( subdomain.ElementsBegin(), subdomain.ElementsEnd() );
+      
      // TODO: these are global changes! - do this only for nodes that are affected
      model.Mesh().UpdateConnectivity();
    
@@ -998,7 +1003,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // using map<size_t,string>  patch_names   from above
-    for ( size_t i{0U}; i<patch_names.size(); ++i )
+    for ( auto i{0U}; i<patch_names.size(); ++i )
        // creating the boundary patch
        AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
 

@@ -98,7 +98,7 @@ size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMA
    double res = std::numeric_limits<double>::quiet_NaN(); 
    uint32_t i{0U}; 
   
-  for ( i{0U}; i < max_iter_; ++i) {
+  for ( i = 0U; i < max_iter_; ++i) {
     SetupEquations(sg);
     res = Residual();
     if (res < target_residual_) {
