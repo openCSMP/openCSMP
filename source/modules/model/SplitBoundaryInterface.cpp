@@ -903,8 +903,8 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
 
   // 3. Construct the connections between the new nodes, new elements and interfaces.
   //    Assign a root node and a root element for new nodes elements respectively
-  vector<Element<dim>*>  elmt_vec_to_establish_nbor_connectivity;
-  elmt_vec_to_establish_nbor_connectivity.reserve( ifelmts.size() );
+  vector<Element<dim>*>  cell_vec_to_establish_nbor_connectivity;
+  cell_vec_to_establish_nbor_connectivity.reserve( ifelmts.size() );
   
   for ( auto& ifelmt : ifelmts )
     {
@@ -919,34 +919,34 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
           new_node->Assign(new_node->Parents(), new_elmt);
         }
 
-      elmt_vec_to_establish_nbor_connectivity.push_back(new_elmt);
+      cell_vec_to_establish_nbor_connectivity.push_back(new_elmt);
     }
 
   // update the neighbor connectivity of new region
   // TODO: potential manifolds have to be disambiguated 
-  establishNeighborConnectivity( elmt_vec_to_establish_nbor_connectivity, false, false ); 
+  establishNeighborConnectivity( cell_vec_to_establish_nbor_connectivity, false, false ); 
 
   // for each contiguous patch of the new region supply a pointer any of its elements into mesh manager 
-  sort( elmt_vec_to_establish_nbor_connectivity.begin(), elmt_vec_to_establish_nbor_connectivity.end() );
+  sort( cell_vec_to_establish_nbor_connectivity.begin(), cell_vec_to_establish_nbor_connectivity.end() );
   set<Element<dim>*>    contiguous_subset;
   vector<Element<dim>*> leftovers;
   
-  while ( !elmt_vec_to_establish_nbor_connectivity.empty() ) 
+  while ( !cell_vec_to_establish_nbor_connectivity.empty() ) 
     {
        // finding contiguous element patch and inserting its first element into the root element vector
-       floodFill( (*elmt_vec_to_establish_nbor_connectivity.begin()), contiguous_subset );
+       floodFill( (*cell_vec_to_establish_nbor_connectivity.begin()), contiguous_subset );
        // if the split boundary is already contiguous
-       if ( contiguous_subset.size() == elmt_vec_to_establish_nbor_connectivity.size() ) break;
-       // removing the pointers to the recovered elements from 'elmt_vec_to_establish_nbor_connectivity'
-       leftovers.reserve( elmt_vec_to_establish_nbor_connectivity.size() - contiguous_subset.size() );
+       if ( contiguous_subset.size() == cell_vec_to_establish_nbor_connectivity.size() ) break;
+       // removing the pointers to the recovered elements from 'cell_vec_to_establish_nbor_connectivity'
+       leftovers.reserve( cell_vec_to_establish_nbor_connectivity.size() - contiguous_subset.size() );
        for ( typename vector<Element<dim>*>::const_iterator 
-             it=elmt_vec_to_establish_nbor_connectivity.begin(); it!=elmt_vec_to_establish_nbor_connectivity.end(); ++it )
+             it=cell_vec_to_establish_nbor_connectivity.begin(); it!=cell_vec_to_establish_nbor_connectivity.end(); ++it )
          // copy remaining elements into the leftover vector   
          if ( contiguous_subset.count( (*it) ) == 0 )
            leftovers.push_back( (*it) ); 
 
        // assigning result vector to repeat operation                
-       elmt_vec_to_establish_nbor_connectivity = leftovers;
+       cell_vec_to_establish_nbor_connectivity = leftovers;
        // contiguous_subset.clear(); - done in floodfill
        leftovers.clear();
     }

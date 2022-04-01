@@ -87,16 +87,16 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 {
   // building the face vector
   // ------------------------
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
   const size_t  n_elements{ mesh.Elements() }; // needs to be subtracted accessing the face container
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
+    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
+    this->cell_vec_.push_back( &(*next(mesh.FacesBegin(),i-n_elements)) );
 
   // building the node vector
   // ------------------------
@@ -151,17 +151,17 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
     throw csmp::Exception( ERROR, "Boundary(reconstructor)",
                           "error Face numbering is expected to start at the number of elements.");
   
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior faces
   for ( size_t i : info.interior_elmts )
     if( (i - elements) < faces.size() )
-      this->elmt_vec_.push_back( faces[i - elements] );
+      this->cell_vec_.push_back( faces[i - elements] );
 
   // assigning pointers to the perimeter faces
   for ( size_t i : info.perimeter_elmts )
     if ( (i - elements) < faces.size() )
-      this->elmt_vec_.push_back( faces[i - elements] );
+      this->cell_vec_.push_back( faces[i - elements] );
 
   // building the node vector
   // ------------------------
@@ -219,7 +219,7 @@ Boundary<dim>::Boundary( const string& boundary_name,
     boundaryFlag_( flag )
 {
   // moving the supplied Face pointers into the element storage
-  this->elmt_vec_.assign( facesBegin, facesEnd );
+  this->cell_vec_.assign( facesBegin, facesEnd );
   
   // initialising node pointer vector, sorting nodes and elements, and creating boundary face vector
   Initialize( flag );
@@ -474,9 +474,9 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
 
   switch ( idx.place ) {
     case FACE: {
-      data.Reset( idx, this->elmt_vec_.size(), var );
+      data.Reset( idx, this->cell_vec_.size(), var );
       for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ ) {
         (*eit)->Read( idx, var );
         data[(*eit)->Idx()] = var;
       }
@@ -495,7 +495,7 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data 
       data.Reset( idx, this->IntegrationPoints(), var );
       size_t counter( 0U );
       for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
         for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
           (*eit)->Read( i, idx, var );
@@ -612,7 +612,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
     case FACE:
       //assert( this->Elements() == vdata.Size() );
       for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
         (*eit)->Store( idx, vdata[(*eit)->Idx()] );
       break;
     case NODE:
@@ -629,7 +629,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
       size_t  counter( 0U );
       //assert( this->IntegrationPoints() == vdata.Size() );
       for ( typename vector<csmp::Face<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
         for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
@@ -726,7 +726,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   this->RenumberElements();
   this->RenumberNodes();
   cerr <<"\nBoundary<"<< dim <<">::Initialize: '"<< this->Name() <<"': printing element id(nodes): and neighbor ids";
-  for ( auto it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); ++it )
+  for ( auto it=this->cell_vec_.begin(); it!=this->cell_vec_.end(); ++it )
   {
   cerr <<"\n\t"<< (*it)->Idx() <<" (";
   for ( auto i{0U}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
@@ -749,7 +749,7 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
 template<uint32_t dim>
 bool csmp::Boundary<dim>::IsExternal() const
 {
-    for ( const auto& it : this->elmt_vec_ )
+    for ( const auto& it : this->cell_vec_ )
       // perhaps create method inside of Face to check whether it lies on the outside of the model
       if ( it->OuterParent() == nullptr ) return true;
     return false;
@@ -831,7 +831,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
 
   // prepping container for a max of total region element count
-  this->elmt_vec_.reserve( region.Elements() );
+  this->cell_vec_.reserve( region.Elements() );
 
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
@@ -854,7 +854,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       if ( inner_outer_elements.second != nullptr ) {
           pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements.first, inner_outer_elements.second );
           // create new internal face
-          this->elmt_vec_.push_back( meshManager.ConstructFaceFromElement( (*it),
+          this->cell_vec_.push_back( meshManager.ConstructFaceFromElement( (*it),
                                                                             inner_outer_elements.first, inner_outer_elements.second,
                                                                             face_ids.first, face_ids.second,
                                                                             lvsFaces, lvsIntegrationPoints ) );
@@ -867,12 +867,12 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
                face++;
             }
           // create new boundary face
-          this->elmt_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements.first, face,
+          this->cell_vec_.push_back( meshManager.AddBoundaryFace( inner_outer_elements.first, face,
                                                                   lvsFaces, lvsIntegrationPoints ) );
         }
       
        // giving the new Face the same number as that of the element
-       this->elmt_vec_.back()->Idx( cell_number++ );
+       this->cell_vec_.back()->Idx( cell_number++ );
        
     } // region elements
 
@@ -886,7 +886,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
             // since the mapping between elements and faces only exists in this subdomain
             // outside elements cannot be considered
             assert ( (*it)->Neighbor(i) != nullptr );
-            this->elmt_vec_[elmt]->Assign( i, this->elmt_vec_[ (*it)->Neighbor(i)->Idx()] );
+            this->cell_vec_[elmt]->Assign( i, this->cell_vec_[ (*it)->Neighbor(i)->Idx()] );
          }
        elmt++;
     }
@@ -897,7 +897,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
        for ( auto i{0U}; i<n_neighbors; ++i )
          // if the perimeter element neighbor is contained in the interior elements of region an assignment is made
          if ( (*it)->Neighbor(i) != nullptr && region.Contains( (*it)->Neighbor(i) ) )
-           this->elmt_vec_[elmt]->Assign( i, this->elmt_vec_[ (*it)->Neighbor(i)->Idx()] );
+           this->cell_vec_[elmt]->Assign( i, this->cell_vec_[ (*it)->Neighbor(i)->Idx()] );
        elmt++;
     }
 
@@ -912,8 +912,8 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
 
 // DEBUG - can all elements of the region be reached by a floodfill? (NOPE)
 //set<Face<dim>*>  cells_contiguous_subset;
-//findContiguousMeshPatch( *(this->elmt_vec_[0]), cells_contiguous_subset );
-//assert( cells_contiguous_subset.size() == this->elmt_vec_.size() );
+//findContiguousMeshPatch( *(this->cell_vec_[0]), cells_contiguous_subset );
+//assert( cells_contiguous_subset.size() == this->cell_vec_.size() );
 // DEBUG - neighbors after assignment
 /*
 cerr <<"\n\nRegion "<< region.Name() <<"\n";
@@ -926,7 +926,7 @@ for ( auto& it : region.CellVector() ) {
 cerr << endl;
 
 cerr <<"\n\nBoundary "<< region.Name() <<"\n";
-for ( auto& it : this->elmt_vec_ ) {
+for ( auto& it : this->cell_vec_ ) {
     cerr <<"\n\tFace "<< it->Idx() <<": nbors: ";
     for ( auto i{0U}; i<it->Neighbors(); ++i )
       if ( it->Neighbor(i) == nullptr ) cerr <<" null";
@@ -946,10 +946,10 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.notice( ERROR, "Boundary<dim>::AccumulateByNumber",
                       "user-supplied face-number vector is empty. Nothing is done." );
 
-  if ( !this->elmt_vec_.empty() ) {
+  if ( !this->cell_vec_.empty() ) {
       csmp_error.notice( WARNING, "Boundary<dim>::AccumulateByNumber",
                          "Boundary is not empty", "erasing all members..." );
-      this->elmt_vec_.clear();
+      this->cell_vec_.clear();
     }
 
   // eliminating potential duplicates from element index vector
@@ -968,21 +968,21 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   // creating the element vector for the region
   // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
   const auto offset = mesh.Elements();
-  this->elmt_vec_.reserve( cell_ids.size() );
+  this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
        const auto face = idx - offset;
        assert( face < mesh.Faces() );
        Face<dim>* fptr = &(*next(mesh.FacesBegin(),face));
        assert( fptr != nullptr );
        assert( fptr->Idx() == idx );
-       this->elmt_vec_.push_back( fptr );
+       this->cell_vec_.push_back( fptr );
     }
     
   // creating node vector
   if ( this->node_vec_.empty() ) this->node_vec_.clear();
   this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
-  for ( auto& it : this->elmt_vec_ ) {
+  for ( auto& it : this->cell_vec_ ) {
        const auto n_nodes{it->Nodes()};
        for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
@@ -995,7 +995,7 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
   this->IdentifyPerimeter();
   
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end AccumulateByNumber
 
@@ -1021,7 +1021,7 @@ bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterato
        return false;
     }
     
-  this->elmt_vec_.assign( facesBegin, facesEnd );
+  this->cell_vec_.assign( facesBegin, facesEnd );
 
   // initialize boundary essentials
   Initialize( AtBoundary() );
@@ -1057,7 +1057,7 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
 
   // reserving storage for boundary elements
   // logic: the number of faces created can only be slightly larger than the number of boundary elements
-  this->elmt_vec_.reserve( region.PerimeterElements() );
+  this->cell_vec_.reserve( region.PerimeterElements() );
 
   // looping over the perimeter elements of the region
   for ( auto i = region.InteriorElements(); i<region.Elements(); ++i )
@@ -1071,7 +1071,7 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
       for ( auto j{0U}; j<perimeter_faces; ++j ) {
            // if this indeed an element at the model boundary
            if ( region.E(i)->Neighbor(j) == nullptr ) {
-               this->elmt_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
+               this->cell_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
                                                                        lvsFaces, lvsIntegrationPoints ) );
              }
            // if this will be a Face in the interior of the model
@@ -1083,23 +1083,23 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
                     if ( region.E(i)->Neighbor(j) == region.E(i) ) shared_face = k;
                     break;
                  }
-               this->elmt_vec_.push_back( meshManager.AddFace( region.E(i), j,
+               this->cell_vec_.push_back( meshManager.AddFace( region.E(i), j,
                                                                region.E(i)->Neighbor(j), shared_face,
                                                                lvsFaces, lvsIntegrationPoints ) );
              }
         }
     }
   // free up excessive storage
-  vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  vector<Face<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
   
   // initialize boundary essentials
   // creating the connectivity among the new faces
   if constexpr ( dim == 3 )
     if ( this->Elements() > 1 )
-      meshManager.template BuildSurfaceConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+      meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
   if constexpr ( dim == 2 )
     if ( this->Elements() > 1 )
-      meshManager.template BuildLineConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+      meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   Initialize( boxBoundary );
 
@@ -1140,7 +1140,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
 
   // reserving storage for boundary elements (logic: the number of faces created cannot be
   // larger than the minimum number boundary elements of the two neighboring groups)
-  this->elmt_vec_.reserve( min( region1.PerimeterElements(), region2.PerimeterElements() ) );
+  this->cell_vec_.reserve( min( region1.PerimeterElements(), region2.PerimeterElements() ) );
 
   // searching for elements of region1 that are neighbors of ones in region2.
   // If so, there is a shared boundary and faces or interfaces are constructed.
@@ -1169,7 +1169,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
                       if ( ePtrNeighbor->Neighbor(k) == ePtr ) face2 = k;
                       break;
                    }
-                 this->elmt_vec_.push_back( meshManager.AddFace( ePtr, face,
+                 this->cell_vec_.push_back( meshManager.AddFace( ePtr, face,
                                                                  ePtrNeighbor, face2,
                                                                  lvsFaces, lvsIntegrationPoints ) );
                  contacting_elements++;
@@ -1185,16 +1185,16 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
        return false;
     }
 
-  vector<Face<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  vector<Face<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
 
   // initialize boundary essentials
   // creating the connectivity among the new faces
   if constexpr ( dim == 3 )
     if ( this->Elements() > 1 )
-      meshManager.template BuildSurfaceConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+      meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
   if constexpr ( dim == 2 )
     if ( this->Elements() > 1 )
-      meshManager.template BuildLineConnectivity<Face>( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+      meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   Initialize( INTERNAL );
 
@@ -1255,7 +1255,7 @@ double  Boundary<dim>::Area() const
 {
   double  integrated_area( 0. );
 
-  for ( const auto& it  : this->elmt_vec_ )
+  for ( const auto& it  : this->cell_vec_ )
     integrated_area += it->Area();
 
   return integrated_area;
@@ -1290,13 +1290,13 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
     }
     else if ( prop_key.place == FACE ) {
       for ( typename vector<Face<dim>*>::const_iterator
-            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         property_integral += (*it)->Volume() * (*it)->Read( prop_key );
     }
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       ScalarVariable  sc;
       for ( typename vector<Face<dim>*>::const_iterator
-            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->PropertyValueAtBaryCenter( prop_key, sc );
         property_integral += (*it)->Volume() * sc();
       }
@@ -1312,7 +1312,7 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
     if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
       VectorVariable<dim>  unrml, vc;
       for ( typename vector<Face<dim>*>::const_iterator
-            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->UnitNormal( unrml );
         (*it)->Read( prop_key, vc );
         property_integral += dotProduct( unrml, vc );
@@ -1321,7 +1321,7 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       VectorVariable<dim>  unrml, vc;
       for ( typename vector<Face<dim>*>::const_iterator
-            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->UnitNormal( unrml );
         (*it)->PropertyValueAtBaryCenter( prop_key, vc );
         property_integral += dotProduct( unrml, vc );
@@ -1356,7 +1356,7 @@ void Boundary<dim>::Out() const
 
   // member faces
   cout << "\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
-  for ( const auto& it : this->elmt_vec_ ) {
+  for ( const auto& it : this->cell_vec_ ) {
     if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized." );
     cout << "\t\t" << it->Idx() << ": " << it->Area() << ", ";
     // Nodes
@@ -1383,7 +1383,7 @@ void Boundary<dim>::Out() const
 
   cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
   auto  bit( this->bd_face_vec_.begin() );
-  for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
+  for ( auto i = this->InteriorElements(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << i << ":";
       for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }

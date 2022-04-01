@@ -113,10 +113,10 @@ class ModelSubDomain {
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
     /// renumbers nodes in domain 0..n-1
-    size_t  RenumberElements() const;
+    size_t  RenumberCells() const;
     /// renumber cells and nodes
     void    UpdateMemberIndexes() const;
-    void    MemberElementIndexes( std::vector<size_t>& ) const;
+    void    MemberCellIndexes( std::vector<size_t>& ) const;
 
     // ----------------------------------------
     // access
@@ -135,9 +135,9 @@ class ModelSubDomain {
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
-    typename std::vector<CELL<dim>*>::const_iterator        ElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator        PerimeterElementsBegin() const;
-    typename std::vector<CELL<dim>*>::const_iterator        ElementsEnd() const;
+    typename std::vector<CELL<dim>*>::const_iterator        CellsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const;
+    typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const;
 
     /// returns the nodes that the domain shares with the given range
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
@@ -152,15 +152,15 @@ class ModelSubDomain {
     size_t            IntegrationPoints() const;
     size_t            SectorIntegrationPoints() const;
     size_t            FacetIntegrationPoints() const;
-    size_t            Elements() const;
-    size_t            InteriorElements() const;
-    size_t            PerimeterElements() const;
+    size_t            Cells() const;
+    size_t            InteriorCells() const;
+    size_t            PerimeterCells() const;
 
     // access via objects and local order in containers
     bool              Contains( const CELL<dim>* const ) const;
     bool              Contains( const Node<dim>* const ) const;
     bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
-    bool              IsPerimeterElement( const CELL<dim>* const ) const;
+    bool              IsPerimeterCell( const CELL<dim>* const ) const;
     /// number of faces of perimeter cell #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
     uint32_t          PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
@@ -174,7 +174,7 @@ class ModelSubDomain {
     /// is the node located on the surface of the model subdomain?
     bool              IsPerimeterNode( const size_t nidx ) const;
     /// does the cell have at least on face on the surface of the model subdomain?
-    bool              IsPerimeterElement( const size_t eidx ) const;
+    bool              IsPerimeterCell( const size_t eidx ) const;
 
     // ----------------------------------------
     // geometry
@@ -199,7 +199,7 @@ class ModelSubDomain {
     void AssignNodeCoordinatesTo( const char* scalar_prop, char coord );
 
     /// characteristics like 'length', 'area', 'volume' , 'aspect ratio', 'inner radius' are assigned to user-defined variable
-    void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
+    void AssignCellCharacteristicsTo( const char* characteristic, const char* var );
     
     /// writes a CSV (comma delimited ascii text) file with point coordinates, node-idx, BOX_BOUNDARY flags, and interior vs perimeter information
     void NodeAttributesToCSV();
@@ -263,12 +263,12 @@ class ModelSubDomain {
     // interpolation and extrapolation
     // ----------------------------------------
 
-    void InterpolateNodeToElementProperty( const char* nprop, const char* eprop );
+    void InterpolateNodeToCellProperty( const char* nprop, const char* eprop );
     void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* eprop );
-    void InterpolateIntegrationPointToElementProperty( const char* cprop, const char* eprop );
-    void ExtrapolateElementToIntegrationPointProperty( const char* eprop, const char* cprop );
-    void ExtrapolateElementToFacetIntegrationPointProperty( const char* eprop, const char* fipprop );
-    void ExtrapolateElementToNodeProperty( const char* eprop, const char* nprop, bool by_distance=true );
+    void InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop );
+    void ExtrapolateCellToIntegrationPointProperty( const char* eprop, const char* cprop );
+    void ExtrapolateCellToFacetIntegrationPointProperty( const char* eprop, const char* fipprop );
+    void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance=true );
     void ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop );
 
 
@@ -299,8 +299,8 @@ class ModelSubDomain {
 
     const PropertyDatabase<dim>&        pref_;
     std::string                         subdomain_name_;         ///< passed down when domain is created so that it can be referred to
-    std::vector<CELL<dim>*>             elmt_vec_;               ///< doubly sorted, interior cells first
-    std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< as in second segment of elmt_vec_
+    std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
+    std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< as in second segment of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
     size_t                              first_bd_node_ = std::numeric_limits<uint32_t>::max(); ///< begin of the perimeter nodes
     inline static int32_t               domain_count_ = 0;       ///<  reference-counting to get unique identifier for subdomains

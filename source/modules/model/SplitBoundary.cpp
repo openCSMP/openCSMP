@@ -81,10 +81,10 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
 {
   // building the interface vector (for this particular region)
   // ----------------------------------------------------------
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
   const size_t n_elements_plus_faces{ mesh.Elements() + mesh.Faces() };
-  for ( auto i : info.interior_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
-  for ( auto i : info.perimeter_elmts ) this->elmt_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
+  for ( auto i : info.interior_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
+  for ( auto i : info.perimeter_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterFacesBegin(),i-n_elements_plus_faces)) );
 
   // building the node vector
   // ------------------------
@@ -139,7 +139,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
   // 1. getting mesh manager to build interfaces according to specifications
   // -----------------------------------------------------------------------
-  this->elmt_vec_.reserve( ifset.size() );
+  this->cell_vec_.reserve( ifset.size() );
 
   // for all the interfaces of the new split boundary
   for ( auto it = ifset.begin(); it != ifset.end(); ++it )
@@ -148,19 +148,19 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
     // InterFaceSet member:   pair<pair<Element<dim>*,size_t>, pair<Element<dim>*,size_t> >
     //                        first high-dim. nbor interface at interface
     // construction with connectivity and number continueing from already existing interfaces
-    this->elmt_vec_.push_back( mesh.AddInterFace( ifset.InnerElement(it), ifset.InnerFaceID(it),
+    this->cell_vec_.push_back( mesh.AddInterFace( ifset.InnerElement(it), ifset.InnerFaceID(it),
                                                   ifset.OuterElement(it), ifset.OuterFaceID(it),
                                                   ifvars, if_ip_vars ) );
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
-  establishNeighborConnectivity( this->elmt_vec_, INSIDE );
-  establishNeighborConnectivity( this->elmt_vec_, OUTSIDE );
+  establishNeighborConnectivity( this->cell_vec_, INSIDE );
+  establishNeighborConnectivity( this->cell_vec_, OUTSIDE );
 
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------
-  this->node_vec_.reserve( this->elmt_vec_.size() );
-  for ( auto& it : this->elmt_vec_ )
+  this->node_vec_.reserve( this->cell_vec_.size() );
+  for ( auto& it : this->cell_vec_ )
     for ( auto i{0U}; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
   // sorting node vector and making it unique
   sort( this->node_vec_.begin(), this->node_vec_.end() );
@@ -252,7 +252,7 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
 template<uint32_t dim>
 INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 {
-  assert( !this->elmt_vec_.empty() );
+  assert( !this->cell_vec_.empty() );
   const auto regionElementsEnd( region.ElementsEnd() );
   const auto sbElementsEnd( this->ElementsEnd() );
   for ( auto ifit( this->ElementsBegin() ); ifit != sbElementsEnd; ++ifit )
@@ -388,7 +388,7 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 template<uint32_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
 {
-  if ( this->elmt_vec_.empty() )
+  if ( this->cell_vec_.empty() )
     throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateNodePointerVector:",
                            this->Name(), "interface vector is empty; nothing could be done." );
 
@@ -397,7 +397,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
 
   // creating the node index vector
   set<csmp::Node<dim>*>  nodes_set;
-  for ( typename vector<InterFace<dim>*>::const_iterator it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+  for ( typename vector<InterFace<dim>*>::const_iterator it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
     for ( typename vector<Node<dim>*>::size_type i{0U}; i<(*it)->FE()->Nodes(); i++ )
     {
       nodes_set.insert( (*it)->N( i, INSIDE ) );
@@ -437,10 +437,10 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
                       "user-supplied interface-number vector is empty. Nothing is done." );
 
-  if ( !this->elmt_vec_.empty() ) {
+  if ( !this->cell_vec_.empty() ) {
       csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
                          "SplitBoundary is not empty", "erasing all members..." );
-      this->elmt_vec_.clear();
+      this->cell_vec_.clear();
     }
 
   // eliminating potential duplicates from element index vector
@@ -459,19 +459,19 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   // creating the element vector for the region
   // NB: assumes that the Faces are numbered consecutively from 0..n-1, while the supplied IDs start at the number of elements
   const auto offset = mesh.Elements() + mesh.Faces();
-  this->elmt_vec_.reserve( cell_ids.size() );
+  this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
        InterFace<dim>* ifptr = &(*next(mesh.InterFacesBegin(),idx-offset));
        assert( ifptr != nullptr );
        assert( ifptr->Idx() == idx );
-       this->elmt_vec_.push_back( ifptr );
+       this->cell_vec_.push_back( ifptr );
     }
     
   // creating node vector
   if ( this->node_vec_.empty() ) this->node_vec_.clear();
   this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
-  for ( auto& it : this->elmt_vec_ ) {
+  for ( auto& it : this->cell_vec_ ) {
        const auto n_nodes{it->Nodes()};
        for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
@@ -484,7 +484,7 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
   this->IdentifyPerimeter();
   
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end AccumulateByNumber
 
@@ -505,19 +505,19 @@ bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
   const IntegrationPointVariables lvsIntegrationPoint( InterFaceIntegrationPointVariables() );
 
   // allocating SubDomain element container
-  this->elmt_vec_.clear();
-  this->elmt_vec_.reserve( boundary.Elements() );
+  this->cell_vec_.clear();
+  this->cell_vec_.reserve( boundary.Elements() );
 
   const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
   for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
     // the InterFace that is being build from the current interface
-    this->elmt_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
+    this->cell_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
 
     // free excessive allocated capacity
-  vector<InterFace<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  vector<InterFace<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
 
   // initialize splitboundary essentials 
-  establishNeighborConnectivity( this->elmt_vec_ );
+  establishNeighborConnectivity( this->cell_vec_ );
   
   this->IdentifyPerimeter();
 
@@ -576,14 +576,14 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if constexpr ( dim == 3U ) {
-      for ( auto it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsSurfaceElement() )
           integrated_area += (*it)->Area();
     }
   
   if constexpr ( dim == 2U ) {
       for ( typename vector<InterFace<dim>*>::const_iterator
-            it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ )
+            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsLineElement() )
           integrated_area += (*it)->Area();
     }
@@ -648,7 +648,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
       double prop_value;
-      for ( auto& ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->cell_vec_ ) {
         double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
         else {
@@ -665,7 +665,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == INTER_FACE ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      for ( auto& ife : this->elmt_vec_ )
+      for ( auto& ife : this->cell_vec_ )
         property_integral += ife->Area() * ife->Read( prop_key );
 
       return property_integral;
@@ -675,7 +675,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // the property value is interpolated to the interface integration points and then integrated
       // using their integration weights
       ScalarVariable  sc;
-      for ( auto& ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->cell_vec_ ) {
         const double interface_area = ife->Area( side );
         for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ) {
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
@@ -687,7 +687,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
 
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
-      for ( auto& ife : this->elmt_vec_ ) {
+      for ( auto& ife : this->cell_vec_ ) {
         const double interface_area = ife->Area( side );
         for ( auto i{0U}; i<ife->IntegrationPoints(); ++i )
           property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
@@ -703,7 +703,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     // the values projected onto the normal are integrated over the interface.
     if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
       VectorVariable<dim>  unrml, vc;
-      for ( auto& it : this->elmt_vec_ ) {
+      for ( auto& it : this->cell_vec_ ) {
         it->UnitNormal( unrml );
         it->Read( prop_key, vc );
         property_integral += dotProduct( unrml, vc ) * it->Area( side );
@@ -712,7 +712,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     // nodal properties are interpolated to the barycentre because this is where the normal is placed
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       VectorVariable<dim>  unrml, vc;
-      for ( auto& it : this->elmt_vec_ ) {
+      for ( auto& it : this->cell_vec_ ) {
         it->UnitNormal( unrml );
         it->PropertyValueAtBaryCenter( prop_key, vc );
         property_integral += dotProduct( unrml, vc ) * it->Area( side );
@@ -792,7 +792,7 @@ void SplitBoundary<dim>::Out() const
 
   size_t elmt_idx{0};
   double geom_measure{0};
-  for ( const auto& it : this->elmt_vec_ ) {
+  for ( const auto& it : this->cell_vec_ ) {
         if ( it == nullptr ) {
              cerr <<" interface pointer "<< elmt_idx <<" not valid.";
              csmp_err.notice( ERROR, "SplitBoundary<dim>::Out", "'nullptr' detected" );
@@ -807,7 +807,7 @@ void SplitBoundary<dim>::Out() const
 
   cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );
-  for ( auto i = this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
+  for ( auto i = this->InteriorElements(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << "\n\t\t"<<"interface "<< i <<": edge numbers: ";
       for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }
