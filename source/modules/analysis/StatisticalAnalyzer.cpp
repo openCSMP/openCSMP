@@ -85,7 +85,7 @@ const
        {  
           double total_volume = 0.; 
           uint32_t  n(0);
-           for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+           for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
              {
                 total_volume += volume = (*it)->Volume();
                 if ( prop_key.type == SCALAR ) {
@@ -225,7 +225,7 @@ const
                      n = (*grit).second.Nodes();
                    break;
                 case ELEMENT_INTEGRATION_POINT:
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        for ( size_t j{0U}; j<(*it)->IntegrationPoints(); j++ )
                          {
                             if ( prop_key.type == SCALAR ) {
@@ -261,7 +261,7 @@ const
                    break;
                 case ELEMENT: 
 
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
 
                           if ( prop_key.type == SCALAR ) {
@@ -296,7 +296,7 @@ const
 
                      // number of samples for total normalization
                      // -----------------------------------------
-                     n = (*grit).second.Elements();
+                     n = (*grit).second.Cells();
                   break;
                 default:
                   csmp_error.notice( ERROR, "StatisticalAnalyzer", "property placement not handled yet");
@@ -304,15 +304,13 @@ const
          // 2. normalization of results
          // ---------------------------
          if ( normalize )
-           for ( typename HistogramBins::iterator
-                 rit=result.begin(); rit!=result.end(); rit++ )
-             (*rit).second /= n;
+           for ( auto it=result.begin(); it!=result.end(); it++ )
+             (*it).second /= n;
 
          // 3. storing result map and zeroing vector for next group
          //--------------------------------------------------------
          results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,n);
-         for ( typename HistogramBins::iterator
-               rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
+         for ( auto it=result.begin(); it!=result.end(); it++ ) (*it).second = 0.;
 
      } // end for all groups
 
@@ -365,7 +363,7 @@ const
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -407,7 +405,7 @@ const
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -461,7 +459,7 @@ const
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           total_volume += fabs( volume = (*it)->Volume() );
                           // 1.1 reading the property value, taking length of vectors, and determinant of tensors
@@ -507,7 +505,7 @@ const
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,(*grit).second.Elements());
+          results[ (*grit).first ] = pair<HistogramBins,uint32_t>(result,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
 
@@ -561,7 +559,7 @@ const
         // -------------------------------------------
         const Region<dim>& subdomain(sref.Region(flow_domain));
         //    cout<<"velocity"<<endl;
-        for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); it++ )
+        for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); it++ )
         {
             // will work for BCC but not for tubes
             //total_volume += fabs( volume = (*it)->Volume() );
@@ -620,7 +618,7 @@ const
         cout<<endl;
         // 2. storing result map and zeroing vector for next group
         //--------------------------------------------------------
-        results[ flow_domain ] = pair<HistogramBins,uint32_t>(result,subdomain.Elements());
+        results[ flow_domain ] = pair<HistogramBins,uint32_t>(result,subdomain.Cells());
         for ( HistogramBins::iterator
              rit=result.begin(); rit!=result.end(); rit++ ) (*rit).second = 0.;
         
@@ -676,7 +674,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
             {
                 case NODE:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -794,7 +792,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT_INTEGRATION_POINT:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -925,7 +923,7 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
                 case ELEMENT:
                      total_volume = 0.;
-                     for ( auto it=(*grit).second.ElementsBegin(); it!=(*grit).second.ElementsEnd(); it++ )
+                     for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
                        {
                           if ( weighted_by_porosity ) porosity = (*it)->Read( poro_key );
                           total_volume += fabs( volume = (*it)->Volume() ) * porosity;
@@ -1048,11 +1046,11 @@ void StatisticalAnalyzer<dim>::RegionPropertyHistogramsElementProperty2BinningBa
 
           // 2. storing result map and zeroing vector for next group
           //--------------------------------------------------------
-          results1[ (*grit).first ] = pair<HistogramBins,uint32_t>(result1,(*grit).second.Elements());
+          results1[ (*grit).first ] = pair<HistogramBins,uint32_t>(result1,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 rit=result1.begin(); rit!=result1.end(); rit++ ) (*rit).second = 0.;
 
-          results2[ (*grit).first ] = pair<HistogramBins,uint32_t>(result2,(*grit).second.Elements());
+          results2[ (*grit).first ] = pair<HistogramBins,uint32_t>(result2,(*grit).second.Cells());
           for ( HistogramBins::iterator
                 rit=result2.begin(); rit!=result2.end(); rit++ ) (*rit).second = 0.;
 

@@ -124,7 +124,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     // Check if there are LDE's present
     bool volume_elements_present(false);
-    for ( auto e = model.Region("Model").ElementsBegin() ; e != model.Region("Model").ElementsEnd(); e++ ){
+    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
         if ((*e)->IsVolumeElement()){
             volume_elements_present=true;
@@ -132,7 +132,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     }
 //    model.Region("Model").E
-    for ( auto e = model.Region("Model").ElementsBegin() ; e != model.Region("Model").ElementsEnd(); e++ ){
+    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
         if ((dim == 2 && (*e)->IsLineElement()) || (dim == 3 && (*e)->IsSurfaceElement() && volume_elements_present))
         {
@@ -177,7 +177,7 @@ void SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>* region)
         Element<dim>* ep;
 //        FiniteElement* fe_tmp;
 #pragma omp for
-        for ( long int e= 0 ; e < region->Elements(); e++ ){
+        for ( long int e= 0 ; e < region->Cells(); e++ ){
             ep = region->E(e);
             FiniteElement* fe_tmp=ep->FE();
             // change pointer here

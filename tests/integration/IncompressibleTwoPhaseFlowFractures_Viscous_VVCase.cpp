@@ -337,8 +337,8 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::ComputeTotalMobili
     csmp::Region<dim>& mref( model_->Region( "Model" ) );
 
     // computing the total mobility
-    const auto elementsEnd( mref.ElementsEnd() );
-    for ( auto it = mref.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd( mref.CellsEnd() );
+    for ( auto it = mref.CellsBegin(); it != elementsEnd; ++it )
       {
          // setting up the relative permeability model
          saturationFunctions.Initialize( *(*it) );

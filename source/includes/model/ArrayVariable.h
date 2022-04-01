@@ -50,7 +50,7 @@ class ScalarVariable;
 
   @code
   Index eaKey( model.Database().StorageKey("element array") );
-  for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+  for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
     (*it)->Read( eaKey, av );
   @endcode
 

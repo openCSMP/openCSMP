@@ -155,7 +155,7 @@ void TopographyDrivenFlow_Example::Run()
     vtk_output.OutputDataToVTK( model, "absolute-fluid-pressure", "absolute fluid pressure", 1 );
   
     // nodal velocities for streamlines (however inaccurate at material interfaces)
-    model.ExtrapolateElementToNodeProperty( "velocity", "nodal velocity" );
+    model.ExtrapolateCellToNodeProperty( "velocity", "nodal velocity" );
     vtk_output.OutputDataToVTK( model, "nodal-velocity", "nodal velocity", 1 );
 
     cout <<"\nmain: That's it..."<< endl;

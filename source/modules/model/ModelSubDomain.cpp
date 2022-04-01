@@ -1243,7 +1243,7 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
 
 /**
 
-AssignElementCharacteristicsTo() allows to assign a number of Element
+AssignCellCharacteristicsTo() allows to assign a number of Element
 characteristics as identified by strings (second argument) to scalar physical
 variables. These characteristics are:
 
@@ -1270,7 +1270,7 @@ The characteristic "inner radius" is commonly used to find the
 appropriate resolution for an advection or visualization grid on which a
 variable is to be mapped on.
 
-AssignElementCharacteristicsTo() can be used to:
+AssignCellCharacteristicsTo() can be used to:
 - test the shape of cells in a mesh for their suitability for a
   computation (aspect ratio).
 - testing how skewed the cells got by deformation
@@ -1356,7 +1356,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
             }
       }
      else {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo",
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                              characteristic,  " entered as characteristic was not identified; nothing done");
           cout <<"\nYour options are: "<< endl;
           cout <<"\n\t inner radius"   << endl;
@@ -1364,7 +1364,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
           cout <<"\t length" << endl;
           cout <<"\t area (>=2D models)" << endl;
           cout <<"\t volume (3D models only)" << endl;
-          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::AssignElementCharacteristicsTo", "Now exciting");
+          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo", "Now exciting");
       }
 
  } // end
@@ -3338,10 +3338,10 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
 
 /**
 
-InterpolateNodePropertyToElementProperty() interpolates node property to the
+InterpolateNodePropertyToCellProperty() interpolates node property to the
 'barycenter' of the triangle. The resulting
 value is different from the result obtained by applying the interrelation
-subclass NodeToElementProperty. The Calculate() method of the latter assigns
+subclass NodeToCellProperty. The Calculate() method of the latter assigns
 the average value of the 3 cell nodes to the cell property 'eprop'.
 
 @section arguments Input Arguments
@@ -3360,7 +3360,7 @@ the two adjacent triangles which make up a square in regular-gridded meshes.
 
 If the variable placement or type of the specified properties fails to
 match the specifications outlined above,
-InterpolateNodePropertyToElementProperty() will report an error and
+InterpolateNodePropertyToCellProperty() will report an error and
 return without completing its task.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -3421,7 +3421,7 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToCellProperty( const char* nprop
 
      } // end switch
 
- } // end InterpolateNodeToElementProperty
+ } // end InterpolateNodeToCellProperty
 
 
 
@@ -3589,7 +3589,7 @@ void  ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToCellProperty( const
             }
       }
 
- } // end InterpolateIntegrationPointToElementProperty
+ } // end InterpolateIntegrationPointToCellProperty
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void  ModelSubDomain<dim,CELL>::ExtrapolateCellToIntegrationPointProperty( const char* eprop,
@@ -3665,7 +3665,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateCellToIntegrationPointProperty( const
              }
     }
 
-} // end ExtrapolateElementToIntegrationPointProperty
+} // end ExtrapolateCellToIntegrationPointProperty
 
 
 
@@ -3945,11 +3945,11 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateCellToNodeProperty( const char* eprop
             }
        }
     if ( verbose_ ) {
-        cout <<"\nModel<"<<dim<<">::ExtrapolateElementToNodeProperty: ";
+        cout <<"\nModel<"<<dim<<">::ExtrapolateCellToNodeProperty: ";
         cout <<"'" << eprop <<"' has been successfully extrapolated to '"<< nprop <<"'." << endl;
     }
 
- } // end ExtrapolateElementToNodeProperty
+ } // end ExtrapolateCellToNodeProperty
 
 
 
@@ -4950,7 +4950,7 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
     // sorting vectors and identifying perimeter cells and nodes
     IdentifyPerimeter();
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
-    // BuildPerimeterFaceVector( InteriorElements() );
+    // BuildPerimeterFaceVector( InteriorCells() );
     
     rebuilt_needed_ = false;
     
@@ -4981,7 +4981,7 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
     // sorting vectors and identifying perimeter cells and nodes
     IdentifyPerimeter();
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
-    // BuildPerimeterFaceVector( InteriorElements() );
+    // BuildPerimeterFaceVector( InteriorCells() );
     
     rebuilt_needed_ = false;
 

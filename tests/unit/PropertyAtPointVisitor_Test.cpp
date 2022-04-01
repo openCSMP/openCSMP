@@ -92,8 +92,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear1DMesh_Test( const char* me
     ErfDensity  erfc_density;
     Model1D<1U> model1DRegion( mesh_name, varfile_name, length, dx_min, dx_max, width_of_transition_zone, &erfc_density );
     Element<1>* eptr;
-    auto elements_begin    = model1DRegion.Region("Model").ElementsBegin();
-    auto elements_end      = model1DRegion.Region("Model").ElementsEnd();
+    auto elements_begin    = model1DRegion.Region("Model").CellsBegin();
+    auto elements_end      = model1DRegion.Region("Model").CellsEnd();
     auto nodes_begin       = model1DRegion.Region("Model").NodesBegin();
     auto nodes_end         = model1DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;
@@ -183,8 +183,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear2DMesh_Test( const char* me
     if ( verbose_ ) cout <<"Building Model..."<<endl;
     ANSYS_Model2D model2DRegion( mesh_name,regionfile_name,varfile_name);
     Element<2>* eptr;
-    auto elements_begin    = model2DRegion.Region("Model").ElementsBegin();
-    auto elements_end      = model2DRegion.Region("Model").ElementsEnd();
+    auto elements_begin    = model2DRegion.Region("Model").CellsBegin();
+    auto elements_end      = model2DRegion.Region("Model").CellsEnd();
     auto nodes_begin       = model2DRegion.Region("Model").NodesBegin();
     auto nodes_end         = model2DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;
@@ -279,8 +279,8 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
                                  varfile_name,
                                  true,true,true);
     Element<3>* eptr;
-    auto elements_begin    = model3DRegion.Region("Model").ElementsBegin();
-    auto elements_end      = model3DRegion.Region("Model").ElementsEnd();
+    auto elements_begin    = model3DRegion.Region("Model").CellsBegin();
+    auto elements_end      = model3DRegion.Region("Model").CellsEnd();
     auto nodes_begin       = model3DRegion.Region("Model").NodesBegin();
     auto nodes_end         = model3DRegion.Region("Model").NodesEnd();
     if ( verbose_ ) cout <<"Finished reading mesh..."<<endl;

@@ -140,8 +140,8 @@ void ModelComparator<dim>::ReadRegionElementScalarVariable( const Region<dim>& r
                                                             std::deque<ScalarVariable>& scalarDeque ) const
 {
     ScalarVariable scalarValue( PLAIN, 0. );
-    const auto elementsEnd( region.ElementsEnd() );
-    for( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd( region.CellsEnd() );
+    for( auto it = region.CellsBegin(); it != elementsEnd; ++it )
     {
         (*it)->Read( propKey, scalarValue );
         scalarDeque.push_back( scalarValue );

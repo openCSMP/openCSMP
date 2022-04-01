@@ -39,10 +39,10 @@ ExplicitFiniteVolumeTransportPHX<dim>::ExplicitFiniteVolumeTransportPHX( Model<d
         flux_out_vectors[i].resize(region_ref.Nodes());
         property_vectors[i].resize(region_ref.Nodes());
         mass_balance_vectors[i].resize(region_ref.Nodes());
-        facet_flux_vectors[i].resize( region_ref.Elements() );
+        facet_flux_vectors[i].resize( region_ref.Cells() );
         for ( typename vector<Element<dim>*>::const_iterator 
-               eit=region_ref.ElementsBegin(); 
-               eit!=region_ref.ElementsEnd(); eit++)
+               eit=region_ref.CellsBegin(); 
+               eit!=region_ref.CellsEnd(); eit++)
               facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV()->Facets() );
        }
     
@@ -225,7 +225,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFlux( const double& 
     for ( size_t i{0U}; i<flux_out_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
-        for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )
+        for ( eit=region_ref.CellsBegin(); eit!=region_ref.CellsEnd(); eit++, fvt++ )
            {
             GetUpwindMatrix( *(*eit), upwind_visitor );
             if (with_gravity)
@@ -323,7 +323,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::CalculateFluxIn( )
     for ( size_t i{0U}; i<flux_in_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
-        for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )
+        for ( eit=region_ref.CellsBegin(); eit!=region_ref.CellsEnd(); eit++, fvt++ )
             stencilPHX.DetermineFluxIn( *(*eit),
                                         facet_flux_vectors[i], flux_in_vectors[i],
                                         mass_balance_vectors[i]);
@@ -432,10 +432,10 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::AddAdvectionVariable( const char* 
    flux_out_vectors[i].resize(region_ref.Nodes());
    property_vectors[i].resize(region_ref.Nodes());
    mass_balance_vectors[i].resize(region_ref.Nodes());
-   facet_flux_vectors[i].resize( region_ref.Elements() );
+   facet_flux_vectors[i].resize( region_ref.Cells() );
    for ( typename vector<Element<dim>*>::const_iterator
-         eit=region_ref.ElementsBegin();
-         eit!=region_ref.ElementsEnd(); eit++)
+         eit=region_ref.CellsBegin();
+         eit!=region_ref.CellsEnd(); eit++)
        facet_flux_vectors[i][(*(*eit)).Idx()].resize( (*(*eit)).FV()->Facets() );
 
 }
@@ -518,7 +518,7 @@ void   ExplicitFiniteVolumeTransportPHX<dim>::DetermineFacetFluxSinglePhase( )
     for ( size_t i{0U}; i<flux_out_vectors.size(); i++ )
       {
         fvt = NodeCenteredFiniteVolumeTransport<dim>::STENCIL_DATA.begin();
-        for ( eit=region_ref.ElementsBegin(); eit!=region_ref.ElementsEnd(); eit++, fvt++ )
+        for ( eit=region_ref.CellsBegin(); eit!=region_ref.CellsEnd(); eit++, fvt++ )
               stencilPHX.DetermineFluxOut((*fvt), *(*eit),
                                           facet_flux_vectors[i], flux_out_vectors[i],
                                           pr_key[i]);

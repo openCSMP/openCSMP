@@ -91,7 +91,7 @@ void Experimental_Example::Run()
     string         variables_file("CSMP-1phase-variables.txt");
     ANSYS_Model2D  model( "BoxHalfs2D", variables_file.c_str(), false, true, true );
     Region<2U>&    line(model.Region("STANDARD"));
-    size_t         n_boundary_line_elements{ line.Elements() };
+    size_t         n_boundary_line_elements{ line.Cells() };
     size_t         n_faces_after_built{ model.Mesh().Faces() };
     // assigning some permeability values to the halves
     model.Region("MATRIX_LEFT").InputPropertyValue("permeability", makeScalar(PLAIN,1e-12) );

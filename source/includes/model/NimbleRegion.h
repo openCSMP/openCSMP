@@ -95,7 +95,7 @@ class NimbleRegion {
     size_t Nodes() const;
     size_t InteriorNodes() const;
     size_t PerimeterNodes() const;
-    size_t Elements() const;
+    size_t Cells() const;
     size_t RenumberNodes() const;
 
     // accessors
@@ -112,8 +112,8 @@ class NimbleRegion {
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const;
 
-    typename std::vector<CellType*>::const_iterator         ElementsBegin() const;
-    typename std::vector<CellType*>::const_iterator         ElementsEnd() const;
+    typename std::vector<CellType*>::const_iterator         CellsBegin() const;
+    typename std::vector<CellType*>::const_iterator         CellsEnd() const;
   
     /// writes the current element and node memberships to the console
     void Out() const;
@@ -124,8 +124,8 @@ class NimbleRegion {
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterNode","Method not implemented");};
     void UpdateMemberIndexes() const
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::UpdateMemberIndexes","Method not implemented");};    
-    bool IsPerimeterElement( const size_t eidx ) const
-        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterElement","Method not implemented");};  
+    bool IsPerimeterCell( const size_t eidx ) const
+        {throw csmp::Exception( ERROR, "NimbleRegion<dim>::IsPerimeterCell","Method not implemented");};  
     size_t SharedPerimeterNodes(typename std::vector<csmp::Node<dim>*>::const_iterator start,
                                 typename std::vector<csmp::Node<dim>*>::const_iterator end ) const
         {throw csmp::Exception( ERROR, "NimbleRegion<dim>::SharedPerimeterNodes","Method not implemented");};  

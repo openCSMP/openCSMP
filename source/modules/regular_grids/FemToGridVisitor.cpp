@@ -219,8 +219,8 @@ void FemToGridVisitor<dim>::InitializeElementGrid( size_t idx, CSMP_FEM_TYPE fe_
 template<uint32_t dim>
 void FemToGridVisitor<dim>::Visit( Region<dim>* r )
  {
-    r->RenumberElements();
-    for ( auto it=r->ElementsBegin(); it!=r->ElementsEnd(); ++it )
+    r->RenumberCells();
+    for ( auto it=r->CellsBegin(); it!=r->CellsEnd(); ++it )
       Visit( *it );
  }
 

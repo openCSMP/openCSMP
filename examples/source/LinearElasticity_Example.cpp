@@ -93,7 +93,7 @@ void LinearElasticity_Example::Run()
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
-    model.AssignElementCharacteristicsTo( "area", "area" );
+    model.AssignCellCharacteristicsTo( "area", "area" );
 
 
   // ---------------------------------------------------------------------------------------

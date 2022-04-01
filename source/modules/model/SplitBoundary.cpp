@@ -234,7 +234,7 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
       return;
       // element, interface and interface are treated the same
     case INTER_FACE:
-      for ( auto it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
+      for ( auto it = this->CellsBegin(); it != this->CellsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
@@ -253,13 +253,13 @@ template<uint32_t dim>
 INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 {
   assert( !this->cell_vec_.empty() );
-  const auto regionElementsEnd( region.ElementsEnd() );
-  const auto sbElementsEnd( this->ElementsEnd() );
-  for ( auto ifit( this->ElementsBegin() ); ifit != sbElementsEnd; ++ifit )
+  const auto regionElementsEnd( region.CellsEnd() );
+  const auto sbElementsEnd( this->CellsEnd() );
+  for ( auto ifit( this->CellsBegin() ); ifit != sbElementsEnd; ++ifit )
     {
       const Element<dim>* const innerParent( (*ifit)->Parent( INSIDE ) );
       const Element<dim>* const outerParent( (*ifit)->Parent( OUTSIDE ) );
-      for ( auto eit( region.ElementsBegin() ); eit != regionElementsEnd; ++eit )
+      for ( auto eit( region.CellsBegin() ); eit != regionElementsEnd; ++eit )
         {
           if ( (*eit) == innerParent ) return INSIDE;
           if ( (*eit) == outerParent ) return OUTSIDE;
@@ -506,10 +506,10 @@ bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
 
   // allocating SubDomain element container
   this->cell_vec_.clear();
-  this->cell_vec_.reserve( boundary.Elements() );
+  this->cell_vec_.reserve( boundary.Cells() );
 
-  const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.ElementsEnd() );
-  for ( typename vector<Face<dim>*>::const_iterator fit( boundary.ElementsBegin() ); fit != facesEnd; ++fit )
+  const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.CellsEnd() );
+  for ( typename vector<Face<dim>*>::const_iterator fit( boundary.CellsBegin() ); fit != facesEnd; ++fit )
     // the InterFace that is being build from the current interface
     this->cell_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
 
@@ -553,7 +553,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   vector<uint32_t>  fnids;
   size_t          n( 0U );
 
-  for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ )
+  for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ )
     for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
       perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
@@ -744,20 +744,20 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const V
     throw csmp::Exception( ERROR, "SplitBoundary<dim>::InputNodePropertyValue:", "This method applies to node properties only!" );
 
   if ( part == COMPLETE ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
+    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->CellsEnd() );
+    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->CellsBegin() ); ifit != ifEnd; ++ifit )
       for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == INTERIOR ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterElementsBegin() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->ElementsBegin() ); ifit != ifEnd; ++ifit )
+    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterCellsBegin() );
+    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->CellsBegin() ); ifit != ifEnd; ++ifit )
       for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
   else if ( part == PERIMETER ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->ElementsEnd() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterElementsBegin() ); ifit != ifEnd; ++ifit )
+    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->CellsEnd() );
+    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterCellsBegin() ); ifit != ifEnd; ++ifit )
       for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
         (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
   }
@@ -786,7 +786,7 @@ void SplitBoundary<dim>::Out() const
 {
   ErrorHandler& csmp_err( ErrorHandler::Instance() );
   cout <<"\nSplitBoundary<dim>::Out(): '"<< this->Name()<<"'";
-  cout <<"\n\t"<<"InterFace objects: interior: "<< this->InteriorElements() <<", perimeter: "<< this->PerimeterElements();
+  cout <<"\n\t"<<"InterFace objects: interior: "<< this->InteriorCells() <<", perimeter: "<< this->PerimeterCells();
   // TODO: output inside and outside Node objects separately
   cout <<"\n\t"<<"Node objects: interior: " << this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
 
@@ -807,7 +807,7 @@ void SplitBoundary<dim>::Out() const
 
   cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );
-  for ( auto i = this->InteriorElements(); i<this->cell_vec_.size(); i++, bit++ ) {
+  for ( auto i = this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << "\n\t\t"<<"interface "<< i <<": edge numbers: ";
       for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }

@@ -96,7 +96,7 @@ void NimbleRegion_Test::run()
 		// -------------------------------------------------------------------------
     Region<2U>&  model_domain(model2D_->Region("Model"));
     Region<2U>&  sub_domain(model2D_->Region("central"));
-    cout <<"\nrun: creating NimbleRegion object from region '"<< sub_domain.Name() <<"' with "<< sub_domain.Nodes() <<" nodes and "<< sub_domain.Elements() <<" elements.\n";
+    cout <<"\nrun: creating NimbleRegion object from region '"<< sub_domain.Name() <<"' with "<< sub_domain.Nodes() <<" nodes and "<< sub_domain.Cells() <<" elements.\n";
 		NimbleRegion<2U>  plume_region( sub_domain.NodesBegin(), sub_domain.NodesEnd() ); // will have a halo of one element extra
     plume_region.Out();
     // tested: O.K.
@@ -141,7 +141,7 @@ void NimbleRegion_Test::run()
 
     // creating a footprint of the revised region
     model2D_->InputPropertyValue("nimble elements", makeScalar(PLAIN, 0.));
-    for ( auto it=plume_region.ElementsBegin(); it!=plume_region.ElementsEnd(); ++it ) {
+    for ( auto it=plume_region.CellsBegin(); it!=plume_region.CellsEnd(); ++it ) {
          (*it)->Store( ne_key, makeScalar(PLAIN,1.) );
       }
     model2D_->InputPropertyValue("nimble nodes", makeScalar(PLAIN, 0.));

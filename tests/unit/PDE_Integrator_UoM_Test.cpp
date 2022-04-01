@@ -88,7 +88,7 @@ namespace csmp {
 
   void PDE_Integrator_UoM_Test::Reset() {
     Region<2U> region = model->Region("Model");
-    size_t elementNum = region.Elements();
+    size_t elementNum = region.Cells();
 
     // Set values on nodes and elements
     Index pressureKey = model->Database().StorageKey("fluid pressure");
@@ -106,7 +106,7 @@ namespace csmp {
       (*nIter)->Store(fluidNodeSourceKey, makeScalar(PLAIN, (*nIter)->Idx()));
     }
 
-    for (auto eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); ++eIter) {
+    for (auto eIter = region.CellsBegin(); eIter != region.CellsEnd(); ++eIter) {
       (*eIter)->Store(fluidVolumeKey, makeScalar(PLAIN, (*eIter)->Idx()));
       (*eIter)->Store(heatSourceKey, makeScalar(PLAIN, (*eIter)->Idx()) / elementNum);
       (*eIter)->Store(gravityVectorKey, makeVector(PLAIN, PLAIN, (*eIter)->BaryCenter()[0], (*eIter)->BaryCenter()[1]));

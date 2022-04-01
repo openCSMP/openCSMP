@@ -1,5 +1,6 @@
 #include "PDE_Integrator_UoM.h"
 #include "NimbleRegion.h"
+#include "ModelSubDomain.h"
 
 #if defined(_OPENMP )
 #include "omp.h"
@@ -60,7 +61,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
     // -------------------------------------------
     this->dof_per_node_ = 0U;
     this->target_.nodes = gref.Nodes();
-    this->target_.elements = gref.Elements();
+    this->target_.elements = gref.Cells();
 
 
     // ------------------------------------------------------
@@ -367,7 +368,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorLHS<dim>*>::iterator
       it_lhs = this->lhs_operators_.begin(); it_lhs != this->lhs_operators_.end(); it_lhs++)
       if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater())
-        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++ )
+        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++ )
         {
           (*it_lhs).second->GetOperands(*(*git));
           (*it_lhs).second->ComputeContribution(*(*git));
@@ -385,7 +386,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorRHS<dim>*>::iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++)
       if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater())
-        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++)
           {
             (*it_rhs).second->GetOperands(*(*git));
             (*it_rhs).second->ComputeContribution(*(*git));
@@ -407,7 +408,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_lhs = this->thread_lhs_operators_[tid].begin(); it_lhs != this->thread_lhs_operators_[tid].end(); it_lhs++) {
         if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater()) {
 #pragma omp for
-          for ( size_t e = 0; e < gref.Elements(); e++)
+          for ( size_t e = 0; e < gref.Cells(); e++)
           {
             //                    cout<<"element: "<<e<<endl;
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
@@ -442,7 +443,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_rhs = this->thread_rhs_operators_[tid].begin(); it_rhs != this->thread_rhs_operators_[tid].end(); it_rhs++) {
         if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater()) {
 #pragma omp for
-          for ( size_t e = 0; e < gref.Elements(); e++)
+          for ( size_t e = 0; e < gref.Cells(); e++)
           {
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
             fe_tmp = eit->FE(); //save old pointer.
@@ -640,7 +641,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     for (typename map<string, MathOperatorRHS<dim>*>::const_iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++ )
       if ((*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater())
-        for ( auto git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++)
           {
             (*it_rhs).second->GetOperands(*(*git));
             (*it_rhs).second->ComputeContribution(*(*git));
@@ -834,8 +835,8 @@ template class PDE_Integrator_UoM<1U, SplitBoundary>;
 template class PDE_Integrator_UoM<2U, SplitBoundary>;
 template class PDE_Integrator_UoM<3U, SplitBoundary>;
 
-template class PDE_Integrator_UoM<1U,NimbleRegion>;
-template class PDE_Integrator_UoM<2U,NimbleRegion>;
-template class PDE_Integrator_UoM<3U,NimbleRegion>;
+template class PDE_Integrator_UoM<1U, NimbleRegion>;
+template class PDE_Integrator_UoM<2U, NimbleRegion>;
+template class PDE_Integrator_UoM<3U, NimbleRegion>;
 
 } // end namespace csmp

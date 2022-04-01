@@ -135,7 +135,7 @@ void TemperatureDensityPressure_Example::Run()
     IAPWS_H2OPropertiesVisitor<1U>  properties_visitor( model, "fluid pressure" ,"fluid density","fluid viscosity");
 
     model.Accept( properties_visitor );
-    model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+    model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
   
   
     // 6. Setting up boundary conditions for the pressure iteration
@@ -197,7 +197,7 @@ void TemperatureDensityPressure_Example::Run()
          cout <<"\n\titeration "<< i+1U <<":"<< endl;
          model.Apply( hydrostatic_pressure );
          model.Accept( properties_visitor );
-         model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+         model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
          rhof += total_dissolved_solids;
          printRangeOfVariable( model, "fluid pressure" );
          printRangeOfVariable( model, "element fluid density" );

@@ -252,7 +252,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
       return;
       // element, face and interface are treated the same
     case ELEMENT:
-      for ( auto it = Region<dim>::ElementsBegin(); it != Region<dim>::ElementsEnd(); it++ )
+      for ( auto it = Region<dim>::CellsBegin(); it != Region<dim>::CellsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
@@ -569,7 +569,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
   else { //
     if ( key.place == REGION ) data.Reserve( 1U, 1U );
     else if ( key.place == NODE ) data.Reserve( this->Nodes(), this->Nodes() );
-    else if ( key.place == ELEMENT ) data.Reserve( this->Elements(), this->Elements() );
+    else if ( key.place == ELEMENT ) data.Reserve( this->Cells(), this->Cells() );
     else
       csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:", property, "output is not handled yet." );
   }
@@ -615,7 +615,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
       }
     }
     else if ( key.place == ELEMENT ) {
-      data.Reserve( this->Elements() );
+      data.Reserve( this->Cells() );
       switch ( key.type ) {
         case SCALAR: {
           ScalarVariable sc;
@@ -896,7 +896,7 @@ void Region<dim>::InputVariableFrom( const char* property,
 
   switch ( idx.place ) {
     case ELEMENT:
-      assert( this->Elements() == vdata.Size() );
+      assert( this->Cells() == vdata.Size() );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
             eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
         (*eit)->Store( idx, vdata[(*eit)->Idx()] );
@@ -1706,7 +1706,7 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
     element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.end() );
     
     // getting the elements for removal
-    for ( typename vector<Element<dim>*>::const_iterator it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it=this->CellsBegin(); it!=this->CellsEnd(); ++it )
       if ( binary_search( element_ids.begin(), element_ids.end(), (*it)->Idx() ) )
         ptrs_to_removed_elements.push_back( (*it) );
      
@@ -1756,7 +1756,7 @@ size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator 
          return 0U;
       }
       
-    const size_t n_elements{ this->Elements() };
+    const size_t n_elements{ this->Cells() };
 
     this->cell_vec_.erase( remove_if( this->cell_vec_.begin(), this->cell_vec_.end(),
                                       [&](auto x) { return binary_search( begin, end, x ); }),
@@ -1792,8 +1792,8 @@ void  Region<dim>::Add( const Region<dim>& grp )
   }
 
   // appending the elements of the second region at the end
-  this->cell_vec_.reserve( this->Elements() + grp.Elements() );
-  for ( auto it=grp.ElementsBegin(); it!=grp.ElementsEnd(); ++it )
+  this->cell_vec_.reserve( this->Cells() + grp.Cells() );
+  for ( auto it=grp.CellsBegin(); it!=grp.CellsEnd(); ++it )
     this->cell_vec_.push_back( const_cast<Element<dim>*>(*it) );
     
   // removing potential duplicates
@@ -1841,14 +1841,14 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
   // reserving storage for boundary elements (logic: the number of faces created cannot be
   // larger than the minimum number boundary elements of the two neighboring groups)
-  this->cell_vec_.reserve( std::min( region1.PerimeterElements(),
-                           region2.PerimeterElements() ) );
+  this->cell_vec_.reserve( std::min( region1.PerimeterCells(),
+                           region2.PerimeterCells() ) );
 
   // searching for elements of region1 that are neighbors of ones in group1.
   // If so, there is a shared boundary and faces or interfaces are constructed.
-  const size_t n_elements( region1.Elements() );
+  const size_t n_elements( region1.Cells() );
 
-  for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
+  for ( auto i = region1.InteriorCells(); i < n_elements; ++i )
     {
       ePtr = region1.E( i );
       const auto perimeter_faces( region1.PerimeterFaces( i ) );
@@ -1859,7 +1859,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
           // checking whether neighbor element forms part of the boundary of group2
           if ( ePtrNeighbor != nullptr )
-            if ( region2.IsPerimeterElement( ePtrNeighbor ) )
+            if ( region2.IsPerimeterCell( ePtrNeighbor ) )
               {
                 // if the neighbor is in the boundary, the new Face is build
                 femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
@@ -1924,14 +1924,14 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( a.Empty() )
-    csmp_error.notice( WARNING, "groupUnion", "first region is empty" );
+    csmp_error.notice( WARNING, "union", "first region is empty" );
   if ( b.Empty() )
-    csmp_error.notice( WARNING, "groupUnion", "second region is empty" );
+    csmp_error.notice( WARNING, "union", "second region is empty" );
 
-  res.CellVector().reserve( a.Elements() + b.Elements() );
-  for ( auto it=a.ElementsBegin(); it!=a.ElementsEnd(); ++it )
+  res.CellVector().reserve( a.Cells() + b.Cells() );
+  for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
     res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
     res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
   
   sort( res.CellVector().begin(), res.CellVector().end() );
@@ -1941,7 +1941,7 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   res.CreateNodePointerVector();
   res.IdentifyPerimeter();
 
-  return res.Elements();
+  return res.Cells();
 
 } // end groupUnion
 
@@ -1963,10 +1963,10 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
     
   // since both regions are sorted already, a will be searched
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) ||
-         binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) ||
+         binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   res.CellVector().shrink_to_fit();
@@ -1976,7 +1976,7 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
       res.IdentifyPerimeter();
     }
 
-  return res.Elements();
+  return res.Cells();
 
 } // end intersection
 
@@ -2000,10 +2000,10 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 
   // since both regions are sorted already, a will be searched first
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( !binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   res.CellVector().shrink_to_fit();
@@ -2013,7 +2013,7 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
       res.IdentifyPerimeter();
     }
 
-  return res.Elements();
+  return res.Cells();
 
 } // end difference
 
@@ -2037,15 +2037,15 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
     csmp_error.notice( WARNING, "symmetricDifference", "second region is empty" );
 
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( !binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
-  for ( auto it=a.ElementsBegin(); it!=a.ElementsEnd(); ++it )
-    if ( !binary_search( b.ElementsBegin(), b.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( b.PerimeterElementsBegin(), b.ElementsEnd(), (*it) ) )
+  for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
+    if ( !binary_search( b.CellsBegin(), b.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( b.PerimeterCellsBegin(), b.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   // removing potential duplicates
@@ -2059,7 +2059,7 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
     res.CreateNodePointerVector();
     res.IdentifyPerimeter();
   }
-  return res.Elements();
+  return res.Cells();
 
 } // end symmetricDifference
 
@@ -2077,12 +2077,12 @@ size_t  sharedElements( const Region<dim>& g1, const Region<dim>& g2 )
 {
   // ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
-  auto  first1( g1.ElementsBegin() );
-  auto  first2( g2.ElementsBegin() );
+  auto  first1( g1.CellsBegin() );
+  auto  first2( g2.CellsBegin() );
   size_t shared_elements( 0U );
 
   // comparing the interior nodes
-  while ( first1 != g1.PerimeterElementsBegin() and first2 != g2.PerimeterElementsBegin() )
+  while ( first1 != g1.PerimeterCellsBegin() and first2 != g2.PerimeterCellsBegin() )
     {
       if ( *first1 < *first2 ) ++first1;
       else if ( *first2 < *first1 ) ++first2;
@@ -2094,10 +2094,10 @@ size_t  sharedElements( const Region<dim>& g1, const Region<dim>& g2 )
     }
 
   // comparing the boundary nodes
-  first1 = g1.PerimeterElementsBegin();
-  first2 = g2.PerimeterElementsBegin();
+  first1 = g1.PerimeterCellsBegin();
+  first2 = g2.PerimeterCellsBegin();
 
-  while ( first1 != g1.ElementsEnd() and first2 != g2.ElementsEnd() )
+  while ( first1 != g1.CellsEnd() and first2 != g2.CellsEnd() )
     {
       if ( *first1 < *first2 ) ++first1;
       else if ( *first2 < *first1 ) ++first2;
@@ -2167,8 +2167,8 @@ bool  hasLowerDimensionalRepresentation<1>( const Region<1>& )
 template<uint32_t dim>
 bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( !hasLowerDimensionalRepresentation( *(*it) ) )
       return false;
@@ -2179,8 +2179,8 @@ bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsVolumeElement() )
       return true;
@@ -2191,8 +2191,8 @@ bool  containsVolumeElements( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsSurfaceElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsSurfaceElement() )
       return true;
@@ -2203,8 +2203,8 @@ bool  containsSurfaceElements( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsLineElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsLineElement() )
       return true;
@@ -2318,7 +2318,7 @@ pair<int32_t,int32_t>  elmt_dim = this->ElementSpatialDimensions();
 
 std::set<Element<dim>* > elements_considered;
 std::set<Element<dim>* > element_neighbors_to_be_considered;
-std::set<Element<dim>* > remaining_elements( this->ElementsBegin(), this->ElementsEnd() );
+std::set<Element<dim>* > remaining_elements( this->CellsBegin(), this->CellsEnd() );
 
 Element<dim>*   lowDimElement         ( NULL );
 Element<dim>*   lowDimNeighborElement ( NULL );
@@ -2331,7 +2331,7 @@ VectorVariable<dim> low_dim_neighbor_edge_unit_normal ( ANY, 0.0 );
 // Find first refence element
 typename std::vector<csmp::Element<dim>* >::const_iterator eit = this->PerimeterElementsBegin();
 lowDimElement = NULL;
-while ( eit!=this->ElementsEnd() )
+while ( eit!=this->CellsEnd() )
 {
 if( (*eit)->IsLineElement() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
 {
@@ -2348,7 +2348,7 @@ break;
 if( lowDimElement == NULL )
 throw csmp::Exception( ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "All perimeter elements of surface regions are lines! Cannot apply this method!" );
 
-while( elements_considered.size() != this->Elements() )
+while( elements_considered.size() != this->Cells() )
 {
 element_neighbors_to_be_considered.insert( lowDimElement );
 elements_considered.insert( lowDimElement );
@@ -2404,7 +2404,7 @@ remaining_elements.erase( lowDimElement );
 element_neighbors_to_be_considered.erase( lowDimElement );
 }
 
-if( elements_considered.size() != this->Elements() )
+if( elements_considered.size() != this->Cells() )
 {
 typename std::set<csmp::Element<dim>* >::const_iterator eit = remaining_elements.begin();
 lowDimElement = NULL;
@@ -2432,8 +2432,8 @@ remaining_elements.clear();
 #ifdef REGION_DEBUG
 
 VectorVariable<dim> un( ANY, 0.0 );
-typename std::vector<csmp::Element<dim>* >::const_iterator reit = this->ElementsBegin();
-while ( reit != this->ElementsEnd() )
+typename std::vector<csmp::Element<dim>* >::const_iterator reit = this->CellsBegin();
+while ( reit != this->CellsEnd() )
 {
 (*reit)->UnitNormal( un );
 std::cerr<<" UN = (";
@@ -2548,7 +2548,7 @@ double  Region<dim>::SurfaceArea() const
 
   if ( dim == 3U ) {
     // for all elements located on the region boundary
-    for ( auto i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
+    for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
       // since each element can have multiple boundary faces
       for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
         const uint32_t face( (*bit)[j] );
@@ -2580,7 +2580,7 @@ double  Region<dim>::SurfaceArea() const
   // in 2D the face is a segment the length of which has to be used
   else if ( dim == 2U ) {
     // for all surface elements on the region boundary (excluding line elements)
-    for ( size_t i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
+    for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
       if ( this->cell_vec_[i]->FE()->IsSurfaceElement() )
         for ( size_t j{0U}; j<(*bit).size(); j++ ) {
           this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
@@ -2838,8 +2838,8 @@ template<uint32_t dim>
 void Region<dim>::Out() const
 {
 cout <<"\n\n\nRegion<"<< dim <<">::Out: ";
-cout <<" member elements: interior="<< this->InteriorElements();
-cout <<", boundary="<< this->cell_vec_.size()-this->InteriorElements() <<": "<< endl;
+cout <<" member elements: interior="<< this->InteriorCells();
+cout <<", boundary="<< this->cell_vec_.size()-this->InteriorCells() <<": "<< endl;
 
 for ( typename vector<csmp::Element<dim>*>::const_iterator
 it=this->cell_vec_.begin(); it!=this->cell_vec_.end(); it++ ) {
@@ -2851,7 +2851,7 @@ throw csmp::Exception( ERROR, "Region<dim>::Out",
 
 cout <<"\n\n boundary elements and their boundary faces (current local numbering): "<< endl;
 vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
-for ( size_t i=this->InteriorElements(); i<this->cell_vec_.size(); i++, bit++ ) {
+for ( size_t i=this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
 cout <<"\nelement "<< i <<": boundary face numbers: ";
 for ( vector<ONE_BYTE_NUMBER>::const_iterator
 ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";

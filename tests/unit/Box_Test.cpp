@@ -316,7 +316,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( FRONT,  3, frontNormal );
     Box().UnitNormalTo( BACK,   3, backNormal );
 
-    for ( size_t i=model_domain.InteriorElements(); i<model_domain.Elements(); ++i ) {
+    for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i ) {
          for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
                 const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
                 assert( flag != NOT );
@@ -363,7 +363,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     //    are outward pointing and aligned
     // -----------------------------------
     Boundary<3U>  left(model.Boundary("LEFT"));
-    for ( auto it=left.ElementsBegin(); it!=left.ElementsEnd(); ++it ) {
+    for ( auto it=left.CellsBegin(); it!=left.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
@@ -375,7 +375,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
       }
    
     Boundary<3U>  right(model.Boundary("RIGHT"));
-    for ( auto it=right.ElementsBegin(); it!=right.ElementsEnd(); ++it ) {
+    for ( auto it=right.CellsBegin(); it!=right.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
@@ -387,7 +387,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
       }
    
     Boundary<3U>  bottom(model.Boundary("BOTTOM"));
-    for ( auto it=bottom.ElementsBegin(); it!=bottom.ElementsEnd(); ++it ) {
+    for ( auto it=bottom.CellsBegin(); it!=bottom.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
@@ -399,7 +399,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
       }
    
     Boundary<3U>  top(model.Boundary("TOP"));
-    for ( auto it=top.ElementsBegin(); it!=top.ElementsEnd(); ++it ) {
+    for ( auto it=top.CellsBegin(); it!=top.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
@@ -411,7 +411,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
       }
    
     Boundary<3U>  back(model.Boundary("BACK"));
-    for ( auto it=back.ElementsBegin(); it!=back.ElementsEnd(); ++it ) {
+    for ( auto it=back.CellsBegin(); it!=back.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
@@ -423,7 +423,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
       }
    
     Boundary<3U>  front(model.Boundary("FRONT"));
-    for ( auto it=front.ElementsBegin(); it!=front.ElementsEnd(); ++it ) {
+    for ( auto it=front.CellsBegin(); it!=front.CellsEnd(); ++it ) {
          if ( (*it)->IsSurfaceElement() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
@@ -500,7 +500,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
     for ( auto nit=mregion.NodesBegin(); nit!=mregion.NodesEnd(); nit++ )
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
-    for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
+    for ( auto eit=mregion.CellsBegin(); eit!=mregion.CellsEnd(); eit++ )
       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
@@ -516,7 +516,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
     for ( auto nit=mregion.NodesBegin(); nit!=mregion.NodesEnd(); nit++ )
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
-    for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
+    for ( auto eit=mregion.CellsBegin(); eit!=mregion.CellsEnd(); eit++ )
       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 
@@ -546,7 +546,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
     for ( auto nit=mregion.NodesBegin(); nit!=mregion.NodesEnd(); nit++ )
       node_flags_before.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_before;
-    for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
+    for ( auto eit=mregion.CellsBegin(); eit!=mregion.CellsEnd(); eit++ )
       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_before.push_back( (*eit)->AtBoundary(i) );
    
@@ -563,7 +563,7 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
     for ( auto nit=mregion.NodesBegin(); nit!=mregion.NodesEnd(); nit++ )
       node_flags_after.push_back( (*nit)->AtBoundary() );
     list<BOX_BOUNDARY>  elmt_flags_after;
-    for ( auto eit=mregion.ElementsBegin(); eit!=mregion.ElementsEnd(); eit++ )
+    for ( auto eit=mregion.CellsBegin(); eit!=mregion.CellsEnd(); eit++ )
       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
         elmt_flags_after.push_back( (*eit)->AtBoundary(i) );
 

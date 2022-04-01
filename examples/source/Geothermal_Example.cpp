@@ -99,10 +99,10 @@ void Geothermal_Example::Run()
   SourceVisitor<DIM>    source_calculator( model );
 
   //! transform rock properties from the nodes to the elements (why is this needed?)
-  model.ExtrapolateElementToNodeProperty( "porosity", "nodal porosity" );
-  model.ExtrapolateElementToNodeProperty( "density rock", "nodal density rock" );
-  model.ExtrapolateElementToNodeProperty( "heat capacity rock", "nodal heat capacity rock" );
-  model.ExtrapolateElementToNodeProperty( "compressibility rock", "nodal compressibility rock" );
+  model.ExtrapolateCellToNodeProperty( "porosity", "nodal porosity" );
+  model.ExtrapolateCellToNodeProperty( "density rock", "nodal density rock" );
+  model.ExtrapolateCellToNodeProperty( "heat capacity rock", "nodal heat capacity rock" );
+  model.ExtrapolateCellToNodeProperty( "compressibility rock", "nodal compressibility rock" );
 
   //! to quickly replace SAMG with LU solver when necessary, uncomment
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -220,9 +220,9 @@ void Geothermal_Example::Run()
   //! Model-wide node-property initialisation including H2O-EOS calculation of fluid density etc.
   thermal_equilibrator.SetInitialProperties( &model );
   //! extrapolation of nodal heat capacity, compressibility and density to the element
-  model.InterpolateNodeToElementProperty( "nodal total heat capacity", "total heat capacity" );
-  model.InterpolateNodeToElementProperty( "nodal total compressibility", "total compressibility" );
-  model.InterpolateNodeToElementProperty( "density liquid", "density liquid element" );
+  model.InterpolateNodeToCellProperty( "nodal total heat capacity", "total heat capacity" );
+  model.InterpolateNodeToCellProperty( "nodal total compressibility", "total compressibility" );
+  model.InterpolateNodeToCellProperty( "density liquid", "density liquid element" );
 
   //! computation of the hydraulic conductivity K=rho k / mu
   ComputeMassConductivity( model );
@@ -230,9 +230,9 @@ void Geothermal_Example::Run()
   //! initializing pressure in the model followed by a repeated fluid and rock property calculation
   model.Apply( steady_state_pressure );
   thermal_equilibrator.SetInitialProperties( &model );
-  model.InterpolateNodeToElementProperty( "nodal total heat capacity", "total heat capacity" );
-  model.InterpolateNodeToElementProperty( "nodal total compressibility", "total compressibility" );
-  model.InterpolateNodeToElementProperty( "density liquid", "density liquid element" );
+  model.InterpolateNodeToCellProperty( "nodal total heat capacity", "total heat capacity" );
+  model.InterpolateNodeToCellProperty( "nodal total compressibility", "total compressibility" );
+  model.InterpolateNodeToCellProperty( "density liquid", "density liquid element" );
 
   //! setting mass transfer and enthalphy (advected properties) to Dirich at those boundaries where p, t are Dirichlet
   model.Boundary( "LEFT" ).ChangePropertyStatus( "fluid density", DIRICH );
@@ -273,9 +273,9 @@ void Geothermal_Example::Run()
     //! update of PT dependent properties
     model.Accept( thermal_equilibrator );
     model.Accept( source_calculator );
-    model.InterpolateNodeToElementProperty( "nodal total heat capacity", "total heat capacity" );
-    model.InterpolateNodeToElementProperty( "nodal total compressibility", "total compressibility" );
-    model.InterpolateNodeToElementProperty( "density liquid", "density liquid element" );
+    model.InterpolateNodeToCellProperty( "nodal total heat capacity", "total heat capacity" );
+    model.InterpolateNodeToCellProperty( "nodal total compressibility", "total compressibility" );
+    model.InterpolateNodeToCellProperty( "density liquid", "density liquid element" );
     ComputeMassConductivity( model );
 
     //! pressure diffusion

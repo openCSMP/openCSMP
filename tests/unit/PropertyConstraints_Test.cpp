@@ -79,7 +79,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
      
      model.FormRegionFrom( "medium porosity", porosity_constraints );
      const Region<3U>& medium_porosity_domain = model.Region("medium porosity");
-     _test( medium_porosity_domain.Elements() == 100 );
+     _test( medium_porosity_domain.Cells() == 100 );
 
      return true;
  }
@@ -101,8 +101,8 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
     
     auto& gref = model.Region("Model");
     
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
+    auto eend = gref.CellsEnd();
+    for (auto eit = gref.CellsBegin(); eit != eend; ++eit) {
       if (!(*eit)->IsVolumeElement()) {
         continue;
       }

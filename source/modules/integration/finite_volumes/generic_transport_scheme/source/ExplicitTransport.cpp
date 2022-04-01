@@ -136,8 +136,8 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
          }
 
      // 2. element-by-element processing of facet fluxes and flux balances
-     const auto elements_end(subdomain_.ElementsEnd());
-     for ( auto eit=subdomain_.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain_.CellsEnd());
+     for ( auto eit=subdomain_.CellsBegin(); eit!=elements_end; ++eit )
        {
           // 1.1 computation of transport velocity from fluid pressure gradient
        
@@ -213,8 +213,8 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
          }
          
      // 2. computing volumetric flow - transport variable products, storing them in variable 'accumulation'
-     const auto elements_end(subdomain_.ElementsEnd());
-     for ( auto eit=subdomain_.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain_.CellsEnd());
+     for ( auto eit=subdomain_.CellsBegin(); eit!=elements_end; ++eit )
        {
           this->TransportVariableFluxesAndBalances( (*eit) );
        }

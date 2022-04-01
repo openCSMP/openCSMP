@@ -661,7 +661,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
                       "attempt to apply this on the application level REGION or BOUNDARY" );
  
      auto nst1 = gref.NodesBegin(), nst2 = gref.NodesEnd();
-     auto est1 = gref.ElementsBegin(), est2 = gref.ElementsEnd();
+     auto est1 = gref.CellsBegin(), est2 = gref.CellsEnd();
 
      ScalarVariable       sc;
      VectorVariable<dim>  vc;
@@ -754,7 +754,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
      // ----------------------------------------- 
      if ( application_level_ == ELEMENT_INTEGRATION_POINT ) 
        {
-          for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+          for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ )
             // looping over the constraint points inside the current element    
             for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) 
               {

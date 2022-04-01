@@ -195,7 +195,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        // checking the element that contains this point
 
        Region<2> mod_domain(model.Region("Model"));
-       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
+       for ( auto it=mod_domain.CellsBegin(); it != mod_domain.CellsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -281,7 +281,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        // checking the element that contains this point
        Region<2U>& model_domain(model.Region("Model"));
 
-       for ( auto it( model_domain.ElementsBegin() ); it != model_domain.ElementsEnd(); ++it  )
+       for ( auto it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -371,7 +371,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
        Region<2>& mod_domain(model.Region("Model"));
-       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
+       for ( auto it=mod_domain.CellsBegin(); it != mod_domain.CellsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -457,7 +457,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
        Region<2> mod_domain(model.Region("Model"));
-       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
+       for ( auto it=mod_domain.CellsBegin(); it != mod_domain.CellsEnd(); ++it  )
        {
 
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -549,7 +549,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
        // TODO: refactor this crazy code
        Region<2> mod_domain(model.Region("Model"));
 
-       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
+       for ( auto it=mod_domain.CellsBegin(); it != mod_domain.CellsEnd(); ++it  )
        {
 
 //       cout << "CurrentID " << (*it)-> Idx() <<endl;
@@ -637,7 +637,7 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
 
        // checking the element that contains this point
        Region<2> mod_domain(model.Region("Model"));
-       for ( auto it=mod_domain.ElementsBegin(); it != mod_domain.ElementsEnd(); ++it  )
+       for ( auto it=mod_domain.CellsBegin(); it != mod_domain.CellsEnd(); ++it  )
        {
 //        cout << "CurrentID " << (*it)-> Idx() <<endl;
 

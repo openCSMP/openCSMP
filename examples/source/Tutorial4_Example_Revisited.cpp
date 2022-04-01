@@ -261,7 +261,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
 
   // loop over all finite elements and identify elements that lie at the model boundary of interest (here LEFT)
   Boundary<2U>&   left = mdl.Boundary( "LEFT" );
-  for ( auto eit = left.ElementsBegin(); eit != left.ElementsEnd(); eit++ )
+  for ( auto eit = left.CellsBegin(); eit != left.CellsEnd(); eit++ )
     {
        // getting the area of the face
         double area = (*eit)->Area();

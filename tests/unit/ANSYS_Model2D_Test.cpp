@@ -49,9 +49,9 @@ namespace csmp
         cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
         cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
         cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
       }
       
  } // end create_ANSYS2D_Model
@@ -65,10 +65,10 @@ void ANSYS_Model2D_Test::run()
     Region<2>& rref( model.Region( "Model" ) );
 
     DenseMatrix<DM_MIN> dm;
-    const vector<Element<2>*>::const_iterator elementsEnd( rref.ElementsEnd() );
+    const auto elementsEnd( rref.CellsEnd() );
     try
       {    
-        for( vector<Element<2>*>::const_iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
+        for( auto it = rref.CellsBegin(); it != elementsEnd; ++it )
           (*it)->CoordinateMatrix();
       }
     catch(...)
@@ -134,10 +134,10 @@ void ANSYS_Model2D_Test::run()
     const size_t rightNodes( right.Nodes() );
     const size_t bottomNodes( bottom.Nodes() );
     const size_t topNodes( top.Nodes() );
-    const size_t leftFaces( left.Elements() );
-    const size_t rightFaces( right.Elements() );
-    const size_t bottomFaces( bottom.Elements() );
-    const size_t topFaces( top.Elements() );
+    const size_t leftFaces( left.Cells() );
+    const size_t rightFaces( right.Cells() );
+    const size_t bottomFaces( bottom.Cells() );
+    const size_t topFaces( top.Cells() );
     
     if ( verbose ) cout << "\nModel Node Count: " << rref.Nodes() << endl;
     _test( rref.Nodes() == 106 );
@@ -149,7 +149,7 @@ void ANSYS_Model2D_Test::run()
     Model<2U> modelBinIn0(bin1name);
     Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
     Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
-    _test( (*modelBinIn0.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey0) == 2. );
+    _test( (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0) == 2. );
     ArrayVariable avBin0( "nodal array", modelBinIn0.Database() );
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
     _test( avBin0 == av );
@@ -161,12 +161,12 @@ void ANSYS_Model2D_Test::run()
     _test( rightNodes == modelBinIn1.Boundary("RIGHT").Nodes() );
     _test( topNodes == modelBinIn1.Boundary("TOP").Nodes() );
     _test( bottomNodes == modelBinIn1.Boundary("BOTTOM").Nodes() );
-    _test( leftFaces == modelBinIn1.Boundary("LEFT").Elements() );
-    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Elements() );
-    _test( topFaces == modelBinIn1.Boundary("TOP").Elements() );
-    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Elements() );
+    _test( leftFaces == modelBinIn1.Boundary("LEFT").Cells() );
+    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Cells() );
+    _test( topFaces == modelBinIn1.Boundary("TOP").Cells() );
+    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Cells() );
 
-    _test( (*modelBinIn1.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey) == 2. );
+    _test( (*modelBinIn1.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey) == 2. );
     ArrayVariable avBin( "nodal array", modelBinIn1.Database() );
     (*modelBinIn1.Region("Model").NodesBegin())->Read( nodalArrayKey, avBin );
     _test( avBin == av );
@@ -254,28 +254,28 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     if ( verbose_ ) {
          interface1.Out();
          const bool renumber_elmts{true};
-         _test( printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts ) == interface1.Elements() );
+         _test( printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts ) == interface1.Cells() );
          interface2.Out();
-         _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Elements() );
+         _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Cells() );
       }
     
     // 3. The endpoints of these regions must be at the vertical model boundaries
-    _test( interface1.PerimeterElements() == 2 );
-    _test( interface2.PerimeterElements() == 2 );
+    _test( interface1.PerimeterCells() == 2 );
+    _test( interface2.PerimeterCells() == 2 );
     _test( interface1.PerimeterNodes() == 2 );
     _test( interface2.PerimeterNodes() == 2 );
     
     // 4. Are the regions contiguous (all elements are interconnected except for those at the end
     int contiguous{2}, n_missing_nbors{0};
     // interface 1
-    for ( auto it=interface1.ElementsBegin(); it!=interface1.ElementsEnd(); ++it )
+    for ( auto it=interface1.CellsBegin(); it!=interface1.CellsEnd(); ++it )
       for ( int i{0}; i<(*it)->Neighbors(); ++i )
         if ( (*it)->Neighbor(i) == nullptr )
           n_missing_nbors++;
     _test( n_missing_nbors <= contiguous );
     // interface 2
     n_missing_nbors = 0;
-    for ( auto it=interface2.ElementsBegin(); it!=interface2.ElementsEnd(); ++it )
+    for ( auto it=interface2.CellsBegin(); it!=interface2.CellsEnd(); ++it )
       for ( int i{0}; i<(*it)->Neighbors(); ++i )
         if ( (*it)->Neighbor(i) == nullptr )
           n_missing_nbors++;
@@ -284,8 +284,8 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     // 4. getting pointers to the elements at the opposite ends of the line-element sequence and checking these elements
     // interface 1
     {
-      auto eit1{ *interface1.PerimeterElementsBegin() };
-      auto eit2{ (*next(interface1.ElementsEnd(),-1)) };
+      auto eit1{ *interface1.PerimeterCellsBegin() };
+      auto eit2{ (*next(interface1.CellsEnd(),-1)) };
       _test( eit1->ConnectedNeighbors() == 1 );
       _test( eit2->ConnectedNeighbors() == 1 );
       // establishing the direction in which the line-element sequence is to be traversed
@@ -297,8 +297,8 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
     }
     // interface 2
     {
-      auto eit1{ *interface2.PerimeterElementsBegin() };
-      auto eit2{ (*next(interface2.ElementsEnd(),-1)) };
+      auto eit1{ *interface2.PerimeterCellsBegin() };
+      auto eit2{ (*next(interface2.CellsEnd(),-1)) };
       _test( eit1->ConnectedNeighbors() == 1 );
       _test( eit2->ConnectedNeighbors() == 1 );
       // establishing the direction in which the line-element sequence is to be traversed
@@ -330,18 +330,18 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
      
     // 1. accessing the line-element regions representing the boundaries between layers
     const Region<2U>& interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
-    size_t n_elmts_region1{ interface1.Elements() };
-    size_t n_elmts_region2{ interface2.Elements() };
+    size_t n_elmts_region1{ interface1.Cells() };
+    size_t n_elmts_region2{ interface2.Cells() };
     
     bool remove_original_region{false};
     pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
     const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
-    _test( boundary1.Elements() == n_elmts_region1 );
+    _test( boundary1.Cells() == n_elmts_region1 );
     
     remove_original_region=true;
     pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
     const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
-    _test( boundary2.Elements() == n_elmts_region2 );
+    _test( boundary2.Cells() == n_elmts_region2 );
 
 } // end Test_CreatInternalBoundary
 
@@ -363,14 +363,14 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
      
     // 1. creating the SplitBoundary from lower-dimensional region
-    size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Elements();
-    size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Elements();
+    size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
+    size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Cells();
     pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
     pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
     assert( splitBoundaryName1.first.size() == 1 );
     assert( splitBoundaryName2.first.size() == 2 );
-    _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Elements() == n_elmts_region1 );
-    _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Elements() == n_elmts_region2 );
+    _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );
+    _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Cells() == n_elmts_region2 );
 
     // 2. remove split boundary 1 here before creating new ones in the same place
     model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1

@@ -311,7 +311,7 @@ void  RelativePermeabilityModel_Test::Test( TwoPhaseModel<1U>& relperm,
     else ofs <<"sw\tseff\tkrw\tkrn\tmob_t\tfn\tG\tpc\tdiffusion-mult\tgravity-G-mult"<< endl;
 
     // computing multiphase flow properties and writing these to file
-    for ( auto it=sg.ElementsBegin(); it!=sg.ElementsEnd(); it++ )
+    for ( auto it=sg.CellsBegin(); it!=sg.CellsEnd(); it++ )
       {
          // setting up the relative permeability model
          // ---------------------------------------------

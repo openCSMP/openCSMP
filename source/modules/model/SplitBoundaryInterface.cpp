@@ -310,7 +310,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
            else selectedDomainVariablesIn( fp, (*it.first).second, database, subset_variables );
        
            // 1.5 reporting out
-           cout <<"\n\t\t"<< (*it.first).first << (*it.first).second.Elements() <<" faces).";
+           cout <<"\n\t\t"<< (*it.first).first << (*it.first).second.Cells() <<" faces).";
        }
    }
 
@@ -547,7 +547,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
           cell_ids.erase( cell_ids.begin(), cell_ids.end() );
 
           // removing the group if it contains no elements
-          if ( (*it.first).second.Elements() == 0U ) {
+          if ( (*it.first).second.Cells() == 0U ) {
               splitBoundaryMap_.erase( it.first );
               csmp_error.notice( WARNING, "SplitBoundaryInterface::FormSplitBoundariesFrom",
                                  "SplitBoundary could not be formed", (*lit).c_str() );
@@ -746,7 +746,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      set<Node<dim>*>     unique_new_nodes;
      vector<Node<dim>*>  node_pointers; // linear array of the nodes of one face after another
      node_pointers.reserve( splitBoundary.Nodes() );
-     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) {
+     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it ) {
           const size_t n_nodes((*it)->Nodes());
           // looping over the nodes on the inside of the interface which must be manifolds
           for ( auto i{0U}; i<n_nodes; ++i ) {
@@ -779,10 +779,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      const LocalVariables             element_props           = model->Database().LocalVariablesAt( ELEMENT );
      const IntegrationPointVariables  integration_point_props = model->Database().IntegrationPointVariablesAt( ELEMENT );
      vector<Element<dim>*>            new_elmts;
-     new_elmts.reserve( splitBoundary.Elements() );
+     new_elmts.reserve( splitBoundary.Cells() );
      size_t node_offset(0U); // for moving through the node-pointer vector
      
-     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it )
+     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it )
        {
           assert( (*it)->Parent(MIDDLE) == nullptr );
           // extracting element-node subvector
@@ -855,7 +855,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
   for ( typename std::map<std::string, csmp::SplitBoundary<dim> >::const_iterator
         it = splitboundaryComplex->SplitBoundariesBegin(); it != splitboundaryComplex->SplitBoundariesEnd(); ++it )
     {
-      for (auto eit = (*it).second.ElementsBegin(); eit != (*it).second.ElementsEnd(); eit++) {
+      for (auto eit = (*it).second.CellsBegin(); eit != (*it).second.CellsEnd(); eit++) {
           csmp::InterFace<dim>* pInterFace = (*eit);
           ifelmts.push_back(pInterFace);
           for (size_t j = 0; j < pInterFace->Nodes() / 2; j++)
@@ -1021,7 +1021,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
      else cout <<"irregularly-shaped model:\n";
      for ( auto bit=SplitBoundariesBegin(); bit!=SplitBoundariesEnd(); ++bit ) {
           cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
-          cout <<" "<< (*bit).second.Elements() <<" interfaces, ";
+          cout <<" "<< (*bit).second.Cells() <<" interfaces, ";
           // in 3D a boudary is a surface
            if constexpr ( dim == 3 ) {
                 cout <<"area (m2): "<< (*bit).second.Area();
@@ -1057,7 +1057,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDiscon
     
     // assigning the new nodes to the higher dimensional parent elements on the outside
     vector<uint32_t>  fnids;
-    for ( auto it=inputBoundary.ElementsBegin(); it!= inputBoundary.ElementsEnd(); ++it )
+    for ( auto it=inputBoundary.CellsBegin(); it!= inputBoundary.CellsEnd(); ++it )
       {
          // the nodes on the outside need to be updated
          assert( (*it)->OuterParent() );

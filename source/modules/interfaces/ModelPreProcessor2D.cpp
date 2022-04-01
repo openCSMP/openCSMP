@@ -62,7 +62,7 @@ void ModelPreProcessor2D::ModelToMatrix( const string& file_name, size_t rows, s
     // 3. setting up static visitor to write repeatedly write data to grid
     // -------------------------------------------------------------------
     FemToGridVisitor<2U> writer( model_ptr_->Database(),  regular_grid, 
-                                 "permeability", model_ptr_->Region("Model").Elements() );
+                                 "permeability", model_ptr_->Region("Model").Cells() );
     writer.OverWrite( true );
     writer.OutputProperty( "permeability" );
      

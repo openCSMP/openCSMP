@@ -116,8 +116,8 @@ template<uint32_t dim>
     
     for ( i = 0; i < Upwinder.size(); i++)
       {
-      Upwinder.at(i).resize( model.Region("Model").Elements() );
-      for ( it = model.Region("Model").ElementsBegin(); it < model.Region("Model").ElementsEnd(); it++)
+      Upwinder.at(i).resize( model.Region("Model").Cells() );
+      for ( it = model.Region("Model").CellsBegin(); it < model.Region("Model").CellsEnd(); it++)
         {
           Upwinder.at(i).at( (*(*it)).Idx() ).Resize((*(*it)).Nodes(),(*(*it)).Nodes());
           Upwinder.at(i).at(( *(*it)).Idx() ) = 0.0;

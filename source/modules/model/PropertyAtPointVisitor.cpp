@@ -14,7 +14,7 @@ PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
                                                      const map <size_t, vector<double> > & inXYZ,
                                                      const char *propertyName )
     : pref_(m.Database()),
-      maxElementsInTheMesh_(m.Region("Model").Elements()),  // Number of elements in the mesh
+      maxElementsInTheMesh_(m.Region("Model").Cells()),  // Number of elements in the mesh
       TargetElement_        ( NULL ),                       // Found element
       CurrentElement_       ( NULL ),                       // Intermediate element
       NumberOfElementNodes_ ( 8 ),                          // Max Number of nodes

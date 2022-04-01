@@ -224,10 +224,6 @@ class RegionInterface {
     /// boolean operation: symmetric difference (the symmetric difference is the union without the intersection)
     bool    RegionSymmetricDifference( const char* region_a, const char* region_b, const char* region_symdiff );
 
-    // TODO: test
-    /// creates a lower-dimensional region along the contact area of 2 higher dimensional ones
-    size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32_t material_id );
-
     /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
     size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                   std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;

@@ -560,7 +560,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( c
    // -------------------------------------------
     dof_per_node_    = 0U;
     target_.nodes    = gref.Nodes();
-    target_.elements = gref.Elements();
+    target_.elements = gref.Cells();
 
 
    // ---------------------------------------------------------------------------------
@@ -980,7 +980,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
            it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
        if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_lhs).second->GetOperands( *(*git) );
              (*it_lhs).second->ComputeContribution( *(*git) );
@@ -995,7 +995,7 @@ void PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPU
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1050,7 +1050,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryInte
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Neumann, an accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
@@ -1082,7 +1082,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundar
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_split_boundary_operators_.begin(); it_rhs!=rhs_split_boundary_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Robin, the accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
@@ -1141,7 +1141,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulate( const 
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1173,7 +1173,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundary
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( (*it_rhs).second->MaterialOperandPlacement() == FACE && 
@@ -1201,7 +1201,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBou
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( auto git=boundary.ElementsBegin(); git!=boundary.ElementsEnd(); git++ )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
                 ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
@@ -1267,7 +1267,7 @@ void  PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATI
 //              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
               if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<"\n";
               for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-                    git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+                    git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
                 {
                    (*it).second->GetOperands( *(*git) );
                    (*it).second->ComputeContribution( *(*git) );
@@ -1633,8 +1633,8 @@ bool PDE_IntegratorExperimental<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundarie
    
     for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
           it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
-      for ( auto fit=(*it).second.ElementsBegin(); fit!=(*it).second.ElementsEnd(); fit++ )
-        if ( subdomain.IsPerimeterElement( (*fit)->InnerParent()->Idx() ) ) {
+      for ( auto fit=(*it).second.CellsBegin(); fit!=(*it).second.CellsEnd(); fit++ )
+        if ( subdomain.IsPerimeterCell( (*fit)->InnerParent()->Idx() ) ) {
              shared_boundaries.push_back( (*it).first );
              break;
           }

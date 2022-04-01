@@ -101,7 +101,7 @@ void Tecplot_Interface<dim>
      // 0. creating list of element ID's of associated Region
      // --------------------------------------------------------------------
      vector<size_t>     elmt_ids;
-     gref.MemberElementIndexes( elmt_ids );
+     gref.MemberCellIndexes( elmt_ids );
                 
 
      // 1. getting new node mapping and updating storage if geometry has changed
@@ -150,14 +150,14 @@ void Tecplot_Interface<dim>
      if ( prop_key.place == NODE ) {   
          if ( gref.E(0)->FE_Type() == LINEAR_TRIANGLE || 
               gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = triangle";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = triangle";
          if ( gref.E(0)->FE_Type() == LINEAR_TETRAHEDRON ||
               gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TETRAHEDRON  )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = tetrahedron";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = tetrahedron";
          if ( gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = quadrilateral";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = quadrilateral";
          if ( gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = brick";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = brick";
          ofs <<", f = fepoint"<< endl;
        }
 
@@ -228,7 +228,7 @@ void Tecplot_Interface<dim>
     // 0. creating list of element ID's of associated Region
     // --------------------------------------------------------------------
     vector<size_t>     elmt_ids;
-    gref.MemberElementIndexes( elmt_ids );
+    gref.MemberCellIndexes( elmt_ids );
     
     // 1. getting new node mapping and updating storage if geometry has changed
     // ------------------------------------------------------------------------
@@ -262,7 +262,7 @@ void Tecplot_Interface<dim>
     ofs <<"VARIABLES = \"x\", \"y\", \"z\"" << endl;
     
     ofs << "ZONE T = \""<<region_name<<"\", ";
-    ofs << "N = " << gref.Nodes() << ", E = " << gref.Elements() << ", ";
+    ofs << "N = " << gref.Nodes() << ", E = " << gref.Cells() << ", ";
     ofs << "DATAPACKING = POINT, ";
     if ( gref.E(0)->FE_Type() == LINEAR_TRIANGLE || gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE )
         ofs << "ZONETYPE = FETRIANGLE,";

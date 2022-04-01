@@ -110,7 +110,7 @@ template<uint32_t dim, template<uint32_t> class STP>
 inline bool TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
                                                       const Element<dim>* const eptr ) const
  {
-    return this->gref_.IsPerimeterElement( eptr );
+    return this->gref_.IsPerimeterCell( eptr );
  }
 
 
@@ -215,7 +215,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
     const bool                  unless_has_equal_dimension(dim!=1U);
 
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++ )
+          eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++ )
       if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
@@ -980,13 +980,13 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable1stOrder( T
     if( !this->with_gravitational_forces_ && !this->with_capillary_spreading_){
 
         for ( typename vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
           stencil_.AccumulateExplicitTwoPhaseSolution1_Visc( (*fvt), *(*eit), relperm, RESULT );
 
     }else{
 
         for ( typename vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             stencil_.AccumulateExplicitTwoPhaseSolution1((*fvt), *(*eit), relperm, RESULT, this->with_gravitational_forces_,this->with_capillary_spreading_);
 
     }
@@ -1057,12 +1057,12 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( T
     if ( !this->with_gravitational_forces_ && !this->with_capillary_spreading_ ){
 
         if(!this->with_lsmgrad_limiter_)
-            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+            for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
                 stencil_.AccumulateExplicitTwoPhaseSolution2_Visc( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT);
         else{
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
             this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
-            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+            for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
                 stencil_.AccumulateExplicitTwoPhaseSolution2_Visc( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);
         }
 
@@ -1078,12 +1078,12 @@ void TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AdvectVariable2ndOrder( T
             */
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
             this->grad_advprop_limiter_->CalculateSlopeLimiter(this->gref_, this->SMINMAX );
-            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
+            for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++)
                 stencil_.AccumulateExplicitTwoPhaseSolution2( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->with_gravitational_forces_,this->with_capillary_spreading_,this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);
 
         }else{
 
-            for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++)
+            for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++)
                 stencil_.AccumulateExplicitTwoPhaseSolution2( this->SMINMAX, (*fvt), *(*eit), relperm, RESULT, this->with_gravitational_forces_, this->with_capillary_spreading_);
 
         }

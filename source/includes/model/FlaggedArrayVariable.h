@@ -50,7 +50,7 @@ class ArrayVariable;
 
   @code
   Index efaKey( model.Database().StorageKey("element flagged array") );
-  for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+  for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
     (*it)->Read( efaKey, fav );
   @endcode
 

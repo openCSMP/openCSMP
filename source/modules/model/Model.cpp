@@ -343,7 +343,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
 if ( mesh_manager_.InterFaces() > 0 )
@@ -409,7 +409,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     UpdateSubdomainPropertyStorage();  // for its regions, boundaries and splitboundaries
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
 if ( mesh_manager_.InterFaces() > 0 )
@@ -503,7 +503,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   UpdateSubdomainPropertyStorage();
 
 #ifdef CSMP_MODEL_DEBUG
-integrityCheck<dim,Element>( mesh_manager_.ElementsBegin(), mesh_manager_.ElementsEnd() );
+integrityCheck<dim,Element>( mesh_manager_.CellsBegin(), mesh_manager_.CellsEnd() );
 if ( mesh_manager_.Faces() > 0 )
   integrityCheck<dim,Face>( mesh_manager_.FacesBegin(), mesh_manager_.FacesEnd() );
 if ( mesh_manager_.InterFaces() > 0 )
@@ -953,17 +953,17 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
   }
   else if ( vplace == ELEMENT || vplace == ELEMENT_INTEGRATION_POINT || vplace == SECTOR_INTEGRATION_POINT || vplace == FACET_INTEGRATION_POINT ) {
     csmp::Region<dim>&  gref( this->Region( "Model" ) );
-    for ( auto eit = gref.ElementsBegin(); eit != gref.ElementsEnd(); eit++ )
+    for ( auto eit = gref.CellsBegin(); eit != gref.CellsEnd(); eit++ )
       (*eit)->AddProperty( prop_key );
   }
   else if ( vplace == FACE || vplace == FACE_INTEGRATION_POINT || vplace == FACE_SECTOR_INTEGRATION_POINT || vplace == FACE_FACET_INTEGRATION_POINT ) {
     for ( auto git = this->BoundariesBegin(); git != this->BoundariesEnd(); ++git )
-      for ( auto eit = (*git).second.ElementsBegin(); eit != (*git).second.ElementsEnd(); eit++ )
+      for ( auto eit = (*git).second.CellsBegin(); eit != (*git).second.CellsEnd(); eit++ )
         (*eit)->AddProperty( prop_key );
   }
   else if ( vplace == INTER_FACE || vplace == INTER_FACE_INTEGRATION_POINT || vplace == INTER_FACE_SECTOR_INTEGRATION_POINT || vplace == INTER_FACE_FACET_INTEGRATION_POINT ) {
     for ( auto git = this->SplitBoundariesBegin(); git != this->SplitBoundariesEnd(); ++git )
-      for ( auto eit = (*git).second.ElementsBegin(); eit != (*git).second.ElementsEnd(); eit++ )
+      for ( auto eit = (*git).second.CellsBegin(); eit != (*git).second.CellsEnd(); eit++ )
         (*eit)->AddProperty( prop_key );
   }
   else if ( vplace == MODEL ) {
@@ -1025,17 +1025,17 @@ void  Model<dim>::DeleteProperty( const char* property )
       (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == ELEMENT || prop_key.place == ELEMENT_INTEGRATION_POINT || prop_key.place == SECTOR_INTEGRATION_POINT || prop_key.place == FACET_INTEGRATION_POINT ) {
-    for ( auto eit = gref.ElementsBegin(); eit != gref.ElementsEnd(); eit++ )
+    for ( auto eit = gref.CellsBegin(); eit != gref.CellsEnd(); eit++ )
       (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT || prop_key.place == FACE_FACET_INTEGRATION_POINT ) {
     for ( auto git = this->BoundariesBegin(); git != this->BoundariesEnd(); ++git )
-      for ( auto eit = (*git).second.ElementsBegin(); eit != (*git).second.ElementsEnd(); eit++ )
+      for ( auto eit = (*git).second.CellsBegin(); eit != (*git).second.CellsEnd(); eit++ )
         (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT || prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT ) {
     for ( auto git = this->SplitBoundariesBegin(); git != this->SplitBoundariesEnd(); ++git )
-      for ( auto eit = (*git).second.ElementsBegin(); eit != (*git).second.ElementsEnd(); eit++ )
+      for ( auto eit = (*git).second.CellsBegin(); eit != (*git).second.CellsEnd(); eit++ )
         (*eit)->DeleteProperty( prop_key );
   }
   else if ( prop_key.place == MODEL ) {
@@ -1106,11 +1106,11 @@ error if it does not match the specifications from above. In this case
 it will return without carrying out the extrapolation.
 */
 template<uint32_t dim>
-void  Model<dim>::ExtrapolateElementToNodeProperty( const char* eprop, const char* nprop, bool by_distance )
+void  Model<dim>::ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance )
 {
-  this->Region( "Model" ).ExtrapolateElementToNodeProperty( eprop, nprop, by_distance );
+  this->Region( "Model" ).ExtrapolateCellToNodeProperty( eprop, nprop, by_distance );
 
-} // end ExtrapolateElementToNodeProperty
+} // end ExtrapolateCellToNodeProperty
 
 
 
@@ -1222,7 +1222,7 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
       v.Visit( this );
       switch ( v.ApplicationTarget() ) {
         case ELEMENT: {
-          for ( auto el_it = mref.ElementsBegin(); el_it != mref.ElementsEnd(); el_it++ )
+          for ( auto el_it = mref.CellsBegin(); el_it != mref.CellsEnd(); el_it++ )
             (*el_it)->Accept( v );
         }
                       return;
@@ -1233,13 +1233,13 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
                    return;
         case FACE: { // all faces contained in the model live inside of the boundaries
           for ( auto bit = this->BoundariesBegin(); bit != this->BoundariesEnd(); bit++ )
-            for ( auto it = (*bit).second.ElementsBegin(); it != (*bit).second.ElementsEnd(); it++ )
+            for ( auto it = (*bit).second.CellsBegin(); it != (*bit).second.CellsEnd(); it++ )
               (*it)->Accept( v );
         }
                    return;
         case INTER_FACE:
           for ( auto bit = this->SplitBoundariesBegin(); bit != this->SplitBoundariesEnd(); bit++ )
-            for ( auto it = (*bit).second.ElementsBegin(); it != (*bit).second.ElementsEnd(); it++ )
+            for ( auto it = (*bit).second.CellsBegin(); it != (*bit).second.CellsEnd(); it++ )
               (*it)->Accept( v );
           return;
           // access is granted to all boundaries of each type
@@ -1933,10 +1933,10 @@ bool  Model<dim>::CopyGradientOfProperty_A_To_B( const char* prop_a, const char*
 
 
 /**
-InterpolateNodePropertyToElementProperty() interpolates node property to the
+InterpolateNodePropertyToCellProperty() interpolates node property to the
 'barycenter' of the triangle. The resulting
 value is different from the result obtained by applying the interrelation
-subclass NodeToElementProperty. The Calculate() method of the latter assigns
+subclass NodeToCellProperty. The Calculate() method of the latter assigns
 the average value of the 3 element nodes to the element property 'eprop'.
 
 @section arguments Input Arguments
@@ -1955,20 +1955,20 @@ the two adjacent triangles which make up a square in regular-gridded meshes.
 
 If the variable placement or type of the specified properties fails to
 match the specifications outlined above,
-InterpolateNodePropertyToElementProperty() will report an error and
+InterpolateNodePropertyToCellProperty() will report an error and
 return without completing its task.
 */
 template<uint32_t dim>
-void  Model<dim>::InterpolateNodeToElementProperty( const char* nprop, const char* eprop, bool verbose )
+void  Model<dim>::InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose )
 {
-  this->Region( "Model" ).InterpolateNodeToElementProperty( nprop, eprop );
+  this->Region( "Model" ).InterpolateNodeToCellProperty( nprop, eprop );
 
   if ( verbose ) {
-    cout << "\nModel<" << dim << ">::InterpolateNodeToElementProperty: ";
+    cout << "\nModel<" << dim << ">::InterpolateNodeToCellProperty: ";
     cout << "'" << nprop << "' has been successfully interpolated to '" << eprop << "'." << endl;
   }
 
-} // end InterpolateNodeToElementProperty
+} // end InterpolateNodeToCellProperty
 
 
 
@@ -2015,14 +2015,14 @@ Consistency checks are performed on the placement and type of the
 input variables.
 */
 template<uint32_t dim>
-void  Model<dim>::InterpolateIntegrationPointToElementProperty( const char* cprop, const char* eprop )
+void  Model<dim>::InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop )
 {
-  this->Region( "Model" ).InterpolateIntegrationPointToElementProperty( cprop, eprop );
+  this->Region( "Model" ).InterpolateIntegrationPointToCellProperty( cprop, eprop );
 
-  cout << "\nModel<" << dim << ">::InterpolateIntegrationPointToElementProperty: ";
+  cout << "\nModel<" << dim << ">::InterpolateIntegrationPointToCellProperty: ";
   cout << "'" << cprop << "' has been successfully interpolated to '" << eprop << "'." << endl;
 
-} // end InterpolateIntegrationPointToElementProperty
+} // end InterpolateIntegrationPointToCellProperty
 
 
 
@@ -2141,7 +2141,7 @@ void Model<dim>::Out() const
 
 
 /**
-AssignElementCharacteristicsTo() allows to assign a number of Element
+AssignCellCharacteristicsTo() allows to assign a number of Element
 characteristics as identified by strings (second argument) to scalar physical
 variables. These characteristics are:
 
@@ -2165,7 +2165,7 @@ The characteristic "inner radius" is commonly used to find the
 appropriate resolution for an advection or visualization grid on which a
 variable is to be mapped on.
 
-AssignElementCharacteristicsTo() can be used to:
+AssignCellCharacteristicsTo() can be used to:
 - test the shape of elements in a mesh for their suitability for a
 computation (aspect ratio).
 - testing how skewed the elements got by deformation
@@ -2184,9 +2184,9 @@ area in a 3D computation, or volume in a 2D computation. Also, element
 height and width are thus far only available in 2D.
 */
 template<uint32_t dim>
-void Model<dim>::AssignElementCharacteristicsTo( const char* characteristic, const char* var )
+void Model<dim>::AssignCellCharacteristicsTo( const char* characteristic, const char* var )
 {
-  this->Region( "Model" ).AssignElementCharacteristicsTo( characteristic, var );
+  this->Region( "Model" ).AssignCellCharacteristicsTo( characteristic, var );
 
 } // end
 
@@ -3210,12 +3210,12 @@ template<uint32_t  dim>
 Point<dim>  centerOfGravity( const Model<dim>& model )
  {
     const Region<dim>& mref(model.Region("Model"));
-    auto it(mref.ElementsBegin());
+    auto it(mref.CellsBegin());
     Point<dim>  center((*it)->BaryCenter());
     double    counter(0.);
     it++;
    
-    while( it != mref.ElementsEnd() ) {
+    while( it != mref.CellsEnd() ) {
          if ( dim == 3U ) {
                if ( (*it)->FE()->IsVolumeElement() ) {
                     center += (*it)->BaryCenter();
@@ -3344,8 +3344,8 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
     Region<dim> ref = model.Region(region);
    
     for ( auto i{0U}; i<n_smoothing_cycles; i++ ) {
-         ref.ExtrapolateElementToNodeProperty( element_var, temp_node_var );
-         ref.InterpolateNodeToElementProperty( temp_node_var, element_var );
+         ref.ExtrapolateCellToNodeProperty( element_var, temp_node_var );
+         ref.InterpolateNodeToCellProperty( temp_node_var, element_var );
       }
 
  } // end smoothElementVariable
@@ -3427,7 +3427,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_v
            break;
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
-                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                    eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
                 for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    (*eit)->Read( i, prop_key, sc );
@@ -3437,7 +3437,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_v
            break;
          case ELEMENT:
               for ( typename vector<Element<dim>*>::const_iterator
-                    eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+                    eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
                 {
                    (*eit)->Read( prop_key, sc );
                    sc -= rngen(gen);
@@ -3488,7 +3488,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
            break;
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
-                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                    eit=mref.CellsBegin(); eit!=mref.CellsEnd(); eit++ )
                 for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    double value = static_cast<double>( (*eit)->Status(prop_key) );
@@ -3497,7 +3497,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
            break;
          case ELEMENT:
               for ( typename vector<Element<dim>*>::const_iterator
-                    eit=mref.ElementsBegin(); eit!=mref.ElementsEnd(); eit++ )
+                    eit=mref.CellsBegin(); eit!=mref.CellsEnd(); eit++ )
                 {
                    double value = static_cast<double>( (*eit)->Status(prop_key) );
                    (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
@@ -3645,7 +3645,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
 
     csmp::Region<2>&  model_domain(sg.Region("Model"));
 
-    for ( auto n=0U; n<model_domain.Elements(); n++ )
+    for ( auto n=0U; n<model_domain.Cells(); n++ )
        {
           //  for elements that are not located at model boundary
           if ( atBoundary( model_domain.E(n) ) == NOT )
@@ -3745,11 +3745,11 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
     bool correct(true);
    
     const Region<dim>&  gref(sg.Region("Model"));
-    if ( gref.Elements() != vset.Elements() ) cout <<"\ncompareConnectivity: element number mismatch."<< endl;
+    if ( gref.Cells() != vset.Elements() ) cout <<"\ncompareConnectivity: element number mismatch."<< endl;
     if ( gref.Nodes() != vset.Vertices() ) cout <<"\ncompareConnectivity: node number mismatch."<< endl;
   
     // 1. plist
-    for ( size_t i=0U; i<gref.Elements(); i++ )
+    for ( size_t i=0U; i<gref.Cells(); i++ )
       {
          for ( uint32_t j{0U}; j<gref.E(i)->Nodes(); j++ )
            if ( gref.E(i)->N(j)->Idx() != vset.Plist( gref.E(i)->Idx(), j ) ) {
@@ -3760,7 +3760,7 @@ bool compareConnectivity( const Model<dim>& sg, const VSet<dim>& vset )
       }
     
     // 2. pfverts
-    for ( size_t i=0U; i<gref.Elements(); i++ )
+    for ( size_t i=0U; i<gref.Cells(); i++ )
       {
          for ( uint32_t j{0U}; j<gref.E(i)->Neighbors(); j++ )
            if ( gref.E(i)->Neighbor(j) and
@@ -3824,13 +3824,13 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                   rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::min(limit_value,rref.Read(prop_key)) ) );
                  break;
                case ELEMENT:
-                  for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                  for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it ) {
                       double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::min(limit_value,val) ) );
                    }
                  break;
                case ELEMENT_INTEGRATION_POINT:
-                  for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                  for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
                     for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
@@ -3855,13 +3855,13 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                   rref.Store( prop_key, makeScalar( rref.Status(prop_key), std::max(limit_value,rref.Read(prop_key)) ) );
                  break;
                case ELEMENT:
-                  for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                  for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it ) {
                       double val = (*it)->Read( prop_key );
                       (*it)->Store( prop_key, makeScalar( (*it)->Status(prop_key), std::max(limit_value,val) ) );
                    }
                  break;
                case ELEMENT_INTEGRATION_POINT:
-                  for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                  for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
                     for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
@@ -3903,7 +3903,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  }
                break;
              case ELEMENT:
-                for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it ) {
+                for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it ) {
                     (*it)->Read( prop_key, vc );
                     const double vmagnitude = vc.Length();
                     assert( vmagnitude > 0. );
@@ -3913,7 +3913,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  }
                break;
              case ELEMENT_INTEGRATION_POINT:
-                for ( auto it=rref.ElementsBegin();  it!=rref.ElementsEnd(); ++it )
+                for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
                   for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                        (*it)->Read( i, prop_key, vc );
                         const double vmagnitude = vc.Length();

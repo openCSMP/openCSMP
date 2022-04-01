@@ -480,7 +480,7 @@ bool createLowerDimensionalRegion( Model<DIM>& model, const char* name_of_new_re
  {
     Region<DIM>& mref = model.Region("Model");
     set<size_t> element_idx;
-    for ( vector<Element<DIM>*>::const_iterator it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
+    for ( vector<Element<DIM>*>::const_iterator it=mref.CellsBegin(); it!=mref.CellsEnd(); ++it )
       if ( (*it)->FE()->IsLineElement() ) element_idx.insert( (*it)->Idx() );
     
     vector<size_t> unique_idx( element_idx.begin(), element_idx.end() );
@@ -518,7 +518,7 @@ void computeGasFlowProperties( Model<DIM>& model, const char* target_region )
     Region<DIM>& mref = model.Region(target_region);
     ScalarVariable  cf, mu;
 
-    for ( auto it=mref.ElementsBegin(); it!=mref.ElementsEnd(); ++it )
+    for ( auto it=mref.CellsBegin(); it!=mref.CellsEnd(); ++it )
       {
          // retrieve input properties (knowing where they are placed)
          double phi = (*it)->Read( phi_key );

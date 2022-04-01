@@ -174,7 +174,7 @@ void MatlabInterface::Write2DMatlabFile( Model<2U>& mdl, const char* file_name, 
           }
 
         // get node-element connectivity
-        for ( auto it2=mref.ElementsBegin(); it2!=mref.ElementsEnd(); it2++ ) {
+        for ( auto it2=mref.CellsBegin(); it2!=mref.CellsEnd(); it2++ ) {
             // regular triangles
             if ( (*it2)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE or
                  (*it2)->FE_Type() == LINEAR_TRIANGLE ) {

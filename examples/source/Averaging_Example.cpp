@@ -49,8 +49,8 @@ void Averaging_Example::Run()
   Region<2U>& region( model.Region( "Model" ) );
 
   // using the ModelSubDomain methods to extrapolate single-valued field
-  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
-  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
+  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
+  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
 
   // output
   vtu.OutputDataToVTU( "ExtrapolationByDistance", "nodal fluid volume source distance", "Model", static_cast<int>(0) );
@@ -60,8 +60,8 @@ void Averaging_Example::Run()
   // creating a perturbed field and extrapolating this
   randomPerturb( model, "fluid volume source", 20. );
 
-  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
-  region.ExtrapolateElementToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
+  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source distance" );
+  region.ExtrapolateCellToNodeProperty( "fluid volume source", "nodal fluid volume source volume", false );
 
   vtu.OutputDataToVTU( "PerturbedFluidVolumeSource", "fluid volume source", "Model", static_cast<int>(1) );
   vtu.OutputDataToVTU( "ExtrapolationByDistance", "nodal fluid volume source distance", "Model", static_cast<int>(1) );

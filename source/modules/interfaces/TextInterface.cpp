@@ -386,7 +386,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
+            for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
@@ -440,7 +440,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
+            for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( uint32_t i{0U}; i<(*eit)->Nodes(); ++i )
@@ -514,7 +514,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
             if ( dim == 1U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, SectorIntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
+            for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ ) {
                 assert( (*eit)->FV() != NULL );
                 // node numbering is equivalent to sector numbering
                 for ( auto i{0U}; i<(*eit)->FV()->Facets(); ++i )
@@ -588,7 +588,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
              if ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
+             for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               {
                  Point<dim>  ctr((*eit)->BaryCenter());
                  fprintf( fp, "%E\t", ctr[0] );
@@ -788,7 +788,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
             break;
           
          case ELEMENT:
-             for ( auto eit=output_region.ElementsBegin(); eit!=output_region.ElementsEnd(); eit++ )
+             for ( auto eit=output_region.CellsBegin(); eit!=output_region.CellsEnd(); eit++ )
                {
                    // 1. coordinate of element barycenter
                    Point<dim>  center((*eit)->BaryCenter());
@@ -936,7 +936,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
             else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
             else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
-            for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
+            for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
                 // printing the element id first
@@ -976,7 +976,7 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
              if      ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
              else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
              else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
-             for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ )
+             for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               {
                  fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                  xyz = ((*eit)->BaryCenter()).Coordinates();

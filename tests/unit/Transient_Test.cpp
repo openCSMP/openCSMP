@@ -97,7 +97,7 @@ namespace csmp {
 		// the result variable "conductivity" is computed automatically and its range is checked
 		//model.Apply(conductivity);
 		const Index conductKey = p_ref.StorageKey("conductivity");
-		for ( auto eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); eIter++ ) {
+		for ( auto eIter = region.CellsBegin(); eIter != region.CellsEnd(); eIter++ ) {
 			(*eIter)->Store(conductKey, makeScalar(DIRICH, 1.));
 		}
 		// output the range of the result variable

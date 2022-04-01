@@ -68,9 +68,9 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     // checking the single element regions
     //model.RegionsOut();
     const Region<2U>& fracs(model.Region("FRAC3"));
-    //cerr <<"\ninterior vs perimeter: "<< fracs.InteriorElements() <<" "<< fracs.PerimeterElements();
-    _test( fracs.InteriorElements()  == 0 );
-    _test( fracs.PerimeterElements() == 1 );
+    //cerr <<"\ninterior vs perimeter: "<< fracs.InteriorCells() <<" "<< fracs.PerimeterCells();
+    _test( fracs.InteriorCells()  == 0 );
+    _test( fracs.PerimeterCells() == 1 );
     
     // saving model to binary
     const string test_model_name( string(model.Name()) + "Vset_TestCase" );
@@ -191,7 +191,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
     ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true);
     ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
-    const size_t elementCount1( modelOutput1.Region("Model").Elements() );
+    const size_t elementCount1( modelOutput1.Region("Model").Cells() );
     const size_t nodeCount1( modelOutput1.Region("Model").Nodes() );
     const size_t regionCount1( modelOutput1.Regions() );
     modelOutput1.Region("Model").InputPropertyValue( "diffusivity", diff );
@@ -204,12 +204,12 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     Model<3U> modelInput1( string("model1") );
     Index dKey1( modelOutput1.Database().StorageKey("diffusivity") );
     Index naKey1( modelOutput1.Database().StorageKey("nodal array") );
-    _test( elementCount1 == modelInput1.Region("Model").Elements() );
+    _test( elementCount1 == modelInput1.Region("Model").Cells() );
     _test( nodeCount1 == modelInput1.Region("Model").Nodes() );
     _test( regionCount1 == modelInput1.Regions() );
     ScalarVariable scalVal;
     ArrayVariable aVal( "nodal array", modelInput1.Database() );
-    for( vector<Element<3>*>::const_iterator it( modelInput1.Region("Model").ElementsBegin() ); it != modelInput1.Region("Model").ElementsEnd(); ++it )
+    for( vector<Element<3>*>::const_iterator it( modelInput1.Region("Model").CellsBegin() ); it != modelInput1.Region("Model").CellsEnd(); ++it )
       {
         (*it)->Read( dKey1, scalVal );
         _test( scalVal == diff );
@@ -269,7 +269,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     modelOutput3.InputPropertyValue( "faip vector", vv );
     modelOutput3.InputPropertyValue( "seip tensor", tv );
-    Element<3>* ePtr = *modelOutput3.Region("Model").ElementsBegin();
+    Element<3>* ePtr = *modelOutput3.Region("Model").CellsBegin();
     for( auto f(0); f < ePtr->Facets(); ++f )
       for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
@@ -280,7 +280,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
     
-    ePtr = *modelInput3.Region("Model").ElementsBegin();
+    ePtr = *modelInput3.Region("Model").CellsBegin();
     auto ctr(0);
     for( auto f(0); f < ePtr->Facets(); ++f )
       for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )

@@ -299,7 +299,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // single face variable test
       // TYPE: Scalar
       model.Boundary("BOUNDARY1").InputPropertyValue( "face variable 1", makeScalar( PLAIN, 4. ) );
-      _test( ( *model.Boundary("BOUNDARY1").ElementsBegin() )->Read(fKey1) == 4. );
+      _test( ( *model.Boundary("BOUNDARY1").CellsBegin() )->Read(fKey1) == 4. );
 
       model.Database().WriteVariablesFile("CSMP-variables-output.txt");
 
@@ -335,7 +335,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       av00 = ArrayVariable( "element array 2", model.Database(), 0. );
       model.InputPropertyValue( "element array 2", av00 );
       ArrayVariable av1( 22, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // TYPE: Array
           (*it)->Read( eaKey2, av1 );
@@ -361,7 +361,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       fav00 = FlaggedArrayVariable( "element flagged array 2", model.Database(), 0. );
       model.InputPropertyValue( "element flagged array 2", fav00 );
       FlaggedArrayVariable fav1( 2, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // TYPE: Flagged Array
           (*it)->Read( efaKey2, fav1 );
@@ -545,7 +545,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Element Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -624,7 +624,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Face
-      for( vector<Face<3>*>::const_iterator it( model.Boundary("BOUNDARY3").ElementsBegin() ); it != model.Boundary("BOUNDARY3").ElementsEnd(); ++it )
+      for( vector<Face<3>*>::const_iterator it( model.Boundary("BOUNDARY3").CellsBegin() ); it != model.Boundary("BOUNDARY3").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( fKey1, scalarV );
@@ -740,7 +740,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -927,7 +927,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // ========================================================================
         // PLACEMENT: Element
@@ -1111,7 +1111,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( eKey2, scalarV );
@@ -1258,7 +1258,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // Status tests
 
       // PLACEMENT: Element
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         _test( (*it)->Status(eKey2)     == twoS.Flag() );

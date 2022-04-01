@@ -67,7 +67,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     // have verified that the ensuing flow matches the parallel plate approximation k = d^2 / 12
     csmp::Index  k_key = sg.Database().StorageKey("permeability");
     ScalarVariable  sc;
-    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
          (*eit)->PropertyValueAtBaryCenter( lap.Key(), sc );
          (*eit)->Store( k_key, sc );
       }
@@ -88,7 +88,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     ExtractVectorVariableLength<dim>  grad_magnitude( sg.Database(), "grad parabolic function", "magnitude grad parabolic function" );
     gref.Apply( grad_magnitude );
 //    sg.InputPropertyValue( channel_width, makeScalar(PLAIN,0.) );
-    gref.ExtrapolateElementToNodeProperty( "magnitude grad parabolic function", channel_width );
+    gref.ExtrapolateCellToNodeProperty( "magnitude grad parabolic function", channel_width );
     PropertyHandle<dim>  cwidth( sg, channel_width ); cwidth *= 2.;
 //    printRangeOfVariable( sg, channel_region, channel_width );
    

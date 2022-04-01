@@ -635,7 +635,7 @@ void printBoxBoundaryFlags( const Model<dim>& model )
     cout << endl;  
       
     multiset<BOX_BOUNDARY> elmt_flags;
-    for ( auto eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
+    for ( auto eit=modeldomain.CellsBegin(); eit!=modeldomain.CellsEnd(); ++eit )
       for ( auto i{0U}; i<(*eit)->Neighbors(); ++i )
         elmt_flags.insert( (*eit)->AtBoundary(i) );
       
@@ -1125,7 +1125,7 @@ void recreateBoxBoundaryFlags( Model<3>& model )
 void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
  { 
     Region<2U>&  modeldomain(model.Region("Model"));
-    for ( vector<Element<2U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+    for ( vector<Element<2U>*>::const_iterator it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
       {  // current version only works for linear quadrilaterals
          assert( (*it)->Nodes() <= 5 );
          
@@ -1211,7 +1211,7 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
     Region<3U>&    modeldomain(model.Region("Model"));
     vector<uint32_t> fnids;
     
-    for ( vector<Element<3U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+    for ( vector<Element<3U>*>::const_iterator it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
       {
          // current version only works for linear hexahedra
          assert( (*it)->Nodes() <= 9 );
@@ -2024,7 +2024,7 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   for ( auto nit = mregion.NodesBegin(); nit != mregion.NodesEnd(); nit++ )
     (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double>((*nit)->AtBoundary()) ) );
 
-  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
+  for ( auto eit = mregion.CellsBegin(); eit != mregion.CellsEnd(); eit++ ) {
        uint32_t face = UNSPECIFIED;
        bool at_boundary{false};
        for ( auto i{0U}; i<(*eit)->Neighbors(); ++i )

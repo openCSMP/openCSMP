@@ -279,7 +279,7 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
     case BOUNDARY:
       return;
     case FACE:
-      for ( auto it = this->ElementsBegin(); it != this->ElementsEnd(); it++ )
+      for ( auto it = this->CellsBegin(); it != this->CellsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
@@ -610,7 +610,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
 
   switch ( idx.place ) {
     case FACE:
-      //assert( this->Elements() == vdata.Size() );
+      //assert( this->Cells() == vdata.Size() );
       for ( typename vector<csmp::Face<dim>*>::const_iterator
             eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
         (*eit)->Store( idx, vdata[(*eit)->Idx()] );
@@ -831,14 +831,14 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
 
   // prepping container for a max of total region element count
-  this->cell_vec_.reserve( region.Elements() );
+  this->cell_vec_.reserve( region.Cells() );
 
   // looping over regions elements, assuring that it's an eligible face type, creating new face with variable storage,
   // establishing connectivity and inserting into boundary element container
-  const auto regionElementsEnd( region.ElementsEnd() );
+  const auto regionElementsEnd( region.CellsEnd() );
   size_t     cell_number{0};
   
-  for ( auto it = region.ElementsBegin(); it != regionElementsEnd; ++it )
+  for ( auto it = region.CellsBegin(); it != regionElementsEnd; ++it )
     {
       // renumbering the elements so that they can be used to find neighbors
       (*it)->Idx( cell_number );
@@ -880,7 +880,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   // connecting the new faces to their neighbors
   size_t elmt{0};
   // processing the interior faces whose neighbors are all on the inside of the domain first
-  for ( auto it=region.ElementsBegin(); it!=region.PerimeterElementsBegin(); ++it ) {
+  for ( auto it=region.CellsBegin(); it!=region.PerimeterCellsBegin(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
        for ( auto i{0U}; i<n_neighbors; ++i ) {
             // since the mapping between elements and faces only exists in this subdomain
@@ -891,8 +891,8 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
        elmt++;
     }
   // processing perimeter faces
-  elmt = region.InteriorElements();
-  for ( auto it=region.PerimeterElementsBegin(); it!=region.ElementsEnd(); ++it ) {
+  elmt = region.InteriorCells();
+  for ( auto it=region.PerimeterCellsBegin(); it!=region.CellsEnd(); ++it ) {
        const size_t n_neighbors{ (*it)->Neighbors() };
        for ( auto i{0U}; i<n_neighbors; ++i )
          // if the perimeter element neighbor is contained in the interior elements of region an assignment is made
@@ -1057,10 +1057,10 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
 
   // reserving storage for boundary elements
   // logic: the number of faces created can only be slightly larger than the number of boundary elements
-  this->cell_vec_.reserve( region.PerimeterElements() );
+  this->cell_vec_.reserve( region.PerimeterCells() );
 
   // looping over the perimeter elements of the region
-  for ( auto i = region.InteriorElements(); i<region.Elements(); ++i )
+  for ( auto i = region.InteriorCells(); i<region.Cells(); ++i )
     {
       // ignoring dim-2 elements because they share the nodes with the higher-dim ones
       if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolumeElement() ) continue;
@@ -1095,10 +1095,10 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
   // initialize boundary essentials
   // creating the connectivity among the new faces
   if constexpr ( dim == 3 )
-    if ( this->Elements() > 1 )
+    if ( this->Cells() > 1 )
       meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
   if constexpr ( dim == 2 )
-    if ( this->Elements() > 1 )
+    if ( this->Cells() > 1 )
       meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   Initialize( boxBoundary );
@@ -1140,15 +1140,15 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
 
   // reserving storage for boundary elements (logic: the number of faces created cannot be
   // larger than the minimum number boundary elements of the two neighboring groups)
-  this->cell_vec_.reserve( min( region1.PerimeterElements(), region2.PerimeterElements() ) );
+  this->cell_vec_.reserve( min( region1.PerimeterCells(), region2.PerimeterCells() ) );
 
   // searching for elements of region1 that are neighbors of ones in region2.
   // If so, there is a shared boundary and faces or interfaces are constructed.
-  const size_t   n_elements( region1.Elements() );
+  const size_t   n_elements( region1.Cells() );
   
   // for the perimeter elements of the region
   size_t contacting_elements{0};
-  for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
+  for ( auto i = region1.InteriorCells(); i < n_elements; ++i )
     {
       Element<dim>* const ePtr = region1.E( i );
       const auto perimeter_faces( region1.PerimeterFaces(i) );
@@ -1160,7 +1160,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
           // checking whether neighbor element is part of the boundary of region2
           assert( ePtrNeighbor != nullptr );
           if ( ePtrNeighbor != nullptr )
-            if ( region2.IsPerimeterElement( ePtrNeighbor ) )
+            if ( region2.IsPerimeterCell( ePtrNeighbor ) )
               {
                  // if the neighbor is in the boundary, the new Face is build
                  uint32_t face2 = UNSPECIFIED;
@@ -1190,10 +1190,10 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   // initialize boundary essentials
   // creating the connectivity among the new faces
   if constexpr ( dim == 3 )
-    if ( this->Elements() > 1 )
+    if ( this->Cells() > 1 )
       meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
   if constexpr ( dim == 2 )
-    if ( this->Elements() > 1 )
+    if ( this->Cells() > 1 )
       meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   Initialize( INTERNAL );
@@ -1232,9 +1232,9 @@ double  Boundary<dim>::Perimeter() const
 
   double          perimeter_length( 0. );
   vector<uint32_t>  fnids;
-  size_t          n( this->InteriorElements() );
+  size_t          n( this->InteriorCells() );
   
-  for ( auto it = this->PerimeterElementsBegin(); it != this->ElementsEnd(); it++, n++ ) {
+  for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ ) {
       if ( (*it)->IsLineElement() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }
@@ -1351,7 +1351,7 @@ void Boundary<dim>::Out() const
 {
   // high-level output
   cout << "\n"<<"Boundary<" << dim << ">::Out: (" << parseBoundary( boundaryFlag_ ) << ") '" << this->Name();
-  cout << "', Face objects interior: " << this->InteriorElements() << ", perimeter: " << this->PerimeterElements() << endl;
+  cout << "', Face objects interior: " << this->InteriorCells() << ", perimeter: " << this->PerimeterCells() << endl;
   cout << "   Node objects interior: " << this->InteriorNodes() << ", perimeter: " << this->PerimeterNodes() << endl;
 
   // member faces
@@ -1379,11 +1379,11 @@ void Boundary<dim>::Out() const
   }
 
   // printing the Faces
-  //for ( auto it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )  (*it)->Out();
+  //for ( auto it=this->CellsBegin(); it!=this->CellsEnd(); ++it )  (*it)->Out();
 
   cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
   auto  bit( this->bd_face_vec_.begin() );
-  for ( auto i = this->InteriorElements(); i<this->cell_vec_.size(); i++, bit++ ) {
+  for ( auto i = this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << i << ":";
       for ( auto ft = (*bit).begin(); ft != (*bit).end(); ft++ ) cout << (*ft) << " ";
     }

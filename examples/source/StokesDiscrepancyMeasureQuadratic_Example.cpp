@@ -141,7 +141,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       // the 'parabolic function' divided by viscosity is now mapped to the variable "element parabolic function"
       PropertyHandle<dim>  lapbc( model, "cpoint parabolic function", SCALAR, ELEMENT_INTEGRATION_POINT );
       ScalarVariable       sc;
-      for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+      for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
            (*eit)->PropertyValueAtBaryCenter( pbf.Key(), sc );
            (*eit)->Store( lapbc.Key(), (sc /= 1.) );
         }
@@ -183,9 +183,9 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
    // 4. Computing the hessian for the FEM solution of fluid pressure
    // -----------------------------------------------------------------------
     model.CopyGradientOfProperty_A_To_B( "fluid pressure", "fluid pressure gradient" );
-    model.ExtrapolateElementToNodeProperty("fluid pressure gradient","nodal fluid pressure gradient");
+    model.ExtrapolateCellToNodeProperty("fluid pressure gradient","nodal fluid pressure gradient");
     model.CopyGradientOfProperty_A_To_B( "nodal fluid pressure gradient", "fluid pressure gradient2" );
-    model.ExtrapolateElementToNodeProperty("fluid pressure gradient2","nodal fluid pressure gradient2");
+    model.ExtrapolateCellToNodeProperty("fluid pressure gradient2","nodal fluid pressure gradient2");
 
     vtk_output.OutputDataToVTK( model, "fluid-pressure-gradient", "fluid pressure gradient", 1 );
     // the Hessian matrix
@@ -208,7 +208,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
      PropertyHandle<dim>  term1( model, "term1", VECTOR, ELEMENT );
      TensorVariable<dim>  ts;
      VectorVariable<dim>  vc, vc2;
-     for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+     for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
           // read hessian
           (*eit)->Read( hessian.Key(), ts );
           (*eit)->Read( grad.Key(), vc );
@@ -219,7 +219,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
 
     // computing term2: Laplacian of fluid pressure is found as sum of the diagonal terms of the Hessian (=its trace)
       PropertyHandle<dim>  lap_p( model, "laplacian of pressure", SCALAR, ELEMENT );
-      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
            // read Hessian from the nodes
            (*nit)->Read( hessian.Key(), ts );
            // add up the diagonal terms
@@ -230,14 +230,14 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       vtk_output.OutputDataToVTK( model, "laplacian-pressure", "laplacian of pressure", 1 );
 
       PropertyHandle<dim>  nlap_pf( model, "nodal laplacian of pressure", SCALAR, NODE );
-      model.ExtrapolateElementToNodeProperty("laplacian of pressure", "nodal laplacian of pressure");
+      model.ExtrapolateCellToNodeProperty("laplacian of pressure", "nodal laplacian of pressure");
 
       PropertyHandle<dim>  term2( model, "gradient of laplacian of pressure", VECTOR, ELEMENT );
       model.CopyGradientOfProperty_A_To_B( "nodal laplacian of pressure", "gradient of laplacian of pressure" );
       printRangeOfVariable( model, channel_region.c_str(), "gradient of laplacian of pressure");
       vtk_output.OutputDataToVTK( model, "grad-laplacian-pressure", "gradient of laplacian of pressure", 1 );
 
-      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
            // read parabolic function psi
            (*nit)->Read( lapbc.Key(), sc );
            // read gradient of laplacian
@@ -257,7 +257,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       PropertyHandle<dim>  E_mag( model, "Stokes Discrepancy Measure", SCALAR, ELEMENT );
 
       ScalarVariable  em;
-      for ( auto nit=gref.ElementsBegin(); nit!=gref.ElementsEnd(); nit++ ) {
+      for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
            // take norm of grad p
            (*nit)->Read( gradp.Key(), vc );
            sc = vc.Length();

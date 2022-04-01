@@ -48,9 +48,9 @@ void TwoPhaseModel_Test::run()
   cout << "\nTwoPhaseModel_Test: " << getName() << endl;
 
   Region<1>& model = model_->Region( "Model" );
-  for ( auto it = model.ElementsBegin(); it != model.ElementsEnd(); ++it )
+  for ( auto it = model.CellsBegin(); it != model.CellsEnd(); ++it )
   {
-  if ( upToElementNumber_ != 0 && distance( model.ElementsBegin(), it ) > upToElementNumber_  )
+  if ( upToElementNumber_ != 0 && distance( model.CellsBegin(), it ) > upToElementNumber_  )
     break;
     // setting up the relative permeability model
     // ---------------------------------------------

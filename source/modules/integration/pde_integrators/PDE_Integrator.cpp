@@ -750,7 +750,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    // -------------------------------------------
     dof_per_node_    = 0U;
     target_.nodes    = gref.Nodes();
-    target_.elements = gref.Elements();
+    target_.elements = gref.Cells();
 
 
    // ------------------------------------------------------
@@ -1323,7 +1323,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
            it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
        if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_lhs).second->GetOperands( *(*git) );
              (*it_lhs).second->ComputeContribution( *(*git) );
@@ -1339,7 +1339,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1360,7 +1360,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
               it_lhs=this->thread_lhs_operators_[tid].begin(); it_lhs!=this->thread_lhs_operators_[tid].end(); it_lhs++ ){
             if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() ){
 #pragma omp for
-                for ( size_t e = 0 ; e < gref.Elements(); e++ )
+                for ( size_t e = 0 ; e < gref.Cells(); e++ )
                 {
 //                    cout<<"element: "<<e<<endl;
 // TODO: check what is going on here with the parallel accumulation
@@ -1396,7 +1396,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
               it_rhs=this->thread_rhs_operators_[tid].begin(); it_rhs!=this->thread_rhs_operators_[tid].end(); it_rhs++ ){
             if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() ){
 #pragma omp for
-                for ( size_t e = 0 ; e < gref.Elements(); e++ )
+                for ( size_t e = 0 ; e < gref.Cells(); e++ )
                 {
                     typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
                     fe_tmp=eit->FE(); //save old pointer.
@@ -1476,7 +1476,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
@@ -1539,7 +1539,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<di
               if (verbose_) cout <<"\nPDE_Integrator<"<<  dim;
 //              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
               if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<"\n";
-              for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+              for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
                 {
                    (*it).second->GetOperands( *(*git) );
                    (*it).second->ComputeContribution( *(*git) );

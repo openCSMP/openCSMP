@@ -356,12 +356,12 @@ bool MeshManager_Test::Test_BuiltElementConnectivity2D()
     
     // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
     vector<vector<Element<2>*> > nbor_pointers;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.CellsBegin(), model_domain.CellsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<2>*> > nbor_pointers2;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers2 );
     // comparing the connectivity with the original VSet
     if ( nbor_pointers != nbor_pointers2 ) return false;
     return true;
@@ -382,12 +382,12 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
     
     // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
     vector<vector<Element<3>*> > nbor_pointers;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.CellsBegin(), model_domain.CellsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<3>*> > nbor_pointers2;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers2 );
     // comparing the connectivity with the original VSet
     if ( nbor_pointers != nbor_pointers2 ) return false;
     return true;
@@ -428,21 +428,21 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     set<Element<3U>*>  discovered_elements;
     
     floodFill( model_domain.E(0), discovered_elements ); // OK
-    _test( discovered_elements.size() == model_domain.Elements() );
+    _test( discovered_elements.size() == model_domain.Cells() );
     
     set<Element<3>*> elements;
-    _test( findContiguousMeshPatch<3>( &(*model_domain.E(0)), elements ) == model_domain.Elements() ); // OK
-    _test( elements.size() == model_domain.Elements() );
+    _test( findContiguousMeshPatch<3>( &(*model_domain.E(0)), elements ) == model_domain.Cells() ); // OK
+    _test( elements.size() == model_domain.Cells() );
     
     map<string,vector<Element<3>*> > elmt_patches;
     size_t patches = findStandAloneMeshPatches( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd(),
                                                 elmt_patches );
     _test( patches == 1 );
-    _test( (*elmt_patches.begin()).second.size() == model_domain.Elements() );
+    _test( (*elmt_patches.begin()).second.size() == model_domain.Cells() );
     for ( auto i : elmt_patches ) cout <<" "<< i.first;
     
     // checking that NodesOfSegment() and  CornerNodesPerSegmentForElementOfType() give the same answer
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          for ( auto i{0}; i < (*it)->FE()->Segments(); ++i ) {
               vector<uint32_t> node_vec;
               (*it)->FE()->NodesOfSegment( i, node_vec );
@@ -835,8 +835,8 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
  
     vector<uint32_t> segm_nodes;
 
-    const auto elmtsEnd{ subdomain.ElementsEnd() };
-    for ( auto it=subdomain.ElementsBegin(); it!=elmtsEnd; ++it ) {
+    const auto elmtsEnd{ subdomain.CellsEnd() };
+    for ( auto it=subdomain.CellsBegin(); it!=elmtsEnd; ++it ) {
          const auto n_segments{ (*it)->Segments() };
          for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
               (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );

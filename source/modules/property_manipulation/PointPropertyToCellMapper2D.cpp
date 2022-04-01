@@ -171,7 +171,7 @@ std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>& model,
     // marking the elements of the region with the unique key UINT_MAX so that containment is readily detected
     const Region<dim>& target_domain(model.Region(target_region.c_str()));
     
-    for ( auto it=target_domain.ElementsBegin(); it!=target_domain.ElementsEnd(); ++it )
+    for ( auto it=target_domain.CellsBegin(); it!=target_domain.CellsEnd(); ++it )
       (*it)->Idx( UINT_MAX );
 
    // searching for the points
@@ -278,7 +278,7 @@ bool PointPropertyToCellMapper2D::MapPointsToCells( Model<2>& model, string targ
     // ------------------------------------
     cells_with_points_ = findCellsEnclosingPoints( model, target_region, points_to_search );
 
-    return !( CellsWithPoints() == target.Elements() );
+    return !( CellsWithPoints() == target.Cells() );
 
  } // end MapPointsToCells
      
@@ -384,7 +384,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
         extrapolator.IntegrateOver( target_domain );
 
         // interpolating nodal values back to the element barycentres in the region
-        for ( auto it=target_domain.ElementsBegin(); it!=target_domain.ElementsEnd(); ++it )
+        for ( auto it=target_domain.CellsBegin(); it!=target_domain.CellsEnd(); ++it )
           if ( (*it)->Status(prop_key) != FIELD_DATA )
             {
                double prop_val = (*it)->PropertyValueAtBaryCenter( prop_key_node );

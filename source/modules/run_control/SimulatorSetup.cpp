@@ -633,8 +633,8 @@ void SimulatorSetup<dim>::SetupWellRatesBasedOnRateVariables()
 
                     // The volume method calculates volume, surface, or length depending on the type of element that composes the well.
                     double wellvolume=model_->Region((*sit).c_str()).Volume();
-                    auto ebegin=model_->Region((*sit).c_str()).ElementsBegin();
-                    auto eend=model_->Region((*sit).c_str()).ElementsEnd();
+                    auto ebegin=model_->Region((*sit).c_str()).CellsBegin();
+                    auto eend=model_->Region((*sit).c_str()).CellsEnd();
                     // calculate volume flow rate per unit length of well (this assumes it is uniform throughout the well!)
                     /// Special Note: Here, we do not divide by the thickness (to get [m^3/(m^3*s)]) because the PDE_Integrator
                     /// does not multiply by any thickness when performing integrals over line elements. If it did,

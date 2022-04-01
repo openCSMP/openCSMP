@@ -36,7 +36,7 @@ void SKUA_FiniteElementMeshInterface_Test::run()
 */   
 //    _test( TestNeighborConnectivity( model ) );
     const Region<3U>&  unit_A(model.Region("UNIT_A"));
-    _test( unit_A.Elements() == 1775 );
+    _test( unit_A.Cells() == 1775 );
 /*
     const Region<3U>&  unit_B(model.Region("UNIT_B"));
     _test( unit_B.Elements() == 1743 );
@@ -86,7 +86,7 @@ void SKUA_FiniteElementMeshInterface_Test::OutputRegionsToVTK( const Model<3U>& 
      std::cout <<"\n\tUnique regions of model:\n";
      for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit ) {
           std::cout <<"\t\t"<< (*rit).first;
-          std::cout <<" "<< (*rit).second.Elements() <<" elements,";
+          std::cout <<" "<< (*rit).second.Cells() <<" elements,";
           std::pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3 )
             std::cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
@@ -114,8 +114,8 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     Region<3U>& domain(model.Region("Model"));
     // recording connectivity from SKUA in an element neighbor vector
     vector<vector<Element<3U>*> > pfverts;
-    pfverts.reserve( domain.Elements() );
-    for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+    pfverts.reserve( domain.Cells() );
+    for ( auto it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it ) {
          vector<Element<3U>*> nbors( (*it)->Neighbors(), nullptr );
          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr )
@@ -132,7 +132,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
     // comparing SKUA with CSMP connectivity
     size_t failed_comparisons(0U);
     vector<vector<Element<3U>*> >::const_iterator pfit(pfverts.begin());
-    for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it, ++pfit ) {
+    for ( auto it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it, ++pfit ) {
          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != (*pfit)[i] ) {
                 if ( verbose ) {
@@ -196,8 +196,8 @@ void SKUA_FiniteElementMeshInterface_Test::PrintOriginalNeighborIDs( const Model
          const csmp::Index eid_key = model.Database().StorageKey("element number");
          // creating a mapping between current elements in region 'Model' and the VSet from the element number
          const Region<3U>& domain = model.Region("Model");
-         vector<const Element<3U>*> ordered_elmts(domain.Elements());
-         for ( auto it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+         vector<const Element<3U>*> ordered_elmts(domain.Cells());
+         for ( auto it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it )
            ordered_elmts[ static_cast<uint32_t>((*it)->Read(eid_key)) ] = (*it);
            
          // reading the VSet material record
