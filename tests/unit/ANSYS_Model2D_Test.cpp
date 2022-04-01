@@ -1,6 +1,7 @@
 #include "ANSYS_Model2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
 #include "MeshManagementUtilities.h"
 #include "vsetMakers.h"
 
@@ -14,6 +15,47 @@ using namespace std;
 namespace csmp
 {
 
+// for model building from ANSYS
+ static void create_ANSYS2D_Model( bool reconstruct_from_file )
+ {
+    string model2d_name_ = "box2d_fault";
+    string varFileName = "CSMP-variables.txt";
+    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
+
+    // ansys 2d model - contiguous
+    cout << "\n------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+    cout << "\n------------------------------------------";
+    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+    set<Element<2>*> elements;
+    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
+    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+    std::map<std::string,std::vector<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+    std::map<std::string,std::vector<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    
+    if (reconstruct_from_file) {
+        model2d_->OutputToBinaryFile(model2d_name_.c_str());
+        delete model2d_;
+        model2d_ = new Model<2U>(model2d_name_);
+        MeshManager<2>& mesh(model2d_->Mesh());
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
+        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+      }
+      
+ } // end create_ANSYS2D_Model
+ 
 
 void ANSYS_Model2D_Test::run()
   {
@@ -138,51 +180,14 @@ void ANSYS_Model2D_Test::run()
     Test_CreateConsistentLineElementOrientations2D();
     
     Test_CreatInternalBoundary();
-    
+
+    Test_CreatInternalSplitBoundaries();
+
   } // end run
   
   
   
- void create_ANSYS2D_Model( bool reconstruct_from_file )
- {
-    string model2d_name_ = "box2d_fault";
-    string varFileName = "CSMP-variables.txt";
-    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
 
-    // ansys 2d model - contiguous
-    cout << "\n------------------------------------------";
-    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
-    cout << "\n------------------------------------------";
-    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
-    set<Element<2>*> elements;
-    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
-    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-    std::map<std::string,std::vector<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
-    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-    std::map<std::string,std::vector<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-    
-    if (reconstruct_from_file) {
-        model2d_->OutputToBinaryFile(model2d_name_.c_str());
-        delete model2d_;
-        model2d_ = new Model<2U>(model2d_name_);
-        MeshManager<2>& mesh(model2d_->Mesh());
-        cout << "\nNodes: " << mesh.Nodes() << "\n";
-        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
-        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
-        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-      }
-      
- } // end create_ANSYS2D_Model
- 
  
  
  
@@ -190,6 +195,12 @@ void ANSYS_Model2D_Test::run()
        // using line element VSet
 void ANSYS_Model2D_Test::Test_printLineElementRegion()
  {
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_printLineElementRegion: running test on model '"<< endl;
+         cout << "MeshPatchWithLineElements" <<"'"<< endl;
+         cout.flush();
+      }
+    
     // verifying function with predefined correct dataset
     {
       VSet<2U>      vset;
@@ -226,11 +237,17 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
 void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
  {
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D: running test on model '"<< endl;
+         cout << model2d_name_ <<"'"<< endl;
+         cout.flush();
+      }
+
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D  model( model2d_name_.c_str(), varFileName.c_str() );
      
     // 1. accessing the line-element regions representing the boundaries between layers
-    Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    Region<2U>&  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
     
     // 2. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
     //    (traversing until end is discovered, but terminating after at most as many steps that the region has elements)
@@ -303,25 +320,67 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
 void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
 {
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalBoundary: running test on model '";
+         cout << model2d_name_ <<"'"<< endl;
+         cout.flush();
+      }
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
      
     // 1. accessing the line-element regions representing the boundaries between layers
-    Region<2U>  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
-    size_t elmts_region2{ interface2.Elements() };
+    const Region<2U>& interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    size_t n_elmts_region1{ interface1.Elements() };
+    size_t n_elmts_region2{ interface2.Elements() };
     
     bool remove_original_region{false};
     pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
-    Boundary<2U> boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
-    _test( boundary1.Elements() == interface1.Elements() );
+    const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
+    _test( boundary1.Elements() == n_elmts_region1 );
     
     remove_original_region=true;
     pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
-    Boundary<2U> boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
-    _test( boundary2.Elements() == elmts_region2 );
+    const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
+    _test( boundary2.Elements() == n_elmts_region2 );
 
 } // end Test_CreatInternalBoundary
 
+
+
+
+
+/**
+    For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
+*/
+void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
+{
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries: running test..."<< endl;
+         cout.flush();
+      }
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. creating the SplitBoundary from lower-dimensional region
+    size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Elements();
+    size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Elements();
+    pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
+    pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
+    assert( splitBoundaryName1.first.size() == 1 );
+    assert( splitBoundaryName2.first.size() == 2 );
+    _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Elements() == n_elmts_region1 );
+    _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Elements() == n_elmts_region2 );
+
+    // 2. remove split boundary 1 here before creating new ones in the same place
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+        
+    // 3. Creating a split boundary between regions (detecting if there already is one?
+    model.CreateSplitBoundaryBetween( "LOWER", "MIDDLE_REGION" ); // INTERFACE 2
+    model.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
+
+
+} // end Test_CreatInternalBoundary
 
 
 } // csmp

@@ -162,7 +162,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
     if ( !this->ContainsRegion("Model") ) return false;
     
     // is it contiguous?
-    if ( !this->IsContiguous("Model") ) return false;
+    if ( !this->Region("Model").IsContiguous() ) return false;
     
     return true;
  }
@@ -1185,39 +1185,6 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
 
 
 
-
-/**
-Tests whether the elements of the region are connected to each-other.
-
-@attention This test cannot be performed if the region has elements of different spatial
-dimensions since these are not interconnected. Therefore, this method returns false if
-the region consists of elements from different spatial dimensions.
-
-@note This method is based on the floofFill() algorithm implemented in CSMP. 
-
-*/
-template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-bool RegionInterface<dim, REGION_COMPLEX>::IsContiguous( const string& region_name ) const
-{
-  const csmp::Region<dim>& mref = Region( region_name );
-
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  pair<int32_t, int32_t>  dimensionality = mref.ElementSpatialDimensions();
-  if ( dimensionality.first > 1U ) {
-      csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::IsContiguous:",
-                         "method can determine contiguity only for regions which consist only of same spatial dimension elements; returned false." );
-      return false;
-    }
-
-  set<Element<dim>*> contiguous_elmts;
-
-  floodFill( const_cast<Element<dim>* const>(*mref.ElementsBegin()), contiguous_elmts );
-  if ( contiguous_elmts.size() != mref.Elements() ) return false;
-
-  return true;
-
-} // end IsContiguous
 
 
 

@@ -83,7 +83,7 @@ class RegionInterface {
     bool IsUnique( const std::string& regionname ) const;
 
     /// checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case)
-    bool IsContiguous( const std::string& regionname ) const;
+    // see model subdomain: bool IsContiguous( const std::string& regionname ) const;
     
     /// checks that there is a model region and that it contains elements
     bool HasValidModelRegion() const;

@@ -873,16 +873,16 @@ it was able to reach from the supplied iterator.
 To break regions into contiguous subdomains.
 
 */
-template<uint32_t dim>
-void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
+template<uint32_t dim, template<uint32_t> class CELL>
+void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "floodFill", "root element pointer is a nullptr; nothing was done.");
+         csmp_error.notice( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
          return;
       }
     // identifying the neighbors of the first element to be looked at
-    vector<Element<dim>*>  neighbor_elements;
+    vector<CELL<dim>*>  neighbor_elements;
     const size_t  neighbors(eptr->Neighbors());
     neighbor_elements.reserve( neighbors );
     for ( auto i{0U}; i<neighbors; i++ )
@@ -899,7 +899,7 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguou
      while( !neighbor_elements.empty() )
        {
           // 0. element set for subsequent passes
-          vector<Element<dim>*>  new_neighbor_elements;
+          vector<CELL<dim>*>  new_neighbor_elements;
    
           // 1. loop over those neighbors that are not already part of the deque
           for ( const auto& nit : neighbor_elements )
@@ -926,6 +926,13 @@ template void floodFill( Element<1U>* const, set<Element<1U>*>& );
 template void floodFill( Element<2U>* const, set<Element<2U>*>& );
 template void floodFill( Element<3U>* const, set<Element<3U>*>& );
 
+template void floodFill( Face<1U>* const, set<Face<1U>*>& );
+template void floodFill( Face<2U>* const, set<Face<2U>*>& );
+template void floodFill( Face<3U>* const, set<Face<3U>*>& );
+
+template void floodFill( InterFace<1U>* const, set<InterFace<1U>*>& );
+template void floodFill( InterFace<2U>* const, set<InterFace<2U>*>& );
+template void floodFill( InterFace<3U>* const, set<InterFace<3U>*>& );
 
 
 

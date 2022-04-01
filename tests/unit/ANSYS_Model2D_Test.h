@@ -21,6 +21,9 @@ class ANSYS_Model2D_Test : public Test
       
       // tests the creation of an internal boundary from the line-element regions
       void Test_CreatInternalBoundary();
+
+      // tests the creation of an internal split boundaries from the line-element region and between domains
+      void Test_CreatInternalSplitBoundaries();
   };
 
 } // csmp

@@ -30,8 +30,8 @@ template<uint32_t> class SplitBoundary;
 // MESH CONNECTIVITY
 
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
-template<uint32_t dim>
-void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
+template<uint32_t dim, template<uint32_t> class CELL>
+void floodFill( CELL<dim>* const eptr, std::set<CELL<dim>*>& output_contiguous_subset );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
 template<uint32_t dim>
