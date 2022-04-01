@@ -18,7 +18,7 @@
 #else
 #include "GaussJordan_Solver.h"
 #endif
-#include "PDE_Integrator_UoM.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 
@@ -373,7 +373,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
 #else
         GaussJordan_Solver solver;
 #endif
-        PDE_Integrator_UoM<2,Region>     extrapolator( solver );
+        PDE_Integrator<2,Region>      extrapolator( solver );
         NumIntegral_dNT_dN_dV<2>      lhs( model.Database(), target_variable_node.c_str(), target_variable_node.c_str() );
         NumIntegral_SetRHS_to_Zero<2> rhs( model.Database(), target_variable_node.c_str() );
         extrapolator.Add( &lhs );

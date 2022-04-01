@@ -17,7 +17,6 @@
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_UoM.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
@@ -559,8 +558,8 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( do
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
-    GaussJordan_Solver             GJ_solver;
-    PDE_Integrator_UoM<1U,Region>  hydrostatic_pressure(GJ_solver);
+    GaussJordan_Solver         GJ_solver;
+    PDE_Integrator<1U,Region>  hydrostatic_pressure(GJ_solver);
  
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
@@ -898,7 +897,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
 #else
     CSMP_DEFAULT_LINEAR_SOLVER     solver;
 #endif
-    PDE_Integrator_UoM<dim,Region> hydrostatic_pressure(solver);
+    PDE_Integrator<dim,Region>     hydrostatic_pressure(solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 

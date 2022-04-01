@@ -1,7 +1,7 @@
 #include "NimbleRegion_Test.h"
 
 // FE algorithm
-#include "PDE_Integrator_UoM.h"
+#include "PDE_Integrator.h"
 #include "SAMG_Solver.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"

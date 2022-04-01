@@ -14,7 +14,7 @@
 #include "ANSYS_Model3D.h"
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
-#include "PDE_IntegratorExperimental.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
@@ -203,7 +203,7 @@ void  ImplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf 
 #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
-    PDE_IntegratorExperimental<3U,Region>  fluid_pressure( solver );
+    PDE_Integrator<3U,Region>  fluid_pressure( solver );
 
     NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
     NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );

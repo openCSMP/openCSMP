@@ -59,9 +59,9 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
                 fv_transport_vapor,fv_transport_liquid),
     #ifdef CSMP_WITH_SAMG_SOLVER
     T_SAMG_solver(&T_settings),
-    T_FE_SAMG(&T_SAMG_solver),
+    T_FE_SAMG(T_SAMG_solver),
     p_SAMG_solver(&p_settings),
-    p_FE_SAMG(&p_SAMG_solver),
+    p_FE_SAMG(p_SAMG_solver),
     #else
      /// add extra functionality for alternative solver if needed
      T_FE_SAMG(&T_LINEAR_solver),

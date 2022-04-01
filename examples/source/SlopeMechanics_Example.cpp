@@ -12,8 +12,6 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_UoM.h"
-#include "PDE_IntegratorExperimental.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -154,7 +152,7 @@ void SlopeMechanics_Example::Run()
   CSMP_DEFAULT_LINEAR_SOLVER  solver;
 #endif
 
-  PDE_Integrator_UoM<DIM,Region>  hydrostatic_pressure( solver );
+  PDE_Integrator<DIM,Region>  hydrostatic_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
@@ -217,8 +215,6 @@ void SlopeMechanics_Example::Run()
     CSMP_DEFAULT_LINEAR_SOLVER  solver2;
 #endif
     PDE_Integrator<DIM,Region>  deformation(solver2);
-    
-    deformation.ScaleEssentialConditions(1.0e15);
 
     // this will also include boundary stresses translated into nodal forces
     const bool principal_vectors(true), plane_strain(false);

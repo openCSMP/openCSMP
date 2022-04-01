@@ -73,11 +73,13 @@ void StokesDiscrepancyMeasure_Example::Run()
     settings.Set_nxtyp(0);
     settings.Set_ncgtyp(5);
     settings.Set_ndefault(40);
-
-    PDE_Integrator<dim,Region>  parabolic_profile(new SAMG_Solver(&settings));
+    SAMG_Solver solver(&settings);
+    PDE_Integrator<dim,Region>  parabolic_profile( solver );
     #else
-    PDE_Integrator<dim,Region>  parabolic_profile(new CSMP_DEFAULT_LINEAR_SOLVER());
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<dim,Region>  parabolic_profile(solver);
     #endif
+
     // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
     // laplacian matrix [L] on the left-hand side
     NumIntegral_dNT_dN_dV<dim,Element<dim> >   laplacian( model.Database(), "parabolic function", "parabolic function" );

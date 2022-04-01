@@ -103,10 +103,10 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       settings.Set_nxtyp(0);
       settings.Set_ncgtyp(5);
       settings.Set_ndefault(40);
-      PDE_Integrator<dim,Region>  parabolic_profile( &solver );
+      PDE_Integrator<dim,Region>  parabolic_profile( solver );
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<dim,Region>  parabolic_profile( &solver );
+      PDE_Integrator<dim,Region>  parabolic_profile( solver );
       #endif
 
       // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
@@ -162,9 +162,10 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
    // -----------------------------------------------------------------------
 #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Solver  samg_solver(&settings);
-      PDE_Integrator<dim,Region>  steady_state_pressure( &samg_solver );
+      PDE_Integrator<dim,Region>  steady_state_pressure( samg_solver );
 #else
-      PDE_Integrator<dim,Region>  steady_state_pressure( &solver );
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+      PDE_Integrator<dim,Region>  steady_state_pressure( solver );
 #endif
 
       NumIntegral_dNT_op_dN_dV<dim,Element<dim> >  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );

@@ -21,8 +21,7 @@
 #include "ExtractTensorVariableComponent.h"
 #include "ConstantFactor.h"
 
-#include "PDE_IntegratorExperimental.h"
-#include "PDE_Integrator_UoM.h"
+#include "PDE_Integrator.h"
 #include "SteadyStateDiffusor.h"
 
 // PDE Operators
@@ -150,10 +149,10 @@ void LinearElasticity_Example::Run()
     settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
     SAMG_Solver  solver(&settings);
-    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Region>  deformation( solver );
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  solver;
-    PDE_IntegratorExperimental<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Region>  deformation( solver );
 #endif
 
     PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );

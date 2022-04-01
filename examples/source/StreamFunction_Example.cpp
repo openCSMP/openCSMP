@@ -117,9 +117,11 @@ void StreamFunction_Example::Run()
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
    #ifdef CSMP_WITH_SAMG_SOLVER
-   PDE_Integrator<2U,Region>  fluid_pressure(new SAMG_Solver());
+   SAMG_Solver solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #else
-   PDE_Integrator<2U,Region>  fluid_pressure(new CSMP_DEFAULT_LINEAR_SOLVER());
+   CSMP_DEFAULT_LINEAR_SOLVER solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #endif
 
    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );

@@ -91,7 +91,8 @@ BoreHole_stability2D_VVCase::BoreHole_stability2D_VVCase(const char* prefix)
       #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Settings settings;
       settings.Set_napproach(2);
-      PDE_Integrator<2U,Region> deformation( new SAMG_Solver(&settings) );
+      SAMG_Solver solver(&settings);
+      PDE_Integrator<2U,Region> deformation( solver  );
       #else
       PDE_Integrator<2U,Region> deformation( new CSMP_DEFAULT_LINEAR_SOLVER() );
       #endif

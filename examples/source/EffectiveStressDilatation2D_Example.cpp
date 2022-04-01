@@ -359,7 +359,7 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
-    transient_pressure.SetSolver(&samg_solver);
+    transient_pressure.SetSolver(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
     /// add extra functionality for alternative solver if needed

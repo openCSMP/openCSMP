@@ -509,13 +509,13 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
     if(lu_solver_){
 
-         steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>  ( );
+         steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>;
 
     }else{
 
         #ifdef CSMP_WITH_SAMG_SOLVER
-
-        steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>  ( new SAMG_Solver(&steady_state_pressure_solver_settings_));
+        SAMG_Solver solver(&steady_state_pressure_solver_settings_);
+        steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>( solver );
 
         // Solver Settings
 

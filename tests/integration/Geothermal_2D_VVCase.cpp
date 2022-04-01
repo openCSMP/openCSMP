@@ -149,7 +149,7 @@ Criterion:
     #endif
 
     //! steady state pressure
-    PDE_Integrator<3U, Region>  steady_state_pressure( &solver );
+    PDE_Integrator<3U, Region>  steady_state_pressure( solver );
 
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     NumIntegral_dNT_op_dV<DIM,Element<DIM> >     gravity( pd_ref, "mass gravity term", "fluid pressure" );
@@ -164,7 +164,7 @@ Criterion:
     steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<3U, Region>  transient_pressure( &solver );
+    PDE_Integrator<3U, Region>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
@@ -196,7 +196,7 @@ Criterion:
     transient_pressure.AddPostProcess( &t_velocity );
     
     //! temperature diffusion
-    PDE_Integrator<DIM, Region>  temperature_diffusion( &solver );
+    PDE_Integrator<DIM, Region>  temperature_diffusion( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
     

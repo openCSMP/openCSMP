@@ -115,7 +115,7 @@ void Geothermal_Example::Run()
   //! 2. Setting up finite element algorithms for PT diffusion
   //! --------------------------------------------------------
   //! computation of initial steady-state fluid pressure
-  PDE_Integrator<DIM, Region>  steady_state_pressure( &solver );
+  PDE_Integrator<DIM, Region>  steady_state_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>    p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
   // replace if you want to work with fluid sources and sinks
@@ -155,7 +155,7 @@ void Geothermal_Example::Run()
   transient_pressure.AddPostProcess( &t_velocity );
 
   //! transient thermal diffusion
-  PDE_Integrator<DIM, Region>  temperature_diffusion( &solver );
+  PDE_Integrator<DIM, Region>  temperature_diffusion( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
 

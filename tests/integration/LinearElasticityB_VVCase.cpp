@@ -76,10 +76,10 @@ namespace csmp
       SAMG_Settings settings;
       SAMG_Solver   solver(&settings);
       settings.Set_napproach(2);
-      PDE_Integrator<DIM,Region> deformation( &solver  );
+      PDE_Integrator<DIM,Region> deformation( solver  );
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<DIM,Region> deformation( &solver );
+      PDE_Integrator<DIM,Region> deformation( solver );
       #endif
 
       PT_op<DIM,Element<DIM> > bforces( model.Database(), "force", "displacement" );

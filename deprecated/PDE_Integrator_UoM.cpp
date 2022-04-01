@@ -1,6 +1,5 @@
 #include "PDE_Integrator_UoM.h"
 #include "NimbleRegion.h"
-#include "ModelSubDomain.h"
 
 #if defined(_OPENMP )
 #include "omp.h"
@@ -11,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::PDE_Integrator_UoM( Solver& solver )
  : PDE_Integrator<dim,COMPUTATION_DOMAIN>(&solver)
 {
@@ -19,14 +18,14 @@ PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::PDE_Integrator_UoM( Solver& solver )
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim,template<size_t> class COMPUTATION_DOMAIN>
 PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::~PDE_Integrator_UoM()
  {
     // are we sure that any newed solver object in the base class is deleted ?
  }
 
 
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COMPUTATION_DOMAIN<dim>& gref)
 {
     // -------------------------------------------------------------------
@@ -61,7 +60,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
     // -------------------------------------------
     this->dof_per_node_ = 0U;
     this->target_.nodes = gref.Nodes();
-    this->target_.elements = gref.Cells();
+    this->target_.elements = gref.Elements();
 
 
     // ------------------------------------------------------
@@ -225,15 +224,15 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
    // ----------------------------------------------------------------------
    this->G_.Resize( offset );
    this->rh_.resize( offset );
-   vector<double>( this->rh_ ).swap( this->rh_ );
+   vector<double64>( this->rh_ ).swap( this->rh_ );
    fill( this->rh_.begin(), this->rh_.end(), 0. );
    this->x_.resize( offset );
-   vector<double>( this->x_ ).swap( this->x_ );
+   vector<double64>( this->x_ ).swap( this->x_ );
 #if defined(_OPENMP )
    for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
        this->thread_G_[tid].Resize(offset);
        this->thread_rh_[tid].resize(offset);
-       vector<double>( thread_rh_[tid] ).swap( thread_rh_[tid] );
+       vector<double64>( thread_rh_[tid] ).swap( thread_rh_[tid] );
        fill( thread_rh_[tid].begin(), thread_rh_[tid].end(), 0. );
    }
 #endif
@@ -247,7 +246,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EstablishMatrixSetup(const COM
 /**
     Needed to overwrite base clase method because DOF_indexes_ yield different positions in matrices and right-hand vector.
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const COMPUTATION_DOMAIN<dim>& gref)
   {
     size_t                  i, j;
@@ -270,7 +269,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const 
       {
         prop_key = (*it).first.key;
         offset = (*it).second;
-        auto  niter(gref.NodesBegin());
+        typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
 
         if (prop_key.place != NODE )
           throw csmp::Exception( WARNING, "PDE_Integrator_UoM<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
@@ -358,7 +357,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignInitialConditions(const 
   
   
   
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_DOMAIN<dim>& gref)
   {
     // setting up the index mapping from global to local node ID numbers
@@ -368,7 +367,8 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorLHS<dim>*>::iterator
       it_lhs = this->lhs_operators_.begin(); it_lhs != this->lhs_operators_.end(); it_lhs++)
       if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater())
-        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++ )
+        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
+          git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
         {
           (*it_lhs).second->GetOperands(*(*git));
           (*it_lhs).second->ComputeContribution(*(*git));
@@ -386,17 +386,18 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for (typename map<string, MathOperatorRHS<dim>*>::iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++)
       if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater())
-        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++)
-          {
-            (*it_rhs).second->GetOperands(*(*git));
-            (*it_rhs).second->ComputeContribution(*(*git));
-            if ((*it_rhs).second->MultiplyWithTimeIncrement())
-              (*it_rhs).second->MultiplyWithTimeFactor(this->time_increment_);
-            if ((*it_rhs).second->DivideByTimeIncrement())
-              (*it_rhs).second->MultiplyWithTimeFactor(1. / this->time_increment_);
-            //(*it_rhs).second->AssignToGlobal(*(*git), rh_);
-            (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_); // luat changed here
-          }
+        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
+          git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
+        {
+          (*it_rhs).second->GetOperands(*(*git));
+          (*it_rhs).second->ComputeContribution(*(*git));
+          if ((*it_rhs).second->MultiplyWithTimeIncrement())
+            (*it_rhs).second->MultiplyWithTimeFactor(this->time_increment_);
+          if ((*it_rhs).second->DivideByTimeIncrement())
+            (*it_rhs).second->MultiplyWithTimeFactor(1. / this->time_increment_);
+          //(*it_rhs).second->AssignToGlobal(*(*git), rh_);
+          (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_); // luat changed here
+        }
 #else
     // accumulating into the compressed row matrix 'G' for each thread
     // ---------------------------------------
@@ -408,7 +409,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_lhs = this->thread_lhs_operators_[tid].begin(); it_lhs != this->thread_lhs_operators_[tid].end(); it_lhs++) {
         if (!(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater()) {
 #pragma omp for
-          for ( size_t e = 0; e < gref.Cells(); e++)
+          for (int32 e = 0; e < gref.Elements(); e++)
           {
             //                    cout<<"element: "<<e<<endl;
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
@@ -443,7 +444,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
         it_rhs = this->thread_rhs_operators_[tid].begin(); it_rhs != this->thread_rhs_operators_[tid].end(); it_rhs++) {
         if (!(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater()) {
 #pragma omp for
-          for ( size_t e = 0; e < gref.Cells(); e++)
+          for (int32 e = 0; e < gref.Elements(); e++)
           {
             typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
             fe_tmp = eit->FE(); //save old pointer.
@@ -471,18 +472,18 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
       this->G_ += this->thread_G_[tid];
 
     for (size_t tid = 0; tid < omp_get_max_threads(); tid++)
-      for (auto i = 0; i < this->rh_.size(); i++)
+      for (size_t i = 0; i < this->rh_.size(); i++)
         this->rh_[i] = this->rh_[i] + this->thread_rh_[tid][i];
 
     //    G_.Out();
-    //    for (auto i = 0; i<rh_.size();i++)
+    //    for (size_t i = 0; i<rh_.size();i++)
     //        cout<<"rh:["<<i<<"]: "<<rh_[i]<<endl;
     //    exit(1);
 
 #endif
   } // end Accumulate
 
-  template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+  template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
   void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::EnumerateAndFixMatrixSize(const COMPUTATION_DOMAIN<dim>& gref) {
     DOF_indexes_.resize(this->rh_.size());
     fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
@@ -506,7 +507,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
           it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
         {
-          auto  niter(gref.NodesBegin());
+          typename vector<csmp::Node<dim>*>::const_iterator  niter(gref.NodesBegin());
           csmp::Index prop_key = (*it).first.key;
           size_t      offset = (*it).second;
 
@@ -535,7 +536,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             VectorVariable<dim>  vc;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, vc);
-              for (auto i{0U}; i < dim; i++) {
+              for (size_t i = 0U; i < dim; i++) {
                 position = (*niter)->Idx() * dim + i + offset;
                 if (vc.Flag(i) == DIRICH) {
                   DOF_indexes_[position] = NULL_IDX;
@@ -553,15 +554,15 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             TensorVariable<dim>  ts;
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ts);
-              for (auto i{0U}; i < dim; i++) {
+              for (size_t i = 0U; i < dim; i++) {
                 if (ts.Flag(i) == DIRICH) {
-                  for (size_t j{0U}; j < dim; j++) {
+                  for (size_t j = 0U; j < dim; j++) {
                     position = (*niter)->Idx() * this->dim2_ + i * dim + j + offset;
                     DOF_indexes_[position] = NULL_IDX;
                   }
                 }
                 else {
-                  for (size_t j{0U}; j < dim; j++) {
+                  for (size_t j = 0U; j < dim; j++) {
                     position = (*niter)->Idx() * this->dim2_ + i * dim + j + offset;
                     DOF_indexes_[position] = DOF;
                     DOF = DOF + 1;
@@ -578,13 +579,13 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
               (*niter)->Read(prop_key, ar);
               if (ar.Flag() == DIRICH)
               {
-                for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                for (size_t i = 0U; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
                 }
               }
               else {
-                for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                for (size_t i = 0U; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = DOF;
                   DOF = DOF + 1;
@@ -598,7 +599,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
             FlaggedArrayVariable  ar(prop_key.dataDepth);
             while (niter != gref.NodesEnd()) {
               (*niter)->Read(prop_key, ar);
-              for (auto i{0U}; i < prop_key.dataDepth; i++)
+              for (size_t i = 0U; i < prop_key.dataDepth; i++)
                 if (ar.Flag(i) == DIRICH) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   DOF_indexes_[position] = NULL_IDX;
@@ -621,19 +622,19 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::Accumulate(const COMPUTATION_D
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    vector<double>(this->rh_).swap(this->rh_);
+    vector<double64>(this->rh_).swap(this->rh_);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
     
     pivotVector_.resize(DOF);
 	  fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    vector<double>(this->x_).swap(this->x_);
+    vector<double64>(this->x_).swap(this->x_);
 
  } // end
  
 
 
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTATION_DOMAIN<dim>& gref)
   {
     // accumulating as late addition into the righhand vector 'rhs'
@@ -641,7 +642,8 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     for (typename map<string, MathOperatorRHS<dim>*>::const_iterator
       it_rhs = this->rhs_operators_.begin(); it_rhs != this->rhs_operators_.end(); it_rhs++ )
       if ((*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater())
-        for ( auto git = gref.CellsBegin(); git != gref.CellsEnd(); git++)
+        for (typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
+             git = gref.ElementsBegin(); git != gref.ElementsEnd(); git++)
           {
             (*it_rhs).second->GetOperands(*(*git));
             (*it_rhs).second->ComputeContribution(*(*git));
@@ -662,7 +664,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     Overriding method of the base class because a mapping is required from the smaller solution vector
     back onto the computational domain.
 */
-  template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+  template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
   void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::OutputResults(COMPUTATION_DOMAIN<dim>& gref)
   {
     Index   prop_key;
@@ -671,7 +673,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsIterator
           it = this->basic_operands_.begin(); it != this->basic_operands_.end(); it++ )
       {
-        auto gfirst(gref.NodesBegin());
+        typename vector<Node<dim>*>::iterator  gfirst(gref.NodesBegin());
         prop_key = (*it).first.key;
         offset = (*it).second;
 
@@ -685,7 +687,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
             position = (*gfirst)->Idx() + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
-              const double sc = this->x_[position];
+              const double64 sc = this->x_[position];
               (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
             }
             gfirst++;
@@ -695,7 +697,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
           VectorVariable<dim>  vc;
           while (gfirst != gref.NodesEnd()) {
             (*gfirst)->Read(prop_key, vc);
-            for (auto i{0U}; i < dim; i++) {
+            for (size_t i = 0U; i < dim; i++) {
               position = (*gfirst)->Idx() * dim + i + offset;
               position = DOF_indexes_[position];
               if (position != NULL_IDX) {
@@ -712,7 +714,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         TensorVariable<dim>  ts;
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ts);
-          for (auto i{0U}; i < dim; i++)
+          for (size_t i = 0U; i < dim; i++)
             for (size_t k = 0U; k < dim; k++) {
               position = (*gfirst)->Idx() * this->dim2_ + i * dim + k + offset;
               position = DOF_indexes_[position];
@@ -730,7 +732,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         ArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (auto i{0U}; i < prop_key.dataDepth; i++) {
+          for (size_t i = 0U; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
@@ -746,7 +748,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
         FlaggedArrayVariable  ar(prop_key.dataDepth);
         while (gfirst != gref.NodesEnd()) {
           (*gfirst)->Read(prop_key, ar);
-          for (auto i{0U}; i < prop_key.dataDepth; i++) {
+          for (size_t i = 0U; i < prop_key.dataDepth; i++) {
             position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
             position = DOF_indexes_[position];
             if (position != NULL_IDX) {
@@ -774,7 +776,7 @@ void  PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::LateAccumulate(const COMPUTAT
 /**
     New aspect as compared with the base class: reduction of matrix and rhs size.
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain )
   {
     //0. renumber nodes
@@ -815,7 +817,7 @@ void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOM
 /**
     ??? - document
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator_UoM<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain) {
 	  for (size_t i(0); i < this->rh_.size(); ++i) {
 		     this->rh_[i] += pivotVector_[i];
@@ -835,8 +837,8 @@ template class PDE_Integrator_UoM<1U, SplitBoundary>;
 template class PDE_Integrator_UoM<2U, SplitBoundary>;
 template class PDE_Integrator_UoM<3U, SplitBoundary>;
 
-template class PDE_Integrator_UoM<1U, NimbleRegion>;
-template class PDE_Integrator_UoM<2U, NimbleRegion>;
-template class PDE_Integrator_UoM<3U, NimbleRegion>;
+template class PDE_Integrator_UoM<1U,NimbleRegion>;
+template class PDE_Integrator_UoM<2U,NimbleRegion>;
+template class PDE_Integrator_UoM<3U,NimbleRegion>;
 
 } // end namespace csmp

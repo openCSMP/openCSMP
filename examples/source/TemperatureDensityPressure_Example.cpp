@@ -114,9 +114,11 @@ void TemperatureDensityPressure_Example::Run()
     // 4. compute vertical temperature profile
     // -------------------------------------------------------------
     #ifdef CSMP_WITH_SAMG_SOLVER
-    PDE_Integrator<1U,Region>  temperature(new SAMG_Solver());
+    SAMG_Solver solver;
+    PDE_Integrator<1U,Region>  temperature( solver );
     #else
-    PDE_Integrator<1U,Region>  temperature(new CSMP_DEFAULT_LINEAR_SOLVER());
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<1U,Region>  temperature( solver );
     #endif
 
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );

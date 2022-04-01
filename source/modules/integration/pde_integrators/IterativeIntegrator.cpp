@@ -3,6 +3,8 @@
 #include "Model.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
 
 using namespace std;
 
@@ -153,11 +155,8 @@ void IterativeIntegrator<dim,COMPUTATION_DOMAIN>::SAMG_KeepSettings() {
 
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 SAMG_Settings* IterativeIntegrator<dim,COMPUTATION_DOMAIN>::GetSAMG_Settings() {
-  SAMG_Settings* result(0);
-  if (SAMG_Solver* samg_solver = dynamic_cast<SAMG_Solver*>(this->GetSolver())) {
-    result = dynamic_cast<SAMG_Settings*>(samg_solver->GetSolverSettings());
-  }
-  return result;
+  SAMG_Solver& solver = dynamic_cast<SAMG_Solver&>(this->GetSolver());
+  return dynamic_cast<SAMG_Settings*>(solver.GetSolverSettings());
 }
 
 #endif // with SAMG_Solver

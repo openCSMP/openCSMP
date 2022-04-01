@@ -3,40 +3,69 @@
 
 #include "CSMP_definitions.h"
 #include "Test.h"
-#include "Model.h"
-#include "VSet.h"
-
-#include "ANSYS_Interface.h"
-#include "ModelTopology.h"
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "CSMP_highLevelUtilities.h"
-
-#include "LinearSolver.h"
-
-#include "PropertyHandle.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
+template<uint32_t> class Region;
+template<uint32_t> class Element;
+
 class PDE_Integrator_Test : public Test {
-public:
-    /// builds a test model that gets assigned to sg_
-    PDE_Integrator_Test();
+  public:
+    explicit PDE_Integrator_Test( Model<2U>& model );
     ~PDE_Integrator_Test();
-    
-    // TODO: test is not developed yet, nothing gets tested for
-    virtual void run();
-    
-    void SolveMatrixEquationWithSAMG();
+    void run();
 
-private:
+  private:
+    Model<2U>& model_;
+    PDE_Integrator<2U, Region>* pde_reference_        = nullptr;         // for validating
+    PDE_Integrator<2U, Region>* pde_test_ = nullptr;         // for testing
+    
+    const static bool verbose_ = true;
 
-  Model<2U>* sg_                       = nullptr;
-  PDE_Integrator<2U,Region>* alg_      = nullptr;
-  NumIntegral_dNT_op_dN_dV<2U>* stiff_ = nullptr;
-  NumIntegral_NT_op_N_dV<2U>* source_  = nullptr;
-};
+    /*
+    =================> LHS:
+    NumIntegral_BT_D_B_dV
+    NumIntegral_BT_D_op_dV
+    NumIntegral_dNT_dN_dV
+    NumIntegral_dNT_mixed_op_dN_dV
+    NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV
+    NumIntegral_dNT_op_dN_dV                                      1
+    NumIntegral_dNT_op_dN_dV_NT_v_dN_dV
+    NumIntegral_dNT_op_dN_NT_op_dop_dN_dV
+    NumIntegral_DNT_op_DN_NT_v_DN_dV
+    NumIntegral_NT_dNi_dV
+    NumIntegral_NT_dNi_dV_sc
+    NumIntegral_NT_lhsop_N_dV
+    NumIntegral_PT_lhsop_P_dV        
+
+    ==================> RHS:
+    MathOperatorRHS
+    NumIntegral_DNi_rhsop_dV
+    NumIntegral_dNT_op_dV                                         1
+    NumIntegral_DNT_rhsop_DN_dV
+    NumIntegral_DNT_v_dV
+    NumIntegral_NT_mixed_op_dNi_dV
+    NumIntegral_NT_op_dNi_dV
+    NumIntegral_NT_op_N_dS
+    NumIntegral_NT_op_N_dV                                        1
+    NumIntegral_NT_op1_op2_dNi_dV
+    NumIntegral_op_NT_dN_orthogonal_dV
+    NumIntegral_op_NT_N_dV
+    NumIntegral_op_PT_P_dV
+    NumIntegral_PT_op_dS
+    NumIntegral_PT_op_dV
+    NumIntegral_PT_op_P_dV
+    PointSource_rhsop                                             1
+    */
+
+  private:
+    void Reset();
+    void TestSingleVariable() {}       // TODO: reinstate method
+    void TestTwoScalarVariables() {}   // TODO: reinstate method
+    void TestOutputSingleVariable() {} // TODO: reinstate method
+  };
 
 } // end namespace csmp
 

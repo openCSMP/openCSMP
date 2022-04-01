@@ -1122,7 +1122,7 @@ void SimulatorSetup<dim>::AddLegacy_FE_Integrator(std::string name)
         SAMG_Solver* sol = new SAMG_Solver();
         name_samgsolver_[name]=sol;
         solver_settings_[name]=dynamic_cast<SAMG_Settings*>(sol->GetSolverSettings());
-        PDE_Integrator<dim,Region>* pint=new PDE_Integrator<dim,Region> (sol);
+        PDE_Integrator<dim,Region>* pint=new PDE_Integrator<dim,Region>(*sol);
         legacy_FE_integrators_[sol]=pint;
     }
 }

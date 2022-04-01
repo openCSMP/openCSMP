@@ -39,7 +39,8 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     lap = 1.0e-30;
 
     #ifdef CSMP_WITH_SAMG_SOLVER
-    PDE_Integrator<dim,Region>  parabolic_profile(new SAMG_Solver());
+    SAMG_Solver solver;
+    PDE_Integrator<dim,Region>  parabolic_profile( solver );
     #else
     /// add extra functionality for alternative solver if needed
     PDE_Integrator<dim,Region> parabolic_profile(new CSMP_DEFAULT_LINEAR_SOLVER());
