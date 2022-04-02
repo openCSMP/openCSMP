@@ -357,16 +357,16 @@ class PDE_Integrator {
     /// checks whether (returns true) any Boundary object in the model is a surface of the computational domain
     bool IdentifySharedBoundaries( const Model<dim>&, const COMPUTATION_DOMAIN<dim>&, std::list<std::string>& shared_boundaries );
   
-    /// for the elimination of Dirichlet constraints (Luat Khoa Tran)
-    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
-  
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
+    /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
+    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+  
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
 
-    /// eliminates Dirichlet conditions from the solution matrix and right-hand vector; uses node numbering
+    /// modifies right-hand vector; adding Dirichlet condition terms that were elimitated before
     virtual void  AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
 
     /// accumulates finite element integrals into solution matrix and right-hand side; uses node numbering
@@ -384,6 +384,9 @@ class PDE_Integrator {
     /// late accumulates surface integrals from Neumann-flagged Face object variables representing those parts of all boundaries that delimit the computational domain
     virtual void  LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const Boundary<dim>& );
     virtual void  LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
+    
+    /// couples domains separated by SplitBoundaries using the information from NodeManifolds
+    void CoupleContacts( COMPUTATION_DOMAIN<dim>& );
 
     /// calls connected solver object to find x in G x = rh problem
     virtual void  Solve();
@@ -403,11 +406,11 @@ class PDE_Integrator {
     std::map<Parameter,size_t>                   basic_operands_;
     std::map<Parameter,size_t>                   test_operands_;           ///< dependent variables in the solved system of equations
 
-    SparseMatrix          G_;                        ///< solution matrix
-    std::vector<double>   rh_;                       ///< righthand vector
-    std::vector<double>   x_;                        ///< solution vector
-    std::vector<size_t>   DOF_indexes_;              ///< for indexing DOFs (only non-Dirichlet dofs, enumerated 0 -> maximum DOF
-    std::vector<double>   pivotVector_;              ///< terms recovered from eliminated rows
+    SparseMatrix          G_;           ///< solution matrix
+    std::vector<double>   rh_;          ///< righthand vector
+    std::vector<double>   x_;           ///< solution vector
+    std::vector<size_t>   DOF_indexes_; ///< indices of DOFs, but only of the non-Dirichlet dofs, size enumerated 0 - DOF-1 (including Dirich DOF)
+    std::vector<double>   pivotVector_; ///< mapping from DOFs to actual node numbers
 
     Solver*               solver_;
 

@@ -114,7 +114,6 @@ struct Index {
     bool Out( std::fstream& fp ) const;
     bool In( std::fstream& fp );
 
-
     VARIABLE_TYPE               type;
     PLACEMENT                   place;
     uint32_t                    index = UNSPECIFIED;        ///< For Scalars, Vectors, Tensors, Arrays, FlaggedArrays: the how many'th variable of its kind at specified placement
@@ -151,6 +150,7 @@ struct INDEX : public Index {
               
    INDEX() : Index() {}
    explicit INDEX( uint32_t i ) : Index(ty,pl,i) {}
+   explicit INDEX( csmp::Index& idx ) : Index(idx) {}
    explicit INDEX( csmp::Index&& idx ) : Index(idx) {}
 };
 

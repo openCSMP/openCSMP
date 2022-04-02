@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "Node.h"
 #include "NimbleRegion.h"
 
 using namespace std;
@@ -854,7 +855,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
                   VectorVariable<dim> vc;
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, vc);
-                      for ( auto i = 0; i < dim; i++) {
+                      for ( auto i{0U}; i < dim; i++) {
                           position = (*niter)->Idx() * dim + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= vc(i);
@@ -868,8 +869,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
                   const size_t        dim2(dim * dim);
                   while (niter != gref.NodesEnd()) {
                     (*niter)->Read(prop_key, ts);
-                    for ( auto i = 0; i < dim; i++)
-                      for ( size_t j = 0; j < dim; j++) {
+                    for ( auto i{0U}; i < dim; i++)
+                      for ( auto j{0U}; j < dim; j++) {
                           position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= ts(i, j);
@@ -882,7 +883,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
                   ArrayVariable  ar(prop_key.dataDepth);
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, ar);
-                      for ( auto i = 0; i < prop_key.dataDepth; i++) {
+                      for ( auto i{0U}; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= ar(i);
@@ -895,7 +896,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
                   FlaggedArrayVariable far(prop_key.dataDepth);
                   while (niter != gref.NodesEnd()) {
                       (*niter)->Read(prop_key, far);
-                      for ( auto i = 0; i < prop_key.dataDepth; i++) {
+                      for ( auto i{0U}; i < prop_key.dataDepth; i++) {
                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                           position = DOF_indexes_[position];
                           if (position != NULL_IDX) this->rh_[position] *= far(i);
@@ -930,7 +931,7 @@ template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain)
  {
     const size_t rh_size(this->rh_.size());
-    for ( size_t i(0); i < rh_size; ++i ) {
+    for ( size_t i{0U}; i < rh_size; ++i ) {
          this->rh_[i] += pivotVector_[i];
       }
  }
@@ -1220,6 +1221,84 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBoundaryIntegra
 
 
 
+/**
+
+Loops over the nodes of the Region Boundary.
+If these are manifolds, the coupling is applied.
+
+@note whether the test function variable should be coupled across the interface is determined from the value of the test-function operand at the SplitBoudary.
+If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is created, if it is ROBIN, the nodes in the manifold are coupled.
+
+@todo perhaps introduce new flag called VARIABLE_FLAG : COUPLED to express the state of the variable at the internal SplitBoundary.
+
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleContacts( COMPUTATION_DOMAIN<dim>& subdomain )
+{
+   if ( test_operands_.size() > 1U )
+     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleContacts",
+                           "method implemented for only one test-function operand so far");
+     
+    // TODO: get this info from the solution variable
+    // const INDEX<SCALAR,NODE> key_continuous_p = INDEX<SCALAR,NODE>( model.Database().StorageKey("pressure continuity status") );
+    const INDEX<SCALAR,NODE> var_key = INDEX<SCALAR,NODE>{ (*test_operands_.begin()).first.key };
+    const VARIABLE_FLAG couple_if{ ROBIN };
+
+    // manifolds can only be present at the subdomain perimeter
+    for ( auto mit = subdomain.PerimeterNodesBegin(); mit != subdomain.NodesEnd(); ++mit )
+      if ( (*mit)->IsManifold() )
+        {
+          const auto n_branches{ (*mit)->Manifold()->Branches() };
+          
+          // 1. RHS: compute total load at master dof then copy that value to slave node
+          size_t masterIDX = (*mit)->Manifold()->N(0)->Idx();
+          for ( auto n{1U}; n < n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                // here the assumption is made that if the control variable value = 1, the interface should be coupled
+                // int continuous_p = static_cast<int>(slave_node->Read(key_continuous_p)); - use ROBIN status instead
+                if ( slave_node->Status(var_key) == couple_if )
+                  rh_[masterIDX] += rh_[slave_node->Idx()];
+            }
+            
+          // 2. RHS: apply reciprocal coupling
+          for ( auto n{1U}; n < n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                if ( slave_node->Status(var_key) == couple_if )
+                  rh_[slave_node->Idx()] = rh_[masterIDX];
+             }
+
+          // 3. LHS: adding all the element on slave row to master dof - except slave dof
+          for( auto n{1U}; n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                if ( slave_node->Status(var_key) == couple_if ) {
+                    size_t slaveIDX = slave_node->Idx();
+                    for (size_t j(0U); j < G_.Cols(); ++j )
+                      if (j != slaveIDX && j != masterIDX)
+                        G_.Add(masterIDX, j, G_.At(slaveIDX, j));
+                    
+                    // 4. adding diagonal value to master dof
+                    G_.Add(masterIDX, masterIDX, G_.At(slaveIDX, slaveIDX));
+                 }
+        }
+
+      // 5. copy that value from master dof to slave dof - except slave and master dofs position
+      for ( auto n{1U}; n_branches; n++ ) {
+            auto slave_node = (*mit)->Manifold()->N(n);
+            if ( slave_node->Status(var_key) == couple_if ) {
+                size_t slaveIDX = slave_node->Idx();
+                for ( size_t j(0); j < G_.Cols(); ++j )
+                   if ( j != slaveIDX && j != masterIDX)
+                     G_.Assign( slaveIDX, j, G_.At(masterIDX, j) );
+ 
+                // 6.  copy diagonal value from master dof to slave dof
+                G_.Assign(slaveIDX, slaveIDX, G_.At(masterIDX, masterIDX) );
+             }
+        }
+    }
+    
+} // end CoupleContacts
+
+
 
 
 /**
@@ -1347,7 +1426,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
             while (gfirst != gref.NodesEnd()) {
                   (*gfirst)->Read(prop_key, ts);
                   for (auto i{0U}; i < dim; i++)
-                    for (size_t k = 0U; k < dim; k++) {
+                    for ( auto k{0U}; k < dim; k++) {
                          position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
                          position = DOF_indexes_[position];
                          if (position != NULL_IDX) ts(i, k) = this->x_[position];

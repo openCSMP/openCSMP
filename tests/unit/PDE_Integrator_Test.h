@@ -11,16 +11,31 @@ namespace csmp {
 template<uint32_t> class Region;
 template<uint32_t> class Element;
 
+
+/**
+
+TODO
+
+@todo test that the PDE operators are accumulated into the right places in the lefthand matrix
+@todo test accumulation of boundary integrals
+@todo test coupling of domains by SplitBoundary integrals
+@todo test accumulation of a coupled system
+@todo test that the contacts between domain and boundaries are identified correctly for the accumulation of surface integrals at the boundary
+@todo move all the testing that relates to matrix inversion into Solver_Test and specific subclasses
+@todo test repeated use of integrator in a time-dependent problem:  matrix retention vs. reconstruction, test change of DOF from step to step
+
+*/
 class PDE_Integrator_Test : public Test {
   public:
     explicit PDE_Integrator_Test( Model<2U>& model );
+    explicit PDE_Integrator_Test( Model<3U>& model );
     ~PDE_Integrator_Test();
     void run();
 
   private:
     Model<2U>& model_;
-    PDE_Integrator<2U, Region>* pde_reference_        = nullptr;         // for validating
-    PDE_Integrator<2U, Region>* pde_test_ = nullptr;         // for testing
+    PDE_Integrator<2U, Region>* pde_reference_ = nullptr;         // for validating
+    PDE_Integrator<2U, Region>* pde_test_      = nullptr;         // for testing
     
     const static bool verbose_ = true;
 
