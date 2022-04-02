@@ -9,6 +9,8 @@ class  SKUA_Example : public Example {
 public:
   virtual void Run();
   virtual void Specifications();
+private:
+  static void ListModels();
 };
 
 } // csmp

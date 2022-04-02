@@ -88,8 +88,9 @@ an output file.
 
 @param output_file The name of the textfile which will either be newly created or
 overwritten.
+@param header If not empty, outputs this header before the topological information.
 */
-void  ModelTopology::Out( const char* output_file ) const
+void  ModelTopology::Out( const char* output_file, const std::string header ) const
  {
     if ( model_domains_.empty() ) {
          cout <<"\nModelTopology::Out: Topology of '"<< model_name_;
@@ -98,6 +99,9 @@ void  ModelTopology::Out( const char* output_file ) const
       }
     ofstream  ofs( output_file );
 
+    if( !header.empty() ) {
+        ofs << header << endl;
+    }
     ofs <<"\nModelTopology::Out: Model: '"<< model_name_ <<"'"<< endl;
     for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ )
       {
