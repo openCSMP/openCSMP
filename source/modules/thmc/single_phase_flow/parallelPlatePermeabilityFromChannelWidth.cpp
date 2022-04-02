@@ -43,7 +43,8 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     PDE_Integrator<dim,Region>  parabolic_profile( solver );
     #else
     /// add extra functionality for alternative solver if needed
-    PDE_Integrator<dim,Region> parabolic_profile(new CSMP_DEFAULT_LINEAR_SOLVER());
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<dim,Region> parabolic_profile( solver );
     #endif
   
     // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment

@@ -64,8 +64,8 @@ CVFEM_PHX_Scheme<dim>::CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravit
     p_FE_SAMG(p_SAMG_solver),
     #else
      /// add extra functionality for alternative solver if needed
-     T_FE_SAMG(&T_LINEAR_solver),
-     p_FE_SAMG(&p_LINEAR_solver),
+     T_FE_SAMG(T_LINEAR_solver),
+     p_FE_SAMG(p_LINEAR_solver),
     #endif
      capacitance_lhs(p_ref,names.capacitance_lhs_variables[0].c_str(),
                            names.capacitance_lhs_variables[1].c_str(),

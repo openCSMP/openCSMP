@@ -164,7 +164,6 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       SAMG_Solver  samg_solver(&settings);
       PDE_Integrator<dim,Region>  steady_state_pressure( samg_solver );
 #else
-      CSMP_DEFAULT_LINEAR_SOLVER solver;
       PDE_Integrator<dim,Region>  steady_state_pressure( solver );
 #endif
 
