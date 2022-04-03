@@ -1,5 +1,6 @@
 #include "ArrayVariable.h"
 #include "ScalarVariable.h"
+#include "PropertyDatabase.h"
 
 #include <cassert>
 

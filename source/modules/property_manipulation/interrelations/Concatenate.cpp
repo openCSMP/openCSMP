@@ -4,6 +4,7 @@
 #include <numeric>
 #include <functional>
 #include "Exception.h"
+#include "PropertyDatabase.h"
 
 using namespace std;
 
