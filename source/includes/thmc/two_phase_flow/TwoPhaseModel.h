@@ -206,10 +206,6 @@ class TwoPhaseModel {
     virtual double dGds_numerical (  double h = 0.000001 ) const;
     virtual double dpcds_numerical(  double h = 0.00001 ) const;
 
-    double spline_value( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
-    double spline_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
-    double spline_second_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const;
-
     /// default is the wetting phase
     virtual void Out( uint32_t phase=1U ) const;
     
