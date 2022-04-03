@@ -237,9 +237,9 @@ void spline( const std::vector<double>& x, // x values    (0..n-1)
 
 /// spline based interpolation, NumRecipes Chapter 3, p.118 modified
 double splint( const vector<double>& xa, 
-                  const vector<double>& ya, 
-                  const vector<double>& y2a, 
-                  double x )
+               const vector<double>& ya,
+               const vector<double>& y2a,
+               double x )
 {
   assert( xa.size() >= 3U );
 
