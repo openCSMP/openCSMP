@@ -1,12 +1,14 @@
 #ifndef ARRAY_VARIABLE_H
 #define ARRAY_VARIABLE_H
 
+#include "CSMP_definitions.h"
 #include "FlaggedArrayVariable.h"
-#include "PropertyDatabase.h"
 
 namespace csmp {
 
 class ScalarVariable;
+class FlaggedArrayVariable;
+template<uint32_t> class PropertyDatabase;
 
 /**
 
@@ -62,8 +64,6 @@ class ScalarVariable;
   // TODO: why - as this is essentially a vector - is it not inherited from a vector?
 
   */
-  class FlaggedArrayVariable;
-  
   class ArrayVariable
     {
     public:

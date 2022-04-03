@@ -69,7 +69,7 @@ template<uint32_t mn_max>
 void DenseMatrix<mn_max>::Identity()
  {
     for ( auto i{0U}; i<rows; i++ )
-      for ( uint32_t j{0U}; j<cols; j++ )
+      for ( auto j{0U}; j<cols; j++ )
         if ( i == j ) data[i][j] = static_cast<double>(1.0);
         else          data[i][j] = static_cast<double>(0.0);         
  }
@@ -124,16 +124,16 @@ void DenseMatrix<mn_max>::Resize( uint32_t m, uint32_t n )
  {
 #ifndef NDEBUG 
     if ( m > mn_max ) {
-         std::cerr <<"\nDenseMatrix<"<< mn_max;
-         std::cerr <<">::Resize: Requested m-rows exceed matric capacity (";
-         std::cerr << m <<" versus "<< rows <<")."<< std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::Resize");
+         cerr <<"\nDenseMatrix<"<< mn_max;
+         cerr <<">::Resize: Requested m-rows exceed matric capacity (";
+         cerr << m <<" versus "<< rows <<")."<< endl;
+         throw length_error("DenseMatrix<mn_max>::Resize");
       }
     if ( n > mn_max ) {
-         std::cerr <<"\nDenseMatrix<"<<  mn_max;
-         std::cerr <<">::Resize: Requested n-columns exceed matric capacity (";
-         std::cerr << n <<" versus "<< cols <<")."<< std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::Resize");
+         cerr <<"\nDenseMatrix<"<<  mn_max;
+         cerr <<">::Resize: Requested n-columns exceed matric capacity (";
+         cerr << n <<" versus "<< cols <<")."<< endl;
+         throw length_error("DenseMatrix<mn_max>::Resize");
       }
 #endif
     rows = m;
@@ -148,15 +148,15 @@ bool DenseMatrix<mn_max>::CheckRange( uint32_t m, uint32_t n,
                                       const char* originator ) const
  {
     if ( m >= rows ) {
-         std::cerr <<"\n"<< originator <<" row index violation, index="<< m;
-         std::cerr <<" versus, row-max=" << rows << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::CheckRange");
+         cerr <<"\n"<< originator <<" row index violation, index="<< m;
+         cerr <<" versus, row-max=" << rows << endl;
+         throw length_error("DenseMatrix<mn_max>::CheckRange");
          return false;
       }
     if ( n >= cols ) {
-         std::cerr <<"\n"<< originator <<" column index violation, index="<< n;
-         std::cerr <<" versus, column-max=" << cols << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::CheckRange");
+         cerr <<"\n"<< originator <<" column index violation, index="<< n;
+         cerr <<" versus, column-max=" << cols << endl;
+         throw length_error("DenseMatrix<mn_max>::CheckRange");
          return false;
       }
     return true;
@@ -186,15 +186,15 @@ bool DenseMatrix<mn_max>::CheckSizes( const DenseMatrix&,
  {
 #ifndef NDEBUG 
     if ( rows != mat.rows ) {
-         std::cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
-         std::cerr <<" versus, rows2=" << mat.rows << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::CheckSizes");
+         cerr <<"\n"<< originator <<" matrices have different sizes; rows1="<< rows;
+         cerr <<" versus, rows2=" << mat.rows << endl;
+         throw length_error("DenseMatrix<mn_max>::CheckSizes");
          return false;
       }
     if ( cols != mat.cols ) {
-         std::cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< cols;
-         std::cerr <<" versus, columns2=" << mat.cols << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::CheckSizes");
+         cerr <<"\n"<< originator <<" matrices have different sizes; columns1="<< cols;
+         cerr <<" versus, columns2=" << mat.cols << endl;
+         throw length_error("DenseMatrix<mn_max>::CheckSizes");
          return false;
       }
 #endif
@@ -225,8 +225,8 @@ void DenseMatrix<mn_max>::ZeroRow( uint32_t row )
       data[row][j] = static_cast<double>(0.0);
       
     else {
-      std::cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroRow: ";
-      std::cout <<"Target rows does not exist: "<< row << std::endl;
+      cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroRow: ";
+      cout <<"Target rows does not exist: "<< row << endl;
     }
  }
 
@@ -238,7 +238,7 @@ void DenseMatrix<mn_max>::ZeroCol( uint32_t col )
  {
     if ( col < cols ) for ( uint32_t i{0U}; i<rows; i++ ) data[i][col] = static_cast<double>(0.0);
     else
-    std::cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroCol: Target column does not exist: "<< col << std::endl;
+    cout <<"\nDenseMatrix<"<< mn_max <<">::ZeroCol: Target column does not exist: "<< col << endl;
  }
 
 
@@ -259,8 +259,8 @@ void DenseMatrix<mn_max>::FillRow( uint32_t row, double val )
  {
     if ( row < rows ) for ( uint32_t j{0U}; j<cols; j++ ) data[row][j] = val;
     else {
-      std::cerr <<"\nDenseMatrix<"<< mn_max <<">::FillRow: ";
-      std::cerr <<"Target rows does not exist: "<< row << std::endl;
+      cerr <<"\nDenseMatrix<"<< mn_max <<">::FillRow: ";
+      cerr <<"Target rows does not exist: "<< row << endl;
     }
  }
  
@@ -272,8 +272,8 @@ void DenseMatrix<mn_max>::FillCol( uint32_t col, double val )
  {
     if ( col < cols ) for ( auto i{0U}; i<rows; i++ ) data[i][col] = val;
     else {
-      std::cerr <<"\nDenseMatrix<"<< mn_max <<">::FillCol: ";
-      std::cerr <<"Target column does not exist: "<< col << std::endl;
+      cerr <<"\nDenseMatrix<"<< mn_max <<">::FillCol: ";
+      cerr <<"Target column does not exist: "<< col << endl;
      }
  }
 
@@ -304,9 +304,9 @@ double   DenseMatrix<mn_max>::RowSum( uint32_t row ) const
          return sum;
       }
 
-    std::cerr <<"\nDenseMatrix<"<< mn_max <<">::RowSum: ";
-    std::cerr <<"Target rows does not exist: "<< row << std::endl;
-    throw std::length_error("DenseMatrix<mn_max>::RowSum");
+    cerr <<"\nDenseMatrix<"<< mn_max <<">::RowSum: ";
+    cerr <<"Target rows does not exist: "<< row << endl;
+    throw length_error("DenseMatrix<mn_max>::RowSum");
 
     return static_cast<double>(0.0);
  }
@@ -325,9 +325,9 @@ double   DenseMatrix<mn_max>::ColSum( uint32_t col ) const
          return sum;
       }
 
-    std::cerr <<"\nDenseMatrix<"<< mn_max <<">::ColSum: ";
-    std::cerr <<"Target column does not exist: "<< col << std::endl;
-    throw std::length_error("DenseMatrix<mn_max>::ColSum");
+    cerr <<"\nDenseMatrix<"<< mn_max <<">::ColSum: ";
+    cerr <<"Target column does not exist: "<< col << endl;
+    throw length_error("DenseMatrix<mn_max>::ColSum");
 
     return static_cast<double>(0.0);
  }
@@ -769,8 +769,8 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const ArrayVariable& ar )
  {
     if ( cols != ar.Size() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(ArrayVariable): matrix.cols != array.size\n";
-         throw std::range_error("DenseMatrix<>::operator*=(ArrayVariable): matrix.cols != array.size");
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(ArrayVariable): matrix.cols != array.size\n";
+         throw range_error("DenseMatrix<>::operator*=(ArrayVariable): matrix.cols != array.size");
       }
     double sum;
     for ( uint32_t i{0U}; i<rows; i++ ) {
@@ -827,8 +827,8 @@ DenseMatrix<mn_max>&
 DenseMatrix<mn_max>::operator*=( const FlaggedArrayVariable& fr )
  {
     if ( cols != fr.Size() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(FlaggedArrayVariable): matrix.cols != array.size\n";
-         throw std::range_error("DenseMatrix<>::operator*=(FlaggedArrayVariable): matrix.cols != array.size");
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(FlaggedArrayVariable): matrix.cols != array.size\n";
+         throw range_error("DenseMatrix<>::operator*=(FlaggedArrayVariable): matrix.cols != array.size");
       }
     double sum;
     for ( uint32_t i{0U}; i<rows; i++ ) {
@@ -903,8 +903,8 @@ template<uint32_t mn_max>
 void DenseMatrix<mn_max>::ExportTo( TensorVariable<1U>& ts ) const
  {
     if ( rows != 1U || rows != cols ) {
-         std::cerr <<"\nDenseMatrix<>::ExportTo (tensor 1D): This matrix has wrong size.\n";
-         throw std::range_error("DenseMatrix<>::ExportTo(TensorVar.1D): matrix.cols != tensor.dim");
+         cerr <<"\nDenseMatrix<>::ExportTo (tensor 1D): This matrix has wrong size.\n";
+         throw range_error("DenseMatrix<>::ExportTo(TensorVar.1D): matrix.cols != tensor.dim");
          return;
       }
     ts(0,0) = data[0][0];
@@ -914,8 +914,8 @@ template<uint32_t mn_max>
 void DenseMatrix<mn_max>::ExportTo( TensorVariable<2U>& ts ) const
  {
     if ( rows != 2U || rows != cols ) {
-         std::cerr <<"\nDenseMatrix<>::ExportTo (tensor 2D): This matrix has wrong size.\n";
-         throw std::range_error("DenseMatrix<>::ExportTo(TensorVar.2D): matrix.cols != tensor.dim");
+         cerr <<"\nDenseMatrix<>::ExportTo (tensor 2D): This matrix has wrong size.\n";
+         throw range_error("DenseMatrix<>::ExportTo(TensorVar.2D): matrix.cols != tensor.dim");
          return;
       }
     ts(0,0) = data[0][0];
@@ -928,9 +928,9 @@ template<uint32_t mn_max>
 void DenseMatrix<mn_max>::ExportTo( TensorVariable<3U>& ts ) const
  {
     if ( rows != 3U || rows != cols ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
-         std::cerr <<">::ExportTo (tensor 3D): This matrix has wrong size.\n";
-         throw std::range_error("DenseMatrix<>::ExportTo(TensorVar.3D): matrix.cols != tensor.dim");
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
+         cerr <<">::ExportTo (tensor 3D): This matrix has wrong size.\n";
+         throw range_error("DenseMatrix<>::ExportTo(TensorVar.3D): matrix.cols != tensor.dim");
          return;
       }
     ts(0,0) = data[0][0];
@@ -952,8 +952,8 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<1U>& ts )
  {
     if ( cols != 1U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.1D): matrix.cols != tensor.dim\n";
-         throw std::range_error("DenseMatrix<>::operator*=(TensorVar.1D): matrix.cols != tensor.dim");
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.1D): matrix.cols != tensor.dim\n";
+         throw range_error("DenseMatrix<>::operator*=(TensorVar.1D): matrix.cols != tensor.dim");
       }
 
     // when loop unrolling is not possible
@@ -975,8 +975,8 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<2U>& ts )
  {
     if ( cols != 2U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.2D): matrix.cols != tensor.dim\n";
-         throw std::range_error("DenseMatrix<>::operator*=(TensorVar.2D): matrix.cols != tensor.dim");
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.2D): matrix.cols != tensor.dim\n";
+         throw range_error("DenseMatrix<>::operator*=(TensorVar.2D): matrix.cols != tensor.dim");
       }
       
     // when loop unrolling is not possible
@@ -1009,7 +1009,7 @@ DenseMatrix<mn_max>&
   DenseMatrix<mn_max>::operator*=( const TensorVariable<3U>& ts )
  {
     if ( cols != 3U ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.3D): matrix.cols != tensor.dim\n";
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=(TensorVar.3D): matrix.cols != tensor.dim\n";
          throw(range_error("DenseMatrix<>::operator*=(TensorVar.3D): matrix.cols != tensor.dim"));
       }
 
@@ -1042,7 +1042,7 @@ DenseMatrix<mn_max>&
     temp(2,1) = data[2][0] * ts(0,1) + data[2][1] * ts(1,1) + data[2][2] * ts(2,1);
     temp(2,2) = data[2][0] * ts(0,2) + data[2][1] * ts(1,2) + data[2][2] * ts(2,2);
 
-    return *this = std::move(temp);
+    return *this = move(temp);
  }
 
 #endif // USED_TOGETHER WITH CSMP
@@ -1052,17 +1052,20 @@ DenseMatrix<mn_max>&
 
 
 
-
-
-
-
-
-
 // AssignToDiagonal (double)
 // ---------------------------------------
 template<uint32_t mn_max>
-void DenseMatrix<mn_max>::AssignToDiagonal( uint32_t diag_elmts,
-                                            const double& sc )
+void DenseMatrix<mn_max>::AssignToDiagonal( double sc )
+ {
+    for ( auto i{0U}; i<rows; i++ )
+      data[i][i] = sc;
+ }
+
+
+// AssignToDiagonalAndZeroOffDiagonal (double)
+// -------------------------------------------
+template<uint32_t mn_max>
+void DenseMatrix<mn_max>::AssignToDiagonalAndZeroOffDiagonal( uint32_t diag_elmts, double sc )
  {
     Resize( diag_elmts, diag_elmts );
     for ( auto i{0U}; i<diag_elmts; i++ )
@@ -1074,7 +1077,7 @@ void DenseMatrix<mn_max>::AssignToDiagonal( uint32_t diag_elmts,
 // ---------------------------------------
 /// vec = Mat * unity vector
 template<uint32_t mn_max>
-void DenseMatrix<mn_max>::RowCondenseTo( std::vector<double>& vec ) const
+void DenseMatrix<mn_max>::RowCondenseTo( vector<double>& vec ) const
  {
     vec.resize(rows);
     vector<double>( vec ).swap( vec );
@@ -1160,10 +1163,10 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
  {
     if ( cols != mat.rows ) {
          cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*: Matrices cannot be multiplied "; 
-         cout <<"because of incompatible sizes (A *= B, see matrices below): "<< std::endl;
+         cout <<"because of incompatible sizes (A *= B, see matrices below): "<< endl;
          Out(3);
          mat.Out(3);
-         throw std::length_error("DenseMatrix<mn_max>::operator*");
+         throw length_error("DenseMatrix<mn_max>::operator*");
       }
 
     // use STANDARD return value optimization
@@ -1184,13 +1187,13 @@ DenseMatrix<mn_max>  DenseMatrix<mn_max>::operator*(
 // operator*  matrix with STL vector multiplication
 // ------------------------------------------------
 template<uint32_t mn_max>
-DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const std::vector<double>& vecT )
+DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const vector<double>& vecT )
  {
     if ( cols != vecT.size() ) {
-         std::cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: ";
-         std::cout <<"Matrix and vector cannot be multiplied "; 
-         std::cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::operator*=");
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: ";
+         cout <<"Matrix and vector cannot be multiplied ";
+         cout <<"because of incompatible sizes (A(cols != vecT(size)): "<< vecT.size() << endl;
+         throw length_error("DenseMatrix<mn_max>::operator*=");
       }
     
     uint32_t  i, j;
@@ -1215,9 +1218,9 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const double* vecT ) 
  {
     if ( vecT == NULL ) {
-         std::cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: Matrix and vector cannot be multiplied "; 
-         std::cout <<"because vecT C-array is not initialized." << std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::operator*=");
+         cout <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::operator*=: Matrix and vector cannot be multiplied ";
+         cout <<"because vecT C-array is not initialized." << endl;
+         throw length_error("DenseMatrix<mn_max>::operator*=");
       }
 
     uint32_t  i, j;
@@ -1387,7 +1390,7 @@ double DenseMatrix<mn_max>::NormL_Infinity() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::NormL_Infinity: empty matrix!\n";
-         return std::numeric_limits<double>::signaling_NaN();
+         return numeric_limits<double>::signaling_NaN();
       }
 
 	double  maxval(static_cast<double>(0.0)), sum;
@@ -1435,9 +1438,9 @@ DenseMatrix<mn_max>  operator*( const DenseMatrix<mn_max>& a,
  {
 #ifdef CSMP_DENSE_MATRIX_DEBUG
     if ( a.Cols() != b.Rows() ) {
-         std::cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
-         std::cerr <<"> operator*: Matrices cannot be multiplied ";
-         std::cerr <<"because of incompatible sizes (A * B, see matrices below): "<< endl;
+         cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max;
+         cerr <<"> operator*: Matrices cannot be multiplied ";
+         cerr <<"because of incompatible sizes (A * B, see matrices below): "<< endl;
          a.Out(3L);
          b.Out(3L);
          throw length_error("DenseMatrix<mn_max>::operator*");
@@ -1464,7 +1467,7 @@ double DenseMatrix<mn_max>::NormL1() const
  {
 	if ( rows == 0 || cols == 0 ) {
          cerr <<"\nDenseMatrix<"<< typeid(double).name() <<","<< mn_max <<">::NormL1: empty matrix!\n";
-         return std::numeric_limits<double>::signaling_NaN();
+         return numeric_limits<double>::signaling_NaN();
       }
 
 	double  maxval(static_cast<double>(0.0)), sum;
@@ -1472,8 +1475,8 @@ double DenseMatrix<mn_max>::NormL1() const
 	for ( uint32_t j{0U}; j<cols; j++ ) {
 		 sum = static_cast<double>(0.0);
 		 for ( uint32_t i{0U}; i<rows; i++ )
-		   sum += std::fabs(data[i][j]);
-		 maxval = std::max(maxval,sum);
+		   sum += fabs(data[i][j]);
+		 maxval = max(maxval,sum);
 	  }
 
 	return maxval;
@@ -1492,11 +1495,11 @@ double DenseMatrix<mn_max>::NormL1() const
 /// vector^T = Matrix * vector^T
 // ---------------------------------------
 template<uint32_t mn_max>
-std::vector<double>  operator*( const DenseMatrix<mn_max>& mat, const std::vector<double>& vec )
+vector<double>  operator*( const DenseMatrix<mn_max>& mat, const vector<double>& vec )
  {
     assert ( mat.Cols() == vec.size() );
     
-    std::vector<double> temp(mat.Rows(),static_cast<double>(0.0));
+    vector<double> temp(mat.Rows(),static_cast<double>(0.0));
     
     for ( uint32_t i{0U}; i<mat.Rows(); i++ )
       for ( uint32_t j{0U}; j<mat.Cols(); j++ ) temp[i] += mat(i,j) * vec[j];
@@ -1510,12 +1513,12 @@ std::vector<double>  operator*( const DenseMatrix<mn_max>& mat, const std::vecto
 /// Matrix = vector^T * Matrix
 // ---------------------------------------
 template<uint32_t mn_max>
-DenseMatrix<mn_max>  operator*( const std::vector<double>& vec, const DenseMatrix<mn_max>& mat )
+DenseMatrix<mn_max>  operator*( const vector<double>& vec, const DenseMatrix<mn_max>& mat )
  {
     if ( vec.size() != mat.Rows() ) {
-         std::cout <<"\noperator*: vector cannot be multiplied with matrix"; 
-         std::cout <<"because of incompatible sizes (v * M): "<< std::endl;
-         throw std::length_error("DenseMatrix<mn_max>::operator*");
+         cout <<"\noperator*: vector cannot be multiplied with matrix";
+         cout <<"because of incompatible sizes (v * M): "<< endl;
+         throw length_error("DenseMatrix<mn_max>::operator*");
       }
 
     DenseMatrix<mn_max>  temp( vec.size(), mat.Cols() );

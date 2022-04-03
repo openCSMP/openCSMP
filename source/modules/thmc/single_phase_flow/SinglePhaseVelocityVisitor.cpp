@@ -228,7 +228,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     if ( conductivity_key_.place == ELEMENT )
     {
         if ( conductivity_key_.type == SCALAR )
-            MTRL[0].AssignToDiagonal( dim, e->Read( conductivity_key_ ) );
+            MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e->Read( conductivity_key_ ) );
         else if ( conductivity_key_.type == VECTOR ) {
             VectorVariable<dim>  vc;
             e->Read( conductivity_key_, vc );
@@ -245,7 +245,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
         for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
-                MTRL[i].AssignToDiagonal( dim, e->Read(i, conductivity_key_));
+                MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->Read(i, conductivity_key_));
             else if ( conductivity_key_.type == VECTOR ) {
                 VectorVariable<dim>  vc;
                 e->Read(i, conductivity_key_, vc );
@@ -263,7 +263,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
         for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
-                MTRL[i].AssignToDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
+                MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
             else if ( conductivity_key_.type == VECTOR ) {
                 VectorVariable<dim>  vc;
                 e->PropertyValueAtIntegrationPoint( conductivity_key_, i, vc );

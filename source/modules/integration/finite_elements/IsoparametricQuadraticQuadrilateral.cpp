@@ -1684,8 +1684,16 @@ IsoparametricQuadraticQuadrilateral::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         std::cerr <<"\nIsoparametricQuadraticQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         std::cerr <<"\n\nIsoparametricQuadraticQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
          std::cerr << detJ << std::endl;
+         cerr <<"(are the nodes perhaps numbered clockwise?), node coordinate matrix:";
+         this->XY.Out();
+         string file_name{ parseFiniteElementType( ElementType() ) };
+         // to print a scalar, the data matrix only needs 1 row
+         DenseMatrix<DM_MIN> DATA( 1, Nodes() );
+         // values increase linearly from first to last node (so that node numbering direction can be seen)
+         for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
+         OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
          throw std::range_error("IsoparametricQuadraticQuadrilateral::JacobianInverse");
       }
 

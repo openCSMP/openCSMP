@@ -16,11 +16,11 @@ instance be the hydraulic conductivity.
 */
 template<uint32_t dim,class CELL>
 Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& pref,
-                                                                       const char* oper,
-                                                                       const char* test,
-                                                                       const char* upwind,
-                                                                       const char* trigger,
-                                                                       const double prefactor)
+                                                                         const char* oper,
+                                                                         const char* test,
+                                                                         const char* upwind,
+                                                                         const char* trigger,
+                                                                         const double prefactor)
   : MathOperatorRHS<dim>(pref,oper,test),
     DN(3,3),
     DNT(3,3),

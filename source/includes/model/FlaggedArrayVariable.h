@@ -2,13 +2,12 @@
 #define FLAGGED_ARRAY_VARIABLE_H
 
 #include "ArrayVariable.h"
-#include "PropertyDatabase.h"
-
 
 namespace csmp {
 
 class ScalarVariable;
 class ArrayVariable;
+template<uint32_t> class PropertyDatabase;
 
 /**
 

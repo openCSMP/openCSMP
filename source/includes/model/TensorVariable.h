@@ -8,7 +8,6 @@
 
 namespace csmp {
 
-
 /**
 @brief full 3D specialisation of the TensorVariable class template
 

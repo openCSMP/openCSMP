@@ -940,7 +940,7 @@ void DenseMatrix_Test::run()
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
                 if ( verbose_ ) cout << "\nDenseMatrix3x3.AssignToDiagonal ( 2, 6. )";
-                DenseMatrix3x3.AssignToDiagonal(2, 6.);
+                DenseMatrix3x3.AssignToDiagonalAndZeroOffDiagonal(2, 6.);
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
                 for ( int i = 0, j = 0; i < 2; i++, j++ )
@@ -1034,7 +1034,7 @@ void DenseMatrix_Test::run()
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
                 if ( verbose_ ) cout << "\nDenseMatrix3x3.AssignToDiagonal ( size_t diag elmnts, double )";
-                DenseMatrix3x3.AssignToDiagonal(3, 10.);
+                DenseMatrix3x3.AssignToDiagonalAndZeroOffDiagonal(3, 10.);
                 DenseMatrix3x3.Out();
 
                 for ( int i = 0, j = 0 ; i < 3; i++, j++ )

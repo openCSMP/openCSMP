@@ -22,8 +22,8 @@ class IsoparametricLinearLineElement : public FiniteElement {
     virtual void      CornerNodes( std::vector<uint32_t>& ids ) const;
     virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
     virtual void      NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual uint32_t    CornerNodes() const;
-    virtual uint32_t    MidSideNodes() const;
+    virtual uint32_t  CornerNodes() const;
+    virtual uint32_t  MidSideNodes() const;
     virtual void      NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
@@ -36,7 +36,7 @@ class IsoparametricLinearLineElement : public FiniteElement {
 
     virtual void      N( std::vector<double>& FN, const std::vector<double>& xy );
     virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
-    virtual double  WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
     virtual  void     N_AtBaryCenter( std::vector<double>& N );
     virtual void      JacobianAtIntegrationPoint( uint32_t IP );
@@ -47,27 +47,27 @@ class IsoparametricLinearLineElement : public FiniteElement {
     virtual double  JacobianDeterminant();
 
     /// constant partial derivatives of interpolation functions on the element
-    virtual void      Nr( double r, std::vector<double>& nr ) const;
-    virtual void      Nr( double r, double* nr ) const;
-    virtual void      dNr( double r, std::vector<double>& dnr ) const;
-    virtual void      dN( DenseMatrix<DM_MIN>& M );
+    virtual void    Nr( double r, std::vector<double>& nr ) const;
+    virtual void    Nr( double r, double* nr ) const;
+    virtual void    dNr( double r, std::vector<double>& dnr ) const;
+    virtual void    dN( DenseMatrix<DM_MIN>& M );
     virtual double  dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );
     virtual double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& M, uint32_t IP );
     virtual double  dN_AtBarycenter( DenseMatrix<DM_MIN>& M );
 
-    virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
+    virtual void    IntegralN( DenseMatrix<DM_MIN>& M );
 
-    virtual void      UnitNormal( std::vector<double>& vc ) const;
+    virtual void    UnitNormal( std::vector<double>& vc ) const;
   
     /// 2 normals located on the nodes and aligned with the elements
-    virtual void      UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual void    UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
-    virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
-                                                                  const std::vector<double>& IVAR,
-                                                                  std::vector<double>& NVAR ) const;
-    virtual void      OutputNodeDataToVTK( const char* file_name,
-                                           const char* var_name,
-                                           DenseMatrix<DM_MIN>& DATA ) const;
+    virtual void    ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
+                                                                const std::vector<double>& IVAR,
+                                                                std::vector<double>& NVAR ) const;
+    virtual void    OutputNodeDataToVTK( const char* file_name,
+                                         const char* var_name,
+                                         DenseMatrix<DM_MIN>& DATA ) const;
 
     virtual void ReferenceCoordinates(DenseMatrix<DM_MIN> & matCoords) const;
 

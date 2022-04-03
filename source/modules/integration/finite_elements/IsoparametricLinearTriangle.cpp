@@ -1523,7 +1523,7 @@ double  IsoparametricLinearTriangle::JacobianInverse()
     JINV(1,1)  =  dum;
 
     if ( detJ <= 0 ) {
-         cerr <<"\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
+         cerr <<"\n\nIsoparametricLinearTriangle::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
          cerr << detJ << std::endl;
          cerr <<"(are the nodes perhaps numbered clockwise?), node coordinate matrix:";
          this->XY.Out();

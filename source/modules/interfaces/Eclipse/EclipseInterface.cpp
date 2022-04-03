@@ -3,6 +3,7 @@
 #include "ModelTopology.h"
 #include "VSet.h"
 
+#include "PropertyDatabase.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"

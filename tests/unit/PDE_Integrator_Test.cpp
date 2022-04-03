@@ -1,8 +1,15 @@
 #include "PDE_Integrator_Test.h"
+#include "PDE_Integrator.h"
+
+#include "VSet.h"
+#include "ModelTopology.h"
+#include "vsetMakers.h"
+
 #include "GaussJordan_Solver.h"
 #include "Model.h"
 #include "Region.h"
 
+// TODO: distinguish this UNIT TEST from an INTEGRATION TEST
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PointSource_rhsop.h"
@@ -23,13 +30,63 @@ PDE_Integrator_Test::PDE_Integrator_Test( Model<2U>& model )
 
   PDE_Integrator_Test::~PDE_Integrator_Test()
   {
-    if (pde_reference_ != nullptr) {
-      delete pde_reference_;
-    }
-    if (pde_test_ != nullptr) {
-      delete pde_test_;
-    }
   }
+
+
+
+
+void PDE_Integrator_Test::TestAssembly()
+ {
+    // 0. creates test model with 4 elements and 6 Face objects for the box boundaries
+    VSet<2U> vset;
+    ModelTopology topo = test_CreateSimplestPolyElement2DModel( vset );
+    const bool treat_regions_as_boundaries{false};
+    Model<2U> model( topo, vset, "CSMP-1phase-variables.txt", treat_regions_as_boundaries );
+    model.InputBoundaryValue( RIGHT, "fluid pressure", makeScalar(DIRICH,1.) );
+    
+    // 1. setting up PDE_Integrator for simple case with a single scalar variable
+    // --------------------------------------------------------------------------
+    GaussJordan_Solver        solver;
+    PDE_Integrator<2U,Region> pde_integrator(solver);
+
+    // Create pde-operators
+    LHS_FixedValueMatrix<2U>  lhs( model.Database(), "permeability", "fluid pressure", "fluid pressure", 1. );
+    RHS_FixedValueMatrix<2U>  rhs( model.Database(), "fluid volume source", "fluid pressure", 1. );
+
+    // assign them to pde integrator
+    pde_integrator.Add(&lhs);
+    pde_integrator.Add(&rhs);
+    
+    const bool debug{true};
+    model.Apply( pde_integrator, debug );
+    
+    // compare matrix with expected matrix
+    // TODO: do testing here; not sure how to get to matrix and vector
+    
+    
+    // 2. setting up PDE_Integrator for case with a single vector solution variable
+    // ----------------------------------------------------------------------------
+    
+    
+    // 3. setting up PDE_Integrator for coupled system of 2 scalars
+    // ----------------------------------------------------------------------------
+    
+
+    // 4. setting up PDE_Integrator for coupled system of 1 scalar + 1 vector variable
+    // -------------------------------------------------------------------------------
+    
+    cout <<"\nPDE_Integrator_Test::TestAssembly: finished test."<< endl;
+    
+ } // end TestAssembly
+
+
+    // Create pde-operators
+//    NumIntegral_dNT_op_dN_dV<2U> pressureLHS(model_.Database(), "permeability", "fluid pressure", "fluid pressure");
+//    NumIntegral_NT_op_N_dV<2U> sourceVolume(model_.Database(), "fluid volume source", "fluid pressure");
+//    pde_integrator.Add(&pressureLHS);
+//    pde_integrator.Add(&sourceVolume);
+
+
 
 
 
@@ -76,6 +133,7 @@ void PDE_Integrator_Test::Reset()
     //=======================================
     // test single variable
     //=======================================
+    TestAssembly();
 
     // test scalar variable
     TestSingleVariable();
