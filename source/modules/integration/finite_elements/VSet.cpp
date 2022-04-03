@@ -34,15 +34,16 @@ VSet<dim>::VSet( uint32_t nodes_per_element,
 }
 
 
-/// creates empty VSet of the desired dimensions
+/// creates an empty poly-element type VSet of  desired dimensions
 template<uint32_t dim>
-VSet<dim>::VSet(const deque<uint32_t>& npes,
-                const deque<uint32_t>& epes,
-                size_t nodes)
-: VData(npes, epes, nodes),
+VSet<dim>::VSet( const vector<int8_t>&  elmt_types,
+                 const deque<uint32_t>& npes,
+                 const deque<uint32_t>& epes,
+                 size_t nodes )
+: VData( npes, epes, nodes ),
   pmtrl_( epes.size(), UNSPECIFIED )
 {
-	SingleElementType(0);
+	ElementTypes( elmt_types );
 }
 
 
