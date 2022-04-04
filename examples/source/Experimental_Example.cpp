@@ -87,6 +87,7 @@ void Experimental_Example::Run()
           if ( j == 1 ) break;
       }
       
+#if 0
     // INSERTING AN INTERNAL BOUNDARY IN 2D MODEL
     string         variables_file("CSMP-1phase-variables.txt");
     ANSYS_Model2D  model( "BoxHalfs2D", variables_file.c_str(), false, true, true );
@@ -111,7 +112,8 @@ void Experimental_Example::Run()
     Boundary<2U>& line_boundary(model.Boundary("STANDARD_BOUNDARY0_MATRIX_LEFT_MATRIX_RIGHT"));
     line_boundary.Out();
     vtu_out.OutputDataToVTU( "line_elmt_region", "permeability", line_boundary, 0 );
-      
+#endif
+  
 #if 0
     // ODLING 720 x 720 meter
     string         variables_file("CSMP-1phase-variables.txt");
@@ -124,6 +126,7 @@ void Experimental_Example::Run()
                                              true,            // boundary conditions for box-shaped model
                                              true );          // essential conditions for regions
                                            // default: boundary conditions for arbitrary-shaped model
+    model.OutputToBinaryFile( model.Name() );
 #endif
 
     // FLUID FLOWER TESTCASE
