@@ -1129,39 +1129,6 @@ double TwoPhaseModel<dim>::dsdpc_at( double pc ) const
 }
 
 
-/// Interpolations
-template<uint32_t dim>
-double TwoPhaseModel<dim>::spline_value( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
-{
-    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double t = ( x - x1) / ( x2 - x1 );
-
-    return (1. - t)*y1 + t*y2 + t*(1.-t)*( a*(1.-t) + b*t);
-
-}
-
-template<uint32_t dim>
-double TwoPhaseModel<dim>::spline_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
-{
-    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double t = ( x - x1) / ( x2 - x1 );
-
-    return (y2-y1)/( x2-x1 ) + (1.-2.*t)*( a*(1.-t)+b*t)/(x2-x1) + t*(1.-t)*(b-a)/(x2-x1);
-
-}
-
-template<uint32_t dim>
-double TwoPhaseModel<dim>::spline_second_derivative( double x, double x1, double x2, double y1, double y2, double k1, double k2) const
-{
-    const double a =  k1*( x2-x1 ) - ( y2 - y1 );
-    const double b = -k2*( x2-x1 ) + ( y2 - y1 );
-    const double t = ( x - x1) / ( x2 - x1 );
-
-    return 2.*( b-2.*a +(a-b)*3.*t)/(x2-x1)/(x2-x1);
-
-}
 
 template<uint32_t dim>
 void TwoPhaseModel<dim>::Out( uint32_t phase ) const

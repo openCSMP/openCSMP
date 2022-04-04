@@ -76,9 +76,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     Region<dim>&  model_domain(sg.Region("Model"));
     
     // loop over all elements and check if all ahve the same volume. if yes, it is most likely that grid is regular
-    auto eit = model_domain.ElementsBegin();
+    auto eit = model_domain.CellsBegin();
     vol = (*eit)->Volume();
-    for ( eit = model_domain.ElementsBegin(); eit != model_domain.ElementsEnd(); eit++ ) {
+    for ( eit = model_domain.CellsBegin(); eit != model_domain.CellsEnd(); eit++ ) {
         if ( (*eit)->Volume() != vol ) {
             throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
                      "Element volume varies, mesh appears to be not regular, exiting function, nothing is done" );
@@ -158,7 +158,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
 
                                                     
-    model_domain.InterpolateNodeToElementProperty( "nodal permeability", "permeability" );
+    model_domain.InterpolateNodeToCellProperty( "nodal permeability", "permeability" );
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid: Successfully mapped permeability field to nodes and elements" << endl;
     
     return true;
@@ -257,7 +257,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     double min, max;
     sg.MinMaxOf( "inner radius", min, max );
     if ( isnan(min) || isnan(max) ) {
-        sg.AssignElementCharacteristicsTo( "inner radius", "inner radius" ); 
+        sg.AssignCellCharacteristicsTo( "inner radius", "inner radius" ); 
         sg.MinMaxOf( "inner radius", min, max );
       }
     if ( min < dx || min < dy ) {
@@ -293,14 +293,14 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     
     // now use the FemFromGridVisitor to map grid k-data to finite elements
     cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityField: \nTransferring FiniteDifferenceGrid to Finite Elements" << endl;
-    FemFromGridVisitor<dim> fem_visitor( sg.Database(), k_field, "permeability", model_domain.Elements() );
+    FemFromGridVisitor<dim> fem_visitor( sg.Database(), k_field, "permeability", model_domain.Cells() );
     sg.Accept( fem_visitor ); 
     
     // find the min and max k and count the elements that have no new k assigned and are nan
     csmp::Index perm_key(sg.Database().StorageKey("permeability"));  
     double mink(1.0e+20), maxk(0.0);
     size_t nan_count(0);
-    for ( auto eit = model_domain.ElementsBegin(); eit !=  model_domain.ElementsEnd(); eit++ ) {
+    for ( auto eit = model_domain.CellsBegin(); eit !=  model_domain.CellsEnd(); eit++ ) {
         (*eit)->Read( perm_key, perm );
         if ( !isnan(perm()) ) {
             if ( perm() > maxk ) maxk = perm();
@@ -310,9 +310,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
     // if many elements have no random k assigned, it makes no sense defining a stochastic k-field,
     // use the originial k field instead and exit function
-    if ( nan_count > model_domain.Elements() / 3 ) {
+    if ( nan_count > model_domain.Cells() / 3 ) {
         cout << "\nStochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityField:";
-        cout << "\n " << nan_count << " Elements of " << model_domain.Elements() << " have no new stochastic k value assigned";
+        cout << "\n " << nan_count << " Elements of " << model_domain.Cells() << " have no new stochastic k value assigned";
         cout << "\nNo sense to employ a stochastic k-field any longer, re-using original k-field instead and exiting function, nothing is done" << endl;
         sg.CopyReplace( "backup permeability", "permeability" );
         return false;
@@ -323,7 +323,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // if k is nan, average the k's of the neighbor elements. If no neighbor elements are given or k's are all nan
     // as well, assign random k
     double k_avg, counter;
-    for ( auto eit = model_domain.ElementsBegin(); eit !=  model_domain.ElementsEnd(); eit++ ) {
+    for ( auto eit = model_domain.CellsBegin(); eit !=  model_domain.CellsEnd(); eit++ ) {
         (*eit)->Read( perm_key, perm );
         if ( isnan( perm() ) ) {
             k_avg = counter = 0.;
@@ -343,7 +343,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
       }
 
     // extrapolate element permeability to nodes, compute log k's for visualization
-    model_domain.ExtrapolateElementToNodeProperty( "permeability", "nodal permeability" );
+    model_domain.ExtrapolateCellToNodeProperty( "permeability", "nodal permeability" );
 
     // store log k values for visualzation
     for ( auto it = model_domain.NodesBegin(); it !=  model_domain.NodesEnd(); it++ ) {

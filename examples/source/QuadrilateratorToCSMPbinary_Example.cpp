@@ -92,7 +92,7 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     const csmp::Index bcp_key = model.Database(). StorageKey("brooks corey parameter");
     Region<2> model_domain(model.Region("Model"));
     
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
           const double permeability = (*it)->Read( k_key );
           // porosity: phi = cubic root of permeability times constant factor + offset
           const double scale_factor(2.5e3);
@@ -187,7 +187,7 @@ void createInflowRegion( Model<2U>& model )
      vector<size_t> element_ids;
      element_ids.reserve(800); // there are 800 elements in the vertical
     
-     for ( auto eit=domain.ElementsBegin(); eit!=domain.ElementsEnd(); ++eit ) {
+     for ( auto eit=domain.CellsBegin(); eit!=domain.CellsEnd(); ++eit ) {
           // for quadrilateral elements, if any of their nodes are on the left boundary the element is as well
           assert( (*eit)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL );
           bool at_left_boundary(false);

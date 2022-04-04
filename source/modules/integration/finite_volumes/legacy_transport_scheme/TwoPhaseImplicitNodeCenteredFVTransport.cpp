@@ -388,7 +388,7 @@ template<uint32_t dim, template<uint32_t> class STP>
 inline bool TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::IsInteriorStencil(
                                                       const Element<dim>* const eptr ) const
  {
-    return this->gref_.IsPerimeterElement( eptr );
+    return this->gref_.IsPerimeterCell( eptr );
  }
 
 
@@ -527,7 +527,7 @@ double TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
     const bool                  unless_has_equal_dimension(dim!=1U);
 
     for ( typename vector<Element<dim>*>::const_iterator 
-          eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++ )
+          eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++ )
       if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
@@ -958,7 +958,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
     vector<FV_Parameter>::const_iterator  fvt=this->STENCIL_DATA.begin();
 
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+          eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
       {
          // 2.1 get necessary data from each element
          this->stencil_.AccumulateImplicitTwoPhaseSolution1( (*fvt), *(*eit), relperm );
@@ -1035,7 +1035,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
         vector<FV_Parameter>::const_iterator  fvt=this->STENCIL_DATA.begin();
 
         for ( typename vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
 
             // 2.1 get necessary data from each element
@@ -1137,7 +1137,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
             fvt=this->STENCIL_DATA.begin();
             for ( typename vector<Element<dim>*>::const_iterator
-                eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+                eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             {
                 // 2.1 get necessary data from each element
                 this->stencil_.AccumulateImplicitTwoPhaseSolution1_NonlinearNewtonRaphson((*fvt), *(*eit), relperm, with_gravitational_forces_, with_capillary_spreading_);
@@ -1298,7 +1298,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
             this->grad_advprop_limiter_->CalculateGenericNodalGradient();
             this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
             for ( typename vector<Element<dim>*>::const_iterator
-                  eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+                  eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             {
 
                 // 2.1 get necessary data from each element
@@ -1313,7 +1313,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
             } // end of accumulation
         }else{
             for ( typename vector<Element<dim>*>::const_iterator
-                  eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+                  eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             {
 
                 // 2.1 get necessary data from each element
@@ -1426,7 +1426,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                 this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
 
                 for ( typename vector<Element<dim>*>::const_iterator
-                    eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+                    eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
                 {
                     // 2.1 get necessary data from each element
                     this->stencil_.AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(this->SMINMAX,(*fvt), *(*eit), relperm, this->with_gravitational_forces_, this->with_capillary_spreading_,this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);
@@ -1437,7 +1437,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                 }
             }else{
                 for ( typename vector<Element<dim>*>::const_iterator
-                    eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+                    eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
                 {
                     // 2.1 get necessary data from each element
                     this->stencil_.AccumulateImplicitTwoPhaseSolution2_NonlinearNewtonRaphson(this->SMINMAX,(*fvt), *(*eit), relperm, this->with_gravitational_forces_, this->with_capillary_spreading_);

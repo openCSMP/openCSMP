@@ -75,7 +75,9 @@ void CopyReplaceVisitor_Test::testNodes( Model<3>* model, const V& value, const 
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  for( std::vector<Node<3>*>::const_iterator it( model->Region("Model").NodesBegin() ); it != model->Region("Model").NodesEnd(); ++it )
+  Region<3U> domain{ model->Region("Model") };
+  
+  for( auto it( domain.NodesBegin() ); it != domain.NodesEnd(); ++it )
   {
     (*it)->Read( key, cache );
     _test( cache == value );
@@ -88,7 +90,9 @@ void CopyReplaceVisitor_Test::testElements( Model<3>* model, const V& value, con
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  for( std::vector<Element<3>*>::const_iterator it( model->Region("Model").ElementsBegin() ); it != model->Region("Model").ElementsEnd(); ++it )
+  Region<3U> domain{ model->Region("Model") };
+
+  for( auto it( domain.CellsBegin() ); it != domain.CellsEnd(); ++it )
   {
     (*it)->Read( key, cache );
     _test( cache == value );
@@ -100,8 +104,10 @@ void CopyReplaceVisitor_Test::testElementIntegrationPoints( Model<3>* model, con
 {
   V cache;
   Index key( model->Database().StorageKey(propertyName) );
-  for( std::vector<Element<3>*>::const_iterator it( model->Region("Model").ElementsBegin() ); it != model->Region("Model").ElementsEnd(); ++it )
-    for( size_t ip(0); ip < (*it)->IntegrationPoints(); ++ip )
+  Region<3U> domain{ model->Region("Model") };
+
+  for( auto it( domain.CellsBegin() ); it != domain.CellsEnd(); ++it )
+    for( auto ip{0U}; ip < (*it)->IntegrationPoints(); ++ip )
       {
         (*it)->Read( key, cache );
         _test( cache == value );

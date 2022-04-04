@@ -104,11 +104,11 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Settings settings;
   settings.Set_napproach(2);
-  SAMG_Solver samgSolver(&settings);
+  SAMG_Solver solver(&settings);
   #else
-  CSMP_DEFAULT_LINEAR_SOLVER samgSolver;
+  CSMP_DEFAULT_LINEAR_SOLVER solver;
   #endif
-  PDE_Integrator<DIM,Region> pressure_diffusion(&samgSolver);
+  PDE_Integrator<DIM,Region> pressure_diffusion(solver);
 
   /*some old code
   NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  steady_conductance( p_ref, "conductivity", "hydrostatic pressure", "hydrostatic pressure" );

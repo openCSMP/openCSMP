@@ -425,7 +425,7 @@ void SimulatorControl<dim>::SetThicknessFactorFromWellRadii()
 
         if (containsLineElements(wref)){
             wref.Read(this->wellRadius_,wellradius);
-            for (auto eit=wref.ElementsBegin();eit!=wref.ElementsEnd();eit++)
+            for (auto eit=wref.CellsBegin();eit!=wref.CellsEnd();eit++)
                 (*eit)->Store(this->thickness_,makeScalar(PLAIN,wellradius()*wellradius()*PI));
         }
     }

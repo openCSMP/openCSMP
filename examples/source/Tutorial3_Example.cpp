@@ -313,7 +313,7 @@ void  Tutorial3_Example::computeTotalMobility( Model<2U>& mdl, TwoPhaseModel<2U>
 
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    for ( auto eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( auto eit = mref.CellsBegin(); eit!= mref.CellsEnd(); eit++ )
       {
          // 1. setting up the relative permeability model
          // ---------------------------------------------

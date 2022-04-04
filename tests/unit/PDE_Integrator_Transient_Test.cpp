@@ -1,16 +1,18 @@
-#include "Transient_Test.h"
-#include "PDE_Integrator_UoM_Mock.h"
+#include "PDE_Integrator_Transient_Test.h"
 
 #include "GaussJordan_Solver.h"
 
 // the CSMP model
 #include "Model.h"
+#include "Region.h"
+#include "Element.h"
 #include "ModelTime.h"
 
 // a simple FE mesh generator
 #include "Triangulator.h"
 
 // the FE algorithm
+#include "PDE_Integrator.h"
 #include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
@@ -27,9 +29,7 @@
 #include "CSMP_highLevelUtilities.h"
 #include "ConstantFactor.h"
 
-
-
-#include "PDE_Integrator_UoM.h"
+#include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
 #include "NumIntegral_NT_op_N_dV.h"
@@ -44,7 +44,7 @@ using namespace std;
 
 namespace csmp {
 
-	void Transient_Test::run()
+	void PDE_Integrator_Transient_Test::run()
 	{
 		double& model_time(ModelTime::Instance().modelTime);
 		model_time = 0.;
@@ -97,7 +97,7 @@ namespace csmp {
 		// the result variable "conductivity" is computed automatically and its range is checked
 		//model.Apply(conductivity);
 		const Index conductKey = p_ref.StorageKey("conductivity");
-		for ( auto eIter = region.ElementsBegin(); eIter != region.ElementsEnd(); eIter++ ) {
+		for ( auto eIter = region.CellsBegin(); eIter != region.CellsEnd(); eIter++ ) {
 			(*eIter)->Store(conductKey, makeScalar(DIRICH, 1.));
 		}
 		// output the range of the result variable
@@ -126,8 +126,8 @@ namespace csmp {
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
 
 		//PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
-		PDE_Integrator_UoM_Mock<2U, Region>  pde_validate(linear_solver);
-		PDE_Integrator_UoM_Mock<2U, Region>  pde_test(linear_solver);
+		PDE_Integrator<2U, Region>              pde_validate(linear_solver);
+		PDE_Integrator<2U, Region>  pde_test(linear_solver);
 
 		NumIntegral_dNT_dN_dV<2U, Element<2U> >  stiffness_matrix(p_ref, "fluid pressure", "fluid pressure");
 		// LHS mass matrix
@@ -161,7 +161,7 @@ namespace csmp {
 		pde_validate.Add(&mass_matrix_rhs);
 		pde_validate.AddPostProcess(&velo);
 
-
+/*
 		pde_test.Add(&stiffness_matrix);
 		pde_test.Add(&source_term);
 		pde_test.Add(&mass_matrix_lhs);
@@ -183,9 +183,9 @@ namespace csmp {
 		pde_validate.TimeIncrement(1.0 / time_increment);
 		pde_test.TimeIncrement(1.0 / time_increment);
 		vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 1);
-		const std::vector<size_t>& index = pde_test.GetDOFIndex();
-		const vector<double> & rh_validate = *pde_validate.GetRH();
-		const vector<double> & rh_test = *pde_test.GetRH();
+		const std::vector<size_t>& index   = DOF_indexes_;
+		const vector<double>& rh_validate = *pde_validate.GetRH();
+		const vector<double>& rh_test     = rh_;
 
 
 		// ====================== TESTING PROCESS ======================
@@ -241,11 +241,11 @@ namespace csmp {
 		pde_validate.GetG()->OutForMatlab("pde_validate");
 		outVector(rh_test, "rh_test");
 		outVector(rh_validate, "rh_validate");
+*/
+} // end method
 
-	}
 
-
-	void Transient_Test::outVector(const vector<double>& vector, std::string file) {
+	void PDE_Integrator_Transient_Test::outVector(const vector<double>& vector, std::string file) {
 		ofstream  ofs(file);
 		long         prec;
 		const long   digits(3);
@@ -268,7 +268,7 @@ namespace csmp {
 	}
 
 	/*
-	void Transient_Test::oldIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain ) {
+	void PDE_Integrator_Transient_Test::oldIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain ) {
 		// 1. configure algorithm
 		pde.EstablishMatrixSetup(domain);
 
@@ -286,10 +286,10 @@ namespace csmp {
 
 		// 6. diagnostics
 		pde.GetG()->OutForMatlab("pde_validate");
-		Transient_Test::outVector(*pde.GetRH(), "rh_validate");	
+		PDE_Integrator_Transient_Test::outVector(*pde.GetRH(), "rh_validate");
 	}
 
-	void Transient_Test::newIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain) {
+	void PDE_Integrator_Transient_Test::newIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain) {
 
 		// 1. configure algorithm
 		// => this is importance, since in dynamic changing of DIRICHLET BCs i.e: coupling and decoupling process
@@ -310,7 +310,7 @@ namespace csmp {
 
 		// 6. diagnostics
 		pde.GetG()->OutForMatlab("pde_test");
-		Transient_Test::outVector(*pde.GetRH(), "rh_test");
+		PDE_Integrator_Transient_Test::outVector(*pde.GetRH(), "rh_test");
 	}
 
 */

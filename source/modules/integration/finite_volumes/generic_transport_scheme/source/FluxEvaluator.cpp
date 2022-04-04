@@ -605,8 +605,8 @@ void FluxEvaluator<dim,USER>::VolumetricFlowAndTransportVariableFluxBalances( Mo
          }
 
      // 2. element-by-element processing of facet fluxes and flux balances
-     const auto elements_end(subdomain.ElementsEnd());
-     for ( auto eit=subdomain.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain.CellsEnd());
+     for ( auto eit=subdomain.CellsBegin(); eit!=elements_end; ++eit )
        {
           // 1.1 computation of transport velocity from fluid pressure gradient
        

@@ -207,7 +207,7 @@ void ParallelPlateFracture_Example::Run()
     // 8. Pass the FE algorithm to the Region and solve [K]{p} = {Q}
     // --------------------------------------------------------------------
     model->Apply( total_pressure_quadratic );
-    model->ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    model->ExtrapolateCellToNodeProperty("velocity", "nodal velocity");
 
 
     // 9. Output the range of the variables "fluid pressure", "velocity",
@@ -261,7 +261,7 @@ void ParallelPlateFracture_Example::Run()
     // --------------------------------------------------------------------
     printRangeOfVariable( model_from_vset, "fluid pressure" );
     printRangeOfVariable( model_from_vset, "velocity" );
-    model_from_vset.ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    model_from_vset.ExtrapolateCellToNodeProperty("velocity", "nodal velocity");
     printRangeOfVariable( model_from_vset, "nodal velocity" );
     printRangeOfVariable( model_from_vset, "pore velocity" );
     printRangeOfVariable( model_from_vset, "volume flux" );

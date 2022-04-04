@@ -340,8 +340,8 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
      // making a Region of volumetric elements only
      Region<3U>&          model_domain = model.Region("Model");
      vector<Element<3U>*> volume_elmts, surface_elmts;
-     volume_elmts.reserve( model_domain.Elements() );
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+     volume_elmts.reserve( model_domain.Cells() );
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
           if ( (*it)->IsVolumeElement() )
             volume_elmts.push_back( (*it) );
           else if ( (*it)->IsSurfaceElement() )

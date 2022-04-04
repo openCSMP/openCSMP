@@ -361,7 +361,7 @@ size_t NimbleRegion<dim>::PerimeterNodes() const
 
 
 template<uint32_t dim>
-size_t NimbleRegion<dim>::Elements() const
+size_t NimbleRegion<dim>::Cells() const
  {
      return elements_.size();
  }
@@ -430,11 +430,11 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  NimbleRegion<dim>::Nodes
 
 template<uint32_t dim>
 typename std::vector<Element
-<dim>*>::const_iterator NimbleRegion<dim>::ElementsBegin() const { return elements_.begin(); }
+<dim>*>::const_iterator NimbleRegion<dim>::CellsBegin() const { return elements_.begin(); }
 
 template<uint32_t dim>
 typename std::vector<Element
-<dim>*>::const_iterator NimbleRegion<dim>::ElementsEnd() const { return elements_.end(); }
+<dim>*>::const_iterator NimbleRegion<dim>::CellsEnd() const { return elements_.end(); }
 
 
 

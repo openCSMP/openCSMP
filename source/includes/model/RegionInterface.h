@@ -83,7 +83,7 @@ class RegionInterface {
     bool IsUnique( const std::string& regionname ) const;
 
     /// checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case)
-    bool IsContiguous( const std::string& regionname ) const;
+    // see model subdomain: bool IsContiguous( const std::string& regionname ) const;
     
     /// checks that there is a model region and that it contains elements
     bool HasValidModelRegion() const;
@@ -223,10 +223,6 @@ class RegionInterface {
 
     /// boolean operation: symmetric difference (the symmetric difference is the union without the intersection)
     bool    RegionSymmetricDifference( const char* region_a, const char* region_b, const char* region_symdiff );
-
-    // TODO: test
-    /// creates a lower-dimensional region along the contact area of 2 higher dimensional ones
-    size_t  RegionBetween( const char* region_a, const char* region_b, const char* region_between, int32_t material_id );
 
     /// finds the contact area between regions a and b, logging pairs of element pointers and face numbers; @return number of shared faces
     size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,

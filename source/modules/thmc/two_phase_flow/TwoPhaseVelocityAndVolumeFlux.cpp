@@ -418,7 +418,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 
             if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
 
-                MathOperatorLHS<dim>::MTRL[0].AssignToDiagonal( dim,  e.Read( MathOperatorLHS<dim>::MaterialOperandKey() ) );
+                MathOperatorLHS<dim>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim,  e.Read( MathOperatorLHS<dim>::MaterialOperandKey() ) );
             }
             else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
                 VectorVariable<dim>  vc;
@@ -435,7 +435,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 
             for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
                 if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-                    MathOperatorLHS<dim>::MTRL[i].AssignToDiagonal( dim,
+                    MathOperatorLHS<dim>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
                                                                     e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() ) );
                 }
                 else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {

@@ -76,7 +76,7 @@ void ConductivityVisitor<dim>::Visit(Region<dim>* region ){
         size_t tid=omp_get_thread_num();
         Element<dim>* ep;
 #pragma omp for
-        for ( long int e= 0 ; e < region->Elements(); e++ ){
+        for ( long int e= 0 ; e < region->Cells(); e++ ){
             ep = region->E(e);
             FiniteElement* fe_tmp=ep->FE();
             // change pointer here

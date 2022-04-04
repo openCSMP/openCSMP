@@ -20,8 +20,8 @@ TransportVisitor2D::TransportVisitor2D( Model<2>& sg,
                                         const char* advected_prop, 
                                         const char* advecting_prop )
     : pref(sg.Database()),
-      egrids(sg.Region("Model").Elements()), 
-      visited(sg.Region("Model").Elements()),
+      egrids(sg.Region("Model").Cells()), 
+      visited(sg.Region("Model").Cells()),
       XY(3,2), NN(3,3), P(3), xy(2),
       time_increment(1),      
       v_key(pref.StorageKey(advecting_prop)),
@@ -53,7 +53,7 @@ TransportVisitor2D::TransportVisitor2D( Model<2>& sg,
           "This Visitor only works for triangular element meshes." );
 
      // initializing the FiniteDifferenceGrid
-     sg.AssignElementCharacteristicsTo("inner radius", "inner radius");
+     sg.AssignCellCharacteristicsTo("inner radius", "inner radius");
      double          rmin, rmax;
      sg.MinMaxOf("inner radius", rmin, rmax );
      resolution = rmin;
@@ -393,7 +393,7 @@ void  TransportVisitor2D::InputPropertyFromGrid( Model<2U>& sg,
       }
 
     // visitor gets arithmetic means from grid if element properties need to be calculated
-    FemFromGridVisitor<2U>  reader( sg.Database(), grid, prop, model_domain.Elements() );
+    FemFromGridVisitor<2U>  reader( sg.Database(), grid, prop, model_domain.Cells() );
 
     if ( prop_key1.place == ELEMENT ) sg.Accept( reader );
     else
@@ -469,7 +469,7 @@ void  TransportVisitor2D::WritePropertyToGrid( Model<2U>& sg,
          checked = true;
       }
       
-     FemToGridVisitor<2U>  writer( sg.Database(), grid, prop, model_domain.Elements() );
+     FemToGridVisitor<2U>  writer( sg.Database(), grid, prop, model_domain.Cells() );
      writer.OverWrite( true );
      writer.OutputProperty( prop );
      sg.Accept( writer );

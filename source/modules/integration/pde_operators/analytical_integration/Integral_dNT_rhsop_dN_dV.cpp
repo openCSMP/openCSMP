@@ -50,7 +50,7 @@ void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
          MathOperatorRHS<dim>::MTRL[0].Zero();
       
          if ( MathOperatorRHS<dim>::MaterialOperandType() == SCALAR ) {
-              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonal( dim, e.Read( MathOperatorRHS<dim>::MaterialOperandKey() ) ); 
+              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( MathOperatorRHS<dim>::MaterialOperandKey() ) ); 
            }
          if ( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;

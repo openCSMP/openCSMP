@@ -21,7 +21,7 @@ void rhinoOutput( const Model<3U>& sgroup )
     const Region<3U>  sg(sgroup.Region("Model")); 
   
     // reading elements
-    for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+    for ( auto eit=sg.CellsBegin(); eit!=sg.CellsEnd(); eit++ )
     {
       const CSMP_FEM_TYPE elType((*eit)->FE_Type());
       
@@ -249,7 +249,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    const Region<3U>&  sgref(sg.Region("Model"));
    
-   for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ ) 
+   for ( auto eit=sgref.CellsBegin(); eit!=sgref.CellsEnd(); eit++ ) 
      for ( auto iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
   	  if((*eit)->FE()->IsVolumeElement()) // there are four facet points
         {    	    

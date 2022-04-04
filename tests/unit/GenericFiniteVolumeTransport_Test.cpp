@@ -203,7 +203,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                        v_key(model.Database().StorageKey("velocity"));
    
      std::vector<double> DNR, DNS, DNT;
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        {
           const size_t nodes((*it)->Nodes());
           // 1. computing facet velocity in parametric space
@@ -451,8 +451,8 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      std::vector<Point<3u>> directed_area_phys(model_domain.Nodes());
 
      std::vector<std::pair<std::set<Point<3u>>,Element<3u>*> > elements;
-     elements.reserve(model_domain.Elements());
-     for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
+     elements.reserve(model_domain.Cells());
+     for (auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it) {
          std::set<Point<3u>> nodes;
          for (auto itn = (*it)->NodesBegin(); itn != (*it)->NodesEnd(); ++itn) {
              nodes.insert((*itn)->Coordinate());
@@ -464,7 +464,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      
 
      for (auto& element_key : elements)
-     // for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+     // for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        {
            auto iti = element_key.second;
            auto it = &iti;
@@ -500,7 +500,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            const Point<3U> vDproj(jinv_bctr * vD.Coordinates());
 
            // XXX check logic
-           bool at_boundary = model_domain.IsPerimeterElement((*it)->Idx());
+           bool at_boundary = model_domain.IsPerimeterCell((*it)->Idx());
 
            // 2. facet projections
            // --------------------
@@ -1339,12 +1339,12 @@ static void testSchemeAsComponent()
 // TESTING SECTOR INTEGRATION POINT STORAGE
       const csmp::Index swt_key(model3D.Database().StorageKey("node number"));
       // sector storage: writing global node numbers to sector IP's and reading them out
-      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
+      for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it )
         for ( auto i{0}; i<(*it)->Sectors(); ++i )
           (*it)->Store( i, 0U, swt_key, makeScalar(PLAIN,(*it)->N(i)->Idx()) );
         
       // reading out node numbers and their double equivalents stored at the sector integration points
-      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it ) {
+      for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it ) {
            cerr <<"\nelement: "<< (*it)->Idx() << endl;
            for ( auto i{0}; i<(*it)->Sectors(); ++i ) {
                 cerr << (*it)->N(i)->Idx() <<":";
@@ -1363,7 +1363,7 @@ static void testSchemeAsComponent()
       cerr <<"\nFV total volume: "<< volume;
 
       volume = 0.;
-      for ( auto it=flow_domain.ElementsBegin(); it!=flow_domain.ElementsEnd(); ++it )
+      for ( auto it=flow_domain.CellsBegin(); it!=flow_domain.CellsEnd(); ++it )
         for ( auto i{0}; i<(*it)->Sectors(); ++i )
           volume += (*it)->Read( i, 0U, sv_key );
       cerr <<"\nFV total volume: "<< volume;

@@ -117,9 +117,11 @@ void StreamFunction_Example::Run()
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
    #ifdef CSMP_WITH_SAMG_SOLVER
-   PDE_Integrator<2U,Region>  fluid_pressure(new SAMG_Solver());
+   SAMG_Solver solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #else
-   PDE_Integrator<2U,Region>  fluid_pressure(new CSMP_DEFAULT_LINEAR_SOLVER());
+   CSMP_DEFAULT_LINEAR_SOLVER solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #endif
 
    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
@@ -364,7 +366,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   vector<vector<double> >               dummy;
   pair<typename map<size_t,vector<vector<double> > >::iterator,bool>  mit;
 
-  for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+  for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ )
     if ( atBoundary(*eit) != NOT )
       {
          // collecting nodal fluid pressures and elemental hydraulic conductivities from
@@ -417,7 +419,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   clock_t ticks = clock();
 
   for ( auto bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
-    for ( auto fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
+    for ( auto fit=(*bit).second.CellsBegin(); fit!=(*bit).second.CellsEnd(); fit++ )
       /// Roman, 2014 ( Face&InterFace ): Should Face contain AtBoundary flag?
       //if ( (*fit)->AtBoundary() != NOT )
         {
@@ -485,7 +487,7 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     ScalarVariable       sc;
     Region<2>&  gref(sg.Region("Model"));
 
-    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
          (*eit)->Read( con_key, sc );
          sc = 1. / sc();
          (*eit)->Store( res_key, sc );

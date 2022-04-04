@@ -172,11 +172,12 @@ void Integral_var_NT_rhsop_N_dV_Test::compareTest(bool lumped) {
 
 void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     //std::deque<Node<2U> >::iterator it;
-    csmp::Index key(sg_->Database().StorageKey(var_name));
+    const csmp::Index    key(sg_->Database().StorageKey(var_name));
     ScalarVariable sc;
+    Region<2U>&    domain{ sg_->Region("Model") };
         
     unsigned int i = 0; // BARF!
-    for (vector<Node<2U>*>::const_iterator it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
+    for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it) {
         (*it)->Read(key,sc);
         if ( verbose_ ) cout << "Node " << i << ": " << sc() << endl;
         ++i;
@@ -185,10 +186,12 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
 
 void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double>& var, const char* var_name) {
     //std::deque<Node<2U> >::iterator it;
-    csmp::Index key(sg_->Database().StorageKey(var_name));
+    const csmp::Index key(sg_->Database().StorageKey(var_name));
+    Region<2U>& domain{ sg_->Region("Model") };
 
-    unsigned int i = 0; // MORE BARF!
-    for ( auto it = sg_->Region("Model").NodesBegin(); it != sg_->Region("Model").NodesEnd(); ++it) {
+    unsigned int i = 0;
+    
+    for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it) {
         (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
         ++i;
     }
@@ -196,10 +199,11 @@ void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(vector<double>& var, const
 
 void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double>& var, const char* var_name) {
   //std::deque<Element<2U> >::iterator it;
-  csmp::Index key(sg_->Database().StorageKey(var_name));
+  const csmp::Index key(sg_->Database().StorageKey(var_name));
+  Region<2U>& domain{ sg_->Region("Model") };
   
   unsigned int i = 0;
-  for (auto it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
+  for (auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it) {
     (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
               
     ++i;
@@ -209,9 +213,10 @@ void Integral_var_NT_rhsop_N_dV_Test::setElementVariable(vector<double>& var, co
 void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalMatrix(SparseMatrix& sm, MathOperatorLHS<2U>& oper) {
     sm.Zero();
     sm.Resize(sg_->Region("Model").Nodes());
+    Region<2U>& domain{ sg_->Region("Model") };
     
     //std::deque<Element<2U> >::iterator it;
-    for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
+    for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it) {
         oper.GetOperands( *(*it));
         oper.ComputeContribution(*(*it));
         oper.AssignToGlobal(*(*it), sm);
@@ -220,8 +225,9 @@ void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalMatrix(SparseMatrix& sm, Ma
 }
 
 void Integral_var_NT_rhsop_N_dV_Test::calculateGlobalRHS(vector<double>& rhs, MathOperatorRHS<2U>& oper) {
+    Region<2U>& domain{ sg_->Region("Model") };
     //std::deque<Element<2U> >::iterator it;
-    for (vector<Element<2U>*>::const_iterator it = sg_->Region("Model").ElementsBegin(); it != sg_->Region("Model").ElementsEnd(); ++it) {
+    for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it) {
         oper.GetOperands(*(*it));
         oper.ComputeContribution(*(*it));
         oper.AssignToGlobal(*(*it), rhs);

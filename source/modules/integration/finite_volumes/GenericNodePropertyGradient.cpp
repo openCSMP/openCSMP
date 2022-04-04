@@ -26,7 +26,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
      tolerance(1.0e-12),
      inner_(1U, VectorVariable<dim>(PLAIN,0.0) ),
      middle_( 1U, inner_ ),
-     distance_facet_FVBarycenter_( gref_.Elements() ),
+     distance_facet_FVBarycenter_( gref_.Cells() ),
      neighbors_( gref_.Nodes() ),
      mass_center( sg, region, "mass center", VECTOR, NODE ), //PropertyHandle for mass center
      u_key(sg.Database().StorageKey( prop )),
@@ -58,12 +58,12 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
 
     // init of vector
     // ====================================================
-    distance_facet_FVBarycenter_.resize( gref_.Elements() ); // resize outer vector
+    distance_facet_FVBarycenter_.resize( gref_.Cells() ); // resize outer vector
     size_t length = distance_facet_FVBarycenter_.size();
 
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=gref_.ElementsBegin();
-          eit!=gref_.ElementsEnd(); eit++ ){
+          eit=gref_.CellsBegin();
+          eit!=gref_.CellsEnd(); eit++ ){
           //resize middle vector
           distance_facet_FVBarycenter_[ (*eit)->Idx() ].resize( (*eit)->FV()->Facets() );
 
@@ -106,7 +106,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
              // get the global parent id:
              global_neighb_el_id = (*cvit)->Parent( p)->Idx();
 
-             if(global_neighb_el_id<gref_.Elements()){
+             if(global_neighb_el_id<gref_.Cells()){
                  // get the corresponding element:
                  const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
@@ -153,7 +153,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
     tolerance(1.0e-15),
     inner_(1U, VectorVariable<dim>() ),
     middle_( 1U, inner_ ),
-    distance_facet_FVBarycenter_( gref_.Elements() ),
+    distance_facet_FVBarycenter_( gref_.Cells() ),
     neighbors_( gref_.Nodes() ),
     mass_center( sg, region, "mass center", VECTOR, NODE ), //PropertyHandle for mass center
      u_key(sg.Database().StorageKey( properties[0] )),
@@ -195,13 +195,13 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
     // init of vector 
     // ====================================================
     
-    distance_facet_FVBarycenter_.resize( gref_.Elements() ); // resize outer vector
+    distance_facet_FVBarycenter_.resize( gref_.Cells() ); // resize outer vector
     size_t length_;
     length_ =  distance_facet_FVBarycenter_.size();
      
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=gref_.ElementsBegin();
-          eit!=gref_.ElementsEnd(); eit++ ){
+          eit=gref_.CellsBegin();
+          eit!=gref_.CellsEnd(); eit++ ){
           
           cout<< (*eit)->Idx() <<endl;
 
@@ -245,7 +245,7 @@ GenericNodePropertyGradient<dim>::GenericNodePropertyGradient( Model<dim>& sg, c
          for( auto p = 0; p< (*cvit)->Parents(); p++ ){
              // get the global parent id:
              auto global_neighb_el_id = (*cvit)->Parent(p)->Idx();
-             if(global_neighb_el_id<gref_.Elements()){
+             if(global_neighb_el_id<gref_.Cells()){
                  // get the corresponding element:
                  const Element<dim>* current_el = gref_.E( global_neighb_el_id );
                  // ...and the global node_i's of that element
@@ -300,8 +300,8 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 
  // loop over stencils
  // ------------------
- for ( auto eit=gref_.ElementsBegin();
-       eit!=gref_.ElementsEnd(); eit++ ){
+ for ( auto eit=gref_.CellsBegin();
+       eit!=gref_.CellsEnd(); eit++ ){
 
         ids.resize( (*eit)->Nodes() );
         // get vector of global id's
@@ -362,8 +362,8 @@ void GenericNodePropertyGradient<dim>::CalculateCenterOfMass()
 template<uint32_t dim>
 void GenericNodePropertyGradient<dim>::CalculateDistanceFacetFVBary( vector<vector<vector<VectorVariable<dim> > > >& d_facet_FVBarycenter )
 {
- for ( auto eit=gref_.ElementsBegin();
-       eit!=gref_.ElementsEnd(); eit++ )
+ for ( auto eit=gref_.CellsBegin();
+       eit!=gref_.CellsEnd(); eit++ )
    {
         // loop over facets
         // -------------------

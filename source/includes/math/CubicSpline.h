@@ -34,9 +34,9 @@ class CubicSpline {
 };
 
 double splint( const std::vector<double>& xa, 
-                 const std::vector<double>& ya,
-                 const std::vector<double>& y2a,
-                 double x );
+               const std::vector<double>& ya,
+               const std::vector<double>& y2a,
+               double x );
                       
  } // csmp
 

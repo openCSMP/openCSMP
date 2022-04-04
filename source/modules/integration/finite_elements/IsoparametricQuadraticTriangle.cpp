@@ -1759,7 +1759,7 @@ double  IsoparametricQuadraticTriangle::JacobianInverse()
 
     if ( detJ <= 0. ) {
        ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-       cerr <<"\nIsoparametricQuadraticTriangle::JacobianInverse: element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
+       cerr <<"\n\nIsoparametricQuadraticTriangle::JacobianInverse: element "<< CurrentID() <<": erroneous determinant of 2D Jacobian matrix: ";
         cerr << detJ << endl;
         cerr <<"\ncaused by element of type: "<< parseFiniteElementType(ElementType()) << endl;
         for ( uint32_t i{0U}; i<Nodes(); i++ )
@@ -1769,7 +1769,13 @@ double  IsoparametricQuadraticTriangle::JacobianInverse()
                 cerr << XY(i,j) <<" ";
             cerr<<endl;
           }
-        csmp_error.notice( WARNING, "soparametricQuadraticTriangle::JacobianInverse:",
+        string file_name{ parseFiniteElementType( ElementType() ) };
+        // to print a scalar, the data matrix only needs 1 row
+        DenseMatrix<DM_MIN> DATA( 1, Nodes() );
+        // values increase linearly from first to last node (so that node numbering direction can be seen)
+        for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
+        OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
+        csmp_error.notice( WARNING, "IsoparametricQuadraticTriangle::JacobianInverse:",
                           "the value of the Jacobian is negative; check node-numbering.");
 
         return fabs(detJ);

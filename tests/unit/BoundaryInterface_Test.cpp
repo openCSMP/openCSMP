@@ -74,8 +74,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -93,8 +93,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -112,8 +112,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -131,8 +131,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -150,8 +150,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -169,8 +169,8 @@ void BoundaryInterface_Test::run()
 										 // either be Face, Element or InterFace
 		  ScalarVariable area(PLAIN, 0.);
 		  size_t surfaceElementCount(0);
-		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.ElementsEnd());
-		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.ElementsBegin(); it != domainElementsEnd; ++it)
+		  const typename std::vector<Face<dim>*>::const_iterator domainElementsEnd(boundary.CellsEnd());
+		  for (typename std::vector<Face<dim>*>::const_iterator it = boundary.CellsBegin(); it != domainElementsEnd; ++it)
 		  {
 			  area = (*it)->Area();
 			  (*it)->Store(areaKey, area);
@@ -188,7 +188,7 @@ void BoundaryInterface_Test::run()
       // -------------------------------------------------------------
       const string test_region("NORMAL_FAULT");
       Region<3U>&  test_subdomain(model.Region(test_region.c_str()));
-      const size_t elmts_original_region(test_subdomain.Elements());
+      const size_t elmts_original_region(test_subdomain.Cells());
       // will remove the original region
       const size_t model_faces_before(model.Mesh().Faces());
       std::pair<std::set<std::string>,bool> boundaries = model.CreateInternalBoundaryFrom( "NORMAL_FAULT" );
@@ -201,7 +201,7 @@ void BoundaryInterface_Test::run()
       if ( verbose_ ) {
            cout << "\nBoundaryInterface_Test::run: Printing the name of the boundaries in the model:";
            for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
-             cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Elements() <<" faces)";
+             cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Cells() <<" faces)";
         }
       _test( model.Boundaries() == 12 );
 
@@ -364,7 +364,7 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
     vector<double> normal(3U), nbor_normal(3U);
    
     size_t non_surface_elements(0U);
-    for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
+    for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only  considers surface elements
       if ( (*it)->IsSurfaceElement() ) {
            (*it)->UnitNormal( normal );
@@ -665,7 +665,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
       }
     // verifying that the region lies inside of the model
     size_t boundary_elements(0);
-    for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
       {
          if ( atBoundary(*eit) ) {
               cerr <<"\nElement is a boundary element:";
@@ -711,8 +711,8 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
 
     // 3. looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
-    face_construction_data.reserve(subdomain.Elements());
-    for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
+    face_construction_data.reserve(subdomain.Cells());
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
       {
           // 3.1 identifying neighbors, facing relations, and juxtaposed materials for current element
           FaceConstructionData  fdata(higherDimensionalNeighbors( *(*eit), mtrl_key ));

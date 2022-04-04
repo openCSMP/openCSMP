@@ -53,8 +53,8 @@ void writeVariableToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key.place == ELEMENT ) {
-        const auto  eit_last(--model_domain.ElementsEnd());
-	      for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); eit++ ) {
+        const auto  eit_last(--model_domain.CellsEnd());
+	      for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ ) {
 	           Point<1U>  x((*eit)->BaryCenter());
 	           ofs <<"["<< x[0];
 	           ofs <<","<< (*eit)->Read( prop_key );
@@ -149,11 +149,11 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key.place == ELEMENT ) {
-	      for ( size_t i{0U}; i<model_domain.Elements(); i++ ) {
+	      for ( size_t i{0U}; i<model_domain.Cells(); i++ ) {
 	           Point<1U> x(model_domain.E(i)->BaryCenter());
 	           ofs <<"["<< x[0];
 	           ofs <<","<< model_domain.E(i)->Read( prop_key );
-	           if ( i < model_domain.Elements()-1U ) ofs <<"],";
+	           if ( i < model_domain.Cells()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }
@@ -186,11 +186,11 @@ void writeVariablesToMapleTextFile( const Model<1U>& sg,
       }
       
     else if ( prop_key2.place == ELEMENT ) {
-	      for ( size_t i{0U}; i<model_domain.Elements(); i++ ) {
+	      for ( size_t i{0U}; i<model_domain.Cells(); i++ ) {
 	           Point<1U>  x(model_domain.E(i)->BaryCenter());
 	           ofs <<"["<< x[0];
 	           ofs <<","<< model_domain.E(i)->Read( prop_key2 );
-	           if ( i < model_domain.Elements()-1U ) ofs <<"],";
+	           if ( i < model_domain.Cells()-1U ) ofs <<"],";
 	           else ofs <<"]";
 	           if ( counter++ == 5U ) { ofs << endl; counter=1; }
 	        }
@@ -268,9 +268,9 @@ void writeVariableToMapleTextFile( const Model<1U>& sg, const char* group,
       
     else if ( prop_key.place == ELEMENT ) {
         vector<double>  x;
-        auto end_it=gref.ElementsEnd();
+        auto end_it=gref.CellsEnd();
         end_it--;
-	      for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+	      for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
 	           x = (*eit)->BaryCenter().Coordinates();
 	           ofs <<"["<< x[0];
 	           ofs <<","<< (*eit)->Read( prop_key );

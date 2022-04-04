@@ -94,7 +94,7 @@ namespace csmp
           vtu.OutputDataToVTU( "InitialSaturationDistribution", "saturation oil", "Model", static_cast<int>(0) );
         }
       // extrapolating to visualize streamlines
-      model.ExtrapolateElementToNodeProperty( "velocity", "nodal velocity" );
+      model.ExtrapolateCellToNodeProperty( "velocity", "nodal velocity" );
       if ( verbose_ ) vtu.OutputDataToVTU( "InitialVelocityField", "nodal velocity", "Model", static_cast<int>(0) );
 
       // simulation settings
@@ -154,8 +154,8 @@ namespace csmp
       }
 
     // computing the total mobility
-    const vector<Element<3>*>::const_iterator elementsEnd( mref.ElementsEnd() );
-    for ( vector<Element<3>*>::const_iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
+    const vector<Element<3>*>::const_iterator elementsEnd( mref.CellsEnd() );
+    for ( vector<Element<3>*>::const_iterator it = mref.CellsBegin(); it != elementsEnd; ++it )
       {
       // setting up the relative permeability model
       saturationFunctions.Initialize( *(*it) );
@@ -180,8 +180,8 @@ namespace csmp
 
       csmp::Region<3>&  mref( model.Region( "Model" ) );
 
-      const vector<Element<3U>*>::const_iterator elementsEnd = mref.ElementsEnd();
-      for ( vector<Element<3U>*>::const_iterator it = mref.ElementsBegin(); it != elementsEnd; ++it )
+      const vector<Element<3U>*>::const_iterator elementsEnd = mref.CellsEnd();
+      for ( vector<Element<3U>*>::const_iterator it = mref.CellsBegin(); it != elementsEnd; ++it )
         {
           // computing the total velocity: vt = -k (lt grad p )
           const double mob_t = (*it)->Read( totalMobilityKey );

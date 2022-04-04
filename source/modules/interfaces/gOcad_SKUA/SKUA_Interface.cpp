@@ -44,13 +44,13 @@ void SKUA_Interface::OutputElementNumbersAndBaryCentresRegionByRegion( const Mod
   ofstream ofs( string( model.Name() ) + "-element_barycentres.txt" );
   ofs << model.Name() << "-element_barycentres.txt  textfile with the element barcyentres of all elements in the mesh\n";
   ofs << "region-name,region-id,element number,x,y,z\n";
-  printRangeOfVariable( model, "element number", true ); // == model.Region("Model").Elements() );
+  printRangeOfVariable( model, "element number", true ); // == model.Region("Model").Cells() );
   size_t region_id = 0;
   
   const csmp::Index key_enr = model.Database().StorageKey("element number");
   
   for ( auto rit = model.UniqueRegionsBegin(); rit != model.UniqueRegionsEnd(); ++rit ) {
-      for ( auto it = (*rit).second.ElementsBegin(); it != (*rit).second.ElementsEnd(); ++it )
+      for ( auto it = (*rit).second.CellsBegin(); it != (*rit).second.CellsEnd(); ++it )
         {
            // region name              id (0..n-1)       element number
            ofs << (*rit).first <<","<< region_id <<","<< static_cast<long>((*it)->Read( key_enr)) <<",";
@@ -237,7 +237,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
                // finding the elements corresponding to element numbers in current model region
                Region<dim>& subdomain = model.Region((*it).first);
                map<size_t,Element<dim>*>  elmt_correspondance_map;
-                for ( auto eit=subdomain.ElementsBegin(); eit!=subdomain.ElementsEnd(); ++eit )
+                for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
                   elmt_correspondance_map.insert( make_pair( (*eit)->Read(e_key), (*eit) ) );
             
                // assign properties element by element if these are valid
@@ -334,7 +334,7 @@ void SKUA_Interface::VariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -415,7 +415,7 @@ void SKUA_Interface::VariablesToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); ++it )
            {
               ofs << (*rt) <<"\t";
               Point<3U> xyz((*it)->BaryCenter());
@@ -479,7 +479,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
       {
          assert( model.ContainsRegion((*rt).c_str()) );
          const Region<3U>&  gref=model.Region((*rt).c_str());
-         for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); ++it )
+         for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); ++it )
            {
               // each array variable entry is output as a singe line 
               assert( (*it)->FE()->IsSurfaceElement() );
@@ -659,7 +659,7 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   
   // reporting
   std::cout << "\nremove_NO_DATA_ElementsInModel: " << region.Name() << " (removed elements: " << n_removed_elmts << ")";
-  std::cout << "\t" << region.Elements() << " elements remaining in '" << region.Name() << "'.\n";
+  std::cout << "\t" << region.Cells() << " elements remaining in '" << region.Name() << "'.\n";
 
   // updating the model, dependent on wether the removed elements were located only in a single unique region or across regions
   // if the region is unique ony that region needs to be modified
@@ -787,7 +787,7 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
 
   set<int32_t>   unknown_identifiers;
   Region<3U>&  model_domain( model.Region( "Model" ) );
-  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
+  for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it )
     {
       const int32_t rocktype = static_cast<int32_t>((*it)->Read( rrt_key ));
       // if the rocktype can be identified, we store the element id for the later creation of a region

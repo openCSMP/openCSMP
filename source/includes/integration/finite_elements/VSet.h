@@ -33,7 +33,8 @@ class VSet : public VData {
           size_t nodes, size_t elmts );
 
     /// multiple element type constructor
-    VSet( const std::deque<uint32_t>& npes,
+    VSet( const std::vector<int8_t>&  fem_types,
+          const std::deque<uint32_t>& npes,
           const std::deque<uint32_t>& epes,
           size_t nodes );
 

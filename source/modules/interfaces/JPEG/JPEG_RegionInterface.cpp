@@ -55,7 +55,7 @@ JPEG_RegionInterface::JPEG_RegionInterface( Model<2U>& sg, const char* group_nam
     xy[3] = vmax;
     
     // initialize the FD grid
-    sg.AssignElementCharacteristicsTo("inner radius", "inner radius");
+    sg.AssignCellCharacteristicsTo("inner radius", "inner radius");
     sg.MinMaxOf("inner radius", rmin, rmax );       
     //                       xmin   xmax   ymin   ymax       
     regular_grid.Initialize( xy[0], xy[1], xy[2], xy[3], rmin, rmin );  
@@ -150,7 +150,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
 
     // 2. building static FiniteDifferenceGrid for repeated data output
     // ----------------------------------------------------------------
-    FemToGridVisitor<2U> writer( sg.Database(), regular_grid, var_name, sg.Region(name_.c_str()).Elements() );
+    FemToGridVisitor<2U> writer( sg.Database(), regular_grid, var_name, sg.Region(name_.c_str()).Cells() );
 
     writer.OverWrite( true );
     writer.OutputProperty( var_name );
@@ -208,7 +208,7 @@ bool JPEG_RegionInterface::OutputRegionDataToJPG( Model<2U>& sg,
 
     // 2. building static FiniteDifferenceGrid for repeated data output
     // ----------------------------------------------------------------
-    FemToGridVisitor<2U> writer( sg.Database(), regular_grid, var_name, sg.Region(name_.c_str()).Elements() );
+    FemToGridVisitor<2U> writer( sg.Database(), regular_grid, var_name, sg.Region(name_.c_str()).Cells() );
     writer.OverWrite( true );
     writer.OutputProperty( var_name );
      

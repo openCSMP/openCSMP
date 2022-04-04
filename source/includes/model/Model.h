@@ -294,10 +294,10 @@ public:
   bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
 
   /// linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property
-  void InterpolateIntegrationPointToElementProperty( const char* ipoint_prop, const char* eprop );
+  void InterpolateIntegrationPointToCellProperty( const char* ipoint_prop, const char* eprop );
 
   /// interpolates node property values to the barycentre of element and stores results in element property
-  void InterpolateNodeToElementProperty( const char* nprop, const char* eprop, bool verbose = true );
+  void InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose = true );
 
   /// interpolates distributed node property values the quadrature points of numerically integrated finite elements
   void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* ipoint_prop );
@@ -306,7 +306,7 @@ public:
   void ExtrapolateIntegrationPointToNodeProperty( const char* ipoint_prop, const char* eprop );
 
   /// piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs. element-volume weighted)
-  void ExtrapolateElementToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true );
+  void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true );
 
   /// changes the flags of the target variable all across the model
   void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
@@ -333,7 +333,7 @@ public:
   void MoveNodeCoordinatesBy( const char* vector_variable );
 
   /// 'characteristic' options are: volume, inner radius, and aspect ratio
-  void AssignElementCharacteristicsTo( const char* characteristic, const char* var );
+  void AssignCellCharacteristicsTo( const char* characteristic, const char* var );
 
   // ------------------------------------------------------------------------
   // Interrelations, Visitors and Algorithms
@@ -355,16 +355,6 @@ public:
   void Apply( PDE_Integrator<dim, csmp::Region>&, const char* region_name, bool debug = false );
   void Apply( PDE_Integrator<dim, csmp::Boundary>&, const std::string& boundary_name, bool debug = false );
   void Apply( PDE_Integrator<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name, bool debug = false );
-
-  /// TODO: fix - for ongoing developments for any of region, boundary or splitboundary
-  void Apply( PDE_Integrator_UoM<dim, csmp::Region>& );
-  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>& );
-  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>& );
-
-  /// TODO: fix - application of integration scheme to a particular region, boundary of split-boundary identified by name
-  void Apply( PDE_Integrator_UoM<dim, csmp::Region>&, const char* region_name );
-  void Apply( PDE_Integrator_UoM<dim, csmp::Boundary>&, const std::string& boundary_name );
-  void Apply( PDE_Integrator_UoM<dim, csmp::SplitBoundary>&, const std::string& splitboundary_name );
 
   // ----------------------------------------
   // Screen output

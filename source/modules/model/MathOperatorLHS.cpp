@@ -3,6 +3,7 @@
 #include "Element.h"
 #include "InterFace.h"
 #include "Face.h"
+#include "PropertyDatabase.h"
 #include "Exception.h"
 
 using namespace std;
@@ -204,7 +205,7 @@ namespace csmp {
 	}
 
 	template<uint32_t dim>
-	std::string  MathOperatorLHS<dim>::Name() const
+	string  MathOperatorLHS<dim>::Name() const
 	{
 		return name_;
 	}
@@ -232,7 +233,7 @@ namespace csmp {
 	}
 
 	template<uint32_t dim>
-	std::string  MathOperatorLHS<dim>::MaterialOperandName() const
+	string  MathOperatorLHS<dim>::MaterialOperandName() const
 	{
 		return op.name;
 	}
@@ -271,7 +272,7 @@ namespace csmp {
 	}
 
 	template<uint32_t dim>
-	std::string  MathOperatorLHS<dim>::BasicOperandName() const
+	string  MathOperatorLHS<dim>::BasicOperandName() const
 	{
 		return bop.first.name;
 	}
@@ -323,7 +324,7 @@ namespace csmp {
 	}
 
 	template<uint32_t dim>
-	std::string  MathOperatorLHS<dim>::TestOperandName() const
+	string  MathOperatorLHS<dim>::TestOperandName() const
 	{
 		return top.first.name;
 	}
@@ -537,7 +538,7 @@ namespace csmp {
 		//    can be performed; no interpolation is needed
 		if (idx.place == ELEMENT_INTEGRATION_POINT) {
 			if (idx.type == SCALAR) {
-				M.AssignToDiagonal(dim, e_ref.Read(ip, idx));
+				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
 			}
 			else if (idx.type == VECTOR) {
 				e_ref.Read(ip, idx, VC[0]);
@@ -567,7 +568,7 @@ namespace csmp {
 		if (idx.place == ELEMENT || idx.place == REGION)
 		{
 			if (idx.type == SCALAR) {
-				M.AssignToDiagonal(dim, e_ref.Read(idx));
+				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
 			}
 			else if (idx.type == VECTOR) {
 				e_ref.Read(idx, VC[0]);
@@ -649,7 +650,7 @@ namespace csmp {
 		//    can be performed; no interpolation is needed
 		if (idx.place == FACE_INTEGRATION_POINT) {
 			if (idx.type == SCALAR) {
-				M.AssignToDiagonal(dim, e_ref.Read(ip, idx));
+				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
 			}
 			else if (idx.type == VECTOR) {
 				e_ref.Read(ip, idx, VC[0]);
@@ -679,7 +680,7 @@ namespace csmp {
 		if (idx.place == FACE || idx.place == BOUNDARY)
 		{
 			if (idx.type == SCALAR) {
-				M.AssignToDiagonal(dim, e_ref.Read(idx));
+				M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
 			}
 			else if (idx.type == VECTOR) {
 				e_ref.Read(idx, VC[0]);
@@ -762,7 +763,7 @@ namespace csmp {
 		{
 			MTRL.resize(1U);
 			if (MaterialOperandType() == SCALAR)
-				MTRL[0].AssignToDiagonal(dim, e_ref.Read(MaterialOperandKey()));
+				MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
 			else if (MaterialOperandType() == VECTOR) {
 				VectorVariable<dim>  vc;
 				e_ref.Read(MaterialOperandKey(), vc);
@@ -794,7 +795,7 @@ namespace csmp {
 				for (auto i{0U}; i < n_integration_points; i++)
 				{
 					if (MaterialOperandType() == SCALAR)
-						MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+						MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
 					else if (MaterialOperandType() == VECTOR) {
 						VectorVariable<dim>  vc;
 						e_ref.Read(i, MaterialOperandKey(), vc);
@@ -834,15 +835,19 @@ namespace csmp {
 
 	} // end GetOperands(Element)
 
-	template<uint32_t dim>
-	void MathOperatorLHS<dim>::GetOperands( const Face<dim>&  e_ref )
+
+
+
+
+template<uint32_t dim>
+void MathOperatorLHS<dim>::GetOperands( const Face<dim>&  e_ref )
 	{
 		// if operand property is an element property
 		if (MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == BOUNDARY)
 		{
 			MTRL.resize(1U);
 			if (MaterialOperandType() == SCALAR)
-				MTRL[0].AssignToDiagonal(dim, e_ref.Read(MaterialOperandKey()));
+				MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
 			else if (MaterialOperandType() == VECTOR) {
 				VectorVariable<dim>  vc;
 				e_ref.Read(MaterialOperandKey(), vc);
@@ -874,7 +879,7 @@ namespace csmp {
 				for (auto i{0U}; i < n_integration_points; i++)
 				{
 					if (MaterialOperandType() == SCALAR)
-						MTRL[i].AssignToDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+						MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
 					else if (MaterialOperandType() == VECTOR) {
 						VectorVariable<dim>  vc;
 						e_ref.Read(i, MaterialOperandKey(), vc);
@@ -917,8 +922,8 @@ namespace csmp {
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::GetOperands( const InterFace<dim>& f)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::GetOperands: ";
-		std::cerr << " Overload to get LHS operands from interface: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::GetOperands: ";
+		cerr << " Overload to get LHS operands from interface: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::GetOperands(InterFace)");
 	} // end GetOperands(InterFace)
 
@@ -926,8 +931,8 @@ namespace csmp {
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::WriteOperands(Element<dim>& e)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
-		std::cerr << " Overload to write LHS operands from element: " << e.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
+		cerr << " Overload to write LHS operands from element: " << e.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::WriteOperands(Element)");
 	} // end WriteOperands(Element)
 
@@ -935,40 +940,40 @@ namespace csmp {
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::WriteOperands(Face<dim>& f)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
-		std::cerr << " Overload to write LHS operands from face: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
+		cerr << " Overload to write LHS operands from face: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::WriteOperands(Face)");
 	} // end WriteOperands(Face)
 
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::WriteOperands(InterFace<dim>& f)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
-		std::cerr << " Overload to write LHS operands from interface: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::WriteOperands: ";
+		cerr << " Overload to write LHS operands from interface: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::WriteOperands(InterFace)");
 	} // end WriteOperands(InterFace)
 
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::ComputeContribution( const Element<dim>& e)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
-		std::cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
+		cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::ComputeContribution(Element)");
 	}// end ComputeContribution(Element)
 
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::ComputeContribution( const Face<dim>& f)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
-		std::cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
+		cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::ComputeContribution(Face)");
 	}// end ComputeContribution(Face)
 
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::ComputeContribution( const InterFace<dim>& f)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
-		std::cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::ComputeContribution: ";
+		cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::ComputeContribution(InterFace)");
 	}// end ComputeContribution(InterFace)
 
@@ -981,7 +986,7 @@ namespace csmp {
 
 	/// AssignToGlobal matrix function
 	template<uint32_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const Element<dim>& e, SparseMatrix& G, vector<double>& pivotVector, const vector<size_t>& DOF_indexes)
 	{
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes()); // ii
@@ -1008,7 +1013,7 @@ namespace csmp {
 		}
 
 		// get (component of) local value of a local node 
-		std::vector<double> nodal_values(IDB.size());
+		vector<double> nodal_values(IDB.size());
 		{
 			if (this->TestOperandType() == SCALAR) {
 				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
@@ -1080,13 +1085,13 @@ namespace csmp {
 			//    }
 			//}
 		}
-		else if (add_accumulate_ || add_accumulate_later_)
+		else if ( add_accumulate_ || add_accumulate_later_)
 		{
 			for (auto i{0U}; i < LHS.Rows(); i++) {
 				if (IDT[i] != NULL_IDX) {
 					for (auto j{0U}; j < LHS.Cols(); j++) {
-						if (IDB[j] == NULL_IDX) {
-							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j]* factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
+						if ( IDB[j] == NULL_IDX ) {
+							pivotVector[IDT[i]] -= LHS(i, j) * nodal_values[j] * factor_;  // notice the sign e.N(j / this->TestOperandOffset())->Read(this->TestOperand())
 						}
 						else {
 							G.Add(IDT[i],
@@ -1146,7 +1151,7 @@ namespace csmp {
 
 
 	template<uint32_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const Face<dim>& e, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const Face<dim>& e, SparseMatrix& G, vector<double>& pivotVector, const  vector<size_t>& DOF_indexes)
 	{
 		// map local to global indexes for test and basic operands
 		IDT.resize(e.Nodes());
@@ -1174,7 +1179,7 @@ namespace csmp {
 		}
 
 		// get (component of) local value of a local node 
-		std::vector<double> nodal_values(IDB.size());
+		vector<double> nodal_values(IDB.size());
 		{
 			if (this->TestOperandType() == SCALAR) {
 				for (auto nIdx = 0; nIdx < e.Nodes(); ++nIdx) {
@@ -1306,10 +1311,10 @@ namespace csmp {
 	} // end AssignToGlobal (Face)
 
 	template<uint32_t dim>
-	void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, SparseMatrix& G, std::vector<double>& pivotVector, const  std::vector<size_t>& DOF_indexes)
+	void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, SparseMatrix& G, vector<double>& pivotVector, const  vector<size_t>& DOF_indexes)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): ";
-		std::cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): ";
+		cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::AssignToGlobal(InterFace)");
 	} // end AssignToGlobal (InterFace)
 
@@ -1431,8 +1436,8 @@ namespace csmp {
 	template<uint32_t dim>
 	void MathOperatorLHS<dim>::AssignToGlobal(const InterFace<dim>& f, SparseMatrix& G)
 	{
-		std::cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): ";
-		std::cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << std::endl;
+		cerr << "\nMathOperatorLHS<dim>::AssignToGlobal(InterFace): ";
+		cerr << " Overload to assign LHS local entries to global matrix: " << f.Idx() << endl;
 		throw invalid_argument("MathOperatorLHS<dim>::AssignToGlobal(InterFace)");
 	} // end AssignToGlobal (InterFace)
 

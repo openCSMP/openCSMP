@@ -1956,8 +1956,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
           auto ips = (*it)->IntegrationPoints();
           for( auto ip = 0; ip < ips; ++ip )
@@ -1970,8 +1970,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
           auto sectors = (*it)->Sectors();
           for( uint32_t sid = 0; sid < sectors; ++sid )
@@ -1988,8 +1988,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
           const auto facets = (*it)->Facets();
           for( auto fid = 0; fid < facets; ++fid )
@@ -2063,8 +2063,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto  ips = (*it)->IntegrationPoints();
@@ -2078,8 +2078,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   }
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto sectors = (*it)->Sectors();
@@ -2097,8 +2097,8 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   }
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto facets = (*it)->Facets();
@@ -2176,8 +2176,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto ips = (*it)->IntegrationPoints();
@@ -2191,8 +2191,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   }
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto sectors = (*it)->Sectors();
@@ -2210,8 +2210,8 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   }
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin();
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin();
            it != domainElementsEnd; ++it )
       {
           const auto facets = (*it)->Facets();
@@ -2301,8 +2301,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       }
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto ips = (*it)->IntegrationPoints();
@@ -2316,8 +2316,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       }
       else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto sectors = (*it)->Sectors();
@@ -2335,8 +2335,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       }
       else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto facets = (*it)->Facets();
@@ -2426,8 +2426,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       }
       else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto ips = (*it)->IntegrationPoints();
@@ -2441,8 +2441,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       }
       else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto sectors = (*it)->Sectors();
@@ -2460,8 +2460,8 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       }
       else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
       {
-          const auto domainElementsEnd( subDomain.ElementsEnd() );
-          for( auto it = subDomain.ElementsBegin();
+          const auto domainElementsEnd( subDomain.CellsEnd() );
+          for( auto it = subDomain.CellsBegin();
                it != domainElementsEnd; ++it )
           {
               const auto facets = (*it)->Facets();
@@ -2516,8 +2516,8 @@ void VTU_Interface<dim>::WriteElementDataArrayScalar( const Index& key, XML_Docu
   ScalarVariable scalarVariable;
   bool newLine( false );
   // looping over domains elements
-  const auto domainElementsEnd( subDomain.ElementsEnd() );
-  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  const auto domainElementsEnd( subDomain.CellsEnd() );
+  for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
     {
       // inserting scalar data
       (*it)->Read( key, scalarVariable );
@@ -2555,8 +2555,8 @@ void VTU_Interface<dim>::WriteElementDataArrayVector( const Index& key, XML_Docu
   bool newLine( false );
   VectorVariable<dim> vectorVariable;
   // looping over regions elements
-  const auto domainElementsEnd( subDomain.ElementsEnd() );
-  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  const auto domainElementsEnd( subDomain.CellsEnd() );
+  for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
     {
       // acquiring vector data
       (*it)->Read( key, vectorVariable );
@@ -2598,8 +2598,8 @@ void VTU_Interface<dim>::WriteElementDataArrayTensor( const Index& key, XML_Docu
   bool newLine( false );
   TensorVariable<dim> tensorVariable;
   // looping over regions nodes
-  const auto domainElementsEnd( subDomain.ElementsEnd() );
-  for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+  const auto domainElementsEnd( subDomain.CellsEnd() );
+  for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
     {
       // acquiring vector data
       (*it)->Read( key, tensorVariable );
@@ -2652,8 +2652,8 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarArray( const Index& key, XML
       vtu.BringToLevel();
       bool newLine( false );
       // looping over domains elements
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
         {
             // inserting scalar array data
             (*it)->Read( key, arrayVariable );
@@ -2706,8 +2706,8 @@ void VTU_Interface<dim>::WriteElementDataArrayScalarFlaggedArray( const Index& k
       vtu.BringToLevel();
       bool newLine( false );
       // looping over domains elements
-      const auto domainElementsEnd( subDomain.ElementsEnd() );
-      for( auto it = subDomain.ElementsBegin(); it != domainElementsEnd; ++it )
+      const auto domainElementsEnd( subDomain.CellsEnd() );
+      for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
         // inserting scalar flagged array data
         (*it)->Read( key, flaggedArrayVariable );
@@ -2864,7 +2864,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   string stringNumber, stringCache;
 
   // opening piece node
-  const size_t DOMAIN_NODES( subDomain.Nodes() ), DOMAIN_ELEMENTS( subDomain.Elements() );
+  const size_t DOMAIN_NODES( subDomain.Nodes() ), DOMAIN_ELEMENTS( subDomain.Cells() );
   stringNumber = number_to_string( DOMAIN_NODES );
   stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
   stringNumber = number_to_string( DOMAIN_ELEMENTS );
@@ -2922,8 +2922,8 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   vector<long> vtkNodeNumbering;
   // looping region's elements
   const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
-  const auto domainSimplicesEnd( subDomain.ElementsEnd() );
-  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+  const auto domainSimplicesEnd( subDomain.CellsEnd() );
+  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
   {
     // storing elements VTK type
     elementTypeVTK = ElementType( *it );
@@ -3013,7 +3013,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   connectivityFile.BringToLevel();
   // looping region's elements
   size_t offset( 0 ); entriesOfLine = 2;
-  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
+  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
   {
     // imcrementing offset by node count and writing to data
     offset += (*it)->Nodes();
@@ -3038,12 +3038,12 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
     connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
   // cell types
-  assert( elementTypesVTK.size() == subDomain.Elements() );
+  assert( elementTypesVTK.size() == subDomain.Cells() );
   connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
   // looping region's elements
   entriesOfLine = 2; size_t elementCount( 0 );
-  for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
+  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
   {
     // imcrementing offset by node count and writing to data
     stringNumber = number_to_string( elementTypesVTK[elementCount] );
@@ -3105,7 +3105,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
   string stringNumber, stringCache;
 
   // opening piece node, number of nodes == number of elements (since berycenters)
-  const size_t DOMAIN_ELEMENTS( subDomain.Elements() );
+  const size_t DOMAIN_ELEMENTS( subDomain.Cells() );
   stringNumber = number_to_string( DOMAIN_ELEMENTS );
   stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
 
@@ -3121,8 +3121,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileBCPC( XML_Document& connectivi
   bool newLine( false );
   connectivityFile.BringToLevel();
   // looping over all the region's nodes
-  const auto domainSimpicesEnd( subDomain.ElementsEnd() );
-  for( auto it = subDomain.ElementsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
+  const auto domainSimpicesEnd( subDomain.CellsEnd() );
+  for( auto it = subDomain.CellsBegin(); it != domainSimpicesEnd; ++it, ++entriesOfLine )
     {
     // writing x,y and z coordinates(tab seperated)
     stringNumber = number_to_string( (*it)->BaryCenter()[0] );
@@ -3258,8 +3258,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileRPC( XML_Document& connectivit
     double dist_bc;
     subDomain.MinMaxCoordinates(pt_min,pt_max);
     // looping over all the region's nodes
-    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( auto it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.CellsEnd() );
+    for( auto it  = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
     {
         pbc = (*it)->BaryCenter();
         dist_to_min = pbc - pt_min;
@@ -3379,8 +3379,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFEIP( XML_Document& connectivi
     connectivityFile.BringToLevel();
 
     // looping over all element integration points
-    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( auto it  = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.CellsEnd() );
+    for( auto it  = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
     {
         const auto ips = (*it)->FE()->IntegrationPoints();
         for( auto ip = 0; ip < ips; ++ip, ++entriesOfLine )
@@ -3513,8 +3513,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVSIP( XML_Document& connectiv
     connectivityFile.BringToLevel();
 
     // looping over all the region's nodes
-    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.CellsEnd() );
+    for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
     {
         auto sectors = (*it)->Sectors();
         for( auto sid = 0; sid < sectors; ++sid )
@@ -3653,8 +3653,8 @@ void VTU_Interface<dim>::EstablishConnectivityFileFVFIP( XML_Document& connectiv
     connectivityFile.BringToLevel();
 
     // looping over all the region's nodes
-    const auto domainSimplicesEnd( subDomain.ElementsEnd() );
-    for( auto it = subDomain.ElementsBegin(); it != domainSimplicesEnd; ++it )
+    const auto domainSimplicesEnd( subDomain.CellsEnd() );
+    for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
     {
         const auto facets = (*it)->Facets();
         for( auto fid = 0; fid < facets; ++fid )

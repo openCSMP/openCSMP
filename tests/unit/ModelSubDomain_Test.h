@@ -142,40 +142,40 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     // 2. elements, i.e. connectivity
     // ------------------------------
     // number of elements
-    if ( domain1.Elements() != domain2.Elements() ) {
+    if ( domain1.Cells() != domain2.Cells() ) {
          if ( verbose )
            std::cerr <<"\ncompareModelSubdomains: number of elements does not match.\n";
          //return false;
       }
-    _test( domain1.Elements() == domain2.Elements() );
+    _test( domain1.Cells() == domain2.Cells() );
    
     // number of interior elements
-    if ( domain1.PerimeterElements() != domain2.PerimeterElements() ) {
+    if ( domain1.PerimeterCells() != domain2.PerimeterCells() ) {
          if ( verbose )
            std::cerr <<"\ncompareModelSubdomains: mismatch in number of perimeter elements.\n";
          //return false;
       }
-    _test( domain1.PerimeterElements() == domain2.PerimeterElements() );
+    _test( domain1.PerimeterCells() == domain2.PerimeterCells() );
    
     // are the interior elements the same ?
-    std::set<uint32_t>  interior_elmts1, interior_elmts2;
-    for ( auto it=domain1.ElementsBegin(); it!=domain1.PerimeterElementsBegin(); ++it ) interior_elmts1.insert( (*it)->Idx() );
-    for ( auto it=domain2.ElementsBegin(); it!=domain2.PerimeterElementsBegin(); ++it ) interior_elmts2.insert( (*it)->Idx() );
+    std::set<size_t>  interior_elmts1, interior_elmts2;
+    for ( auto it=domain1.CellsBegin(); it!=domain1.PerimeterCellsBegin(); ++it ) interior_elmts1.insert( (*it)->Idx() );
+    for ( auto it=domain2.CellsBegin(); it!=domain2.PerimeterCellsBegin(); ++it ) interior_elmts2.insert( (*it)->Idx() );
     _test( interior_elmts1 == interior_elmts2 );   
    
     // element connectivity (not assuming that elements are in same order)
-    std::set<std::vector<uint32_t> > plist_entries1;
-    for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
-         std::vector<uint32_t> nodes( (*it)->Nodes() );
-         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
+    std::set<std::vector<size_t> > plist_entries1;
+    for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
+         std::vector<size_t> nodes( (*it)->Nodes() );
+         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
          plist_entries1.insert( move(nodes) );
       }
-    std::set<std::vector<uint32_t> > plist_entries2;
-    for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
-         std::vector<uint32_t> nodes( (*it)->Nodes() );
-         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
+    std::set<std::vector<size_t> > plist_entries2;
+    for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
+         std::vector<size_t> nodes( (*it)->Nodes() );
+         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
 //std::cerr <<"\n"<< (*it)->Idx() <<": ";
@@ -197,7 +197,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
    
     // comparing the element neighbor connectivity
     std::set<std::vector<uint32_t> > pfverts_entries1;
-    for ( auto it=domain1.ElementsBegin(); it!=domain1.ElementsEnd(); ++it ) {
+    for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
          std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
@@ -206,7 +206,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
          pfverts_entries1.insert( move(nbors) );
       }
     std::set<std::vector<uint32_t> > pfverts_entries2;
-    for ( auto it=domain2.ElementsBegin(); it!=domain2.ElementsEnd(); ++it ) {
+    for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
          std::vector<uint32_t> nbors( (*it)->Neighbors(),0 );
          for ( auto i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {

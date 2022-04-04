@@ -60,7 +60,7 @@ double maximumDifference( const Model<dim>& sg,
      }
 
    else if ( new_key.place == ELEMENT ) {
-       for ( auto eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ ) {
+       for ( auto eit = sgref.CellsBegin(); eit != sgref.CellsEnd(); eit++ ) {
            (*eit)->Read( new_key, new_prop );
            (*eit)->Read( old_key, old_prop );
            if ( !absolute ) temp = std::fabs( ( new_prop() - old_prop() ) / new_prop() );
@@ -70,7 +70,7 @@ double maximumDifference( const Model<dim>& sg,
      }
 
    else if ( new_key.place == ELEMENT_INTEGRATION_POINT ) {
-       for ( auto eit = sgref.ElementsBegin(); eit != sgref.ElementsEnd(); eit++ )
+       for ( auto eit = sgref.CellsBegin(); eit != sgref.CellsEnd(); eit++ )
          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
            {
              (*eit)->Read( i, new_key, new_prop );

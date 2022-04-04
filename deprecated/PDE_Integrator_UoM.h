@@ -14,7 +14,7 @@ namespace csmp {
     @author Khoa Luat Tran (University of Melbourne)
     @date 17/4/2019
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+template<size_t dim, template<size_t> class COMPUTATION_DOMAIN>
 class PDE_Integrator_UoM : public PDE_Integrator<dim, COMPUTATION_DOMAIN> {
   public:
     /// only use this constructor
@@ -33,13 +33,13 @@ class PDE_Integrator_UoM : public PDE_Integrator<dim, COMPUTATION_DOMAIN> {
     // For Solve() and PostProcess() the base class methods are used!
 
   protected:
- 	  std::vector<size_t>  DOF_indexes_; ///< for indexing DOFs (only non-Dirichlet BC dofs, enumerated 0 -> maximum DOF
-	  std::vector<double>  pivotVector_; ///< terms recovered from eliminated rows
+ 	  std::vector<size_t>    DOF_indexes_; ///< for indexing DOFs (only non-Dirichlet BC dofs, enumerated 0 -> maximum DOF
+	  std::vector<double64>  pivotVector_; ///< terms recovered from eliminated rows
     void  EnumerateAndFixMatrixSize( const COMPUTATION_DOMAIN<dim>& );  // Luat Khoa Tran
 
   private:
-    double  scale_factor_; ///< for essential conditions
-    bool    verbose_;
+    double64               scale_factor_; ///< for essential conditions
+    bool                   verbose_;
   };
 
 } // csmp

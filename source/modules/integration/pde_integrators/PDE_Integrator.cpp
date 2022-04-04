@@ -1,8 +1,8 @@
 #include "PDE_Integrator.h"
-#if defined(_OPENMP )
-#include "omp.h"
-#include "FiniteElementManager.h"
-#endif
+#include "Model.h"
+#include "Region.h"
+#include "Boundary.h"
+#include "Node.h"
 #include "NimbleRegion.h"
 
 using namespace std;
@@ -32,270 +32,90 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
    /// add extra functionality for alternative solver if needed
    solver_(new CSMP_DEFAULT_LINEAR_SOLVER()),
 #endif
-   dim2_(dim*dim),
+   newed_Solver_object_(true),
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
-   newed_Solver_object(true),
+   trim_vectors_(false),
    time_increment_(0.),
-   scale_factor_(1.),
    verbose_(true)
 {
    target_.nodes = target_.elements = 0U;
-#if defined(_OPENMP )
-   this->femgrs_.resize(omp_get_max_threads());
-   this->thread_G_.resize(omp_get_max_threads());
-   this->thread_rh_.resize(omp_get_max_threads());
-   this->thread_lhs_operators_.resize(omp_get_max_threads());
-   this->thread_rhs_operators_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        this->femgrs_[tid].InitializeElements(dim,1,true);
-    }
-#endif
 }
 
 
 
-/**
-    Use this constructor wherever possible.
-*/
+
+
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver& solver )
  : solver_(&solver),
-   dim2_(dim*dim),
+   newed_Solver_object_(false),
    dof_per_node_(0),
    setup_established_(false),
    retain_matrix_(false),
-   newed_Solver_object(false),
+   trim_vectors_(false),
    time_increment_(0.),
-   scale_factor_(1.),
    verbose_(true)
 {
   target_.nodes = target_.elements = 0U;
-#if defined(_OPENMP )
-    femgrs_.resize(omp_get_max_threads());
-    this->thread_G_.resize(omp_get_max_threads());
-    this->thread_rh_.resize(omp_get_max_threads());
-    this->thread_lhs_operators_.resize(omp_get_max_threads());
-    this->thread_rhs_operators_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        this->femgrs_[tid].InitializeElements(dim,1,true);
-    }
-#endif
 }
-
-
-
-
-/** custom constructor.
-
-  @attention Potential memory leak! - if you write     integrator(new Solver())
- 
-  The constructor will not manage the supplied pointer, i.e. delete the supplied object instance.
- 
-*/
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver* solver )
- : solver_(solver),
-   dim2_(dim*dim),
-   dof_per_node_(0),
-   setup_established_(false),
-   retain_matrix_(false),
-   newed_Solver_object(false),
-   time_increment_(0.),
-   scale_factor_(1.),
-   verbose_(true)
-{
-  assert( solver != NULL );
-  target_.nodes = target_.elements = 0U;
-#if defined(_OPENMP )
-    femgrs_.resize(omp_get_max_threads());
-    this->thread_G_.resize(omp_get_max_threads());
-    this->thread_rh_.resize(omp_get_max_threads());
-    this->thread_lhs_operators_.resize(omp_get_max_threads());
-    this->thread_rhs_operators_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        this->femgrs_[tid].InitializeElements(dim,1,true);
-    }
-#endif
-}
-
-
-
-
-
 
 
 
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 PDE_Integrator<dim,COMPUTATION_DOMAIN>::~PDE_Integrator()
  {
-    if ( newed_Solver_object ) delete solver_;
-#if defined(_OPENMP )
-    for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-          it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
-        for (size_t tid = 0 ; tid < omp_get_num_threads() ;tid++)
-            if (this->thread_lhs_operators_[tid].find(it_lhs->second->Name()) != this->thread_lhs_operators_[tid].end())
-                delete(this->thread_lhs_operators_[tid].at(it_lhs->second->Name()));
-
-    for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-          it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
-        for (size_t tid = 0 ; tid < omp_get_num_threads() ;tid++)
-            if (this->thread_rhs_operators_[tid].find(it_rhs->second->Name()) != this->thread_rhs_operators_[tid].end())
-                delete(this->thread_rhs_operators_[tid].at(it_rhs->second->Name()));
-#endif
+    if ( newed_Solver_object_ ) delete solver_;
  }
 
 
 
-/** 
-@attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
-*/
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( const PDE_Integrator<dim,COMPUTATION_DOMAIN>& a )
- :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-   solver_(new SAMG_Solver()),
-   #else
-   /// add extra functionality for alternative solver if needed
-   solver_(new CSMP_DEFAULT_LINEAR_SOLVER()),
-   #endif
-   rh_(a.rh_),
-   x_(a.x_),
-   G_(a.G_),
-   lhs_operators_(a.lhs_operators_),
-   rhs_operators_(a.rhs_operators_),
-   basic_operands_(a.basic_operands_),
-   test_operands_(a.test_operands_),
-   postpro_operators_(a.postpro_operators_),
-   dim2_(dim*dim),
-   dof_per_node_(a.dof_per_node_),
-   setup_established_(a.setup_established_),
-   retain_matrix_(a.retain_matrix_),
-   newed_Solver_object(true),
-   scale_factor_(1.),
-   time_increment_(a.time_increment_),
-   target_(a.target_),
-   verbose_(a.verbose_)
-{
-   assert( solver_ != NULL );
-   cout <<"\nPDE_Integrator: copy constructor: ";
-   cout <<"New algorithm uses new instance of solver."<< endl;
-#if defined(_OPENMP )
-    femgrs_.resize(omp_get_max_threads());
-    this->thread_G_.resize(omp_get_max_threads());
-    this->thread_rh_.resize(omp_get_max_threads());
-    this->thread_lhs_operators_.resize(omp_get_max_threads());
-    this->thread_rhs_operators_.resize(omp_get_max_threads());
-#pragma omp parallel
-    {
-        size_t tid = omp_get_thread_num();
-        this->femgrs_[tid].InitializeElements(dim,1,true);
-    }
-#endif
-}
-
-
-
-/** 
-@attention A new Solver object is created here and it is of type LUdcmp_Solver, hence not honoring provided instance
-
-@todo SKM: fix so that the copy construction also involves the Solver
-*/
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>& PDE_Integrator<dim,COMPUTATION_DOMAIN>::operator=( const PDE_Integrator<dim,COMPUTATION_DOMAIN>& a )
-{
-  if ( &a != this ) {
-      G_                 = a.G_;
-      rh_                = a.rh_;
-      x_                 = a.x_;
-
-      if ( a.solver_ != NULL ) {
-           assert( solver_ != NULL or solver_ == 0 );
-           if ( newed_Solver_object ) {
-               delete solver_;
-               /// SKM fix:  this is not a clean solution. One should bring over solver from other integrator instance
-               #ifdef CSMP_WITH_SAMG_SOLVER
-               solver_ = new SAMG_Solver();
-               #else
-               /// add extra functionality for alternative solver if needed
-               solver_ = new CSMP_DEFAULT_LINEAR_SOLVER();
-               #endif
-            }
-           else solver_ = a.solver_;
-        }
-
-      lhs_operators_     = a.lhs_operators_;
-      rhs_operators_     = a.rhs_operators_;
-      postpro_operators_ = a.postpro_operators_;
-      basic_operands_    = a.basic_operands_;
-      test_operands_     = a.test_operands_;
-      time_increment_    = a.time_increment_;
-      retain_matrix_     = a.retain_matrix_;
-      setup_established_ = a.setup_established_;
-      target_            = a.target_;
-      dof_per_node_      = a.dof_per_node_;
-      scale_factor_      = a.scale_factor_;
-      verbose_           = a.verbose_;
-
-#if defined(_OPENMP )
-      this->femgrs_=a.femgrs_;
-      this->thread_G_=a.thread_G_;
-      this->thread_rh_=a.thread_rh_;
-      this->thread_lhs_operators_=a.thread_lhs_operators_;
-      this->thread_rhs_operators_=a.thread_rhs_operators_;
-#endif
-    }
-  return *this;
-}
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Verbose( bool verbose )
+{ verbose_=verbose; }
 
 
 
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain ) 
+bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::Verbose() const
+{ return verbose_; }
+
+
+
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain )
  { retain_matrix_=retain; }
 
+
+/**
+    Default = false, switch on if size matters more than speed.
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVectors( bool trim )
+ {
+     trim_vectors_ = trim;
+ }
 
 
 
 /**
-     Deletes the current solver replacing it with the supplied one.
-     Does not assume responsibility for the supplield solver 
-     which must be deleted elsewhere if created on the heap.
+    If a solver was allocated earlier it is deleted before the new_solver is 
+    connected to the Integrator.
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver* new_solver ) {
-  assert( new_solver != NULL );
-  if ( solver_ != new_solver ) {
-       delete solver_;
-       solver_ = new_solver;
-    }
-  newed_Solver_object = false;
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver& new_solver ) {
+   if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
+   newed_Solver_object_ = false;
+   solver_ = &new_solver;
 }
 
 
 
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-Solver* PDE_Integrator<dim,COMPUTATION_DOMAIN>::GetSolver() const {
-  return solver_;
+Solver& PDE_Integrator<dim,COMPUTATION_DOMAIN>::GetSolver() const {
+  return *solver_;
 }
-
-
-
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings",
-                      "this call to the method did nothing, the method is defined only in the subclasses.");
-
- } // end AdjustSolverSettings
 
 
 
@@ -355,20 +175,9 @@ template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
+   G_.Out( precision );
 
    cout.setf(ios::scientific);
-
-   for ( size_t i{0U}; i<G_.Rows(); i++ )
-      {
-         for ( size_t j{0U}; j<G_.Cols(); j++ )
-           {
-              cout.precision(precision);
-              if ( G_.At(i,j) >= 0 ) cout <<" ";
-              cout <<  G_.At(i,j) <<" ";
-           }
-         cout << endl;
-      }
-
    cout <<"\n\nGlobal righthand vector of length: "<< rh_.size() << endl;
    for ( size_t i{0U}; i<rh_.size(); i++ )
      {
@@ -404,10 +213,7 @@ which represent parts of the PDE which is being modeled by the PDE_Integrator.
 Add() allows you to associate such operators_ (like dove^2) with the
 PDE_Integrator.
 
-@param op PDE operator usually representing the integral form of an equation
-term that shall be added to the integrator.
-
-Pointer to PDE operator objects (=Operands) which you defined
+@param op pointer to PDE operator objects (=Operands) which you defined
 earlier in your program. These are always subclasses derived
 from the MathOperatorLHSptr or MathOperatorRHSptr base classes.
 
@@ -423,7 +229,6 @@ name are added.
 
 Each PDE_Integrator needs at least one left and one righthand math operator.
 Define these before you pass the PDE_Integrator to the Model.
-
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
@@ -432,10 +237,6 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
     lhs_operators_[ op->Name() ] = op;
     // force update during next application
     setup_established_ = false;
-#if defined(_OPENMP )
-    for (size_t tid = 0 ; tid < omp_get_max_threads() ;tid++)
-        thread_lhs_operators_[tid][op->Name()]=op->clone();
-#endif
  }
 
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
@@ -444,10 +245,35 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
     rhs_operators_[ op->Name() ] = op;
     // force update during next application
     setup_established_ = false;
-#if defined(_OPENMP )
-    for (size_t tid = 0 ; tid < omp_get_max_threads() ;tid++)
-        thread_rhs_operators_[tid][op->Name()]=op->clone();
-#endif
+ }
+
+
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( MathOperatorRHS<dim>* op )
+ {
+    rhs_boundary_operators_[ op->Name() ] = op;
+    // force update during next application
+    setup_established_ = false;
+ }
+
+
+
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorRHS<dim>* op )
+ {
+    rhs_split_boundary_operators_[ op->Name() ] = op;
+    // force update during next application
+    setup_established_ = false;
+ }
+
+
+
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorLHS<dim>* op )
+ {
+    lhs_split_boundary_operators_[ op->Name() ] = op;
+    // force update during next application
+    setup_established_ = false;
  }
 
 
@@ -457,10 +283,6 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( MathOperatorLHS<dim
     postpro_operators_[ op->Name() ] = op;
     // force update during next application
     setup_established_ = false;
-
-#if defined(_OPENMP )
-
-#endif
  }
 
 
@@ -548,12 +370,11 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& 
 /**
 
 After an PDE_Integrator has been applied, the solution matrix G and the righthand
-vector rh contain processed accumulation data which need to be removed before
+vector rh contain data which need to be removed before
 a new accumulation can take place. This is done automatically by the
-PDE_Integrator, unless it has been set to retain the solution matrix.
+PDE_Integrator, unless it has been asked to retain the solution matrix.
 
-In addition, you may want to re-use the PDE_Integrator and define
-new PDE operators, a new computational domain and/or computational
+However, you may want to use new PDE operators, a new computational domain and/or computational
 method. In this case, Reset() allows to restore the PDE_Integrator's default state
 and zero's the elements of its matrix and vector storage.
 
@@ -715,110 +536,114 @@ other computation, just ignore this warning.
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
-{
-
-    // -------------------------------------------------------------------
-    // 0. If the algorithm is just re-used, (and has not been reset by
-    //    the user, the righthand vector and
-    //    the solution vector are zeroed and nothing else is done.
-    // -------------------------------------------------------------------
-    // * Change: x is not reset anymore
-    if ( setup_established_ &&
-         ( !basic_operands_.empty() && !test_operands_.empty() ) )
-    {
+ {
+   // -------------------------------------------------------------------
+   // 0. If the algorithm is just re-used, (and has not been reset by
+   //    the user), the righthand vector and
+   //    the solution vector are zeroed and nothing else is done.
+   // -------------------------------------------------------------------
+   if ( setup_established_ &&
+        target_.nodes == gref.Nodes() &&
+       !basic_operands_.empty() && !test_operands_.empty() )
+     {
+        // TODO: one might want to retain the right-hand vector, but not the matrix
         if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
-#if defined(_OPENMP )
-        for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
-           if ( thread_rh_[tid].size() > 0 ) fill( thread_rh_[tid].begin(), thread_rh_[tid].end(), 0. );
-        }
-#endif
         if ( G_.Rows()  > 0 && !retain_matrix_ ) {
+            // TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
             G_.Erase();
             G_.Resize( rh_.size() );
-#if defined(_OPENMP )
-            for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
-                this->thread_G_[tid].Erase();
-                this->thread_G_[tid].Resize(rh_.size());
-            }
-#endif
-        }
-    }
-
+          }
+        return;
+     }
 
    // -------------------------------------------
    // 1. determine basic sizes for G, x, rh
    // -------------------------------------------
     dof_per_node_    = 0U;
     target_.nodes    = gref.Nodes();
-    target_.elements = gref.Elements();
+    target_.elements = gref.Cells();
 
 
-   // ------------------------------------------------------
-   // 2. if A.-setup for first time or if rebuild is necessary:
-   //    checking basic operands and comparing MathOperators
-   // ------------------------------------------------------
-   const Index  unspecified;
-
-   // lefthand MathOperators first
-   // ----------------------------
-   for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-         lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+   // ---------------------------------------------------------------------------------
+   // 2. if the PDE_Integrator is setup for first time or if its rebuild is necessary,
+   //    new maps of basic and test function operands are established
+   // ----------------------------------------------------------------------------------
+   if ( basic_operands_.empty() || test_operands_.empty() )
      {
-        // making list of unique basic operands
-        Index pkey = (*lhs_it).second->BasicOperandKey();
-        if (verbose_)
-            cout <<"\nFor: '"<< (*lhs_it).first <<"' PDE operator is added to lefthand term list."<< endl;
+       const Index  unspecified;
 
-        // checking whether the intended variables exist in the database
-        if ( unspecified != pkey )
-            basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
-        else
-            throw csmp::Exception( WARNING,
-                                   "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                   "lefthand basic operand not found");
-        // test function operands are picked up when the righthandside is accumulated
-        // since they must also be present in there
-     }
+       // lefthand MathOperators first
+       // ----------------------------
+       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
+             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+         {
+            // making list of unique basic operands
+            Index pkey = (*lhs_it).second->BasicOperandKey();
+            if (verbose_) cout <<"\nFor: '"<< (*lhs_it).first <<"' PDE operator is added to lefthand term list."<< endl;
+            // checking whether the intended variables exist in the database
+            //                                   Index,   calculation offset
+            if ( pkey != unspecified ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
+            else
+                throw csmp::Exception( WARNING,
+                                       "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                       "lefthand basic operand not found.");
+            // test function operands are picked up when the righthandside is accumulated
+            // since they must also be present in there
+         }
 
-   // righthand MathOperators
-   // -----------------------
-   for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-         rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
-     {
-        // making a list of unique test operands
-        Index pkey = (*rhs_it).second->TestOperandKey();
-        if (verbose_)
-            cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
+       // righthand MathOperators
+       // -----------------------
+       for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+             rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
+         {
+            // making a list of unique test operands
+            Index pkey = (*rhs_it).second->TestOperandKey();
+            if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
+            if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+            else
+              throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                             "righthand test operand not found.");
+         }
+       // including pde operators on the model boundary
+       if ( !rhs_boundary_operators_.empty() ) {
+           for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+                 rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+             {
+                // making a list of unique test operands
+                Index pkey = (*rhs_it).second->TestOperandKey();
+                if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
+                if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+                else
+                  throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                                 "righthand test operand not found.");
+             }
+         }
 
-        if ( unspecified != pkey )
-            test_operands_[(*rhs_it).second->TestOperand()] = 0U;
-        else
-            throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                         "righthand test operand not found");
-     }
+       // Testing: for each righthand operand there must be a basic or test operand on the LHS
+       // ------------------------------------------------------------------------------------
+       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
+             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+         if ( basic_operands_.find( ((*lhs_it).second->BasicOperand()) ) == basic_operands_.end() &&
+              test_operands_.find( ((*lhs_it).second->TestOperand()) ) == test_operands_.end() )
+           {
+              cout <<"\nPDE_Integrator<"<<  dim <<">::EstablishMatrixSetup: ";
+              cout <<"There is no lefthand operand corresponding to righthand operand. ";
+              cout <<"\nThe system of equations is undefined. ";
+              cout <<"\nCreate corresponding LHS basic or test Operand for: ";
+              cout << (*lhs_it).first << endl;
+              throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+                                             "lefthand basic or test operand missing");
+           }
 
-   // ---------------------------------------------------------------------------------------
-   // 3. Testing: for each righthand operand there must be a basic or test operand on the LHS
-   // ---------------------------------------------------------------------------------------
-   for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-         lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
-     if ( basic_operands_.find( ((*lhs_it).second->BasicOperand()) ) == basic_operands_.end() &&
-          test_operands_.find( ((*lhs_it).second->TestOperand()) ) == test_operands_.end() )
-       {
-          cout <<"\nPDE_Integrator<"<<  dim <<">::EstablishMatrixSetup: ";
-          cout <<"There is no lefthand operand corresponding to righthand operand. ";
-          cout <<"\nThe system of equations is undefined. ";
-          cout <<"\nCreate corresponding LHS basic or test Operand for: ";
-          cout << (*lhs_it).first << endl;
-          throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                         "lefthand basic or test operand missing");
-       }
+      } // end: establishing basic and test function operators
+   
 
    // ----------------------------------------------------------------
-   //   4. Offsets are assigned to test Operands
+   //   3. Offsets are assigned to test Operands
    //      indicating positions, i,j in solution matrix.
    // ----------------------------------------------------------------
-   size_t  offset(0U);
+   size_t       offset(0U);
+   const uint32_t dim2(dim * dim);
    for ( operandsIterator
          iter=test_operands_.begin(); iter!=test_operands_.end(); iter++ )
      {
@@ -828,7 +653,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         else if ( (*iter).first.key.type == VECTOR )
           dof_per_node_ += dim;
         else if ( (*iter).first.key.type == TENSOR )
-          dof_per_node_ += dim2_;
+          dof_per_node_ += dim2;
         else if ( (*iter).first.key.type == ARRAY )
           dof_per_node_ += (*iter).first.key.dataDepth;
         else if ( (*iter).first.key.type == FLAGGEDARRAY )
@@ -845,7 +670,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                      break;
                    case VECTOR: offset += target_.nodes * dim;
                      break;
-                   case TENSOR: offset += target_.nodes * dim2_;
+                   case TENSOR: offset += target_.nodes * dim2;
                      break;
                    case ARRAY:  offset += target_.nodes * (*iter).first.key.dataDepth;
                      break;
@@ -861,7 +686,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                      break;
                    case VECTOR: offset += target_.elements * dim;
                      break;
-                   case TENSOR: offset += target_.elements * dim2_;
+                   case TENSOR: offset += target_.elements * dim2;
                      break;
                    case ARRAY:  offset += target_.elements * (*iter).first.key.dataDepth;
                       break;
@@ -874,24 +699,26 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
          }
       }
 
+
    // --------------------------------------------------------------------------
-   // 5. communicating offsets to MathOperators
+   // 4. communicating offsets to MathOperators
    // --------------------------------------------------------------------------
    operandsIterator  iter;
 
+   // LEFT-HANDSIDE
    for ( typename map<string,MathOperatorLHS<dim>*>::iterator
          lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
      {
-       // since basic and test operand offsets must be the same, but only the test operands
-       // have been assigned an offset basic operand offsets are derived from test operand offsets
-       if ( (iter=test_operands_.find((*lhs_it).second->BasicOperand())) != test_operands_.end() ) {
-           (*lhs_it).second->BasicOperandOffset( (*iter).second );
-           if ( (iter=basic_operands_.find((*lhs_it).second->BasicOperand())) != basic_operands_.end() )
+        // since basic and test operand offsets must be the same, but only the test operands
+        // have been assigned an offset basic operand offsets are derived from test operand offsets
+        if ( (iter=test_operands_.find((*lhs_it).second->BasicOperand())) != test_operands_.end() ) {
+             (*lhs_it).second->BasicOperandOffset( (*iter).second );
+             if ( (iter=basic_operands_.find((*lhs_it).second->BasicOperand())) != basic_operands_.end() )
                (*iter).second = (*lhs_it).second->BasicOperandOffset();
-       }
-       else
-           throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                  "LHS basic operand matrix placement i unresolved");
+          }
+        else
+          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+                                       "LHS basic operand matrix placement i unresolved");
 
         if ( (iter=test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end() )
           (*lhs_it).second->TestOperandOffset( (*iter).second );
@@ -899,6 +726,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
           throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
+   
+   // RIGHT-HAND SIDE
    for ( typename map<string,MathOperatorRHS<dim>*>::iterator
          rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
      {
@@ -909,27 +738,30 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                           (*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
+   // RIGHT-HAND SIDE: BOUNDARY INTEGRALS
+   for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+         rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+     {
+        if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
+          (*rhs_it).second->TestOperandOffset( (*iter).second );
+        else
+          throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+                                 (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
+     }
+
+
    // ----------------------------------------------------------------------
-   // 6. Resizing 'G' and righthand vector 'rh' which is initialised to zero
+   // 5. Resizing 'G' and righthand vector 'rh' which is initialised to zero
    // ----------------------------------------------------------------------
-   // * Change: resize x as well
    G_.Resize( offset );
    rh_.resize( offset );
-   vector<double>( rh_ ).swap( rh_ );
+   if ( trim_vectors_ ) vector<double>( rh_ ).swap( rh_ );
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   vector<double>( x_ ).swap( x_ );
-#if defined(_OPENMP )
-   for (size_t tid = 0 ; tid < omp_get_max_threads() ; tid++){
-       this->thread_G_[tid].Resize(offset);
-       this->thread_rh_[tid].resize(offset);
-       vector<double>( thread_rh_[tid] ).swap( thread_rh_[tid] );
-       fill( thread_rh_[tid].begin(), thread_rh_[tid].end(), 0. );
-   }
-#endif
+   if ( trim_vectors_ ) vector<double>( x_ ).swap( x_ );
    setup_established_ = true;
 
- } // end EstablishMatrixSetup()
+ } // end EstablishMatrixSetup
 
 
 
@@ -980,98 +812,105 @@ Warning: So far no conditions are assigned to elements, faces, segments
 @endcode
 
 The dependent variable must be placed on the nodes:
+
+TODO: write alternative method that deals with the case when a boundary is only partially overlapping with the model domain.
+
  */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    size_t                  i, j;
-    size_t                  position, offset;
-    ScalarVariable          sc;
-    VectorVariable<dim>     vc;
-    TensorVariable<dim>     ts;
-    Index                   prop_key;
-
     if ( !setup_established_ )
       throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
-    if ( basic_operands_.empty() ) {
+    if ( basic_operands_.empty() )
       throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
                              "No basic operands have been specified...");
-         return;
-      }
 
-     for ( operandsConstIterator
-           it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-         {
-            prop_key = (*it).first.key;
-            offset   = (*it).second;
-            auto  niter(gref.NodesBegin());
+    size_t position(NULL_IDX);
 
-            if ( prop_key.place != NODE ) {
-                 throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
-                 "So far no conditions are assigned to elements, faces, segments");
-                 return;
-              }
+     for ( operandsConstIterator it=test_operands_.begin(); it!=test_operands_.end(); it++ )
+       {
+          Index prop_key = (*it).first.key;
+          if ( prop_key.place != NODE )
+            throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+                                            "So far no conditions are assigned to elements, faces, segments");
+          size_t offset = (*it).second;
+          auto   niter(gref.NodesBegin());
 
-            switch( prop_key.type )
-              {
-                 case SCALAR:
-                    while ( niter != gref.NodesEnd() ) {
-                         // here the number in the new list is required to facilitate input
-                         // into the size-restricted computation matrix
-                         (*niter)->Read( prop_key, sc );
-                         position = (*niter)->Idx() + offset;
-                         rh_[ position ] *= sc();
-                         niter++;
-                      }
-                   break;
-                 case VECTOR:
-                    while ( niter != gref.NodesEnd() ) {
-                         (*niter)->Read( prop_key, vc );
-                         for ( i=0; i<dim; i++ ) {
-                             position = (*niter)->Idx() * dim + i + offset;
-                             rh_[ position ] *= vc(i);
-                           }
-                         niter++;
-                      }
-                   break;
-                 case TENSOR:
-                    while ( niter != gref.NodesEnd() ) {
-                         (*niter)->Read( prop_key, ts );
-                         for ( i=0; i<dim; i++ )
-                           for ( j=0; j<dim; j++ ) {
-                               position = (*niter)->Idx() * dim2_ + i * dim + j + offset;
-                               rh_[ position ] *= ts(i,j);
-                             }
-                         niter++;
-                      }
-                    break;
-                 case ARRAY:{
-                   ArrayVariable  ar(prop_key.dataDepth);
-                   while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        for ( i=0; i<prop_key.dataDepth; i++ ) {
-                            position = (*niter)->Idx() * prop_key.dataDepth  + i + offset;
-                            rh_[ position ] *= ar(i);
-                          }
-                        niter++;
-                     }
-                   }
-                   break;
-                 case FLAGGEDARRAY:{
-                  FlaggedArrayVariable far(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                       (*niter)->Read( prop_key, far );
-                       for ( i=0; i<prop_key.dataDepth; i++ ) {
-                           position = (*niter)->Idx() * prop_key.dataDepth  + i + offset;
-                           rh_[ position ] *= far(i);
-                         }
-                       niter++;
+          switch (prop_key.type)
+            {
+              case SCALAR:
+                while (niter != gref.NodesEnd()) {
+                  // here the number in the new list is required to facilitate input
+                  // into the size-restricted computation matrix
+                  position = (*niter)->Idx() + offset;
+                  position = DOF_indexes_[position];
+                  if ( position != NULL_IDX )
+                    this->rh_[position] *= (*niter)->Read(prop_key);
+                  niter++;
+                }
+                break;
+              case VECTOR: {
+                  VectorVariable<dim> vc;
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, vc);
+                      for ( auto i{0U}; i < dim; i++) {
+                          position = (*niter)->Idx() * dim + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= vc(i);
+                        }
+                      niter++;
                     }
                   }
-             }
-         }
+                break;
+              case TENSOR: {
+                  TensorVariable<dim> ts;
+                  const size_t        dim2(dim * dim);
+                  while (niter != gref.NodesEnd()) {
+                    (*niter)->Read(prop_key, ts);
+                    for ( auto i{0U}; i < dim; i++)
+                      for ( auto j{0U}; j < dim; j++) {
+                          position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= ts(i, j);
+                        }
+                    niter++;
+                    }
+                  }
+                break;
+              case ARRAY: {
+                  ArrayVariable  ar(prop_key.dataDepth);
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, ar);
+                      for ( auto i{0U}; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= ar(i);
+                        }
+                      niter++;
+                    }
+                  }
+                break;
+              case FLAGGEDARRAY: {
+                  FlaggedArrayVariable far(prop_key.dataDepth);
+                  while (niter != gref.NodesEnd()) {
+                      (*niter)->Read(prop_key, far);
+                      for ( auto i{0U}; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          position = DOF_indexes_[position];
+                          if (position != NULL_IDX) this->rh_[position] *= far(i);
+                        }
+                      niter++;
+                    }
+                 }
+               break;
+             default:
+                 throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+                                                 "Variable placement not recognised; nothing was done.");
+        } // end switch
+        
+    } // end for
 
  } // end AssignInitialConditions
 
@@ -1079,202 +918,23 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
 
 
 
-/** 
-    Applies scale factor to Dirichlet matrix diagonal entries as applied by AssignEssentialConditions() and the rhs entries.
-    
-    Use, for instance, in mechanics problems where the unscaled matrix diagonal entry of (1) 
-    is >10 orders of magnitude greater than the other matrix entries and often, this is aggrevated
-    by extremely small entries in the RHS vector.
-    
-    @author SKM 1/10/2014
-*/
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ScaleEssentialConditions( double scale_factor )
- {
-    scale_factor_ = scale_factor;
-   
- } // end ScaleEssentialConditions
-
-
-
 
 /**
+    The Dirichlet constraints have already been eliminated,
+    but their contributions to the non-Dirichlet rows have to be added to the RHS.
+ 
+    The guts of the elimation now live in EnumerateAndFixMatrixSize().
 
-Two versions, for Modeland for Region computations are defined.
-This method accumulates the basic 'Operands' of the finite-element equations
-into the global solution matrix and the righthand vector. This is
-done only if their condition flag (VARIABLE_FLAG) is equal to the essential
-condition flag defined for this basic operand. (by default,
-essential-condition flags of Operands are DIRICH(let)).
-
-The method retrieves information from the mesh and the property managers.
-If a group computation is carried out, the target group is accessed by
-a pointer.
-
-@section implementation Implementation
-
-AssignEssentialConditions() does not decrease the size of the global
-matrix 'G' or the righthand vector 'rh'. In stead, it zeros rows
-in 'G' and then sets the G'ith element in question to one while the
-Operand value is then placed into 'rh' (this technique is described for
-fixed displacements (Dirichlet) in Segerlind, 1984, p. 417ff).
-
-@section application Application
-
-Because it simultaneously affects the solution matrix and the righthand
-vector, AssignEssentialConditions() must be applied AFTER the accumulation
-process has been completed.
-
-When you assemble vector or tensor variables, you also have the option
-of only assembling one of their components. To do this just flag the
-components that you want to assemble as DIRICH.
-
-@section messages Messages
-
-The following errors and warnings will be reported:
-
-@code
-please call EstablishMatrixSetup() prior to this method.
-@endcode
-
-If EstablishMatrixSetup() has not been executed so far.
-
-@code
-No basic operands have been specified...
-@endcode
-
-If there are no dependent variables defined !!!
-
-@code
-Warning: So far no conditions are assigned to elements, faces, segments
-@endcode
-
-The dependent variable must be placed on the nodes:
+    @author Luat Khoa Tran
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain)
  {
-    if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                      "please call EstablishMatrixSetup() prior to this method.");
-
-    if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                             "No (basic) operands have been specified...");
-
-    // ----------------------------------------------------
-    // 2. if the PDE_Integrator applies to a Region
-    // ----------------------------------------------------
-    //  This method accumulates basic 'Operands' in the finite-element equations
-    //  into the global solution matrix and the righthand vector, if their condition
-    //  flag is equal to the essential condition flag of the basic operand.
-    //  (by default, the essential-condition flag of Operand's is DIRICH(let)).
-
-    //  AssignEssentialConditions() must be applied AFTER accumulation process.
-    //
-    //  When you assemble vector or tensor variables, you also have the option
-    //  of only assembling one of their components. To do this just set the
-    //  components that you do not want to assemble to DBL_MAX.
-    // -------------------------------------------------------------
-     for ( operandsConstIterator
-           it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       {
-         auto  niter(gref.NodesBegin());
-         csmp::Index prop_key = (*it).first.key;
-         size_t      offset   = (*it).second;
-
-         if ( prop_key.place != NODE )
-           throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                                 "So far no conditions are assigned to elements, faces, segments");
-
-          switch( prop_key.type )
-           {
-              case SCALAR:
-                while ( niter != gref.NodesEnd() ) {
-                      if ( (*niter)->Status( prop_key ) == DIRICH )
-                        {
-                           size_t  position = (*niter)->Idx() + offset;
-                           G_.ZeroRow( position );
-                           G_.Add( position, position, scale_factor_ );
-                           rh_[ position ] = scale_factor_ * (*niter)->Read( prop_key );
-                        }
-                       niter++;
-                    }
-                break;
-              case VECTOR: {
-                  VectorVariable<dim>  vc;
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, vc );
-                        for ( auto i{0U}; i<dim; i++ )
-                          if ( vc.Flag(i) == DIRICH ) {
-                               size_t  position = (*niter)->Idx() * dim + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * vc(i);
-                            }
-                        niter++;
-                     }
-                  }
-                break;
-              case TENSOR: {
-                 TensorVariable<dim>  ts;
-                 while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ts );
-                        for ( auto i{0U}; i<dim; i++ )
-                          if ( ts.Flag(i) == DIRICH ) 
-                            for ( auto j{0U}; j<dim; j++ )
-                              {
-                                size_t  position = (*niter)->Idx() * dim2_ + i * dim + j + offset;
-                                G_.ZeroRow( position );
-                                G_.Add( position, position, scale_factor_ );
-                                rh_[ position ] = scale_factor_ * ts(i,j);
-                              }
-                         ++niter;
-                      }
-                   }
-                 break;
-              case ARRAY: {
-                  ArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        if ( ar.Flag() == DIRICH )
-                        {
-                            for ( auto i{0U}; i<prop_key.dataDepth; i++ )
-                            {
-                               size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * ar(i);
-                            }
-                        }
-                        niter++;
-                     }
-                  }
-                 break;
-              case FLAGGEDARRAY: {
-                  FlaggedArrayVariable  ar(prop_key.dataDepth);
-                  while ( niter != gref.NodesEnd() ) {
-                        (*niter)->Read( prop_key, ar );
-                        for ( auto i{0U}; i<prop_key.dataDepth; i++ )
-                          if ( ar.Flag(i) == DIRICH ) {
-                               size_t  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                               G_.ZeroRow( position );
-                               G_.Add( position, position, scale_factor_ );
-                               rh_[ position ] = scale_factor_ * ar(i);
-                            }
-                        niter++;
-                     }
-                  }
-                 break;
-               default:
-                 throw csmp::Exception( FATAL_ERROR,
-                                       "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignEssentialConditions",
-                                       "Variable type not recognised by this method" );
-        }
-    } // end for
-
-} // end AssignEssentialConditions
-
+    const size_t rh_size(this->rh_.size());
+    for ( size_t i{0U}; i < rh_size; ++i ) {
+         this->rh_[i] += pivotVector_[i];
+      }
+ }
 
 
 
@@ -1311,132 +971,135 @@ with the time-increment.
 
 Accumulate() is executed internally when the PDE_Integrator is passed to the
 Model.
+
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    // setting up the index mapping from global to local node ID numbers
-    gref.RenumberNodes();
-#if !defined(_OPENMP)
     // accumulating into the sparse matrix 'G'
     // ---------------------------------------
      for ( typename map<string,MathOperatorLHS<dim>*>::iterator
            it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
        if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_lhs).second->GetOperands( *(*git) );
              (*it_lhs).second->ComputeContribution( *(*git) );
              if ( (*it_lhs).second->MultiplyWithTimeIncrement() )
                (*it_lhs).second->MultiplyWithTimeFactor( time_increment_ );
-             if ( (*it_lhs).second->DivideByTimeIncrement() )
-                 (*it_lhs).second->MultiplyWithTimeFactor( 1./time_increment_ );
-             (*it_lhs).second->AssignToGlobal( *(*git), G_ );
+             // LUAT KHOA TRAN - (*it_lhs).second->AssignToGlobal( *(*git), G_ );
+             (*it_lhs).second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
            }
 
-    // accumulating via multiplication into the righthand vector 'rhs'
+    // accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
      for ( typename map<string,MathOperatorRHS<dim>*>::iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
              if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-             if ( (*it_rhs).second->DivideByTimeIncrement() )
-                 (*it_rhs).second->MultiplyWithTimeFactor( 1./time_increment_ );
-             (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_);
            }
-#else
-     // accumulating into the sparse matrix 'G' for each thread
-     // ---------------------------------------
-#pragma omp parallel
-    {
-        FiniteElement* fe_tmp;
-        size_t tid = omp_get_thread_num();
-        for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-              it_lhs=this->thread_lhs_operators_[tid].begin(); it_lhs!=this->thread_lhs_operators_[tid].end(); it_lhs++ ){
-            if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() ){
-#pragma omp for
-                for ( size_t e = 0 ; e < gref.Elements(); e++ )
-                {
-//                    cout<<"element: "<<e<<endl;
-// TODO: check what is going on here with the parallel accumulation
-                    typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
-                    fe_tmp=eit->FE(); //save old pointer.
-                    // change pointer here
-                    eit->Assign(femgrs_[tid].E(eit->FE_Type()));
 
-                    // do needed work.
-                    (*it_lhs).second->GetOperands( (*eit) );
-                    (*it_lhs).second->ComputeContribution( (*eit) );
-                    if ( (*it_lhs).second->MultiplyWithTimeIncrement() )
-                        (*it_lhs).second->MultiplyWithTimeFactor( time_increment_ );
-                    if ( (*it_lhs).second->DivideByTimeIncrement() )
-                        (*it_lhs).second->MultiplyWithTimeFactor( 1./time_increment_ );
-                    (*it_lhs).second->AssignToGlobal( (*eit), thread_G_[tid] );
-
-                    // put it back here
-                    eit->Assign(fe_tmp);
-                }
-            }
-        }
-    }
-
-
-#pragma omp parallel
-    {
-        FiniteElement* fe_tmp;
-        size_t tid = omp_get_thread_num();
-        // accumulating via multiplication into the righhand vector 'rhs' for each thread
-        // --------------------------------------------------------------
-        for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-              it_rhs=this->thread_rhs_operators_[tid].begin(); it_rhs!=this->thread_rhs_operators_[tid].end(); it_rhs++ ){
-            if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() ){
-#pragma omp for
-                for ( size_t e = 0 ; e < gref.Elements(); e++ )
-                {
-                    typename COMPUTATION_DOMAIN<dim>::CellType* eit = gref.E(e);
-                    fe_tmp=eit->FE(); //save old pointer.
-                    // change pointer here
-                    eit->Assign(femgrs_[tid].E(eit->FE_Type()));
-
-                    // do needed work.
-                    (*it_rhs).second->GetOperands( (*eit) );
-                    (*it_rhs).second->ComputeContribution( (*eit) );
-                    if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-                        (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-                    if ( (*it_rhs).second->DivideByTimeIncrement() )
-                        (*it_rhs).second->MultiplyWithTimeFactor( 1./time_increment_ );
-
-                    (*it_rhs).second->AssignToGlobal( (*eit), thread_rh_[tid] );
-
-                    // put it back here
-                    eit->Assign(fe_tmp);
-                }
-            }
-        }
-    }
-
-    for (size_t tid = 0 ; tid < omp_get_max_threads(); tid++)
-        this->G_+=this->thread_G_[tid];
-
-    for (size_t tid = 0 ; tid < omp_get_max_threads(); tid++)
-        for (auto i = 0 ; i < this->rh_.size(); i++)
-            this->rh_[i]=this->rh_[i]+this->thread_rh_[tid][i];
-
-    //    G_.Out();
-    //    for (auto i = 0; i<rh_.size();i++)
-    //        cout<<"rh:["<<i<<"]: "<<rh_[i]<<endl;
-    //    exit(1);
-
-#endif
-} // end Accumulate
+ } // end Accumulate
 
 
 
+
+
+/**
+    determining whether the nodes of the supplied element are contained in the computational domain
+*/
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>& face )
+ {
+    const size_t nodes(face.Nodes());
+    for ( auto i{0U}; i<nodes; ++i )
+      if ( !comp_domain.IsPerimeterNode( face.N(i) ) ) return false;
+    return true;
+ }
+
+// same but for SplitBoundary objects
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<dim>& interface )
+ {
+    const size_t nodes(interface.Nodes());
+    for ( auto i{0U}; i<nodes; ++i )
+      if ( !comp_domain.IsPerimeterNode( interface.N(i) ) ) return false;
+    return true;
+ }
+
+
+
+/**
+    for the accumulation of Neumann-flagged element integrals evaluated on Face objects
+    
+    TODO: include boundary conditions applied to LHS
+    TODO: adopt method to handle InterFace objects (in split boundaries) as well
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                       const Boundary<dim>& boundary )
+ {
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
+       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
+           // if the material operand is flagged Neumann, an accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateBoundaryIntegrals
+
+
+
+/**
+    Coupling conditions / surface integrals applied to SplitBoundary objects
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                            const SplitBoundary<dim>& boundary )
+ {
+    // TODO: include accumulation for LHS operators
+    
+    // accumulating into the righhand vector 'rhs'
+    // --------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
+           it_rhs=rhs_split_boundary_operators_.begin(); it_rhs!=rhs_split_boundary_operators_.end(); it_rhs++ )
+       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
+           // if the material operand is flagged Robin, the accumulation will be performed
+           // @attention it is assumed that the material operand has the same status at all integration points
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT && 
+                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+             }
+   
+ } // AccumulateSplitBoundaryIntegrals
 
 
 
@@ -1467,6 +1130,9 @@ AssignToGlobal();
 LateAccumulate() is executed only in time-dependent calculations. The
 execution is invoked internally, when the PDE_Integrator is passed to the
 Model.
+
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_DOMAIN<dim>& gref )
@@ -1476,21 +1142,161 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_
      for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
            it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
        if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
-         for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
              (*it_rhs).second->GetOperands( *(*git) );
              (*it_rhs).second->ComputeContribution( *(*git) );
              if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
                (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-             if ( (*it_rhs).second->DivideByTimeIncrement() )
-               (*it_rhs).second->MultiplyWithTimeFactor( 1./time_increment_ );
-             (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
            }
 
  } // end Late Accumulate
 
 
 
+
+
+/**
+    For source terms on the surface that need to be added to the righthand side after time or other
+    conditions were multiplied in the righthand vector.
+
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+ 
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                           const Boundary<dim>& boundary )
+ {
+    // accumulating as late addition into the righhand vector 'rhs'
+    // ------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
+           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
+       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
+           // accumulations need to be performed only where material operands are flagged Neumann
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
+               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+             }
+
+ } // end LateAccumulateBoundaryIntegrals
+
+
+// same but for SplitBoundary objects
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
+                                                                                                const SplitBoundary<dim>& boundary )
+ {
+    // accumulating as late addition into the righhand vector 'rhs'
+    // ------------------------------------------------------------
+     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
+           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
+       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
+           // accumulations need to be performed only where material operands are flagged Neumann
+           if ( isContainedIn( comp_domain, *(*git) ) == true && (
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
+                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&  
+                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+             {
+               (*it_rhs).second->GetOperands( *(*git) );
+               (*it_rhs).second->ComputeContribution( *(*git) );
+               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
+                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+             }
+
+ } // end LateAccumulateBoundaryIntegrals
+
+
+
+/**
+
+Loops over the nodes of the Region Boundary.
+If these are manifolds, the coupling is applied.
+
+@note whether the test function variable should be coupled across the interface is determined from the value of the test-function operand at the SplitBoudary.
+If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is created, if it is ROBIN, the nodes in the manifold are coupled.
+
+@todo perhaps introduce new flag called VARIABLE_FLAG : COUPLED to express the state of the variable at the internal SplitBoundary.
+
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleContacts( COMPUTATION_DOMAIN<dim>& subdomain )
+{
+   if ( test_operands_.size() > 1U )
+     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleContacts",
+                           "method implemented for only one test-function operand so far");
+     
+    // TODO: get this info from the solution variable
+    // const INDEX<SCALAR,NODE> key_continuous_p = INDEX<SCALAR,NODE>( model.Database().StorageKey("pressure continuity status") );
+    const INDEX<SCALAR,NODE> var_key = INDEX<SCALAR,NODE>{ (*test_operands_.begin()).first.key };
+    const VARIABLE_FLAG couple_if{ ROBIN };
+
+    // manifolds can only be present at the subdomain perimeter
+    for ( auto mit = subdomain.PerimeterNodesBegin(); mit != subdomain.NodesEnd(); ++mit )
+      if ( (*mit)->IsManifold() )
+        {
+          const auto n_branches{ (*mit)->Manifold()->Branches() };
+          
+          // 1. RHS: compute total load at master dof then copy that value to slave node
+          size_t masterIDX = (*mit)->Manifold()->N(0)->Idx();
+          for ( auto n{1U}; n < n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                // here the assumption is made that if the control variable value = 1, the interface should be coupled
+                // int continuous_p = static_cast<int>(slave_node->Read(key_continuous_p)); - use ROBIN status instead
+                if ( slave_node->Status(var_key) == couple_if )
+                  rh_[masterIDX] += rh_[slave_node->Idx()];
+            }
+            
+          // 2. RHS: apply reciprocal coupling
+          for ( auto n{1U}; n < n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                if ( slave_node->Status(var_key) == couple_if )
+                  rh_[slave_node->Idx()] = rh_[masterIDX];
+             }
+
+          // 3. LHS: adding all the element on slave row to master dof - except slave dof
+          for( auto n{1U}; n_branches; n++ ) {
+                auto slave_node = (*mit)->Manifold()->N(n);
+                if ( slave_node->Status(var_key) == couple_if ) {
+                    size_t slaveIDX = slave_node->Idx();
+                    for (size_t j(0U); j < G_.Cols(); ++j )
+                      if (j != slaveIDX && j != masterIDX)
+                        G_.Add(masterIDX, j, G_.At(slaveIDX, j));
+                    
+                    // 4. adding diagonal value to master dof
+                    G_.Add(masterIDX, masterIDX, G_.At(slaveIDX, slaveIDX));
+                 }
+        }
+
+      // 5. copy that value from master dof to slave dof - except slave and master dofs position
+      for ( auto n{1U}; n_branches; n++ ) {
+            auto slave_node = (*mit)->Manifold()->N(n);
+            if ( slave_node->Status(var_key) == couple_if ) {
+                size_t slaveIDX = slave_node->Idx();
+                for ( size_t j(0); j < G_.Cols(); ++j )
+                   if ( j != slaveIDX && j != masterIDX)
+                     G_.Assign( slaveIDX, j, G_.At(masterIDX, j) );
+ 
+                // 6.  copy diagonal value from master dof to slave dof
+                G_.Assign(slaveIDX, slaveIDX, G_.At(masterIDX, masterIDX) );
+             }
+        }
+    }
+    
+} // end CoupleContacts
 
 
 
@@ -1539,7 +1345,8 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<di
               if (verbose_) cout <<"\nPDE_Integrator<"<<  dim;
 //              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
               if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<"\n";
-              for ( auto git=gref.ElementsBegin(); git!=gref.ElementsEnd(); git++ )
+              for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
+                    git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
                 {
                    (*it).second->GetOperands( *(*git) );
                    (*it).second->ComputeContribution( *(*git) );
@@ -1569,78 +1376,98 @@ The solution vector indices are re-translated into the temporary node ids.
 OutputResults() is executed internally, when a PDE_Integrator object is passed
 to the Model.
 
+@attention Method relies on an 0..n contiguous node numbering in the region (computational domain).
+
  */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref ) 
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref )
  {
-   Index   prop_key;
-   size_t  offset;
+   size_t       position;
+   const uint32_t dim2(dim * dim);
 
-    for ( operandsIterator
-          it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
+    for ( operandsIterator it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
      {
-        auto  gfirst(gref.NodesBegin());
-        prop_key = (*it).first.key;
-        offset   = (*it).second;
-
+        auto         gfirst(gref.NodesBegin());
+        const Index  prop_key = (*it).first.key;
         if ( prop_key.place != NODE )
             throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
+        size_t  offset = (*it).second;
+       
         switch ( prop_key.type  )
          {
             case SCALAR:
-                 while ( gfirst != gref.NodesEnd() ) {
-                      const double sc = x_[ (*gfirst)->Idx() + offset ];
-                      (*gfirst)->Store( prop_key, makeScalar((*gfirst)->Status(prop_key),sc) );
-                      gfirst++;
-                   }
-               break;
-            case VECTOR: {
-                 VectorVariable<dim>  vc;
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, vc );
-                      for ( auto i{0U}; i<dim; i++ ) vc(i) = x_[ (*gfirst)->Idx() * dim + i + offset ];
-                      (*gfirst)->Store( prop_key, vc );
-                      gfirst++;
-                   }
-                 }
-               break;
-            case TENSOR: {
-                 TensorVariable<dim>  ts;
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ts );
-                      for ( auto i{0U}; i<dim; i++ )
-                        for ( auto k{0U}; k<dim; k++ )
-                          ts(i,k) = x_[ (*gfirst)->Idx() * dim2_ + i * dim + k + offset ];
-                      (*gfirst)->Store( prop_key, ts );
-                      gfirst++;
-                   }
+              while (gfirst != gref.NodesEnd()) {
+                  position = (*gfirst)->Idx() + offset;
+                  position = DOF_indexes_[position];
+                  if (position != NULL_IDX) {
+                    const double sc = this->x_[position];
+                    (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
+                  }
+                  gfirst++;
                 }
               break;
-            case ARRAY: {
-                 ArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( auto i{0U}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
+            case VECTOR: {
+              VectorVariable<dim>  vc;
+              while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, vc);
+                  for (auto i{0U}; i < dim; i++) {
+                      position = (*gfirst)->Idx() * dim + i + offset;
+                      position = DOF_indexes_[position];
+                      if (position != NULL_IDX) vc(i) = this->x_[position];
+                    }
+                  (*gfirst)->Store(prop_key, vc);
+                  gfirst++;
+                }
+              }
+            break;
+          case TENSOR: {
+            TensorVariable<dim>  ts;
+            while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, ts);
+                  for (auto i{0U}; i < dim; i++)
+                    for ( auto k{0U}; k < dim; k++) {
+                         position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
+                         position = DOF_indexes_[position];
+                         if (position != NULL_IDX) ts(i, k) = this->x_[position];
+                      }
+                  (*gfirst)->Store(prop_key, ts);
+                  gfirst++;
+                }
+              }
+            break;
+          case ARRAY: {
+            ArrayVariable  ar(prop_key.dataDepth);
+            while (gfirst != gref.NodesEnd()) {
+                 (*gfirst)->Read(prop_key, ar);
+                 for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                     position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
+                     position = DOF_indexes_[position];
+                     if (position != NULL_IDX) ar(i) = this->x_[position];
                    }
-                 }
-               break;
-            case FLAGGEDARRAY: {
-                 FlaggedArrayVariable  ar(prop_key.dataDepth);
-                 while ( gfirst != gref.NodesEnd() ) {
-                      (*gfirst)->Read( prop_key, ar );
-                      for ( auto i{0U}; i<prop_key.dataDepth; i++ ) ar(i) = x_[ (*gfirst)->Idx() * prop_key.dataDepth + i + offset ];
-                      (*gfirst)->Store( prop_key, ar );
-                      gfirst++;
-                   }
-                 }
-               break;
-        default:
+                 (*gfirst)->Store(prop_key, ar);
+                 gfirst++;
+              }
+            }
+          break;
+          case FLAGGEDARRAY: {
+              FlaggedArrayVariable  ar(prop_key.dataDepth);
+              while (gfirst != gref.NodesEnd()) {
+                  (*gfirst)->Read(prop_key, ar);
+                  for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                      position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
+                      position = DOF_indexes_[position];
+                      if (position != NULL_IDX) ar(i) = this->x_[position];
+                    }
+                  (*gfirst)->Store(prop_key, ar);
+                  gfirst++;
+                }
+            }
+          break;
+          default:
               throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
-            
+             
          } // end switch(type)
 
  } // end for
@@ -1653,11 +1480,42 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
 
 
 
+
+
+
+
+
+
+/**
+    Solution of the system of linear algebraic equations:
+    
+    1. Dimensionsing of the solution matrix (n-variables, scalar or vector etc.)
+    
+    2. Accumulation of the FE or FV integrals
+    
+    3. Multiplication of the initial conditions into the RHS in the case of the transient problem.
+    
+    4. Late accumulation to RHS
+    
+    5. Essential conditions (either with or without elimination of the Dirichlet constraints from the matrix).
+    
+    6. Solution
+    
+    7. Postprocessing (if respective pde operators were added to the PDE_Integrator).
+*/
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain, bool debug )
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
+    if ( !rhs_boundary_operators_.empty() )
+      throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
+                            "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
+   
+    // setting up 0..n contiguous node numbering for index mapping
+    domain.RenumberNodes();
+
+    ReduceSystemSizeEliminatingEssentialConditions( domain );
  
     // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
     Accumulate( domain );
@@ -1673,8 +1531,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
     
     // 6. diagnostics
     if ( debug ) {
+         Out();
          OutputGlobals();
-         // OutputInput();
       }
  
     // 7. invert global matrix
@@ -1687,6 +1545,338 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
     PostProcess( domain );
 
  } // end IntegrateOver
+
+
+
+
+
+
+
+
+
+/** 
+    Accumulates element integrals, but
+    simultaneously considering potential Boundary objects associated with the simplicial complex.
+    The domain is the computational domain to which the PDE_Integrator is applied.
+    
+    @author SKM 7/7/2015
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
+                                                                        COMPUTATION_DOMAIN<dim>& domain,
+                                                                        bool debug )
+ {
+    // 1. configure algorithm
+    EstablishMatrixSetup( domain );
+
+    // setting up 0..n contiguous node numbering for index mapping
+    domain.RenumberNodes();
+
+    ReduceSystemSizeEliminatingEssentialConditions( domain );
+
+    // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
+    Accumulate( domain );
+   
+    // 3. Accumulation: potential boundary integrals from Boundary objects that share nodes with the simplicial
+    //    complex of interest
+    list<string> shared_boundaries;
+    // enlist all boundaries: split- and regular ones
+    IdentifySharedBoundaries( model, domain, shared_boundaries );
+   
+    // TODO: distinguish between split boundaries and boundaries  
+    if ( !shared_boundaries.empty() ) {
+         for ( list<string>::const_iterator
+               it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
+              // handling the split boundaries
+              if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+                   const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
+                   cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
+                   cout <<" accumulating split boundary: "<< (*it) <<"\n";
+                   AccumulateSplitBoundaryIntegrals( domain, domain_boundary );
+                }
+              // handing the normal boundaries
+              else {
+                   const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
+                   cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
+                   cout <<" accumulating boundary: "<< (*it) <<"\n";
+                   AccumulateBoundaryIntegrals( domain, domain_boundary );
+                }
+           }
+      }
+
+    // 4. If the computation is transient initial conditions must be input into the righthand vector
+    if ( Transient() == true ) AssignInitialConditions( domain );
+
+    // 5. If the computation is transient initial conditions must be input into the righthand vector
+    if ( Transient() == true ) {
+         LateAccumulate( domain );
+         if ( !shared_boundaries.empty() ) {
+              for ( list<string>::const_iterator
+                    it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
+                  if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+                        const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
+                        LateAccumulateSplitBoundaryIntegrals( domain, domain_boundary );
+                     }
+                   else {
+                        const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
+                        LateAccumulateBoundaryIntegrals( domain, domain_boundary );
+                     }
+                }
+           }
+      }
+   
+    // 6. assign conditions like Dirichlet or Neumann boundary conditions etc.
+    AssignEssentialConditions( domain );
+    
+    // 7. diagnostics
+    if ( debug ) {
+         Out();
+         OutputGlobals();
+         // OutputInput();
+      }
+   
+// SKM_TEST checks whether the contributions are written to the correct nodes
+//csmp::Index test_key = model.Database().StorageKey("test variable");
+//for ( size_t i{0U}; i<domain.Nodes(); i++ )
+// domain.N(i)->Store( test_key, makeScalar(PLAIN, rh_[i] ) );
+ 
+    // 8. invert global matrix
+    Solve();
+
+    // 9. write results back into Model
+    OutputResults( domain );
+                           
+    // 10. Calculation of result-dependent properties
+    PostProcess( domain );
+
+ } // end IntegrateOver
+ 
+ 
+ 
+/**
+    Identifies the names of any model boundaries (standard and split ones),
+    which are shared with the computational domain 'subdomain'
+    by searching for the corresponding string in the boundaries. The identified boundaries 
+    are returned in the argument list.
+    
+    @attention method assumes that the names of the boundaries are composed of the strings
+    BOUNDARY, the name of the volumetric boundary that is adjacent to them and their name,
+    for instance,  BOUNDARY_MATRIX_LANDSURFACE. The only other names that are handled are those
+    of the boundaries in a box-shaped model.
+    
+    @attention method also handles case, where the computational domain is the region 'Model'.
+    
+    @attention internal model boundaries are not handled yet.
+    
+    @author SKM
+       
+    TODO: think about meaningful PDE operators for internal model boundaries
+
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Model<dim>& model,
+                                                                                   const COMPUTATION_DOMAIN<dim>& subdomain,
+                                                                                   list<string>& shared_boundaries )
+ {
+    shared_boundaries.clear();
+
+    // 1. enlist any internal or free-form boundaries
+    for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+      if ( (*it).first.find(subdomain.Name()) != string::npos )
+        shared_boundaries.push_back( (*it).first );
+   
+    // 2. box-shaped model and computational domain = "Model"
+    if ( subdomain.Name() == "Model" ) {
+         shared_boundaries.push_back( "BOTTOM" );
+         if constexpr ( dim != 1U ) {
+              shared_boundaries.push_back( "LEFT" );
+              shared_boundaries.push_back( "RIGHT" );
+              shared_boundaries.push_back( "TOP" );
+           }
+         if constexpr ( dim == 3U ) {
+              shared_boundaries.push_back( "FRONT" );
+              shared_boundaries.push_back( "BACK" );
+           }
+         return true;
+      }
+      
+    // 3. if the computational domain is any other subregion of the model
+    else {
+        for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+          if ( subdomain.SharedPerimeterNodes( (*it).second.NodesBegin(), (*it).second.NodesEnd() ) > 0 )
+            shared_boundaries.push_back( (*it).first );    
+      }
+   
+    // 3. for an entire irregularly shaped model find boundaries which touch each other
+    model.Region("Model").UpdateMemberIndexes();
+   
+    for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
+          it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+      for ( auto fit=(*it).second.CellsBegin(); fit!=(*it).second.CellsEnd(); fit++ )
+        if ( subdomain.IsPerimeterCell( (*fit)->InnerParent()->Idx() ) ) {
+             shared_boundaries.push_back( (*it).first );
+             break;
+          }
+   
+    // restoring a node numbering that is unique to the computational domain
+    subdomain.UpdateMemberIndexes();
+   
+    if ( !shared_boundaries.empty() ) return true;
+    return false;
+   
+ } // end IdentifySharedBoundaries
+
+
+
+
+
+/**
+    Enumerate method must be applied AFTER establish matrix setup process.
+    and BEFORE the accumulated proecess.
+    When you assemble vector or tensor variables, you also have the option
+    of only assembling one of their components. To do this just set the
+    components that you do not want to assemble to DBL_MAX.
+ 
+    @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
+ 
+    @author Luat Khoa Tran
+
+*/
+template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+ {
+    const uint32_t dim2(dim * dim);
+    DOF_indexes_.resize(this->rh_.size());
+    fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
+
+    if (!this->setup_established_)
+      throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+        "please call EstablishMatrixSetup() prior to this method.");
+
+    if (this->basic_operands_.empty())
+      throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+        "No (basic) operands have been specified...");
+
+
+    size_t DOF(0);
+
+    for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
+          it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
+        {
+          auto        niter(gref.NodesBegin());
+          csmp::Index prop_key = (*it).first.key;
+          size_t      offset = (*it).second;
+
+          if (prop_key.place != NODE)
+            throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+              "So far no conditions are assigned to elements, faces, segments");
+
+          size_t  position(0);
+          switch (prop_key.type) {
+              case SCALAR:
+                while (niter != gref.NodesEnd()) {
+                    position = (*niter)->Idx() + offset;
+                    if ((*niter)->Status(prop_key) == DIRICH) DOF_indexes_[position] = NULL_IDX;
+                    else {
+                        DOF_indexes_[position] = DOF;
+                        DOF = DOF + 1U;
+                      }
+                    niter++;
+                  }
+                break;
+              case VECTOR:
+                while ( niter != gref.NodesEnd()) {
+                       for ( auto i{0U}; i < dim; ++i ) {
+                            position = (*niter)->Idx() * dim + i + offset;
+                            if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
+                            else {
+                                 DOF_indexes_[position] = DOF;
+                                 DOF = DOF + 1U;
+                              }
+                         }
+                      niter++;
+                   }
+                break;
+              case TENSOR:
+                // tensors have flags only for their diagonal elements
+                while ( niter != gref.NodesEnd() )
+                  {
+                     for (auto i{0U}; i < dim; i++) {
+                        if ( (*niter)->Status(prop_key,i) == DIRICH )
+                          for (size_t j{0U}; j < dim; j++) {
+                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                               DOF_indexes_[position] = NULL_IDX;
+                            }
+                        else for (size_t j{0U}; j < dim; j++) {
+                                  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                                  DOF_indexes_[position] = DOF;
+                                  DOF = DOF + 1U;
+                               }
+
+                       }
+                    niter++;
+                  }
+                break;
+              case ARRAY:
+                // array variables only have a single flag
+                while (niter != gref.NodesEnd()) {
+                    if ( (*niter)->Status(prop_key) == DIRICH )
+                      {
+                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          DOF_indexes_[position] = NULL_IDX;
+                        }
+                      }
+                    else {
+                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                          DOF_indexes_[position] = DOF;
+                          DOF = DOF + 1U;
+                        }
+                      }// end if
+                    niter++;
+                  } // end while
+                break;
+              case FLAGGEDARRAY:
+                while ( niter != gref.NodesEnd() )
+                  {
+                     for (auto i{0U}; i < prop_key.dataDepth; i++ )
+                        if ( (*niter)->Status(prop_key,i) == DIRICH ) {
+                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                             DOF_indexes_[position] = NULL_IDX;
+                          }
+                        else {
+                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                             DOF_indexes_[position] = DOF;
+                             DOF = DOF + 1U;
+                          }
+                     niter++;
+                  }
+             break;
+              default:
+                throw csmp::Exception(FATAL_ERROR,
+                  "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+                  "Variable type not recognised by this method");
+              }
+          
+      } // end for (all Dirichlet flagged variables)
+
+    this->G_.Resize(DOF);
+    this->rh_.resize(DOF);
+    if ( trim_vectors_ ) vector<double>(this->rh_).swap(this->rh_);
+    fill(this->rh_.begin(), this->rh_.end(), 0.);
+    this->x_.resize(DOF);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
+
+    pivotVector_.resize(DOF);
+    fill(pivotVector_.begin(), pivotVector_.end(), 0.);
+    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
+
+ } // end ReduceSystemSizeEliminatingEssentialConditions
+
+
+
+
 
 
 
@@ -1720,6 +1910,91 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
      cout << outfile <<"' has been written successfully." << endl;
 
  } // end WriteGlobalMatrixMap
+
+
+
+
+/**
+    Prints the state of the integrator to the screen.
+ 
+    std::map<std::string,MathOperatorLHS<dim>*>  lhs_operators_;
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_operators_;
+    std::map<std::string,MathOperatorRHS<dim>*>  rhs_boundary_operators_;
+    std::map<std::string,MathOperatorLHS<dim>*>  postpro_operators_;
+    std::map<Parameter,size_t>                   basic_operands_;
+    std::map<Parameter,size_t>                   test_operands_;
+
+    SparseMatrix            G_;
+    std::vector<double>   rh_;
+    std::vector<double>   x_;
+    Solver*                 solver_;
+
+    const size_t            dim2_;
+    size_t                  dof_per_node_;
+    bool                    setup_established_, retain_matrix_;
+    const bool              newed_Solver_object;
+    double                time_increment_;
+
+    struct SIZES {
+        size_t nodes;
+        size_t elements;
+    } target_;
+
+  private:
+
+    double                scale_factor_; ///< for essential conditions
+    bool                    verbose_;
+
+*/
+template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Out() const
+ {
+     cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::Out:\n";
+   
+     if ( basic_operands_.empty() || test_operands_.empty() ) {
+          cout <<"\nintegrator has not been initialized yet.\n";
+          return;
+       }
+   
+     cout <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
+     //  std::map<Parameter,size_t>  test_operands_;
+     for ( auto it=test_operands_.begin(); it!=test_operands_.end(); it++ )
+       cout <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
+
+     cout <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
+     for ( auto it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ ) {
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+       }
+   
+     cout <<"\n\nrighthand element integrals that will be accumulated:\n";
+     for ( auto it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ ) {
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+       }
+
+     cout <<"\n\nsurface element integrals that will be accumulated:\n";
+     for ( auto it=rhs_boundary_operators_.begin(); it!=rhs_boundary_operators_.end(); it++ ) {
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+       }
+
+     cout <<"\n\npost-processing operators:\n";
+     for ( auto it=postpro_operators_.begin(); it!=postpro_operators_.end(); it++ ) {
+          cout <<"\n"<< (*it).first <<": ";
+          //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
+       }
+   
+     cout <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
+     cout <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
+     cout <<"\n\tset up etablished:                  "<< setup_established_;
+     cout <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
+     cout <<"\n\ttime increment:                     "<< time_increment_;
+   
+     if ( solver_ != NULL ) cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
+   
+ } // end Out
+
 
 
 

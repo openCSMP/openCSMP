@@ -671,8 +671,8 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable1stOrder(
         std::vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
 
         for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin();
-              eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin();
+              eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
             stencil_.eidx_ = (*eit)->Idx();
 
@@ -751,14 +751,14 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectVariable2ndOrder(
     std::vector<FV_Parameter>::const_iterator  fvt(this->STENCIL_DATA.begin());
 
     if(!this->with_lsmgrad_limiter_)
-        for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
              // 2.0 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionSolution2( this->SMINMAX,
                                                            (*fvt), *(*eit), RESULT );
     else{
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
         this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_, this->SMINMAX );
-        for ( auto eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+        for ( auto eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
              // 2.0 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionSolution2( this->SMINMAX,
                                                            (*fvt), *(*eit), RESULT, this->mass_center_key_,
@@ -799,7 +799,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
         std::vector<FV_Parameter>::const_iterator  fvt(this->STENCIL_DATA.begin());
 
         for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
             // 1.0 initializing the stencil array index (needed for the limiter function)
             stencil_.AccumulateExplicitAdvectionDiffusionSolution1( (*fvt), *(*eit), RESULT, this->adv1_key_.type, ncom );
 
@@ -835,7 +835,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
 
     if(!this->with_lsmgrad_limiter_)
         for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
              // 1.1 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionDiffusionSolution2( this->SMINMAX,
                                                                     (*fvt), *(*eit), RESULT );
@@ -843,7 +843,7 @@ void ExplicitNodeCenteredFiniteVolumeTransport<dim,STP>::AdvectAndDiffuseVariabl
         this->grad_advprop_limiter_->CalculateGenericNodalGradient();
         this->grad_advprop_limiter_->CalculateSlopeLimiter( this->gref_,this->SMINMAX );
         for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++, fvt++ )
              // 1.1 initializing the stencil array index (needed for the limiter function)
              stencil_.AccumulateExplicitAdvectionDiffusionSolution2( this->SMINMAX,
                                                                     (*fvt), *(*eit), RESULT, this->mass_center_key_,this->grad_advprop_key_,this->grad_advprop_limiter_key_);

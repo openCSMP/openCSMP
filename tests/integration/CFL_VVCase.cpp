@@ -100,7 +100,7 @@ void CFL_TestCase::OutputVTU( Model<3>& model,
                long time )
 {
   VTU_Interface<3> vtu( model );
-  model.ExtrapolateElementToNodeProperty( "velocity", "nodal velocity" );
+  model.ExtrapolateCellToNodeProperty( "velocity", "nodal velocity" );
   list<string> props;
   props.push_back( "saturation water" );
   props.push_back( "nodal velocity" );

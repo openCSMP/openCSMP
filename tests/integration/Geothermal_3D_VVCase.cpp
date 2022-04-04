@@ -55,9 +55,9 @@ Criterion:
       ScalarVariable rho;
       VectorVariable<3U> gravityVector;
       
-      const vector<Element< 3U>*>::const_iterator modelElementsEnd( model.Region("Model").ElementsEnd() );
+      const vector<Element< 3U>*>::const_iterator modelElementsEnd( model.Region("Model").CellsEnd() );
       
-      for( vector<Element<3U>*>::const_iterator it( model.Region("Model").ElementsBegin() ); 
+      for( vector<Element<3U>*>::const_iterator it( model.Region("Model").CellsBegin() ); 
            it != modelElementsEnd; ++it )
       {
         for (size_t ip=0;ip<(*it)->IntegrationPoints (); ++ip)
@@ -136,10 +136,10 @@ Criterion:
 	SourceVisitor<DIM>    source_calculator(model);
 
     //! get nodal rock properties
-    model.ExtrapolateElementToNodeProperty("porosity", "nodal porosity");
-    model.ExtrapolateElementToNodeProperty("density rock", "nodal density rock");
-    model.ExtrapolateElementToNodeProperty("heat capacity rock", "nodal heat capacity rock");
-    model.ExtrapolateElementToNodeProperty("compressibility rock", "nodal compressibility rock");
+    model.ExtrapolateCellToNodeProperty("porosity", "nodal porosity");
+    model.ExtrapolateCellToNodeProperty("density rock", "nodal density rock");
+    model.ExtrapolateCellToNodeProperty("heat capacity rock", "nodal heat capacity rock");
+    model.ExtrapolateCellToNodeProperty("compressibility rock", "nodal compressibility rock");
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,7 +156,7 @@ Criterion:
     #endif
 
     //! steady state pressure
-    PDE_Integrator<3U, Region>  steady_state_pressure( &solver );
+    PDE_Integrator<3U, Region>  steady_state_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     NumIntegral_dNT_op_dV<DIM,Element<DIM> >     gravity( pd_ref, "mass gravity term", "fluid pressure" );
@@ -171,7 +171,7 @@ Criterion:
     steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<3U, Region>  transient_pressure( &solver );
+    PDE_Integrator<3U, Region>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
@@ -203,7 +203,7 @@ Criterion:
     transient_pressure.AddPostProcess( &t_velocity );
     
     //! temperature diffusion
-    PDE_Integrator<DIM, Region>  temperature_diffusion( &solver );
+    PDE_Integrator<DIM, Region>  temperature_diffusion( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
     
@@ -249,18 +249,18 @@ Criterion:
       
     //! Initial equalibration
     thermal_equilibrator.SetInitialProperties(&model );
-    model.InterpolateNodeToElementProperty("nodal total heat capacity", "total heat capacity");
-    model.InterpolateNodeToElementProperty("nodal total compressibility", "total compressibility");
-	model.InterpolateNodeToElementProperty("density liquid", "density liquid element");
+    model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
+    model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
+	model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
     
     ComputeMassConductivity(model);
     ComputeMassGravityTerm (model);
     model.Apply (steady_state_pressure);
     
     thermal_equilibrator.SetInitialProperties(&model );
-    model.InterpolateNodeToElementProperty("nodal total heat capacity", "total heat capacity");
-    model.InterpolateNodeToElementProperty("nodal total compressibility", "total compressibility");
-	model.InterpolateNodeToElementProperty("density liquid", "density liquid element");
+    model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
+    model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
+	model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
   
     //!important
     //! set mt and hCl (advected properties) to Dirich at the boundaries where p, t are dirichlet
@@ -303,9 +303,9 @@ Criterion:
       model.Accept(thermal_equilibrator);
 	  model.Accept(source_calculator);
 
-      model.InterpolateNodeToElementProperty("nodal total heat capacity", "total heat capacity");
-      model.InterpolateNodeToElementProperty("nodal total compressibility", "total compressibility");
-	  model.InterpolateNodeToElementProperty("density liquid", "density liquid element");
+      model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
+      model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
+	  model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
       
       //! conductivity and gravity term depend on "density liquid"
       ComputeMassConductivity(model);

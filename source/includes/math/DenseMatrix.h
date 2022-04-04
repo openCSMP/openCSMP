@@ -73,10 +73,12 @@ class DenseMatrix {
     DenseMatrix& operator*=( double );
     /// C = A B, matrix - matrix multiplication -> M(A.rows,B.cols) returns temporary matrix
     DenseMatrix  operator*( const DenseMatrix& ) const;
-
-
+    /// creates identify matrix (Kronecker-Delta) with ones in the diagonal and zeros everywhere else
     void Identity();
-    void AssignToDiagonal( uint32_t diag_elmts, const double& sc );
+    /// assigns 'value' to the i=j elements  o fmatrix
+    void AssignToDiagonal( double val );
+    /// resizes matrix to 'diag_elmts', assigns 'value' to the diagonal elements matrix diagonal while zeroing out all other values
+    void AssignToDiagonalAndZeroOffDiagonal( uint32_t diag_elmts, double val );
     /// returns vec = Mat * unity vector
     void RowCondenseTo( std::vector<double>& ) const;
     void Zero();

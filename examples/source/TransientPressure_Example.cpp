@@ -172,10 +172,10 @@ void TransientPressure_Example::Run()
   PDE_Integrator<2U,Region>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Solver  samg_solver;
-  transient_pressure.SetSolver(&samg_solver);
+  transient_pressure.SetSolver( samg_solver );
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-  transient_pressure.SetSolver(&linear_solver);
+  transient_pressure.SetSolver( linear_solver );
 #endif
 
   NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );

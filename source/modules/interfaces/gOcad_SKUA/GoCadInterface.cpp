@@ -1924,7 +1924,7 @@ const
              ts_elmt_data.reserve( sg.Nodes() );
              for ( size_t i{0U}; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.CellsBegin(); eit!=sg.CellsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -1998,7 +1998,7 @@ const
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( auto eit = sg.ElementsBegin(); eit != sg.ElementsEnd(); eit++ )
+    for ( auto eit = sg.CellsBegin(); eit != sg.CellsEnd(); eit++ )
       {
          ofs <<"TRGL ";
          for ( auto j{0U}; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2167,7 +2167,7 @@ const
              ts_elmt_data.reserve( gref.Nodes() );
              for ( size_t i{0U}; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
           {
               for ( auto j{0U}; j<(*it)->Nodes(); j++ ) elmts.insert( (*it)->N(j)->Idx() );
               switch ( prop_key.type )
@@ -2207,7 +2207,7 @@ const
                } 
           break;
         case ELEMENT_INTEGRATION_POINT:
-             for ( auto it= gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+             for ( auto it= gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
                for ( auto i{0}; i<(*it)->IntegrationPoints(); i++ )
                {
                   // getting constraint point coordinates
@@ -2260,7 +2260,7 @@ const
     map<size_t,size_t> new_node_ids;
     for ( size_t i{0U}; i<nodes.size(); i++ ) new_node_ids[ nodes[i] ] = i+1;
 
-    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
       {
          ofs <<"TRGL ";
          for ( auto j{0U}; j<(*it)->Nodes(); j++ )
@@ -2425,7 +2425,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
 
     // 4.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
+    for ( auto eit=sg.CellsBegin(); eit != sg.CellsEnd(); ++eit )
       {
          ofs <<"TRGL ";
          for ( auto j{0U}; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2575,7 +2575,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve( sg.Nodes() );
              for ( size_t i{0U}; i<sg.Nodes(); i++ ) ts_elmt_data.push_back( TensorVariable<dim>() );
           }
-        for ( auto eit=sg.ElementsBegin(); eit!=sg.ElementsEnd(); eit++ )
+        for ( auto eit=sg.CellsBegin(); eit!=sg.CellsEnd(); eit++ )
           {
               switch ( prop_key.type )
                 {
@@ -2614,7 +2614,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
           break;
         case ELEMENT_INTEGRATION_POINT: {
                size_t  counter(0U);
-               for ( auto eit=sg.ElementsBegin(); eit != sg.ElementsEnd(); ++eit )
+               for ( auto eit=sg.CellsBegin(); eit != sg.CellsEnd(); ++eit )
                  {
                     for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) {
                         // getting constraint point coordinates
@@ -2662,7 +2662,7 @@ void GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
 
     // 5.3 Writing plist (nodes that make up the tetrahedra)
     // -----------------------------------------------------
-    for ( auto eit=sg.ElementsBegin(); eit!= sg.ElementsEnd(); eit++ )
+    for ( auto eit=sg.CellsBegin(); eit!= sg.CellsEnd(); eit++ )
       {
          ofs <<"TETRA ";
          for ( auto j{0U}; j<(*eit)->Nodes(); j++ ) ofs << (*eit)->N(j)->Idx() <<" ";
@@ -2804,11 +2804,11 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
    // 4.2 making a list of nodes that belong to the group
    // ---------------------------------------------------
    vector<size_t>    nodes(   gref.Nodes() );
-   vector<size_t>    elmts(   gref.Elements() );
+   vector<size_t>    elmts(   gref.Cells() );
 
    size_t n(0U);
    for ( auto nit=gref.NodesBegin(); nit!=gref.NodesEnd(); nit++, n++ )    nodes[n] = (*nit)->Idx();
-   for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, n++ ) elmts[n] = (*it)->Idx();
+   for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++, n++ ) elmts[n] = (*it)->Idx();
 
    // 4.4 making a list of element properties if these are required
    // -------------------------------------------------------------
@@ -2841,7 +2841,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
              ts_elmt_data.reserve(gref.Nodes() );
              for ( size_t i{0U}; i<gref.Nodes(); i++ ) ts_elmt_data.push_back( ts );
           }
-        for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+        for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
           {
               for ( auto j{0U}; j<(*it)->Nodes(); j++ ) {
                   elmt_nds.insert( (*it)->N(j)->Idx() );
@@ -2899,7 +2899,7 @@ void  GoCadInterface<dim>::OutputVariableToTSolid( const Model<dim>& sgroup,
           break;
        case ELEMENT_INTEGRATION_POINT: {
              size_t counter{0};
-             for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++, counter++ )
+             for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++, counter++ )
                {
                   for ( auto j{0U}; j<(*it)->IntegrationPoints(); j++ ) {
                         // getting constraint point coordinates

@@ -20,7 +20,7 @@ using namespace std;
 namespace csmp {
 
 /**
-    This function tests the creation of a VSet (not related to the EFVT class).
+    creates Mesh with a single quadratic quadrilateral
 */
 VSet<2U> test_CreateVSet()
 {
@@ -208,6 +208,118 @@ void test_Create_One_Square_VSet(VSet<2U>& vset, double length_of_sides, bool bS
 }
 
 
+/**
+    Model TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object at the box boundary.
+    Model is rectangle shaped
+*/
+ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
+ {
+    //--------------------------ELEMENT TYPES
+  	//add element types
+    const CSMP_FEM_TYPE T(ISOPARAMETRIC_LINEAR_TRIANGLE), Q(ISOPARAMETRIC_LINEAR_QUADRILATERAL), P(ISOPARAMETRIC_LINEAR_BAR);
+    deque<int8_t> vecElementTypes = { T,T,Q,P,       // elements
+                                      P,P,P,P,P,P }; // faces
+    const int n_cells{10};
+  	assert( vecElementTypes.size() == n_cells );
+    const size_t     n_nodes(6); // number of nodes
+  	deque<uint32_t>  npes(n_cells,2);  // default: number of nodes per element
+    deque<uint32_t>  epes(n_cells,2);  // default: nbors per element
+    for ( size_t i{0U}; i<vecElementTypes.size(); ++i ) {
+         if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_TRIANGLE ) {
+              npes[i] = 3;
+              epes[i] = 3;
+           }
+         else if ( vecElementTypes[i] == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) {
+              npes[i] = 4;
+              epes[i] = 4;
+           }
+      }
+    const int n_faces{6}, n_interfaces{0};
+  	vset.Resize( vecElementTypes, npes, epes, n_nodes, n_faces, n_interfaces );
+  	vset.AddElementTypes( vecElementTypes.begin(), vecElementTypes.end() );
+
+  	//-----------------------NODES (6)
+  	//define node coordinates
+  	std::deque<double> px = { 0.,1.,2.,0.,1.,2. };
+    assert( px.size() == n_nodes );
+  	std::deque<double> py = { 1.,1.,1., 0.,0.,0. };
+    assert( py.size() == n_nodes );
+  	std::deque<double> pz(n_nodes,0.);
+  	  	  	
+  	vset.AddXYZ( px, py, pz );
+  	
+  	//--------------------------NODE BOUNDARY FLAGS
+    BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT};
+    vector<int8_t> bflags = { CNR1, B, CNR2, CNR3, U, CNR4 };
+    assert( bflags.size() == n_nodes );
+    vset.AddBFlags( bflags.begin(), bflags.end() );
+
+
+  	//--------------------------ELEMENTS
+  	// define nodes per element
+    deque< vector<int64_t> > plist = { {0,3,1}, {1,3,4}, {1,4,5,2}, {1,3}, // 4 elements
+                                       {3,4}, {4,5}, {5,2}, {2,1}, {1,0}, {0,3} }; // 17 faces
+    assert( plist.size() == n_cells );
+    vset.AddPlist( plist.begin(), plist.end() );
+
+     //---------------------------------NEIGHBORS
+    //define neighbors per element
+    deque<vector<int64_t> > pfverts = { {1,U,L}, {B,2,0}, {1,B,R,U}, {CNR1,U}, // element neighbors
+                                        // face neighbors: { face-nbors, connected high-dim elmts, local face ids of high dim elmts }
+                                        {5,9,1,B,0,B}, {6,4,2,B,1,B}, {7,5,2,R,2,R}, {8,6,2,U,3,U}, {9,7,0,U,1,U}, {4,8,0,L,2,L} };
+    assert( pfverts.size() == n_cells );
+    vset.AddPfverts( pfverts.begin(), pfverts.end() );
+
+    // creating a matching model topology
+    ModelTopology mesh_topology( "MODEL_TINY", true );
+    
+    // surface elements fall in 2 domains "lower" and "upper"
+    mesh_topology.AddDomain( "TRIA", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE"},
+                              vector<size_t>{ 0 } );
+    mesh_topology.AddDomain( "MIXED", set<string>{"ISOPARAMETRIC_LINEAR_TRIANGLE", "ISOPARAMETRIC_LINEAR_QUADRILATERAL"},
+                              vector<size_t>{ 1,2 } );
+    mesh_topology.AddDomain( "LINE", set<string>{"ISOPARAMETRIC_LINEAR_BAR"},
+                              vector<size_t>{ 3 } );
+    // boundaries
+    mesh_topology.AddDomain( "BOTTOM", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{4,5} );
+    mesh_topology.AddDomain( "RIGHT",  set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{6} );
+    mesh_topology.AddDomain( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{7,8} );
+    mesh_topology.AddDomain( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{9} );
+
+    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.InterFaces() );
+    assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
+
+    // adding corresponding materials to VSet
+    const size_t n_elements{4};
+    vector<int32_t> pmtrl = { 1,2,2,3 };
+    assert( pmtrl.size() == n_elements );
+    vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );
+    
+    // adding node and element numbers for comparisons
+    PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, 2U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+    // permeability
+    PropertyData perm( ELEMENT, SCALAR, 2U );
+    perm.Reserve( vset.Elements() );
+    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("TRIA"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-15 ) );
+    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("MIXED"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-14 ) );
+    for ( size_t i{0U}; i<mesh_topology.CellsWithinDomain("LINE"); ++i ) pushBack( perm, makeScalar( ANY, 1.0e-12 ) );
+    vset.AddData( "permeability", perm );
+
+    vset.Out();
+    
+    return mesh_topology;
+    
+ } // end test_CreateSimplestPolyElement2DModel
+ 
+ 
 
 
 

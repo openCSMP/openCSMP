@@ -1581,8 +1581,8 @@ size_t MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<di
  throw csmp::Exception( ERROR, "MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter:", "Not properly tested yet, may have side effects" );
  
     size_t n_detachments{0};
-    const size_t n_cells{ subdomain.Elements() };
-    for ( size_t i=subdomain.InteriorElements(); i < n_cells; ++i ) {
+    const size_t n_cells{ subdomain.Cells() };
+    for ( size_t i=subdomain.InteriorCells(); i < n_cells; ++i ) {
          const uint32_t n_perim_faces( subdomain.PerimeterFaces(i) );
          for ( auto j{0U}; j < n_perim_faces; ++j ) {
               auto p_face = subdomain.PerimeterFace( i, j );

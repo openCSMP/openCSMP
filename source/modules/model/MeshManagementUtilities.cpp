@@ -873,16 +873,16 @@ it was able to reach from the supplied iterator.
 To break regions into contiguous subdomains.
 
 */
-template<uint32_t dim>
-void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguous_subset )
+template<uint32_t dim, template<uint32_t> class CELL>
+void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "floodFill", "root element pointer is a nullptr; nothing was done.");
+         csmp_error.notice( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
          return;
       }
     // identifying the neighbors of the first element to be looked at
-    vector<Element<dim>*>  neighbor_elements;
+    vector<CELL<dim>*>  neighbor_elements;
     const size_t  neighbors(eptr->Neighbors());
     neighbor_elements.reserve( neighbors );
     for ( auto i{0U}; i<neighbors; i++ )
@@ -899,7 +899,7 @@ void floodFill( Element<dim>* const eptr, set<Element<dim>*>& elements_contiguou
      while( !neighbor_elements.empty() )
        {
           // 0. element set for subsequent passes
-          vector<Element<dim>*>  new_neighbor_elements;
+          vector<CELL<dim>*>  new_neighbor_elements;
    
           // 1. loop over those neighbors that are not already part of the deque
           for ( const auto& nit : neighbor_elements )
@@ -926,6 +926,13 @@ template void floodFill( Element<1U>* const, set<Element<1U>*>& );
 template void floodFill( Element<2U>* const, set<Element<2U>*>& );
 template void floodFill( Element<3U>* const, set<Element<3U>*>& );
 
+template void floodFill( Face<1U>* const, set<Face<1U>*>& );
+template void floodFill( Face<2U>* const, set<Face<2U>*>& );
+template void floodFill( Face<3U>* const, set<Face<3U>*>& );
+
+template void floodFill( InterFace<1U>* const, set<InterFace<1U>*>& );
+template void floodFill( InterFace<2U>* const, set<InterFace<2U>*>& );
+template void floodFill( InterFace<3U>* const, set<InterFace<3U>*>& );
 
 
 
@@ -1416,7 +1423,7 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     // 1. for all elements on the perimeter of the model subdomain,
     //    generate keys from their node coordinates that are then matched with one-another
     //    in order to connect these elements
-    for ( auto n=subdomain.InteriorElements(); n<subdomain.Elements(); ++n )
+    for ( auto n=subdomain.InteriorCells(); n<subdomain.Cells(); ++n )
         {
            // for those element faces that define the perimeter surface
            for ( auto i{0U}; i<subdomain.PerimeterFaces(n); ++i )
@@ -1523,7 +1530,7 @@ template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Eleme
 template<uint32_t dim>
 bool containsElementsOfType( const Region<dim>& gref, CELL_SHAPE dimension )
  {
-    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
       if ( parseFiniteElementDimension( (*it)->FE_Type() ) == dimension )
         return true;
       
@@ -1562,7 +1569,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
     vector<double> normal(3U), nbor_normal(3U);
    
     size_t non_surface_elements(0U);
-    for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
+    for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers surface elements
       if ( (*it)->IsSurfaceElement() ) {
            (*it)->UnitNormal( normal );
@@ -1595,7 +1602,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
     vector<double> normal(2U), nbor_normal(2U);
    
     size_t non_line_elements(0U);
-    for ( auto it=subdomain.ElementsBegin(); it!=subdomain.ElementsEnd(); ++it )
+    for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers line elements
       if ( (*it)->IsLineElement() ) {
            (*it)->UnitNormal( normal );
@@ -2345,8 +2352,8 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
       std::vector<uint32_t> fnids;
       fnids.reserve(4);
 
-      const auto eend = region.ElementsEnd();
-      for (auto eit = region.ElementsBegin(); eit != eend; ++eit) {
+      const auto eend = region.CellsEnd();
+      for (auto eit = region.CellsBegin(); eit != eend; ++eit) {
 
         // 1. Volume elements only
         
@@ -2442,8 +2449,8 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     const Region<dim>& line_domain( model.Region(region_name) );
     if ( renumber_nodes ) line_domain.RenumberNodes();
     
-    const Element<dim>* eptr1 = (*line_domain.PerimeterElementsBegin());
-    const Element<dim>* eptr2 = (*prev(line_domain.ElementsEnd(),1));
+    const Element<dim>* eptr1 = (*line_domain.PerimeterCellsBegin());
+    const Element<dim>* eptr2 = (*prev(line_domain.CellsEnd(),1));
     
     const Element<dim>* previous_ptr{nullptr};
     size_t              traversed_elmts{0U};
@@ -2472,7 +2479,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
               // if progress stops
               if ( previous_ptr == eptr1 ) {
                    cout <<"\n| broken chain; ending after "<< traversed_elmts;
-                   cout <<" elements vs. "<< line_domain.Elements() <<" in total."<< endl;
+                   cout <<" elements vs. "<< line_domain.Cells() <<" in total."<< endl;
                    break;
                 }
               traversed_elmts++;
@@ -2498,7 +2505,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
               // if progress stops
               if ( previous_ptr == eptr2 ) {
                    cout <<"\n| broken chain; ending after "<< traversed_elmts;
-                   cout <<" elements vs. "<< line_domain.Elements() <<" in total."<< endl;
+                   cout <<" elements vs. "<< line_domain.Cells() <<" in total."<< endl;
                    break;
                 }
               traversed_elmts++;
@@ -2506,8 +2513,8 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
       }
       
    // checking
-   if ( traversed_elmts < line_domain.Elements() ) {
-        cout <<"\n"<<"printLineElementRegion('"<< region_name <<"'): only "<< traversed_elmts <<" of "<< line_domain.Elements();
+   if ( traversed_elmts < line_domain.Cells() ) {
+        cout <<"\n"<<"printLineElementRegion('"<< region_name <<"'): only "<< traversed_elmts <<" of "<< line_domain.Cells();
         cout <<" total were discovered by neighbor to neighbor traversal. Broken connectivity?"<< endl;
      }
   

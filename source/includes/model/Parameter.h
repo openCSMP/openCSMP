@@ -37,33 +37,33 @@ struct Parameter {
     bool    operator<( const csmp::Parameter& ) const;
 
     /// define a physical variable at runtime, using console input (stdin)
-    void           DefineFromStdin();
+    void    DefineFromStdin();
   
     /// checks whether the supplied value lies within min/max defined for this parameter
-    bool           IsWithinRange( double ) const;
+    bool    IsWithinRange( double ) const;
   
     /// expected range of this parameter in the specific simulation
-    void           Range( double& vmin, double& vmax ) const;
-    double       MinValue() const { return min; }
-    double       MaxValue() const { return max; }
+    void    Range( double& vmin, double& vmax ) const;
+    double  MinValue() const { return min; }
+    double  MaxValue() const { return max; }
   
     /// prints parameter record to screen
-    void           Out() const;
+    void    Out() const;
   
     /// writes parameter record to a binary file
-    bool           Out( std::fstream& fp ) const;
+    bool    Out( std::fstream& fp ) const;
   
     /// reads parameter record from a binary file
-    bool           In( std::fstream& fp );
+    bool    In( std::fstream& fp );
     
-    std::string    name;        ///< typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks)
-    std::string    notation;    ///< e.g., k for permeability, v for velocity etc.
-    std::string    unit;        ///< normally SI unit like kg/m2
+    std::string  name;        ///< typically a human-readable name like 'fluid pressure' that can contain blanks (no tabs or line breaks)
+    std::string  notation;    ///< e.g., k for permeability, v for velocity etc.
+    std::string  unit;        ///< normally SI unit like kg/m2
     double       min, max;    ///< physically meaningful value range, specific to simulation problem
-    std::string    usage;       ///< with regard to computation: INPUT, COMPUTED etc.
-    std::string    explanation; ///< how property is used, e.g., stress calculation etc.
-    std::string    reference;   ///< to a paper that describes a related calculation
-    mutable csmp::Index  key;   ///< variable accessor for this parameter as calculated and assigned by PropertyDatabase
+    std::string  usage;       ///< with regard to computation: INPUT, COMPUTED etc.
+    std::string  explanation; ///< how property is used, e.g., stress calculation etc.
+    std::string  reference;   ///< to a paper that describes a related calculation
+    mutable csmp::Index key;  ///< variable accessor for this parameter as calculated and assigned by PropertyDatabase
  };
 
 /// to print parameter description in compact form to an output stream

@@ -72,9 +72,11 @@ void IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase::run()
     settings.Set_napproach(2);
     settings.Set_eps(1.0e-14);
     settings.Set_rel_eps(1.0e-12);
-    PDE_Integrator<DIM,Region> pressure_diffusion( new SAMG_Solver(&settings) );
+    SAMG_Solver solver(&settings);
+    PDE_Integrator<DIM,Region> pressure_diffusion( solver );
     #else
-    PDE_Integrator<DIM,Region> pressure_diffusion( new CSMP_DEFAULT_LINEAR_SOLVER() );
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<DIM,Region> pressure_diffusion( solver );
     #endif
 
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> > stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");

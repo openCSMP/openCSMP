@@ -259,7 +259,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 	box.UnitNormalTo(BACK, dim, nrml_back);
 
 	cout << "\nAssignBoxBoundaryFlagsWherePossible: scanning hexahedral elements for boundary adffiliation...";
-	for (auto it = domain.ElementsBegin(); it != domain.ElementsEnd(); ++it)
+	for (auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it)
 	{
 		// ignore elements that are not hexahedra
 		if ((*it)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON) {

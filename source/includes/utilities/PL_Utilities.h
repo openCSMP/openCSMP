@@ -106,7 +106,7 @@ Point<3U> modelMidpoint( const Model<3U>& model, const char* regionName = "Model
 template<uint32_t dim>
 double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
   {
-    model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
+    model.ExtrapolateCellToNodeProperty("volume flux", "nodal volume flux" );
     return  boundary.SurfaceIntegral( model.Database(), "nodal volume flux" );
   }
 
@@ -114,7 +114,7 @@ double boundaryInflow( Model<dim>& model, csmp::Boundary<dim>& boundary )
 template<uint32_t dim>
 double regionInflow( Model<dim>& model, csmp::Region<dim>& region )
   {
-  model.ExtrapolateElementToNodeProperty("volume flux", "nodal volume flux" );
+  model.ExtrapolateCellToNodeProperty("volume flux", "nodal volume flux" );
   return  region.VolumeIntegral( "nodal volume flux" ,false);
   }
 
@@ -136,8 +136,8 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
 
     Region<dim>&  rref(  model.Region( regionName.data() ) );
 
-    const auto elementsEnd = rref.ElementsEnd();
-    for ( auto it = rref.ElementsBegin(); it != elementsEnd; ++it )
+    const auto elementsEnd = rref.CellsEnd();
+    for ( auto it = rref.CellsBegin(); it != elementsEnd; ++it )
       {
         // vt = -k (lt grad p)
         const double conductivity = (*it)->Read( conductivityKey );
@@ -196,11 +196,11 @@ bool mapOut( const std::map<KeyType,ValueType>& mapToOutput, const char* filenam
 template<uint32_t dim,template<uint32_t> class Domain>
 bool connected( const Domain<dim>& d1, const Domain<dim>& d2 )
 {
-  const typename std::vector<typename Domain<dim>::Simplex*>::const_iterator simplicesEnd = d1.ElementsEnd();
-  for ( typename std::vector<typename Domain<dim>::Simplex*>::const_iterator it = d1.ElementsBegin(); it != simplicesEnd; ++it )
+  const typename std::vector<typename Domain<dim>::Simplex*>::const_iterator simplicesEnd = d1.CellsEnd();
+  for ( typename std::vector<typename Domain<dim>::Simplex*>::const_iterator it = d1.CellsBegin(); it != simplicesEnd; ++it )
   {
-    const typename std::vector<typename Domain<dim>::Simplex*>::const_iterator simplicesEndInner = d2.ElementsEnd();
-    for ( typename std::vector<typename Domain<dim>::Simplex*>::const_iterator iit = d2.ElementsBegin(); iit != simplicesEndInner; ++iit )
+    const typename std::vector<typename Domain<dim>::Simplex*>::const_iterator simplicesEndInner = d2.CellsEnd();
+    for ( typename std::vector<typename Domain<dim>::Simplex*>::const_iterator iit = d2.CellsBegin(); iit != simplicesEndInner; ++iit )
       for( size_t i(0); i < (*iit)->Neighbors(); ++i )
         if( (*iit)->Neighbor(i) == (*it) )
           return true;

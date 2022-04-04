@@ -95,7 +95,7 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
 
   set<int32_t>   region_identifiers_without_name;
   Region<dim>&  model_domain( model.Region( "Model" ) );
-  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
+  for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it )
   {
     const double value = (*it)->Read( prop_key );
     // checking that the property value can indeed be converted into an integer in a meaningful range
@@ -141,7 +141,7 @@ size_t replaceElement_NAN_ValuesWith( Model<dim>& model, const std::string& elem
     Region<dim>& model_domain(model.Region("Model"));
     
     size_t NANs_detected(0U);
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         if ( isnan( (*it)->Read(key) ) ) {
              (*it)->Store( key, makeScalar(ANY,replacement_val) );
           }

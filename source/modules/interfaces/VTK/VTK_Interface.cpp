@@ -134,7 +134,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
 
      // 0. creating list of consecutive element ID 0..n-1
      // -------------------------------------------------
-     vector<size_t>  elmt_ids; elmt_ids.reserve( gref.Elements() );
+     vector<size_t>  elmt_ids; elmt_ids.reserve( gref.Cells() );
      for ( auto n=0U; n<elmt_ids.capacity(); n++ ) elmt_ids.push_back(n); 
        
      //   reading node properties in alphabetical order
@@ -461,7 +461,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      // ------------------------------------------------------------
      // finding the group in the group list
      vector<size_t>  elmt_ids;
-     gref.MemberElementIndexes( elmt_ids );
+     gref.MemberCellIndexes( elmt_ids );
 
      if ( elmt_ids.empty() )     
        throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",
@@ -1253,7 +1253,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     // --------------------------------------------------------------------------
     vector<double>  dentry;
     size_t          cpoints(0U);
-    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
       {
          // getting the coordinates of the constraint point
          for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++, cpoints++ )
@@ -1332,7 +1332,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     // --------------------------------------------------------------------------
     vector<double>  dentry;
     size_t            cpoints(0U);
-    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+    for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
     {
       // getting the coordinates of the constraint point
       for ( auto i{0U}; i<(*it)->Facets(); i++, cpoints++ )
@@ -2675,7 +2675,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      deque<VTK_TYPE> geometric_primitives_VTK;
      // 2 options: triangle and quadrilateral
      size_t cell_list_size(0);
-     for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
+     for ( size_t i=subdomain.InteriorCells(); i<subdomain.Cells(); ++i )
        for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j));
              geometric_primitives_VTK.push_back( parseElementType(fem_type) );
@@ -2689,7 +2689,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // ------------------------------------------------------------------------
      ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
      vector<uint32_t> fnids;
-     for ( size_t i=subdomain.InteriorElements(); i<subdomain.Elements(); ++i )
+     for ( size_t i=subdomain.InteriorCells(); i<subdomain.Cells(); ++i )
        for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              // writing out the number of nodes per face
              CSMP_FEM_TYPE fem_type = subdomain.E(i)->FE()->ElementTypeOfFace( subdomain.PerimeterFace(i,j) );

@@ -16,7 +16,7 @@ HydroFractureVisitor<dim>::HydroFractureVisitor( Model<dim>& sg )
      Pe_key(pref.StorageKey("excess pressure")),
      S_key(pref.StorageKey("storativity")),
      V_key(pref.StorageKey("velocity")),
-     fractured( sg.Region("Model").Elements() ),
+     fractured( sg.Region("Model").Cells() ),
      GRAD_LIMIT(101325.), // one bar m-1
      K_LIMIT(1.),         // maximum hydraulic conductivity that can be induced by 
      pres(3)              // hydrofracture process

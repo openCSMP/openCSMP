@@ -116,9 +116,11 @@ void RhinoMesh_Example::Run()
      // 1. steady-state fluid pressure
      // -----------------------------------------------------------------------
       #ifdef CSMP_WITH_SAMG_SOLVER
-      PDE_Integrator<3U,Region>  steady_state_pressure(new SAMG_Solver());
+      SAMG_Solver solver;
+      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
       #else
-      PDE_Integrator<3U,Region>  steady_state_pressure(new CSMP_DEFAULT_LINEAR_SOLVER());
+      CSMP_DEFAULT_LINEAR_SOLVER solver;
+      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
       #endif
 
       NumIntegral_dNT_op_dN_dV<3U,Element<3U> >  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );

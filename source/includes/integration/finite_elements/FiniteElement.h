@@ -333,10 +333,10 @@ class FiniteElement {
     virtual   double  JacobianDeterminant();
 	
     /// initialises interpolation function product matrix N^T x N for analytically integrated elements
-    virtual   void      IntegralNN( DenseMatrix<DM_MIN>& );
+    virtual   void    IntegralNN( DenseMatrix<DM_MIN>& );
   
     /// initialises interpolation function derivatives product matrix DN^T x DN for element where derivatives are constant
-    virtual   void      IntegraldNdN( DenseMatrix<DM_MIN>& );
+    virtual   void    IntegraldNdN( DenseMatrix<DM_MIN>& );
     
     // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
 

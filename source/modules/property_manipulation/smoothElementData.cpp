@@ -123,7 +123,7 @@ void smoothElementData( Model<dim>& model,
            const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), "SI", key.type, key.place, key.dataDepth,
                                                              log10(min_val_database), log10(max_val_database) );
            // taking the decadic logarithm of values
-        for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+        for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it ) {
                  if ( key.type == SCALAR ) {
                       (*it)->Store( log_key, makeScalar( (*it)->Status(key), log10( (*it)->Read(key)) ) );
                    }
@@ -158,8 +158,8 @@ void smoothElementData( Model<dim>& model,
                                                              min_val_database, max_val_database );
            // smoothing by extrapolation and interpolation
            for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ ) {
-                model.ExtrapolateElementToNodeProperty( variable_name.c_str(), node_prop_name.c_str() );
-                model.InterpolateNodeToElementProperty( node_prop_name.c_str(), variable_name.c_str() );
+                model.ExtrapolateCellToNodeProperty( variable_name.c_str(), node_prop_name.c_str() );
+                model.InterpolateNodeToCellProperty( node_prop_name.c_str(), variable_name.c_str() );
              }                                                   
            if ( node_prop_created )
              model.DeleteProperty( node_prop_name.c_str() );
@@ -168,11 +168,11 @@ void smoothElementData( Model<dim>& model,
       // 3. in-plane smoothing  of the data in multiple iterations
       // ---------------------------------------------------------
       else {
-          vector<double> smoothed_vals(domain.InteriorElements());
+          vector<double> smoothed_vals(domain.InteriorCells());
           for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ )
             {
               size_t elmt(0U);
-              for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
+              for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it,  ++elmt )
                   {
                     // the new value taken is the volume-weighted mean average of the element neighbors and its own value
                     // current element
@@ -202,7 +202,7 @@ void smoothElementData( Model<dim>& model,
                   }
                 
                 // storing the smoothed values at the end of smoothing cycle
-                for ( size_t i{0U}; i<domain.InteriorElements(); ++i ) {
+                for ( size_t i{0U}; i<domain.InteriorCells(); ++i ) {
                     if ( smoothed_vals[i] >= min_val_database && smoothed_vals[i] <= max_val_database )
                        domain.E(i)->Store( key, makeScalar( domain.E(i)->Status(key), smoothed_vals[i] ) );
                     else {
@@ -228,7 +228,7 @@ void smoothElementData( Model<dim>& model,
           TensorVariable<dim>  ts;
 
           // taking the decadic logarithm of values
-       for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+       for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it ) {
                 if ( key.type == SCALAR ) {
                      (*it)->Store( original_key, makeScalar( (*it)->Status(key), pow( 10., (*it)->Read(key)) ) );
                   }

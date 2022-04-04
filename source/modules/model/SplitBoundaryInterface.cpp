@@ -310,7 +310,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
            else selectedDomainVariablesIn( fp, (*it.first).second, database, subset_variables );
        
            // 1.5 reporting out
-           cout <<"\n\t\t"<< (*it.first).first << (*it.first).second.Elements() <<" faces).";
+           cout <<"\n\t\t"<< (*it.first).first << (*it.first).second.Cells() <<" faces).";
        }
    }
 
@@ -547,7 +547,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
           cell_ids.erase( cell_ids.begin(), cell_ids.end() );
 
           // removing the group if it contains no elements
-          if ( (*it.first).second.Elements() == 0U ) {
+          if ( (*it.first).second.Cells() == 0U ) {
               splitBoundaryMap_.erase( it.first );
               csmp_error.notice( WARNING, "SplitBoundaryInterface::FormSplitBoundariesFrom",
                                  "SplitBoundary could not be formed", (*lit).c_str() );
@@ -746,7 +746,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      set<Node<dim>*>     unique_new_nodes;
      vector<Node<dim>*>  node_pointers; // linear array of the nodes of one face after another
      node_pointers.reserve( splitBoundary.Nodes() );
-     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it ) {
+     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it ) {
           const size_t n_nodes((*it)->Nodes());
           // looping over the nodes on the inside of the interface which must be manifolds
           for ( auto i{0U}; i<n_nodes; ++i ) {
@@ -779,10 +779,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      const LocalVariables             element_props           = model->Database().LocalVariablesAt( ELEMENT );
      const IntegrationPointVariables  integration_point_props = model->Database().IntegrationPointVariablesAt( ELEMENT );
      vector<Element<dim>*>            new_elmts;
-     new_elmts.reserve( splitBoundary.Elements() );
+     new_elmts.reserve( splitBoundary.Cells() );
      size_t node_offset(0U); // for moving through the node-pointer vector
      
-     for ( auto it=splitBoundary.ElementsBegin(); it!=splitBoundary.ElementsEnd(); ++it )
+     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it )
        {
           assert( (*it)->Parent(MIDDLE) == nullptr );
           // extracting element-node subvector
@@ -855,7 +855,7 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
   for ( typename std::map<std::string, csmp::SplitBoundary<dim> >::const_iterator
         it = splitboundaryComplex->SplitBoundariesBegin(); it != splitboundaryComplex->SplitBoundariesEnd(); ++it )
     {
-      for (auto eit = (*it).second.ElementsBegin(); eit != (*it).second.ElementsEnd(); eit++) {
+      for (auto eit = (*it).second.CellsBegin(); eit != (*it).second.CellsEnd(); eit++) {
           csmp::InterFace<dim>* pInterFace = (*eit);
           ifelmts.push_back(pInterFace);
           for (size_t j = 0; j < pInterFace->Nodes() / 2; j++)
@@ -903,8 +903,8 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
 
   // 3. Construct the connections between the new nodes, new elements and interfaces.
   //    Assign a root node and a root element for new nodes elements respectively
-  vector<Element<dim>*>  elmt_vec_to_establish_nbor_connectivity;
-  elmt_vec_to_establish_nbor_connectivity.reserve( ifelmts.size() );
+  vector<Element<dim>*>  cell_vec_to_establish_nbor_connectivity;
+  cell_vec_to_establish_nbor_connectivity.reserve( ifelmts.size() );
   
   for ( auto& ifelmt : ifelmts )
     {
@@ -919,34 +919,34 @@ bool  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SingleRegionFromAllSpl
           new_node->Assign(new_node->Parents(), new_elmt);
         }
 
-      elmt_vec_to_establish_nbor_connectivity.push_back(new_elmt);
+      cell_vec_to_establish_nbor_connectivity.push_back(new_elmt);
     }
 
   // update the neighbor connectivity of new region
   // TODO: potential manifolds have to be disambiguated 
-  establishNeighborConnectivity( elmt_vec_to_establish_nbor_connectivity, false, false ); 
+  establishNeighborConnectivity( cell_vec_to_establish_nbor_connectivity, false, false ); 
 
   // for each contiguous patch of the new region supply a pointer any of its elements into mesh manager 
-  sort( elmt_vec_to_establish_nbor_connectivity.begin(), elmt_vec_to_establish_nbor_connectivity.end() );
+  sort( cell_vec_to_establish_nbor_connectivity.begin(), cell_vec_to_establish_nbor_connectivity.end() );
   set<Element<dim>*>    contiguous_subset;
   vector<Element<dim>*> leftovers;
   
-  while ( !elmt_vec_to_establish_nbor_connectivity.empty() ) 
+  while ( !cell_vec_to_establish_nbor_connectivity.empty() ) 
     {
        // finding contiguous element patch and inserting its first element into the root element vector
-       floodFill( (*elmt_vec_to_establish_nbor_connectivity.begin()), contiguous_subset );
+       floodFill( (*cell_vec_to_establish_nbor_connectivity.begin()), contiguous_subset );
        // if the split boundary is already contiguous
-       if ( contiguous_subset.size() == elmt_vec_to_establish_nbor_connectivity.size() ) break;
-       // removing the pointers to the recovered elements from 'elmt_vec_to_establish_nbor_connectivity'
-       leftovers.reserve( elmt_vec_to_establish_nbor_connectivity.size() - contiguous_subset.size() );
+       if ( contiguous_subset.size() == cell_vec_to_establish_nbor_connectivity.size() ) break;
+       // removing the pointers to the recovered elements from 'cell_vec_to_establish_nbor_connectivity'
+       leftovers.reserve( cell_vec_to_establish_nbor_connectivity.size() - contiguous_subset.size() );
        for ( typename vector<Element<dim>*>::const_iterator 
-             it=elmt_vec_to_establish_nbor_connectivity.begin(); it!=elmt_vec_to_establish_nbor_connectivity.end(); ++it )
+             it=cell_vec_to_establish_nbor_connectivity.begin(); it!=cell_vec_to_establish_nbor_connectivity.end(); ++it )
          // copy remaining elements into the leftover vector   
          if ( contiguous_subset.count( (*it) ) == 0 )
            leftovers.push_back( (*it) ); 
 
        // assigning result vector to repeat operation                
-       elmt_vec_to_establish_nbor_connectivity = leftovers;
+       cell_vec_to_establish_nbor_connectivity = leftovers;
        // contiguous_subset.clear(); - done in floodfill
        leftovers.clear();
     }
@@ -1021,7 +1021,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
      else cout <<"irregularly-shaped model:\n";
      for ( auto bit=SplitBoundariesBegin(); bit!=SplitBoundariesEnd(); ++bit ) {
           cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
-          cout <<" "<< (*bit).second.Elements() <<" interfaces, ";
+          cout <<" "<< (*bit).second.Cells() <<" interfaces, ";
           // in 3D a boudary is a surface
            if constexpr ( dim == 3 ) {
                 cout <<"area (m2): "<< (*bit).second.Area();
@@ -1057,7 +1057,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDiscon
     
     // assigning the new nodes to the higher dimensional parent elements on the outside
     vector<uint32_t>  fnids;
-    for ( auto it=inputBoundary.ElementsBegin(); it!= inputBoundary.ElementsEnd(); ++it )
+    for ( auto it=inputBoundary.CellsBegin(); it!= inputBoundary.CellsEnd(); ++it )
       {
          // the nodes on the outside need to be updated
          assert( (*it)->OuterParent() );

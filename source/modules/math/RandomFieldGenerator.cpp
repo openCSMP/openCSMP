@@ -181,13 +181,13 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   
   // resize the storage vector for the random permeability field
   Region<dim>& mref = mdl.Region(region);
-  k_.resize(mdl.Region("Model").Elements());
+  k_.resize(mdl.Region("Model").Cells());
 
   cout << "\nRandomFieldGenerator<dim>::RandomElementField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over elements
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0));
       bc = (*it)->BaryCenter(); // xy coordinates of bary centre
@@ -375,7 +375,7 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
     }
  
   const Region<dim>& mref = mdl.Region("Model");
-  if ( k_.size() != mref.Elements() ) {
+  if ( k_.size() != mref.Cells() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
@@ -384,7 +384,7 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
   
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ )
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ )
     ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
@@ -444,7 +444,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   ifs.close();
 
   Region<dim>& mref = mdl.Region("Model");
-  if ( k_temp.size() != mref.Elements() ) {
+  if ( k_temp.size() != mref.Cells() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
@@ -453,7 +453,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
 
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }

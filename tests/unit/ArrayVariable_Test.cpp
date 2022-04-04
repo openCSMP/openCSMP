@@ -1,6 +1,7 @@
 #include "ArrayVariable_Test.h"
 
 #include "ArrayVariable.h"
+#include "PropertyDatabase.h"
 
 using namespace std;
 

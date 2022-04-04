@@ -45,7 +45,7 @@ void replaceWhiteSpaceBy( string& p, char ascii_char )
 template<uint32_t dim>
 bool isoparametricElementMesh( const Model<dim>& sg )
  {
-   std::string  etype(parseFiniteElementType((*sg.Region("Model").ElementsBegin())->FE()->ElementType()));
+   std::string  etype(parseFiniteElementType((*sg.Region("Model").CellsBegin())->FE()->ElementType()));
 
      if ( etype.find("ISOPARAMETRIC") != std::string::npos ) return true;
      return false;
@@ -391,7 +391,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
     if ( var_key.place == ELEMENT ) {
          // counting no-data values, and memorizing pointers to elements with such values
          set<Element<dim>*> elementsMissingDataValues, filledValues;
-         for ( typename vector<Element<dim>*>::const_iterator it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+         for ( typename vector<Element<dim>*>::const_iterator it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
            if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double>::epsilon() )
              elementsMissingDataValues.insert( (*it) );
           

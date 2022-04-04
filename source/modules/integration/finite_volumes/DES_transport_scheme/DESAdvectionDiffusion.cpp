@@ -144,8 +144,8 @@ void DESAdvectionDiffusion<dim>::InitializeFiniteVolumeProperties()
     gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
     
     // For the interior elements of the region compute relevant variable values
-    const auto it_end(gref_.ElementsEnd());
-    for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref_.CellsEnd());
+    for ( auto it=gref_.CellsBegin(); it!=it_end; ++it )
     {
          const auto sectors((*it)->Sectors());
          const auto facets((*it)->Facets());

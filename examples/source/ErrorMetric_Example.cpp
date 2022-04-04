@@ -95,9 +95,9 @@ void ErrorMetric_Example::Run()
    // 3. Computing the error metric for the FEM solution of fluid pressure
    // -----------------------------------------------------------------------
     model.CopyGradientOfProperty_A_To_B( "fluid pressure", "fluid pressure gradient" );
-    model.ExtrapolateElementToNodeProperty("fluid pressure gradient","nodal fluid pressure gradient");
+    model.ExtrapolateCellToNodeProperty("fluid pressure gradient","nodal fluid pressure gradient");
     model.CopyGradientOfProperty_A_To_B( "nodal fluid pressure gradient", "fluid pressure gradient2" );
-    model.ExtrapolateElementToNodeProperty("fluid pressure gradient2","nodal fluid pressure gradient2");
+    model.ExtrapolateCellToNodeProperty("fluid pressure gradient2","nodal fluid pressure gradient2");
 
     vtk_output.OutputDataToVTK( model, "hessian", "fluid pressure gradient2", 1 );
     vtk_output.OutputDataToVTK( model, "FRAC_VOLUMES", "hessian", "fluid pressure gradient2", 1, true );
@@ -169,7 +169,7 @@ void ErrorMetric_Example::discretizationError3D( Model<3U>& sg, const char* hess
     ScalarVariable       emag;
     Region<3>&  sgref(sg.Region("Model"));
 
-    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
+    for ( auto eit=sgref.CellsBegin(); eit!=sgref.CellsEnd(); eit++ )
       {
          (*eit)->Read( hes_key, ts );
 

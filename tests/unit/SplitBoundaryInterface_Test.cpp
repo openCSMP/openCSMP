@@ -18,9 +18,9 @@ namespace csmp
 template<uint32_t dim>
 void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
   if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -33,7 +33,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -58,9 +58,9 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
   size_t null_neighbors( 0 );
   Element<dim>* parentElement( NULL );
 
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
   if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       if ( (*it)->InterveningElement() != NULL )
         (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
@@ -119,7 +119,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -191,7 +191,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
   Point<dim> baryCenter;
 
   if ( dim == 2 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );
@@ -205,7 +205,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );
@@ -380,8 +380,8 @@ void SplitBoundaryInterface_Test::NodeParents( const Region<dim>& region, size_t
 template<uint32_t dim>
 void SplitBoundaryInterface_Test::ElementNodes( const Region<dim>& region )
 {
-  const typename vector<Element<dim>*>::const_iterator elementsEnd( region.ElementsEnd() );
-  for ( typename vector<Element<dim>*>::const_iterator element( region.ElementsBegin() ); element != elementsEnd; ++element )
+  const typename vector<Element<dim>*>::const_iterator elementsEnd( region.CellsEnd() );
+  for ( typename vector<Element<dim>*>::const_iterator element( region.CellsBegin() ); element != elementsEnd; ++element )
     _test( (*element)->NodeConnectorSize() == (*element)->Nodes() );
 }
 
@@ -431,7 +431,7 @@ void SplitBoundaryInterface_Test::TestSplitNodeAssignment( const Model<dim>& mod
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
     // loop over InterFaces
-    for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
+    for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.CellsBegin(); ifit != spbit->second.CellsEnd(); ++ifit )
     {
       if ( NoNeighborNull( *(*ifit) ) )
       {
@@ -520,7 +520,7 @@ void SplitBoundaryInterface_Test::TestUnitNormals( Model<dim>& model, const std:
   for ( typename Model<dim>::splitBoundaryConstIterator spbit = model.SplitBoundariesBegin(); spbit != model.SplitBoundariesEnd(); ++spbit )
   {
     // loop over InterFaces
-    for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
+    for ( typename std::vector<InterFace<dim>* >::const_iterator ifit = spbit->second.CellsBegin(); ifit != spbit->second.CellsEnd(); ++ifit )
     {
       (*ifit)->UnitNormal( nrml_in, INSIDE );
       (*ifit)->UnitNormal( nrml_out, OUTSIDE );
@@ -574,7 +574,7 @@ void SplitBoundaryInterface_Test::VisualiseSplitBoundaries( Model<dim>& model, c
     interfaceValue += 1.0;
 
     // loop over InterFaces
-    for ( auto ifit = spbit->second.ElementsBegin(); ifit != spbit->second.ElementsEnd(); ++ifit )
+    for ( auto ifit = spbit->second.CellsBegin(); ifit != spbit->second.CellsEnd(); ++ifit )
     {
       (*ifit)->Parent( INSIDE )->Read( element_prop_idx, interfaceValueRead );
       interfaceValueWrite = +1;

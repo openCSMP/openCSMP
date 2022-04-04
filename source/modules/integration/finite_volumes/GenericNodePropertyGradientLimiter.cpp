@@ -128,7 +128,7 @@ void GenericNodePropertyGradientLimiter<dim>::CalculateSlopeLimiter( const Regio
                 size_t global_el_id = (*it)->Parent( p )->Idx();
 
                 // get the corresponding element:
-                if( global_el_id<gref.Elements() ) {
+                if( global_el_id<gref.Cells() ) {
                     uint32_t nloc_id = (*it)->ParentNodeNumber( p );
 
                     // at that parent element, loop over all facets that belong to the current node/fv

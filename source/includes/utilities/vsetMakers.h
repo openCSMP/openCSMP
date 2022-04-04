@@ -6,7 +6,7 @@
 
 namespace csmp {
 
-    /// all methods create VSets numbered 0..n-1
+    /// quadratic quadrilateral single-element mesh
     VSet<2U>  test_CreateVSet();
     
     // 2D single element sets
@@ -22,6 +22,11 @@ namespace csmp {
                                         
     // 2D poly-element sets and topology info
     // --------------------------------------
+    
+    ///  Rectangle shaoed MODEL_TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object marking the box boundary.
+    ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& );
+
+    /// Rectangle shaped mixed model with 2 intersecting line element regions
     ModelTopology  test_Create_MeshPatchWithLineElements_VSet( VSet<2U>& );
 
     /// model SPLIT22_BASIC with box boundaries (Faces) and one through-going and one internal crossing split boundary
