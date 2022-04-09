@@ -407,9 +407,16 @@ uint32_t  Node<dim>::Neighbors() const
 
 
 /**
-    Implements node connectivity graph.
+    Implements node connectivity graph, giving access to all the Node objects that the Node is connected to via Element, Face or InterFace edges.
+    Node neighbors are enlisted in an order that is determined by sorting the points to them (this makes the neighbor vector searchable).
     
-    Nodes are enlisted in the order of their pointers (the new vector is maintained searchable).
+    @param neighbor_node the nth Node in the sortes vector of pointers to nodes stored in the node.
+    
+    @attention If the node is a manifold (topologically co-located with other nodes that can be accessed looping over the branches of the manifold,
+    then only those Nodes are neighbors who are on the same contiguous mesh patch as the Node, i.e., not shared with the other nodes in the manifold.
+    
+    @author SKM
+    @date 8/10/2021
 */
 template<uint32_t dim>
 Node<dim>*  Node<dim>::Neighbor( uint32_t neighbor_node ) const

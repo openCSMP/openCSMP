@@ -2382,16 +2382,35 @@ template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<
 
 
 /**
-    After some diagnostics that establish the extent of mesh modification, the cell neighbor connectivity is rebuilt.
+      (Re)-establishes the connections between Elements, Faces and Interfaces, however, restricted to those of the same dimenisonality
+      (volumetric Elements to volumetric Elements, surface to surface and line to line). Since lower-dimensional cells can be manifolds
+      (multiple neighbors per face), these are disambiguated by chosing those cells as neigbors that lie in the same plane (or closest to)
+      or define the same direction.
+      
+      Once the the connections between cells are re-established, the method reconnectes the nodes to parent elements.
+      Using this information, the nodes are connected to their neighbor elements (avoiding connections between the nodes that form part the same manifold).
+      
+      @note The connection between cells is not affected by Regions, Boundaries or Splitboundaries. The Face objects on the outside
+      of a model, for instance, are all interconnected with one another.
+      
+      @note Elements are not connected across SplitBoundaries, but these connections can be retrieved from corresponding InterFaces.
+      
+      @note The parent connectivity of nodes includes only Element objects, i.e., not Face or InterFace objects.
     
     @attention calls EraseNullPointerCells()
     
+    @todo After some diagnostics that establish the extent of mesh modification, the cell neighbor connectivity is rebuilt.
     TODO: rewrite this in a form that makes use of existing connectivity.
+    TODO: restrict this to the immediate neighborhood of where changes occurred (pointer vectors are needed anyway)
+    
+    @author SKM
+    @date 12/10/21
 */
 template<uint32_t dim>
 void MeshManager<dim>::UpdateConnectivity()
  {
-    // creating pointer vectors that are needed by BuildConnectivity() methods
+    // 0. creating cell vectors needed by BuildConnectivity() methods and reconnecting equidimensional cells
+    // -----------------------------------------------------------------------------------------------------
     vector<Element<dim>*> element_ptrs;
     element_ptrs.reserve( elements_.size() );
     for ( auto& it : elements_ ) element_ptrs.push_back( &it );
@@ -2411,11 +2430,8 @@ void MeshManager<dim>::UpdateConnectivity()
          BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
       }
     
-    // global node connectivity to parent elements
-    // RebuildNodeParentElementRelationships( elements_.begin(), elements_.end() );
-    // ----------------------------------------------------------------------------
-    // TODO: restrict this to the neighborhood where changes occurred
-
+    // 1. (Re)-creating node connectivity to parent elements
+    // -----------------------------------------------------
     // counting the parent elements of each node
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
     for ( auto& it : elements_ ) {
@@ -2428,7 +2444,7 @@ void MeshManager<dim>::UpdateConnectivity()
           }
       }
 
-    // reserving the memory for the parent storage and assigning the parent elements
+    // re-assigning the parent elements
     for ( auto& n : parent_elmts_per_node ) {
          const auto n_parents = static_cast<uint32_t>( n.second.size() );
          n.first->ResizeParentStorage( n_parents );
@@ -2444,8 +2460,16 @@ void MeshManager<dim>::UpdateConnectivity()
            }
          assert( n.first->Parents() >= 1 );
       }
-    // TODO: extend the repairs to include NodeManifolds
-    ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not updated by this method yet");
+    
+    // 2. Rebuilding the node connectivity
+    // -----------------------------------
+    for ( auto& nit : nodes_ ) nit.ReassignNeighbors();
+    
+    // 3. Update node manifolds
+    // ------------------------
+    // TODO: extend the update procedure to include potential NodeManifolds
+    if ( node_manifold_manager_ != nullptr )
+      ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not updated by this method yet");
     
  } // end UpdateConnectivity
 
