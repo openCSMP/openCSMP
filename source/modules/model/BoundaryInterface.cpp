@@ -725,12 +725,13 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
               // creating the faces
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
-              face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
-                                                                            model_domain.E( (*pit).InnerElement() ),
-                                                                            model_domain.E( (*pit).OuterElement() ),
-                                                                            (*pit).InnerElementFace(),
-                                                                            (*pit).OuterElementFace(),
-                                                                            lvsFaces, lvsIntegrationPoints ) );
+              face_vector.push_back( model.Mesh().ReplaceElementByFace( model_domain.E( (*pit).Element() ),
+                                                                        model_domain.E( (*pit).InnerElement() ),
+                                                                        model_domain.E( (*pit).OuterElement() ),
+                                                                        (*pit).InnerElementFace(),
+                                                                        (*pit).OuterElementFace(),
+                                                                        lvsFaces, lvsIntegrationPoints,
+                                                                        remove_original_region ) );
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
            }
@@ -802,7 +803,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 8. (optional) remove parent region (including its elements) if no longer required.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) model.RemoveRegion( dim_1_region );
+    if ( remove_original_region ) {
+         model.RemoveRegion( dim_1_region );
+         model.RebuildRegions();
+      }
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 9. extra diagnostics and output of boundary names

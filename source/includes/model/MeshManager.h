@@ -165,16 +165,8 @@ public:
                                          uint32_t adjacent_face_of_inner_element,
                                          uint32_t adjacent_face_of_outer_element,
                                          const LocalVariables& face_variables,
-                                         const IntegrationPointVariables& face_integration_point_variables );
-
-  /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
-  Face<dim>* const ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
-                                             csmp::Element<dim>* inner_eptr,
-                                             csmp::Element<dim>* outer_eptr,
-                                             uint32_t adjacent_face_of_inner_element,
-                                             uint32_t adjacent_face_of_outer_element,
-                                             const LocalVariables& face_variables,
-                                             const IntegrationPointVariables& face_integration_point_variables );
+                                         const IntegrationPointVariables& face_integration_point_variables,
+                                         bool delete_original_face=true );
 
   /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,
