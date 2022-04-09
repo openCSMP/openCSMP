@@ -1,4 +1,5 @@
 #include "InterFace_Test.h"
+#include "Element.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricLinearLineElement.h"
 #include "Exception.h"
@@ -51,16 +52,18 @@ void InterFace_Test::Assign_tests(){
     ConstructInterFaceIngredients(e1, e2, n1, n2, n3, n4, n5, n6, e_nb_in1, e_nb_in2, e_nb_ou1, e_nb_ou2);
 
     //Knowledge of face ID
-    size_t faceID_of_e1 = 0;
-    size_t faceID_of_e2 = 1;
+    uint32_t faceID_of_e1 = 0;
+    uint32_t faceID_of_e2 = 1;
 
     //Interface Construction
     // ---------------------
     // simplemost
     IsoparametricLinearLineElement face_FE;
     FiniteVolumeStencil<2>         line_stencil("ISOPARAMETRIC_LINEAR_BAR");
-    InterFace<2> if_obj0( &face_FE, &line_stencil ), if_obj1( &face_FE, &line_stencil ),
-                 if_obj2( &face_FE, &line_stencil ), if_obj3( &face_FE, &line_stencil );
+    const LocalVariables           lvars; // empty
+    IntegrationPointVariables      ivars; // empty
+    InterFace<2> if_obj0( &face_FE, &line_stencil, lvars, ivars ), if_obj1( &face_FE, &line_stencil, lvars, ivars ),
+                 if_obj2( &face_FE, &line_stencil, lvars, ivars ), if_obj3( &face_FE, &line_stencil, lvars, ivars );
 
 
     ///Beginning Use and Tests
@@ -160,13 +163,18 @@ void InterFace_Test::Geometry_tests(){
 
     ConstructInterFaceIngredients(e1, e2, n1, n2, n3, n4, n5, n6, e_nb_in1, e_nb_in2, e_nb_ou1, e_nb_ou2);
     //Knowledge of face ID -- a result of this particular constrution
-    size_t faceID_of_e1 = 0;
-    size_t faceID_of_e2 = 1;
+    uint32_t faceID_of_e1 = 0;
+    uint32_t faceID_of_e2 = 1;
 
     //Construc InterFace objects
     IsoparametricLinearLineElement face_FE;
     FiniteVolumeStencil<2>         line_stencil("ISOPARAMETRIC_LINEAR_BAR");
-    InterFace<2> if_obj0( &face_FE, &line_stencil ), if_obj1( &face_FE, &line_stencil ), if_obj2( &face_FE, &line_stencil );
+    const LocalVariables           lvars; // empty
+    IntegrationPointVariables      ivars; // empty
+
+    InterFace<2>  if_obj0( &face_FE, &line_stencil, lvars, ivars ),
+                  if_obj1( &face_FE, &line_stencil, lvars, ivars ),
+                  if_obj2( &face_FE, &line_stencil, lvars, ivars );
 
     //Assign 0
     if_obj0.Assign(&e1, &e2, true);

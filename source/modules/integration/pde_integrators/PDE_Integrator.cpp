@@ -1233,10 +1233,10 @@ If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is creat
 
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleContacts( COMPUTATION_DOMAIN<dim>& subdomain )
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleDomainsAcrossSplitBoudary( COMPUTATION_DOMAIN<dim>& subdomain )
 {
    if ( test_operands_.size() > 1U )
-     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleContacts",
+     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleDomainsAcrossSplitBoudary",
                            "method implemented for only one test-function operand so far");
      
     // TODO: get this info from the solution variable

@@ -665,7 +665,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   // element 4
   Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
   Face<3U>*    fptr1(nullptr), *fptr2(nullptr);
-  for ( auto i{0}; i<eptr->Faces(); i++ )
+  for ( auto i{0U}; i<eptr->Faces(); i++ )
     {
        // if the face is at the boundary, we construct a boundary face
        if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
@@ -689,11 +689,14 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
     
 	_test( mesh.Faces() == n_original_faces + boundary_face_constructed + interior_face_constructed );
  
- // conversion of interior face to interfaces
+  // conversion of interior face to interface, but without duplication of nodes
+  vector<Node<3U>*>         outside_nodes( fptr2->Nodes(), nullptr );
+  // using the same nodes but in reverse order
+  for ( auto i{0U}; i<fptr2->Nodes(); i++ ) outside_nodes[ fptr2->Nodes()-i-1U ] = fptr2->N(i);
   LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
 	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
   if ( interior_face_constructed ) {
-       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars );
+       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars, outside_nodes );
        ifptr->Out();
     }
 	
@@ -751,9 +754,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
             for ( auto j=0U; j<fnids.size(); ++j ) {
-                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, ManifoldType::INTERFACE );
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE );
                  middle_nodes.push_back( mnptr );
-                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, ManifoldType::INTERFACE );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes

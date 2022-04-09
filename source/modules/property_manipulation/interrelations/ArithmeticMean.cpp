@@ -1,4 +1,5 @@
 #include "ArithmeticMean.h"
+#include "PropertyDatabase.h"
 
 using namespace std;
 

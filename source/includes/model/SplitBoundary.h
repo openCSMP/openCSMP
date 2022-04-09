@@ -123,7 +123,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
-    bool CreateFrom( MeshManager<dim>&, Boundary<dim>& );
+    bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
   
     /// reestablishes the pointers to the nodes associated with the stored elements
     void CreateNodePointerVector();

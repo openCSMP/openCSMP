@@ -1285,7 +1285,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:", "Provided Regions are identical.");
          return make_pair("boundary not created",false);
       }
-    if ( !boundaryComplex->IsUnique(group1) or !boundaryComplex->IsUnique(group2) ) {
+    if ( !boundaryComplex->IsUnique(group1) || !boundaryComplex->IsUnique(group2) ) {
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:",
                            "This method is intended for the creation of boundaries between unique Regions");
          return make_pair("boundary not created",false);

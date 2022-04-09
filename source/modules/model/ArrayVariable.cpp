@@ -1,7 +1,6 @@
 #include "ArrayVariable.h"
 #include "ScalarVariable.h"
-
-#include <cassert>
+#include "PropertyDatabase.h"
 
 using namespace std;
 

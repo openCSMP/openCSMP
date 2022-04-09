@@ -128,9 +128,16 @@ Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const string& region
 }
 
 
+
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool  RegionInterface<dim, REGION_COMPLEX>::IsUnique( const string& region_name ) const
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( !ContainsRegion(region_name) )
+    csmp_error.notice( ERROR, "RegionInterface<dim, REGION_COMPLEX>::IsUnique:",
+                       region_name, "mdoes not exist.");
+
   typename map<string, csmp::Region<dim> >::const_iterator  iter( uniqueRegionMap_.find( region_name ) );
   if ( iter != uniqueRegionMap_.end() )
     return true;

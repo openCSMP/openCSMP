@@ -1,4 +1,5 @@
 #include "CornerPointGrid.h"
+#include "Parameter.h"
 #include "PropertyData.h"
 #include "CSMP_highLevelUtilities.h"
 #include "STL_utilities.h"

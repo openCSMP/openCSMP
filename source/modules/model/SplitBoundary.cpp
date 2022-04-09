@@ -497,28 +497,20 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     @author SKM 21/9/2021
 */
 template<uint32_t dim>
-bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
+bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
+                                      MeshManager<dim>& mesh,
                                       Boundary<dim>& boundary )
 {
   //LVS
   const LocalVariables lvsInterFace( InterFaceVariables() );
   const IntegrationPointVariables lvsIntegrationPoint( InterFaceIntegrationPointVariables() );
 
-  // allocating SubDomain element container
-  this->cell_vec_.clear();
-  this->cell_vec_.reserve( boundary.Cells() );
+  this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
+                                                    next(boundary.CellVector().begin(),boundary.InteriorCells()),
+                                                    boundary.CellVector().end() );
+  // create node vector
+  this->CreateNodePointerVector();
 
-  const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.CellsEnd() );
-  for ( typename vector<Face<dim>*>::const_iterator fit( boundary.CellsBegin() ); fit != facesEnd; ++fit )
-    // the InterFace that is being build from the current interface
-    this->cell_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
-
-    // free excessive allocated capacity
-  vector<InterFace<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
-
-  // initialize splitboundary essentials 
-  establishNeighborConnectivity( this->cell_vec_ );
-  
   this->IdentifyPerimeter();
 
   return true;

@@ -1,5 +1,6 @@
 #include "MeshManager.h"
 #include "MeshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 #include "NodeManifoldManager.h"
 #include "PropertyDatabase.h"
 #include "FiniteElementManager.h"
@@ -10,8 +11,7 @@
 #include "PropertyData.h"
 #include "Box.h"
 #include "ModelTopology.h"
-// #include "MeshIterator.h"
-#include "CSMP_highLevelUtilities.h"
+
 
 #define MESH_MANAGER_DEBUG
 
@@ -88,7 +88,20 @@ template<uint32_t dim>
 size_t MeshManager<dim>::InterFaces() const
  { return interfaces_.size(); }
 
+template<uint32_t dim>
+size_t MeshManager<dim>::NodeManifolds() const
+ {
+    if ( node_manifold_manager_ == nullptr ) return 0U;
+    return node_manifold_manager_->Manifolds();
+ }
 
+template<uint32_t dim>
+bool MeshManager<dim>::HasNodeManifolds() const
+ {
+    if ( node_manifold_manager_ == nullptr ) return false;
+    return true;
+ }
+ 
 
 template<uint32_t dim>
   typename plf::colony<Node<dim>>::iterator      MeshManager<dim>::NodesBegin()
@@ -1333,7 +1346,8 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 template<uint32_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>* fptr,
                                                                 const LocalVariables& lvars,
-                                                                const IntegrationPointVariables& ivars )
+                                                                const IntegrationPointVariables& ivars,
+                                                                vector<Node<dim>*> outside_nodes )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1343,11 +1357,15 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
      csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
 
    // 1. constructing new interface
+   // -----------------------------
+   // - constructor takes care of assigning the higher dimensional elements
+   // - constructor assigns outside nodes also changing the nodes of the higher-dimensional element
+   // - constructor detaches the neighbor connection between the higher dimensional elements
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fptr->FE(), fptr->FV(), lvars, ivars ) );
-   // 2. also assigning nodes, expecting that the nodes on the opposite side of the interface are already there
-   (*ifp).Assign( fptr->InnerParent(), fptr->OuterParent() );
+     ifp = interfaces_.emplace( InterFace<dim>( fptr, lvars, ivars, outside_nodes ) );
+     
+   // 2. assigning idx
    (*ifp).Idx( iface_id );
 
 #ifdef DEBUG
@@ -1375,33 +1393,47 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
 
 /**
-    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold.
-         @attention the current node is assumed to be on the INSIDE of the Interface; when there is none yet, this distinction will be made automatically
+    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold, else, the existing node is returned.
+    
+    @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
+    
+    @param nptr_inside pointer to the node that will be on the inside of the InterFace that gets created if any.
+    @param new_node_side manifold-type qualifier for the new node
+    @return pointer to the new node now stored by the MeshManager.
 */
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
-                                              INTERFACE_SIDE new_node_side,
-                                              ManifoldType geometry )
+                                              INTERFACE_SIDE new_node_side )
   {
     if ( nptr_inside == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node does not exist.");
+      throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node pointer is a 'nullptr'.");
 
-    // copying the inside node
-    typename plf::colony<Node<dim>>::iterator
-      nit = nodes_.emplace( Node<dim>( *nptr_inside ) );
-    
+    // copying the inside node to create a new node
+    auto nit = nodes_.insert( Node<dim>( *nptr_inside ) );
+
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
-         // if we are already dealing with a manifold, the geomtric classifier is retained
+         // if we are already dealing with a manifold, its geometric classifier is retained
          nptr_inside->Manifold()->Add( &(*nit), new_node_side );
          (*nit).Assign( (*nptr_inside->Manifold()) );
       }
-    else // a new manifold is created with the provided geometric classifier
-      node_manifold_manager_->MergeManifolds( nptr_inside->Manifold(), (*nit).Manifold() );
+    else {
+         // checking that the NodeManifoldManager has been initialised
+         assert ( node_manifold_manager_ != nullptr );
+           
+         // a new manifold from the old and the new node using the provided default geometric classifier
+         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::INTERFACE );
+         // and its nodes are connected to it
+         nptr_inside->Assign( (*nmf) );
+         (*nit).Assign( (*nmf) );
+      }
 
+    // working out whether the original classification as an interface was correct
+    consistencyCheck( (*(*nit).Manifold()) );
     return &(*nit);
-  }
-
+    
+  } // end Duplicate
+    
 
 
 
@@ -1557,6 +1589,170 @@ if ( InterFaces() > 0 ) {
      if constexpr( dim == 3 ) BuildSurfaceConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
      if constexpr( dim == 2 ) BuildLineConnectivity<Face>( face_ptrs.begin(), face_ptrs.end() );
 */
+
+
+
+
+
+
+/**
+   Replaces supplied Face objects with InterFace objects, adding the necessary multiplicated nodes
+   and establishing their connectivity. Since the Face objects are deleted the supplied pointer ranges to them (interior and perimeter) are invalidated
+   by this method.
+   
+   @param dbase is needed for the inialisation of the LocalVariableStorage associated with the Face objects
+   
+   @param first iterator to the first Face of the supplied boundary
+   
+   @param bfirst  is an iterator that simultaneously is the end of the interior faces and the beginning of the boundary faces
+   
+   @param last iterator to the last Face of the boundary which also points behind the last perimeter face
+   
+   Steps - starting with the processing of interior faces:
+   
+   1. The creation of InterFace objects in the interior and the necessary duplication of nodes occur simultaneously.
+   
+   2. Interface objects are constructed from the second range, also duplicating nodes at the model- or domain boundaries. No new nodes are inserted if the boundary terminates inside of a higher dimensional region. In this case, interior and exterior perimeter nodes on the SplitBoundary perimeter are assigned the same, pre-existing perimeter node inherited from the converted boundary.
+
+   During the construction of all InterFace objects, the higher dimensional neighbors are assigned and the corresponding Element faces are remembered.
+
+   3. Former higher-dimensional Element neighbors that are now separated by the SplitBoundary are disconnected from one another assigning their neighbor  pointers to 'nullptr'.
+     (this step is not necessary if the whole connectivty is rebuilt anyway)
+
+   4. The new InterFace objects are connected with one-another so that a SplitBoundary constructor has all the necessary information to distinguish interior from perimeter.
+   
+   5. Finally the node-to-parent element connectivity of the InterFace nodes needs to be rebuilt restricting parent element access to the side of the interface that the node forms part of
+   
+   @author SKM
+   @date 6/4/22
+
+*/
+template<uint32_t dim>
+vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const PropertyDatabase<dim>& dbase,
+                                                                     typename vector<Face<dim>*>::iterator first,
+                                                                     typename vector<Face<dim>*>::iterator bfirst,
+                                                                     typename vector<Face<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    vector<InterFace<dim>*>  iface_ptrs;
+    const size_t  n_original_faces{ faces_.size() };
+
+    if ( distance(first,last) == 0U ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
+         return iface_ptrs;
+      }
+    else iface_ptrs.reserve( n_original_faces );
+    
+    // Constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+    
+    const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+    
+    // vector of interfaces which will be returned
+    vector<InterFace<dim>*>  interface_ptrs;
+    interface_ptrs.reserve( distance(first,last) );
+    // tracking already duplicated nodes to avoid duplicates
+    //  original,  duplicate
+    map<Node<dim>*,Node<dim>*>  new_nodes;
+
+    // 1. converting interior Face objects into InterFace ones, duplicating their nodes
+    // --------------------------------------------------------------------------------
+    // (original Face objects are removed)
+    while( first != bfirst )
+      {
+         // 1.1 initial checks
+         // (input range must not contain any nullptrs)
+         assert( (*first) != nullptr );
+         
+         // 1.2 duplicating the nodes creating manifolds as necessary
+         // ---------------------------------------------------------
+         const auto         n_nodes{ (*first)->Nodes() };
+         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         auto               nit{ new_nodes.end() };
+         // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
+         for ( auto i{0U}; i<n_nodes; i++ )
+           // if there a matching outside node has not been created yet
+           if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE );
+                new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
+             }
+           // if the necessary new node was already created earlier it was retrieved and is assigned here
+           else outside_nodes[i] = (*nit).second;
+           // reversing the sequence
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+           
+         // 1.3 construction of InterFace away from boundaries
+         // --------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         interface_ptrs.push_back( ReplaceFaceByInterFace( (*first), lvars, ivars, outside_nodes ) );
+         first++;
+      }
+
+
+    // 2. Converting perimeter faces into interfaces, dealing with boundaries
+    // ----------------------------------------------------------------------
+    // (original Face objects are removed)
+    first = bfirst;
+    while( first != last )
+      {
+         // 2.1 initial checks
+         // (input range must not contain any nullptrs)
+         assert( (*first) != nullptr );
+         
+         // 2.2 duplicating nodes but only if we are at a model boundary or the node already is a manifold
+         // ----------------------------------------------------------------------------------------------
+         // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
+         const auto         n_nodes{ (*first)->Nodes() };
+         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         auto               nit{ new_nodes.end() };
+         
+         for ( auto i{0U}; i<n_nodes; i++ )
+           if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
+                if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE );
+                     new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
+                  }
+                else outside_nodes[i] = (*nit).second;
+             }
+           else outside_nodes[i] = (*first)->N(i);
+
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+
+         // 2.3 construction of InterFace on the model perimeter
+         // ----------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         //     - boundaries are inferred, when:
+         //       - BOX_BOUNDARY flag is !NOT
+         interface_ptrs.push_back( ReplaceFaceByInterFace( (*first), lvars, ivars, outside_nodes ) );
+         first++;
+      }
+ 
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< interface_ptrs.size() <<" new interfaces and ";
+     cout << new_nodes.size() <<" new nodes."<< endl;
+     
+     return interface_ptrs;
+     
+ } // end ReplaceFacesByInterFaces
+
+
+
+
 
 
 

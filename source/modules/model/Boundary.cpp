@@ -1131,8 +1131,23 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
                                    const Region<dim>& region2,
                                    MeshManager<dim>& meshManager )
 {
-  if ( string(region1.Name()) == region2.Name() )
-    throw csmp::Exception( ERROR, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( string(region1.Name()) == region2.Name() ) {
+       csmp_error.notice( WARNING, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
+       return false;
+    }
+    
+  // checking whether there are any shared perimeter nodes
+  set<Node<dim>*> shared_perimeter_nodes;
+  set_intersection( region1.PerimeterNodesBegin(),region1.NodesEnd(),
+                    region2.PerimeterNodesBegin(), region2.NodesEnd(),
+                    inserter(shared_perimeter_nodes,shared_perimeter_nodes.begin()));
+                    
+  if ( shared_perimeter_nodes.empty() ) {
+       csmp_error.notice( ERROR, "Boundary<dim>::CreateBetween:", "supplied regions do not share any perimeter nodes; nothing was done." );
+       return false;
+    }
     
   // LVS
   const LocalVariables lvsFaces( FaceVariables() );

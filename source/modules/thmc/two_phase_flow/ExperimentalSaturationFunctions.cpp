@@ -535,7 +535,7 @@ void ExperimentalSaturationFunctions<dim,USER>::Out() const
       }
     cout <<"\ncapillary pressure curve, pc(sw), for all rock types:\n";
     number = 0;
-    for ( auto it=kr2_.begin(); it!=kr2_.end(); it++ ) {
+    for ( auto it=pc_.begin(); it!=pc_.end(); it++ ) {
         cout <<"\nrock type "<< number++;
         (*it).Out();
       }

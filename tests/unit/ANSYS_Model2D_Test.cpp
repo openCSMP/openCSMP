@@ -57,6 +57,7 @@ namespace csmp
  } // end create_ANSYS2D_Model
  
 
+/*
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
@@ -184,9 +185,13 @@ void ANSYS_Model2D_Test::run()
     Test_CreatInternalSplitBoundaries();
 
   } // end run
+*/
   
   
-  
+void ANSYS_Model2D_Test::run()
+  {
+    Test_CreatInternalSplitBoundaries();
+  }
 
  
  
@@ -368,15 +373,21 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
     pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
     assert( splitBoundaryName1.first.size() == 1 );
-    assert( splitBoundaryName2.first.size() == 2 );
+    assert( splitBoundaryName2.first.size() == 1 );
     _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );
     _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Cells() == n_elmts_region2 );
+    
+    model.SplitBoundariesOut();
 
     // 2. remove split boundary 1 here before creating new ones in the same place
     model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
         
-    // 3. Creating a split boundary between regions (detecting if there already is one?
-    model.CreateSplitBoundaryBetween( "LOWER", "MIDDLE_REGION" ); // INTERFACE 2
+    model.RegionsOut();
+
+    // 3. Creating a split boundary between regions (detecting that there already is that split boundary)
+    model.CreateSplitBoundaryBetween( "LOWER_REGION", "MIDDLE_REGION" ); // INTERFACE 2
+
+    // 4. Creating a split boundary between regions (detecting the disjointed nodes?)
     model.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
 
 

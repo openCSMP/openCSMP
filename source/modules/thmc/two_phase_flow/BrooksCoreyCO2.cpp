@@ -337,13 +337,13 @@ double BrooksCoreyCO2<dim>::Sw_Phase( double pc ) const
    // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
    // applying the limit on capillary pressure
    double pcmax = entry_pressure_ * pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
-                                           ( -1. / ( 1. + lambda_ ) ) );
+                                         ( -1. / ( 1. + lambda_ ) ) );
 
    if ( pc >= pcmax )
    {
       // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
        const double Se_min =  pow( ( entry_pressure_ / ( lambda_ * TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_/seff_mult ) ),
-                                ( lambda_ / ( 1. + lambda_ ) ) );
+                                   ( lambda_ / ( 1. + lambda_ ) ) );
        // assuming linear changes in capillary pressure below Se_min with slope of MAXIMUM_DPCDS
        TwoPhaseModel<dim>::seff_ = Se_min - ( pc - pcmax )/TwoPhaseModel<dim>::MAX_CAPILLARY_PRESSURE_SLOPE_*seff_mult ;
 

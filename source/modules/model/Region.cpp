@@ -7,6 +7,7 @@
 
 #include "writeVariableIf.h"
 #include "Node.h"
+#include "MeshManager.h"
 #include "Element.h"
 #include "Boundary.h"
 #include "FiniteElementManager.h"

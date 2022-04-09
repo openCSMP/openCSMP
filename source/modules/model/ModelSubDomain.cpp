@@ -892,7 +892,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
   // creating the node index vector
   this->node_vec_.reserve( cell_vec_.size() * 4 );
   for ( auto it : this->cell_vec_ ) {
-       const size_t nodes{ it->Nodes() };
+       const auto nodes{ it->Nodes() };
        for ( auto i{0U}; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
             this->node_vec_.push_back( it->N( i ) );

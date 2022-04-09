@@ -18,7 +18,7 @@ NodeManifold<dim>::~NodeManifold()
 }
 
 
-
+// tested: OK
 template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
                                  const set<pair<size_t,INTERFACE_SIDE> >& manifold_nodes,
@@ -39,6 +39,22 @@ NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
     // sorting branches using the node pointers as keys (default of sort)
     sort( branches_.begin(), branches_.end() );
 }
+
+
+
+
+/**
+    Creates manifold assigning pointers to the supplied nodes.
+    
+    @attention the nodes must be assigned to the new Manifold separately once it has been constructed.
+*/
+template<uint32_t dim>
+NodeManifold<dim>::NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node, ManifoldType classifier )
+ : parent_geometry_(classifier)
+ {
+     branches_.push_back( make_pair( &inside_node, INSIDE ) );
+     branches_.push_back( make_pair( &outside_node, OUTSIDE ) );
+ }
 
 
 

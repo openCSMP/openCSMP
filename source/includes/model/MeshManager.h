@@ -59,7 +59,10 @@ public:
   bool HybridElementMesh() const;
   
   /// uses a floodfill on the highest-dimensional elements in the mesh to identify whether the model consists  of disconnected mesh patches
-  bool IsContiguous() const; 
+  bool IsContiguous() const;
+  
+  /// has the NodeManifoldManager been initialised which is true if the original model contained any split boundaries
+  bool HasNodeManifolds() const;
 
   /// returns number of nodes=vertices in the current mesh
   size_t Nodes() const;
@@ -72,6 +75,9 @@ public:
 
   /// returns number of InterFaces=lower-dimensional elements in current mesh
   size_t InterFaces() const;
+  
+  /// number of Manifold objects existing in conjuction with the split boundaries
+  size_t NodeManifolds() const;
   
   typename plf::colony<Node<dim> >::iterator      NodesBegin();
   typename plf::colony<Node<dim> >::iterator      NodesEnd();
@@ -121,11 +127,16 @@ public:
   template<template<uint32_t> class CELL>
   size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
   
-  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards
   std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,
                                                    typename std::vector<Element<dim>*>::iterator first,
                                                    typename std::vector<Element<dim>*>::iterator last );
 
+  /// replaces supplied Face objects with interfaces adding the necessary nodes and node manfolds as well as connectivity; the faces are deleted afterwards
+  std::vector<InterFace<dim>*>  ReplaceFacesByInterFaces( const PropertyDatabase<dim>&,
+                                                          typename std::vector<Face<dim>*>::iterator first,
+                                                          typename std::vector<Face<dim>*>::iterator first_at_boundary,
+                                                          typename std::vector<Face<dim>*>::iterator last );
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
 
@@ -187,7 +198,8 @@ public:
    /// assuming that the nodes on either side of the interface are already there, the face gets replaced
   InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
                                                 const LocalVariables&,
-                                                const IntegrationPointVariables& );
+                                                const IntegrationPointVariables&,
+                                                std::vector<Node<dim>*> outside_nodes );
  
   /// For connecting node-matched mesh patches, creating / updating their node manifolds
   InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
@@ -195,10 +207,9 @@ public:
                                       const LocalVariables& interface_variables,
                                       const IntegrationPointVariables& interface_integration_point_variables );
 
-   /// duplicates Node, automatically creating a node manifold or adding it to an existing one.
+   /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
   Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
-                                   INTERFACE_SIDE new_node_side,
-                                   ManifoldType geometry );
+                                   INTERFACE_SIDE new_node_side );
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
