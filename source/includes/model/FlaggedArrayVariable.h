@@ -73,7 +73,7 @@ class FlaggedArrayVariable
                             double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                             VARIABLE_FLAG flag = ANY );
       
-      explicit FlaggedArrayVariable( size_t arraySize,
+      explicit FlaggedArrayVariable( unsigned int arraySize,
                                      double defaultValue = 0.,
                                      VARIABLE_FLAG flag = ANY );
       
@@ -135,10 +135,6 @@ class FlaggedArrayVariable
       VARIABLE_FLAG  Flag( const size_t&) const;
       VARIABLE_FLAG& Flag( const size_t&);
       void           Flag( const size_t&, VARIABLE_FLAG);
-      void           Fabs();
-      void           Ln();
-      void           Log10();
-      void           Sqrt();
       bool           IsWithinRange( double min, double max ) const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();

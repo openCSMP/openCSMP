@@ -543,7 +543,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 
   double        perimeter_length( 0. );
   vector<uint32_t>  fnids;
-  size_t          n( 0U );
+  size_t          n = this->InteriorCells();
 
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ )
     for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {

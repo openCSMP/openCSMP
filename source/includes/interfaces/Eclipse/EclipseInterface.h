@@ -3,11 +3,11 @@
 
 #include "CornerPointCell.h"
 #include "CornerPointGrid.h"
+#include "Parameter.h"
 
 namespace csmp {
 
 class ModelTopology;
-class Parameter;
 template<uint32_t> class VSet;
 
 
