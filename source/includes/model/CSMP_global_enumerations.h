@@ -14,9 +14,9 @@ CSMP global constants and enumerations
 ========================================
 */
 
-/// initialisation of const to maximum value that size_t can take
+/// initialisation of const to maximum value that uint32_t  can take
 const size_t NULL_IDX(std::numeric_limits<uint32_t>::max());
-const short  UNSPECIFIED(-1);
+const int    UNSPECIFIED(-1);
 
 /**
 @defgroup CSMP_global_enumerations

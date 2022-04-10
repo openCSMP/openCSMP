@@ -492,6 +492,34 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
 
 /**
+    For post-processing the results of Divide. Here the assumption is made that the faces are already interconnected.
+*/
+template<uint32_t dim>
+bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::const_iterator ifacesBegin,
+                                     const typename vector<InterFace<dim>*>::const_iterator ifacesEnd )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+  if ( distance(ifacesBegin,ifacesEnd) == 0 ) {
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom", "supplied InterFace range is empty; nothing was done");
+       return false;
+    }
+  if ( (*ifacesBegin)->ConnectedNeighbors() == 0 ) {
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom", "some supplied InterFace objects do not have neighbors; nothing was done");
+       return false;
+    }
+    
+  this->cell_vec_.assign( ifacesBegin, ifacesEnd );
+
+  // initialize boundary essentials
+  this->CreateNodePointerVector();
+  this->IdentifyPerimeter();
+
+  return true;
+}
+
+
+/**
     Creates a split boundary from a boundary. Requires unique indices.
     @author SKM 1/11/2013
     @author SKM 21/9/2021

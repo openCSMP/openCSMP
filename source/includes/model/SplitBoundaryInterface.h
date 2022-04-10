@@ -87,7 +87,7 @@ class SplitBoundaryInterface {
   protected:
 
     /// creating name for the case when the SplitBoundary was already present in the input mesh
-    std::string CreateSplitBoundaryName( const std::pair<std::string, std::string>& juxtaposed_regions ) const;
+    std::string CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
  
   protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs

@@ -1278,6 +1278,8 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+throw csmp::Exception( FATAL_ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetween", "method needs to be refactored");
+
     string  region1(group1);
     string  region2(group2);
 
@@ -1307,7 +1309,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     if ( it.second ) {
         cout << "\nBoundaryInterface<"<< dim <<">::CreateBetween: creating boundary between ";
         cout << group1 << " and " << group2 << endl;
-        bool succeeded = (*it.first).second.CreateBetween( gref1, gref2, boundaryComplex->Mesh() );
+        bool succeeded{false}; // = (*it.first).second.CreateBetween( gref1, gref2, boundaryComplex->Mesh() );
  
         if ( !succeeded )
           csmp_error.notice( WARNING, "BoundaryInterFace::CreateBetween:",
@@ -1323,7 +1325,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
 
     return make_pair("boundary not created",false);
     
- } // end InsertBoundary
+ } // end CreateBoundaryBetween
 
 
 
@@ -1755,8 +1757,11 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 
 
 
-// helper function for method below
-// returns index of first and last element of the checked region
+
+
+/** Helper function for method EstablishBoxBoundaries() below
+    returns index of first and last element of the checked region
+*/
 template<uint32_t dim>
 static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& model, const char* region_name,
                                                                  vector<Element<dim>*>& elements )

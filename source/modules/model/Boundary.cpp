@@ -1126,6 +1126,7 @@ This method assumes that the connectivity between the elements is up to date.
 Variable storage is assigned to the faces.
 
 */
+/*
 template<uint32_t dim>
 bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
                                    const Region<dim>& region2,
@@ -1217,7 +1218,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   return true;
 
 } // CreateBetween
-
+*/
 
 
 

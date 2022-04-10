@@ -90,7 +90,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
  {
   public:
     SplitBoundary() = delete;
-    /// constroctor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
+    /// constructor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
                    const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
                    
@@ -121,6 +121,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     
     /// forms a split boundary from existing interfaces assuming that these are numbered n=elmts+faces .. interfaces-1
     size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
+
+    /// creating from supplied vector of faces
+    bool CreateFrom( const typename std::vector<InterFace<dim>*>::const_iterator ifacesBegin,
+                     const typename std::vector<InterFace<dim>*>::const_iterator ifacesEnd );
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );

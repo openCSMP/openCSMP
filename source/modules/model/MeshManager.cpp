@@ -1219,6 +1219,72 @@ template<uint32_t dim>
 InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
                                                       Element<dim>* const outer_parent, uint32_t outer_element_face_id,
                                                       const LocalVariables& lvars,
+                                                      const IntegrationPointVariables& ivars,
+                                                      vector<Node<dim>*> outside_nodes )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( inner_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+   if ( outer_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+   if ( inner_parent == outer_parent ) {
+        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
+                                  "inner and outer parent pointers are the same");
+        return nullptr;
+     }
+
+   assert( inner_element_face_id < inner_parent->Faces() );
+   assert( outer_element_face_id < outer_parent->Faces() );
+
+   // 1. establishing the finite element type if the interface
+   const CSMP_FEM_TYPE etype = inner_parent->FE()->ElementTypeOfFace( inner_element_face_id );
+
+   // 2. constructing new interface
+   const size_t iface_id = interfaces_.size();
+   typename plf::colony<InterFace<dim>>::iterator
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     
+   // 3. assigning higher dimensional elements and faces
+   const bool assign_nodes{false};
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Idx( iface_id );
+   
+   // 4. assigning the inside nodes to the new InterFace (which are those of the face of the inside element)
+   const auto n_nodes_per_face{ outside_nodes.size() };
+   vector<uint32_t>  fnids;
+   inner_parent->FE()->NodesOfFace( inner_element_face_id, fnids );
+   assert( fnids.size() == n_nodes_per_face );
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     (*ifp).Assign( n, inner_parent->N( fnids[n] ), INSIDE );
+   
+   // 5. assigning the outside nodes to the InterFace
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     (*ifp).Assign( n, outside_nodes[n], OUTSIDE );
+
+   // 6. replacing the original nodes of the face of the outside element with the new nodes
+   outer_parent->FE()->NodesOfFace( outer_element_face_id, fnids );
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     outer_parent->Assign( fnids[n], outside_nodes[n] );
+     
+   // 7. detaching the input Elements from one-anothers
+   inner_parent->Unassign( outer_parent );
+   outer_parent->Unassign( inner_parent );
+
+   return &(*ifp);
+
+} // end AddInterFace
+
+
+/**
+     As method above but assuming that the Elements on either side of the interface are already detached, having separate nodes.
+*/
+template<uint32_t dim>
+InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
+                                                      Element<dim>* const outer_parent, uint32_t outer_element_face_id,
+                                                      const LocalVariables& lvars,
                                                       const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1245,11 +1311,23 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     
+   // 3. assigning higher dimensional elements and faces
    const bool assign_nodes{true};
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
    (*ifp).Idx( iface_id );
+   
+   // 4. detaching the input Elements from one-anothers
+   inner_parent->Unassign( outer_parent );
+   outer_parent->Unassign( inner_parent );
 
-   assert( node_manifold_manager_ != nullptr );
+   return &(*ifp);
+
+} // end AddInterFace
+
+
+
+/* the InterFace manifolds are assumed to be created before the creation of the InterFace by Duplicate(node)
 
    // 3. assigning node manifolds
    const size_t n_nodes{(*ifp).FE()->Nodes()};
@@ -1281,13 +1359,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
               (*ifp).N(i,OUTSIDE)->Manifold()->Add( (*ifp).N(i,INSIDE), INSIDE );
            }
        }
-   
-   return &(*ifp);
-
-} // end AddInterFace
-
-
-
+*/
 
 
 /**
@@ -1684,6 +1756,159 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
 
 
 
+  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
+template<uint32_t dim>
+vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
+                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& matching_elmts )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    // vector of interfaces which will be returned
+    const size_t  n_original_faces{ interfaces_.size() };
+    vector<InterFace<dim>*>  interface_ptrs;
+
+    if ( matching_elmts.empty() ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         return interface_ptrs;
+      }
+    else interface_ptrs.reserve( matching_elmts.size() );
+    
+    // Constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+    
+    const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+    
+    // 1. finding the perimeter nodes of the interface patch that will be created
+    // --------------------------------------------------------------------------
+    // - from the corner nodes of the element faces that will be at the interface, segment keys are made
+    // - the faces are numbered
+    // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
+    // segment key,     face labels (if there are more than 2, the segment is on the inside of interface patch)
+    map<set<Node<dim>*>,set<size_t> > segment_nbors;
+    size_t iface_count{0U};
+    for ( const auto& it : matching_elmts ) {
+         // using the elements on the future inside of the interface to get face diagnosts
+         const CSMP_FEM_TYPE etype = it.first.first->FE()->ElementTypeOfFace( it.first.second );
+         vector<uint32_t> fnids;
+         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+         // getting the segment nodes from these face-nodes assuming that the first nodes are the corner nodes
+         switch( etype ) {
+              case ISOPARAMETRIC_LINEAR_TRIANGLE:
+              case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+              case LINEAR_TRIANGLE:
+              case LINEAR_TRIANGLE3D: {
+                    // segment 1, of the three segments given by the corner nodes of the triangular face
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(0) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+              case LINEAR_RECTANGLE: {
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(3) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(3), it.first.first->N(0) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_BAR:
+              case ISOPARAMETRIC_QUADRATIC_BAR:
+              case LINEAR_BAR: {
+                    // here the nodes at the endpoints are used
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              default:
+                csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements",
+                                   parseFiniteElementType(etype), "face type of element could not be parsed.");
+                
+           }
+         iface_count++;
+      }
+      
+    // drawing the results together: those segments that have only a singe Face neighbor consist of nodes that lie at the perimeter of the InterFace patch
+    vector<Node<dim>*> perimeter_node_ptrs;
+    for ( auto& it : segment_nbors )
+      if ( it.second.size() == 1U )
+        for ( auto& nit : it.first )
+          perimeter_node_ptrs.push_back( nit );
+    // sorting and removing duplicates from vector, making it searchable
+    sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+    perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
+    
+    
+    // 2. Creating InterFace objects, duplicating nodes and dealing with boundaries
+    // ----------------------------------------------------------------------------
+    // tracking already duplicated nodes to avoid further duplication
+    //  original,  duplicate
+    map<Node<dim>*,Node<dim>*>  new_nodes;
+    
+    for ( const auto& it : matching_elmts )
+      {
+         // 2.1 duplicating nodes but only if we are at a model boundary or the node already is a manifold
+         // ----------------------------------------------------------------------------------------------
+         // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
+         vector<uint32_t> fnids;
+         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+         const auto         n_nodes{ fnids.size() };
+         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         auto               nit{ new_nodes.end() };
+         
+         for ( auto i{0U}; i<n_nodes; i++ ) {
+             // if the node is not a perimeter node it will get duplicated
+             if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N( fnids[i] ) ) ) {
+                  outside_nodes[i] = Duplicate( it.first.first->N(i), OUTSIDE );
+               }
+             // perimeter nodes are duplicated only if they are located on the model boundary or they are manifolds
+             else if ( it.first.first->N( fnids[i] )->AtBoundary() != NOT || it.first.first->N( fnids[i] )->IsManifold() ) {
+                  if ( (nit=new_nodes.find(it.first.first->N( fnids[i] ))) == new_nodes.end() ) {
+                       outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE );
+                       new_nodes.insert( make_pair( it.first.first->N( fnids[i] ), outside_nodes[i] ) );
+                    }
+                  else outside_nodes[i] = (*nit).second;
+               }
+             else outside_nodes[i] = it.first.first->N( fnids[i] );
+           }
+
+         // turning the nodes from counterclockwise to clockwse because they will go on the opposite side of the interface
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+
+         // 2.3 construction of InterFace on the model perimeter
+         // ----------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         //     - boundaries are inferred, when:
+         //       - BOX_BOUNDARY flag is !NOT
+         interface_ptrs.push_back( AddInterFace( it.first.first, it.first.second,
+                                                 it.second.first, it.second.second,
+                                                 lvars, ivars, outside_nodes ) );
+      }
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
+     cout << new_nodes.size() <<" new nodes."<< endl;
+     
+     return interface_ptrs;
+     
+  } // end CreateInterFacesBetweenNodeSharingElements
 
 
 
@@ -2279,7 +2504,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
            for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
-                if ( n_face_nbors == 2 ) {
+                if ( n_face_nbors == 2U ) {
                      CELL<dim>* const ptr1  = (*it.second.begin()).first;
                      CELL<dim>* const ptr2  = (*it.second.rbegin()).first;
                      const uint32_t face_e1 = (*it.second.begin()).second;
@@ -2288,7 +2513,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      ptr2->Assign( face_e2, ptr1 );
                   }
                 // else this is a manifold and two most suitable neighbors must be found
-                else if ( n_face_nbors > 2 ) { // TODO: test
+                else if ( n_face_nbors > 2U ) { // TODO: test
                      // finding all possible combinations of surface elements
                      vector<int64_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
@@ -2379,6 +2604,183 @@ template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<
 
 
 
+/**
+       Special method to obtain the connectivity of InterFace objects, which is tricker because InterFace nodes are multiplicated. Yet these node clusters are grouped into NodeManifold objects.
+       Thus, rather than creating keys from Node pointers to match the faces of the InterFaces with one-another, this method uses the NodeManifold pointers.
+       
+       @note When InterFace nodes are the same on either side of the InterFace and there is no manifold object, the method casts the node pointers into Manfifolds to still permit a comparison.
+       
+       @note because InterFaces are lines in 2D and surfaces in 3D, the disambiguation in the case where there are multiple neighbors is dimension dependent.
+       Correspondingly, there are constexpr compile time pathways that distinguish the proceduures for them.
+       
+       @attention method does not touch the connectivity of interfaces to their higher dimensional neighbors
+       
+       @author SKM
+       @date 10/4/22
+*/
+template<uint32_t dim>
+void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFace<dim>*>::const_iterator first,
+                                                   typename std::vector<InterFace<dim>*>::const_iterator last )
+   {
+      // for InterFaces = surface elements in s 3D model
+      // -----------------------------------------------
+      if constexpr ( dim == 3U ) {
+           // creating search keys from the corner nodes of the interface faces
+           // corner-nodes      interfaces that share face and their face id
+           map<set<NodeManifold<3U>*>,map<InterFace<3U>*,uint32_t> >  elmt_pairs;
+
+           // pairing the cells up in the search map
+           const auto cellsEnd{last};
+           while ( first != cellsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( auto face{0}; face < n_faces; ++face ) {
+                     // getting node-manifold pointers from set of pointers to face corner nodes
+                     set<NodeManifold<3U>*> manifold_ptrs;
+                     for ( const auto& nit : (*first)->CornerNodesOfFace(face) ) {
+                           if ( nit->IsManifold() ) manifold_ptrs.insert( nit->Manifold() );
+                           else manifold_ptrs.insert( reinterpret_cast<NodeManifold<3U>*>(nit) );
+                        }
+                     auto it = elmt_pairs.insert( make_pair( manifold_ptrs, map<InterFace<3U>*,uint32_t>{{*first,face}} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<InterFace<3U>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the cells to one another
+           for ( auto& it : elmt_pairs ) {
+                const size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2U ) {
+                     InterFace<3U>* const ptr1  = (*it.second.begin()).first;
+                     InterFace<3U>* const ptr2  = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*it.second.begin()).second;
+                     const uint32_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is an interface manifold and two most suitable surface neighbors must be found
+                else if ( n_face_nbors > 2U ) { // TODO: test
+                     // finding all possible combinations of surface elements
+                     vector<int64_t> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t n_samples{2U};
+                     deque<vector<int64_t> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces or line elements with the smallest acute angle between them
+                     map<double,size_t>  ordered_combinations;
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                          InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          assert( ptr1 != nullptr );
+                          assert( ptr2 != nullptr );
+                          const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
+                                                   angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
+                          // using smallest angle
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi = (*ordered_combinations.begin()).second;
+                     InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
+                     InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const uint32_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+      // for line elements, interfaces in a 2D model
+      // -------------------------------------------
+      if constexpr ( dim == 2U ) {
+           map<set<NodeManifold<2U>*>,map<InterFace<2U>*,uint32_t> > elmt_pairs;
+           const auto cellsEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != cellsEnd ) {
+                assert( (*first) != nullptr );
+                const auto n_faces{ (*first)->Faces() };
+                for ( auto face{0U}; face < n_faces; ++face ) {
+                     // getting node-manifold pointers from set of pointers to face corner nodes
+                     set<NodeManifold<2U>*> manifold_ptrs;
+                     for ( const auto& nit : (*first)->CornerNodesOfFace(face) ) {
+                           if ( nit->IsManifold() ) manifold_ptrs.insert( nit->Manifold() );
+                           else manifold_ptrs.insert( reinterpret_cast<NodeManifold<2U>*>(nit) );
+                        }
+                     auto it = elmt_pairs.insert( make_pair( manifold_ptrs, map<InterFace<2U>*,uint32_t>{{*first,face}} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<InterFace<2U>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the elements to one another
+           for ( auto& it : elmt_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2U ) {
+                     InterFace<2U>* const ptr1  = (*it.second.begin()).first;
+                     InterFace<2U>* const ptr2  = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*it.second.begin()).second;
+                     const uint32_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+                else if ( n_face_nbors > 2U ) {
+                     // finding all possible combinations of surface elements
+                     vector<int64_t> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t n_samples{2U};
+                     deque<vector<int64_t> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces with the smallest acute angle between them
+                     map<double,size_t>  ordered_combinations;
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                          InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          const double angle = angleBetweenLineCells( ptr1, ptr2 );
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi = (*ordered_combinations.begin()).second;
+                     InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
+                     InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
+                     const uint32_t face_e1  = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const uint32_t face_e2  = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+ } // end BuildSurfaceElementConnectivity
+
+
 
 
 /**
@@ -2427,7 +2829,8 @@ void MeshManager<dim>::UpdateConnectivity()
          vector<InterFace<dim>*> iface_ptrs;
          iface_ptrs.reserve( faces_.size() );
          for ( auto& it : interfaces_ ) iface_ptrs.push_back( &it );
-         BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
+         // BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
+         BuildInterFaceConnectivity( iface_ptrs.begin(), iface_ptrs.end() );
       }
     
     // 1. (Re)-creating node connectivity to parent elements
@@ -2469,7 +2872,7 @@ void MeshManager<dim>::UpdateConnectivity()
     // ------------------------
     // TODO: extend the update procedure to include potential NodeManifolds
     if ( node_manifold_manager_ != nullptr )
-      ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not updated by this method yet");
+      ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
     
  } // end UpdateConnectivity
 

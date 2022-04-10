@@ -665,22 +665,108 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
 /**
 
-Creates SplitBoundary via the creation of a boundary between region.
-The original boundary gets removed.
+Creates SplitBoundary between two unique regions that share nodes along their perimeter.
+The first region will be placed on the inside of the new split boundary.
+
+@param region1_name name of the unique region that shall be on the inside of the new split boundary
+@param region2_name of the unique region that touches (shares nodes with)  region1 and shall become the outside region of the new split boundary
+
+@note Method will add new Node and InterFace objects to the model
+
+@note method does not create a temporary Boundary on the way to the SplitBoundary construction
 
 @author SKM
 @date 25/1/20
 
  */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1, const char* region2 )
+pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1_name, const char* region2_name )
  {
-   SPLITBOUNDARY_COMPLEX<dim>*  modelComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    SPLITBOUNDARY_COMPLEX<dim>*  modelComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+  
+    // 1. initial diagnostics verifying inputs and whether the two regions indicate have a shared interface
+    // ----------------------------------------------------------------------------------------------------
+    if ( string{region1_name} == region2_name ) {
+         csmp_error.notice( ERROR, "BoundaryInterface::CreateSplitBoundaryBetween:", "Provided Regions are the same.");
+         return make_pair("split boundary not created",false);
+      }
+    if ( !modelComplex->IsUnique(region1_name) || !modelComplex->IsUnique(region2_name) ) {
+         csmp_error.notice( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:", "This method only works for unique Region objects");
+         return make_pair("split boundary not created",false);
+      }
    
-   pair<string,bool> result = modelComplex->BoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateBoundaryBetween( region1, region2 );
+    const csmp::Region<dim>&  region1(modelComplex->Region(region1_name));
+    const csmp::Region<dim>&  region2(modelComplex->Region(region2_name));
+    // corner-node-ptrs Elements adjacent to interface and their face numbers (inside elements will be first in pair)
+    map<set<Node<dim>*>,pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  shared_perimeter_faces;
+    // is there a shared interface? - looping over the perimeter faces of the adjacent regions
+    
+    // starting with region1
+    for ( size_t i{ region1.InteriorCells() }; i<region1.Cells(); i++ )
+      for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
+           auto pface = region1.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           shared_perimeter_faces.insert( make_pair( region1.E(i)->CornerNodesOfFace(pface),
+                                          make_pair( make_pair( region1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+        }
+    // for the second region2, do the same, but when matching faces are found corresponding elements and face ids are assigned to second element-face pair
+    size_t n_matching_faces{0U};
+    for ( size_t i{ region2.InteriorCells() }; i<region2.Cells(); i++ )
+      for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
+           auto pface = region2.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
+                                                    make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+           // if a matching face is found
+           if ( it.second == false ) { // no new insertion could be made into map with unique keys
+                (*it.first).second.second = make_pair( region2.E(i), pface );
+                n_matching_faces++;
+             }
+        }
+
+    if ( n_matching_faces == 0U ) {
+         csmp_error.notice( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:", "the 2 input regions do not share any faces; has this boundary been split before?");
+         return make_pair("split boundary not created",false);
+      }
+
    
-   assert( result.second == true );
-   return CreateSplitBoundaryFrom( modelComplex->Boundary(result.first) );
+    // 2. creation of the new SplitBoundary
+    // ------------------------------------
+    string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
+    // collecting the required element pairs from the perimeter face vector
+    vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matching_elmts;
+    matching_elmts.reserve( shared_perimeter_faces.size() );
+    for ( const auto& pit : shared_perimeter_faces )
+      if ( pit.second.second.first != nullptr )
+        matching_elmts.emplace_back( pit.second );
+        
+    // creating the necessary interfaces and nodes and updating the connectivity of the mesh
+    vector<InterFace<dim>*>  interfaces = modelComplex->Mesh().CreateInterFacesBetweenNodeSharingElements( modelComplex->Database(), matching_elmts );
+    
+    // attempt to create a (Face-based) boundary, appending numbers as necessary
+    pair<typename map<string,csmp::SplitBoundary<dim> >::iterator,bool>
+      it = splitBoundaryMap_.insert( make_pair( split_boundary_name, csmp::SplitBoundary<dim>( split_boundary_name, modelComplex->Database() ) ) );
+
+    if ( it.second ) {
+        cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: creating boundary between ";
+        cout << region1_name << " and " << region2_name << endl;
+        bool succeeded = (*it.first).second.CreateFrom( interfaces.begin(), interfaces.end() );
+ 
+        if ( !succeeded )
+          csmp_error.notice( WARNING, "SplitBoundaryInterFace::CreateSplitBoundaryBetween:",
+                          "The regions of interest do not share any nodes; trying to create a boundary");
+        else {
+             cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: created boundary between ";
+             cout << region1_name << " and " << region2_name << endl;
+             return make_pair(split_boundary_name,true);
+          }
+      }
+    else throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
+                                split_boundary_name, "split boundary already exists. Nothing was done.");
+
+    return make_pair("split boundary not created",false);
 
  } // end InsertSplitBoundary
 

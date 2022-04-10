@@ -72,7 +72,10 @@ class ModelSubDomain {
     virtual PLACEMENT Placement() const = 0;
     virtual bool      ValidVariable( const char* variableName ) const;
 
+    /// support of the Visitor pattern
     virtual void Accept( Visitor<dim>& );
+    
+    /// modification via Operand-based relations between discretised properties that only modify a single result variable
     void Apply( Interrelation<dim>& );
     
     /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
@@ -98,8 +101,7 @@ class ModelSubDomain {
     /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
     size_t RemoveNullPointerCells();
     
-    /// flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
-    // TODO: how much is this actually used? - deprecate?
+    /// for remeshing:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
     void ScheduleForRebuilt();
     bool NeedsRebuilt() const;
 
@@ -139,13 +141,13 @@ class ModelSubDomain {
     typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const;
     typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const;
 
-    /// returns the nodes that the domain shares with the given range
+    /// returns how many of the supplied range of nodes form part of the model subdomain's perimeter
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
                                  typename std::vector<csmp::Node<dim>*>::const_iterator end ) const;
 
     /// check whether subdomain conatains any cells
     bool              Empty() const;
-
+    
     size_t            Nodes() const;
     size_t            InteriorNodes() const;
     size_t            PerimeterNodes() const;
@@ -155,22 +157,23 @@ class ModelSubDomain {
     size_t            Cells() const;
     size_t            InteriorCells() const;
     size_t            PerimeterCells() const;
-
-    // access via objects and local order in containers
+    
     bool              Contains( const CELL<dim>* const ) const;
     bool              Contains( const Node<dim>* const ) const;
+    
     bool              IsPerimeterNode( const csmp::Node<dim>* const ) const;
     bool              IsPerimeterCell( const CELL<dim>* const ) const;
-    /// number of faces of perimeter cell #eid, that lie on subdomain surface; @attention member indexes must be are uptodate
+    
+    /// for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline
     uint32_t          PerimeterFaces( size_t eid ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
     uint32_t          PerimeterFace( size_t eid, uint32_t face ) const;
+
     /// pointer to node #n in subdomain; @attention node can vary from initialization to initialization
     csmp::Node<dim>*  N( size_t n ) const;
     /// pointer to cell #n of model subdomain
     CELL<dim>*        E( size_t n ) const;
 
-    // access via object indexes( note: use with caution )
     /// is the node located on the surface of the model subdomain?
     bool              IsPerimeterNode( const size_t nidx ) const;
     /// does the cell have at least on face on the surface of the model subdomain?

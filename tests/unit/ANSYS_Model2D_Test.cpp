@@ -370,6 +370,7 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     // 1. creating the SplitBoundary from lower-dimensional region
     size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
     size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Cells();
+
     pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
     pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
     assert( splitBoundaryName1.first.size() == 1 );
@@ -384,11 +385,13 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
         
     model.RegionsOut();
 
-    // 3. Creating a split boundary between regions (detecting that there already is that split boundary)
+    // 3. Directly creating a split boundary between regions (should not work leading to detection that there already is a split boundary)
     model.CreateSplitBoundaryBetween( "LOWER_REGION", "MIDDLE_REGION" ); // INTERFACE 2
 
     // 4. Creating a split boundary between regions (detecting the disjointed nodes?)
-    model.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
+    ANSYS_Model2D model2( model2d_name_.c_str(), varFileName.c_str() );
+    // now the nodes are shared so this should work
+    model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
 
 
 } // end Test_CreatInternalBoundary
