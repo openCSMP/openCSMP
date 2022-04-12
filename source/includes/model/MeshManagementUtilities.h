@@ -203,6 +203,12 @@ std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>:
 template<uint32_t dim>
 size_t  printLineElementRegion( const Model<dim>&, const char* region_name, bool renumber_nodes );
 
+/// prints the idx and coordinates of the supplied nodes in a format that can be pasted into a spreadsheet
+template<uint32_t dim>
+void printNodeCoordinates( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+
+
 } // end csmp
 
 #endif /* CSMP_MESH_MANAGEMENT_UTILITIES_H */

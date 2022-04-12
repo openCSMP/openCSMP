@@ -150,6 +150,11 @@ public:
                                                 const LocalVariables& node_variables,
                                                 BOX_BOUNDARY = NOT );
 
+   /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
+  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside,
+                                  INTERFACE_SIDE new_node_side,
+                                  const LocalVariables& lvars );
+
   /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,
                                   const LocalVariables& element_variables,
@@ -210,10 +215,6 @@ public:
                                       const LocalVariables& interface_variables,
                                       const IntegrationPointVariables& interface_integration_point_variables,
                                       std::vector<Node<dim>*> outside_nodes );
-
-   /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
-  Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
-                                   INTERFACE_SIDE new_node_side );
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();

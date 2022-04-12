@@ -730,6 +730,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
 
   MeshManager<3U>&           mesh(model.Mesh());
   bool                       interface_constructed(false);
+  LocalVariables				     nvars  = model.Database().LocalVariablesAt(NODE);
   LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
 	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
   const size_t n_original_ifaces = mesh.InterFaces();
@@ -754,9 +755,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
             for ( auto j=0U; j<fnids.size(); ++j ) {
-                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE );
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, nvars );
                  middle_nodes.push_back( mnptr );
-                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, nvars );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes

@@ -703,7 +703,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     map<set<Node<dim>*>,pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  shared_perimeter_faces;
     // is there a shared interface? - looping over the perimeter faces of the adjacent regions
     
-    // starting with region1
+    // starting with region1 - assuming that no face-matching can occur at this stage
     for ( size_t i{ region1.InteriorCells() }; i<region1.Cells(); i++ )
       for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
            auto pface = region1.PerimeterFace(i,j);
@@ -731,8 +731,15 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
          return make_pair("split boundary not created",false);
       }
 
-   
-    // 2. creation of the new SplitBoundary
+    // 2. Eliminating the single element entries from the 'shared_perimeter_faces' map
+    // -------------------------------------------------------------------------------
+    for ( auto it = shared_perimeter_faces.begin(); it != shared_perimeter_faces.end() /* not hoisted */; /* no increment */ ) {
+         // there is only a single element in the Element-pointer pair, the map entry will be deleted
+         if ( (*it).second.second.first == nullptr ) it = shared_perimeter_faces.erase(it); // since C++11
+         else ++it;
+      }
+
+    // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
     // collecting the required element pairs from the perimeter face vector
@@ -742,7 +749,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       if ( pit.second.second.first != nullptr )
         matching_elmts.emplace_back( pit.second );
         
-    // creating the necessary interfaces and nodes and updating the connectivity of the mesh
+    // creating the necessary interfaces and nodes, and updates the connectivity of the mesh
     vector<InterFace<dim>*>  interfaces = modelComplex->Mesh().CreateInterFacesBetweenNodeSharingElements( modelComplex->Database(), matching_elmts );
     
     // attempt to create a (Face-based) boundary, appending numbers as necessary
@@ -768,7 +775,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
     return make_pair("split boundary not created",false);
 
- } // end InsertSplitBoundary
+ } // end CreateSplitBoundaryBetween
 
 
 
@@ -806,6 +813,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
      csmp::SplitBoundary<dim>&    splitBoundary( model->SplitBoundary(split_boundary) );
      csmp::MeshManager<dim>&      mesh( model->Mesh() );
+     const LocalVariables&        lvars( model->Database().LocalVariablesAt( NODE ) );
      
      // 1. creating unique set of nodes matching those on the inside of the SplitBoundary in position
      // --------------------------------------------------------------------------------------------------------------------------
@@ -829,10 +837,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
                          if ( nptr != nullptr )
                            node_pointers.push_back( nptr );
                          else // a new node has to be generated
-                           node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE ) );
+                           node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
                       }
                     //                            inserts the new node it creates into the corresponding NodeManifold
-                    else node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE ) );
+                    else node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
                  }
                // else the already created new node is added
                else node_pointers.push_back( (*nit.first) );

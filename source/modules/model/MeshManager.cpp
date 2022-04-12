@@ -1429,17 +1429,18 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 */
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
-                                              INTERFACE_SIDE new_node_side )
+                                              INTERFACE_SIDE new_node_side,
+                                              const LocalVariables& lvars )
   {
     if ( nptr_inside == nullptr )
       throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node pointer is a 'nullptr'.");
 
     // copying the inside node to create a new node
-    auto nit = nodes_.insert( Node<dim>( *nptr_inside ) );
+    auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary() );
 
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
-         // if we are already dealing with a manifold, its geometric classifier is retained
+         // if we are already dealing with a manifold, the new node is added to it
          nptr_inside->Manifold()->Add( &(*nit), new_node_side );
          (*nit).Assign( (*nptr_inside->Manifold()) );
       }
@@ -1651,6 +1652,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
     if ( no_previous_manifolds )
       node_manifold_manager_ = new NodeManifoldManager<dim>();
     
+    const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
     const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
     const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
     
@@ -1679,7 +1681,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            // if there a matching outside node has not been created yet
            if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE );
+                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
                 new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
              }
            // if the necessary new node was already created earlier it was retrieved and is assigned here
@@ -1718,7 +1720,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
                 if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE );
+                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
                      new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
                   }
                 else outside_nodes[i] = (*nit).second;
@@ -1759,7 +1761,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
-                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& matching_elmts )
+                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1767,17 +1769,18 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
     const size_t  n_original_faces{ interfaces_.size() };
     vector<InterFace<dim>*>  interface_ptrs;
 
-    if ( matching_elmts.empty() ) {
+    if ( interface_nbor_elmts.empty() ) {
          csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
          return interface_ptrs;
       }
-    else interface_ptrs.reserve( matching_elmts.size() );
+    else interface_ptrs.reserve( interface_nbor_elmts.size() );
     
     // Constructing the node manifold manager if necessary
     const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
     if ( no_previous_manifolds )
       node_manifold_manager_ = new NodeManifoldManager<dim>();
     
+    const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
     const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
     const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
     
@@ -1786,76 +1789,30 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
     // - from the corner nodes of the element faces that will be at the interface, segment keys are made
     // - the faces are numbered
     // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
-    // segment key,     face labels (if there are more than 2, the segment is on the inside of interface patch)
-    map<set<Node<dim>*>,set<size_t> > segment_nbors;
-    size_t iface_count{0U};
-    for ( const auto& it : matching_elmts ) {
-         // using the elements on the future inside of the interface to get face diagnosts
-         const CSMP_FEM_TYPE etype = it.first.first->FE()->ElementTypeOfFace( it.first.second );
+    vector<Node<dim>*>  perimeter_node_ptrs;  perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
+    size_t              iface_count{0U};
+    
+    for ( const auto& it : interface_nbor_elmts ) {
          vector<uint32_t> fnids;
          it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-         // getting the segment nodes from these face-nodes assuming that the first nodes are the corner nodes
-         switch( etype ) {
-              case ISOPARAMETRIC_LINEAR_TRIANGLE:
-              case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
-              case LINEAR_TRIANGLE:
-              case LINEAR_TRIANGLE3D: {
-                    // segment 1, of the three segments given by the corner nodes of the triangular face
-                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(0) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                  }
-                break;
-              case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
-              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
-              case LINEAR_RECTANGLE: {
-                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(3) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(3), it.first.first->N(0) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                  }
-                break;
-              case ISOPARAMETRIC_LINEAR_BAR:
-              case ISOPARAMETRIC_QUADRATIC_BAR:
-              case LINEAR_BAR: {
-                    // here the nodes at the endpoints are used
-                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
-                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
-                  }
-                break;
-              default:
-                csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements",
-                                   parseFiniteElementType(etype), "face type of element could not be parsed.");
-                
-           }
+         for ( const auto& i : fnids )
+           perimeter_node_ptrs.push_back( it.first.first->N(i) );
          iface_count++;
       }
       
-    // drawing the results together: those segments that have only a singe Face neighbor consist of nodes that lie at the perimeter of the InterFace patch
-    vector<Node<dim>*> perimeter_node_ptrs;
-    for ( auto& it : segment_nbors )
-      if ( it.second.size() == 1U )
-        for ( auto& nit : it.first )
-          perimeter_node_ptrs.push_back( nit );
     // sorting and removing duplicates from vector, making it searchable
     sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
     perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
-    
-    
+    // printNodeCoordinates<dim>( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+
+
     // 2. Creating InterFace objects, duplicating nodes and dealing with boundaries
     // ----------------------------------------------------------------------------
     // tracking already duplicated nodes to avoid further duplication
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
     
-    for ( const auto& it : matching_elmts )
+    for ( const auto& it : interface_nbor_elmts )
       {
          // 2.1 duplicating nodes but only if we are at a model boundary or the node already is a manifold
          // ----------------------------------------------------------------------------------------------
@@ -1869,12 +1826,14 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
          for ( auto i{0U}; i<n_nodes; i++ ) {
              // if the node is not a perimeter node it will get duplicated
              if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N( fnids[i] ) ) ) {
-                  outside_nodes[i] = Duplicate( it.first.first->N(i), OUTSIDE );
+                  outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE, nvars );
+                  new_nodes.insert( make_pair( it.first.first->N( fnids[i] ), outside_nodes[i] ) );
                }
              // perimeter nodes are duplicated only if they are located on the model boundary or they are manifolds
              else if ( it.first.first->N( fnids[i] )->AtBoundary() != NOT || it.first.first->N( fnids[i] )->IsManifold() ) {
                   if ( (nit=new_nodes.find(it.first.first->N( fnids[i] ))) == new_nodes.end() ) {
-                       outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE );
+                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
+                       outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE, nvars );
                        new_nodes.insert( make_pair( it.first.first->N( fnids[i] ), outside_nodes[i] ) );
                     }
                   else outside_nodes[i] = (*nit).second;
@@ -1909,6 +1868,52 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
      return interface_ptrs;
      
   } // end CreateInterFacesBetweenNodeSharingElements
+
+
+
+
+/* STILL USEFUL?
+
+         // getting the segment nodes from these face-nodes assuming that the first nodes are the corner nodes
+         switch( etype ) {
+              case ISOPARAMETRIC_LINEAR_TRIANGLE:
+              case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+              case LINEAR_TRIANGLE:
+              case LINEAR_TRIANGLE3D: {
+                    // segment 1, of the three segments given by the corner nodes of the triangular face
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N( fnids[1] ), it.first.first->N( fnids[2] ) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(fnids[2]), it.first.first->N(fnids[0]) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(fnids[0]), it.first.first->N(fnids[1]) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+              case LINEAR_RECTANGLE: {
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(3) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(3), it.first.first->N(0) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_BAR:
+              case ISOPARAMETRIC_QUADRATIC_BAR:
+              case LINEAR_BAR: {
+                    // here the nodes at the endpoints are used
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              default:
+                csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements",
+                                   parseFiniteElementType(etype), "face type of element could not be parsed.");
+*/
 
 
 
@@ -2737,8 +2742,8 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2U ) {
-                     InterFace<2U>* const ptr1  = (*it.second.begin()).first;
-                     InterFace<2U>* const ptr2  = (*it.second.rbegin()).first;
+                     InterFace<2U>* const ptr1 = (*it.second.begin()).first;
+                     InterFace<2U>* const ptr2 = (*it.second.rbegin()).first;
                      assert( ptr1 != nullptr );
                      assert( ptr2 != nullptr );
                      const uint32_t face_e1 = (*it.second.begin()).second;

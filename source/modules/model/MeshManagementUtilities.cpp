@@ -2442,6 +2442,8 @@ template size_t collocatedNodes( const Element<3>* const );
 
 
 
+
+
 /// pretty prints line elements as a chain from beginning to end
 template<uint32_t dim>
 size_t printLineElementRegion( const Model<dim>& model, const char* region_name, bool renumber_nodes )
@@ -2525,5 +2527,39 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
 template size_t printLineElementRegion( const Model<3U>&, const char*, bool );
 template size_t printLineElementRegion( const Model<2U>&, const char*, bool );
 
+
+
+
+/**
+    Prints coordinates of range of nodes nodes in a spread-sheet plottable format
+*/
+template<uint32_t dim>
+void printNodeCoordinates( typename vector<Node<dim>*>::const_iterator first,
+                           typename vector<Node<dim>*>::const_iterator last )
+ {
+     size_t n_nodes = distance(first,last);
+     if ( n_nodes == 0 ) {
+          cerr <<"\nprintNodeCoordinates: supplied iterator range is empty, nothing could be printed."<< endl;
+          return;
+       }
+       
+     cout <<"\n"<<"printNodeCoordinates: printing range of "<< n_nodes <<" nodes. Idx followed by coordinate values:"<< endl;
+     cout <<"\n"<<"idx, x";
+     if constexpr ( dim == 2U ) cout <<", y"<< endl;
+     if constexpr ( dim == 3U ) cout <<", y, z"<< endl;
+     
+     while ( first != last ) {
+          assert( (*first) != nullptr );
+          cout << (*first)->Idx() <<", "<< (*first)->x();
+          for ( auto i{1U}; i<dim; i++ ) cout <<", "<< (*(*first))[i];
+          cout << endl;
+          first++;
+       }
+     
+ } // end printNodeCoordinates
+
+template void printNodeCoordinates<3U>( typename vector<Node<3U>*>::const_iterator, typename vector<Node<3U>*>::const_iterator );
+template void printNodeCoordinates<2U>( typename vector<Node<2U>*>::const_iterator, typename vector<Node<2U>*>::const_iterator );
+template void printNodeCoordinates<1U>( typename vector<Node<1U>*>::const_iterator, typename vector<Node<1U>*>::const_iterator );
 
 } // end csmp

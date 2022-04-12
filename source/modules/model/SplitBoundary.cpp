@@ -398,7 +398,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
   // creating the node index vector
   set<csmp::Node<dim>*>  nodes_set;
   for ( typename vector<InterFace<dim>*>::const_iterator it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-    for ( typename vector<Node<dim>*>::size_type i{0U}; i<(*it)->FE()->Nodes(); i++ )
+    for ( auto i{0U}; i<(*it)->FE()->Nodes(); i++ )
     {
       nodes_set.insert( (*it)->N( i, INSIDE ) );
       nodes_set.insert( (*it)->N( i, OUTSIDE ) );
@@ -505,7 +505,7 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
        return false;
     }
   if ( (*ifacesBegin)->ConnectedNeighbors() == 0 ) {
-       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom", "some supplied InterFace objects do not have neighbors; nothing was done");
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom:", "some supplied InterFace objects do not have neighbors; nothing was done");
        return false;
     }
     
@@ -563,16 +563,16 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( dim != 3U ) {
+  if constexpr ( dim != 3U ) {
     csmp_error.notice( WARNING, "SplitBoundary<>::Perimeter:",
                        "returning 1.0 since perimeter is a point." );
     return 1.;
   }
 
-  double        perimeter_length( 0. );
-  vector<uint32_t>  fnids;
-  size_t          n = this->InteriorCells();
+  double perimeter_length{0.};
+  size_t n{ this->InteriorCells() };
 
+  vector<uint32_t>  fnids;
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ )
     for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
