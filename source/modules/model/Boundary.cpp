@@ -854,10 +854,10 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       if ( inner_outer_elements.second != nullptr ) {
           pair<size_t,size_t> face_ids = findAdjacentElementFaces( inner_outer_elements.first, inner_outer_elements.second );
           // create new internal face
-          this->cell_vec_.push_back( meshManager.ConstructFaceFromElement( (*it),
-                                                                            inner_outer_elements.first, inner_outer_elements.second,
-                                                                            face_ids.first, face_ids.second,
-                                                                            lvsFaces, lvsIntegrationPoints ) );
+          this->cell_vec_.push_back( meshManager.ReplaceElementByFace( (*it),
+                                                                       inner_outer_elements.first, inner_outer_elements.second,
+                                                                       face_ids.first, face_ids.second,
+                                                                       lvsFaces, lvsIntegrationPoints ) );
         }
       else { // if this is a Face at the model boundary
           size_t face{0};
@@ -1126,13 +1126,29 @@ This method assumes that the connectivity between the elements is up to date.
 Variable storage is assigned to the faces.
 
 */
+/*
 template<uint32_t dim>
 bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
                                    const Region<dim>& region2,
                                    MeshManager<dim>& meshManager )
 {
-  if ( string(region1.Name()) == region2.Name() )
-    throw csmp::Exception( ERROR, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( string(region1.Name()) == region2.Name() ) {
+       csmp_error.notice( WARNING, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
+       return false;
+    }
+    
+  // checking whether there are any shared perimeter nodes
+  set<Node<dim>*> shared_perimeter_nodes;
+  set_intersection( region1.PerimeterNodesBegin(),region1.NodesEnd(),
+                    region2.PerimeterNodesBegin(), region2.NodesEnd(),
+                    inserter(shared_perimeter_nodes,shared_perimeter_nodes.begin()));
+                    
+  if ( shared_perimeter_nodes.empty() ) {
+       csmp_error.notice( ERROR, "Boundary<dim>::CreateBetween:", "supplied regions do not share any perimeter nodes; nothing was done." );
+       return false;
+    }
     
   // LVS
   const LocalVariables lvsFaces( FaceVariables() );
@@ -1202,7 +1218,7 @@ bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
   return true;
 
 } // CreateBetween
-
+*/
 
 
 

@@ -78,7 +78,7 @@ template<uint32_t> class PropertyDatabase;
                      double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                      VARIABLE_FLAG flag = ANY );
       
-      explicit ArrayVariable( size_t arraySize,
+      explicit ArrayVariable( unsigned int arraySize,
                               double defaultValue = 0.,
                               VARIABLE_FLAG flag = ANY );
       
@@ -131,20 +131,19 @@ template<uint32_t> class PropertyDatabase;
       bool           operator<( const ArrayVariable& ) const;
 
       /// accessors to the data
-      double&        operator()( size_t );
-      double         operator[]( size_t ) const;
-      void           Component( size_t, double );
-      double         Component( size_t ) const;
+      double&        operator()( uint32_t );
+      double         operator[]( uint32_t ) const;
+      
+      /// functions needed to make CSMP variables interoperable; do not delete
+      void           Component( uint32_t, double );
+      double         Component( uint32_t ) const;
 
+      /// returns number of array elements
       size_t         Size() const;
       void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag(  ) const;
       VARIABLE_FLAG& Flag(  );
       void           Flag( VARIABLE_FLAG flag );
-      void           Fabs();
-      void           Ln();
-      void           Log10();
-      void           Sqrt();
       bool           IsWithinRange( double min, double max ) const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();

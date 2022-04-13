@@ -5,7 +5,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 
   void ArrayVariable_Test::run()

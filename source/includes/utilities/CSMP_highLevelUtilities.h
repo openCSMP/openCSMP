@@ -8,7 +8,7 @@ namespace csmp {
 
 /**
 @file CSMP_highLevelUtilities.h
-@brief global csmp funtions
+@brief global functions for which no suitable place has yet been found in the code.
 @author S.K. Matthai
 */
 

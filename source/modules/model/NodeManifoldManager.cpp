@@ -108,6 +108,35 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
 
 
 
+
+/// creates a node manifold to which nodes can be added
+template<uint32_t dim>
+typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::AddManifold( plf::colony<Node<dim> >& nodes,
+                                                                                          Node<dim>* const inside,
+                                                                                          Node<dim>* const outside,
+                                                                                          ManifoldType manifold_type )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // both nodes must be manifolds
+     if ( inside == nullptr || outside == nullptr ) {
+          csmp_error.notice( ERROR, "NodeManifoldManager<dim>::AddManifold",
+                            "input parameters contain nullptr nodes; nothing can be done" );
+          return node_manifolds_.end();
+       }
+       
+    // constructing the manifold supplying references to the actual Node objects stored in the colony via iterators
+    auto inside_it  = nodes.get_iterator( inside );
+    auto outside_it = nodes.get_iterator( outside );
+    
+    // return node_manifolds_.insert( NodeManifold( (*inside_it), (*outside_it), manifold_type ) );
+    return node_manifolds_.insert( NodeManifold( (*inside_it), (*outside_it), manifold_type ) );
+
+ } // end AddManifold
+
+
+
+
 /**
     Tries to replace the two manifolds by a single one that connects all of  their nodes;
     succeeds if the two share nodes. Will return true in this case;
@@ -120,8 +149,14 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
 template<uint32_t dim>
 bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeManifold<dim>* nmf2 )
  {
-    assert( nmf1 != nullptr );
-    assert( nmf2 != nullptr );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // both nodes must be manifolds
+     if ( nmf1 == nullptr || nmf2 == nullptr ) {
+          csmp_error.notice( ERROR, "NodeManifoldManager<dim>::MergeManifolds",
+                            "input contains nullptr manifolds; nothing can be done" );
+          return false;
+       }
     
     // 1. do the manifolds share nodes
     // -------------------------------
@@ -177,56 +212,6 @@ void NodeManifoldManager<dim>::SortManifoldsByVariableValue( std::string var_nam
 
  
  
-/**
-   replace two separate node manifolds by a single one that contains the union of their nodes
-   
-   @return bool: if the manifolds share nodes, they can indeed be merged, else they are kept separate.
-   
-   @attention the new Manifold does not get sorted
-*/
-/* REFACTOR
-template<uint32_t dim>
-bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* mnf1, NodeManifold<dim>* mnf2 )
-  {
-     assert( mnf1 != nullptr );
-     assert( mnf2 != nullptr );
-     
-     // 1. making sure that the two manifolds actually share nodes
-     size_t sum_nodes = mnf1->Branches() + mnf2->Branches();
-     vector<pair<Node<dim>*,INTERFACE_SIDE> > combined_manifolds;
-     combined_manifolds.reserve(sum_nodes);
-     for ( auto i{0U}; i<mnf1->Branches(); ++i )
-       combined_manifolds.push_back( make_pair( mnf1->N(i), mnf1->InterFaceSide(i) ) );
-
-     // making the vector unique
-     sort( combined_manifolds.begin(), combined_manifolds.end() );
-     combined_manifolds.erase( unique(combined_manifolds.begin(), combined_manifolds.end()), combined_manifolds.end() );
-
-     // checking - if there are no shared nodes, the two manifolds cannot be merged
-     if ( combined_manifolds.size() == sum_nodes ) return false;
-     
-     // 2. creating a new temp manifold that gets assigned to mnf1
-     vector<Node<dim>*>     nodes; nodes.reserve( combined_manifolds.size() );
-     vector<INTERFACE_SIDE> sides; sides.reserve( combined_manifolds.size() );
-     for ( auto& it : combined_manifolds ) {
-          nodes.push_back( it.first );
-          sides.push_back( it.second );
-       }
-       
-     NodeManifold<dim> merged_manifold( nodes, sides, ManifoldType::INTERFACE );
-     // making sure it is appropriately classified in terms of the manifold geometry
-     ManifoldType mtype = consistencyCheck( merged_manifold );
-     merged_manifold.GeometricClassifier( mtype );
-     
-     // 3. replacing the first manifold with the new one
-     *mnf1 = merged_manifold;
-     // deleting the second one
-     Delete( mnf2 );
-
-     return true;
-     
-  } // end MergeManifolds
-*/
  
 
 
@@ -236,6 +221,8 @@ void NodeManifoldManager<dim>::Delete( NodeManifold<dim>* const md )
 {
    node_manifolds_.erase( node_manifolds_.get_iterator(md) );
 }
+
+
 
 
 /**

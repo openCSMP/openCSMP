@@ -196,18 +196,35 @@ bool ModelSubDomain<dim,CELL>::Empty() const
   }
 
 
+
 /**
+    To loop over the faces of the perimeter cells which lie on the subdomain boundary.
+    
+    @param cell_idx marks the location of the cell in  bd_face_vec_  and has to be in the range of InteriorCells() and total number of Cells in the subdomain-1U.
+    
+    To loop over all the boundary faces of a subdomain, use the following code snippet:
+    
+    @code
+    for ( size_t i{ subdomain.InteriorCells() }; i<subdomain.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain.PerimeterFaces(i); j++ ) {
+           auto perim_face = subdomain.PerimeterFace(i,j);
+           // get a normal to the cell face
+           Point<dim> unrml = subdomain.E(i)->FE()->Point<dim> UnitNormalToFace(j);
+           ...
+        }
+    @endcode
+        
     @return returns how many faces of the target cell lie on the subdomain boundary
  
     @attention the cell index that is supplied as a method argument has to
     range between e = interior cells and cells-1.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t e ) const
+uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
  {
-    assert( e >= InteriorCells() );
-    assert( e < cell_vec_.size() );
-    return static_cast<uint32_t>( bd_face_vec_[e - InteriorCells()].size() );
+    assert( cell_idx >= InteriorCells() );
+    assert( cell_idx < cell_vec_.size() );
+    return static_cast<uint32_t>( bd_face_vec_[cell_idx - InteriorCells()].size() );
  }
 
 
@@ -892,7 +909,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
   // creating the node index vector
   this->node_vec_.reserve( cell_vec_.size() * 4 );
   for ( auto it : this->cell_vec_ ) {
-       const size_t nodes{ it->Nodes() };
+       const auto nodes{ it->Nodes() };
        for ( auto i{0U}; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
             this->node_vec_.push_back( it->N( i ) );
@@ -4992,7 +5009,9 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
 
 
 /**
-    @return returns the number of nodes on the subdomain perimeter which are shared by the subdomain and a given model boundary
+     @param start iterator to beginning of range that will be checked for region membership
+     @param end iterator behind last element in the range
+     @return returns the number of nodes in the supplied range, which also form part of the perimeter of this model subdomain
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Node<dim>*>::const_iterator start,
@@ -5053,51 +5072,38 @@ PLACEMENT modelSubdomainType( const std::string& subdomain_name )
 
 /**
      Counts and returns the number of nodes shared between the two regions.
-     Special attention is paid to the fact the nodes are sorted in two ranges.
+     Special attention is paid to the fact the nodes are sorted in two separate ranges for the interior and exterior.
+     All potential combinations are considered.
      
-     @attention function assumes that both subdomains are valid, containing multiple nodes.
+     @attention function assumes that both subdomains are valid, containing no multiple nodes.
  */
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2 )
  {
-    auto   first1(g1.NodesBegin());
-    auto   first2(g2.NodesBegin());
-    size_t shared_nodes(0U);
+    // creating some copies of the sorted node vectors
+    vector<Node<dim>*>  g1_nodes( g1.NodeVector() );
+    vector<Node<dim>*>  g2_nodes( g2.NodeVector() );
+    // not much extra sorting is required because the separate ranges were already sorted
+    sort( g1_nodes.begin(), g1_nodes.end() );
+    sort( g2_nodes.begin(), g2_nodes.end() );
+    
+    vector<Node<dim>*> shared_nodes;
+    set_intersection( g1_nodes.begin(), g1_nodes.end(), g2_nodes.begin(), g2_nodes.end(),
+                      back_inserter(shared_nodes) );
 
-    // comparing the interior nodes
-    while ( first1 != g1.PerimeterNodesBegin() and first2 != g2.PerimeterNodesBegin() )
-      {
-        if ( *first1 < *first2 ) ++first1;
-        else if ( *first2 < *first1 ) ++first2;
-        else {
-             shared_nodes++;
-             first1++;
-             first2++;
-          }
-      }
-
-    // comparing the boundary nodes
-    first1 = g1.PerimeterNodesBegin();
-    first2 = g2.PerimeterNodesBegin();
-
-    while ( first1 != g1.NodesEnd() and first2 != g2.NodesEnd() )
-      {
-        if ( *first1 < *first2 ) ++first1;
-        else if ( *first2 < *first1 ) ++first2;
-        else {
-             shared_nodes++;
-             first1++;
-             first2++;
-          }
-      }
-
-    return shared_nodes;
+    return shared_nodes.size();
 
  } // end sharedNodes
 
 template size_t sharedNodes( const ModelSubDomain<1U,Element>& g1, const ModelSubDomain<1U,Element>& g2 );
 template size_t sharedNodes( const ModelSubDomain<2U,Element>& g1, const ModelSubDomain<2U,Element>& g2 );
 template size_t sharedNodes( const ModelSubDomain<3U,Element>& g1, const ModelSubDomain<3U,Element>& g2 );
+
+template size_t sharedNodes( const ModelSubDomain<1U,Face>& g1, const ModelSubDomain<1U,Face>& g2 );
+template size_t sharedNodes( const ModelSubDomain<2U,Face>& g1, const ModelSubDomain<2U,Face>& g2 );
+template size_t sharedNodes( const ModelSubDomain<3U,Face>& g1, const ModelSubDomain<3U,Face>& g2 );
+
+
 
 
 /** 
@@ -5107,26 +5113,30 @@ template size_t sharedNodes( const ModelSubDomain<3U,Element>& g1, const ModelSu
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2 )
  {
-    typename vector<Node<dim>*>::const_iterator  first1(g1.PerimeterNodesBegin());
-    typename vector<Node<dim>*>::const_iterator  first2(g2.PerimeterNodesBegin());
-    size_t shared_nodes(0U);
+    // creating some copies of the sorted node vectors
+    vector<Node<dim>*>  g1_nodes( g1.PerimeterNodesBegin(), g1.NodesEnd() );
+    vector<Node<dim>*>  g2_nodes( g2.PerimeterNodesBegin(), g2.NodesEnd() );
+    
+    // not sorting is required because the node ranges are already sorted
+    vector<Node<dim>*> shared_nodes;
+    set_intersection( g1_nodes.begin(), g1_nodes.end(), g2_nodes.begin(), g2_nodes.end(),
+                      back_inserter(shared_nodes) );
 
-    // comparing the boundary nodes
-    while ( first1 != g1.NodesEnd() and first2 != g2.NodesEnd() )
-      {
-        if ( *first1 < *first2 ) ++first1;
-        else if ( *first2 < *first1 ) ++first2;
-        else {
-             shared_nodes++;
-             first1++;
-             first2++;
-          }
-      }
-
-    return shared_nodes;
+    return shared_nodes.size();
 
  } // end sharedPerimeterNodes
 
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Element>& g1, const ModelSubDomain<1U,Element>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Element>& g1, const ModelSubDomain<2U,Element>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Element>& g1, const ModelSubDomain<3U,Element>& g2 );
+
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Face>& g1, const ModelSubDomain<1U,Face>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Face>& g1, const ModelSubDomain<2U,Face>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Face>& g1, const ModelSubDomain<3U,Face>& g2 );
+
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,InterFace>& g1, const ModelSubDomain<1U,InterFace>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,InterFace>& g1, const ModelSubDomain<2U,InterFace>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>& g1, const ModelSubDomain<3U,InterFace>& g2 );
 
 
 

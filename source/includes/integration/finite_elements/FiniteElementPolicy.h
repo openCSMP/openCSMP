@@ -88,8 +88,7 @@ class FiniteElementPolicy {
 
     /// interpolates node property values to the point of interest (in global coordinates); @attention costly for isoparametric elements
     template<class Var>
-    void       PropertyValueAt( const csmp::Index&,
-                                const std::vector<double>& xyz, Var& ) const;
+    void     PropertyValueAt( const csmp::Index&, const std::vector<double>& xyz, Var& ) const;
     /// scalar version
     double   PropertyValueAt( const csmp::Index&, const std::vector<double>& xyz ) const;
   

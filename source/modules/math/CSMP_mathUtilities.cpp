@@ -332,8 +332,10 @@ double splineValue( double x, double x1, double x2, double y1, double y2, double
 }
 
 
-
-double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2)
+/**
+      Central finite-difference approximation of the function.
+*/
+double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2 )
 {
     const double a =  k1*( x2-x1 ) - ( y2 - y1 );
     const double b = -k2*( x2-x1 ) + ( y2 - y1 );

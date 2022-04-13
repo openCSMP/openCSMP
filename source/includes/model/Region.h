@@ -17,11 +17,11 @@ template<uint32_t>   class Boundary;
 template<uint32_t>   class MeshManager;
 template<typename> class FEM_Data;
 
-/// returns number of nodes that are shared by the two subdomains
+/// returns number of nodes that are shared by the two subdomains; defined in ModelSubDomain.cpp
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 
-/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains
+/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains; defined in ModelSubDomain.cpp
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 
@@ -120,7 +120,9 @@ class Region : public ModelSubDomain<dim, Element>,
       
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
-    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+    void InputPropertyValue( const char* input_prop, const Var& new_value,
+                            VARIABLE_FLAG flag_of_values_to_be_preserved,
+                            SUBDOMAIN_PART = COMPLETE );
 
     /// Local variable storage interface
     virtual PLACEMENT Placement() const { return REGION; }
@@ -132,7 +134,7 @@ class Region : public ModelSubDomain<dim, Element>,
     void OutputTo( VSet<dim>& vset, bool with_properties = true ) const;
 
     /// outputs region into VSet polygonal data container, including a selected list of properties
-    void OutputTo( VSet<dim>& vset, const std::map<std::string, Index>& properties ) const;
+    void OutputTo( VSet<dim>& vset, const std::map<std::string,Index>& properties_to_be_output_for_region ) const;
 
     /// output all distributed properties into the supplied VSet
     void OutputDataTo( VSet<dim>& vset ) const;

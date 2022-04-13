@@ -59,7 +59,10 @@ public:
   bool HybridElementMesh() const;
   
   /// uses a floodfill on the highest-dimensional elements in the mesh to identify whether the model consists  of disconnected mesh patches
-  bool IsContiguous() const; 
+  bool IsContiguous() const;
+  
+  /// has the NodeManifoldManager been initialised which is true if the original model contained any split boundaries
+  bool HasNodeManifolds() const;
 
   /// returns number of nodes=vertices in the current mesh
   size_t Nodes() const;
@@ -72,6 +75,9 @@ public:
 
   /// returns number of InterFaces=lower-dimensional elements in current mesh
   size_t InterFaces() const;
+  
+  /// number of Manifold objects existing in conjuction with the split boundaries
+  size_t NodeManifolds() const;
   
   typename plf::colony<Node<dim> >::iterator      NodesBegin();
   typename plf::colony<Node<dim> >::iterator      NodesEnd();
@@ -121,10 +127,20 @@ public:
   template<template<uint32_t> class CELL>
   size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
   
-  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the input Elements are deleted
   std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,
                                                    typename std::vector<Element<dim>*>::iterator first,
                                                    typename std::vector<Element<dim>*>::iterator last );
+
+  /// replaces supplied Face objects with InterFace ones adding  necessary nodes and node manifolds, establishing new connectivity; the input Faces are deleted
+  std::vector<InterFace<dim>*>  ReplaceFacesByInterFaces( const PropertyDatabase<dim>&,
+                                                          typename std::vector<Face<dim>*>::iterator first,
+                                                          typename std::vector<Face<dim>*>::iterator first_at_boundary,
+                                                          typename std::vector<Face<dim>*>::iterator last );
+
+  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
+  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
+                        const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
@@ -133,6 +149,11 @@ public:
   Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
                                                 const LocalVariables& node_variables,
                                                 BOX_BOUNDARY = NOT );
+
+   /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
+  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside,
+                                  INTERFACE_SIDE new_node_side,
+                                  const LocalVariables& lvars );
 
   /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,
@@ -154,16 +175,8 @@ public:
                                          uint32_t adjacent_face_of_inner_element,
                                          uint32_t adjacent_face_of_outer_element,
                                          const LocalVariables& face_variables,
-                                         const IntegrationPointVariables& face_integration_point_variables );
-
-  /// creates Face matching the supplied lower-dimensional element but without deleting the underlying element 
-  Face<dim>* const ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
-                                             csmp::Element<dim>* inner_eptr,
-                                             csmp::Element<dim>* outer_eptr,
-                                             uint32_t adjacent_face_of_inner_element,
-                                             uint32_t adjacent_face_of_outer_element,
-                                             const LocalVariables& face_variables,
-                                             const IntegrationPointVariables& face_integration_point_variables );
+                                         const IntegrationPointVariables& face_integration_point_variables,
+                                         bool delete_original_face=true );
 
   /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,
@@ -187,18 +200,21 @@ public:
    /// assuming that the nodes on either side of the interface are already there, the face gets replaced
   InterFace<dim>* const ReplaceFaceByInterFace( csmp::Face<dim>* eptr,
                                                 const LocalVariables&,
-                                                const IntegrationPointVariables& );
+                                                const IntegrationPointVariables&,
+                                                std::vector<Node<dim>*> outside_nodes );
  
-  /// For connecting node-matched mesh patches, creating / updating their node manifolds
+  /// for reconstrunction / creation of interfaces when the supplied elements are already disconnected from one-another, having separate nodes
   InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
                                       Element<dim>* const outer_parent, uint32_t outer_element_face_id,
                                       const LocalVariables& interface_variables,
                                       const IntegrationPointVariables& interface_integration_point_variables );
 
-   /// duplicates Node, automatically creating a node manifold or adding it to an existing one.
-  Node<dim>* const      Duplicate( Node<dim>* const nptr_inside,
-                                   INTERFACE_SIDE new_node_side,
-                                   ManifoldType geometry );
+  /// For connecting node-matched, node-sharing mesh patches, after the creating of the necessary outside nodes and manifolds
+  InterFace<dim>*	const	AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
+                                      Element<dim>* const outer_parent, uint32_t outer_element_face_id,
+                                      const LocalVariables& interface_variables,
+                                      const IntegrationPointVariables& interface_integration_point_variables,
+                                      std::vector<Node<dim>*> outside_nodes );
 
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
@@ -221,6 +237,10 @@ public:
   template<template<uint32_t> class CELL>
   void BuildLineConnectivity( typename std::vector<CELL<dim>*>::const_iterator first,
                               typename std::vector<CELL<dim>*>::const_iterator last );
+                              
+  /// specialisation of the method that finds matching faces by using manifold-pointer based keys rather than node-pointer based ones
+  void BuildInterFaceConnectivity( typename std::vector<InterFace<dim>*>::const_iterator first,
+                                   typename std::vector<InterFace<dim>*>::const_iterator last );
 
   /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
   void RebuildNodeParentElementRelationships();

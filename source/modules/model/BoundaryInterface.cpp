@@ -725,12 +725,13 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
               // creating the faces
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
-              face_vector.push_back( model.Mesh().ConstructFaceFromElement( model_domain.E( (*pit).Element() ),
-                                                                            model_domain.E( (*pit).InnerElement() ),
-                                                                            model_domain.E( (*pit).OuterElement() ),
-                                                                            (*pit).InnerElementFace(),
-                                                                            (*pit).OuterElementFace(),
-                                                                            lvsFaces, lvsIntegrationPoints ) );
+              face_vector.push_back( model.Mesh().ReplaceElementByFace( model_domain.E( (*pit).Element() ),
+                                                                        model_domain.E( (*pit).InnerElement() ),
+                                                                        model_domain.E( (*pit).OuterElement() ),
+                                                                        (*pit).InnerElementFace(),
+                                                                        (*pit).OuterElementFace(),
+                                                                        lvsFaces, lvsIntegrationPoints,
+                                                                        remove_original_region ) );
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
            }
@@ -743,12 +744,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: this does not set the subdomain pointers to zero; don't touch them
-    //if ( remove_original_region )
-    //  model.Mesh().Delete( subdomain.CellsBegin(), subdomain.CellsEnd() );
-      
-     // TODO: these are global changes! - do this only for nodes that are affected
-     model.Mesh().UpdateConnectivity();
+    // TODO: these are global changes! - do this only for nodes that are affected
+    model.Mesh().UpdateConnectivity();
    
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -802,7 +799,10 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 8. (optional) remove parent region (including its elements) if no longer required.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) model.RemoveRegion( dim_1_region );
+    if ( remove_original_region ) {
+         model.RemoveRegion( dim_1_region );
+         model.RebuildRegions();
+      }
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 9. extra diagnostics and output of boundary names
@@ -1274,6 +1274,8 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+throw csmp::Exception( FATAL_ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetween", "method needs to be refactored");
+
     string  region1(group1);
     string  region2(group2);
 
@@ -1285,7 +1287,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:", "Provided Regions are identical.");
          return make_pair("boundary not created",false);
       }
-    if ( !boundaryComplex->IsUnique(group1) or !boundaryComplex->IsUnique(group2) ) {
+    if ( !boundaryComplex->IsUnique(group1) || !boundaryComplex->IsUnique(group2) ) {
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:",
                            "This method is intended for the creation of boundaries between unique Regions");
          return make_pair("boundary not created",false);
@@ -1303,7 +1305,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     if ( it.second ) {
         cout << "\nBoundaryInterface<"<< dim <<">::CreateBetween: creating boundary between ";
         cout << group1 << " and " << group2 << endl;
-        bool succeeded = (*it.first).second.CreateBetween( gref1, gref2, boundaryComplex->Mesh() );
+        bool succeeded{false}; // = (*it.first).second.CreateBetween( gref1, gref2, boundaryComplex->Mesh() );
  
         if ( !succeeded )
           csmp_error.notice( WARNING, "BoundaryInterFace::CreateBetween:",
@@ -1319,7 +1321,7 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
 
     return make_pair("boundary not created",false);
     
- } // end InsertBoundary
+ } // end CreateBoundaryBetween
 
 
 
@@ -1751,8 +1753,11 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
 
 
 
-// helper function for method below
-// returns index of first and last element of the checked region
+
+
+/** Helper function for method EstablishBoxBoundaries() below
+    returns index of first and last element of the checked region
+*/
 template<uint32_t dim>
 static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& model, const char* region_name,
                                                                  vector<Element<dim>*>& elements )

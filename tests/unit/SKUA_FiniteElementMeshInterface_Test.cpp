@@ -126,7 +126,7 @@ bool SKUA_FiniteElementMeshInterface_Test::TestNeighborConnectivity( Model<3U>& 
    if ( verbose ) PrintOriginalNeighborIDs( model );
       
     // recreating the connectivity in CSMP
-    establishNeighborConnectivity( model.Region("Model").CellVector() );
+    model.Mesh().UpdateConnectivity();
     if ( verbose ) PrintOriginalNeighborIDs( model );
     
     // comparing SKUA with CSMP connectivity

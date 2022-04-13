@@ -175,8 +175,8 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     // Resize to new state (this already supports ip vars)
     const std::pair<uint32_t,uint32_t> newTotaDataDepth = lvsCompileTimeDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
-    const uint32_t dataSize( data_.data.size() );
-    const uint32_t flagSize( data_.flags.size() );
+    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
+    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
 
     /// Roman, 2013: with ipvs support
 
@@ -278,8 +278,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
 
     /// @todo (2-F) Asserts missing
-    const uint32_t flagSize( data_.flags.size() );
-    const uint32_t dataSize( data_.data.size() );
+    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
+    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
 
         /// Roman, 2013: with ipvs support
 

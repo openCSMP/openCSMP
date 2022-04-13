@@ -1,5 +1,6 @@
 #include "InterFace.h"
 #include "Element.h"
+#include "Face.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
@@ -12,39 +13,64 @@ using namespace std;
 
 namespace csmp {
 
+/**
+   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes in opposite order are supplied by node-pointer vector'
+   
+   @note it takes care of assigning the higher dimensional neighbor elements
+   @note assigns outside nodes to InterFace also changing these nodes on the higher-dimensional outside element
+   @note detaches the neighbor connection between the higher dimensional elements
+
+ */
 template<uint32_t dim>
-InterFace<dim>::InterFace( csmp::FiniteElement* f )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
+InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props,
+               std::vector<Node<dim>*> outside_nodes )
+  : FiniteElementPolicy<dim,csmp::InterFace>( fptr->FE() ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( fptr->FV() ),
     idx_( numeric_limits<size_t>::max() ),
-    node_connector_( f->Nodes() * 2, nullptr ),
-    interface_connector_( f->Neighbors(), nullptr ),
+    node_connector_( fptr->Nodes() * 2, nullptr ),
+    interface_connector_( fptr->Neighbors(), nullptr ),
     middleElement_( nullptr ),
     current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr ),
+    innerParent_( fptr->InnerParent() ),
+    outerParent_( fptr->OuterParent() ),
+    inner_parent_face_id_( fptr->InnerParentFaceID() ),
+    outer_parent_face_id_( fptr->OuterParentFaceID() ),
     collocated_nodes_(true)
 {
-   assert( f != nullptr );
-}
+   assert( fptr != nullptr );
+   assert( outerParent_ != nullptr ); // interfaces must have neighbors on all sides
+   assert( outside_nodes.size() == fptr->Nodes() );
+
+#ifdef DEBUG
+   for ( const auto& nit : outside_nodes ) assert( nit != nullptr );
+#endif
+
+   // 1. assigning the nodes to the new InterFace
+   // -------------------------------------------
+   const auto n_nodes{ outside_nodes.size() };
+   for ( auto i{0U}; i< n_nodes; i++ ) {
+        Assign( i, fptr->N(i), INSIDE );
+        Assign( i, outside_nodes[i], OUTSIDE );
+     }
+     
+   // 2. replacing the nodes on the outside element with the new outside nodes
+   // ------------------------------------------------------------------------
+   vector<uint32_t> fnids;
+   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
+   for ( auto i{0U}; i< n_nodes; i++ )
+     outerParent_->Assign( fnids[i], outside_nodes[i] );
+     
+   // 3. detaching the higher-dimensional element neighbors from one another
+   // ----------------------------------------------------------------------
+   innerParent_->Unassign( outerParent_ );
+   outerParent_->Unassign( innerParent_ );
+
+ } // end complete custom constructor (Face)
 
 
-template<uint32_t dim>
-InterFace<dim>::InterFace( csmp::FiniteElement* f,
-                           const csmp::FiniteVolumeStencil<dim>* fvs )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( numeric_limits<size_t>::max() ),
-    node_connector_( f->Nodes() * 2, nullptr ),
-    interface_connector_( f->Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr ),
-    collocated_nodes_(true)
-{
-   assert( f   != nullptr );
-   assert( fvs != nullptr );
-}
+
 
 
 /// custom constructor which also builds variable storage; used in most cases

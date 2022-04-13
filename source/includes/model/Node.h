@@ -54,7 +54,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     Node& operator=( const Node& );
     Node& operator=( Node&& );
 
-    /// comparitor (Roman, 2014, very costly. @todo rethink logic and rewrite
+    /// comparitor (Roman, 2014), very costly. @todo rethink logic and rewrite
     bool operator==( const Node<dim>& );
 
     /// Local variable storage interface

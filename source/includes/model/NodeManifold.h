@@ -49,14 +49,17 @@ class NodeManifold {
     public:
       NodeManifold() = default;
 
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >                   manifold;
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::iterator         manifoldIterator;
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::const_iterator   manifoldConstIterator;
+      using manifold              = std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >;
+      using manifoldIterator      = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::iterator;
+      using manifoldConstIterator = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::const_iterator;
 
       /// main constructor in NodeManifoldManager: sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
       NodeManifold( plf::colony<Node<dim> >& nodes,
                     const std::set<std::pair<size_t,INTERFACE_SIDE> >& manifold_nodes,
                     ManifoldType );
+      
+      /// constructs new Manifold from two nodes on the inside and outside of it; @attention nodes must be assigned to this manifold once it has been constructed
+      NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node, ManifoldType );
 
       /// constructs manifold from vector pointer and qualifier pairs
       NodeManifold( const manifold&, ManifoldType );

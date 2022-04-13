@@ -149,7 +149,7 @@ class RegionInterface {
     // FROM THE 'MODEL' REGION THAT NEEDS TO BE CREATED BEFORE
 
     /// creates unique regions from material IDs which must have been defined earlier; returns number of regions formed; returns number of regions
-    size_t FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity = true );
+    size_t FormRegionsFromMaterialIDs();
     
     /// Assuming that elements have been numbered as required by caller, method forms region of elements with this Idx() values; returns # of elements in region; returns number of elements
     size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );

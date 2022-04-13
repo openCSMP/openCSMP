@@ -43,10 +43,13 @@ class NodeManifoldManager {
 
     size_t                 Manifolds() const;
     
-     // find - no need for this because each node has direct access to connected manifolds
+     // FindManifold - no need for this because each node has direct access to connected manifolds
 
-    /// creates a node manifold to which nodes can be added
-//    NodeManifold<dim>* const NewManifold( Node<dim>* const inside, Node<dim>* const outside, ManifoldType );
+    /// constructs a node manifold accessing the supplied node colony and node pointers
+    typename plf::colony<NodeManifold<dim> >::iterator  AddManifold( plf::colony<Node<dim> >& nodes,
+                                                                     Node<dim>* const inside,
+                                                                     Node<dim>* const outside,
+                                                                     ManifoldType );
     
     /// puts the nodes inside of the manifolds into the ascending order of values of the user specified  variable
     void SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index );

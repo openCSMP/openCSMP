@@ -64,7 +64,7 @@ void InputDataManager_Test::run()
       _equal( ts(1,1), 1.0e-13, tolerance );
       _equal( ts(2,2), 1.0e-14, tolerance );
       // array variables
-      ArrayVariable  ary(5);
+      ArrayVariable  ary(5U);
       matrix_domain.E(0)->Read( aq_key, ary );
       _equal( ary(0), 0.1, tolerance );
       _equal( ary(1), 0.2, tolerance );

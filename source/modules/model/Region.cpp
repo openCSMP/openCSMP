@@ -7,6 +7,7 @@
 
 #include "writeVariableIf.h"
 #include "Node.h"
+#include "MeshManager.h"
 #include "Element.h"
 #include "Boundary.h"
 #include "FiniteElementManager.h"
@@ -1068,8 +1069,7 @@ SKM trying to make sense of Andrew Bromage's undocumented code:
 */
 /*
 template<uint32_t dim>
-size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
-                                          bool reestablishNeighborConnectivity )
+size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1145,9 +1145,6 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
   }
 
   // 5. (re)connecting elements up to their neighbors
-
-  if ( reestablishNeighborConnectivity )
-    this->EstablishNeighborConnectivity();
 
   // 6. identifying the boundaries
   this->IdentifyPerimeter();

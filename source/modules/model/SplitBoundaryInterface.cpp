@@ -131,13 +131,16 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
     if ( spit != splitBoundaryMap_.end() ) {
          // deleting the split boundary
          splitBoundaryMap_.erase( (*spit).first );
+         
+         // TODO: remove duplicated nodes again
+         cout <<"\n"<<"SplitBoundaryInterface<"<< dim <<">::RemoveSplitBoundary: removed split boundary named '";
+         cout << splitboundary <<"' albeing retaining duplicated nodes."<< endl;
          return;
       }
 
     // if the split boundary was not contained in the map, feedback is given
     ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface::RemoveSplitBoundary", splitboundary,
                                     "split boundary was not contained in SplitBoundary map");
-    
   } // end RemoveSplitBoundary
 
 
@@ -633,20 +636,13 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
        return make_pair( "no SplitBoundary was created", false );
     }
   
-  // get some diagnostics here whether the boundary terminates into a volume or not
-  const bool include_perimeter_nodes{true};
-  
-  // create new outside nodes for access via manifolds, connecting them to outside parent elements on the boundary
-  // remove neighbor element connections across the future split boundary
-  DuplicateNodesAndDisconnectParents( boundary, include_perimeter_nodes );
-  
   pair<typename map<string, csmp::SplitBoundary<dim> >::iterator, bool>
     it = splitBoundaryMap_.insert( std::make_pair( splitboundaryName, csmp::SplitBoundary<dim>( splitboundaryName,
                                                                                                 splitboundaryComplex->Database() ) ) );
   if ( it.second ) {
       cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom:";
       cout <<" creating SplitBoundary from 'Boundary' "<< boundary.Name() << endl;
-      (*it.first).second.CreateFrom( splitboundaryComplex->Mesh(), boundary );
+      (*it.first).second.CreateFrom( splitboundaryComplex->Database(), splitboundaryComplex->Mesh(), boundary );
     }
 
   // removes boundary also deleting its interface objects
@@ -663,45 +659,125 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
 
 
-/**
-      TODO: find faster alternative to this brute-force method
-*/
-template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-void  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::UpdateSplitBoundaryComplex()
- {
-    SPLITBOUNDARY_COMPLEX<dim>* splitboundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-    // all connectivity is managed by the MeshManager
-    splitboundaryComplex->Mesh().UpdateConnectivity();
-
-    for ( typename SPLITBOUNDARY_COMPLEX<dim>::splitBoundaryIterator
-          sbit = splitboundaryComplex->SplitBoundariesBegin(); sbit != splitboundaryComplex->SplitBoundariesEnd(); ++sbit ) {
-        sbit->second.CreateNodePointerVector();
-        sbit->second.IdentifyPerimeter();
-      }
-    
- } // end UpdateSplitBoundaryComplex
 
 
 
 
 /**
-Creates SplitBoundary via the creation of a boundary between regions.
-The original boundary gets removed.
+
+Creates SplitBoundary between two unique regions that share nodes along their perimeter.
+The first region will be placed on the inside of the new split boundary.
+
+@param region1_name name of the unique region that shall be on the inside of the new split boundary
+@param region2_name of the unique region that touches (shares nodes with)  region1 and shall become the outside region of the new split boundary
+
+@note Method will add new Node and InterFace objects to the model
+
+@note method does not create a temporary Boundary on the way to the SplitBoundary construction
 
 @author SKM
 @date 25/1/20
 
  */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1, const char* region2 )
+pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryBetween( const char* region1_name, const char* region2_name )
  {
-   SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
-   
-   pair<string,bool> result = splitboundaryComplex->BoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateBoundaryBetween( region1, region2 );
-   
-   return CreateSplitBoundaryFrom( splitboundaryComplex->Boundary(result.first) );
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
- } // end InsertSplitBoundary
+    SPLITBOUNDARY_COMPLEX<dim>*  modelComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+  
+    // 1. initial diagnostics: verifying inputs and shared faces between the two regions
+    // ---------------------------------------------------------------------------------
+    if ( string{region1_name} == region2_name ) {
+         csmp_error.notice( ERROR, "BoundaryInterface::CreateSplitBoundaryBetween:", "Provided Regions are the same.");
+         return make_pair("split boundary not created",false);
+      }
+    if ( !modelComplex->IsUnique(region1_name) || !modelComplex->IsUnique(region2_name) ) {
+         csmp_error.notice( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:", "This method only works for unique Region objects");
+         return make_pair("split boundary not created",false);
+      }
+   
+    const csmp::Region<dim>&  region1(modelComplex->Region(region1_name));
+    const csmp::Region<dim>&  region2(modelComplex->Region(region2_name));
+    // corner-node-ptrs Elements adjacent to interface and their face numbers (inside elements will be first in pair)
+    map<set<Node<dim>*>,pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  shared_perimeter_faces;
+    // is there a shared interface? - looping over the perimeter faces of the adjacent regions
+    
+    // starting with region1 - assuming that no face-matching can occur at this stage
+    for ( size_t i{ region1.InteriorCells() }; i<region1.Cells(); i++ )
+      for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
+           auto pface = region1.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           shared_perimeter_faces.insert( make_pair( region1.E(i)->CornerNodesOfFace(pface),
+                                          make_pair( make_pair( region1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+        }
+    // for the second region2, do the same, but when matching faces are found corresponding elements and face ids are assigned to second element-face pair
+    size_t n_matching_faces{0U};
+    for ( size_t i{ region2.InteriorCells() }; i<region2.Cells(); i++ )
+      for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
+           auto pface = region2.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
+                                                    make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+           // if a matching face is found
+           if ( it.second == false ) { // no new insertion could be made into map with unique keys
+                (*it.first).second.second = make_pair( region2.E(i), pface );
+                n_matching_faces++;
+             }
+        }
+
+    if ( n_matching_faces == 0U ) {
+         string message( string(" input regions '") + region1_name + "' and '" + region2_name +"'");
+         csmp_error.notice( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
+                            message, "do not share any faces; has this boundary been split before?");
+         return make_pair("split boundary not created",false);
+      }
+
+    // 2. Eliminating the single element entries from the 'shared_perimeter_faces' map
+    // -------------------------------------------------------------------------------
+    for ( auto it = shared_perimeter_faces.begin(); it != shared_perimeter_faces.end() /* not hoisted */; /* no increment */ ) {
+         // there is only a single element in the Element-pointer pair, the map entry will be deleted
+         if ( (*it).second.second.first == nullptr ) it = shared_perimeter_faces.erase(it); // since C++11
+         else ++it;
+      }
+
+    // 3. creation of the new SplitBoundary
+    // ------------------------------------
+    string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
+    // MATCHING ELEMENTS: collecting the required element pairs from the perimeter face vector
+    vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matching_elmts;
+    matching_elmts.reserve( shared_perimeter_faces.size() );
+    for ( const auto& pit : shared_perimeter_faces )
+      if ( pit.second.second.first != nullptr )
+        matching_elmts.emplace_back( pit.second );
+        
+    // creating the necessary interfaces and nodes, and updates the connectivity of the mesh
+    vector<InterFace<dim>*>  interfaces = modelComplex->Mesh().CreateInterFacesBetweenNodeSharingElements( modelComplex->Database(), matching_elmts );
+    
+    // attempt to create a (Face-based) boundary, appending numbers as necessary
+    pair<typename map<string,csmp::SplitBoundary<dim> >::iterator,bool>
+      it = splitBoundaryMap_.insert( make_pair( split_boundary_name, csmp::SplitBoundary<dim>( split_boundary_name, modelComplex->Database() ) ) );
+
+    if ( it.second ) {
+        cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: creating split boundary between '";
+        cout << region1_name << "' and '" << region2_name <<"'"<< endl;
+        bool succeeded = (*it.first).second.CreateFrom( interfaces.begin(), interfaces.end() );
+ 
+        if ( !succeeded )
+          csmp_error.notice( WARNING, "SplitBoundaryInterFace::CreateSplitBoundaryBetween:",
+                          "The regions of interest do not share any nodes; trying to create a boundary");
+        else {
+             cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: split boundary '";
+             cout << split_boundary_name << "' created successfully."<< endl;
+             return make_pair(split_boundary_name,true);
+          }
+      }
+    else throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
+                                split_boundary_name, "split boundary already exists. Nothing was done.");
+
+    return make_pair("split boundary not created",false);
+
+ } // end CreateSplitBoundaryBetween
 
 
 
@@ -739,6 +815,7 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
      SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
      csmp::SplitBoundary<dim>&    splitBoundary( model->SplitBoundary(split_boundary) );
      csmp::MeshManager<dim>&      mesh( model->Mesh() );
+     const LocalVariables&        lvars( model->Database().LocalVariablesAt( NODE ) );
      
      // 1. creating unique set of nodes matching those on the inside of the SplitBoundary in position
      // --------------------------------------------------------------------------------------------------------------------------
@@ -762,10 +839,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
                          if ( nptr != nullptr )
                            node_pointers.push_back( nptr );
                          else // a new node has to be generated
-                           node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, ManifoldType::INTERFACE ) );
+                           node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
                       }
                     //                            inserts the new node it creates into the corresponding NodeManifold
-                    else node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, ManifoldType::INTERFACE ) );
+                    else node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
                  }
                // else the already created new node is added
                else node_pointers.push_back( (*nit.first) );
@@ -798,7 +875,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
        
      // 3. establishing neighbor connectivity among the new elements
      // ------------------------------------------------------------
-     establishNeighborConnectivity( new_elmts, false, false );
+     if constexpr ( dim == 2U )
+       mesh.template BuildLineConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
+     if constexpr ( dim == 3U )
+       mesh.template BuildSurfaceConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
 
 
      // 4. construct the new unique region between the interface elements in the model
@@ -1034,52 +1114,6 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
      cout.flush();
 
 } // end Out
-
-
-
-
-/** Gets  MeshManager to multiplicate the nodes of the future split boundary using the supplied node-pointer vector.
-    The elements on the outside are then assigned to the new nodes and both inner and outer higher-dimensional neighbors
-        are disconnected from one another.
- 
-    @attention in the construction of the Splitboundary, the manifold flagging will allow to retrieve the correct side of the interface.
-*/
-template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::DuplicateNodesAndDisconnectParents( Boundary<dim>& inputBoundary,
-                                                                                             bool include_perimeter_nodes )
- {
-    SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
-    MeshManager<dim>& mesh_manager(model->Mesh());
-    
-    const auto nodesEnd = (include_perimeter_nodes==true) ? inputBoundary.NodesEnd() : inputBoundary.PerimeterNodesBegin();
-    for ( auto nit=inputBoundary.NodesBegin(); nit!=nodesEnd; ++nit )
-      mesh_manager.Duplicate( *nit, OUTSIDE, ManifoldType::INTERFACE );
-    
-    // assigning the new nodes to the higher dimensional parent elements on the outside
-    vector<uint32_t>  fnids;
-    for ( auto it=inputBoundary.CellsBegin(); it!= inputBoundary.CellsEnd(); ++it )
-      {
-         // the nodes on the outside need to be updated
-         assert( (*it)->OuterParent() );
-         const auto outer_parent_face_id = (*it)->OuterParentFaceID();
-         (*it)->FE()->NodesOfFace( outer_parent_face_id, fnids );
-         size_t n_nodes{fnids.size()};
-         for ( auto i{0U}; i<n_nodes; ++i ) {
-              assert( (*it)->OuterParent()->N( fnids[i] )->IsManifold() );
-              NodeManifold<dim>* nmanifold = (*it)->OuterParent()->N( fnids[i] )->Manifold();
-              vector<Node<dim>*> node_vec = nmanifold->NodesLocatedAt( OUTSIDE );
-              // TODO: deal with the case where manifold has many entries and has to be disambiguated
-              assert( node_vec.size() == 1 );
-              // assigning the outer node of the manifold to the outer element parent
-              (*it)->OuterParent()->Assign( fnids[i], node_vec[0] );
-           }
-         // disconnect higher-dimensional parent elements from one-another
-         (*it)->InnerParent()->Assign( (*it)->InnerParentFaceID(), static_cast<Element<dim>*>(nullptr) );
-         (*it)->OuterParent()->Assign( outer_parent_face_id, static_cast<Element<dim>*>(nullptr) );
-      }
-    
- } // end DuplicateNodesAndDisconnectParents
-
 
 
 

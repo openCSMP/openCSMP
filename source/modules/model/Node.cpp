@@ -41,6 +41,8 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
 
 /**
     Copy constructor also copies the pointer assignments (!).
+    
+    @attention when copy constructing manifold nodes, make sure to add this new Node to it
 */
 template<uint32_t dim>
 Node<dim>::Node( const Node<dim>& nd )
@@ -52,6 +54,8 @@ Node<dim>::Node( const Node<dim>& nd )
     at_boundary_(nd.at_boundary_)
   {
     this->LVS( nd.LVS() );
+    // NB: if this is a manifold, the new Node must be added to it,
+    //     but this can only be done once the node has been constructed
   }
 
 
@@ -407,9 +411,16 @@ uint32_t  Node<dim>::Neighbors() const
 
 
 /**
-    Implements node connectivity graph.
+    Implements node connectivity graph, giving access to all the Node objects that the Node is connected to via Element, Face or InterFace edges.
+    Node neighbors are enlisted in an order that is determined by sorting the points to them (this makes the neighbor vector searchable).
     
-    Nodes are enlisted in the order of their pointers (the new vector is maintained searchable).
+    @param neighbor_node the nth Node in the sortes vector of pointers to nodes stored in the node.
+    
+    @attention If the node is a manifold (topologically co-located with other nodes that can be accessed looping over the branches of the manifold,
+    then only those Nodes are neighbors who are on the same contiguous mesh patch as the Node, i.e., not shared with the other nodes in the manifold.
+    
+    @author SKM
+    @date 8/10/2021
 */
 template<uint32_t dim>
 Node<dim>*  Node<dim>::Neighbor( uint32_t neighbor_node ) const

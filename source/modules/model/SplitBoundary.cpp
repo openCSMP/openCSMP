@@ -154,8 +154,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
-  establishNeighborConnectivity( this->cell_vec_, INSIDE );
-  establishNeighborConnectivity( this->cell_vec_, OUTSIDE );
+  mesh.BuildInterFaceConnectivity( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------
@@ -398,7 +397,7 @@ void SplitBoundary<dim>::CreateNodePointerVector()
   // creating the node index vector
   set<csmp::Node<dim>*>  nodes_set;
   for ( typename vector<InterFace<dim>*>::const_iterator it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-    for ( typename vector<Node<dim>*>::size_type i{0U}; i<(*it)->FE()->Nodes(); i++ )
+    for ( auto i{0U}; i<(*it)->FE()->Nodes(); i++ )
     {
       nodes_set.insert( (*it)->N( i, INSIDE ) );
       nodes_set.insert( (*it)->N( i, OUTSIDE ) );
@@ -492,33 +491,53 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
 
 /**
+    For post-processing the results of Divide. Here the assumption is made that the faces are already interconnected.
+*/
+template<uint32_t dim>
+bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::const_iterator ifacesBegin,
+                                     const typename vector<InterFace<dim>*>::const_iterator ifacesEnd )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  
+  if ( distance(ifacesBegin,ifacesEnd) == 0 ) {
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom", "supplied InterFace range is empty; nothing was done");
+       return false;
+    }
+  if ( (*ifacesBegin)->ConnectedNeighbors() == 0 ) {
+       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom:", "some supplied InterFace objects do not have neighbors; nothing was done");
+       return false;
+    }
+    
+  this->cell_vec_.assign( ifacesBegin, ifacesEnd );
+
+  // initialize boundary essentials
+  this->CreateNodePointerVector();
+  this->IdentifyPerimeter();
+
+  return true;
+}
+
+
+/**
     Creates a split boundary from a boundary. Requires unique indices.
     @author SKM 1/11/2013
     @author SKM 21/9/2021
 */
 template<uint32_t dim>
-bool  SplitBoundary<dim>::CreateFrom( MeshManager<dim>& mesh,
+bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
+                                      MeshManager<dim>& mesh,
                                       Boundary<dim>& boundary )
 {
   //LVS
   const LocalVariables lvsInterFace( InterFaceVariables() );
   const IntegrationPointVariables lvsIntegrationPoint( InterFaceIntegrationPointVariables() );
 
-  // allocating SubDomain element container
-  this->cell_vec_.clear();
-  this->cell_vec_.reserve( boundary.Cells() );
+  this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
+                                                    next(boundary.CellVector().begin(),boundary.InteriorCells()),
+                                                    boundary.CellVector().end() );
+  // create node vector
+  this->CreateNodePointerVector();
 
-  const typename vector<Face<dim>*>::const_iterator facesEnd( boundary.CellsEnd() );
-  for ( typename vector<Face<dim>*>::const_iterator fit( boundary.CellsBegin() ); fit != facesEnd; ++fit )
-    // the InterFace that is being build from the current interface
-    this->cell_vec_.push_back( mesh.ReplaceFaceByInterFace( (*fit), lvsInterFace, lvsIntegrationPoint ) );
-
-    // free excessive allocated capacity
-  vector<InterFace<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
-
-  // initialize splitboundary essentials 
-  establishNeighborConnectivity( this->cell_vec_ );
-  
   this->IdentifyPerimeter();
 
   return true;
@@ -543,16 +562,16 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( dim != 3U ) {
+  if constexpr ( dim != 3U ) {
     csmp_error.notice( WARNING, "SplitBoundary<>::Perimeter:",
                        "returning 1.0 since perimeter is a point." );
     return 1.;
   }
 
-  double        perimeter_length( 0. );
-  vector<uint32_t>  fnids;
-  size_t          n( 0U );
+  double perimeter_length{0.};
+  size_t n{ this->InteriorCells() };
 
+  vector<uint32_t>  fnids;
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ )
     for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
       (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );

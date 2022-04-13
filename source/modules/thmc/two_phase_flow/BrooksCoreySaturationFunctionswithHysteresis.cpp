@@ -580,7 +580,7 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterResidualSatu
 template<uint32_t dim, template<uint32_t> class USER>
 void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidualSaturationImbibitionToDrainage( Element<dim>* const e, double& Swr_, double& Sor_) const
   {
-    const size_t    Nr(3);   // number of iteration of solving Non-linear system of equations to get the psedo-resduals.
+    const int    Nr(3);   // number of iteration of solving Non-linear system of equations to get the psedo-resduals.
     const double awd_ =  ac_params_[AWD];
     const double aod_ =  ac_params_[AOD];
     const double cwd_ =  ac_params_[CWD];
@@ -618,7 +618,7 @@ void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::WaterAndOilResidual
     
     Swr_= psrH2O ;
     
-    for (size_t iter=0; iter<Nr ; iter++) { // do estimate for pesdu residual saturation
+    for ( auto iter=0U; iter<Nr ; iter++) { // do estimate for pesdu residual saturation
       
       // step one estimates the oil residual saturation from upper turning point
       Sor_ = 1.0 - (1.0-So2)/(1.0 - pow(cod_/(PcS2 - cwd_*pow((1.0 - Swr_)/(Sw2 - Swr_),awd_)) ,iaod_)) ;
@@ -1158,7 +1158,9 @@ double BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::dkrnds_at( Elemen
  
 */
 template<uint32_t dim, template<uint32_t> class USER>
-void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e , double& newSrH2O, double& newSrCO2, std::array<double, 2>& a,std::array<double, 2>& c) const {
+void BrooksCoreySaturationFunctionsWithHysteresis<dim,USER>::CheckPcLimitsAndResetResiduals( Element<dim>* const e,
+                                                                                             double& newSrH2O, double& newSrCO2,
+                                                                                             array<double, 2>& a,array<double, 2>& c) const {
   
     const double srH2O(e->Read(User()->key_srH2O));  // To have primary Drianage and Imibition parameters
     assert(srH2O >= 0 and srH2O <=1) ;
