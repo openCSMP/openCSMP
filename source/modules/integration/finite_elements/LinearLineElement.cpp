@@ -76,7 +76,7 @@ vector<uint32_t>  LinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
     if ( face_id == 1U ) return vector<uint32_t>{0U};
-    return vector<uint32_t>{face_id};
+    return vector<uint32_t>{1U};
  }
 
 

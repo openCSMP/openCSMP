@@ -226,7 +226,7 @@ vector<uint32_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( uint32_t
  {
     assert( face_id <= 1U );
     if ( face_id == 1U ) return vector<uint32_t>{0U};
-    return vector<uint32_t>{face_id};
+    return vector<uint32_t>{1U};
  }
 
 

@@ -1761,19 +1761,15 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
-                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
+                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,
+                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    // vector of interfaces which will be returned
-    const size_t  n_original_faces{ interfaces_.size() };
-    vector<InterFace<dim>*>  interface_ptrs;
-
     if ( interface_nbor_elmts.empty() ) {
          csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
-         return interface_ptrs;
+         return vector<InterFace<dim>*>{}; // empty vec
       }
-    else interface_ptrs.reserve( interface_nbor_elmts.size() );
     
     // Constructing the node manifold manager if necessary
     const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
@@ -1786,59 +1782,95 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
     
     // 1. finding the perimeter nodes of the interface patch that will be created
     // --------------------------------------------------------------------------
-    // - from the corner nodes of the element faces that will be at the interface, segment keys are made
-    // - the faces are numbered
-    // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
-    vector<Node<dim>*>  perimeter_node_ptrs;  perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
-    size_t              iface_count{0U};
+    vector<Node<dim>*>  perimeter_node_ptrs;
+    perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
     
     for ( const auto& it : interface_nbor_elmts ) {
          vector<uint32_t> fnids;
          it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-         for ( const auto& i : fnids )
+         for ( auto i : fnids )
            perimeter_node_ptrs.push_back( it.first.first->N(i) );
-         iface_count++;
       }
       
-    // sorting and removing duplicates from vector, making it searchable
+    // sorting and removing duplicates from node vector, making it searchable
     sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
     perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
     // printNodeCoordinates<dim>( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+    // NB: tested: at this point we only have perimeter nodes left
 
 
-    // 2. Creating InterFace objects, duplicating nodes and dealing with boundaries
+    // 2. Finding the subset of these nodes which will also be on the perimeter of the SplitBoundary
+    // ---------------------------------------------------------------------------------------------
+    // IMPORTANT: this needs to be done before creating the InterFace objects because it influences which of its nodes will have to be manifolds
+    // How? - in 2D, these are the nodes that are only contained in of of the faces
+    if constexpr (dim == 2U ) {
+         vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
+         // again
+         for ( const auto& it : interface_nbor_elmts ) {
+              vector<uint32_t> fnids;
+              it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+              for ( auto i : fnids ) {
+                   // finding the vector index corresponding to the perimeter node
+                   auto lb = perimeter_node_ptrs.end();
+                   if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
+                   face_count[ distance(perimeter_node_ptrs.begin(),lb) ]++;
+                }
+           }
+         // eliminating those pointers from 'perimeter_node_ptrs' that are shared by multiple elements
+         for ( size_t i{0}; i<face_count.size(); i++ )
+           if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
+         perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
+      }
+    //      - in 3D, does one need a triangulation
+    if constexpr (dim == 3U ) {
+         throw csmp::Exception( ERROR, "CreateInterFacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
+      }
+    
+
+    // 3. Creating InterFace objects, duplicating nodes and dealing with boundaries
     // ----------------------------------------------------------------------------
     // tracking already duplicated nodes to avoid further duplication
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
+    // vector of interfaces which will be returned
+    vector<InterFace<dim>*>     interface_ptrs;
+    interface_ptrs.reserve( interface_nbor_elmts.size() );
     
     for ( const auto& it : interface_nbor_elmts )
       {
          // 2.1 duplicating nodes but only if we are at a model boundary or the node already is a manifold
          // ----------------------------------------------------------------------------------------------
          // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
-         vector<uint32_t> fnids;
+         // - from the corner nodes of the element faces that will be at the interface, segment keys are made
+         // - the faces are numbered
+         // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
+         vector<uint32_t>   fnids;
          it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-         const auto         n_nodes{ fnids.size() };
-         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         vector<Node<dim>*> outside_nodes( fnids.size(), nullptr );
          auto               nit{ new_nodes.end() };
+         uint32_t           nd_count{0};
          
-         for ( auto i{0U}; i<n_nodes; i++ ) {
-             // if the node is not a perimeter node it will get duplicated
-             if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N( fnids[i] ) ) ) {
-                  outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE, nvars );
-                  new_nodes.insert( make_pair( it.first.first->N( fnids[i] ), outside_nodes[i] ) );
-               }
-             // perimeter nodes are duplicated only if they are located on the model boundary or they are manifolds
-             else if ( it.first.first->N( fnids[i] )->AtBoundary() != NOT || it.first.first->N( fnids[i] )->IsManifold() ) {
-                  if ( (nit=new_nodes.find(it.first.first->N( fnids[i] ))) == new_nodes.end() ) {
-                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
-                       outside_nodes[i] = Duplicate( it.first.first->N( fnids[i] ), OUTSIDE, nvars );
-                       new_nodes.insert( make_pair( it.first.first->N( fnids[i] ), outside_nodes[i] ) );
+         for ( auto i : fnids ) {
+             // excluding nodes that will lie on the perimeter of the new interface patch, nodes are duplicated
+             if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
+                  // but only if they have not already been duplicated
+                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                     }
-                  else outside_nodes[i] = (*nit).second;
+                  else outside_nodes[nd_count] = (*nit).second;
                }
-             else outside_nodes[i] = it.first.first->N( fnids[i] );
+             // perimeter nodes must be duplicated if they are located on the model boundary or are manifolds
+             else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
+                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                    }
+                  else outside_nodes[nd_count] = (*nit).second;
+               }
+             else outside_nodes[nd_count] = it.first.first->N(i);
+             nd_count++;
            }
 
          // turning the nodes from counterclockwise to clockwse because they will go on the opposite side of the interface
@@ -2632,7 +2664,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
       if constexpr ( dim == 3U ) {
            // creating search keys from the corner nodes of the interface faces
            // corner-nodes      interfaces that share face and their face id
-           map<set<NodeManifold<3U>*>,map<InterFace<3U>*,uint32_t> >  elmt_pairs;
+           map<set<NodeManifold<3U>*>,map<InterFace<3U>*,uint32_t> >  iface_pairs;
 
            // pairing the cells up in the search map
            const auto cellsEnd{last};
@@ -2646,7 +2678,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                            if ( nit->IsManifold() ) manifold_ptrs.insert( nit->Manifold() );
                            else manifold_ptrs.insert( reinterpret_cast<NodeManifold<3U>*>(nit) );
                         }
-                     auto it = elmt_pairs.insert( make_pair( manifold_ptrs, map<InterFace<3U>*,uint32_t>{{*first,face}} ) );
+                     auto it = iface_pairs.insert( make_pair( manifold_ptrs, map<InterFace<3U>*,uint32_t>{{*first,face}} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2658,7 +2690,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
              }
              
            // processing the results, connecting the cells to one another
-           for ( auto& it : elmt_pairs ) {
+           for ( auto& it : iface_pairs ) {
                 const size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2U ) {
@@ -2712,21 +2744,19 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
       // for line elements, interfaces in a 2D model
       // -------------------------------------------
       if constexpr ( dim == 2U ) {
-           map<set<NodeManifold<2U>*>,map<InterFace<2U>*,uint32_t> > elmt_pairs;
-           const auto cellsEnd{last};
+           map<NodeManifold<2U>*,map<InterFace<2U>*,uint32_t> > iface_pairs;
+           const auto ifacesEnd{last};
            
            // pairing the elements up in the search map
-           while ( first != cellsEnd ) {
+           while ( first != ifacesEnd ) {
                 assert( (*first) != nullptr );
                 const auto n_faces{ (*first)->Faces() };
                 for ( auto face{0U}; face < n_faces; ++face ) {
-                     // getting node-manifold pointers from set of pointers to face corner nodes
-                     set<NodeManifold<2U>*> manifold_ptrs;
-                     for ( const auto& nit : (*first)->CornerNodesOfFace(face) ) {
-                           if ( nit->IsManifold() ) manifold_ptrs.insert( nit->Manifold() );
-                           else manifold_ptrs.insert( reinterpret_cast<NodeManifold<2U>*>(nit) );
-                        }
-                     auto it = elmt_pairs.insert( make_pair( manifold_ptrs, map<InterFace<2U>*,uint32_t>{{*first,face}} ) );
+                     // getting node-manifold pointers: the first 2 nodes must correspond to the corner nodes of the Face
+                     NodeManifold<2U>* mptr = ( (*first)->N(face)->IsManifold() ) ? (*first)->N(face)->Manifold() : reinterpret_cast<NodeManifold<2U>*>((*first)->N(face));
+                     assert( mptr );
+                    // creating the map entry
+                     auto it = iface_pairs.insert( make_pair( mptr, map<InterFace<2U>*,uint32_t>{{*first,face}} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2736,9 +2766,9 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                   }
                 first++;
              }
-             
+ 
            // processing the results, connecting the elements to one another
-           for ( auto& it : elmt_pairs ) {
+           for ( auto& it : iface_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2U ) {

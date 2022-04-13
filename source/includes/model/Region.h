@@ -17,11 +17,11 @@ template<uint32_t>   class Boundary;
 template<uint32_t>   class MeshManager;
 template<typename> class FEM_Data;
 
-/// returns number of nodes that are shared by the two subdomains
+/// returns number of nodes that are shared by the two subdomains; defined in ModelSubDomain.cpp
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 
-/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains
+/// returns number of nodes on the subdomain perimeters that are shared by the two subdomains; defined in ModelSubDomain.cpp
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim, CELL>&, const ModelSubDomain<dim, CELL>& );
 

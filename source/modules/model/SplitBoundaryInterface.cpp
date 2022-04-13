@@ -686,8 +686,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
     SPLITBOUNDARY_COMPLEX<dim>*  modelComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
   
-    // 1. initial diagnostics verifying inputs and whether the two regions indicate have a shared interface
-    // ----------------------------------------------------------------------------------------------------
+    // 1. initial diagnostics: verifying inputs and shared faces between the two regions
+    // ---------------------------------------------------------------------------------
     if ( string{region1_name} == region2_name ) {
          csmp_error.notice( ERROR, "BoundaryInterface::CreateSplitBoundaryBetween:", "Provided Regions are the same.");
          return make_pair("split boundary not created",false);
@@ -727,7 +727,9 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
         }
 
     if ( n_matching_faces == 0U ) {
-         csmp_error.notice( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:", "the 2 input regions do not share any faces; has this boundary been split before?");
+         string message( string(" input regions '") + region1_name + "' and '" + region2_name +"'");
+         csmp_error.notice( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
+                            message, "do not share any faces; has this boundary been split before?");
          return make_pair("split boundary not created",false);
       }
 
@@ -742,7 +744,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );
-    // collecting the required element pairs from the perimeter face vector
+    // MATCHING ELEMENTS: collecting the required element pairs from the perimeter face vector
     vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matching_elmts;
     matching_elmts.reserve( shared_perimeter_faces.size() );
     for ( const auto& pit : shared_perimeter_faces )
@@ -757,16 +759,16 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       it = splitBoundaryMap_.insert( make_pair( split_boundary_name, csmp::SplitBoundary<dim>( split_boundary_name, modelComplex->Database() ) ) );
 
     if ( it.second ) {
-        cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: creating boundary between ";
-        cout << region1_name << " and " << region2_name << endl;
+        cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: creating split boundary between '";
+        cout << region1_name << "' and '" << region2_name <<"'"<< endl;
         bool succeeded = (*it.first).second.CreateFrom( interfaces.begin(), interfaces.end() );
  
         if ( !succeeded )
           csmp_error.notice( WARNING, "SplitBoundaryInterFace::CreateSplitBoundaryBetween:",
                           "The regions of interest do not share any nodes; trying to create a boundary");
         else {
-             cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: created boundary between ";
-             cout << region1_name << " and " << region2_name << endl;
+             cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: split boundary '";
+             cout << split_boundary_name << "' created successfully."<< endl;
              return make_pair(split_boundary_name,true);
           }
       }

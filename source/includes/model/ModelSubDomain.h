@@ -141,9 +141,11 @@ class ModelSubDomain {
     typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const;
     typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const;
 
-    /// returns how many of the supplied range of nodes form part of the model subdomain's perimeter
+    /// returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter
     size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
                                  typename std::vector<csmp::Node<dim>*>::const_iterator end ) const;
+                                 
+    // see also the non-member functions below
 
     /// check whether subdomain conatains any cells
     bool              Empty() const;
