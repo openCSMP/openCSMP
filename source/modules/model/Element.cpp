@@ -37,7 +37,7 @@ them properly.
 template<uint32_t dim>
 Element<dim>::Element( csmp::FiniteElement* f )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
@@ -52,7 +52,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
                        const csmp::FiniteVolumeStencil<dim>* fvs )
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
@@ -73,7 +73,7 @@ Element<dim>::Element( csmp::FiniteElement* f,
 
   : FiniteElementPolicy<dim, csmp::Element>( f ),
     FiniteVolumePolicy<dim, ::csmp::Element>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     material_id_(UNSPECIFIED),
     elmt_connector_( f->Neighbors(), nullptr ),
     node_connector_( f->Nodes(), nullptr )
@@ -416,7 +416,7 @@ template<uint32_t dim>
 void Element<dim>::Unassign( const Element<dim>* const e_ptr )
   {
     if ( e_ptr == nullptr ) return;
-    for ( auto i = 0U; i < elmt_connector_.size(); ++i )
+    for ( auto i{0U}; i < elmt_connector_.size(); ++i )
       if ( e_ptr == elmt_connector_[i] ) {
           elmt_connector_[i] = nullptr;
           break;
@@ -440,7 +440,7 @@ template<uint32_t dim>
 void Element<dim>::Unassign( const csmp::Node<dim>* const nd_ptr )
   {
     if ( nd_ptr == nullptr ) return;
-    for ( auto i = 0U; i < node_connector_.size(); i++ )
+    for ( auto i{0U}; i < node_connector_.size(); i++ )
       if ( nd_ptr == node_connector_[i] ) {
           node_connector_[i] = nullptr;
           break;
@@ -597,7 +597,7 @@ void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
   const auto n_nodes( Nodes() );
   XY.Resize( n_nodes, dim );
-  for ( auto i = 0U; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -718,7 +718,7 @@ void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>
   const auto  n_nodes( Nodes() );
   V.resize( n_nodes );
 
-  for ( auto i = 0U; i<n_nodes; i++ )
+  for ( auto i{0U}; i<n_nodes; i++ )
     N( i )->Read( idx, V[i] );
 }
 
@@ -761,14 +761,14 @@ void Element<dim>::Out() const
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
   string str("undefined");
-  for ( auto i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i )->AtBoundary() );
     cout << N( i )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
-  for ( auto i = 0U; i<this->Neighbors(); i++ )
+  for ( auto i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Neighbor( i )->Idx() << ": ";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";

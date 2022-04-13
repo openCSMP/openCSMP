@@ -21,7 +21,7 @@ void PoreVolumeLHS<dim>::AccumulateStencil( const Element<dim>& e, SparseMatrix&
     assert( e.IntegrationPointsPerSector() == 1U );
     const size_t sector_ipoints(e.Sectors()); 
     
-    for ( auto i{0}; i <sector_ipoints; ++i ) {
+    for ( auto i{0U}; i <sector_ipoints; ++i ) {
         const double sector_pore_volume = e.Read( i, 0U, spv_key_ );
         const size_t   idx = e.N(i)->Idx();
         

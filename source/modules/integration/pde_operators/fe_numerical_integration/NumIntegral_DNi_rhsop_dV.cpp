@@ -77,13 +77,13 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL& e )
     const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
     double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim>::DERIV ) : 0.;
 
-    for ( auto i=0; i<e.IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
          if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim>::DERIV, i );
          double grad_op(0.);
          const size_t nodes(e.Nodes());
-         for ( auto j=0; j<nodes; ++j )
+         for ( auto j{0U}; j<nodes; ++j )
            grad_op += MathOperatorRHS<dim>::DERIV(xyz_,j) * op_vec_[j]();
         
          // integration

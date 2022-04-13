@@ -31,8 +31,8 @@ class NumIntegral_NT_op_N_dV : public MathOperatorRHS<dim> {
   private:
     uint32_t  nodal_degrees_of_freedom;
 
-    DenseMatrix<DM_MIN>  N, NT, 
-                         RHS_TEMP;
+    DenseMatrix<DM_MIN>  N_, NT_,
+                         RHS_TEMP_;
 };
 
 // copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger

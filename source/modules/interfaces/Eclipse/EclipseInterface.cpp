@@ -3,6 +3,7 @@
 #include "ModelTopology.h"
 #include "VSet.h"
 
+#include "PropertyDatabase.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
@@ -122,7 +123,7 @@ bool EclipseInterface::ReadFile( csmp::VSet<3U>& vset,
   // 4. create a default region including all cells except wells and faults
   std::vector<size_t> elmts;
   std::set<std::string> fem_types;
-  for ( auto i = 0U; i < vset_->Elements(); i++ ) {
+  for ( size_t i{0U}; i < vset_->Elements(); i++ ) {
     elmts.push_back( i );
     fem_types.insert( csmp::parseFiniteElementType( vset_->ElementType(i) ) );
   }
@@ -2212,7 +2213,7 @@ bool isEclipseCommentLine( char* str )
     return true;
 
   const size_t strlength( strlen( str ) );
-  for ( auto i = 0U; i<strlength; i++ )
+  for ( auto i{0U}; i<strlength; i++ )
     if ( str[i] == '#' || str[i] == '%' ) {
       str[i] = '\0';
       break;
@@ -2234,7 +2235,7 @@ bool isEclipseEndOfBlock( char* str )
   if ( str[0] == '/' )
     return true;
   const size_t strlength( strlen( str ) );
-  for ( auto i = 0U; i<strlength; i++ )
+  for ( auto i{0U}; i<strlength; i++ )
     if ( str[i] != ' ' && str[i] != '/' )
       return false;
     else if ( str[i] == '/' )
@@ -2254,7 +2255,7 @@ bool isEclipseLineWithEndOfBlock( char* str )
     return true;
 
   const size_t strlength( strlen( str ) );
-  for ( auto i = 0U; i<strlength; i++ )
+  for ( auto i{0U}; i<strlength; i++ )
     if ( str[i] == '/' ) {
       if ( i + 1 < strlength )
         str[i + 1] = '\0';
@@ -2795,10 +2796,10 @@ bool EclipseInterface::Read_COORD( std::ifstream& ifs, char* text_line, size_t l
   grid_.Resize( i_stride, j_stride );
 
   // keeping j constant i go over the i's
-  for ( size_t j = 0U; j<j_stride; j++ )
+  for ( size_t j{0U}; j<j_stride; j++ )
   {
     // reading the pillar coordinates
-    for ( auto i = 0U; i<i_stride; i++ )
+    for ( auto i{0U}; i<i_stride; i++ )
     {
       // read pillar top
       double pillar_top_x = atof( popToken( ifs, text_line, line_length ) );
@@ -2949,16 +2950,16 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
   size_t pos = 0;
   for ( size_t k = 0U; k<NZ_; k++ )
   {
-    for ( size_t j = 0U; j<NY_; j++ )
+    for ( size_t j{0U}; j<NY_; j++ )
     {
-      for ( auto i = 0U; i<NX_; i++ )
+      for ( size_t i{0U}; i<NX_; i++ )
       {
         double t_nw = values.at( pos++ );
         double t_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 0] = t_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 1] = t_ne;
       }
-      for ( auto i = 0U; i<NX_; i++ )
+      for ( size_t i{0U}; i<NX_; i++ )
       {
         double t_sw = values.at( pos++ );
         double t_se = values.at( pos++ );
@@ -2966,16 +2967,16 @@ bool EclipseInterface::Read_ZCORN( std::ifstream& ifs, char* text_line, size_t l
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 3] = t_se;
       }
     }
-    for ( size_t j = 0U; j<NY_; j++ )
+    for ( size_t j{0U}; j<NY_; j++ )
     {
-      for ( auto i = 0U; i<NX_; i++ )
+      for ( size_t i{0U}; i<NX_; i++ )
       {
         double b_nw = values.at( pos++ );
         double b_ne = values.at( pos++ );
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 4] = b_nw;
         zcorn_[(i + j * NX_ + k * NXxNY) * 8 + 5] = b_ne;
       }
-      for ( auto i = 0U; i<NX_; i++ )
+      for ( size_t i{0U}; i<NX_; i++ )
       {
         double b_sw = values.at( pos++ );
         double b_se = values.at( pos++ );

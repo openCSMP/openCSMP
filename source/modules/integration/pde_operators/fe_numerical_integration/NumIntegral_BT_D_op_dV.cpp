@@ -98,7 +98,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
     else { // Node or Constraint Point
          E_.resize(e.FE()->IntegrationPoints());
          nu_.resize(e.FE()->IntegrationPoints());
-         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
               MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, Y_key_, i, E_[i] );
               MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, nu_key_, i, nu_[i] );
            }
@@ -123,13 +123,13 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
     else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
          MathOperatorRHS<dim>::MTRL.resize(e.IntegrationPoints());
-         for ( auto i=0; i<e.IntegrationPoints(); i++ )
-           for ( size_t j=0U; j<dim; ++j )
+         for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
+           for ( size_t j{0U}; j<dim; ++j )
              MathOperatorRHS<dim>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim>::MaterialOperandKey() );
       }
     else // if a nodal variable is dealt with
       {
-         for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
           MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e,
                                          MathOperatorRHS<dim>::MaterialOperandKey(), 
                                          i, MathOperatorRHS<dim>::MTRL[i] );
@@ -184,7 +184,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // mapping isostatic components of strain vector into 3x1 matrix STR
     STR.Zero();
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
-      for ( auto i=0; i<dim; i++ )
+      for ( auto i{0U}; i<dim; i++ )
         STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
 
     // numerical integration: 
@@ -222,7 +222,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT or 
               MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ) {
               STR.Zero();
-              for ( auto j=0; j<dim; j++ ) 
+              for ( auto j{0U}; j<dim; j++ ) 
                 STR(j,0U) = MathOperatorRHS<dim>::MTRL[i](j,j);
            }
 

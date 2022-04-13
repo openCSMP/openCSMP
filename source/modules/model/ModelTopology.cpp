@@ -88,8 +88,9 @@ an output file.
 
 @param output_file The name of the textfile which will either be newly created or
 overwritten.
+@param header If not empty, outputs this header before the topological information.
 */
-void  ModelTopology::Out( const char* output_file ) const
+void  ModelTopology::Out( const char* output_file, const std::string header ) const
  {
     if ( model_domains_.empty() ) {
          cout <<"\nModelTopology::Out: Topology of '"<< model_name_;
@@ -98,6 +99,9 @@ void  ModelTopology::Out( const char* output_file ) const
       }
     ofstream  ofs( output_file );
 
+    if( !header.empty() ) {
+        ofs << header << endl;
+    }
     ofs <<"\nModelTopology::Out: Model: '"<< model_name_ <<"'"<< endl;
     for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ )
       {
@@ -1077,6 +1081,7 @@ void  ModelTopology::OutputBoundaries( list<string>& boundaries ) const
  }
 
 
+
 void  ModelTopology::OutputSplitBoundaries( list<string>& split_boundaries ) const
  {
     set<string>  model_split_boundaries;
@@ -1618,7 +1623,7 @@ void  ModelTopology::PropertiesOfDomains( const char* regions_file,
          region = strtok( text_line, delims2 );
          // if the region is part of the current model its properties are read
          if ( Contains(region.c_str()) ) {
-               for ( auto i{0}; i<properties.size(); i++ ) {
+               for ( auto i{0U}; i<properties.size(); i++ ) {
                     val = atof( strtok( NULL, delims2 ) );
                     prop_vals.push_back( val );
                  }
@@ -1964,7 +1969,7 @@ void  ModelTopology::RenumberCells( const map<size_t,size_t>& eid_mapping )
     @param check_range allows user to check the newly generated range again.
 */
 template<uint32_t dim>
-void  ModelTopology::RenumberCells(csmp::VSet<dim>& vset, bool check_range )
+void  ModelTopology::RenumberCells( VSet<dim>& vset, bool check_range )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

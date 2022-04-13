@@ -112,7 +112,7 @@ void DispersivityVisitor< dim>::Visit(Element< dim>* n)
    double cross_term(0.0);
 
    // diffusion
-   for ( auto i=0; i<dim; i++ ) disp(i,i) = dp();
+   for ( auto i{0U}; i<dim; i++ ) disp(i,i) = dp();
 
    if ( v_abs != 0.0 ) {
        // xx

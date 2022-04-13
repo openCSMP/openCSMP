@@ -47,8 +47,8 @@ void Integral_NT_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
       {
          MathOperatorLHS<dim>::LHS.Resize(e.Nodes(),e.Nodes());
          double vol_div3 = e.Volume() / static_cast<double>(e.Nodes());
-         for ( auto i=0; i<e.Nodes(); i++ )
-           for ( auto j=0; j<e.Nodes(); j++ )
+         for ( auto i{0U}; i<e.Nodes(); i++ )
+           for ( auto j{0U}; j<e.Nodes(); j++ )
              if ( i == j ) MathOperatorLHS<dim>::LHS(i,j) = vol_div3;
              else          MathOperatorLHS<dim>::LHS(i,j) = 0.;
       }      

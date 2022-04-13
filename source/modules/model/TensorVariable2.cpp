@@ -742,15 +742,15 @@ void  TensorVariable<2U>::In()
      cout.flush();
      string  status;
      cin >> status;
-     for ( uint32_t i=0; i<2U; i++ )
+     for ( uint32_t i{0U}; i<2U; i++ )
        flag[i] = parseStatus( status.c_str() );
      
      cout <<"\nEnter first row of elements : ";
      cout.flush();
-     for ( uint32_t i=0; i<2U; i++ ) cin >> data[0][i];
+     for ( uint32_t i{0U}; i<2U; i++ ) cin >> data[0][i];
      cout <<"Enter second row of elements: ";
      cout.flush();
-     for ( uint32_t i=0; i<2U; i++ ) cin >> data[1][i];
+     for ( uint32_t i{0U}; i<2U; i++ ) cin >> data[1][i];
 
  } // end In
 

@@ -56,7 +56,7 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::const_iterator
     const auto nodes_end(last);
     for ( auto nit(first); nit!=nodes_end; ++nit ) {
          const auto parent_elements((*nit)->Parents());
-         for ( auto i=0; i<parent_elements; ++i ) {
+         for ( auto i{0U}; i<parent_elements; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
               elmts.insert( (*nit)->Parent(i) );
            }
@@ -79,13 +79,13 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::const_iterator
    
     for ( auto& it : elements_ ) {
          const auto neighbors(it->Neighbors());
-         for ( auto i{0}; i<neighbors; ++i )
+         for ( auto i{0U}; i<neighbors; ++i )
             if ( it->Neighbor(i) == nullptr ||
                 !binary_search( elements_.begin(), elements_.end(), it->Neighbor(i) ) ) {
                  // collecting the perimeter nodes into a set
                  it->FE()->NodesOfFace( i, fnids );
                  const auto nodes_of_face(fnids.size());
-                 for ( auto j=0U; j<nodes_of_face; ++j )
+                 for ( auto j{0U}; j<nodes_of_face; ++j )
                    perimeter_nodes.insert( it->N(fnids[j]) );
               }
             //else cerr <<"i ";
@@ -189,13 +189,13 @@ void NimbleRegion<dim>::Update2( typename std::vector<Node<dim>*>::const_iterato
     set<Node<dim>*>  perimeter_nodes;
     const typename vector<Node<dim>*>::iterator nodes_end(nodes_.end());
     for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_end; ++nit )
-       for ( auto i=0; i<(*nit)->Parents(); ++i ) {
+       for ( auto i{0U}; i<(*nit)->Parents(); ++i ) {
             assert( (*nit)->Parent(i) != nullptr );
             pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit)->Parent(i) );
             // if this is element was not encountered before, we keep track of its nodes
             if ( eit.second ) {
                 const auto nodes((*nit)->Parent(i)->Nodes());
-                for ( auto j=0U; j<nodes; ++j )
+                for ( auto j{0U}; j<nodes; ++j )
                     // but only those nodes that are not contained in the interior
                     if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit)->Parent(i)->N(j) ) ) {
                          // storing the unique perimeter nodes
@@ -271,13 +271,13 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
     set<Node<dim>*>  perimeter_nodes;
     //for ( typename vector<Node<dim>*>::iterator nit=nodes_.begin(); nit!=nodes_end; ++nit )
     for ( typename vector<Node<dim>*>::iterator nit2=nodes_.begin(); nit2!=nodes_.end(); ++nit2 )
-       for ( auto i=0; i<(*nit2)->Parents(); ++i ) {
+       for ( auto i{0U}; i<(*nit2)->Parents(); ++i ) {
             assert( (*nit2)->Parent(i) != nullptr );
             pair<typename set<CellType*>::iterator,bool> eit = elmts.insert( (*nit2)->Parent(i) );
             // if this is element was not encountered before, we keep track of its nodes
             if ( eit.second ) {
                 const auto nodes((*nit2)->Parent(i)->Nodes());
-                for ( auto j=0U; j<nodes; ++j )
+                for ( auto j{0U}; j<nodes; ++j )
                     // but only those nodes that are not contained in the interior
                     if ( !binary_search( nodes_.begin(), nodes_.end(), (*nit2)->Parent(i)->N(j) ) ) {
                          // storing the unique perimeter nodes
@@ -300,14 +300,14 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
     for ( auto& it : elements_ ) {
          const auto neighbors(it->Neighbors());
          //cout<<"    neighbors = "<<neighbors<<endl;
-         for ( auto i{0}; i<neighbors; ++i )
+         for ( auto i{0U}; i<neighbors; ++i )
             if ( it->Neighbor(i) == nullptr ||
                 !binary_search( elements_.begin(), elements_.end(), it->Neighbor(i) ) ) {
                  // collecting the perimeter nodes into a set
                  it->FE()->NodesOfFace( i, fnids );
                  const auto nodes_of_face(fnids.size());
                  //cout<<"   nodes_of_face = "<<nodes_of_face<<endl;
-                 for ( auto j=0U; j<nodes_of_face; ++j )
+                 for ( auto j{0U}; j<nodes_of_face; ++j )
                    perimeter_nodes.insert( it->N(fnids[j]) );
               }
             //else cerr <<"i ";
@@ -361,7 +361,7 @@ size_t NimbleRegion<dim>::PerimeterNodes() const
 
 
 template<uint32_t dim>
-size_t NimbleRegion<dim>::Elements() const
+size_t NimbleRegion<dim>::Cells() const
  {
      return elements_.size();
  }
@@ -430,11 +430,11 @@ typename std::vector<csmp::Node<dim>*>::const_iterator  NimbleRegion<dim>::Nodes
 
 template<uint32_t dim>
 typename std::vector<Element
-<dim>*>::const_iterator NimbleRegion<dim>::ElementsBegin() const { return elements_.begin(); }
+<dim>*>::const_iterator NimbleRegion<dim>::CellsBegin() const { return elements_.begin(); }
 
 template<uint32_t dim>
 typename std::vector<Element
-<dim>*>::const_iterator NimbleRegion<dim>::ElementsEnd() const { return elements_.end(); }
+<dim>*>::const_iterator NimbleRegion<dim>::CellsEnd() const { return elements_.end(); }
 
 
 

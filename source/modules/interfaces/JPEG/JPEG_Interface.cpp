@@ -111,7 +111,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     
     if ( !regular_grid.IsInitialized() ) 
       {
-         sg.AssignElementCharacteristicsTo("inner radius", "inner radius");
+         sg.AssignCellCharacteristicsTo("inner radius", "inner radius");
          sg.MinMaxOf("inner radius", rmin, rmax );       
          Point<2U>  xyz_min, xyz_max;
          sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -122,7 +122,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     // 3. setting up static visitor to write repeatedly write data to grid
     // -------------------------------------------------------------------
     FemToGridVisitor<2U> writer( sg.Database(),  regular_grid, 
-                                 var_name, sg.Region("Model").Elements() );
+                                 var_name, sg.Region("Model").Cells() );
     writer.OverWrite( true );
     writer.OutputProperty( var_name );
      
@@ -184,7 +184,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     
     if ( !regular_grid.IsInitialized() ) 
       {
-         sg.AssignElementCharacteristicsTo("inner radius", "inner radius");
+         sg.AssignCellCharacteristicsTo("inner radius", "inner radius");
          sg.MinMaxOf("inner radius", rmin, rmax );       
          Point<2U>  xyz_min, xyz_max;
          sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -195,7 +195,7 @@ bool JPEG_Interface::OutputDataToJPG( Model<2U>& sg,
     // 3. setting up static visitor to write repeatedly write data to grid
     // -------------------------------------------------------------------
     FemToGridVisitor<2U> writer( sg.Database(), regular_grid, 
-                                 var_name, sg.Region("Model").Elements() );
+                                 var_name, sg.Region("Model").Cells() );
     writer.OverWrite( true );
     writer.OutputProperty( var_name );
      

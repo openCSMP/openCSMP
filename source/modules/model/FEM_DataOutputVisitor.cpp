@@ -46,7 +46,7 @@ void FEM_DataOutputVisitor<Var,dim>::Visit( Element<dim>* eptr )
          return;
       }
     // IntegrationPoint properties
-    for ( auto i{0}; i<eptr->IntegrationPoints(); i++ ) {
+    for ( auto i{0U}; i<eptr->IntegrationPoints(); i++ ) {
          assert( counter_ < input_data_ref_.Size() ); 
          eptr->Read( i, prop_key_, input_data_ref_[ counter_++ ] );
       }

@@ -140,9 +140,9 @@ void Region_Test::run()
         if ( verbose_ ) cout << (*it) <<" ";
         if ( verbose_ ) vtk_output.OutputDataToVTK( model, (*it).c_str(), "permeability", "permeability", 1, true );
         count++;
-        size_t num_elements_perm_region(model.Region((*it).c_str()).Elements());
-        _test((  num_elements_perm_region == model.Region("MATRIX").Elements()  )
-                 or  ( num_elements_perm_region == model.Region("FRAC_VOLUMES").Elements() ));
+        size_t num_elements_perm_region(model.Region((*it).c_str()).Cells());
+        _test((  num_elements_perm_region == model.Region("MATRIX").Cells()  )
+                 or  ( num_elements_perm_region == model.Region("FRAC_VOLUMES").Cells() ));
     }
     if ( verbose_ ) cout << endl;
     cout.flush();
@@ -155,7 +155,7 @@ void Region_Test::run()
 
     if ( verbose_ ) vtk_output.OutputDataToVTK( model, "permeability_regions", "permeability_regions", "permeability", 1, true );
 
-    _test( model.Region("permeability_regions").Elements() == model.Region("Model").Elements() );
+    _test( model.Region("permeability_regions").Cells() == model.Region("Model").Cells() );
     if ( verbose_ ) cout <<"\n\n\nRegion_Test::run: RemoveRegion()  removing region 'permeability_regions' and other new regions."<< endl;
 
     model.RemoveRegion( "permeability_regions" );
@@ -183,8 +183,8 @@ void Region_Test::run()
     auto nodes_end=model.Region("pressure_permeability_overlap1").NodesEnd();
     auto nodes_begin=model.Region( "pressure_permeability_overlap1" ).NodesBegin();
 
-    auto Elements_end=model.Region("pressure_permeability_overlap1").ElementsEnd();
-    auto Elements_begin=model.Region( "pressure_permeability_overlap1").ElementsBegin();
+    auto Elements_end=model.Region("pressure_permeability_overlap1").CellsEnd();
+    auto Elements_begin=model.Region( "pressure_permeability_overlap1").CellsBegin();
 
     Index PresKey( model.Database().StorageKey("fluid pressure" ) );
     Index PermKey( model.Database().StorageKey("permeability" ) );
@@ -220,7 +220,7 @@ void Region_Test::run()
         vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap1", "region_kpf1", "fluid pressure", 1, true );
         vtk_output.OutputDataToVTK( model, "pressure_permeability_overlap2", "region_kpf2", "fluid pressure", 1, true );
       }
-    _test( model.Region("pressure_permeability_overlap1").Elements() == model.Region("pressure_permeability_overlap1").Elements() );
+    _test( model.Region("pressure_permeability_overlap1").Cells() == model.Region("pressure_permeability_overlap1").Cells() );
     _test( model.ContainsRegion("pressure_permeability_overlap1") == true );
     _test( model.ContainsRegion("pressure_permeability_overlap2") == true );
 
@@ -277,7 +277,7 @@ void Region_Test::run()
     // Region Union Test
     if ( verbose_ ) cout <<"\n\n\nRegion_Test::run: RegionUnion()  combining 'FRAC_VOLUMES' and 'MATRIX' regions."<< endl;
     model.RegionUnion( "FRAC_VOLUMES", "MATRIX", "MODEL" );
-    _test( model.Region("Model").Elements() == model.Region("MODEL").Elements() );
+    _test( model.Region("Model").Cells() == model.Region("MODEL").Cells() );
 
     if ( verbose_ )
       vtk_output.OutputDataToVTK( model, "FRAC_VOLUMES", "volumetric_fractures", "fluid pressure", 1, true );
@@ -305,7 +305,7 @@ void Region_Test::run()
     // Region difference test (returns the data in A that is not in B)
     if ( verbose_ ) cout <<"\nRegion_Test::run: What is the difference between MATRIX and Model (FRAC_VOLUMES): ";
     _test( model.RegionDifference( "Model", "MATRIX", "difference" ) == true );
-    _test( model.Region("difference").Elements() == model.Region("FRAC_VOLUMES").Elements() );
+    _test( model.Region("difference").Cells() == model.Region("FRAC_VOLUMES").Cells() );
 
     if ( verbose_ )
       vtk_output.OutputDataToVTK( model, "difference", "fluid-pressure", "fluid pressure", 1, true );
@@ -317,7 +317,7 @@ void Region_Test::run()
       }
     _test( model.RegionSymmetricDifference( "MATRIX", "Model", "diff" ) == true );
     // should contain all volumetric elements from FRAC_VOLUMES
-    _test( model.Region("diff").Elements() == model.Region("FRAC_VOLUMES").Elements() );
+    _test( model.Region("diff").Cells() == model.Region("FRAC_VOLUMES").Cells() );
     model.RemoveRegion( "diff" );
 
     // breaking a region into contiguous sub-regions
@@ -370,11 +370,11 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     _equal( surface_area1, surface_area, numeric_limits<double>::epsilon() * surface_area );
   
     // extracting perimeter elements to set for comparison
-    size_t perimeter_elements(model1_domain.PerimeterElements());
+    size_t perimeter_elements(model1_domain.PerimeterCells());
     // extracting the perimeter face vector for comparison with re-read model2
     vector<vector<int8_t> > perimeter_faces;
-    perimeter_faces.reserve(model1_domain.PerimeterElements());
-    for ( auto e=model1_domain.InteriorElements(); e<model1_domain.Elements(); ++e ) {
+    perimeter_faces.reserve(model1_domain.PerimeterCells());
+    for ( auto e=model1_domain.InteriorCells(); e<model1_domain.Cells(); ++e ) {
          vector<int8_t>  face_vec;
          for ( auto i{0}; i<model1_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( static_cast<int8_t>(model1_domain.PerimeterFace(e,i)) );
@@ -395,13 +395,13 @@ bool Region_Test::TestBoundaryFaceFunctionality()
     const Region<3U>& model2_domain(model2.Region("Model"));
  
     // test 0: same number of perimeter elementds
-    size_t perimeter_elements2(model2_domain.PerimeterElements());
+    size_t perimeter_elements2(model2_domain.PerimeterCells());
     _test( perimeter_elements = perimeter_elements2 );
   
     // test 1: re-read model2
     vector<vector<int8_t> > perimeter_faces2;
-    perimeter_faces2.reserve(model2_domain.PerimeterElements());
-    for ( auto e=model2_domain.InteriorElements(); e<model2_domain.Elements(); ++e ) {
+    perimeter_faces2.reserve(model2_domain.PerimeterCells());
+    for ( auto e=model2_domain.InteriorCells(); e<model2_domain.Cells(); ++e ) {
          vector<int8_t>  face_vec;
          for ( auto i{0}; i<model2_domain.PerimeterFaces(e); ++i )
            face_vec.push_back( static_cast<int8_t>(model2_domain.PerimeterFace(e,i)) );
@@ -510,15 +510,15 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
      Region<3>&  domain(model.Region(region));
      for ( auto nit=domain.NodesBegin(); nit!=domain.PerimeterNodesBegin(); nit++ ) interior_nodes.insert( (*nit) );
      for ( auto nit=domain.PerimeterNodesBegin(); nit!=domain.NodesEnd(); nit++ )   perimeter_nodes.insert( (*nit) );
-     for ( auto eit=domain.ElementsBegin(); eit!=domain.PerimeterElementsBegin(); eit++ ) interior_elements.insert( (*eit) );
-     for ( auto eit=domain.PerimeterElementsBegin(); eit!=domain.ElementsEnd(); eit++ ) perimeter_elements.insert( (*eit) );
+     for ( auto eit=domain.CellsBegin(); eit!=domain.PerimeterCellsBegin(); eit++ ) interior_elements.insert( (*eit) );
+     for ( auto eit=domain.PerimeterCellsBegin(); eit!=domain.CellsEnd(); eit++ ) perimeter_elements.insert( (*eit) );
    
      size_t n_perimeter_nodes(domain.PerimeterNodes());
-     size_t n_perimeter_elements(domain.PerimeterElements());
+     size_t n_perimeter_elements(domain.PerimeterCells());
      // extracting the perimeter face vector for comparison with re-read model2
      vector<vector<int8_t> > perimeter_faces;
-     perimeter_faces.reserve(domain.PerimeterElements());
-     for ( auto e=domain.InteriorElements(); e<domain.Elements(); ++e ) {
+     perimeter_faces.reserve(domain.PerimeterCells());
+     for ( auto e=domain.InteriorCells(); e<domain.Cells(); ++e ) {
           vector<int8_t>  face_vec;
           for ( auto i{0}; i<domain.PerimeterFaces(e); ++i )
             face_vec.push_back( static_cast<int8_t>(domain.PerimeterFace(e,i)) );
@@ -539,15 +539,15 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
 
      for ( auto nit=domain2.NodesBegin(); nit!=domain2.PerimeterNodesBegin(); nit++ ) interior_nodes2.insert( (*nit) );
      for ( auto nit=domain2.PerimeterNodesBegin(); nit!=domain2.NodesEnd(); nit++ )   perimeter_nodes2.insert( (*nit) );
-     for ( auto eit=domain2.ElementsBegin(); eit!=domain2.PerimeterElementsBegin(); eit++ ) interior_elements2.insert( (*eit) );
-     for ( auto eit=domain2.PerimeterElementsBegin(); eit!=domain2.ElementsEnd(); eit++ ) perimeter_elements2.insert( (*eit) );
+     for ( auto eit=domain2.CellsBegin(); eit!=domain2.PerimeterCellsBegin(); eit++ ) interior_elements2.insert( (*eit) );
+     for ( auto eit=domain2.PerimeterCellsBegin(); eit!=domain2.CellsEnd(); eit++ ) perimeter_elements2.insert( (*eit) );
    
      size_t n_perimeter_nodes2(domain2.PerimeterNodes());
-     size_t n_perimeter_elements2(domain2.PerimeterElements());
+     size_t n_perimeter_elements2(domain2.PerimeterCells());
      // extracting the perimeter face vector for comparison with re-read model2
      vector<vector<int8_t> > perimeter_faces2;
-     perimeter_faces2.reserve(domain2.PerimeterElements());
-     for ( auto e=domain2.InteriorElements(); e<domain2.Elements(); ++e ) {
+     perimeter_faces2.reserve(domain2.PerimeterCells());
+     for ( auto e=domain2.InteriorCells(); e<domain2.Cells(); ++e ) {
           vector<int8_t>  face_vec;
           for ( auto i{0}; i<domain2.PerimeterFaces(e); ++i )
             face_vec.push_back( static_cast<int8_t>(domain2.PerimeterFace(e,i)) );
@@ -585,7 +585,7 @@ bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
    
     const Region<3U>& model_domain(model.Region("Model"));
    
-    for ( auto e=model_domain.InteriorElements(); e<model_domain.Elements(); ++e )
+    for ( auto e=model_domain.InteriorCells(); e<model_domain.Cells(); ++e )
      {
          const size_t expected_perimeter_faces(model_domain.PerimeterFaces(e));
          size_t       perimeter_faces(0U);

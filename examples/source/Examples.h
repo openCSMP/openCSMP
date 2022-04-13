@@ -14,7 +14,7 @@
 #include "StatisticalAnalyzer_Example.h"    // creation of histograms
 #include "Visitor_Example.h"                // use & implementation of visitor
 #include "DenseMatrix_Example.h"            // illustration of matrix features
-#include "SteadyStatePressureToVset_Example.h" // Region to/from Vset
+#include "ParallelPlateFracture_Example.h"  // fracture permeability calculation, linear or quadratic pressure
 #include "PressureDiffusion_Example.h"      //  2D transient calculation of fluid pressure distribution
 #include "LinearElasticity_Example.h"       // mechanical computations with regions
 #include "TopographyDrivenFlow_Example.h"   // steady state

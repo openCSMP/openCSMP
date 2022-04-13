@@ -75,8 +75,8 @@ void Integral_NT_rhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
       fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
       
       // the matrix is contracted into a vector by multiplying with the basis vector
-      for ( auto i=0; i<e.Nodes(); i++ ) 
-        for ( auto j=0; j<e.Nodes(); j++ ) 
+      for ( auto i{0U}; i<e.Nodes(); i++ ) 
+        for ( auto j{0U}; j<e.Nodes(); j++ ) 
           MathOperatorRHS<dim>::RHS[i] += INN(i,j) * basic_var_[j]() * sc();
     }
     // lumped formulation  

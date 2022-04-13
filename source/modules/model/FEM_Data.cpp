@@ -20,7 +20,7 @@ FEM_Data<csp_type>::FEM_Data( PLACEMENT p, size_t i )
  : place(p), logarithmitized(false)
  {
     data.reserve(i);
-    for ( size_t j=0U; j<i; j++ ) data.push_back( csp_type() );
+    for ( size_t j{0U}; j<i; j++ ) data.push_back( csp_type() );
  } 
 
 
@@ -64,7 +64,7 @@ void FEM_Data<csp_type>::Reset( const csmp::Index& setting, size_t size, const c
     data.erase( data.begin(), data.end() );
     if ( size > 0 ) {
          data.reserve(size);
-         for( auto i{0}; i<size; i++ ) data.push_back( val );
+         for( size_t i{0U}; i<size; i++ ) data.push_back( val );
       } 
  } 
 
@@ -313,7 +313,7 @@ void FEM_Data<csp_type>::Out() const
     if ( logarithmitized ) cout <<"\nLogarithmitized data: "<< endl;
     else                   cout <<"\nData ("<< data.size()<<" vals): "<< endl;
  
-    for ( auto i{0}; i<data.size(); i++ )
+    for ( size_t i{0U}; i<data.size(); i++ )
       cout << data[i] <<"\t";
     cout << endl;
 

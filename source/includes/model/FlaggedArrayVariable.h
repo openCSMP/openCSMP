@@ -2,13 +2,12 @@
 #define FLAGGED_ARRAY_VARIABLE_H
 
 #include "ArrayVariable.h"
-#include "PropertyDatabase.h"
-
 
 namespace csmp {
 
 class ScalarVariable;
 class ArrayVariable;
+template<uint32_t> class PropertyDatabase;
 
 /**
 
@@ -50,7 +49,7 @@ class ArrayVariable;
 
   @code
   Index efaKey( model.Database().StorageKey("element flagged array") );
-  for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+  for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
     (*it)->Read( efaKey, fav );
   @endcode
 
@@ -74,7 +73,7 @@ class FlaggedArrayVariable
                             double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                             VARIABLE_FLAG flag = ANY );
       
-      explicit FlaggedArrayVariable( size_t arraySize,
+      explicit FlaggedArrayVariable( unsigned int arraySize,
                                      double defaultValue = 0.,
                                      VARIABLE_FLAG flag = ANY );
       
@@ -136,10 +135,6 @@ class FlaggedArrayVariable
       VARIABLE_FLAG  Flag( const size_t&) const;
       VARIABLE_FLAG& Flag( const size_t&);
       void           Flag( const size_t&, VARIABLE_FLAG);
-      void           Fabs();
-      void           Ln();
-      void           Log10();
-      void           Sqrt();
       bool           IsWithinRange( double min, double max ) const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();

@@ -1,8 +1,6 @@
 #ifndef CSMP_INTER_FACE_H
 #define CSMP_INTER_FACE_H
 
-#include "Element.h"
-
 #include "LocalVariableStorage.h"
 #include "FiniteElement.h"
 #include "FiniteElementPolicy.h"
@@ -10,6 +8,10 @@
 
 
 namespace csmp {
+
+template<uint32_t> class Element;
+template<uint32_t> class Face;
+
 
 /**
 
@@ -71,18 +73,19 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     InterFace() = delete;
 
-    explicit InterFace( FiniteElement* );
+    /// constructs complete InterFace with Face nodes as inside nodes and outside nodes in opposite order as supplied get connected to outside element
+    InterFace( csmp::Face<dim>*,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props,
+               std::vector<Node<dim>*> outside_nodes );
 
-    InterFace( FiniteElement*,
-               const FiniteVolumeStencil<dim>* );
-    
     /// default: incomplete construction without connection to nodes
     InterFace( csmp::FiniteElement*, 
                const csmp::FiniteVolumeStencil<dim>*,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props );
 
-    /// incomplete reconstruction of model from native binary file
+    /// reconstruction of model from native binary file
     InterFace( size_t index,
                csmp::FiniteElement*,
                const csmp::FiniteVolumeStencil<dim>*,
@@ -169,6 +172,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
+    
+    /// END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects terminating within models where INSIDE and OUTSIDE nodes are identical
+    bool IsEndPointNode( uint32_t n_local ) const;
 
     /// returns neighbor InterFace of interface
     csmp::InterFace<dim>* const Neighbor( uint32_t ) const;
@@ -206,7 +212,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
-    double         Area( INTERFACE_SIDE=MIDDLE ) const;
+    double         Area( INTERFACE_SIDE=INSIDE ) const;
     
     /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
     void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;

@@ -407,7 +407,7 @@ IsoparametricLinearTetrahedron::dN( DenseMatrix<DM_MIN>& DN4 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -575,7 +575,7 @@ void  IsoparametricLinearTetrahedron::IntegrationPoint( uint32_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( auto i{0}; i<npe; i++ ) {
+    for( auto i{0U}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -597,7 +597,7 @@ void IsoparametricLinearTetrahedron::ParametricToPhysical( vector<double>& rst,
     xyz.resize(dim);
     xyz[0]=xyz[1]=xyz[2]=0.;
 
-    for(uint32_t i=0; i<npe; i++) {
+    for( uint32_t i{0U}; i<npe; i++) {
          xyz[0]+=XY(i,0)*DNR[i];
          xyz[1]+=XY(i,1)*DNR[i];
          xyz[2]+=XY(i,2)*DNR[i];
@@ -789,7 +789,7 @@ double IsoparametricLinearTetrahedron::Volume()
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( auto i=0; i<gpe; i++ )
+    for ( auto i{0U}; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -930,7 +930,7 @@ IsoparametricLinearTetrahedron::InnerRadius()
    double  sum(0.);
 
    EdgeLengths( NRST );
-   for ( uint32_t i=0; i<spe; i++ ) sum += NRST[i];
+   for ( uint32_t i{0U}; i<spe; i++ ) sum += NRST[i];
 
    if(AspectRatio()>4.)
      cerr<<"\nIsoparametricLinearTetrahedron::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
@@ -1003,8 +1003,8 @@ const
    if ( gpe == 1U ) {
         // Define nodal values as bi-linear variation of the integration points values
         // See Zienkewitch, pp. 351, for example
-        for ( uint32_t i=0; i<npe; i++ )
-            for ( uint32_t k=0; k<nvars; k++ )	NVAR[i*nvars + k] = IVAR[k];
+        for ( uint32_t i{0U}; i<npe; i++ )
+            for ( uint32_t k{0U}; k<nvars; k++ )	NVAR[i*nvars + k] = IVAR[k];
 
         return;
      }
@@ -1080,7 +1080,7 @@ const
           for ( int k=0; k<nvars; k++ ) sum[k] += intpol[j] * IVAR[j*nvars + k];
 
         // store result in output vector
-        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k{0U}; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
@@ -1204,9 +1204,9 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" double"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1235,7 +1235,7 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" double"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1243,8 +1243,8 @@ void IsoparametricLinearTetrahedron::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" double"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }

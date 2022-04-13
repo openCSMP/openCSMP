@@ -172,7 +172,7 @@ namespace csmp {
   template<uint32_t dim>
   inline void vertexCenterOfMass( const std::vector<Point<dim> >& vecPoints, Point<dim>& vecCentroid )
   {
-    for(auto i = 0U; i < vecPoints.size(); i++)
+    for( size_t i{0U}; i < vecPoints.size(); i++)
       vecCentroid += vecPoints[i];
     
     vecCentroid /= vecPoints.size();

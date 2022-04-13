@@ -27,7 +27,7 @@ void material_IDs_FromPropertyValues( Model<dim>& model, const std::string& elmt
     Region<dim>& model_domain(model.Region("Model"));
     int32_t mtrl_min(INT_MAX), mtrl_max(INT_MIN);
     
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         const double value = (*it)->Read(key);
         // checking that the property value can indeed be converted into an integer in a meaningful range
         // using the modulus operator % to determine whether the number has a decimal fraction
@@ -65,7 +65,7 @@ void propertyValuesPFromMaterial_IDs( Model<dim>& model, const std::string& elmt
 
     Region<dim>& model_domain(model.Region("Model"));
     
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          const double material_identifier = static_cast<double>( (*it)->Material_ID() );
          (*it)->Store( key, makeScalar( (*it)->Status(key), material_identifier ) );
       }
@@ -99,7 +99,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
     size_t       modified_interior_elmts(0U),
                  modified_boundary_elmts(0U);
     
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          if ( !isTriangular( (*it)->FE_Type() ) )
            csmp::Exception( ERROR, "smoothMaterialInterfaces", "thus far, this method has only been implemented for triangles.");
          if ( !(*it)->IsSurfaceElement() )
@@ -108,7 +108,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
          // removing completely isolated elements
          const int32_t mtrl_ID = (*it)->Material_ID();
          bool  nbor_with_same_ID(false);
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+         for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr && (*it)->Neighbor(i)->Material_ID() == mtrl_ID ) {
                 nbor_with_same_ID = true;
                 break;

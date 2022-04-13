@@ -219,7 +219,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          e->FE()->Jacobian( e->FE()->DNR, e->FE()->DNS, e->FE()->DNT );
 
          DN.Resize(3U,nodes);
-         for ( auto i{0}; i<nodes; i++ ) {
+         for ( auto i{0U}; i<nodes; i++ ) {
               DN(0U,i) = e->FE()->DNR[i];
               DN(1U,i) = e->FE()->DNS[i];
               DN(2U,i) = e->FE()->DNT[i];
@@ -235,8 +235,8 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          // compute Jacobian matrix
          e->FE()->JAC.Resize(2U,3U);
          e->FE()->JAC.Zero();
-         for ( auto i{0}; i<3U; i++ )
-           for ( uint32_t j=0U; j<nodes; j++ ) {
+         for ( auto i{0U}; i<3U; i++ )
+           for ( uint32_t j{0U}; j<nodes; j++ ) {
                 e->FE()->JAC(0U,i) += e->FE()->DNR[j] *
                                                          e->FE()->XY(j,i);
                 e->FE()->JAC(1U,i) += e->FE()->DNS[j] *
@@ -246,7 +246,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          // using equation J' = ( E * g - F^2 )^0.5 see CELL-development-in-CSP.doc equation (15)
          // compute E, F, and g
          double  efg0(0.), efg1(0.), efg2(0.);
-         for ( uint32_t i=0; i<3U; i++ ) {
+         for ( uint32_t i{0U}; i<3U; i++ ) {
               efg0 += e->FE()->JAC(0U,i) * e->FE()->JAC(0U,i);
               efg1 += e->FE()->JAC(0U,i) * e->FE()->JAC(1U,i);
               efg2 += e->FE()->JAC(1U,i) * e->FE()->JAC(1U,i);
@@ -254,7 +254,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          double  detJ(sqrt(efg0 * efg2 - efg1 * efg1));
          double  det_inverse(1. / (detJ * detJ));
 
-         for ( uint32_t i=0; i<nodes; i++ ) {
+         for ( uint32_t i{0U}; i<nodes; i++ ) {
               DN(0U,i)  = det_inverse * e->FE()->JAC(0U,0U) *
                         (efg2 * e->FE()->DNR[i] - efg1 * e->FE()->DNS[i] );
               DN(0U,i) += det_inverse * e->FE()->JAC(1U,0U) *
@@ -333,7 +333,7 @@ double FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint(
 
     assert( e != nullptr );
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i<nodes; i++ )
+    for ( uint32_t i{0U}; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
     return sum;
@@ -377,7 +377,7 @@ double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( uint
     // interpolating property to integration point
     double  sum(0.);
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i<nodes; i++ )
+    for ( uint32_t i{0U}; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
     return sum;
@@ -423,7 +423,7 @@ void FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint( const cs
       
     assert( e != nullptr );
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i<nodes; i++ ) {
+    for ( uint32_t i{0U}; i<nodes; i++ ) {
         e->N(i)->Read( prop_key, temp );
         var += temp * e->FE()->NRST[i];
     }
@@ -482,7 +482,7 @@ void  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( const 
     assert( e != nullptr );
 
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i < nodes; i++ ) {
+    for ( uint32_t i{0U}; i < nodes; i++ ) {
          e->N(i)->Read( prop_key, temp );
          var += temp * e->FE()->NRST[i];
       }
@@ -541,7 +541,7 @@ double  FiniteVolumePolicy<3U,CELL>::FacetIntegral( uint32_t iSector,
 
     double  integral(static_cast<double>(0.));
     for ( uint32_t iFacet=0U; iFacet<fvptr_->FacetsPerSector(iSector); iFacet++ )
-      for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
+      for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
              // 1. take integration point location from FV stencil
              fvptr_->FacetIntegrationPoint( iFacet, j, e->FE()->NRST );
              // 2. Compute the Jacobian
@@ -587,7 +587,7 @@ double  FiniteVolumePolicy<3U,CELL>::SectorIntegral( uint32_t iSector,
     e->CoordinateMatrix();
 
     double fIntegral(0.);
-    for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+    for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST );
         fIntegral += PropertyValueAtSectorIntegrationPoint( iSector, j, prop_key ) *
@@ -705,7 +705,7 @@ double  FiniteVolumePolicy<3U,CELL>::ProjectionOnFacetNormal( uint32_t iFacet,
     double sum2(static_cast<double>(0.));
 
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i<nodes; i++ ) {
+    for ( uint32_t i{0U}; i<nodes; i++ ) {
          e->N(i)->Read( prop_key, vc );
          sum0 += e->FE()->NRST[i] * vc[0];
          sum1 += e->FE()->NRST[i] * vc[1];
@@ -748,7 +748,7 @@ double  FiniteVolumePolicy<3U,CELL>::SectorVolume( uint32_t iSector ) const
    e->CoordinateMatrix();
 
    double fVolume(0.);
-   for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+   for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
         fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
         e->FE()->JacobianAt(e->FE()->NRST);
         fVolume += fvptr_->SectorIntegrationWeight(iSector, j) *
@@ -1060,7 +1060,7 @@ double  FiniteVolumePolicy<3U,CELL>::ParametricFacetArea( uint32_t iFacet ) cons
   double  area(static_cast<double>(0.));
   
   // loop that loops only if there are indeed multiple integration points
-  for ( uint32_t j=0; j<fvptr_->IntegrationPointsPerFacet(); j++ )
+  for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerFacet(); j++ )
     area += fvptr_->FacetIntegrationWeight( iFacet, j );
 
   return area;

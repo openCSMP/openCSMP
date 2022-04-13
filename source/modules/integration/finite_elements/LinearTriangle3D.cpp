@@ -172,7 +172,7 @@ double  LinearTriangle3D::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
+   for ( uint32_t i{0U}; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()), 
              segm2 = (*segms.rbegin());
@@ -210,7 +210,7 @@ double  LinearTriangle3D::InnerRadius()
    double         sum(0.0), vol;
 
    EdgeLengths( segms );
-   for ( uint32_t i=0; i<segms.size(); i++ ) sum += segms[i];
+   for ( uint32_t i{0U}; i<segms.size(); i++ ) sum += segms[i];
    sum /= 2.0;
    vol  = Volume();
    vol /= sum;
@@ -667,9 +667,9 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;  
@@ -698,7 +698,7 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x6
-           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -707,8 +707,8 @@ void LinearTriangle3D::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 6
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }
@@ -769,9 +769,9 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;  
@@ -801,10 +801,10 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      
      ofs <<"SCALARS "<< "sum_N" <<" float"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-     for ( uint32_t i=0; i<npe; i++ ) {
+     for ( uint32_t i{0U}; i<npe; i++ ) {
           xyz[0] = XY(i,0); xyz[1] = XY(i,1); xyz[2] = XY(i,2); sum = 0.0;
           N( IPOL, xyz );
-          for ( uint32_t j=0; j<npe; j++ ) sum += IPOL[j];
+          for ( uint32_t j{0U}; j<npe; j++ ) sum += IPOL[j];
           ofs << sum <<" ";
        }
      ofs << endl;
@@ -815,8 +815,8 @@ void LinearTriangle3D::OutputToVTK( const char* file_name )
      DenseMatrix<DM_MIN> DN(dim,npe);
      dN( DN );
      
-     for ( uint32_t i=0; i<DN.Cols(); i++ ) {
-          for ( uint32_t j=0; j<DN.Rows(); j++ ) ofs << DN(j,i) <<"  ";
+     for ( uint32_t i{0U}; i<DN.Cols(); i++ ) {
+          for ( uint32_t j{0U}; j<DN.Rows(); j++ ) ofs << DN(j,i) <<"  ";
           ofs << endl;
        }
      ofs << endl;

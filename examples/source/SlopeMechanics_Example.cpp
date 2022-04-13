@@ -12,8 +12,6 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_UoM.h"
-#include "PDE_IntegratorExperimental.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -133,13 +131,13 @@ void SlopeMechanics_Example::Run()
   const csmp::Index visc_key(model.Database().StorageKey("fluid viscosity"));
   const csmp::Index cond_key(model.Database().StorageKey("conductivity"));
   ScalarVariable  visc;
-  for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+  for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
        (*it)->PropertyValueAtBaryCenter( visc_key, visc );
        (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
     }
   printRangeOfVariable( model, "conductivity" );
 
-  model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+  model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
   
   // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -154,7 +152,7 @@ void SlopeMechanics_Example::Run()
   CSMP_DEFAULT_LINEAR_SOLVER  solver;
 #endif
 
-  PDE_Integrator_UoM<DIM,Region>  hydrostatic_pressure( solver );
+  PDE_Integrator<DIM,Region>  hydrostatic_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
@@ -188,11 +186,11 @@ void SlopeMechanics_Example::Run()
 //printRangeOfVariable( model, "fluid pressure" );
 //vtk_output.OutputDataToVTK( model, "fluid pressure", "fluid pressure", 0, true );
        model.Accept( properties_visitor );
-       for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+       for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
             (*it)->PropertyValueAtBaryCenter( visc_key, visc );
             (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
          }
-       model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+       model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
        rhof += total_dissolved_solids;
        printRangeOfVariable( model, "fluid pressure" );
        printRangeOfVariable( model, "element fluid density" );
@@ -217,8 +215,6 @@ void SlopeMechanics_Example::Run()
     CSMP_DEFAULT_LINEAR_SOLVER  solver2;
 #endif
     PDE_Integrator<DIM,Region>  deformation(solver2);
-    
-    deformation.ScaleEssentialConditions(1.0e15);
 
     // this will also include boundary stresses translated into nodal forces
     const bool principal_vectors(true), plane_strain(false);
@@ -375,7 +371,7 @@ void permeabilityPorosityCorrelation( Model<DIM>& model )
  
     Region<DIM>& model_domain(model.Region("Model"));
    
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
       {
          double porosity = (*it)->Read( phi_key );
          // TODO: introduce proper relationship here
@@ -411,7 +407,7 @@ void porePressureBiotAlphaProduct( Model<DIM>& model, const char* target_region 
     csmp::Region<DIM>& ref = model.Region(target_region);
     ScalarVariable sc;
     
-    for ( auto it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
+    for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); it++ )
       {
          const double alpha((*it)->Read( alpha_key ));
          if ( alpha < 0. or alpha > 1. ) {
@@ -442,7 +438,7 @@ void gravityForce( Model<DIM>& model, double acc_gravity )
     VectorVariable<DIM> gforce(ANY,0. );
     model.InputPropertyValue( "gravity force", gforce );
    
-    for ( auto it=ref.ElementsBegin(); it!=ref.ElementsEnd(); it++ )
+    for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); it++ )
       {
          (*it)->Read( gf_key, gforce );
          gforce(1) += (*it)->Read( drd_key ) * acc_gravity;

@@ -68,13 +68,13 @@ void GravityProjectionVisitor<dim>::Get_Result( Element<dim>* eptr, VectorVariab
 template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Visit( Model<dim>* m ){
     csmp::Region<dim>&  mref(m->Region("Model"));
-    for ( auto e_it=mref.ElementsBegin(); e_it!=mref.ElementsEnd(); e_it++ )
+    for ( auto e_it=mref.CellsBegin(); e_it!=mref.CellsEnd(); e_it++ )
         (*e_it)->Accept( *this );
 }
 
 template<uint32_t dim>
 void GravityProjectionVisitor<dim>::Visit(Region<dim>* region ){
-    for ( auto e_it=region->ElementsBegin(); e_it!=region->ElementsEnd(); e_it++ )
+    for ( auto e_it=region->CellsBegin(); e_it!=region->CellsEnd(); e_it++ )
         (*e_it)->Accept( *this );
 }
 

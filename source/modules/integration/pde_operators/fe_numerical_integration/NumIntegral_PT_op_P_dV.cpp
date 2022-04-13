@@ -83,7 +83,7 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
              if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
                {   
                  for ( auto n=0; n<e.Nodes(); n++ ) 
-                   for ( auto i=0; i<nodal_degrees_of_freedom; i++ )
+                   for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
                      MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
                }
              else

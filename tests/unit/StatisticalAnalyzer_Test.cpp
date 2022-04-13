@@ -113,8 +113,8 @@ void StatisticalAnalyzer_Test::StatisticalAnalyzerRegionPropertyHistogramsElemen
    size_t counter(1U);
 
    for (std::vector<Element<1U>*>::const_iterator
-        eit = model_->Region("Model").ElementsBegin();
-        eit != model_->Region("Model").ElementsEnd(); eit++, counter++)
+        eit = model_->Region("Model").CellsBegin();
+        eit != model_->Region("Model").CellsEnd(); eit++, counter++)
    {
       (*eit)->Store(por_key, makeScalar(PLAIN, 0.01 * counter));
    }
@@ -159,8 +159,8 @@ void StatisticalAnalyzer_Test::StatisticalAnalyzerRegionPropertyHistograms()
    Index sat_key = model_->Database().StorageKey("saturation water");
    size_t counter(1U);
 
-   for (std::vector<Element<1U>*>::const_iterator eit = model_->Region("Model").ElementsBegin();
-        eit != model_->Region("Model").ElementsEnd(); eit++, counter++)
+   for (std::vector<Element<1U>*>::const_iterator eit = model_->Region("Model").CellsBegin();
+        eit != model_->Region("Model").CellsEnd(); eit++, counter++)
    {
       (*eit)->Store(por_key, makeScalar(PLAIN, 0.01 * counter));
    }
@@ -240,8 +240,8 @@ void StatisticalAnalyzer_Test::StatisticalAnalyzer_TestRegionPropertyHistogramsE
     Index sat_key = model_->Database().StorageKey("saturation water");
     size_t counter(1U);
 
-    for (std::vector<Element<1U>*>::const_iterator eit = model_->Region("Model").ElementsBegin();
-        eit != model_->Region("Model").ElementsEnd(); eit++, counter++)
+    for (std::vector<Element<1U>*>::const_iterator eit = model_->Region("Model").CellsBegin();
+        eit != model_->Region("Model").CellsEnd(); eit++, counter++)
     {
       (*eit)->Store(por_key, makeScalar(PLAIN, 1. - (*eit)->BaryCenter()[0U]));
     }

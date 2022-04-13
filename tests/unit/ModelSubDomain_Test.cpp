@@ -343,7 +343,7 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     model.Mesh().UpdateConnectivity();
     
     bool no_mismatch(true);
-    for ( vector<Element<3U>*>::const_iterator it=domain.ElementsBegin(); it!=domain.ElementsEnd(); ++it )
+    for ( vector<Element<3U>*>::const_iterator it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it )
       for ( auto i{0}; i<(*it)->Neighbors(); ++i ) {
            if ( (*it)->Neighbor(i) != nullptr ) {
                 const size_t elmt_id = static_cast<uint32_t>((*it)->Read( eid_key ));

@@ -116,7 +116,7 @@ void BrittleFailureVisitor<dim>::Visit( Element<dim>* e )
    // reading extra variables at integration points and calculating criteria
    if ( Stress_key_.place == ELEMENT_INTEGRATION_POINT ) {
         const size_t integration_points(e->FE()->IntegrationPoints());
-        for ( auto i{0}; i<integration_points; i++ )
+        for ( auto i{0U}; i<integration_points; i++ )
           {
             // 1. reading extra input variables
             if ( Pressure_key_.place != UNDEFINED )

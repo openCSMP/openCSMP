@@ -76,7 +76,7 @@ void Integral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL& e )
         e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), OP );
         e.N_AtBaryCenter( IPOL );
         prop1() = 0.0;
-        for ( auto i=0; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
+        for ( auto i{0U}; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
      }
      
    // reading the material property variable (for instance conductivity)
@@ -112,7 +112,7 @@ void Integral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e )
     
     double vol = e.Volume();
 
-    for ( auto i=0; i<e.Nodes(); i++ ) 
+    for ( auto i{0U}; i<e.Nodes(); i++ ) 
       //                             gradZ        density    K          acc.gravity    element volume
       MathOperatorRHS<dim>::RHS[i] = DN(xyz-1,i) * prop1() * prop2() * -gravity  * vol;
 

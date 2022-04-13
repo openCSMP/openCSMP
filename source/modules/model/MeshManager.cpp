@@ -1,5 +1,6 @@
 #include "MeshManager.h"
 #include "MeshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 #include "NodeManifoldManager.h"
 #include "PropertyDatabase.h"
 #include "FiniteElementManager.h"
@@ -10,8 +11,7 @@
 #include "PropertyData.h"
 #include "Box.h"
 #include "ModelTopology.h"
-// #include "MeshIterator.h"
-#include "CSMP_highLevelUtilities.h"
+
 
 #define MESH_MANAGER_DEBUG
 
@@ -88,7 +88,20 @@ template<uint32_t dim>
 size_t MeshManager<dim>::InterFaces() const
  { return interfaces_.size(); }
 
+template<uint32_t dim>
+size_t MeshManager<dim>::NodeManifolds() const
+ {
+    if ( node_manifold_manager_ == nullptr ) return 0U;
+    return node_manifold_manager_->Manifolds();
+ }
 
+template<uint32_t dim>
+bool MeshManager<dim>::HasNodeManifolds() const
+ {
+    if ( node_manifold_manager_ == nullptr ) return false;
+    return true;
+ }
+ 
 
 template<uint32_t dim>
   typename plf::colony<Node<dim>>::iterator      MeshManager<dim>::NodesBegin()
@@ -273,14 +286,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( 0U ) ) );
 
   if ( vset.HybridElementTypeMesh() )
-    for ( auto i = 0U; i<vset.TotalNumberOfCells(); ++i )
+    for ( size_t i{0U}; i<vset.TotalNumberOfCells(); ++i )
       input_etypes.insert( parseFiniteElementTypeEnum( vset.ElementType( i ) ) );
 
   cout << "\nMeshManager<" << dim << ">::Initialize: ";
   cout << "input VSet contains the following finite element types:\n\t";
   for ( typename set<CSMP_FEM_TYPE>::const_iterator
         iit = input_etypes.begin(); iit != input_etypes.end(); iit++ ) {
-      cerr << parseFiniteElementType( (*iit) ) << "  ";
+      cout << parseFiniteElementType( (*iit) ) << "  ";
       if ( !fem_manager_.ContainsElementType( *iit ) ) {
         cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( *iit ) << endl;
         fem_manager_.Out();
@@ -302,7 +315,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-          for ( auto j = 0U; j<dim; ++j ) coord[j] = vset.P( j, idx );
+          for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
+          // TODO: for some reason the move constructor is not called here (copy elision, but?)
           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
         }
     }
@@ -313,7 +327,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( ELEMENT ) );
       typename deque<vector<int64_t>>::const_iterator first( vset.PlistElmtsBegin() ), last( vset.PlistElmtsEnd() );
 
-      size_t elmt_idx(0);
+      size_t elmt_idx{0};
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
@@ -324,8 +338,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
-              const size_t nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j = 0U; j < nodes; ++j )
+              const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
+              for ( auto j{0U}; j < nodes; ++j )
                 (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
                 
               // assign the material
@@ -344,8 +358,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                 eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
-              for ( auto j = 0U; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
-              (*eit).Material_ID( vset.Pmtrl( elmt_idx ) );
+              for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
               elmt_idx++;
               first++;
             }
@@ -364,7 +377,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const size_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
 //assert( n_neighbors == distance(vset.PfvertsBegin(e.Idx()),vset.PfvertsEnd(e.Idx())) );
 
-            for ( auto j = 0U; j < n_neighbors; ++j ) {
+            for ( auto j{0U}; j < n_neighbors; ++j ) {
                   const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
                   if ( index >= n_elmts ) {
                        cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
@@ -410,7 +423,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                                                           fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
-            for ( auto j = 0U; j<nodes; ++j ) {
+            for ( auto j{0U}; j<nodes; ++j ) {
                 const size_t node = vset.Plist( face_idx, j );
                 assert( node < n_nodes );
                 (*fit).Assign( j, &(*next(nodes_.begin(),node)) );
@@ -428,14 +441,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        else
          {
             if ( csmp_error.Verbose() )
-              cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their higher-dimensional neighbors..." << endl;
+              cout << "\nMeshManager<" << dim << ">::Initialize: connecting faces to their equidimensional and higher-dimensional neighbors..." << endl;
             const int64_t  n_faces(faces_.size());
             for ( auto& e : faces_ )
               {
                  // Equidimensional Face neighbors first
                  // ------------------------------------
                  const auto neighbors( e.Neighbors() );
-                 for ( auto j = 0U; j<neighbors; ++j )
+                 for ( auto j{0U}; j<neighbors; ++j )
                    {
                       // if there is a neighbor (as is the case if the stored index is greater than zero)
                       // (e->Idx() starts with elements=first face)
@@ -479,7 +492,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
                  // assigning inner and outer higher-dimensional neighbors
                  e.Assign( innerElement, outerElement );
-                 // and the corresponding face numbers
+                 // and the corresponding face numbers of these higher dimensional elements
                  e.ParentFaceID( INSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 2U )) );
                  if ( outerElement )
                    e.ParentFaceID( OUTSIDE, static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors + 3U )) );
@@ -521,7 +534,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const auto nodes( (*ifit).FE()->Nodes() );
             // assigning nodes
             // inside
-            for ( auto j = 0U; j<nodes; ++j ) {
+            for ( auto j{0U}; j<nodes; ++j ) {
                  const size_t node(vset.Plist( interface_idx, j ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
@@ -530,14 +543,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
               }
             // outside
-            const size_t nodes2x(nodes + nodes);
-            for ( auto j = nodes; j<nodes2x; ++j ) {
-                 const size_t node(vset.Plist( interface_idx, j ));
+            for ( auto j{0U}; j<nodes; ++j ) {
+                 const size_t node(vset.Plist( interface_idx, j+nodes ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
-                 (*ifit).Assign( j, &(*next(nodes_.begin(),node-nodes)), OUTSIDE );
+                 (*ifit).Assign( j, &(*next(nodes_.begin(),node)), OUTSIDE );
               }
             ++interface_idx;
             ++first;
@@ -553,67 +565,71 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
          if ( csmp_error.Verbose() )
            cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
          const int64_t  n_faces(faces_.size()), n_interfaces(interfaces_.size());
-         const int64_t  cells(n_elmts+n_faces+n_interfaces);
+         const int64_t  n_cells(n_elmts+n_faces+n_interfaces);
          // connecting interfaces to their higher-dimensional neighbors
-         for ( auto& e : interfaces_ )
+         for ( auto& itf : interfaces_ )
            {
-              // assigning equidimensional InterFace-type neighbors first
-              // --------------------------------------------------------
-              const auto neighbors( e.Neighbors() );
-              for ( auto j = 0U; j<neighbors; ++j )
+              const int64_t iface_idx = itf.Idx();
+              assert(  iface_idx >= n_elmts + n_faces );
+              
+              // 1. Assigning equidimensional InterFace-type neighbors first
+              // -----------------------------------------------------------
+              const auto neighbors( itf.Neighbors() );
+              for ( auto j{0U}; j<neighbors; ++j )
                 {
                    // if there is a neighbor (as is the case if the stored index is greater than zero)
-                   const int64_t  index( vset.Pfvert( e.Idx(), j ) );
-                   if ( index >= cells ) {
-                        cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< cells << endl;
+                   const int64_t  index( vset.Pfvert( iface_idx, j ) );
+                   
+                   // if there is no neighbor nothing needs to be done because all neighbor pointers
+                   // are already set to 'null' per default
+                   if ( index < 0 ) continue;
+                   
+#ifdef DEBUG       // if the index is out of range
+                   if ( index >= n_cells || index <= n_elmts ) {
+                        cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< n_cells << endl;
                         csmp_error.notice( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
                      }
-                   assert( index >= vset.Elements() + vset.Faces() );
-                   assert( index < vset.Elements() + vset.Faces() + vset.InterFaces() ); // (-) elements because face container is numbered from 0..n-1
-                  
-                   // the number of the interface in the container is the number from the VSet - elements and faces
+#endif
+                   // NB: the number of the interface in the container is the number from the VSet - elements and faces
                    // because the interface container is counts from 0..n-1
-                   e.Assign( j, &(*next(interfaces_.begin(),index - n_elmts - n_faces)) );
+                   const size_t neighbor_idx = index - n_elmts - n_faces;
+                   itf.Assign( j, &(*next(interfaces_.begin(),neighbor_idx)) );
                 }
 
-             // higher-dimensional Element-type neighbors
-             // -----------------------------------------
-             // (higher-dimensional neighbors are always present on both sides of the InterFace because interfaces exist only inside of a model)
-             if ( vset.Pfvert( e.Idx(), neighbors ) < 0 || vset.Pfvert( e.Idx(), neighbors + 1U) < 0 )
-               {
-                  cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
-                  cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
+             // 2. Assigning the higher-dimensional neighbor Element objects
+             // ------------------------------------------------------------
+             // (both higher-dimensional neighbors must be defined because interfaces exist only on the inside of models)
+             const int64_t  index1 = vset.Pfvert( iface_idx, neighbors );
+             const int64_t  index2 = vset.Pfvert( iface_idx, neighbors+1U );
+#ifdef DEBUG
+             if ( index1 < 0 || index2 < 0 ) {
+                  cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
                   csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
                }
-             if ( vset.Pfvert( e.Idx(), neighbors ) >= cells || vset.Pfvert( e.Idx(), neighbors + 1U ) >= cells )
-               {
-                  cerr <<"\n\tInterFace "<< e.Idx() <<": inner neighbor "<< vset.Pfvert( e.Idx(), neighbors );
-                  cerr <<" and outer "<< vset.Pfvert( e.Idx(), neighbors+1U ) <<"\n";
-                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace out of range.");
+             if ( index1 >= n_elmts || index2 >= n_elmts ) {
+                  cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
+                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor indices of InterFace out of range.");
                }
+#endif
              // assignment: inner and outer Element objects
-             const int64_t  index1 = vset.Pfvert( e.Idx(), neighbors );
-             const int64_t  index2 = vset.Pfvert( e.Idx(), neighbors+1U );
-             assert( index1 < cells );
-             assert( index2 < cells );
              assert( index1 > MULTIPLE );
              assert( index2 > MULTIPLE );
-             Element<dim>* const innerElement = (index1 < 0) ? nullptr : &(*next(elements_.begin(),index1));
-             Element<dim>* const outerElement = (index2 < 0) ? nullptr : &(*next(elements_.begin(),index2));
-             e.Assign( innerElement, outerElement );
-             // assignment: Element face numbers adjacent to InterFace
-             const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors+2U ));
-             const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( e.Idx(), neighbors+3U ));
-             assert( inner_face_id < e.Faces() );
-             assert( outer_face_id < e.Faces() );
-             e.ParentFaceID( INSIDE,  inner_face_id );
-             e.ParentFaceID( OUTSIDE, outer_face_id );
-             // assignment: intervening Element or neighbor boundary flag
-             const int64_t  index3 = vset.Pfvert( e.Idx(), neighbors+4U );
-             assert( index3 < elements_.size() );
+             Element<dim>* const innerElement = &(*next(elements_.begin(),index1));
+             Element<dim>* const outerElement = &(*next(elements_.begin(),index2));
+             itf.Assign( innerElement, outerElement );
+             // assignment: local number of faces adjacent to InterFace; these face numbers must always be defined
+             const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+2U ));
+             const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+3U ));
+             assert( inner_face_id < innerElement->Faces() );
+             assert( outer_face_id < outerElement->Faces() );
+             itf.ParentFaceID( INSIDE,  inner_face_id );
+             itf.ParentFaceID( OUTSIDE, outer_face_id );
+             // assignment: intervening Element else boundary flag INTERNAL
+             const int64_t  index3 = vset.Pfvert( iface_idx, neighbors+4U );
+             assert( index3 < n_elmts );
              assert( index3 > MULTIPLE );
              Element<dim>* const middleElement = (index3 < 0) ? nullptr : &(*next(elements_.begin(),index3));
-             e.Assign( middleElement );
+             if ( middleElement ) itf.Assign( middleElement );
           }
       }
       
@@ -644,13 +660,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
     }
 
   // reserving the memory for the parent storage and zeroing parent vector for next step
-  auto i{0};
+  auto i{0U};
   for ( auto& n : nodes_ )
     n.ResizeParentStorage( parent_elmts_per_node[i++] );
 
    // assigning the parent element information to the nodes
    for ( auto& e : elements_ )
-       for ( auto j = 0U; j<e.Nodes(); ++j )
+       for ( auto j{0U}; j<e.Nodes(); ++j )
          e.N( j )->Assign( j, &e );
        
    // sorting the parent element pointers stored by the nodes for searching
@@ -683,13 +699,24 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
      
   // ------------------------------------------------------------------------------
-  // 8. reconstructing NodeManifolds if any
+  // 8. Constructing NodeManifolds if any
   // -------------------------------------------------------------------------------
    if ( !interfaces_.empty() ) {
        VData::vertexManifoldIndices  indexes;
        vset.ExtractNodeManifolds( indexes );
        node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
      }
+     
+#ifdef MESH_MANAGER_DEBUG
+if ( !interfaces_.empty() ) {
+   cerr <<"\nMeshManager: current node manifolds:\n";
+   for ( const auto& nit : nodes_ ) {
+        cerr <<" "<< nit.Idx();
+        if ( nit.IsManifold() )
+          nit.Manifold()->Out();
+     }
+  }
+#endif
 
    return true;
   
@@ -768,7 +795,7 @@ void MeshManager<dim>::RebuildNodeParentElementRelationships()
    // assigning the parent element information to the nodes
    for ( auto& e : elements_ ) {
         const size_t n_nodes{ e.Nodes() };
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           e.N( j )->Assign( j, &e );
      }
 
@@ -844,7 +871,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
      {
         // tree travel: looping the neighbor nodes of the current node, finding the one that is the closest to the point
         const size_t n_nbors( nptr->Neighbors() );
-        for ( auto i{0}; i<n_nbors; ++i )
+        for ( auto i{0U}; i<n_nbors; ++i )
           distances.insert( make_pair( pt.DistanceTo( nptr->Neighbor(i)->Coordinate() ), i ) );
         // since map defaults to less, its first entry is the node we want
         nptr = nptr->Neighbor( static_cast<uint32_t>((*distances.begin()).second) );
@@ -894,7 +921,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
 
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
 
 
@@ -902,7 +929,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
   // ------------------------------------------------------------------------------------------------------ 
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
-  for ( auto i{0}; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
@@ -960,7 +987,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    // 2. checking the validity of the node vector in debug mode
 #ifdef DEBUG
    // node vector
-   for ( auto i{0}; i<ifptr->FE()->Nodes(); ++i ) {
+   for ( auto i{0U}; i<ifptr->FE()->Nodes(); ++i ) {
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
@@ -980,7 +1007,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    
    // 4. connecting the nodes to the element
    const size_t n_nodes( ifptr->FE()->Nodes() );
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
      
    // 5. Connecting the intervening element to interface
@@ -1008,7 +1035,8 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
                                                          uint32_t adjacent_face_of_inner_element,
                                                          uint32_t adjacent_face_of_outer_element,
                                                          const LocalVariables& lvars,
-                                                         const IntegrationPointVariables& ivars )
+                                                         const IntegrationPointVariables& ivars,
+                                                         bool delete_original_face )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
@@ -1047,8 +1075,10 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    (*fit).Idx( face_id );
 
    // 3. deleting original Element
-   elements_.erase( elements_.get_iterator(eptr) );
-   eptr = nullptr;
+   if ( delete_original_face ) {
+        elements_.erase( elements_.get_iterator(eptr) );
+        eptr = nullptr;
+     }
    
    return &(*fit);
    
@@ -1056,55 +1086,6 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
        
 
 
-/**
-   Like ReplaceElementByFace, but without deletion of the original element.
-*/
-template<uint32_t dim>
-Face<dim>* const MeshManager<dim>::ConstructFaceFromElement( const csmp::Element<dim>* const eptr,
-                                                             csmp::Element<dim>* inner_eptr,
-                                                             csmp::Element<dim>* outer_eptr,
-                                                             uint32_t adjacent_face_of_inner_element,
-                                                             uint32_t adjacent_face_of_outer_element,
-                                                             const LocalVariables& lvars,
-                                                             const IntegrationPointVariables& ivars )
- {
-   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-   
-   // 0. verifying the input
-   // pointers
-   if ( eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "pointer to lower-dimensional input element is not initialised");
-     
-   // is the element indeed lower dimensional?
-   if constexpr ( dim == 3 )
-     if ( !eptr->IsSurfaceElement() )
-     csmp_error.notice( ERROR, "MeshManager<3>::ConstructFaceFromElement", "element to be replaced is not a lower-dimensional surface element");
-   if constexpr ( dim == 2 )
-     if ( !eptr->IsLineElement() )
-     csmp_error.notice( ERROR, "MeshManager<2>::ConstructFaceFromElement", "element to be replaced is not a lower-dimensional line element");
-
-   if ( inner_eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "pointer to higher dimensional element on inside not initialised");
-   if ( inner_eptr == outer_eptr ) {
-        csmp_error.notice( ERROR, "MeshManager<dim>::ConstructFaceFromElement", "cannot create Face"
-                                  "pointer to higher dimensional elements are the same");
-        return nullptr;
-     }
-     
-   assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
-   if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
-       
-   // constructing new face
-   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
-   typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( *eptr, inner_eptr, outer_eptr,
-                                       adjacent_face_of_inner_element, adjacent_face_of_outer_element,
-                                       lvars, ivars ) );
-   (*fit).Idx( face_id );
-
-   return &(*fit);
-   
- } // end ConstructFaceFromElement
 
        
        
@@ -1238,6 +1219,72 @@ template<uint32_t dim>
 InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
                                                       Element<dim>* const outer_parent, uint32_t outer_element_face_id,
                                                       const LocalVariables& lvars,
+                                                      const IntegrationPointVariables& ivars,
+                                                      vector<Node<dim>*> outside_nodes )
+{
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( inner_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+   if ( outer_parent == nullptr )
+     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+   if ( inner_parent == outer_parent ) {
+        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
+                                  "inner and outer parent pointers are the same");
+        return nullptr;
+     }
+
+   assert( inner_element_face_id < inner_parent->Faces() );
+   assert( outer_element_face_id < outer_parent->Faces() );
+
+   // 1. establishing the finite element type if the interface
+   const CSMP_FEM_TYPE etype = inner_parent->FE()->ElementTypeOfFace( inner_element_face_id );
+
+   // 2. constructing new interface
+   const size_t iface_id = interfaces_.size();
+   typename plf::colony<InterFace<dim>>::iterator
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     
+   // 3. assigning higher dimensional elements and faces
+   const bool assign_nodes{false};
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Idx( iface_id );
+   
+   // 4. assigning the inside nodes to the new InterFace (which are those of the face of the inside element)
+   const auto n_nodes_per_face{ outside_nodes.size() };
+   vector<uint32_t>  fnids;
+   inner_parent->FE()->NodesOfFace( inner_element_face_id, fnids );
+   assert( fnids.size() == n_nodes_per_face );
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     (*ifp).Assign( n, inner_parent->N( fnids[n] ), INSIDE );
+   
+   // 5. assigning the outside nodes to the InterFace
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     (*ifp).Assign( n, outside_nodes[n], OUTSIDE );
+
+   // 6. replacing the original nodes of the face of the outside element with the new nodes
+   outer_parent->FE()->NodesOfFace( outer_element_face_id, fnids );
+   for ( auto n{0U}; n<n_nodes_per_face; ++n )
+     outer_parent->Assign( fnids[n], outside_nodes[n] );
+     
+   // 7. detaching the input Elements from one-anothers
+   inner_parent->Unassign( outer_parent );
+   outer_parent->Unassign( inner_parent );
+
+   return &(*ifp);
+
+} // end AddInterFace
+
+
+/**
+     As method above but assuming that the Elements on either side of the interface are already detached, having separate nodes.
+*/
+template<uint32_t dim>
+InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_parent, uint32_t inner_element_face_id,
+                                                      Element<dim>* const outer_parent, uint32_t outer_element_face_id,
+                                                      const LocalVariables& lvars,
                                                       const IntegrationPointVariables& ivars )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1264,20 +1311,32 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     
+   // 3. assigning higher dimensional elements and faces
    const bool assign_nodes{true};
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
    (*ifp).Idx( iface_id );
+   
+   // 4. detaching the input Elements from one-anothers
+   inner_parent->Unassign( outer_parent );
+   outer_parent->Unassign( inner_parent );
 
-   assert( node_manifold_manager_ != nullptr );
+   return &(*ifp);
+
+} // end AddInterFace
+
+
+
+/* the InterFace manifolds are assumed to be created before the creation of the InterFace by Duplicate(node)
 
    // 3. assigning node manifolds
    const size_t n_nodes{(*ifp).FE()->Nodes()};
-   for ( auto i{0}; i<n_nodes; ++i )
+   for ( auto i{0U}; i<n_nodes; ++i )
      // if the inside node is different from the outside node so that there needs to be a manifold
      if ( (*ifp).N(i,INSIDE) != (*ifp).N(i,OUTSIDE) ) {
          // 1. if both nodes are not yet manifolds
          if ( !(*ifp).N(i,INSIDE)->IsManifold() && !(*ifp).N(i,OUTSIDE)->IsManifold() ) {
-              node_manifold_manager_->NewManifold( (*ifp).N(i,INSIDE), (*ifp).N(i,OUTSIDE), ManifoldType::INTERFACE );
+              node_manifold_manager_->MergeManifolds( (*ifp).N(i,INSIDE)->Manifold(), (*ifp).N(i,OUTSIDE)->Manifold() );
               continue;
            }
          // 2. if both nodes are already manifolds, they are merged into single one
@@ -1292,21 +1351,15 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
          //    because the second is not a manifold
          if ( (*ifp).N(i,INSIDE)->IsManifold() ) {
               // the outside node is added to it
-              (*ifp).N(i,INSIDE)->Manifold()->Add( (*ifp).N(i,OUTSIDE), OUTSIDE, ManifoldType::INTERSECTION );
+              (*ifp).N(i,INSIDE)->Manifold()->Add( (*ifp).N(i,OUTSIDE), OUTSIDE );
            }
          // 4. if the outside node is already a manifold
          else if ( (*ifp).N(i,OUTSIDE)->IsManifold() ) {
               // the inside node is added to the outside nodes manifold
-              (*ifp).N(i,OUTSIDE)->Manifold()->Add( (*ifp).N(i,INSIDE), INSIDE, ManifoldType::INTERSECTION );
+              (*ifp).N(i,OUTSIDE)->Manifold()->Add( (*ifp).N(i,INSIDE), INSIDE );
            }
        }
-   
-   return &(*ifp);
-
-} // end AddInterFace
-
-
-
+*/
 
 
 /**
@@ -1319,7 +1372,8 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 template<uint32_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>* fptr,
                                                                 const LocalVariables& lvars,
-                                                                const IntegrationPointVariables& ivars )
+                                                                const IntegrationPointVariables& ivars,
+                                                                vector<Node<dim>*> outside_nodes )
 {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1329,16 +1383,20 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
      csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
 
    // 1. constructing new interface
+   // -----------------------------
+   // - constructor takes care of assigning the higher dimensional elements
+   // - constructor assigns outside nodes also changing the nodes of the higher-dimensional element
+   // - constructor detaches the neighbor connection between the higher dimensional elements
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fptr->FE(), fptr->FV(), lvars, ivars ) );
-   // 2. also assigning nodes, expecting that the nodes on the opposite side of the interface are already there
-   (*ifp).Assign( fptr->InnerParent(), fptr->OuterParent() );
+     ifp = interfaces_.emplace( InterFace<dim>( fptr, lvars, ivars, outside_nodes ) );
+     
+   // 2. assigning idx
    (*ifp).Idx( iface_id );
 
 #ifdef DEBUG
    // verifying that the nodes on the inside matching those of the face
-   for ( auto i{0}; i<fptr->Nodes(); ++i ) {
+   for ( auto i{0U}; i<fptr->Nodes(); ++i ) {
         assert( (*ifp).N(i) != nullptr );
         assert( (*ifp).N(i,INSIDE) != nullptr );
         assert( fptr->N(i) == (*ifp).N(i,INSIDE) );
@@ -1361,33 +1419,48 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
 
 /**
-    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold.
-         @attention the current node is assumed to be on the INSIDE of the Interface; when there is none yet, this distinction will be made automatically
+    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold, else, the existing node is returned.
+    
+    @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
+    
+    @param nptr_inside pointer to the node that will be on the inside of the InterFace that gets created if any.
+    @param new_node_side manifold-type qualifier for the new node
+    @return pointer to the new node now stored by the MeshManager.
 */
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
                                               INTERFACE_SIDE new_node_side,
-                                              ManifoldType geometry )
+                                              const LocalVariables& lvars )
   {
     if ( nptr_inside == nullptr )
-      throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node does not exist.");
+      throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node pointer is a 'nullptr'.");
 
-    // copying the inside node
-    typename plf::colony<Node<dim>>::iterator
-      nit = nodes_.emplace( Node<dim>( *nptr_inside ) );
-    
+    // copying the inside node to create a new node
+    auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary() );
+
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
-         // if we are already dealing with a manifold, the geomtric classifier is retained
-         nptr_inside->Manifold()->Add( &(*nit), new_node_side, nptr_inside->Manifold()->GeometricClassifier() );
-         (*nit).Assign( nptr_inside->Manifold() );
+         // if we are already dealing with a manifold, the new node is added to it
+         nptr_inside->Manifold()->Add( &(*nit), new_node_side );
+         (*nit).Assign( (*nptr_inside->Manifold()) );
       }
-    else // a new manifold is created with the provided geometric classifier
-      node_manifold_manager_->NewManifold( nptr_inside, &(*nit), geometry );
+    else {
+         // checking that the NodeManifoldManager has been initialised
+         assert ( node_manifold_manager_ != nullptr );
+           
+         // a new manifold from the old and the new node using the provided default geometric classifier
+         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::INTERFACE );
+         // and its nodes are connected to it
+         nptr_inside->Assign( (*nmf) );
+         (*nit).Assign( (*nmf) );
+      }
 
+    // working out whether the original classification as an interface was correct
+    consistencyCheck( (*(*nit).Manifold()) );
     return &(*nit);
-  }
-
+    
+  } // end Duplicate
+    
 
 
 
@@ -1414,7 +1487,6 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    const size_t       n_original_elements{ elements_.size() };
     vector<Face<dim>*> face_ptrs;
     const long         n_faces_to_build{ distance(first,last) };
 
@@ -1426,9 +1498,6 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     
     const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
     const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
-    
-    // backup copy used later for the deletion
-    typename vector<Element<dim>*>::iterator  erase_it{ first };
     
     // 1. converting Elements into Faces
     // ---------------------------------
@@ -1474,8 +1543,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               // finding the face numbers of the parent elements
               pair<uint32_t,uint32_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
               // creating Face, storing a pointer to it
-              face_ptrs.push_back( ConstructFaceFromElement( (*first), pelmts.first, pelmts.second,
-                                                             face_ids.first, face_ids.second, lvars, ivars ) );
+              face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first, pelmts.second,
+                                                         face_ids.first, face_ids.second, lvars, ivars ) );
               // numbering new Face consecutively
               face_ptrs.back()->Idx( face_idx++ );
            }
@@ -1484,30 +1553,10 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          first++;
       }
       
-     // 2. remove elements replaced by Face objects
-     // -------------------------------------------
-     // (no attention needs to be paid to neighbor connectivity because the whole lower dimensional regions will be removed)
-     cout <<"\nMeshManager::ReplaceElementsByFaces: (n_elements="<< elements_.size();
-     cout <<") deleting "<< n_faces_to_build <<" elements...\n";
-     while ( erase_it != last )
-       {
-// POINTER REMAINS VALID AFTER DELETION:          cerr <<"\n\t"<< (*erase_it)->Idx();
-          // null the element parent pointers in the elements nodes
-          for ( auto i{0}; i<(*erase_it)->Nodes(); ++i )
-            (*erase_it)->N(i)->Unassign( (*erase_it) );
-          // get element pointer for colony and delete the element TODO: inefficient because this is done multiple times for each node
-          elements_.erase( elements_.get_iterator( *erase_it ) );
-          // set the supplied element pointer to null TODO: this needs to be communicated to pointers of input regions?
-          (*erase_it) = nullptr;
-          // increment iterator
-          erase_it++;
-       }
-     assert( n_original_elements - elements_.size() == n_faces_to_build );
-     
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
 
-     // 3. cleaning up inter-CELL and node to parent connectivity
+     // 2. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
      // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
@@ -1550,6 +1599,359 @@ if ( InterFaces() > 0 ) {
 
 
 /**
+   Replaces supplied Face objects with InterFace objects, adding the necessary multiplicated nodes
+   and establishing their connectivity. Since the Face objects are deleted the supplied pointer ranges to them (interior and perimeter) are invalidated
+   by this method.
+   
+   @param dbase is needed for the inialisation of the LocalVariableStorage associated with the Face objects
+   
+   @param first iterator to the first Face of the supplied boundary
+   
+   @param bfirst  is an iterator that simultaneously is the end of the interior faces and the beginning of the boundary faces
+   
+   @param last iterator to the last Face of the boundary which also points behind the last perimeter face
+   
+   Steps - starting with the processing of interior faces:
+   
+   1. The creation of InterFace objects in the interior and the necessary duplication of nodes occur simultaneously.
+   
+   2. Interface objects are constructed from the second range, also duplicating nodes at the model- or domain boundaries. No new nodes are inserted if the boundary terminates inside of a higher dimensional region. In this case, interior and exterior perimeter nodes on the SplitBoundary perimeter are assigned the same, pre-existing perimeter node inherited from the converted boundary.
+
+   During the construction of all InterFace objects, the higher dimensional neighbors are assigned and the corresponding Element faces are remembered.
+
+   3. Former higher-dimensional Element neighbors that are now separated by the SplitBoundary are disconnected from one another assigning their neighbor  pointers to 'nullptr'.
+     (this step is not necessary if the whole connectivty is rebuilt anyway)
+
+   4. The new InterFace objects are connected with one-another so that a SplitBoundary constructor has all the necessary information to distinguish interior from perimeter.
+   
+   5. Finally the node-to-parent element connectivity of the InterFace nodes needs to be rebuilt restricting parent element access to the side of the interface that the node forms part of
+   
+   @author SKM
+   @date 6/4/22
+
+*/
+template<uint32_t dim>
+vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const PropertyDatabase<dim>& dbase,
+                                                                     typename vector<Face<dim>*>::iterator first,
+                                                                     typename vector<Face<dim>*>::iterator bfirst,
+                                                                     typename vector<Face<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    vector<InterFace<dim>*>  iface_ptrs;
+    const size_t  n_original_faces{ faces_.size() };
+
+    if ( distance(first,last) == 0U ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
+         return iface_ptrs;
+      }
+    else iface_ptrs.reserve( n_original_faces );
+    
+    // Constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+    
+    const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
+    const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+    
+    // vector of interfaces which will be returned
+    vector<InterFace<dim>*>  interface_ptrs;
+    interface_ptrs.reserve( distance(first,last) );
+    // tracking already duplicated nodes to avoid duplicates
+    //  original,  duplicate
+    map<Node<dim>*,Node<dim>*>  new_nodes;
+
+    // 1. converting interior Face objects into InterFace ones, duplicating their nodes
+    // --------------------------------------------------------------------------------
+    // (original Face objects are removed)
+    while( first != bfirst )
+      {
+         // 1.1 initial checks
+         // (input range must not contain any nullptrs)
+         assert( (*first) != nullptr );
+         
+         // 1.2 duplicating the nodes creating manifolds as necessary
+         // ---------------------------------------------------------
+         const auto         n_nodes{ (*first)->Nodes() };
+         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         auto               nit{ new_nodes.end() };
+         // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
+         for ( auto i{0U}; i<n_nodes; i++ )
+           // if there a matching outside node has not been created yet
+           if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
+             }
+           // if the necessary new node was already created earlier it was retrieved and is assigned here
+           else outside_nodes[i] = (*nit).second;
+           // reversing the sequence
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+           
+         // 1.3 construction of InterFace away from boundaries
+         // --------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         interface_ptrs.push_back( ReplaceFaceByInterFace( (*first), lvars, ivars, outside_nodes ) );
+         first++;
+      }
+
+
+    // 2. Converting perimeter faces into interfaces, dealing with boundaries
+    // ----------------------------------------------------------------------
+    // (original Face objects are removed)
+    first = bfirst;
+    while( first != last )
+      {
+         // 2.1 initial checks
+         // (input range must not contain any nullptrs)
+         assert( (*first) != nullptr );
+         
+         // 2.2 duplicating nodes but only if we are at a model boundary or the node already is a manifold
+         // ----------------------------------------------------------------------------------------------
+         // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
+         const auto         n_nodes{ (*first)->Nodes() };
+         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
+         auto               nit{ new_nodes.end() };
+         
+         for ( auto i{0U}; i<n_nodes; i++ )
+           if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
+                if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                     new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
+                  }
+                else outside_nodes[i] = (*nit).second;
+             }
+           else outside_nodes[i] = (*first)->N(i);
+
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+
+         // 2.3 construction of InterFace on the model perimeter
+         // ----------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         //     - boundaries are inferred, when:
+         //       - BOX_BOUNDARY flag is !NOT
+         interface_ptrs.push_back( ReplaceFaceByInterFace( (*first), lvars, ivars, outside_nodes ) );
+         first++;
+      }
+ 
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< interface_ptrs.size() <<" new interfaces and ";
+     cout << new_nodes.size() <<" new nodes."<< endl;
+     
+     return interface_ptrs;
+     
+ } // end ReplaceFacesByInterFaces
+
+
+
+
+
+  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
+template<uint32_t dim>
+vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
+                                                                                       const vector<pair<pair<Element<dim>*,uint32_t>,
+                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( interface_nbor_elmts.empty() ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         return vector<InterFace<dim>*>{}; // empty vec
+      }
+    
+    // Constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+    
+    const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
+    const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+    
+    // 1. finding the perimeter nodes of the interface patch that will be created
+    // --------------------------------------------------------------------------
+    vector<Node<dim>*>  perimeter_node_ptrs;
+    perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
+    
+    for ( const auto& it : interface_nbor_elmts ) {
+         vector<uint32_t> fnids;
+         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+         for ( auto i : fnids )
+           perimeter_node_ptrs.push_back( it.first.first->N(i) );
+      }
+      
+    // sorting and removing duplicates from node vector, making it searchable
+    sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+    perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
+    // printNodeCoordinates<dim>( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+    // NB: tested: at this point we only have perimeter nodes left
+
+
+    // 2. Finding the subset of these nodes which will also be on the perimeter of the SplitBoundary
+    // ---------------------------------------------------------------------------------------------
+    // IMPORTANT: this needs to be done before creating the InterFace objects because it influences which of its nodes will have to be manifolds
+    // How? - in 2D, these are the nodes that are only contained in of of the faces
+    if constexpr (dim == 2U ) {
+         vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
+         // again
+         for ( const auto& it : interface_nbor_elmts ) {
+              vector<uint32_t> fnids;
+              it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+              for ( auto i : fnids ) {
+                   // finding the vector index corresponding to the perimeter node
+                   auto lb = perimeter_node_ptrs.end();
+                   if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
+                   face_count[ distance(perimeter_node_ptrs.begin(),lb) ]++;
+                }
+           }
+         // eliminating those pointers from 'perimeter_node_ptrs' that are shared by multiple elements
+         for ( size_t i{0}; i<face_count.size(); i++ )
+           if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
+         perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
+      }
+    //      - in 3D, does one need a triangulation
+    if constexpr (dim == 3U ) {
+         throw csmp::Exception( ERROR, "CreateInterFacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
+      }
+    
+
+    // 3. Creating InterFace objects, duplicating nodes and dealing with boundaries
+    // ----------------------------------------------------------------------------
+    // tracking already duplicated nodes to avoid further duplication
+    //  original,  duplicate
+    map<Node<dim>*,Node<dim>*>  new_nodes;
+    // vector of interfaces which will be returned
+    vector<InterFace<dim>*>     interface_ptrs;
+    interface_ptrs.reserve( interface_nbor_elmts.size() );
+    
+    for ( const auto& it : interface_nbor_elmts )
+      {
+         // 2.1 duplicating nodes but only if we are at a model boundary or the node already is a manifold
+         // ----------------------------------------------------------------------------------------------
+         // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
+         // - from the corner nodes of the element faces that will be at the interface, segment keys are made
+         // - the faces are numbered
+         // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
+         vector<uint32_t>   fnids;
+         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+         vector<Node<dim>*> outside_nodes( fnids.size(), nullptr );
+         auto               nit{ new_nodes.end() };
+         uint32_t           nd_count{0};
+         
+         for ( auto i : fnids ) {
+             // excluding nodes that will lie on the perimeter of the new interface patch, nodes are duplicated
+             if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
+                  // but only if they have not already been duplicated
+                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                    }
+                  else outside_nodes[nd_count] = (*nit).second;
+               }
+             // perimeter nodes must be duplicated if they are located on the model boundary or are manifolds
+             else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
+                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                    }
+                  else outside_nodes[nd_count] = (*nit).second;
+               }
+             else outside_nodes[nd_count] = it.first.first->N(i);
+             nd_count++;
+           }
+
+         // turning the nodes from counterclockwise to clockwse because they will go on the opposite side of the interface
+         reverse( outside_nodes.begin(), outside_nodes.end() );
+
+         // 2.3 construction of InterFace on the model perimeter
+         // ----------------------------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
+         //     - boundaries are inferred, when:
+         //       - BOX_BOUNDARY flag is !NOT
+         interface_ptrs.push_back( AddInterFace( it.first.first, it.first.second,
+                                                 it.second.first, it.second.second,
+                                                 lvars, ivars, outside_nodes ) );
+      }
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
+     cout << new_nodes.size() <<" new nodes."<< endl;
+     
+     return interface_ptrs;
+     
+  } // end CreateInterFacesBetweenNodeSharingElements
+
+
+
+
+/* STILL USEFUL?
+
+         // getting the segment nodes from these face-nodes assuming that the first nodes are the corner nodes
+         switch( etype ) {
+              case ISOPARAMETRIC_LINEAR_TRIANGLE:
+              case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+              case LINEAR_TRIANGLE:
+              case LINEAR_TRIANGLE3D: {
+                    // segment 1, of the three segments given by the corner nodes of the triangular face
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N( fnids[1] ), it.first.first->N( fnids[2] ) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(fnids[2]), it.first.first->N(fnids[0]) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(fnids[0]), it.first.first->N(fnids[1]) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+              case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+              case LINEAR_RECTANGLE: {
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(1), it.first.first->N(2) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(2), it.first.first->N(3) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                    sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(3), it.first.first->N(0) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              case ISOPARAMETRIC_LINEAR_BAR:
+              case ISOPARAMETRIC_QUADRATIC_BAR:
+              case LINEAR_BAR: {
+                    // here the nodes at the endpoints are used
+                    auto sit = segment_nbors.insert( make_pair( set<Node<dim>*>{ it.first.first->N(0), it.first.first->N(1) }, set{iface_count} ) );
+                    if ( sit.second == false ) (*sit.first).second.insert( iface_count );
+                  }
+                break;
+              default:
+                csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements",
+                                   parseFiniteElementType(etype), "face type of element could not be parsed.");
+*/
+
+
+
+
+
+/**
       Sets neighbor pointers of cells surrounding the domain to 'nullptr' if they were pointing to cells within the domain.
       
       The intention of this method is to avoid that these pointers wil accidentially be derefefenced causing crashes
@@ -1567,10 +1969,10 @@ size_t MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<di
  throw csmp::Exception( ERROR, "MeshManager<dim>::DetachOutsideNeighborsAlongPerimeter:", "Not properly tested yet, may have side effects" );
  
     size_t n_detachments{0};
-    const size_t n_cells{ subdomain.Elements() };
-    for ( size_t i=subdomain.InteriorElements(); i < n_cells; ++i ) {
+    const size_t n_cells{ subdomain.Cells() };
+    for ( size_t i=subdomain.InteriorCells(); i < n_cells; ++i ) {
          const uint32_t n_perim_faces( subdomain.PerimeterFaces(i) );
-         for ( auto j{0}; j < n_perim_faces; ++j ) {
+         for ( auto j{0U}; j < n_perim_faces; ++j ) {
               auto p_face = subdomain.PerimeterFace( i, j );
               // detaching outside neighbor, if any
               if ( subdomain.E(i)->Neighbor(p_face) != nullptr ) {
@@ -1665,8 +2067,8 @@ size_t MeshManager<dim>::Delete( typename vector<Node<dim>*>::iterator first,
     
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
-                                 typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::const_iterator first,
+                                 typename vector<Element<dim>*>::const_iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1696,7 +2098,7 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
                auto colony_it{ elements_.get_iterator( const_cast<Element<dim>*>(*first) ) };
                assert( colony_it!= elements_.end() );
                elements_.erase( colony_it );
-               (*first) = nullptr;
+ //              (*first) = nullptr;
                first++;
             }
        }
@@ -1711,7 +2113,7 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
           // the element deletion
           const auto n_parents{nit->Parents()};
           size_t n_active_parents{0};
-          for ( auto j{0}; j<n_parents; ++j )
+          for ( auto j{0U}; j<n_parents; ++j )
            if ( nit->Parent(j) != nullptr )
              n_active_parents++;
 
@@ -1995,7 +2397,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
-                     for ( auto i{0}; i < n_combinations; ++i ) {
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
@@ -2139,7 +2541,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
            for ( auto& it : elmt_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
-                if ( n_face_nbors == 2 ) {
+                if ( n_face_nbors == 2U ) {
                      CELL<dim>* const ptr1  = (*it.second.begin()).first;
                      CELL<dim>* const ptr2  = (*it.second.rbegin()).first;
                      const uint32_t face_e1 = (*it.second.begin()).second;
@@ -2148,7 +2550,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      ptr2->Assign( face_e2, ptr1 );
                   }
                 // else this is a manifold and two most suitable neighbors must be found
-                else if ( n_face_nbors > 2 ) { // TODO: test
+                else if ( n_face_nbors > 2U ) { // TODO: test
                      // finding all possible combinations of surface elements
                      vector<int64_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
@@ -2157,7 +2559,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
-                     for ( auto i{0}; i < n_combinations; ++i ) {
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           const double angle = angleBetweenLineCells( ptr1, ptr2 );
@@ -2239,19 +2641,213 @@ template void MeshManager<2>::BuildLineConnectivity<InterFace>( typename vector<
 
 
 
+/**
+       Special method to obtain the connectivity of InterFace objects, which is tricker because InterFace nodes are multiplicated. Yet these node clusters are grouped into NodeManifold objects.
+       Thus, rather than creating keys from Node pointers to match the faces of the InterFaces with one-another, this method uses the NodeManifold pointers.
+       
+       @note When InterFace nodes are the same on either side of the InterFace and there is no manifold object, the method casts the node pointers into Manfifolds to still permit a comparison.
+       
+       @note because InterFaces are lines in 2D and surfaces in 3D, the disambiguation in the case where there are multiple neighbors is dimension dependent.
+       Correspondingly, there are constexpr compile time pathways that distinguish the proceduures for them.
+       
+       @attention method does not touch the connectivity of interfaces to their higher dimensional neighbors
+       
+       @author SKM
+       @date 10/4/22
+*/
+template<uint32_t dim>
+void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFace<dim>*>::const_iterator first,
+                                                   typename std::vector<InterFace<dim>*>::const_iterator last )
+   {
+      // for InterFaces = surface elements in s 3D model
+      // -----------------------------------------------
+      if constexpr ( dim == 3U ) {
+           // creating search keys from the corner nodes of the interface faces
+           // corner-nodes      interfaces that share face and their face id
+           map<set<NodeManifold<3U>*>,map<InterFace<3U>*,uint32_t> >  iface_pairs;
+
+           // pairing the cells up in the search map
+           const auto cellsEnd{last};
+           while ( first != cellsEnd ) {
+                assert( (*first) != nullptr );
+                const size_t n_faces{ (*first)->Faces() };
+                for ( auto face{0}; face < n_faces; ++face ) {
+                     // getting node-manifold pointers from set of pointers to face corner nodes
+                     set<NodeManifold<3U>*> manifold_ptrs;
+                     for ( const auto& nit : (*first)->CornerNodesOfFace(face) ) {
+                           if ( nit->IsManifold() ) manifold_ptrs.insert( nit->Manifold() );
+                           else manifold_ptrs.insert( reinterpret_cast<NodeManifold<3U>*>(nit) );
+                        }
+                     auto it = iface_pairs.insert( make_pair( manifold_ptrs, map<InterFace<3U>*,uint32_t>{{*first,face}} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<InterFace<3U>*>(nullptr) );
+                  }
+                first++;
+             }
+             
+           // processing the results, connecting the cells to one another
+           for ( auto& it : iface_pairs ) {
+                const size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2U ) {
+                     InterFace<3U>* const ptr1  = (*it.second.begin()).first;
+                     InterFace<3U>* const ptr2  = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*it.second.begin()).second;
+                     const uint32_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is an interface manifold and two most suitable surface neighbors must be found
+                else if ( n_face_nbors > 2U ) { // TODO: test
+                     // finding all possible combinations of surface elements
+                     vector<int64_t> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t n_samples{2U};
+                     deque<vector<int64_t> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces or line elements with the smallest acute angle between them
+                     map<double,size_t>  ordered_combinations;
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                          InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          assert( ptr1 != nullptr );
+                          assert( ptr2 != nullptr );
+                          const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
+                                                   angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
+                          // using smallest angle
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi = (*ordered_combinations.begin()).second;
+                     InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
+                     InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const uint32_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+      // for line elements, interfaces in a 2D model
+      // -------------------------------------------
+      if constexpr ( dim == 2U ) {
+           map<NodeManifold<2U>*,map<InterFace<2U>*,uint32_t> > iface_pairs;
+           const auto ifacesEnd{last};
+           
+           // pairing the elements up in the search map
+           while ( first != ifacesEnd ) {
+                assert( (*first) != nullptr );
+                const auto n_faces{ (*first)->Faces() };
+                for ( auto face{0U}; face < n_faces; ++face ) {
+                     // getting node-manifold pointers: the first 2 nodes must correspond to the corner nodes of the Face
+                     NodeManifold<2U>* mptr = ( (*first)->N(face)->IsManifold() ) ? (*first)->N(face)->Manifold() : reinterpret_cast<NodeManifold<2U>*>((*first)->N(face));
+                     assert( mptr );
+                    // creating the map entry
+                     auto it = iface_pairs.insert( make_pair( mptr, map<InterFace<2U>*,uint32_t>{{*first,face}} ) );
+                     // if the face record already exists, the new element pointer - face is added to it
+                     if ( it.second == false )
+                       (*it.first).second.insert( make_pair( (*first), face ) );
+                       
+                     // nulling the current neighbor connectivity of the elements if any
+                     (*first)->Assign( face, static_cast<InterFace<2U>*>(nullptr) );
+                  }
+                first++;
+             }
+ 
+           // processing the results, connecting the elements to one another
+           for ( auto& it : iface_pairs ) {
+                size_t n_face_nbors{ it.second.size() };
+                // if there is just a single matching neighbor
+                if ( n_face_nbors == 2U ) {
+                     InterFace<2U>* const ptr1 = (*it.second.begin()).first;
+                     InterFace<2U>* const ptr2 = (*it.second.rbegin()).first;
+                     assert( ptr1 != nullptr );
+                     assert( ptr2 != nullptr );
+                     const uint32_t face_e1 = (*it.second.begin()).second;
+                     const uint32_t face_e2 = (*it.second.rbegin()).second;
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else this is a manifold and two most suitable neighbors must be found
+                else if ( n_face_nbors > 2U ) {
+                     // finding all possible combinations of surface elements
+                     vector<int64_t> sequence( n_face_nbors );
+                     iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
+                     const size_t n_samples{2U};
+                     deque<vector<int64_t> >  combinations;
+                     const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
+                     // finding the combination of surfaces with the smallest acute angle between them
+                     map<double,size_t>  ordered_combinations;
+                     for ( auto i{0U}; i < n_combinations; ++i ) {
+                          InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          const double angle = angleBetweenLineCells( ptr1, ptr2 );
+                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          // ordering
+                          ordered_combinations.insert( make_pair(acute_angle,i) );
+                       }
+                     // the first element in the map has the smallest angle
+                     const size_t combi = (*ordered_combinations.begin()).second;
+                     InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
+                     InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
+                     const uint32_t face_e1  = (*next(it.second.begin(),combinations[combi][0])).second;
+                     const uint32_t face_e2  = (*next(it.second.begin(),combinations[combi][1])).second;
+                     // uff! - finally.
+                     ptr1->Assign( face_e1, ptr2 );
+                     ptr2->Assign( face_e2, ptr1 );
+                  }
+                // else no assignments have to be made as there is no neighbor
+             }
+        }
+ 
+ } // end BuildSurfaceElementConnectivity
+
+
 
 
 /**
-    After some diagnostics that establish the extent of mesh modification, the cell neighbor connectivity is rebuilt.
+      (Re)-establishes the connections between Elements, Faces and Interfaces, however, restricted to those of the same dimenisonality
+      (volumetric Elements to volumetric Elements, surface to surface and line to line). Since lower-dimensional cells can be manifolds
+      (multiple neighbors per face), these are disambiguated by chosing those cells as neigbors that lie in the same plane (or closest to)
+      or define the same direction.
+      
+      Once the the connections between cells are re-established, the method reconnectes the nodes to parent elements.
+      Using this information, the nodes are connected to their neighbor elements (avoiding connections between the nodes that form part the same manifold).
+      
+      @note The connection between cells is not affected by Regions, Boundaries or Splitboundaries. The Face objects on the outside
+      of a model, for instance, are all interconnected with one another.
+      
+      @note Elements are not connected across SplitBoundaries, but these connections can be retrieved from corresponding InterFaces.
+      
+      @note The parent connectivity of nodes includes only Element objects, i.e., not Face or InterFace objects.
     
     @attention calls EraseNullPointerCells()
     
+    @todo After some diagnostics that establish the extent of mesh modification, the cell neighbor connectivity is rebuilt.
     TODO: rewrite this in a form that makes use of existing connectivity.
+    TODO: restrict this to the immediate neighborhood of where changes occurred (pointer vectors are needed anyway)
+    
+    @author SKM
+    @date 12/10/21
 */
 template<uint32_t dim>
 void MeshManager<dim>::UpdateConnectivity()
  {
-    // creating pointer vectors that are needed by BuildConnectivity() methods
+    // 0. creating cell vectors needed by BuildConnectivity() methods and reconnecting equidimensional cells
+    // -----------------------------------------------------------------------------------------------------
     vector<Element<dim>*> element_ptrs;
     element_ptrs.reserve( elements_.size() );
     for ( auto& it : elements_ ) element_ptrs.push_back( &it );
@@ -2268,14 +2864,12 @@ void MeshManager<dim>::UpdateConnectivity()
          vector<InterFace<dim>*> iface_ptrs;
          iface_ptrs.reserve( faces_.size() );
          for ( auto& it : interfaces_ ) iface_ptrs.push_back( &it );
-         BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
+         // BuildConnectivity<csmp::InterFace>( iface_ptrs.begin(), iface_ptrs.end() );
+         BuildInterFaceConnectivity( iface_ptrs.begin(), iface_ptrs.end() );
       }
     
-    // global node connectivity to parent elements
-    // RebuildNodeParentElementRelationships( elements_.begin(), elements_.end() );
-    // ----------------------------------------------------------------------------
-    // TODO: restrict this to the neighborhood where changes occurred
-
+    // 1. (Re)-creating node connectivity to parent elements
+    // -----------------------------------------------------
     // counting the parent elements of each node
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
     for ( auto& it : elements_ ) {
@@ -2288,7 +2882,7 @@ void MeshManager<dim>::UpdateConnectivity()
           }
       }
 
-    // reserving the memory for the parent storage and assigning the parent elements
+    // re-assigning the parent elements
     for ( auto& n : parent_elmts_per_node ) {
          const auto n_parents = static_cast<uint32_t>( n.second.size() );
          n.first->ResizeParentStorage( n_parents );
@@ -2296,7 +2890,7 @@ void MeshManager<dim>::UpdateConnectivity()
          for ( const auto& it : n.second ) {
            size_t n_nodes{it->Nodes()};
            // assigning them to the node
-           for ( auto j=0U; j<n_nodes; ++j )
+           for ( auto j{0U}; j<n_nodes; ++j )
              if ( n.first == it->N(j) ) {
                  it->N(j)->Assign( j, it );
                  break;
@@ -2304,8 +2898,16 @@ void MeshManager<dim>::UpdateConnectivity()
            }
          assert( n.first->Parents() >= 1 );
       }
-    // TODO: extend the repairs to include NodeManifolds
-    cerr <<"\nMeshManager::UpdateConnectivity: WARNING: node manifolds are not reestablished here yet.\n";
+    
+    // 2. Rebuilding the node connectivity
+    // -----------------------------------
+    for ( auto& nit : nodes_ ) nit.ReassignNeighbors();
+    
+    // 3. Update node manifolds
+    // ------------------------
+    // TODO: extend the update procedure to include potential NodeManifolds
+    if ( node_manifold_manager_ != nullptr )
+      ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
     
  } // end UpdateConnectivity
 
@@ -2348,19 +2950,18 @@ template<uint32_t dim>
 void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
 {
   size_t n( 0U );
-  for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& nd ) { nd.Idx( n++ ); } );
 
   n = 0U; // resetting the counter
-  for_each( elements_.begin(), elements_.end(), [&n]( Element<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( elements_.begin(), elements_.end(), [&n]( Element<dim>& e ) { e.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( faces_.begin(), faces_.end(), [&n]( Face<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( faces_.begin(), faces_.end(), [&n]( Face<dim>& f ) { f.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( interfaces_.begin(), interfaces_.end(), [&n]( InterFace<dim>& o ) { o.Idx( n++ ); return o; } );
+  for_each( interfaces_.begin(), interfaces_.end(), [&n]( InterFace<dim>& i ) { i.Idx( n++ ); } );
 
 } // end AssignUniqueNumbers
-
 
 
 
@@ -2588,7 +3189,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // elements
   for ( const auto& e : elements_ ) {
       const auto n_nodes{e.Nodes()};
-      for ( auto j = 0U; j<n_nodes; ++j )
+      for ( auto j{0U}; j<n_nodes; ++j )
         vset.Plist( eidx, j, (e.N( j )->Idx()) );
       pmtrl[eidx] = e.Material_ID();
       ++eidx;
@@ -2600,7 +3201,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !faces_.empty() )
     for ( const auto& f : faces_ ) {
         const auto n_nodes{f.Nodes()};
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j )->Idx()) );
         ++eidx;
       }
@@ -2609,7 +3210,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   if ( !interfaces_.empty() )
     for ( const auto& f : interfaces_ ) {
         const auto n_nodes{f.Nodes()};
-        for ( auto j = 0U; j<n_nodes; ++j )
+        for ( auto j{0U}; j<n_nodes; ++j )
           vset.Plist( eidx, j, (f.N( j )->Idx()) );
         ++eidx;
       }
@@ -2623,7 +3224,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& e : elements_ ) {
       const auto neighbors{e.Neighbors()};
       assert( neighbors <= 6 );
-      for ( auto j{0}; j<neighbors; ++j ) {
+      for ( auto j{0U}; j<neighbors; ++j ) {
             const Element<dim>* const ptr = e.Neighbor(j);
             if ( ptr ) {
                 assert( ptr->Idx() < elements_.size() );
@@ -2641,7 +3242,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   for ( const auto& f : faces_ ) {
       // equidimensional neighbors first
       const auto neighbors{ f.Neighbors() };
-      for ( auto j = 0U; j<neighbors; ++j ) {
+      for ( auto j{0U}; j<neighbors; ++j ) {
            const Face<dim>* const ptr = f.Neighbor(j);
            // if the neighbor exists (which it must on the inside of the Face)
            if ( ptr != nullptr )
@@ -2677,7 +3278,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     //    they are written in the order in which they are stored in the interface
     //    To simplify things there is always an entry for the intervening element even if there is none.
     const auto neighbors{ f.Neighbors() };
-    for ( auto j = 0U; j<neighbors; ++j ) {
+    for ( auto j{0U}; j<neighbors; ++j ) {
          if ( f.Neighbor(j) != nullptr )
            vset.Pfvert( eidx, j, f.Idx() );
          else
@@ -2914,7 +3515,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2925,7 +3526,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2936,7 +3537,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2947,7 +3548,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2958,7 +3559,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -2995,9 +3596,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3009,9 +3610,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3023,9 +3624,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3037,9 +3638,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3051,9 +3652,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
                 const auto sectors( it.Sectors() );
-                for ( auto i = 0U; i<sectors; ++i ) {
+                for ( auto i{0U}; i<sectors; ++i ) {
                   const auto ips_per_sector( it.IntegrationPointsPerSector() );
-                  for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                  for ( auto j{0U}; j<ips_per_sector; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3091,9 +3692,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3105,9 +3706,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3119,9 +3720,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3133,9 +3734,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3147,9 +3748,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3253,7 +3854,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3264,7 +3865,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3275,7 +3876,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3286,7 +3887,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3297,7 +3898,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3335,9 +3936,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3349,9 +3950,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3363,9 +3964,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3377,9 +3978,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3391,9 +3992,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3432,9 +4033,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3446,9 +4047,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3460,9 +4061,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3474,9 +4075,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3488,9 +4089,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
             const auto facets( it.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3591,7 +4192,7 @@ break;
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3602,7 +4203,7 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3613,7 +4214,7 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3624,7 +4225,7 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3635,7 +4236,7 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const size_t integration_points( it.IntegrationPoints() );
-            for ( auto i = 0U; i<integration_points; ++i ) {
+            for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
               pushBack( data, value );
             }
@@ -3671,9 +4272,9 @@ break;
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3685,9 +4286,9 @@ break;
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3699,9 +4300,9 @@ break;
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3713,9 +4314,9 @@ break;
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3727,9 +4328,9 @@ break;
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
             const auto sectors( it.Sectors() );
-            for ( auto i = 0U; i<sectors; ++i ) {
+            for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
-              for ( auto j = 0U; j<ips_per_sector; ++j ) {
+              for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
                 pushBack( data, value );
               }
@@ -3766,9 +4367,9 @@ break;
                 ScalarVariable value;
                 for ( const auto& it : interfaces_ ) {
                   const auto facets( it.Facets() );
-                  for ( auto i = 0U; i<facets; ++i ) {
+                  for ( auto i{0U}; i<facets; ++i ) {
                     const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                    for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                    for ( auto j{0U}; j<ips_per_facet; ++j ) {
                       it.Read( i, j, (*pit).second, value );
                       pushBack( data, value );
                     }
@@ -3780,9 +4381,9 @@ break;
               VectorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3794,9 +4395,9 @@ break;
               TensorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3808,9 +4409,9 @@ break;
               ArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -3822,9 +4423,9 @@ break;
               FlaggedArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
                 const auto facets( it.Facets() );
-                for ( auto i = 0U; i<facets; ++i ) {
+                for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
-                  for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                  for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
                     pushBack( data, value );
                   }
@@ -4028,7 +4629,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U ); // running index
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4041,7 +4642,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4054,7 +4655,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4067,7 +4668,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4080,7 +4681,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               const size_t integration_points( e.IntegrationPoints() );
-              for ( auto i = 0U; i<integration_points; ++i ) {
+              for ( auto i{0U}; i<integration_points; ++i ) {
                     read( (*pit).second, entry, value );
                     e.Store( i, key, value );
                     entry++;
@@ -4113,9 +4714,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4130,9 +4731,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4147,9 +4748,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4164,9 +4765,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4181,9 +4782,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto sectors( e.Sectors() );
-              for ( auto i = 0U; i<sectors; ++i ) {
+              for ( auto i{0U}; i<sectors; ++i ) {
                 const auto ips_per_sector( e.IntegrationPointsPerSector() );
-                for ( auto j = 0U; j<ips_per_sector; ++j ) {
+                for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
                       entry++;
@@ -4217,9 +4818,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           for ( auto& e : elements_ ) {
             if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
             const auto facets( e.Facets() );
-            for ( auto i = 0U; i<facets; ++i ) {
+            for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-              for ( auto j = 0U; j<ips_per_facet; ++j ) {
+              for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 read( (*pit).second, entry, value );
                 e.Store( i, j, key, value );
                 entry++;
@@ -4234,9 +4835,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4251,9 +4852,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4268,9 +4869,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4285,9 +4886,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
               const auto facets( e.Facets() );
-              for ( auto i = 0U; i<facets; ++i ) {
+              for ( auto i{0U}; i<facets; ++i ) {
                 const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-                for ( auto j = 0U; j<ips_per_facet; ++j ) {
+                for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4391,7 +4992,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4404,7 +5005,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4417,7 +5018,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4430,7 +5031,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4443,7 +5044,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4475,9 +5076,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4491,9 +5092,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4507,9 +5108,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4523,9 +5124,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4539,9 +5140,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4574,9 +5175,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4590,9 +5191,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4606,9 +5207,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4622,9 +5223,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4638,9 +5239,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
                   entry++;
@@ -4748,7 +5349,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4761,7 +5362,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4774,7 +5375,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4787,7 +5388,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4800,7 +5401,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const size_t integration_points( e.IntegrationPoints() );
-          for ( auto i = 0U; i<integration_points; ++i ) {
+          for ( auto i{0U}; i<integration_points; ++i ) {
             read( (*pit).second, entry, value );
             e.Store( i, key, value );
             entry++;
@@ -4832,9 +5433,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4848,9 +5449,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4864,9 +5465,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4880,9 +5481,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4896,9 +5497,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto sectors( e.Sectors() );
-          for ( auto i = 0U; i<sectors; ++i ) {
+          for ( auto i{0U}; i<sectors; ++i ) {
             const auto ips_per_sector( e.IntegrationPointsPerSector() );
-            for ( auto j = 0U; j<ips_per_sector; ++j ) {
+            for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4931,9 +5532,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4947,9 +5548,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4963,9 +5564,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4979,9 +5580,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -4995,9 +5596,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
           const auto facets( e.Facets() );
-          for ( auto i = 0U; i<facets; ++i ) {
+          for ( auto i{0U}; i<facets; ++i ) {
             const auto ips_per_facet( e.IntegrationPointsPerFacet() );
-            for ( auto j = 0U; j<ips_per_facet; ++j ) {
+            for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
               entry++;
@@ -5089,7 +5690,7 @@ bool  MeshManager<dim>::HybridElementMesh() const
        @date 2018
 */
 template<uint32_t dim>
-int32_t  MeshManager<dim>::CheckElementConnectivity() const
+size_t  MeshManager<dim>::CheckElementConnectivity() const
 {
   cout <<"\nMeshManager::CheckElementConnectivity: checking mesh..."<< endl;
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -5100,7 +5701,7 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
   // --------------------------------------------------------------------
   // 3. detecting whether region contains lower-dimensional elements
   // --------------------------------------------------------------------
-  int32_t errors(0);
+  size_t errors(0);
 
   bool with_volume_elements( false );
   bool with_surface_elements( false );
@@ -5136,14 +5737,14 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
       // identifying the boundary faces and their nodes
       // (each face potentially has a neighbor element)
       long  nbors_that_belong_to_group( eit.Neighbors() );
-      for ( auto i = 0U; i<eit.Faces(); i++ )
+      for ( auto i{0U}; i<eit.Faces(); i++ )
         // if the face is at a model boundary
         if ( eit.Neighbor( i ) == nullptr )
           {
             // boundary nodes
             assert( eit.FE() != NULL );
             eit.FE()->NodesOfFace( i, fnids );
-            for ( size_t j = 0U; j<fnids.size(); ++j )
+            for ( size_t j{0U}; j<fnids.size(); ++j )
               boundary_nodes.insert( eit.N( fnids[j] ) );
             // counting neighbors
             nbors_that_belong_to_group--;
@@ -5175,14 +5776,14 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
       if ( parseFiniteElementDimension( eit.FE_Type() ) == highest_spatial_dim )
       {
         // creating a subset with their nodes
-        for ( auto i = 0U; i<eit.Nodes(); ++i ) {
+        for ( auto i{0U}; i<eit.Nodes(); ++i ) {
           assert( eit.N( i ) != nullptr );
           highest_dim_elmt_nodes.insert( eit.N( i ) );
         }
         // if the element has faces that lie on the region boundary
         // it is considered a boudary element
         long  nbors_that_belong_to_group( eit.Neighbors() );
-        for ( auto i = 0U; i<eit.Faces(); ++i )
+        for ( auto i{0U}; i<eit.Faces(); ++i )
           // 1) the element is on model boundary  or  2) one of its neighbors does not belong to its parent region
           if ( eit.Neighbor( i ) == nullptr )
             {
@@ -5206,7 +5807,7 @@ int32_t  MeshManager<dim>::CheckElementConnectivity() const
         // lower-dimensional elements with nodes that do not belong to the node set of the
         // higher dimensional elements must be boundary elements
         size_t  exterior_nodes( 0U );
-        for ( auto i = 0U; i<e->Nodes(); ++i )
+        for ( auto i{0U}; i<e->Nodes(); ++i )
           if ( !highest_dim_elmt_nodes.count( e->N( i ) ) )
             exterior_nodes++;
 
@@ -5262,7 +5863,7 @@ void MeshManager<dim>::Out() const
   cout << "\nELEMENTS: " << endl;
   for ( const auto& e : elements_ ) {
          string bound("NOT");
-         for ( auto i{0}; i<e.Neighbors(); ++i )
+         for ( auto i{0U}; i<e.Neighbors(); ++i )
            if ( e.Neighbor(i) == nullptr ) {
                 bound = parseBoundary( atBoundary(&e,i) );
                 break;
@@ -5270,10 +5871,10 @@ void MeshManager<dim>::Out() const
          cout << "\nElement ID: " << e.Idx() <<" ("<< parseFiniteElementType(e.FE_Type());
          cout <<"), Boundary flag: " << bound << endl;
          cout << "Member Nodes: " << endl;
-         for ( auto i = 0U; i < e.Nodes(); i++ )
+         for ( auto i{0U}; i < e.Nodes(); i++ )
            cout << e.N( i )->Idx() << "\t";
          cout << "\nNeighbor elements: " << endl;
-         for ( auto i = 0U; i < e.Neighbors(); i++ )
+         for ( auto i{0U}; i < e.Neighbors(); i++ )
            if ( e.Neighbor( i ) != nullptr )
              cout << e.Neighbor( i )->Idx() << "\t";
            else
@@ -5288,10 +5889,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : faces_ ) {
         cout << "\nFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i = 0U; i < f.Nodes(); i++ )
+        for ( auto i{0U}; i < f.Nodes(); i++ )
           cout << f.N( i )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i = 0U; i < f.Neighbors(); i++ )
+        for ( auto i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != nullptr )
             cout << f.Neighbor( i )->Idx() << "\t";
           else
@@ -5307,10 +5908,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : interfaces_ ) {
         cout << "\nInterFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i = 0U; i < f.Nodes(); i++ )
+        for ( auto i{0U}; i < f.Nodes(); i++ )
           cout << f.N( i )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
-        for ( auto i = 0U; i < f.Neighbors(); i++ )
+        for ( auto i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != NULL )
             cout << f.Neighbor( i )->Idx() << "\t";
           else
@@ -5338,8 +5939,10 @@ void MeshManager<dim>::Out() const
   list<CSMP_FEM_TYPE> etypes;
   fem_manager_.CurrentElementTypes( etypes );
   cout <<"\nFinite volume stencils: ";
-  for ( auto fit : etypes )
-  fvm_manager_.Stencil(fit)->Out();
+  for ( const auto& fit : etypes ) {
+       cout <<"\n"<< parseFiniteElementType( fit );
+       fvm_manager_.Stencil(fit)->Out();
+    }
   cout << endl;
   
   // node manifolds

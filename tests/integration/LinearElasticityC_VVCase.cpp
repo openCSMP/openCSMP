@@ -44,7 +44,7 @@ namespace csmp
       Point<DIM> min, max;
       model.MinMaxCoordinates( min, max );
       const double length( max[0]-min[0] );
-      cout << "\n1D model with " << length << " m in length discretized into " << model.Region("Model").Elements() << " elements.\n";
+      cout << "\n1D model with " << length << " m in length discretized into " << model.Region("Model").Cells() << " elements.\n";
 
       // model configuration
       const VectorVariable<DIM> forceRight( DIRICH, tensileForceInX );

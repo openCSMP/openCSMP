@@ -1,4 +1,5 @@
 #include "CornerPointGrid.h"
+#include "Parameter.h"
 #include "PropertyData.h"
 #include "CSMP_highLevelUtilities.h"
 #include "STL_utilities.h"
@@ -434,10 +435,10 @@ void CornerPointGrid::ConstructFiniteElementsFromColumns( VSet<3U>& vset )
   };
   
   vector<std::int8_t> pbflags( vset.Vertices(), 0 ); // boundary flags
-  for ( auto i = 0U; i < vset.Vertices(); ++i )
+  for ( auto i{0U}; i < vset.Vertices(); ++i )
     {
       vector<double> coord( 3U );
-      for ( size_t j = 0U; j<3U; ++j ) coord[j] = vset.P( j, i );
+      for ( size_t j{0U}; j<3U; ++j ) coord[j] = vset.P( j, i );
       Point<3U> pt( coord );
       if ( std::find_if( tp_pts.begin(), tp_pts.end(), isEqual( pt ) ) != tp_pts.end() )
         pbflags[i] = BOX_BOUNDARY::TOP;

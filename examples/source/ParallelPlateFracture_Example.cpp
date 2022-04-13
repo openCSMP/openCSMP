@@ -1,4 +1,4 @@
-#include "SteadyStatePressureToVset_Example.h"
+#include "ParallelPlateFracture_Example.h"
 
 #include "Model.h"
 #include "ModelTopology.h"
@@ -28,7 +28,7 @@ using namespace std;
 
 namespace csmp {
 
-void SteadyStatePressureToVset_Example::Specifications()
+void ParallelPlateFracture_Example::Specifications()
 {
   SetTitle( "Parallel-plate-fracture permeability and fluid pressure distribution" );
   SetDifficulty( 3 );
@@ -36,7 +36,7 @@ void SteadyStatePressureToVset_Example::Specifications()
   AddAuthor( "SKM" );
   AddDescription( "Quadratic finite element interpolation, Dirichlet essential conditions" );
   AddDescription( "Model then gets saved to a binary file, and then rebuilt from it" );
-  AddDescription( "source in: SteadyStatePressureToVset_Example.cpp" );
+  AddDescription( "source in: ParallelPlateFracture_Example.cpp" );
   AddRequirement( "file set: 'veins_20k.1'");
 }
 
@@ -60,15 +60,17 @@ void SteadyStatePressureToVset_Example::Specifications()
    @todo SKM:  REWRITE: simplify the example to VSet operations: input and output only
 
 ***************************************************************************************** */
-void SteadyStatePressureToVset_Example::Run()
+void ParallelPlateFracture_Example::Run()
 {
-    cout<< "\nSteadyStatePressureToVset_Example::Run: 2D Steady-state fluid pressure distribution in a fractured rock."<< endl;
+    cout<< "\nParallelPlateFracture_Example::Run: 2D Steady-state fluid pressure distribution in a fractured rock."<< endl;
     cout<< "\n\tUse input mesh from Triangle (1)='veins_20k.1' or ANSYS (2)=any model with a region called 'fractures'?  ";
     int option1(1);
     cin >> option1;
-    char  file_name[200];
-    cout <<"\n\tEnter name of input file set: ";
-    cin >> file_name;
+    string file_name{"veins_20k.1"};
+    if ( option1 != 1 ) {
+        cout <<"\n\tEnter name of input file set: ";
+        cin >> file_name;
+      }
     const bool isoparametric(true), extra_checks(true);
   
     cout <<"\n\tChoose either a linear (1) or quadratic (2) finite element approximation: ";
@@ -88,7 +90,7 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------------------------------------
     if ( option1 == 1 ) {
          TRIANGLE_Interface  mesh_interface;
-         mesh_interface.ReadTriangle2DMesh( file_name, mesh_container, isoparametric, extra_checks );
+         mesh_interface.ReadTriangle2DMesh( file_name.c_str(), mesh_container, isoparametric, extra_checks );
          if ( option2 == 2 ) VSetConverter<2U>().ConvertLinearToQuadraticTriangles( mesh_container );
          model = new Model<2U>( mesh_container, "example2.txt" );
       }
@@ -96,8 +98,8 @@ void SteadyStatePressureToVset_Example::Run()
     else {
          ANSYS_Interface  mesh_interface(isoparametric);
          const bool binary_file( true );
-         mesh_interface.Read_ANSYS_Mesh( file_name, mesh_container, mesh_topology, binary_file, true );
-      mesh_topology.ReduceToDomains( file_name );
+         mesh_interface.Read_ANSYS_Mesh( file_name.c_str(), mesh_container, mesh_topology, binary_file, true );
+         mesh_topology.ReduceToDomains( file_name.c_str() );
          map<size_t,size_t>  old_and_new_elmtids;
          mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
          mesh_container.ReduceTo( old_and_new_elmtids );
@@ -205,7 +207,7 @@ void SteadyStatePressureToVset_Example::Run()
     // 8. Pass the FE algorithm to the Region and solve [K]{p} = {Q}
     // --------------------------------------------------------------------
     model->Apply( total_pressure_quadratic );
-    model->ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    model->ExtrapolateCellToNodeProperty("velocity", "nodal velocity");
 
 
     // 9. Output the range of the variables "fluid pressure", "velocity",
@@ -219,8 +221,8 @@ void SteadyStatePressureToVset_Example::Run()
     printRangeOfVariable( *model, "conductivity" );
 
 
-    // 10. Output the results to VTK and JPG files
-    // --------------------------------------------
+    // 10. Output the results to VTK files
+    // -----------------------------------
     vtk_output.OutputDataToVTK( *model, "fluid-pressure", "fluid pressure",    1 );
     vtk_output.OutputDataToVTK( *model, "velocity",       "velocity",          1 );
     vtk_output.OutputDataToVTK( *model, "nvelocity",      "nodal velocity",    1 );
@@ -259,7 +261,7 @@ void SteadyStatePressureToVset_Example::Run()
     // --------------------------------------------------------------------
     printRangeOfVariable( model_from_vset, "fluid pressure" );
     printRangeOfVariable( model_from_vset, "velocity" );
-    model_from_vset.ExtrapolateElementToNodeProperty("velocity", "nodal velocity");
+    model_from_vset.ExtrapolateCellToNodeProperty("velocity", "nodal velocity");
     printRangeOfVariable( model_from_vset, "nodal velocity" );
     printRangeOfVariable( model_from_vset, "pore velocity" );
     printRangeOfVariable( model_from_vset, "volume flux" );

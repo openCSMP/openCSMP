@@ -1,12 +1,14 @@
 #ifndef ARRAY_VARIABLE_H
 #define ARRAY_VARIABLE_H
 
+#include "CSMP_definitions.h"
 #include "FlaggedArrayVariable.h"
-#include "PropertyDatabase.h"
 
 namespace csmp {
 
 class ScalarVariable;
+class FlaggedArrayVariable;
+template<uint32_t> class PropertyDatabase;
 
 /**
 
@@ -50,7 +52,7 @@ class ScalarVariable;
 
   @code
   Index eaKey( model.Database().StorageKey("element array") );
-  for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+  for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
     (*it)->Read( eaKey, av );
   @endcode
 
@@ -62,8 +64,6 @@ class ScalarVariable;
   // TODO: why - as this is essentially a vector - is it not inherited from a vector?
 
   */
-  class FlaggedArrayVariable;
-  
   class ArrayVariable
     {
     public:
@@ -78,7 +78,7 @@ class ScalarVariable;
                      double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                      VARIABLE_FLAG flag = ANY );
       
-      explicit ArrayVariable( size_t arraySize,
+      explicit ArrayVariable( unsigned int arraySize,
                               double defaultValue = 0.,
                               VARIABLE_FLAG flag = ANY );
       
@@ -131,20 +131,19 @@ class ScalarVariable;
       bool           operator<( const ArrayVariable& ) const;
 
       /// accessors to the data
-      double&        operator()( size_t );
-      double         operator[]( size_t ) const;
-      void           Component( size_t, double );
-      double         Component( size_t ) const;
+      double&        operator()( uint32_t );
+      double         operator[]( uint32_t ) const;
+      
+      /// functions needed to make CSMP variables interoperable; do not delete
+      void           Component( uint32_t, double );
+      double         Component( uint32_t ) const;
 
+      /// returns number of array elements
       size_t         Size() const;
       void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag(  ) const;
       VARIABLE_FLAG& Flag(  );
       void           Flag( VARIABLE_FLAG flag );
-      void           Fabs();
-      void           Ln();
-      void           Log10();
-      void           Sqrt();
       bool           IsWithinRange( double min, double max ) const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();

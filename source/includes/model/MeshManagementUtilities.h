@@ -30,8 +30,8 @@ template<uint32_t> class SplitBoundary;
 // MESH CONNECTIVITY
 
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
-template<uint32_t dim>
-void floodFill( Element<dim>* const eptr, std::set<Element<dim>*>& output_contiguous_subset );
+template<uint32_t dim, template<uint32_t> class CELL>
+void floodFill( CELL<dim>* const eptr, std::set<CELL<dim>*>& output_contiguous_subset );
 
 /// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
 template<uint32_t dim>
@@ -198,6 +198,16 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
 template<uint32_t dim>
 std::pair<Point<dim>,Point<dim>>  boundingBox( typename std::vector<Node<dim>*>::const_iterator first,
                                                typename std::vector<Node<dim>*>::const_iterator last );
+
+/// pretty prints line elements as a chain from beginning to end; returns number of elements printed
+template<uint32_t dim>
+size_t  printLineElementRegion( const Model<dim>&, const char* region_name, bool renumber_nodes );
+
+/// prints the idx and coordinates of the supplied nodes in a format that can be pasted into a spreadsheet
+template<uint32_t dim>
+void printNodeCoordinates( typename std::vector<Node<dim>*>::const_iterator first,
+                           typename std::vector<Node<dim>*>::const_iterator last );
+
 
 } // end csmp
 

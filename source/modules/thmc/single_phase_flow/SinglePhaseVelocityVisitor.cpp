@@ -124,7 +124,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     // Check if there are LDE's present
     bool volume_elements_present(false);
-    for ( auto e = model.Region("Model").ElementsBegin() ; e != model.Region("Model").ElementsEnd(); e++ ){
+    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
         if ((*e)->IsVolumeElement()){
             volume_elements_present=true;
@@ -132,7 +132,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     }
 //    model.Region("Model").E
-    for ( auto e = model.Region("Model").ElementsBegin() ; e != model.Region("Model").ElementsEnd(); e++ ){
+    for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
         if ((dim == 2 && (*e)->IsLineElement()) || (dim == 3 && (*e)->IsSurfaceElement() && volume_elements_present))
         {
@@ -177,7 +177,7 @@ void SinglePhaseVelocityVisitor<dim>::Visit(Region<dim>* region)
         Element<dim>* ep;
 //        FiniteElement* fe_tmp;
 #pragma omp for
-        for ( long int e= 0 ; e < region->Elements(); e++ ){
+        for ( long int e= 0 ; e < region->Cells(); e++ ){
             ep = region->E(e);
             FiniteElement* fe_tmp=ep->FE();
             // change pointer here
@@ -228,7 +228,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     if ( conductivity_key_.place == ELEMENT )
     {
         if ( conductivity_key_.type == SCALAR )
-            MTRL[0].AssignToDiagonal( dim, e->Read( conductivity_key_ ) );
+            MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e->Read( conductivity_key_ ) );
         else if ( conductivity_key_.type == VECTOR ) {
             VectorVariable<dim>  vc;
             e->Read( conductivity_key_, vc );
@@ -242,10 +242,10 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
     else if ( conductivity_key_.place == ELEMENT_INTEGRATION_POINT )
     {
-        for ( auto i=0; i<e->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
-                MTRL[i].AssignToDiagonal( dim, e->Read(i, conductivity_key_));
+                MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->Read(i, conductivity_key_));
             else if ( conductivity_key_.type == VECTOR ) {
                 VectorVariable<dim>  vc;
                 e->Read(i, conductivity_key_, vc );
@@ -260,10 +260,10 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
     }
     else if ( conductivity_key_.place == NODE )
     {
-        for ( auto i=0; i<e->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
-                MTRL[i].AssignToDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
+                MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
             else if ( conductivity_key_.type == VECTOR ) {
                 VectorVariable<dim>  vc;
                 e->PropertyValueAtIntegrationPoint( conductivity_key_, i, vc );
@@ -286,8 +286,8 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
         // ---------------------------------------------
         // vel = -(k/mu)*(grad p - rho*g*{g_unit})
         velo = 0.;
-        for ( auto i=0; i<e->Nodes(); i++ )
-            for ( auto j=0; j<dim; j++ )
+        for ( auto i{0U}; i<e->Nodes(); i++ )
+            for ( auto j{0U}; j<dim; j++ )
                 velo(j) += PF[i]() * DERIV(j,i) ;
 
         if (with_gravity_) {
@@ -306,7 +306,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
             }
         }
 
-        for ( auto j=0; j<dim; j++ )
+        for ( auto j{0U}; j<dim; j++ )
             velo(j) *= -MTRL[0](j,j);
 
         if (ivelo_key_!=csmp::Index()) {

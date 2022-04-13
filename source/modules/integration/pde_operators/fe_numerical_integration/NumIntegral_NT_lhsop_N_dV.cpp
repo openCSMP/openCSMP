@@ -67,13 +67,13 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
               MathOperatorLHS<dim>::MaterialOperandPlacement() == FACE ||
               MathOperatorLHS<dim>::MaterialOperandPlacement() == INTER_FACE)
            {
-            for ( auto j=0; j<e.Nodes(); j++ )
+            for ( auto j{0U}; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE ||  
                    MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
-            for ( auto j=0; j<e.Nodes(); j++ )
+            for ( auto j{0U}; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
@@ -89,8 +89,8 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det = e.det_JINV_AtIntegrationPoint( i );
                    
-              for ( auto j=0U; j<e.Nodes(); j++ )
-                for ( auto k=0U; k<e.Nodes(); k++ )
+              for ( auto j{0U}; j<e.Nodes(); j++ )
+                for ( auto k{0U}; k<e.Nodes(); k++ )
                   {
                     if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ||
                          MathOperatorLHS<dim>::MaterialOperandPlacement() == FACE ||

@@ -1,5 +1,6 @@
 #include "InterFace.h"
 #include "Element.h"
+#include "Face.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
 #include "CSMP_mathUtilities.h"
@@ -12,39 +13,64 @@ using namespace std;
 
 namespace csmp {
 
+/**
+   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes in opposite order are supplied by node-pointer vector'
+   
+   @note it takes care of assigning the higher dimensional neighbor elements
+   @note assigns outside nodes to InterFace also changing these nodes on the higher-dimensional outside element
+   @note detaches the neighbor connection between the higher dimensional elements
+
+ */
 template<uint32_t dim>
-InterFace<dim>::InterFace( csmp::FiniteElement* f )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    idx_( UINT_MAX ),
-    node_connector_( f->Nodes() * 2, nullptr ),
-    interface_connector_( f->Neighbors(), nullptr ),
+InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props,
+               std::vector<Node<dim>*> outside_nodes )
+  : FiniteElementPolicy<dim,csmp::InterFace>( fptr->FE() ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( fptr->FV() ),
+    idx_( numeric_limits<size_t>::max() ),
+    node_connector_( fptr->Nodes() * 2, nullptr ),
+    interface_connector_( fptr->Neighbors(), nullptr ),
     middleElement_( nullptr ),
     current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr ),
+    innerParent_( fptr->InnerParent() ),
+    outerParent_( fptr->OuterParent() ),
+    inner_parent_face_id_( fptr->InnerParentFaceID() ),
+    outer_parent_face_id_( fptr->OuterParentFaceID() ),
     collocated_nodes_(true)
 {
-   assert( f != nullptr );
-}
+   assert( fptr != nullptr );
+   assert( outerParent_ != nullptr ); // interfaces must have neighbors on all sides
+   assert( outside_nodes.size() == fptr->Nodes() );
+
+#ifdef DEBUG
+   for ( const auto& nit : outside_nodes ) assert( nit != nullptr );
+#endif
+
+   // 1. assigning the nodes to the new InterFace
+   // -------------------------------------------
+   const auto n_nodes{ outside_nodes.size() };
+   for ( auto i{0U}; i< n_nodes; i++ ) {
+        Assign( i, fptr->N(i), INSIDE );
+        Assign( i, outside_nodes[i], OUTSIDE );
+     }
+     
+   // 2. replacing the nodes on the outside element with the new outside nodes
+   // ------------------------------------------------------------------------
+   vector<uint32_t> fnids;
+   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
+   for ( auto i{0U}; i< n_nodes; i++ )
+     outerParent_->Assign( fnids[i], outside_nodes[i] );
+     
+   // 3. detaching the higher-dimensional element neighbors from one another
+   // ----------------------------------------------------------------------
+   innerParent_->Unassign( outerParent_ );
+   outerParent_->Unassign( innerParent_ );
+
+ } // end complete custom constructor (Face)
 
 
-template<uint32_t dim>
-InterFace<dim>::InterFace( csmp::FiniteElement* f,
-                           const csmp::FiniteVolumeStencil<dim>* fvs )
-  : FiniteElementPolicy<dim,csmp::InterFace>( f ),
-    FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
-    node_connector_( f->Nodes() * 2, nullptr ),
-    interface_connector_( f->Neighbors(), nullptr ),
-    middleElement_( nullptr ),
-    current_side_( INSIDE ),
-    innerParent_( nullptr ),
-    outerParent_( nullptr ),
-    collocated_nodes_(true)
-{
-   assert( f   != nullptr );
-   assert( fvs != nullptr );
-}
+
 
 
 /// custom constructor which also builds variable storage; used in most cases
@@ -55,7 +81,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
                            const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::InterFace>( f ),
     FiniteVolumePolicy<dim,csmp::InterFace>( fvs ),
-    idx_( UINT_MAX ),
+    idx_( numeric_limits<size_t>::max() ),
     node_connector_( f->Nodes() * 2, nullptr ),
     interface_connector_( f->Neighbors(), nullptr ),
     middleElement_( nullptr ),
@@ -376,7 +402,6 @@ template<uint32_t dim>
 void InterFace<dim>::Assign( Element<dim>* const parentElement, uint32_t faceId, INTERFACE_SIDE side )
 {
   assert( parentElement != nullptr );
-  assert( side != MIDDLE );
 
   if ( side == INSIDE ) {
       innerParent_ = parentElement;
@@ -445,7 +470,7 @@ template<uint32_t dim>
 void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
   {
     if ( e_ptr == nullptr ) return;
-    for ( auto i = 0U; i < interface_connector_.size(); i++ )
+    for ( auto i{0U}; i < interface_connector_.size(); i++ )
       if ( e_ptr == interface_connector_[i] ) {
           interface_connector_[i] = nullptr;
           break;
@@ -462,7 +487,7 @@ void InterFace<dim>::Unassign( const InterFace<dim>* const e_ptr )
 template<uint32_t dim>
 uint32_t InterFace<dim>::ConnectedNeighbors() const
 {
-  uint32_t connections( interface_connector_.size() );
+  uint32_t connections = static_cast<uint32_t>(interface_connector_.size());
   for ( auto& f : interface_connector_ )
     if ( f == nullptr ) connections--;
   return connections;
@@ -531,7 +556,7 @@ std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
       innerParent_->FE()->NodesOfFace( face, nids );
       set<Point<dim> >  face_key;
       const auto nodes(nids.size());
-      for ( uint32_t j = 0U; j<nodes; ++j )
+      for ( uint32_t j{0U}; j<nodes; ++j )
         face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
       inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
     }
@@ -541,7 +566,7 @@ std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
     outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
     const auto nodes(nids.size());
-    for ( uint32_t j = 0U; j<nodes; ++j )
+    for ( uint32_t j{0U}; j<nodes; ++j )
       face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
@@ -719,6 +744,45 @@ typename std::vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVec
 }
 
 
+
+/**
+    END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects (perimeter InterFaces)
+    terminating within models where INSIDE and OUTSIDE nodes are identical.
+    
+    @param n_local either a node on the inside or on the outside of the interface,
+    which is the same as that on the opposite side if the node is on the perimeter (3D) or at a free-standing end point (2D) of a SplitBoundary.
+*/
+template<uint32_t dim>
+bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
+ {
+    assert( n_local < node_connector_.size() );
+    const auto n_nodes = this->FE()->Nodes();
+    
+    // if this is an inside node
+    if ( n_local < n_nodes ) {
+         // assuming that all the node pointers are valid
+         assert( this->N(n_local) != nullptr );
+         assert( this->N(n_nodes - n_local) != nullptr );
+         if ( this->N(n_local) ==  this->N(n_nodes - n_local) )
+           return true;
+      }
+
+    // if this is an outside node
+    if ( n_local >= n_nodes ) {
+         // assuming that all the node pointers are valid
+         assert( this->N(n_local) != nullptr );
+         assert( this->N(n_local - n_nodes) != nullptr );
+         if ( this->N(n_local) ==  this->N(n_local - n_nodes) )
+           return true;
+      }
+
+    return false;
+    
+ } // end
+
+
+
+
 /**
 
     Returns pointers to the nodes on either side of the Interface.
@@ -750,6 +814,7 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
   if ( side == OUTSIDE ) {
     uint32_t outside_idx = n + if_FE_nodes;
+// TODO: suspicious branching
     if ( n < if_FE_nodes )
       return node_connector_[outside_idx];
     else {
@@ -807,12 +872,12 @@ uint32_t  InterFace<dim>::ParentNodeNumber( uint32_t n, INTERFACE_SIDE side ) co
 
   if ( side == INSIDE ) {
     // finding the parent element that corresponds to inside element
-    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i{0U}; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == innerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
   else if ( side == OUTSIDE ) {
-    for ( auto i = 0U; i<node_connector_[n]->Parents(); ++i )
+    for ( auto i{0U}; i<node_connector_[n]->Parents(); ++i )
       if ( node_connector_[n]->Parent( i ) == outerParent_ )
         return node_connector_[n]->ParentNodeNumber( i );
   }
@@ -878,16 +943,14 @@ uint32_t  InterFace<dim>::OuterParentFaceID() const
 template<uint32_t dim>
 uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 {
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    return inner_parent_face_id_;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( outerParent_ != nullptr );
-    return outer_parent_face_id_;
-  }
+  if ( side == INSIDE ) {
+      assert( innerParent_ != nullptr );
+      return inner_parent_face_id_;
+    }
+  else if ( side == OUTSIDE ) {
+      assert( outerParent_ != nullptr );
+      return outer_parent_face_id_;
+    }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
@@ -902,16 +965,16 @@ uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
 template<uint32_t dim>
 void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
 {
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    inner_parent_face_id_ = idx;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( outerParent_ != nullptr );
-    outer_parent_face_id_ = idx;
-  }
+  if ( side == INSIDE ) {
+      assert( innerParent_ != nullptr );
+      inner_parent_face_id_ = idx;
+      return;
+    }
+  else if ( side == OUTSIDE ) {
+      assert( outerParent_ != nullptr );
+      outer_parent_face_id_ = idx;
+      return;
+    }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
@@ -945,15 +1008,15 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+  if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
+
+  if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
+
   if ( side == MIDDLE ) {
        if ( middleElement_ != nullptr ) return middleElement_->Volume();
        csmp_error.notice( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
        return numeric_limits<double>::signaling_NaN();
     }
-
-  if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
-
-  if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
 
   // error
   return std::numeric_limits<double>::signaling_NaN();
@@ -1059,7 +1122,7 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_S
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i = 0U; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i, side )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -1072,7 +1135,7 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
   const auto n_nodes( Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i = 0U; i<n_nodes; ++i )
+  for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i )->Coordinate() );
 
 } // end CoordinateMatrix
@@ -1194,7 +1257,7 @@ void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Va
   const auto  n_nodes( this->FE()->Nodes() );
   V.resize( n_nodes );
 
-  for ( auto i = 0U; i<n_nodes; i++ )
+  for ( auto i{0U}; i<n_nodes; i++ )
     N( i, side )->Read( idx, V[i] );
 }
 
@@ -1228,18 +1291,18 @@ void  InterFace<dim>::Out() const
   cout << "\nInternal data: ";
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
-  for ( auto i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, INSIDE )->AtBoundary() );
     cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
   }
-  for ( auto i = 0U; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->Nodes(); i++ ) {
     str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
     cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
   }
   cout << endl;
 
   cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
-  for ( auto i = 0U; i<this->Neighbors(); i++ )
+  for ( auto i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
       cout << "\t\t" << Idx() << ":";
       cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
@@ -1269,12 +1332,12 @@ void  InterFace<dim>::Out() const
     }
 
     cout << "\n Connected Node objects, side 1 of interface: ";
-    for ( auto i = 0U; i<this->Nodes(); i++ )
+    for ( auto i{0U}; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
     cout << "\n Connected Node objects, side 2 of interface: ";
-    for ( auto i = 0U; i<this->Nodes(); i++ )
+    for ( auto i{0U}; i<this->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
@@ -1296,7 +1359,7 @@ void  InterFace<dim>::Out() const
     cout << "\tUnit Normal:            ";
     VectorVariable<dim> un( PLAIN, 0. );
     UnitNormal( un );
-    for ( auto i = 0U; i<dim; i++ ) cout << un[i] << ", ";
+    for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
     cout << endl;
 
 } // end Out

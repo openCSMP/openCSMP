@@ -635,8 +635,8 @@ void printBoxBoundaryFlags( const Model<dim>& model )
     cout << endl;  
       
     multiset<BOX_BOUNDARY> elmt_flags;
-    for ( auto eit=modeldomain.ElementsBegin(); eit!=modeldomain.ElementsEnd(); ++eit )
-      for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
+    for ( auto eit=modeldomain.CellsBegin(); eit!=modeldomain.CellsEnd(); ++eit )
+      for ( auto i{0U}; i<(*eit)->Neighbors(); ++i )
         elmt_flags.insert( (*eit)->AtBoundary(i) );
       
     it = elmt_flags.begin();
@@ -1125,14 +1125,14 @@ void recreateBoxBoundaryFlags( Model<3>& model )
 void recreateBoxBoundaryFlagsForQuadrilateralModel( Model<2U>& model )
  { 
     Region<2U>&  modeldomain(model.Region("Model"));
-    for ( vector<Element<2U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+    for ( vector<Element<2U>*>::const_iterator it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
       {  // current version only works for linear quadrilaterals
          assert( (*it)->Nodes() <= 5 );
          
          if ( !isQuadrilateral( (*it)->FE_Type() ) )
            throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForQuadrilateralModel", "this method only works for quadrilateral elements");
            
-         for ( auto i=0; i<(*it)->Nodes(); ++i )
+         for ( auto i{0U}; i<(*it)->Nodes(); ++i )
            (*it)->N(i)->AtBoundary( NOT );
         // BOTTOM 
          if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
@@ -1211,7 +1211,7 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
     Region<3U>&    modeldomain(model.Region("Model"));
     vector<uint32_t> fnids;
     
-    for ( vector<Element<3U>*>::const_iterator it=modeldomain.ElementsBegin(); it!=modeldomain.ElementsEnd(); ++it )
+    for ( vector<Element<3U>*>::const_iterator it=modeldomain.CellsBegin(); it!=modeldomain.CellsEnd(); ++it )
       {
          // current version only works for linear hexahedra
          assert( (*it)->Nodes() <= 9 );
@@ -1220,48 +1220,48 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
            throw csmp::Exception( ERROR, "recreateBoxBoundaryFlagsForHexahedralModel", "this method only works for quadrilateral elements");
            
          // DEFAULT (not at any boundary)
-         for ( auto i=0; i<(*it)->Nodes(); ++i )
+         for ( auto i{0U}; i<(*it)->Nodes(); ++i )
            (*it)->N(i)->AtBoundary( NOT );
            
          // BOTTOM 
          if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
               (*it)->FE()->NodesOfFace( 0U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( BOTTOM );
               continue;
            }
          // RIGHT 
          if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
               (*it)->FE()->NodesOfFace( 2U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( RIGHT );
               continue;
            }
          // TOP 
          if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
               (*it)->FE()->NodesOfFace( 5U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( TOP );
               continue;
            }
          // LEFT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
               (*it)->FE()->NodesOfFace( 4U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( LEFT );
               continue;
            }
          // FRONT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
               (*it)->FE()->NodesOfFace( 1U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( FRONT );
               continue;
            }
          // BACK 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
               (*it)->FE()->NodesOfFace( 3U, fnids );
-              for ( size_t j=0U; j<fnids.size(); ++j )
+              for ( size_t j{0U}; j<fnids.size(); ++j )
                 (*it)->N( fnids[j] )->AtBoundary( BACK );
               continue;
            }
@@ -1403,7 +1403,7 @@ static bool isIn( const set<BOX_BOUNDARY>& bflags, initializer_list<BOX_BOUNDARY
       @test OK
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
+BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
  {
     assert( eptr != nullptr );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -1449,11 +1449,15 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
               const BOX_BOUNDARY flag1 = (*flag_it);
               flag_it++;
               const BOX_BOUNDARY flag2 = (*flag_it);
+              // intersections between internal and external boundaries
+              if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
+              if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
+              // corner cases
               if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
               if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
               // there should be no other cases because the 2D model has no edges
               cerr <<"\n\tmissed case: ";
-              for ( auto boundary : eflags )
+              for ( const auto& boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
               csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
@@ -1461,9 +1465,9 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
          // in 2D, a face can only have 2D nodes unless this is a higher order element
          else if ( eflags.size() >= 3U ) {
               // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
-              if ( eptr->FE()->OrderOfShapeFunctions() == 1 ) {
+              if ( eptr->Interpolation() == 1 ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( auto i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
@@ -1496,6 +1500,9 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
                    const BOX_BOUNDARY flag1 = (*flag_it);
                    flag_it++;
                    const BOX_BOUNDARY flag2 = (*flag_it);
+                   // intersections between internal and external boundaries
+                   if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
+                   if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
                    // if there is a corner involved, the other flag is chosen because an element face cannot span a corner
                    if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
                    if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
@@ -1519,15 +1526,15 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, size_t b_face )
     
  } // end atBoundary
 
-template BOX_BOUNDARY atBoundary( const Element<1U>* const, size_t );
-template BOX_BOUNDARY atBoundary( const Element<2U>* const, size_t  );
-template BOX_BOUNDARY atBoundary( const Element<3U>* const, size_t  );
+template BOX_BOUNDARY atBoundary( const Element<1U>* const, uint32_t );
+template BOX_BOUNDARY atBoundary( const Element<2U>* const, uint32_t  );
+template BOX_BOUNDARY atBoundary( const Element<3U>* const, uint32_t  );
 
 // TESTING
 /*
 if ( eptr->FE()->IsLineElement() ) {
      cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
-     for ( auto i{0}; i<eptr->Nodes(); ++i )
+     for ( auto i{0U}; i<eptr->Nodes(); ++i )
        cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
      cerr << endl;
   }
@@ -1542,13 +1549,13 @@ bool atBoundary( const CELL<dim>* const cptr )
      // for surface and line elements all nodes must be at the boundary
      if ( !cptr->IsEquidimensional() ) {
           const size_t n_nodes{ cptr->Nodes() };
-          for( auto i{0}; i<n_nodes; ++i )
+          for( auto i{0U}; i<n_nodes; ++i )
             if ( cptr->N(i)->AtBoundary() == NOT )
               return false;
        }
      else { // equidimensional elements
-          const size_t n_nbors{ cptr->Neighbors() };
-          for ( auto i{0}; i<n_nbors; ++i )
+          const auto n_nbors{ cptr->Neighbors() };
+          for ( auto i{0U}; i<n_nbors; ++i )
             if ( cptr->Neighbor(i) == nullptr )
               return true;
           return false;
@@ -1564,7 +1571,6 @@ template bool atBoundary( const Element<3U>* const );
 
 
 
-
 /* FAILS AT TIMES
 
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -1576,7 +1582,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // nodal bflags are stored in a set
     set<BOX_BOUNDARY>  eflags;
     const size_t nodes( eptr->Nodes() );
-    for ( auto i = 0U; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          assert( eptr->N(i) != nullptr );
          if ( eptr->N(i)->AtBoundary() != NOT )
            eflags.insert( eptr->N( i )->AtBoundary() );
@@ -1586,7 +1592,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     // in which case it is missing on of its neighbors
     if ( eflags.empty() ) {
          size_t n_nbors{eptr->Neighbors()};
-         for ( auto i{0}; i<n_nbors; ++i )
+         for ( auto i{0U}; i<n_nbors; ++i )
            if ( eptr->Neighbor(i) == nullptr )
              return INTERNAL;
          return NOT;
@@ -1616,7 +1622,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               else {
                    // checking that there is indeed a face on the model boundary
                    const size_t n_nbors{eptr->Neighbors()};
-                   for ( auto i{0}; i<n_nbors; ++i )
+                   for ( auto i{0U}; i<n_nbors; ++i )
                      if ( eptr->Neighbor(i) == nullptr )
                        return (*eflags.begin());
                 }
@@ -1643,7 +1649,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               // 3 flags are legitimate only for quadrilaterals at the corners of a rectangular model
               if ( !isQuadrilateral( eptr->FE_Type() ) ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( auto i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):",
@@ -1659,7 +1665,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
            }
          else {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( auto i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
@@ -1694,7 +1700,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               // corner quadrilaterals that should not exist unless the element is a non simplex element
               if ( !isQuadrilateral( eptr->FE_Type() ) ) {
                    cerr <<"\n\n\telement: "<< eptr->Idx() <<" ("<< parseFiniteElementType(eptr->FE_Type()) <<"), boundary flags:\n\t\t\t";
-                   for ( auto i{0}; i<eptr->Nodes(); ++i )
+                   for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
                    csmp_error.notice( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
@@ -1709,7 +1715,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
          // three flags may imply that a tetrahedral, pyramid, or prism element is located at boundary
          else if ( eflags.size() == 3U ) {
             const size_t n_nbors{eptr->Neighbors()};
-            for ( auto i{0}; i<n_nbors; ++i )
+            for ( auto i{0U}; i<n_nbors; ++i )
               if ( eptr->Neighbor(i) == nullptr )
                 if ( isTriangular( eptr->FE()->ElementTypeOfFace(i) ) )
                   {
@@ -1737,7 +1743,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
          // 4 flags may imply that a pyramid, prism or hexahedral element is located at boundary
          else if ( eflags.size() == 4U ) {
             const size_t n_nbors{eptr->Neighbors()};
-            for ( auto i{0}; i<n_nbors; ++i )
+            for ( auto i{0U}; i<n_nbors; ++i )
               if ( eptr->Neighbor(i) == nullptr )
                 if ( isQuadrilateral( eptr->FE()->ElementTypeOfFace(i) ) )
                   {
@@ -2018,10 +2024,10 @@ void boxFlagsToVariable( Model<dim>& model, const char* node_variable, const cha
   for ( auto nit = mregion.NodesBegin(); nit != mregion.NodesEnd(); nit++ )
     (*nit)->Store( nprop_key, makeScalar( ANY, static_cast<double>((*nit)->AtBoundary()) ) );
 
-  for ( auto eit = mregion.ElementsBegin(); eit != mregion.ElementsEnd(); eit++ ) {
-       size_t face = UNSPECIFIED;
+  for ( auto eit = mregion.CellsBegin(); eit != mregion.CellsEnd(); eit++ ) {
+       uint32_t face = UNSPECIFIED;
        bool at_boundary{false};
-       for ( auto i{0}; i<(*eit)->Neighbors(); ++i )
+       for ( auto i{0U}; i<(*eit)->Neighbors(); ++i )
          if ( (*eit)->Neighbor(i) == nullptr ) {
               face        = i;
               at_boundary = true;

@@ -148,7 +148,7 @@ double FiniteVolumePolicy<2U,CELL>::dN_At( const Point<2U>& rst,
          e->FE()->Jacobian( e->FE()->DNR, e->FE()->DNS );
 
          DN.Resize(2U,e->Nodes());
-         for ( auto i{0}; i<e->Nodes(); i++ ) {
+         for ( auto i{0U}; i<e->Nodes(); i++ ) {
               DN(0U,i) = e->FE()->DNR[i];
               DN(1U,i) = e->FE()->DNS[i];
            }
@@ -190,7 +190,7 @@ double FiniteVolumePolicy<2U,CELL>::PropertyValueAtFacetIntegrationPoint(
   assert( e != nullptr );
   double  sum(0.);
   const uint32_t nodes(e->Nodes());
-  for ( auto i{0}; i<nodes; i++ )
+  for ( auto i{0U}; i<nodes; i++ )
     sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
   return sum;
@@ -221,7 +221,7 @@ double  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
     assert(  e != nullptr );
     double  sum(static_cast<double>(0.));
     const uint32_t nodes(e->Nodes());
-    for ( auto i{0}; i<nodes; i++ )
+    for ( auto i{0U}; i<nodes; i++ )
       sum += e->FE()->NRST[i] * e->N(i)->Read( prop_key );
 
     return sum;
@@ -263,7 +263,7 @@ void FiniteVolumePolicy<2U,CELL>::PropertyValueAtFacetIntegrationPoint(
     var = 0;
     assert( e != nullptr );
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i<nodes; i++ ) {
+    for ( uint32_t i{0U}; i<nodes; i++ ) {
         e->N(i)->Read( prop_key, temp );
         var += temp * e->FE()->NRST[i];
      }
@@ -321,7 +321,7 @@ void  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
   
     assert( e != nullptr );
     const uint32_t nodes(e->Nodes());
-    for ( uint32_t i=0; i < nodes; i++ )
+    for ( uint32_t i{0U}; i < nodes; i++ )
     {
         e->N(i)->Read( prop_key, temp );
         var += temp * e->FE()->NRST[i];
@@ -369,7 +369,7 @@ double  FiniteVolumePolicy<2U,CELL>::FacetIntegral( uint32_t iSector,
     double  integral(0.);
 
     for ( uint32_t iFacet=0U; iFacet<fvptr_->FacetsPerSector(iSector); iFacet++ )
-      for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
+      for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerFacet(); j++ ) {
            fvptr_->FacetIntegrationPoint( iFacet, j, e->FE()->NRST );
            e->FE()->JacobianAt(e->FE()->NRST);
            const double detJ(e->FE()->JacobianDeterminant());
@@ -397,7 +397,7 @@ double  FiniteVolumePolicy<2U,CELL>::SectorIntegral( uint32_t iSector,
     e->CoordinateMatrix();
 
     double fIntegral(0.);
-    for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+    for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
          fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
          e->FE()->JacobianAt(e->FE()->NRST);
          fIntegral += PropertyValueAtSectorIntegrationPoint( iSector, j, prop_key ) *
@@ -455,7 +455,7 @@ double  FiniteVolumePolicy<2U,CELL>::ProjectionOnFacetNormal( uint32_t iFacet,
     double  sum0(0.);
     double  sum1(0.);
     const uint32_t nodes(e->Nodes());
-    for ( auto i{0}; i<nodes; i++ ) {
+    for ( auto i{0U}; i<nodes; i++ ) {
        e->N(i)->Read( prop_key, vc );
        sum0 += e->FE()->NRST[i] * vc[0];
        sum1 += e->FE()->NRST[i] * vc[1];
@@ -483,7 +483,7 @@ double  FiniteVolumePolicy<2U,CELL>::SectorVolume( uint32_t iSector ) const
      e->CoordinateMatrix();
 
      double fVolume(static_cast<double>(0.));
-     for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
+     for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerSector(); j++ ) {
           fvptr_->SectorIntegrationPoint( iSector, j, e->FE()->NRST );
           e->FE()->JacobianAt(e->FE()->NRST);
           fVolume += fvptr_->SectorIntegrationWeight( iSector, j ) *
@@ -591,7 +591,7 @@ double  FiniteVolumePolicy<2U,CELL>::ParametricFacetArea( uint32_t iFacet ) cons
 
   double  area(static_cast<double>(0.));
 
-  for ( uint32_t j=0U; j<fvptr_->IntegrationPointsPerFacet(); j++ )
+  for ( uint32_t j{0U}; j<fvptr_->IntegrationPointsPerFacet(); j++ )
     area += fvptr_->FacetIntegrationWeight( iFacet, j );
 
   return area;

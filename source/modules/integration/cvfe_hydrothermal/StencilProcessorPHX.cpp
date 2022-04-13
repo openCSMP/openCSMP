@@ -41,7 +41,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
    eidx_ = e.Idx();
    e.Read( k_key, perm_ );
 
-   for ( auto i{0}; i<e.FV()->Facets(); i++ )
+   for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
  
         grav_ = param.FacetNormalProjection(i,gravity_);
@@ -91,7 +91,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithoutGravity( const FV_Paramete
   {
 
    eidx_ = e.Idx();
-   for ( auto i{0}; i<e.FV()->Facets(); i++ )
+   for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
  
        e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -131,7 +131,7 @@ void StencilProcessorPHX<dim>::DetermineFluxIn( const Element<dim>& e,
   
    eidx_ = e.Idx();
 
-   for ( auto i{0}; i<e.FV()->Facets(); i++ )
+   for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
  
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -157,7 +157,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
        {
  
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );

@@ -33,7 +33,7 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
     //    eliminating unwanted line/surface element regions
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, true );
  
-    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the line element orientations right
+    // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the neighbor connectivity right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
 
@@ -42,14 +42,14 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
       // element numbers
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
@@ -135,10 +135,11 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     ModelTopology    mesh_topology( isoparametric_elements );
     ANSYS_Interface  mesh_interface( isoparametric_elements );
 
-    // 0. reading the mesh from ANSYS CSMP-input files
-    //    and eliminating the unwanted line/surface element regions
+    // 0. reading the mesh from ANSYS CSMP-input files, eliminating the unwanted line/surface element regions
+    //    node numbers of triangles and quadrilaterals are reversed if they are in clockwise order (establishing right-hand coordinate compliance)
     const bool recreate_node_boundary_flags{true}; // does this using the lower-dimensional boundary regions 
     mesh_interface.Read_ANSYS_Mesh( std::string( mesh_file_set ), vset, mesh_topology, binary_input_file, recreate_node_boundary_flags );
+    
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
@@ -149,7 +150,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
       const uint32_t dim{2};
       PropertyData elmt_nums( ELEMENT, SCALAR, dim );
       elmt_nums.Reserve( vset.Elements() );
-      for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
       vset.AddData( "element number", elmt_nums );
     }
     if ( Database().IsDefined( "node number" ) ) {
@@ -157,7 +158,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
       const uint32_t dim{2};
       PropertyData node_nums( NODE, SCALAR, dim );
       node_nums.Reserve( vset.Vertices() );
-      for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
       vset.AddData( "node number", node_nums );
     }
 
@@ -171,7 +172,8 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     else
       Model<2U>::Initialize( mesh_topology,
                              vset );
-  }
+  } // end try
+
 
   // --------------------------------------_-----------  
   // catching all possible standard and CSMP exceptions

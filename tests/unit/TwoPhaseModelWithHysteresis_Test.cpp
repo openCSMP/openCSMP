@@ -23,7 +23,7 @@ vector <pair<double,double> >  TwoPhaseModelwithHysteresis_Test::Extract_data( M
     FlowFunctionsModule2<1U> SatFunctions( mdl.Database(), 9.8 ) ;
     Region<1U>& mdl_domain{mdl.Region("Model")};
   
-    for (auto it = mdl_domain.ElementsBegin(); it != mdl_domain.ElementsEnd(); ++it ) // loop over elements
+    for (auto it = mdl_domain.CellsBegin(); it != mdl_domain.CellsEnd(); ++it ) // loop over elements
     {
         double Sw = SatFunctions.Sw((*it)) ;
         double extract_data(0) ;
@@ -177,7 +177,7 @@ void  TwoPhaseModelwithHysteresis_Test::runOverSaturationRange( TestCases local_
   arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
-  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
+  for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it )
     (*it)->Store( SatFunctions.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
@@ -437,7 +437,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
   arrayvariable1_(bcp::CWI) = c_[bcp::H2O][bcp::IMBIBITION];
   arrayvariable1_(bcp::COI) = c_[bcp::CO2][bcp::IMBIBITION];
   
-  for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it )
+  for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it )
     (*it)->Store( SatFunctions.key_kri_param, arrayvariable1_);
   
   cout << "\n 1D Initialised value of the Hysteresis relative permeability model Parameters in the model." << endl;
@@ -469,7 +469,7 @@ void csmp::TwoPhaseModelwithHysteresis_Test::run() {
    
    */
   
-  for (auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it ) // loop over elements
+  for (auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it ) // loop over elements
   {
     auto idx_ = (*it)->Idx() ;
     

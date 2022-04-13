@@ -90,7 +90,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( const CELL& e )
     ip_nmult.resize( e.FE()->IntegrationPoints() );
     
     // getting property values at the integration points assuming we have a scalar (which was verified earlier)
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       ip_nmult[i] = e.PropertyValueAtIntegrationPoint( nkey, i );
 
  } // end GetOperands
@@ -121,7 +121,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

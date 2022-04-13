@@ -21,7 +21,7 @@ FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
   {
   }
 
-FlaggedArrayVariable::FlaggedArrayVariable( size_t arraySize,
+FlaggedArrayVariable::FlaggedArrayVariable( unsigned int arraySize,
                                             double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arraySize, defaultValue ),
@@ -54,15 +54,13 @@ void FlaggedArrayVariable::CopyValuesOnly( ArrayVariable& av )
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-      data_[i] = val;
+    for ( auto& i : data_ ) i = val;
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator=( const ScalarVariable& val )
   {
-    for( size_t i(0); i < Size(); ++i )
-      data_[i] = val();
+    for ( auto& i : data_ ) i = val();
     return *this;
   }
 
@@ -121,7 +119,7 @@ double  FlaggedArrayVariable::Component( size_t i ) const
 bool FlaggedArrayVariable::operator==( const FlaggedArrayVariable& av ) const
   {
     assert( av.Size() == Size() );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         if( (*this)[i] != av[i] )
           return false;
       return true;
@@ -136,7 +134,7 @@ bool FlaggedArrayVariable::operator<( const FlaggedArrayVariable& av ) const
   {
     assert( av.Size() == Size() );
 
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
       if( (*this)[i] >= av[i] )
         return false;
     return true;
@@ -146,7 +144,7 @@ bool FlaggedArrayVariable::operator<=( const FlaggedArrayVariable& av ) const
   {
     assert( av.Size() == Size() );
 
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
       if( (*this)[i] > av[i] )
         return false;
     return true;
@@ -156,7 +154,7 @@ bool FlaggedArrayVariable::operator>( const FlaggedArrayVariable& av ) const
   {
     assert( av.Size() == Size() );
 
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
       if( (*this)[i] <= av[i] )
         return false;
     return true;
@@ -166,7 +164,7 @@ bool FlaggedArrayVariable::operator>=( const FlaggedArrayVariable& av ) const
   {
     assert( av.Size() == Size() );
 
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
       if( (*this)[i] < av[i] )
         return false;
     return true;
@@ -177,7 +175,7 @@ bool FlaggedArrayVariable::operator>=( const FlaggedArrayVariable& av ) const
 FlaggedArrayVariable FlaggedArrayVariable::operator+( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) += val;
     return temp_arr;
 }
@@ -185,7 +183,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator+( double val ) const
 FlaggedArrayVariable FlaggedArrayVariable::operator-( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) -= val;
 
     return temp_arr;
@@ -194,7 +192,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator-( double val ) const
 FlaggedArrayVariable FlaggedArrayVariable::operator*( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) *= val;
     return temp_arr;
   }
@@ -202,7 +200,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator*( double val ) const
 FlaggedArrayVariable FlaggedArrayVariable::operator/( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) /= val;
     return temp_arr;
   }
@@ -210,7 +208,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator/( double val ) const
 FlaggedArrayVariable FlaggedArrayVariable::operator^( double val ) const
   {
     FlaggedArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
     {
         temp_arr(i) = std::pow( temp_arr[i], val);
         temp_arr.Flag(i) = flags_[i];
@@ -222,29 +220,25 @@ FlaggedArrayVariable FlaggedArrayVariable::operator^( double val ) const
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator+=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] += val;
+    for ( auto& i : data_ ) i += val;
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator-=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] -= val;
+    for ( auto& i : data_ ) i -= val;
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator*=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] *= val;
+    for ( auto& i : data_ ) i *= val;
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator/=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] /= val;
+    for ( auto& i : data_ ) i /= val;
     return *this;
   }
 
@@ -253,57 +247,53 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator/=( double val )
 /// Operations with ScalarVariables
 FlaggedArrayVariable& FlaggedArrayVariable::operator+=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] += sc();
+    for ( auto& i : data_ ) i += sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator-=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] -= sc();
+    for ( auto& i : data_ ) i -= sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator*=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] *= sc();
+    for ( auto& i : data_ ) i *= sc();
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator/=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] /= sc();
+    for ( auto& i : data_ ) i /= sc();
     return *this;
   }
 
 /// Operations with FlaggedArrayVariables
 FlaggedArrayVariable& FlaggedArrayVariable::operator+=( const FlaggedArrayVariable& av )
   {
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         data_[i] += av[i];
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator-=( const FlaggedArrayVariable& av )
   {
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         data_[i] -= av[i];
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator*=( const FlaggedArrayVariable& av )
   {
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         data_[i] *= av[i];
     return *this;
   }
 
 FlaggedArrayVariable& FlaggedArrayVariable::operator/=( const FlaggedArrayVariable& av )
   {
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         data_[i] /= av[i];
     return *this;
   }
@@ -311,7 +301,7 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator/=( const FlaggedArrayVariab
 FlaggedArrayVariable FlaggedArrayVariable::operator-( const FlaggedArrayVariable& av ) const
   {
     FlaggedArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
     {
         returnArray(i) -= av[i];
         returnArray.Flag(i) = flags_[i];
@@ -322,7 +312,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator-( const FlaggedArrayVariable
 FlaggedArrayVariable FlaggedArrayVariable::operator+( const FlaggedArrayVariable& av ) const
   {
     FlaggedArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
     {
         returnArray(i) += av[i];
         returnArray.Flag(i) = flags_[i];
@@ -333,7 +323,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator+( const FlaggedArrayVariable
 FlaggedArrayVariable FlaggedArrayVariable::operator*( const FlaggedArrayVariable& av ) const
   {
     FlaggedArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
     {
       returnArray(i) *= av[i];
       returnArray.Flag(i) = flags_[i];
@@ -345,7 +335,7 @@ FlaggedArrayVariable FlaggedArrayVariable::operator*( const FlaggedArrayVariable
 FlaggedArrayVariable FlaggedArrayVariable::operator/( const FlaggedArrayVariable& av ) const
   {
     FlaggedArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
     {
       returnArray(i) /= av[i];
       returnArray.Flag(i) = flags_[i];
@@ -357,8 +347,8 @@ bool FlaggedArrayVariable::IsWithinRange( double min, double max ) const
   {
     assert( min < max );
 
-    for ( size_t i(0); i < Size(); ++i )
-      if( ((*this)[i] < min) || ((*this)[i] > max) )
+    for ( auto& i : data_ )
+      if( i < min || i > max )
         return false;
     return true;
   }
@@ -371,31 +361,6 @@ void  FlaggedArrayVariable::MinMax( double& min, double& max ) const
      max = (*max_element( data_.begin(), data_.end() ));
   }
 
-
-
-void FlaggedArrayVariable::Fabs()
-  {
-      for ( size_t i(0); i < Size(); ++i )
-          data_[i] = fabs( data_[i] );
-  }
-
-void FlaggedArrayVariable::Sqrt()
-  {
-      for ( size_t i(0); i < Size(); ++i )
-          data_[i] = sqrt( data_[i] );
-  }
-
-void FlaggedArrayVariable::Log10()
-  {
-      for ( size_t i(0); i < Size(); ++i )
-          data_[i] = log10( data_[i] );
-  }
-
-void FlaggedArrayVariable::Ln()
-  {
-      for ( size_t i(0); i < Size(); ++i )
-          data_[i] = log( data_[i] );
-  }
 
 
 

@@ -82,7 +82,7 @@ void TwoPhaseFileBased<dim>::ReadFile( const char* fileName )
    cout << "\n---------------------------------------------------------";
    cout << "\nFile based two phase model setup based on following input:\n";
    cout << "\nSeff\tKrw\tKrn\tPc\n";
-   for( uint32_t i=0; i<seff_.size(); ++i )
+   for( uint32_t i{0U}; i<seff_.size(); ++i )
      cout << seff_.at( i ) << "\t" << krw_.at( i ) << "\t" << krn_.at( i ) << "\t" << pc_.at( i ) << endl;
    cout << "---------------------------------------------------------\n";
 

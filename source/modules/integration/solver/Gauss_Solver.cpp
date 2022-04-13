@@ -33,7 +33,7 @@ void Gauss_Solver::SolveWithMeschach( SparseMatrix& A,
     VEC*    rhs = v_get(b.size());
     VEC*    sol = v_get(x.size());
     
-    for ( uint32_t i=0; i<x.size(); i++ ) {
+    for ( uint32_t i{0U}; i<x.size(); i++ ) {
         rhs->ve[i] = b[i];
         sol->ve[i] = x[i];
     }
@@ -46,7 +46,7 @@ void Gauss_Solver::SolveWithMeschach( SparseMatrix& A,
     spLUfactor( LU , pivot, pivot_factor );
     spLUsolve ( LU , pivot, rhs, sol );
     
-    for ( uint32_t i=0; i<x.size(); i++ ) x[i] = sol->ve[i];
+    for ( uint32_t i{0U}; i<x.size(); i++ ) x[i] = sol->ve[i];
     
     // giving the memory back to the system
     sp_free( M );

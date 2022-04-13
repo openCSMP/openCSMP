@@ -10,16 +10,17 @@
 #include "MeshManager_Test.h"
 #include "MeshManagementUtilities.h"
 #include "vsetMakers.h"
-#include "ANSYS_Model3D.h"
-#include "ANSYS_Model2D.h"
+#include "VTU_Interface.h"
 #include "Region.h"
 #include "Element.h"
+#include "compareFloats.h"
 
 #include "IsoparametricLinearPyramid.h"
 #include "VTK_Interface.h"
 #include "ModelTopology.h"
 #include "NodeManifold.h"
 
+// #define CSMP_MESH_MANAGER_TEST_DEBUG
 
 using namespace std;
 
@@ -30,151 +31,83 @@ custom models
 uses "CSMP-1phase-variables.txt"
 */
 MeshManager_Test::MeshManager_Test()
- : model2d_(nullptr), model3d_(nullptr)
 {
 }
 
 
-void MeshManager_Test::Create_ANSYS2D_Model( bool reconstruct_from_file )
+
+template<uint32_t dim>
+bool TestNodeNeighborConnectivity( const Model<dim>& model )
  {
-    // ansys 2d model - contiguous
-    cout << "\n------------------------------------------";
-    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
-    cout << "\n------------------------------------------";
-    model2d_name_ = "box2d_fault";
-    string varFileName = "CSMP-variables.txt";
-    model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
-    MeshManager<2>& mesh(model2d_->Mesh());
-    cout << "\nNodes: " << mesh.Nodes() << "\n";
-    set<Element<2>*> elements;
-    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
-    cout << "\nElements: " << mesh.Elements() << "\n";
-    std::map<std::string,std::vector<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
-    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-    std::map<std::string,std::vector<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
-    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+    const Region<dim>&  model_domain(model.Region("Model"));
     
-    if (reconstruct_from_file) {
-        model2d_->OutputToBinaryFile(model2d_name_.c_str());
-        delete model2d_;
-        model2d_ = new Model<2U>(model2d_name_);
-        MeshManager<2>& mesh(model2d_->Mesh());
-        cout << "\nNodes: " << mesh.Nodes() << "\n";
-        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
-        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
-        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
-        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
-      }
-      
- } // end Create_ANSYS2D_Model
+    vector<set<size_t>> node_neighbors;
+    nodeNeighbors( model_domain, node_neighbors );
+    
+    // determining typical number of node neighbors in mesh
+    size_t n_neighbors{0};
+    for ( auto nit : node_neighbors ) n_neighbors += nit.size();
+    cout <<"\n\taverage number of neighbors per node: "<< n_neighbors / node_neighbors.size();
+}
+
+
+
+
  
  
  
-void MeshManager_Test::CheckModel3D()
+bool MeshManager_Test::CheckConnectivityOfModel3D( Model<3>& model )
  {
     set<Element<3>*> elements3;
-    MeshManager<3>& mesh(model3d_->Mesh());
-    cout << "\n\n\nMeshManager_Test::CheckModel: '"<< model3d_->Name() <<"'";
-    cout <<"\nNodes: " << mesh.Nodes() << "\n";
-    set<Node<3>*> contiguous_set_of_nodes;
-    cout << "\nInterconnected nodes: " << findInterconnectedNodeCluster( &(*mesh.NodesBegin()), contiguous_set_of_nodes ) << "\n";
-    cout << "\nElements: " << mesh.Elements() << "\n";
+    MeshManager<3>&  mesh(model.Mesh());
+    cout << "\n\n\nMeshManager_Test::CheckConnectivityOfModel3D: '"<< model.Name() <<"'";
+    cout <<"\nExamining the connectivity of  Nodes: " << mesh.Nodes() << "\n";
+    set<Node<3>*>  contiguous_set_of_nodes;
+    Node<3>*       nptr = &(*mesh.NodesBegin()); // from colony!
+    cout << "\nInterconnected nodes: " << findInterconnectedNodeCluster( nptr, contiguous_set_of_nodes ) << "\n";
+    cout << "\nExamining the connectivity of  Elements: " << mesh.Elements() << "\n";
     // checking the neighbor connectivity
+#ifdef CSMP_MESH_MANAGER_TEST_DEBUG
     integrityCheck<3,Element>( mesh.ElementsBegin(), mesh.ElementsEnd() );
+#endif
     // checking whether the model is contiguous
     set<Element<3>*> contiguous_subset_of_cells;
     findContiguousMeshPatch( &(*mesh.ElementsBegin()), contiguous_subset_of_cells );
     if (  contiguous_subset_of_cells.size() == mesh.Elements() ) {
-         cout <<" model is contiguous.";
+         cout <<"\nMeshManager_Test::CheckConnectivityOfModel3D: model is contiguous.";
       }
     else {
          map<string,vector<Element<3U>*> > elmt_map3;
          _test( findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), elmt_map3 ) > 1 );
-         cout <<" the model is discontiguous and consists of the mesh patches:";
+         cout <<"\nMeshManager_Test::CheckConnectivityOfModel3D: the model is discontiguous and consists of the mesh patches:";
          for ( auto& it : elmt_map3 ) {
-              cout <<"\n\t\t"<< it.first <<": "<< it.second.size() <<" elements.";
+              cout <<"\n\t\t'"<< it.first <<"': "<< it.second.size() <<" elements.";
            }
       }
-    cout << "\nFaces: " << mesh.Faces() << "\n";
+    cout << "\n\nExamining the connectivity of  Faces: " << mesh.Faces() << "\n";
     if ( mesh.Faces() > 0 ) {
         map<string,vector<Face<3U>*> >  face_map3;
         _test( findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) >= 1 );
         cout << "\nInterconnected faces: " << (*face_map3.begin()).second.size() << "\n";
       }
-    cout << "\nInterfaces: " << mesh.InterFaces() << "\n";
+    cout << "\nExamining the connectivity of  Interfaces: " << mesh.InterFaces() << "\n";
     if ( mesh.InterFaces() > 0 ) {
         map<string,vector<InterFace<3U>*> >  iface_map3;
         _test( findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) >= 1 );
         cout << "\nInterconnected Interfaces: " << (*iface_map3.begin()).second.size() << "\n";
       }
+    
+    // Junchul's test (goal is zero errors)
+    _test( mesh.CheckElementConnectivity() == 0 );
+
+    return true;
       
- } // end CheckModel
+ } // end CheckConnectivityOfModel3D
  
  
  
  
  
-void MeshManager_Test::Create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
- {
-    // ansys 3d model - discontiguous
-   if ( !contiguous ) {
-        cout << "\n-------------------------------------------------------";
-        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
-        cout << "\n-------------------------------------------------------";
-        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
-        model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
-        
-        CheckModel3D();
- 
-        //writing ansys model to file deleting it and then recreating a csmp native model from the file
-        if ( reconstruct_from_file ) {
-            model3d_->OutputToBinaryFile(model3d_name_.c_str());
-            delete model3d_;
-            model3d_ = new Model<3U>(model3d_name_);
-            
-            CheckModel3D();
-           }
-        delete model3d_;
-        model3d_ = nullptr;
-        return;
-     }
-
-    // ansys 3d model - contiguous
-    cout << "\n-------------------------------------------------------";
-    cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
-    cout << "\n-------------------------------------------------------";
-    string varFileName = "CSMP-variables.txt";
-    model3d_name_ = "prism_test";
-    model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
-
-    CheckModel3D();
-
-    Region<3U>&  model_domain = model3d_->Region("Model");
-    vector<set<size_t>> node_neighbors;
-    nodeNeighbors( model_domain, node_neighbors );
-    // determining typical number of node neighbors in mesh
-    size_t n_neighbors{0};
-    for ( auto nit : node_neighbors ) n_neighbors += nit.size();
-    cout <<"\n\taverage number of neighbors per node: "<< n_neighbors / node_neighbors.size();
-      
-    if ( reconstruct_from_file ) {
-        // writing ansys model to file deleting it and then recreating a csmp native model from the file
-        model3d_->OutputToBinaryFile(model3d_name_.c_str());
-        delete model3d_;
-        model3d_ = new Model<3U>(model3d_name_);
-        
-        CheckModel3D();
-      }
-  
- } // end Create_ANSYS3D_Model
 
 
 
@@ -190,31 +123,36 @@ void MeshManager_Test::run()
       cout << "\n----------------------------";
       cout << "\nMeshManager_Test::TestBasics";
       cout << "\n----------------------------";
-      string varFileName("CSMP-1phase-variables.txt");
-      model3d_name_ = "PyramidHexaPatch";
-      const bool   skewed_elements(false); // otherwise model is not a box anymore
-      VSet<3U>     vset;
-      test_Create_Pyramid_Hexa_VSet(vset, skewed_elements);
-      model3d_ = new Model<3U>(vset, varFileName.c_str() );
-      // TEST
       // ==========
       TestBasics();
       // ==========
-      delete model3d_;
-      model3d_ = nullptr;
    }
-
+   
   _test(Test_BuiltElementConnectivity2D()); // OK
   _test(Test_BuiltElementConnectivity3D()); // OK
   _test(Test_parentElementsSharedByFace()); // OK
 
-  _test( Test_MeshTraversal3D() );
+  _test( Test_MeshTraversal3D(/* Pyramid_Hexa_VSet */) );
+  
+	cout << "\n----------------------------------------------------";
+	cout << "\nMeshManager_Test::TestCompleteModel2D";
+	cout << "\n(elements,faces,interfaces,regions,boundaries, split boundaries)";
+	cout << "\n----------------------------------------------------";
+  _test( TestCompleteModel2D() );
 
-
-	cout << "\n------------------------------------------------";
-	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
-	cout << "\n------------------------------------------------";
-	_test(TestEntityNumberingFunction());
+  // building more complex 'FracBox' model with Boundaries and lower-dimensional elements for further testing
+  VSet<3U>      vset;
+  ModelTopology topology;
+  string        var_file("CSMP-variables.txt");
+  const bool    regions_to_boundaries{true};
+  test_Create_FracBox( topology, vset );
+  
+  Model<3>      model( topology, vset, var_file.c_str(), regions_to_boundaries );
+  
+	cout << "\n----------------------------------------------------";
+	cout << "\nMeshManager_Test::CheckConnectivityOfModel3D";
+	cout << "\n----------------------------------------------------";
+  _test( CheckConnectivityOfModel3D(model) );
 
 	cout << "\n----------------------------------------------------";
 	cout << "\nMeshManager_Test::TestElementDeletionAndInsertion";
@@ -230,6 +168,11 @@ void MeshManager_Test::run()
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion";
 	cout << "\n------------------------------------------------------";
 	_test(TestInterFaceDeletionAndInsertion());
+
+	cout << "\n------------------------------------------------";
+	cout << "\nMeshManager_Test::TestEntityNumberingFunction";
+	cout << "\n------------------------------------------------";
+	_test(TestEntityNumberingFunction( model ) ); // originally using 'prism_test'
 
 	_test(TestEraseAllPrimitives());
  
@@ -247,37 +190,101 @@ Checks that numbers of elements etc. in mesh manager do indeed reflect those of 
 void MeshManager_Test::TestBasics()
 {
 	// vsetMakers: test_Create_Pyramid_Hexa_VSet
-	if (model3d_name_ == "PyramidHexaPatch") {
-		const MeshManager<3U>& mesh = model3d_->Mesh();
+  VSet<3>    vset;
+  const bool bSkewed{false};
+  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  Model<3> model( vset );
+  model.Name("PyramidHexaPatch");
+  // bounding box
+  Point<3> xyz_min, xyz_max;
+  model.MinMaxCoordinates( xyz_min, xyz_max );
 
-		// returns true if the mesh consists of multiple element types
-		_test(mesh.HybridElementMesh() == true);
+  const MeshManager<3U>& mesh = model.Mesh();
 
-		// counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
-		set<size_t> test_set;
-		_test( detectElementsWithAllNodesOnBoundary( mesh, test_set ) == 0U );
+  // returns true if the mesh consists of multiple element types
+  _test(mesh.HybridElementMesh() == true);
 
-		// returns number of nodes=vertices in the current mesh
-		_test(mesh.Nodes() == 65);
+  // counts and returns current indices of elements that may give rise to problems during the assignment of boundary conditions
+  set<size_t> test_set;
+  _test( detectElementsWithAllNodesOnBoundary( mesh, test_set ) == 0U );
 
-		// returns number of elements in the current mesh
-		_test(mesh.Elements() == 32);
+  // returns number of nodes=vertices in the current mesh
+  _test(mesh.Nodes() == 65);
 
-		// returns number of Faces=lower-dimensional elements in current mesh
-		_test(mesh.Faces() == 0);
+  // returns number of elements in the current mesh
+  _test(mesh.Elements() == 32);
 
-		// returns number of interfaces=faces with multiplicated nodes
-		_test(mesh.InterFaces() == 0);
-	}
-	else
-		cerr << "\nMeshManager_Test::TestBasics; function only acts on 'test_Create_Pyramid_Hexa_VSet' model.\n";
+  // returns number of Faces=lower-dimensional elements in current mesh
+  _test(mesh.Faces() == 0);
+
+  // returns number of interfaces=faces with multiplicated nodes
+  _test(mesh.InterFaces() == 0);
+  
+  // test model model volume (based on bounding box)
+  const Region<3>&  model_domain(model.Region("Model"));
+  const double volume = (xyz_max[0]-xyz_min[0]) * (xyz_max[1]-xyz_min[1]) *  (xyz_max[2]-xyz_min[2]);
+  _test( approximatelyEqual(model_domain.Volume(),volume) );
+  
+  // does this also work correctly in 2D?
+  VSet<2> vset2D;
+  test_Create_MeshPatchWithLineElements_VSet( vset2D );
+  Model<2> model2D( vset2D, "CSMP-variables.txt" ); // needs "element number" and "node number"
+  model2D.Name("MeshPatchWithLineElements");
+  const Region<2>&  model_domain2D(model2D.Region("Model"));
+  const double area{ 6. * 5. };
+  _test( approximatelyEqual(model_domain2D.Volume(),area) );
+  
+  // do all nodes have the expected neighbors?
+  vector<set<size_t>>  node_neighbors;
+  nodeNeighbors( model_domain, node_neighbors );
+  // testing using the connectivity from the VSet
 
 } // end TestBasics
 
 
 
+/**
+       2D test case for rectangular model of 2 domains separated by SplitBoundary.
+       Extra partitally penetrating split boundary crosses dividing SplitBoundary.
+       
+       @author SKM
+       @date 19/3/22
+*/
+bool MeshManager_Test::TestCompleteModel2D()
+ {
+    VSet<2U>       vset;
+    ModelTopology  topo = test_Create_BoundarySplitBoundaryPatch( vset );
+    const bool     treat_all_domains_as_regions{false};
+    Model<2>       model( topo, vset, "CSMP-1phase-variables.txt", treat_all_domains_as_regions );
+    
+    // testing that the model has the right area (also checks element orientations)
+    const Region<2>&  model_domain(model.Region("Model"));
+    const double model_area{ 4.5 * 7. };
+    _test( approximatelyEqual(model_domain.Volume(),model_area) );
+    
+    // can such a model be output to VTU?
+    VTU_Interface<2>  vtu_out( model );
+    vtu_out.OutputDataToVTU( "SPLIT22_BASIC", "permeability", "Model", 0 );
+    
+    // saving model to disk and bringing it back
+    model.OutputToBinaryFile( model.Name() );
+    set<string>  subset_variables; // all variables
+    Model<2U>    restored_model( string{model.Name()}, subset_variables );
+    double       pmin, pmax;
+    restored_model.MinMaxOf( "permeability", pmin, pmax );
+    _test( approximatelyEqual(pmin,1.0e-13) );
+    _test( approximatelyEqual(pmax,1.0e-12) );
+    restored_model.MinMaxOf( "node number", pmin, pmax );
+    _test( approximatelyEqual(pmin,0) );
+    _test( approximatelyEqual(pmax,vset.Vertices()-1U) );
+    
+    return true;
+    
+ } // end TestCompleteModel
 
-// method with the same name
+
+
+// tests method with the same name
 bool MeshManager_Test::Test_parentElementsSharedByFace()
  {
     VSet<3U> vset;
@@ -349,12 +356,12 @@ bool MeshManager_Test::Test_BuiltElementConnectivity2D()
     
     // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
     vector<vector<Element<2>*> > nbor_pointers;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.CellsBegin(), model_domain.CellsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<2>*> > nbor_pointers2;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers2 );
     // comparing the connectivity with the original VSet
     if ( nbor_pointers != nbor_pointers2 ) return false;
     return true;
@@ -375,12 +382,12 @@ bool MeshManager_Test::Test_BuiltElementConnectivity3D()
     
     // testing the reconstruction of element connectivity from face node pointers (old one gets removed)
     vector<vector<Element<3>*> > nbor_pointers;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers );
     // rebuilding the connectivity
-    model.Mesh().BuildConnectivity<Element>( model_domain.ElementsBegin(), model_domain.ElementsEnd() );
+    model.Mesh().BuildConnectivity<Element>( model_domain.CellsBegin(), model_domain.CellsEnd() );
     // getting the connectivity that was recreated
     vector<vector<Element<3>*> > nbor_pointers2;
-    backupNeighborConnectivity( model_domain.ElementsBegin(), model_domain.ElementsEnd(), nbor_pointers2 );
+    backupNeighborConnectivity( model_domain.CellsBegin(), model_domain.CellsEnd(), nbor_pointers2 );
     // comparing the connectivity with the original VSet
     if ( nbor_pointers != nbor_pointers2 ) return false;
     return true;
@@ -421,21 +428,21 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     set<Element<3U>*>  discovered_elements;
     
     floodFill( model_domain.E(0), discovered_elements ); // OK
-    _test( discovered_elements.size() == model_domain.Elements() );
+    _test( discovered_elements.size() == model_domain.Cells() );
     
     set<Element<3>*> elements;
-    _test( findContiguousMeshPatch<3>( &(*model_domain.E(0)), elements ) == model_domain.Elements() ); // OK
-    _test( elements.size() == model_domain.Elements() );
+    _test( findContiguousMeshPatch<3>( &(*model_domain.E(0)), elements ) == model_domain.Cells() ); // OK
+    _test( elements.size() == model_domain.Cells() );
     
     map<string,vector<Element<3>*> > elmt_patches;
     size_t patches = findStandAloneMeshPatches( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd(),
                                                 elmt_patches );
     _test( patches == 1 );
-    _test( (*elmt_patches.begin()).second.size() == model_domain.Elements() );
+    _test( (*elmt_patches.begin()).second.size() == model_domain.Cells() );
     for ( auto i : elmt_patches ) cout <<" "<< i.first;
     
     // checking that NodesOfSegment() and  CornerNodesPerSegmentForElementOfType() give the same answer
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          for ( auto i{0}; i < (*it)->FE()->Segments(); ++i ) {
               vector<uint32_t> node_vec;
               (*it)->FE()->NodesOfSegment( i, node_vec );
@@ -493,18 +500,18 @@ bool MeshManager_Test::Test_MeshTraversal3D()
 
 
 
-
-bool MeshManager_Test::TestEntityNumberingFunction()
+/**
+        Mesh traversal as implemented by Junchul Kim in 2019
+     uses 'prism_test' as test model
+*/
+bool MeshManager_Test::TestEntityNumberingFunction( Model<3>& model )
 {
-  const bool contiguous{true}, reconstruct_from_CSMP_binary_file{true};
-  Create_ANSYS3D_Model( contiguous, reconstruct_from_CSMP_binary_file );
-	// nodes numbered via Model region
-	Region<3U>& model_domain(model3d_->Region("Model"));
- 
+	// renumbering nodes via Model region
+	Region<3U>& model_domain(model.Region("Model"));
 	model_domain.UpdateMemberIndexes();
 	vector<size_t>  node_numbers_Model;
 	node_numbers_Model.reserve(model_domain.Nodes());
-	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model3d_name_ << "': 'Model' numbered nodes:\n";
+	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model.Name() << "': 'Model' numbered nodes:\n";
 	for ( auto nit = model_domain.NodesBegin(); nit != model_domain.NodesEnd(); ++nit) {
       node_numbers_Model.push_back((*nit)->Idx());
       if ((*nit)->Idx() % 100 == 0) cout << (*nit)->Idx() << "...";
@@ -513,13 +520,12 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 	// renumbering nodes
 	const bool in_a_single_sequence(true);
-  MeshManager<3>& mesh(model3d_->Mesh());
+  MeshManager<3>& mesh(model.Mesh());
 	mesh.AssignUniqueNumbers(in_a_single_sequence);
 	// checking the numbering
 	vector<size_t>  nodes_renumbered;
-	nodes_renumbered.reserve(model3d_->Mesh().Nodes());
-	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model3d_name_ << "': renumbered nodes:\n";
-
+	nodes_renumbered.reserve(model.Mesh().Nodes());
+	cout << "\nMeshManager_Test::TestEntityNumberingFunction: model '" << model.Name() << "': renumbered nodes:\n";
 	{
 		set<csmp::Node<3U>*>    discovered_nodes;
 		deque<csmp::Node<3U>*>  current_nodes;
@@ -558,12 +564,20 @@ bool MeshManager_Test::TestEntityNumberingFunction()
 
 
 
+/**
+     Starts with a hexahedral mini model
+*/
 bool MeshManager_Test::TestElementDeletionAndInsertion()
 {
-  MeshManager<3U>& mesh(model3d_->Mesh());
-  const size_t     n_original_elmts(mesh.Elements());
-	// 0. the first element is copy constructed and stored, and then deleted
+  VSet<3U> vset;
+  test_Create_Hexahedra_VSet( vset, false );
+  Model<3>   model( vset, "CSMP-variables.txt" );
+  //Region<3>& model_domain = model.Region("Model");
 
+  MeshManager<3U>& mesh(model.Mesh());
+  const size_t     n_original_elmts(mesh.Elements());
+  
+	// 0. the first element is copy constructed and stored, and then deleted
 	csmp::Element<3U> first_element(*mesh.ElementsBegin());
 	// 1. delete elements 1 from the model
 	mesh.Erase( mesh.ElementsBegin() );
@@ -573,13 +587,14 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
   const size_t n_original_nodes(mesh.Nodes());
 	// 2. create a new element with its nodes
 	IsoparametricLinearPyramid fe;
-	LocalVariables				     node_vars = model3d_->Database().LocalVariablesAt(NODE);
-	LocalVariables				     elmt_vars = model3d_->Database().LocalVariablesAt(ELEMENT);
-	IntegrationPointVariables	 intp_vars = model3d_->Database().IntegrationPointVariablesAt(ELEMENT);
+	LocalVariables				     node_vars = model.Database().LocalVariablesAt(NODE);
+	LocalVariables				     elmt_vars = model.Database().LocalVariablesAt(ELEMENT);
+	IntegrationPointVariables	 intp_vars = model.Database().IntegrationPointVariablesAt(ELEMENT);
   // copy the first node
   Node<3U>      n1(*mesh.NodesBegin());
   const size_t  nearby_node(4);
 	Node<3U>*		  ptr_n1 = mesh.AddNodeAtUniqueLocation( n1.Coordinate(), nearby_node, node_vars );
+  //                     ----------------------------
   // method must return pointer to node 1 pointer
   _test( ptr_n1 == &(*mesh.NodesBegin()) );
 
@@ -588,6 +603,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	Node<3U>*		ptr_n3 = mesh.AddNodeAt( Point<3U>(29., 30., 0.0), node_vars, NOT );
 	Node<3U>*		ptr_n4 = mesh.AddNodeAt( Point<3U>(31., 32., 0.0), node_vars, NOT );
 	Node<3U>*		ptr_n5 = mesh.AddNodeAt( Point<3U>(34., 35., 0.0), node_vars, NOT );
+  //                   --------------
 
 	_test( mesh.Nodes() == n_original_nodes + 5 );
 
@@ -629,20 +645,27 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 
 
 
-// create Faces at boundary and between elements, converted to InterFace objects and then delete them.
-bool MeshManager_Test::TestFaceDeletionAndInsertion()
+// create Faces at boundary and between elements and then delete them again.
+bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
-  MeshManager<3U>& mesh(model3d_->Mesh());
+	// vsetMakers: test_Create_Pyramid_Hexa_VSet
+  VSet<3>    vset;
+  const bool bSkewed{false};
+  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  Model<3> model( vset );
+  model.Name("PyramidHexaPatch");
+
+  MeshManager<3U>& mesh(model.Mesh());
   bool             boundary_face_constructed(false);
   bool             interior_face_constructed(false);
-  LocalVariables				     fvars = model3d_->Database().LocalVariablesAt(FACE);
-	IntegrationPointVariables	 ivars = model3d_->Database().IntegrationPointVariablesAt(FACE);
+  LocalVariables				     fvars = model.Database().LocalVariablesAt(FACE);
+	IntegrationPointVariables	 ivars = model.Database().IntegrationPointVariablesAt(FACE);
   const size_t n_original_faces = mesh.Faces();
 
   // element 4
   Element<3U>* const eptr( &(*next(mesh.ElementsBegin(),4)) );
   Face<3U>*    fptr1(nullptr), *fptr2(nullptr);
-  for ( auto i{0}; i<eptr->Faces(); i++ )
+  for ( auto i{0U}; i<eptr->Faces(); i++ )
     {
        // if the face is at the boundary, we construct a boundary face
        if ( eptr->Neighbor(i) == nullptr && !boundary_face_constructed ) {
@@ -666,11 +689,14 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
     
 	_test( mesh.Faces() == n_original_faces + boundary_face_constructed + interior_face_constructed );
  
- // conversion of interior face to interfaces
-  LocalVariables				     ifvars = model3d_->Database().LocalVariablesAt(INTER_FACE);
-	IntegrationPointVariables	 iivars = model3d_->Database().IntegrationPointVariablesAt(INTER_FACE);
+  // conversion of interior face to interface, but without duplication of nodes
+  vector<Node<3U>*>         outside_nodes( fptr2->Nodes(), nullptr );
+  // using the same nodes but in reverse order
+  for ( auto i{0U}; i<fptr2->Nodes(); i++ ) outside_nodes[ fptr2->Nodes()-i-1U ] = fptr2->N(i);
+  LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
+	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
   if ( interior_face_constructed ) {
-       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars );
+       InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( fptr2, ifvars, iivars, outside_nodes );
        ifptr->Out();
     }
 	
@@ -679,8 +705,8 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
 	mesh.Delete( face_ptrs.begin(), face_ptrs.end() );
   _test( fptr1 == nullptr );
   _test( fptr2 == nullptr );
-	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of faces):\n";
-	cout << "\nFaces: " << model3d_->Mesh().Faces() << "\n";
+	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of faces):\n";
+	cout << "\nFaces: " << mesh.Faces() << "\n";
 
 	_test( mesh.Faces() == n_original_faces );
 
@@ -693,12 +719,20 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion()
 
 
 
-bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
+bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 {
-  MeshManager<3U>& mesh(model3d_->Mesh());
+	// vsetMakers: test_Create_Pyramid_Hexa_VSet
+  VSet<3>    vset;
+  const bool bSkewed{false};
+  test_Create_Pyramid_Hexa_VSet( vset, bSkewed );
+  Model<3> model( vset );
+  model.Name("PyramidHexaPatch");
+
+  MeshManager<3U>&           mesh(model.Mesh());
   bool                       interface_constructed(false);
-  LocalVariables				     ifvars = model3d_->Database().LocalVariablesAt(INTER_FACE);
-	IntegrationPointVariables	 iivars = model3d_->Database().IntegrationPointVariablesAt(INTER_FACE);
+  LocalVariables				     nvars  = model.Database().LocalVariablesAt(NODE);
+  LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
+	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
   const size_t n_original_ifaces = mesh.InterFaces();
 
   // puts interfaces between the interior faces of Element # and Element #
@@ -721,9 +755,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
             for ( auto j=0U; j<fnids.size(); ++j ) {
-                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, ManifoldType::INTERFACE );
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, nvars );
                  middle_nodes.push_back( mnptr );
-                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, ManifoldType::INTERFACE );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, nvars );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes
@@ -752,8 +786,8 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
  
 	// delete the new interface(s) again
 	mesh.Delete( iface_ptrs.begin(), iface_ptrs.end() );
-	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model3d_name_ << "' (after deletion of interfaces):\n";
-	cout << "\nFaces: " << model3d_->Mesh().InterFaces() << "\n";
+	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of interfaces):\n";
+	cout << "\nFaces: " << mesh.InterFaces() << "\n";
 
 	_test( mesh.InterFaces() == n_original_ifaces );
 
@@ -768,20 +802,20 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion()
 */
 bool MeshManager_Test::TestEraseAllPrimitives()
 {
-   bool reconstruct_from_CSMP_binary_file{true};
-   Create_ANSYS2D_Model( reconstruct_from_CSMP_binary_file );
+   // TODO: needs 2D VSet with SplitBoundary (throughgoing) and fracture type that ends inside of model
+   /*
    MeshManager<2U>& mesh(model2d_->Mesh());
    const size_t     n_original_elmts(mesh.Elements());
    const size_t     n_original_faces(mesh.Faces());
    const size_t     n_orig_interfaces(mesh.InterFaces());
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-   _test( mesh.Erase( mesh.NodesBegin(),   mesh.NodesEnd() )   == n_original_elmts );
+   _test( mesh.Erase( mesh.NodesBegin(),      mesh.NodesEnd() )      == n_original_elmts );
    _test( mesh.Erase( mesh.ElementsBegin(),   mesh.ElementsEnd() )   == n_original_elmts );
    _test( mesh.Erase( mesh.FacesBegin(),      mesh.FacesEnd() )      == n_original_faces );
    _test( mesh.Erase( mesh.InterFacesBegin(), mesh.InterFacesEnd() ) == n_orig_interfaces );
 	 cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-	 _test( mesh.Elements() + mesh.Faces() + mesh.InterFaces() + mesh.Nodes() == 0);
-
+	 _test( mesh.Elements() + mesh.Faces() + mesh.InterFaces() + mesh.Nodes() == 0 );
+  */
 	return true;
 }
 
@@ -805,13 +839,13 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
  
     vector<uint32_t> segm_nodes;
 
-    const auto elmtsEnd{ subdomain.ElementsEnd() };
-    for ( auto it=subdomain.ElementsBegin(); it!=elmtsEnd; ++it ) {
+    const auto elmtsEnd{ subdomain.CellsEnd() };
+    for ( auto it=subdomain.CellsBegin(); it!=elmtsEnd; ++it ) {
          const auto n_segments{ (*it)->Segments() };
          for ( auto segm_id{0}; segm_id < n_segments; ++segm_id ) {
               (*it)->FE()->NodesOfSegment( segm_id, segm_nodes );
               // replacing local with global node ids
-              for ( auto& sit : segm_nodes ) sit = (*it)->N(sit)->Idx();
+              for ( auto& sit : segm_nodes ) sit = static_cast<uint32_t>((*it)->N(sit)->Idx());
               // storing the node-to-node connections avoiding duplicates
               assert( segm_nodes.size() == 2 ); // only linear segments are considered by this function
               size_t segm_node1{ subdomain.N(*segm_nodes.begin())->Idx() };

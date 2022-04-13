@@ -16,7 +16,8 @@ namespace csmp {
 */
 template<uint32_t dim>
 Node<dim>::Node()
-    : idx_(ULONG_MAX),
+    : idx_(numeric_limits<size_t>::max()),
+      manifold_(nullptr),
       at_boundary_(NOT)
   {
   }
@@ -31,6 +32,7 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
  : LocalVariableStorage<dim,Node>(lvs),
    xyz_(pt),
    idx_(idx),
+   manifold_(nullptr),
    at_boundary_(boundary_flag)
  {
  }
@@ -39,16 +41,21 @@ Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BO
 
 /**
     Copy constructor also copies the pointer assignments (!).
+    
+    @attention when copy constructing manifold nodes, make sure to add this new Node to it
 */
 template<uint32_t dim>
 Node<dim>::Node( const Node<dim>& nd )
   : xyz_(nd.xyz_), idx_(nd.idx_),
     parent_element_pointers_(nd.parent_element_pointers_),
     neighbor_node_pointers_(nd.neighbor_node_pointers_),
+    manifold_(nd.manifold_),
     parent_node_indexes_(nd.parent_node_indexes_),
     at_boundary_(nd.at_boundary_)
   {
     this->LVS( nd.LVS() );
+    // NB: if this is a manifold, the new Node must be added to it,
+    //     but this can only be done once the node has been constructed
   }
 
 
@@ -59,11 +66,12 @@ Node<dim>::Node( const Node<dim>& nd )
 template<uint32_t dim>
 Node<dim>::Node( Node<dim>&& nd )
   : xyz_{ move(nd.xyz_) },
-    idx_{nd.idx_},
+    idx_{ move(nd.idx_) },
     parent_element_pointers_{ move(nd.parent_element_pointers_) },
     neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
+    manifold_{ move(nd.manifold_) },
     parent_node_indexes_{ move(nd.parent_node_indexes_) },
-    at_boundary_{nd.at_boundary_}
+    at_boundary_{ move(nd.at_boundary_) }
   {
     this->LVS( move(nd.LVS()) );
   }
@@ -74,9 +82,7 @@ Node<dim>::Node( Node<dim>&& nd )
 template<uint32_t dim>
 Node<dim>::~Node()
  {
-    if ( manifold_ != nullptr )
-      manifold_->Remove( this );
-      
+//    if ( manifold_ != nullptr ) manifold_->Remove( this );
 //    cerr <<"\nNode "<< Idx() <<": called destructor.";
  }
 
@@ -93,6 +99,7 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          at_boundary_             = nd.at_boundary_;
          parent_element_pointers_ = nd.parent_element_pointers_;
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
+         manifold_                = nd.manifold_;
          parent_node_indexes_     = nd.parent_node_indexes_;
          this->LVS( move( nd.LVS() ) );
       }
@@ -116,6 +123,7 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     at_boundary_             = nd.at_boundary_;
     parent_element_pointers_ = move( nd.parent_element_pointers_ );
     neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
+    manifold_                = move( nd.manifold_ );
     parent_node_indexes_     = move( nd.parent_node_indexes_ );
     this->LVS( nd.LVS() );
  
@@ -314,7 +322,7 @@ uint32_t  Node<dim>::ReassignNeighbors()
     set<Node<dim>*>  current_nbors;
     const auto       n_parents{ Parents() };
     
-    for ( auto i{0}; i < n_parents; ++i )
+    for ( auto i{0U}; i < n_parents; ++i )
       if ( Parent(i) != nullptr &&
            Parent(i)->IsEquidimensional() ) {
            for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
@@ -403,9 +411,16 @@ uint32_t  Node<dim>::Neighbors() const
 
 
 /**
-    Implements node connectivity graph.
+    Implements node connectivity graph, giving access to all the Node objects that the Node is connected to via Element, Face or InterFace edges.
+    Node neighbors are enlisted in an order that is determined by sorting the points to them (this makes the neighbor vector searchable).
     
-    Nodes are enlisted in the order of their pointers (the new vector is maintained searchable).
+    @param neighbor_node the nth Node in the sortes vector of pointers to nodes stored in the node.
+    
+    @attention If the node is a manifold (topologically co-located with other nodes that can be accessed looping over the branches of the manifold,
+    then only those Nodes are neighbors who are on the same contiguous mesh patch as the Node, i.e., not shared with the other nodes in the manifold.
+    
+    @author SKM
+    @date 8/10/2021
 */
 template<uint32_t dim>
 Node<dim>*  Node<dim>::Neighbor( uint32_t neighbor_node ) const
@@ -538,12 +553,16 @@ void  Node<dim>::SortParents() {
 
 template<uint32_t dim>
 void  Node<dim>::Idx( size_t idx_to_assign ) const
- { idx_ = idx_to_assign; }
+ {
+    idx_ = idx_to_assign;
+ }
 
 
 template<uint32_t dim>
 size_t   Node<dim>::Idx() const
- { return idx_; }
+ {
+    return idx_;
+ }
 
 
 
@@ -582,7 +601,7 @@ double          Node<dim>::z() const { return xyz_[2u]; }
 
 /// access to manifold if any; returns nullptr if the node is not a manifold
 template<uint32_t dim>
-bool Node<dim>::IsManifold() const { return (manifold_ == nullptr); }
+bool Node<dim>::IsManifold() const { return (manifold_ != nullptr); }
 
 
 template<uint32_t dim>
@@ -590,10 +609,9 @@ NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
 
 
 template<uint32_t dim>
-void Node<dim>::Assign( NodeManifold<dim>* const md )
+void Node<dim>::Assign( NodeManifold<dim>& nmf )
  {
-    assert( md != nullptr );
-    manifold_ = md;
+    manifold_ = &nmf;
  }
 
 
@@ -617,7 +635,7 @@ void Node<dim>::Out() const
 #ifndef NDEBUG
     if ( parent_node_indexes_.size() > 0u ) {
          cout <<"\nElement objects sharing the node / node position therein:\n"<< endl;
-         for ( auto i{0}; i<Parents(); i++ ) {
+         for ( auto i{0U}; i<Parents(); i++ ) {
               if ( Parent(i) == NULL ) cout <<"NONE (null pointer) ";
               else Parent(i)->Out();
               cout <<"(node "<< ParentNodeNumber(i) <<"), ";
@@ -659,7 +677,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     assert( (*nit)->Parents() > 0 );
     const auto n_parents{(*nit)->Parents()};
     set<Element<dim>*> shared_parents;
-    for ( auto i{0}; i<n_parents; ++i ) {
+    for ( auto i{0U}; i<n_parents; ++i ) {
          assert( (*nit)->Parent(i) != nullptr );
          if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
          if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -673,7 +691,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     while ( nit != nodesEnd ) {
          set<Element<dim>*> temp;
          const auto parents{(*nit)->Parents()};
-         for ( auto i{0}; i<parents; ++i ) {
+         for ( auto i{0U}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
               if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
               if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -777,7 +795,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     set<Element<dim>*> shared_parents;
 
     // creating set of parent elements shared by first and second node
-    for ( auto i{0}; i<n_parents; ++i )
+    for ( auto i{0U}; i<n_parents; ++i )
       if ( (*nit)->Parent(i) ) {
            if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
            if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
@@ -798,7 +816,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
             printParents( (*first) );
           ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
 
-          return make_pair( (*shared_parents.begin()), UINT_MAX );
+          return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
        }
     if (  shared_parents.size() > 1 ) {
     
@@ -823,7 +841,7 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
          ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
 
-         return make_pair( (*shared_parents.begin()), UINT_MAX );
+         return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
       }
     
     
@@ -858,7 +876,7 @@ if ( interPenetrating<dim>( elmt1, elmt2 ) )
          eptr->FE()->NodesOfSegment( segm, snids );
          const auto n_segm_nodes{ snids.size() };
          bool all_nodes_are_contained{true};
-         for ( auto j{0}; j<n_segm_nodes; ++j )
+         for ( auto j{0U}; j<n_segm_nodes; ++j )
            if ( !binary_search( face_nodes.begin(), face_nodes.end(), eptr->N( snids[j] ) ) ) {
                 all_nodes_are_contained = false;
                 break;
@@ -889,7 +907,7 @@ void printNeighbors( const Node<dim>* const nptr )
     assert( nptr->Parents() > 0 );
     
     cout <<"\nnode "<< nptr->Idx() <<":";
-    for ( auto i{0}; i<n_nbors; ++i ) {
+    for ( auto i{0U}; i<n_nbors; ++i ) {
          const Node<dim>* const nd_nbor = nptr->Neighbor(i);
          if ( nd_nbor == nullptr ) cout <<" NULL";
          else cout <<" "<< nd_nbor->Idx(); // <<":"<< parseBoundary( nd_nbor->AtBoundary() );
@@ -916,7 +934,7 @@ void printParents( const Node<dim>* const nptr )
     set<Element<dim>*> parents;
     
     cout <<"\nNode "<< nptr->Idx();
-    for ( auto i{0}; i<n_parents; ++i ) {
+    for ( auto i{0U}; i<n_parents; ++i ) {
          if ( nptr->Parent(i) == nullptr ) cout <<" NULL";
          else {
               cout <<" "<< parseAbbreviated_FE_Type( nptr->Parent(i)->FE_Type() );

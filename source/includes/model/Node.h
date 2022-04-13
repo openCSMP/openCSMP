@@ -54,7 +54,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     Node& operator=( const Node& );
     Node& operator=( Node&& );
 
-    /// comparitor (Roman, 2014, very costly. @todo rethink logic and rewrite
+    /// comparitor (Roman, 2014), very costly. @todo rethink logic and rewrite
     bool operator==( const Node<dim>& );
 
     /// Local variable storage interface
@@ -89,7 +89,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     // node manifolds (where nodes have been multiplicated at material interfaces)
     
     /// connects the node to other topologically collocated nodes if any
-    void Assign( NodeManifold<dim>* const );
+    void Assign( NodeManifold<dim>& );
     
     /// access to manifold if any; returns nullptr if the node is not a manifold
     bool IsManifold() const;

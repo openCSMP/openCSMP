@@ -417,7 +417,7 @@ bool ColorPalette::WriteColorPaletteFile( const char* file, const string& what )
       for( rgbIt  = rgbColors.begin();
            rgbIt != rgbColors.end(); rgbIt++ )
         {
-          for( size_t i=0; i<3; i++ )
+          for( size_t i{0U}; i<3; i++ )
             {
               ofs << '\t' << (*rgbIt)[i];
             }
@@ -429,7 +429,7 @@ bool ColorPalette::WriteColorPaletteFile( const char* file, const string& what )
       for( hsvIt  = hsvColors.begin();
            hsvIt != hsvColors.end(); hsvIt++ )
         {
-          for( size_t i=0; i<3; i++ ) ofs << '\t' << (*hsvIt)[i];
+          for( size_t i{0U}; i<3; i++ ) ofs << '\t' << (*hsvIt)[i];
           ofs << endl;
         }
     }
@@ -453,7 +453,7 @@ void  ColorPalette::WriteRgbColorPaletteToStdout()
   for( rgbIt  = rgbColors.begin();
        rgbIt != rgbColors.end(); rgbIt++ )
     {
-      for( size_t i=0; i<3; i++ ) cout << '\t' << ((*rgbIt)[i]);
+      for( size_t i{0U}; i<3; i++ ) cout << '\t' << ((*rgbIt)[i]);
       cout << endl;
     }
 }
@@ -470,7 +470,7 @@ void  ColorPalette::WriteRgbColorPaletteToStdoutWithLineNumbers()
        rgbIt != rgbColors.end(); rgbIt++ )
     {
       cout << lineCounter++;
-      for( size_t i=0; i<3; i++ ) cout << '\t' << ((*rgbIt)[i]);
+      for( size_t i{0U}; i<3; i++ ) cout << '\t' << ((*rgbIt)[i]);
       cout << endl;
     }
 }
@@ -486,7 +486,7 @@ void  ColorPalette::WriteHsvColorPaletteToStdout()
   for( hsvIt  = hsvColors.begin();
        hsvIt != hsvColors.end(); hsvIt++ )
     {
-      for( size_t i=0; i<3; i++ ) cout << '\t' << (*hsvIt)[i];
+      for( size_t i{0U}; i<3; i++ ) cout << '\t' << (*hsvIt)[i];
       cout << endl;
     }
 }
@@ -505,7 +505,7 @@ void ColorPalette::WriteHsvColorPaletteToStdoutWithLineNumbers()
        hsvIt != hsvColors.end(); hsvIt++ )
     {
       cout << lineCounter++;
-      for( size_t i=0; i<3; i++ ) cout << '\t' << (*hsvIt)[i];
+      for( size_t i{0U}; i<3; i++ ) cout << '\t' << (*hsvIt)[i];
       cout << endl;
     }
 }
@@ -886,11 +886,11 @@ void ColorPalette::GiveRgb( float val, float* vessel )
       std::cout << "    (size_t)val was: " << which << " instead of >=0 and < ";
       std::cout << paletteSize << std::endl;
       std::cout << "\nSetting palette values to zero !"<< std::endl;
-      for( size_t i=0; i<3; i++ ) vessel[i] = 0.0F; // black
+      for( size_t i{0U}; i<3; i++ ) vessel[i] = 0.0F; // black
    }
 
   // Fill in the array
-  for( size_t i=0; i<3; i++ ) vessel[i] = rgbColors[ which ][i];
+  for( size_t i{0U}; i<3; i++ ) vessel[i] = rgbColors[ which ][i];
   vessel[3] = blend;
 }
 
@@ -910,10 +910,10 @@ void ColorPalette::GiveHsv( float val, float* vessel )
       std::cout  << "    (size_t)val was: " << which << " instead of >=0 and < ";
       std::cout  << paletteSize << std::endl;
       std::cout  << "\nSetting palette values to zero !"<< std::endl;
-      for( size_t i=0; i<3; i++ ) vessel[i] = 0.0F; // black
+      for( size_t i{0U}; i<3; i++ ) vessel[i] = 0.0F; // black
    }
   
-   for( size_t i=0; i<3; i++ ) vessel[i] = hsvColors[ which ][i];
+   for( size_t i{0U}; i<3; i++ ) vessel[i] = hsvColors[ which ][i];
    vessel[3] = blend;
 }
 

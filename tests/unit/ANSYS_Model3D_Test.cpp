@@ -29,7 +29,7 @@ namespace csmp
 
       size_t nullNeighborsOut(0);
       const Region<3U> model_domain1(modelOutput1.Region("Model"));
-      for ( auto it = model_domain1.ElementsBegin(); it != model_domain1.ElementsEnd(); ++it )
+      for ( auto it = model_domain1.CellsBegin(); it != model_domain1.CellsEnd(); ++it )
         for ( auto n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighborsOut;
@@ -43,13 +43,13 @@ namespace csmp
       modelOutput1.Region("MATRIX_LEFT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixLeftValue ) );
       modelOutput1.Region("MATRIX_RIGHT").InputPropertyValue( "permeability", makeScalar( PLAIN, matrixRightValue ) );
 
-      const size_t elementCount( modelOutput1.Region("Model").Elements() );
+      const size_t elementCount( modelOutput1.Region("Model").Cells() );
       const size_t nodeCount( modelOutput1.Region("Model").Nodes() );
       const size_t regionCount( modelOutput1.Regions() );
       const size_t matrixLeftNodeCount(  modelOutput1.Region("MATRIX_LEFT").Nodes() );
       const size_t matrixRightNodeCount(  modelOutput1.Region("MATRIX_RIGHT").Nodes() );
-      const size_t matrixLeftElementCount(  modelOutput1.Region("MATRIX_LEFT").Elements() );
-      const size_t matrixRightElementCount(  modelOutput1.Region("MATRIX_RIGHT").Elements() );
+      const size_t matrixLeftElementCount(  modelOutput1.Region("MATRIX_LEFT").Cells() );
+      const size_t matrixRightElementCount(  modelOutput1.Region("MATRIX_RIGHT").Cells() );
 
       _test( modelOutput1.ContainsBoundary("TOP") );
       _test( modelOutput1.ContainsBoundary("BOTTOM") );
@@ -58,12 +58,12 @@ namespace csmp
       _test( modelOutput1.ContainsBoundary("BACK") );
       _test( modelOutput1.ContainsBoundary("LEFT") );
 
-      const size_t topFaceCount( modelOutput1.Boundary("TOP").Elements() );
-      const size_t bottomFaceCount( modelOutput1.Boundary("BOTTOM").Elements() );
-      const size_t leftFaceCount( modelOutput1.Boundary("LEFT").Elements() );
-      const size_t rightFaceCount( modelOutput1.Boundary("RIGHT").Elements() );
-      const size_t frontFaceCount( modelOutput1.Boundary("FRONT").Elements() );
-      const size_t backFaceCount( modelOutput1.Boundary("BACK").Elements() );
+      const size_t topFaceCount( modelOutput1.Boundary("TOP").Cells() );
+      const size_t bottomFaceCount( modelOutput1.Boundary("BOTTOM").Cells() );
+      const size_t leftFaceCount( modelOutput1.Boundary("LEFT").Cells() );
+      const size_t rightFaceCount( modelOutput1.Boundary("RIGHT").Cells() );
+      const size_t frontFaceCount( modelOutput1.Boundary("FRONT").Cells() );
+      const size_t backFaceCount( modelOutput1.Boundary("BACK").Cells() );
 
       const size_t topNodeCount( modelOutput1.Boundary("TOP").Nodes() );
       const size_t bottomNodeCount( modelOutput1.Boundary("BOTTOM").Nodes() );
@@ -82,12 +82,12 @@ namespace csmp
       Model<3> modelInput1( file_name, set<string>({}) );
       const Region<3U> model_domain2(modelInput1.Region("Model"));
       const double binaryModelTime( timer.Stop() );
-      _test( elementCount == modelInput1.Region("Model").Elements() );
+      _test( elementCount == modelInput1.Region("Model").Cells() );
       _test( nodeCount    == modelInput1.Region("Model").Nodes() );
       
       if ( verbose ) cout <<"\n\nrun: Model reconstructed from file:\n";
       size_t nullNeighbors(0);
-      for ( auto it = model_domain2.ElementsBegin(); it != model_domain2.ElementsEnd(); ++it )
+      for ( auto it = model_domain2.CellsBegin(); it != model_domain2.CellsEnd(); ++it )
         for ( auto n{0}; n < (*it)->Neighbors(); ++n )
           if( (*it)->Neighbor(n) == nullptr )
             ++nullNeighbors;
@@ -101,19 +101,19 @@ namespace csmp
       _test( modelInput1.ContainsBoundary("FRONT") );
       _test( modelInput1.ContainsBoundary("BACK") );
       _test( modelInput1.ContainsBoundary("BOTTOM") );
-      _test( elementCount == modelInput1.Region("Model").Elements() );
+      _test( elementCount == modelInput1.Region("Model").Cells() );
       _test( nodeCount == modelInput1.Region("Model").Nodes() );
       _test( regionCount == modelInput1.Regions() );
       _test( matrixLeftNodeCount == modelInput1.Region("MATRIX_LEFT").Nodes() );
       _test( matrixRightNodeCount == modelInput1.Region("MATRIX_RIGHT").Nodes() );
-      _test( matrixLeftElementCount == modelInput1.Region("MATRIX_LEFT").Elements() );
-      _test( matrixRightElementCount == modelInput1.Region("MATRIX_RIGHT").Elements() );
-      _test( topFaceCount == modelInput1.Boundary("TOP").Elements() );
-      _test( bottomFaceCount == modelInput1.Boundary("BOTTOM").Elements() );
-      _test( leftFaceCount == modelInput1.Boundary("LEFT").Elements() );
-      _test( rightFaceCount == modelInput1.Boundary("RIGHT").Elements() );
-      _test( frontFaceCount == modelInput1.Boundary("FRONT").Elements() );
-      _test( backFaceCount == modelInput1.Boundary("BACK").Elements() );
+      _test( matrixLeftElementCount == modelInput1.Region("MATRIX_LEFT").Cells() );
+      _test( matrixRightElementCount == modelInput1.Region("MATRIX_RIGHT").Cells() );
+      _test( topFaceCount == modelInput1.Boundary("TOP").Cells() );
+      _test( bottomFaceCount == modelInput1.Boundary("BOTTOM").Cells() );
+      _test( leftFaceCount == modelInput1.Boundary("LEFT").Cells() );
+      _test( rightFaceCount == modelInput1.Boundary("RIGHT").Cells() );
+      _test( frontFaceCount == modelInput1.Boundary("FRONT").Cells() );
+      _test( backFaceCount == modelInput1.Boundary("BACK").Cells() );
 
       const size_t topNodeCountIn( modelInput1.Boundary("TOP").Nodes() );
       const size_t bottomNodeCountIn( modelInput1.Boundary("BOTTOM").Nodes() );
@@ -208,7 +208,8 @@ namespace csmp
       for( vector<Node<3>*>::const_iterator it = rref.NodesBegin(); it != nodesEnd; ++it )
         {
         const BOX_BOUNDARY boxBoundary( (*it)->AtBoundary() );
-        if( boxBoundary == LEFT or boxBoundary == RIGHT or boxBoundary == TOP or boxBoundary == BOTTOM  or boxBoundary == FRONT or boxBoundary == BACK )
+        if( boxBoundary == LEFT or boxBoundary == RIGHT or boxBoundary == TOP or
+            boxBoundary == BOTTOM  or boxBoundary == FRONT or boxBoundary == BACK )
           (*it)->Store( nodalKey, makeScalar( PLAIN, 1.0 ) );
         else
           continue;   
@@ -237,12 +238,12 @@ namespace csmp
       Boundary<3>& front( model.Boundary( std::string("FRONT") ) );
       Boundary<3>& back( model.Boundary( std::string("BACK") ) );
 
-      _test( left.Elements() != 0 );
-      _test( right.Elements() != 0 );
-      _test( bottom.Elements() != 0 );
-      _test( top.Elements() != 0 );
-      _test( front.Elements() != 0 );
-      _test( back.Elements() != 0 );
+      _test( left.Cells() != 0 );
+      _test( right.Cells() != 0 );
+      _test( bottom.Cells() != 0 );
+      _test( top.Cells() != 0 );
+      _test( front.Cells() != 0 );
+      _test( back.Cells() != 0 );
       
       // testing model with finite volume variables
       ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true,true);
@@ -258,7 +259,7 @@ namespace csmp
 
       modelOutput3.InputPropertyValue( "faip vector", vv );
       modelOutput3.InputPropertyValue( "seip tensor", tv );
-      Element<3>* ePtr = *modelOutput3.Region("Model").ElementsBegin();
+      Element<3>* ePtr = *modelOutput3.Region("Model").CellsBegin();
       for( auto f(0); f < ePtr->Facets(); ++f )
         for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
@@ -276,7 +277,7 @@ namespace csmp
         _test( modelInput3.Boundary("BOUNDARY5").Nodes() == modelOutput3_boundar5NodesOut );
         _test( modelInput3.Boundary("BOUNDARY6").Nodes() == modelOutput3_boundar6NodesOut );
 
-        ePtr = *modelInput3.Region("Model").ElementsBegin();
+        ePtr = *modelInput3.Region("Model").CellsBegin();
         size_t ctrFaIps(0);
         for( auto f(0); f < ePtr->Facets(); ++f )
           for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
@@ -289,8 +290,8 @@ namespace csmp
           _test( ctrFaIps == 6 );
           
           size_t ctrSeIps(0);
-          for( size_t s(0); s < ePtr->Sectors(); ++s )
-            for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+          for( auto s(0); s < ePtr->Sectors(); ++s )
+            for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
             {
               ePtr->Read( s, sip, seipTensorKey, tvPlain );
               _test( tvPlain == tv );
@@ -317,8 +318,8 @@ namespace csmp
             ++ctrFaIps;
           }
 
-          for( size_t s(0); s < ePtr->Sectors(); ++s )
-            for( size_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+          for( auto s(0); s < ePtr->Sectors(); ++s )
+            for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
             {
               ePtr->Read( s, sip, seipTensorKey, tvPlain );
               _test( tvPlain == tv );
@@ -330,5 +331,52 @@ namespace csmp
 
        if ( verbose ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
     }
+    
+    
+    
+    
+    
+void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
+ {
+   Model<3>* model3d_(0);
+   string    model3d_name_;
+   
+    // ansys 3d model - discontiguous
+   if ( !contiguous ) {
+        cout << "\n-------------------------------------------------------";
+        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
+        cout << "\n-------------------------------------------------------";
+        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
+        model3d_name_ = "ModelDykeAllLayersSplit";
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
+ 
+        //writing ansys model to file deleting it and then recreating a csmp native model from the file
+        if ( reconstruct_from_file ) {
+            model3d_->OutputToBinaryFile(model3d_name_.c_str());
+            delete model3d_;
+            model3d_ = new Model<3U>(model3d_name_);
+           }
+        delete model3d_;
+        model3d_ = nullptr;
+        return;
+     }
+
+    // ansys 3d model - contiguous
+    cout << "\n-------------------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
+    cout << "\n-------------------------------------------------------";
+    string varFileName = "CSMP-variables.txt";
+    model3d_name_ = "prism_test";
+    model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
+
+    if ( reconstruct_from_file ) {
+        // writing ansys model to file deleting it and then recreating a csmp native model from the file
+        model3d_->OutputToBinaryFile(model3d_name_.c_str());
+        delete model3d_;
+        model3d_ = new Model<3U>(model3d_name_);
+      }
+  
+ } // end create_ANSYS3D_Model
+    
 
   } // csmp

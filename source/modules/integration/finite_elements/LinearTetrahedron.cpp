@@ -134,7 +134,7 @@ void LinearTetrahedron::dN( DenseMatrix<DM_MIN>& B )
    // volume
    double vol6 = M(0,0)+M(0,1)+M(0,2)+M(0,3);
 
-   for ( uint32_t i=0; i<npe; i++ )
+   for ( uint32_t i{0U}; i<npe; i++ )
     {
        B(0,i) = M(1,i) / vol6;
        B(1,i) = M(2,i) / vol6;
@@ -349,7 +349,7 @@ void LinearTetrahedron::UpdateFor()
      {
         // test function coefficients
         int32_t j(1);
-        for ( uint32_t i=0; i<npe; i++ )
+        for ( uint32_t i{0U}; i<npe; i++ )
           {
              // a(i)
              M(0,i)  = -XY(n(i,1),0) * (XY(n(i,3),1)*XY(n(i,2),2)-XY(n(i,3),2)*XY(n(i,2),1));

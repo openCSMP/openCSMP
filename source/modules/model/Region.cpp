@@ -7,6 +7,7 @@
 
 #include "writeVariableIf.h"
 #include "Node.h"
+#include "MeshManager.h"
 #include "Element.h"
 #include "Boundary.h"
 #include "FiniteElementManager.h"
@@ -109,18 +110,18 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 {
   // building the element vector
   // ---------------------------
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-  if ( this->elmt_vec_.capacity() > mesh.Elements() )
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  if ( this->cell_vec_.capacity() > mesh.Elements() )
     throw csmp::Exception( ERROR, "Region(custom constructor)",
                           "attempt to contruct region with more elements than are contained in MeshManager");
 
   // pushing back the pointers to the interior elements
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
+    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
+    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
 
   // building the node vector
   // ------------------------
@@ -165,15 +166,15 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 {
   // building the element vector
   // ---------------------------
-  this->elmt_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
 
   // assigning pointers to the interior elements
   for ( size_t i : info.interior_elmts )
-    this->elmt_vec_.push_back( elmts[i] );
+    this->cell_vec_.push_back( elmts[i] );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
-    this->elmt_vec_.push_back( elmts[i] );
+    this->cell_vec_.push_back( elmts[i] );
     
   // building the node vector
   // ------------------------
@@ -252,7 +253,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
       return;
       // element, face and interface are treated the same
     case ELEMENT:
-      for ( auto it = Region<dim>::ElementsBegin(); it != Region<dim>::ElementsEnd(); it++ )
+      for ( auto it = Region<dim>::CellsBegin(); it != Region<dim>::CellsEnd(); it++ )
         (*it)->Accept( v );
       return;
     case NODE:
@@ -396,7 +397,7 @@ This vset can, for example, later be used to create a new Model.
 template<uint32_t dim>
 void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
 {
-  if ( this->elmt_vec_.empty() ) {
+  if ( this->cell_vec_.empty() ) {
     throw csmp::Exception( ERROR, "Region<dim>::OutputTo",
                            "Attempt to output empty group to VSet. Nothing was done." );
     return;
@@ -406,13 +407,13 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
 
   // 0. resizing the VSet
   size_t         counter( 0U );
-  deque<uint32_t>  nodes_per_element( this->elmt_vec_.size() );
-  deque<uint32_t>  elements_per_element( this->elmt_vec_.size() );
-  deque<int8_t>  etypes( this->elmt_vec_.size() );
+  deque<uint32_t>  nodes_per_element( this->cell_vec_.size() );
+  deque<uint32_t>  elements_per_element( this->cell_vec_.size() );
+  deque<int8_t>  etypes( this->cell_vec_.size() );
   set<int8_t>    n_etypes;
 
   for ( typename vector<csmp::Element<dim>*>::const_iterator
-        eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+        eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
   {
     n_etypes.insert( (*eit)->FE_Type() );
     etypes[counter] = (*eit)->FE_Type();
@@ -432,22 +433,22 @@ void Region<dim>::OutputTo( VSet<dim>& vset, bool with_properties ) const
   this->UpdateMemberIndexes();
 
   // 1. assigning coordinate values
-  for ( auto i = 0U; i<this->node_vec_.size(); i++ ) {
+  for ( size_t i{0U}; i<this->node_vec_.size(); i++ ) {
     vset.Px( i, this->node_vec_[i]->x() );
     if ( dim != 1U ) vset.Py( i, this->node_vec_[i]->y() );
     if ( dim == 3U ) vset.Pz( i, this->node_vec_[i]->z() );
   }
 
   for ( typename vector<csmp::Element<dim>*>::const_iterator
-        eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+        eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
     // mapping global to local node numbers
-    for ( auto i = 0U; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
+    for ( auto i{0U}; i<(*eit)->Nodes(); i++ ) vset.Plist( (*eit)->Idx(), i, (*eit)->N( i )->Idx() );
 
   // 3. writing the neighbor per element map (pfverts)
   counter = 0U;
   for ( typename vector<csmp::Element<dim>*>::const_iterator
-        eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ ) {
-    for ( auto i = 0U; i<(*eit)->Neighbors(); i++ )
+        eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ ) {
+    for ( auto i{0U}; i<(*eit)->Neighbors(); i++ )
       if ( (*eit)->Neighbor( i ) != NULL )
         vset.Pfvert( counter, i, static_cast<int32_t>((*eit)->Neighbor( i )->Idx()) );
       else {
@@ -569,7 +570,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
   else { //
     if ( key.place == REGION ) data.Reserve( 1U, 1U );
     else if ( key.place == NODE ) data.Reserve( this->Nodes(), this->Nodes() );
-    else if ( key.place == ELEMENT ) data.Reserve( this->Elements(), this->Elements() );
+    else if ( key.place == ELEMENT ) data.Reserve( this->Cells(), this->Cells() );
     else
       csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:", property, "output is not handled yet." );
   }
@@ -615,11 +616,11 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
       }
     }
     else if ( key.place == ELEMENT ) {
-      data.Reserve( this->Elements() );
+      data.Reserve( this->Cells() );
       switch ( key.type ) {
         case SCALAR: {
           ScalarVariable sc;
-          for ( const auto& it : this->elmt_vec_ ) {
+          for ( const auto& it : this->cell_vec_ ) {
             (*it).Read( key, sc );
             pushBack( data, sc );
           }
@@ -627,7 +628,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case VECTOR: {
           VectorVariable<dim> vc;
-          for ( const auto& it : this->elmt_vec_ ) {
+          for ( const auto& it : this->cell_vec_ ) {
             (*it).Read( key, vc );
             pushBack( data, vc );
           }
@@ -635,7 +636,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case TENSOR: {
           TensorVariable<dim> ts;
-          for ( const auto& it : this->elmt_vec_ ) {
+          for ( const auto& it : this->cell_vec_ ) {
             (*it).Read( key, ts );
             pushBack( data, ts );
           }
@@ -643,7 +644,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                      break;
         case ARRAY: {
           ArrayVariable av;
-          for ( const auto& it : this->elmt_vec_ ) {
+          for ( const auto& it : this->cell_vec_ ) {
             (*it).Read( key, av );
             pushBack( data, av );
           }
@@ -651,7 +652,7 @@ PropertyData  Region<dim>::OutputVariableTo( const char* property ) const
                     break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable fa;
-          for ( const auto& it : this->elmt_vec_ ) {
+          for ( const auto& it : this->cell_vec_ ) {
             (*it).Read( key, fa );
             pushBack( data, fa );
           }
@@ -766,8 +767,8 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
 
   switch ( idx.place ) {
     case ELEMENT: {
-      data.Reset( idx, this->elmt_vec_.size(), var );
-      for ( const auto& eit : this->elmt_vec_ ) {
+      data.Reset( idx, this->cell_vec_.size(), var );
+      for ( const auto& eit : this->cell_vec_ ) {
         eit->Read( idx, var );
         data[ eit->Idx() ] = var;
       }
@@ -784,8 +785,8 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
     case ELEMENT_INTEGRATION_POINT: {
       data.Reset( idx, this->IntegrationPoints(), var );
       size_t counter( 0U );
-      for ( const auto& eit : this->elmt_vec_ )
-        for ( auto i = 0U; i<eit->IntegrationPoints(); i++ ) {
+      for ( const auto& eit : this->cell_vec_ )
+        for ( auto i{0U}; i<eit->IntegrationPoints(); i++ ) {
           eit->Read( i, idx, var );
           data[counter] = var;
           ++counter;
@@ -796,10 +797,10 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       data.Reset( idx, this->SectorIntegrationPoints(), var );
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
+        for ( auto j{0U}; j<(*eit)->Sectors(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -811,10 +812,10 @@ void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) 
       data.Reset( idx, this->FacetIntegrationPoints(), var );
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
-        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
+        for ( auto j{0U}; j<(*eit)->Facets(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Read( j, i, idx, var );
             data[counter] = var;
             ++counter;
@@ -896,9 +897,9 @@ void Region<dim>::InputVariableFrom( const char* property,
 
   switch ( idx.place ) {
     case ELEMENT:
-      assert( this->Elements() == vdata.Size() );
+      assert( this->Cells() == vdata.Size() );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
         (*eit)->Store( idx, vdata[(*eit)->Idx()] );
       break;
     case NODE:
@@ -914,9 +915,9 @@ void Region<dim>::InputVariableFrom( const char* property,
       size_t  counter( 0U );
       assert( this->IntegrationPoints() == vdata.Size() );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
-        for ( auto i = 0U; i<(*eit)->IntegrationPoints(); i++ )
+        for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
           (*eit)->Store( i, idx, vdata[counter + i] );
         counter += (*eit)->IntegrationPoints();
       }
@@ -925,11 +926,11 @@ void Region<dim>::InputVariableFrom( const char* property,
     case SECTOR_INTEGRATION_POINT: {
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
-        for ( auto j = 0U; j<(*eit)->Sectors(); j++ )
+        for ( auto j{0U}; j<(*eit)->Sectors(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerSector(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -940,11 +941,11 @@ void Region<dim>::InputVariableFrom( const char* property,
     case FACET_INTEGRATION_POINT: {
       size_t counter( 0U );
       for ( typename vector<csmp::Element<dim>*>::const_iterator
-            eit = this->elmt_vec_.begin(); eit != this->elmt_vec_.end(); eit++ )
+            eit = this->cell_vec_.begin(); eit != this->cell_vec_.end(); eit++ )
       {
-        for ( auto j = 0U; j<(*eit)->Facets(); j++ )
+        for ( auto j{0U}; j<(*eit)->Facets(); j++ )
         {
-          for ( auto i = 0U; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
+          for ( auto i{0U}; i<(*eit)->IntegrationPointsPerFacet(); i++ ) {
             (*eit)->Store( j, i, idx, vdata[counter] );
             ++counter;
           }
@@ -1073,10 +1074,10 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !this->elmt_vec_.empty() )
+  if ( !this->cell_vec_.empty() )
     csmp_error.notice( WARNING, "Region<dim>::FromLargestComponent:",
                        "Region is not empty; deleting all content." );
-  this->elmt_vec_.clear();
+  this->cell_vec_.clear();
 
   // traversal of the existing mesh nodes to find all its elements	
   deque<csmp::Node<dim>*>	   nodes;
@@ -1141,7 +1142,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
       }
     }
     std::vector<Element<dim>*> elmts( discovered_elements_in_component.begin(), discovered_elements_in_component.end() );
-    this->elmt_vec_.swap( elmts );
+    this->cell_vec_.swap( elmts );
   }
 
   // 5. (re)connecting elements up to their neighbors
@@ -1152,7 +1153,7 @@ size_t Region<dim>::FromLargestComponent( MeshManager<dim>& mesh,
   // 6. identifying the boundaries
   this->IdentifyPerimeter();
 
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 } // end FromLargestComponent
 */
 
@@ -1186,9 +1187,9 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
      }
    
    // obtain pointers to all elements
-   this->elmt_vec_.reserve( mesh.Elements() );
+   this->cell_vec_.reserve( mesh.Elements() );
    for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
-     this->elmt_vec_.push_back( &(*it) );
+     this->cell_vec_.push_back( &(*it) );
    
    // obtain pointers to all nodes
    this->node_vec_.reserve( mesh.Nodes() );
@@ -1198,7 +1199,7 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
    // sorting in interior and perimeter ranges
    this->IdentifyPerimeter();
     
-   return this->elmt_vec_.size();
+   return this->cell_vec_.size();
 
  } // end AccumulateAll (disconnected domain version)
 
@@ -1223,14 +1224,13 @@ size_t Region<dim>::Accumulate( typename vector<csmp::Element<dim>*>::const_iter
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (vector)",
                            "supplied element range is empty. Nothing is done." );
 
-  this->elmt_vec_.assign( start, end );
+  this->cell_vec_.assign( start, end );
   
-  // uses vector in creation
   this->CreateNodePointerVector();
   
   this->IdentifyPerimeter();
 
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end Accumulate (vector)
 
@@ -1245,14 +1245,13 @@ size_t Region<dim>::Accumulate( typename set<csmp::Element<dim>*>::const_iterato
     throw csmp::Exception( ERROR, "Region<dim>::Accumulate (set)",
                            "supplied element range is empty. Nothing is done." );
 
-  this->elmt_vec_.assign( start, end );
+  this->cell_vec_.assign( start, end );
 
-    // uses vector in creation
   this->CreateNodePointerVector();
 
   this->IdentifyPerimeter();
 
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end Accumulate (set)
 
@@ -1278,27 +1277,27 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !this->elmt_vec_.empty() )
+  if ( !this->cell_vec_.empty() )
     csmp_error.notice( WARNING, "Region<dim>::AccumulateWithinRange",
                        "Region<dim> already contains elements, they will be deleted" );
 
   if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
 
-  if ( !this->elmt_vec_.empty() ) this->elmt_vec_.clear();
-  this->elmt_vec_.reserve( mesh.Elements()/2 );
+  if ( !this->cell_vec_.empty() ) this->cell_vec_.clear();
+  this->cell_vec_.reserve( mesh.Elements()/2 );
   
   set<Node<dim>*> node_set;
   
   for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it )
     if ( constraints.CheckConstraints( &(*it) ) )
       {
-        this->elmt_vec_.push_back( &(*it) );
+        this->cell_vec_.push_back( &(*it) );
         const size_t n_nodes{ (*it).Nodes() };
-        for ( auto i = 0U; i<n_nodes; ++i )
+        for ( auto i{0U}; i<n_nodes; ++i )
           node_set.insert( (*it).N(i) );
       }
 
-  if ( !this->elmt_vec_.empty() )
+  if ( !this->cell_vec_.empty() )
     {
        this->node_vec_.assign( node_set.begin(), node_set.end() );
        this->IdentifyPerimeter();
@@ -1306,10 +1305,10 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const Propert
   else
     csmp_error.notice( ERROR, "Region<dim>::AccumulateWithinRange", "no elements in the desired property range were found.");
   
-  this->elmt_vec_.shrink_to_fit();
+  this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
   
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end AccumulateWithinRange(PropertyConstraints)
 
@@ -1347,7 +1346,7 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
   const auto end = mesh.ElementsEnd();
   auto     start = mesh.ElementsBegin();
   
-  this->elmt_vec_.reserve( mesh.Elements() );
+  this->cell_vec_.reserve( mesh.Elements() );
   this->node_vec_.reserve( mesh.Nodes() );
 
   switch ( prop_key.place )
@@ -1357,14 +1356,14 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
         while ( start != end ) {
             bool applies = false;
             const auto n_nodes{ (*start).Nodes() };
-            for ( auto j = 0U; j<n_nodes; j++ )
+            for ( auto j{0U}; j<n_nodes; j++ )
               if ( (*start).N( j )->IsWithinRange( prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
-                this->elmt_vec_.push_back( &(*start) );
-                for ( auto i = 0U; i<n_nodes; i++ )
+                this->cell_vec_.push_back( &(*start) );
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1373,15 +1372,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case ELEMENT_INTEGRATION_POINT:
         while ( start != end ) {
             bool applies = false;
-            for ( auto j = 0U; j<(*start).IntegrationPoints(); j++ )
+            for ( auto j{0U}; j<(*start).IntegrationPoints(); j++ )
               if ( (*start).IsWithinRange( j, prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
-                this->elmt_vec_.push_back( &(*start) );
+                this->cell_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1392,15 +1391,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerSector() == 1 );
             auto n_sectors{ (*start).FV()->Sectors() };
-            for ( auto j = 0U; j<n_sectors; j++ )
+            for ( auto j{0U}; j<n_sectors; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
-                this->elmt_vec_.push_back( &(*start) );
+                this->cell_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1411,15 +1410,15 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
             bool applies = false;
             assert( (*start).IntegrationPointsPerFacet() == 1 );
             const auto n_facets{ (*start).FV()->Facets() };
-            for ( auto j = 0U; j<n_facets; j++ )
+            for ( auto j{0U}; j<n_facets; j++ )
               if ( (*start).IsWithinRange( j, 0, prop_key, min, max ) ) {
                 applies = true;
                 break;
               }
             if ( applies == true ) {
-                this->elmt_vec_.push_back( &(*start) );
+                this->cell_vec_.push_back( &(*start) );
                 const size_t n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1428,9 +1427,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
       case ELEMENT:
         while ( start != end ) {
             if ( (*start).IsWithinRange( prop_key, min, max ) ) {
-                this->elmt_vec_.push_back( &(*start) );
+                this->cell_vec_.push_back( &(*start) );
                 const auto n_nodes{ (*start).Nodes() };
-                for ( auto i = 0U; i<n_nodes; i++ )
+                for ( auto i{0U}; i<n_nodes; i++ )
                   this->node_vec_.push_back( (*start).N(i) );
               }
             start++;
@@ -1441,14 +1440,16 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
                          feature, "placement could not be identified; REGION is not an option" );
     } // end switch
 
-  this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
+  // removing duplicate nodes (unique needs vector to be sorted)
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-  this->elmt_vec_.shrink_to_fit();
-  this->node_vec_.shrink_to_fit();
-    
+  
   this->IdentifyPerimeter();
 
-  return this->elmt_vec_.size();
+  this->cell_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
+    
+  return this->cell_vec_.size();
 
 } // end AccumulateWithinRange
 
@@ -1467,11 +1468,11 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
   const auto end = mesh.ElementsEnd();
   auto     start = mesh.ElementsBegin();
   
-  this->elmt_vec_.reserve( mesh.Elements() );
+  this->cell_vec_.reserve( mesh.Elements() );
   this->node_vec_.reserve( mesh.Nodes() );
 
-  if ( !this->elmt_vec_.empty() ) {
-      this->elmt_vec_.clear();
+  if ( !this->cell_vec_.empty() ) {
+      this->cell_vec_.clear();
       this->node_vec_.clear();
     }
 
@@ -1479,28 +1480,30 @@ size_t Region<dim>::AccumulateRectangularRegion( MeshManager<dim>& mesh,
       size_t check{0};
       const auto n_nodes{ (*start).Nodes() };
       // all nodes have to be inside for the element selection criterion to be fulfilled
-      for ( auto j = 0U; j<n_nodes; j++ ) {
+      for ( auto j{0U}; j<n_nodes; j++ ) {
           Point<dim>  p = (*start).N( j )->Coordinate();
           if ( p.IsBetween( xyz_min, xyz_max ) ) check++;
         }
       // if all nodes are inside the rectangular region
       // the element becomes part of the new group
       if ( check == n_nodes ) {
-          this->elmt_vec_.push_back( &(*start) );
-          for ( auto i = 0U; i < n_nodes; i++ )
+          this->cell_vec_.push_back( &(*start) );
+          for ( auto i{0U}; i < n_nodes; i++ )
             this->node_vec_.push_back( (*start).N(i) );
         }
       start++;
     }
 
+  // removing duplicate nodes (unique needs vector to be sorted)
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+
   this->IdentifyPerimeter();
   
-  this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
-  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-  this->elmt_vec_.shrink_to_fit();
+  this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();
 
-  return this->elmt_vec_.size();
+  return this->cell_vec_.size();
 
 } // end AccumulateRectangularRegion
 
@@ -1521,10 +1524,10 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.notice( ERROR, "Region<dim>::AccumulateByNumber",
                       "user-supplied element-number vector is empty. Nothing is done." );
 
-  if ( !this->elmt_vec_.empty() ) {
+  if ( !this->cell_vec_.empty() ) {
       csmp_error.notice( WARNING, "Region<dim>::AccumulateByNumber",
                          "Region is not empty", "erasing all members..." );
-      this->elmt_vec_.clear();
+      this->cell_vec_.clear();
     }
 
   // eliminating potential duplicates from element index vector
@@ -1541,32 +1544,36 @@ size_t  Region<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
                        "user-supplied element-number vector is larger than range of index-to-element-pointer mapping." );
 
   // creating the element vector for the region
-  this->elmt_vec_.reserve( element_ids.size() );
+  this->cell_vec_.reserve( element_ids.size() );
   for ( auto& idx : element_ids ) {
        Element<dim>* eptr = &(*next(mesh.ElementsBegin(),idx));
        assert( eptr != nullptr );
        assert( eptr->Idx() == idx );
-       this->elmt_vec_.push_back( eptr );
+       this->cell_vec_.push_back( eptr );
     }
     
   // creating node vector
   if ( this->node_vec_.empty() ) this->node_vec_.clear();
   this->node_vec_.reserve( element_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
   // filling the vector
-  for ( auto& it : this->elmt_vec_ ) {
+  for ( auto& it : this->cell_vec_ ) {
        const size_t n_nodes{it->Nodes()};
-       for ( auto i{0}; i<n_nodes; ++i ) {
+       for ( auto i{0U}; i<n_nodes; ++i ) {
             assert( it->N(i) != nullptr );
             this->node_vec_.push_back( it->N(i) );
          }
      }
+
   // removing duplicates and trimming excess memory from node vector
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
 
   this->IdentifyPerimeter();
   
-  return this->elmt_vec_.size();
+  this->cell_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
+
+  return this->cell_vec_.size();
 
 } // end AccumulateByNumber
 
@@ -1616,15 +1623,14 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !this->elmt_vec_.empty() ) {
+  if ( !this->cell_vec_.empty() ) {
     csmp_error.notice( WARNING, "Region<dim>::AccumulateByNumber",
                        "Region is not empty", "erasing all members..." );
-    this->elmt_vec_.clear();
+    this->cell_vec_.clear();
   }
 
+  // test whether there are consecutive duplicated elements
   sort( element_ids.begin(), element_ids.end() );
-
-  // if in debug mode, tests whether there are consecutive duplicated elements
   vector<size_t>::iterator  new_end( unique( element_ids.begin(), element_ids.end() ) );
   if ( new_end != element_ids.end() )
     element_ids.erase( new_end, element_ids.end() );
@@ -1633,7 +1639,7 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
     csmp_error.notice( ERROR, "Region<dim>::AccumulateByNumber",
                        "user-supplied element-number vector is larger than iterator range." );
 
-  this->elmt_vec_.reserve( element_ids.size() );
+  this->cell_vec_.reserve( element_ids.size() );
   set<Node<dim>*>  node_set;
 
   // selecting elements and nodes from the selected ID range
@@ -1642,9 +1648,9 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
     assert( *start != nullptr );
     if ( binary_search( element_ids.begin(), element_ids.end(), (*start)->Idx() ) ) {
       // add element with the correct id to the region
-      this->elmt_vec_.push_back( (*start) );
+      this->cell_vec_.push_back( (*start) );
       // add its nodes as well
-      for ( auto i = 0U; i<(*start)->Nodes(); i++ )
+      for ( auto i{0U}; i<(*start)->Nodes(); i++ )
         node_set.insert( (*start)->N( i ) );
     }
     start++;
@@ -1655,7 +1661,10 @@ size_t  Region<dim>::AccumulateByNumber( typename vector<Element<dim>*>::const_i
 
   this->IdentifyPerimeter();
   
-  return this->elmt_vec_.size();
+  this->cell_vec_.shrink_to_fit();
+  this->node_vec_.shrink_to_fit();
+
+  return this->cell_vec_.size();
 
 } // end AccumulateByNumber
 
@@ -1688,7 +1697,7 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
          return 0U;
       }
 
-    if ( this->elmt_vec_.empty() ) {
+    if ( this->cell_vec_.empty() ) {
          csmp_error.notice( WARNING, "Region<dim>::RemoveByNumber",  "Region is empty. Nothing was done." );
          return 0U;
       }
@@ -1698,25 +1707,28 @@ size_t Region<dim>::RemoveByNumber( vector<size_t>& element_ids, vector<Element<
     element_ids.erase( unique( element_ids.begin(), element_ids.end() ), element_ids.end() );
     
     // getting the elements for removal
-    for ( typename vector<Element<dim>*>::const_iterator it=this->ElementsBegin(); it!=this->ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it=this->CellsBegin(); it!=this->CellsEnd(); ++it )
       if ( binary_search( element_ids.begin(), element_ids.end(), (*it)->Idx() ) )
         ptrs_to_removed_elements.push_back( (*it) );
      
     // finding the difference between the removal and the current element vector
-    sort( this->elmt_vec_.begin(), this->elmt_vec_.end() );
+    sort( this->cell_vec_.begin(), this->cell_vec_.end() );
     vector<Element<dim>*> elmts_to_retain;
-    set_difference( this->elmt_vec_.begin(), this->elmt_vec_.end(),
+    set_difference( this->cell_vec_.begin(), this->cell_vec_.end(),
                     ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end(),
                     inserter(elmts_to_retain, elmts_to_retain.begin()));
      
     // rebuilding the region
-    this->elmt_vec_.assign( elmts_to_retain.begin(), elmts_to_retain.end() );
+    this->cell_vec_.assign( elmts_to_retain.begin(), elmts_to_retain.end() );
     elmts_to_retain.clear();
 
     this->CreateNodePointerVector();
 
     this->IdentifyPerimeter();
     
+    this->cell_vec_.shrink_to_fit();
+    this->node_vec_.shrink_to_fit();
+
     return ptrs_to_removed_elements.size();
 
  } // end RemoveByNumber
@@ -1740,22 +1752,25 @@ size_t Region<dim>::RemoveRange( typename vector<csmp::Element<dim>*>::iterator 
          return 0U;
       }
 
-    if ( this->elmt_vec_.empty() ) {
+    if ( this->cell_vec_.empty() ) {
          csmp_error.notice( WARNING, "Region<dim>::RemoveRange",  "Region is empty. Nothing was done." );
          return 0U;
       }
       
-    const size_t n_elements{ this->Elements() };
+    const size_t n_elements{ this->Cells() };
 
-    this->elmt_vec_.erase( remove_if( this->elmt_vec_.begin(), this->elmt_vec_.end(),
+    this->cell_vec_.erase( remove_if( this->cell_vec_.begin(), this->cell_vec_.end(),
                                       [&](auto x) { return binary_search( begin, end, x ); }),
-                           this->elmt_vec_.end() );
+                           this->cell_vec_.end() );
     
     this->CreateNodePointerVector();
 
     this->IdentifyPerimeter();
       
-    return n_elements - this->elmt_vec_.size();
+    this->cell_vec_.shrink_to_fit();
+    this->node_vec_.shrink_to_fit();
+
+    return n_elements - this->cell_vec_.size();
  
   } // end RemoveRange
 
@@ -1778,14 +1793,14 @@ void  Region<dim>::Add( const Region<dim>& grp )
   }
 
   // appending the elements of the second region at the end
-  this->elmt_vec_.reserve( this->Elements() + grp.Elements() );
-  for ( auto it=grp.ElementsBegin(); it!=grp.ElementsEnd(); ++it )
-    this->elmt_vec_.push_back( const_cast<Element<dim>*>(*it) );
+  this->cell_vec_.reserve( this->Cells() + grp.Cells() );
+  for ( auto it=grp.CellsBegin(); it!=grp.CellsEnd(); ++it )
+    this->cell_vec_.push_back( const_cast<Element<dim>*>(*it) );
     
   // removing potential duplicates
-  sort( this->elmt_vec_.begin(), this->elmt_vec_.end() );
-  this->elmt_vec_.erase( unique( this->elmt_vec_.begin(), this->elmt_vec_.end() ), this->elmt_vec_.end() );
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  sort( this->cell_vec_.begin(), this->cell_vec_.end() );
+  this->cell_vec_.erase( unique( this->cell_vec_.begin(), this->cell_vec_.end() ), this->cell_vec_.end() );
+  vector<csmp::Element<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
 
   this->CreateNodePointerVector();
   
@@ -1827,25 +1842,25 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
 
   // reserving storage for boundary elements (logic: the number of faces created cannot be
   // larger than the minimum number boundary elements of the two neighboring groups)
-  this->elmt_vec_.reserve( std::min( region1.PerimeterElements(),
-                           region2.PerimeterElements() ) );
+  this->cell_vec_.reserve( std::min( region1.PerimeterCells(),
+                           region2.PerimeterCells() ) );
 
   // searching for elements of region1 that are neighbors of ones in group1.
   // If so, there is a shared boundary and faces or interfaces are constructed.
-  const size_t n_elements( region1.Elements() );
+  const size_t n_elements( region1.Cells() );
 
-  for ( auto i = region1.InteriorElements(); i < n_elements; ++i )
+  for ( auto i = region1.InteriorCells(); i < n_elements; ++i )
     {
       ePtr = region1.E( i );
       const auto perimeter_faces( region1.PerimeterFaces( i ) );
-      for ( auto j = 0U; j < perimeter_faces; ++j )
+      for ( auto j{0U}; j < perimeter_faces; ++j )
         {
           const auto face = region1.PerimeterFace( i, j );
           ePtrNeighbor = ePtr->Neighbor( face );
 
           // checking whether neighbor element forms part of the boundary of group2
           if ( ePtrNeighbor != nullptr )
-            if ( region2.IsPerimeterElement( ePtrNeighbor ) )
+            if ( region2.IsPerimeterCell( ePtrNeighbor ) )
               {
                 // if the neighbor is in the boundary, the new Face is build
                 femPtr = finiteElementManager.E( ePtr->FE()->ElementTypeOfFace( face ) );
@@ -1867,7 +1882,7 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                                                                 lvsElements, lvsIntegrationPoints,
                                                                 nodes, material_id );
                 // added to boundary
-                this->elmt_vec_.push_back( elmtObj );
+                this->cell_vec_.push_back( elmtObj );
 
               } // neighboring elements
 
@@ -1876,10 +1891,9 @@ bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
     } // perimeter elements
 
     // free
-  vector<csmp::Element<dim>*>( this->elmt_vec_ ).swap( this->elmt_vec_ );
+  vector<csmp::Element<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
 
   this->CreateNodePointerVector();
-  establishNeighborConnectivity( this->elmt_vec_ );
   this->IdentifyPerimeter();
   this->UpdateMemberIndexes();
 
@@ -1911,14 +1925,14 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( a.Empty() )
-    csmp_error.notice( WARNING, "groupUnion", "first region is empty" );
+    csmp_error.notice( WARNING, "union", "first region is empty" );
   if ( b.Empty() )
-    csmp_error.notice( WARNING, "groupUnion", "second region is empty" );
+    csmp_error.notice( WARNING, "union", "second region is empty" );
 
-  res.CellVector().reserve( a.Elements() + b.Elements() );
-  for ( auto it=a.ElementsBegin(); it!=a.ElementsEnd(); ++it )
+  res.CellVector().reserve( a.Cells() + b.Cells() );
+  for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
     res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
     res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
   
   sort( res.CellVector().begin(), res.CellVector().end() );
@@ -1928,7 +1942,7 @@ size_t  groupUnion( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   res.CreateNodePointerVector();
   res.IdentifyPerimeter();
 
-  return res.Elements();
+  return res.Cells();
 
 } // end groupUnion
 
@@ -1950,10 +1964,10 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
     
   // since both regions are sorted already, a will be searched
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) ||
-         binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) ||
+         binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   res.CellVector().shrink_to_fit();
@@ -1963,7 +1977,7 @@ size_t  intersection( const Region<dim>& a, const Region<dim>& b, Region<dim>& r
       res.IdentifyPerimeter();
     }
 
-  return res.Elements();
+  return res.Cells();
 
 } // end intersection
 
@@ -1987,10 +2001,10 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
 
   // since both regions are sorted already, a will be searched first
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( !binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   res.CellVector().shrink_to_fit();
@@ -2000,7 +2014,7 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
       res.IdentifyPerimeter();
     }
 
-  return res.Elements();
+  return res.Cells();
 
 } // end difference
 
@@ -2024,15 +2038,15 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
     csmp_error.notice( WARNING, "symmetricDifference", "second region is empty" );
 
   if ( !res.CellVector().empty() ) res.CellVector().clear();
-  res.CellVector().reserve( min(a.Elements(),b.Elements()) );
-  for ( auto it=b.ElementsBegin(); it!=b.ElementsEnd(); ++it )
-    if ( !binary_search( a.ElementsBegin(), a.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( a.PerimeterElementsBegin(), a.ElementsEnd(), (*it) ) )
+  res.CellVector().reserve( min(a.Cells(),b.Cells()) );
+  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
+    if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
-  for ( auto it=a.ElementsBegin(); it!=a.ElementsEnd(); ++it )
-    if ( !binary_search( b.ElementsBegin(), b.PerimeterElementsBegin(), (*it) ) &&
-         !binary_search( b.PerimeterElementsBegin(), b.ElementsEnd(), (*it) ) )
+  for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
+    if ( !binary_search( b.CellsBegin(), b.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( b.PerimeterCellsBegin(), b.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   // removing potential duplicates
@@ -2046,7 +2060,7 @@ size_t  symmetricDifference( const Region<dim>& a, const Region<dim>& b, Region<
     res.CreateNodePointerVector();
     res.IdentifyPerimeter();
   }
-  return res.Elements();
+  return res.Cells();
 
 } // end symmetricDifference
 
@@ -2064,12 +2078,12 @@ size_t  sharedElements( const Region<dim>& g1, const Region<dim>& g2 )
 {
   // ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
-  auto  first1( g1.ElementsBegin() );
-  auto  first2( g2.ElementsBegin() );
+  auto  first1( g1.CellsBegin() );
+  auto  first2( g2.CellsBegin() );
   size_t shared_elements( 0U );
 
   // comparing the interior nodes
-  while ( first1 != g1.PerimeterElementsBegin() and first2 != g2.PerimeterElementsBegin() )
+  while ( first1 != g1.PerimeterCellsBegin() and first2 != g2.PerimeterCellsBegin() )
     {
       if ( *first1 < *first2 ) ++first1;
       else if ( *first2 < *first1 ) ++first2;
@@ -2081,10 +2095,10 @@ size_t  sharedElements( const Region<dim>& g1, const Region<dim>& g2 )
     }
 
   // comparing the boundary nodes
-  first1 = g1.PerimeterElementsBegin();
-  first2 = g2.PerimeterElementsBegin();
+  first1 = g1.PerimeterCellsBegin();
+  first2 = g2.PerimeterCellsBegin();
 
-  while ( first1 != g1.ElementsEnd() and first2 != g2.ElementsEnd() )
+  while ( first1 != g1.CellsEnd() and first2 != g2.CellsEnd() )
     {
       if ( *first1 < *first2 ) ++first1;
       else if ( *first2 < *first1 ) ++first2;
@@ -2122,8 +2136,8 @@ bool Region<dim>::Includes( const Region<dim>& g ) const
   // because region vectors are sorted into 2 seperate ranges,
   // new sorted vectors spanning the whole ranges need to be established first
   // before includes() can be called
-  vector<Element<dim>*> tmp_elmt_vec1( this->elmt_vec_ );
-  vector<Element<dim>*> tmp_elmt_vec2( g.elmt_vec_ );
+  vector<Element<dim>*> tmp_elmt_vec1( this->cell_vec_ );
+  vector<Element<dim>*> tmp_elmt_vec2( g.cell_vec_ );
   // sorting the vectors
   sort( tmp_elmt_vec1.begin(), tmp_elmt_vec1.end() );
   sort( tmp_elmt_vec2.begin(), tmp_elmt_vec2.end() );
@@ -2154,8 +2168,8 @@ bool  hasLowerDimensionalRepresentation<1>( const Region<1>& )
 template<uint32_t dim>
 bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( !hasLowerDimensionalRepresentation( *(*it) ) )
       return false;
@@ -2166,8 +2180,8 @@ bool  hasLowerDimensionalRepresentation( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsVolumeElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsVolumeElement() )
       return true;
@@ -2178,8 +2192,8 @@ bool  containsVolumeElements( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsSurfaceElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsSurfaceElement() )
       return true;
@@ -2190,8 +2204,8 @@ bool  containsSurfaceElements( const Region<dim>& region )
 template<uint32_t dim>
 bool  containsLineElements( const Region<dim>& region )
 {
-  const auto elementsEnd( region.ElementsEnd() );
-  for ( auto it = region.ElementsBegin(); it != elementsEnd; ++it )
+  const auto elementsEnd( region.CellsEnd() );
+  for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
     if ( (*it)->FE()->IsLineElement() )
       return true;
@@ -2305,7 +2319,7 @@ pair<int32_t,int32_t>  elmt_dim = this->ElementSpatialDimensions();
 
 std::set<Element<dim>* > elements_considered;
 std::set<Element<dim>* > element_neighbors_to_be_considered;
-std::set<Element<dim>* > remaining_elements( this->ElementsBegin(), this->ElementsEnd() );
+std::set<Element<dim>* > remaining_elements( this->CellsBegin(), this->CellsEnd() );
 
 Element<dim>*   lowDimElement         ( NULL );
 Element<dim>*   lowDimNeighborElement ( NULL );
@@ -2318,7 +2332,7 @@ VectorVariable<dim> low_dim_neighbor_edge_unit_normal ( ANY, 0.0 );
 // Find first refence element
 typename std::vector<csmp::Element<dim>* >::const_iterator eit = this->PerimeterElementsBegin();
 lowDimElement = NULL;
-while ( eit!=this->ElementsEnd() )
+while ( eit!=this->CellsEnd() )
 {
 if( (*eit)->IsLineElement() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
 {
@@ -2335,7 +2349,7 @@ break;
 if( lowDimElement == NULL )
 throw csmp::Exception( ERROR, "Region<dim>::CorrectLowDimRegionOrientation()", "All perimeter elements of surface regions are lines! Cannot apply this method!" );
 
-while( elements_considered.size() != this->Elements() )
+while( elements_considered.size() != this->Cells() )
 {
 element_neighbors_to_be_considered.insert( lowDimElement );
 elements_considered.insert( lowDimElement );
@@ -2391,7 +2405,7 @@ remaining_elements.erase( lowDimElement );
 element_neighbors_to_be_considered.erase( lowDimElement );
 }
 
-if( elements_considered.size() != this->Elements() )
+if( elements_considered.size() != this->Cells() )
 {
 typename std::set<csmp::Element<dim>* >::const_iterator eit = remaining_elements.begin();
 lowDimElement = NULL;
@@ -2419,12 +2433,12 @@ remaining_elements.clear();
 #ifdef REGION_DEBUG
 
 VectorVariable<dim> un( ANY, 0.0 );
-typename std::vector<csmp::Element<dim>* >::const_iterator reit = this->ElementsBegin();
-while ( reit != this->ElementsEnd() )
+typename std::vector<csmp::Element<dim>* >::const_iterator reit = this->CellsBegin();
+while ( reit != this->CellsEnd() )
 {
 (*reit)->UnitNormal( un );
 std::cerr<<" UN = (";
-for( size_t i=0; i<dim; i++)
+for( size_t i{0U}; i<dim; i++)
 std::cerr<< " "<< un[i];
 std::cerr<<" )\n";
 reit++;
@@ -2474,7 +2488,7 @@ double  Region<dim>::Volume( bool multiply_with_porosity ) const
   if ( multiply_with_porosity ) {
     csmp::Index  phi_key = this->pref_.StorageKey( "porosity" );
     for ( typename vector<csmp::Element<dim>*>::const_iterator
-          it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+          it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
       if ( (*it)->FE()->IsVolumeElement() )  volume += (*it)->Volume() * (*it)->Read( phi_key );
       else if ( (*it)->FE()->IsSurfaceElement() ) area += (*it)->Volume() * (*it)->Read( phi_key );
       else if ( (*it)->FE()->IsLineElement() )    length += (*it)->Volume() * (*it)->Read( phi_key );
@@ -2482,7 +2496,7 @@ double  Region<dim>::Volume( bool multiply_with_porosity ) const
   }
   else
     for ( typename vector<csmp::Element<dim>*>::const_iterator
-          it = this->elmt_vec_.begin(); it != this->elmt_vec_.end(); it++ ) {
+          it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
       if ( (*it)->FE()->IsVolumeElement() )  volume += (*it)->Volume();
       else if ( (*it)->FE()->IsSurfaceElement() ) area += (*it)->Volume();
       else if ( (*it)->FE()->IsLineElement() )    length += (*it)->Volume();
@@ -2535,30 +2549,30 @@ double  Region<dim>::SurfaceArea() const
 
   if ( dim == 3U ) {
     // for all elements located on the region boundary
-    for ( auto i = this->InteriorElements(); i<this->Elements(); ++i, ++bit )
+    for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
       // since each element can have multiple boundary faces
-      for ( uint32_t j = 0U; j<(*bit).size(); j++ ) {
+      for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
         const uint32_t face( (*bit)[j] );
-        this->elmt_vec_[i]->FE()->NodesOfFace( face, fnids );
-        const CSMP_FEM_TYPE etype( this->elmt_vec_[i]->FE()->ElementTypeOfFace( face ) );
+        this->cell_vec_[i]->FE()->NodesOfFace( face, fnids );
+        const CSMP_FEM_TYPE etype( this->cell_vec_[i]->FE()->ElementTypeOfFace( face ) );
         // triangular face
         if ( etype == ISOPARAMETRIC_LINEAR_TRIANGLE or
              etype == LINEAR_TRIANGLE3D or
              etype == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
-          area += triangleArea( this->elmt_vec_[i]->N( fnids[0U] )->Coordinate(),
-                                this->elmt_vec_[i]->N( fnids[1U] )->Coordinate(),
-                                this->elmt_vec_[i]->N( fnids[2U] )->Coordinate() );
+          area += triangleArea( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
+                                this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
+                                this->cell_vec_[i]->N( fnids[2U] )->Coordinate() );
         // quadrilateral face
         if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL or etype == LINEAR_RECTANGLE or
              etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL )
-          area += facetArea4( this->elmt_vec_[i]->N( fnids[0U] )->Coordinate(),
-                              this->elmt_vec_[i]->N( fnids[1U] )->Coordinate(),
-                              this->elmt_vec_[i]->N( fnids[2U] )->Coordinate(),
-                              this->elmt_vec_[i]->N( fnids[3U] )->Coordinate() );
+          area += facetArea4( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
+                              this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
+                              this->cell_vec_[i]->N( fnids[2U] )->Coordinate(),
+                              this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
         // linear face
         if ( etype == ISOPARAMETRIC_LINEAR_BAR or
              etype == ISOPARAMETRIC_QUADRATIC_BAR ) {
-          area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
+          area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
           //csmp_error.notice( WARNING, "Region<dim>::SurfaceArea", "line-element thickness on perimeter is assumed to be one." );
         }
         // additional case of point face where a line-element is perpendicular to a boundary node
@@ -2567,11 +2581,11 @@ double  Region<dim>::SurfaceArea() const
   // in 2D the face is a segment the length of which has to be used
   else if ( dim == 2U ) {
     // for all surface elements on the region boundary (excluding line elements)
-    for ( auto i = this->InteriorElements(); i<this->Elements(); i++, bit++ )
-      if ( this->elmt_vec_[i]->FE()->IsSurfaceElement() )
-        for ( size_t j = 0U; j<(*bit).size(); j++ ) {
-          this->elmt_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
-          area += this->elmt_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->elmt_vec_[i]->N( fnids[1U] )->Coordinate() );
+    for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
+      if ( this->cell_vec_[i]->FE()->IsSurfaceElement() )
+        for ( size_t j{0U}; j<(*bit).size(); j++ ) {
+          this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
+          area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
         }
   }
 
@@ -2607,18 +2621,18 @@ double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosi
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
     return std::numeric_limits<double>::signaling_NaN();
   }
-  if ( this->elmt_vec_.empty() ) {
+  if ( this->cell_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral", "Region is empty; returning NaN." );
     return std::numeric_limits<double>::signaling_NaN();
   }
 
   if ( verbose ) {
 #ifndef NDEBUG
-    if ( dim == 2U && !(*this->elmt_vec_.begin())->FE()->IsSurfaceElement() ) {
+    if ( dim == 2U && !(*this->cell_vec_.begin())->FE()->IsSurfaceElement() ) {
       string info( this->Name() ); info += " ('"; info += prop; info += "')";
       csmp_error.notice( WARNING, "Region<2>::VolumeIntegral:", info, "region is not a surface; integral may not be correct." );
     }
-    if ( dim == 3U && !(*this->elmt_vec_.begin())->FE()->IsVolumeElement() ) {
+    if ( dim == 3U && !(*this->cell_vec_.begin())->FE()->IsVolumeElement() ) {
       string info( this->Name() ); info += " ('"; info += prop; info += "')";
       csmp_error.notice( WARNING, "Region<3>::VolumeIntegral:", info, "region is not a volume, integral may not be correct." );
     }
@@ -2646,12 +2660,12 @@ double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosi
     if ( prop_key.place == NODE or prop_key.place == ELEMENT_INTEGRATION_POINT ) {
       if ( multiply_with_porosity ) {
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->PropertyIntegral( prop_key ) * (*iter)->Read( phi_key );
       }
       else {
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->PropertyIntegral( prop_key );
       }
       return integral;
@@ -2669,12 +2683,12 @@ double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosi
       if ( multiply_with_porosity ) {
         csmp::Index phi_key = this->pref_.StorageKey( "porosity" );
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->Read( prop_key ) * (*iter)->Volume() * (*iter)->Read( phi_key );
       }
       else
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->Read( prop_key ) * (*iter)->Volume();
     }
     else { // VECTOR property
@@ -2682,14 +2696,14 @@ double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosi
       if ( multiply_with_porosity ) {
         csmp::Index phi_key = this->pref_.StorageKey( "porosity" );
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ ) {
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ ) {
           (*iter)->Read( prop_key, vc );
           integral += vc.Length() * (*iter)->Volume() * (*iter)->Read( phi_key );
         }
       }
       else
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ ) {
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ ) {
           (*iter)->Read( prop_key, vc );
           integral += vc.Length() * (*iter)->Volume();
         }
@@ -2730,7 +2744,7 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
                        "Vector properties can only be integrated if they are placed on the element. Nothing was done" );
     return std::numeric_limits<double>::signaling_NaN();
   }
-  if ( this->elmt_vec_.empty() ) {
+  if ( this->cell_vec_.empty() ) {
     csmp_error.notice( ERROR, "Region<dim>::VolumeIntegral_x_Thickness", "Region is empty" );
     return std::numeric_limits<double>::signaling_NaN();
   }
@@ -2758,12 +2772,12 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
     if ( prop_key.place == NODE or prop_key.place == ELEMENT_INTEGRATION_POINT ) {
       if ( multiply_with_porosity ) {
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->PropertyIntegral( prop_key ) * (*iter)->Read( phi_key ) * (*iter)->Read( thic_key );
       }
       else {
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->PropertyIntegral( prop_key ) * (*iter)->Read( thic_key );
       }
       return integral;
@@ -2781,12 +2795,12 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
       if ( multiply_with_porosity ) {
         csmp::Index phi_key = this->pref_.StorageKey( "porosity" );
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->Read( prop_key ) * (*iter)->Volume() * (*iter)->Read( phi_key ) * (*iter)->Read( thic_key );
       }
       else
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ )
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ )
           integral += (*iter)->Read( prop_key ) * (*iter)->Volume() * (*iter)->Read( thic_key );
     }
     else { // VECTOR property
@@ -2794,14 +2808,14 @@ double  Region<dim>::VolumeIntegral_x_Thickness( const char* prop, bool multiply
       if ( multiply_with_porosity ) {
         csmp::Index phi_key = this->pref_.StorageKey( "porosity" );
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ ) {
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ ) {
           (*iter)->Read( prop_key, vc );
           integral += vc.Length() * (*iter)->Volume() * (*iter)->Read( phi_key ) * (*iter)->Read( thic_key );
         }
       }
       else
         for ( typename vector<csmp::Element<dim>*>::const_iterator
-              iter = this->elmt_vec_.begin(); iter != this->elmt_vec_.end(); iter++ ) {
+              iter = this->cell_vec_.begin(); iter != this->cell_vec_.end(); iter++ ) {
           (*iter)->Read( prop_key, vc );
           integral += vc.Length() * (*iter)->Volume() * (*iter)->Read( thic_key );
         }
@@ -2825,11 +2839,11 @@ template<uint32_t dim>
 void Region<dim>::Out() const
 {
 cout <<"\n\n\nRegion<"<< dim <<">::Out: ";
-cout <<" member elements: interior="<< this->InteriorElements();
-cout <<", boundary="<< this->elmt_vec_.size()-this->InteriorElements() <<": "<< endl;
+cout <<" member elements: interior="<< this->InteriorCells();
+cout <<", boundary="<< this->cell_vec_.size()-this->InteriorCells() <<": "<< endl;
 
 for ( typename vector<csmp::Element<dim>*>::const_iterator
-it=this->elmt_vec_.begin(); it!=this->elmt_vec_.end(); it++ ) {
+it=this->cell_vec_.begin(); it!=this->cell_vec_.end(); it++ ) {
 if ( (*it) == NULL )
 throw csmp::Exception( ERROR, "Region<dim>::Out",
 "member element pointer not initialised");
@@ -2838,7 +2852,7 @@ throw csmp::Exception( ERROR, "Region<dim>::Out",
 
 cout <<"\n\n boundary elements and their boundary faces (current local numbering): "<< endl;
 vector<vector<ONE_BYTE_NUMBER> >::const_iterator  bit(this->bd_face_vec_.begin());
-for ( size_t i=this->InteriorElements(); i<this->elmt_vec_.size(); i++, bit++ ) {
+for ( size_t i=this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
 cout <<"\nelement "<< i <<": boundary face numbers: ";
 for ( vector<ONE_BYTE_NUMBER>::const_iterator
 ft=(*bit).begin(); ft!=(*bit).end(); ft++ ) cout << (*ft) <<" ";

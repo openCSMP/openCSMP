@@ -136,10 +136,11 @@ class Boundary : public ModelSubDomain<dim, Face>,
                        BOX_BOUNDARY boxBoundary = IRREGULAR );
 
     /// creates surface / perimeter line of Faces between regions (the first is on the inside)
+/* deprecated
     bool CreateBetween( const Region<dim>&,
                         const Region<dim>&,
                         MeshManager<dim>& );
-
+*/
 
     // ----------------------------------------
     //  geometric properties and integrals

@@ -15,9 +15,14 @@ namespace csmp {
 
 template<uint32_t> class Model;
 
+/**
+       Estabilishes that basic functionality of the Model works:
+        - Model can be built from VSet
+        - Model with Boundaries can be built from ModelTopology and VSet, written to disk and read again.
+*/
 class ModelBasics_Test: public Test {
   public:
-      explicit ModelBasics_Test( bool verbose=false );
+      ModelBasics_Test();
       ~ModelBasics_Test();
       
       virtual void run();
@@ -26,10 +31,10 @@ class ModelBasics_Test: public Test {
      // from VSet and variables file only
      bool TestModelConstructionFromVSet();
   
-     bool TestWriteModelToDiskAndReadBack( bool create_boundaries_from_faces );
+     bool TestWriteModelToDiskAndReadBack();
   
   private:
-    bool verbose_;
+    const static bool verbose_ = true; // TURN VERBOSE ON HERE
 
 };
 

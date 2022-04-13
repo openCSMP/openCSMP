@@ -175,8 +175,8 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     // Resize to new state (this already supports ip vars)
     const std::pair<uint32_t,uint32_t> newTotaDataDepth = lvsCompileTimeDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
-    const uint32_t dataSize( data_.data.size() );
-    const uint32_t flagSize( data_.flags.size() );
+    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
+    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
 
     /// Roman, 2013: with ipvs support
 
@@ -278,8 +278,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
 
     /// @todo (2-F) Asserts missing
-    const uint32_t flagSize( data_.flags.size() );
-    const uint32_t dataSize( data_.data.size() );
+    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
+    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
 
         /// Roman, 2013: with ipvs support
 
@@ -446,7 +446,7 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
     if ( data_.arrays > 0U ) {
         std::cout <<"\n\n\tstored array variables: ";
         const uint32_t  array_variables( data_.arrays );
-        for ( auto i{0}; i<array_variables; ++i )
+        for ( auto i{0U}; i<array_variables; ++i )
           {
              csmp::Index    idx(ARRAY,varPlacement,i);
              ArrayVariable  ary( idx.dataDepth ); 
@@ -458,7 +458,7 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
     if ( data_.flaggedArrays > 0U ) {
         std::cout <<"\n\n\tstored array variables: ";
         const uint32_t  flaggged_array_variables( data_.flaggedArrays );
-        for ( auto i{0}; i<flaggged_array_variables; ++i )
+        for ( auto i{0U}; i<flaggged_array_variables; ++i )
           {
              csmp::Index           idx(FLAGGEDARRAY,varPlacement,i);
              FlaggedArrayVariable  ary( idx.dataDepth ); 
@@ -663,10 +663,10 @@ void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const Tens
 #endif
     const uint32_t dataOffset(idx.dataOffset);
     const uint32_t flagOffset(idx.flagOffset);
-    for ( auto i{0}; i<dim; i++ ) 
+    for ( auto i{0U}; i<dim; i++ )
       {
         data_.flags[ flagOffset+i ] = ts.Flag(i);
-        for ( uint32_t j=0U; j<dim; j++ )
+        for ( uint32_t j{0U}; j<dim; j++ )
           data_.data[ dataOffset+i*dim+j ] = ts(i,j);
       }
  }
@@ -687,10 +687,10 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, TensorVaria
 #endif
    const uint32_t dataOffset(idx.dataOffset);
    const uint32_t flagOffset(idx.flagOffset);
-   for ( auto i{0}; i<dim; i++ ) 
+   for ( auto i{0U}; i<dim; i++ )
      {
        ts.Flag(i) = data_.flags[ flagOffset+i ] ;
-       for ( uint32_t j=0U; j<dim; j++ )
+       for ( uint32_t j{0U}; j<dim; j++ )
          ts(i,j) = data_.data[ dataOffset+i*dim+j ];
      }
  }
@@ -1015,10 +1015,10 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
 
-  for ( auto i{0}; i<dim; i++ ) 
+  for ( auto i{0U}; i<dim; i++ )
     {
     data_.flags[ flagOffset+i ] = ts.Flag(i);
-    for ( uint32_t j=0U; j<dim; j++ )
+    for ( uint32_t j{0U}; j<dim; j++ )
       data_.data[ offset+i*dim+j ] = ts(i,j);
     }
   }
@@ -1038,10 +1038,10 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
   assert( flagOffset+dim-1 < data_.flags.size() );
 #endif
 
-  for ( auto i{0}; i<dim; i++ ) 
+  for ( auto i{0U}; i<dim; i++ )
     {
     ts.Flag(i) = data_.flags[flagOffset+i];
-    for ( uint32_t j=0U; j<dim; j++ )
+    for ( uint32_t j{0U}; j<dim; j++ )
       ts(i,j) = data_.data[ offset+i*dim+j ];
     }
   }
@@ -1470,9 +1470,9 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    for ( auto i{0}; i<dim; ++i ) {
+    for ( auto i{0U}; i<dim; ++i ) {
           data_.flags[ flagOffset + sector_ip_flag_offset + i ] = ts.Flag(i);
-          for ( uint32_t j=0U; j<dim; ++j )
+          for ( uint32_t j{0U}; j<dim; ++j )
             data_.data[ offset + sector_ip_offset + i*dim + j ] = ts(i,j);
       }
  }
@@ -1502,9 +1502,9 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    for ( auto i{0}; i<dim; ++i ) {
+    for ( auto i{0U}; i<dim; ++i ) {
           ts.Flag(i) = data_.flags[flagOffset + sector_ip_flag_offset + i];
-          for ( uint32_t j=0U; j<dim; ++j )
+          for ( uint32_t j{0U}; j<dim; ++j )
             ts(i,j) = data_.data[ offset + sector_ip_offset + i*dim + j ];
       }
   }

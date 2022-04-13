@@ -110,7 +110,7 @@ double  ExplicitMassBasedTransport<dim, STP>::AnisotropicCourantIncrement()
     
     // loop over the elements finding their transsect length in the direction of flow
     for ( typename vector<Element<dim>*>::const_iterator
-          eit=this->gref_.ElementsBegin(); eit!=this->gref_.ElementsEnd(); eit++ )
+          eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++ )
     {
         (*eit)->Read( this->vel_key_, vc );
         velocity = vc.Length();
@@ -138,7 +138,7 @@ template<uint32_t dim,template<uint32_t> class STP>
 void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProducts()
 {
     // for all finite-volume facets
-    for ( auto i{0}; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
+    for ( auto i{0U}; i<this->gref_.E(this->stencil_.eidx_)->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         this->gref_.E(this->stencil_.eidx_)->FV()->FacetEdgeNodes( i, this->stencil_.inside_node_, this->stencil_.outside_node_ );
@@ -173,7 +173,7 @@ void ExplicitMassBasedTransport<dim,STP>::AccumulateFluxUpwindProductsOMP(vector
     Element<dim>* ep = this->gref_.E(this->thread_stencil_processor_[tid]->eidx_);
 
     // for all finite-volume facets
-    for ( auto i{0}; i<ep->FV()->Facets(); i++ )
+    for ( auto i{0U}; i<ep->FV()->Facets(); i++ )
     {
         // identifying the finite volumes to which the flux will be distributed
         ep->FV()->FacetEdgeNodes( i, this->thread_stencil_processor_[tid]->inside_node_, this->thread_stencil_processor_[tid]->outside_node_ );
@@ -274,8 +274,8 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
         /// your changes/improvements will only be evident in serial simulations.
         std::vector<FV_Parameter>::const_iterator  fvt = this->STENCIL_DATA.begin();
         for ( typename std::vector<Element<dim>*>::const_iterator
-              eit=this->gref_.ElementsBegin();
-              eit!=this->gref_.ElementsEnd(); eit++, fvt++ )
+              eit=this->gref_.CellsBegin();
+              eit!=this->gref_.CellsEnd(); eit++, fvt++ )
         {
             this->stencil_.eidx_ = (*eit)->Idx();
 
@@ -303,7 +303,7 @@ void ExplicitMassBasedTransport<dim,STP>::AdvectVariable1stOrder(
             /// Julian - 02/09/2015
 
 #pragma omp for
-            for ( int32_t e = 0 ; e < this->gref_.Elements() ; e++ )
+            for ( int32_t e = 0 ; e < this->gref_.Cells(); e++ )
             {
                 ep = this->gref_.E(e);
                 this->thread_stencil_processor_[tid]->eidx_ = ep->Idx();

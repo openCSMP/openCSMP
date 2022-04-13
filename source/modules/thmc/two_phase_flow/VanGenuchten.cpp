@@ -1,3 +1,4 @@
+#include "CSMP_mathUtilities.h"
 #include "VanGenuchten.h"
 #include "PropertyDatabase.h"
 #include "CSMP_mathUtilities.h"
@@ -171,7 +172,7 @@ double VanGenuchten<dim>::krw_Phase() const
         const double y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
         const double k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
 
-        return TwoPhaseModel<dim>::spline_value( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0);
+        return splineValue( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0);
     }
 
     //        krw = [ 1 - (1 - Se^1/m)^m ]^2 * Se^eps
@@ -199,7 +200,7 @@ double VanGenuchten<dim>::krn_Phase() const
         const double y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
         const double k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
 
-        return TwoPhaseModel<dim>::spline_value( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k);
+        return splineValue( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k);
     }
 
     //        krn = [ 1 - Se^1/m]^2m * (1 - Se)^gamma
@@ -224,7 +225,7 @@ double VanGenuchten<dim>::dkrwds_Phase() const
         const double y = TwoPhaseModel<dim>::krw_at( KRW_HIGH_SW_LIMIT_ );
         const double k = TwoPhaseModel<dim>::dkrwds_at( KRW_HIGH_SW_LIMIT_)/seff_mult;
 
-        return TwoPhaseModel<dim>::spline_derivative( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0)*seff_mult;
+        return splineDerivative( TwoPhaseModel<dim>::seff_, KRW_HIGH_SW_LIMIT_, 1.0 , y, 1.0, k, 0.0)*seff_mult;
     }
 
     const double m = m_from_n(n_);
@@ -250,7 +251,7 @@ double VanGenuchten<dim>::dkrnds_Phase() const
         const double y = TwoPhaseModel<dim>::krn_at( KRN_LOW_SW_LIMIT_ );
         const double k = TwoPhaseModel<dim>::dkrnds_at( KRN_LOW_SW_LIMIT_)/seff_mult;
 
-        return TwoPhaseModel<dim>::spline_derivative( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k)*seff_mult;
+        return splineDerivative( TwoPhaseModel<dim>::seff_, 0.0, KRN_LOW_SW_LIMIT_, 1.0, y, 0.0, k)*seff_mult;
     }
 
     const double m = m_from_n(n_);
@@ -325,6 +326,9 @@ double VanGenuchten<dim>::dpcds_Phase( ) const
 
     return -(term2 * term0) / (alpha_ * n_ * m * TwoPhaseModel<dim>::seff_ * term1) * seff_mult;
 }
+
+
+
 
 template<uint32_t dim>
 double VanGenuchten<dim>::Sw_Phase( double pc ) const

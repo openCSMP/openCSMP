@@ -91,7 +91,7 @@ void writeVariableIf( CELL<dim>* ptr,
     for ( auto i{0}; i<dim; i++ )
       if ( ptr->Status(idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
+           for ( size_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( idx, ts );
@@ -195,7 +195,7 @@ void writeVariableIf( CELL<dim>* ptr,
     for ( auto i{0}; i<dim; i++ )
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
+           for ( size_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( ip, idx, ts );
@@ -305,7 +305,7 @@ void writeVariableIf( CELL<dim>* ptr,
     for ( auto i{0}; i<dim; i++ )
       if ( ptr->Status(ip,idx,i) != dont_overwrite ) {
            ts.Flag(i) = var.Flag(i);
-           for ( size_t j=0U; j<dim; j++ )
+           for ( size_t j{0U}; j<dim; j++ )
              ts(i,j) = var(i,j);
         }
     ptr->Store( sector_or_facet, ip, idx, ts );

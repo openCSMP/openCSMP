@@ -21,11 +21,15 @@ class VData_Test : public Test {
     // checks whether mesh is still intact after corner elements were split
     // test model FracBox
     bool TestReplacementOfCornerTetrahedra();
+
+    /* checks whether a neighbor-based traversal of line elements is possible after calling this method
+       inside of EstablishElementConnectivity2D()
+    */
+    void Test_CreateConsistentLineElementOrientations2D();
+
 };
 
 
-// builds fracbox model with 1872 elements and several tetrahedra spanning the corners
-void create_FracBoxModel( VSet<3U>& );
     
 
 

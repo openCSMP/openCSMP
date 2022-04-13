@@ -6,6 +6,8 @@
 #include "VSet.h"
 #include "Model.h"
 
+using namespace std;
+
 namespace csmp {
 
 /** Constructs the ANSYS_Interface interface object.
@@ -49,7 +51,7 @@ void ANSYS_Interface::Clear()
 
 /// Builds Model after it was constructed with the default constructor.
 template<uint32_t dim>
-void ANSYS_Interface::Read_ANSYS_Mesh( const std::string& filename,
+void ANSYS_Interface::Read_ANSYS_Mesh( const string& filename,
                                        VSet<dim>&         vset,
                                        ModelTopology&     mesh_topology,
                                        bool               binary_input_file,
@@ -63,9 +65,9 @@ void ANSYS_Interface::Read_ANSYS_Mesh( const std::string& filename,
 }
 
 
-template void ANSYS_Interface::Read_ANSYS_Mesh( const std::string&,VSet<1U>&,ModelTopology&,bool,bool);
-template void ANSYS_Interface::Read_ANSYS_Mesh( const std::string&,VSet<2U>&,ModelTopology&,bool,bool);
-template void ANSYS_Interface::Read_ANSYS_Mesh( const std::string&,VSet<3U>&,ModelTopology&,bool,bool);
+template void ANSYS_Interface::Read_ANSYS_Mesh( const string&,VSet<1U>&,ModelTopology&,bool,bool);
+template void ANSYS_Interface::Read_ANSYS_Mesh( const string&,VSet<2U>&,ModelTopology&,bool,bool);
+template void ANSYS_Interface::Read_ANSYS_Mesh( const string&,VSet<3U>&,ModelTopology&,bool,bool);
 
 
 
@@ -178,7 +180,7 @@ errors are raised is encountered.
 */
 
 template<uint32_t dim>
-void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
+void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
                                       VSet<dim>&  vset,
                                       ModelTopology&  mesh_topology,
                                       bool reassign_boundary_flags )
@@ -189,8 +191,8 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
 
     // 1. Reading the '*.asc' file with the mesh topology description
     // ---------------------------------------------------------------
-    std::string   asc_name  = meshfile; asc_name += ".asc";
-    std::ifstream ifs_asc( asc_name.c_str() );
+    string   asc_name  = meshfile; asc_name += ".asc";
+    ifstream ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
          csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                     "ASCII geometry input file with extension '.asc' could not be opened");
@@ -210,7 +212,7 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
     // 2.0 Reading the '*.dat' file with the mesh data
     // -----------------------------------------------
     FILE*  ifs_dat(0);
-    std::string dat_name = meshfile; dat_name += ".dat";
+    string dat_name = meshfile; dat_name += ".dat";
 
     if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == NULL )
       csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
@@ -218,8 +220,8 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
 
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\nANSYS_Interface::ReadMeshBinary: Reading connectivity file: '"<< dat_name;
-        std::cout <<"'"<< std::endl << std::endl;
+        cout <<"\n\nANSYS_Interface::ReadMeshBinary: Reading connectivity file: '"<< dat_name;
+        cout <<"'"<< endl << endl;
     }
 
     if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) ) {
@@ -257,8 +259,8 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
     }
     else if( csmp_error.Verbose() )
     {
-         std::cout <<"\n\nANSYS_Interface::ReadMeshBinary(): Input (asc & dat) files '";
-         std::cout << meshfile <<"' read successfully."<< std::endl;
+         cout <<"\n\nANSYS_Interface::ReadMeshBinary(): Input (asc & dat) files '";
+         cout << meshfile <<"' read successfully."<< endl;
     }
 
     // build the model topology
@@ -277,9 +279,9 @@ void ANSYS_Interface::ReadMeshBinary( const std::string&  meshfile,
 
  } // ReadMeshBinary
 
-template void ANSYS_Interface::ReadMeshBinary( const std::string&,VSet<1U>&,ModelTopology&,bool);
-template void ANSYS_Interface::ReadMeshBinary( const std::string&,VSet<2U>&,ModelTopology&,bool);
-template void ANSYS_Interface::ReadMeshBinary( const std::string&,VSet<3U>&,ModelTopology&,bool);
+template void ANSYS_Interface::ReadMeshBinary( const string&,VSet<1U>&,ModelTopology&,bool);
+template void ANSYS_Interface::ReadMeshBinary( const string&,VSet<2U>&,ModelTopology&,bool);
+template void ANSYS_Interface::ReadMeshBinary( const string&,VSet<3U>&,ModelTopology&,bool);
 
 
 
@@ -331,7 +333,7 @@ input data.
 */
 
 template<uint32_t dim>
-void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
+void ANSYS_Interface::ReadMeshASCII( const string& meshfile,
                                      VSet<dim>&  vset,
                                      ModelTopology&  mesh_topology,
                                      bool reassign_boundary_flags )
@@ -342,8 +344,8 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
 
     // 1. Reading the '*.asc' file with the mesh topology description
     // --------------------------------------------------------------
-    std::string    asc_name = meshfile; asc_name += ".asc";
-    std::ifstream  ifs_asc( asc_name.c_str() );
+    string    asc_name = meshfile; asc_name += ".asc";
+    ifstream  ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
        csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII",
                                  "ASCII geometry input file with extension '.asc' could not be opened");
@@ -363,8 +365,8 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
 
     // 2. Reading the '*.dat' file with the mesh data
     // -------------------------------------------------------------
-    std::string    dat_name = meshfile; dat_name += ".dat";
-    std::ifstream  ifs_dat( dat_name.c_str() );
+    string    dat_name = meshfile; dat_name += ".dat";
+    ifstream  ifs_dat( dat_name.c_str() );
 
     if ( !ifs_dat.is_open() )
          csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII",
@@ -372,8 +374,8 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
 
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\nANSYS_Interface::ReadMeshASCII: Reading connectivity file: '"<< dat_name;
-        std::cout <<"'"<< std::endl << std::endl;
+        cout <<"\n\nANSYS_Interface::ReadMeshASCII: Reading connectivity file: '"<< dat_name;
+        cout <<"'"<< endl << endl;
     }
 
     if ( !ReadNodeCoordinatesASCII( ifs_dat, vset ) ) {
@@ -411,8 +413,8 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
     }
     else if( csmp_error.Verbose() )
     {
-         std::cout <<"\n\nANSYS_Interface::ReadMeshASCII(): Input (asc & dat) files '";
-         std::cout << meshfile <<"' read successfully."<< std::endl;
+         cout <<"\n\nANSYS_Interface::ReadMeshASCII(): Input (asc & dat) files '";
+         cout << meshfile <<"' read successfully."<< endl;
     }
 
     /// check topology
@@ -431,9 +433,9 @@ void ANSYS_Interface::ReadMeshASCII( const std::string& meshfile,
  } // ReadMeshASCII
 
 
-template void ANSYS_Interface::ReadMeshASCII( const std::string&,VSet<1U>&,ModelTopology&,bool );
-template void ANSYS_Interface::ReadMeshASCII( const std::string&,VSet<2U>&,ModelTopology&,bool );
-template void ANSYS_Interface::ReadMeshASCII( const std::string&,VSet<3U>&,ModelTopology&,bool );
+template void ANSYS_Interface::ReadMeshASCII( const string&,VSet<1U>&,ModelTopology&,bool );
+template void ANSYS_Interface::ReadMeshASCII( const string&,VSet<2U>&,ModelTopology&,bool );
+template void ANSYS_Interface::ReadMeshASCII( const string&,VSet<3U>&,ModelTopology&,bool );
 
 
 
@@ -458,7 +460,7 @@ void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<dim>& vset, bool isoparametr
     if ( !vset.HybridElementTypeMesh() )
       vset.ElementType( 0U, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(0U), isoparametric, dim ) );
     else
-      for ( auto i{0}; i<vset.ElementTypes(); i++ )
+      for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
         vset.ElementType( i, ANSYS_ElementSpecifications::CSMP_TypeFrom_ANSYS_Type( vset.ElementType(i), isoparametric, dim ) );
 
  } // end
@@ -467,12 +469,12 @@ template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<1U>&,bool );
 template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<2U>&,bool );
 template void convert_ANSYS_To_CSMP_FiniteElementTypes( VSet<3U>&,bool );
 
-void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::string>& object_specs,
+void convert_ANSYS_To_CSMP_FiniteElementTypes( multimap<string,string>& object_specs,
                                                bool isoparametric, uint32_t dim )
 {
-    std::string elmt_type;
-    std::multimap<std::string,std::string>::iterator itEnd = object_specs.end();
-    for ( std::multimap<std::string,std::string>::iterator
+    string elmt_type;
+    multimap<string,string>::iterator itEnd = object_specs.end();
+    for ( multimap<string,string>::iterator
        it=object_specs.begin(); it!=itEnd; it++ )
     {
         elmt_type = (*it).second;
@@ -492,7 +494,7 @@ void convert_ANSYS_To_CSMP_FiniteElementTypes( std::multimap<std::string,std::st
 // READING COMMENTS
 
 
-/** If std::string commences with # sign true is returned, else
+/** If string commences with # sign true is returned, else
 false is returned.
 */
 bool ANSYS_Interface::IsCommentLine( char* str ) const
@@ -508,15 +510,15 @@ bool ANSYS_Interface::IsCommentLine( char* str ) const
 /** If a comment occurs in the current line everything after the comment
 is skipped. The functions returns true if such a comment was found.
 */
-bool ANSYS_Interface::SkipPotentialComment( std::ifstream& ifs ) const
+bool ANSYS_Interface::SkipPotentialComment( ifstream& ifs ) const
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
     char    c('#'); ifs.get(c);
     bool    is_comment(false);
-    std::string  comment;
+    string  comment;
 
-    while ( !ifs.eof() && !std::isdigit(c) && c != '\n' && c != '\r' )
+    while ( !ifs.eof() && !isdigit(c) && c != '\n' && c != '\r' )
       {
          // checking for comments
          if ( c == '#' ) is_comment = true;
@@ -526,7 +528,7 @@ bool ANSYS_Interface::SkipPotentialComment( std::ifstream& ifs ) const
     ifs.unget();
 
     if ( is_comment && csmp_error.Verbose() )
-        std::cout <<"\n\tSkipped comment: "<< comment << std::endl;
+        cout <<"\n\tSkipped comment: "<< comment << endl;
 
     return is_comment;
 
@@ -537,7 +539,7 @@ bool ANSYS_Interface::SkipPotentialComment( std::ifstream& ifs ) const
 
 /** Advances the file stream to behind the comment line.
   */
-void ANSYS_Interface::AdvancePastCommentLine( std::ifstream& ifs ) const
+void ANSYS_Interface::AdvancePastCommentLine( ifstream& ifs ) const
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -548,7 +550,7 @@ void ANSYS_Interface::AdvancePastCommentLine( std::ifstream& ifs ) const
     while ( (!IsCommentLine(text_line) && !ifs.eof()) );
 
     if( csmp_error.Verbose() )
-        std::cout <<"\n\tSkipped comment line: "<< text_line << std::endl;
+        cout <<"\n\tSkipped comment line: "<< text_line << endl;
 
  } // end SkipPotentialCommentLines
 
@@ -575,7 +577,7 @@ A reference to the initialized ASCII input file stream.
 
 @return The file title is returned.  
 */
-bool ANSYS_Interface::ReadTitleASCII( std::ifstream& ifs, std::string& title )
+bool ANSYS_Interface::ReadTitleASCII( ifstream& ifs, string& title )
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -584,12 +586,12 @@ bool ANSYS_Interface::ReadTitleASCII( std::ifstream& ifs, std::string& title )
     // 1. Reading file header 
     ifs.getline( text_line, 256 ); // title line
     if( csmp_error.Verbose() )
-        std::cout <<"\nANSYS_Interface::ReadTitleASCII: File header: "<< text_line << std::endl;
+        cout <<"\nANSYS_Interface::ReadTitleASCII: File header: "<< text_line << endl;
     title = text_line;
     
     ifs.getline( text_line, 256 ); // second explanatory line
     if( csmp_error.Verbose() )
-        std::cout <<"\n\tFile specifications: "<< text_line << std::endl;
+        cout <<"\n\tFile specifications: "<< text_line << endl;
 
     if ( title.empty() ) return false;
     return true;
@@ -599,7 +601,7 @@ bool ANSYS_Interface::ReadTitleASCII( std::ifstream& ifs, std::string& title )
 
 
 /** Reads regions indiscriminately of their element types that they contain
-and stores all the information in corresponding std::multimaps.
+and stores all the information in corresponding multimaps.
 
 @section arguments Input Arguments 
 
@@ -617,17 +619,17 @@ with a digit.
 
 Used by the public interfaces of the class.  
 */
-bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
+bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( ifstream& ifs )
  {
     char                       text_line[INFO_STRING];
     const char* const          delims =" ,\t,:,\n,\r";
-    std::string                object_name;
-    std::string                elmt_specifier;
+    string                object_name;
+    string                elmt_specifier;
     int32_t                    n_regions(0), region(0);
     size_t                     n, n_elements;
     int32_t                    material;
-    std::vector<size_t>        empty_list;
-    std::set<std::string>      excluded_elmts;
+    vector<size_t>        empty_list;
+    set<string>      excluded_elmts;
     
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
@@ -683,7 +685,7 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
        } 
     
     // 3. Reading which individual elements belong to the subregions
-    std::set<std::string>  processed_regions;
+    set<string>  processed_regions;
     region=0; 
     
     while ( region < n_regions )
@@ -720,7 +722,7 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
                else { 
                     auto rit = object_elements_.insert( make_pair(object_name,empty_list) );
                     (*rit).second.reserve( n_elements );
-                    for ( auto i{0}; i<n_elements; i++ ) {
+                    for ( size_t i{0U}; i<n_elements; i++ ) {
                          // expecting that elements are numbered 0...n-1
                          ifs >> n; 
                          (*rit).second.push_back( n );
@@ -736,15 +738,15 @@ bool ANSYS_Interface::ReadRegionsAndElementTypesASCII( std::ifstream& ifs )
     if ( !object_specs_.empty() ) {
         if( csmp_error.Verbose() )
         {
-            std::cout <<"\nANSYS_Interface::ReadRegionsAndElementTypesASCII ";
-            std::cout <<"Input file contains the geometric objects: "<< std::endl;
-            for ( std::multimap<std::string,std::string>::const_iterator
+            cout <<"\nANSYS_Interface::ReadRegionsAndElementTypesASCII ";
+            cout <<"Input file contains the geometric objects: "<< endl;
+            for ( multimap<string,string>::const_iterator
                it=object_specs_.begin(); it!=object_specs_.end(); it++, it2++ )
             {
-                std::cout <<"\n\t"<< (*it2).second.size() <<" "<< (*it).second <<" elements ";
-                std::cout <<"\tforming region: '"<< (*it).first <<"'";
+                cout <<"\n\t"<< (*it2).second.size() <<" "<< (*it).second <<" elements ";
+                cout <<"\tforming region: '"<< (*it).first <<"'";
             }
-            std::cout << std::endl << std::endl;
+            cout << endl << endl;
         }
         return true;
       }
@@ -775,7 +777,7 @@ A reference to the initialized ASCII input file stream.
 VSet.  
 */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadNodeCoordinatesASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -786,43 +788,43 @@ bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream& ifs, VSet<dim>& v
     SkipPotentialComment( ifs );
     
     // Px recornd
-    std::deque<double> X(n_nodes);
+    deque<double> X(n_nodes);
     if ( n_nodes == 0U ) {
          throw csmp::Exception( ERROR, "ANSYS_Interface::ReadNodeCoordinatesASCII", 
                                     "No node coordinates are specified in file" );
          return false;
       }
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> X[i];
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> X[i];
 
     // Py record
-    std::deque<double> Y(n_nodes);
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> Y[i];
+    deque<double> Y(n_nodes);
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> Y[i];
     
     // Pz record
-    std::deque<double> Z(n_nodes);
-    for ( auto i{0}; i<n_nodes; i++ ) ifs >> Z[i];
+    deque<double> Z(n_nodes);
+    for ( size_t i{0U}; i<n_nodes; i++ ) ifs >> Z[i];
      
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\nANSYS_Interface::ReadNodeCoordinatesASCII: ";
-        std::cout <<"Read x,y,z coordinates of: "<< n_nodes <<" nodes."<< std::endl;
+        cout <<"\nANSYS_Interface::ReadNodeCoordinatesASCII: ";
+        cout <<"Read x,y,z coordinates of: "<< n_nodes <<" nodes."<< endl;
     }
 
     vset.AddXYZ( X, Y, Z );  
       
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\nANSYS_Interface::ReadNodeCoordinatesASCII: ";
-        std::cout <<"Coordinates of "<< n_nodes <<" nodes read successfully."<< std::endl;
+        cout <<"\nANSYS_Interface::ReadNodeCoordinatesASCII: ";
+        cout <<"Coordinates of "<< n_nodes <<" nodes read successfully."<< endl;
     }
 
     return true;
     
  } // ReadNodeCoordinatesASCII
 
-template bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadNodeCoordinatesASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadNodeCoordinatesASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadNodeCoordinatesASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadNodeCoordinatesASCII( ifstream&,VSet<3U>& );
 
 
 /**
@@ -839,13 +841,13 @@ A reference to the initialized ASCII input file stream.
 nodes are stored in the second method argument.  
 */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     int8_t        flag;
     double      bvalue;
-    std::vector<bool>  bconds(vset.Vertices(),false);
+    vector<bool>  bconds(vset.Vertices(),false);
     
     // Pbflags record
     if ( bconds.size() == 0 ) {
@@ -856,7 +858,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
 
     AdvancePastCommentLine( ifs );
 
-    for ( auto i{0}; i<bconds.size(); i++ ) {
+    for ( size_t i{0U}; i<bconds.size(); i++ ) {
          ifs >> flag;
          if ( flag != 0 ) {
               bconds[i] = true;
@@ -869,15 +871,15 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
     AdvancePastCommentLine( ifs );
 
     // Pbvals record
-    for ( size_t i=0; i<bconds.size(); i++ ) {
+    for ( size_t i{0U}; i<bconds.size(); i++ ) {
          ifs >> bvalue;
 //         if ( bconds[i] ) vset.AddBValue( i+1, bvalue ); ignoring these values
       }
 
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\nANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII: ";
-        std::cout <<" Boundary flags and boundary values read successfully."<< std::endl;
+        cout <<"\nANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII: ";
+        cout <<" Boundary flags and boundary values read successfully."<< endl;
     }
 
     return true;
@@ -885,9 +887,9 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream& ifs, V
  } // ReadBoundaryFlagsAndConditionsASCII
 
 
-template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream&,VSet<3U>& );
 
 
 /**
@@ -901,7 +903,7 @@ per element for the reading process.
 A reference to the initialized ASCII input file stream.
  */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadPelementASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadPelementASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -919,9 +921,9 @@ bool ANSYS_Interface::ReadPelementASCII( std::ifstream& ifs, VSet<dim>& vset )
          return false;
       }
 
-    std::vector<int8_t> elmt_types;
+    vector<int8_t> elmt_types;
     elmt_types.reserve(records);
-    for ( auto i{0}; i<records; i++ ) {
+    for ( size_t i{0U}; i<records; i++ ) {
         ifs >> etype;
         elmt_types.push_back( etype );
       }
@@ -938,9 +940,9 @@ bool ANSYS_Interface::ReadPelementASCII( std::ifstream& ifs, VSet<dim>& vset )
 
  } // ReadPelementASCII
 
-template bool ANSYS_Interface::ReadPelementASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadPelementASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadPelementASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadPelementASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadPelementASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadPelementASCII( ifstream&,VSet<3U>& );
 
 
 /**
@@ -958,24 +960,24 @@ beginning of the plist data block.
 second method argument.  
 */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    std::map<size_t,std::vector<int64_t> >  plist;
-    std::vector<int64_t>          dummy;
+    map<size_t,vector<int64_t> >  plist;
+    vector<int64_t>          dummy;
     size_t                       total_items, 
                                  element(0), item(0), 
                                  id, nodes;
     const size_t                 n_nodes(vset.Vertices());
     
-    std::pair<std::map<size_t,std::vector<int64_t> >::iterator,bool>  it;
-    std::pair<size_t,std::vector<int64_t> > data;
+    pair<map<size_t,vector<int64_t> >::iterator,bool>  it;
+    pair<size_t,vector<int64_t> > data;
     
     // now the vset can be resized according to the new information
-    std::deque<uint32_t>  ndele(vset.ElementTypes());
+    deque<uint32_t>  ndele(vset.ElementTypes());
                        
-    for ( auto i{0}; i<vset.ElementTypes(); i++ )
+    for ( size_t i{0U}; i<vset.ElementTypes(); i++ )
       ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
     vset.ResizePlist( ndele );
 
@@ -999,12 +1001,12 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
          
          data.first  = ++element;
          data.second =   dummy;
-         it = plist.insert(data); // insertion of empty std::vector
+         it = plist.insert(data); // insertion of empty vector
          assert( it.second );
          (*it.first).second.reserve(nodes);
          
          // node ID's in file range 0...nodes-1
-         for ( size_t i=0; i<nodes; i++ ) {
+         for ( size_t i{0U}; i<nodes; i++ ) {
               ifs >> id;
               assert( id < n_nodes );
               (*it.first).second.push_back( id );
@@ -1022,8 +1024,8 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
    
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\nANSYS_Interface::ReadPlistASCII: ";
-        std::cout <<"Member node IDs read for: "<< element <<" elements."<< std::endl;
+        cout <<"\nANSYS_Interface::ReadPlistASCII: ";
+        cout <<"Member node IDs read for: "<< element <<" elements."<< endl;
     }
 
     return true;
@@ -1031,9 +1033,9 @@ bool ANSYS_Interface::ReadPlistASCII( std::ifstream& ifs, VSet<dim>& vset )
  } // ReadPlistASCII
 
 
-template bool ANSYS_Interface::ReadPlistASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadPlistASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadPlistASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadPlistASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadPlistASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadPlistASCII( ifstream&,VSet<3U>& );
 
 
 /**
@@ -1051,13 +1053,13 @@ A reference to the initialized ASCII input file stream.
  
 */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     // making an array of numbers of neighbors of each element
-    std::deque<uint32_t>  nbors( vset.ElementTypes() );
-    for ( auto i{0}; i<vset.ElementTypes(); ++i )
+    deque<uint32_t>  nbors( vset.ElementTypes() );
+    for ( size_t i{0U}; i<vset.ElementTypes(); ++i )
       nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
     vset.ResizePfverts( nbors );
 
@@ -1076,27 +1078,27 @@ bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
     
     // reading the pfvert file record
     size_t                       element(0), item(0);
-    std::map<size_t,std::vector<int64_t> >  pfverts;
-    std::vector<int64_t>               dummy;
+    map<size_t,vector<int64_t> >  pfverts;
+    vector<int64_t>               dummy;
 
     while ( item < total_items )
       {
          // getting the number of neighbors of the element to be read
          size_t neighbors = nbors[element];
          assert( neighbors >= 2  and  neighbors <= 32 );
-         std::pair<size_t,std::vector<int64_t> >  data(element,dummy);
+         pair<size_t,vector<int64_t> >  data(element,dummy);
         
-         // insertion of empty std::vector
-         std::pair<std::map<size_t,std::vector<int64_t> >::iterator,bool>  it(pfverts.insert(data));
+         // insertion of empty vector
+         pair<map<size_t,vector<int64_t> >::iterator,bool>  it(pfverts.insert(data));
          assert( it.second );
          (*it.first).second.reserve(neighbors);
 
          // element ID's in file range 0...elements-1
-         for ( size_t i=0; i<neighbors; ++i ) {
+         for ( size_t i{0U}; i<neighbors; ++i ) {
               int32_t  idx;
               ifs >> idx;
               if ( ifs.bad() ) {
-                   std::cerr <<"\nread 'pfvert' record for element: "<< element <<", neighbor: "<< i <<", value: "<< idx;
+                   cerr <<"\nread 'pfvert' record for element: "<< element <<", neighbor: "<< i <<", value: "<< idx;
                    throw csmp::Exception( ERROR, "ANSYS_Interface::ReadPfvertsASCII:",
                                          "file stream went bad, when reading 'pfverts' record; may be not enough entries." );
                 }
@@ -1123,17 +1125,17 @@ bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream& ifs, VSet<dim>& vset )
    
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\nANSYS_Interface::ReadPfvertsASCII: ";
-        std::cout <<"Neighbor IDs read for: "<< element <<" elements."<< std::endl;
+        cout <<"\nANSYS_Interface::ReadPfvertsASCII: ";
+        cout <<"Neighbor IDs read for: "<< element <<" elements."<< endl;
     }
 
     return true;
 
  } // ReadPfvertsASCII
 
-template bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadPfvertsASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadPfvertsASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadPfvertsASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadPfvertsASCII( ifstream&,VSet<3U>& );
 
 /**
  
@@ -1147,7 +1149,7 @@ A reference to the initialized ASCII input file stream.
 @return The material information is assigned to the supplied VSet.  
 */
 template<uint32_t dim>
-bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
+bool ANSYS_Interface::ReadPmaterialASCII( ifstream& ifs, VSet<dim>& vset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -1165,7 +1167,7 @@ bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
       }
     
     // only for the volumetric elements material data are read from file
-    std::vector<int32_t> elmt_mtrls;
+    vector<int32_t> elmt_mtrls;
     elmt_mtrls.reserve(records);
     int32_t   emtrl;
     size_t  i(0);
@@ -1175,7 +1177,7 @@ bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
       }
 
     if ( elmt_mtrls.size() < vset.Elements() ) {
-         std::cerr <<"\nFor the "<< vset.Elements() <<" elements, material parameter values were provided for only "<< records <<"\n";
+         cerr <<"\nFor the "<< vset.Elements() <<" elements, material parameter values were provided for only "<< records <<"\n";
          csmp_error.notice( ERROR, "ANSYS_Interface::ReadPmaterialASCII:",
                            "Element material information could not be obtained for all elements." );
          return false;
@@ -1188,9 +1190,9 @@ bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream& ifs, VSet<dim>& vset )
  } // ReadPmaterialASCII
 
 
-template bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream&,VSet<1U>& );
-template bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream&,VSet<2U>& );
-template bool ANSYS_Interface::ReadPmaterialASCII( std::ifstream&,VSet<3U>& );
+template bool ANSYS_Interface::ReadPmaterialASCII( ifstream&,VSet<1U>& );
+template bool ANSYS_Interface::ReadPmaterialASCII( ifstream&,VSet<2U>& );
+template bool ANSYS_Interface::ReadPmaterialASCII( ifstream&,VSet<3U>& );
 
 
 
@@ -1207,7 +1209,7 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     const size_t  dbytes  = sizeof(double);
     size_t        entries(0);
 
@@ -1221,8 +1223,8 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX ); // max size of unsigned 32 bit integer
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\treading "<< entries <<" node coordinates 'px,py,pz'..."<< std::endl;
-        std::cout.flush();
+        cout <<"\n\treading "<< entries <<" node coordinates 'px,py,pz'..."<< endl;
+        cout.flush();
     }
     // reading node coordinates 'px', 'py', 'pz' (double)
     double* px = new double[ entries ];
@@ -1242,7 +1244,7 @@ bool ANSYS_Interface::ReadNodeCoordinatesBinary( FILE* fp, VSet<dim>& vset )
     vset.ResizeNodes( entries );
 
     // assign node coordinates
-    for ( auto i{0}; i<entries; i++ ) {
+    for ( size_t i{0U}; i<entries; i++ ) {
          vset.Px( i, px[i] );
          vset.Py( i, py[i] ); // ANSYS models will always have a three coordinate's
          vset.Pz( i, pz[i] ); // ANSYS models will always have a three coordinate's
@@ -1294,31 +1296,37 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
 
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\treading boundary flags 'pbflags'..."<< std::endl;
-        std::cout.flush();
+        cout <<"\n\treading boundary flags 'pbflags'..."<< endl;
+        cout.flush();
     }
     int32_t        ival;
-    const int32_t  min29(MULTIPLE_BOUNDARIES), zero(NOT);
+    const int32_t  min29(MULTIPLE_BOUNDARIES);
     const size_t   nodes(vset.Vertices());
-    for ( size_t i=0; i<nodes; i++ ){
+    size_t         flag_value_errors{0U};
+    for ( size_t i{0U}; i<nodes; i++ ){
          fread( (void*) &ival, ibytes, 1U, fp );
-         if ( ival < min29 || ival > zero ) {
-              csmp_error.notice( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
+         if ( ival < min29 ) {
               ival = IRREGULAR;
+              flag_value_errors++;
            }
          vset.AddBFlag( i, static_cast<int8_t>(ival) );
      }
+
+    if ( flag_value_errors > 0 ) {
+         cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
+         csmp_error.notice( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
+      }
 
 
     // 2. reading boundary condition values 'pbounds' (double) and ignoring them
     // --------------------------------------------------------------------------
     // CURRENTLY IGNORED because users never assign any in ANSYS
     if ( csmp_error.Verbose() ) {
-        std::cout <<"\n\treading boundary values 'pbounds'..."<< std::endl;
-        std::cout.flush();
+        cout <<"\n\treading boundary values 'pbounds'..."<< endl;
+        cout.flush();
       }
     double dval;
-    for ( size_t i=0; i<nodes; i++ )
+    for ( size_t i{0U}; i<nodes; i++ )
       fread( (void*) &dval, dbytes, 1U, fp );
 
     return true;
@@ -1338,7 +1346,7 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // reading element-type information record 'pelement' (unsigned int)
@@ -1348,20 +1356,20 @@ bool ANSYS_Interface::ReadPelementBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX );
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\treading "<< entries <<" finite-element type specifiers from 'pelement'..."<< std::endl;
-        std::cout.flush();
+        cout <<"\n\treading "<< entries <<" finite-element type specifiers from 'pelement'..."<< endl;
+        cout.flush();
     }
     int32_t*   pelmt = new int32_t[ entries ];
     fread( (void*) pelmt, ibytes, entries, fp );
     // checking the validity of the element types (valid range 2-23)
-    for ( size_t i=0; i<entries; i++ )
+    for ( size_t i{0U}; i<entries; i++ )
       if ( pelmt[i] < 2 || pelmt[i] > 23 )
         throw csmp::Exception( ERROR,
                               "ANSYS_Interface::ReadPelementBinary",
                              "'pelement' value out of range ANSYS-TYPE range (2-23).");
 
     // adding element types to vset
-    std::vector<int8_t> elmt_types;
+    vector<int8_t> elmt_types;
     elmt_types.assign( pelmt, pelmt + entries );
     vset.ElementTypes( elmt_types );
 
@@ -1382,16 +1390,16 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // setting up the storage for 'plist' in VSet
     const size_t   nelements(vset.ElementTypes());
 
     // now the vset can be resized according to the new information
-    std::deque<uint32_t>  ndele(nelements);
+    deque<uint32_t>  ndele(nelements);
     size_t              n_plist_entries_expected{0};
-    for ( auto i{0}; i<nelements; ++i ) {
+    for ( size_t i{0U}; i<nelements; ++i ) {
          ndele[i] = csmp_elmt_specs::NodesPerElementOfType( vset.ElementType(i) );
          n_plist_entries_expected += ndele[i];
       }
@@ -1408,20 +1416,20 @@ bool ANSYS_Interface::ReadPlistBinary( FILE* fp, VSet<dim>& vset )
     assert( entries == n_plist_entries_expected );
     
     if ( csmp_error.Verbose() ) {
-          std::cout <<"\n\treading "<< nelements <<" nodes-per-element records from 'plist' (size="<< entries <<")..."<< std::endl;
-          std::cout.flush();
+          cout <<"\n\treading "<< nelements <<" nodes-per-element records from 'plist' (size="<< entries <<")..."<< endl;
+          cout.flush();
       }
   
     // reading the plist
     uint32_t*  plist = new uint32_t[ entries ];
     fread( (void*) plist, uibytes, entries, fp );
 
-    std::deque<std::vector<int64_t> >::iterator  it(vset.PlistBegin());
+    deque<vector<int64_t> >::iterator  it(vset.PlistBegin());
     size_t  nentry(0U);
 
     // the elements of the plist (node ids) are assigned
-    for ( auto i{0}; i<nelements; i++, it++ )
-      for ( size_t j=0U; j<ndele[i]; j++ )
+    for ( size_t i{0U}; i<nelements; i++, it++ )
+      for ( size_t j{0U}; j<ndele[i]; j++ )
           (*it)[j] = plist[nentry++];
 
     delete[] plist;
@@ -1443,21 +1451,21 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     int64_t       entries(0);
 
     // setting up the storage for 'pfverts' in VSet
     const size_t   nelements(vset.ElementTypes());
 
     // making an array of with the number of neighbors for each element
-    std::deque<uint32_t>  nbors( nelements );
-    size_t              n_pfverts_entries_expected{0};
-    for ( auto i{0}; i<nelements; ++i ) {
+    deque<uint32_t>  nbors( nelements );
+    size_t           n_pfverts_entries_expected{0};
+    for ( size_t i{0U}; i<nelements; ++i ) {
          assert( vset.ElementType(i) >= -128 );
          assert( vset.ElementType(i) <=  128 );
          nbors[i] = csmp_elmt_specs::NeighborsPerElementOfType( vset.ElementType(i) );
          n_pfverts_entries_expected += nbors[i];
-//         std::cout << nbors[i] <<":"<< parseAbbreviated_FE_Type( vset.ElementType(i) ) <<" ";
+//         cout << nbors[i] <<":"<< parseAbbreviated_FE_Type( vset.ElementType(i) ) <<" ";
       }
     assert( nbors.size() == vset.Elements() );
     vset.ResizePfverts( nbors );
@@ -1471,12 +1479,13 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX );
     
     if ( entries != n_pfverts_entries_expected ) {
-         std::cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary", "neighbor element info in binary seems corrupt");
+         cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
+         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
+                           "neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced");
       }
     if ( csmp_error.Verbose() ) {
-         std::cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< std::endl;
-         std::cout.flush();
+         cout <<"\n\treading "<< nelements <<" neighbor-list records from 'pfverts' (size="<< entries <<")..."<< endl;
+         cout.flush();
       }
     if ( entries >= 2147483647 )
       csmp_error.notice( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
@@ -1487,20 +1496,20 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
 
 // DEBUGGING - what is actually been read
 /*
-std::cerr <<"\npfverts read from ANSYS file:\n";
+cerr <<"\npfverts read from ANSYS file:\n";
 for ( auto i{0}; i<n_pfverts_entries_expected; ++i )
-  std::cerr << pfverts[i] <<" ";
-std::cerr << std::endl;
+  cerr << pfverts[i] <<" ";
+cerr << endl;
 */
 
     // reading the C array into the resized pfverts deque inside VData
     // ---------------------------------------------------------------
-    std::deque<std::vector<int64_t> >::iterator it(vset.PfvertsBegin());
+    deque<vector<int64_t> >::iterator it(vset.PfvertsBegin());
     size_t  n_entry(0U);
-    for ( size_t i=0; i<nelements; i++, ++it ) {
+    for ( size_t i{0U}; i<nelements; i++, ++it ) {
         // minimum number of neighbors per element
         assert( nbors[i] >= 2 );
-        for ( size_t j=0U; j<nbors[i]; j++ ) {
+        for ( size_t j{0U}; j<nbors[i]; j++ ) {
              // ignoring extra entries if ANSYS pfverts array is too short
              // later uses VData::EstablishNeighborConnectivity3D() to fix things up
              if ( n_entry >= entries ) break;
@@ -1520,20 +1529,20 @@ template bool ANSYS_Interface::ReadPfvertsBinary( FILE*, VSet<3U>& );
 // TESTING of previous function
 
 // test: deque is OK, although XCode debugger shows it with a size of 0
-//std::cerr <<"\nReadPfvertsBinary: neighbor info\n:";
+//cerr <<"\nReadPfvertsBinary: neighbor info\n:";
 //for ( auto it=nbors.begin(); it!=nbors.end(); ++it )
-//  std::cerr << (*it) <<" ";
+//  cerr << (*it) <<" ";
 
 // TESTING
 /*
-std::cerr <<"\nReadPfvertsBinary: neighbor info\n:";
+cerr <<"\nReadPfvertsBinary: neighbor info\n:";
 size_t i(0);
- for ( std::deque<std::vector<int64_t> >::const_iterator
+ for ( deque<vector<int64_t> >::const_iterator
        ft=vset.PfvertsBegin(); ft!=vset.PfvertsEnd(); ft++, i++ )
    {
-      std::cout << i <<": \t";
-      for ( size_t j=0U; j<(*ft).size(); j++ ) std::cout << (*ft)[j] <<"\t ";
-      std::cout << std::endl;
+      cout << i <<": \t";
+      for ( size_t j{0U}; j<(*ft).size(); j++ ) cout << (*ft)[j] <<"\t ";
+      cout << endl;
    }
 */
 
@@ -1547,7 +1556,7 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     const size_t  ibytes  = sizeof(int32_t);
-    const size_t  uibytes = sizeof(uint32_t);
+    const size_t  uibytes = sizeof( uint32_t);
     size_t        entries(0);
 
     // reading material information 'pmtrl'
@@ -1557,12 +1566,12 @@ bool ANSYS_Interface::ReadPmaterialBinary( FILE* fp, VSet<dim>& vset )
     assert( entries < ULONG_MAX );
     if( csmp_error.Verbose() )
     {
-        std::cout <<"\n\treading "<< entries <<" material-type specifiers for the elements from 'pmtrl'..."<< std::endl;
-        std::cout.flush();
+        cout <<"\n\t"<<"reading "<< entries <<" material-type specifiers for the elements from 'pmtrl'..."<< endl;
+        cout.flush();
     }
     int32_t*  mtrls = new int32_t[ entries ];
     fread( (void*) mtrls, ibytes, entries, fp );
-    std::vector<int32_t> elmt_mtrls;
+    vector<int32_t> elmt_mtrls;
     elmt_mtrls.assign( mtrls, mtrls + entries );
     
     vset.AddPmtrl( elmt_mtrls.begin(), elmt_mtrls.end() );
@@ -1584,7 +1593,7 @@ template bool ANSYS_Interface::ReadPmaterialBinary( FILE*, VSet<3U>& );
 
 // ANSYS MODEL INTERFACE
 
-ANSYS_ModelSettings::ANSYS_ModelSettings( const std::string& mesh_file_prefix )
+ANSYS_ModelSettings::ANSYS_ModelSettings( const string& mesh_file_prefix )
     : mesh_file_prefix_     ( mesh_file_prefix ),
       irregular_mesh_       ( true ),
       binary_file_          ( true ),
@@ -1623,7 +1632,7 @@ ANSYS_ModelSettings::~ANSYS_ModelSettings()
 }
 
 void ANSYS_ModelSettings
-::MeshSetup( const std::string& regions_file_prefix,
+::MeshSetup( const string& regions_file_prefix,
              bool irregular_mesh,        /* true = non-box shaped model, false = box shaped model */
              bool binary_file,           /* true = binary, false = ascii */
              bool create_boundaries )    /* true = creates boundaries around model, false = does not create boundaries */
@@ -1639,7 +1648,7 @@ void ANSYS_ModelSettings
 }
 
 void ANSYS_ModelSettings
-::MeshSetup( const std::set<std::string>& regions, // desired regions
+::MeshSetup( const set<string>& regions, // desired regions
              bool irregular_mesh,        /* true = non-box shaped model, false = box shaped model */
              bool binary_file,           /* true = binary, false = ascii */
              bool create_boundaries )    /* true = creates boundaries around model, false = does not create boundaries */

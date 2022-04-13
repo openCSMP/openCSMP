@@ -35,8 +35,8 @@ Matrix& RandomFieldGenerator<dim>::UniformRandomMatrix(size_t m, size_t n)
   std::uniform_real_distribution<> rndist(0,1);
   
   m1_.Resize(m,n);
-  for(size_t i=0; i<m; i++) {
-      for(size_t j=0; j<n; j++)
+  for(size_t i{0U}; i<m; i++) {
+      for(size_t j{0U}; j<n; j++)
           m1_(i,j) = rndist(gen);
     } 
   return m1_;
@@ -61,8 +61,8 @@ Matrix& RandomFieldGenerator<dim>::NormalRandomMatrix(size_t m, size_t n)
   std::normal_distribution<> rndist(0,1);
   
   m3_.Resize(m,n);
-  for (size_t i=0; i<m; i++) {
-      for (size_t j=0; j<n; j++) {
+  for (size_t i{0U}; i<m; i++) {
+      for (size_t j{0U}; j<n; j++) {
           m3_(i,j) = rndist(gen);
       }
   }
@@ -76,8 +76,8 @@ double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double 
   const double t1(pi_*xl/Lx), t2(pi_*yl/Ly), pi2(2.0*pi_);
   Matrix M1(cnt, cnt), M2(cnt, cnt);
   
-  for ( size_t i=0; i<cnt; i++ )
-      for (size_t j=0; j<cnt; j++ ) {
+  for ( size_t i{0U}; i<cnt; i++ )
+      for (size_t j{0U}; j<cnt; j++ ) {
           M1(i,j) = static_cast<double>(j)*t1;
           M2(i,j) = static_cast<double>(i)*t2;
         }
@@ -86,8 +86,8 @@ double RandomFieldGenerator<dim>::TheoreticalStandardDeviation(size_t m, double 
   M2 *= M2;
 
   double sigma(0.0);
-  for ( size_t i=0; i<cnt; i++ )
-      for (size_t j=0; j<cnt; j++ )
+  for ( size_t i{0U}; i<cnt; i++ )
+      for (size_t j{0U}; j<cnt; j++ )
         sigma += std::exp(-(M1(i,j)+M2(i,j))/pi2);
   
   return std::sqrt(sigma);
@@ -181,18 +181,18 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
   
   // resize the storage vector for the random permeability field
   Region<dim>& mref = mdl.Region(region);
-  k_.resize(mdl.Region("Model").Elements());
+  k_.resize(mdl.Region("Model").Cells());
 
   cout << "\nRandomFieldGenerator<dim>::RandomElementField2D: Generating random field for '" << variable << "' in region " << region;
   cout << "\nUsing mean: " << mean << ", standard deviation: " << sigma << ", correlation length x: " << xlength << ", correlation length y: " << ylength << endl;
     
   // loop over elements
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ ) {
 
       sc = (1.0/sqrtLxLy*R(0,0));
       bc = (*it)->BaryCenter(); // xy coordinates of bary centre
       v1 = v2 = v3 = 1.0;
-      for (size_t i=0;i<m; i++) {
+      for (size_t i{0U};i<m; i++) {
           t1 = std::cos(pi_ * v1 * bc[0]/Lx);
           t2 = std::exp(-std::pow((pi_ * v1 * xlength/Lx),2.0)/pi2);
           t3 = std::cos(pi_ * v1 * bc[1]/Ly);
@@ -201,7 +201,7 @@ void RandomFieldGenerator<dim>::RandomElementField2D( Model<dim>& mdl, const cha
           sc += term * t3 * t4 * R(i+1,0);
           v1 += 1.0;
         }
-      for (size_t j=0; j<m; j++ ) {
+      for (size_t j{0U}; j<m; j++ ) {
           v3 = 1.0;
           for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);
@@ -328,7 +328,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
       bc[0] = (*it)->x();
       bc[1] = (*it)->y();
       v1 = v2 = v3 = 1.0;
-      for (size_t i=0;i<m; i++) {
+      for (size_t i{0U};i<m; i++) {
           t1 = std::cos(pi_ * v1 * bc[0]/Lx);
           t2 = std::exp(-std::pow((pi_ * v1 * xlength/Lx),2.0)/pi2);
           t3 = std::cos(pi_ * v1 * bc[1]/Ly);
@@ -337,7 +337,7 @@ void RandomFieldGenerator<dim>::RandomNodeField2D( Model<dim>& mdl, const char* 
           sc += term * t3 * t4 * R(i+1,0);
           v1 += 1.0;
         }
-      for (size_t j=0; j<m; j++ ) {
+      for (size_t j{0U}; j<m; j++ ) {
           v3 = 1.0;
           for (auto k=0; k<m; k++ ) {
               t1 = std::cos(pi_ * v2 * bc[0]/Lx);
@@ -375,7 +375,7 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
     }
  
   const Region<dim>& mref = mdl.Region("Model");
-  if ( k_.size() != mref.Elements() ) {
+  if ( k_.size() != mref.Cells() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::OutputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
@@ -384,7 +384,7 @@ void RandomFieldGenerator<dim>::OutputRandomElementField( Model<dim>& mdl )
   std::ofstream ofs;
   ofs.open( fname.c_str(), ios::out|ios::trunc );  
   
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ )
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ )
     ofs << k_[(*it)->Idx()] << endl;
 
   ofs.close();
@@ -444,7 +444,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   ifs.close();
 
   Region<dim>& mref = mdl.Region("Model");
-  if ( k_temp.size() != mref.Elements() ) {
+  if ( k_temp.size() != mref.Cells() ) {
       throw csmp::Exception( ERROR, "RandomFieldGenerator<double,2>::InputRandomElementField2D",
                       "Size of the random field does not correspond to number of finite elements in Model");
       return;
@@ -453,7 +453,7 @@ void RandomFieldGenerator<dim>::InputRandomElementField( Model<dim>& mdl, const 
   const Index    key(mdl.Database().StorageKey(variable));
   ScalarVariable sc;
 
-  for ( auto it = mref.ElementsBegin(); it != mref.ElementsEnd(); it++ ) {
+  for ( auto it = mref.CellsBegin(); it != mref.CellsEnd(); it++ ) {
       sc() = k_temp[(*it)->Idx()];
       (*it)->Store( key, sc );
     }

@@ -116,7 +116,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
     // get the vertical density gradient 
     // if fluid density is an element property
     if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
-      for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) 
+      for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            // get dN = interpolation function derivate value at integration point
            double ip_value =  oper_eprop(); // fluid density
@@ -124,13 +124,13 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
            ip_value   *=  e.WeightAtIntegrationPoint(i);
            ip_value   *=  e.dN_AtIntegrationPoint( DN, i ); // det_J
 
-           for ( auto j=0; j<e.Nodes(); j++ )
+           for ( auto j{0U}; j<e.Nodes(); j++ )
              MathOperatorRHS<dim>::RHS[j] += ip_value * DN(xyz,j);
         }
 
     // if fluid density is a node property
     else
-      for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) 
+      for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) 
         {
            e.N_AtIntegrationPoint( i, IPOL );
            const double detJ = e.dN_AtIntegrationPoint( DN, i );
@@ -145,7 +145,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL& e
            ip_value *=  e.WeightAtIntegrationPoint(i);
            ip_value *=  detJ;
            
-           for ( auto j=0; j<e.Nodes(); j++ ) 
+           for ( auto j{0U}; j<e.Nodes(); j++ ) 
              MathOperatorRHS<dim>::RHS[j] += ip_value * DN(xyz,j);
       }
 

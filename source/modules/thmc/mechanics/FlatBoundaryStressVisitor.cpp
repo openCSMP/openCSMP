@@ -136,7 +136,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
       f->N(i)->Read(F_key_, vc_);
       vc_ += (nrml_ + vs_);
       f->N(i)->Store(F_key_, vc_);                                         // HA. Adds both shear and normal components to the nodal force vectors. 
-      for (size_t j = 0U; j < dim; j++) f->N(i)->Status(F_key_, j, DIRICH);  // HA. Applies the forces as dirichlet boundary conditions. 
+      for (size_t j{0U}; j < dim; j++) f->N(i)->Status(F_key_, j, DIRICH);  // HA. Applies the forces as dirichlet boundary conditions. 
    }
 
    

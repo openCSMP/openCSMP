@@ -85,14 +85,14 @@ void Tecplot_Interface<dim>
          return;
        }
 
-     const Region<dim>&  super_group(sg.Region("Model"));
+     const Region<dim>&  model_domain(sg.Region("Model"));
 
-     if ( super_group.E(0)->FE_Type() != LINEAR_TRIANGLE &&
-          super_group.E(0)->FE_Type() != LINEAR_TETRAHEDRON &&
-          super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TRIANGLE && 
-          super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TETRAHEDRON && 
-          super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_QUADRILATERAL &&
-          super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
+     if ( model_domain.E(0)->FE_Type() != LINEAR_TRIANGLE &&
+          model_domain.E(0)->FE_Type() != LINEAR_TETRAHEDRON &&
+          model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TRIANGLE && 
+          model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TETRAHEDRON && 
+          model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_QUADRILATERAL &&
+          model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
           cout << "\nTecplot_Interface<dim>::OutputDataToTecplotFile: This element type cannot be visualized. Nothing is done..." << endl;
           return;
        }
@@ -101,7 +101,7 @@ void Tecplot_Interface<dim>
      // 0. creating list of element ID's of associated Region
      // --------------------------------------------------------------------
      vector<size_t>     elmt_ids;
-     gref.MemberElementIndexes( elmt_ids );
+     gref.MemberCellIndexes( elmt_ids );
                 
 
      // 1. getting new node mapping and updating storage if geometry has changed
@@ -150,14 +150,14 @@ void Tecplot_Interface<dim>
      if ( prop_key.place == NODE ) {   
          if ( gref.E(0)->FE_Type() == LINEAR_TRIANGLE || 
               gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = triangle";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = triangle";
          if ( gref.E(0)->FE_Type() == LINEAR_TETRAHEDRON ||
               gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TETRAHEDRON  )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = tetrahedron";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = tetrahedron";
          if ( gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = quadrilateral";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = quadrilateral";
          if ( gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_HEXAHEDRON )
-           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Elements() <<", et = brick";
+           ofs <<"ZONE T=\""<<region_name<<" mesh\" n="<< gref.Nodes() <<", e= "<< gref.Cells() <<", et = brick";
          ofs <<", f = fepoint"<< endl;
        }
 
@@ -169,7 +169,7 @@ void Tecplot_Interface<dim>
      size_t counter(1);
      for ( nit=pxyz_data_.begin(); nit!=pxyz_data_.end(); nit++ )
        {
-          for ( auto i=0; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
+          for ( auto i{0U}; i<dim; i++ ) ofs << (*nit).second[i] <<" ";
           if ( dim == 2U ) ofs << 0.0 <<" ";
           // SCALAR
           if ( prop_key.type == SCALAR ) ofs << (*nit).second[3] <<" ";
@@ -213,14 +213,14 @@ void Tecplot_Interface<dim>
                            const char*        file_name,
                            long               timestep )
 {
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
     
-    if ( super_group.E(0)->FE_Type() != LINEAR_TRIANGLE &&
-         super_group.E(0)->FE_Type() != LINEAR_TETRAHEDRON &&
-         super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TRIANGLE &&
-         super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TETRAHEDRON &&
-         super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_QUADRILATERAL &&
-         super_group.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
+    if ( model_domain.E(0)->FE_Type() != LINEAR_TRIANGLE &&
+         model_domain.E(0)->FE_Type() != LINEAR_TETRAHEDRON &&
+         model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TRIANGLE &&
+         model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_TETRAHEDRON &&
+         model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_QUADRILATERAL &&
+         model_domain.E(0)->FE_Type() != ISOPARAMETRIC_LINEAR_HEXAHEDRON ) {
         cout << "\nTecplot_Interface<dim>::OutputDataToTecplotFile: This element type cannot be visualized. Nothing is done..." << endl;
         return;
     }
@@ -228,7 +228,7 @@ void Tecplot_Interface<dim>
     // 0. creating list of element ID's of associated Region
     // --------------------------------------------------------------------
     vector<size_t>     elmt_ids;
-    gref.MemberElementIndexes( elmt_ids );
+    gref.MemberCellIndexes( elmt_ids );
     
     // 1. getting new node mapping and updating storage if geometry has changed
     // ------------------------------------------------------------------------
@@ -262,7 +262,7 @@ void Tecplot_Interface<dim>
     ofs <<"VARIABLES = \"x\", \"y\", \"z\"" << endl;
     
     ofs << "ZONE T = \""<<region_name<<"\", ";
-    ofs << "N = " << gref.Nodes() << ", E = " << gref.Elements() << ", ";
+    ofs << "N = " << gref.Nodes() << ", E = " << gref.Cells() << ", ";
     ofs << "DATAPACKING = POINT, ";
     if ( gref.E(0)->FE_Type() == LINEAR_TRIANGLE || gref.E(0)->FE_Type() == ISOPARAMETRIC_LINEAR_TRIANGLE )
         ofs << "ZONETYPE = FETRIANGLE,";
@@ -287,7 +287,7 @@ void Tecplot_Interface<dim>
     typename map<size_t,vector<double> >::const_iterator  nitEnd = pxyz_data_.end();
     for ( nit=pxyz_data_.begin(); nit != nitEnd; nit++ )
     {
-        for ( auto i=0; i < 3U; i++ ){
+        for ( auto i{0U}; i < 3U; i++ ){
             ofs << (*nit).second[i];
         if( i != 2U )
             ofs <<" ";
@@ -354,11 +354,11 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
     plist.erase( plist.begin(), plist.end() );
     node_nums.erase( node_nums.begin(), node_nums.end() );
     
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
 
     // 1. creating unique node number list, and plist by looping over the selected elements
     // ------------------------------------------------------------------------------------
-    super_group.UpdateMemberIndexes();
+    model_domain.UpdateMemberIndexes();
     size_t  nodes(0U);
     
     for ( typename vector<size_t>::const_iterator
@@ -366,18 +366,18 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
       {
          const size_t eid( *lit );
          // getting node ids and renumbering them 0...n-1
-         for ( auto i{0}; i<super_group.E( eid )->Nodes(); i++ ) {
+         for ( auto i{0U}; i<model_domain.E( eid )->Nodes(); i++ ) {
               pair<typename map<size_t,size_t>::iterator,bool>
-                node_it = node_nums.insert( make_pair( super_group.E( eid )->N(i)->Idx(), nodes ) );
+                node_it = node_nums.insert( make_pair( model_domain.E( eid )->N(i)->Idx(), nodes ) );
               if ( node_it.second == true ) nodes++;
            }
          
          // building the plist, minimizing the search by always using the smallest 
          // size of the map possible
-         pentry.resize( super_group.E( eid )->Nodes() );
-         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
+         pentry.resize( model_domain.E( eid )->Nodes() );
+         for ( auto i{0U}; i<model_domain.E( eid )->Nodes(); i++ )
            {
-              auto nit = node_nums.find( super_group.E( eid )->N(i)->Idx() );
+              auto nit = node_nums.find( model_domain.E( eid )->N(i)->Idx() );
               pentry[i] = (*nit).second;
            }
          
@@ -386,8 +386,8 @@ void Tecplot_Interface<dim>::NodeBasedTopology( const Model<dim>& sg,
            pit = plist.insert( make_pair( eid, vector<size_t>() ) );
          assert( pit.second == true );
          // initializing plist vector
-         (*pit.first).second.reserve( super_group.E( eid )->Nodes() );
-         for ( auto i=0; i<super_group.E( eid )->Nodes(); i++ )
+         (*pit.first).second.reserve( model_domain.E( eid )->Nodes() );
+         for ( auto i{0U}; i<model_domain.E( eid )->Nodes(); i++ )
            (*pit.first).second.push_back( pentry[i] );
       }   
      
@@ -409,7 +409,7 @@ void Tecplot_Interface<dim>::PointBasedTopology( const Model<dim>& sg,
     pair<size_t,vector<size_t> >  alpha_help;
     vector<size_t>                alpha_vec(1);
 
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
 
     plist.erase( plist.begin(), plist.end() );
     node_nums.erase( node_nums.begin(), node_nums.end() );
@@ -421,7 +421,7 @@ void Tecplot_Interface<dim>::PointBasedTopology( const Model<dim>& sg,
     {
         const size_t eid( *lit );
         // getting node ids and renumbering them including duplicates 0...elmts * npe's
-        node_nums[ nodes ] = super_group.E( eid )->Idx();
+        node_nums[ nodes ] = model_domain.E( eid )->Idx();
         pentry[0] = nodes++;
         // inserting new element id and single-element vector into plist
         alpha_help.first  = eid;
@@ -441,7 +441,7 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
                                              const map<size_t,vector<size_t> >& plist,
                                              map<size_t,vector<size_t> >& tplist )
  {
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
  
     map<size_t,vector<size_t> >::const_iterator  it;
     // triangle   tetrahedron
@@ -452,7 +452,7 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
    
     for ( it=plist.begin(); it!=plist.end(); it++ )
       {
-         switch ( super_group.E( (*it).first )->Nodes() )
+         switch ( model_domain.E( (*it).first )->Nodes() )
            {
               case 2: // segments (vectors are just copied over)
                    tplist[ (*it).first ] = (*it).second;
@@ -763,8 +763,8 @@ void Tecplot_Interface<dim>::TransformPlist( const Model<dim>&  sg,
                 break;
 
               default:
-                   cout <<"\nElement ID: "<< super_group.E( (*it).first )->Idx();
-                   cout <<" with "<< super_group.E( (*it).first )->Nodes() <<" nodes."<< endl;
+                   cout <<"\nElement ID: "<< model_domain.E( (*it).first )->Idx();
+                   cout <<" with "<< model_domain.E( (*it).first )->Nodes() <<" nodes."<< endl;
                    throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::TransformPlist", 
                                   "Unable to interpret how this element shall be broken in subelements");
            }
@@ -777,7 +777,7 @@ void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
                                      const map<size_t,size_t>& node_nums,
                                      map<size_t,vector<double> >& pxyz_data )
 {
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
 
     pair<typename map<size_t,vector<double> >::iterator,bool>  dit;
     typename map<size_t,size_t>::const_iterator                  nit;
@@ -795,10 +795,10 @@ void Tecplot_Interface<dim>::XyzData( const Model<dim>& sg,
         
         // node coordinates (reserves storage for three coordinates )
         (*dit.first).second.reserve(3);
-        (*dit.first).second.push_back( super_group.N( (*nit).first )->x() );
+        (*dit.first).second.push_back( model_domain.N( (*nit).first )->x() );
         if ( dim == 1 ) (*dit.first).second.push_back( 0.0 );
-        else (*dit.first).second.push_back( super_group.N( (*nit).first )->y() );
-        if ( dim == 3 ) (*dit.first).second.push_back( super_group.N( (*nit).first )->z() );
+        else (*dit.first).second.push_back( model_domain.N( (*nit).first )->y() );
+        if ( dim == 3 ) (*dit.first).second.push_back( model_domain.N( (*nit).first )->z() );
         else            (*dit.first).second.push_back( 0. );
     }
     
@@ -810,7 +810,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
                                       const map<size_t,size_t>& node_nums,
                                       map<size_t,vector<double> >& pxyz_data )
 {
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
 
     if ( prop_key.place != NODE )
         throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::NodeData",
@@ -835,22 +835,22 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
         
             // node coordinates (reserves storage for three coordinates and a scalar data value)
         (*dit.first).second.reserve(4);
-        (*dit.first).second.push_back( super_group.N( (*nit).first )->x() );
-        (*dit.first).second.push_back( super_group.N( (*nit).first )->y() );
-        if ( dim == 3 ) (*dit.first).second.push_back( super_group.N( (*nit).first )->z() );
+        (*dit.first).second.push_back( model_domain.N( (*nit).first )->x() );
+        (*dit.first).second.push_back( model_domain.N( (*nit).first )->y() );
+        if ( dim == 3 ) (*dit.first).second.push_back( model_domain.N( (*nit).first )->z() );
         else            (*dit.first).second.push_back( 0. );
         
             // data values
         if ( prop_key.type == SCALAR )
             {
-            super_group.N( (*nit).first )->Read( prop_key, sc );
+            model_domain.N( (*nit).first )->Read( prop_key, sc );
             (*dit.first).second.push_back( sc() );
             }
         else if ( prop_key.type == VECTOR )
             {
                 // storage for 3 coordinate values and 3 data values (in 2D 3rd place = 0.0)
             (*dit.first).second.reserve(6);
-            super_group.N( (*nit).first )->Read( prop_key, vc );
+            model_domain.N( (*nit).first )->Read( prop_key, vc );
                 // variables have always 3 components since view screen is 3D
             for ( int j=0; j<2; j++ ) (*dit.first).second.push_back( vc[j] );
             if ( dim == 3 )            (*dit.first).second.push_back( vc[2] );
@@ -860,7 +860,7 @@ void Tecplot_Interface<dim>::NodeData( const Model<dim>& sg,
             {
                 // storage for 3 coordinate values and 9 data values (in 2D 3rd row, column = 0.0)
             (*dit.first).second.reserve(12);
-            super_group.N( (*nit).first )->Read( prop_key, ts );
+            model_domain.N( (*nit).first )->Read( prop_key, ts );
                 // variables have always 3 components since view screen is 3D
             if ( dim == 3 )
                 for ( auto k=0; k<3; k++ )
@@ -888,7 +888,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
                                                const map<size_t,size_t>& node_nums,
                                                map<size_t,vector<double> >& pxyz_data )
  {
-    const Region<dim>&  super_group(sg.Region("Model"));
+    const Region<dim>&  model_domain(sg.Region("Model"));
     
     if ( prop_key.place != ELEMENT )
       throw csmp::Exception( FATAL_ERROR, "Tecplot_Interface<dim>::ElementPointData", 
@@ -914,7 +914,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
          
          // node coordinates (reserves storage for three coordinates and a scalar data value)
          (*dit.first).second.reserve(4);
-         pt = super_group.E( (*nit).second )->BaryCenter();
+         pt = model_domain.E( (*nit).second )->BaryCenter();
          (*dit.first).second.push_back( pt[0] );
          (*dit.first).second.push_back( pt[1] );
          if ( dim == 3 ) (*dit.first).second.push_back( pt[2] );
@@ -932,7 +932,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
       {
          if ( prop_key.type == SCALAR )
            {
-              super_group.E( (*it).first )->Read( prop_key, sc );
+              model_domain.E( (*it).first )->Read( prop_key, sc );
               // looping over the element's node 
               for ( pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
@@ -942,7 +942,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
            }
          else if ( prop_key.type == VECTOR )
            {
-              super_group.E( (*it).first )->Read( prop_key, vc );
+              model_domain.E( (*it).first )->Read( prop_key, vc );
               for ( pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
                    dit2 = pxyz_data.find( (*pit) );
@@ -959,7 +959,7 @@ void Tecplot_Interface<dim>::ElementPointData( const Model<dim>& sg,
            }
          else if ( prop_key.type == TENSOR )
            {
-              super_group.E( (*it).first )->Read( prop_key, ts );
+              model_domain.E( (*it).first )->Read( prop_key, ts );
               for ( pit=(*it).second.begin(); pit!=(*it).second.end(); pit++ )
                 {
                    dit2 = pxyz_data.find( (*pit) );

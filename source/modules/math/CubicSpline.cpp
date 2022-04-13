@@ -1,4 +1,5 @@
 #include "CubicSpline.h"
+#include "CSMP_mathUtilities.h"
 
 #include <cmath>
 
@@ -14,8 +15,10 @@ double CubicSpline::Value( double x ) const
 /// two point derivative about x(x-1% of range,x+1% of range
 double CubicSpline::Derivative( double x ) const
  {
+//    return (Value(x+x_range_/100.)-Value(x-x_range_/100.)) / (x_range_/50.);
     return (Value(x+x_range_/100.)-Value(x-x_range_/100.)) / (x_range_/50.);
- } 
+
+ }
  
 
 double CubicSpline::MaxDerivative() const
@@ -174,7 +177,7 @@ void  CubicSpline::Initialize( const std::vector<double>& xa, const std::vector<
 void CubicSpline::Out() const
  {
     cout <<"\nCubicSpline: internal data: ";
-    cout <<"\n x, f(x) and f'(x) at "<< xa_.size() <<" user defined points.";
+    cout <<"\n x, f(x) and f''(x) at "<< xa_.size() <<" user defined points.";
     vector<double>::const_iterator  it1(ya_.begin());
     vector<double>::const_iterator  it2(y2a_.begin());
     
@@ -187,10 +190,10 @@ void CubicSpline::Out() const
 
 
 
-/// creates cubic spline from input points
+/// creates cubic spline second derivative from input points and values (called only once when the spline is contructed)
 void spline( const std::vector<double>& x, // x values    (0..n-1) 
              const std::vector<double>& y, // f(x) values (0..n-1)
-             double yp1, double ypn,    // slope at beginning and end
+             double yp1, double ypn,       // slope at beginning and end
 	           std::vector<double>& y2 )     // f''(x) at above points
 {
   assert( x.size() == y.size() );
@@ -237,9 +240,9 @@ void spline( const std::vector<double>& x, // x values    (0..n-1)
 
 /// spline based interpolation, NumRecipes Chapter 3, p.118 modified
 double splint( const vector<double>& xa, 
-                  const vector<double>& ya, 
-                  const vector<double>& y2a, 
-                  double x )
+               const vector<double>& ya,
+               const vector<double>& y2a,
+               double x )
 {
   assert( xa.size() >= 3U );
 

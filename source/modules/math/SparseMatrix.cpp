@@ -310,7 +310,7 @@ double SparseMatrix::InfinityNorm() const
     double sum(0.0), maxsum(0.0);
 
     // loop over all rows
-    for ( size_t i=0; i<data.size(); i++ ) {
+    for ( size_t i{0U}; i<data.size(); i++ ) {
         sum = 0.;
         // loop over all columns and add up entries
         for ( it = data[i].begin(); it != data[i].end(); it++ ) {
@@ -325,7 +325,7 @@ double SparseMatrix::InfinityNorm() const
 
 bool SparseMatrix::Symmetric() const
  {
-    for ( size_t i=0; i<data.size(); i++ ) 
+    for ( size_t i{0U}; i<data.size(); i++ ) 
       {
           if ( data[i].empty() ) {
                cout <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
@@ -351,7 +351,7 @@ bool SparseMatrix::ZeroesInDiagonal() const
     if ( entries < Rows() ) return true;
     
     map<size_t,double>::const_iterator  ditc;
-    for ( auto i{0}; i<data.size(); i++ )
+    for ( size_t i{0U}; i<data.size(); i++ )
       if ( data[i].empty() ||
           (ditc=data[i].find(i)) == data[i].end() ||
           (*ditc).second == static_cast<double>(0.) ) {
@@ -367,7 +367,7 @@ bool SparseMatrix::ZeroesInDiagonal() const
 bool SparseMatrix::DiagonallyPositive() const
  {
     map<size_t,double>::const_iterator  ditc;
-    for ( size_t i=0; i<data.size(); i++ ) {
+    for ( size_t i{0U}; i<data.size(); i++ ) {
          if ( (ditc=data[i].find(i)) == data[i].end() ) {
                cout <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
                cout <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
@@ -390,9 +390,9 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
     fname +=".txt";
     ofstream  ofs(fname.c_str());
 
-     for ( auto i{0}; i<Rows(); i++ )
+     for ( size_t i{0U}; i<Rows(); i++ )
        {
-          for ( size_t j=0U; j<Cols(); j++ )
+          for ( size_t j{0U}; j<Cols(); j++ )
             if ( At(i,j) != 0. ) ofs << 1 <<" ";
             else                 ofs << 0 <<" ";
           ofs << endl;
@@ -412,8 +412,8 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
 template<class cspMat1, class cspMat2>
 void SparseMatrix::Assign( const cspMat1& idx, const cspMat2& d )
  {
-    for ( auto i{0}; i<idx.Rows(); ++i )
-      for ( size_t j=0U; j<idx.Cols(); ++j )
+    for ( size_t i{0U}; i<idx.Rows(); ++i )
+      for ( size_t j{0U}; j<idx.Cols(); ++j )
         Add( static_cast<uint32_t>(idx(i,j)), static_cast<uint32_t>(idx(i,j)), d(i,j) );
 
  } // end Assign
@@ -775,8 +775,8 @@ void SparseMatrix::In( const char* file_name_without_extension )
       ifs >> msize;
       Resize( msize );
       
-      for ( auto i{0}; i<msize; i++ )
-        for ( size_t j=0U; j<msize; j++ ) {
+      for ( size_t i{0U}; i<msize; i++ )
+        for ( size_t j{0U}; j<msize; j++ ) {
                ifs >> fdata;
                if ( fdata != 0. ) Add( i, j, fdata );
            }
@@ -804,7 +804,7 @@ void SparseMatrix::Out( long digits ) const
     if ( digits != 0 ) cout.setf(ios::scientific);
 
     // for all rows
-    for ( auto i{0}; i<data.size(); i++ )
+    for ( size_t i{0U}; i<data.size(); i++ )
       // for all column entries
       for ( map<size_t,double>::const_iterator
             ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
@@ -852,7 +852,7 @@ void SparseMatrix::Out( const char* file ) const
         prec = ofs.precision(digits);
      }
 
-    for ( size_t i=0; i<data.size(); i++ )
+    for ( size_t i{0U}; i<data.size(); i++ )
       for ( map<size_t,double>::const_iterator
             ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
          ofs <<"("<< i <<","<< (*ditc).first;

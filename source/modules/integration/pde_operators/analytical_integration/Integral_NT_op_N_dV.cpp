@@ -61,8 +61,8 @@ void Integral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
          e.IntegralNN( INN );
          fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
          // the matrix is contracted into a vector
-         for ( auto i=0; i<e.Nodes(); i++ ) 
-           for ( auto j=0; j<e.Nodes(); j++ ) 
+         for ( auto i{0U}; i<e.Nodes(); i++ ) 
+           for ( auto j{0U}; j<e.Nodes(); j++ ) 
              MathOperatorRHS<dim>::RHS[i] += INN(i,j) * sc();
       }
     // lumped formulation  

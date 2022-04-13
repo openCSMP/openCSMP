@@ -130,9 +130,11 @@ void TimeSteppingApproaches_Example::Run()
    // ------------------------------------------------------------------------------------
    PDE_Integrator<DIM,Region>  CrankNicholson1_pf;
    #ifdef CSMP_WITH_SAMG_SOLVER
-   CrankNicholson1_pf.SetSolver(new SAMG_Solver());
+   SAMG_Solver solver;
+   CrankNicholson1_pf.SetSolver( solver );
    #else
-   CrankNicholson1_pf.SetSolver(new CSMP_DEFAULT_LINEAR_SOLVER());
+   CSMP_DEFAULT_LINEAR_SOLVER solver;
+   CrankNicholson1_pf.SetSolver( solver );
    #endif
 
    // conductance matrix dt/2 * [K] at pressure t+dt
@@ -191,10 +193,10 @@ void TimeSteppingApproaches_Example::Run()
    PDE_Integrator<DIM,Region>  CrankNicholson2_pf;
 #ifdef CSMP_WITH_SAMG_SOLVER
    SAMG_Solver  samg_solver;
-   CrankNicholson2_pf.SetSolver(&samg_solver);
+   CrankNicholson2_pf.SetSolver(samg_solver);
 #else
    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-   CrankNicholson2_pf.SetSolver(&linear_solver);
+   CrankNicholson2_pf.SetSolver(linear_solver);
 #endif
 
    // conductance matrix dt/2 * [K] at pressure t+dt
@@ -254,9 +256,9 @@ void TimeSteppingApproaches_Example::Run()
    // ------------------------------------------------------------------------------------
    PDE_Integrator<DIM,Region>  BackwardEuler_pf;
    #ifdef CSMP_WITH_SAMG_SOLVER
-   BackwardEuler_pf.SetSolver(new SAMG_Solver());
+   BackwardEuler_pf.SetSolver( solver );
    #else
-   BackwardEuler_pf.SetSolver(new CSMP_DEFAULT_LINEAR_SOLVER());
+   BackwardEuler_pf.SetSolver( solver );
    #endif
 
    // conductance matrix dt * [K] at pressure t+dt

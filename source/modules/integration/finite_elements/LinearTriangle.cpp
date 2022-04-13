@@ -279,7 +279,7 @@ double  LinearTriangle::AspectRatio()
    // order segment
    set<double> segms;
 
-   for ( uint32_t i=0; i<spe; i++ ) segms.insert( vec[i] );
+   for ( uint32_t i{0U}; i<spe; i++ ) segms.insert( vec[i] );
 
    double segm1 = (*segms.begin()), 
             segm2 = (*segms.rbegin());
@@ -296,7 +296,7 @@ double  LinearTriangle::InnerRadius()
    double         sum(0.0), vol;
 
    EdgeLengths( segms );
-   for ( uint32_t i=0; i<segms.size(); i++ ) sum += segms[i];
+   for ( uint32_t i{0U}; i<segms.size(); i++ ) sum += segms[i];
    sum /= 2.0;
    vol  = Volume();
    vol /= sum;
@@ -328,7 +328,7 @@ void LinearTriangle::N( vector<double>& N, const vector<double>& xyz )
 
    // summing the interpolation functions to get their value at (x,y)   
    N.resize(npe);
-   for ( uint32_t i=0; i<npe; i++ )
+   for ( uint32_t i{0U}; i<npe; i++ )
      N[i] = ae2 * (a[i] + b[i] * xyz[0] + c[i] * xyz[1]);
      
 } // end N
@@ -354,7 +354,7 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes
  {
      if ( bnodes.size() < 2 ) {
            cerr <<"\n\tnodes at boundary: ";
-           for ( uint32_t j=0; j<bnodes.size(); j++ ) cerr << bnodes[j] <<" ";
+           for ( uint32_t j{0U}; j<bnodes.size(); j++ ) cerr << bnodes[j] <<" ";
            cerr << endl;
            throw csmp::Exception( ERROR, "LinearTriangle::ConsecutiveNodesAtBoundary",
                                       "Two nodes should be located at a boundary ! -",
@@ -456,10 +456,10 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
           // x, y
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           // z
           ofs << 0.0 <<" ";
           ofs << endl;
@@ -490,7 +490,7 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x6
-           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -499,8 +499,8 @@ void LinearTriangle::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 6
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                // the missing 3rd dimension
                ofs << 0.0 <<"  ";
                ofs << endl;

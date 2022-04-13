@@ -47,7 +47,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
                                      size_t        psize )
- : super_group(sg),
+ : model_domain(sg),
    group(sg.Region("Model")),
    group_name("Model"),
    flag_output(ANY),
@@ -95,7 +95,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
                                      size_t        psize )
- : super_group(sg),
+ : model_domain(sg),
    group(sg.Region(group)),
    group_name(group),
    flag_output(ANY),
@@ -137,7 +137,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
 */
 template<uint32_t dim>
 PropertyHandle<dim>::PropertyHandle( const PropertyHandle<dim>& op )
- : super_group(op.super_group),
+ : model_domain(op.model_domain),
    group_name(op.group_name),
    group(op.group),
    var_name(op.var_name),
@@ -162,7 +162,7 @@ template<uint32_t dim>
 PropertyHandle<dim>::~PropertyHandle()
  {
     if ( new_variable_created ) 
-      super_group.DeleteProperty( var_name.c_str() );
+      model_domain.DeleteProperty( var_name.c_str() );
     
  } // end destructor
 
@@ -257,8 +257,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
     
        VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
        TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-       csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
-       csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+       csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
+       csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
     
        // these combinations of properties are not possible   
        if ( key.place != opkey.place )
@@ -274,13 +274,13 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                            (*nit)->Store( key, makeScalar( flag_output, (*nit)->Read( opkey )) );
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
 	                            if ( (*eit)->Status( i, key ) == flag_output ) 
 	                              (*eit)->Store( i, key, makeScalar( flag_output, (*eit)->Read( i, opkey )) );
 	                     break;
 	                   case ELEMENT:        
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
 	                          if ( (*eit)->Status( key ) == flag_output ) 
 	                            (*eit)->Store( key, makeScalar( flag_output, (*eit)->Read( opkey )) );
 	                      break;
@@ -304,15 +304,15 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                            }
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
 	                          if ( (*eit)->Status( i, key ) == flag_output ) {
 	                               (*eit)->Read( i, opkey, vc );	                          
 	                               (*eit)->Store( i, key, vc );
 	                            }
 	                     break;
 	                   case ELEMENT:        
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
 	                            {
 	                               (*eit)->Read( opkey, vc );	                          
 	                               (*eit)->Store( key, vc );
@@ -340,15 +340,15 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
 	                            }
 	                     break;
 	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-	                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
   	                            {
   	                               (*eit)->Read( i, opkey, ts );	                          
   	                               (*eit)->Store( i, key, ts );
   	                            }
 	                     break;
 	                   case ELEMENT:        
-	                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
 	                            {
 	                               (*eit)->Read( opkey, ts );	                          
 	                               (*eit)->Store( key, ts );
@@ -438,12 +438,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                           (*nit)->Store( key_, sc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, sc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           (*eit)->Store( key_, sc );
                       break;
                    default:
@@ -462,12 +462,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                           (*nit)->Store( key_, vc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, vc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           (*eit)->Store( key_, vc );
                       break;
                    default:
@@ -486,12 +486,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
                           (*nit)->Store( key_, ts );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key_, ts );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           (*eit)->Store( key_, ts );
                       break;
                    default:
@@ -520,7 +520,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
     sc = s;
     vc = s;
     ts = s;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -532,12 +532,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
@@ -553,12 +553,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           (*nit)->Store( key, vc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, vc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           (*eit)->Store( key, vc );
                       break;
                    default:
@@ -574,12 +574,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
                           (*nit)->Store( key, ts );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             (*eit)->Store( i, key, ts );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           (*eit)->Store( key, ts );
                       break;
                    default:
@@ -601,7 +601,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
  {
     ScalarVariable  sc(flag_output,vc.Length());
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -614,12 +614,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                           if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
@@ -634,25 +634,25 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>&
                    case NODE:
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ ) {
                              (*nit)->Read( key, temp );
-                             for ( auto j=0U; j<dim; j++ )
+                             for ( auto j{0U}; j<dim; j++ )
                                if ( (*nit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
                              (*nit)->Store( key, temp );
                           }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ ) {
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
                                (*eit)->Read( i, key, temp );
-                               for ( auto j=0U; j<dim; j++ )
+                               for ( auto j{0U}; j<dim; j++ )
                                  if ( (*eit)->Status(i, key, j ) == flag_output ) temp(j) = vc[j];
                                (*eit)->Store( i, key, vc );
                             }
                             
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ ) {
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ ) {
                              (*eit)->Read( key, temp );
-                             for ( auto j=0U; j<dim; j++ )
+                             for ( auto j{0U}; j<dim; j++ )
                                if ( (*eit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
                              (*eit)->Store( key, vc );
                           }
@@ -684,7 +684,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
  {
     ScalarVariable  sc(flag_output,strtod("NAN",NULL));
     sc() = ts.Determinant();
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -697,12 +697,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                           if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
                       break;
                    default:
@@ -723,12 +723,12 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
                           if ( (*nit)->Status( key, 0 ) == flag_output ) (*nit)->Store( key, ts );
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key, 0 ) == flag_output ) (*eit)->Store( i, key, ts );
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key, 0 ) == flag_output ) (*eit)->Store( key, ts );
                       break;
                    default:
@@ -752,7 +752,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>&
 template<uint32_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVariable<dim> >& vc ) 
  {
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != VECTOR ) {
          throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of vectors )", 
@@ -770,7 +770,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
                                              "vector size does not match number of IntegrationPoints" ); 
            break;
          case ELEMENT:
-              if ( group.Elements() != vc.size() )
+              if ( group.Cells() != vc.size() )
                 throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
                                              "vector size does not match number of Elements" ); 
             break;
@@ -781,7 +781,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
   
     FEM_Data<VectorVariable<dim> >  var_data( key.place, vc );
 
-    super_group.InputVariableFrom( super_group.Database().Name(key), var_data );
+    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
       
     return *this; 
 
@@ -792,7 +792,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVa
 template<uint32_t dim>
 PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVariable<dim> >& ts ) 
  {
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     if ( key.type != TENSOR ) {
          throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of tensors )", 
@@ -810,7 +810,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVa
                                              "vector size does not match number of IntegrationPoints" ); 
            break;
          case ELEMENT:
-              if ( group.Elements() != ts.size() )
+              if ( group.Cells() != ts.size() )
                 throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
                                              "vector size does not match number of Elements" ); 
             break;
@@ -821,7 +821,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVa
   
     FEM_Data<TensorVariable<dim> >  var_data( key.place, ts );
 
-    super_group.InputVariableFrom( super_group.Database().Name(key), var_data );
+    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
       
     return *this; 
 
@@ -867,7 +867,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
     VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t i, j;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -884,7 +884,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -894,7 +894,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -919,7 +919,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -928,7 +928,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                               }
                      break;
                   case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i) += val;
@@ -952,7 +952,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -961,7 +961,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) += val;
@@ -992,7 +992,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
     VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t  i, j;
-    csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1009,7 +1009,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -1019,7 +1019,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -1044,7 +1044,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -1053,7 +1053,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i) -= val;
@@ -1077,7 +1077,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -1086,7 +1086,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) -= val;
@@ -1120,7 +1120,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
     VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
     uint32_t  i, j;
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1137,7 +1137,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -1147,7 +1147,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -1172,7 +1172,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -1181,7 +1181,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i) *= val;
@@ -1205,7 +1205,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -1214,7 +1214,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) *= val;
@@ -1245,7 +1245,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
     TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());   
     uint32_t  i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -1262,7 +1262,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -1272,7 +1272,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -1297,7 +1297,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -1306,7 +1306,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i) /= val;
@@ -1330,7 +1330,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -1339,7 +1339,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) /= val;
@@ -1404,8 +1404,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator+=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key   = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
  
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -1433,8 +1433,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key,    sc1 );
                                  (*eit)->Read( i, opkey, sc2 );
@@ -1443,7 +1443,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key,    sc1 );
                                (*eit)->Read( opkey, sc2 );
@@ -1469,8 +1469,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1479,7 +1479,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc1 );
                                (*eit)->Read( opkey, vc2 );
@@ -1505,8 +1505,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -1515,7 +1515,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts1 );
                                (*eit)->Read( opkey, ts2 );
@@ -1535,44 +1535,44 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
 
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempIPVariable;
     }
     else if (key.place == FACET_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempFIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToFacetIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempFIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToFacetIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) += tempFIPVariable;
     }
     else
@@ -1596,8 +1596,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator-=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -1625,8 +1625,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -1636,7 +1636,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key,    sc1 );
@@ -1663,8 +1663,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1673,7 +1673,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc1 );
                                (*eit)->Read( opkey, vc2 );
@@ -1699,8 +1699,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -1709,7 +1709,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts1 );
                                (*eit)->Read( opkey, ts2 );
@@ -1728,38 +1728,38 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) -= tempIPVariable;
     }
     else
@@ -1783,8 +1783,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator*=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     ScalarVariable                     sc1, sc2;
     VectorVariable<dim>                     vc1, vc2;
@@ -1807,8 +1807,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -1820,7 +1820,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                    case ELEMENT:  
                      if( key.type == opkey.type )
                      {
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key,    sc1 );
@@ -1831,7 +1831,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                      }
                      else if( key.type == VECTOR && opkey.type == SCALAR )
                      {
-                       for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ ) // no flag manipulations for props of diff type
+                       for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ ) // no flag manipulations for props of diff type
                          {
                            (*eit)->Read( key,    vc1 );
                            (*eit)->Read( opkey,  sc1 );
@@ -1860,8 +1860,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -1870,7 +1870,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc1 );
                                (*eit)->Read( opkey, vc2 );
@@ -1896,8 +1896,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -1906,7 +1906,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts1 );
                                (*eit)->Read( opkey, ts2 );
@@ -1925,39 +1925,39 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-       PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), opkey.type, key.place );
-       group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
+       PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), opkey.type, key.place );
+       group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
        (*this) *= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT) // P. Lang EDIT
     {
         string opVarName(  op.VariableName() );
-        PropertyHandle<dim> tempNodeVariable( super_group, (opVarName + "_temp").c_str(), opkey.type, key.place );
-        group.ExtrapolateElementToNodeProperty( op.VariableName(), (opVarName + "_temp").c_str() );
+        PropertyHandle<dim> tempNodeVariable( model_domain, (opVarName + "_temp").c_str(), opkey.type, key.place );
+        group.ExtrapolateCellToNodeProperty( op.VariableName(), (opVarName + "_temp").c_str() );
         (*this) *= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT) /// @todo (1-F) key.type, key.place should be opkey.type, key.place
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) *= tempIPVariable;
     }
     else
@@ -1981,8 +1981,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
       throw Exception( ERROR, "PropertyHandle<dim>::operator/=(PropertyHandle)",
                       VariableName(), "Property handles are associated with different model subdomains" );
 
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = super_group.Database().StorageKey( op.VariableName() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
 
     if ( key.type  != opkey.type ) {
          throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
@@ -2011,8 +2011,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,    sc1 );
@@ -2022,7 +2022,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key,    sc1 );
@@ -2049,8 +2049,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc1 );
                                  (*eit)->Read( i, opkey, vc2 );
@@ -2059,7 +2059,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc1 );
                                (*eit)->Read( opkey, vc2 );
@@ -2085,8 +2085,8 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts1 );
                                  (*eit)->Read( i, opkey, ts2 );
@@ -2095,7 +2095,7 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts1 );
                                (*eit)->Read( opkey, ts2 );
@@ -2114,38 +2114,38 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>
        }
     else if (key.place == ELEMENT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToElementProperty(op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempElementVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempNodeVariable;
     }
     else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempNodeVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempNodeVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
         group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempIPVariable;
     }
     else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
     {
-        PropertyHandle<dim> tempElementVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToElementProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempElementVariable;
     }
     else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
     {
-        PropertyHandle<dim> tempIPVariable( super_group, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateElementToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
+        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
+        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
         (*this) /= tempIPVariable;
     }
     else
@@ -2186,7 +2186,7 @@ void  PropertyHandle<dim>::Squared()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2203,8 +2203,8 @@ void  PropertyHandle<dim>::Squared()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
@@ -2213,7 +2213,7 @@ void  PropertyHandle<dim>::Squared()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2238,8 +2238,8 @@ void  PropertyHandle<dim>::Squared()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
                                  vc *= vc;
@@ -2247,7 +2247,7 @@ void  PropertyHandle<dim>::Squared()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                vc *= vc;
@@ -2271,8 +2271,8 @@ void  PropertyHandle<dim>::Squared()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
                                  ts *= ts;
@@ -2280,7 +2280,7 @@ void  PropertyHandle<dim>::Squared()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                ts *= ts;
@@ -2315,7 +2315,7 @@ void  PropertyHandle<dim>::Sqrt()
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2332,7 +2332,7 @@ void  PropertyHandle<dim>::Sqrt()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -2342,7 +2342,7 @@ void  PropertyHandle<dim>::Sqrt()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2367,7 +2367,7 @@ void  PropertyHandle<dim>::Sqrt()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -2376,7 +2376,7 @@ void  PropertyHandle<dim>::Sqrt()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output )
                             {
                                (*eit)->Read( key, vc );
@@ -2403,7 +2403,7 @@ void  PropertyHandle<dim>::Sqrt()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -2414,7 +2414,7 @@ void  PropertyHandle<dim>::Sqrt()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -2457,7 +2457,7 @@ void  PropertyHandle<dim>::Ln()
     TensorVariable<dim>                      ts;
     uint32_t  i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2474,7 +2474,7 @@ void  PropertyHandle<dim>::Ln()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
@@ -2484,7 +2484,7 @@ void  PropertyHandle<dim>::Ln()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2510,7 +2510,7 @@ void  PropertyHandle<dim>::Ln()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
@@ -2520,7 +2520,7 @@ void  PropertyHandle<dim>::Ln()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ )
@@ -2547,7 +2547,7 @@ void  PropertyHandle<dim>::Ln()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, ts );
@@ -2558,7 +2558,7 @@ void  PropertyHandle<dim>::Ln()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -2598,7 +2598,7 @@ void  PropertyHandle<dim>::Log10()
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2615,8 +2615,8 @@ void  PropertyHandle<dim>::Log10()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                             if ( (*eit)->Status( i, key ) == flag_output ) 
                               {
                                  (*eit)->Read( i, key,  sc );
@@ -2625,7 +2625,7 @@ void  PropertyHandle<dim>::Log10()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2645,26 +2645,26 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
                            {
                                (*nit)->Read( key, vc );
-                               for ( auto i=0; i<dim; i++ )
+                               for ( auto i{0U}; i<dim; i++ )
                                  if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
                                (*nit)->Store( key, vc );
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
-                          for ( auto i{0}; i<(*eit)->IntegrationPoints(); i++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
+                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                               {
                                  (*eit)->Read( i, key, vc );
-                                 for ( auto j=0; j<dim; j++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( vc(j) > 0.0 ) vc(j)=log10( vc(j) );
                                  (*eit)->Store( i, key, vc );
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
-                               for ( auto i=0; i<dim; i++ )
+                               for ( auto i{0U}; i<dim; i++ )
                                  if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
                                (*eit)->Store( key, vc );
                            }
@@ -2681,29 +2681,29 @@ void  PropertyHandle<dim>::Log10()
                         for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
                            {
                                (*nit)->Read( key, ts );
-                               for ( auto i=0; i<dim; i++ )
-                                 for ( auto j=0; j<dim; j++ )
+                               for ( auto i{0U}; i<dim; i++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                (*nit)->Store( key, ts );
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
-                                 for ( auto i=0; i<dim; i++ )
-                                   for ( auto j=0; j<dim; j++ )
+                                 for ( auto i{0U}; i<dim; i++ )
+                                   for ( auto j{0U}; j<dim; j++ )
                                      if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                  (*eit)->Store( ip, key, ts );
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
-                               for ( auto i=0; i<dim; i++ )
-                                 for ( auto j=0; j<dim; j++ )
+                               for ( auto i{0U}; i<dim; i++ )
+                                 for ( auto j{0U}; j<dim; j++ )
                                    if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
                                (*eit)->Store( key, ts );
                             }
@@ -2738,7 +2738,7 @@ void  PropertyHandle<dim>::Exp()
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2755,7 +2755,7 @@ void  PropertyHandle<dim>::Exp()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -2765,7 +2765,7 @@ void  PropertyHandle<dim>::Exp()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2790,7 +2790,7 @@ void  PropertyHandle<dim>::Exp()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -2799,7 +2799,7 @@ void  PropertyHandle<dim>::Exp()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=exp( vc(i) );
@@ -2825,7 +2825,7 @@ void  PropertyHandle<dim>::Exp()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -2836,7 +2836,7 @@ void  PropertyHandle<dim>::Exp()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -2876,7 +2876,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -2893,7 +2893,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -2903,7 +2903,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -2928,7 +2928,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -2937,7 +2937,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=pow( vc(i), raised_to );
@@ -2963,7 +2963,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -2974,7 +2974,7 @@ void  PropertyHandle<dim>::Pow( double raised_to )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3015,7 +3015,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
     TensorVariable<dim>                      ts;
     uint32_t     i, j;
     
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
 
     switch( key.type )
       {
@@ -3032,7 +3032,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3042,7 +3042,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3068,7 +3068,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3078,7 +3078,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) 
@@ -3105,7 +3105,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3116,7 +3116,7 @@ void  PropertyHandle<dim>::ZapNAN( double with )
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3157,7 +3157,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Sin()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
@@ -3188,7 +3188,7 @@ void  PropertyHandle<dim>::Sin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3198,7 +3198,7 @@ void  PropertyHandle<dim>::Sin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3223,7 +3223,7 @@ void  PropertyHandle<dim>::Sin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3232,7 +3232,7 @@ void  PropertyHandle<dim>::Sin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=sin( vc(i) );
@@ -3258,7 +3258,7 @@ void  PropertyHandle<dim>::Sin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3269,7 +3269,7 @@ void  PropertyHandle<dim>::Sin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3310,7 +3310,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Cos()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3339,7 +3339,7 @@ void  PropertyHandle<dim>::Cos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3349,7 +3349,7 @@ void  PropertyHandle<dim>::Cos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3374,7 +3374,7 @@ void  PropertyHandle<dim>::Cos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3383,7 +3383,7 @@ void  PropertyHandle<dim>::Cos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=cos( vc(i) );
@@ -3409,7 +3409,7 @@ void  PropertyHandle<dim>::Cos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3420,7 +3420,7 @@ void  PropertyHandle<dim>::Cos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3461,7 +3461,7 @@ performed.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Tan()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3490,7 +3490,7 @@ void  PropertyHandle<dim>::Tan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3500,7 +3500,7 @@ void  PropertyHandle<dim>::Tan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3525,7 +3525,7 @@ void  PropertyHandle<dim>::Tan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3534,7 +3534,7 @@ void  PropertyHandle<dim>::Tan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=tan( vc(i) );
@@ -3560,7 +3560,7 @@ void  PropertyHandle<dim>::Tan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3571,7 +3571,7 @@ void  PropertyHandle<dim>::Tan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3609,7 +3609,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Acos()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3638,7 +3638,7 @@ void  PropertyHandle<dim>::Acos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3648,7 +3648,7 @@ void  PropertyHandle<dim>::Acos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3673,7 +3673,7 @@ void  PropertyHandle<dim>::Acos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3682,7 +3682,7 @@ void  PropertyHandle<dim>::Acos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=acos( vc(i) );
@@ -3708,7 +3708,7 @@ void  PropertyHandle<dim>::Acos()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3719,7 +3719,7 @@ void  PropertyHandle<dim>::Acos()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3757,7 +3757,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Asin()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3786,7 +3786,7 @@ void  PropertyHandle<dim>::Asin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3796,7 +3796,7 @@ void  PropertyHandle<dim>::Asin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3821,7 +3821,7 @@ void  PropertyHandle<dim>::Asin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for (auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for (auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3830,7 +3830,7 @@ void  PropertyHandle<dim>::Asin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=asin( vc(i) );
@@ -3856,7 +3856,7 @@ void  PropertyHandle<dim>::Asin()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -3867,7 +3867,7 @@ void  PropertyHandle<dim>::Asin()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -3906,7 +3906,7 @@ If the physical variable component value is not within a range between
 template<uint32_t dim>
 void  PropertyHandle<dim>::Atan()
  {
-    const csmp::Index  key = super_group.Database().StorageKey( var_name.c_str() );
+    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
     ScalarVariable                          sc;
     VectorVariable<dim>                      vc;
     TensorVariable<dim>                      ts;
@@ -3935,7 +3935,7 @@ void  PropertyHandle<dim>::Atan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                             if ( (*eit)->Status( ip, key ) == flag_output )
                               {
@@ -3945,7 +3945,7 @@ void  PropertyHandle<dim>::Atan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           if ( (*eit)->Status( key ) == flag_output ) 
                             {
                                (*eit)->Read( key, sc );
@@ -3970,7 +3970,7 @@ void  PropertyHandle<dim>::Atan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, vc );
@@ -3979,7 +3979,7 @@ void  PropertyHandle<dim>::Atan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, vc );
                                for ( i=0; i<dim; i++ ) vc(i)=atan( vc(i) );
@@ -4005,7 +4005,7 @@ void  PropertyHandle<dim>::Atan()
                             }
                      break;
                    case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                           for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
                               {
                                  (*eit)->Read( ip, key, ts );
@@ -4016,7 +4016,7 @@ void  PropertyHandle<dim>::Atan()
                               }
                      break;
                    case ELEMENT:        
-                        for ( auto eit=group.ElementsBegin(); eit!=group.ElementsEnd(); eit++ )
+                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
                             {
                                (*eit)->Read( key, ts );
                                for ( i=0; i<dim; i++ )
@@ -4057,7 +4057,7 @@ Range() calls the MinMaxOf() interface of the Model.
 template<uint32_t dim>
 void  PropertyHandle<dim>::Range( double& omin, double& omax ) const
  {
-    super_group.MinMaxOf( var_name.c_str(), omin, omax );
+    model_domain.MinMaxOf( var_name.c_str(), omin, omax );
  }
 
 
@@ -4097,7 +4097,7 @@ bool  PropertyHandle<dim>::IsWithinRange() const
       }
     double  omin, omax, pmin, pmax;
     group.MinMaxOf( var_name.c_str(), omin, omax );
-    super_group.Database().RangeOf(  var_name.c_str(), pmin, pmax );
+    model_domain.Database().RangeOf(  var_name.c_str(), pmin, pmax );
     if ( omin >= pmin && omax <= pmax ) return true;
 
     return false;

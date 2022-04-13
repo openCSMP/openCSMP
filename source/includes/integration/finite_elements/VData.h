@@ -98,6 +98,9 @@ class VData {
     
     /// compares 'pelmt', 'plist', 'pvferts' and 'pbflags' among the VData; specific mismatches are reported to std::cerr
     bool   operator==( const VData& ) const;
+    
+    /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
+    int SpatialDimension() const;
 
     /// returns number of nodes in the mesh
     size_t Vertices() const;
@@ -285,10 +288,10 @@ class VData {
     // PERSISTANCE (storing mesh in binary file)
     
     /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
-    
-    /// checks for collocated vertices into transfer data structure
-    bool ExtractNodeManifolds( vertexManifoldIndices& ) const;
+    typedef std::map<size_t,std::set<std::pair<size_t,INTERFACE_SIDE> > > vertexManifoldIndices;
+
+    /// checks for collocated vertices and collects them into transfer data structure; returns number of manifolds found
+    size_t ExtractNodeManifolds( vertexManifoldIndices& ) const;
   
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );

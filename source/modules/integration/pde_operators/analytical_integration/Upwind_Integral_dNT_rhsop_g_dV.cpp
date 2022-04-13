@@ -16,11 +16,11 @@ instance be the hydraulic conductivity.
 */
 template<uint32_t dim,class CELL>
 Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>::Upwind_Integral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& pref,
-                                                                       const char* oper,
-                                                                       const char* test,
-                                                                       const char* upwind,
-                                                                       const char* trigger,
-                                                                       const double prefactor)
+                                                                         const char* oper,
+                                                                         const char* test,
+                                                                         const char* upwind,
+                                                                         const char* trigger,
+                                                                         const double prefactor)
   : MathOperatorRHS<dim>(pref,oper,test),
     DN(3,3),
     DNT(3,3),
@@ -111,7 +111,7 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>::ComputeContribution( const CELL& 
       
        // calculate upwinding coefficients and multiply them with operand matrix   
       for ( auto i{0}; i <e.Nodes(); ++i) {
-          for ( auto j=0U; j <e.Nodes(); ++j ) {;
+          for ( auto j{0U}; j <e.Nodes(); ++j ) {;
               if (i != j) {
                   const double decision = DNT(i, j)*(trigger_var_[j]() - trigger_var_[i]());
                   if      (decision > 0) DNT(i, j) *= upwind_var_[i]();

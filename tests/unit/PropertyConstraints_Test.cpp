@@ -57,7 +57,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
      const bool    using_isoparametric_elements{true};
      ModelTopology topology( "FracBox", using_isoparametric_elements );
      VSet<3U>      vset;
-     test_Create_FracBox( vset, topology );
+     test_Create_FracBox( topology, vset );
 
      const bool create_boundaries_from_faces{true}, box_shaped{false};
      Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", false );
@@ -79,7 +79,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
      
      model.FormRegionFrom( "medium porosity", porosity_constraints );
      const Region<3U>& medium_porosity_domain = model.Region("medium porosity");
-     _test( medium_porosity_domain.Elements() == 100 );
+     _test( medium_porosity_domain.Cells() == 100 );
 
      return true;
  }
@@ -101,8 +101,8 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
     
     auto& gref = model.Region("Model");
     
-    auto eend = gref.ElementsEnd();
-    for (auto eit = gref.ElementsBegin(); eit != eend; ++eit) {
+    auto eend = gref.CellsEnd();
+    for (auto eit = gref.CellsBegin(); eit != eend; ++eit) {
       if (!(*eit)->IsVolumeElement()) {
         continue;
       }

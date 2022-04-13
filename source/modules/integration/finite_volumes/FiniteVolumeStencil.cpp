@@ -150,10 +150,10 @@ void FiniteVolumeStencil<dim>::Resize(  uint32_t n_isrf,
     facet_types.resize( n_isrf );
     edges_of_element.resize(n_isrf);
 
-    for ( uint32_t i=0; i<n_ivol; i++ )
+    for ( uint32_t i{0U}; i<n_ivol; i++ )
       facets_surrounding_node[i].resize( srfs_per_node );
     
-    for ( uint32_t i=0; i<n_isrf; i++ ) {
+    for ( uint32_t i{0U}; i<n_isrf; i++ ) {
          facet_integration_points[i].resize( n_spts );
          facet_projection_weights[i].resize( n_spts );
          facet_integration_weights[i].resize( n_spts );
@@ -164,7 +164,7 @@ void FiniteVolumeStencil<dim>::Resize(  uint32_t n_isrf,
     sector_integration_weights.resize( n_ivol );
     //par_sector_integration_points.resize( n_ivol );
 
-    for ( uint32_t i=0; i<n_ivol; i++ ) {
+    for ( uint32_t i{0U}; i<n_ivol; i++ ) {
          sector_integration_points[i].resize( n_vpts );
          //par_sector_integration_points[i].resize( n_vpts );
            //par_sector_integration_points[i][j].resize(pdim);
@@ -622,7 +622,7 @@ FiniteVolumeStencil<dim>::FacetNormalTransformationNodeWeights( uint32_t iFacet,
 
 
 template<uint32_t dim>
-const Point<dim>& FiniteVolumeStencil<dim>::FacetEdgeMidPoint(uint32_t iFacet ) const
+const Point<dim>& FiniteVolumeStencil<dim>::FacetEdgeMidPoint( uint32_t iFacet ) const
 {
     assert( iFacet < edges_of_element.size() );
 
@@ -1098,60 +1098,63 @@ template<uint32_t dim>
 void FiniteVolumeStencil<dim>::Out() const
 {
    cout<<"\nFiniteVolumeStencil<dim>::Out: \nVolume Weights: ";
-   for(uint32_t i=0; i<sector_integration_weights.size(); i++)
-      for(uint32_t j=0; j<sector_integration_weights[i].size(); j++)
+   for( uint32_t i{0U}; i<sector_integration_weights.size(); i++)
+      for( uint32_t j{0U}; j<sector_integration_weights[i].size(); j++)
         cout<<" "<<sector_integration_weights[i][j];
    
    cout<<endl<<endl<<" Volume IPs: "<<endl;
-   for(uint32_t i=0; i<sector_integration_points.size(); i++) {
-     for(uint32_t j=0; j<sector_integration_points[i].size(); j++) {
-        for(uint32_t k=0; k<dim; k++) cout<<" "<<sector_integration_points[i][j][k];
+   for( uint32_t i{0U}; i<sector_integration_points.size(); i++) {
+     for( uint32_t j{0U}; j<sector_integration_points[i].size(); j++) {
+        for( uint32_t k{0U}; k<dim; k++) cout<<" "<<sector_integration_points[i][j][k];
           cout<<endl;
         }
    }
                 
    cout<<endl<<" Facet Weights: ";
-   for(uint32_t i=0; i<facet_integration_weights.size(); i++) {
-     for(uint32_t j=0; j<facet_integration_weights[i].size(); j++) {
+   for( uint32_t i{0U}; i<facet_integration_weights.size(); i++) {
+     for( uint32_t j{0U}; j<facet_integration_weights[i].size(); j++) {
        cout<<" "<<facet_integration_weights[i][j] ;
       }
    }
    cout<<endl;
    
    cout<<endl<<" Facet IPs: "<<endl;
-   for(uint32_t i=0; i<facet_integration_points.size(); i++) {
-     for(uint32_t j=0; j<facet_integration_points[i].size(); j++) {
-       for(uint32_t k=0; k<dim; k++) cout<<" "<<facet_integration_points[i][j][k];
+   for( uint32_t i{0U}; i<facet_integration_points.size(); i++) {
+     for( uint32_t j{0U}; j<facet_integration_points[i].size(); j++) {
+       for( uint32_t k{0U}; k<dim; k++) cout<<" "<<facet_integration_points[i][j][k];
        cout<<endl;
      }
    }
 
   cout<<endl<<" Facet parametric normals inside the element: "<<endl;
-   for(uint32_t i=0; i<facet_parametric_normals.size(); i++) {
-     for(uint32_t j=0; j<dim; j++) {
+   for( uint32_t i{0U}; i<facet_parametric_normals.size(); i++) {
+     for( uint32_t j{0U}; j<dim; j++) {
        cout<<" "<<facet_parametric_normals[i][j] ;
      }
      cout<<endl;
    }
      
-   cout<<endl<<" Facet physical normals inside the element: "<<endl;
-   for(uint32_t i=0; i<facet_normals.size(); i++) {
-     for(uint32_t j=0; j<dim; j++) {
-       cout<<" "<<facet_normals[i][j] ;
+   if ( !facet_normals.empty() && !facet_normals[0].empty() ) {
+       cout<<endl<<" Facet physical normals inside the element: "<<endl;
+       for( uint32_t i{0U}; i<facet_normals.size(); i++) {
+         if ( !facet_normals[i].empty() )
+           for( uint32_t j{0U}; j<dim; j++) {
+             cout<<" "<<facet_normals[i][j] ;
+         }
+         cout<<endl;
+       }
      }
-     cout<<endl;
-   }
 
     cout<<endl<<" Facet surrounding node in the element: "<<endl;
-    for(uint32_t i=0; i<Sectors(); i++) {
-      for(uint32_t j=0; j<facets_surrounding_node[i].size(); j++) {
+    for( uint32_t i{0U}; i<Sectors(); i++) {
+      for( uint32_t j{0U}; j<facets_surrounding_node[i].size(); j++) {
         cout<<" "<<facets_surrounding_node[i][j] ;
       }
       cout<<endl;
     }
     
     cout<<endl<<" Edges pairs in the element "<<endl;
-    for(uint32_t i=0; i<edges_of_element.size(); i++) {
+    for( uint32_t i{0U}; i<edges_of_element.size(); i++) {
       cout<<" "<< edges_of_element[i].first <<", "<< edges_of_element[i].second <<" ";
     }
   cout << endl << endl; 

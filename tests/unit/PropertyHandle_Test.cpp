@@ -96,19 +96,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         Index  ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 += nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), 5., numeric_limits<double>::epsilon() );
         elementVariable2 += IPVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), 10., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         Index  ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 += nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 9., numeric_limits<double>::epsilon() );
         IPVariable2 += elementVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 10.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
@@ -134,20 +134,20 @@ void PropertyHandle_Test::run()
         elementVariable4  = 0.6;
         nodeVariable3     = 0.4;
         elementVariable4 += nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), 1.0, numeric_limits<double>::epsilon() );
         IPVariable3       = 0.7;
         elementVariable4 += IPVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), 1.7, numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 += nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 12.4, numeric_limits<double>::epsilon() );
         IPVariable4 += elementVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 19.9, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
@@ -169,19 +169,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
         elementVariable6 += nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0), 29., numeric_limits<double>::epsilon() );
         elementVariable6 += IPVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0), 46., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 6" );
         IPVariable6 += nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0), 33., numeric_limits<double>::epsilon() );
         IPVariable6 += elementVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0), 46.5, numeric_limits<double>::epsilon() );
 
         /////////////////////////////////////////////////////////////////////////
@@ -228,19 +228,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 -= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), -1, numeric_limits<double>::epsilon() );
         elementVariable2 -= IPVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), -6., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 -= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 3., numeric_limits<double>::epsilon() );
         IPVariable2 -= elementVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 1.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
@@ -260,19 +260,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 4" );
         elementVariable4 -= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), -1., numeric_limits<double>::epsilon() );
         elementVariable4 -= IPVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), -12., numeric_limits<double>::epsilon() );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 -= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 3., numeric_limits<double>::epsilon() );
         IPVariable4 -= elementVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), -4.5, numeric_limits<double>::epsilon() );
 
         if ( verbose_ ) {
@@ -292,19 +292,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
         elementVariable6 -= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0) , -1., TOLERANCE );
         elementVariable6 -= IPVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0), -18., TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 6" );
         IPVariable6 -= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0), 3., TOLERANCE );
         IPVariable6 -= elementVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0), -10.5, TOLERANCE );
 
         /////////////////////////////////////////////////////////////////////////
@@ -351,19 +351,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 *= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), 6., TOLERANCE );
         elementVariable2 *= IPVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc(), 30., TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 *= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 18., TOLERANCE );
         IPVariable2 *= elementVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 27., TOLERANCE );
 
         if ( verbose_ ) {
@@ -383,19 +383,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 4" );
         elementVariable4 *= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), 72., TOLERANCE );
         elementVariable4 *= IPVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), 792., TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 *= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 108., TOLERANCE );
         IPVariable4 *= elementVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 810., TOLERANCE );
 
         if ( verbose_ ) {
@@ -415,19 +415,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
         elementVariable6 *= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0) , 3*210. , TOLERANCE );
         elementVariable6 *= IPVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0) , 9*3570. , TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 6" );
         IPVariable6 *= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0) , 3*270. , TOLERANCE );
         IPVariable6 *= elementVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0) , 9*3645. , TOLERANCE);
 
 
@@ -475,19 +475,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 2" );
         elementVariable2 /= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc() , 2./3. , TOLERANCE );
         elementVariable2 /= IPVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, sc );
         _equal( sc() , 2./15. , TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 2" );
         IPVariable2 /= nodeVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 2., TOLERANCE );
         IPVariable2 /= elementVariable1;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, sc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, sc );
         _equal( sc(), 4./3., TOLERANCE );
 
         if ( verbose_ ) {
@@ -507,19 +507,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 4" );
         elementVariable4 /= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0), 8./9., TOLERANCE );
         elementVariable4 /= IPVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, vc );
         _equal( vc(0) , 8./99. , TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 4" );
         IPVariable4 /= nodeVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0), 4./3., TOLERANCE );
         IPVariable4 /= elementVariable3;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, vc );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, vc );
         _equal( vc(0) , 8./45., TOLERANCE );
 
         if ( verbose_ ) {
@@ -539,19 +539,19 @@ void PropertyHandle_Test::run()
         // ELEMENT
         ekey   = model->Database().StorageKey( "element variable 6" );
         elementVariable6 /= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0) , 14./15. , TOLERANCE );
         elementVariable6 /= IPVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( ekey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( ekey, ts );
         _equal( ts(0,0) , 14./15./17. , TOLERANCE );
 
         // INTEGRATION POINT
         ipkey   = model->Database().StorageKey( "integration point variable 6" );
         IPVariable6 /= nodeVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0) , 6./5. , TOLERANCE );
         IPVariable6 /= elementVariable5;
-        (*(model->Region( "Model" ).ElementsBegin()))->Read( 0U, ipkey, ts );
+        (*(model->Region( "Model" ).CellsBegin()))->Read( 0U, ipkey, ts );
         _equal( ts(0,0) , 4./45. , TOLERANCE);
 
   }

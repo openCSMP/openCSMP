@@ -153,9 +153,11 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
     #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
     settings.Set_napproach(2);
-    PDE_Integrator<3U,Region> deformation( new SAMG_Solver(&settings) );
+    SAMG_Solver solver(&settings);
+    PDE_Integrator<3U,Region> deformation( solver );
     #else
-    PDE_Integrator<3U,Region> deformation( new CSMP_DEFAULT_LINEAR_SOLVER() );
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<3U,Region> deformation( solver );
     #endif
 
     PT_op<3U,Element<3U> > bforces( model.Database(), "force", "displacement" );

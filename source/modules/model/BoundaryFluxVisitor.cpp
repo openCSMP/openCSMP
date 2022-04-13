@@ -25,9 +25,9 @@ void BoundaryFluxVisitor<dim>::Visit(Boundary<dim>* bd)
 {
   double total_flux(0.);
   VectorVariable<dim> v(PLAIN, 0.), face_unit_normal(PLAIN, 0.);
-  typename vector<Face<dim>*>::const_iterator facesEnd( bd->ElementsEnd() );
+  typename vector<Face<dim>*>::const_iterator facesEnd( bd->CellsEnd() );
 
-  for( typename vector<Face<dim>*>::const_iterator it( bd->ElementsBegin() ); it != facesEnd; ++it )
+  for( typename vector<Face<dim>*>::const_iterator it( bd->CellsBegin() ); it != facesEnd; ++it )
     {
       (*it)->Parent(INSIDE)->Read(property_key_, v);
       (*it)->UnitNormal(face_unit_normal);

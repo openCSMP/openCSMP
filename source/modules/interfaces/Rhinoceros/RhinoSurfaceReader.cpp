@@ -686,7 +686,7 @@ void SKM_RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs 
       {
          ofs <<"TRGL ";
          // again node ids must be augmented by 1 since Gocad counts 1...n
-         for ( size_t i=0; i<3; i++ ) ofs << (*pit).second[i]+1 <<" ";
+         for ( size_t i{0U}; i<3; i++ ) ofs << (*pit).second[i]+1 <<" ";
          ofs << endl;
       } 
 

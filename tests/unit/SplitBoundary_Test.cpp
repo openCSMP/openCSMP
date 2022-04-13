@@ -16,9 +16,9 @@ namespace csmp
 template<uint32_t dim>
 void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
   if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -31,7 +31,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side,
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -56,9 +56,9 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
   size_t null_neighbors( 0 );
   Element<dim>* parentElement( NULL );
 
-  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.ElementsEnd() );
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
   if ( dim == 2 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       if ( (*it)->InterveningElement() != NULL )
         (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
@@ -117,7 +117,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.ElementsBegin(); it != facesEnd; ++it )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
     {
       const size_t nodes( (*it)->Nodes() );
       for ( auto i = 0; i < nodes; ++i )
@@ -189,7 +189,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
   Point<dim> baryCenter;
 
   if ( dim == 2 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );
@@ -203,7 +203,7 @@ void shiftInterfaceTips( Region<dim>& region, double shift )
       }
     }
   else if ( dim == 3 )
-    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterElementsBegin(); it != region.ElementsEnd(); ++it )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
     {
       baryCenter = (*it)->BaryCenter();
       const size_t nodes( (*it)->Nodes() );

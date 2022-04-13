@@ -53,7 +53,7 @@ void ANSYS_SplitBoundaryMatch_Test::run()
      // painting internal boundary elements (they are flagged neither REGION_BOUNDARY nor IRREGULAR
      const double color(0.);
      const csmp::Index evar_key(model.Database().StorageKey("element variable"));
-     for ( auto eit=model_domain.PerimeterElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit )
+     for ( auto eit=model_domain.PerimeterCellsBegin(); eit!=model_domain.CellsEnd(); ++eit )
        (*eit)->Store( evar_key, makeScalar(PLAIN,color) );
 
      // regularising node positions

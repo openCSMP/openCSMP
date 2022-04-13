@@ -2,9 +2,7 @@
 #define CSMP_MATH_OPERATOR_RHS_H
 
 #include "Parameter.h"
-
 #include "DenseMatrix.h"
-
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 #include "TensorVariable.h"
@@ -13,6 +11,7 @@
 
 namespace csmp {
 
+class Parameter;
 template<uint32_t> class Element;
 template<uint32_t> class Face;
 template<uint32_t> class InterFace;
@@ -114,7 +113,7 @@ class MathOperatorRHS {
     bool          LumpedFormulation()           const;
     size_t        ApplicationCycle()            const;
     size_t        ApplicationCycles()           const;
-    double      MultiplyBy()                  const;
+    double        MultiplyBy()                  const;
     bool          MultiplyWithTimeIncrement()   const;
     bool          DivideByTimeIncrement()       const;
 
@@ -125,8 +124,8 @@ class MathOperatorRHS {
     void          SubtractAccumulateLater();
     void          MultiplyAccumulate();
     void          LumpedFormulation ( bool );
-    void          ApplicationCycle  ( size_t        );
-    void          ApplicationCycles ( size_t        );
+    void          ApplicationCycle  ( size_t );
+    void          ApplicationCycles ( size_t );
     void          MultiplyBy( double integral_mult_factor );
     void          MultiplyWithTimeIncrement( bool multiply );
     void          DivideByTimeIncrement( bool divide );
@@ -134,10 +133,10 @@ class MathOperatorRHS {
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const Element<dim>&,
                                               const csmp::Index&,
-                                              size_t ip, DenseMatrix<DM_MIN>& );
+                                              uint32_t ip, DenseMatrix<DM_MIN>& );
     void          PropertyAtIntegrationPoint( const Face<dim>&,
                                               const csmp::Index&,
-                                              size_t ip, DenseMatrix<DM_MIN>& );
+                                              uint32_t ip, DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
     virtual void  GetOperands( const Element<dim>& );
@@ -187,7 +186,7 @@ class MathOperatorRHS {
     std::vector<ArrayVariable >         AR;                  ///< arrays
     std::vector<FlaggedArrayVariable >  FR;                  ///< flagged arrays
 
-    double                            factor_;             ///< constant factor
+    double                              factor_;             ///< constant factor
 
     /// specifies accumulation procedure
     bool        add_accumulate_;

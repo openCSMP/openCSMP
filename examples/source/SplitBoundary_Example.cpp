@@ -15,7 +15,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "PDE_IntegratorExperimental.h"
+#include "PDE_Integrator.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -139,7 +139,7 @@ void printNeigboursOfPerimeterElements( const PropertyDatabase<2>& pbase, const 
      const csmp::Index key(pbase.StorageKey("element number"));
      map<long,const Element<2>* const>  ordered_elmts;
      
-     for ( auto it=domain.PerimeterElementsBegin(); it!=domain.ElementsEnd(); ++it ) {
+     for ( auto it=domain.PerimeterCellsBegin(); it!=domain.CellsEnd(); ++it ) {
            ordered_elmts.insert( make_pair( (*it)->Read(key), (*it) ) );
        }
        

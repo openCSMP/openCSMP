@@ -97,7 +97,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
 #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Settings settings;
       SAMG_Solver   solver( &settings );
-      PDE_Integrator<3U,Region> pde_integrator( &solver );
+      PDE_Integrator<3U,Region> pde_integrator( solver );
       // solver configuration
       settings.SetSolverInstance(1);
       settings.Set_iout1( 0 );
@@ -118,7 +118,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
 //      settings.Set_w_avrge(2);
 #else
       CSMP_DEFAULT_LINEAR_SOLVER  solver;
-      PDE_Integrator<3U,Region>   pde_integrator( &solver );
+      PDE_Integrator<3U,Region>   pde_integrator( solver );
 #endif
 
 #ifdef SAMG_OUTPUT_TO_FILE

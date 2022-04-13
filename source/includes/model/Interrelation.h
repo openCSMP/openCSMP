@@ -3,7 +3,6 @@
 
 #include "CSMP_definitions.h"
 #include "Operand.h"
-#include "MeshManager.h"
 
 namespace csmp {
 

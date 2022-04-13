@@ -123,20 +123,20 @@ void smoothElementData( Model<dim>& model,
            const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), "SI", key.type, key.place, key.dataDepth,
                                                              log10(min_val_database), log10(max_val_database) );
            // taking the decadic logarithm of values
-        for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+        for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it ) {
                  if ( key.type == SCALAR ) {
                       (*it)->Store( log_key, makeScalar( (*it)->Status(key), log10( (*it)->Read(key)) ) );
                    }
                  else if ( key.type == VECTOR ) { 
                        (*it)->Read( key, vc );
-                       for ( auto i{0}; i<dim; ++i )
+                       for ( auto i{0U}; i<dim; ++i )
                          vc(i) = log10( vc[i] );
                        (*it)->Store( log_key, vc );
                    }
                  else if ( key.type == TENSOR ) {
                       (*it)->Read( key, ts );
-                      for ( auto i{0}; i<dim; ++i )
-                        for ( auto j=0U; j<dim; ++j )
+                      for ( auto i{0U}; i<dim; ++i )
+                        for ( auto j{0U}; j<dim; ++j )
                           ts(i,j) = log10( ts(i,j) );
                       (*it)->Store( log_key, ts );
                    }
@@ -158,8 +158,8 @@ void smoothElementData( Model<dim>& model,
                                                              min_val_database, max_val_database );
            // smoothing by extrapolation and interpolation
            for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ ) {
-                model.ExtrapolateElementToNodeProperty( variable_name.c_str(), node_prop_name.c_str() );
-                model.InterpolateNodeToElementProperty( node_prop_name.c_str(), variable_name.c_str() );
+                model.ExtrapolateCellToNodeProperty( variable_name.c_str(), node_prop_name.c_str() );
+                model.InterpolateNodeToCellProperty( node_prop_name.c_str(), variable_name.c_str() );
              }                                                   
            if ( node_prop_created )
              model.DeleteProperty( node_prop_name.c_str() );
@@ -168,11 +168,11 @@ void smoothElementData( Model<dim>& model,
       // 3. in-plane smoothing  of the data in multiple iterations
       // ---------------------------------------------------------
       else {
-          vector<double> smoothed_vals(domain.InteriorElements());
+          vector<double> smoothed_vals(domain.InteriorCells());
           for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ )
             {
               size_t elmt(0U);
-              for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it,  ++elmt )
+              for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it,  ++elmt )
                   {
                     // the new value taken is the volume-weighted mean average of the element neighbors and its own value
                     // current element
@@ -202,7 +202,7 @@ void smoothElementData( Model<dim>& model,
                   }
                 
                 // storing the smoothed values at the end of smoothing cycle
-                for ( auto i{0}; i<domain.InteriorElements(); ++i ) {
+                for ( size_t i{0U}; i<domain.InteriorCells(); ++i ) {
                     if ( smoothed_vals[i] >= min_val_database && smoothed_vals[i] <= max_val_database )
                        domain.E(i)->Store( key, makeScalar( domain.E(i)->Status(key), smoothed_vals[i] ) );
                     else {
@@ -228,20 +228,20 @@ void smoothElementData( Model<dim>& model,
           TensorVariable<dim>  ts;
 
           // taking the decadic logarithm of values
-       for ( auto it=domain.ElementsBegin(); it!=domain.PerimeterElementsBegin(); ++it ) {
+       for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it ) {
                 if ( key.type == SCALAR ) {
                      (*it)->Store( original_key, makeScalar( (*it)->Status(key), pow( 10., (*it)->Read(key)) ) );
                   }
                 else if ( key.type == VECTOR ) { 
                       (*it)->Read( key, vc );
-                      for ( auto i{0}; i<dim; ++i )
+                      for ( auto i{0U}; i<dim; ++i )
                         vc(i) = pow( 10., vc[i] );
                       (*it)->Store( original_key, vc );
                   }
                 else if ( key.type == TENSOR ) {
                      (*it)->Read( key, ts );
-                     for ( auto i{0}; i<dim; ++i )
-                       for ( auto j=0U; j<dim; ++j )
+                     for ( auto i{0U}; i<dim; ++i )
+                       for ( auto j{0U}; j<dim; ++j )
                          ts(i,j) = pow( 10., ts(i,j) );
                      (*it)->Store( original_key, ts );
                   }
@@ -312,7 +312,7 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
      
     const typename vector<csmp::Element<dim>*>::iterator elmts_end(last);
     for ( typename vector<Element<dim>*>::iterator it=first; it!=elmts_end; ++it )
-      for ( auto i{0}; i<(*it)->Nodes(); ++ i ) {
+      for ( auto i{0U}; i<(*it)->Nodes(); ++ i ) {
            assert( (*it)->N(i) != nullptr );
            new_nodes.insert( (*it)->N(i) );
         }
@@ -349,7 +349,7 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
                    //getting nodes of closest uni-initialized element (assumed to be most relevant to original el)
                    std::vector<Node<dim>*> closest_nodes = (*eit)->NodeVector();
                    //Now initializing all new nodes in the new element
-                   for (uint32_t n_new = 0 ; n_new < (*it)->Nodes(); ++n_new){
+                   for ( uint32_t n_new = 0 ; n_new < (*it)->Nodes(); ++n_new){
                      if ( find(new_nodes.begin(), new_nodes.end(), (*it)->N(n_new)) != new_nodes.end() ){
                        //Looking for node with same boundary flag if possible
                        BOX_BOUNDARY new_node_bound = (*it)->N(n_new)->AtBoundary();

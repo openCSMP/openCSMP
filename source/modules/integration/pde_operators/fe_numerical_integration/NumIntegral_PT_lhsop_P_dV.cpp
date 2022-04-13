@@ -67,11 +67,11 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL& e )
          // reading density but using the porosity variable temporarily
          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), phi );
-              for ( auto i=0; i<dim; i++ ) 
+              for ( auto i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim>::MTRL[0](i,i) = phi();
            }
       }
-    else for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    else for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
            MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
                                                                 i, MathOperatorLHS<dim>::MTRL[i] );
 
@@ -90,8 +90,8 @@ void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N,
     mP.Resize(1,nodal_degrees_of_freedom * N.size());
 
     int k(0);
-    for ( auto i=0; i<N.size(); i++ ) 
-      for ( auto j=0; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
+    for ( auto i{0U}; i<N.size(); i++ ) 
+      for ( auto j{0U}; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
 }
 
 
@@ -112,7 +112,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
     vector<double>  N( e.Nodes() );
     double          det( 0.0 );
     
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          e.N_AtIntegrationPoint( i, N );
          det = e.det_JINV_AtIntegrationPoint( i );
@@ -121,7 +121,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
          N_to_P( N, P );
          P.Transposed( PT );
          
-         for ( auto j=0; j<P.Cols(); j++ )
+         for ( auto j{0U}; j<P.Cols(); j++ )
            if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT )   
              P(0,j) *= MathOperatorLHS<dim>::MTRL[0](0,0) * phi();
            else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE )

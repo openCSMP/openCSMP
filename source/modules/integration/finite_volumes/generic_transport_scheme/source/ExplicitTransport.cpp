@@ -83,7 +83,7 @@ size_t ExplicitTransport<dim>::CollectHaloStencils()
          // at the model boundary,  adding those parent elements to the halo
          // which are not contained in the subdomain
          if ( (*nit)->AtBoundary() == NOT )
-           for ( auto i{0}; i<(*nit)->Parents(); ++i )
+           for ( auto i{0U}; i<(*nit)->Parents(); ++i )
              if ( !subdomain_.Contains( (*nit)->Parent(i) ) )
                halo_elmts_.push_back( (*nit)->Parent(i) );
       }
@@ -128,7 +128,7 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
      if ( HasHaloStencils() )
        for ( typename vector<Element<dim>*>::iterator it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const auto nodes((*it)->Nodes());
-            for ( auto i{0}; i<nodes; ++i ) {
+            for ( auto i{0U}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( key_FB, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_out_, makeScalar(ANY,0.) );
@@ -136,8 +136,8 @@ void ExplicitTransport<dim>::VolumetricFlowAndTransportVariableFluxBalances()
          }
 
      // 2. element-by-element processing of facet fluxes and flux balances
-     const auto elements_end(subdomain_.ElementsEnd());
-     for ( auto eit=subdomain_.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain_.CellsEnd());
+     for ( auto eit=subdomain_.CellsBegin(); eit!=elements_end; ++eit )
        {
           // 1.1 computation of transport velocity from fluid pressure gradient
        
@@ -206,15 +206,15 @@ void ExplicitTransport<dim>::TransportVariableFluxBalances()
      if ( HasHaloStencils() )
        for ( auto it=halo_elmts_.begin(); it!=halo_elmts_.end(); ++it ) {
             const auto nodes((*it)->Nodes());
-            for ( auto i{0}; i<nodes; ++i ) {
+            for ( auto i{0U}; i<nodes; ++i ) {
                  (*it)->N(i)->Store( key_acc_, makeScalar(ANY,0.) );
                  (*it)->N(i)->Store( key_out_, makeScalar(ANY,0.) );
               }
          }
          
      // 2. computing volumetric flow - transport variable products, storing them in variable 'accumulation'
-     const auto elements_end(subdomain_.ElementsEnd());
-     for ( auto eit=subdomain_.ElementsBegin(); eit!=elements_end; ++eit )
+     const auto elements_end(subdomain_.CellsEnd());
+     for ( auto eit=subdomain_.CellsBegin(); eit!=elements_end; ++eit )
        {
           this->TransportVariableFluxesAndBalances( (*eit) );
        }
@@ -390,7 +390,7 @@ void ExplicitTransport<dim>::AdjustResultsAssumingDivergenceFreeVelocityField( d
                const auto nid((*nit)->ParentNodeNumber(t));
 
                // for all FACETS per SECTOR surrounding the finite volume at the boundary
-               for ( auto i{0}; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
+               for ( auto i{0U}; i<eptr->FV()->FacetsPerSector(nid); i++ ) {
                     auto iFacet( eptr->FV()->FacetSurroundingSector(nid,i) );
                     double velo = eptr->ProjectionOnFacetNormal( iFacet, this->key_V );
                     if ( nid == eptr->FV()->InsideNode(iFacet) )div += velo;

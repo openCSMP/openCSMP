@@ -114,9 +114,11 @@ void TemperatureDensityPressure_Example::Run()
     // 4. compute vertical temperature profile
     // -------------------------------------------------------------
     #ifdef CSMP_WITH_SAMG_SOLVER
-    PDE_Integrator<1U,Region>  temperature(new SAMG_Solver());
+    SAMG_Solver solver;
+    PDE_Integrator<1U,Region>  temperature( solver );
     #else
-    PDE_Integrator<1U,Region>  temperature(new CSMP_DEFAULT_LINEAR_SOLVER());
+    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    PDE_Integrator<1U,Region>  temperature( solver );
     #endif
 
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );
@@ -135,7 +137,7 @@ void TemperatureDensityPressure_Example::Run()
     IAPWS_H2OPropertiesVisitor<1U>  properties_visitor( model, "fluid pressure" ,"fluid density","fluid viscosity");
 
     model.Accept( properties_visitor );
-    model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+    model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
   
   
     // 6. Setting up boundary conditions for the pressure iteration
@@ -197,7 +199,7 @@ void TemperatureDensityPressure_Example::Run()
          cout <<"\n\titeration "<< i+1U <<":"<< endl;
          model.Apply( hydrostatic_pressure );
          model.Accept( properties_visitor );
-         model.InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+         model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
          rhof += total_dissolved_solids;
          printRangeOfVariable( model, "fluid pressure" );
          printRangeOfVariable( model, "element fluid density" );

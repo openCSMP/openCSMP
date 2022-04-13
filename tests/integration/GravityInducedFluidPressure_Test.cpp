@@ -17,7 +17,6 @@
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 #include "PDE_Integrator.h"
-#include "PDE_Integrator_UoM.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
@@ -559,8 +558,8 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( do
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
-    GaussJordan_Solver             GJ_solver;
-    PDE_Integrator_UoM<1U,Region>  hydrostatic_pressure(GJ_solver);
+    GaussJordan_Solver         GJ_solver;
+    PDE_Integrator<1U,Region>  hydrostatic_pressure(GJ_solver);
  
     NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
@@ -625,7 +624,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator2( doubl
     const csmp::Index rho_key  = model1D_->Database().StorageKey("fluid mixture density");
     const csmp::Index mu_key   = model1D_->Database().StorageKey("viscosity carbonic phase");
     // rho k/mu
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          double mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
          (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
       }
@@ -642,7 +641,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator2( doubl
     const csmp::Index  gv_key(model1D_->Database().StorageKey("dip vector"));
     const csmp::Index  gt_key(model1D_->Database().StorageKey("gravity term"));
     // single phase version: rho^2 k/mu g
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         (*it)->Read( gv_key, grav_vec );
         grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * (*it)->Read(rho_key) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
         (*it)->Store( gt_key, grav_vec );
@@ -690,7 +689,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index rho_key  = model->Database().StorageKey("fluid mixture density");
     const csmp::Index mu_key   = model->Database().StorageKey("viscosity carbonic phase");
     // rho k/mu
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          double mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
          (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
       }
@@ -710,7 +709,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index  gv_key(model->Database().StorageKey("dip vector"));
     const csmp::Index  gt_key(model->Database().StorageKey("gravity term"));
     // single phase version: rho^2 k/mu g
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         (*it)->Read( gv_key, grav_vec );
         grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * ((*it)->Read(rho_key) - reference_density) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
         (*it)->Store( gt_key, grav_vec );
@@ -788,7 +787,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index rho_key  = model->Database().StorageKey("fluid mixture density");
     const csmp::Index mu_key   = model->Database().StorageKey("viscosity carbonic phase");
     // rho k/mu
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          double mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
          (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
       }
@@ -805,7 +804,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index  gv_key(model->Database().StorageKey("dip vector"));
     const csmp::Index  gt_key(model->Database().StorageKey("gravity term"));
     // single phase version: rho^2 k/mu g
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         (*it)->Read( gv_key, grav_vec );
         grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * ((*it)->Read(rho_key) - reference_density) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
         (*it)->Store( gt_key, grav_vec );
@@ -826,7 +825,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
          cout <<"\n\titeration "<< i+1U <<":"<< endl;
          model1D_->Apply( hydrostatic_pressure );
          model1D_->Accept( properties_visitor );
-         model1D_->InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+         model1D_->InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
          rhof += total_dissolved_solids;
          printRangeOfVariable( *model1D_, "fluid pressure" );
          printRangeOfVariable( *model1D_, "element fluid density" );
@@ -898,7 +897,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
 #else
     CSMP_DEFAULT_LINEAR_SOLVER     solver;
 #endif
-    PDE_Integrator_UoM<dim,Region> hydrostatic_pressure(solver);
+    PDE_Integrator<dim,Region>     hydrostatic_pressure(solver);
     NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
@@ -913,7 +912,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index rho_key  = model->Database().StorageKey("fluid mixture density");
     const csmp::Index mu_key   = model->Database().StorageKey("viscosity carbonic phase");
     // rho k/mu
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          double mobt = (*it)->Read( rho_key ) * (*it)->Read( k_key ) / (*it)->PropertyValueAtBaryCenter( mu_key );
          (*it)->Store( mobt_key, makeScalar(PLAIN,mobt) );
       }
@@ -930,7 +929,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     const csmp::Index  gv_key(model->Database().StorageKey("dip vector"));
     const csmp::Index  gt_key(model->Database().StorageKey("gravity term"));
     // single phase version: rho^2 k/mu g
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         (*it)->Read( gv_key, grav_vec );
         grav_vec(1) = -acc_gravity * (*it)->Read(rho_key) * ((*it)->Read(rho_key) - reference_density) * ((*it)->Read(k_key) / (*it)->PropertyValueAtBaryCenter(mu_key));
         (*it)->Store( gt_key, grav_vec );
@@ -951,7 +950,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
          cout <<"\n\titeration "<< i+1U <<":"<< endl;
          model1D_->Apply( hydrostatic_pressure );
          model1D_->Accept( properties_visitor );
-         model1D_->InterpolateNodeToElementProperty( "fluid density", "element fluid density" );
+         model1D_->InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
          rhof += total_dissolved_solids;
          printRangeOfVariable( *model1D_, "fluid pressure" );
          printRangeOfVariable( *model1D_, "element fluid density" );

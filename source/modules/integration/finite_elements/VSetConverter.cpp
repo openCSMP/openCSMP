@@ -110,7 +110,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles( VSet<dim>& vset )
      // 1. mapping already existing node points O.K.
      // ---------------------------------------
      const size_t n_nodes{vset.Vertices()};
-     for ( auto i{0}; i<n_nodes; i++ )
+     for ( size_t i{0U}; i<n_nodes; i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -280,7 +280,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
 
      // 1. mapping already existing node points O.K.
      // ---------------------------------------
-     for ( size_t i=0; i<vset.Vertices(); i++ )
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -1256,7 +1256,7 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
       {
          // finding node of triangle origin
          ordered_nodes.clear();
-         for ( auto i{0}; i<3U; i++ )
+         for ( auto i{0U}; i<3U; i++ )
            ordered_nodes[ mjl::Point(vset.Px((*pit)[i]), vset.Py((*pit)[i])) ] = i;
          size_t  offset = (*ordered_nodes.begin()).second;
                                                    
@@ -1291,10 +1291,10 @@ void VSetConverter<dim>::OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& vse
                 } 
          
               // reassigning the new node list to the plist
-              for ( auto i{0}; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
+              for ( auto i{0U}; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
          
               // reorganizing the neighbor element list 'pfverts' as well
-              for ( auto i{0}; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
+              for ( auto i{0U}; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
            }
          pit++;
          fit++;
@@ -1449,7 +1449,7 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
       {
          // finding node of triangle origin
          ordered_nodes.erase( ordered_nodes.begin(), ordered_nodes.end() );
-         for ( auto i{0}; i<3U; i++ )
+         for ( auto i{0U}; i<3U; i++ )
            ordered_nodes[ mjl::Point(vset.Px((*pit)[i]), vset.Py((*pit)[i])) ] = i;
          size_t offset = (*ordered_nodes.begin()).second;
                                                    
@@ -1486,10 +1486,10 @@ void VSetConverter<dim>::OrderBarycentricQuadraticTriangleCoordinateOrigins( VSe
                 } 
          
               // reassigning the new node list to the plist
-              for ( size_t i=0; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
+              for ( size_t i{0U}; i<(*pit).size(); i++ ) (*pit)[i] = pdata[i];
          
               // reorganizing the neighbor element list 'pfverts' as well
-              for ( size_t i=0; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
+              for ( size_t i{0U}; i<(*fit).size(); i++ ) (*fit)[i] = pfvert[i];
            }
          pit++; 
          fit++;
@@ -1596,7 +1596,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
 
      // 1. mapping already existing node points O.K.
      // ---------------------------------------
-     for ( size_t i=0; i<vset.Vertices(); i++ )
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -1948,7 +1948,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
 
      // 1. mapping already existing node points O.K.
      // ---------------------------------------
-     for ( size_t i=0; i<vset.Vertices(); i++ )
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -2211,7 +2211,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
 
      double  x, y, z;
 
-     for ( auto i{0}; i<vset.Vertices(); i++ )  
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )
        {
           x = vset.Px(i);
           y = vset.Py(i);
@@ -2227,7 +2227,7 @@ void VSetConverter<dim>::EstablishBoundaryFlagsForBoxModel( VSet<dim>& vset, dou
      // making new boundary conditions
      vector<std::int8_t>  new_bflags( vset.Vertices(), 0 );
 
-     for ( auto i{0}; i<vset.Vertices(); i++ )  
+     for ( size_t i{0U}; i<vset.Vertices(); i++ )  
        if ( approximatelyEqual(vset.Px(i),xmin,tol) ||
             approximatelyEqual(vset.Px(i),xmax,tol) ||
             approximatelyEqual(vset.Py(i),ymin,tol) ||

@@ -44,7 +44,7 @@ namespace csmp {
                                           "output variable must be placed on the element integration point; nothing was done." );
           return;
        }
-     if ( !(*model_domain.ElementsBegin())->FE()->UsesLocalCoordinates() ) {
+     if ( !(*model_domain.CellsBegin())->FE()->UsesLocalCoordinates() ) {
           ErrorHandler::Instance().notice( ERROR, "outputQuadraturePointPropertiesAsDiscontinuousNodeVariablesToVTK:",
                                           "the mesh must consist of numerically integrated elements; nothing was done." );
           return;
@@ -78,7 +78,7 @@ namespace csmp {
      // ---------------------------------------------------------------------------------------------
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      size_t nodes(0u), cells(0U);
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
           nodes += (*it)->Nodes();
           cells++;
        }
@@ -86,10 +86,10 @@ namespace csmp {
      ofs <<"POINTS " << nodes <<" float"<< endl;
 
      DenseMatrix<DM_MIN> COORD;
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
           (*it)->NodeCoordinateMatrix( COORD );
-          for ( auto i=0; i<(*it)->Nodes(); ++i ) {
-              for ( auto j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
+              for ( auto j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
               if ( dim == 2 ) ofs << 0.;
               ofs << endl;
             }
@@ -100,18 +100,18 @@ namespace csmp {
      // -----------------------------------------------------
      ofs <<"CELLS "<< cells <<" "<< nodes + cells << endl;
      size_t node(0U);
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
             // nodes per cell
             ofs << (*it)->Nodes() <<" ";
             // member nodes (running node index)
-            for ( auto i=0; i<(*it)->Nodes(); ++i ) ofs << node++ <<" ";
+            for ( auto i{0U}; i<(*it)->Nodes(); ++i ) ofs << node++ <<" ";
             ofs << endl;
         }
 
      // 4. writing CELL_TYPES
      // ---------------------
      ofs <<"CELL_TYPES "<< cells << endl;
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        if ( (*it)->FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE ||
             (*it)->FE_Type() == ISOPARAMETRIC_QUADRATIC_TETRAHEDRON )
          ofs << parseElementType( (*it)->FE_Type() ) << endl;
@@ -127,15 +127,15 @@ namespace csmp {
    
      // extrapolating the integration point data to the node points and writing them to file
      vector<double> IVAR, NVAR;
-     for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
            // collecting the variable values from the integration points
            IVAR.resize( (*it)->IntegrationPoints() );
-           for ( auto i{0}; i<(*it)->IntegrationPoints(); ++i )
+           for ( auto i{0U}; i<(*it)->IntegrationPoints(); ++i )
              IVAR[i] = (*it)->Read( i, key );
            // extrapolation
            const size_t n_node_variables(1U);
            (*it)->FE()->ExtrapolateIntegrationPointVariableToNodes( n_node_variables, IVAR, NVAR );
-           for ( auto i{0}; i<NVAR.size(); ++i ) ofs << NVAR[i] <<" ";
+           for ( auto i{0U}; i<NVAR.size(); ++i ) ofs << NVAR[i] <<" ";
            ofs << endl;
        }
 

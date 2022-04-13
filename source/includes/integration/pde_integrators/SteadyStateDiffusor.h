@@ -8,6 +8,11 @@
 #include "PointSource_rhsop.h"
 #include "PDE_Integrator.h"
 
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#endif
+
 namespace csmp {
 
 template<uint32_t> class Model;
@@ -83,13 +88,14 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
     NumIntegral_dNT_op_dV<dim,ComputationCell>*     gravity_;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings                   settings_; // only this derived class knows about SAMG
+    SAMG_Settings  settings_;
+    SAMG_Solver    solver_;
 #else
-    /// add extra functionality for alternative solver if needed
+    CSMP_DEFAULT_LINEAR_SOLVER solver_;
 #endif
 
-    const double                  grad_multiplier_;
-    std::string                     dep_var_name_;
+    const double  grad_multiplier_;
+    std::string   dep_var_name_;
 
     
   private:

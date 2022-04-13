@@ -76,7 +76,7 @@ void SourceVisitor<dim>::Visit( Element<dim>* e )
     //! if lower dimension elements are included in transport calculation thickness needs to be taken into account
     /// @todo need to find a more efficient way to perform this calculation. Julian 19.02.2016
 
-    for (auto i=0;i< e->Nodes (); i++)
+    for (auto i{0U};i< e->Nodes (); i++)
     {
         e->N(i)->Read(nfvsKey_, nfvs);
         nfvs() += e->N(i)->Read(densityDiffKey_) * e->SectorVolume(i) * phi() * thickness() / timestep();

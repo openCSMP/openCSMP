@@ -221,7 +221,7 @@ class ModelTopology {
 
     /// output info
     void  Out() const;
-    void  Out( const char* output_file ) const;
+    void  Out( const char* output_file, const std::string header = std::string() ) const;
 
     /// initialises ModelTopology from text file as written by Out()
     bool InputFromTextFile( const char* file_dot_asc );

@@ -54,7 +54,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
 
     // read node variable which must be a scalar
     NPROP.resize( e.Nodes() );
-    for ( auto i=0; i<e.Nodes(); i++ )
+    for ( auto i{0U}; i<e.Nodes(); i++ )
       NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim>::MaterialOperandKey() );
     
 } // end GetOperands
@@ -96,19 +96,19 @@ void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL&
     // ------------------------------------------------------------------
      // interpolating basic property to integration points
      e.N_AtBaryCenter( IPOL );
-     for ( auto j=0; j<e.Nodes(); j++ )
+     for ( auto j{0U}; j<e.Nodes(); j++ )
        for ( auto k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
        
      // global intpol. function derivative matrix and determinant of Jacobian matrix
      const double volume(e.Volume());
      
      // copying scaled derivative matrix so that spatial derivatives are rotated by 90o
-     if ( dim == 2U ) for ( auto j=0; j<e.Nodes(); j++ ) {
+     if ( dim == 2U ) for ( auto j{0U}; j<e.Nodes(); j++ ) {
           DNORTHO(0,j) = -M(1,j) * volume; // dNdx = -dNdy P
           DNORTHO(1,j) =  M(0,j) * volume; // dNdy =  dNdx P
        }
 
-     else if ( dim == 3U ) for ( auto j=0; j<e.Nodes(); j++ ) {
+     else if ( dim == 3U ) for ( auto j{0U}; j<e.Nodes(); j++ ) {
           DNORTHO(0,j) = -M(1,j) * volume; // dNdx = -dNdy P
           DNORTHO(1,j) =  M(0,j) * volume; // dNdy =  dNdx P
           if ( dim == 3U )
@@ -126,7 +126,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL&
      // single column matrix
      RES = M * UNITY;
      
-     for ( auto j=0; j<e.Nodes(); j++ ) 
+     for ( auto j{0U}; j<e.Nodes(); j++ ) 
        // minus since flow is always down pressure
        MathOperatorRHS<dim>::RHS[j] += -RES[j];
 

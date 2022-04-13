@@ -336,7 +336,7 @@ void IAPWS_H2OPropertiesVisitor<dim>::Visit( Node<dim>* n )
 template<uint32_t dim>
 void IAPWS_H2OPropertiesVisitor<dim>::Visit( Element<dim>* e )
 {
-    for ( auto i{0}; i<e->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
     {
         Tf=e->PropertyValueAtIntegrationPoint(T_key,i);
         Pf=e->PropertyValueAtIntegrationPoint(P_key,i);

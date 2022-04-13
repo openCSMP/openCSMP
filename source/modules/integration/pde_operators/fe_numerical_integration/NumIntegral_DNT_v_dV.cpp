@@ -126,7 +126,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     double detJ, fdensity;
     
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
          // interpolation functions to interpolate density and velocity
          e.N_AtIntegrationPoint( i, IPOL );
          detJ = e.dN_AtIntegrationPoint( DN, i );
@@ -135,7 +135,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
          
          if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
                // interpolating density multiplier to integration point
-               for ( auto j=0; j<e.Nodes(); j++ ) 
+               for ( auto j{0U}; j<e.Nodes(); j++ ) 
                  fdensity += IPOL[j] * dens_nprop[j]();
 
                // multiply property value it with multipliers
@@ -152,7 +152,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
          DNT *= OPMAT;
 
          // assembling contribution to right-hand vector
-         for ( auto j=0; j<e.Nodes(); j++ )
+         for ( auto j{0U}; j<e.Nodes(); j++ )
            MathOperatorRHS<dim>::RHS[j] = rfac() * DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ;
       }
 

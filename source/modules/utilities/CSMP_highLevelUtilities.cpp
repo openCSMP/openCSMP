@@ -35,7 +35,7 @@ namespace csmp {
 void replaceWhiteSpaceBy( string& p, char ascii_char )
  {
     if ( !p.empty() )
-      for ( auto i{0}; i<p.size(); i++ )
+      for ( auto i{0U}; i<p.size(); i++ )
         if ( p[i] == ' ' || p[i] == '\t' ||
              p[i] == '\n' || p[i] == '\r' ) p[i] = ascii_char;
  }
@@ -45,7 +45,7 @@ void replaceWhiteSpaceBy( string& p, char ascii_char )
 template<uint32_t dim>
 bool isoparametricElementMesh( const Model<dim>& sg )
  {
-   std::string  etype(parseFiniteElementType((*sg.Region("Model").ElementsBegin())->FE()->ElementType()));
+   std::string  etype(parseFiniteElementType((*sg.Region("Model").CellsBegin())->FE()->ElementType()));
 
      if ( etype.find("ISOPARAMETRIC") != std::string::npos ) return true;
      return false;
@@ -223,7 +223,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void printNodes( const CELL<dim>& c )
  {
     set<uint32_t> nodes;
-    for ( auto i{0}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    for ( auto i{0U}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
     cout <<" "<< c.Idx() <<": ";
     for ( auto& it : nodes ) cout << it <<",";
     cout <<" ";
@@ -248,7 +248,7 @@ size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,
     assert( first != last );
 
     set<uint32_t>  node_numbers;
-    size_t       counts(0);
+    uint32_t       counts(0);
     
     while ( first != last ) {
          for ( vector<Node<1U>*>::const_iterator
@@ -391,7 +391,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
     if ( var_key.place == ELEMENT ) {
          // counting no-data values, and memorizing pointers to elements with such values
          set<Element<dim>*> elementsMissingDataValues, filledValues;
-         for ( typename vector<Element<dim>*>::const_iterator it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ )
+         for ( typename vector<Element<dim>*>::const_iterator it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ )
            if ( isnan((*it)->Read(var_key)) || fabs(no_data_value-(*it)->Read(var_key)) < numeric_limits<double>::epsilon() )
              elementsMissingDataValues.insert( (*it) );
           
@@ -409,7 +409,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                        it=elementsMissingDataValues.begin(); it!=elementsMissingDataValues.end(); it++ )
                    {
                       set<pair<double,double> > valuesAndWeights;
-                      for ( auto i{0}; i<(*it)->Neighbors(); i++ )
+                      for ( auto i{0U}; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> bctr = (*it)->BaryCenter();
@@ -467,7 +467,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
                        it=nodesMissingDataValues.begin(); it!=nodesMissingDataValues.end(); it++ )
                    {
                       set<pair<double,double> > valuesAndWeights;
-                      for ( auto i{0}; i<(*it)->Neighbors(); i++ )
+                      for ( auto i{0U}; i<(*it)->Neighbors(); i++ )
                         if ( (*it)->Neighbor(i) != NULL )
                           {
                              Point<dim> nxyz = (*it)->Coordinate();
@@ -746,9 +746,9 @@ void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
     /// mesh specs
     const size_t num_elements( vset.Elements() );
     const size_t num_nodes( vset.Vertices() );
-    size_t eid;
+    uint32_t eid;
     size_t nid;
-    size_t enodes;
+    uint32_t enodes;
 
     /// fem data
     int fem_type;
@@ -1249,7 +1249,7 @@ size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
     do {
         combinations.push_back( std::vector<int64_t>{} );
         combinations.back().reserve( samples );
-        for ( size_t i=0; i < N; ++i ) { // [0..N-1] integers
+        for ( size_t i{0U}; i < N; ++i ) { // [0..N-1] integers
              if ( bitmask[i] == 1 )
                combinations.back().push_back( sequence[i] );
           }

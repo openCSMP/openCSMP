@@ -98,7 +98,7 @@ void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
     // farming old matrix out into entries of new one
     // starting with last row
     B.Resize(3,B.Cols() * 2U);
-    for ( auto i=0; i<nodes; i++ )
+    for ( auto i{0U}; i<nodes; i++ )
       {
          B(2,i*2)   = B(1,i);
          B(2,i*2+1) = B(0,i);
@@ -112,7 +112,7 @@ void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
     // spreading out second row
     for ( int i=nodes; i>0; i-- ) B(1,(i-1)*2+1) = B(1,(i-1));
     // zeroing intermediate positions
-    for ( auto i=0; i<dof; i+=2 ) B(1,i) = 0.;
+    for ( auto i{0U}; i<dof; i+=2 ) B(1,i) = 0.;
       
  } // end DNto2DOF
 
@@ -135,7 +135,7 @@ void  dN_To3DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
     B.Resize(6,dof);
     
     // inserting values into the extra three bottom rows
-    for ( auto i=0; i<old_nodes; i++ )
+    for ( auto i{0U}; i<old_nodes; i++ )
       {
          // fourth row
          B(3,i*3)   = B(1,i); // d/dy
@@ -245,7 +245,7 @@ void out( const Var& obj )
    cout <<"\ncontainer: "<< obj.size() << endl;
    
    int row_break(1), split_after(10); 
-   for ( auto i=0; i<obj.size(); i++, row_break++ )
+   for ( auto i{0U}; i<obj.size(); i++, row_break++ )
      {
         if ( obj[i] > 0 ) cout <<" ";
         cout << obj[i] <<" ";
@@ -332,8 +332,10 @@ double splineValue( double x, double x1, double x2, double y1, double y2, double
 }
 
 
-
-double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2)
+/**
+      Central finite-difference approximation of the function.
+*/
+double splineDerivative( double x, double x1, double x2, double y1, double y2, double k1, double k2 )
 {
     const double a =  k1*( x2-x1 ) - ( y2 - y1 );
     const double b = -k2*( x2-x1 ) + ( y2 - y1 );

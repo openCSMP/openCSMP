@@ -428,8 +428,8 @@ double ComputationalSettings::TimeIncrementFromVelocityChange( const Model<dim>&
     }
 
     // loop over elements and compare volume fluxes
-    auto       firs = sg.Region("Model").ElementsBegin();
-    const auto last = sg.Region("Model").ElementsEnd();
+    auto       firs = sg.Region("Model").CellsBegin();
+    const auto last = sg.Region("Model").CellsEnd();
     
     while ( firs != last ) {
         // get current and previous volume flux

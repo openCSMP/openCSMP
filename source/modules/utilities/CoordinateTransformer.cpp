@@ -18,7 +18,7 @@ namespace csmp {
 template<uint32_t dim>
 CoordinateTransformer<dim>::CoordinateTransformer()
  {
-    for ( size_t i=0; i<dim; i++ ) {
+    for ( size_t i{0U}; i<dim; i++ ) {
          translation_[i] = 0.; ///< in x,y,z direction
          flip_[i]        = 1.; ///< coordinate multiplier
       }
@@ -32,7 +32,7 @@ CoordinateTransformer<dim>::CoordinateTransformer()
 template<uint32_t dim>
 void CoordinateTransformer<dim>::Transform( Point<dim>& p ) const
  {
-    for ( auto i{0}; i<dim; i++ ) {
+    for ( auto i{0U}; i<dim; i++ ) {
          p[i] += translation_[i];
          p[i] *= flip_[i];
       }
@@ -55,7 +55,7 @@ template<uint32_t dim>
 Point<dim> CoordinateTransformer<dim>::Transform( const vector<double>& vec ) const
  {
     Point<dim>  p(vec);
-    for ( auto i{0}; i<dim; i++ ) {
+    for ( auto i{0U}; i<dim; i++ ) {
          p[i] += translation_[i];
          p[i] *= flip_[i];
       }
@@ -121,7 +121,7 @@ void CoordinateTransformer<dim>::ExchangeAxes( size_t axis_a, size_t axis_b )
 template<uint32_t dim>
 void CoordinateTransformer<dim>::Reset()
  {
-    for ( auto i{0}; i<dim; i++ ) {
+    for ( auto i{0U}; i<dim; i++ ) {
          translation_[i] = 0.;
          flip_[i] = 1.;
       }

@@ -117,9 +117,11 @@ void StreamFunction_Example::Run()
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
    #ifdef CSMP_WITH_SAMG_SOLVER
-   PDE_Integrator<2U,Region>  fluid_pressure(new SAMG_Solver());
+   SAMG_Solver solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #else
-   PDE_Integrator<2U,Region>  fluid_pressure(new CSMP_DEFAULT_LINEAR_SOLVER());
+   CSMP_DEFAULT_LINEAR_SOLVER solver;
+   PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #endif
 
    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
@@ -167,7 +169,7 @@ rref.E(5)->CoordinateMatrix();
 DenseMatrix<DM_MIN> DATA;
 DATA.Resize(1,6);
 // nodal fluid pressure
-for ( size_t j=0; j<rref.E(5)->Nodes(); j++ ) DATA(0,j) = rref.E(5)->N(j)->Read( pf_key );
+for ( auto j=0; j<rref.E(5)->Nodes(); j++ ) DATA(0,j) = rref.E(5)->N(j)->Read( pf_key );
 rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
 
 
@@ -356,7 +358,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   // ------------------------------------------------------------------------------
   vector<ScalarVariable>  PF(10);
   ScalarVariable          K; // hydraulic conductivity
-  vector<double>        IPVF(4), NVF(10);
+  vector<double>          IPVF(4), NVF(10);
   DenseMatrix<DM_MIN>     DERIV;
   // storage for the extrapolated nodal velocities for each individual element
   // elements nodes velocity components
@@ -364,7 +366,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   vector<vector<double> >               dummy;
   pair<typename map<size_t,vector<vector<double> > >::iterator,bool>  mit;
 
-  for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ )
+  for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ )
     if ( atBoundary(*eit) != NOT )
       {
          // collecting nodal fluid pressures and elemental hydraulic conductivities from
@@ -383,7 +385,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
 
               // getting the material properties, K and phi into the equation
               for ( auto n=0; n<(*eit)->Nodes(); n++ )
-                for ( size_t j=0; j<dim; j++ )
+                for ( auto j=0; j<dim; j++ )
                   // -DERIV because fluid flows down pressure
                   IPVF[ i*dim + j ] += PF[n]() * -DERIV(j,n) * K();
            }
@@ -417,7 +419,7 @@ double StreamFunction_Example::integrateDomainBoundaryFlux( Model<dim>& sg )
   clock_t ticks = clock();
 
   for ( auto bit=sg.BoundariesBegin(); bit!=sg.BoundariesEnd(); bit++ )
-    for ( auto fit=(*bit).second.ElementsBegin(); fit!=(*bit).second.ElementsEnd(); fit++ )
+    for ( auto fit=(*bit).second.CellsBegin(); fit!=(*bit).second.CellsEnd(); fit++ )
       /// Roman, 2014 ( Face&InterFace ): Should Face contain AtBoundary flag?
       //if ( (*fit)->AtBoundary() != NOT )
         {
@@ -485,7 +487,7 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     ScalarVariable       sc;
     Region<2>&  gref(sg.Region("Model"));
 
-    for ( auto eit=gref.ElementsBegin(); eit!=gref.ElementsEnd(); eit++ ) {
+    for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
          (*eit)->Read( con_key, sc );
          sc = 1. / sc();
          (*eit)->Store( res_key, sc );

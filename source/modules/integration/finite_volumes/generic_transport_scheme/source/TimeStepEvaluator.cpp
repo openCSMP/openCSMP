@@ -239,7 +239,7 @@ double  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double max
     const bool                  unless_has_equal_dimension(dim!=1U);
 
     for ( typename vector<Element<dim>*>::const_iterator 
-          eit=gref_.ElementsBegin(); eit!=gref_.ElementsEnd(); ++eit )
+          eit=gref_.CellsBegin(); eit!=gref_.CellsEnd(); ++eit )
       if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
@@ -275,12 +275,12 @@ double  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double max
                  {
                      fill( gradPc.begin(), gradPc.end(), 0. );
                      (*(*eit)).dN_AtBaryCenter( DN );
-                     for ( size_t j=0U; j<(*eit)->Nodes(); j++ ) {
+                     for ( size_t j{0U}; j<(*eit)->Nodes(); j++ ) {
                          const double sn = (*eit)->N(j)->Read( User()->C0_key );
                          relperm.SaturationWettingPhase( 1. - sn );
                          relperm.EffectiveSaturation();
                          const double pc = relperm.pc_Phase();
-                         for ( size_t k=0U; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
+                         for ( size_t k{0U}; k<dim; k++ ) gradPc[k] += DN(k,j) * pc;
                      }
                      // getting the maximum capillary flux (G= lambda overbar)
                      double  magnitude_grad_pc(gradPc[0]); // 1D

@@ -109,8 +109,8 @@ void Variables_Example::Run()
     model.InputPropertyValue( "nodal tensor", tensorVariable );
 
     // finite-element integration (Gauss quadrature) points
-    const vector<Element<D>*>::const_iterator modelElementsEnd( model.Region("Model").ElementsEnd() );
-    for( vector<Element<D>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != modelElementsEnd; ++it )
+    const vector<Element<D>*>::const_iterator modelElementsEnd( model.Region("Model").CellsEnd() );
+    for( vector<Element<D>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != modelElementsEnd; ++it )
       {
         (*it)->Store( elementScalarKey, scalarVariable );
 
@@ -123,7 +123,7 @@ void Variables_Example::Run()
 
     // finite volume integration points
     ArrayVariable seipArray( "element seip array", model.Database(), 0.2, ROBIN );
-    for( vector<Element<D>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != modelElementsEnd; ++it )
+    for( vector<Element<D>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != modelElementsEnd; ++it )
       {
       // element
       (*it)->Store( elementScalarKey, scalarVariable );
@@ -149,7 +149,7 @@ void Variables_Example::Run()
     fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
 
     for( auto bit( model.BoundariesBegin() ); bit != model.BoundariesEnd(); ++bit )
-      for( auto fit( bit->second.ElementsBegin() ); fit != bit->second.ElementsEnd(); ++fit )
+      for( auto fit( bit->second.CellsBegin() ); fit != bit->second.CellsEnd(); ++fit )
         (*fit)->Store( faceScalarKey, makeScalar( PLAIN, (*fit)->Volume() ) );
 
 
@@ -170,8 +170,8 @@ void Variables_Example::Run()
 
     // displace nodes of splitboudnaries
     SplitBoundary<D>& fractureSplitBoundary = model.SplitBoundary( "SPLITBOUNDARY_FRACTURE" );
-    const vector<InterFace<D>*>::const_iterator elementsEnd( fractureSplitBoundary.ElementsEnd() );
-    for( vector<InterFace<D>*>::const_iterator it( fractureSplitBoundary.ElementsBegin() ); it != elementsEnd; ++it )
+    const vector<InterFace<D>*>::const_iterator elementsEnd( fractureSplitBoundary.CellsEnd() );
+    for( vector<InterFace<D>*>::const_iterator it( fractureSplitBoundary.CellsBegin() ); it != elementsEnd; ++it )
       {
         ScalarVariable volume( PLAIN, (*it)->InnerParent()->Volume() );
         (*it)->Store( interfaceScalarKey, volume );

@@ -148,8 +148,8 @@ Point<dim>  FiniteElementPolicy<dim,CELL>::RstToXYZ( Point<dim> rst ) const
    assert( e  != nullptr );
    rst = 0.;
    const auto nodes(e->Nodes());
-   for ( auto i{0}; i<nodes; i++ )
-     for ( auto j=0U; j<dim; ++j )
+   for ( auto i{0U}; i<nodes; i++ )
+     for ( auto j{0U}; j<dim; ++j )
        // transformation of the coordinates
        rst[j] += e->FE()->NRST[i] * (*e->N(i))[j];
   
@@ -395,7 +395,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyIntegral( const csmp::Index& prop_
          double sum(0.);
          const auto n_integration_points(fptr_->IntegrationPoints());
          CoordinateMatrix();
-         for ( auto i{0}; i <n_integration_points; i++ )
+         for ( auto i{0U}; i <n_integration_points; i++ )
          {
              fptr_->JacobianAtIntegrationPoint( i );
              sum += fptr_->JacobianInverse() * fptr_->WeightAtIntegrationPoint(i) * eptr->Read( i, prop_key );
@@ -412,12 +412,12 @@ double FiniteElementPolicy<dim,CELL>::PropertyIntegral( const csmp::Index& prop_
     const auto n_integration_points(fptr_->IntegrationPoints());
 
     CoordinateMatrix();
-    for ( auto i{0}; i <n_integration_points; i++ )
+    for ( auto i{0U}; i <n_integration_points; i++ )
       {
         sumN = 0.;
         fptr_->JacobianAtIntegrationPoint(i);
         fptr_->N_AtIntegrationPoint( i, fptr_->NRST );
-        for ( auto j=0; j<fptr_->Nodes(); j++ )
+        for ( auto j{0U}; j<fptr_->Nodes(); j++ )
             sumN += fptr_->NRST[j] * eptr->N(j)->Read( prop_key );
         sumI += sumN * fptr_->JacobianInverse() * fptr_->WeightAtIntegrationPoint(i);
       }  
@@ -477,7 +477,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
     fptr_->N( fptr_->NRST, xyz );
 
     const auto n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ )
+    for ( auto i{0U}; i<n_nodes; i++ )
     {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
@@ -509,7 +509,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
 
     double var(0.);
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ )
+    for ( auto i{0U}; i<n_nodes; i++ )
        var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
 
     return var;
@@ -556,7 +556,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const auto n_integration_points(IntegrationPoints());
-       for ( auto i{0}; i < n_integration_points; i++ ) {
+       for ( auto i{0U}; i < n_integration_points; i++ ) {
             eptr->Read( i, idx, temp );
             var += temp;
          }
@@ -565,7 +565,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
        const auto n_sector_integration_points(eptr->FV()->Sectors());
-       for ( auto i{0}; i < n_sector_integration_points; i++ ) {
+       for ( auto i{0U}; i < n_sector_integration_points; i++ ) {
             eptr->Read( i, 0U, idx, temp );
             var += temp;
          }
@@ -577,7 +577,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     fptr_->N_AtBaryCenter( fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ ) {
+    for ( auto i{0U}; i<n_nodes; i++ ) {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
     }
@@ -607,7 +607,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const auto n_integration_points(IntegrationPoints());
-       for ( auto i{0}; i < n_integration_points; i++ ) {
+       for ( auto i{0U}; i < n_integration_points; i++ ) {
             var += eptr->Read( i, idx );
          }
        var /= static_cast<double>(fptr_->IntegrationPoints());
@@ -615,7 +615,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
        const auto n_sector_integration_points(eptr->FV()->Sectors());
-       for ( auto i{0}; i < n_sector_integration_points; i++ ) {
+       for ( auto i{0U}; i < n_sector_integration_points; i++ ) {
             var += eptr->Read( i, 0U, idx );
          }
        var /= static_cast<double>(n_sector_integration_points);
@@ -626,7 +626,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     fptr_->N_AtBaryCenter( fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ ) {
+    for ( auto i{0U}; i<n_nodes; i++ ) {
        var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
     }
     
@@ -677,7 +677,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp:
     fptr_->N_AtIntegrationPoint( ip, fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ )
+    for ( auto i{0U}; i<n_nodes; i++ )
     {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
@@ -712,7 +712,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csm
 
     double  var(0.);
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0}; i<n_nodes; i++ )
+    for ( auto i{0U}; i<n_nodes; i++ )
       var += fptr_->NRST[i] * eptr->N(i)->Read( idx );
 
    return var;
@@ -745,7 +745,7 @@ void  FiniteElementPolicy<dim,CELL>::IntegrationPointPropertyVector( const csmp:
     const auto n_integration_points(fptr_->IntegrationPoints());
     var.resize( n_integration_points );
 
-    for ( auto i{0}; i<n_integration_points; i++ )
+    for ( auto i{0U}; i<n_integration_points; i++ )
       {
           if constexpr( TypeMatchesVariableType<Var,ARRAY>::value || TypeMatchesVariableType<Var,FLAGGEDARRAY>::value ) {
               var[i].Resize( idx.dataDepth );

@@ -79,7 +79,7 @@ void outputToXGraph( const Model<1U>& model, const char* file_name, double model
     map<double,vector<double> >  elmtprop_map;
     vector<double>               elmtprops(2U);
 
-    for ( auto it=sgref.ElementsBegin(); it!=sgref.ElementsEnd(); it++ ) {
+    for ( auto it=sgref.CellsBegin(); it!=sgref.CellsEnd(); it++ ) {
           elmtprops[0] = (*it)->Read( mobt_key );
           elmtprops[1] = (*it)->Read( flux_key );
           Point<1U> p  = (*it)->BaryCenter();

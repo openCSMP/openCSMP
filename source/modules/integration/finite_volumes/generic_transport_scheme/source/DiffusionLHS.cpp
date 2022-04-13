@@ -53,7 +53,7 @@ void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix&
       }
  
     const size_t integration_points(fe.IntegrationPoints());
-    for ( auto i{0}; i<integration_points; ++i )
+    for ( auto i{0U}; i<integration_points; ++i )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
@@ -68,8 +68,8 @@ void DiffusionLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix&
          RESULT_ *= fe.WeightAtIntegrationPoint(i) * detJ;
 
          // assigning the matrix contribution to the solution matrix
-         for ( size_t j=0U; j<DNT_.Rows(); j++ )
-           for ( size_t k=0U; k<DNT_.Cols(); k++ )
+         for ( size_t j{0U}; j<DNT_.Rows(); j++ )
+           for ( size_t k{0U}; k<DNT_.Cols(); k++ )
              A.Add( fe.N(j)->Idx(), fe.N(k)->Idx(), RESULT_(j,k) );
       }
 

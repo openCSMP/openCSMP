@@ -92,7 +92,7 @@ void ComputeGravityTermVisitor<dim>::Visit(Region<dim>* region ){
         FiniteElement* fe_tmp;
         size_t tid=omp_get_thread_num();
 #pragma omp for
-        for ( long int e= 0 ; e < region->Elements(); e++ ){
+        for ( long int e= 0 ; e < region->Cells(); e++ ){
             ep = region->E(e);
             fe_tmp=ep->FE();
             // change pointer here

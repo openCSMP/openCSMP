@@ -142,7 +142,7 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
 
    // in the case of body forces
    if ( stress_computation_ == BOUNDARY_STRESS::DEPTH_DEPENDENT ) {
-         for ( auto i{0}; i<dim; ++i )
+         for ( auto i{0U}; i<dim; ++i )
            if ( SHmax_.Flag() == NEUMANN or Shmin_.Flag() == NEUMANN ) {
                  Neumann_condition = true;
                  break;
@@ -155,7 +155,7 @@ void BoundaryStressVisitor<dim>::Visit( Face<dim>* f )
   
    // when body forces are not turned on
    if ( stress_computation_ == BOUNDARY_STRESS::SINGLE_VALUED ) {
-       for ( auto i{0}; i<dim; ++i )
+       for ( auto i{0U}; i<dim; ++i )
          if ( bstress_.Flag(i) == NEUMANN ) {
                Neumann_condition = true;
                break;
@@ -180,7 +180,7 @@ template<uint32_t dim>
 void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim>* f )
  {
    bool Neumann_condition(false);
-   for ( auto i{0}; i<dim; ++i )
+   for ( auto i{0U}; i<dim; ++i )
      if ( bstress_.Flag(i) == NEUMANN ) {
            Neumann_condition = true;
            break;
@@ -192,7 +192,7 @@ void BoundaryStressVisitor<dim>::ApplyConstantStressBoundaryConditions( Face<dim
    force_ = bstress_ * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
-   for ( auto i{0}; i<face_nodes; i++ ) {
+   for ( auto i{0U}; i<face_nodes; i++ ) {
         // the status of the variable is not touched
         f->N(i)->Read( F_key_, vc_ );
         vc_ += force_;
@@ -249,7 +249,7 @@ void BoundaryStressVisitor<dim>::ApplyDepthDependentBoundaryConditions( Face<dim
    faceStressVector = faceStressVector * (f->Area() / static_cast<double>(face_nodes));
   
    // adding the normal stress forces to the nodal forces of the nodes of the face
-   for ( auto i{0}; i<face_nodes; i++ ) {
+   for ( auto i{0U}; i<face_nodes; i++ ) {
         // the status of the variable is not touched
         f->N(i)->Read( F_key_, vc_ );
         vc_ += faceStressVector;
@@ -291,7 +291,7 @@ void BoundaryStressVisitor<dim>::RetrieveNormalWithCorrectDirection( Face<dim>* 
           // normalizing a copy of the unit normal with the distance between the 2 barycenters
           const double face_parent_ctr_distance(parent_ctr.DistanceTo(face_ctr));
           Point<dim> pnrml;
-          for ( auto i{0}; i<dim; i++ ) pnrml[i] = nrml[i];
+          for ( auto i{0U}; i<dim; i++ ) pnrml[i] = nrml[i];
           pnrml /= face_parent_ctr_distance;
           const double face_parent_nrml_tip_distance(parent_ctr.DistanceTo(face_ctr + pnrml));
           // now normal is added to face center, if this gets a point closer to parent center

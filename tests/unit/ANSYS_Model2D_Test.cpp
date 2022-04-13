@@ -1,6 +1,9 @@
 #include "ANSYS_Model2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"
+#include "SplitBoundary.h"
+#include "MeshManagementUtilities.h"
+#include "vsetMakers.h"
 
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
@@ -12,7 +15,49 @@ using namespace std;
 namespace csmp
 {
 
+// for model building from ANSYS
+ static void create_ANSYS2D_Model( bool reconstruct_from_file )
+ {
+    string model2d_name_ = "box2d_fault";
+    string varFileName = "CSMP-variables.txt";
+    Model<2>* model2d_ = new ANSYS_Model2D(model2d_name_.c_str(), varFileName.c_str());
 
+    // ansys 2d model - contiguous
+    cout << "\n------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'box2d_fault'";
+    cout << "\n------------------------------------------";
+    cout << "\nNodes: " << model2d_->Mesh().Nodes() << "\n";
+    set<Element<2>*> elements;
+    cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
+    cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+    std::map<std::string,std::vector<Element<2U>*> > patch_map;
+    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+    std::map<std::string,std::vector<Face<2U>*> >  face_map;
+    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+    std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
+    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    
+    if (reconstruct_from_file) {
+        model2d_->OutputToBinaryFile(model2d_name_.c_str());
+        delete model2d_;
+        model2d_ = new Model<2U>(model2d_name_);
+        MeshManager<2>& mesh(model2d_->Mesh());
+        cout << "\nNodes: " << mesh.Nodes() << "\n";
+        cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
+        cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
+        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
+        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
+        cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
+        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+      }
+      
+ } // end create_ANSYS2D_Model
+ 
+
+/*
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
@@ -20,12 +65,11 @@ void ANSYS_Model2D_Test::run()
     ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
     Region<2>& rref( model.Region( "Model" ) );
 
-
     DenseMatrix<DM_MIN> dm;
-    const vector<Element<2>*>::const_iterator elementsEnd( rref.ElementsEnd() );
+    const auto elementsEnd( rref.CellsEnd() );
     try
       {    
-        for( vector<Element<2>*>::const_iterator it = rref.ElementsBegin(); it != elementsEnd; ++it )
+        for( auto it = rref.CellsBegin(); it != elementsEnd; ++it )
           (*it)->CoordinateMatrix();
       }
     catch(...)
@@ -91,10 +135,10 @@ void ANSYS_Model2D_Test::run()
     const size_t rightNodes( right.Nodes() );
     const size_t bottomNodes( bottom.Nodes() );
     const size_t topNodes( top.Nodes() );
-    const size_t leftFaces( left.Elements() );
-    const size_t rightFaces( right.Elements() );
-    const size_t bottomFaces( bottom.Elements() );
-    const size_t topFaces( top.Elements() );
+    const size_t leftFaces( left.Cells() );
+    const size_t rightFaces( right.Cells() );
+    const size_t bottomFaces( bottom.Cells() );
+    const size_t topFaces( top.Cells() );
     
     if ( verbose ) cout << "\nModel Node Count: " << rref.Nodes() << endl;
     _test( rref.Nodes() == 106 );
@@ -106,7 +150,7 @@ void ANSYS_Model2D_Test::run()
     Model<2U> modelBinIn0(bin1name);
     Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
     Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
-    _test( (*modelBinIn0.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey0) == 2. );
+    _test( (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0) == 2. );
     ArrayVariable avBin0( "nodal array", modelBinIn0.Database() );
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
     _test( avBin0 == av );
@@ -118,15 +162,239 @@ void ANSYS_Model2D_Test::run()
     _test( rightNodes == modelBinIn1.Boundary("RIGHT").Nodes() );
     _test( topNodes == modelBinIn1.Boundary("TOP").Nodes() );
     _test( bottomNodes == modelBinIn1.Boundary("BOTTOM").Nodes() );
-    _test( leftFaces == modelBinIn1.Boundary("LEFT").Elements() );
-    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Elements() );
-    _test( topFaces == modelBinIn1.Boundary("TOP").Elements() );
-    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Elements() );
+    _test( leftFaces == modelBinIn1.Boundary("LEFT").Cells() );
+    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Cells() );
+    _test( topFaces == modelBinIn1.Boundary("TOP").Cells() );
+    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Cells() );
 
-    _test( (*modelBinIn1.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey) == 2. );
+    _test( (*modelBinIn1.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey) == 2. );
     ArrayVariable avBin( "nodal array", modelBinIn1.Database() );
     (*modelBinIn1.Region("Model").NodesBegin())->Read( nodalArrayKey, avBin );
     _test( avBin == av );
+    
+    // ADVANCED FUNCTIONALITY TESTS in relation to ANSYS models
+    // --------------------------------------------------------
+    // SKM (27/3/22)
+    // assunming that the line-element connectivity was rebuilt when the model was created
+    Test_printLineElementRegion();
+    
+    Test_CreateConsistentLineElementOrientations2D();
+    
+    Test_CreatInternalBoundary();
+
+    Test_CreatInternalSplitBoundaries();
+
+  } // end run
+*/
+  
+  
+void ANSYS_Model2D_Test::run()
+  {
+    Test_CreatInternalSplitBoundaries();
   }
+
+ 
+ 
+ 
+ 
+       // using line element VSet
+void ANSYS_Model2D_Test::Test_printLineElementRegion()
+ {
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_printLineElementRegion: running test on model '"<< endl;
+         cout << "MeshPatchWithLineElements" <<"'"<< endl;
+         cout.flush();
+      }
+    
+    // verifying function with predefined correct dataset
+    {
+      VSet<2U>      vset;
+      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+       
+      // works fine
+      const bool renumber_nodes{false};
+      _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC3", renumber_nodes ) == 1 ); // only one element
+    }
+ 
+    // rebuilding neighbor connectivty and line element connectivity
+    {
+      VSet<2U>      vset;
+      ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
+      vset.EstablishElementConnectivity2D(); // also deals with line-element orientations
+      Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
+       
+      const bool renumber_nodes{false};
+      _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );
+      _test( printLineElementRegion( model, "FRAC3", renumber_nodes ) == 1 ); // only one element
+    }
+    
+} // end Test_printLineElementRegion
+
+ 
+ 
+ 
+
+
+void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
+ {
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D: running test on model '"<< endl;
+         cout << model2d_name_ <<"'"<< endl;
+         cout.flush();
+      }
+
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D  model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. accessing the line-element regions representing the boundaries between layers
+    Region<2U>&  interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    
+    // 2. checking whether the elements are forming a chain that can be traversed neighbor to neighbors
+    //    (traversing until end is discovered, but terminating after at most as many steps that the region has elements)
+    if ( verbose_ ) {
+         interface1.Out();
+         const bool renumber_elmts{true};
+         _test( printLineElementRegion( model, interface1.Name().c_str(), renumber_elmts ) == interface1.Cells() );
+         interface2.Out();
+         _test( printLineElementRegion( model, interface2.Name().c_str(), renumber_elmts ) == interface2.Cells() );
+      }
+    
+    // 3. The endpoints of these regions must be at the vertical model boundaries
+    _test( interface1.PerimeterCells() == 2 );
+    _test( interface2.PerimeterCells() == 2 );
+    _test( interface1.PerimeterNodes() == 2 );
+    _test( interface2.PerimeterNodes() == 2 );
+    
+    // 4. Are the regions contiguous (all elements are interconnected except for those at the end
+    int contiguous{2}, n_missing_nbors{0};
+    // interface 1
+    for ( auto it=interface1.CellsBegin(); it!=interface1.CellsEnd(); ++it )
+      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+        if ( (*it)->Neighbor(i) == nullptr )
+          n_missing_nbors++;
+    _test( n_missing_nbors <= contiguous );
+    // interface 2
+    n_missing_nbors = 0;
+    for ( auto it=interface2.CellsBegin(); it!=interface2.CellsEnd(); ++it )
+      for ( int i{0}; i<(*it)->Neighbors(); ++i )
+        if ( (*it)->Neighbor(i) == nullptr )
+          n_missing_nbors++;
+    _test( n_missing_nbors <= contiguous );
+
+    // 4. getting pointers to the elements at the opposite ends of the line-element sequence and checking these elements
+    // interface 1
+    {
+      auto eit1{ *interface1.PerimeterCellsBegin() };
+      auto eit2{ (*next(interface1.CellsEnd(),-1)) };
+      _test( eit1->ConnectedNeighbors() == 1 );
+      _test( eit2->ConnectedNeighbors() == 1 );
+      // establishing the direction in which the line-element sequence is to be traversed
+      // should be consistent for beginnging and end
+      // (perimeter element 1 is expected to be at beginning)
+      bool forward_at_beginning = ( eit1->Neighbor(1) == nullptr ) ? true : false;
+      bool forward_at_end       = ( eit2->Neighbor(0) == nullptr ) ? true : false;
+      _test( forward_at_beginning == forward_at_end );
+    }
+    // interface 2
+    {
+      auto eit1{ *interface2.PerimeterCellsBegin() };
+      auto eit2{ (*next(interface2.CellsEnd(),-1)) };
+      _test( eit1->ConnectedNeighbors() == 1 );
+      _test( eit2->ConnectedNeighbors() == 1 );
+      // establishing the direction in which the line-element sequence is to be traversed
+      // (perimeter element 1 is expected to be at beginning)
+      bool forward_at_beginning = ( eit1->Neighbor(1) == nullptr ) ? true : false;
+      bool forward_at_end       = ( eit2->Neighbor(0) == nullptr ) ? true : false;
+      _test( forward_at_beginning == forward_at_end );
+    }
+        
+ } // end Test_CreateConsistentLineElementOrientations2D
+
+
+
+
+
+/**
+    For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
+*/
+void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
+{
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalBoundary: running test on model '";
+         cout << model2d_name_ <<"'"<< endl;
+         cout.flush();
+      }
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. accessing the line-element regions representing the boundaries between layers
+    const Region<2U>& interface1{ model.Region("INTERFACE1") }, interface2{ model.Region("INTERFACE2") };
+    size_t n_elmts_region1{ interface1.Cells() };
+    size_t n_elmts_region2{ interface2.Cells() };
+    
+    bool remove_original_region{false};
+    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
+    const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
+    _test( boundary1.Cells() == n_elmts_region1 );
+    
+    remove_original_region=true;
+    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
+    const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
+    _test( boundary2.Cells() == n_elmts_region2 );
+
+} // end Test_CreatInternalBoundary
+
+
+
+
+
+/**
+    For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
+*/
+void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
+{
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries: running test..."<< endl;
+         cout.flush();
+      }
+    string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // 1. creating the SplitBoundary from lower-dimensional region
+    size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
+    size_t n_elmts_region2 = model.Region( "INTERFACE2" ).Cells();
+
+    pair<set<string>,bool> splitBoundaryName1 = model.CreateSplitBoundaryFrom( "INTERFACE1" );
+    pair<set<string>,bool> splitBoundaryName2 = model.CreateSplitBoundaryFrom( "INTERFACE2" );
+    assert( splitBoundaryName1.first.size() == 1 );
+    assert( splitBoundaryName2.first.size() == 1 );
+    _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );
+    _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Cells() == n_elmts_region2 );
+    
+    model.SplitBoundariesOut();
+
+    // 2. remove split boundary 1 here before creating new ones in the same place
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+        
+    model.RegionsOut();
+
+    // 3. Directly creating a split boundary between regions (should not work leading to detection that there already is a split boundary)
+    model.CreateSplitBoundaryBetween( "LOWER_REGION", "MIDDLE_REGION" ); // INTERFACE 2
+
+    // 4. Creating a split boundary between regions (detecting the disjointed nodes?)
+    ANSYS_Model2D model2( model2d_name_.c_str(), varFileName.c_str() );
+    // now the nodes are shared so this should work
+    model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
+
+
+} // end Test_CreatInternalBoundary
+
 
 } // csmp

@@ -33,7 +33,8 @@ class VSet : public VData {
           size_t nodes, size_t elmts );
 
     /// multiple element type constructor
-    VSet( const std::deque<uint32_t>& npes,
+    VSet( const std::vector<int8_t>&  fem_types,
+          const std::deque<uint32_t>& npes,
           const std::deque<uint32_t>& epes,
           size_t nodes );
 
@@ -42,11 +43,13 @@ class VSet : public VData {
     VSet& operator=( const VSet& );
     VSet& operator=( VSet&& ) = default;
 
+    /// resizing meshes with only a single element type
     void Resize( uint32_t nodes_per_element,
                  uint32_t nbors_per_element,
                  int8_t csmp_etype, 
                  size_t nodes, size_t elmts );
 
+    /// use for meshes with multiple element sizes
     void Resize( const std::deque<int8_t>& etypes,
                  const std::deque<uint32_t>& npes, 
                  const std::deque<uint32_t>& epes,

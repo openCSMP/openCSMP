@@ -17,11 +17,11 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
   
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
-   settings_(),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), element_source_variable, diffusing_variable) ),
@@ -93,13 +93,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* point_source_variable )
                                      
  :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
-   #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
-   #endif
+#ifdef CSMP_WITH_SAMG_SOLVER
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#else
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), element_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
@@ -175,13 +175,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             const char* point_source_variable )
                                      
  :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
-   #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
-   #endif
+#ifdef CSMP_WITH_SAMG_SOLVER
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#else
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
@@ -260,13 +260,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                               const char* gradient_variable,
                                                               double gradient_multiplier )
  :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
-   #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
-   #endif
+#ifdef CSMP_WITH_SAMG_SOLVER
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#else
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
@@ -346,13 +346,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             double gradient_multiplier )
                                      
  :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
-   #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
-   #endif
+#ifdef CSMP_WITH_SAMG_SOLVER
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#else
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),
@@ -439,13 +439,13 @@ TransientDiffusor<dim,COMPUTATION_DOMAIN>::TransientDiffusor( Model<dim>& sg,
                                                                             double gradient_multiplier )
                                      
  :
-   #ifdef CSMP_WITH_SAMG_SOLVER
-      settings_(),
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new SAMG_Solver(&settings_) ),
-   #else
-      /// add extra functionality for alternative solver if needed
-      PDE_Integrator<dim,COMPUTATION_DOMAIN>( new CSMP_DEFAULT_LINEAR_SOLVER() ),
-   #endif
+#ifdef CSMP_WITH_SAMG_SOLVER
+   solver_(&settings_),
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#else
+   /// add extra functionality for alternative solver if needed
+   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+#endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
    source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    capacitance_lhs_( sg.Database(), storage_variable, diffusing_variable, diffusing_variable ),

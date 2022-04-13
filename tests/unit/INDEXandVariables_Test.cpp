@@ -31,6 +31,7 @@ struct IndexTrackerTestStruct
 
 void INDEXandVariables_Test::run()
   {
+// TODO: remove dependence of this test on ANSYS model!
     // Run Test for 3D Model constructed by ANSYS mesh reader
 	  string variables_filename = (string)(this->getName() + ".txt");
     ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true, true, true );
@@ -299,7 +300,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // single face variable test
       // TYPE: Scalar
       model.Boundary("BOUNDARY1").InputPropertyValue( "face variable 1", makeScalar( PLAIN, 4. ) );
-      _test( ( *model.Boundary("BOUNDARY1").ElementsBegin() )->Read(fKey1) == 4. );
+      _test( ( *model.Boundary("BOUNDARY1").CellsBegin() )->Read(fKey1) == 4. );
 
       model.Database().WriteVariablesFile("CSMP-variables-output.txt");
 
@@ -335,7 +336,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       av00 = ArrayVariable( "element array 2", model.Database(), 0. );
       model.InputPropertyValue( "element array 2", av00 );
       ArrayVariable av1( 22, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // TYPE: Array
           (*it)->Read( eaKey2, av1 );
@@ -361,7 +362,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       fav00 = FlaggedArrayVariable( "element flagged array 2", model.Database(), 0. );
       model.InputPropertyValue( "element flagged array 2", fav00 );
       FlaggedArrayVariable fav1( 2, 77., DIRICH );
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // TYPE: Flagged Array
           (*it)->Read( efaKey2, fav1 );
@@ -545,7 +546,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Element Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -585,7 +586,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Element Integration Point
-          for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+          for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
             {
               // TYPE: Scalar
               (*it)->Read( i, eipKey1, scalarV );
@@ -624,7 +625,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Face
-      for( vector<Face<3>*>::const_iterator it( model.Boundary("BOUNDARY3").ElementsBegin() ); it != model.Boundary("BOUNDARY3").ElementsEnd(); ++it )
+      for( vector<Face<3>*>::const_iterator it( model.Boundary("BOUNDARY3").CellsBegin() ); it != model.Boundary("BOUNDARY3").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( fKey1, scalarV );
@@ -658,7 +659,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Face Integration Points
-        for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, fipKey1, scalarV );
@@ -740,7 +741,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // ========================================================================
       // PLACEMENT: Element & Integration Points
 
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
           // ========================================================================
           // PLACEMENT: Element
@@ -780,7 +781,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Element Integration Point
-          for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+          for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
             {
               // TYPE: Scalar
               (*it)->Read( i, eipKey1, scalarV );
@@ -818,10 +819,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
           
           // ========================================================================
           // PLACEMENT: Sector Integration Point
-          const size_t sectors( (*it)->Sectors() );
+          const auto sectors( (*it)->Sectors() );
           assert( sectors != 0 );
-          for( size_t j(0); j < sectors; ++j )
-            for( size_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+          for( auto j(0U); j < sectors; ++j )
+            for( auto i{0U}; i < (*it)->IntegrationPointsPerSector(); ++i )
               {
                 // TYPE: Scalar
                 (*it)->Read( j, i, seipKey1, scalarV );
@@ -856,10 +857,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
             // ========================================================================
             // PLACEMENT: Facet Integration Point
-            const size_t facets( (*it)->Facets() );
+            const auto facets( (*it)->Facets() );
             assert( facets != 0 );
-            for( size_t j(0); j < facets; ++j )
-              for( size_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+            for( auto j(0U); j < facets; ++j )
+              for( auto i{0U}; i < (*it)->IntegrationPointsPerFacet(); ++i )
                 {
                   // TYPE: Scalar
                   (*it)->Read( j, i, faipKey1, scalarV );
@@ -927,7 +928,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // ========================================================================
         // PLACEMENT: Element
@@ -949,7 +950,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, eipKey2, scalarV );
@@ -975,10 +976,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Sector Integration Point
-        const size_t sectors( (*it)->Sectors() );
+        const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( size_t j(0); j < sectors; ++j )
-          for( size_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( auto j(0U); j < sectors; ++j )
+          for( auto i{0U}; i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             (*it)->Read( j, i, seipKey2, scalarV );
@@ -1003,10 +1004,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Facet Integration Points
-          const size_t facets( (*it)->Facets() );
+          const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( size_t j(0); j < facets; ++j )
-            for( size_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( auto j(0U); j < facets; ++j )
+            for( auto i{0U}; i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               (*it)->Read( j, i, faipKey2, scalarV );
@@ -1111,7 +1112,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
       // ========================================================================
       // PLACEMENT: Element & Integration Points
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         (*it)->Read( eKey2, scalarV );
@@ -1141,7 +1142,7 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           (*it)->Read( i, eipKey2, scalarV );
@@ -1177,10 +1178,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
         // ========================================================================
         // PLACEMENT: Sector Integration Points
-        const size_t sectors( (*it)->Sectors() );
+        const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( size_t j(0); j < sectors; ++j )
-          for( size_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( auto j(0U); j < sectors; ++j )
+          for( auto i{0U}; i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             (*it)->Read( j, i, seipKey2, scalarV );
@@ -1215,10 +1216,10 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
 
           // ========================================================================
           // PLACEMENT: Facet Integration Point
-          const size_t facets( (*it)->Facets() );
+          const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( size_t j(0); j < facets; ++j )
-            for( size_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( auto j(0U); j < facets; ++j )
+            for( auto i{0U}; i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               (*it)->Read( j, i, faipKey2, scalarV );
@@ -1258,12 +1259,12 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
       // Status tests
 
       // PLACEMENT: Element
-      for( vector<Element<3>*>::const_iterator it( model.Region("Model").ElementsBegin() ); it != model.Region("Model").ElementsEnd(); ++it )
+      for( vector<Element<3>*>::const_iterator it( model.Region("Model").CellsBegin() ); it != model.Region("Model").CellsEnd(); ++it )
         {
         // TYPE: Scalar
         _test( (*it)->Status(eKey2)     == twoS.Flag() );
         _test( (*it)->Status(neweKey3)  == threeS.Flag() );
-        for( size_t d(0); d<3; ++d )
+        for( auto d{0U}; d<3; ++d )
           {
           // TYPE: Vector
           _test( (*it)->Status(evKey2,d)    == fiveV.Flag(d) );
@@ -1276,19 +1277,19 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
         _test( (*it)->Status(eaKey2) == elementArray2.Flag() );
         _test( (*it)->Status(neweaKey3) == elementArray3.Flag() );
         // TYPE: Flagged Array
-        for( size_t d(0); d<elementFlaggedArray2.Size(); ++d )
+        for( auto d{0U}; d<elementFlaggedArray2.Size(); ++d )
             _test( (*it)->Status(efaKey2,d) == elementFlaggedArray2.Flag(d) );
-        for( size_t d(0); d<elementFlaggedArray3.Size(); ++d )
+        for( auto d{0U}; d<elementFlaggedArray3.Size(); ++d )
             _test( (*it)->Status(newefaKey3,d) == elementFlaggedArray3.Flag(d) );
 
         // ========================================================================
         // PLACEMENT: Element Integration Point
-        for( size_t i(0); i < (*it)->IntegrationPoints(); ++i )
+        for( auto i{0U}; i < (*it)->IntegrationPoints(); ++i )
           {
           // TYPE: Scalar
           _test( (*it)->Status(i,eipKey2)       == twoS.Flag() );
           _test( (*it)->Status(i,neweipKey3)    == threeS.Flag() );
-          for( size_t d(0); d<3; ++d )
+          for( auto d{0U}; d<3; ++d )
             {
             // TYPE: Vector
             _test( (*it)->Status(i,eipvKey2,d)      == fiveV.Flag(d) );
@@ -1302,24 +1303,24 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
           _test( (*it)->Status(i,eipaKey3)      == eipArray3.Flag() );
           _test( (*it)->Status(i,neweipaKey3)   == elementArray3.Flag() );
           // TYPE: Flagged Array
-          for( size_t d(0); d<eipFlaggedArray3.Size(); ++d )
+          for( auto d{0U}; d<eipFlaggedArray3.Size(); ++d )
               _test( (*it)->Status(i,eipfaKey3,d) == eipFlaggedArray3.Flag(d) );
-          for( size_t d(0); d<elementFlaggedArray3.Size(); ++d )
+          for( auto d{0U}; d<elementFlaggedArray3.Size(); ++d )
               _test( (*it)->Status(i,neweipfaKey3,d) == elementFlaggedArray3.Flag(d) );
           }
 
 
         // ========================================================================
         // PLACEMENT: Sector Integration Point
-        const size_t sectors( (*it)->Sectors() );
+        const auto sectors( (*it)->Sectors() );
         assert( sectors != 0 );
-        for( size_t j(0); j < sectors; ++j )
-          for( size_t i(0); i < (*it)->IntegrationPointsPerSector(); ++i )
+        for( auto j(0U); j < sectors; ++j )
+          for( auto i{0U}; i < (*it)->IntegrationPointsPerSector(); ++i )
             {
             // TYPE: Scalar
             _test( (*it)->Status(j,i,seipKey2)      == twoS.Flag() );
             _test( (*it)->Status(j,i,newseipKey3)   == threeS.Flag() );
-            for( size_t d(0); d<3; ++d )
+            for( auto d{0U}; d<3; ++d )
               {
               // TYPE: Vector
               _test( (*it)->Status(j,i,seipvKey2,d)     == fiveV.Flag(d) );
@@ -1333,25 +1334,25 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
             _test( (*it)->Status(j,i,seipaKey3)     == fvipArray3.Flag() );
             _test( (*it)->Status(j,i,newseipaKey3)  == elementArray3.Flag() );
             // TYPE: Flagged Array
-            for( size_t d(0); d<fvipFlaggedArray2.Size(); ++d )
+            for( auto d{0U}; d<fvipFlaggedArray2.Size(); ++d )
                 _test( (*it)->Status(j,i,seipfaKey2,d) == fvipFlaggedArray2.Flag(d) );
-            for( size_t d(0); d<fvipFlaggedArray3.Size(); ++d )
+            for( auto d{0U}; d<fvipFlaggedArray3.Size(); ++d )
                 _test( (*it)->Status(j,i,seipfaKey3,d) == fvipFlaggedArray3.Flag(d) );
-            for( size_t d(0); d<elementFlaggedArray3.Size(); ++d )
+            for( auto d{0U}; d<elementFlaggedArray3.Size(); ++d )
                 _test( (*it)->Status(j,i,newseipfaKey3,d) == elementFlaggedArray3.Flag(d) );
             }
 
           // ========================================================================
           // PLACEMENT: Facet Integration Point
-          const size_t facets( (*it)->Facets() );
+          const auto facets( (*it)->Facets() );
           assert( facets != 0 );
-          for( size_t j(0); j < facets; ++j )
-            for( size_t i(0); i < (*it)->IntegrationPointsPerFacet(); ++i )
+          for( auto j(0U); j < facets; ++j )
+            for( auto i{0U}; i < (*it)->IntegrationPointsPerFacet(); ++i )
               {
               // TYPE: Scalar
               _test( (*it)->Status(j,i,faipKey2)    == twoS.Flag() );
               _test( (*it)->Status(j,i,newfaipKey3) == threeS.Flag() );
-              for( size_t d(0); d<3; ++d )
+              for( auto d{0U}; d<3; ++d )
                 {
                 // TYPE: Vector
                 _test( (*it)->Status(j,i,faipvKey2,d)       == fiveV.Flag(d) );
@@ -1365,11 +1366,11 @@ void INDEXandVariables_Test::runModel( Model<3>& model )
               _test( (*it)->Status(j,i,faipaKey3) == fvipArray3.Flag() );
               _test( (*it)->Status(j,i,newfaipaKey3)  == elementArray3.Flag() );
               // TYPE: Flagged Array
-              for( size_t d(0); d<fvipFlaggedArray2.Size(); ++d )
+              for( auto d{0U}; d<fvipFlaggedArray2.Size(); ++d )
                   _test( (*it)->Status(j,i,faipfaKey2,d) == fvipFlaggedArray2.Flag(d) );
-              for( size_t d(0); d<fvipFlaggedArray3.Size(); ++d )
+              for( auto d{0U}; d<fvipFlaggedArray3.Size(); ++d )
                   _test( (*it)->Status(j,i,faipfaKey3,d) == fvipFlaggedArray3.Flag(d) );
-              for( size_t d(0); d<elementFlaggedArray3.Size(); ++d )
+              for( auto d{0U}; d<elementFlaggedArray3.Size(); ++d )
                   _test( (*it)->Status(j,i,newfaipfaKey3,d) == elementFlaggedArray3.Flag(d) );
 
               }

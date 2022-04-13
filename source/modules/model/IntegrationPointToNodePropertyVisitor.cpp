@@ -72,12 +72,12 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     // storing the constraint point property into a vector
     eptr->IntegrationPointPropertyVector( cprop_key_, vars_vector_ );
     
-    const size_t  vcomponents(vars_vector_[0].Size());
+    const auto vcomponents{ vars_vector_[0].Size() };
     cp_vars_.resize( eptr->IntegrationPoints() * vcomponents );
     nd_vars_.resize( eptr->Nodes() * vcomponents );
     
-    for ( auto i{0}; i<vars_vector_.size(); i++ )
-      for ( size_t j=0U; j<vcomponents; j++ ) 
+    for ( auto i{0U}; i<vars_vector_.size(); i++ )
+      for ( auto j{0U}; j<vcomponents; j++ )
         cp_vars_[ i * vcomponents + j ] = vars_vector_[i].Component(j);
     
     // extrapolating constraint point properties to nodes
@@ -87,7 +87,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
     csmp::Point<dim>  bc = eptr->BaryCenter();
     
     // accumulating results into nodes vector for later averaging
-    for ( auto i{0}; i<eptr->Nodes(); i++ ) {
+    for ( auto i{0U}; i<eptr->Nodes(); i++ ) {
          eptr->N(i)->Read( nprop_key_, variable_ );
          
          // using 1 / (distance from barycenter to node)  as a weight
@@ -96,7 +96,7 @@ void IntegrationPointToNodePropertyVisitor<Var,dim>::Visit( Element<dim>* eptr )
          summed_weights_[ eptr->N(i)->Idx() ] += weight;
          
          // adding extrapolated contributions
-         for ( size_t j=0U; j<vcomponents; j++ ) 
+         for ( auto j{0U}; j<vcomponents; j++ )
            variable_.Component( j, variable_.Component(j) + weight * nd_vars_[ i * vcomponents + j ] );
          
          eptr->N(i)->Store( nprop_key_, variable_ );

@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-LinearRectangle::LinearRectangle(uint32_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
+LinearRectangle::LinearRectangle( uint32_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
 	{
 		dim = dims;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */
@@ -41,7 +41,7 @@ LinearRectangle::LinearRectangle(uint32_t dims) :FiniteElement(LINEAR_RECTANGLE,
 			-vol / 18.,  vol / 36., -vol / 18.,  vol / 9. };
 		uint32_t k(0);
 		for (auto i = 0; i < 4; ++i)
-			for (uint32_t j = 0; j < 4; ++j)
+			for ( uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[k++];
 	}
 
@@ -77,7 +77,7 @@ void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 		DN.Resize(dim, npe);
 		DN.Zero();
 		for (auto i : { r , s })
-			for (uint32_t j = 0; j < npe; ++j)
+			for ( uint32_t j = 0; j < npe; ++j)
 				DN(i, j) = V_[indV++];
 	}
 
@@ -85,7 +85,7 @@ void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 void LinearRectangle::CornerNodes(std::vector<uint32_t>& ids) const { ids = { 0, 1, 2, 3 }; }
 
 
-void LinearRectangle::NodesOfSegment(uint32_t segm_id, std::vector<uint32_t>& snids) const
+void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids) const
 	{
 		snids.resize(2);
 		if (segm_id == 0) {
@@ -111,7 +111,7 @@ void LinearRectangle::NodesOfSegment(uint32_t segm_id, std::vector<uint32_t>& sn
 
 
 
-void LinearRectangle::NodesOfFace(uint32_t face_id, std::vector<uint32_t>& fnids) const
+void LinearRectangle::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids) const
 	{
 		fnids.resize(2);
 		if (face_id == 0)
@@ -197,7 +197,7 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 		uint32_t vind = 0;
 		M.Resize(4, 4);
 		for (auto i = 0; i < 4; ++i)
-			for (uint32_t j = 0; j < 4; ++j)
+			for ( uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[vind++];
 	}
 

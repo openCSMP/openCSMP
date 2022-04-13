@@ -2,6 +2,7 @@
 #define CSMP_NODE_MANIFOLD_H
 
 #include "CSMP_definitions.h"
+#include "plf_colony.h"
 
 namespace csmp {
 
@@ -48,22 +49,34 @@ class NodeManifold {
     public:
       NodeManifold() = default;
 
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >                   manifold;
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::iterator         manifoldIterator;
-      typedef typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::const_iterator   manifoldConstIterator;
+      using manifold              = std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >;
+      using manifoldIterator      = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::iterator;
+      using manifoldConstIterator = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::const_iterator;
 
-      /// sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
-      NodeManifold( const std::vector<Node<dim>*>&, const std::vector<INTERFACE_SIDE>&, ManifoldType );
+      /// main constructor in NodeManifoldManager: sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
+      NodeManifold( plf::colony<Node<dim> >& nodes,
+                    const std::set<std::pair<size_t,INTERFACE_SIDE> >& manifold_nodes,
+                    ManifoldType );
+      
+      /// constructs new Manifold from two nodes on the inside and outside of it; @attention nodes must be assigned to this manifold once it has been constructed
+      NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node, ManifoldType );
 
+      /// constructs manifold from vector pointer and qualifier pairs
       NodeManifold( const manifold&, ManifoldType );
 
-      NodeManifold( const NodeManifold& )            = default;
-      NodeManifold( NodeManifold&& )                 = default;
-      NodeManifold& operator=( const NodeManifold& ) = default;
-      NodeManifold& operator=( NodeManifold&& )      = default;
+      NodeManifold( const NodeManifold& );
+      NodeManifold( NodeManifold&& );
+      NodeManifold& operator=( const NodeManifold& );
+      NodeManifold& operator=( NodeManifold&& );
 
       ~NodeManifold();
       
+      /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for  Manifold geometry
+      bool Add( Node<dim>*, INTERFACE_SIDE );
+
+      /// removes node from the current manifold and sets its manifold pointer to zero because a Node can only belong to a single manifold
+      bool Remove( const Node<dim>* const );
+
       /// asscending sort (scalar on Node or Element only) - default is sorted by pointer in sequence entered
       void SortByVariableValue( const Index& scalar_node_variable );
 
@@ -85,12 +98,6 @@ class NodeManifold {
       /// reports manifold classifier that indicates the topologic position of the manifold
       ManifoldType GeometricClassifier() const;
       void GeometricClassifier( ManifoldType );
-
-      /// adds a node to the manifold storing the interface side, it is on; note that this might also have implications for the Manifold geometry which is therefore required
-      bool Add( Node<dim>*, INTERFACE_SIDE, ManifoldType );
-
-      /// removes node from the current manifold and sets its manifold pointer to zero because a Node can only belong to a single manifold
-      bool Remove( Node<dim>* );
 
       /// print out information
       void Out() const;

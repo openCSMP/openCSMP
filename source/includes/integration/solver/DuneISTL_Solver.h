@@ -230,7 +230,7 @@ class DuneISTL_Solver : public Solver
         const size_type entries( v.size() );
         bv.resize(entries);
         // assign data
-        for (size_t i=0; i<entries; ++i)
+        for (size_t i{0U}; i<entries; ++i)
             bv[i] = v[i];
     }
     void ConvertBlockVectorToVector( const Dune::BlockVector<Dune::FieldVector<double,1> >& bv, std::vector<double>& v )
@@ -243,7 +243,7 @@ class DuneISTL_Solver : public Solver
         const size_type entries( bv.size() );
         v.resize(entries);
         // assign data
-        for (size_t i=0; i<entries; ++i)
+        for (size_t i{0U}; i<entries; ++i)
             v[i] = bv[i];
     }
 

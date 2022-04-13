@@ -50,7 +50,7 @@ void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL& e )
          MathOperatorRHS<dim>::MTRL[0].Zero();
       
          if ( MathOperatorRHS<dim>::MaterialOperandType() == SCALAR ) {
-              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonal( dim, e.Read( MathOperatorRHS<dim>::MaterialOperandKey() ) ); 
+              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( MathOperatorRHS<dim>::MaterialOperandKey() ) ); 
            }
          if ( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
@@ -95,7 +95,7 @@ void Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
     double volume = e.Volume();
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    for ( auto i=0; i<e.Nodes(); i++ )
+    for ( auto i{0U}; i<e.Nodes(); i++ )
       MathOperatorRHS<dim>::RHS[i] = DNT(i,0) * volume;
 
 } // end ComputeContribution

@@ -22,10 +22,10 @@ void PointPropertyToCellMapper2D_Test::run()
 
 
     DenseMatrix<DM_MIN> dm;
-    const auto elementsEnd( rref.ElementsEnd() );
+    const auto elementsEnd( rref.CellsEnd() );
     try
       {    
-        for( auto it = rref.ElementsBegin(); it != elementsEnd; ++it )
+        for( auto it = rref.CellsBegin(); it != elementsEnd; ++it )
           (*it)->CoordinateMatrix();
       }
     catch(...)
@@ -91,10 +91,10 @@ void PointPropertyToCellMapper2D_Test::run()
     const size_t rightNodes( right.Nodes() );
     const size_t bottomNodes( bottom.Nodes() );
     const size_t topNodes( top.Nodes() );
-    const size_t leftFaces( left.Elements() );
-    const size_t rightFaces( right.Elements() );
-    const size_t bottomFaces( bottom.Elements() );
-    const size_t topFaces( top.Elements() );
+    const size_t leftFaces( left.Cells() );
+    const size_t rightFaces( right.Cells() );
+    const size_t bottomFaces( bottom.Cells() );
+    const size_t topFaces( top.Cells() );
     
     if ( verbose ) cout << "\nModel Node Count: " << rref.Nodes() << endl;
     _test( rref.Nodes() == 106 );
@@ -106,7 +106,7 @@ void PointPropertyToCellMapper2D_Test::run()
     Model<2U> modelBinIn0(bin1name);
     Index nodalArrayKey0( modelBinIn0.Database().StorageKey("nodal array") );
     Index faceVariableKey0( modelBinIn0.Database().StorageKey("face variable") );
-    _test( (*modelBinIn0.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey0) == 2. );
+    _test( (*modelBinIn0.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey0) == 2. );
     ArrayVariable avBin0( "nodal array", modelBinIn0.Database() );
     (*modelBinIn0.Region("Model").NodesBegin())->Read( nodalArrayKey0, avBin0 );
     _test( avBin0 == av );
@@ -118,12 +118,12 @@ void PointPropertyToCellMapper2D_Test::run()
     _test( rightNodes == modelBinIn1.Boundary("RIGHT").Nodes() );
     _test( topNodes == modelBinIn1.Boundary("TOP").Nodes() );
     _test( bottomNodes == modelBinIn1.Boundary("BOTTOM").Nodes() );
-    _test( leftFaces == modelBinIn1.Boundary("LEFT").Elements() );
-    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Elements() );
-    _test( topFaces == modelBinIn1.Boundary("TOP").Elements() );
-    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Elements() );
+    _test( leftFaces == modelBinIn1.Boundary("LEFT").Cells() );
+    _test( rightFaces == modelBinIn1.Boundary("RIGHT").Cells() );
+    _test( topFaces == modelBinIn1.Boundary("TOP").Cells() );
+    _test( bottomFaces == modelBinIn1.Boundary("BOTTOM").Cells() );
 
-    _test( (*modelBinIn1.Boundary("RIGHT").ElementsBegin())->Read(faceVariableKey) == 2. );
+    _test( (*modelBinIn1.Boundary("RIGHT").CellsBegin())->Read(faceVariableKey) == 2. );
     ArrayVariable avBin( "nodal array", modelBinIn1.Database() );
     (*modelBinIn1.Region("Model").NodesBegin())->Read( nodalArrayKey, avBin );
     _test( avBin == av );

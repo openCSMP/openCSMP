@@ -152,8 +152,8 @@ public:
 
     // Running a trivial test criterion
     bool passed( true );
-    const std::vector<Element<DIM>*>::const_iterator elementsEnd = rref.ElementsEnd();
-    for( std::vector<Element<DIM>*>::const_iterator it = rref.ElementsBegin();
+    const std::vector<Element<DIM>*>::const_iterator elementsEnd = rref.CellsEnd();
+    for( std::vector<Element<DIM>*>::const_iterator it = rref.CellsBegin();
          it != elementsEnd; ++it )
       {
         if( (*it)->Read( porosityKey ) != (*it)->Read( cachePorosityKey ) *

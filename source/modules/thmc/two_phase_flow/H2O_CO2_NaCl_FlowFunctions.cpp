@@ -24,10 +24,10 @@ template<uint32_t dim, template<uint32_t> class USER>
 bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::ContinuousPhases( Element<dim>* const e, bool& aqueous, bool& carbonic, bool& halite ) const
  {
     assert( e != nullptr );
-    const size_t nodes(e->Nodes());
+    const auto nodes(e->Nodes());
     aqueous = carbonic = halite = true;
 
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          if ( isnan(s) && s <= numeric_limits<double>::epsilon()*2 ) aqueous = false;
          s = e->N(i)->Read( User()->key_sCO2 );
@@ -53,7 +53,7 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhaseSaturation( 
     const size_t nodes(e->Nodes());
     double sw(0.);
 
-    for ( size_t i=0; i<nodes; ++i ) {
+    for ( size_t i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw += e->FE()->NRST[i] * s;
       }
@@ -75,11 +75,11 @@ double  H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSaturations( Element<di
  {
     assert( e != nullptr );
     e->N_AtBaryCenter( e->FE()->NRST );
-    const size_t nodes(e->Nodes());
+    const auto nodes(e->Nodes());
    
     sw = sn = 0.;
 
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw += e->FE()->NRST[i] * s;
          s = e->N(i)->Read( User()->key_sCO2 );
@@ -109,12 +109,12 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateAqueousPhase( Element<dim>
  {
     assert( e != nullptr );
     e->N_AtBaryCenter( e->FE()->NRST );
-    const size_t nodes(e->Nodes());
+    const auto nodes(e->Nodes());
     double     ipol_sum(0.);
    
     sw = rhow = muw = 0.;
 
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {
@@ -147,12 +147,12 @@ bool H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateCarbonicPhase( Element<dim
  {
     assert( e != nullptr );
     e->N_AtBaryCenter( e->FE()->NRST );
-    const size_t nodes(e->Nodes());
+    const auto nodes(e->Nodes());
     double     ipol_sum(0.);
    
     snw = rhon = mun = 0.;
 
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
         // carbonic phase
         double sn = e->N(i)->Read( User()->key_sCO2 );
         snw  += e->FE()->NRST[i] * sn;
@@ -183,13 +183,13 @@ double H2O_CO2_NaCl_FlowFunctions<dim,USER>::InterpolateSystem( Element<dim>* co
  {
     assert( e != nullptr );
     e->N_AtBaryCenter( e->FE()->NRST );
-    const size_t nodes(e->Nodes());
+    const auto nodes(e->Nodes());
     double halite_saturation(0.);
     double ipol_sum1(0.), ipol_sum2(0.);
 
     sw = rhow = muw = snw = rhon = mun = 0.;
 
-    for ( auto i=0; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
          double s = e->N(i)->Read( User()->key_sH2O );
          sw   += e->FE()->NRST[i] * s;
          if ( s > 0. ) {

@@ -211,7 +211,7 @@ void ODE_StiffSolver::IntermediateStepsToSave( size_t s )
       {
          result_xp.reserve(s);
          for ( size_t i=kmax-1; i<s; i++ ) result_xp.push_back(0.0);
-         for ( size_t j=0; j<dof; j++ ) 
+         for ( size_t j{0U}; j<dof; j++ ) 
            {
                result_yp[j].reserve(s);
                for ( size_t i=kmax-1; i<s; i++ ) result_yp[j].push_back(0.0); 
@@ -1124,7 +1124,7 @@ All of these output routines assume an indexing from 1...n.
 void ODE_StiffSolver::Out( const vector<int32_t>& vec ) const
  {
     cout <<"\nvector n ("<< vec.size() <<")"<< endl;
-    for ( size_t i=0; i<vec.size(); i++ ) cout << vec[i] <<"  ";
+    for ( size_t i{0U}; i<vec.size(); i++ ) cout << vec[i] <<"  ";
     cout << endl;
  }                
 
@@ -1160,7 +1160,7 @@ void ODE_StiffSolver::Out( double** vec, int32_t m, int32_t n )
 void ODE_StiffSolver::Out( const vector<double>& vec ) const
  {
     cout <<"\nvector n ("<<vec.size() <<")"<< endl;
-    for ( size_t i=0; i<vec.size(); i++ ) cout << vec[i] <<"  ";
+    for ( size_t i{0U}; i<vec.size(); i++ ) cout << vec[i] <<"  ";
     cout << endl;
  }                
 
@@ -2075,7 +2075,7 @@ Currently, the method reports the calculated values for each product term.
 void ODE_StiffSolver::EvaluateIndependentProductTerms( const double dependent_vals[], vector<double>& vals )
  {
     assert ( eqns.size() == vals.size() );
-    for ( size_t i=0; i<eqns.size(); i++ ) 
+    for ( size_t i{0U}; i<eqns.size(); i++ ) 
       {
          vals[i] = eqns[i].Sum( dependent_vals );
          cout <<"\nindependent value: "<< vals[i];

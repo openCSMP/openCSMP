@@ -14,7 +14,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PDE_Integrator.h"
-#include "PDE_IntegratorExperimental.h"
+#include "PDE_Integrator.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -78,28 +78,71 @@ void Experimental_Example::Specifications()
 */
 void Experimental_Example::Run()
 {
+    cout <<"\nHello World and size of uint_fast32_t: "<< sizeof(uint_fast32_t) << endl;
+    cout <<"\nauto i{0}: "<< sizeof(uint_fast32_t) << endl;
+    vector<double> doubs(2,2e-4);
+    for ( auto j{0}; j<doubs.size(); j++ ) {
+          doubs[j] = 2.3;
+          cout <<"\n\tsize of vector loop variable j: "<< sizeof(j) << endl;
+          if ( j == 1 ) break;
+      }
+      
+    // INSERTING AN INTERNAL BOUNDARY IN 2D MODEL
+    string         variables_file("CSMP-1phase-variables.txt");
+    ANSYS_Model2D  model( "BoxHalfs2D", variables_file.c_str(), false, true, true );
+    Region<2U>&    line(model.Region("STANDARD"));
+    size_t         n_boundary_line_elements{ line.Cells() };
+    size_t         n_faces_after_built{ model.Mesh().Faces() };
+    // assigning some permeability values to the halves
+    model.Region("MATRIX_LEFT").InputPropertyValue("permeability", makeScalar(PLAIN,1e-12) );
+    model.Region("MATRIX_RIGHT").InputPropertyValue("permeability", makeScalar(PLAIN,1e-13) );
+    
+    // create Boundary and remove lower-dimensional region
+    model.CreateInternalBoundaryFrom("STANDARD");
+    
+    if ( model.Mesh().Faces() - n_faces_after_built != n_boundary_line_elements )
+      cerr <<"main: model contains different number of faces than elements in line element boundary\n";
+    
+    // visualising model and boundary
+    VTU_Interface<2U>  vtu_out( model, "Testing_OpenCSMP" );
+    
+    vtu_out.OutputDataToVTU( "BoxHalfs2D_test", "permeability", "Model", 0 );
+    
+    Boundary<2U>& line_boundary(model.Boundary("STANDARD_BOUNDARY0_MATRIX_LEFT_MATRIX_RIGHT"));
+    line_boundary.Out();
+    vtu_out.OutputDataToVTU( "line_elmt_region", "permeability", line_boundary, 0 );
+      
+#if 0
+    // ODLING 720 x 720 meter
+    string         variables_file("CSMP-1phase-variables.txt");
+    ANSYS_Model2D  model( "odling720x720", variables_file.c_str(), false, true, true );
+    // boolean flags set reading to: 2) default prop.values, 3) group prop.values, 4) essential conditions for box-shaped model
+    InputDataManager<2>().ConfigureFromFile( model, "Fluid_Flower",
+                                             false,           // region name from parameter range
+                                             true,            // default property values
+                                             true,            // regional property values
+                                             true,            // boundary conditions for box-shaped model
+                                             true );          // essential conditions for regions
+                                           // default: boundary conditions for arbitrary-shaped model
+#endif
+
+    // FLUID FLOWER TESTCASE
+#if 0
     string  variables_file("DES_2phase_variables.txt");
     ANSYS_Model2D  model( "Fluid_Flower", variables_file.c_str(), false, true, true );
     
-    model.RegionsOut();
-    model.BoundariesOut();
-    
-    //! Assignment of material properties, initial conditions, and boundary
+    // Assignment of material properties, initial conditions, and boundary
     InputDataManager<2>  model_configuration;
-    ComputationalSettings  run_settings;
 
     // boolean flags set reading to: 2) default prop.values, 3) group prop.values, 4) essential conditions for box-shaped model
-    model_configuration.ConfigureFromFile( model, "Fluid_Flower", false,    // groupname from parameter range
-                                           true,    // default property values
-                                           true,    // regional property values
-                                           false,    // boundary conditions for box-shaped model
-                                           true,    // essential conditions for groups
-                                           true,    // csmp::Boundary properties
-                                           run_settings );
-
-
-    VTK_Interface<2>  vtk_output;
-    vtk_output.OutputDataToVTK( model, "Fluid_Flower-perm", "permeability",  0 );
+    model_configuration.ConfigureFromFile( model, "Fluid_Flower",
+                                           false,           // region name from parameter range
+                                           true,            // default property values
+                                           true,            // regional property values
+                                           true,            // boundary conditions for box-shaped model
+                                           true );          // essential conditions for regions
+                                           // default: boundary conditions for arbitrary-shaped model
+#endif
 
 } // end Run
 

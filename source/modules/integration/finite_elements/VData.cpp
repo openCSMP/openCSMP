@@ -9,6 +9,7 @@
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "CSMP_ElementSpecifications.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -51,10 +52,10 @@ VData::VData( const deque<uint32_t>& npes,
     first_face_(npes.size()),
     first_interface_(npes.size())
  {
-    for ( auto i{0}; i<epes.size(); i++ )
+    for ( auto i{0U}; i<epes.size(); i++ )
       plist[i]   = vector<int64_t>(npes[i]);
          
-    for ( auto i{0}; i<epes.size(); i++ )
+    for ( auto i{0U}; i<epes.size(); i++ )
       pfverts[i] = vector<int64_t>(epes[i]);
  }
 
@@ -72,9 +73,9 @@ VData::VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nod
     first_face_(elmts),
     first_interface_(elmts)
 {
-    for ( auto i{0}; i<elmts; i++ )
+    for ( size_t i{0U}; i<elmts; i++ )
       plist.push_back( vector<int64_t>(nodes_per_element) );
-    for ( size_t k=0U; k<elmts; k++ )
+    for ( size_t k{0U}; k<elmts; k++ )
       pfverts.push_back( vector<int64_t>(nbors_per_element) );
 }
 
@@ -233,6 +234,32 @@ bool  VData::IsoparametricElementMesh() const
          return false;
      return true;
  }
+
+
+/// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
+int VData::SpatialDimension() const
+ {
+   // 1. looking at the element types
+   if ( !HybridElementTypeMesh() )
+     return CSMP_ElementSpecifications::MinimumSpatialDimension( pelmt[0] );
+     
+   uint32_t spatial_dim{1};
+   for ( auto i : pelmt ) {
+        spatial_dim = max( spatial_dim, CSMP_ElementSpecifications::MinimumSpatialDimension(i) );
+        if (  spatial_dim == 3 ) break;
+     }
+     
+   // 2. taking the Z-coordinate range as an additional criterion
+   const pair<double,double>  Z_range = Z_Range();
+   if ( approximatelyEqual(Z_range.first,Z_range.second) && spatial_dim == 2 ) return 2;
+   
+   if ( spatial_dim == 3 && approximatelyEqual(Z_range.first,Z_range.second) )
+     throw csmp::Exception( ERROR, "VData::SpatialDimension",
+                           "while mesh contains volume elements, Z-coordinate range is zero");
+   return spatial_dim;
+   
+ } // end SpatialDimension
+
 
 
 
@@ -576,10 +603,10 @@ void VData::Resize( size_t nodes_per_element,
     plist.clear();
     pfverts.clear();
 
-    for ( auto i{0}; i<elmts; ++i ) {
+    for ( size_t i{0U}; i<elmts; ++i ) {
          plist.push_back( vector<int64_t>(nodes_per_element) );
       }
-    for ( size_t k=0U; k<elmts; ++k )
+    for ( size_t k{0U}; k<elmts; ++k )
       pfverts.push_back( vector<int64_t>(nbors_per_element) );
       
     hybrid_mesh_ = false;
@@ -641,10 +668,10 @@ to be included into the supplied deques.
     
     pelmt.assign( etypes.begin(), etypes.end() );
     
-    for ( auto i{0}; i<nrCells; i++ )
+    for ( auto i{0U}; i<nrCells; i++ )
       plist.emplace_back( vector<int64_t>(npes[i],UINT_MAX) );
     
-    for ( auto i{0}; i<nrCells; i++ )
+    for ( auto i{0U}; i<nrCells; i++ )
       pfverts.emplace_back( vector<int64_t>(epes[i],IRREGULAR) );
     
     if ( etypes.size() > 1U ) hybrid_mesh_ = true;
@@ -742,7 +769,7 @@ void VData::ResizePlist( size_t elements )
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
       plist.push_back( empty_vec );
    
     // if there were no faces or interfaces initially
@@ -797,7 +824,7 @@ void VData::ResizePlist( size_t elements, uint32_t nperelmt )
     const size_t old_size( plist.size() );
     assert( elements > old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         plist.push_back( empty_vec );
 
     // mono-element meshes can have no faces nor interfaces
@@ -836,13 +863,13 @@ void VData::ResizePlist( const deque<uint32_t>& mixed_ele_plist )
     vector<int64_t>  empty_vec;
     size_t          n_last(mixed_ele_plist[0]);
 
-    for ( auto i{0}; i<mixed_ele_plist.size(); ++i )
+    for ( auto i{0U}; i<mixed_ele_plist.size(); ++i )
       {
          if ( !hybrid_mesh_  and  n_last != mixed_ele_plist[i] ) hybrid_mesh_ = true;
          // extending member vectors in place (avoiding copying)
          plist.push_back( empty_vec );
          plist[i].reserve( (n_last=mixed_ele_plist[i]) );
-         for ( size_t j=0; j<n_last; ++j ) plist[i].push_back( 0 );
+         for ( size_t j{0U}; j<n_last; ++j ) plist[i].push_back( 0 );
       }
 
     // if there were no faces or interfaces initially
@@ -876,7 +903,7 @@ void VData::ResizePfverts( size_t elements )
     const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );
 }
 
@@ -895,7 +922,7 @@ void VData::ResizePfverts( size_t elements, uint32_t nperelmt )
     const size_t old_size( pfverts.size() );
     assert( elements >= old_size );
     const size_t new_elmts( elements - old_size );
-    for ( size_t i=0; i<new_elmts; i++ )
+    for ( size_t i{0U}; i<new_elmts; i++ )
         pfverts.push_back( empty_vec );
 }
 
@@ -926,12 +953,12 @@ void VData::ResizePfverts( const deque<uint32_t>& mixed_ele_pfverts )
          pfverts.erase( pfverts.begin(), pfverts.end() );
       }
 
-    for ( size_t i=0; i<mixed_ele_pfverts.size(); ++i )
+    for ( size_t i{0U}; i<mixed_ele_pfverts.size(); ++i )
       {
          // extending member vectors in place (avoiding copying)
          pfverts.push_back( empty_vec );
          pfverts[i].reserve( mixed_ele_pfverts[i] );
-         for ( size_t j=0U; j<mixed_ele_pfverts[i]; j++ ) pfverts[i].push_back( flag_other );
+         for ( size_t j{0U}; j<mixed_ele_pfverts[i]; j++ ) pfverts[i].push_back( flag_other );
       }
 
  } // end ResizePfverts
@@ -985,36 +1012,32 @@ bool VData::CheckFix()
 
    // plist
    // -----
-   for ( deque<vector<int64_t> >::const_iterator
-         pit=plist.begin(); pit!=plist.end(); pit++ )
-     for ( vector<int64_t>::const_iterator
-           it=(*pit).begin(); it!=(*pit).end(); it++ )
-       if ( *it > Vertices() )
+   for ( const auto& pit : plist )
+     for ( const auto& it : pit )
+       if ( it > Vertices() )
          {
-            cerr <<"\nVData::Check: Wrong node ID in plist: ";
-            cerr << *it <<" versus n-nodes: "<< Vertices() << endl;
+            cerr <<"\nVData::Check: Wrong node number (index) in plist: ";
+            cerr << it <<" versus n-nodes: "<< Vertices() << endl;
             ok = false;
          }
 
    // pfverts
    // -------
-   for ( deque<vector<int64_t> >::iterator
-         fpit=pfverts.begin(); fpit!=pfverts.end(); fpit++ )
-     for ( vector<int64_t>::iterator
-           fit=(*fpit).begin(); fit!=(*fpit).end(); fit++ ) {
-       if ( *fit > static_cast<int64_t>(Elements()) )
+   for ( auto& fpit : pfverts )
+     for ( auto& fit : fpit ) {
+       if ( fit > static_cast<int64_t>(Elements()) )
          {
-            cerr <<"\nVData::Check: Non-existant high element ID in pfverts: ";
-            cerr << *fit <<" versus n-elements: "<< Elements() << endl;
+            cerr <<"\nVData::Check: Non-existant high element number (index) in pfverts: ";
+            cerr << fit <<" versus n-elements: "<< Elements() << endl;
             ok = false;
          }
-       if ( *fit < REGION_BOUNDARY )
+       if ( fit < REGION_BOUNDARY )
          {
             if ( ok ) {
-                 cerr <<"\n\n\n\nVData::Check: Too low boundary flag ID in pfverts: ";
-                 cerr << *fit <<" versus n-elements: "<< Elements() << endl << endl;
+                 cerr <<"\n\n\n\nVData::Check: Too low boundary flag number (index) in pfverts: ";
+                 cerr << fit <<" versus n-elements: "<< Elements() << endl << endl;
               }
-            *fit = REGION_BOUNDARY;
+            fit = REGION_BOUNDARY;
             ok = false;
          }
        }  
@@ -1261,7 +1284,7 @@ void VData::OutASCII( const char* file ) const
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
      ofs <<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
-     for ( auto i{0}; i<px.size(); i++ )
+     for ( auto i{0U}; i<px.size(); i++ )
        ofs << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
@@ -1281,7 +1304,7 @@ void VData::OutASCII( const char* file ) const
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           ofs << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) ofs << (*pt)[j] <<"\t";
+          for ( size_t j{0U}; j<(*pt).size(); j++ ) ofs << (*pt)[j] <<"\t";
           ofs << endl;
        }
 
@@ -1293,7 +1316,7 @@ void VData::OutASCII( const char* file ) const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           ofs << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) ofs << (*ft)[j] <<"\t";
+          for ( size_t j{0U}; j<(*ft).size(); j++ ) ofs << (*ft)[j] <<"\t";
           ofs << endl;
        }
 
@@ -1322,7 +1345,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // vector<int8_t> pelmt;
     const size_t n_elmts{pelmt.size()};
     ofs <<"\ndeque<int8_t>  etypes{";
-    for ( auto i{0}; i<n_elmts; ++i ) {
+    for ( auto i{0U}; i<n_elmts; ++i ) {
          ofs << static_cast<int>(pelmt[i]);
          if ( i < n_elmts-1 ) ofs <<",";
       }
@@ -1378,7 +1401,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
 
     //------------------------------BOUNDARY FLAGS
     ofs <<"\n\nvector<int8_t>  bflags{";
-    for ( auto i{0}; i<Vertices(); ++i ) {
+    for ( size_t i{0U}; i<Vertices(); ++i ) {
          ofs << static_cast<int>(BFlag(i));
          if ( i <Vertices()-1 ) ofs <<",";
       }
@@ -1391,7 +1414,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // Plist( size_t eidx, size_t node, size_t val );
     for ( size_t eidx{0}; eidx<plist.size(); ++eidx ) {
         ofs <<"\n\tplist["<< eidx <<"] = { ";
-        for ( size_t node{0}; node<plist[eidx].size(); ++node ) {
+        for ( auto node{0U}; node<plist[eidx].size(); ++node ) {
              ofs << plist[eidx][node];
              if ( node < plist[eidx].size()-1 ) ofs <<", ";
           }
@@ -1405,7 +1428,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     // Pfverts( size_t eidx, size_t neighbor, size_t val );
     for ( size_t eidx{0}; eidx<pfverts.size(); ++eidx ) {
         ofs <<"\n\tpfverts["<< eidx <<"] = { ";
-        for ( size_t nbor{0}; nbor<pfverts[eidx].size(); ++nbor ) {
+        for ( auto nbor{0U}; nbor<pfverts[eidx].size(); ++nbor ) {
              ofs << pfverts[eidx][nbor];
              if ( nbor < pfverts[eidx].size()-1 ) ofs <<", ";
           }
@@ -1447,7 +1470,7 @@ void VData::Out() const
      assert( px.size() == py.size() );
      assert( py.size() == pz.size() );
      cout<<"\n'px, py, pz' coordinates of "<< px.size() <<" nodes:"<< endl;
-     for ( auto i{0}; i<px.size(); i++ )
+     for ( auto i{0U}; i<px.size(); i++ )
        cout << i <<": \t"<< px[i] <<"\t"<< py[i] <<"\t"<< pz[i] << endl;
 
      // pelmt
@@ -1467,7 +1490,7 @@ void VData::Out() const
            pt=plist.begin(); pt!=plist.end(); pt++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
+          for ( size_t j{0U}; j<(*pt).size(); j++ ) cout << (*pt)[j] <<"\t";
           cout << endl;
        }
 
@@ -1479,7 +1502,7 @@ void VData::Out() const
            ft=pfverts.begin(); ft!=pfverts.end(); ft++, i++ )
        {
           cout << i <<": \t";
-          for ( size_t j=0U; j<(*ft).size(); j++ ) {
+          for ( size_t j{0U}; j<(*ft).size(); j++ ) {
                if ( (*ft)[j] >= 0 )
                  cout << (*ft)[j] <<"\t ";
                else {
@@ -1537,7 +1560,7 @@ void VData::InText( std::ifstream& ifs )
           vector<double>( pz ).swap( pz );
        }
 
-     for ( auto i{0}; i<nnodes; i++ ) {
+     for ( size_t i{0U}; i<nnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           px[i] = atof(strtok( text_line, delims ));
@@ -1560,7 +1583,7 @@ void VData::InText( std::ifstream& ifs )
      else                hybrid_mesh_ = true;
      if ( hybrid_mesh_ ) pelmt.reserve(nelements);
      
-     for ( auto i{0}; i<nelements; i++ ) {
+     for ( size_t i{0U}; i<nelements; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           int64_t  etype = atoi(strtok( text_line, delims ));
@@ -1570,7 +1593,7 @@ void VData::InText( std::ifstream& ifs )
           assert( npe > 2 );
           plist[i].resize( static_cast<uint32_t>(npe) );
           vector<int64_t>( plist[i] ).swap( plist[i] );
-          for ( size_t j=0U; j<static_cast<uint32_t>(npe); j++ )
+          for ( size_t j{0U}; j<static_cast<uint32_t>(npe); j++ )
             plist[i][j] = atoi(strtok(NULL,delims));
        }
      
@@ -1583,13 +1606,13 @@ void VData::InText( std::ifstream& ifs )
      assert( nelements == npe );
      pfverts.resize( static_cast<int64_t>(nelements) );
      deque<vector<int64_t> >( pfverts ).swap( pfverts );
-     for ( auto i{0}; i<static_cast<uint32_t>(nelements); i++ ) {
+     for ( auto i{0U}; i<static_cast<uint32_t>(nelements); i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           npe = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
           pfverts[i].resize( static_cast<uint32_t>(npe) );
           vector<int64_t>( pfverts[i] ).swap( pfverts[i] );
-          for ( size_t j=0; j<static_cast<uint32_t>(npe); j++ )
+          for ( size_t j{0U}; j<static_cast<uint32_t>(npe); j++ )
             pfverts[i][j] = atoi(strtok(NULL,delims));
        }
      
@@ -1601,7 +1624,7 @@ void VData::InText( std::ifstream& ifs )
      size_t nbnodes = atoi(strtok( text_line, delims )); // neigbor elements per element (=faces)
      assert( static_cast<int>(nbnodes) <= nnodes );
      bflags.resize(nnodes,0);
-     for ( auto i{0}; i<nbnodes; i++ ) {
+     for ( auto i{0U}; i<nbnodes; i++ ) {
           do ifs.getline( text_line, 256 );
           while ( (isCommentLine(text_line) && !ifs.eof()) );
           size_t nid   = atoi(strtok( text_line, delims ));
@@ -1702,15 +1725,15 @@ void VData::ScaleCoordinateToRange( char coordinate_axis, double cmin, double cm
     double  new_range = cmax   - cmin;  
 
     if ( coordinate_axis == 'x' || coordinate_axis == 'X' )
-      for ( size_t i=0; i<px.size(); i++ )
+      for ( size_t i{0U}; i<px.size(); i++ )
         px[i] = cmin + ((px[i] - oldmin)/old_range) * new_range;
 
     else if ( coordinate_axis == 'y' || coordinate_axis == 'Y' )
-      for ( size_t i=0; i<py.size(); i++ )
+      for ( size_t i{0U}; i<py.size(); i++ )
         py[i] = cmin + ((py[i] - oldmin)/old_range) * new_range;
 
     else if ( coordinate_axis == 'z' || coordinate_axis == 'Z' )
-      for ( size_t i=0; i<pz.size(); i++ )
+      for ( size_t i{0U}; i<pz.size(); i++ )
         pz[i] = cmin + ((pz[i] - oldmin)/old_range) * new_range;
  } 
  
@@ -1735,7 +1758,7 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(pelmt == vd.pelmt) ) {
          cerr<<"\nVData::operator== failed 'pelmt' comparison.";
          if ( pelmt.size() != vd.pelmt.size() ) cerr <<"\nelement type records have different sizes.\n";
-         for ( auto i{0}; i<pelmt.size(); ++i )
+         for ( size_t i{0U}; i<pelmt.size(); ++i )
            if ( pelmt[i] != vd.pelmt[i] )
              cerr <<"\n\t\t"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": "<< static_cast<int>(pelmt[i]) <<" vs "<< static_cast<int>(vd.pelmt[i]);
          cerr << endl << endl;
@@ -1744,7 +1767,7 @@ bool  VData::operator==( const VData& vd ) const
     
     if ( !(plist == vd.plist) ) {
          cerr<<"\nVData::operator== failed 'plist' comparison.";
-         for ( auto i{0}; i<plist.size(); ++i )
+         for ( size_t i{0U}; i<plist.size(); ++i )
            if ( plist[i] != vd.plist[i] ) {
                 if ( plist[i].size() != vd.plist[i].size() ) cerr <<"\ncell "<< i <<" nodes-per-element records have different sizes.\n";
                 else {
@@ -1759,7 +1782,7 @@ bool  VData::operator==( const VData& vd ) const
     
     if ( !(pfverts == vd.pfverts) ) {
          cerr<<"\nVData::operator== failed 'pfverts' comparison.\n";
-         for ( auto i{0}; i<pfverts.size(); ++i )
+         for ( size_t i{0U}; i<pfverts.size(); ++i )
            if ( pfverts[i] != vd.pfverts[i] ) {
                 if ( pfverts[i].size() != vd.pfverts[i].size() ) cerr <<"\n\tcell "<< i <<" element-neighbor records have different sizes.\n";
                 else {
@@ -1775,7 +1798,7 @@ bool  VData::operator==( const VData& vd ) const
     if ( !(bflags == vd.bflags) ) {
          cerr<<"\nVData::operator== failed 'bflags' comparison.";
          if ( bflags.size() != vd.bflags.size() ) cerr <<"\n\tboundary flag records have different sizes.\n";
-         for ( auto i{0}; i<bflags.size(); ++i )
+         for ( size_t i{0U}; i<bflags.size(); ++i )
            if ( bflags[i] != vd.bflags[i] )
              cerr <<"\n\t\tnode flag "<< i <<": "<< static_cast<int>(bflags[i]) <<" vs "<< static_cast<int>(vd.bflags[i]);
          cerr << endl << endl;
@@ -2217,6 +2240,8 @@ pair<double,double>  VData::Z_Range() const
       @attention method expects elements to be of CSMP_FEM_TYPE
       
       @attention works only for linear and quadratic elements
+      
+      @attention method does not touch the line elements
 */
 size_t VData::RenumberElementsCounterClockwise2D()
  {
@@ -2302,12 +2327,16 @@ size_t VData::RenumberElementsCounterClockwise2D()
    The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements,
    which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
    
+   @attention this method expects that there already is connectivity information for line elements
+   
    @attention if the line elements do not know their neighbors already, this method will not work!
    
    @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
    
    @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
    =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which must stored in pfverts.
+   
+   @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements)
    
    @note algorithmic procedure: 1) chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
    2) these are then traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the chains of
@@ -2343,18 +2372,22 @@ size_t VData::RenumberElementsCounterClockwise2D()
 
       const vector<int8_t>::const_iterator  end = PelmtEnd();
       vector<int8_t>::const_iterator        eit = PelmtBegin();
-      int64_t  elmt_idx(0U);
+      int64_t                               elmt_idx{0U};
 
        while( eit != end ) {
-            // if this is a line element at the beginning of a line element chain
             CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
+            // only recording line elements that are located at the beginning or end of a polyline = line element chain
             if ( isLineElement( etype ) ) {
-                  // beginnings or endings of polylines inside of model
-                  if ( pfverts[elmt_idx][0] < 0 )
-                    line_elmts.insert( elmt_idx );
-                  // boundary line elements or loop on the boundary
-                  if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 )
-                    boundary_line_elmts.insert( elmt_idx );
+                  // line elements with a single neighbor at the beginning or end of polyline
+                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) || (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
+                    // but only, if that neighbor is located on the inside of the model
+                    if ( bflags[ plist[elmt_idx][0] ] == NOT || bflags[ plist[elmt_idx][1] ] == NOT ) {
+                         line_elmts.insert( elmt_idx );
+                      }
+                  // line elements on the model boundary
+                 if ( bflags[ plist[elmt_idx][0] ] < 0 && bflags[ plist[elmt_idx][1] ] < 0 ) {
+                       boundary_line_elmts.insert( elmt_idx );
+                    }
               }
             // if this is a surface element  
             else {
@@ -2362,7 +2395,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                  // and storing their nodes in correct order for later comparisons
                  if ( isTriangularElement( etype ) ) {
                       const size_t faces{3};
-                      for ( auto i{0}; i < faces; ++i )
+                      for ( auto i{0U}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) { // face 0
@@ -2376,9 +2409,10 @@ size_t VData::RenumberElementsCounterClockwise2D()
                                }
                           }
                    }
+                 // quadrilaterals
                  else if ( isQuadrilateralElement( etype ) ) {
                       const size_t faces{4};
-                      for ( auto i{0}; i < faces; ++i )
+                      for ( auto i{0U}; i < faces; ++i )
                         if ( pfverts[elmt_idx][i] < 0 )
                           {
                              if ( i == 0 ) { // face 0
@@ -2394,8 +2428,7 @@ size_t VData::RenumberElementsCounterClockwise2D()
                                   surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) );
                                }
                          }
-                      // inserting the faces
-                   }
+                   } 
                  else {
                       cerr <<"\n\telement "<< elmt_idx <<": type "<< parseFiniteElementType(*eit) <<" cannot be processed.\n";
                       throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D", "element type not recognised");
@@ -2406,75 +2439,112 @@ size_t VData::RenumberElementsCounterClockwise2D()
          }
          
       // 2. following potential line element chains from beginning to end, re-orientating elements as necessary
+      //    and recording individual polylines
       // ------------------------------------------------------------------------------------------------------
+      // (after the potential re-orientation of surface elements by ModelTopology) line element orientations might be inconsistent with surface ones)
       // root-elmt & numbers of interconnected line elements in discovered chain
       map<int64_t ,deque<int64_t> > polylines;
-      set<int64_t>                processed_elmts;
+      set<int64_t>                  processed_elmts;
       
-      // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( set<int64_t>::const_iterator it=line_elmts.begin(); it!= line_elmts.end(); ++it )
+      // looping over the line elements that are missing one neighbor, starting at the beginning or end of a chain
+      for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
         {
-           // if this is an isolated line segment with no neighbors it is skipped
+           // getting index of element and skipping elements that have already been processed
            elmt_idx = (*it);
-           if ( (pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0) ||
-                 processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
+           if ( processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
 
-           // if the line element has no first neighbor it must be at the beginning of a chain and correctly oriented
-           BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>( pfverts[elmt_idx][0] );
-           // its neighbor-free side must be at an internal or external boundary
-           if ( bflag >= 0 ) {
-                cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
-                cerr <<"'pfvert["<< elmt_idx <<"][0]' entry for neighbour element 1: "<< pfverts[elmt_idx][0];
-                cerr <<" not correct: ["<< pfverts[elmt_idx][0] <<","<< pfverts[elmt_idx][1] <<"].";
+           // isolated line elements (no neighbors) are skipped as well
+           if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) {
+                polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
+                processed_elmts.insert( elmt_idx );
+                continue;
              }
-           assert( bflag >= MULTIPLE );
 
-          // storing the element as the first in the line element sequence
-          pair<map<int64_t ,deque<int64_t> >::iterator,bool>
-            chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
-            
+         // storing the element as the first in a new line element sequence
+          auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{elmt_idx} ) );
           // making sure that the element was indeed inserted (else it is a duplicate)
           assert( chain_it.second == true );
           processed_elmts.insert( elmt_idx );
           
-          // traversing the line element chain in the direction of available neighbors, node0 is the one with no neighbor
-          // NB: in line elements the element neighbor also is opposite to the node with the same number, e.g.,
-          //     [nd0]-line element0-[nd1]-line element1-[nd2] -> elm1 1 is opposite to nd0
-          bool end_of_polyline(false);
-          while ( end_of_polyline == false )
-            {
-               // is the neighbor element is correctly oriented its first node will be shared with the second node of the previous line element
-               assert( pfverts[elmt_idx][1] >= 0 );
-               // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
-               bool flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
-               // else, we move to this next element,
-               elmt_idx = pfverts[elmt_idx][1];
-               // and flip its nodes and neighbors.
-               if ( flip == true ) {
-                    const size_t node0 = plist[elmt_idx][0];
-                    const size_t node1 = plist[elmt_idx][1];
-                    plist[elmt_idx][0] = node1;
-                    plist[elmt_idx][1] = node0;
-                    int64_t  swap          = pfverts[elmt_idx][1];
-                    pfverts[elmt_idx][1] = pfverts[elmt_idx][0];
-                    pfverts[elmt_idx][0] = swap;
-                 }
-               // Then we store this element in the polyline.
-               (*chain_it.first).second.push_back( elmt_idx );
-               processed_elmts.insert( elmt_idx );
-               // exit condition (if both nodes od line element are o the BOX_BOUNDARY)
-               if ( pfverts[elmt_idx][0] < 0 || pfverts[elmt_idx][1] < 0 )
-                 end_of_polyline = true;
+          // traversing the line element chain until running out of neighbors
+          // ----------------------------------------------------------------
+          // NB: like for other simplex elements, the line element neighbor is located opposite to the node with the same number.
+          //     nbor1 | [nd0]-line element0-[nd1] | nbor0
+          
+          // -----------------------
+          // forward chain traversal
+          // -----------------------
+          // (the neighbor element first node will is shared with the zeroth node of the following line element)
+          if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L ) {
+              bool end_of_polyline(false);
+              while ( end_of_polyline == false )
+                {
+                   // if this next element's first neighbor is element 'elmt_idx', everything is fine and no flip is required
+                   bool flip = ( pfverts[ pfverts[elmt_idx][0] ][1] == elmt_idx ) ? false : true;
+                   // else we flip this element's nodes and neighbors
+                   if ( flip == true ) {
+                        swap( plist[ pfverts[elmt_idx][0] ][0],  plist[ pfverts[elmt_idx][0] ][1] );
+                        swap( pfverts[ pfverts[elmt_idx][0] ][0], pfverts[ pfverts[elmt_idx][0] ][1] );
+                     }
+                   // we move to the next element
+                   elmt_idx = pfverts[elmt_idx][0];
+                   // then we store this element in the polyline
+                   (*chain_it.first).second.push_back( elmt_idx );
+                   // and record it as processed
+                   auto inserted = processed_elmts.insert( elmt_idx );
+                   // checking that we are not visiting a previously visited element again
+                   assert( inserted.second == true );
+                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
+                   if ( pfverts[elmt_idx][0] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
+                     end_of_polyline = true;
+                }
+               continue;
             }
-            
+          // -------------------------------
+          // backward chain traversal
+          // -------------------------------
+          if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L ) {
+              bool beginning_of_polyline(false);
+              while ( beginning_of_polyline == false )
+                {
+                   // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
+                   bool flip = ( pfverts[ pfverts[elmt_idx][1] ][0] == elmt_idx ) ? false : true;
+                   // and, if necessary, we flip its nodes and neighbors.
+                   if ( flip == true ) {
+                        swap( plist[ pfverts[elmt_idx][1] ][0],  plist[ pfverts[elmt_idx][1] ][1] );
+                        swap( pfverts[ pfverts[elmt_idx][1] ][0], pfverts[ pfverts[elmt_idx][1] ][1] );
+                     }
+                   // we move to this next element
+                   elmt_idx = pfverts[elmt_idx][1];
+                   // then we store this element in the polyline.
+                   (*chain_it.first).second.push_back( elmt_idx );
+                   auto inserted = processed_elmts.insert( elmt_idx );
+                   assert( inserted.second == true );
+                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
+                   if ( pfverts[elmt_idx][1] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
+                     beginning_of_polyline = true;
+                }
+            }
        } // for line_elements
        
-      // NOTE: since every chain has a beginning and an end, it would normally stored twice, but:
+      // NOTE: since every chain has a beginning and an end, it would normally be stored twice, but:
       //       - of the interior chains, only the ones starting with the lower element number are kept
       //       - for the ones surrounding the model the one consistent with the counter-clockwise numbering of the higher-dim. ele is stored
       //       - the only line elements left now, are those forming part of loops, these must be consistent in their orientation with
       //         the faces of the elements that they surround.
-      
+      if ( !polylines.empty() ) {
+          cout <<"\n\nVData::CreateConsistentLineElementOrientations2D: processed "<< polylines.size() <<" polylines with the line elements:"<< endl;
+          for ( auto it : polylines ) {
+               cout <<"\t"<< it.first <<": ";
+               for ( auto idx : it.second ) cout << idx <<" ";
+               cout << endl;
+            }
+          cout << endl;
+        }
+      else {
+           cerr <<"\nVData::CreateConsistentLineElementOrientations: WARNING: No changes were made. Unable to process line element chains. ";
+           cerr <<"\n\n\t\t"<<"line elements processed: "<< processed_elmts.size() << endl;
+        }
       
       // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
       // --------------------------------------------------------------------------------------------------------------------------------
@@ -2483,31 +2553,26 @@ size_t VData::RenumberElementsCounterClockwise2D()
       //
       // getting the surface element deque ready for binary_search
       sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
+      
       // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( set<int64_t>::const_iterator it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
+      for ( auto it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
         {
            // searching for the corresponding face of a higher dimensional element
            // --------------------------------------------------------------------
            // if a surface element face with same node numbering is found the line element is already correctly oriented
            if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) )
              continue;
-           // if the face has the opposite orientation, the line element is flipped
+           // if the face has the opposite orientation, the line elements in the polyline have to be flipped
            if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][1], plist[*it][0]) ) ) {
-                // swapping nodes
-                int64_t  swap     = plist[*it][1];
-                plist[*it][1]   = plist[*it][0];
-                plist[*it][0]   = swap;
-                // swapping neighbors
-                swap            = pfverts[*it][1];
-                pfverts[*it][1] = pfverts[*it][0];
-                pfverts[*it][0] = swap;
+                swap( plist[*it][0], plist[*it][1] );     // swapping nodes
+                swap( pfverts[*it][0], pfverts[*it][1] ); // swapping neighbors
              }
            // this is a line element with no surface element next to it?
            else {
-                cerr <<"\nCreateConsistentLineElementOrientations: line element "<< *it <<" at border with the nodes:\n\t\t";
+                cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
                 cerr << plist[*it][0] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][0]])) <<"), ";
                 cerr << plist[*it][1] <<"("<< parseBoundary(intToBOX_BOUNDARY(bflags[plist[*it][1]])) <<"), ";
-                cerr <<" has no higher-dimensional neighbor; its orientation is left untouched.\n";
+                cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
              }
            
         } // end boundary_line_elmts
@@ -2515,6 +2580,23 @@ size_t VData::RenumberElementsCounterClockwise2D()
   } // end CreateConsistentLineElementOrientations
 
 
+
+ // checking the node flagging for the case that the line elements are Faces or InterFaces
+ /*
+ int bflag{MULTIPLE}, no_nbor{0};
+ if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
+ else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
+ // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
+ if ( bflag >= 0 ) {
+      cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
+      cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
+      cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
+      cerr <<" should be equivalent to boundary flag of the adjacent node: ";
+      cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
+   }
+ assert( bflag >= MULTIPLE );
+*/
+ 
 
 
 
@@ -2696,14 +2778,14 @@ void  VData::EstablishElementConnectivity2D()
              else {
                   assert( isLineElement( etype ) );
                   pfverts[elmt_idx].resize(2U,IRREGULAR);
-                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 0
-                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<int64_t>{elmt_idx} ) );
+                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1 (on the side of neighbor 0)
+                    it0 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it0.second )
                     (*it0.first).second.insert( elmt_idx );
                   
-                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 1
-                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][1], set<int64_t>{elmt_idx} ) );
+                  pair<map<int64_t ,set<int64_t> >::iterator,bool> // node 0 (opposite neighbor 1)
+                    it1 = line_elmt_that_share_node.insert( make_pair( plist[elmt_idx][0], set<int64_t>{elmt_idx} ) );
                   // if there is already an entry for the node, the elmt id is added to the set
                   if ( !it1.second )
                     (*it1.first).second.insert( elmt_idx );
@@ -2795,10 +2877,9 @@ void  VData::EstablishElementConnectivity2D()
         
         // detecting elements with more than one face on boundary (these need to be fixed)
         elmt_idx = 0U;
-        for ( deque<vector<int64_t> >::const_iterator
-              pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
-              auto etype = (HybridElementTypeMesh()==false) ? pelmt[0] : pelmt[elmt_idx];
-              if ( !isLineElement( parseFiniteElementTypeEnum( etype ) ) )
+        for ( auto pft=pfverts.begin(); pft!=pfverts.end(); ++pft, ++elmt_idx ) {
+              auto etype2D = (HybridElementTypeMesh()==false) ? pelmt[0] : pelmt[elmt_idx];
+              if ( !isLineElement( parseFiniteElementTypeEnum( etype2D ) ) )
                 {
                    size_t boundaries_per_element(0U);
                    for ( vector<int64_t>::const_iterator pt=(*pft).begin(); pt!=(*pft).end(); ++pt )
@@ -2824,18 +2905,19 @@ void  VData::EstablishElementConnectivity2D()
             {
                 const size_t n_connections(it.second.size()-1);
                 
-                // 1. isolated line elements terminating either at an inside node (INTERNAL) or at the BOX_BOUNDARY
+                // 1. isolated line elements terminating either at an inside node (NOT) or at the BOX_BOUNDARY
                 // --------------------------------------------------------------------------------------------------
                 if ( n_connections == 0U ) {
                      const size_t elmt = (*it.second.begin());
-                     // if there is no neighbor element corresponding to the first node
-                     if ( it.first == plist[elmt][0] ) {
+                     // if there is no neighbor element opposite to the zeroeth node
+                     if ( it.first == plist[elmt][1] ) {
                           // identifying the boundary that the missing neighbor is located at
+                          // (note: although we are not at a BOX_BOUNDARY we need a negative flag, else CSMP infers elmt #0=NOT)
                           pfverts[elmt][0] = (bflags[ it.first ]==0) ? INTERNAL : bflags[ it.first ];
                        }
-                     else if ( it.first == plist[elmt][1] ) {
-                          // the missing neighbor is located at a boundary
-                          pfverts[elmt][1] = (bflags[ plist[elmt][1] ]==0) ? INTERNAL : bflags[ plist[elmt][1] ];
+                     else if ( it.first == plist[elmt][0] ) {
+                          // the missing neighbor may be located at a model boundary
+                          pfverts[elmt][1] = (bflags[ plist[elmt][0] ]==0) ? INTERNAL : bflags[ it.first ];
                        }
                      else throw csmp::Exception( ERROR, "VData::EstablishElementConnectivity2D", "orphan line element node");
                   }
@@ -2846,11 +2928,11 @@ void  VData::EstablishElementConnectivity2D()
                      const size_t elmt2 = (*it.second.rbegin());
                      // processing the neighbors
                      // line element 1
-                     if ( it.first      == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                     else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                     if ( it.first      == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                     else if ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
                      // line element 2
-                     if ( it.first      == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                     else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                     if ( it.first      == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                     else if ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
                   }
                 // 3. line element manifolds (multiple line elements)
                 // --------------------------------------------------------------------------------------------------
@@ -2890,12 +2972,12 @@ void  VData::EstablishElementConnectivity2D()
                                 assigned_elements.find(elmt2) == assigned_elements.end() )
                              {
                                 // finding the correct side of edge1
-                                if      ( it.first == plist[elmt1][0] ) pfverts[elmt1][0] = elmt2;
-                                else if ( it.first == plist[elmt1][1] ) pfverts[elmt1][1] = elmt2;
+                                if      ( it.first == plist[elmt1][1] ) pfverts[elmt1][0] = elmt2;
+                                else if ( it.first == plist[elmt1][0] ) pfverts[elmt1][1] = elmt2;
                                 assigned_elements.insert( elmt1 );
                                 // and edge2
-                                if      ( it.first == plist[elmt2][0] ) pfverts[elmt2][0] = elmt1;
-                                else if ( it.first == plist[elmt2][1] ) pfverts[elmt2][1] = elmt1;
+                                if      ( it.first == plist[elmt2][1] ) pfverts[elmt2][0] = elmt1;
+                                else if ( it.first == plist[elmt2][0] ) pfverts[elmt2][1] = elmt1;
                                 assigned_elements.insert( elmt2 );
                              }
                         }
@@ -2904,16 +2986,20 @@ void  VData::EstablishElementConnectivity2D()
                            // making sure that there only is a single unassigned element
                            assert( joint_line_elmts.size() - 1 == assigned_elements.size() );
                            // finding the yet-to-be-assigned element
-                           size_t unassigned_elmt{UINT_MAX};
+                           size_t unassigned_elmt = numeric_limits<size_t>::max();
                            for ( auto& leit : joint_line_elmts )
                              if ( assigned_elements.find(leit) == assigned_elements.end() ) {
                                   unassigned_elmt = leit;
                                   break;
                                }
-                           assert ( unassigned_elmt != UINT_MAX );
+                           assert ( unassigned_elmt != numeric_limits<size_t>::max() );
                            // finding the correct side of the line element and assigning the vertex bflag to irt
-                           if      ( it.first == plist[unassigned_elmt][0] ) pfverts[unassigned_elmt][0] = bflags[it.first];
-                           else if ( it.first == plist[unassigned_elmt][1] ) pfverts[unassigned_elmt][1] = bflags[it.first];
+                           if   ( it.first == plist[unassigned_elmt][1] ) {
+                                 pfverts[unassigned_elmt][0] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
+                              }
+                           if ( it.first == plist[unassigned_elmt][0] ) {
+                                 pfverts[unassigned_elmt][1] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
+                              }
                         }
                   }
                               
@@ -2947,6 +3033,13 @@ void  VData::EstablishElementConnectivity2D()
 */
 size_t VData::SwitchCornerTriangles2D()
  {
+    if ( HybridElementTypeMesh() ) {
+         cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: while mesh contains corner-spanning triangles ";
+         cout <<" this method cannot be applied because it cannot simultaneously fix the adjacent line elements yet that are contained in the VSet.\n";
+         cout <<" Please improve method. or fix corner elements in meshing tool."<< endl;
+         return 0U;
+      }
+      
     size_t switched_triangles{0};
     
     if ( pfverts.empty() || pfverts.size() != plist.size() ) {
@@ -2968,7 +3061,7 @@ size_t VData::SwitchCornerTriangles2D()
                    pair<size_t,size_t> face_nds;
                    size_t              cnr_nd(UINT_MAX);
                    int64_t               nb_idx(UINT_MAX);
-                   for ( auto i{0}; i<3; ++i ) {
+                   for ( auto i{0U}; i<3; ++i ) {
                         if ( pfverts[elmt_idx][i] >= 0 ) {
                              nb_idx = pfverts[elmt_idx][i];
                              switch ( i ) {
@@ -3086,7 +3179,7 @@ void VData::EstablishElementConnectivity3D()
                // creating face key of node pointers from indices of face nodes
                set<size_t> key;
                const auto nodes(CSMP_ElementSpecifications::NodesPerFaceForElementOfType( etype, face ) );
-               for ( auto j=0U; j<nodes; ++j ) {
+               for ( auto j{0U}; j<nodes; ++j ) {
                     // inserting the global  node numbers into the key
                     const size_t face_node = plist[elmt_idx][ CSMP_ElementSpecifications::FaceNodeForElementOfType( etype, face, j ) ];
                     key.insert( face_node );
@@ -3393,7 +3486,7 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
      // if this a tetrahedral only mesh no checks have to be performed
      if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
        {
-          for ( auto i{0}; i<n_elements; ++i ) {
+          for ( size_t i{0U}; i<n_elements; ++i ) {
                long n_neighbors{0}, neighbor(UNSPECIFIED);
                for ( size_t j{0}; j<PfvertsSize(i); ++j )
                  if ( Pfvert(i,j) >= 0 ) {
@@ -3406,7 +3499,7 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
             }
        }
      else { // for hybrid element type meshes the element type needs to be checked
-          for ( auto i{0}; i<n_elements; ++i ) {
+          for ( size_t i{0U}; i<n_elements; ++i ) {
                long n_neighbors{0}, neighbor(UNSPECIFIED);
                for ( size_t j{0}; j<PfvertsSize(i); ++j )
                  if ( Pfvert(i,j) >= 0 ) {
@@ -3455,7 +3548,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
     // looping over the elements to get the corner nodes of their segments
     for ( size_t elmt{0}; elmt < n_elements; ++elmt ) {
          // getting the element type
-         const auto CSMP_FE_type = (HybridElementTypeMesh()) ? pelmt[elmt] : pelmt[0];
+         const auto CSMP_FE_type = (HybridElementTypeMesh()) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
          if ( !higher_order_elements && CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 1 ) {
               csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
               higher_order_elements = true;
@@ -3550,70 +3643,100 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
     
     Checks for collocated vertices into transfer data structure.
 */
-bool VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
+size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
  {
-    indexes.clear();
-    
-    // if there are no interfaces, method returns false
+    // 0.  if there are no interfaces, method returns false
     if (  first_interface_ == first_face_ ) {
          cerr <<"\nVData::ExtractNodeManifolds: does not contain any manifolds.\n";
-         return false;
+         return 0;
       }
+
+    // 1. creating some temporary containers
+    // 1.1 all manifold vertices encountered with their side classifiers
+    map<size_t,INTERFACE_SIDE>  manifold_vertex_classifications;
+    // 1.2 all collocated manifold vertices are stored in sets
+    set<pair<size_t,size_t> >   manifold_vertices;
       
-   // creating manifold data from the interface node indices stored in plist
-   //for ( auto it=PelmtInterfacesBegin(); it!=PelmtEnd(); ++it ) - element type info
+   // 2. creating manifold data from the interface node indices stored in plist
    for ( auto it=PlistInterFacesBegin(); it!=PlistInterFacesEnd(); ++it )
      {
-        // the first half of the interface vertices represents inside nodes
+        // the first half of the interface vertices represent inside nodes in CCW order outside looking in
+        // the second half of the indices represent the outside nodes in matching albeit reverse order
         assert( !(*it).empty() );
-        const size_t plist_entries((*it).size());
+        const auto plist_entries((*it).size());
         assert( (plist_entries & 1) == 0 /* even number */ );
-        const size_t iface_nodes(plist_entries/2);
+        const auto iface_nodes(plist_entries/2);
         
         // creating a new entry in the manifold map or getting an iterator to an existing one
         // map<size_t,set<pair<size_t,int8_t> > > vertexManifoldIndices
-        for ( size_t i=1U; i<iface_nodes; ++i ) {
-              const pair<size_t,int8_t> vertex( make_pair( (*it)[i], INSIDE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
+        for ( auto i{0U}; i<iface_nodes; ++i ) {
+              // recording which vertices are collocated
+              pair<size_t,size_t> vertex_pair = { static_cast<size_t>((*it)[i]), static_cast<size_t>((*it)[plist_entries-i-1]) };
+              if ( vertex_pair.first > vertex_pair.second )
+                swap( vertex_pair.first, vertex_pair.second );
+              manifold_vertices.insert( vertex_pair );
+              // collecting the manifold vertices together with their classifiers
+              manifold_vertex_classifications.insert( make_pair( (*it)[i], INSIDE ) );
+              manifold_vertex_classifications.insert( make_pair( (*it)[plist_entries-i-1], OUTSIDE ) );
           }
-        for ( size_t i=iface_nodes; i<plist_entries; ++i ) {
-               const pair<size_t,int8_t> vertex( make_pair( (*it)[i], OUTSIDE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it)[i], set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
-          }
-     }
-     
-   // now trying to match the vertices of intervening elements, if any
-   deque<int64_t> intervening_elmts;
-   for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
-         assert( (*it).size() > 2U );
-         // the last entry in each pfvert record is the index of the intervening element or bflag
-         const ssize_t idx = (*it).back();
-         if ( idx >= 0 ) // if there is an intervening element
-           intervening_elmts.push_back( idx );
-     }
-     
-   // if there are intervening elements, they are added to the manifolds
-   if ( !intervening_elmts.empty() ) {
-        for ( auto elmt : intervening_elmts )
-          for ( auto it=PlistBegin(elmt); it!=PlistEnd(elmt); ++it ) {
-              const pair<size_t,int8_t> vertex( make_pair( (*it), MIDDLE ) );
-              // trying the insertion
-              auto manif_it = indexes.insert( make_pair( (*it), set<pair<size_t,int8_t> >({vertex}) ) );
-              // if this is an existing record the vertex is added to that one
-              if ( manif_it.second == false )
-                (*manif_it.first).second.insert( vertex );
-          }
-     }
+      }
       
-   return true;
+   // 3. matching the InterFace vertices to potential intervening elements
+   size_t interface{Elements()+Faces()};
+   for ( auto it=next(PfvertsBegin(),first_interface_); it!=PfvertsEnd(); ++it ) {
+         assert( (*it).size() > 6U ); // 6=minimum nbors, +2 higher-dim elmts +2 face_ids
+         // the last entry in each pfvert record is the index of the intervening element or bflag
+         const auto elmt_idx = (*it).back();
+         if ( elmt_idx >= 0 ) {// if there is an intervening element
+             auto nodes_of_elmt{ plist[interface].size() / 2 };
+             // the nodes of the intervening element match (in position and order) those of the INSIDE of the Interface
+             for ( auto i{0U}; i<nodes_of_elmt; ++i ) {
+                  manifold_vertex_classifications.insert( make_pair( plist[elmt_idx][i], MIDDLE ) );
+                  pair<size_t,size_t> vertex_pair = { plist[interface][i], plist[elmt_idx][i] };
+                  if ( vertex_pair.first > vertex_pair.second ) swap( vertex_pair.first, vertex_pair.second );
+                  manifold_vertices.insert( vertex_pair );
+                }
+           }
+         interface++;
+     }
+     
+   // 4. consolidating the manifold vertex pairs into singles, pairs, and multiples needed for later classification
+   map<size_t,set<size_t> > manifold_node_clusters;
+   for ( const auto& it : manifold_vertices ) {
+        // adding all permutations of indices into map while elimating duplicates at the same time
+        auto insert_it = manifold_node_clusters.insert( make_pair( it.first, set<size_t>{ it.first, it.second } ) );
+        if ( !insert_it.second )
+          (*insert_it.first).second.insert( it.second );
+     }
+   // up to here we only get a maximum of three entries before the original pairs do not know of each other
+   // this is fixed in the following second pass
+   for ( const auto& it : manifold_vertices )
+     // if the second number of the pair is not a cluster key
+     if ( manifold_node_clusters.count( it.second ) == 0 )
+       {  // the first number is searched for in the cluster sets (it must be in one of them)
+          for ( auto& cit : manifold_node_clusters )
+            if ( cit.second.find( it.first ) != cit.second.end() ) {
+                 // if it is found, the missing number 2 is inserted
+                 cit.second.insert( it.second );
+                 break;
+              }
+       }
+       
+   // 5. populating the output datastructure: map<size_t,set<pair<size_t,INTERFACE_SIDE> > >
+   if ( !indexes.empty() ) indexes.clear();
+   for ( auto& mit : manifold_node_clusters ) {
+        set<pair<size_t,INTERFACE_SIDE> > vertices_with_attributes;
+        // for all the stored vertices
+        for ( auto& sit : mit.second ) {
+              auto attribute_it = manifold_vertex_classifications.find( sit );
+              // the vertex must be present in map
+              assert( attribute_it != manifold_vertex_classifications.end() );
+              vertices_with_attributes.insert( make_pair( sit, (*attribute_it).second ) );
+          }
+        indexes.insert( make_pair( mit.first, vertices_with_attributes ) );
+     }
+   
+   return manifold_node_clusters.size();
    
  } // end ExtractNodeManifolds
 
@@ -3689,7 +3812,7 @@ void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
     n_cnr = vdata.Plist(cnr,n_cnr);
     // establishing extra node of opposite tetrahedron 'nbor' (more robust to rely on node numbers only)
     size_t n4{UINT_MAX};
-    for ( auto i{0}; i<n_nodes; ++i )
+    for ( auto i{0U}; i<n_nodes; ++i )
       if ( vdata.Plist(nbr,i) != n0 &&
            vdata.Plist(nbr,i) != n1 &&
            vdata.Plist(nbr,i) != n2 &&
@@ -3877,7 +4000,7 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
      const size_t npe = distance(vdata.PlistBegin(eidx),vdata.PlistEnd(eidx));
      assert( npe == 4 );
      ofs <<"POINTS " << npe <<" double"<< endl;
-     for ( auto i=0; i<npe; i++ )
+     for ( auto i{0U}; i<npe; i++ )
        ofs << vdata.Px(vdata.Plist(eidx,i)) <<" "<< vdata.Py(vdata.Plist(eidx,i)) <<" "<< vdata.Pz(vdata.Plist(eidx,i)) << endl;
      ofs << endl;
 
@@ -3900,7 +4023,7 @@ void elementToVTK( const VData& vdata, size_t eidx, const char* outfile )
      // ofs.setf( ios::scientific );
      ofs <<"SCALARS "<< var_name <<" double"<< endl;
      ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
-     for ( auto i=0; i<npe; i++ ) ofs << vdata.Plist(eidx,i) <<" ";
+     for ( auto i{0U}; i<npe; i++ ) ofs << vdata.Plist(eidx,i) <<" ";
      ofs << endl;
      ofs.close();
      cout <<"\nelementToVTK: file '"<< file_name <<"' written successfully."<< endl;

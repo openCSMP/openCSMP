@@ -273,8 +273,8 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     const csmp::Index key(sg_->Database().StorageKey(var_name));
     unsigned int i = 0;
     Region<2>& model_domain( sg_->Region("Model") );
-    assert( var.size() == model_domain.Elements() );
-    for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it) {
+    assert( var.size() == model_domain.Cells() );
+    for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it) {
        (*it)->Store(key,ScalarVariable(PLAIN, var[i++]) );
       }
   }
@@ -284,7 +284,7 @@ Integral_var_NT_lhsop_N_dV_Test::Integral_var_NT_lhsop_N_dV_Test( bool verbose )
     sm.Resize( model_domain.Nodes() );
     sm.Zero();
     
-    for ( auto it = model_domain.ElementsBegin(); it != model_domain.ElementsEnd(); ++it ) {
+    for ( auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it ) {
         oper.GetOperands( *(*it));
         oper.ComputeContribution(*(*it));
         oper.AssignToGlobal(*(*it), sm);

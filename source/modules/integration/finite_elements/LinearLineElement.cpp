@@ -63,20 +63,20 @@ void LinearLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>&
  }
 
 
-/// SKM fixed 10/6/2014
+/// the Face of a line element is located opposite to the node with the same number
 void  LinearLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
-    if ( face_id > 1U )
-      std::cerr <<"\nLinearLineElement::NodesOfFace: There are only 2 faces present, corresponding to the nodes."<< std::endl;
+    assert( face_id <= 1 );
     fnids.resize(1U);
-    fnids[0] = face_id;
+    fnids[0] = ( face_id == 0U ) ? 1U : 0U;
  }
 
 
 vector<uint32_t>  LinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( face_id <= 1 );
-    return vector<uint32_t>{face_id};
+    if ( face_id == 1U ) return vector<uint32_t>{0U};
+    return vector<uint32_t>{1U};
  }
 
 
@@ -543,8 +543,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ ) {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+     for ( uint32_t i{0U}; i<npe; i++ ) {
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           if ( dim == 2 ) ofs << 0.0 <<" ";
           ofs << endl;
        }
@@ -574,7 +574,7 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1 x n_nodes
-           for ( uint32_t i=0; i<npe; i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<npe; i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -582,8 +582,8 @@ LinearLineElement::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x n_nodes
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                if ( dim == 3 )
                  ofs << endl;
                else

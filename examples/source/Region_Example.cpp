@@ -216,7 +216,7 @@ void Region_Example::Run()
    model.AssimilateRegion( "elements110to200", "elements10to100" );
    //    ^^^^^^^^^^^^^^^^
    cout <<"\nmain: number of elements before and after assimilation: "<< element_ids.size() <<" vs. ";
-   cout << model.Region("elements10to100").Elements() << endl;
+   cout << model.Region("elements10to100").Cells() << endl;
 
    vtk_output.OutputDataToVTK( model, "elements10to100", "fluid-pressure", "fluid pressure", 1, true );
    model.RemoveRegion( "elements110to200" );
@@ -239,7 +239,7 @@ void Region_Example::Run()
    // test :
    model.RegionUnion( "FRACS", "MATRIX", "MODEL" );
    //    ^^^^^^^^^^^
-   assert( model.Region("Model").Elements() == model.Region("MODEL").Elements() );
+   assert( model.Region("Model").Cells() == model.Region("MODEL").Cells() );
    model.RemoveRegion( "MODEL" );
 
    cout <<"\n\n\nmain: RegionIntersection() between FRACS and MATRIX."<< endl;
@@ -305,7 +305,7 @@ void Region_Example::Run()
 
    FEM_Data<ScalarVariable>  input_data;
    input_data.Reset( model.Database().StorageKey("permeability"),
-                     model.Region("Model").Elements(), makeScalar(PLAIN,1.0e-12) );
+                     model.Region("Model").Cells(), makeScalar(PLAIN,1.0e-12) );
 
    model.Region("Model").InputVariableFrom( "permeability", input_data ); // test: O.K.
    //                    ^^^^^^^^^^^^^^^^^
@@ -326,7 +326,7 @@ void Region_Example::Run()
 
    PropertyHandle<DIM>  nodal_perm( model, "nodal permeability", SCALAR, NODE );
    model.Region("Model").InputPropertyValue( "nodal permeability", makeScalar(PLAIN,1.0e-12), COMPLETE ); // test: O.K.
-   model.Region("Model").InterpolateNodeToElementProperty( "nodal permeability", "permeability" ); // test: O.K.
+   model.Region("Model").InterpolateNodeToCellProperty( "nodal permeability", "permeability" ); // test: O.K.
    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    printRangeOfVariable( model, "permeability" );
    printRangeOfVariable( model, "nodal permeability" );
@@ -340,16 +340,16 @@ void Region_Example::Run()
    cpoint_k = ts;
    printRangeOfVariable( model, "cpoint permeability" );
    PropertyHandle<DIM>  elmt_k( model, "element permeability", TENSOR, ELEMENT );
-   model.Region("Model").InterpolateIntegrationPointToElementProperty( "cpoint permeability", "element permeability" );  // O.K.
+   model.Region("Model").InterpolateIntegrationPointToCellProperty( "cpoint permeability", "element permeability" );  // O.K.
    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    printRangeOfVariable( model, "element permeability" );
 
    PropertyHandle<DIM>  nodal_v( model, "nodal velocity", VECTOR, NODE );
-   model.Region("Model").ExtrapolateElementToNodeProperty( "velocity","nodal velocity" ); // O.K.
+   model.Region("Model").ExtrapolateCellToNodeProperty( "velocity","nodal velocity" ); // O.K.
    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    printRangeOfVariable( model, "velocity" );
    printRangeOfVariable( model, "nodal velocity" );  // interpolation by distance
-   model.Region("Model").ExtrapolateElementToNodeProperty( "velocity","nodal velocity", false ); // O.K.
+   model.Region("Model").ExtrapolateCellToNodeProperty( "velocity","nodal velocity", false ); // O.K.
    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    printRangeOfVariable( model, "nodal velocity" );
 
@@ -359,7 +359,7 @@ void Region_Example::Run()
    printRangeOfVariable( model, "nodal tensor permeability" );
 
    PropertyHandle<DIM>  volume( model, "volume", SCALAR, ELEMENT );
-   model.Region("Model").AssignElementCharacteristicsTo( "volume", "volume" ); // test: O.K.
+   model.Region("Model").AssignCellCharacteristicsTo( "volume", "volume" ); // test: O.K.
    //                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
    printRangeOfVariable( model, "volume" );
 
@@ -380,15 +380,15 @@ void Region_Example::Run()
    cout <<"\nmain: Region 'small' contains: "<< endl;
    cout <<"\n\tnodes:             "<< gref.Nodes(); // test: O.K.
    cout <<"\n\tconstraint points: "<< gref.IntegrationPoints(); // test: O.K.
-   cout <<"\n\telements:          "<< gref.Elements(); // test: O.K.
+   cout <<"\n\telements:          "<< gref.Cells(); // test: O.K.
    cout <<"\n\tinterior nodes:    "<< gref.InteriorNodes(); // test: O.K.
-   cout <<"\n\tinterior elements: "<< gref.InteriorElements(); // test: O.K.
+   cout <<"\n\tinterior elements: "<< gref.InteriorCells(); // test: O.K.
    cout <<"\n\tIs empty?          "<< gref.Empty() << endl; // test: O.K.
 
    const Element<DIM>*  e1 = &(*(model.Mesh().ElementsBegin()));
    cout <<"\nmain: Does the model contain a certain element? "<< model.Region("Model").Contains( e1 ) << endl; // test: O.K.
    //                                                                                  ^^^^^^^^
-   cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterElement( e1 ) << endl; // test: O.K.
+   cout <<"\nmain: At its boundary? "<< model.Region("Model").IsPerimeterCell( e1 ) << endl; // test: O.K.
    //                                                         ^^^^^^^^^^^^^^^^^^
 
    // output of group data

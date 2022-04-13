@@ -21,7 +21,7 @@ void PostProcessor<dim,USER>::PostProcess()
           it=User()->PostProcessingOperatorsBegin(); it!=User()->PostProcessingOperatorsEnd(); ++it )
       {
          // loop over the domain, apply the operator, store the results
-         for ( auto ot=User()->ComputationDomain().ElementsBegin(); ot!=User()->ComputationDomain().ElementsEnd(); ++ot )
+         for ( auto ot=User()->ComputationDomain().CellsBegin(); ot!=User()->ComputationDomain().CellsEnd(); ++ot )
            (*ot)->Out();
       }
           

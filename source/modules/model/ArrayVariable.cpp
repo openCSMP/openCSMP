@@ -1,7 +1,6 @@
 #include "ArrayVariable.h"
 #include "ScalarVariable.h"
-
-#include <cassert>
+#include "PropertyDatabase.h"
 
 using namespace std;
 
@@ -30,37 +29,35 @@ ArrayVariable::ArrayVariable()
     {
     }
 
-ArrayVariable::ArrayVariable( size_t arraySize, double defaultValue, VARIABLE_FLAG flag )
+ArrayVariable::ArrayVariable( unsigned int arraySize, double defaultValue, VARIABLE_FLAG flag )
     : flag_(flag), data_( arraySize, defaultValue )
     {
-
     }
 
 ArrayVariable::ArrayVariable( const ArrayVariable& av )
     : flag_( av.flag_ ), data_( av.data_ )
     {
-
     }
 
-double& ArrayVariable::operator()( size_t i )
+double& ArrayVariable::operator()( uint32_t i )
     {
       assert( i < Size() );
       return data_[i];
     }
 
-double ArrayVariable::operator[]( size_t i ) const
+double ArrayVariable::operator[]( uint32_t i ) const
     {
       assert( i < Size() );
       return data_[i];
     }
 
-void  ArrayVariable::Component( size_t i, double val )
+void  ArrayVariable::Component( uint32_t i, double val )
    {
       assert( i < Size() );
       data_[i] = val;
    }
 
-double  ArrayVariable::Component( size_t i ) const
+double  ArrayVariable::Component( uint32_t i ) const
    {
       assert( i < Size() );
       return data_[i];
@@ -96,7 +93,7 @@ bool ArrayVariable::operator==( const ArrayVariable& av ) const
   {
     if( Flag() != av.Flag() || Size() != av.Size() )
       return false;
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
       if( data_[i] != av[i] )
         return false;
     return true;
@@ -118,7 +115,7 @@ bool ArrayVariable::operator<( const ArrayVariable& av ) const
     else
       {
         double sumThis(0.), sumParameter(0.);
-        for( size_t i(0); i < Size(); ++i )
+        for( uint32_t i{0U}; i < Size(); ++i )
           {
             sumThis += (*this)[i];
             sumParameter += av[i];
@@ -131,33 +128,31 @@ bool ArrayVariable::operator<( const ArrayVariable& av ) const
 
 ArrayVariable& ArrayVariable::operator=( const ArrayVariable& av )
   {
-    if( this != &av )
-      {
+    if( this != &av ) {
         flag_ = av.flag_;
         data_ = av.data_;
       }
     return *this;
   }
 
+
 void ArrayVariable::CopyValuesOnly( FlaggedArrayVariable& fav )
 {
-    if( this->Size() == fav.Size() )
-        for (auto i = 0 ; i< fav.Size();i++)
-            data_[i]         = fav(i);
+    assert ( this->Size() == fav.Size() );
+    for (auto i{0U}; i<fav.Size(); i++ )
+      data_[i] = fav(i);
 }
 
 ArrayVariable& ArrayVariable::operator=( double val )
   {
-  for( size_t i(0); i < Size(); ++i )
-    data_[i] = val;
-  return *this;
+    for( auto& i : data_ ) i = val;
+    return *this;
   }
 
 ArrayVariable& ArrayVariable::operator=( const ScalarVariable& val )
   {
-  for( size_t i(0); i < Size(); ++i )
-    data_[i] = val();
-  return *this;
+    for( auto& i : data_ ) i = val();
+    return *this;
   }
 
 /// Standart Operations with temporary object
@@ -165,7 +160,7 @@ ArrayVariable& ArrayVariable::operator=( const ScalarVariable& val )
 ArrayVariable ArrayVariable::operator+( double val ) const
   {
     ArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) += val;
     return temp_arr;
 }
@@ -173,7 +168,7 @@ ArrayVariable ArrayVariable::operator+( double val ) const
 ArrayVariable ArrayVariable::operator-( double val ) const
   {
     ArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) -= val;
     return temp_arr;
   }
@@ -181,7 +176,7 @@ ArrayVariable ArrayVariable::operator-( double val ) const
 ArrayVariable ArrayVariable::operator*( double val ) const
   {
     ArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) *= val;
     return temp_arr;
   }
@@ -189,7 +184,7 @@ ArrayVariable ArrayVariable::operator*( double val ) const
 ArrayVariable ArrayVariable::operator/( double val ) const
   {
     ArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) /= val;
     return temp_arr;
   }
@@ -197,7 +192,7 @@ ArrayVariable ArrayVariable::operator/( double val ) const
 ArrayVariable ArrayVariable::operator^( double val ) const
   {
     ArrayVariable temp_arr( *this );
-    for( size_t i(0); i < Size(); ++i )
+    for( uint32_t i{0U}; i < Size(); ++i )
         temp_arr(i) = std::pow(temp_arr(i), val);
     return temp_arr;
   }
@@ -206,29 +201,25 @@ ArrayVariable ArrayVariable::operator^( double val ) const
 
 ArrayVariable& ArrayVariable::operator+=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] += val;
+    for( auto& i : data_ ) i += val;
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator-=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] -= val;
+    for( auto& i : data_ ) i -= val;
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator*=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] *= val;
+    for( auto& i : data_ ) i *= val;
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator/=( double val )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] /= val;
+    for( auto& i : data_ ) i /= val;
     return *this;
   }
 
@@ -237,64 +228,58 @@ ArrayVariable& ArrayVariable::operator/=( double val )
 /// Operations with ScalarVariables
 ArrayVariable& ArrayVariable::operator+=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] += sc();
+    for( auto& i : data_ ) i += sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator-=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] -= sc();
+    for( auto& i : data_ ) i -= sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator*=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] *= sc();
+    for( auto& i : data_ ) i *= sc();
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator/=( const ScalarVariable& sc )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] /= sc();
+    for( auto& i : data_ ) i /= sc();
     return *this;
   }
 
 /// Operations with ArrayVariables
 ArrayVariable& ArrayVariable::operator+=( const ArrayVariable& arr )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] += arr[i];
+    for ( uint32_t i{0U}; i < Size(); ++i ) data_[i] += arr[i];
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator-=( const ArrayVariable& arr )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] -= arr[i];
+    for ( uint32_t i{0U}; i < Size(); ++i ) data_[i] -= arr[i];
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator*=( const ArrayVariable& arr )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] *= arr[i];
+    for ( uint32_t i{0U}; i < Size(); ++i ) data_[i] *= arr[i];
     return *this;
   }
 
 ArrayVariable& ArrayVariable::operator/=( const ArrayVariable& arr )
   {
-    for( size_t i(0); i < Size(); ++i )
-        data_[i] /= arr[i];
+    for ( uint32_t i{0U}; i < Size(); ++i ) data_[i] /= arr[i];
     return *this;
   }
+  
+  
 ArrayVariable ArrayVariable::operator-( const ArrayVariable& av ) const
   {
     ArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
       returnArray(i) -=  av[i];
     return returnArray;
   }
@@ -302,7 +287,7 @@ ArrayVariable ArrayVariable::operator-( const ArrayVariable& av ) const
 ArrayVariable ArrayVariable::operator+( const ArrayVariable& av ) const
   {
     ArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
       returnArray(i) +=  av[i];
     return returnArray;
   }
@@ -310,7 +295,7 @@ ArrayVariable ArrayVariable::operator+( const ArrayVariable& av ) const
 ArrayVariable ArrayVariable::operator*( const ArrayVariable& av ) const
   {
     ArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
       returnArray(i) *=  av[i];
     return returnArray;
   }
@@ -319,20 +304,21 @@ ArrayVariable ArrayVariable::operator*( const ArrayVariable& av ) const
 ArrayVariable ArrayVariable::operator/( const ArrayVariable& av ) const
   {
     ArrayVariable returnArray( *this );
-    for (size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
       returnArray(i) /=  av[i];
     return returnArray;
   }
+
 
 bool ArrayVariable::IsWithinRange( double min, double max ) const
   {
     assert( min < max );
 
-    for ( size_t i(0); i < Size(); ++i )
-      if( ((*this)[i] < min) || ((*this)[i] > max) )
-        return false;
+    for( const auto& i : data_ )
+      if( i < min || i > max ) return false;
     return true;
   }
+
 
 
 /// returns the minimum and maximum of the values stored in the array variable 
@@ -342,31 +328,6 @@ void  ArrayVariable::MinMax( double& min, double& max ) const
      max = (*max_element( data_.begin(), data_.end() ));
  }
 
-
-
-void ArrayVariable::Fabs()
-  {
-  for ( size_t i(0); i < Size(); ++i )
-      data_[i] = fabs(data_[i]);
-  }
-
-void ArrayVariable::Sqrt()
-  {
-  for ( size_t i(0); i < Size(); ++i )
-    data_[i] = sqrt(data_[i]);
-  }
-
-void ArrayVariable::Log10()
-  {
-  for ( size_t i(0); i < Size(); ++i )
-    data_[i] = log10(data_[i]);
-  }
-
-void ArrayVariable::Ln()
-  {
-  for ( size_t i(0); i < Size(); ++i )
-    data_[i] = log(data_[i]);
-  }
 
 
 
@@ -382,7 +343,7 @@ void ArrayVariable::Out( long digits ) const
     
     if ( digits != 0 ) cout.setf(ios::scientific);
 
-    for ( size_t i(0); i < Size(); ++i )
+    for ( uint32_t i{0U}; i < Size(); ++i )
       {
          cout <<"("<< i <<"):  "<< (*this)[i] <<", ";
          if ( pcols == 10 ) {

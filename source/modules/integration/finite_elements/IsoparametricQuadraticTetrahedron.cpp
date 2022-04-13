@@ -710,7 +710,7 @@ double  IsoparametricQuadraticTetrahedron::InnerRadius()
    double                 sum(0.0);
 
    EdgeLengths( segms );
-   for ( uint32_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( uint32_t i{0U}; i<spe; i++ ) sum += segms[i];
 
    return Volume() / (sum/2.);
 }
@@ -729,7 +729,7 @@ void IsoparametricQuadraticTetrahedron::ParametricToPhysical( vector<double>& rs
     xyz.resize(dim);
     xyz[0]=xyz[1]=xyz[2]=0.;
 
-    for( uint32_t i=0; i<npe; i++ ) {
+    for( uint32_t i{0U}; i<npe; i++ ) {
          xyz[0]+=XY(i,0)*DNR[i];
          xyz[1]+=XY(i,1)*DNR[i];
          xyz[2]+=XY(i,2)*DNR[i];
@@ -802,13 +802,13 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = 0.0;
-        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
+        for( uint32_t i{0U};i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = 0.0;
-            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
+            for( uint32_t j{0U};j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = 0.0;
-                for(uint32_t k=0;k<numberOfFirstIterrations;k++)
+                for( uint32_t k{0U};k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -823,7 +823,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t l=0; l<dim; l++)
+                        for( uint32_t l=0; l<dim; l++)
                             rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -884,7 +884,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(uint32_t i=0; i<dim; i++)
+            for( uint32_t i{0U}; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -943,7 +943,7 @@ void IsoparametricQuadraticTetrahedron::PhysicalToParametric(
 
     }
 
-    for(uint32_t i=0; i<dim; i++)
+    for( uint32_t i{0U}; i<dim; i++)
         rSt[i] = rstHatK[i];
 
 }
@@ -1120,9 +1120,9 @@ void IsoparametricQuadraticTetrahedron::dN( DenseMatrix<DM_MIN>& DN10 )
      M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) RST[j] = NXYZ(i,j);
+          for ( uint32_t j{0U}; j<dim; j++ ) RST[j] = NXYZ(i,j);
 
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -1133,7 +1133,7 @@ void IsoparametricQuadraticTetrahedron::dN( DenseMatrix<DM_MIN>& DN10 )
           Jacobian( DNR, DNS, DNT );
           JacobianInverse();
 
-          for ( uint32_t j=0; j<dim; j++ ) M(j,0) = DN10(j,i);
+          for ( uint32_t j{0U}; j<dim; j++ ) M(j,0) = DN10(j,i);
 
           // 3x3 * 3x1 = 3x1 gives the global DN entries
           JINV *= M;
@@ -1222,7 +1222,7 @@ double  IsoparametricQuadraticTetrahedron::Volume()
     // numerical integration:
     // looping over the 4 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( auto i{0}; i<gpe; i++ )
+    for ( auto i{0U}; i<gpe; i++ )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1544,9 +1544,9 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1576,7 +1576,7 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1584,8 +1584,8 @@ void IsoparametricQuadraticTetrahedron::OutputNodeDataToVTK( const char* file_na
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }
@@ -1713,10 +1713,10 @@ void  IsoparametricQuadraticTetrahedron::ExtrapolateIntegrationPointVariableToNo
         // carry out extrapolation
         fill( sum.begin(), sum.end(), static_cast<double>(0.) );
         for ( uint32_t l=0; l<gpe; l++ )
-          for ( uint32_t k=0; k<nvars; k++ ) sum[k] += intpol[l] * IVAR[l*nvars + k];
+          for ( uint32_t k{0U}; k<nvars; k++ ) sum[k] += intpol[l] * IVAR[l*nvars + k];
 
         // store result in output vector
-        for ( uint32_t k=0; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
+        for ( uint32_t k{0U}; k<nvars; k++ ) NVAR[i*nvars + k] = sum[k];
      }
 
 } // end ExtrapolateIntegrationPointVariableToNodes (STL vectors)
@@ -1734,7 +1734,7 @@ void  IsoparametricQuadraticTetrahedron::IntegrationPoint( uint32_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( auto i{0}; i<npe; i++ ) {
+    for( auto i{0U}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];

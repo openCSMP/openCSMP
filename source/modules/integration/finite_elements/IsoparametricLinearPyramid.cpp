@@ -525,10 +525,10 @@ IsoparametricLinearPyramid::GenerateIntegrationPoints(DenseMatrix<DM_MIN> &Ip, s
      T[0]=0.455848155988775; T[1]=0.877485177344559;
      vector<double> b(numberOfPointsInTdimension);
      b[0]=0.100785882079825; b[1]=0.232547451253508;
-     uint32_t i=0;
-     for(uint32_t j=0;j<numberOfQuadIntegrationPoints;j++)
+     uint32_t i{0U};
+     for( uint32_t j{0U};j<numberOfQuadIntegrationPoints;j++)
         {
-        for(uint32_t k=0;k<numberOfPointsInTdimension;k++)
+        for( uint32_t k{0U};k<numberOfPointsInTdimension;k++)
             {
                 Ip(i,0)=T[k]*IPQUAD(j,0);
                 Ip(i,1)=T[k]*IPQUAD(j,1);
@@ -634,7 +634,7 @@ IsoparametricLinearPyramid::dN( DenseMatrix<DM_MIN>& DN5 )
     M.Resize(dim,1);
 
      // Jacobian transformation to global coordinate system
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
           // here the global coordinates come in
           dNr( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), DNR );
@@ -653,7 +653,7 @@ IsoparametricLinearPyramid::dN( DenseMatrix<DM_MIN>& DN5 )
           //JINV.Out();
           //getchar();
           /////////////////////////////////////////////////////////
-          //for ( uint32_t j=0; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
+          //for ( uint32_t j{0U}; j<dim; j++ ) TEMP(j,0) = DN8(j,i);
           M(0,0)=DNR[i]; M(1,0)=DNS[i]; M(2,0)=DNT[i];
 
           //DN5(0,i)=DNR[i]; DN5(1,i)=DNS[i]; DN5(2,i)=DNT[i];
@@ -793,10 +793,10 @@ IsoparametricLinearPyramid::ParametricToPhysical(std::vector<double> &rst, std::
 {
     Nrst(rst[0],rst[1],rst[2], NRST );
 
-    for(uint32_t i=0; i<dim; i++)
+    for( uint32_t i{0U}; i<dim; i++)
         xyz[i]=0.0;
 
-    for(uint32_t i=0; i<npe; i++)
+    for( uint32_t i{0U}; i<npe; i++)
     {
         xyz[0]+=XY(i,0)*NRST[i];
         xyz[1]+=XY(i,1)*NRST[i];
@@ -876,13 +876,13 @@ IsoparametricLinearPyramid::PhysicalToParametric(
         minDistanceFromGivenPoint = distanceFromGivenPointL2;
 
         rstHatK_PlusOne[0] = -1.0;
-        for(uint32_t i=0;i<numberOfFirstIterrations;i++)
+        for( uint32_t i{0U};i<numberOfFirstIterrations;i++)
         {
             rstHatK_PlusOne[1] = -1.0;
-            for(uint32_t j=0;j<numberOfFirstIterrations;j++)
+            for( uint32_t j{0U};j<numberOfFirstIterrations;j++)
             {
                 rstHatK_PlusOne[2] = 0.0;
-                for(uint32_t k=0;k<numberOfFirstIterrations;k++)
+                for( uint32_t k{0U};k<numberOfFirstIterrations;k++)
                 {
                     ParametricToPhysical( rstHatK_PlusOne, outxyz);
 
@@ -897,7 +897,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
 
                     if( minDistanceFromGivenPoint > distanceFromGivenPointL2 )
                     {
-                        for(uint32_t l=0; l<dim; l++)
+                        for( uint32_t l=0; l<dim; l++)
                             rstHatK[l] = rstHatK_PlusOne[l];
 
                         minDistanceFromGivenPoint = distanceFromGivenPointL2;
@@ -958,7 +958,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
             rstHatK_PlusOne[1] = rstHatK[1] - constantMu*(JINV(0,1)*(outxyz[0]-xyz[0]) + JINV(1,1)*(outxyz[1]-xyz[1]) +JINV(2,1)*(outxyz[2]-xyz[2]));
             rstHatK_PlusOne[2] = rstHatK[2] - constantMu*(JINV(0,2)*(outxyz[0]-xyz[0]) + JINV(1,2)*(outxyz[1]-xyz[1]) +JINV(2,2)*(outxyz[2]-xyz[2]));
 
-            for(uint32_t i=0; i<dim; i++)
+            for( uint32_t i{0U}; i<dim; i++)
                 rstHatK[i] = rstHatK_PlusOne[i];
 
             ParametricToPhysical( rstHatK, outxyz);
@@ -1012,7 +1012,7 @@ IsoparametricLinearPyramid::PhysicalToParametric(
 
     }
 
-    for(uint32_t i=0; i<dim; i++)
+    for( uint32_t i{0U}; i<dim; i++)
       rSt[i] = rstHatK[i];
 }
 
@@ -1199,7 +1199,7 @@ IsoparametricLinearPyramid::Volume()
     // numerical integration:
     // looping over the 8 Gauss points calculating determinant
     // test-function products and applying uniform weights
-    for ( auto i{0}; i<gpe; ++i )
+    for ( auto i{0U}; i<gpe; ++i )
       {
          dNr( IP(i,0), IP(i,1), IP(i,2), DNR );
          dNs( IP(i,0), IP(i,1), IP(i,2), DNS );
@@ -1341,7 +1341,7 @@ IsoparametricLinearPyramid::InnerRadius()
    double                 sum(0.0);
 
    EdgeLengths( segms );
-   for ( uint32_t i=0; i<spe; i++ ) sum += segms[i];
+   for ( uint32_t i{0U}; i<spe; i++ ) sum += segms[i];
 
    if(AspectRatio()>4.0)
       cerr<<"\nIsoparametricLinearPyramid::InnerRadius: WARNING: function not applicable for this high element aspect ratio.\n"<<endl;
@@ -1467,8 +1467,8 @@ const
    NVAR.resize( npe * nvars );
   // Define nodal values as bi-linear variation of the integration points values
   // See Zienkewitch, pp. 351, for example
-    for ( uint32_t i=0; i<npe; i++ )
-      for ( uint32_t k=0; k<nvars; k++ )
+    for ( uint32_t i{0U}; i<npe; i++ )
+      for ( uint32_t k{0U}; k<nvars; k++ )
         NVAR[i*nvars + k] = IVAR[k];
 
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
@@ -1489,7 +1489,7 @@ void  IsoparametricLinearPyramid::IntegrationPoint( uint32_t ip,
      // local interpolation function values
     Nrst( IP(ip,0), IP(ip,1), IP(ip,2), NRST );
 
-    for( auto i{0}; i<npe; i++ ) {
+    for( auto i{0U}; i<npe; i++ ) {
           xyz[0] += XY(i,0) * NRST[i];
           xyz[1] += XY(i,1) * NRST[i];
           xyz[2] += XY(i,2) * NRST[i];
@@ -1553,9 +1553,9 @@ void IsoparametricLinearPyramid::OutputNodeDataToVTK( const char* file_name,
      DenseMatrix<DM_MIN> COORD(XY);
      ofs <<"DATASET UNSTRUCTURED_GRID"<< endl;
      ofs <<"POINTS " << npe <<" float"<< endl;
-     for ( uint32_t i=0; i<npe; i++ )
+     for ( uint32_t i{0U}; i<npe; i++ )
        {
-          for ( uint32_t j=0; j<dim; j++ ) ofs << COORD(i,j) <<" ";
+          for ( uint32_t j{0U}; j<dim; j++ ) ofs << COORD(i,j) <<" ";
           ofs << endl;
        }
      ofs << endl;
@@ -1586,7 +1586,7 @@ void IsoparametricLinearPyramid::OutputNodeDataToVTK( const char* file_name,
            ofs <<"SCALARS "<< var_name <<" float"<< endl;
            ofs <<"LOOKUP_TABLE default" << endl; // table must always be created
            // matrix DATA is 1x9
-           for ( uint32_t i=0; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
+           for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) ofs << DATA(0,i) <<" ";
            ofs << endl;
        }
      else
@@ -1594,8 +1594,8 @@ void IsoparametricLinearPyramid::OutputNodeDataToVTK( const char* file_name,
           ofs <<"VECTORS "<< var_name <<" float"<< endl;
           // variables have always 3 components since view screen is 3D
           // matrix DATA is vec-dim x 10
-          for ( uint32_t i=0; i<DATA.Cols(); i++ ) {
-               for ( uint32_t j=0; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
+          for ( uint32_t i{0U}; i<DATA.Cols(); i++ ) {
+               for ( uint32_t j{0U}; j<DATA.Rows(); j++ ) ofs << DATA(j,i) <<"  ";
                ofs << endl;
             }
        }

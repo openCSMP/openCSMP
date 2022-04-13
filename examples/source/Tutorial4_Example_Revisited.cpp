@@ -4,7 +4,7 @@
 #include "ANSYS_Model2D.h"
 
 // FE algorithm
-#include "PDE_Integrator_UoM.h"
+#include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
 #include "NumIntegral_dNT_op_dN_dV.h"
@@ -145,10 +145,10 @@ void Tutorial4_Example_Revisited::Run()
 
   // FE algorithm with specialised SAMG settings
   SAMG_Solver  solver( &settings );
-  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
+  PDE_Integrator<2U, Region>  stokes_flow( solver );
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  solver;
-  PDE_Integrator_UoM<2U, Region>  stokes_flow( solver );
+  PDE_Integrator<2U, Region>  stokes_flow( solver );
 #endif
 
   // Stokes lubrication equation
@@ -261,7 +261,7 @@ void Tutorial4_Example_Revisited::assignFluxToPointSource( Model<2U>& mdl, const
 
   // loop over all finite elements and identify elements that lie at the model boundary of interest (here LEFT)
   Boundary<2U>&   left = mdl.Boundary( "LEFT" );
-  for ( auto eit = left.ElementsBegin(); eit != left.ElementsEnd(); eit++ )
+  for ( auto eit = left.CellsBegin(); eit != left.CellsEnd(); eit++ )
     {
        // getting the area of the face
         double area = (*eit)->Area();

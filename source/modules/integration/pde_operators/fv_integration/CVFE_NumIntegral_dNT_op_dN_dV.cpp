@@ -59,7 +59,7 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::GetOperands( CELL& e )
 
     // the scalar permeability is stored in the relperm model
     if ( this->MaterialOperandType() == SCALAR ) {
-         this->MTRL[0U].AssignToDiagonal( dim, kri_.Permeability() );
+         this->MTRL[0U].AssignToDiagonalAndZeroOffDiagonal( dim, kri_.Permeability() );
       }
     else if ( this->MaterialOperandType() == VECTOR ) {
          // the vector permeability needs to be read again
@@ -105,8 +105,8 @@ void CVFE_NumIntegral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( CELL& e )
     for ( auto i{0}; i<e.FV()->Facets(); i++ )
       {
          // identifying the finite volumes to which the flux will be distributed
-         size_t inside_node  = e.FV()->InsideNode(i),
-                outside_node = e.FV()->OutsideNode(i);
+         uint32_t inside_node  = e.FV()->InsideNode(i),
+                  outside_node = e.FV()->OutsideNode(i);
 
          Point<dim> rst  = e.FV()->FacetIntegrationPoint( i, 0U );
          double   detJ = (e).dN_At( rst, DN_ );

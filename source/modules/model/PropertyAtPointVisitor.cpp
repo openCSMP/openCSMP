@@ -14,7 +14,7 @@ PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
                                                      const map <size_t, vector<double> > & inXYZ,
                                                      const char *propertyName )
     : pref_(m.Database()),
-      maxElementsInTheMesh_(m.Region("Model").Elements()),  // Number of elements in the mesh
+      maxElementsInTheMesh_(m.Region("Model").Cells()),  // Number of elements in the mesh
       TargetElement_        ( NULL ),                       // Found element
       CurrentElement_       ( NULL ),                       // Intermediate element
       NumberOfElementNodes_ ( 8 ),                          // Max Number of nodes
@@ -214,17 +214,17 @@ bool PropertyAtPointVisitor<dim>::isCloseToBarycenter( const vector<double> curr
 
     double distance(0.0);
     double max_distance(0.0);
-    for ( size_t i=0; i<e->Nodes(); i++ )
+    for ( size_t i{0U}; i<e->Nodes(); i++ )
     {
         distance = 0.0;
-        for ( auto j=0; j<dim; j++ )
+        for ( auto j{0U}; j<dim; j++ )
             distance += (e->FE()->XYZ(i,j)- bc[j])*(e->FE()->XYZ(i,j)- bc[j]);
         distance = sqrt (distance );
         max_distance = std::max( max_distance, distance);
     }
 
     distance = 0.0;
-    for ( auto j=0; j<dim; j++ )
+    for ( auto j{0U}; j<dim; j++ )
         distance += (currXyz[j]- bc[j])*(currXyz[j]- bc[j]);
     distance = sqrt (distance );
 
@@ -275,8 +275,8 @@ bool PropertyAtPointVisitor<dim>::FindPoint_BruteForceSearch( const vector<doubl
                     std::cout<<"Point: x="<<currXyz[0]<<"; y="<<currXyz[1]<<std::endl;
 
                 vector<double> xyz(dim,0.0);
-                for ( auto i=0; i<e->Nodes(); i++ ) {
-                    for ( auto j=0; j<dim; j++ )
+                for ( auto i{0U}; i<e->Nodes(); i++ ) {
+                    for ( auto j{0U}; j<dim; j++ )
                         xyz[j] += NI_[i] * e->FE()->XYZ(i,j);
                 }
 
@@ -362,7 +362,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
                 minimumNi       = *Nmax;
 
                 // Visitation of the element neigbours in order to find the element with the min value of shape function
-                for( auto i=0; i<CurrentElement_->Neighbors(); i++ )
+                for( auto i{0U}; i<CurrentElement_->Neighbors(); i++ )
                 {
                     // if not a boundary element
                     if( CurrentElement_->Neighbor(i) != NULL)
@@ -385,7 +385,7 @@ bool PropertyAtPointVisitor<dim>::FindPoint_NeighborSearch( const vector<double>
                                 CurrentElement_->Neighbor(i)->CoordinateMatrix();
                                 CurrentElement_->Neighbor(i)->FE()->N( NI_, currXyz );
 
-                                for(size_t j=0; j<CurrentElement_->Neighbor(i)->Nodes(); j++)
+                                for(size_t j{0U}; j<CurrentElement_->Neighbor(i)->Nodes(); j++)
                                     NI_[j] = fabs(NI_[j]);
 
                                 Nmin        = min_element( NI_.begin(), NI_.end() );
@@ -522,7 +522,7 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                         TargetElement_->NodePropertyVector( prop_idx_, NPS_ );
                         // Interpolate properties
                         propS_[itX->first]() = 0.0;
-                        for ( size_t i=0; i<TargetElement_->Nodes(); i++ )
+                        for ( size_t i{0U}; i<TargetElement_->Nodes(); i++ )
                             propS_[itX->first]() += NI_[i] * NPS_[i]();
 
                     }else if (prop_idx_.place == ELEMENT)
@@ -535,10 +535,10 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPV_ );
 
-                        for(auto i=0;i<dim;i++)
+                        for(auto i{0U};i<dim;i++)
                         {
                             propV_[itX->first](i)=0.0;
-                            for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
+                            for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                 propV_[itX->first](i)+=NI_[j] * NPV_[j](i);
                         }
 
@@ -551,12 +551,12 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPT_ );
-                        for(auto i=0;i<dim;i++)
+                        for(auto i{0U};i<dim;i++)
                         {
                             for(auto k=0;k<dim;k++)
                             {
                                 propT_[itX->first](i,k)=0.0;
-                                for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
+                                for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                     propT_[itX->first](i,k)+=NI_[j] * NPT_[j](i,k);
                             }
                         }
@@ -569,10 +569,10 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPA_ );
-                        for(size_t i=0;i<dim;i++)
+                        for(size_t i{0U};i<dim;i++)
                         {
                             propA_[itX->first](i)=0.0;
-                            for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
+                            for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                 propA_[itX->first](i)+=NI_[j] * NPA_[j](i);
                         }
                     }else if (prop_idx_.place == ELEMENT)
@@ -583,10 +583,10 @@ void PropertyAtPointVisitor<dim>::Visit( Element<dim>* e)
                     if (prop_idx_.place == NODE)
                     {
                         TargetElement_->NodePropertyVector( prop_idx_, NPFA_ );
-                        for(size_t i=0;i<dim;i++)
+                        for(size_t i{0U};i<dim;i++)
                         {
                             propA_[itX->first](i)=0.0;
-                            for ( size_t j=0; j<TargetElement_->Nodes(); j++ )
+                            for ( size_t j{0U}; j<TargetElement_->Nodes(); j++ )
                                 propFA_[itX->first](i)+=NI_[j] * NPFA_[j](i);
                         }
                     }else if (prop_idx_.place == ELEMENT)

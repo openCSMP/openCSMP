@@ -153,7 +153,7 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
         // VSet - assigning new coordinates to all points
         double   distance( 0.0 );
         double   length_factor( length / old_length );
-        for( auto i{0}; i<n_vertices; i++ ) {
+        for( size_t i{0UL}; i<n_vertices; i++ ) {
              for( uint32_t dimension=0U; dimension<dim; dimension++ )
                  p[ dimension ] = vset.P( dimension, i );
              distance  = (p - old_origin).Length();
@@ -173,7 +173,7 @@ void LineElementMesher<dim>::AssignCornerPoints( VSet<dim>& vset,
 
 template<uint32_t dim>
 void LineElementMesher<dim>::InsertSplitNodes( VSet<dim>& vset,
-                                      const std::vector<double>& splitnodes_x )
+                                               const std::vector<double>& splitnodes_x )
 {
     if( !splitnodes_x.empty() && ( vset.Vertices() > 0 ) )
     {
@@ -263,7 +263,7 @@ void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
                 n_elements );
 
    //1.1 VSet - assigning point x-coordinates
-   for ( auto i{0}; i<n_vertices; i++ ){
+   for ( size_t i{0UL}; i<n_vertices; i++ ){
        vset.P( 0U, i, dx * i );
        for( uint32_t dimension=1U; dimension<dim; dimension++ )
            vset.P( dimension, i, 0.0 );
@@ -467,15 +467,15 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
         deque<vector<int64_t> >  plist( n_elements, vector<int64_t>(2) );
 
         //1.1 PList - assigning content
-        for ( size_t i=0; i<n_elements; ++i )
-          for ( size_t j=0; j<2; ++j )
+        for ( size_t i{0U}; i<n_elements; ++i )
+          for ( size_t j{0U}; j<2; ++j )
             plist[i][j] = i + j;
 
         //2.0 PFVerts - establish
         deque<vector<int64_t> > pfvert( n_elements, vector<int64_t>(2) );
 
         //2.1 PFVerts - assigning content
-        for ( size_t i=0; i<n_elements; ++i ) {
+        for ( size_t i{0U}; i<n_elements; ++i ) {
              pfvert[i][0] = static_cast<int64_t>(i) - 1;
              pfvert[i][1] = static_cast<int64_t>(i) + 1;
           }
@@ -555,7 +555,7 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             deque<vector<int64_t> > pfvert( n_elements, vector<int64_t>(2) );
 
             //2.1 PFVerts - assigning content
-            for ( auto i{0}; i<n_elements; i++ ) {
+            for ( size_t i{0UL}; i<n_elements; i++ ) {
                  pfvert[i][0] = i - 1U;
                  pfvert[i][1] = i + 1U;
               }

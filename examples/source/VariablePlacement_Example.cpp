@@ -90,8 +90,8 @@ void VariablePlacement_Example::Run()
 
     // we loop over all elements to access the created properties
     Region<DIM>& rref = model.Region( "Model" );
-    const vector<Element<DIM>*>::const_iterator elementsEnd = rref.ElementsEnd();
-    for( vector<Element<DIM>*>::const_iterator it = rref.ElementsBegin(); it != elementsEnd; ++ it)
+    const vector<Element<DIM>*>::const_iterator elementsEnd = rref.CellsEnd();
+    for( vector<Element<DIM>*>::const_iterator it = rref.CellsBegin(); it != elementsEnd; ++ it)
     {
       // now we may use the function object like an ordinary function
       storeToElement( *it, elementKey, 5. );

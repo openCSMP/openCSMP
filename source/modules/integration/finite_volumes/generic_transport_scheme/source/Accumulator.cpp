@@ -70,8 +70,8 @@ void Accumulator<dim,USER>::Accumulate( double time_increment )
             (*et).second->Factor( factor );
             
             // processing interior of solution domain
-            AccumulateByStencil( User()->ComputationDomain().ElementsBegin(), 
-                                 User()->ComputationDomain().ElementsEnd(), 
+            AccumulateByStencil( User()->ComputationDomain().CellsBegin(), 
+                                 User()->ComputationDomain().CellsEnd(), 
                                  (*et).second, User()->LinearSystem().LHS );  
                                    
             // processing potential halo of solution domain

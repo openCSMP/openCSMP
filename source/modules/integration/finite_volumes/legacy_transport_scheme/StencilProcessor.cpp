@@ -129,7 +129,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
      // getting all the node-related information
      // ----------------------------------------
      if (vt==SCALAR){
-         for ( auto i{0}; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable
@@ -138,7 +138,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
          }
      }
      else if (vt==ARRAY){
-         for ( auto i{0}; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable and source
@@ -152,7 +152,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
          }
      }
      else if (vt==FLAGGEDARRAY){
-         for ( auto i{0}; i<e.Nodes(); i++ ) {
+         for ( auto i{0U}; i<e.Nodes(); i++ ) {
              // sector pore volumes
              sector_pore_volume_[i] = param.SectorVolume( i );
              // advected variable and source
@@ -170,7 +170,7 @@ void StencilProcessor<dim>::InitializeFirstOrder( const FV_Parameter& param,
      // -------------------------------------------------------
      facet_flux_.resize(e.FV()->Facets());
      
-     for ( auto i=0; i<e.FV()->Facets(); i++ ) {
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ ) {
          // project the velocities onto the facet normals to get
          // fluxes once the projections have been multiplied with
          // the surface areas
@@ -204,14 +204,14 @@ void StencilProcessor<dim>::ComputeBoundaryFluxMismatch(const FV_Parameter& para
      else
         velo_mult_flag = true;
      
-     for ( auto i{0}; i<e.Nodes(); i++ ) {
+     for ( auto i{0U}; i<e.Nodes(); i++ ) {
 
          src_[i] = 0.;
          
          // compute flux mismatch
          if (e.N(i)->AtBoundary() != NOT)
            {
-             for ( auto k=0U; k<e.FV()->FacetsPerSector(i); k++ ) {
+             for ( auto k{0U}; k<e.FV()->FacetsPerSector(i); k++ ) {
                  const auto n(e.FV()->FacetSurroundingSector(i,k));
                  e.FV()->FacetEdgeNodes( n, inside_node_, outside_node_ );
                  // if the sector node is the inside node then an incoming flux will create a positive source term
@@ -259,7 +259,7 @@ void StencilProcessor<dim>::InitializeSecondOrder( const FV_Parameter& param,
 
      // getting all the node-property related information
      // -------------------------------------------------
-     for ( auto i{0}; i<e.FV()->Sectors(); i++ ) {
+     for ( auto i{0U}; i<e.FV()->Sectors(); i++ ) {
           // sector pore volumes
           sector_pore_volume_[i] = param.SectorVolume( i );
           // advected variable (transformed by bijective mapping)
@@ -271,7 +271,7 @@ void StencilProcessor<dim>::InitializeSecondOrder( const FV_Parameter& param,
 
      // interpolating values of advected quantity to facet integration points
      // --------------------------------------------------------------------
-     for ( auto i=0; i<facets; i++ ) {
+     for ( auto i{0U}; i<facets; i++ ) {
           // interpolating the property value to the (first) facet integration point
           ipsi1_[i] = ( e ).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
 
@@ -320,7 +320,7 @@ void StencilProcessor<dim>::InitializeAdvectedVariableValues( const Element<dim>
 
      // getting all the node-property related information
      // -------------------------------------------------
-     for ( auto i=0; i<e.Nodes(); i++ )
+     for ( auto i{0U}; i<e.Nodes(); i++ )
        // advected variable & advected variable transformed by bijective mapping
        psi1_[i] = e.N(i)->Read( adv1_key_ ); // for upstream saturations
 
@@ -328,7 +328,7 @@ void StencilProcessor<dim>::InitializeAdvectedVariableValues( const Element<dim>
 
      // interpolating advected variable to finite-volume facet integration points
      // -------------------------------------------------------------------------
-     for ( auto i=0; i<facets; i++ )
+     for ( auto i{0U}; i<facets; i++ )
        ipsi1_[i] = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
      
  } // end InitializeAdvectedPropertyValues
@@ -364,7 +364,7 @@ void  StencilProcessor<dim>::IsotropicallyLimitTransportProperties( const Elemen
     uint32_t     n_upstr, n_dnstr;
     const double zero(0.), xi(2.);
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -397,7 +397,7 @@ void  StencilProcessor<dim>::ApplyLeastSquareMethodToLimitTransportProperties( c
     size_t  n_upstr, n_dnstr;
     const double   zero(0.);
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ ){
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ ){
 
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -476,7 +476,7 @@ void StencilProcessor<dim>::EvaluateThetaValues( const Element<dim>& e,
     theta_.resize(e.FV()->Facets());
 
     // for each sector divider
-    for ( auto i=0; i<theta_.size(); i++ )
+    for ( auto i{0U}; i<theta_.size(); i++ )
       {
          e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
@@ -574,7 +574,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
      src_.resize(e.Nodes());
 
      // for all FV sectors = nodes = matrix columns
-     for ( auto j=0U; j<e.Nodes(); j++ )
+     for ( auto j{0U}; j<e.Nodes(); j++ )
        {
           sector_pore_volume_[j] = param.SectorVolume(j);
           psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -582,7 +582,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
           // accumulate fluid sources (+) or sinks (-) due to deviations from 
           // potentially non-conservative fluxes
           src_[j] = 0.;  
-          for ( auto k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
+          for ( auto k{0U}; k<e.FV()->FacetsPerSector(j); k++ ) {
                const auto n(e.FV()->FacetSurroundingSector(j,k));
                // if the sector node is the inside node then an incoming flux will create a positive source term
                const double fsign( (j == e.FV()->InsideNode(n)) ? -1. : 1. ); 
@@ -596,7 +596,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1(
       //    (compare with Helmig, 97, p. 108, eqn. 3.74)
       // -----------------------------------------------------------------------------
       facet_flux_.resize( e.FV()->Facets() );
-      for ( auto i{0}; i<e.FV()->Facets(); i++ )
+      for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
         facet_flux_[i] = param.FacetNormalVelocity(i) * dfds;
 
@@ -657,7 +657,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
      // getting all the node-property related information
      // for all FV sectors = nodes = matrix columns
      // -------------------------------------------------
-     for ( auto j=0U; j<e.FV()->Sectors(); j++ ) //for ( size_t j=0U; j<e.Nodes(); j++ )
+     for ( auto j{0U}; j<e.FV()->Sectors(); j++ ) //for ( size_t j{0U}; j<e.Nodes(); j++ )
      {
        // sector pore volumes
        sector_pore_volume_[j] = param.SectorVolume(j);
@@ -670,7 +670,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
        // accumulate fluid sources (+) or sinks (-) due to deviations from
        // potentially non-conservative fluxes
        src_[j] = 0.;
-       for ( auto k=0U; k<e.FV()->FacetsPerSector(j); k++ ) {
+       for ( auto k{0U}; k<e.FV()->FacetsPerSector(j); k++ ) {
          const auto n(e.FV()->FacetSurroundingSector(j,k));
          // if the sector node is the inside node then an incoming flux will create a positive source term
          const double fsign( (j == e.FV()->InsideNode(n) ) ? -1. : 1. );
@@ -688,7 +688,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2(
 
      // interpolating values of advected quantity to facet integration points
      // --------------------------------------------------------------------
-     for ( auto i{0}; i<e.FV()->Facets(); i++ )
+     for ( auto i{0U}; i<e.FV()->Facets(); i++ )
      {
        // interpolating the property value to the (first) facet integration point
        ipsi1_[i] = (e).PropertyValueAtFacetIntegrationPoint( i, 0U, adv1_key_ );
@@ -736,7 +736,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( size_t j=0U; j<e.Nodes(); j++ )
+    for ( size_t j{0U}; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -774,22 +774,22 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution1_NonlinearNewton
 
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( size_t k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative ove sn is needed
-             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k{0U}; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1000,7 +1000,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( auto j=0U; j<e.Nodes(); j++ )
+    for ( auto j{0U}; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -1037,22 +1037,22 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( size_t j=0U; j<e.Nodes(); j++ ) {
+        for ( size_t j{0U}; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
-             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k{0U}; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1283,7 +1283,7 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
     sector_pore_volume_.resize(e.Nodes());
     psi1_.resize(e.Nodes());
     // for all FV sectors = nodes = matrix columns
-    for ( auto j=0U; j<e.Nodes(); j++ )
+    for ( auto j{0U}; j<e.Nodes(); j++ )
     {
         sector_pore_volume_[j] = param.SectorVolume(j);
         psi1_[j]               = e.N(j)->Read( adv1_key_ );
@@ -1322,22 +1322,22 @@ void  StencilProcessor<dim>::AccumulateImplicitTwoPhaseSolution2_NonlinearNewton
         e.dN_AtBaryCenter( DN_ );
 
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( size_t k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
         fill( dpcdsn_.begin(), dpcdsn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              relperm.InitializeForNode( e, j );
              relperm.EffectiveSaturation();
              const double dpcds = -relperm.dpcds_Phase( ); // minus, because one calculate derivative of pc over sw, when the derivative over sn is needed
-             for ( auto k=0U; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
+             for ( auto k{0U}; k<dim; k++ ) dpcdsn_[k] += DN_(k,j) * dpcds;
         }
 
     }
 
-    for ( auto i{0}; i<e.FV()->Facets(); i++ )
+    for ( auto i{0U}; i<e.FV()->Facets(); i++ )
       {
 
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1557,7 +1557,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
                                                         const FV_Parameter& param,
                                                         const Element<dim>& e,
                                                         TwoPhaseModel<dim>& relperm,
-                                                        size_t pnid,
+                                                        uint32_t pnid,
                                                         double& flux,
                                                         bool with_gravity_forces,
                                                         bool with_capillary_spreading)
@@ -1578,7 +1578,7 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
     rhs_src_[pnid] = 0.;
     relperm.InitializeForNode( e, pnid );
     relperm.EffectiveSaturation();
-    for ( size_t k=0U; k<e.FV()->FacetsPerSector(pnid); k++ ) {
+    for ( size_t k{0U}; k<e.FV()->FacetsPerSector(pnid); k++ ) {
           const size_t i(e.FV()->FacetSurroundingSector(pnid,k));
           // if the sector node is the inside node then an incoming flux will create a positive source term
           e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -1599,16 +1599,16 @@ void  StencilProcessor<dim>::CorrectImplicitTwoPhaseSolutionAtBoundary_Nonlinear
 
         e.dN_AtBaryCenter( DN_ );
         fill( dsdn_.begin(), dsdn_.end(), 0. );
-        for ( auto j=0U; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              const double sn = e.N(j)->Read( adv1_key_);
-             for ( auto k=0U; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
+             for ( auto k{0U}; k<dim; k++ ) dsdn_[k] += DN_(k,j) * sn;
         }
 
     }
 
     // now the saturation dependent properties are computed
     // for all FACETS per SECTOR surrounding the finite volume at the boundary
-    for ( auto k=0U; k<e.FV()->FacetsPerSector(pnid); k++ )
+    for ( auto k{0U}; k<e.FV()->FacetsPerSector(pnid); k++ )
       {
          auto i( e.FV()->FacetSurroundingSector(pnid,k) );
 
@@ -1681,23 +1681,23 @@ void  StencilProcessor<dim>::Out() const
     // outputting data of object
     cout <<"Finite volume stencil data."<< endl;
     cout <<"\n\tassociated sectors, pore volumes, and advected property values: ";
-    for ( size_t i=0; i<sector_pore_volume_.size(); i++ )
+    for ( size_t i{0U}; i<sector_pore_volume_.size(); i++ )
       cout <<"\n\tsector "<< i+1 <<": "<< sector_pore_volume_[i] <<", "<< psi1_[i];
 
     cout <<"\n\nFacets between nodes i, i+1, and associated properties:";
     cout <<"\n\tintegrated volume flux and advected variable interpolated to integration points:";
-    for ( size_t i=0; i<facet_flux_.size(); i++ )
+    for ( size_t i{0U}; i<facet_flux_.size(); i++ )
     cout <<"\n\tfacet "<< i+1 <<": "<< facet_flux_[i] <<", "<< ipsi1_[i];
 
     if ( !src_.empty() ) {
          cout <<"\n\nFacet integrated source terms:";
-         for ( size_t i=0; i<src_.size(); i++ )
+         for ( size_t i{0U}; i<src_.size(); i++ )
          cout <<"\n\tfacet "<< i+1 <<": "<< src_[i];
       }
 
     if ( !ipsi1_.empty() ) {
          cout <<"\n\nadvected variable values at facet integration points: ";
-         for ( size_t i=0; i<ipsi1_.size(); i++ )
+         for ( size_t i{0U}; i<ipsi1_.size(); i++ )
          cout <<"\n\tfacet "<< i+1 <<": "<< ipsi1_[i];
       }
 

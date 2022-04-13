@@ -170,8 +170,8 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
     gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
     
     // For the interior elements of the region compute relevant variable values
-    const auto it_end(gref_.ElementsEnd());
-    for ( auto it=gref_.ElementsBegin(); it!=it_end; ++it )
+    const auto it_end(gref_.CellsEnd());
+    for ( auto it=gref_.CellsBegin(); it!=it_end; ++it )
     {
          const size_t sectors((*it)->Sectors());
          const size_t facets((*it)->Facets());
@@ -181,7 +181,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          const double thickness = (*it)->Read( key_thi );
          if (!isnan(thickness)) phi *= thickness; //if thickness is initialised
          
-         for ( auto i{0}; i<sectors; ++i ) {
+         for ( auto i{0U}; i<sectors; ++i ) {
               const double sector_volume = (*it)->SectorVolume(i);  
               double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
@@ -189,7 +189,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
          }
 
          // computing facet normals and areas
-         for ( auto j=0U; j<facets; ++j ) {
+         for ( auto j{0U}; j<facets; ++j ) {
               const double facet_area = (*it)->FacetArea(j);
               (*it)->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
               Point<dim> nrml = (*it)->FacetNormal(j);
@@ -211,11 +211,11 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
    for ( auto nit=gref_.PerimeterNodesBegin(); nit!=nit_end; ++nit ) {
         const size_t parent_elements((*nit)->Parents());   
         bool truncated_node = false;    
-        for ( auto i{0}; i<parent_elements; ++i ) {
+        for ( auto i{0U}; i<parent_elements; ++i ) {
              Element<dim>* const eptr = (*nit)->Parent(i);
              // computing facet normals and areas
              const auto facets(eptr->Facets());
-             for ( auto j=0U; j<facets; ++j ) {
+             for ( auto j{0U}; j<facets; ++j ) {
                   const double facet_area = eptr->FacetArea(j);
                   eptr->Store( j, 0U, key_fA, makeScalar( PLAIN, facet_area ) );
                   Point<dim> nrml = eptr->FacetNormal(j);

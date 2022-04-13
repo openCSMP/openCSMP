@@ -63,7 +63,7 @@ void NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>::ComputeContribution( CELL& e )
 
 	volume = e.Volume();
 	 
-	 for ( size_t j=0; j<e.Nodes(); j++ )
+	 for ( size_t j{0U}; j<e.Nodes(); j++ )
 	   MathOperatorLHS<dim>::LHS(j,j) = (VAR[j]()*volume) / static_cast<double>(e.Nodes());
 
 } // end ComputeContribution

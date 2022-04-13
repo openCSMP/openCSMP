@@ -104,7 +104,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL& e )
         const size_t ipoints(e.IntegrationPoints());
         E_.resize(ipoints);
         nu_.resize(ipoints);
-        for ( auto i=0; i<ipoints; ++i )
+        for ( auto i{0U}; i<ipoints; ++i )
           {
              // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
              E_[i]  = e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() );
@@ -211,7 +211,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // matrices to element - contribution matrix
     MathOperatorLHS<dim>::LHS.Zero();
 
-    for ( auto i=0; i<e.FE()->IntegrationPoints(); i++ )
+    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // the material property matrix is constructed at each integration point
          if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {

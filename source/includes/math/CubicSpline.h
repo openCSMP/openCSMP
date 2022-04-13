@@ -5,7 +5,13 @@
 
 namespace csmp {
 
-/// implementation of a cubic spline using 3 constraint points and 2 derivatives at the curve ends
+/** Implementation of a cubic spline using at least 3 constraint points / data values and 2 derivatives at the curve ends.
+    
+    @note A sufficiently large number of the datapoints need to be supplied to get a satisfactory spline, dependent on the curve represented by the data.
+    Graph the spline curve first before using the results in other computations. The data for graphing can be obtained using the Out() function.
+    
+    CubicSpine is used inside the experimental data-based saturation functions in the CSMP library found in the thmc directory.
+*/
 class CubicSpline {
   public:
     CubicSpline();
@@ -19,9 +25,11 @@ class CubicSpline {
                      const double, const double );
     
     double Value( double x ) const;
+    
+    /// computes derivative using a forward finite difference approach @todo improve by using analytic derivative
     double Derivative( double x ) const;
     
-    // of the input values
+    /// computes the maximum value of the second derivative of the spline function; use for checking whether there are enough data points to get satisfactory curve
     double MaxDerivative() const;
     double Range_x() const;
     double Range_fx() const;
@@ -33,10 +41,11 @@ class CubicSpline {
     double  x_range_, y_range_, xa_min, xa_max, ya_min, ya_max;
 };
 
+/// function computes second derivative that is needed to define the spline; is called only once during spline construction
 double splint( const std::vector<double>& xa, 
-                 const std::vector<double>& ya,
-                 const std::vector<double>& y2a,
-                 double x );
+               const std::vector<double>& ya,
+               const std::vector<double>& y2a,
+               double x );
                       
  } // csmp
 

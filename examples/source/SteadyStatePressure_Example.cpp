@@ -59,7 +59,12 @@ void SteadyStatePressure_Example::Specifications()
   //     Use example_viewer.tcl to visualize vtk output
   //
   // ******************************************************************************************
-  
+
+// undefined to avoid  a memory overwrite problem in the legacy JPEG library
+#ifdef CSMP_WITH_IMAGE_OUTPUT
+#undef CSMP_WITH_IMAGE_OUTPUT
+#endif
+
 */
 void SteadyStatePressure_Example::Run()
 {
@@ -141,10 +146,11 @@ void SteadyStatePressure_Example::Run()
   text_output.OutputDataAsTextColumnsNumbered( model, "fluid-pressure", "fluid pressure" );
   text_output.OutputDataAsTextColumnsNumbered( model, "conductivity", "conductivity" );
 
+#ifdef CSMP_WITH_IMAGE_OUTPUT
   JPEG_Interface jpg_output;
-
+// undefined behaviour caused here!
   jpg_output.OutputDataToJPG( model, "conductivity", "conductivity", 0 );
-
+#endif
 
   // 6. Building PDE_Integrator "total_pressure" by applying the PDE operator subclasses
   //    A post processing operation is added to compute the fluid velocities and
@@ -195,8 +201,10 @@ void SteadyStatePressure_Example::Run()
   vtk_output.OutputDataToVTK( model, "nvolume-flux",   "nodal volume flux", 0 );
 
   // JPG output (only scalar variables can be visualized)
+#ifdef CSMP_WITH_IMAGE_OUTPUT
   jpg_output.OutputDataToJPG( model, "fluid-pressure", "fluid pressure",    0 );
   jpg_output.OutputDataToJPG( model, "volume-flux",    "volume flux",       0 );
+#endif
 
 
   // 8. Form a Group named "granite" in order to access
@@ -224,8 +232,10 @@ void SteadyStatePressure_Example::Run()
   printRangeOfVariable( model, "granite", "volume flux" );
   printRangeOfVariable( model, "granite", "nodal volume flux" );
 
+#ifdef CSMP_WITH_IMAGE_OUTPUT
   jpg_output.OutputDataToJPG( model, "fluid-pressure", "fluid pressure", 1 );
   jpg_output.OutputDataToJPG( model, "volume-flux",    "volume flux",    1 );
+#endif
 
   // output of the region "granite"
   vtk_output.OutputDataToVTK( model, "granite", "fluid-pressure", "fluid pressure", 1, true );

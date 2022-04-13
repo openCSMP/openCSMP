@@ -18,8 +18,8 @@ template<uint32_t> class Node;
 template<uint32_t dim>
 class NodeManifoldManager {
   public:
-       /// vertex manifolds: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::map<size_t,std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+       /// vertex manifolds indices for construction: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
+    typedef std::map<size_t,std::set<std::pair<size_t,INTERFACE_SIDE> > > vertexManifoldIndices;
     
     /// Re-constructor when node manifolds are read back from a CSMP native binary fileset
     NodeManifoldManager( const vertexManifoldIndices&,
@@ -43,19 +43,22 @@ class NodeManifoldManager {
 
     size_t                 Manifolds() const;
     
-     // find - no need for this because each node has direct access to connected manifolds
+     // FindManifold - no need for this because each node has direct access to connected manifolds
 
-    /// creates a node manifold to which nodes can be added
-    NodeManifold<dim>* const NewManifold( Node<dim>* const inside, Node<dim>* const outside, ManifoldType );
+    /// constructs a node manifold accessing the supplied node colony and node pointers
+    typename plf::colony<NodeManifold<dim> >::iterator  AddManifold( plf::colony<Node<dim> >& nodes,
+                                                                     Node<dim>* const inside,
+                                                                     Node<dim>* const outside,
+                                                                     ManifoldType );
     
     /// puts the nodes inside of the manifolds into the ascending order of values of the user specified  variable
     void SortManifoldsByVariableValue( std::string var_name, const csmp::Index& var_index );
     
-    /// replace two separate node manifolds by a single one that contains the union of their nodes, but only if there is at least one shared node
+    /// tries to replace two manifolds by a single one that connects all of  their nodes; succeeds if there the two shares node returning true; fixes all node connections
     bool MergeManifolds( NodeManifold<dim>*, NodeManifold<dim>* );
 
     /// deletes = erases manifold from storage container, reordering / compacting as necessary
-    void   Delete( NodeManifold<dim>* const );
+    void Delete( NodeManifold<dim>* const );
     
     /// scans for manifolds with a single Node only and deletes them
     size_t DeleteSingleNodeManifolds();

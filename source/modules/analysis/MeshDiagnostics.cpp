@@ -22,8 +22,8 @@ void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
     
     const Region<dim>& sgref(sg.Region("Model"));
     
-    for ( auto eit=sgref.ElementsBegin();
-          eit!=sgref.ElementsEnd(); eit++ ) 
+    for ( auto eit=sgref.CellsBegin();
+          eit!=sgref.CellsEnd(); eit++ ) 
       {
          if ( first_element ) {
               vmin = vmax = (*eit)->Volume();
@@ -58,7 +58,7 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
     
     Region<dim>& sgref(sg.Region("Model"));
 
-    for ( auto eit=sgref.ElementsBegin(); eit!=sgref.ElementsEnd(); eit++ )
+    for ( auto eit=sgref.CellsBegin(); eit!=sgref.CellsEnd(); eit++ )
       { 
         if ( bc_vec.size() != (*eit)->Neighbors() ) bc_vec.resize((*eit)->Neighbors());
         sign = 0.;
@@ -81,11 +81,11 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
             if ( id_vec.size() != (*eit)->Neighbors() ) id_vec.resize((*eit)->Neighbors());
             id = (*eit)->Neighbors()-1;
             // reorder element ids
-            for ( auto i=0; i<(*eit)->Neighbors(); i++ ) {
+            for ( auto i{0U}; i<(*eit)->Neighbors(); i++ ) {
                 if ( (*eit)->Neighbor(i) != NULL ) id_vec[id-i] = (*eit)->Neighbor(i)->Idx();
                 else                               id_vec[id-i] = 0;
               }
-            for ( size_t i=0; i<id_vec.size(); i++ ) {
+            for ( size_t i{0U}; i<id_vec.size(); i++ ) {
                 if ( id_vec[i] > 0 ) (*eit)->Assign( i, sgref.E(id_vec[i]-1) );
                 else                 (*eit)->Assign( i, static_cast<Element<dim>*>(nullptr) );
               }
@@ -166,7 +166,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     v_valmin = v_valmax = sgroup.N(0)->y();    
  
     for ( vector<Element<3U>*>::const_iterator
-          eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+          eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->NodeCoordinateMatrix( XY );
          for ( auto i{0}; i<(*eit)->Nodes(); i++ )
@@ -191,11 +191,11 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
 
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Testing length of element segments..."<< endl;
     
-    (*sgroup.ElementsBegin())->SegmentLengths( lengths );
+    (*sgroup.CellsBegin())->SegmentLengths( lengths );
     sl_min = sl_max = lengths[0];
 
     for ( vector<Element<3U>*>::const_iterator
-          eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+          eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->SegmentLengths( lengths );
          for ( auto i{0}; i<lengths.size(); i++ )
@@ -207,7 +207,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
               if ( l_segm < sl_min_e ) sl_min_e = l_segm;
            }
          segm_length_ratio = sl_max_e / sl_min_e;
-         if ( eit == sgroup.ElementsBegin() ) segm_length_ratio_max = segm_length_ratio_min = segm_length_ratio;
+         if ( eit == sgroup.CellsBegin() ) segm_length_ratio_max = segm_length_ratio_min = segm_length_ratio;
          if ( segm_length_ratio > 10. )
            cout <<"\nlarge segment length ratio in element "<< (*eit)->Idx() <<": "<< segm_length_ratio;
           
@@ -223,7 +223,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
    
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Verifying element volumes/areas/lengths..."<< endl;
     for ( vector<Element<3U>*>::const_iterator
-           eit=sgroup.ElementsBegin(); eit!=sgroup.ElementsEnd(); eit++ )
+           eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          // catching exceptions that might originate from negative Jacobian calculations
          try {
@@ -285,7 +285,7 @@ bool MeshDiagnostics<dim>::DetectPotentiallyMisnumberedElements( const Model<dim
     bool discovered_negative_element_volume(false);
    
    
-    for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit )
+    for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit )
       if ( (*eit)->Volume() < 0. ) {
            discovered_negative_element_volume = true;
            cerr <<"\nMeshDiagnostics: Deteceted element with negative volume: ";
@@ -316,7 +316,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
    
     // scalar node variables
     if ( key.type == SCALAR )
-      for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+      for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit ) {
            double value(numeric_limits<double>::quiet_NaN());
            bool     detected_status(false);
            for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
@@ -340,7 +340,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
         }
    
     if ( key.type == VECTOR ) {
-          for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+          for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit ) {
                VectorVariable<dim> vc;
                bool     detected_status(false);
                for ( auto i{0}; i<(*eit)->Nodes(); ++i ) {
@@ -348,7 +348,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                     (*eit)->N(i)->Read( key, vc );
                  
                     // for each variable component
-                    for ( size_t j=0U; j<dim; j++ )
+                    for ( size_t j{0U}; j<dim; j++ )
                       {
                          double value(numeric_limits<double>::quiet_NaN());
                          // finding status-flagged nodes and reading their stored values
@@ -429,7 +429,7 @@ bool MeshDiagnostics<dim>::DetectOverConstrainedElements( const Model<dim>& mode
   
     bool over_constrained_elmts(false);
    
-    for ( auto eit=model_domain.ElementsBegin(); eit!=model_domain.ElementsEnd(); ++eit ) {
+    for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); ++eit ) {
            const size_t nodes = (*eit)->Nodes();
            size_t status_constraints(0U);
            if ( key.type == SCALAR ) {
@@ -471,7 +471,7 @@ bool detectDuplicateElements( const Model<dim>& m )
     
     const Region<dim>&  gref(m.Region("Model"));
     
-    for ( auto it=gref.ElementsBegin(); it!=gref.ElementsEnd(); it++ ) {
+    for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); it++ ) {
           csmp::Point<dim> bc = (*it)->BaryCenter();
           pair<typename set<csmp::Point<dim> >::iterator,bool>
           bc_it = element_barycenters.insert( bc );

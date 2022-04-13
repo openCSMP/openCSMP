@@ -27,23 +27,26 @@ void VSet_Test::run()
   _test( vset1.PlistSize( 0 ) == 8 );
   _test( vset1.PlistSize( 1 ) == 8 );
   _test( vset1.ElementType( 0 ) == LINEAR_TETRAHEDRON );
+  _test( vset1.MeshDimension() == 3 );
+
+  // vset2: poly-element mesh
   std::deque<uint32_t> npe;
   npe.push_back( 8 ); npe.push_back( 8 ); npe.push_back( 5 );
   std::deque<uint32_t> epe;
   epe.push_back( 6 ); epe.push_back( 6 ); epe.push_back( 5 );
-  _test( vset1.MeshDimension() == 3 );
-
-  VSet<3U> vset2( npe, epe, 13 );
+  vector<int8_t> fem_types = { ISOPARAMETRIC_LINEAR_HEXAHEDRON, ISOPARAMETRIC_LINEAR_HEXAHEDRON, ISOPARAMETRIC_LINEAR_PYRAMID };
+  
+  VSet<3U> vset2( fem_types, npe, epe, 13 );
   _test( vset2.Elements() == 3 );
   _test( vset2.Vertices() == 13 );
-  // BRING BACK/DISMISS ONCE ISSUE RESOLVED
-  //_test( vset2.HybridElementTypeMesh() == true );
+  _test( vset2.HybridElementTypeMesh() == true );
   _test( vset2.PfvertsSize( 0 ) == 6 );
   _test( vset2.PfvertsSize( 1 ) == 6 );
   _test( vset2.PfvertsSize( 2 ) == 5 );
   _test( vset2.PlistSize( 0 ) == 8 );
   _test( vset2.PlistSize( 1 ) == 8 );
   _test( vset2.PlistSize( 2 ) == 5 );
+  
   VSet<3U> vset3( vset1 );
   _test( vset3.Elements() == 2 );
   _test( vset3.Vertices() == 12 );
@@ -53,15 +56,15 @@ void VSet_Test::run()
   _test( vset3.PlistSize( 0 ) == 8 );
   _test( vset3.PlistSize( 1 ) == 8 );
   _test( vset3.ElementType( 0 ) == LINEAR_TETRAHEDRON );
-  VSet<3U> vset4 = vset2;
-  _test( vset4.Elements() == 3 );
-  _test( vset4.Vertices() == 13 );
+  
+  VSet<3U> vset4 = vset1;
+  _test( vset4.Elements() == 2 );
+  _test( vset4.Vertices() == 12 );
   _test( vset4.PfvertsSize( 0 ) == 6 );
   _test( vset4.PfvertsSize( 1 ) == 6 );
-  _test( vset4.PfvertsSize( 2 ) == 5 );
   _test( vset4.PlistSize( 0 ) == 8 );
   _test( vset4.PlistSize( 1 ) == 8 );
-  _test( vset4.PlistSize( 2 ) == 5 );
+  _test( vset1.HybridElementTypeMesh() == false );
 
   // .)RESIZE
   vset4.Resize(  8, 6, LINEAR_TETRAHEDRON, 12, 2 );

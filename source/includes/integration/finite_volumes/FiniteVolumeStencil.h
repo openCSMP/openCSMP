@@ -100,7 +100,7 @@ class FiniteVolumeStencil {
     uint32_t OutsideNode( uint32_t iFacet ) const;
   
     /// point on the finite-element edge that is touched by the facet
-	  const Point<dim>& FacetEdgeMidPoint(uint32_t iFacet ) const;
+	  const Point<dim>& FacetEdgeMidPoint( uint32_t iFacet ) const;
   
     /// of finite element in parametric space
     const Point<dim>& Barycenter() const;

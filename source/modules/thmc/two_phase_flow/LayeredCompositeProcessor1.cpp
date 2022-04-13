@@ -312,8 +312,8 @@ void LayeredCompositeProcessor1::Out() const
          cout <<"\n\t\t"<<"f(sw) Sw_VL  Sw_CL SW_CL_low_k_layer  Sw_CL_high_k_layer  Sfactor  Sw(Nc)\n\t\t";
          const size_t rows    = RRT_[rrt].size();
          const size_t columns = RRT_[rrt][0U].size();
-         for ( size_t i=0; i<rows; ++i ) {
-              for ( size_t j=0; j<columns; ++j )
+         for ( size_t i{0U}; i<rows; ++i ) {
+              for ( size_t j{0U}; j<columns; ++j )
                 cout << RRT_[rrt][i][j] <<"  ";
               cout <<"\n\t\t";
            }

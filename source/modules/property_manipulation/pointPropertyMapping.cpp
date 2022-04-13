@@ -101,7 +101,7 @@ void pointPropertyMapping( const std::string& model_name )
       if ( stdio.YesNo("pointPropertyMapping: Were the 'permeability' data entered in [mD]? - CSMP needs [m2]; convert to m2") ) {
            csmp::Index k_key(model.Database().StorageKey("permeability"));
            Region<3U>&  mref(model.Region("Model"));
-           for ( auto it=mref.ElementsBegin(); it!=mref.ElementsEnd(); it++ )
+           for ( auto it=mref.CellsBegin(); it!=mref.CellsEnd(); it++ )
               //                                                                 md -> m2
               (*it)->Store( k_key, makeScalar( (*it)->Status(k_key), (*it)->Read(k_key) * 1.0e-15 ) );
          }
@@ -113,7 +113,7 @@ void pointPropertyMapping( const std::string& model_name )
          // converting rock-type values to integers
          const csmp::Index rkey(model.Database().StorageKey("rocktype"));
          Region<3U>& model_domain(model.Region("Model"));
-         for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it )
+         for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
            (*it)->Store( rkey, makeScalar( (*it)->Status(rkey), round((*it)->Read(rkey))) );
          vtu_output.OutputDataToVTU( (model_name + "-mapped_rocktype"), string("rocktype"), string("Model"), 0 );
       }
@@ -381,7 +381,7 @@ static void SpreadElementPropertyToNodeProperty( std::map<Element<3U>*,vector<do
        it=elementPropertyMap.begin(); it!=elementPropertyMap.end(); ++it )
     {
         ScalarVariable  sp(DIRICH,it->first->Read(elmtProperty));
-        for( auto i=0; i<it->first->Nodes(); ++i )
+        for( auto i{0U}; i<it->first->Nodes(); ++i )
           it->first->N(i)->Store(nodeProperty,sp);
     }
 }
@@ -396,7 +396,7 @@ static void AssignElementProperties( std::map<Element<3U>*,std::vector<double> >
                                       const std::vector<csmp::Index>& property_keys )
 {
   for( std::map<Element<3U>*,std::vector<double> >::iterator it=elementPropertyMap.begin();it!=elementPropertyMap.end(); ++it )
-    for( auto i=0; i < property_keys.size(); ++i )
+    for( auto i{0U}; i < property_keys.size(); ++i )
       if ( it->second[i] != ZERO_DATA_VALUE )
         it->first->Store( property_keys[i], makeScalar(PLAIN,it->second[i]) ); //Flag Plain if element has value, Will have ANY Flag if it does not.
 }
@@ -414,11 +414,11 @@ static void  InitializeEmptyElementVector( const csmp::Region<3U>& gref, const s
   noElementPropertyVectors.resize(property_keys.size());
   std::vector<Element<3U>*>  noPropElements;
   
-  for ( auto i{0}; i<property_keys.size(); ++i )
+  for ( auto i{0U}; i<property_keys.size(); ++i )
    {
       noPropElements.clear();
-      noPropElements.reserve(gref.Elements());
-      for ( size_t j=0U; j<gref.Elements(); ++j ){
+      noPropElements.reserve(gref.Cells());
+      for ( size_t j{0U}; j<gref.Cells(); ++j ){
         if( gref.E(j)->Status(property_keys[i]) == ANY){
           noPropElements.push_back(gref.E(j));
         }
@@ -543,7 +543,7 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
 {
   std::vector<csmp::Point<3U> > elmtNs;
   csmp::Point<3U> coords;
-  for(auto i=0;i<elmt->Nodes();++i){
+  for(auto i{0U};i<elmt->Nodes();++i){
     coords = elmt->N(i)->Coordinate();
     elmtNs.push_back(coords);
   }
@@ -620,15 +620,15 @@ static vector<double> computeSurfaceBarycentricCoordinates( const Element<3U>* e
 }
 
 static Element<3U>* GetRandomElement(const csmp::Region<3U>& gref){
-  long emax = gref.Elements();
-  long rand = std::rand() % emax;
+  size_t emax = gref.Cells();
+  size_t rand = std::rand() % emax;
   Element<3U>* elmt = gref.E(rand);
   return elmt;
 }
 
 static void OutputVector(std::vector<double>& vec){
-  const auto vec_size(vec.size());
-  for( auto i = 0; i < vec_size;++i ){
+  const auto vec_size{vec.size()};
+  for( auto i{0U}; i < vec_size;++i ){
     cout << "Position: " << i << " Value: "<<vec[i]<<" ";
   }
   cout << endl;
@@ -638,20 +638,11 @@ static void OutputVector(std::vector<double>& vec){
 static double SumVec(const std::vector<double>& vec){
   double sum = 0;
   const auto vec_size(vec.size());
-  for(auto i = 0; i < vec_size; ++i){
+  for(auto  i{0U}; i < vec_size; ++i){
     sum = sum + vec[i];
   }
   return sum;
 }
-
-// ASSUMES that tolerance of 1e-6 is good enough; true for all kinds of variables ???
-static bool CheckRMS( const std::vector<double>& vec ){
-  const double e(1.0e-6);
-  if(fabs(1.-SumVec(vec))<e) return true;
-  return false;
-}
-
-
 
 
 
@@ -668,10 +659,10 @@ static pair<Element<3U>*,bool>  EvaluateBarycentricCoordinates( Element<3U>* ele
   Element<3U>* next_element(NULL);
   std::vector<double> coordinates;
   
-  for(auto i = 1; i <=nodes;++i){
+  for(auto i{1U}; i <=nodes;++i){
     coordinates.push_back(RESULT[i]);
   }
-  for(auto i = 0; i < coordinates.size();++i){
+  for(auto i{0U}; i < coordinates.size();++i){
     if(coordinates[i] >= (0.0-e) && coordinates[i] <= (1.0+e) ){
       pos_position.push_back(i);
     }
@@ -706,7 +697,7 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
   std::pair<Element<3U>*,Node<3U>*> return_vals;
   size_t num_nodes;
   std::map<double,csmp::Element<3U>*> face_list;
-  size_t iteration = 0;
+  int iteration = 0;
   
   std::vector<double> pos_position;
   ScalarVariable sp;
@@ -718,7 +709,7 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
     num_nodes = element->Nodes();
     SparseMatrix LHS(num_nodes);
     std::vector<double> coords = pXYZ.Coordinates();
-    for(size_t i=0;i <= dimension;i++){
+    for(size_t i{0U};i <= dimension;i++){
       if(i<3){
         RHS[i] = coords[i];
       }
@@ -726,26 +717,26 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
         RHS[i] = 1.0;
       }      
     }
-    for( size_t i=0; i<=dimension; i++ ) RESULT[i] = 0.;
+    for( size_t i{0U}; i<=dimension; i++ ) RESULT[i] = 0.;
     
     //create LHS vector from tetrahedron nodes coordinates in node_coordinates as  well as add the barycenter constraint Epsilon(Lambda_i) = 1
-    for(size_t i=0;i < dimension+1;i++){
-      for(auto j=0; j < num_nodes;j++){//finish setting up the matrix
-        if(i==0){
+    for(size_t i=0U;i < dimension+1;i++){
+      for(auto j{0U}; j < num_nodes;j++){//finish setting up the matrix
+        if(i==0U){
         // TODO:  this access of the element's node coordinates with a global node number looks like an ERROR ?
           LHS.Add(i,j,element->N(j)->x());
         } 
-        else if(i==1){
+        else if(i==1U){
           
           LHS.Add(i,j,element->N(j)->y()); 
           
         } 
-        else if(i==2){
+        else if(i==2U){
           
           LHS.Add(i,j,element->N(j)->z());  
           
         }
-        else if(i==3){
+        else if(i==3U){
           
           LHS.Add(i,j,1.0);
         
@@ -761,14 +752,14 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
     solver.Solve(LHS,RHS,RESULT);
     //check if all three barycentric coordinates are positive => the point is inside the element    
     pos_position.clear();
-    for(size_t i=0; i<RESULT.size();i++){
+    for(size_t i{0U}; i<RESULT.size();i++){
       if(RESULT[i]>=0.0){
         pos_position.push_back(i);
       }
       else{
       }
     }
-    for(auto i=0; i<RESULT.size(); ++i ){
+    for( size_t i{0U}; i<RESULT.size(); ++i ){
  // TODO: fix error: this uses i to access neighbors which will definitely create overflows
       face_list.insert(make_pair(RESULT[i],element->Neighbor(i)));
     
@@ -1203,7 +1194,7 @@ static void OutPutPropertyModel( const std::map<std::string,std::map<csmp::Point
 static size_t degreesOfFreedom( const Region<3U>& gref, csmp::Index prop_key )
  {
    size_t num = 0;
-   for ( size_t j=0U; j<gref.Nodes(); ++j )
+   for ( size_t j{0U}; j<gref.Nodes(); ++j )
     if(gref.N(j)->Status(prop_key) == DIRICH) num++;
 
    cout << "\ndegreesOfFreedom: N nodes: "<< gref.Nodes() <<" vs. Dirichlet nodes: "<< num << endl;
@@ -1250,7 +1241,7 @@ static vector<csmp::Index> DatabaseKeysFromNameList( Model<3U>& model, const std
 */
 static void InitializePropertiesInDatabase( Model<3U>& model, const char* region_name, const std::vector<string>& property_descriptors )
  {
-    for ( size_t i=0; i<property_descriptors.size(); ++i ) {
+    for ( size_t i{0U}; i<property_descriptors.size(); ++i ) {
          Region<3U>& ref = model.Region(region_name);
          auto property_key = model.Database().StorageKey(property_descriptors.at(i).c_str());
          switch (property_key.type) {
@@ -1381,7 +1372,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       // ---------------------------------
       // Identifying whether we are dealing with a volumetric region
       // (assuming that regions only consist of a single dimensionality of elements)
-      if ( (*gref.ElementsBegin())->FE()->IsVolumeElement() )
+      if ( (*gref.CellsBegin())->FE()->IsVolumeElement() )
         {
            map<Element<3U>*,vector<vector<double> > >  mapped;
            MapPointsTo3DVolumetricRegion( pointsAndProperties, gref, mapped ); // ToDo: Bug: properties are not put on diferent vectors in map??
@@ -1417,13 +1408,13 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       AssignDefaultValuesToElements(noPropertyElementVectors, property_keys, defaultValues);
       
       cout << "\n\tStarting the interpolation of "<< property_keys.size() <<" properties onto the volumetric regions...\n";
-      for( size_t i=0; i<property_keys.size(); ++i )
+      for( size_t i{0U}; i<property_keys.size(); ++i )
         {
           cout <<"Interpolating property: "<<property_descriptors[i]<<endl;
           gref.InputPropertyValue(scalar_node, makeScalar(PLAIN,0.0));
           gref.InputPropertyValue(scalar_elmt, makeScalar(PLAIN,0.0));
             
-          cout << "Number of elements in surface mesh: "<< gref.Elements()<<endl;
+          cout << "Number of elements in surface mesh: "<< gref.Cells()<<endl;
           cout << "Number of elements without current property assigned."<<noPropertyElementVectors[i].size()<< endl;
           
           // overwrites property values at element nodes with the value of the corresponding property stored on the element 
@@ -1440,7 +1431,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
                property_int_samg.IntegrateOver(gref);
             }
           //Interpolate nodal values to elements using the element temp variable container
-          gref.InterpolateNodeToElementProperty(scalar_node,scalar_elmt);
+          gref.InterpolateNodeToCellProperty(scalar_node,scalar_elmt);
             
           /*Assign the known and interpolated values*/
           AssignElementPropertyFromElementList(noPropertyElementVectors[i],scalar_elmt_key,property_keys[i],empty_elmt_key);
@@ -1454,7 +1445,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       // ------------------------------------
       // PROCESSING REGIONS THAT ARE SURFACES
       // ------------------------------------
-      else if ( (*gref.ElementsBegin())->FE()->IsSurfaceElement() )
+      else if ( (*gref.CellsBegin())->FE()->IsSurfaceElement() )
         {
         cout << "\nMapping point data to surface mesh." << endl;
         map<Element<3U>*,vector<vector<double> > >  mapped;
@@ -1465,9 +1456,9 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
              for ( map<Element<3U>*,vector<vector<double> > >::iterator
                    map_it=mapped.begin(); map_it !=mapped.end(); ++map_it ) {
                   cout << "Outputing Values for this Element" << endl;
-                  for ( size_t i=0; i<map_it->second.size(); ++i ) {
+                  for ( size_t i{0U}; i<map_it->second.size(); ++i ) {
                        cout << "Ouputing Values for this Property"<<endl;
-                       for ( size_t j=0; j<map_it->second[i].size(); ++j )                
+                       for ( size_t j{0U}; j<map_it->second[i].size(); ++j )                
                          cout << "Value: "<<map_it->second[i][j]<<endl;              
                     }
               }
@@ -1491,7 +1482,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
         AssignDefaultValuesToElements(noPropertyElementVectors, property_keys, defaultValues);
         
         cout << "\n\tStarting the interpolation of "<< property_keys.size() <<" properties onto the surface regions...\n";
-        for( size_t i=0; i<property_keys.size(); ++i )
+        for( size_t i{0U}; i<property_keys.size(); ++i )
           {
             cout <<"Interpolating Property: "<<property_descriptors[i]<<endl;
             gref.InputPropertyValue(scalar_node, makeScalar(PLAIN,0.0));
@@ -1508,7 +1499,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
                 property_int_samg.Add(&source);
                 property_int_samg.IntegrateOver(gref);
               }
-            gref.InterpolateNodeToElementProperty(scalar_node,scalar_elmt);
+            gref.InterpolateNodeToCellProperty(scalar_node,scalar_elmt);
             AssignElementPropertyFromElementList(noPropertyElementVectors[i],scalar_elmt_key,property_keys[i],empty_elmt_key);
             if ( dof >= 1 ) nearestNeighborFill( model, (*it).first.c_str(), property_descriptors[i].c_str(), ZERO_DATA_VALUE );
           }
@@ -1532,8 +1523,8 @@ static void FindEmptyElements(Region<3U>& gref, csmp::Index property_key, vector
   if ( !emptyElements.empty() ) emptyElements.clear();
   std::vector<Element<3U>*>  noPropElements;
   emptyElements.clear();
-  emptyElements.reserve(gref.Elements());
-  for ( size_t j=0U; j<gref.Elements(); ++j ){
+  emptyElements.reserve(gref.Cells());
+  for ( size_t j{0U}; j<gref.Cells(); ++j ){
     if( gref.E(j)->Status(property_key)==ANY) emptyElements.push_back(gref.E(j));
   }
 }

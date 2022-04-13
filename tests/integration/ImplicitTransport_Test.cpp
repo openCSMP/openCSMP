@@ -14,7 +14,7 @@
 #include "ANSYS_Model3D.h"
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
-#include "PDE_IntegratorExperimental.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
@@ -203,7 +203,7 @@ void  ImplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf 
 #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
-    PDE_IntegratorExperimental<3U,Region>  fluid_pressure( solver );
+    PDE_Integrator<3U,Region>  fluid_pressure( solver );
 
     NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
     NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
@@ -332,7 +332,7 @@ void ImplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // sum of sector volumes
     double     sector_volume(0.), sector_PV(0.), FE_PV(0.);
     const size_t sector_ip(0U);
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         FE_PV += (*it)->Volume() * (*it)->Read( phi_key );
         for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
              sector_volume += (*it)->Read( i, sector_ip, sv_key ); // larger tolerance needed presumable because sectors are hexahedra
@@ -355,7 +355,7 @@ void ImplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // NB: establishing the flux balance in an element loop, which must include the perimeter elements,
     //     but avoiding truncated FVs at boundaries
     // double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key ); // tested: O.K.
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();
@@ -373,7 +373,7 @@ void ImplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // second version, loop over the element facets
     // --------------------------------------------
     fill( flux_balance.begin(), flux_balance.end(), 0. );
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          // Attention: inside/outside is with reference to facet, and NOT to finite-element sector
          //            when outside-inside>1 the opposite sign needs to be applied because facet is between first and last node !
          for ( auto i{0}; i<(*it)->Facets(); ++i ) {
@@ -430,7 +430,7 @@ void ImplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxatio
     vector<double>  flux_balance( model_domain.Nodes(), 0. );
     // NB: establishing the flux balance in an element loop, including the perimeter elements,
     //     but avoiding truncated FVs at the model boundary
-    for ( auto it=model_domain.ElementsBegin(); it!=model_domain.ElementsEnd(); ++it ) {
+    for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();

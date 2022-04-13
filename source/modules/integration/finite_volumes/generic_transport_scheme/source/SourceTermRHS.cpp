@@ -42,7 +42,7 @@ void SourceTermRHS<dim>::AccumulateStencil( const Element<dim>& e, std::vector<d
     
     const size_t nodes = e.Nodes();
     esource /= static_cast<double>(nodes);
-    for ( auto i{0}; i<nodes; ++i )
+    for ( auto i{0U}; i<nodes; ++i )
       rhs[ e.N(i)->Idx() ] += esource * e.N(i)->Read( adv_key_ );
  }
 

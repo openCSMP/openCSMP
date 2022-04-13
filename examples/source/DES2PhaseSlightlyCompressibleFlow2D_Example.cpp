@@ -252,7 +252,7 @@ void DES2PhaseSlightlyCompressibleFlow2D_Example::computeTotalMobility( Model<2U
     
     // 2. Computing the multiphase flow properties
     //    loop over finite elements
-    for ( auto eit = mref.ElementsBegin(); eit!= mref.ElementsEnd(); eit++ )
+    for ( auto eit = mref.CellsBegin(); eit!= mref.CellsEnd(); eit++ )
     {
         //flowfunctions.UpdateBrooksCoreyParameters(*eit);
         //total mobility

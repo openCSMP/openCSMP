@@ -214,7 +214,7 @@ void GocadHeader::WriteToText( ofstream& ofs ) const
     ofs << endl;
 
     ofs <<"NO_DATA_VALUES";
-    for ( size_t i=0; i<properties.size(); i++ ) ofs <<" "<< NO_VALUE;
+    for ( size_t i{0U}; i<properties.size(); i++ ) ofs <<" "<< NO_VALUE;
     ofs << endl;
 
     ofs <<"PROPERTY_CLASSES";
