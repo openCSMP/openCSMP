@@ -251,7 +251,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
       TODO: add a PropertyConstraint here
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity )
+size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     

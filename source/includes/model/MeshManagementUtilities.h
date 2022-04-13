@@ -10,11 +10,11 @@
 #define CSMP_MESH_MANAGEMENT_UTILITIES_H
 
 #include "CSMP_definitions.h"
-#include "MeshPatchAttributes.h"
 #include "plf_colony.h"
 
 namespace csmp {
 
+template<uint32_t> class Point;
 template<uint32_t> class Node;
 template<uint32_t> class Element;
 template<uint32_t> class Face;
@@ -22,6 +22,7 @@ template<uint32_t> class InterFace;
 
 template<uint32_t> class Model;
 template<uint32_t> class MeshManager;
+template<uint32_t> class MeshPatch;
 template<uint32_t> class Region;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
@@ -32,15 +33,6 @@ template<uint32_t> class SplitBoundary;
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<uint32_t dim, template<uint32_t> class CELL>
 void floodFill( CELL<dim>* const eptr, std::set<CELL<dim>*>& output_contiguous_subset );
-
-/// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
-template<uint32_t dim>
-void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
-                                     bool unassign_neighbors_outside = false, bool verbose = true );
-
-template<uint32_t dim>
-void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
-                                     bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
 template<uint32_t dim>
@@ -60,7 +52,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
                                              typename std::vector<CELL<dim>*>::const_iterator end,
-                                             std::map<CELL<dim>*,MeshPatchAttributes>& ); 
+                                             std::map<CELL<dim>*,MeshPatch<dim>>& );
 
 
 // DIAGNOSTICS
@@ -94,7 +86,10 @@ size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  ed
                                                bool find_segment_ids );
 
 
-// UTILITIES INVOLVING INDIVIDUAL ELEMENTS/FACES/INTERFACES
+// MESHING UTILITIES
+
+
+// MESHING UTILITIES FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
 // TODO: implement
 //template<uint32_t dim,template<uint32_t> class CELL>
@@ -161,10 +156,10 @@ template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
-bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
+bool hasNonManifoldVertices( const csmp::Element<3U>* const tptr, double tolerance=1.0e-5 );
 
 /// detects whether the point is contained in any of the elements of the region
-csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
+csmp::Element<3u>* const pointInVolumeElement( Region<3U>& region, const Point<3U>& query );
 
 /// detect degenerate elements by using the node coordinates to check whether some nodes have the same location
 template<uint32_t dim>

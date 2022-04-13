@@ -1,4 +1,5 @@
 #include "MeshManager.h"
+#include "MeshPatch.h"
 #include "MeshManagementUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "NodeManifoldManager.h"
@@ -1821,9 +1822,11 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
            if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
          perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
       }
-    //      - in 3D, does one need a triangulation
+    // In 3D, does one need a triangulation
     if constexpr (dim == 3U ) {
          throw csmp::Exception( ERROR, "CreateInterFacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
+         MeshPatch<3U> patch( SURFACE );
+         patch.BuildInterveningPatch( interface_nbor_elmts, false, perimeter_node_ptrs );
       }
     
 
@@ -2349,7 +2352,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                                                  typename std::vector<CELL<dim>*>::const_iterator last )
    {
       // this method applies only to surface elements in 3D
-      if constexpr ( dim == 3 ) {
+      if constexpr ( dim == 3U ) {
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
            map<set<Node<3>*>,map<CELL<3>*,uint32_t> >  elmt_pairs;
@@ -2426,7 +2429,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
         }
  
       // for surface elements, faces or interfaces in a 2D model
-      if constexpr ( dim == 2 ) {
+      if constexpr ( dim == 2U ) {
            map<set<Node<2>*>,map<CELL<2>*,uint32_t> > elmt_pairs;
            const auto                                 cellsEnd{last};
            
@@ -2514,19 +2517,20 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                                               typename std::vector<CELL<dim>*>::const_iterator last )
    {
       // this method applies only to line elements in 2 and 3D
-      if constexpr ( dim != 1 ) {
+      if constexpr ( dim != 1U ) {
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
-           map<set<Node<dim>*>,map<CELL<dim>*,uint32_t> >  elmt_pairs;
-           const auto                                      elementsEnd{last};
+           map<Node<dim>*,map<CELL<dim>*,uint32_t> >  elmt_pairs;
+           const auto                                 elementsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
+                const auto n_faces{ (*first)->Faces() };
                 for ( auto face{0}; face < n_faces; ++face ) {
-                     // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<dim>*,uint32_t>{make_pair(*first,face)} ) );
+                     // now there is only a single corner node corresponding to the opposite face of the line element
+                     // (node 1 is at Face 0 and node 0 at Face 1 as for all simplex elements)
+                     auto it = elmt_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ), map<CELL<dim>*,uint32_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2582,7 +2586,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
         }
  
       // for line elements, faces or interfaces in a 1D model
-      if constexpr ( dim == 1 ) {
+      if constexpr ( dim == 1U ) {
            map<set<Node<1>*>,map<CELL<1>*,uint32_t> >  elmt_pairs;
            const auto                                  elementsEnd{last};
            

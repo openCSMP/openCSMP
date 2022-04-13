@@ -154,8 +154,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
 
   // 2. establising interface neighbor connectivity and interior vs. perimeter includig sorting
   // ---------------------------------------------------------------------------------------------------
-  establishNeighborConnectivity( this->cell_vec_, INSIDE );
-  establishNeighborConnectivity( this->cell_vec_, OUTSIDE );
+  mesh.BuildInterFaceConnectivity( this->cell_vec_.begin(), this->cell_vec_.end() );
 
   // 3. building the interface node vector
   // ---------------------------------------------------------------------------------------------------

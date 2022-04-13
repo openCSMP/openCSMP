@@ -744,12 +744,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: this does not set the subdomain pointers to zero; don't touch them
-    //if ( remove_original_region )
-    //  model.Mesh().Delete( subdomain.CellsBegin(), subdomain.CellsEnd() );
-      
-     // TODO: these are global changes! - do this only for nodes that are affected
-     model.Mesh().UpdateConnectivity();
+    // TODO: these are global changes! - do this only for nodes that are affected
+    model.Mesh().UpdateConnectivity();
    
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------

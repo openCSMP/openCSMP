@@ -8,6 +8,7 @@
 
 #include "MeshManagementUtilities.h"
 #include "MeshManager.h"
+#include "MeshPatch.h"
 #include "Model.h"
 #include "Region.h"
 #include "Element.h"
@@ -375,7 +376,7 @@ template size_t findInterconnectedNodeCluster( Node<1>* const nptr, set<Node<1>*
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_iterator begin,
                                              typename vector<CELL<dim>*>::const_iterator end,
-                                             map<CELL<dim>*,MeshPatchAttributes>& root_pointers )
+                                             map<CELL<dim>*,MeshPatch<dim>>& root_pointers )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
@@ -427,10 +428,9 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
            // computing the next subset
            if ( cells.empty() ) break;
            else {
-                MeshPatchAttributes attributes( cells_contiguous_subset.size(),
-                                               parseFiniteElementDimension((*cells.begin())->FE_Type()) );
+                MeshPatch<dim> attributes( parseFiniteElementDimension((*cells.begin())->FE_Type()) );
                 
-                pair<typename map<CELL<dim>*,MeshPatchAttributes>::iterator,bool>
+                pair<typename map<CELL<dim>*,MeshPatch<dim>>::iterator,bool>
                   insertion = root_pointers.insert( make_pair( (*cells.begin()), attributes ) );
                 if ( insertion.second == false ) {
                      csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
@@ -448,15 +448,15 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
 // 3D version
 template size_t  findPointersToStandAloneMeshPatches( vector<Element<3U>*>::const_iterator,
                                                       vector<Element<3U>*>::const_iterator,
-                                                      map<Element<3U>*,MeshPatchAttributes>& );
+                                                      map<Element<3U>*,MeshPatch<3U>>& );
 
 template size_t  findPointersToStandAloneMeshPatches( vector<Face<3U>*>::const_iterator,
                                                       vector<Face<3U>*>::const_iterator,
-                                                      map<Face<3U>*,MeshPatchAttributes>& );
+                                                      map<Face<3U>*,MeshPatch<3U>>& );
 
 template size_t  findPointersToStandAloneMeshPatches( vector<InterFace<3U>*>::const_iterator,
                                                       vector<InterFace<3U>*>::const_iterator,
-                                                      map<InterFace<3U>*,MeshPatchAttributes>& );
+                                                      map<InterFace<3U>*,MeshPatch<3U>>& );
 
 
 
@@ -938,381 +938,6 @@ template void floodFill( InterFace<3U>* const, set<InterFace<3U>*>& );
 
 
 
-
-
-/**
-    Connects Element objects to their same-dimensional neighbors in as much as is possible.
-    
-    Where there are no neighbors the neighbor pointers will be nulled.
-    
-    @attention The assumption is made that all nodes in the model have a unique numbering.
-    
-    @author SKM 2012
-    
-        @todo deal with manifolds, disambiguating them on the basis of element orientation (only elements int the same plane or aligned elements should be neighbors)
-
-        @TODO: no need to use set, use sort() then unique() on the result vector, searching will be much faster
-*/
-template<uint32_t dim>
-void  establishNeighborConnectivity( vector<Element<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( simplexVector.empty() ) {
-         csmp_error.notice( WARNING, "establishNeighborConnectivity( Element )", "supplied element vector is empty; nothing was done" );
-         return;
-      }
-
-    cout << "\nestablishNeighborConnectivity( Element ): Establishing CSMP FE neighbor connectivity...\n";
- 
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    if (verbose) cout << "  Building element face list...\n";
-
-    //       key             face number neighbor
-    multimap<set<Node<dim>*>,pair<uint32_t,Element<dim>*> >  volume_neighbor_keys,
-                                                             surface_neighbor_keys,
-                                                             line_neighbor_keys;
-    vector<uint32_t>               fnids;
-    typename std::set<Node<dim>*>  key;
-
-    for ( typename vector<Element<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
-      for ( auto face=0U; face<(*it)->Faces(); face++ )
-        {
-           if ( (*it) == nullptr ) {
-                csmp_error.notice( ERROR, "establishNeighborConnectivity( Element )",
-                                  "supplied element contains NULL pointer to elements; nothing was done" );
-                return;
-             }
-           // creating face key from idx's of face
-           (*it)->FE()->NodesOfFace( face, fnids );
-           for ( auto j{0U}; j<fnids.size(); j++ )
-               key.insert( (*it)->N( fnids[j] ) );
-             
-           // inserting newly generated keys into multimap
-           if ( (*it)->FE()->IsVolumeElement() )
-               volume_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else if ( (*it)->FE()->IsSurfaceElement() )
-               surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else // for all line elements
-               line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           key.clear();
-
-           // unassign neighbors outside of the provided vector range
-           if ( unassign_neighbors_outside )
-           {
-             // remove element from neighbor list of its neighbors
-             const auto neighbors( (*it)->Neighbors() );
-             for ( auto neighbor = 0; neighbor < neighbors; ++neighbor )
-               if ( (*it)->Neighbor( neighbor ) != NULL ) {
-                 const auto neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
-                 for ( auto i = 0; i < neighbor_neighbors; i++ )
-                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
-                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
-                       (*it)->NeighborElementVector()[i] = NULL;
-                     }
-                 
-                 (*it)->NeighborElementVector()[neighbor] = NULL;
-               }
-             (*it)->NeighborElementVector().clear();
-           }
-        }
-
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-
-    if (verbose) cout << "  Building element neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() ) {
-
-        Element<dim>* e1Ptr(nullptr);
-        Element<dim>* e2Ptr(nullptr);
-
-        if (verbose) cout << "\n\t\tline elements...";
-
-        auto it1(line_neighbor_keys.begin()), it2(line_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning eachothers faces
-                   //                          face pointer                   nbor face idx        neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // line elements
-    
-    // 2.2 surface elements
-    // --------------------
-    if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
-
-        Element<dim>* e1Ptr(nullptr);
-        Element<dim>* e2Ptr(nullptr);
-
-        if (verbose) cout << "\n\t\tsurface elements...";
-
-        auto it1(surface_neighbor_keys.begin()), it2(surface_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                    // assigning eachothers faces
-                    //                          face pointer                   nbor face idx        neighbor pointer
-                    ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                    ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // surface elements
-      
-    // 2.3 volume elements
-    // -------------------
-    if ( dim == 3U and !volume_neighbor_keys.empty() ) {
-
-        Element<dim>* e1Ptr(nullptr);
-        Element<dim>* e2Ptr(nullptr);
-
-        if (verbose) cout << "\n\t\tvolume elements...\n";
-
-        auto it1(volume_neighbor_keys.begin()), it2(volume_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != volume_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ( (*it1).second.second != 0 and (*it2).second.second != 0 ) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning eachothers faces
-                   //                          face pointer                   nbor face idx        neighbor pointer
-                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
-                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
-                   
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == volume_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // dim=3
-    
- } // end establishNeighborConnectivity
-
-// explicit instantiations
-template void establishNeighborConnectivity<1U>( std::vector<csmp::Element<1U>*>&, bool, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::Element<2U>*>&, bool, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::Element<3U>*>&, bool, bool );
-
-
-
-
-/** CONNECTIVITY BETWEEN INTERFACES
-       
-         Inside and outside must be considered.
-*/
-template<uint32_t dim>
-void  establishNeighborConnectivity( std::vector<csmp::InterFace<dim>*>& simplexVector, bool unassign_neighbors_outside, bool verbose )
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( simplexVector.empty() ) {
-         csmp_error.notice( WARNING, "establishNeighborConnectivity( InterFace ):", "supplied element vector is empty; nothing was done." );
-         return;
-      }
-
-    if (verbose) cout << "\nestablishNeighborConnectivity( InterFace ): Establishing CSMP FE neighbor connectivity...\n";
-
-    // 1. making separate search vectors of face keys for surface and line elements
-    // ----------------------------------------------------------------------------
-    if (verbose)  cout << "  Building element face list...\n";
-
-    //       key             face number neighbor
-    multimap<set<Node<dim>*>,pair<uint32_t,InterFace<dim>*> >  surface_neighbor_keys,
-                                                               line_neighbor_keys;
-    vector<uint32_t>               fnids;
-    typename std::set<Node<dim>*>  key;
-
-    for ( typename vector<InterFace<dim>*>::const_iterator it = simplexVector.begin(); it!=simplexVector.end(); it++ )
-      for ( auto face=0U; face<(*it)->Faces(); face++ )
-        {
-           if ( (*it) == NULL ) {
-                csmp_error.notice( ERROR, "establishNeighborConnectivity( InterFace )",
-                                  "supplied element contains NULL pointer to elements; nothing was done" );
-                return;
-             }
-
-           // creating face keys from idx's of interface for INSIDE & OUTSIDE
-           (*it)->CurrentSide( INSIDE ); // just for node-vector
-           (*it)->FE()->NodesOfFace( face, fnids );
-           for ( size_t j{0U}; j<fnids.size(); j++ )
-             key.insert( (*it)->N( fnids[j] ) );
-
-           // inserting newly generated key into multimap
-           if ( (*it)->FE()->IsSurfaceElement() )
-               surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else if ( (*it)->FE()->IsLineElement() )
-               line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
-           else{
-               csmp_error.notice( ERROR, "establishNeighborConnectivity( InterFace )", "supplied element vector contains volumetric element! nothing was done" );
-               return;
-           }
-           key.clear();
-
-           // unassign neirghbors outside of the provided vector range
-           if ( unassign_neighbors_outside )
-           {
-             // remove element from neighbor list of its neighbors
-             const auto neighbors( (*it)->Neighbors() );
-             for ( auto neighbor = 0; neighbor < neighbors; ++neighbor )
-               if ( (*it)->Neighbor( neighbor ) != NULL ) {
-                 const auto neighbor_neighbors( (*it)->Neighbor( neighbor )->Neighbors() );
-                 for ( auto i = 0; i < neighbor_neighbors; i++ )
-                   if ( (*it)->Neighbor( neighbor )->Neighbor( i ) != NULL )
-                     if ( (*it)->Neighbor( neighbor )->Neighbor( i ) == (*it) ) {
-                       (*it)->NeighborElementVector()[i] = NULL;
-                     }
-
-                 (*it)->NeighborElementVector()[neighbor] = NULL;
-               }
-             (*it)->NeighborElementVector().clear();
-           }
-        }
-
-
-    // 2. (re)building element neigborhoods
-    // ------------------------------------
-    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
-    if (verbose) cout << "  Building element neighbor connectivity...";
-
-    // 2.1 line elements
-    // -----------------
-    if ( !line_neighbor_keys.empty() ) {
-
-        InterFace<dim>* e1Ptr(NULL);
-        InterFace<dim>* e2Ptr(NULL);
-
-        if (verbose) cout << "\n\t\tline elements...";
-
-        auto it1(line_neighbor_keys.begin()), it2(line_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != line_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                   // assigning eachothers faces
-                    //                        face pointer, neighbor pointer, side-of interface
-                   (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                   (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == line_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // dim=1
-
-    // 2.2 surface elements
-    // --------------------
-    if ( dim >= 2U and !surface_neighbor_keys.empty() ) {
-
-        InterFace<dim>* e1Ptr(NULL);
-        InterFace<dim>* e2Ptr(NULL);
-
-        if (verbose) cout << "\n\t\tsurface elements...";
-
-        auto it1(surface_neighbor_keys.begin()), it2(surface_neighbor_keys.begin());
-
-        it2++;
-
-        while ( it2 != surface_neighbor_keys.end() )
-          {
-              // if there is a pair of valid neighbor elements, neighbor assignments are made
-              if ( (*it1).first == (*it2).first and ((*it1).second.second != 0 and (*it2).second.second != 0) )
-                {
-                   e1Ptr = (*it1).second.second;
-                   e2Ptr = (*it2).second.second;
-                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
-
-                    // assigning eachothers faces
-                    //                        face pointer, neighbor pointer, side-of interface
-                    (*it1).second.second->Assign( (*it1).second.first, e2Ptr );
-                    (*it2).second.second->Assign( (*it2).second.first, e1Ptr );
-
-
-                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
-                   ++it1;
-                   ++it2;
-                }
-
-              // both iterators are advanced
-              if ( it2 == surface_neighbor_keys.end() ) break;
-              ++it1;
-              ++it2;
-          }
-      } // dim=2
-
-
- } // end establishNeighborConnectivity
-
-template void establishNeighborConnectivity<1U>( std::vector<csmp::InterFace<1U>*>&, bool, bool );
-template void establishNeighborConnectivity<2U>( std::vector<csmp::InterFace<2U>*>&, bool, bool );
-template void establishNeighborConnectivity<3U>( std::vector<csmp::InterFace<3U>*>&, bool, bool );
 
 
 
@@ -2561,5 +2186,6 @@ void printNodeCoordinates( typename vector<Node<dim>*>::const_iterator first,
 template void printNodeCoordinates<3U>( typename vector<Node<3U>*>::const_iterator, typename vector<Node<3U>*>::const_iterator );
 template void printNodeCoordinates<2U>( typename vector<Node<2U>*>::const_iterator, typename vector<Node<2U>*>::const_iterator );
 template void printNodeCoordinates<1U>( typename vector<Node<1U>*>::const_iterator, typename vector<Node<1U>*>::const_iterator );
+
 
 } // end csmp

@@ -875,7 +875,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
        
      // 3. establishing neighbor connectivity among the new elements
      // ------------------------------------------------------------
-     establishNeighborConnectivity( new_elmts, false, false );
+     if constexpr ( dim == 2U )
+       mesh.template BuildLineConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
+     if constexpr ( dim == 3U )
+       mesh.template BuildSurfaceConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
 
 
      // 4. construct the new unique region between the interface elements in the model
