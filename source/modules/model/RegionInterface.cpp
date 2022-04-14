@@ -216,7 +216,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
   // if region was inserted successfully
   if ( newRegion.second ) {
        size_t elmts = (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh() );
-       if ( elmts == 0 )
+       if ( elmts == 0 ) //                     ^^^^^^^^^^^^^
          csmp_error.notice( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
                             regionname, "region could not be formed." );
        // do not renumber
@@ -2488,20 +2488,21 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
       @attention the assumption is made the inter-element connectivity has was updated before
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
+void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
  {
      // since this region may now contain a different number of elements
      RemoveRegion("Model");
 
-     // rebuilding the region 'Model'
+     // 1. rebuilding the region 'Model'
+     // --------------------------------
      const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
      FormModelRegion( is_unique );
 
      csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
 
-     // 1. non-unique, potentially overlapping regions
-     //    (they get rebuilt efficiently using the original creation constraints, but only if new elements
-     //     lie within them)
+     // 2. non-unique, potentially overlapping regions
+     // ----------------------------------------------
+     //    (they are rebuilt using original creation constraints)
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit )
        if ( (*rit).second.NeedsRebuilt() && (*rit).first != "Model" ) {
              auto crit = regionTraits_.find( (*rit).first );
@@ -2514,13 +2515,14 @@ void RegionInterface<dim, REGION_COMPLEX>::RebuildRegions()
              (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
           }
 
-     // 2. unique regions: only get modified if they have been ScheduledForRebuilt()
+     // 3. unique regions: only get modified if they have been ScheduledForRebuilt()
+     // ----------------------------------------------------------------------------
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
        if ( (*rit).second.NeedsRebuilt() )
          // assuming the the element neighbor connectivity was updated before by the MeshManager
          (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
        
- } // end RebuildRegions
+ } // end UpdateRegions
 
 
 
@@ -2542,7 +2544,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 1 )
             cout <<" length (m): "<< (*rit).second.Volume();
-          cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
+          cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
      cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
@@ -2555,7 +2557,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
           else if ( rdim.second == 1 )
             cout <<" length (m): "<< (*rit).second.Volume();
-          cout <<", range of spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
+          cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
      cout << endl << endl;
  }

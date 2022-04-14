@@ -313,6 +313,16 @@ void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neig
  }
 
 
+
+template<uint32_t dim>
+void  Node<dim>::AssignPropertyValuesFrom( const Node<dim>& nd )
+  {
+     // copies the property values
+     this->LVS( nd.LVS() );
+  }
+
+
+
 /**
    Remove duplicates, nullptrs, and sort the vector again.
 */

@@ -106,6 +106,9 @@ class Node : public LocalVariableStorage<dim,Node> {
 
     /// expects a sorted vector without duplicates
     void Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors=false );
+    
+    /// copies the values of the stored node properties over to the current node
+    void  AssignPropertyValuesFrom( const Node<dim>& );
 
     /// rebuilds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
     uint32_t ReassignNeighbors();

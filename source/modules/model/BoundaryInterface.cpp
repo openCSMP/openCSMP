@@ -801,7 +801,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     if ( remove_original_region ) {
          model.RemoveRegion( dim_1_region );
-         model.RebuildRegions();
+         model.UpdateRegions();
       }
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -1856,7 +1856,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       auto right  = collectLowerDimensionalElementsFrom( *model, "RIGHT", elmts_to_become_faces );
       auto left   = collectLowerDimensionalElementsFrom( *model, "LEFT", elmts_to_become_faces );
       
-      if constexpr ( dim == 3 ) {
+      if constexpr ( dim == 3U ) {
            front = collectLowerDimensionalElementsFrom( *model, "FRONT", elmts_to_become_faces );
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
@@ -1878,12 +1878,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
         AddBoundary( "TOP", next(fit,top.first), next(fit,top.second), TOP );
       if ( irregular.first != irregular.second )
         AddBoundary( "IRREGULAR", next(fit,irregular.first), next(fit,irregular.second), IRREGULAR );
-      if constexpr( dim == 3 ) {
+      if constexpr( dim == 3U ) {
           AddBoundary( "BACK",  next(fit,back.first),  next(fit,back.second), BACK );
           AddBoundary( "FRONT", next(fit,front.first), next(fit,front.second), FRONT );
        }
       
-      // 5. removing the input regions
+      // 5. removing input regions and updating other regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
       if ( top.first != top.second ) model->RemoveRegion( "TOP" );
@@ -1891,11 +1891,12 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       model->RemoveRegion( "BOTTOM" );
       model->RemoveRegion( "RIGHT" );
       model->RemoveRegion( "LEFT" );
-      if constexpr( dim == 3 ) {
+      if constexpr( dim == 3U ) {
            model->RemoveRegion( "BACK" );
            model->RemoveRegion( "FRONT" );
         }
         
+      model->UpdateRegions();
       cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
   }
@@ -1971,23 +1972,14 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
          return set<string>{};
       }
 
-	  // 2. removing the original regions from which the boundaries were created
-    // ------------------------------------------------------------------------------------
-    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-    for ( auto& it : eligibleRegions ) {
-         // nor helpful and has side effects: model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
-         model->RemoveRegion( it.first.c_str() );
-      }
-      
-    assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
 
-    // 3. replacing the elements by Faces (input elements are deleted and nullptrs returned)
+    // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
+    assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
     vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                      elmts_to_become_faces.begin(),
                                                                      elmts_to_become_faces.end() );
-
-    // 4. creating the Boundaries from the faces
+    // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };
     set<string>  boundaries_created;
@@ -2007,6 +1999,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
          cout << endl;
       }
 
+	  // 4. removing the original regions from which the boundaries were created
+    // ------------------------------------------------------------------------------------
+    // (no flagging for rebuilt of regions is necessary as they will be completely removed)
+    for ( auto& it : eligibleRegions ) {
+         // nor helpful and has side effects: model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
+         model->RemoveRegion( it.first.c_str() );
+      }
+    model->UpdateRegions();
+
 	  cout << "\n\nBoundaryInterface::EstablishBoundariesFromRegions: done!\n";
     // if there are some unattributed faces left the method returs false
 	  return boundaries_created;
@@ -2014,10 +2015,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 } // end EstablishBoundariesFromRegions
 
 
-
-//        if ( !CreateExternalBoundaryFrom( it->first.c_str(), IRREGULAR ) )
-//          csmp_error.notice( WARNING, "BoundaryInterface::EstablishBoundariesFromRegions",
-//                                      "unable to create Boundary", it->first );
 
  // DEBUGGING - checked that there are no duplicates or nullptrs in the 'elmts_to_become_faces' vector
 // checking input vector for duplicates (OK for prism_test
@@ -2343,7 +2340,7 @@ template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
  {
      cout <<"\nBoundaryInterface<"<< dim <<",Boundary<Face>>::BoundariesOut: ";
-     if ( Boundaries() == 0 ) {
+     if ( Boundaries() == 0U ) {
           cout <<"\tmodel does not contain any boundaries.\n\n";
           return;
        }
@@ -2354,11 +2351,11 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
           cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
           cout <<" "<< (*bit).second.Cells() <<" faces, ";
           // in 3D a boudary is a surface
-           if constexpr ( dim == 3 ) {
+           if constexpr ( dim == 3U ) {
                 cout <<"area (m2): "<< (*bit).second.Area();
                 cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
              }
-           if constexpr ( dim == 2 )
+           if constexpr ( dim == 2U )
              cout <<" length (m): "<< (*bit).second.Area();
        }
      cout << endl << endl;

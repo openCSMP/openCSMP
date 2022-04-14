@@ -1181,6 +1181,9 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
         csmp_error.notice( ERROR, "Region<dim>::AccumulateAll:", "supplied index-to-pointer mapping is empty.");
         return 0U;
      }
+     
+   if ( !this->cell_vec_.empty() ) this->cell_vec_.clear();
+   if ( !this->node_vec_.empty() ) this->node_vec_.clear();
    
    // obtain pointers to all elements
    this->cell_vec_.reserve( mesh.Elements() );

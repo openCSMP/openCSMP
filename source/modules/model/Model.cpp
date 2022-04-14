@@ -307,9 +307,9 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // 6. forming Boundaries
     //    if the model is box-shaped (albeit perhaps with an irregular top surface)
     if (  mesh_topology.BoxShapedModel() ) {
-        this->EstablishBoxBoundaries();
-        // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-        cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
+         this->EstablishBoxBoundaries();
+         // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+         cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
       }
     // irregularly shaped models
     else {
@@ -317,15 +317,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
             this->EstablishBoundariesFromRegions();
           else
             csmp_error.notice( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
-                  
-                // we do not want to keep faces at internal boundaries that might become SplitBoundary objects
-                // but we do want to create them on the outside of the model where the names of the input regions contain
-                // the string "BOUNDARY"
-          if ( this->ContainsBoundary("Model_Boundary") )
-            this->RemoveBoundary( this->Boundary("Model_Boundary") );
 
-         // cleanup after boundary creation
-         this->RebuildRegions();
+         // reporting
          this->RegionsOut();
          this->BoundariesOut();
       }
@@ -421,6 +414,7 @@ if ( mesh_manager_.InterFaces() > 0 )
     cout << endl;
   
 } // end Initialize (VSet / ModelTopology)
+
 
 // Testing the Regions that will become boundaries OK
 //this->Region("BACK").NodeAttributesToCSV();

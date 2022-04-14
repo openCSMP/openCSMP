@@ -1438,6 +1438,9 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
     // copying the inside node to create a new node
     auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary() );
+    
+    // copying the properties over
+    (*nit).AssignPropertyValuesFrom( *nptr_inside );
 
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
