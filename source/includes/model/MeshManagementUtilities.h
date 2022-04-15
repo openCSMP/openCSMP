@@ -57,6 +57,10 @@ size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::c
 
 // DIAGNOSTICS
 
+/// calculates the number of model cells that fall into the cell category indicated by placement; returns total number of cells in the model
+template<uint32_t dim>
+size_t currentCellTypes( const MeshManager<dim>&, PLACEMENT, size_t& volume_cells, size_t& surface_cells, size_t& line_cells );
+
 /// determines whether mesh in model is built from finite elements with a local coordinate system
 template<uint32_t dim>
 bool isoparametricElementMesh( const Model<dim>& );
@@ -84,6 +88,21 @@ bool findSplitInterfaceElements( const Region<dim>&,
 size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  edge_nodes,
                                                std::map<Element<3>*,std::vector<Node<3>*> >& segm_parents,
                                                bool find_segment_ids );
+
+/// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
+template<uint32_t dim>
+long  findNode( const Model<dim>&, const Point<dim>& pxyz, double tolerance, bool verbose = false );
+
+/// find node by its position as identified from its coordinates: tolerance should take into account single-precision of CAD tools
+size_t  findNode( const Model<1U>&, double nx, double tolerance );
+/// 2D version
+size_t  findNode( const Model<2U>&, double nx, double ny, double tolerance );
+/// 3D version
+size_t  findNode( const Model<3U>&, double nx, double ny, double nz, double tolerance );
+
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim, template<uint32_t> class CELL>
+void printNodes( const CELL<dim>& );
 
 
 // MESHING UTILITIES

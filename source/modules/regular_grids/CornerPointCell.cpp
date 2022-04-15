@@ -77,17 +77,17 @@ size_t CornerPointCell::GetNumFaces( size_t ) const
 
 // TYPE OF ELEMENT ( DIMENSION )
 
-bool CornerPointCell::IsVolumeElement() const
+bool CornerPointCell::IsVolume() const
 {
     return ( ( cell_category_ == CORNER_POINT_CELL_DIM_3_NON_OVERLAPPING ) || ( cell_category_ == CORNER_POINT_CELL_DIM_3_OVERLAPPING ) );
 }
 
-bool CornerPointCell::IsSurfaceElement() const
+bool CornerPointCell::IsSurface() const
 {
     return ( cell_category_ == CORNER_POINT_CELL_DIM_2 );
 }
 
-bool CornerPointCell::IsLineElement() const
+bool CornerPointCell::IsLine() const
 {
     return ( cell_category_ == CORNER_POINT_CELL_DIM_1 );
 }
@@ -965,7 +965,7 @@ void CornerPointCell::ProcessPolyWellElement( std::map<std::set<uint32_t>,GridNo
     const bool add_edge_centroids( true );
     const bool add_face_centroids( true );
     const bool add_cell_centroids( true );
-    const bool is_volumetric_element( IsVolumeElement() );
+    const bool is_volumetric_element( IsVolume() );
     processCellWithCentroids( add_edge_centroids, add_face_centroids, add_cell_centroids, is_volumetric_element, tetra_mesh,
                               this->grid_, additional_points, additional_edges,
                               this->elements_,this->faces_,this->extra_nodes_,
@@ -979,7 +979,7 @@ void CornerPointCell::ProcessPolyNonWellElement( std::map<std::set<uint32_t>,Gri
 {
     const bool tetra_mesh( true );
     const bool do_not_add_cell_centroids( false );
-    const bool is_volumetric_element( IsVolumeElement() );
+    const bool is_volumetric_element( IsVolume() );
     if( this->GetNumNodes() == 8U )
         processCellWithCentroids( add_edge_centroids, add_face_centroids, add_cell_centroids, is_volumetric_element, tetra_mesh,
                                   this->grid_, additional_points, additional_edges,

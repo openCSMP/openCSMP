@@ -103,7 +103,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
     
     auto eend = gref.CellsEnd();
     for (auto eit = gref.CellsBegin(); eit != eend; ++eit) {
-      if (!(*eit)->IsVolumeElement()) {
+      if (!(*eit)->IsVolume()) {
         continue;
       }
       const Point<3u> bctr = (*eit)->BaryCenter();

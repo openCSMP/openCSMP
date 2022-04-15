@@ -20,6 +20,76 @@ using namespace std;
 
 namespace csmp {
 
+
+/**
+     @note Model is used for convenience here. MeshManager would be mode appropriate.
+*/
+template<uint32_t dim>
+size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& volume_cells, size_t& surface_cells, size_t& line_cells )
+ {
+    size_t n_cells_model{ mesh.Elements() + mesh.Faces() + mesh.InterFaces() };
+    volume_cells = surface_cells = line_cells = 0U;
+    
+    // elements
+    if ( etype == ELEMENT ) {
+         if constexpr ( dim == 3U ) {
+             for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+                  if      ( (*it).IsVolume() ) volume_cells++;
+                  else if ( (*it).IsSurface() ) surface_cells++;
+                  else { assert( (*it).IsLine() ); line_cells++; }
+               }
+           }
+         else if constexpr ( dim == 2U ) {
+             for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+                  if ( (*it).IsSurface() ) surface_cells++;
+                  else { assert( (*it).IsLine() ); line_cells++; }
+               }
+           }
+         else // 1D
+           line_cells = mesh.Elements();
+      }
+    // faces
+    else if ( etype == FACE ) {
+         surface_cells = count_if( mesh.FacesBegin(), mesh.FacesEnd(), []( const Face<dim>& e ){ return e.IsSurface(); } );
+         line_cells = mesh.Faces() - surface_cells;
+      }
+    // interfaces
+    else if ( etype == INTER_FACE ) {
+         surface_cells = count_if( mesh.InterFacesBegin(), mesh.InterFacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } );
+         line_cells = mesh.InterFaces() - surface_cells;
+      }
+    else cerr <<"\n\n"<< "currentCellTypes: invalid celltype: "<< parsePlacement(etype) << endl;
+ 
+   return n_cells_model;
+ 
+ } // end currentCellTypes
+
+template size_t currentCellTypes( const MeshManager<3U>&, PLACEMENT, size_t&, size_t&, size_t& );
+template size_t currentCellTypes( const MeshManager<2U>&, PLACEMENT, size_t&, size_t&, size_t& );
+template size_t currentCellTypes( const MeshManager<1U>&, PLACEMENT, size_t&, size_t&, size_t& );
+
+
+
+
+
+template<uint32_t dim>
+bool isoparametricElementMesh( const Model<dim>& sg )
+ {
+    string  etype(parseFiniteElementType((*sg.Region("Model").CellsBegin())->FE()->ElementType()));
+
+    if ( etype.find("ISOPARAMETRIC") != std::string::npos ) return true;
+    return false;
+
+ } // end isoparametricElementMesh
+ 
+template bool isoparametricElementMesh<1U>( const Model<1U>& );
+template bool isoparametricElementMesh<2U>( const Model<2U>& );
+template bool isoparametricElementMesh<3U>( const Model<3U>& );
+
+
+
+
+
 /**
 Counts elements the nodes of which are all located on the model boundary.
 
@@ -1196,7 +1266,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers surface elements
-      if ( (*it)->IsSurfaceElement() ) {
+      if ( (*it)->IsSurface() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
            for ( auto i{0U}; i<neighbors; ++i )
@@ -1229,7 +1299,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
     size_t non_line_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers line elements
-      if ( (*it)->IsLineElement() ) {
+      if ( (*it)->IsLine() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
            for ( auto i{0U}; i<neighbors; ++i )
@@ -1278,8 +1348,8 @@ double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* cons
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
-    assert( cell1->FE()->IsSurfaceElement() );
-    assert( cell2->FE()->IsSurfaceElement() );
+    assert( cell1->FE()->IsSurface() );
+    assert( cell2->FE()->IsSurface() );
     
     Point<3> nrml1( cell1->UnitNormal() );
     Point<3> nrml2( cell2->UnitNormal() );
@@ -1306,8 +1376,8 @@ double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* con
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
-    assert( cell1->FE()->IsLineElement() );
-    assert( cell2->FE()->IsLineElement() );
+    assert( cell1->FE()->IsLine() );
+    assert( cell2->FE()->IsLine() );
     
     // cos theta = dot-product over cross-product (length1 * length2)
     // already in degrees
@@ -1369,7 +1439,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
           node_processing:
           const auto n_parents{ nit->Parents() };
           for ( auto i{0U}; i<n_parents; ++i )
-            if ( nit->Parent(i)->IsVolumeElement() )
+            if ( nit->Parent(i)->IsVolume() )
               {
                  // checking which of the neighbor nodes of the parent element
                  // are also contained in the shared nodes vector
@@ -1436,6 +1506,155 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
      return segm_parents.size();
      
  } // end parentElementsSharingMultipleEdgeNodes
+
+
+
+
+
+/**
+
+Returns the ID (0..n-1) of any node which is located within the tolerance of the
+target coordinates. If the node cannot be found it returns max() of index type.
+
+@section arguments Input Arguments
+
+The current model that shall be searched for the node, the node
+coordinates, and the tolerance which shall be applied in comparing the
+supplied coordinates with those of the actual node points.
+
+@return The Idx (0..n-1) of the node of interest or UINTMAX
+(if this node does not exist) will
+be returned.
+
+@section application Application
+
+The method is used to retrieve point locations from the mesh in order to
+identify points that cannot be grouped into individual families using
+the ANSYS mesher.
+
+*/
+size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
+                  double tolerance )
+ {
+    const Region<3>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
+         if ( fabs(nx-(*it)->x()) <= tolerance and
+              fabs(ny-(*it)->y()) <= tolerance and
+              fabs(nz-(*it)->z()) <= tolerance )
+           return (*it)->Idx();
+      }
+ 
+    stringstream  out("The targeted node with the coordinate (x,y,z): ");
+    out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
+    out <<" returning node index="<< std::numeric_limits<uint32_t>::max() << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+
+size_t  findNode( const Model<2U>& sg, double nx, double ny,
+                  double tolerance )
+ {
+    const Region<2>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
+           if ( fabs(nx-(*it)->x()) <= tolerance and
+                fabs(ny-(*it)->y()) <= tolerance )
+             return (*it)->Idx();
+      }
+ 
+    stringstream  out("The targeted node with the coordinates (x,y): ");
+    out << nx <<" "<< ny <<" could not be found; ";
+    out <<" returning node index="<< UINT_MAX << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+
+size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
+ {
+    const Region<1>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+      if ( fabs(nx-(*it)->x()) <= tolerance ) return (*it)->Idx();
+         
+    stringstream  out("The targeted node with the coordinate (x): ");
+    out << nx <<" could not be found; ";
+    out <<" returning node index="<< UINT_MAX << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+/**
+    Generic version for 1-3 dimensions, using Point object to identify the node
+    location.
+    
+    If a node is found its local Idx() number is returned
+    (care has to be taken that this index is a valid number.
+    
+    If the node cannot be found, -1, is returned.
+    
+    @attention if verbose is on and the point cannot be found this is reported.
+    
+    @author SKM 22/9/2014.
+*/
+template<uint32_t dim>
+long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, bool verbose )
+ {
+    const Region<dim>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+      if ( pxyz.CoincidesWithWithinTolerance( (*it)->Coordinate(), tolerance ) )
+        return (*it)->Idx();
+
+    ErrorHandler& csmp_error(ErrorHandler::Instance());
+   
+    if ( verbose ) {
+         stringstream  out("The targeted node with the coordinate (x): ");
+         out << pxyz <<" could not be found; ";
+         out <<" returning node index="<< -1 << endl;
+         csmp_error.notice( WARNING, "findNode:", out.str() );
+      }
+    return -1;
+     
+} // end find_node
+
+template long findNode( const Model<1U>&, const Point<1U>&, double, bool );
+template long findNode( const Model<2U>&, const Point<2U>&, double, bool );
+template long findNode( const Model<3U>&, const Point<3U>&, double, bool );
+
+
+
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim, template<uint32_t> class CELL>
+void printNodes( const CELL<dim>& c )
+ {
+    set<uint32_t> nodes;
+    for ( auto i{0U}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    cout <<" "<< c.Idx() <<": ";
+    for ( auto& it : nodes ) cout << it <<",";
+    cout <<" ";
+ }
+
+template void printNodes( const Element<1U>& );
+template void printNodes( const Element<2U>& );
+template void printNodes( const Element<3U>& );
+template void printNodes( const Face<1U>& );
+template void printNodes( const Face<2U>& );
+template void printNodes( const Face<3U>& );
+template void printNodes( const InterFace<1U>& );
+template void printNodes( const InterFace<2U>& );
+template void printNodes( const InterFace<3U>& );
 
 
 
@@ -1747,24 +1966,24 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           for ( auto i{0U}; i<(*first)->Neighbors(); ++i )
             if ( (*first)->Neighbor(i) ) {
                  if constexpr ( dim == 3 ) {
-                      if ( (*first)->IsVolumeElement() && !(*first)->Neighbor(i)->IsVolumeElement() ) {
+                      if ( (*first)->IsVolume() && !(*first)->Neighbor(i)->IsVolume() ) {
                            cerr <<"\nconnectivityCheck: volume Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
-                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                      if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
                            cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
-                      if ( (*first)->IsLineElement() && !(*first)->Neighbor(i)->IsLineElement() ) {
+                      if ( (*first)->IsLine() && !(*first)->Neighbor(i)->IsLine() ) {
                            cerr <<"\nconnectivityCheck: line Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
                    }
                  if constexpr ( dim == 2 ) {
-                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                      if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
                            cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a line element!";
                            issues++;
                         }
@@ -1909,13 +2128,13 @@ template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* const elmt2 )
  {
     if constexpr ( dim == 3 )
-      if ( !elmt1->IsVolumeElement() || !elmt2->IsVolumeElement() ) {
+      if ( !elmt1->IsVolume() || !elmt2->IsVolume() ) {
            cerr <<"\ninterPenetrating<3>: only works for equidimensional (volumetric) elements.\n";
            return false;
         }
 
     if constexpr ( dim == 2 )
-      if ( !elmt1->IsSurfaceElement() || !elmt2->IsSurfaceElement() ) {
+      if ( !elmt1->IsSurface() || !elmt2->IsSurface() ) {
            cerr <<"\ninterPenetrating<2>: only works for equidimensional (surface) elements.\n";
         }
 
@@ -1982,7 +2201,7 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
 
         // 1. Volume elements only
         
-        if (!(*eit)->IsVolumeElement()) continue;
+        if (!(*eit)->IsVolume()) continue;
 
         // 2. Test against axis-aligned bounding box
 
@@ -2088,7 +2307,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     if ( forward ) {
          cout <<"in forward direction:"<< endl;
          while( eptr1 != nullptr ) {
-              if ( !eptr1->IsLineElement() )
+              if ( !eptr1->IsLine() )
                 throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
               // Ideally (where the numbers are nodes and the labels are BOX_BOUNDARY flags)
               // we should get something like: TOP 1--0 0--11 11--12...56--56 BOTTOM
@@ -2116,7 +2335,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     else {
          cout <<"from back to front:"<< endl;
          while( eptr2 != nullptr ) {
-              if ( !eptr2->IsLineElement() )
+              if ( !eptr2->IsLine() )
                 throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
               if ( !eptr2->Neighbor(0) )
                 cout <<"  "<< parseBoundary( eptr2->N(1)->AtBoundary() ) <<" "<< eptr2->N(1)->Idx();

@@ -7,6 +7,7 @@
 //
 
 #include "GravityInducedFluidPressure_Test.h"
+#include "MeshManagementUtilities.h"
 #include "Model.h"
 #include "Region.h"
 #include "Element.h"

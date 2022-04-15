@@ -1124,7 +1124,7 @@ of the RGB image size. If a property value is NAN, the according color will be b
 */
 
 void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t timestep, 
-                                                    bool greyscale, bool sqrt_of ) const
+                                                bool greyscale, bool sqrt_of ) const
  {
     // rgb color stuff (created only once)
     ColorPalette      rgb_colorizer;  // default rainbow scale 1-255

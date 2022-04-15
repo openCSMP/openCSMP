@@ -14,7 +14,6 @@
 #include "FiniteVolumeStencilManager.h"
 
 #include "ErrorHandler.h"
-//#include "CSMP_highLevelUtilities.h"
 #include "PL_Utilities.h"
 #include "FEM_Data.h"
 
@@ -596,14 +595,14 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
 
   if constexpr ( dim == 3U ) {
       for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-        if ( (*it)->FE()->IsSurfaceElement() )
+        if ( (*it)->FE()->IsSurface() )
           integrated_area += (*it)->Area();
     }
   
   if constexpr ( dim == 2U ) {
       for ( typename vector<InterFace<dim>*>::const_iterator
             it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-        if ( (*it)->FE()->IsLineElement() )
+        if ( (*it)->FE()->IsLine() )
           integrated_area += (*it)->Area();
     }
   

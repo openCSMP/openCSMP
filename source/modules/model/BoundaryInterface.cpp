@@ -424,8 +424,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 template<uint32_t dim>
 FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const csmp::Index& mtrl_key )
  {
-     if constexpr ( dim == 2 ) assert( e.IsLineElement() );
-     if constexpr ( dim == 3 ) assert( e.IsSurfaceElement() );
+     if constexpr ( dim == 2 ) assert( e.IsLine() );
+     if constexpr ( dim == 3 ) assert( e.IsSurface() );
      assert( mtrl_key.place != UNDEFINED );
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
@@ -768,7 +768,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
          const auto parent_elements((*nit)->Parents());
          // copying those node parent pointers to the temporary vector which shall be kept
          for ( uint32_t i{0U}; i<parent_elements; ++i ) {
-              if ( (*nit)->Parent(i)->IsSurfaceElement() and subdomain.Contains( (*nit)->Parent(i) ) )
+              if ( (*nit)->Parent(i)->IsSurface() and subdomain.Contains( (*nit)->Parent(i) ) )
                 continue;
               else
                 parents_to_keep.insert( make_pair( (*nit)->Parent(i), (*nit)->ParentNodeNumber(i) ) );
@@ -854,7 +854,7 @@ cerr <<"\n\t\t"<< (*eit)->Idx() <<": "<< unrml[0] <<" "<< unrml[1];
            (*it)->FE()->NodesOfFace( face, fnids );
            for ( uint32_t j{0U}; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
            // inserting newly generated keys into multimap
-           if ( (*it)->IsSurfaceElement() )
+           if ( (*it)->IsSurface() )
              surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
            else // for all line elements
              line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
@@ -1780,7 +1780,7 @@ static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& mod
     // indexing and storing the cells for later identification
     for ( auto& it : domain.CellVector() ) {
         // checking that we are indeed dealing with a lower-dimensional element
-        if ( (dim == 3 && !it->IsSurfaceElement()) || (dim == 2 && !it->IsLineElement()) ) {
+        if ( (dim == 3 && !it->IsSurface()) || (dim == 2 && !it->IsLine()) ) {
             cerr <<"\n\t"<< parseFiniteElementType( it->FE_Type() ) <<": idx: "<< it->Idx();
             csmp_error.notice( ERROR, "collectLowerDimensionalElementsFrom", "element is not lower dimensional");
           }
@@ -1866,7 +1866,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
                                                                        elmts_to_become_faces.begin(),
                                                                        elmts_to_become_faces.end() );
-
       // 4. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };

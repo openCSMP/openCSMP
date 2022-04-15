@@ -689,8 +689,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     set<Element<dim>*> shared_parents;
     for ( auto i{0U}; i<n_parents; ++i ) {
          assert( (*nit)->Parent(i) != nullptr );
-         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
-         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
          shared_parents.insert( (*nit)->Parent(i) );
       }
       
@@ -703,8 +703,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
          const auto parents{(*nit)->Parents()};
          for ( auto i{0U}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
-              if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
-              if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+              if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+              if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
               if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
                 temp.insert( (*nit)->Parent(i) );
            }
@@ -807,8 +807,8 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     // creating set of parent elements shared by first and second node
     for ( auto i{0U}; i<n_parents; ++i )
       if ( (*nit)->Parent(i) ) {
-           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolumeElement() ) continue;
-           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurfaceElement() ) continue;
+           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
            // is this parent also one of the first node
            bool parent_to_all{true};
            for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )

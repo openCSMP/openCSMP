@@ -572,7 +572,7 @@ void RegionMonitor<dim>::Out( const char* text_file ) const
 
 
 
-/// P. Lang: loops over all elements of all regions of model and returns true if IsVolumeElement()
+/// P. Lang: loops over all elements of all regions of model and returns true if IsVolume()
 template<uint32_t dim>
 bool  RegionMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 {
@@ -582,7 +582,7 @@ bool  RegionMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 
     const auto  elementsEnd = rref.CellsEnd();
     for ( auto eit=rref.CellsBegin(); eit!=elementsEnd; ++eit )
-        if ( (*eit)->IsVolumeElement() )
+        if ( (*eit)->IsVolume() )
           return true;
 
     return false;

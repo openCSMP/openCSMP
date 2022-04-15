@@ -222,13 +222,13 @@ bool  FiniteElement::Isoparametric() const        { return isoparametric; }
 
 bool  FiniteElement::UsesLocalCoordinates() const { return uses_local_coordinates; }
 
-bool  FiniteElement::IsLineElement()    const     
+bool  FiniteElement::IsLine()    const     
  { if ( element_category == LINE )   return true; return false; }
  
-bool  FiniteElement::IsSurfaceElement() const     
+bool  FiniteElement::IsSurface() const     
  { if ( element_category == SURFACE ) return true; return false; }
  
-bool  FiniteElement::IsVolumeElement()  const     
+bool  FiniteElement::IsVolume()  const     
  { if ( element_category == VOLUME )  return true; return false; }
  
 bool FiniteElement::IsSimplex() const

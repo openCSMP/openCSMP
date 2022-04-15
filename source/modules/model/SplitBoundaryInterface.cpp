@@ -4,7 +4,6 @@
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "Model.h"
-#include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
 #include "smoothElementData.h"
 #include "MeshManager.h"
@@ -709,7 +708,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
            auto pface = region1.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
-           assert( !region1.E(i)->IsLineElement() );
+           assert( !region1.E(i)->IsLine() );
            shared_perimeter_faces.insert( make_pair( region1.E(i)->CornerNodesOfFace(pface),
                                           make_pair( make_pair( region1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
         }
@@ -719,7 +718,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
            auto pface = region2.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
-           assert( !region1.E(i)->IsLineElement() );
+           assert( !region1.E(i)->IsLine() );
            auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
                                                     make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
            // if a matching face is found

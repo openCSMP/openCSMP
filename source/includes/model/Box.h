@@ -11,8 +11,12 @@ template<uint32_t> class Model;
 /**
 @file Box.h
 
-@brief definitions for quadrilateral and box-shaped models(2D and 3D that is) captured by the class box.
+@brief Anything to do with definitions and operations on rectangular and box-shaped models(2D and 3D that is).
+This also includes stand-alone functions for the processing of Boundary flags and values.
+
 @author S.K. Matthai
+@date 1997
+
 */
 
 /**
@@ -200,6 +204,44 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 );
 template<uint32_t dim>
 void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
                                const char* node_property, double& bmin, double& bmax );
+
+/// linear interpolation of values to point between 2 points in 1D (use for assigning property gradients along straight boundaries)
+double linearInterpolate( const std::pair<Point<1U>, double>&,
+                          const std::pair<Point<1U>, double>&,
+                          const Point<1U>& );
+
+/// bilinear interpolation to point between 2 points in 2D
+double linearInterpolate( const std::pair<Point<2U>, double>&,
+                          const std::pair<Point<2U>, double>&,
+                          const Point<2U>& );
+
+/// 3D trilinear interpolation
+double linearInterpolate( const std::pair<Point<3U>, double>&,
+                          const std::pair<Point<3U>, double>&,
+                          const Point<3U>& );
+
+/// just a stub (ignores the bilinear)
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<1U>& xy1,
+                            const Point<1U>& xy2,
+                            const Point<1U>& coord,
+                            double p1, double p2, double, double );
+
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<2U>& xy1,
+                            const Point<2U>& xy2,
+                            const Point<2U>& coord,
+                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            double p1, double p2, double p3, double p4 );
+
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<3U>& xy1,
+                            const Point<3U>& xy2,
+                            const Point<3U>& coord,
+                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            double p1, double p2, double p3, double p4 );
+
+
 
 
 } // end namespace csmp

@@ -9,6 +9,9 @@
 #include "QuadraturePointOutputToVTK.h"
 #include "Model.h"
 #include "Region.h"
+#include "ErrorHandler.h"
+#include "VTK_Interface.h"
+#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 

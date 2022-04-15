@@ -101,7 +101,7 @@ void GravityProjectionVisitor<dim>::Visit( Element<dim>* eptr )
         if(!const_vec_ )
             eptr->Read(prop_idx_,vec_);
 
-        if( eptr->FE()->IsLineElement() )
+        if( eptr->FE()->IsLine() )
         {
             //! projection of a vector field onto a unit norm vector r(r[0],r[1]),|r|=1
             //! VecProj = ( vec, r ) r
@@ -137,7 +137,7 @@ void GravityProjectionVisitor<dim>::Visit( Element<dim>* eptr )
         if(!const_vec_ )
             eptr->Read(prop_idx_,vec_);
 
-        if( eptr->FE()->IsLineElement() )
+        if( eptr->FE()->IsLine() )
         {
             //! projection of a vector field onto a unit norm vector r(r[0],r[1],r[2]),|r|=1
             //! VecProj = ( vec, r ) r
@@ -156,7 +156,7 @@ void GravityProjectionVisitor<dim>::Visit( Element<dim>* eptr )
             proj_(1) = line_vector[1];
             proj_(2) = line_vector[2];
         }
-        else if( eptr->FE()->IsSurfaceElement())
+        else if( eptr->FE()->IsSurface())
         {
 
             //! projection of a vector field onto a surface with a unit normal vector n(n[0], n[1], n[2]), |n|=1

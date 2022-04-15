@@ -80,7 +80,7 @@ void FiniteVolumePolicy<2U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, ui
 
     // surface elements
     assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->Nrs( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
                        fvptr_->FacetIntegrationPoint( iFacet, ip, 2U ),
                        e->FE()->NRST );
@@ -102,7 +102,7 @@ void FiniteVolumePolicy<2U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, 
 
     // surface elements
     assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
           e->FE()->Nrs( fvptr_->SectorIntegrationPoint( iSector, ip, 0U ),
                         fvptr_->SectorIntegrationPoint( iSector, ip, 2U ),
                         e->FE()->NRST );
@@ -123,7 +123,7 @@ void FiniteVolumePolicy<2U,CELL>::Local_dN_At( const Point<2U>& rst ) const
  {
     const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( e != nullptr );
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->dNr( rst[0], rst[1], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], e->FE()->DNS );
          return;
@@ -141,7 +141,7 @@ double FiniteVolumePolicy<2U,CELL>::dN_At( const Point<2U>& rst,
     const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( e != nullptr );
     e->CoordinateMatrix();
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->dNr( rst[0], rst[1], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], e->FE()->DNS );
 
@@ -506,7 +506,7 @@ double  FiniteVolumePolicy<2U,CELL>::FacetArea( uint32_t iFacet ) const
     assert( iFacet < fvptr_->Facets());
 
     assert( e != nullptr );
-    if ( e->IsSurfaceElement() )
+    if ( e->IsSurface() )
       return e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)).DistanceTo( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
     
     return 1.; // if it is a line element
@@ -521,7 +521,7 @@ Point<2U> FiniteVolumePolicy<2U,CELL>::FacetNormal( uint32_t iFacet ) const
   const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
   assert( iFacet < fvptr_->Facets());
 
-  if ( e->IsSurfaceElement() ) {
+  if ( e->IsSurface() ) {
     // the segment midpoint is the origin of the facet
     uint32_t inside_node, outside_node;
     fvptr_->FacetEdgeNodes( iFacet, inside_node, outside_node );
@@ -556,7 +556,7 @@ double  FiniteVolumePolicy<2U,CELL>::FacetAreaMapped( uint32_t iFacet ) const
     const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
     assert( iFacet < fvptr_->Facets());
 
-    if(e->IsLineElement()) return 1.;
+    if(e->IsLine()) return 1.;
 
     const Point<2U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
     const Point<2U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
@@ -572,7 +572,7 @@ Point<2U> FiniteVolumePolicy<2U,CELL>::FacetNormalMapped( uint32_t iFacet ) cons
    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
    assert( iFacet < fvptr_->Facets());
 
-  if(e->IsLineElement()) return Point<2U>(1.,0);
+  if(e->IsLine()) return Point<2U>(1.,0);
 
   const Point<2U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
   const Point<2U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );

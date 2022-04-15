@@ -8,7 +8,7 @@
 #include "Region.h"
 #include "Model.h"
 #include "Exception.h"
-#include "CSMP_highLevelUtilities.h"
+#include "meshManagementUtilities.h"
 #include "ErrorHandler.h"
 
 using namespace std;

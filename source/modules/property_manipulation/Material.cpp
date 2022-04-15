@@ -102,7 +102,7 @@ void smoothMaterialInterfaces( Model<dim>& model )
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          if ( !isTriangular( (*it)->FE_Type() ) )
            csmp::Exception( ERROR, "smoothMaterialInterfaces", "thus far, this method has only been implemented for triangles.");
-         if ( !(*it)->IsSurfaceElement() )
+         if ( !(*it)->IsSurface() )
            csmp::Exception( ERROR, "smoothMaterialInterfaces", "thus far, this method only works for surface type elements.");
            
          // removing completely isolated elements

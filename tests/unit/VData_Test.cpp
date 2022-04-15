@@ -342,9 +342,9 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
      vector<Element<3U>*> volume_elmts, surface_elmts;
      volume_elmts.reserve( model_domain.Cells() );
      for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
-          if ( (*it)->IsVolumeElement() )
+          if ( (*it)->IsVolume() )
             volume_elmts.push_back( (*it) );
-          else if ( (*it)->IsSurfaceElement() )
+          else if ( (*it)->IsSurface() )
             surface_elmts.push_back( (*it) );
        }
         

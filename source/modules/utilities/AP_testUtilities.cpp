@@ -175,7 +175,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   //print facets
   for ( auto iFacet = 0U; iFacet < e.FV()->Facets(); iFacet++ )
   {
-   if(e.FE()->IsSurfaceElement()) // only two facet points
+   if(e.FE()->IsSurface()) // only two facet points
    {
      ofs << "\nPolyline ";
      Point<3U> pt1( e.RstToXYZ(e.FV()->FacetPoint(iFacet,0U)) );
@@ -184,7 +184,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
      ofs << pt2[0] << "," << pt2[1] << "," << pt2[2] << " ";
      ofs << "_Enter ";
    }
-   else if(e.FE()->IsVolumeElement()) // there are four facet points
+   else if(e.FE()->IsVolume()) // there are four facet points
    {
      stringstream ss;
      writeSurfaceFacet(ss, e, e, iFacet); 
@@ -251,7 +251,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    for ( auto eit=sgref.CellsBegin(); eit!=sgref.CellsEnd(); eit++ ) 
      for ( auto iFacet=0U; iFacet<(*eit)->FV()->Facets(); iFacet++ )
-  	  if((*eit)->FE()->IsVolumeElement()) // there are four facet points
+  	  if((*eit)->FE()->IsVolume()) // there are four facet points
         {    	    
     	    (*eit)->FV()->FacetEdgeNodes( iFacet, inside_node, outside_node );
   	      

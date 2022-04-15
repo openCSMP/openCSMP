@@ -12,7 +12,6 @@
 #include "STL_utilities.h"
 #include "Point.h"
 #include "Exception.h"
-#include "CSMP_highLevelUtilities.h"
 #if defined(_OPENMP )
 #include "omp.h"
 #endif

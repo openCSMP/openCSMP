@@ -4,7 +4,6 @@
 #include "PropertyConstraints.h"
 #include "ModelTopology.h"
 #include "MeshManagementUtilities.h"
-#include "CSMP_highLevelUtilities.h"
 #include "UnionFind.h"
 #include "binaryReadWrite.h"
 #include "ErrorHandler.h"

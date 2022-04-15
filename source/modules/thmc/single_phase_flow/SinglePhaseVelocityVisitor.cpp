@@ -126,7 +126,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
     bool volume_elements_present(false);
     for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
-        if ((*e)->IsVolumeElement()){
+        if ((*e)->IsVolume()){
             volume_elements_present=true;
         }
 
@@ -134,7 +134,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 //    model.Region("Model").E
     for ( auto e = model.Region("Model").CellsBegin() ; e != model.Region("Model").CellsEnd(); e++ ){
 
-        if ((dim == 2 && (*e)->IsLineElement()) || (dim == 3 && (*e)->IsSurfaceElement() && volume_elements_present))
+        if ((dim == 2 && (*e)->IsLine()) || (dim == 3 && (*e)->IsSurface() && volume_elements_present))
         {
             ErrorHandler::Instance().notice(FATAL_ERROR,"SinglePhaseVelocityVisitor, constructor","You have lower dimensional elements in your model",
                                 " Either implement code to support them in this visitor or use another that does.");

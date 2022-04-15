@@ -749,7 +749,7 @@ void SimulatorMonitor<dim>::Out()
 
 
 
-/// P. Lang: loops over all elements of all regions of model and returns true if IsVolumeElement()
+/// P. Lang: loops over all elements of all regions of model and returns true if IsVolume()
 template<uint32_t dim>
 bool  SimulatorMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 {
@@ -760,7 +760,7 @@ bool  SimulatorMonitor<dim>::HasVolumeElements( const Model<dim>& mref ) const
 
     const auto elementsEnd = rref.CellsEnd();
     for ( auto eit=rref.CellsBegin(); eit!=elementsEnd; ++eit )
-        if ( (*(*eit)->FE()).IsVolumeElement() )
+        if ( (*(*eit)->FE()).IsVolume() )
           return true;
 
     return false;

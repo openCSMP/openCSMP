@@ -22,7 +22,6 @@
 #include "UnionFind.h"
 
 #include "ErrorHandler.h"
-#include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
 
 // #define REGION_DEBUG
@@ -2148,12 +2147,12 @@ bool Region<dim>::Includes( const Region<dim>& g ) const
 
 static bool  hasLowerDimensionalRepresentation( const Element<3U>& element )
 {
-  return !element.FE()->IsVolumeElement();
+  return !element.FE()->IsVolume();
 }
 
 static bool  hasLowerDimensionalRepresentation( const Element<2U>& element )
 {
-  return !element.FE()->IsSurfaceElement();
+  return !element.FE()->IsSurface();
 }
 
 template<>
@@ -2182,7 +2181,7 @@ bool  containsVolumeElements( const Region<dim>& region )
   const auto elementsEnd( region.CellsEnd() );
   for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
-    if ( (*it)->FE()->IsVolumeElement() )
+    if ( (*it)->FE()->IsVolume() )
       return true;
   }
   return false;
@@ -2194,7 +2193,7 @@ bool  containsSurfaceElements( const Region<dim>& region )
   const auto elementsEnd( region.CellsEnd() );
   for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
-    if ( (*it)->FE()->IsSurfaceElement() )
+    if ( (*it)->FE()->IsSurface() )
       return true;
   }
   return false;
@@ -2206,7 +2205,7 @@ bool  containsLineElements( const Region<dim>& region )
   const auto elementsEnd( region.CellsEnd() );
   for ( auto it = region.CellsBegin(); it != elementsEnd; ++it )
   {
-    if ( (*it)->FE()->IsLineElement() )
+    if ( (*it)->FE()->IsLine() )
       return true;
   }
   return false;
@@ -2333,7 +2332,7 @@ typename std::vector<csmp::Element<dim>* >::const_iterator eit = this->Perimeter
 lowDimElement = NULL;
 while ( eit!=this->CellsEnd() )
 {
-if( (*eit)->IsLineElement() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
+if( (*eit)->IsLine() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
 {
 elements_considered.insert( *eit );
 remaining_elements.erase( *eit );
@@ -2410,7 +2409,7 @@ typename std::set<csmp::Element<dim>* >::const_iterator eit = remaining_elements
 lowDimElement = NULL;
 while ( eit!=remaining_elements.end() )
 {
-if( (*eit)->IsLineElement() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
+if( (*eit)->IsLine() && elmt_dim.second == 2 ) // do not consider line element in surface region in 3D
 {
 elements_considered.insert( *eit );
 remaining_elements.erase( *eit );
@@ -2488,17 +2487,17 @@ double  Region<dim>::Volume( bool multiply_with_porosity ) const
     csmp::Index  phi_key = this->pref_.StorageKey( "porosity" );
     for ( typename vector<csmp::Element<dim>*>::const_iterator
           it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
-      if ( (*it)->FE()->IsVolumeElement() )  volume += (*it)->Volume() * (*it)->Read( phi_key );
-      else if ( (*it)->FE()->IsSurfaceElement() ) area += (*it)->Volume() * (*it)->Read( phi_key );
-      else if ( (*it)->FE()->IsLineElement() )    length += (*it)->Volume() * (*it)->Read( phi_key );
+      if ( (*it)->FE()->IsVolume() )  volume += (*it)->Volume() * (*it)->Read( phi_key );
+      else if ( (*it)->FE()->IsSurface() ) area += (*it)->Volume() * (*it)->Read( phi_key );
+      else if ( (*it)->FE()->IsLine() )    length += (*it)->Volume() * (*it)->Read( phi_key );
     }
   }
   else
     for ( typename vector<csmp::Element<dim>*>::const_iterator
           it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
-      if ( (*it)->FE()->IsVolumeElement() )  volume += (*it)->Volume();
-      else if ( (*it)->FE()->IsSurfaceElement() ) area += (*it)->Volume();
-      else if ( (*it)->FE()->IsLineElement() )    length += (*it)->Volume();
+      if ( (*it)->FE()->IsVolume() )  volume += (*it)->Volume();
+      else if ( (*it)->FE()->IsSurface() ) area += (*it)->Volume();
+      else if ( (*it)->FE()->IsLine() )    length += (*it)->Volume();
     }
 
   // counting only the contributions of the elements with the highest spatial dimension
@@ -2581,7 +2580,7 @@ double  Region<dim>::SurfaceArea() const
   else if ( dim == 2U ) {
     // for all surface elements on the region boundary (excluding line elements)
     for ( size_t i = this->InteriorCells(); i<this->Cells(); i++, bit++ )
-      if ( this->cell_vec_[i]->FE()->IsSurfaceElement() )
+      if ( this->cell_vec_[i]->FE()->IsSurface() )
         for ( size_t j{0U}; j<(*bit).size(); j++ ) {
           this->cell_vec_[i]->FE()->NodesOfFace( (*bit)[j], fnids );
           area += this->cell_vec_[i]->N( fnids[0U] )->Coordinate().DistanceTo( this->cell_vec_[i]->N( fnids[1U] )->Coordinate() );
@@ -2627,11 +2626,11 @@ double  Region<dim>::VolumeIntegral( const char* prop, bool multiply_with_porosi
 
   if ( verbose ) {
 #ifndef NDEBUG
-    if ( dim == 2U && !(*this->cell_vec_.begin())->FE()->IsSurfaceElement() ) {
+    if ( dim == 2U && !(*this->cell_vec_.begin())->FE()->IsSurface() ) {
       string info( this->Name() ); info += " ('"; info += prop; info += "')";
       csmp_error.notice( WARNING, "Region<2>::VolumeIntegral:", info, "region is not a surface; integral may not be correct." );
     }
-    if ( dim == 3U && !(*this->cell_vec_.begin())->FE()->IsVolumeElement() ) {
+    if ( dim == 3U && !(*this->cell_vec_.begin())->FE()->IsVolume() ) {
       string info( this->Name() ); info += " ('"; info += prop; info += "')";
       csmp_error.notice( WARNING, "Region<3>::VolumeIntegral:", info, "region is not a volume, integral may not be correct." );
     }

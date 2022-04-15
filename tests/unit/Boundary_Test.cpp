@@ -90,7 +90,7 @@ void Boundary_Test::NoSurfaceElementsAsNodeParents( const Region<dim>& region )
   const auto domainNodesEnd( region.NodesEnd() );
   for( auto it = region.NodesBegin(); it != domainNodesEnd; ++it )
     for( size_t i(0); i < (*it)->Parents(); ++i )
-      _test( !(*it)->Parent(i)->IsSurfaceElement() );
+      _test( !(*it)->Parent(i)->IsSurface() );
 }
 
 
