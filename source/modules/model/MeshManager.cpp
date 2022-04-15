@@ -1,4 +1,5 @@
 #include "MeshManager.h"
+#include "MeshPatch.h"
 #include "MeshManagementUtilities.h"
 #include "CSMP_highLevelUtilities.h"
 #include "NodeManifoldManager.h"
@@ -1047,10 +1048,10 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
 
    // is the element indeed lower dimensional?
    if constexpr ( dim == 3 )
-     if ( !eptr->IsSurfaceElement() )
+     if ( !eptr->IsSurface() )
      csmp_error.notice( ERROR, "MeshManager<3>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional surface element");
    if constexpr ( dim == 2 )
-     if ( !eptr->IsLineElement() )
+     if ( !eptr->IsLine() )
      csmp_error.notice( ERROR, "MeshManager<2>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional line element");
 
    if ( eptr->FV() == nullptr )
@@ -1079,7 +1080,7 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
         elements_.erase( elements_.get_iterator(eptr) );
         eptr = nullptr;
      }
-   
+
    return &(*fit);
    
  } // end ReplaceElementByFace
@@ -1437,6 +1438,9 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
     // copying the inside node to create a new node
     auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary() );
+    
+    // copying the properties over
+    (*nit).AssignPropertyValuesFrom( *nptr_inside );
 
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
@@ -1501,6 +1505,8 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     
     // 1. converting Elements into Faces
     // ---------------------------------
+    size_t n_elements = elements_.size();
+    size_t n_faces    = faces_.size();
     size_t face_idx{0};
     
     while( first != last )
@@ -1509,12 +1515,12 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
          if constexpr ( dim == 3 )
-           if ( !(*first)->IsSurfaceElement() ) {
+           if ( !(*first)->IsSurface() ) {
                 (*first)->Out();
                 throw csmp::Exception( ERROR, "MeshManager<3>::ReplaceElementsByFaces", "supplied element is not a surface element and cannot be converted to Face.");
              }
          if constexpr ( dim == 2 )
-           if ( !(*first)->IsLineElement() ) {
+           if ( !(*first)->IsLine() ) {
                 (*first)->Out();
                 throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
              }
@@ -1530,6 +1536,11 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
               pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
               // creating Face, storing a pointer to it
               face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
+              // deleting the underlying element
+              auto colony_it = elements_.get_iterator( (*first) );
+              assert( colony_it != elements_.end() );
+              elements_.erase( colony_it );
+              (*first) = nullptr;
               // numbering new Face consecutively
               face_ptrs.back()->Idx( face_idx++ );
            }
@@ -1555,6 +1566,10 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
       
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+#ifdef MESH_MANAGER_DEBUG
+     cout <<"\n\nMeshManager: ReplaceElementsByFaces: created "<< faces_.size() - n_faces;
+     cout <<" faces and deleted "<< n_elements - elements_.size() <<" elements."<< endl;
+#endif
 
      // 2. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
@@ -1821,9 +1836,11 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
            if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
          perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
       }
-    //      - in 3D, does one need a triangulation
+    // In 3D, does one need a triangulation
     if constexpr (dim == 3U ) {
          throw csmp::Exception( ERROR, "CreateInterFacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
+         MeshPatch<3U> patch( SURFACE );
+         patch.BuildInterveningPatch( interface_nbor_elmts, false, perimeter_node_ptrs );
       }
     
 
@@ -2067,8 +2084,8 @@ size_t MeshManager<dim>::Delete( typename vector<Node<dim>*>::iterator first,
     
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::const_iterator first,
-                                 typename vector<Element<dim>*>::const_iterator last )
+size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::iterator first,
+                                 typename vector<Element<dim>*>::iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2095,10 +2112,8 @@ size_t MeshManager<dim>::Delete( typename vector<Element<dim>*>::const_iterator 
                for ( auto nit=(*first)->NodesBegin(); nit!=nodesEnd; ++nit )
                  node_ptrs.push_back( (*nit) );
                // deleting the element, setting the pointer in the input iterator to zero
-               auto colony_it{ elements_.get_iterator( const_cast<Element<dim>*>(*first) ) };
-               assert( colony_it!= elements_.end() );
-               elements_.erase( colony_it );
- //              (*first) = nullptr;
+               elements_.erase( elements_.get_iterator( (*first) ) );
+               (*first) = nullptr;
                first++;
             }
        }
@@ -2228,9 +2243,9 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
         surface_cells.reserve( n_cells_max/3 );
         line_cells.reserve( n_cells_max/6 );
         while ( first != cellsEnd ) {
-             if      ( (*first)->FE()->IsVolumeElement() )  volume_cells.push_back(*first);
-             else if ( (*first)->FE()->IsSurfaceElement() ) surface_cells.push_back(*first);
-             else if ( (*first)->FE()->IsLineElement() )    line_cells.push_back(*first);
+             if      ( (*first)->FE()->IsVolume() )  volume_cells.push_back(*first);
+             else if ( (*first)->FE()->IsSurface() ) surface_cells.push_back(*first);
+             else if ( (*first)->FE()->IsLine() )    line_cells.push_back(*first);
              first++;
           }
         // connecting the elements found
@@ -2246,8 +2261,8 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
              surface_cells.reserve( n_cells_max );
              line_cells.reserve( n_cells_max/6 );
              while ( first != cellsEnd ) {
-                  if ( (*first)->FE()->IsSurfaceElement() )   surface_cells.push_back(*first);
-                  else if ( (*first)->FE()->IsLineElement() ) line_cells.push_back(*first);
+                  if ( (*first)->FE()->IsSurface() )   surface_cells.push_back(*first);
+                  else if ( (*first)->FE()->IsLine() ) line_cells.push_back(*first);
                   first++;
                }
              // connecting the elements found
@@ -2349,7 +2364,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                                                  typename std::vector<CELL<dim>*>::const_iterator last )
    {
       // this method applies only to surface elements in 3D
-      if constexpr ( dim == 3 ) {
+      if constexpr ( dim == 3U ) {
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
            map<set<Node<3>*>,map<CELL<3>*,uint32_t> >  elmt_pairs;
@@ -2402,7 +2417,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                           CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
                           assert( ptr2 != nullptr );
-                          const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
+                          const double angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
                                                    angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // using smallest angle
                           const double acute_angle = (angle > 90.) ? 180. -angle : angle;
@@ -2426,7 +2441,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
         }
  
       // for surface elements, faces or interfaces in a 2D model
-      if constexpr ( dim == 2 ) {
+      if constexpr ( dim == 2U ) {
            map<set<Node<2>*>,map<CELL<2>*,uint32_t> > elmt_pairs;
            const auto                                 cellsEnd{last};
            
@@ -2514,19 +2529,20 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                                               typename std::vector<CELL<dim>*>::const_iterator last )
    {
       // this method applies only to line elements in 2 and 3D
-      if constexpr ( dim != 1 ) {
+      if constexpr ( dim != 1U ) {
            // creating search keys from the corner nodes of the element faces
            // corner-nodes      elements that share face and their face id
-           map<set<Node<dim>*>,map<CELL<dim>*,uint32_t> >  elmt_pairs;
-           const auto                                      elementsEnd{last};
+           map<Node<dim>*,map<CELL<dim>*,uint32_t> >  elmt_pairs;
+           const auto                                 elementsEnd{last};
            
            // pairing the elements up in the search map
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
-                const size_t n_faces{ (*first)->Faces() };
+                const auto n_faces{ (*first)->Faces() };
                 for ( auto face{0}; face < n_faces; ++face ) {
-                     // trying to insert it into the map
-                     auto it = elmt_pairs.insert( make_pair( (*first)->CornerNodesOfFace(face), map<CELL<dim>*,uint32_t>{make_pair(*first,face)} ) );
+                     // now there is only a single corner node corresponding to the opposite face of the line element
+                     // (node 1 is at Face 0 and node 0 at Face 1 as for all simplex elements)
+                     auto it = elmt_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ), map<CELL<dim>*,uint32_t>{make_pair(*first,face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2582,7 +2598,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
         }
  
       // for line elements, faces or interfaces in a 1D model
-      if constexpr ( dim == 1 ) {
+      if constexpr ( dim == 1U ) {
            map<set<Node<1>*>,map<CELL<1>*,uint32_t> >  elmt_pairs;
            const auto                                  elementsEnd{last};
            
@@ -2718,7 +2734,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                           InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
                           assert( ptr2 != nullptr );
-                          const double angle = ( ptr1->IsSurfaceElement() && ptr2->IsSurfaceElement() ) ?
+                          const double angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
                                                    angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // using smallest angle
                           const double acute_angle = (angle > 90.) ? 180. -angle : angle;
@@ -5653,14 +5669,14 @@ bool  MeshManager<dim>::IsContiguous() const
     size_t elmt_count{0};
     if constexpr ( dim == 3 ) {
          for ( auto& it : elements_ )
-           if ( it.IsVolumeElement() ) {
+           if ( it.IsVolume() ) {
                 eptr = &it;
                 elmt_count++;
              }
       }
     else if constexpr ( dim == 2 ) {
          for ( auto& it : elements_ )
-           if ( it.IsSurfaceElement() ) {
+           if ( it.IsSurface() ) {
                 eptr = &it;
                 elmt_count++;
              }
@@ -5708,9 +5724,9 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
   bool with_line_elements( false );
 
   for ( const auto& it : elements_ ) {
-      if      ( !with_line_elements    && it.IsLineElement() )		with_line_elements = true;
-      else if ( !with_surface_elements && it.IsSurfaceElement() )	with_surface_elements = true;
-      else if ( !with_volume_elements  && it.IsVolumeElement() )	with_volume_elements = true;
+      if      ( !with_line_elements    && it.IsLine() )		with_line_elements = true;
+      else if ( !with_surface_elements && it.IsSurface() )	with_surface_elements = true;
+      else if ( !with_volume_elements  && it.IsVolume() )	with_volume_elements = true;
     }
 
   int32_t dimension_counter( 0 );

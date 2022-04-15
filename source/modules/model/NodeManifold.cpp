@@ -179,7 +179,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
             double first_value(0.);
             size_t first_count(0);
             for( auto e = 0; e < branches_[i].first->Parents(); e++) {
-                //if( (dim==2 && nodes_[i]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[i]->Parent(e)->IsVolumeElement()) ) {
+                //if( (dim==2 && nodes_[i]->Parent(e)->IsSurface()) || (dim==3 && nodes_[i]->Parent(e)->IsVolume()) ) {
                 if( !isnan(branches_[i].first->Parent(e)->Read(index)) ) {
                     //first = nodes_[i]->Parent(e)->Read(index);
                     //break;
@@ -197,7 +197,7 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
                 double second_value(0.);
                 uint32_t second_count(0);
                 for( auto e = 0; e < branches_[j].first->Parents(); e++) {
-                    //if( (dim==2 && nodes_[j]->Parent(e)->IsSurfaceElement()) || (dim==3 && nodes_[j]->Parent(e)->IsVolumeElement()) ) {
+                    //if( (dim==2 && nodes_[j]->Parent(e)->IsSurface()) || (dim==3 && nodes_[j]->Parent(e)->IsVolume()) ) {
                     if( !isnan(branches_[j].first->Parent(e)->Read(index)) ) {
                         //second = nodes_[j]->Parent(e)->Read(index);
                         //break;
@@ -429,8 +429,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf  )
              // in the case of a fracture manifold (we can have an endpoint...)
              for ( auto i{0U}; i<connected_elmts; ++i ) {
                   assert( mnd_ptr->Parent(i) );
-                  if ( !mnd_ptr->Parent(i)->IsLineElement() ) line_elmt_manifold = false;
-                  if ( !mnd_ptr->Parent(i)->IsSurfaceElement() ) surf_elmt_manifold = false;
+                  if ( !mnd_ptr->Parent(i)->IsLine() ) line_elmt_manifold = false;
+                  if ( !mnd_ptr->Parent(i)->IsSurface() ) surf_elmt_manifold = false;
                }
              // classification is plausible
              if ( line_elmt_manifold ) {

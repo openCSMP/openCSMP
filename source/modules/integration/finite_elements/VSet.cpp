@@ -3,6 +3,14 @@
 #include "Exception.h"
 #include "binaryReadWrite.h"
 
+#include "IsoparametricLinearLineElement.h"
+#include "IsoparametricLinearTriangle.h"
+#include "IsoparametricLinearQuadrilateral.h"
+#include "IsoparametricLinearTetrahedron.h"
+#include "IsoparametricLinearPyramid.h"
+#include "IsoparametricLinearPrism.h"
+#include "IsoparametricLinearHexahedron.h"
+
 using namespace std;
 
 namespace csmp {
@@ -982,12 +990,207 @@ int32_t  VSet<dim>::MeshDimension( bool check_coordinates ) const
  } // MeshDimension
 
 
-
-
-
-
 template class VSet<1U>;
 template class VSet<2U>;
 template class VSet<3U>;
+
+
+
+//  NON-MEMBER FUNCTIONS
+
+
+template<uint32_t dim,class VarType>
+void extrapolateElementToNodeProperty( csmp::VSet<dim>&             vset,
+                                       const std::vector<VarType>& elmnt_data,
+                                       std::vector<VarType>&       nodal_data )
+{
+    /// mesh specs
+    const size_t num_elements( vset.Elements() );
+    const size_t num_nodes( vset.Vertices() );
+    size_t       eid;
+    size_t       nid;
+    uint32_t     enodes;
+
+    /// fem data
+    int fem_type;
+    csmp::Point<dim> pt;
+    double           volume{0.};
+    uint32_t         lnid;
+
+    /// apply volume averaging to the element property
+    VarType var;
+    var = 0.0;
+    nodal_data.resize( num_nodes, var );
+    std::vector<double> total_volume( num_nodes, 0.0 );
+    for ( eid = 0U; eid<num_elements; ++eid )
+    {
+        enodes = vset.PlistSize( eid );
+        if( enodes > 1 )
+        {
+            /// get element data
+            var = elmnt_data[ eid ];
+            /// calculate volume of element
+            fem_type = ( vset.HybridElementTypeMesh() ? vset.ElementType( eid ) : vset.ElementType( 0 ) );
+            switch( fem_type )
+            {
+            case csmp::ISOPARAMETRIC_LINEAR_HEXAHEDRON:
+                {
+                    csmp::IsoparametricLinearHexahedron fem;
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_PYRAMID:
+                {
+                    csmp::IsoparametricLinearPyramid        fem;
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_PRISM:
+                {
+                    csmp::IsoparametricLinearPrism fem;
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_TETRAHEDRON:
+                {
+                    csmp::IsoparametricLinearTetrahedron fem;
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+                {
+                    csmp::IsoparametricLinearQuadrilateral  fem(3);
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_TRIANGLE:
+                {
+                    csmp::IsoparametricLinearTriangle fem(3);
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            case csmp::ISOPARAMETRIC_LINEAR_BAR:
+                {
+                    csmp::IsoparametricLinearLineElement    fem(3);
+                    fem.XY.Resize( enodes, dim );
+                    lnid = 0;
+                    for ( std::vector<int64_t>::iterator
+                          nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit, ++lnid )
+                    {
+                        nid = (*nit);
+                        pt[0] = vset.Px( nid );
+                        if( dim > 1U )  pt[1] = vset.Py( nid );
+                        if( dim == 3U ) pt[2] = vset.Pz( nid );
+                        fem.XY.AssignRow( lnid, pt );
+                    }
+                    volume = fem.Volume();
+                }
+                break;
+            default:
+                volume = 1.0;
+                break;
+            }
+            var *= volume;
+            /// summ up data
+            for ( std::vector<int64_t>::iterator
+                  nit = vset.PlistBegin( eid ); nit != vset.PlistEnd( eid ); ++nit )
+            {
+                nid = (*nit);
+                nodal_data[ nid ]   += var;
+                total_volume[ nid ] += volume;
+            }
+        }
+    }
+    /// calculating the nodal averages
+    for ( nid = 0; nid < num_nodes; ++nid )
+         nodal_data[ nid ] /= total_volume[ nid ];
+}
+
+template void extrapolateElementToNodeProperty(csmp::VSet<1U>&,const std::vector<csmp::ScalarVariable>&,std::vector<csmp::ScalarVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<1U>&,const std::vector<csmp::VectorVariable<1U> >&,std::vector<csmp::VectorVariable<1U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<1U>&,const std::vector<csmp::TensorVariable<1U> >&,std::vector<csmp::TensorVariable<1U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<1U>&,const std::vector<csmp::ArrayVariable>&,std::vector<csmp::ArrayVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<1U>&,const std::vector<csmp::FlaggedArrayVariable>&,std::vector<csmp::FlaggedArrayVariable>&);
+
+template void extrapolateElementToNodeProperty(csmp::VSet<2U>&,const std::vector<csmp::ScalarVariable>&,std::vector<csmp::ScalarVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<2U>&,const std::vector<csmp::VectorVariable<2U> >&,std::vector<csmp::VectorVariable<2U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<2U>&,const std::vector<csmp::TensorVariable<2U> >&,std::vector<csmp::TensorVariable<2U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<2U>&,const std::vector<csmp::ArrayVariable>&,std::vector<csmp::ArrayVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<2U>&,const std::vector<csmp::FlaggedArrayVariable>&,std::vector<csmp::FlaggedArrayVariable>&);
+
+template void extrapolateElementToNodeProperty(csmp::VSet<3U>&,const std::vector<csmp::ScalarVariable>&,std::vector<csmp::ScalarVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<3U>&,const std::vector<csmp::VectorVariable<3U> >&,std::vector<csmp::VectorVariable<3U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<3U>&,const std::vector<csmp::TensorVariable<3U> >&,std::vector<csmp::TensorVariable<3U> >&);
+template void extrapolateElementToNodeProperty(csmp::VSet<3U>&,const std::vector<csmp::ArrayVariable>&,std::vector<csmp::ArrayVariable>&);
+template void extrapolateElementToNodeProperty(csmp::VSet<3U>&,const std::vector<csmp::FlaggedArrayVariable>&,std::vector<csmp::FlaggedArrayVariable>&);
+
+
+
 
 } // end namespace csmp

@@ -142,7 +142,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
                      saturationFunctions_->MobilityPhase(2) * saturationFunctions_->DensityNonWettingPhase() );
     }
 
-    if( element->FE()->IsLineElement() )
+    if( element->FE()->IsLine() )
     {
       //! projection of a vector g(0,-1,0) onto a vector r(r[0],r[1],r[2]) 
       //! (where |r|=1) is equal to
@@ -162,7 +162,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
       gravityVector(2) = line_vector[2];
 
     }
-    else if( element->FE()->IsSurfaceElement())
+    else if( element->FE()->IsSurface())
     {
       //! projection of vector g(0,-1, 0) onto a surface with a normal vector n(n[0], n[1], n[2]) 
       //! (where |n|=1) is equal to

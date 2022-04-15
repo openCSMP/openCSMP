@@ -216,7 +216,7 @@ double TwoPhaseExplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
 
     for ( typename vector<Element<dim>*>::const_iterator
           eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++ )
-      if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
+      if ( !((*eit)->FE()->IsLine() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
            // -------------------------------------------------------------

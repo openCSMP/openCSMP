@@ -7,7 +7,7 @@
 #include "LinearTetrahedron.h"
 #include "MJL_Triangle3D.h"
 #include "Exception.h"
-#include "CSMP_highLevelUtilities.h"
+#include "meshManagementUtilities.h"
 #include "PropertyData.h"
 
 using namespace std;

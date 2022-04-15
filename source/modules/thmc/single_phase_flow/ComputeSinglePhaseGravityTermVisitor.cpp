@@ -85,7 +85,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
     double gravityTerm;
     VectorVariable<dim> gravityVector;
     
-    if( element->FE()->IsLineElement() && (dim == 2 || dim ==3))
+    if( element->FE()->IsLine() && (dim == 2 || dim ==3))
     {
         //! projection of a gravity vector (e.g. (0,-1,0) ) onto a vector r(r[0],r[1],r[2])
         //! r is a vector from one node to the other of the line element.
@@ -100,7 +100,7 @@ void ComputeSinglePhaseGravityTermVisitor<dim>::ComputeContribution( Element<dim
             gravityVector(j) = projection[j];
 
     }
-    else if( element->FE()->IsSurfaceElement() && dim ==3)
+    else if( element->FE()->IsSurface() && dim ==3)
     {
         //! projection of vector g(0,-1, 0) onto a surface with a normal vector n(n[0], n[1], n[2])
         //! (where |n|=1) is equal to

@@ -845,7 +845,7 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
       
       // in 3D, there still could be line elements in the region which are not eligible to become faces,
       // unless the Region consist only of line elements
-      if constexpr ( dim == 3 ) if ( (*it)->IsLineElement() ) continue;
+      if constexpr ( dim == 3 ) if ( (*it)->IsLine() ) continue;
 
       // finding the higher-dimensional element(s) that sit(s) adjacent to the lower-dimensional one
       pair<Element<dim>*,Element<dim>*>  inner_outer_elements = parentElementsSharedByFace<dim>( (*it)->NodesBegin(), (*it)->NodesEnd() );
@@ -1063,8 +1063,8 @@ bool Boundary<dim>::CreateAround( const Region<dim>& region,
   for ( auto i = region.InteriorCells(); i<region.Cells(); ++i )
     {
       // ignoring dim-2 elements because they share the nodes with the higher-dim ones
-      if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolumeElement() ) continue;
-      if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurfaceElement() ) continue;
+      if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolume() ) continue;
+      if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurface() ) continue;
 
       // for each perimeter face
       const auto perimeter_faces( region.PerimeterFaces( i ) );
@@ -1251,7 +1251,7 @@ double  Boundary<dim>::Perimeter() const
   size_t          n( this->InteriorCells() );
   
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ ) {
-      if ( (*it)->IsLineElement() ) {
+      if ( (*it)->IsLine() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }
       for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {

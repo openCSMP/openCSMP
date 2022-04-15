@@ -1372,7 +1372,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       // ---------------------------------
       // Identifying whether we are dealing with a volumetric region
       // (assuming that regions only consist of a single dimensionality of elements)
-      if ( (*gref.CellsBegin())->FE()->IsVolumeElement() )
+      if ( (*gref.CellsBegin())->FE()->IsVolume() )
         {
            map<Element<3U>*,vector<vector<double> > >  mapped;
            MapPointsTo3DVolumetricRegion( pointsAndProperties, gref, mapped ); // ToDo: Bug: properties are not put on diferent vectors in map??
@@ -1445,7 +1445,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       // ------------------------------------
       // PROCESSING REGIONS THAT ARE SURFACES
       // ------------------------------------
-      else if ( (*gref.CellsBegin())->FE()->IsSurfaceElement() )
+      else if ( (*gref.CellsBegin())->FE()->IsSurface() )
         {
         cout << "\nMapping point data to surface mesh." << endl;
         map<Element<3U>*,vector<vector<double> > >  mapped;

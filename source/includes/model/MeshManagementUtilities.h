@@ -10,11 +10,11 @@
 #define CSMP_MESH_MANAGEMENT_UTILITIES_H
 
 #include "CSMP_definitions.h"
-#include "MeshPatchAttributes.h"
 #include "plf_colony.h"
 
 namespace csmp {
 
+template<uint32_t> class Point;
 template<uint32_t> class Node;
 template<uint32_t> class Element;
 template<uint32_t> class Face;
@@ -22,6 +22,7 @@ template<uint32_t> class InterFace;
 
 template<uint32_t> class Model;
 template<uint32_t> class MeshManager;
+template<uint32_t> class MeshPatch;
 template<uint32_t> class Region;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
@@ -32,15 +33,6 @@ template<uint32_t> class SplitBoundary;
 /// retrieves and returns the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<uint32_t dim, template<uint32_t> class CELL>
 void floodFill( CELL<dim>* const eptr, std::set<CELL<dim>*>& output_contiguous_subset );
-
-/// recreates neighbor connectivity among all equidimensional elements (volumetric-, surfacic- and line elements); returns number of elements processed
-template<uint32_t dim>
-void  establishNeighborConnectivity( std::vector<Element<dim>*>&,
-                                     bool unassign_neighbors_outside = false, bool verbose = true );
-
-template<uint32_t dim>
-void  establishNeighborConnectivity( std::vector<InterFace<dim>*>&,
-                                     bool unassign_neighbors_outside = false, bool verbose = true );
 
 /// checks all elements of the surface region for whether their neighbor elements have normals that deviate less than 90o from their normals
 template<uint32_t dim>
@@ -60,10 +52,14 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
                                              typename std::vector<CELL<dim>*>::const_iterator end,
-                                             std::map<CELL<dim>*,MeshPatchAttributes>& ); 
+                                             std::map<CELL<dim>*,MeshPatch<dim>>& );
 
 
 // DIAGNOSTICS
+
+/// calculates the number of model cells that fall into the cell category indicated by placement; returns total number of cells in the model
+template<uint32_t dim>
+size_t currentCellTypes( const MeshManager<dim>&, PLACEMENT, size_t& volume_cells, size_t& surface_cells, size_t& line_cells );
 
 /// determines whether mesh in model is built from finite elements with a local coordinate system
 template<uint32_t dim>
@@ -93,8 +89,26 @@ size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  ed
                                                std::map<Element<3>*,std::vector<Node<3>*> >& segm_parents,
                                                bool find_segment_ids );
 
+/// finds node by point coordinate; returns -1 if not found; @attention tolerance needs to account for single-precision of CAD tools
+template<uint32_t dim>
+long  findNode( const Model<dim>&, const Point<dim>& pxyz, double tolerance, bool verbose = false );
 
-// UTILITIES INVOLVING INDIVIDUAL ELEMENTS/FACES/INTERFACES
+/// find node by its position as identified from its coordinates: tolerance should take into account single-precision of CAD tools
+size_t  findNode( const Model<1U>&, double nx, double tolerance );
+/// 2D version
+size_t  findNode( const Model<2U>&, double nx, double ny, double tolerance );
+/// 3D version
+size_t  findNode( const Model<3U>&, double nx, double ny, double nz, double tolerance );
+
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim, template<uint32_t> class CELL>
+void printNodes( const CELL<dim>& );
+
+
+// MESHING UTILITIES
+
+
+// MESHING UTILITIES FOR INDIVIDUAL ELEMENTS/FACES/INTERFACES
 
 // TODO: implement
 //template<uint32_t dim,template<uint32_t> class CELL>
@@ -161,10 +175,10 @@ template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
-bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double tolerance=1.0e-5 );
+bool hasNonManifoldVertices( const csmp::Element<3U>* const tptr, double tolerance=1.0e-5 );
 
 /// detects whether the point is contained in any of the elements of the region
-csmp::Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& query );
+csmp::Element<3u>* const pointInVolumeElement( Region<3U>& region, const Point<3U>& query );
 
 /// detect degenerate elements by using the node coordinates to check whether some nodes have the same location
 template<uint32_t dim>

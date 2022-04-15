@@ -59,8 +59,8 @@ Face<dim>::Face( const Element<dim>& elmt,
     inner_parent_face_id_(inner_parent_face_id),
     outer_parent_face_id_(outer_parent_face_id)
  {
-    if constexpr ( dim == 3 ) assert( elmt.IsSurfaceElement() );
-    if constexpr ( dim == 2 ) assert( elmt.IsLineElement() );
+    if constexpr ( dim == 3 ) assert( elmt.IsSurface() );
+    if constexpr ( dim == 2 ) assert( elmt.IsLine() );
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
     assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
@@ -336,8 +336,8 @@ Face<dim>::Face( Element<dim>& e,
  {
     assert( boundary_face < e.Faces() );
     if ( e.Neighbor(boundary_face) != nullptr ) outerParent_ = e.Neighbor(boundary_face);
-    if constexpr ( dim == 2 ) assert( e.IsSurfaceElement() );
-    if constexpr ( dim == 3 ) assert( e.IsVolumeElement() );
+    if constexpr ( dim == 2 ) assert( e.IsSurface() );
+    if constexpr ( dim == 3 ) assert( e.IsVolume() );
 
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
@@ -655,13 +655,13 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // 1. argument checks and assignments
     // ----------------------------------
     assert( innerElement != nullptr ); // inner element must be defined
-    if constexpr ( dim == 3U ) assert( innerElement->IsVolumeElement() );
-    if constexpr ( dim == 2U ) assert( innerElement->IsSurfaceElement() );
+    if constexpr ( dim == 3U ) assert( innerElement->IsVolume() );
+    if constexpr ( dim == 2U ) assert( innerElement->IsSurface() );
     innerParent_ = innerElement;
     
     if ( outerElement != nullptr ) { // outer element is defined if face is in model interior
-         if constexpr ( dim == 3U ) assert( outerElement->IsVolumeElement() );
-         if constexpr ( dim == 2U ) assert( outerElement->IsSurfaceElement() );
+         if constexpr ( dim == 3U ) assert( outerElement->IsVolume() );
+         if constexpr ( dim == 2U ) assert( outerElement->IsSurface() );
          outerParent_ = outerElement;
       }
     
@@ -678,8 +678,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // 2.1 matching the lower-dimensional face to a face of inner higher-dimensional element
     // -------------------------------------------------------------------------------------
-    if ( ((dim == 3U) && this->IsSurfaceElement() ) || // Face is either a triangle or a quadrilateral in 3D
-         ((dim == 2U) && this->IsLineElement()) )      // Face is a line in 2D
+    if ( ((dim == 3U) && this->IsSurface() ) || // Face is either a triangle or a quadrilateral in 3D
+         ((dim == 2U) && this->IsLine()) )      // Face is a line in 2D
       {
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);

@@ -1495,7 +1495,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() >= 2U ) {
               // if a surface element face is located on a model edge
-              if ( eptr->FE()->IsSurfaceElement() ) {
+              if ( eptr->FE()->IsSurface() ) {
                    auto flag_it = eflags.begin();
                    const BOX_BOUNDARY flag1 = (*flag_it);
                    flag_it++;
@@ -1509,7 +1509,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    return whichBoundary( flag1, flag2 );
                 }
               // only the sides of the model are an option
-              else if ( eptr->FE()->IsVolumeElement() ) {
+              else if ( eptr->FE()->IsVolume() ) {
                    for ( auto bit : eflags )
                      if ( isSide(bit) )
                       return bit;
@@ -1532,7 +1532,7 @@ template BOX_BOUNDARY atBoundary( const Element<3U>* const, uint32_t  );
 
 // TESTING
 /*
-if ( eptr->FE()->IsLineElement() ) {
+if ( eptr->FE()->IsLine() ) {
      cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
      for ( auto i{0U}; i<eptr->Nodes(); ++i )
        cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
@@ -1618,7 +1618,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr ( dim == 2 ) {
          // elements are considered boundary elements only if they have a face on the model boundary
          if ( eflags.size() == 1U ) {
-              if ( eptr->FE()->IsLineElement() ) return (*eflags.begin());
+              if ( eptr->FE()->IsLine() ) return (*eflags.begin());
               else {
                    // checking that there is indeed a face on the model boundary
                    const size_t n_nbors{eptr->Neighbors()};
@@ -1680,12 +1680,12 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr ( dim == 3U )
       {
          // only line and surface elements may be at boundary if there is only one boundary flag
-         if ( eflags.size() == 1U && !eptr->IsVolumeElement() )
+         if ( eflags.size() == 1U && !eptr->IsVolume() )
            return (*eflags.begin());
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() == 2U ) {
-              if ( eptr->FE()->IsSurfaceElement() ) {
+              if ( eptr->FE()->IsSurface() ) {
                    // if there is a corner involved, the other flag is chosen because an element must not span a corner
                    // and its boundary face will lie on one of the sides of the model
                    auto flag_it = eflags.begin();
@@ -2234,14 +2234,234 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
 
 
 
+double bilinearInterpolate( uint32_t idx_x, uint32_t,
+                            const Point<1U>& xy1,
+                            const Point<1U>& xy2,
+                            const Point<1U>& coord,
+                            double p1, double p2, double, double )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 )
+        {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2) / 2.0;
+        }
+
+      if ( p1 == p2 ) return p1;
+    
+      // 4. computing interpolation function. Num. Recip. p. 105
+      double t = (coord[idx_x] - xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      
+      // 5 bi-linear interpolation
+      return (1. - t) * p1 + t * p2;
+
+} // end bilinearInterpolate
 
 
-template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double&, double& );
-template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double&, double& );
-template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double&, double& );
 
 
 
+/**
+
+interpolateXY() uses bilinear interpolation to find the value of a
+property specified at the corner points of a rectangle, at the coordinates
+of a point located inside of this rectangle.
+
+Since interpolateXY() carries out an interpolation on a planar surface
+in 3D space, it also needs the integer indices which give the axis
+in the reference coordinate system.
+
+@section arguments Input Arguments
+
+The first two arguments of interpolateXY() specify the coordinate axis
+indices of the following Point<dim> arguments which shall be used in
+the interpolation. For instance, for i=0, j=1, the interpolation will be
+carried out in the XY plane.
+
+The three following VectorVariable<2U> arguments specify the lower left and
+upper right right corners of the rectangle in which the variable value shall
+be interpolated at a point given by the third VectorVariable<2U> argument.
+
+The last four floating point arguments define the values of the variable
+which is to be interpolated. They are the corner points of the rectangle
+listed in counter-clockwise fashion (e.g., lower left, lower right, upper
+right and upper left corners, respectively).
+
+@return The result of the interpolation is returned into a double type variable.
+
+@section application Application
+
+Function is used by AssignBoundaryValues().
+
+@section messages Messages
+
+The function will report an error and return the average value of the
+four cornerpoints if their coordinates are identical.
+*/
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<2U>& xy1,
+                            const Point<2U>& xy2,
+                            const Point<2U>& coord,
+                            double p1, double p2, double p3, double p4 )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 ) {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2+p3+p4) / 4.0;
+        }
+
+      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
+    
+      // 4. computing interpolation functions. Num. Recip. p. 105
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      
+      // 5 bi-linear interpolation
+      return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;
+
+} // end bilinearInterpolate
+
+
+
+
+/**
+
+interpolateXY() uses bilinear interpolation to find the value of a
+property specified at the corner points of a rectangle, at the coordinates
+of a point located inside of this rectangle.
+
+Since interpolateXY() carries out an interpolation on a planar surface
+in 3D space, it also needs the integer indices which give the axis
+in the reference coordinate system.
+
+@section arguments Input Arguments
+
+The first two arguments of interpolateXY() specify the coordinate axis
+indices of the following VectorVariable<dim> arguments which shall be used in
+the interpolation. For instance, for i=0, j=1, the interpolation will be
+carried out in the XY plane.
+
+The three following VectorVariable<dim> arguments specify the lower left and
+upper right right corners of the rectangle in which the variable value shall
+be interpolated at a point given by the third VectorVariable<dim> argument.
+
+The last four floating point arguments define the values of the variable
+which is to be interpolated. They are the corner points of the rectangle
+listed in counter-clockwise fashion (e.g., lower left, lower right, upper
+right and upper left corners, respectively).
+
+@return The result of the interpolation is returned into a double type variable.
+
+@section application Application
+
+Function is used by AssignBoundaryValues().
+
+@section messages Messages
+
+The function will report an error and return the average value of the
+four cornerpoints if their coordinates are identical.
+*/
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<3U>& xy1,
+                            const Point<3U>& xy2,
+                            const Point<3U>& coord,
+                            double p1, double p2, double p3, double p4 )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 ) {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2+p3+p4) / 4.0;
+        }
+
+      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
+    
+      // 4. computing interpolation functions. Num. Recip. p. 105
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      
+      // 5 bi-linear interpolation
+      return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;
+
+} // end bilinearInterpolate
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<1U>,double>& p1, // endpoint1, value1
+                          const pair<Point<1U>,double>& p2, // endpoint2, value2
+                          const Point<1U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx = p2.first[0] - p1.first[0];
+    
+    // distance between current point and point 1
+    double dist = pt[0] - p1.first[0];
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
+
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<2U>,double>& p1, // endpoint1, value1
+                          const pair<Point<2U>,double>& p2, // endpoint2, value2
+                          const Point<2U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) );
+    
+    // distance between current point and point 1
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) );
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
+                           const pair<Point<3U>,double>& p2, // endpoint2, value2
+                           const Point<3U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) +
+                           (p2.first[2]-p1.first[2])*(p2.first[2]-p1.first[2]) );
+    
+    // distance between current point and point 1
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) +
+                           (pt[2]-p1.first[2])*(pt[2]-p1.first[2]) );
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
 
 
 } // end namespace csmp

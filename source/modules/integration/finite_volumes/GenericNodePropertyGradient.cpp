@@ -446,9 +446,9 @@ void GenericNodePropertyGradient<dim>::ConvertToGlobalCoordinates( Element<dim>&
   std::vector<double> temp(el.Nodes()); //has the local interp. function values
   std::vector<double> local_c(local_c_point.Coordinates());
 
-  if( el.IsLineElement() ){
+  if( el.IsLine() ){
       el.FE()->Nr( local_c[0], temp );
-  }else if( el.IsSurfaceElement()){
+  }else if( el.IsSurface()){
       el.FE()->Nrs( local_c[0], local_c[1], temp );
   }else{
       el.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );

@@ -43,9 +43,9 @@ FiniteElement* FiniteElementPolicy<dim,CELL>::FE() const
 template<uint32_t dim, template<uint32_t> class CELL>
 bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
  {
-    if constexpr ( dim == 3 ) return IsVolumeElement();
-    if constexpr ( dim == 2 ) return IsSurfaceElement();
-    if constexpr ( dim == 1 ) return IsLineElement();
+    if constexpr ( dim == 3U ) return IsVolume();
+    if constexpr ( dim == 2U ) return IsSurface();
+    if constexpr ( dim == 1U ) return IsLine();
     return false;
  }
 
@@ -53,24 +53,24 @@ bool FiniteElementPolicy<dim,CELL>::IsEquidimensional() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsLineElement() const
+bool FiniteElementPolicy<dim,CELL>::IsLine() const
   {
     assert( fptr_ != nullptr );
-    return fptr_->IsLineElement();
+    return fptr_->IsLine();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsSurfaceElement() const
+bool FiniteElementPolicy<dim,CELL>::IsSurface() const
   {
     assert( fptr_ != nullptr );
-    return fptr_->IsSurfaceElement();
+    return fptr_->IsSurface();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-bool FiniteElementPolicy<dim,CELL>::IsVolumeElement() const
+bool FiniteElementPolicy<dim,CELL>::IsVolume() const
   {
     assert( fptr_ != nullptr );
-    return fptr_->IsVolumeElement();
+    return fptr_->IsVolume();
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -177,11 +177,11 @@ void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst ) const
     const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
     assert( e != nullptr );
  
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->Nrst( rst[0], rst[1], rst[2], e->FE()->NRST );
          return;
       }
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->Nrs( rst[0], rst[1], e->FE()->NRST );
          return;
       }
@@ -202,11 +202,11 @@ void FiniteElementPolicy<dim,CELL>::N_At( const Point<dim>& rst,
 
     const CELL<dim>* e( static_cast<const CELL<dim>*>(this) );
     assert( e != nullptr );
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->Nrst( rst[0], rst[1], rst[2], IPOL );
          return;
       }
-    if ( e->FE()->IsSurfaceElement() ) {
+    if ( e->FE()->IsSurface() ) {
          e->FE()->Nrs( rst[0], rst[1], IPOL );
          return;
       }
@@ -954,7 +954,7 @@ double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
                                  "encountered element with invalid element pointer.");
        }
 
-    if ( fptr_->IsVolumeElement() ) {
+    if ( fptr_->IsVolume() ) {
          std::vector<uint32_t>  ids;
          fptr_->NodesOfFace( n, ids );
 
@@ -976,7 +976,7 @@ double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
 
     // if the element is a surface, the face is a line element
     // and its length will be returned
-    if ( fptr_->IsSurfaceElement() ) {
+    if ( fptr_->IsSurface() ) {
          std::vector<uint32_t>  ids;
          fptr_->NodesOfFace( n, ids );
          assert( ids.size() == 2 );

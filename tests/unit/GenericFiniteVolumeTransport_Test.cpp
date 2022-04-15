@@ -234,7 +234,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
           // --------------------
           const size_t facets=(*it)->Facets();
           for ( auto i{0}; i<facets; ++i ) {
-              assert( (*it)->IsVolumeElement() );
+              assert( (*it)->IsVolume() );
               
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------
@@ -470,7 +470,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            auto it = &iti;
        
            // std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
-           assert( (*it)->IsVolumeElement() );
+           assert( (*it)->IsVolume() );
 
 
           const size_t nodes((*it)->Nodes());
@@ -509,7 +509,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 //           auto fetype = (*it)->FE_Type();
            
            for ( auto i{0}; i<facets; ++i ) {
-               assert( (*it)->IsVolumeElement() );
+               assert( (*it)->IsVolume() );
                
                // 2.1 classic way of calculating facet fluxes in physical space
                // ------------------------------------------------------------

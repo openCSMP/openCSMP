@@ -754,9 +754,9 @@ void Element<dim>::Out() const
   cout << "\n\nElement<" << dim << ">::Out: number: " << idx_;
   cout <<"\n\tMaterial ID: "<< material_id_;
   cout << " (" << parseFiniteElementType( this->FE_Type() ) << " = ";
-  if ( this->IsLineElement() )    cout << "line element";
-  else if ( this->IsSurfaceElement() ) cout << "surface element";
-  else if ( this->IsVolumeElement() )  cout << "volume element";
+  if ( this->IsLine() )    cout << "line element";
+  else if ( this->IsSurface() ) cout << "surface element";
+  else if ( this->IsVolume() )  cout << "volume element";
   cout <<"\n";
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
@@ -788,27 +788,27 @@ void Element<dim>::Out() const
 
     // length, area, volue
     const double volume( this->Volume() );
-    if ( this->IsLineElement() ) {
+    if ( this->IsLine() ) {
       if ( volume > 0. ) cout << "\n\tlength: " << volume << endl;
       else cerr << "\n\tlength: ERROR (negative value indicates numbering problem): " << volume << endl;
     }
-    if ( this->IsSurfaceElement() ) {
+    if ( this->IsSurface() ) {
       if ( volume > 0. ) cout << "\n\tarea: " << volume << endl;
       else cerr << "\n\tarea: ERROR (negative value indicates numbering problem): " << volume << endl;
     }
-    else if ( this->IsVolumeElement() ) {
+    else if ( this->IsVolume() ) {
       if ( volume > 0. ) cout << "\n\tvolume: " << volume << endl;
       else cerr << "\n\tvolume: ERROR (negative value indicates numbering problem): " << volume << endl;
     }
 
     // inner radius
-    if ( this->IsSurfaceElement() )
+    if ( this->IsSurface() )
       cout << "\n\tradius of inscribed circle: " << this->InnerRadius() << endl;
-    else if ( this->IsVolumeElement() )
+    else if ( this->IsVolume() )
       cout << "\n\tradius of inscribed sphere: " << this->InnerRadius() << endl;
 
     // aspect ratio
-    if ( !this->IsLineElement() ) cout << "\n\taspect ratio (b-box):   " << this->AspectRatio() << endl;
+    if ( !this->IsLine() ) cout << "\n\taspect ratio (b-box):   " << this->AspectRatio() << endl;
 
 } // end Out
 

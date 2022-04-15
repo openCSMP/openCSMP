@@ -81,6 +81,8 @@ class FiniteVolumePolicy<3U, CELL> {
   public:
     FiniteVolumePolicy( const csmp::FiniteVolumeStencil<3U>* = nullptr );
     FiniteVolumePolicy( const FiniteVolumePolicy& p ) : fvptr_(p.fvptr_) {}
+    /// virtual destructor that does nothing: super important because default destructor would try to delete FV stencil
+    virtual ~FiniteVolumePolicy() {}
 
     /// connect policy to a finite-volume stencil that must match the parent element
     void       AssignFiniteVolume( const csmp::FiniteVolumeStencil<3U>* );

@@ -13,6 +13,8 @@ class FiniteElementPolicy {
   public:
     FiniteElementPolicy( FiniteElement* = nullptr );
     FiniteElementPolicy( const FiniteElementPolicy& p ) : fptr_(p.fptr_) {}
+    /// virtual destructor that does nothing: super important because default destructor would try to delete FiniteElement from FiniteElementManager!
+    virtual ~FiniteElementPolicy() {}
   
     /// for deferred assignment or changing the element at runtime
     void Assign( FiniteElement* fe_ptr );
@@ -33,9 +35,9 @@ class FiniteElementPolicy {
     /// true for volumes in 3D, surfaces in 2D, and line elements in 1D, else this is a lower dimensional element
     bool       IsEquidimensional() const;
     
-    bool       IsLineElement() const;
-    bool       IsSurfaceElement() const;
-    bool       IsVolumeElement() const;
+    bool       IsLine() const;
+    bool       IsSurface() const;
+    bool       IsVolume() const;
 
     uint32_t   Interpolation() const;
     bool       UsesLocalCoordinates() const;

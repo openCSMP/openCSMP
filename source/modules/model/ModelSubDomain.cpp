@@ -347,9 +347,9 @@ pair<int32_t,int32_t>  ModelSubDomain<dim,CELL>::SpatialDimensions() const
     bool with_line_cells(false);
 
     for( const auto& it : cell_vec_ ) {
-         if      ( it->IsLineElement() )    with_line_cells = true;
-         else if ( it->IsSurfaceElement() ) with_surface_cells = true;
-         else if ( it->IsVolumeElement() )  with_volume_cells = true;
+         if      ( it->IsLine() )    with_line_cells = true;
+         else if ( it->IsSurface() ) with_surface_cells = true;
+         else if ( it->IsVolume() )  with_volume_cells = true;
       }
 
     int32_t counter(0);
@@ -519,8 +519,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
               boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
           // storing the boundary face vector for the current cell
           if ( boundary_faces.size() == faces ) {
-               if ( (dim == 2 && (*it)->IsSurfaceElement()) ||
-                    (dim == 3 && (*it)->IsVolumeElement()) ) {
+               if ( (dim == 2 && (*it)->IsSurface()) ||
+                    (dim == 3 && (*it)->IsVolume()) ) {
                     cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
                     cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
                     cout <<" is a stand-alone cell in this subdomain.";
@@ -724,7 +724,7 @@ cout.flush();
               // - for surface cells this means at least one edge
               else {
                    // line cells (assuming that the faces correspond to the nodes)
-                   if ( (*it)->IsLineElement() ) {
+                   if ( (*it)->IsLine() ) {
                         const auto n_nodes{ (*it)->Nodes() };
                         for ( auto i{0U}; i<n_nodes; ++i )
                           // if the node is a boundary noode
@@ -1335,7 +1335,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
      if ( !strcmp( characteristic, "length" ) )
        for ( auto& eit : cell_vec_ )
          {
-             if ( eit->IsLineElement() ) {
+             if ( eit->IsLine() ) {
                   sc = fabs( eit->Volume() );
                   eit->Store( prop_key, sc );
                }
@@ -1343,7 +1343,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
      else if ( !strcmp( characteristic, "area" ) )
        for ( auto& eit : cell_vec_ )
          {
-             if ( eit->IsSurfaceElement() ) {
+             if ( eit->IsSurface() ) {
                   sc = fabs( eit->Volume() );
                   eit->Store( prop_key, sc );
                }
@@ -1351,7 +1351,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
      else if ( !strcmp( characteristic, "volume" ) )
        for ( auto& eit : cell_vec_ )
          {
-             if ( eit->IsVolumeElement() ) {
+             if ( eit->IsVolume() ) {
                   sc = fabs( eit->Volume() );
                   eit->Store( prop_key, sc );
                }

@@ -188,9 +188,9 @@ class FiniteElement {
     /// returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions
     uint32_t           OrderOfShapeFunctions() const;
   
-    bool               IsLineElement() const;
-    bool               IsSurfaceElement() const;
-    bool               IsVolumeElement() const;
+    bool               IsLine() const;
+    bool               IsSurface() const;
+    bool               IsVolume() const;
   
     /// true for linear line-, triangle- or tetrahedral elements for which the Jacobian matrix is constant throughout
     bool               IsSimplex() const;

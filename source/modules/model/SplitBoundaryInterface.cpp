@@ -4,7 +4,6 @@
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "Model.h"
-#include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
 #include "smoothElementData.h"
 #include "MeshManager.h"
@@ -698,7 +697,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       }
    
     const csmp::Region<dim>&  region1(modelComplex->Region(region1_name));
-    const csmp::Region<dim>&  region2(modelComplex->Region(region2_name));
+    csmp::Region<dim>&        region2(modelComplex->Region(region2_name)); // not const because must be rebuilt
+    
     // corner-node-ptrs Elements adjacent to interface and their face numbers (inside elements will be first in pair)
     map<set<Node<dim>*>,pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  shared_perimeter_faces;
     // is there a shared interface? - looping over the perimeter faces of the adjacent regions
@@ -708,6 +708,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
            auto pface = region1.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !region1.E(i)->IsLine() );
            shared_perimeter_faces.insert( make_pair( region1.E(i)->CornerNodesOfFace(pface),
                                           make_pair( make_pair( region1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
         }
@@ -717,6 +718,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
            auto pface = region2.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !region1.E(i)->IsLine() );
            auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
                                                     make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
            // if a matching face is found
@@ -769,6 +771,10 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
         else {
              cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: split boundary '";
              cout << split_boundary_name << "' created successfully."<< endl;
+             // flagging outside region for rebuild because it has new nodes
+             region2.ScheduleForRebuilt();
+             modelComplex->UpdateRegions();
+             // all done
              return make_pair(split_boundary_name,true);
           }
       }
@@ -875,7 +881,10 @@ std::pair<std::string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>:
        
      // 3. establishing neighbor connectivity among the new elements
      // ------------------------------------------------------------
-     establishNeighborConnectivity( new_elmts, false, false );
+     if constexpr ( dim == 2U )
+       mesh.template BuildLineConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
+     if constexpr ( dim == 3U )
+       mesh.template BuildSurfaceConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
 
 
      // 4. construct the new unique region between the interface elements in the model
@@ -1089,7 +1098,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
      const SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<const SPLITBOUNDARY_COMPLEX<dim>*>(this));
 
      cout <<"\nSplitBoundaryInterface<"<< dim <<",SplitBoundary<InterFace>>::SplitBoundariesOut: ";
-     if ( SplitBoundaries() == 0 ) {
+     if ( SplitBoundaries() == 0U ) {
           cout <<"\tmodel does not contain any split boundaries.\n\n";
           return;
        }
@@ -1100,11 +1109,11 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
           cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
           cout <<" "<< (*bit).second.Cells() <<" interfaces, ";
           // in 3D a boudary is a surface
-           if constexpr ( dim == 3 ) {
+           if constexpr ( dim == 3U ) {
                 cout <<"area (m2): "<< (*bit).second.Area();
                 cout <<", perimeter length (m): "<< (*bit).second.Perimeter();
              }
-           if constexpr ( dim == 2 )
+           if constexpr ( dim == 2U )
              cout <<" length (m): "<< (*bit).second.Area();
        }
      cout << endl << endl;

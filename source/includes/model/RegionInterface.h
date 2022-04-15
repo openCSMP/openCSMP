@@ -149,7 +149,7 @@ class RegionInterface {
     // FROM THE 'MODEL' REGION THAT NEEDS TO BE CREATED BEFORE
 
     /// creates unique regions from material IDs which must have been defined earlier; returns number of regions formed; returns number of regions
-    size_t FormRegionsFromMaterialIDs( bool reestablishNeighborConnectivity = true );
+    size_t FormRegionsFromMaterialIDs();
     
     /// Assuming that elements have been numbered as required by caller, method forms region of elements with this Idx() values; returns # of elements in region; returns number of elements
     size_t FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
@@ -228,8 +228,8 @@ class RegionInterface {
     size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                   std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;
 
-    /// if the mesh changed this brute-force method rebuild the node and element vectors of all regions
-    void RebuildRegions();
+    /// if the mesh changed this safe but model-wide method rebuilds the node and element vectors of all regions
+    void UpdateRegions();
 
   protected:
     /// rebuilds unique regions, but only if they contain some nulled element pointers
