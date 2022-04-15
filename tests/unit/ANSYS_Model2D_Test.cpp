@@ -366,6 +366,8 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+    const size_t n_original_cells = model.Mesh().Elements() + model.Mesh().Faces();  // only those
+    const size_t n_original_faces = model.Mesh().Faces();
      
     // 1. creating the SplitBoundary from lower-dimensional region
     size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
@@ -377,6 +379,17 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     assert( splitBoundaryName2.first.size() == 1 );
     _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );
     _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Cells() == n_elmts_region2 );
+    // the number of total cells in the model should not have changed
+    size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
+    _test( currentCellTypes( model.Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) == n_original_cells );
+    // now the line elements should be gone and Interfaces there instead
+    _test( line_elmts == 0 );
+    // the number of Faces should have stayed constant because the once created new must have been removed again
+    currentCellTypes( model.Mesh(), FACE, volume_elmts, surface_elmts, line_elmts );
+    _test( line_elmts == n_original_faces );
+    // there should be x interfaces
+    currentCellTypes( model.Mesh(), INTER_FACE, volume_elmts, surface_elmts, line_elmts );
+    _test( line_elmts == n_elmts_region1 + n_elmts_region2 );
     
     model.SplitBoundariesOut();
 

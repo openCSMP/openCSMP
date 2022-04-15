@@ -99,8 +99,8 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
     
     for ( auto& it : input_elmts )
       {
-         if constexpr ( dim == 3U ) assert( it.first.first->IsVolumeElement() );
-         if constexpr ( dim == 2U ) assert( it.first.first->IsSurfaceElement() );
+         if constexpr ( dim == 3U ) assert( it.first.first->IsVolume() );
+         if constexpr ( dim == 2U ) assert( it.first.first->IsSurface() );
 
          // 1. constructing the most basic Element objects from the information for the intervening faces
          // ---------------------------------------------------------------------------------------------

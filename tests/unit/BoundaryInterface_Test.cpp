@@ -366,7 +366,7 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only  considers surface elements
-      if ( (*it)->IsSurfaceElement() ) {
+      if ( (*it)->IsSurface() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
            for ( auto i{0}; i<neighbors; ++i )
@@ -541,7 +541,7 @@ static size_t findBoundaries( const Model<3U>& model, const set<string>& interse
 */
 static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
  {
-     assert( e.IsSurfaceElement() );
+     assert( e.IsSurface() );
 
      // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
      // -----------------------------------------------------------------------------------------------------------------------------

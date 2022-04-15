@@ -240,7 +240,7 @@ double  TimeStepEvaluator<dim,USER>::StreamlineCFL( Node<dim>* const, double max
 
     for ( typename vector<Element<dim>*>::const_iterator 
           eit=gref_.CellsBegin(); eit!=gref_.CellsEnd(); ++eit )
-      if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
+      if ( !((*eit)->FE()->IsLine() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
            // -------------------------------------------------------------

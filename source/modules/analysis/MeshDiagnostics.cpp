@@ -7,7 +7,7 @@
 #include "PropertyHandle.h"
 #include "VTK_Interface.h"
 #include "Standard_IO_Handler.h"
-#include "CSMP_highLevelUtilities.h"
+#include "meshManagementUtilities.h"
 
 using namespace std;
 

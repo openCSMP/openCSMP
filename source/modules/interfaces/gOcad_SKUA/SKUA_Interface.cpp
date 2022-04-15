@@ -482,7 +482,7 @@ void SKUA_Interface::SurfaceArrayVariableToPointCloud( const Model<3U>& model,
          for ( auto it=gref.CellsBegin(); it!=gref.CellsEnd(); ++it )
            {
               // each array variable entry is output as a singe line 
-              assert( (*it)->FE()->IsSurfaceElement() );
+              assert( (*it)->FE()->IsSurface() );
              
               // getting the normal along which the output points will be created
               if ( (*it)->FE_Type() == ISOPARAMETRIC_LINEAR_QUADRILATERAL )

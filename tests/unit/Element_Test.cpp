@@ -152,7 +152,7 @@ void Element_Test::MoveSemanticsTest()
   csmp::Element<2U> e1_moved( move( Element<2>( 1, &fe_q, &quad, evars, ivars, mtrl_idx ) ) );
   _test( e1_moved.Idx() == e1.Idx() );
   _test( e1_moved.Material_ID() == e1.Material_ID() );
-  _test( e1_moved.IsSurfaceElement() == e1.IsSurfaceElement() );
+  _test( e1_moved.IsSurface() == e1.IsSurface() );
   _test( e1_moved.FE_Type() == e1.FE_Type() );
   
   if ( verbose_ ) e1_moved.OutLVS();

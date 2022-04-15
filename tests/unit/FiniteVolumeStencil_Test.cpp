@@ -515,9 +515,9 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
 			    vector< Point< 3> > vecOfPointsOfTheFacet;
 			    
 			    size_t iNrOfFacetPoints(0);
-			    if     ( (*vIterFEs)->IsLineElement() )    iNrOfFacetPoints = 1;
-			    else if( (*vIterFEs)->IsSurfaceElement() ) iNrOfFacetPoints = 2;
-			    else if( (*vIterFEs)->IsVolumeElement() )  iNrOfFacetPoints = 4;
+			    if     ( (*vIterFEs)->IsLine() )    iNrOfFacetPoints = 1;
+			    else if( (*vIterFEs)->IsSurface() ) iNrOfFacetPoints = 2;
+			    else if( (*vIterFEs)->IsVolume() )  iNrOfFacetPoints = 4;
 			    
 			  #ifdef PYRAMID_TRIANGULAR_FACETS
 			    if(vIterFVS->ParentElement() == "ISOPARAMETRIC_LINEAR_PYRAMID" && iFacet > 3 ) iNrOfFacetPoints = 3;
@@ -678,7 +678,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                 Point<3> mappedNormal(0,0,0);
 
                 //1. Compute normal by transformation
-                if ((*vIterFEs)->IsVolumeElement()) {
+                if ((*vIterFEs)->IsVolume()) {
                     Point<3> v0(0,0,0);
                     Point<3> v1(0,0,0);
 
@@ -714,7 +714,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     mappedNormal += 0.5 * crossProduct(pt1, pt0);
                   }
                 }
-                else if ((*vIterFEs)->IsSurfaceElement()) {
+                else if ((*vIterFEs)->IsSurface()) {
                     Point<3u> tangent(0,0,0);
                     Point<3u> bitangent(0,0,0);
 
@@ -736,7 +736,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                   // XXX Need a better way to test this
                   mappedNormal = computedNormal;
                 }
-                else if ((*vIterFEs)->IsLineElement()) {
+                else if ((*vIterFEs)->IsLine()) {
                     Point<3u> v0(0,0,0);
                     for ( auto iNode = 0U; iNode < iNrOfNodes; ++iNode) {
                         const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
@@ -857,9 +857,9 @@ void FiniteVolumeStencil_Test::weightsAndFacetIntegrationPointsTest()
       //get the area/distance
        size_t iNrOfFacetPoints(0);
        
-       if     ( (*vIterFEs)->IsLineElement() )    iNrOfFacetPoints = 1;
-			 else if( (*vIterFEs)->IsSurfaceElement() ) iNrOfFacetPoints = 2;
-			 else if( (*vIterFEs)->IsVolumeElement() )  iNrOfFacetPoints = 4;
+       if     ( (*vIterFEs)->IsLine() )    iNrOfFacetPoints = 1;
+			 else if( (*vIterFEs)->IsSurface() ) iNrOfFacetPoints = 2;
+			 else if( (*vIterFEs)->IsVolume() )  iNrOfFacetPoints = 4;
 			 
 			   
 			 if(iNrOfFacetPoints == 1)

@@ -104,7 +104,7 @@ void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, ui
 
     // volume elements first, since speed matters the most
     assert( e != nullptr );
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->Nrst( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
                         fvptr_->FacetIntegrationPoint( iFacet, ip, 1U ),
                         fvptr_->FacetIntegrationPoint( iFacet, ip, 2U ),
@@ -113,7 +113,7 @@ void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, ui
       }
       
     // surface elements  
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
       e->FE()->Nrs( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
                     fvptr_->FacetIntegrationPoint( iFacet, ip, 1U ),
                     e->FE()->NRST );
@@ -138,7 +138,7 @@ void FiniteVolumePolicy<3U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, 
 
     // volume elements first, since speed matters the most
     assert( e != nullptr );
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->Nrst( fvptr_->SectorIntegrationPoint( iSector, ip, 0U ),
                         fvptr_->SectorIntegrationPoint( iSector, ip, 1U ),
                         fvptr_->SectorIntegrationPoint( iSector, ip, 2U ),
@@ -147,7 +147,7 @@ void FiniteVolumePolicy<3U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, 
       }
       
     // surface elements  
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
       e->FE()->Nrs( fvptr_->SectorIntegrationPoint( iSector, ip, 0U ),
                     fvptr_->SectorIntegrationPoint( iSector, ip, 1U ),
                     e->FE()->NRST );
@@ -182,13 +182,13 @@ void FiniteVolumePolicy<3U,CELL>::Local_dN_At( const Point<3U>& rst ) const
  {
     const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
     assert( e != nullptr );
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->dNr( rst[0], rst[1], rst[2], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], rst[2], e->FE()->DNS );
          e->FE()->dNt( rst[0], rst[1], rst[2], e->FE()->DNT );
          return;
       }
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->dNr( rst[0], rst[1], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], e->FE()->DNS );
          return;
@@ -211,7 +211,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
     assert( e != nullptr );
     e->CoordinateMatrix();
 
-    if ( e->IsVolumeElement() ) {
+    if ( e->IsVolume() ) {
          e->FE()->dNr( rst[0], rst[1], rst[2], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], rst[2], e->FE()->DNS );
          e->FE()->dNt( rst[0], rst[1], rst[2], e->FE()->DNT );
@@ -229,7 +229,7 @@ double FiniteVolumePolicy<3U,CELL>::dN_At( const Point<3U>& rst,
          return detJ;
       }
 
-    if ( e->IsSurfaceElement() ) {
+    if ( e->IsSurface() ) {
          e->FE()->dNr( rst[0], rst[1], e->FE()->DNR );
          e->FE()->dNs( rst[0], rst[1], e->FE()->DNS );
          // compute Jacobian matrix
@@ -779,7 +779,7 @@ double  FiniteVolumePolicy<3U,CELL>::FacetArea( uint32_t iFacet ) const
    assert( iFacet < fvptr_->Facets());
 
     assert( e != nullptr );
-      if ( e->IsVolumeElement() ) {
+      if ( e->IsVolume() ) {
 #ifdef PYRAMID_TRIANGULAR_FACETS
            if(fvptr_->FacetPoints(iFacet) == 3U )
              return triangleArea(e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
@@ -791,7 +791,7 @@ double  FiniteVolumePolicy<3U,CELL>::FacetArea( uint32_t iFacet ) const
                                e->RstToXYZ(fvptr_->FacetPoint(iFacet,2U)),
                                e->RstToXYZ(fvptr_->FacetPoint(iFacet,3U)) );
         }
-      else if ( e->IsSurfaceElement() ) {
+      else if ( e->IsSurface() ) {
            return e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)).DistanceTo(
                   e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
         }
@@ -832,7 +832,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( uint32_t iFacet ) const
     assert( iFacet < fvptr_->Facets());
 #endif
 
-  if ( e->IsVolumeElement() ) {
+  if ( e->IsVolume() ) {
       switch (fvptr_->FacetPoints(iFacet)) {
           case 3:
               return normalOfTriangle ( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)),
@@ -852,7 +852,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( uint32_t iFacet ) const
     }
 
     assert( e != nullptr );
-   if ( e->IsSurfaceElement() ) {
+   if ( e->IsSurface() ) {
        // this version has the best definition
        Point<3U> segment(midPoint(e->N(fvptr_->InsideNode(iFacet))->Coordinate(),
                                   e->N(fvptr_->OutsideNode(iFacet))->Coordinate()) - e->BaryCenter());
@@ -888,10 +888,10 @@ template<template<uint32_t> class CELL>
 double  FiniteVolumePolicy<3U,CELL>::FacetAreaMapped( uint32_t iFacet ) const
 {
   const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
-  if(e->IsLineElement()) return 1.;
+  if(e->IsLine()) return 1.;
 
   assert( e != nullptr );
-  if(e->IsSurfaceElement())
+  if(e->IsSurface())
   {
     const Point<3U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
     const Point<3U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );
@@ -954,9 +954,9 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( uint32_t iFacet ) con
 {
   const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
   assert( e != nullptr );
-  if( e->IsLineElement()) return Point<3U>(1.,0.,0.);
+  if( e->IsLine()) return Point<3U>(1.,0.,0.);
 
-  if( e->IsSurfaceElement()) // project to bar element - rotate coplanar to the element by 90 degrees
+  if( e->IsSurface()) // project to bar element - rotate coplanar to the element by 90 degrees
     {
       const Point<3U> fp0( e->RstToXYZ(fvptr_->FacetPoint(iFacet,0U)) );
       const Point<3U> fp1( e->RstToXYZ(fvptr_->FacetPoint(iFacet,1U)) );

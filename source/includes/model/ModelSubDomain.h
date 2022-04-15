@@ -101,7 +101,7 @@ class ModelSubDomain {
     /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
     size_t RemoveNullPointerCells();
     
-    /// for remeshing:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
+    /// for rebuilding subdomains when nodes or cells changed:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
     void ScheduleForRebuilt();
     bool NeedsRebuilt() const;
 

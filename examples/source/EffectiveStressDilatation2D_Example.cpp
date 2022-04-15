@@ -481,7 +481,7 @@ bool createLowerDimensionalRegion( Model<DIM>& model, const char* name_of_new_re
     Region<DIM>& mref = model.Region("Model");
     set<size_t> element_idx;
     for ( vector<Element<DIM>*>::const_iterator it=mref.CellsBegin(); it!=mref.CellsEnd(); ++it )
-      if ( (*it)->FE()->IsLineElement() ) element_idx.insert( (*it)->Idx() );
+      if ( (*it)->IsLine() ) element_idx.insert( (*it)->Idx() );
     
     vector<size_t> unique_idx( element_idx.begin(), element_idx.end() );
    

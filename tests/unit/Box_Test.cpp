@@ -364,7 +364,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     // -----------------------------------
     Boundary<3U>  left(model.Boundary("LEFT"));
     for ( auto it=left.CellsBegin(); it!=left.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
              // testing for alignment
@@ -376,7 +376,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  right(model.Boundary("RIGHT"));
     for ( auto it=right.CellsBegin(); it!=right.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
              // testing for alignment
@@ -388,7 +388,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  bottom(model.Boundary("BOTTOM"));
     for ( auto it=bottom.CellsBegin(); it!=bottom.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
              // testing for alignment
@@ -400,7 +400,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  top(model.Boundary("TOP"));
     for ( auto it=top.CellsBegin(); it!=top.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
              // testing for alignment
@@ -412,7 +412,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  back(model.Boundary("BACK"));
     for ( auto it=back.CellsBegin(); it!=back.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
              // testing for alignment
@@ -424,7 +424,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  front(model.Boundary("FRONT"));
     for ( auto it=front.CellsBegin(); it!=front.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
              // testing for alignment

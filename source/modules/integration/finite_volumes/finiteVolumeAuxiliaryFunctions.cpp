@@ -209,9 +209,9 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
     std::vector<double> temp(e.Nodes()); //has the local interp. function values
     std::vector<double> global_c(dim),local_c(local_c_point.Coordinates());
 
-    if( e.IsLineElement() ){
+    if( e.IsLine() ){
         e.FE()->Nr( local_c[0], temp );
-    }else if( e.IsSurfaceElement()){
+    }else if( e.IsSurface()){
         e.FE()->Nrs( local_c[0], local_c[1], temp );
     }else{
         e.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );
@@ -284,9 +284,9 @@ double limitProperty_LSMGRAD( const Element<dim>& e,
     std::vector<double> temp(e.Nodes()); //has the local interp. function values
     std::vector<double> global_c(dim),local_c(local_c_point.Coordinates());
 
-    if( e.IsLineElement() ){
+    if( e.IsLine() ){
         e.FE()->Nr( local_c[0], temp );
-    }else if( e.IsSurfaceElement()){
+    }else if( e.IsSurface()){
         e.FE()->Nrs( local_c[0], local_c[1], temp );
     }else{
         e.FE()->Nrst( local_c[0], local_c[1], local_c[2], temp );

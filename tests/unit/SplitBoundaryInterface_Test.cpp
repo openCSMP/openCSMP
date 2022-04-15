@@ -399,11 +399,11 @@ void csmp::SplitBoundaryInterface_Test::CheckRemovedLowDimParents( Boundary<dim>
 
 // local helper functions
 static bool IsLowDim( Element<3>* ePtr ) {
-  return ePtr->FE()->IsSurfaceElement();
+  return ePtr->FE()->IsSurface();
 }
 
 static bool IsLowDim( Element<2>* ePtr ) {
-  return ePtr->FE()->IsLineElement();
+  return ePtr->FE()->IsLine();
 }
 
 

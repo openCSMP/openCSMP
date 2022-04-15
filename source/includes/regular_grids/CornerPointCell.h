@@ -125,9 +125,9 @@ public:
     size_t GetNumFaces( size_t fid ) const;
 
     /// type of element ( dimension )
-    bool   IsVolumeElement() const;
-    bool   IsSurfaceElement() const;
-    bool   IsLineElement() const;
+    bool   IsVolume() const;
+    bool   IsSurface() const;
+    bool   IsLine() const;
     bool   IsPointElement() const;
 
     /// type of element ( topology )

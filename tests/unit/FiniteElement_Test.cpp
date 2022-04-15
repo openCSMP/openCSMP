@@ -98,13 +98,13 @@ void FiniteElement_Test::run()
 
   // .) LINE ELEMENT
   if ( verbose_ ) cout << "Testing element type...\n";
-  _test( femData_.LineElement() == femPtr_->IsLineElement() );
+  _test( femData_.LineElement() == femPtr_->IsLine() );
 
   // .) SURFACE ELEMENT
-  _test( femData_.SurfaceElement() == femPtr_->IsSurfaceElement() );
+  _test( femData_.SurfaceElement() == femPtr_->IsSurface() );
 
   // .) VOLUME ELEMENT
-  _test( femData_.VolumeElement() == femPtr_->IsVolumeElement() );
+  _test( femData_.VolumeElement() == femPtr_->IsVolume() );
 
   // .) CSMP FEM TYPE
   _test( femData_.ElementType() == femPtr_->ElementType() );
@@ -219,7 +219,7 @@ void FiniteElement_Test::run()
 
   // .) UNIT NORMAL
   if ( verbose_ ) cout << "Testing unit normal...\n";
-  if( femPtr_->IsSurfaceElement() )
+  if( femPtr_->IsSurface() )
   {
     std::vector<double> unitNormal;
     std::vector<double> unitNormalTest( femData_.UnitNormal() );
@@ -389,9 +389,9 @@ void FiniteElement_Test::run()
   if ( verbose_ ) cout << "Testing jacobian at integration points...\n";
   uint32_t dim_volume=1.0;
 
-  if (femPtr_->IsSurfaceElement())
+  if (femPtr_->IsSurface())
          dim_volume=2.0;
-  if (femPtr_->IsVolumeElement())
+  if (femPtr_->IsVolume())
          dim_volume=3.0;
 
   if( femData_.JACOBIANatIP() )

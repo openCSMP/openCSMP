@@ -222,13 +222,13 @@ bool  FiniteElement::Isoparametric() const        { return isoparametric; }
 
 bool  FiniteElement::UsesLocalCoordinates() const { return uses_local_coordinates; }
 
-bool  FiniteElement::IsLineElement()    const     
+bool  FiniteElement::IsLine()    const     
  { if ( element_category == LINE )   return true; return false; }
  
-bool  FiniteElement::IsSurfaceElement() const     
+bool  FiniteElement::IsSurface() const     
  { if ( element_category == SURFACE ) return true; return false; }
  
-bool  FiniteElement::IsVolumeElement()  const     
+bool  FiniteElement::IsVolume()  const     
  { if ( element_category == VOLUME )  return true; return false; }
  
 bool FiniteElement::IsSimplex() const
@@ -1101,6 +1101,11 @@ CELL_SHAPE  parseFiniteElementDimension( CSMP_FEM_TYPE etype )
      if ( etype == BARYCENTRIC_QUADRATIC_TETRAHEDRON ) return VOLUME;
      if ( etype == CUBIC_TETRAHEDRON ) return VOLUME;
 
+     if ( etype == ZERO_DIMENSIONAL_FACE ) return POINT;
+     if ( etype == POINT_ELEMENT ) return POINT;
+     if ( etype == POLYGONAL_ELEMENT ) return SURFACE;
+     if ( etype == POLYHEDRAL_ELEMENT ) return VOLUME;
+
      cerr <<"\nparseFiniteElementDimension: Could not identify dimension of element type: "<< etype << endl;
      return static_cast<CELL_SHAPE>(UNSPECIFIED);
 
@@ -1159,7 +1164,13 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype )
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20;       		
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27; 				
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
-     if ( etype == EXPERIMENTAL_ELEMENT ) return EXPERIMENTAL_ELEMENT; 
+
+     if ( etype == ZERO_DIMENSIONAL_FACE ) return ZERO_DIMENSIONAL_FACE;
+     if ( etype == POINT_ELEMENT ) return POINT_ELEMENT;
+     if ( etype == POLYGONAL_ELEMENT ) return POLYGONAL_ELEMENT;
+     if ( etype == POLYHEDRAL_ELEMENT ) return POLYHEDRAL_ELEMENT;
+
+     if ( etype == EXPERIMENTAL_ELEMENT ) return EXPERIMENTAL_ELEMENT;
 
      cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return UNKNOWN;
@@ -1221,6 +1232,11 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20" ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20;
      if ( etype == "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27" ) return ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27;
      if ( etype == "ISOPARAMETRIC_CUBIC_HEXAHEDRON" ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON;
+
+     if ( etype == "ZERO_DIMENSIONAL_FACE" ) return ZERO_DIMENSIONAL_FACE;
+     if ( etype == "POINT_ELEMENT" ) return POINT_ELEMENT;
+     if ( etype == "POLYGONAL_ELEMENT" ) return POLYGONAL_ELEMENT;
+     if ( etype == "POLYHEDRAL_ELEMENT" ) return POLYHEDRAL_ELEMENT;
      if ( etype == "EXPERIMENTAL_ELEMENT" ) return EXPERIMENTAL_ELEMENT;
 
      cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
@@ -1282,7 +1298,13 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20";       		                // HEXA_20   =7, 
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return "ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27"; 				            // HEXA_27   =5,
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "ISOPARAMETRIC_CUBIC_HEXAHEDRON";
-     if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL_ELEMENT"; 
+
+     if ( etype == ZERO_DIMENSIONAL_FACE ) return "ZERO_DIMENSIONAL_FACE";
+     if ( etype == POINT_ELEMENT ) return "POINT_ELEMENT";
+     if ( etype == POLYGONAL_ELEMENT ) return "POLYGONAL_ELEMENT";
+     if ( etype == POLYHEDRAL_ELEMENT ) return "POLYHEDRAL_ELEMENT";
+
+     if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL_ELEMENT";
 
      cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;
      return "UNKNOWN";
@@ -1339,6 +1361,12 @@ CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype )
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20 ) return "IHEX20";       		                // HEXA_20   =7,
      if ( etype == ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) return "IHEX27"; 				            // HEXA_27   =5,
      if ( etype == ISOPARAMETRIC_CUBIC_HEXAHEDRON ) return "IHEX^3";
+
+     if ( etype == ZERO_DIMENSIONAL_FACE ) return "0D_FACE";
+     if ( etype == POINT_ELEMENT ) return "POINT";
+     if ( etype == POLYGONAL_ELEMENT ) return "POLYGON";
+     if ( etype == POLYHEDRAL_ELEMENT ) return "POLYHED";
+
      if ( etype == EXPERIMENTAL_ELEMENT ) return "EXPERIMENTAL";
 
      cerr <<"\nparseFiniteElementType: Could not identify element type: "<< etype << endl;

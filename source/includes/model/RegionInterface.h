@@ -228,8 +228,8 @@ class RegionInterface {
     size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                   std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;
 
-    /// if the mesh changed this brute-force method rebuild the node and element vectors of all regions
-    void RebuildRegions();
+    /// if the mesh changed this safe but model-wide method rebuilds the node and element vectors of all regions
+    void UpdateRegions();
 
   protected:
     /// rebuilds unique regions, but only if they contain some nulled element pointers

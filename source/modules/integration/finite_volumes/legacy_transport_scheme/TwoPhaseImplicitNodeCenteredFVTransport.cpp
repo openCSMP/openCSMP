@@ -528,7 +528,7 @@ double TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::AnisotropicCourantIncre
 
     for ( typename vector<Element<dim>*>::const_iterator 
           eit=this->gref_.CellsBegin(); eit!=this->gref_.CellsEnd(); eit++ )
-      if ( !((*eit)->FE()->IsLineElement() && unless_has_equal_dimension) )
+      if ( !((*eit)->FE()->IsLine() && unless_has_equal_dimension) )
         {
            // 0. relative permeability model computed at element barycenter
            // -------------------------------------------------------------
@@ -1066,8 +1066,8 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                  {
                      Element<dim>* const eptr(nd_ptr->Parent(t));
                      size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
-                     //if(((dim==3) && (!eptr->FE()->IsSurfaceElement()) && (!eptr->FE()->IsLineElement())) ||((dim==2) && (!eptr->FE()->IsLineElement()))){
-                     //if((dim>1) && (!eptr->FE()->IsLineElement())){
+                     //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
+                     //if((dim>1) && (!eptr->FE()->IsLine())){
 
                           double flux(0.0);
                           this->stencil_.CorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson(this->STENCIL_DATA[eptr->Idx()], *eptr, relperm, pnid, flux, with_gravitational_forces_, with_capillary_spreading_);
@@ -1163,8 +1163,8 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
                      {
                          Element<dim>* const eptr(nd_ptr->Parent(t));
                          size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
-                         //if(((dim==3) && (!eptr->FE()->IsSurfaceElement()) && (!eptr->FE()->IsLineElement())) ||((dim==2) && (!eptr->FE()->IsLineElement()))){
-                         //if((dim>1) && (!eptr->FE()->IsLineElement())){
+                         //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
+                         //if((dim>1) && (!eptr->FE()->IsLine())){
 
                               double flux(0.0);
                               this->stencil_.CorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson(this->STENCIL_DATA[eptr->Idx()], *eptr, relperm, pnid, flux, with_gravitational_forces_, with_capillary_spreading_);
@@ -1345,8 +1345,8 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                  {
                      Element<dim>* const eptr(nd_ptr->Parent(t));
                      size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
-                     //if(((dim==3) && (!eptr->FE()->IsSurfaceElement()) && (!eptr->FE()->IsLineElement())) ||((dim==2) && (!eptr->FE()->IsLineElement()))){
-                     //if((dim>1) && (!eptr->FE()->IsLineElement())){
+                     //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
+                     //if((dim>1) && (!eptr->FE()->IsLine())){
 
                           double flux(0.0);
                           this->stencil_.CorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson(this->STENCIL_DATA[eptr->Idx()], *eptr, relperm, pnid, flux, this->with_gravitational_forces_, this->with_capillary_spreading_);
@@ -1465,8 +1465,8 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2nd
                      {
                          Element<dim>* const eptr(nd_ptr->Parent(t));
                          size_t pnid(this->gref_.N(i)->ParentNodeNumber(t));
-                         //if(((dim==3) && (!eptr->FE()->IsSurfaceElement()) && (!eptr->FE()->IsLineElement())) ||((dim==2) && (!eptr->FE()->IsLineElement()))){
-                         //if((dim>1) && (!eptr->FE()->IsLineElement())){
+                         //if(((dim==3) && (!eptr->FE()->IsSurface()) && (!eptr->FE()->IsLine())) ||((dim==2) && (!eptr->FE()->IsLine()))){
+                         //if((dim>1) && (!eptr->FE()->IsLine())){
 
                               double flux(0.0);
                               this->stencil_.CorrectImplicitTwoPhaseSolutionAtBoundary_NonlinearNewtonRaphson(this->STENCIL_DATA[eptr->Idx()], *eptr, relperm, pnid, flux, this->with_gravitational_forces_, this->with_capillary_spreading_);

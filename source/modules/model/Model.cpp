@@ -15,7 +15,6 @@
 #include "ErrorHandler.h"
 #include "Standard_IO_Handler.h"
 #include "variableOperations.h"
-#include "CSMP_highLevelUtilities.h"
 #include "MeshManagementUtilities.h"
 #include "binaryReadWrite.h"
 #include "ModelTime.h"
@@ -307,9 +306,9 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // 6. forming Boundaries
     //    if the model is box-shaped (albeit perhaps with an irregular top surface)
     if (  mesh_topology.BoxShapedModel() ) {
-        this->EstablishBoxBoundaries();
-        // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
-        cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
+         this->EstablishBoxBoundaries();
+         // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
+         cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
       }
     // irregularly shaped models
     else {
@@ -317,19 +316,12 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
             this->EstablishBoundariesFromRegions();
           else
             csmp_error.notice( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
-                  
-                // we do not want to keep faces at internal boundaries that might become SplitBoundary objects
-                // but we do want to create them on the outside of the model where the names of the input regions contain
-                // the string "BOUNDARY"
-          if ( this->ContainsBoundary("Model_Boundary") )
-            this->RemoveBoundary( this->Boundary("Model_Boundary") );
 
-         // cleanup after boundary creation
-         this->RebuildRegions();
+         // reporting
          this->RegionsOut();
          this->BoundariesOut();
       }
-    
+
     // 7. forming SplitBoundaries if a discontiguous model was detected
     if ( !contiguous_model ) {
          this->DetectAndCreateSplitBoundaries();
@@ -350,10 +342,27 @@ if ( mesh_manager_.InterFaces() > 0 )
 #endif
 
     cout << "\n============================================================================";
-    cout << "\nModel '"<< this->Name() <<"' has been established successfully!";
+    cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
+    if ( this->Mesh().Elements() > 0 ) {
+         size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
+      }
+    if ( this->Mesh().Faces() > 0 ) {
+         size_t volume_faces{0U}, surface_faces{0U}, line_faces{0U};
+         currentCellTypes( this->Mesh(), FACE, volume_faces, surface_faces, line_faces );
+         assert( volume_faces == 0U );
+         cout <<"\n\t\t\t("<< Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
+      }
+    if ( this->Mesh().InterFaces() > 0 ) {
+         size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
+         currentCellTypes( this->Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
+         assert( volume_ifaces == 0U );
+         cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+      }
     cout << "\n============================================================================";
     cout << endl;
-  
+
 } // end Initialize (regionfile,ModelTopology,VSet)
 
 
@@ -416,11 +425,30 @@ if ( mesh_manager_.InterFaces() > 0 )
 #endif
 
     cout << "\n============================================================================";
-    cout << "\nModel '"<< this->Name() <<"' has been established successfully!";
+    cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
+    if ( this->Mesh().Elements() > 0 ) {
+         size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
+      }
+    if ( this->Mesh().Faces() > 0 ) {
+         size_t volume_faces{0U}, surface_faces{0U}, line_faces{0U};
+         currentCellTypes( this->Mesh(), FACE, volume_faces, surface_faces, line_faces );
+         assert( volume_faces == 0U );
+         cout <<"\n\t\t\t("<< Mesh().Faces() <<" faces: surfaces "<< surface_faces <<", lines "<< line_faces <<")";
+      }
+    if ( this->Mesh().InterFaces() > 0 ) {
+         size_t volume_ifaces{0U}, surface_ifaces{0U}, line_ifaces{0U};
+         currentCellTypes( this->Mesh(), INTER_FACE, volume_ifaces, surface_ifaces, line_ifaces );
+         assert( volume_ifaces == 0U );
+         cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
+      }
     cout << "\n============================================================================";
     cout << endl;
+
   
 } // end Initialize (VSet / ModelTopology)
+
 
 // Testing the Regions that will become boundaries OK
 //this->Region("BACK").NodeAttributesToCSV();
@@ -3178,13 +3206,13 @@ Point<dim>  centerOfGravity( const Model<dim>& model )
    
     while( it != mref.CellsEnd() ) {
          if ( dim == 3U ) {
-               if ( (*it)->FE()->IsVolumeElement() ) {
+               if ( (*it)->FE()->IsVolume() ) {
                     center += (*it)->BaryCenter();
                     counter += 1.;
                  }
             }
          else if ( dim == 2U ) {
-               if ( (*it)->FE()->IsSurfaceElement() ) {
+               if ( (*it)->FE()->IsSurface() ) {
                     center += (*it)->BaryCenter();
                     counter += 1.;
                  }
