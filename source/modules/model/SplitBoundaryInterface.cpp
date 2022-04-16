@@ -647,6 +647,9 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
   // removes boundary also deleting its interface objects
   splitboundaryComplex->RemoveBoundary( boundary );
 
+throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom(boundary)",
+                      " the node vector of the region on the outside also has to be updated ");
+
   cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
   cout << splitboundaryName <<"' successfully.\n\n";
 
@@ -718,7 +721,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
       for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
            auto pface = region2.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
-           assert( !region1.E(i)->IsLine() );
+           assert( !region2.E(i)->IsLine() );
            auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
                                                     make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
            // if a matching face is found

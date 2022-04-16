@@ -5142,6 +5142,122 @@ template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>& g1, co
 
 
 
+/**
+       Finds the higher-dimensional perimeter cells that share their perimeter faces on the touching two subdomains.
+       
+       @param subdomain1 any unique (non-overlapping) Region, Boundary or Splitboundary
+       @param subdomain2 subdomain that is expected to share outside faces with the first subdomain
+       @param matching_cells  map of higher-dimensional cells that share a face at the contact between the two subdomains
+       @return the number of shared perimeter faces that were found.
+       
+       @todo check for interpenetrating regions
+       
+       @author SKM
+       @date 16.4.22
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
+                              vector<pair<pair<CELL<dim>*,uint32_t>,pair<CELL<dim>*,uint32_t> > >& matching_cells )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // 0. some initial checks
+    // ----------------------
+    if ( subdomain1.Name() == subdomain2.Name() ) {
+         csmp_error.notice( ERROR, "sharedPerimeterCells:", "argument regions are the same; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain1.Empty() ) {
+         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain1.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain2.Empty() ) {
+         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain2.Empty() ) {
+         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain1.NeedsRebuilt() || subdomain2.NeedsRebuilt() ) {
+         csmp_error.notice( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
+         return 0U;
+      }
+
+    // 1. is there a shared interface? - looping over the perimeter faces of the adjacent regions
+    // ------------------------------------------------------------------------------------------
+    map<set<Node<dim>*>,pair<pair<CELL<dim>*,uint32_t>,pair<CELL<dim>*,uint32_t> > >  shared_perimeter_cells;
+    // (determining contacts via shared corner-node-ptrs of cells adjacent to interface)
+    // (not only these elements but also their face numbers will be recorded (inside elements will be first in pair)
+
+    // starting with region1 - assuming that no face-matching can occur at this stage
+    for ( size_t i{ subdomain1.InteriorCells() }; i<subdomain1.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain1.PerimeterFaces(i); j++ ) {
+           auto pface = subdomain1.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !subdomain1.E(i)->IsLine() );
+           shared_perimeter_cells.insert( make_pair( subdomain1.E(i)->CornerNodesOfFace(pface),
+                                          make_pair( make_pair( subdomain1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+        }
+    // for the second region2, do the same, but when matching faces are found corresponding elements and face ids are assigned to second element-face pair
+    size_t n_matching_faces{0U};
+    for ( size_t i{ subdomain2.InteriorCells() }; i<subdomain2.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain2.PerimeterFaces(i); j++ ) {
+           auto pface = subdomain2.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !subdomain2.E(i)->IsLine() );
+           auto it = shared_perimeter_cells.insert( make_pair( subdomain2.E(i)->CornerNodesOfFace(pface),
+                                                    make_pair( make_pair( subdomain2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+           // if a matching face is found
+           if ( it.second == false ) { // no new insertion could be made into map with unique keys
+                (*it.first).second.second = make_pair( subdomain2.E(i), pface );
+                n_matching_faces++;
+             }
+        }
+
+    if ( n_matching_faces == 0U ) {
+         string message( string(" input regions '") + subdomain1.Name() + "' and '" + subdomain2.Name() +"'");
+         csmp_error.notice( WARNING, "sharedPerimeterCells:",
+                            message, "do not share any faces, nothing could be done");
+         return 0U;
+      }
+
+    // 2. Eliminating the single element entries from the 'shared_perimeter_faces' map
+    // -------------------------------------------------------------------------------
+    for ( auto it = shared_perimeter_cells.begin(); it != shared_perimeter_cells.end() /* not hoisted */; /* no increment */ ) {
+         // there is only a single element in the Element-pointer pair, the map entry will be deleted
+         if ( (*it).second.second.first == nullptr ) it = shared_perimeter_cells.erase(it); // since C++11
+         else ++it;
+      }
+
+    // 3. collecting the required cell pairs from the 'shared_perimeter_faces' map
+    // ---------------------------------------------------------------------------
+    //vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matching_cells;
+    matching_cells.reserve( shared_perimeter_cells.size() );
+    for ( const auto& pit : shared_perimeter_cells )
+      if ( pit.second.second.first != nullptr )
+        matching_cells.emplace_back( pit.second );
+
+    return matching_cells.size();
+  
+ } // end sharedPerimeterCells
+
+
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,Element>&, const ModelSubDomain<1U,Element>&, vector<pair<pair<Element<1>*,uint32_t>,pair<Element<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,Element>&, const ModelSubDomain<2U,Element>&, vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,Element>&, const ModelSubDomain<3U,Element>&, vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > >& );
+
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,Face>&, const ModelSubDomain<1U,Face>&, vector<pair<pair<Face<1>*,uint32_t>,pair<Face<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,Face>&, const ModelSubDomain<2U,Face>&, vector<pair<pair<Face<2>*,uint32_t>,pair<Face<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,Face>&, const ModelSubDomain<3U,Face>&, vector<pair<pair<Face<3>*,uint32_t>,pair<Face<3>*,uint32_t> > >& );
+
+/* MORE COMPLICATED BECAUSE face nodes might not be shared
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,InterFace>&, const ModelSubDomain<1U,InterFace>&, vector<pair<pair<Element<1>*,uint32_t>,pair<Element<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,InterFace>&, const ModelSubDomain<2U,InterFace>&, vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,InterFace>&, const ModelSubDomain<3U,InterFace>&, vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > >& );
+*/
+
+
 
  template class ModelSubDomain<1U,Element>;
  template class ModelSubDomain<2U,Element>;

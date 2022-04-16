@@ -1274,11 +1274,11 @@ pair<string,bool>  BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetwee
     BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-throw csmp::Exception( FATAL_ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryBetween", "method needs to be refactored");
-
     string  region1(group1);
     string  region2(group2);
 
+    // 1. preliminary checks
+    // ---------------------
     if (region1 == "Model" or region2 == "Model") {
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:", "Region 'Model' not eligible for InsertBoundary.");
          return make_pair("boundary not created",false);
@@ -1289,16 +1289,25 @@ throw csmp::Exception( FATAL_ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::Cr
       }
     if ( !boundaryComplex->IsUnique(group1) || !boundaryComplex->IsUnique(group2) ) {
          csmp_error.notice( ERROR, "BoundaryInterface::CreateBetween:",
-                           "This method is intended for the creation of boundaries between unique Regions");
+                           "This method is intended for the creation of unique non-overlapping Regions");
          return make_pair("boundary not created",false);
       }
+    // TODO: how are cases handled where one of the regions is a surface or a line while the other is a volume?
    
+   
+    // 2. do the two regions share part of (are in contact with eachother) their perimeter
+    // -----------------------------------------------------------------------------------
+    // (this also considers the case where one of the regions has no usable interface because it is at the model boundary)
     const csmp::Region<dim>&  gref1(boundaryComplex->Region(group1));
     const csmp::Region<dim>&  gref2(boundaryComplex->Region(group2));
+    
+    
+    // 3. creating a boundary from the faces of the shared perimeter elements
+    // ----------------------------------------------------------------------
    
     string boundary_name = FindBoundaryName( set<string>{string{group1},string{group2}} );
 
-    // attempt to create a (Face-based) boundary, appending numbers as necessary
+    // attempt to create a (Face-based) boundary with the new name, appending numbers as necessary if the name already exists
     pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
       it = boundaryMap_.insert( make_pair( boundary_name, csmp::Boundary<dim>( boundary_name, boundaryComplex->Database(), INTERNAL ) ) );
 

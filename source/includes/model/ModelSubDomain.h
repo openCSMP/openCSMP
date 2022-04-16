@@ -328,6 +328,11 @@ size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,C
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
+/// maps potential contacting faces and cell pointers of cells that are contacting each other in the two regions; @return the number of these cells, pointers to them, and corresponding face number written into the argument map
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
+                              std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
+
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
 void readDomainIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& );
 
