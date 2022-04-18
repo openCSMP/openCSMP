@@ -901,14 +901,20 @@ cout.flush();
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 {
-  assert( !this->cell_vec_.empty() );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( this->cell_vec_.empty() ) {
+        csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+                                  "cannot create 'node_vec_', current cell vector is empty");
+        return;
+     }
 
   if ( !this->node_vec_.empty() )
     this->node_vec_.clear();
 
-  // creating the node index vector
+  // creating the node pointer vector
   this->node_vec_.reserve( cell_vec_.size() * 4 );
-  for ( auto it : this->cell_vec_ ) {
+  for ( auto& it : this->cell_vec_ ) {
        const auto nodes{ it->Nodes() };
        for ( auto i{0U}; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
@@ -921,6 +927,43 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
   this->node_vec_.shrink_to_fit();
 }
+
+
+
+
+
+
+    /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
+template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     if ( contacting_cells.empty() ) {
+          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+                                    "provided argument vector does not contain any cells");
+          return;
+       }
+
+  if ( !this->node_vec_.empty() ) this->node_vec_.clear();
+  this->node_vec_.reserve( contacting_cells.size() ); // rough guess of n-nodes
+   
+  // creating the node pointer vector
+  for ( const auto& it : contacting_cells ) {
+       // taking the nodes from the inside of the cell pairs
+       vector<uint32_t> fnids;
+       it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+       for ( auto i : fnids )
+         this->node_vec_.push_back( it.first.first->N(i) );
+    }
+
+  // removing duplicates and trimming excess memory from node vector
+  sort( this->node_vec_.begin(), this->node_vec_.end() );
+  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+  this->node_vec_.shrink_to_fit();
+
+ } // end CreateNodePointerVector
+
 
 
 

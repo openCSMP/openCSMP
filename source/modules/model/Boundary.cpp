@@ -129,65 +129,6 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
 
 
 
-/**
-    re-constructor of boundary from index data stored in SubDomainInfo and faces using an element and a face vector
-    
-        @attention assumes that the faces in SubDomainInfo are numbered from  elements..elements+faces-1
-*/
-/*
-template<uint32_t dim>
-Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
-                         const size_t& elements,
-                         const std::deque<Node<dim>*>& nodes,
-                         const std::deque<Face<dim>*>& faces,
-                         const SubDomainInfo& info,
-                         BOX_BOUNDARY bflag )
-  : ModelSubDomain<dim, Face>( info.name, pref ),
-    boundaryFlag_( bflag )
-{
-  // building the face vector
-  // ------------------------
-  if ( info.interior_elmts[0] != elements )
-    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
-                          "error Face numbering is expected to start at the number of elements.");
-  
-  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-
-  // assigning pointers to the interior faces
-  for ( size_t i : info.interior_elmts )
-    if( (i - elements) < faces.size() )
-      this->cell_vec_.push_back( faces[i - elements] );
-
-  // assigning pointers to the perimeter faces
-  for ( size_t i : info.perimeter_elmts )
-    if ( (i - elements) < faces.size() )
-      this->cell_vec_.push_back( faces[i - elements] );
-
-  // building the node vector
-  // ------------------------
-  // assigning pointers to the interior and perimeter nodes
-  this->first_bd_node_ = info.interior_nodes.size();
-  this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
-
-  // assigning pointers to the interior faces
-  for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( nodes[i] );
-
-  // assigning pointers to the perimeter faces
-  for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( nodes[i] );
-
-  this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
-
-  // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
-  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
-
-  // allocating the storage for boundary properties
-  // ----------------------------------------------
-  this->ResizePropertyStorage( pref.LocalVariablesAt( BOUNDARY ) );
-  
-} // end re-constructor (Nodes,Faces)
-*/
 
 
 template<uint32_t dim>
@@ -214,15 +155,15 @@ Boundary<dim>::Boundary( const string& boundary_name,
                          const PropertyDatabase<dim>& dbase_ref,
                          typename std::vector<Face<dim>*>::iterator facesBegin,
                          typename std::vector<Face<dim>*>::iterator facesEnd,
-                         BOX_BOUNDARY flag )
+                         BOX_BOUNDARY boxBoundary )
   : ModelSubDomain<dim, Face>( boundary_name, dbase_ref ),
-    boundaryFlag_( flag )
+    boundaryFlag_( boxBoundary )
 {
   // moving the supplied Face pointers into the element storage
   this->cell_vec_.assign( facesBegin, facesEnd );
   
-  // initialising node pointer vector, sorting nodes and elements, and creating boundary face vector
-  Initialize( flag );
+  // initialize BOX_BOUNDARY of nodes
+  InitializeBoundaryFlags( boxBoundary );
 }
 
 
@@ -700,7 +641,7 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
     bflags and entity sorting.
 */
 template<uint32_t dim>
-void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
+void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )
 {
   // assigns BOX_BOUNDARY flag to Boundary
   AtBoundary( boxBoundary );
@@ -717,26 +658,9 @@ void Boundary<dim>::Initialize( BOX_BOUNDARY boxBoundary )
   // initialises boundary face vector bd_face_vec_
   this->IdentifyPerimeter();
 
-} // end Initialize
+} // end InitializeBoundaryFlags
 
 
-
-  /*
-  // TESTING - createLineFaceConnectivity()
-  this->RenumberElements();
-  this->RenumberNodes();
-  cerr <<"\nBoundary<"<< dim <<">::Initialize: '"<< this->Name() <<"': printing element id(nodes): and neighbor ids";
-  for ( auto it=this->cell_vec_.begin(); it!=this->cell_vec_.end(); ++it )
-  {
-  cerr <<"\n\t"<< (*it)->Idx() <<" (";
-  for ( auto i{0U}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
-  cerr <<"): ";
-  for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
-  if ( (*it)->Neighbor(i) == nullptr ) cerr <<"nullptr ";
-  else cerr << (*it)->Neighbor(i)->Idx() <<" ";
-  }
-  cerr << endl;
-  */
 
 
 
@@ -901,8 +825,8 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
        elmt++;
     }
 
-  // initialize boundary essentials
-  Initialize( boxBoundary );
+  // initialize BOX_BOUNDARY of nodes
+  InitializeBoundaryFlags( boxBoundary );
 
   // done
   return true;
@@ -1004,7 +928,8 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
 
 /**
-    For post-processing the results of Divide. Here the assumption is made that the faces are already interconnected.
+    To create Boundary from an existing range of Face objecgts. It is assumed
+    that the faces are already interconnected.
 */
 template<uint32_t dim>
 bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterator facesBegin,
@@ -1023,202 +948,15 @@ bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterato
     
   this->cell_vec_.assign( facesBegin, facesEnd );
 
-  // initialize boundary essentials
-  Initialize( AtBoundary() );
-
+  // initialize BOX_BOUNDARY of nodes
+  InitializeBoundaryFlags( boundaryFlag_ );
+  
   return true;
 }
 
 
 
 
-
-
-/**
-Creates faces around the region
-Only for volume regions in 3D and surface regions in 2D.
-
-@note any dim-2 elements are ignored: this means line elements
-in a 3D model are ignored.
-
-@date refactored by SKM 1/6/2016 (new face constructor etc.)
-
-@author P. Lang, provisionally refactored SKM 7/6/2016
-@date Aug 2011
-*/
-template<uint32_t dim>
-bool Boundary<dim>::CreateAround( const Region<dim>& region,
-                                  MeshManager<dim>& meshManager,
-                                  BOX_BOUNDARY boxBoundary )
-{
-  // LVS
-  const LocalVariables lvsFaces( FaceVariables() );
-  const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
-
-  // reserving storage for boundary elements
-  // logic: the number of faces created can only be slightly larger than the number of boundary elements
-  this->cell_vec_.reserve( region.PerimeterCells() );
-
-  // looping over the perimeter elements of the region
-  for ( auto i = region.InteriorCells(); i<region.Cells(); ++i )
-    {
-      // ignoring dim-2 elements because they share the nodes with the higher-dim ones
-      if constexpr ( dim == 3 ) if ( !region.E( i )->IsVolume() ) continue;
-      if constexpr ( dim == 2 ) if ( !region.E( i )->IsSurface() ) continue;
-
-      // for each perimeter face
-      const auto perimeter_faces( region.PerimeterFaces( i ) );
-      for ( auto j{0U}; j<perimeter_faces; ++j ) {
-           // if this indeed an element at the model boundary
-           if ( region.E(i)->Neighbor(j) == nullptr ) {
-               this->cell_vec_.push_back( meshManager.AddBoundaryFace( region.E( i ), j,
-                                                                       lvsFaces, lvsIntegrationPoints ) );
-             }
-           // if this will be a Face in the interior of the model
-           else {
-               // finding which face of the outer element will be at the boundary
-               uint32_t shared_face = UNSPECIFIED;
-               const auto n_neighbors{region.E(i)->Neighbor(j)->Neighbors()};
-               for ( auto k{0}; k<n_neighbors; ++k ) {
-                    if ( region.E(i)->Neighbor(j) == region.E(i) ) shared_face = k;
-                    break;
-                 }
-               this->cell_vec_.push_back( meshManager.AddFace( region.E(i), j,
-                                                               region.E(i)->Neighbor(j), shared_face,
-                                                               lvsFaces, lvsIntegrationPoints ) );
-             }
-        }
-    }
-  // free up excessive storage
-  vector<Face<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
-  
-  // initialize boundary essentials
-  // creating the connectivity among the new faces
-  if constexpr ( dim == 3 )
-    if ( this->Cells() > 1 )
-      meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
-  if constexpr ( dim == 2 )
-    if ( this->Cells() > 1 )
-      meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
-
-  Initialize( boxBoundary );
-
-  //done
-  return true;
-
-} // CreateAround
-
-
-
-
-
-/**
-    Uses Region boundary face vectors to find the interface between the supplied regions, if any.
-    Gets MeshManager to constructs Face objects along this interface and then forms a boundary from them.
-        
-@author P. Lang
-@date 25/8/2011
-@date 27/10/21 SKM refactored
-
-This method assumes that the connectivity between the elements is up to date.
-
-@attention The Faces are build such that their normals point from region1 to region2.
-Variable storage is assigned to the faces.
-
-*/
-/*
-template<uint32_t dim>
-bool Boundary<dim>::CreateBetween( const Region<dim>& region1,
-                                   const Region<dim>& region2,
-                                   MeshManager<dim>& meshManager )
-{
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-  if ( string(region1.Name()) == region2.Name() ) {
-       csmp_error.notice( WARNING, "Boundary<dim>::CreateBetween:", "input region1 = input region2; nothing was done." );
-       return false;
-    }
-    
-  // checking whether there are any shared perimeter nodes
-  set<Node<dim>*> shared_perimeter_nodes;
-  set_intersection( region1.PerimeterNodesBegin(),region1.NodesEnd(),
-                    region2.PerimeterNodesBegin(), region2.NodesEnd(),
-                    inserter(shared_perimeter_nodes,shared_perimeter_nodes.begin()));
-                    
-  if ( shared_perimeter_nodes.empty() ) {
-       csmp_error.notice( ERROR, "Boundary<dim>::CreateBetween:", "supplied regions do not share any perimeter nodes; nothing was done." );
-       return false;
-    }
-    
-  // LVS
-  const LocalVariables lvsFaces( FaceVariables() );
-  const IntegrationPointVariables lvsIntegrationPoints( FaceIntegrationPointVariables() );
-
-  // reserving storage for boundary elements (logic: the number of faces created cannot be
-  // larger than the minimum number boundary elements of the two neighboring groups)
-  this->cell_vec_.reserve( min( region1.PerimeterCells(), region2.PerimeterCells() ) );
-
-  // searching for elements of region1 that are neighbors of ones in region2.
-  // If so, there is a shared boundary and faces or interfaces are constructed.
-  const size_t   n_elements( region1.Cells() );
-  
-  // for the perimeter elements of the region
-  size_t contacting_elements{0};
-  for ( auto i = region1.InteriorCells(); i < n_elements; ++i )
-    {
-      Element<dim>* const ePtr = region1.E( i );
-      const auto perimeter_faces( region1.PerimeterFaces(i) );
-      for ( auto j{0U}; j < perimeter_faces; ++j )
-        {
-          const auto face = region1.PerimeterFace( i, j );
-          Element<dim>*  ePtrNeighbor = ePtr->Neighbor( face );
-
-          // checking whether neighbor element is part of the boundary of region2
-          assert( ePtrNeighbor != nullptr );
-          if ( ePtrNeighbor != nullptr )
-            if ( region2.IsPerimeterCell( ePtrNeighbor ) )
-              {
-                 // if the neighbor is in the boundary, the new Face is build
-                 uint32_t face2 = UNSPECIFIED;
-                 const auto n_neighbors{ePtrNeighbor->Neighbors()};
-                 for ( auto k{0}; k<n_neighbors; ++k ) {
-                      if ( ePtrNeighbor->Neighbor(k) == ePtr ) face2 = k;
-                      break;
-                   }
-                 this->cell_vec_.push_back( meshManager.AddFace( ePtr, face,
-                                                                 ePtrNeighbor, face2,
-                                                                 lvsFaces, lvsIntegrationPoints ) );
-                 contacting_elements++;
-
-              } // neighboring elements
-
-        } // perimeter faces
-
-    } // perimeter elements
-    
-  // if no contact between the two regions was found
-  if ( contacting_elements == 0 ) {
-       return false;
-    }
-
-  vector<Face<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
-
-  // initialize boundary essentials
-  // creating the connectivity among the new faces
-  if constexpr ( dim == 3 )
-    if ( this->Cells() > 1 )
-      meshManager.template BuildSurfaceConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
-  if constexpr ( dim == 2 )
-    if ( this->Cells() > 1 )
-      meshManager.template BuildLineConnectivity<Face>( this->cell_vec_.begin(), this->cell_vec_.end() );
-
-  Initialize( INTERNAL );
-
-  //done
-  return true;
-
-} // CreateBetween
-*/
 
 
 

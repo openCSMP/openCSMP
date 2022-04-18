@@ -37,6 +37,7 @@ static	char	rcsid[] = "$Id: err.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 #include   <setjmp.h>
 #include   <cctype>
 #include   "err.h"
+#include "meschach_matrix.h"
 
 using namespace std;
 

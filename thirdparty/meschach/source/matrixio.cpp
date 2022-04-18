@@ -26,7 +26,7 @@
 /* 1.6 matrixio.c 11/25/87 */
 #include        <cstdio>
 #include        <cctype>
-#include        "matrix.h"
+#include        "meschach_matrix.h"
 
 using namespace std;
 

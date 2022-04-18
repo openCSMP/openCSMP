@@ -29,7 +29,7 @@
 
 #include <cstdlib>
 #include <cstring>
-#include "matrix.h"
+#include "meschach_matrix.h"
 
 using namespace std;
 

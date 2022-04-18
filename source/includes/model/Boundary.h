@@ -18,33 +18,46 @@ template<uint32_t> class Region;
 
 /**
 
-@brief Boundary is lower-dimensional subclass and specialisation of ModelSubDomain 
-which consist of Face objects.
+@brief A Boundary is lower-dimensional ModelSubDomain, consisting of Face objects.
+Consisting of Faces endows the boundary with special functionality such
+as access to higer-dimensional elements on either side and a distinct
+treatment in the accumulation of PDE operators such as surface integrals
+for a domain.
 
-Boundaries are collections of Faces covering interior and exterior model boundaries,
-and are made accessible through BoundaryInterface of the Model class.
+Like for the Model or Region, properties can be placed directly on them
+saving storage and supporting subdomain specific treatment of processes.
+
+Boundaries have BOX_BOUNDARY flags, telling whether they are internal or
+external (box flags including IRREGULAR) boundaries.
+Their nodes are flagged correspondingly, which is important because
+it helps in the progressive construction of Boundaries to avoid accidential
+duplication.
+
+The nodes of a boundary have the same flag as the box boundary.
+Nodes within a model are thus flagged INTERNAL unless they already have
+a !NOT box-boundary flag.
+
+Boundaries creation and removal are managed via the BoundaryInterface of the Model class.
+
+@note Since Face is a separate variable placement variables placed on the
+element are accessible via Read, Store or Status operations.
+In practice, however, one always has access to the adjacent higher-dimensional
+Element from which element properties can be obtained, for instance, to compute
+2D solutions of the governing equations on the Boundary.
 
 @section motivation Motivation
 
-To apply conditions, carry out computations or monitor processes
+To apply areal boundary conditions, carry out computations or monitor processes
 at material interfaces or model side boundaries.
 
 To distinguish surface elements by turning them into Face objects 
 for specific processing, and treating
 boundary-specific calculations separately.
 
-@section consequences Consequences
-
-Through the use of boundaries essential conditions and coupling terms
-arising at material interfaces can be computed with greater ease and
-efficiency.
-
-Boundary adds an extra variable placement BOUNDARY, which permits
-targeting of variables like 'basal heat flow' etc.
-
 @author S.K. Matthai
 @author P. Lang
 @date 2010
+@date 2022 major revision
 
 */
 template<uint32_t dim>
@@ -129,18 +142,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
     bool CreateFrom( Region<dim>& lower_dimensional_region,
                      MeshManager<dim>& meshManager,
                      BOX_BOUNDARY boxBoundary );
-    
-    /// creates surface / perimeter line of Faces around the region ( only for volume regions in 3D and surface regions in 2D )
-    bool CreateAround( const Region<dim>& region,
-                       MeshManager<dim>&,
-                       BOX_BOUNDARY boxBoundary = IRREGULAR );
 
-    /// creates surface / perimeter line of Faces between regions (the first is on the inside)
-/* deprecated
-    bool CreateBetween( const Region<dim>&,
-                        const Region<dim>&,
-                        MeshManager<dim>& );
-*/
 
     // ----------------------------------------
     //  geometric properties and integrals
@@ -171,8 +173,8 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
   protected:
 
-    /// establishes connectivity between Faces if not already there, assigns boundary flag and finds perimeter
-    void Initialize( BOX_BOUNDARY boxBoundary );
+    /// assigns box boundary flags to nodes unless thet already have an !NOT value
+    void InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary );
 
     /// returns local variables stored at face integration points
     IntegrationPointVariables FaceIntegrationPointVariables() const;

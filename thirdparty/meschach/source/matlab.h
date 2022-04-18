@@ -27,8 +27,9 @@
 /* matlab.h -- Header file for matlab.c and spmatlab.c for save/load formats */
 
 #ifndef MATLAB_DEF
-
 #define	MATLAB_DEF
+
+#include "meschach_matrix.h"
 
 /* structure required by MATLAB */
 typedef struct {

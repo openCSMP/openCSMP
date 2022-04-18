@@ -28,7 +28,7 @@
 
 
 #include	<cstdio>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 using namespace std;
 

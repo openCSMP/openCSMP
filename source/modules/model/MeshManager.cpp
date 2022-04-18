@@ -1773,6 +1773,58 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
 
 
 
+
+template<uint32_t dim>
+vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
+                                                                             const vector<pair<pair<Element<dim>*,uint32_t>,
+                                                                                               pair<Element<dim>*,uint32_t> > >& face_nbor_elmts )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( face_nbor_elmts.empty() ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::CreateFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         return vector<Face<dim>*>{}; // empty vec
+      }
+    
+    // Property storage
+    const LocalVariables             lvars(dbase.LocalVariablesAt(FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(FACE));
+
+    // 1. Creating Face objects
+    // ------------------------
+    vector<Face<dim>*> face_ptrs;
+    face_ptrs.reserve( face_nbor_elmts.size() );
+    
+    for ( const auto& it : face_nbor_elmts )
+      {
+         // construction of Face
+         // --------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         face_ptrs.push_back( AddFace( it.first.first, it.first.second,
+                                       it.second.first, it.second.second,
+                                       lvars, ivars ) );
+      }
+
+     // 2. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateFacesBetweenNodeSharingElements: created "<< face_ptrs.size() <<" new faces."<< endl;
+     
+     return face_ptrs;
+     
+  } // end CreateInterFacesBetweenNodeSharingElements
+
+
+
+
+
+
+
+
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
@@ -2902,7 +2954,7 @@ void MeshManager<dim>::UpdateConnectivity()
     for ( auto& n : parent_elmts_per_node ) {
          const auto n_parents = static_cast<uint32_t>( n.second.size() );
          n.first->ResizeParentStorage( n_parents );
-         // loopin over the future parents
+         // looping over the future parents
          for ( const auto& it : n.second ) {
            size_t n_nodes{it->Nodes()};
            // assigning them to the node

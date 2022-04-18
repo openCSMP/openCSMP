@@ -225,7 +225,7 @@ void BoundaryInterface_Test::run()
       //_test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
-      const size_t patches_found = model.FindBoundaryNames( search_strings, region_patches_found );
+      const size_t patches_found = model.FindBoundaryByNames( search_strings, region_patches_found );
       // the boundary was decomposed into 6 patches
       _test( patches_found == 6 );
     

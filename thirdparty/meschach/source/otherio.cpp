@@ -31,7 +31,7 @@
 static	char	rcsid[] = "$Id: otherio.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
 #include	"platform.h"
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 using namespace std;
 

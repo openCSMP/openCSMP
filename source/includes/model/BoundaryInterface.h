@@ -74,15 +74,15 @@ class BoundaryInterface {
     boundaryIterator       Boundary( const csmp::Boundary<dim>& );
     size_t                 Boundaries() const;
 
-    /// combines strings (including 'BOUNDARY') into a unique name of the boundary
-    std::string CreateBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
+    /// creates a name for a new boundary that shall be created between two touching unique (non-overlapping) regions
+    std::string CreateBoundaryName( const std::string& inside_region, const std::string& outside_region );
 
     /// searches for a boundary that intersects the supplied higher-dimensional region(s); returns null string ('\0') if not found
-    std::string  FindBoundaryName( const std::set<std::string>& intersected_regions ) const;
+    std::string  FindBoundaryByName( const std::set<std::string>& intersected_regions ) const;
 
     /// searches for the boundaries whose name contains the supplied strings (region names etc.)
-    size_t  FindBoundaryNames( const std::set<std::string>& intersected_regions,
-                               std::set<std::string>& region_patches_found ) const;
+    size_t  FindBoundaryByNames( const std::set<std::string>& intersected_regions,
+                                 std::set<std::string>& region_patches_found ) const;
 
     /// checks whether name contains the strings BOUNDARY or any of the predefined boundary names
     bool IsBoundaryName( const std::string& regionName ) const;
@@ -102,11 +102,11 @@ class BoundaryInterface {
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
                                                                        bool remove_dim_minus1_region=true );
                                                                        
-    /// for  creation of boundaries on the outside of the model; no partitioning based on contacting regions will occur
-    bool CreateExternalBoundaryFrom( const char* dimension_minus1_region, BOX_BOUNDARY boxBoundary = NOT );
+    /// creates boundary on the outside of the model; no partitioning based on contacting regions will occur
+    bool CreateExternalBoundaryFrom( const char* dimension_minus1_region, BOX_BOUNDARY boxBoundary );
 
-    /// converts lower dimensional element regions surrounding the target region and containing strings like BOUNDARY in their name into a Boundary<Face> object
-    bool CreateBoundaryAround( const char* region, BOX_BOUNDARY boxBoundary = NOT );
+    /// creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside
+    bool CreateBoundaryAround( const char* region );
 
     /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
     std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
@@ -134,6 +134,9 @@ class BoundaryInterface {
 
  protected:
  
+    /// combines strings (including 'BOUNDARY') into a unique name of the boundary
+    std::string CreateBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
+
     /// creates boundary from already interconnected faces that also know their parent elements
     bool AddBoundary( const char* name,
                       typename std::vector<Face<dim>*>::iterator facesBegin,

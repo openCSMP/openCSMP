@@ -222,7 +222,9 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : idx_(NULL_IDX),
+  : FiniteElementPolicy<dim,Face>( fem_manager.E( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+    FiniteVolumePolicy<dim,Face>( fvm_manager.Stencil( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+    idx_(NULL_IDX),
     innerParent_(inner_parent),
     outerParent_(outer_parent),
     inner_parent_face_id_(inner_parent_face_id),
@@ -239,8 +241,20 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
          assert( innerParent_ != outerParent_ );
          return;
       }
-    assert( inner_parent->Neighbor(inner_parent_face_id) == outer_parent->Neighbor(outer_parent_face_id) );
+    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+    assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+
+    // resizing the node and neighbor vectors
+    node_connector_.resize(this->FE()->Nodes(),nullptr);
+    face_connector_.resize(this->FE()->Faces(),nullptr);
     
+    // assigning the nodes
+    vector<uint32_t> fnids;
+    inner_parent->FE()->NodesOfFace( inner_parent_face_id_, fnids );
+    uint32_t i_node{0};
+    for ( auto i : fnids )
+      node_connector_[i_node++] = inner_parent->N(i);
+
     // creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
@@ -250,59 +264,6 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
  } // end (constructor that infers face from higher-dimensional parent elements)
 
 
-
-/*
-   // checking the type of element
-   if ( feptr->ElementType() != outer_parent->FE()->ElementTypeOfFace(i) ) {
-        cerr <<"\nFace<"<< dim <<">(ctor: face between parents): mismatch of supplied FiniteElement ";
-        cerr <<"and element type of shared face: ";
-        cerr << parseFiniteElementType( feptr->ElementType() ) <<" vs ";
-        cerr << parseFiniteElementType( outer_parent->FE()->ElementTypeOfFace(i) );
-     }
-*/
-
-/*
-    // finding face which is shared between parents
-    // --------------------------------------------
-    bool  matching_face_found{false};
-    const auto n_faces_inner{innerParent_->Faces()};
-    for ( auto i{0U}; i<n_faces_inner; ++i )
-      if ( inner_parent->Neighbor(i) == outer_parent ) {
-           inner_parent_face_id_ = i;
-           // assigning the finite element
-           const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
-           FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
-           FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager.Stencil(etype) );
-           node_connector_.resize(this->FE()->Nodes(),nullptr);
-           face_connector_.resize(this->FE()->Faces(),nullptr);
-           // assigning the nodes
-           vector<uint32_t> fnids;
-           inner_parent->FE()->NodesOfFace( i, fnids );
-           const auto n_face_nodes{fnids.size()};
-           for ( auto k{0}; k < n_face_nodes; ++k )
-             node_connector_[k] = inner_parent->N( fnids[k] );
-           // finding the number of the shared face in the outer element
-           const auto n_faces_outer{outerParent_->Faces()};
-           for ( auto j{0U}; j<n_faces_outer; ++j )
-             if ( outer_parent->Neighbor(j) == inner_parent ) {
-                  outer_parent_face_id_ = j;
-                  break;
-               }
-           matching_face_found = true;
-           break;
-        }
- 
-    // reporting the failed construction
-    if ( !matching_face_found ) {
-         cerr <<"\n\nFace<"<< dim <<">(ctor: face between parents): parent elements "<< inner_parent->Idx();
-         cerr <<" and "<< outer_parent->Idx() <<" do not seem to share a face:\n";
-         inner_parent->Out();
-         outer_parent->Out();
-         innerParent_ = nullptr;
-         outerParent_ = nullptr;
-         return;
-      }
-*/
 
 
 

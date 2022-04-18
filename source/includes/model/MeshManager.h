@@ -132,6 +132,10 @@ public:
                                                    typename std::vector<Element<dim>*>::iterator first,
                                                    typename std::vector<Element<dim>*>::iterator last );
 
+  /// creates Face objects between face/node sharing Elements updating the connectivity; inside elements are first in pair
+  std::vector<Face<dim>*>  CreateFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
+                                          const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
+
   /// replaces supplied Face objects with InterFace ones adding  necessary nodes and node manifolds, establishing new connectivity; the input Faces are deleted
   std::vector<InterFace<dim>*>  ReplaceFacesByInterFaces( const PropertyDatabase<dim>&,
                                                           typename std::vector<Face<dim>*>::iterator first,
@@ -140,7 +144,7 @@ public:
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
-                        const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
+                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
   Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
@@ -178,7 +182,7 @@ public:
                                          const IntegrationPointVariables& face_integration_point_variables,
                                          bool delete_original_face=true );
 
-  /// the neighbor element pointers are not assigned; @note node pointers must be supplied in CCW order from outside looking in; deduces element type
+  /// creates face and assigns nodes and higher-dimensional neighbors @note the face neighbor element pointers are not assigned;
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,
                             Element<dim>* const outer_parent, uint32_t outer_parent_face_id,
                             const LocalVariables&,

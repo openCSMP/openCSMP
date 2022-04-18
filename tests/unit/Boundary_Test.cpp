@@ -323,7 +323,7 @@ void Boundary_Test::runLegacy()
     pair<string,bool> result = model2D.CreateBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
     _test( result.second == true );
     // this is the name according to the CSMP convention
-    const std::string boundary2D_BETWEENname( std::string("BOUNDARY0_MATRIX_LEFT") + std::string("_") + std::string("MATRIX_RIGHT") );
+    const string boundary2D_BETWEENname( string("BOUNDARY_MATRIX_LEFT") + string("_") + string("MATRIX_RIGHT") );
     _test( model2D.ContainsBoundary( boundary2D_BETWEENname ) );
     Boundary<2>& boundary2D_BETWEEN( model2D.Boundary( result.first ) ); 
     _test( InputElementAreaAsVolumeVariable<2>( model2D, boundary2D_BETWEEN, "face variable" ) > 0 );
@@ -450,7 +450,7 @@ void Boundary_Test::runLegacy()
     // CREATE BETWEEN
     if ( verbose_ ) cout << "\nAttempting to insert csmp:: Boundary for region1  "<< region1Name << " and region2 " << region2Name << " ...\n";
     model.CreateBoundaryBetween( region1Name.data(), region2Name.data() );
-    std::string boundary12Name("BOUNDARY0_");
+    std::string boundary12Name("BOUNDARY_");
     boundary12Name += region1Name;
     boundary12Name += "_";
     boundary12Name += region2Name;
@@ -542,7 +542,6 @@ void Boundary_Test::runLegacy()
     CheckNodeFlags( boundaryHullLeft, IRREGULAR );
     CheckNodeParents( boundaryHullLeft );
 
-
     // 3D TESTS III 
     // ============
     /* TODO: test makes no sense as it tries to build 3D model from 2D mesh
@@ -593,7 +592,7 @@ void Boundary_Test::runLegacy()
       Region<3>& rref( m02.Region("Model") );
       for ( vector<Element<3>*>::const_iterator eit = rref.CellsBegin(); eit != rref.CellsEnd(); ++eit ) 
         {
-          for ( size_t i(0); i < (*eit)->Neighbors(); ++i )
+          for ( auto i{0U}; i < (*eit)->Neighbors(); ++i )
             if ( !(*eit)->Neighbor(i) )
               ++nullNeighborCount; 
         }

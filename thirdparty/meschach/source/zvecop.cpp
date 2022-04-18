@@ -26,7 +26,7 @@
 
 #include	<cstdio>
 #include <cstring>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 #include	"zmatrix.h"
 static	char	rcsid[] = "$Id: zvecop.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 

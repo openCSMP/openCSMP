@@ -89,8 +89,11 @@ class ModelSubDomain {
     /// distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
-    /// creates node vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
+    /// creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
     void CreateNodePointerVector();
+
+    /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
+    void CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells );
 
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
