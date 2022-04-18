@@ -34,7 +34,7 @@
 
 
 #include        <setjmp.h>
-#include        "matrix.h"
+#include        "meschach_matrix.h"
 
 /* Error recovery */
 

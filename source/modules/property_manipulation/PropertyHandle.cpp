@@ -8,7 +8,6 @@
 #include "Region.h"
 #include "Model.h"
 #include "Exception.h"
-#include "meshManagementUtilities.h"
 #include "ErrorHandler.h"
 
 using namespace std;

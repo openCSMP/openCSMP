@@ -8,7 +8,6 @@
 #include "TriangularFacet.h"
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
-#include "meshManagementUtilities.h"
 #include "CSMP_ElementSpecifications.h"
 #include "compareFloats.h"
 

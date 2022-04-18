@@ -82,7 +82,7 @@ void	MEM_ZERO(char *ptr,int len)
 
 static char	rcsid[] = "$Id: extras.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 #define	REGISTER_RICH	1
 

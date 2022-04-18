@@ -6,7 +6,6 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
-#include "meshManagementUtilities.h"
 #include "Box.h"
 #include "PropertyDatabase.h"
 #include "Element.h"
