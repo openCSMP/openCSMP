@@ -324,7 +324,10 @@ void  Node<dim>::AssignPropertyValuesFrom( const Node<dim>& nd )
 
 
 /**
-   Remove duplicates, nullptrs, and sort the vector again.
+    Re-establishes the node neighbors of the node using the parent element connectivity.
+    Since lower-dimensional elements share the nodes with the higher dimensional ones, they are ignored.
+    Only corner nodes are considered in the first pass.
+    Subsequently midside nodes which exist in higher-order elements are detected and their neighbors are assigned.
 */
 template<uint32_t dim>
 uint32_t  Node<dim>::ReassignNeighbors()
@@ -333,8 +336,8 @@ uint32_t  Node<dim>::ReassignNeighbors()
     const auto       n_parents{ Parents() };
     
     for ( auto i{0U}; i < n_parents; ++i )
-      if ( Parent(i) != nullptr &&
-           Parent(i)->IsEquidimensional() ) {
+      // only considering parent elements with the same dimensions as the model
+      if ( Parent(i) && Parent(i)->IsEquidimensional() ) {
            for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
              current_nbors.insert( j );
         }
@@ -474,6 +477,10 @@ existing entries. The values of potential new elements are set to zero.
 template<uint32_t dim>
 void  Node<dim>::ResizeParentStorage( uint32_t n )
   {
+     // while this does not release the memory, it is essential to zap previous content of parent storage
+     parent_node_indexes_.clear();
+     parent_element_pointers_.clear();
+     // resize, initialising contained pointers to null and indices to NOT_INITIALIZED
      parent_node_indexes_.resize( n, NOT_INITIALIZED );
      std::vector<ONE_BYTE_NUMBER>( parent_node_indexes_ ).swap( parent_node_indexes_ );
      parent_element_pointers_.resize( n, nullptr );
@@ -785,6 +792,8 @@ template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vec
        @param first and last are iterators to the nodes of the Face.
        
        @return pair of Element and the face or segment of the element that has the same nodes.
+       
+       @attention method works only if all the parent element pointers that the node stores are valid.
 */
 template<uint32_t dim>
 pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
@@ -806,9 +815,9 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
 
     // creating set of parent elements shared by first and second node
     for ( auto i{0U}; i<n_parents; ++i )
-      if ( (*nit)->Parent(i) ) {
-           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+      if ( (*nit)->Parent(i) != nullptr ) {
+           if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+           if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
            // is this parent also one of the first node
            bool parent_to_all{true};
            for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )

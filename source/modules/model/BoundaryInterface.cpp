@@ -1862,9 +1862,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 
       // 3. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
-      vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
-                                                                       elmts_to_become_faces.begin(),
-                                                                       elmts_to_become_faces.end() );
+      vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
+                                                                               elmts_to_become_faces.begin(),
+                                                                               elmts_to_become_faces.end() );
       // 4. creating the Boundaries from the faces
       // -----------------------------------------
       typename vector<Face<dim>*>::iterator fit{ faces.begin() };
@@ -1974,9 +1974,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
     // 2. replacing the elements by Faces (input elements are deleted and nullptrs returned)
     // -------------------------------------------------------------------------------------
     assert( connectivityCheck<dim>( elmts_to_become_faces.begin(), elmts_to_become_faces.end() ) == 0 );
-    vector<Face<dim>*> faces = model->Mesh().ReplaceElementsByFaces( model->Database(),
-                                                                     elmts_to_become_faces.begin(),
-                                                                     elmts_to_become_faces.end() );
+    vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
+                                                                             elmts_to_become_faces.begin(),
+                                                                             elmts_to_become_faces.end() );
     // 3. creating the Boundaries from the faces
     // -----------------------------------------
     typename vector<Face<dim>*>::iterator fit{ faces.begin() };

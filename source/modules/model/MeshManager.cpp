@@ -1485,9 +1485,9 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
 
 */
 template<uint32_t dim>
-vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyDatabase<dim>& pref,
-                                                              typename vector<Element<dim>*>::iterator first,
-                                                              typename vector<Element<dim>*>::iterator last )
+vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const PropertyDatabase<dim>& pref,
+                                                                      typename vector<Element<dim>*>::iterator first,
+                                                                      typename vector<Element<dim>*>::iterator last )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1495,7 +1495,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
     const long         n_faces_to_build{ distance(first,last) };
 
     if ( n_faces_to_build == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceElementsByFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
     else face_ptrs.reserve( n_faces_to_build );
@@ -1514,51 +1514,28 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
          // 1.1 initial checks and labeling
          // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
-         if constexpr ( dim == 3 )
+         if constexpr ( dim == 3U )
            if ( !(*first)->IsSurface() ) {
                 (*first)->Out();
-                throw csmp::Exception( ERROR, "MeshManager<3>::ReplaceElementsByFaces", "supplied element is not a surface element and cannot be converted to Face.");
+                throw csmp::Exception( ERROR, "MeshManager<3>::ReplaceInteriorElementsByFaces", "supplied element is not a surface element and cannot be converted to Face.");
              }
-         if constexpr ( dim == 2 )
+         if constexpr ( dim == 2U )
            if ( !(*first)->IsLine() ) {
                 (*first)->Out();
-                throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
+                throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceInteriorElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
              }
         
-         // 1.2 simplified construction of Face at model boundary
-         bool boundary_face{true};
-         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit )
-           if ( (*nit)->AtBoundary() == NOT ) {
-                boundary_face = false;
-                break;
-             }
-         if ( boundary_face ) { // finding higher dimensional neighbor and its face idx
-              pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
-              // creating Face, storing a pointer to it
-              face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
-              // deleting the underlying element
-              auto colony_it = elements_.get_iterator( (*first) );
-              assert( colony_it != elements_.end() );
-              elements_.erase( colony_it );
-              (*first) = nullptr;
-              // numbering new Face consecutively
-              face_ptrs.back()->Idx( face_idx++ );
-           }
-           
-         // 1.3 more involved construction of Face object in the interior of a model
-         //    (both neighbors are present)
-         else { // finding higher-dimensional neighbors (2)
-              pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
-              assert( pelmts.first  != nullptr );
-              assert( pelmts.second != nullptr );
-              // finding the face numbers of the parent elements
-              pair<uint32_t,uint32_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
-              // creating Face, storing a pointer to it
-              face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first, pelmts.second,
-                                                         face_ids.first, face_ids.second, lvars, ivars ) );
-              // numbering new Face consecutively
-              face_ptrs.back()->Idx( face_idx++ );
-           }
+         // 1.2 construction of Face object in the interior of a model where both neighbors are present
+         pair<Element<dim>*,Element<dim>*>  pelmts = parentElementsSharedByFace<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         assert( pelmts.first  != nullptr );
+         assert( pelmts.second != nullptr );
+         // finding the face numbers of the parent elements
+         pair<uint32_t,uint32_t> face_ids = findAdjacentElementFaces( pelmts.first, pelmts.second );
+         // creating Face, storing a pointer to it; deleting lower-dimensional element from which it was constructed
+         face_ptrs.push_back( ReplaceElementByFace( (*first), pelmts.first, pelmts.second,
+                                                   face_ids.first, face_ids.second, lvars, ivars ) );
+         // numbering new Face consecutively
+         face_ptrs.back()->Idx( face_idx++ );
        
          // NOTE: no Element erasure yet because this would invalidate node parent vector, corrupting this functionality
          first++;
@@ -1567,7 +1544,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
      //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
 #ifdef MESH_MANAGER_DEBUG
-     cout <<"\n\nMeshManager: ReplaceElementsByFaces: created "<< faces_.size() - n_faces;
+     cout <<"\n\nMeshManager: ReplaceInteriorElementsByFaces: created "<< faces_.size() - n_faces;
      cout <<" faces and deleted "<< n_elements - elements_.size() <<" elements."<< endl;
 #endif
 
@@ -1578,7 +1555,113 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceElementsByFaces( const PropertyData
      
      return face_ptrs;
      
- } // end ReplaceElementsByFaces
+ } // end ReplaceInteriorElementsByFaces
+
+
+
+
+/**
+   replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the Elements are deleted afterwards, setting input pointers to NULL
+   
+      the Node flags of the Element are used to determine whether this is a boundary face
+      
+     @note RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
+     @code
+     elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+     @endcode
+
+*/
+template<uint32_t dim>
+vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const PropertyDatabase<dim>& pref,
+                                                                      typename vector<Element<dim>*>::iterator first,
+                                                                      typename vector<Element<dim>*>::iterator last )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    vector<Face<dim>*> face_ptrs;
+    const long         n_faces_to_build{ distance(first,last) };
+
+    if ( n_faces_to_build == 0U ) {
+         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
+         return face_ptrs;
+      }
+    else face_ptrs.reserve( n_faces_to_build );
+    
+    const LocalVariables             lvars(pref.LocalVariablesAt(FACE));
+    const IntegrationPointVariables& ivars(pref.IntegrationPointVariablesAt(FACE));
+    
+    // 1. converting Elements into Faces
+    // ---------------------------------
+    size_t n_elements = elements_.size();
+    size_t n_faces    = faces_.size();
+    size_t face_idx{0};
+    // remembering the first iterator
+    auto first2{ first };
+    
+    while( first != last )
+      {
+         // 1.1 initial checks and labeling
+         // (input range must not contain any nullptrs)
+         assert( (*first) != nullptr );
+         if constexpr ( dim == 3 )
+           if ( !(*first)->IsSurface() ) {
+                (*first)->Out();
+                throw csmp::Exception( ERROR, "MeshManager<3>::ReplaceBoundaryElementsByFaces", "supplied element is not a surface element and cannot be converted to Face.");
+             }
+         if constexpr ( dim == 2 )
+           if ( !(*first)->IsLine() ) {
+                (*first)->Out();
+                throw csmp::Exception( ERROR, "MeshManager<2>::ReplaceBoundaryElementsByFaces", "supplied element is not a line element and cannot be converted to Face.");
+             }
+        
+         // 1.2 construction of Face at model boundary
+#ifdef DEBUG
+         bool boundary_dim_m1_elmt{true};
+         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); ++nit )
+           if ( (*nit)->AtBoundary() == NOT ) {
+                boundary_dim_m1_elmt = false;
+                break;
+             }
+         assert( boundary_dim_m1_elmt == true );
+#endif
+         // finding higher dimensional neighbor and its face idx
+         pair<Element<dim>* const,uint32_t> pelmt = parentElement<dim>( (*first)->NodesBegin(), (*first)->NodesEnd() );
+         // creating Face, storing a pointer to it
+         face_ptrs.push_back( AddBoundaryFace( pelmt.first, pelmt.second, lvars, ivars ) );
+         // numbering new Face consecutively
+         face_ptrs.back()->Idx( face_idx++ );
+           
+         // NOTE: no Element erasure yet because this would invalidate node parent vector, corrupting this functionality
+         first++;
+      }
+      
+     // 2. deleting the elements from which the faces were created
+     // ----------------------------------------------------------
+     while( first2 != last ) {
+          elements_.erase( elements_.get_iterator(*first2) );
+          (*first2) = nullptr;
+          first2++;
+       }
+
+     // RANGE ERASE DOES ONLY WORK FOR A CONSECUTIVE RANGE OF ITERATORS WHERE it1 < it2
+     //elements_.erase( (*elmt_iterators.begin()), (*elmt_iterators.end()) );
+#ifdef MESH_MANAGER_DEBUG
+     cout <<"\n\nMeshManager: ReplaceBoundaryElementsByFaces: created "<< faces_.size() - n_faces;
+     cout <<" faces and deleted "<< n_elements - elements_.size() <<" elements."<< endl;
+     size_t surface_elmts{0};
+     for ( auto& it : elements_ ) if ( it.IsSurface() ) surface_elmts++;
+     cout <<"\t\t"<<"there are "<< surface_elmts <<" surface elements left in the model."<< endl;
+#endif
+
+     // 3. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     // TODO: these are global changes! - do this only for nodes that are affected
+     UpdateConnectivity();
+     
+     return face_ptrs;
+     
+ } // end ReplaceBoundaryElementsByFaces
+
 
 
 /*
@@ -2941,10 +3024,11 @@ void MeshManager<dim>::UpdateConnectivity()
     // counting the parent elements of each node
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
     for ( auto& it : elements_ ) {
-        const auto nodes_end{it.NodesEnd()};
+        assert( it.FE() );
+        assert( it.FV() );
+        const auto nodes_end{ it.NodesEnd() };
         for ( auto nit = it.NodesBegin(); nit != nodes_end; ++nit ) {
-             pair<typename map<Node<dim>*,set<Element<dim>*> >::iterator,bool>
-               mit = parent_elmts_per_node.insert( make_pair( (*nit), set<Element<dim>*>{ &it } ) );
+             auto mit = parent_elmts_per_node.insert( make_pair( (*nit), set<Element<dim>*>{ &it } ) );
              if ( mit.second == false )
                (*mit.first).second.insert( &it );
           }
@@ -2956,7 +3040,7 @@ void MeshManager<dim>::UpdateConnectivity()
          n.first->ResizeParentStorage( n_parents );
          // looping over the future parents
          for ( const auto& it : n.second ) {
-           size_t n_nodes{it->Nodes()};
+           const auto n_nodes{it->Nodes()};
            // assigning them to the node
            for ( auto j{0U}; j<n_nodes; ++j )
              if ( n.first == it->N(j) ) {

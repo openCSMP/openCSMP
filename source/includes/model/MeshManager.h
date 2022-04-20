@@ -127,12 +127,17 @@ public:
   template<template<uint32_t> class CELL>
   size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
   
-  /// replaces supplied lower-dimensional elements with Face objects, establishing their connectivity; the input Elements are deleted
-  std::vector<Face<dim>*>  ReplaceElementsByFaces( const PropertyDatabase<dim>&,
-                                                   typename std::vector<Element<dim>*>::iterator first,
-                                                   typename std::vector<Element<dim>*>::iterator last );
+  /// replaces supplied lower-dimensional elements inside of a model with Face objects, establishing their connectivity; the input Elements are deleted
+  std::vector<Face<dim>*>  ReplaceInteriorElementsByFaces( const PropertyDatabase<dim>&,
+                                                           typename std::vector<Element<dim>*>::iterator first,
+                                                           typename std::vector<Element<dim>*>::iterator last );
 
-  /// creates Face objects between face/node sharing Elements updating the connectivity; inside elements are first in pair
+   /// replaces supplied lower-dimensional elements at the external boundary of a model with Face objects, establishing their connectivity; the input Elements are deleted
+  std::vector<Face<dim>*>  ReplaceBoundaryElementsByFaces( const PropertyDatabase<dim>&,
+                                                           typename std::vector<Element<dim>*>::iterator first,
+                                                           typename std::vector<Element<dim>*>::iterator last );
+
+ /// creates Face objects between face/node sharing Elements updating the connectivity; inside elements are first in pair
   std::vector<Face<dim>*>  CreateFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
