@@ -666,41 +666,13 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().Delete( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().DeleteAndRepairConnnectivity( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 
   // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
   model.Mesh().UpdateConnectivity();
-  
-  /*
-  for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector2();
-    rit->second.EstablishNeighborConnectivity();
-    rit->second.IdentifyPerimeter();
-  }
-
-  // updating unique regions
-  for ( auto rit = model.UniqueRegionsBegin(); rit != model.UniqueRegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector2();
-    rit->second.EstablishNeighborConnectivity();
-    rit->second.IdentifyPerimeter();
-  }
-  // updating boundaries
-  for ( auto bit = model.BoundariesBegin(); bit != model.BoundariesEnd(); ++bit ) {
-    //bit->second.UpdateElementPointerVector( model.Mesh() );
-    bit->second.CreateNodePointerVector2();
-    bit->second.EstablishNeighborConnectivity();
-    bit->second.IdentifyPerimeter();
-  }
-  // updating split boundaries
-  for ( auto sbit = model.SplitBoundariesBegin(); sbit != model.SplitBoundariesEnd(); ++sbit ) {
-    sbit->second.CreateNodePointerVector2();
-    sbit->second.EstablishNeighborConnectivity();
-    sbit->second.IdentifyPerimeter();
-  }
-  */
   
 } // end Remove_NO_DATA_ElementsInModel
 

@@ -117,30 +117,36 @@ from the model, potentially turning it into a disconnected group of mesh patches
        @date 15/8/2020
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( const char* splitboundary )
+void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( const char* splitboundary,
+                                                                              bool erase_interfaces )
  {
-    if ( !ContainsSplitBoundary(splitboundary) ) {
+     if ( !ContainsSplitBoundary(splitboundary) ) {
          ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface::RemoveSplitBoundary",
                                           splitboundary, "split boundary is not contained in model; nothing was done");
          return;
       }
-      
-    // locating the boundary in the split boundary map
-    splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary );
-    if ( spit != splitBoundaryMap_.end() ) {
-         // deleting the split boundary
-         splitBoundaryMap_.erase( (*spit).first );
-         
-         // TODO: remove duplicated nodes again
-         cout <<"\n"<<"SplitBoundaryInterface<"<< dim <<">::RemoveSplitBoundary: removed split boundary named '";
-         cout << splitboundary <<"' albeing retaining duplicated nodes."<< endl;
-         return;
-      }
+    
+    SPLITBOUNDARY_COMPLEX<dim>&  splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>& >(*this) );
+    csmp::SplitBoundary<dim>&    split_boundary = splitBoundaryComplex.SplitBoundary( splitboundary );
 
-    // if the split boundary was not contained in the map, feedback is given
-    ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface::RemoveSplitBoundary", splitboundary,
-                                    "split boundary was not contained in SplitBoundary map");
+     // erasing the faces
+     if ( erase_interfaces ) {
+         // getting the mesh manager to delete faces and nodes and fix up the connectivity
+         splitBoundaryComplex.Mesh().DeleteAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
+       }
+
+     // deleting the split boundary
+     splitBoundaryMap_.erase( splitboundary );
+     
+     // TODO: should we remove duplicated nodes again?
+     cout <<"\n"<<"SplitBoundaryInterface<"<< dim <<">::RemoveSplitBoundary: removed split boundary named '";
+     cout << splitboundary <<"' albeing retaining duplicated nodes."<< endl;
+
   } // end RemoveSplitBoundary
+
+
+
+
 
 
 /**
@@ -158,18 +164,17 @@ from the model, potentially turning it into a disconnected group of mesh patches
        @date 15/8/2020
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary )
+void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( csmp::SplitBoundary<dim>& splitboundary,
+                                                                              bool erase_interfaces )
  {
-    // locating the boundary in the split boundary map
-    splitBoundaryIterator  spit = splitBoundaryMap_.find( splitboundary.Name() );
-    // if the addresses are the same
-    if ( spit !=  splitBoundaryMap_.end() ) {
-         // if the split boundary is contained in the map, it is erased
-         splitBoundaryMap_.erase( (*spit).first );
-         return;
-      }
+     // erasing the faces
+     if ( erase_interfaces ) {
+         SPLITBOUNDARY_COMPLEX<dim>&  splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
+         // getting the mesh manager to delete faces and nodes and fix up the connectivity
+         splitBoundaryComplex.Mesh().DeleteAndRepairConnnectivity( splitboundary.CellVector().begin(), splitboundary.CellVector().end() );
+       }
 
-    ErrorHandler::Instance().notice( WARNING, "SplitBoundaryInterface<dim,Model>::RemoveBoundary", "boundary does not exist" );
+     splitBoundaryMap_.erase( splitboundary.Name() );
     
   } // end RemoveSplitBoundary
 
@@ -645,10 +650,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     }
 
   // removes boundary also deleting its interface objects
-  splitboundaryComplex->RemoveBoundary( boundary );
-
-throw csmp::Exception( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom(boundary)",
-                      " the node vector of the region on the outside also has to be updated ");
+  const bool erase_faces{ true };
+  splitboundaryComplex->RemoveBoundary( boundary, erase_faces );
 
   cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
   cout << splitboundaryName <<"' successfully.\n\n";

@@ -1820,6 +1820,7 @@ This method assumes that elements are uniquely and throughgoingly numbered.
 The Elements are build so that their normals point from region 1 to region 2.
 Variable storage is assigned for both, the elements and region itself.
 */
+/* TODO: refactor using new functionality
 template<uint32_t dim>
 bool Region<dim>::CreateBetween( MeshManager<dim>& meshManager,
                                  const FiniteElementManager& finiteElementManager,

@@ -374,9 +374,9 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -410,9 +410,9 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
   const std::string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
 
   // visualization
   VTU_Interface<dim> vtu( *model );
@@ -451,9 +451,9 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model(nullptr);
   if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
   else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true, true ));
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
 
   string  spliboundary_regions_file( model_name );
 

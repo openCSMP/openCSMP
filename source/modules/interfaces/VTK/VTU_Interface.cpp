@@ -282,11 +282,14 @@ map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::Get
     return splitBoundaryConnectivityFiles_multiblock_;
 }
 
+
+
 // INTERFACES
 // ----------------
 
-/// provide aliases for csmp variables that will be shown in vtu instead
-/// returns if existing was empty
+/** provide aliases for csmp variables that will be shown in vtu instead
+    @return returns if existing was empty
+*/
 template<uint32_t dim>
 bool VTU_Interface<dim>::VariableNameAliases( const map<string,string>& variableNameAliases )
 {
@@ -294,6 +297,7 @@ bool VTU_Interface<dim>::VariableNameAliases( const map<string,string>& variable
   variableNameAliases_ = variableNameAliases;
   return variableNameAliasesWasEmpty;
 }
+
 
 /// for a given csmp variable, returns output alias if existing. returns variable name otherwise
 template<uint32_t dim>
@@ -308,15 +312,18 @@ string VTU_Interface<dim>::FindVariableOutputAlias( const string& csmpVariableNa
   return outputAliasName;
 }
 
-/// allows the creation of an index-to-name correspondance.  If the resulting container is
-/// empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
-/// If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
-/// Julian, July 2014
+
+/** allows the creation of an index-to-name correspondance.  If the resulting container is
+    empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
+    If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
+    Julian, July 2014
+*/
 template<uint32_t dim>
 void VTU_Interface<dim>::CreateArrayComponentPrefixNames(string array_var_name, vector<string>& index_to_name )
 {
     this->array_index_to_name_.insert(make_pair(array_var_name,index_to_name));
 }
+
 
 /// Allows adding text after the timestep number to the vtu filename. By default, this string is empty.
 template<uint32_t dim>
@@ -325,11 +332,13 @@ void VTU_Interface<dim>::SetSuffixText(string text)
     this->suffix_text_=text;
 }
 
+
 template<uint32_t dim>
 const string& VTU_Interface<dim>::GetProblemTitle( ) const
 {
     return this->problemTitle_;
 }
+
 
 /// control whether '0' is appended
 template<uint32_t dim>
@@ -337,22 +346,30 @@ void VTU_Interface<dim>::OmitZeroInFileName( bool omitZeroInFileName )
 {
     omitZeroInFileName_ = omitZeroInFileName;
 }
+
+
 template<uint32_t dim>
 bool VTU_Interface<dim>::OmitZeroInFileName() const
 {
     return omitZeroInFileName_;
 }
+
+
 template<uint32_t dim>
 void VTU_Interface<dim>::OutputElementVectorAndTensorDataAtCellCenters( bool flag )
 {
    elementVecAndTensDataAtCellCenters_ = flag;
 }
 
+
+
 template<uint32_t dim>
 void VTU_Interface<dim>::OutputRegionVectorAndTensorDataAtRegionCenters( bool flag )
 {
    regionVecAndTensDataAtCellCenters_ = flag;
 }
+
+
 
 template<uint32_t dim>
 string VTU_Interface<dim>::OutputFileNamePrefix( const string& fileName )
@@ -382,6 +399,8 @@ string VTU_Interface<dim>::OutputFileNamePrefix( const string& fileName )
     return fileName;
 }
 
+
+
 template<uint32_t dim>
 string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const string& fileName, const string& domainName )
 {
@@ -405,6 +424,8 @@ string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const string& fil
 
     return outputName;
 }
+
+
 
 template<uint32_t dim>
 template<class T>
@@ -835,7 +856,8 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& initial_file_name,
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
     string fileNamePrefix( this->OutputFileNamePrefix( initial_file_name ) );
-    fileNamePrefix = DomainSpecificOutputFileNamePrefix( fileNamePrefix, DomainName(subDomain) );
+    // SKM_FIX: this method used to append (BOUNDARY) or (SPLITBOUNDARY). This is not needed because the name already tells this
+    // fileNamePrefix = DomainSpecificOutputFileNamePrefix( fileNamePrefix, DomainName(subDomain) );
     string relativeFileNamePrefix( DomainSpecificOutputFileNamePrefix( initial_file_name, DomainName(subDomain) ) );
 
     // split list into separate ones for node and element placed indices

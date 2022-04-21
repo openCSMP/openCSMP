@@ -394,7 +394,8 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     model.SplitBoundariesOut();
 
     // 2. remove split boundary 1 here before creating new ones in the same place
-    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+    const bool erase_interfaces{ true };
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str(), erase_interfaces ); // INTERFACE1
         
     model.RegionsOut();
 

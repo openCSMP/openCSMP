@@ -73,12 +73,12 @@ const Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const string& 
                            "RegionsInterface<dim,REGION_COMPLEX>::Region: ",
                            "regions search string is empty" );
 
-  // first a look in the unique group list
+  // first a look in the unique region list
   typename map<string, csmp::Region<dim> >::const_iterator  iter( uniqueRegionMap_.find( region_name ) );
   if ( iter != uniqueRegionMap_.end() )
     return (*iter).second;
 
-  // now a look at the generic group list
+  // now a look at the generic region list
   iter = regionMap_.find( string( region_name ) );
 
   if ( iter != regionMap_.end() )
@@ -292,7 +292,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
              // retrieving the elements by their IDs and assigning them  to the region
              (*it.first).second.Accumulate( mit.second.begin(), mit.second.end() );
 
-             // removing the group if it contains no elements
+             // removing the region if it contains no elements
              if ( (*it.first).second.Cells() == 0U ) {
                  uniqueRegionMap_.erase( it.first );
                  csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionsFromMaterialIDs",
@@ -314,13 +314,11 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
 
 
 /**
-Removes named Region object and its elements and nodes.
 
-@param  regionName The name of the group object which shall be removed.
+Removes named Region object and (optionally) its elements and nodes.
 
-@section messages Messages
-
-@note: this can trigger removal of elements
+@param  regionName The name of the region object which shall be removed.
+@param  delete_elmts_and_update_connectivity  gets MeshManager to delete elements and nodes and rebuilt local connectivity.
 
 @note If the region which shall be removed does not exist, the method reports a warning.
 
@@ -333,14 +331,30 @@ Mesh().DetachOutsideNeighborsAlongPerimeter(  ModelSubdomain&  );
 
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName )
+void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
+                                                         bool erase_elmts_and_update_connectivity )
 {
-  // check whether region exists (should be a notice only, nothrow)
-  if ( !ContainsRegion( regionName ) )
-    throw csmp::Exception( WARNING,
-                           "RegionsInterface<dim,Model>::RemoveRegion",
-                           "region did not exist: ",
-                           regionName );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // 0. check whether region exists (should be a notice only, nothrow)
+  if ( !ContainsRegion( regionName ) ) {
+       csmp_error.notice( WARNING, "RegionsInterface<dim,Model>::RemoveRegion",
+                         "region did not exist: ", regionName );
+       return;
+    }
+    
+  if ( erase_elmts_and_update_connectivity && !IsUnique(regionName) ) {
+       csmp_error.notice( ERROR, "RegionsInterface<dim,Model>::RemoveRegion",
+                          regionName, "is potentially overlapping other regions; case not handled yet" );
+       return;
+    }
+
+  REGION_COMPLEX<dim>&  regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
+  csmp::Region<dim>&    region = this->Region( regionName );
+
+  if ( erase_elmts_and_update_connectivity )
+    // getting the mesh manager to delete elements and nodes and fix up the connectivity
+    regionComplex.Mesh().DeleteAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
 
   // finding the region in the corresponding map
   typename map<string, csmp::Region<dim> >::iterator
@@ -356,6 +370,43 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName 
     }
 
 } // end RemoveRegion
+
+
+
+/* NOW IN MESHMANAGER
+
+  // 1. looking at the parent elements of the regions perimeter nodes to determine which elements must be updated
+  //    after the deletion
+  if ( delete_elmts_and_update_connectivity )
+    {
+       // 1.1 remembering elements and nodes that will need to be updated
+       vector<Element<dim>*> elmts_to_update;
+       vector<Node<dim>*>    nodes_to_update;
+       elmts_to_update.reserve( region.Cells() );
+       nodes_to_update.reserve( region.PerimeterNodes() );
+       
+       // since perimeter nodes are shared between regions, they will not be deleted
+       for ( auto nit=region.PerimeterNodesBegin(); nit!=region.NodesEnd(); ++nit ) {
+             nodes_to_update.push_back( (*nit) );
+             for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
+                assert( (*nit)->Parent(i) != nullptr );
+                // recording elements, but only if they do not belong to the region
+                if ( !region.Contains( (*nit)->Parent(i) ) )
+                  elmts_to_update.push_back( (*nit)->Parent(i) );
+             }
+         }
+       // making the element vector unique
+       sort( elmts_to_update.begin(), elmts_to_update.end() );
+       elmts_to_update.erase( unique( elmts_to_update.begin(), elmts_to_update.end() ), elmts_to_update.end() );
+       
+       // 1.2 getting the mesh manager to delete the elements
+       regionComplex.Mesh().DeleteAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
+       
+       // 1.3 updating the connectivity
+       regionComplex.Mesh().ConnectNodesToParentsAndNeighbors( elmts_to_update.begin(), elmts_to_update.end() );
+    }
+*/
+
 
 
 // DEBUG - check element vector for duplicates (OK)
@@ -641,23 +692,23 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
 
 
 /**
-RegionsFromPropertyValues() defines one group for each value of the target
-property.  The user will be prompted to assign a name to each group as these
-are being created. The names of successfully created groups are returned
+RegionsFromPropertyValues() defines one region for each value of the target
+property.  The user will be prompted to assign a name to each region as these
+are being created. The names of successfully created regions are returned
 into the list argument.
 
 @param prop the property on the basis of whose variations
-the group regions will be defined.
+the region regions will be defined.
 
-The names of the newly created groups are returned into an STL set
+The names of the newly created regions are returned into an STL set
 which uses the less<> functional to order the names alphabetically. If
-the set is not empty, it will be erased before the group names are
+the set is not empty, it will be erased before the region names are
 stored within it.
 
 @section implementation Implementation
 
 Thus far, the method only handles scalar variables. Since there is always
-just one property value per element, the groups will be unique.
+just one property value per element, the regions will be unique.
 
 @section application Application
 
@@ -669,7 +720,7 @@ produce as many Regions as there are finite-elements in the mesh.
 @section messages Messages
 
 The method is interactive and will prompt the user for the names of the
-groups which are created in the course of its execution.
+regions which are created in the course of its execution.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( const char* prop,
@@ -731,7 +782,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromPropertyValues( cons
                              "Property placement not recognized; presumable placement REGION is not allowed in this context. " );
   }
 
-  // 2. Prompting user for group names and making groups
+  // 2. Prompting user for region names and making regions
   // ---------------------------------------------------
   cout << "\nModel<" << dim << ">::FormRegionsFromPropertyValues: Generating region names";
   cout << " corresponding to unique values of the property: '" << prop << "' ";
@@ -832,7 +883,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
     if ( it.second ) {
         (*it.first).second.Accumulate( first, last );
 
-        // removing the group if it contains no elements
+        // removing the region if it contains no elements
         if ( (*it.first).second.Cells() == 0U ) {
           regionMap_.erase( it.first );
           csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom",
@@ -855,29 +906,29 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
 /**
 FormAndAddDomain() used combined constraints suppplied in the form of
 a constraints object to determine which elements shall be used to
-form a (unique/non-unique) group with the target name.
+form a (unique/non-unique) region with the target name.
 
-@param region_name the name of the group that shall be formed and a reference to
+@param region_name the name of the region that shall be formed and a reference to
 the initialized PropertyConstraints object which must contain the
 ranges of the variables that shall be used to discriminate elements
-that shall be accumulated into the group.
+that shall be accumulated into the region.
 
 @section application Application
 
-To form groups from dynamic criteria like the combined pressure and
+To form regions from dynamic criteria like the combined pressure and
 temperature ranges that get computed via Algorithms or other criteria
 that are not known at the onset of a computation.
 
 @section messages Messages
 
 The method reports an INFO if no values fall into the target ranges and
-a FATAL_ERROR if the group cannot be created because the name is already
+a FATAL_ERROR if the region cannot be created because the name is already
 in use.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_name,
                                                              PropertyConstraints& constraints,
-                                                             bool unique_group )
+                                                             bool unique_region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -895,7 +946,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
 
   // the 'bool' member of pair indicates whether insertion into map worked or not
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>  it;
-  if ( unique_group )
+  if ( unique_region )
     it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
   else
     it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
@@ -907,7 +958,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
       regionTraits_.insert( make_pair( region_name, constraints ) );
       (*it.first).second.AccumulateWithinRange( regionComplex->Mesh(), constraints );
 
-      // removing the group if it contains no elements
+      // removing the region if it contains no elements
       if ( (*it.first).second.Cells() == 0U ) {
         regionMap_.erase( it.first );
         csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom",
@@ -932,47 +983,47 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
 
 
 /**
-Forms a group of finite elements who host property values which lie within
-a user-specified range. The new group is added to the Model group map.
+Forms a region of finite elements who host property values which lie within
+a user-specified range. The new region is added to the Model region map.
 
 The selection process implies that this type of region can include several
 regions inside your problem domain. For instance, all shale horizons as
-identified by a clay content between 50 to 100% may constitute a new group.
+identified by a clay content between 50 to 100% may constitute a new region.
 
-When a new group is formed a group internal flag will be assigned to
+When a new region is formed a region internal flag will be assigned to
 each node, constraint point and element.
-There are two group-internal object flags, PLAIN and BOUNDARY. When a
-new group is formed, the Region method IdentifyBoundaryAs() assigns the
-group-internal object flags, depending on whether the nodes, constraint
-points or elements in the group lie at the group boundary or inside of
-the group. Elements are assigned a boundary flag if at least one of
-their faces coincides with the group boundary.
+There are two region-internal object flags, PLAIN and BOUNDARY. When a
+new region is formed, the Region method IdentifyBoundaryAs() assigns the
+region-internal object flags, depending on whether the nodes, constraint
+points or elements in the region lie at the region boundary or inside of
+the region. Elements are assigned a boundary flag if at least one of
+their faces coincides with the region boundary.
 
 @section arguments Input Arguments
 
-The newly formed group of finite elements will have a name specified
+The newly formed region of finite elements will have a name specified
 by the first method argument. The selection criterion is that values of
 the physical variable identified by the second argument, are within the
 open interval given by [min,max].
 
 @section implementation Implementation
 
-Once all member elements of the new group have been identified, the group
+Once all member elements of the new region have been identified, the region
 analyzes which elements, nodes, and constraint points lie at its boundary.
-Subsequently the group is added to a map of groups that is contained in
+Subsequently the region is added to a map of regions that is contained in
 the Model object.
 
-Inn this and other group-forming methods Regions are first added to the
-group map before they are filled, avoiding a costly copy construction
-of non-empty groups.
+Inn this and other region-forming methods Regions are first added to the
+region map before they are filled, avoiding a costly copy construction
+of non-empty regions.
 
 @section application Application
 
-To form groups on the basis of characteristic material properties.
+To form regions on the basis of characteristic material properties.
 
 @section messages Messages
 
-A warning is issued if a group with the same name already exists or if no
+A warning is issued if a region with the same name already exists or if no
 elements with the desired properties were found.
 
 */
@@ -980,7 +1031,7 @@ template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_name,
                                                              const char* prop,
                                                              double min, double max,
-                                                             bool unique_group )
+                                                             bool unique_region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -998,7 +1049,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
 
   // the 'bool' member of pair indicates whether insertion into map worked or not
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>  it;
-  if ( unique_group )
+  if ( unique_region )
     it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
   else
     it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
@@ -1007,7 +1058,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
     {
       (*it.first).second.AccumulateWithinRange( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh(), prop, min, max );
 
-      // removing the group if it contains no elements
+      // removing the region if it contains no elements
       if ( (*it.first).second.Cells() == 0U ) {
         regionMap_.erase( it.first );
         csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRegionFrom",
@@ -1140,7 +1191,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
   if ( ignore_domain_type_identifiers ) topo.OutputAll( regions );
   else topo.OutputRegions( regions );
 
-  // 2. assigning the regions to groups in the Model
+  // 2. assigning the elements to regions in the Model
   cout << "\nRegionInterface::FormRegionsFrom: Forming the regions: ";
 
   uint32_t new_regions( 0U );
@@ -1163,7 +1214,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
           (*it.first).second.AccumulateByNumber( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh(), element_ids );
           element_ids.erase( element_ids.begin(), element_ids.end() );
 
-          // removing the group if it contains no elements
+          // removing the region if it contains no elements
           if ( (*it.first).second.Cells() == 0U ) {
               uniqueRegionMap_.erase( it.first );
               csmp_error.notice( WARNING, "RegionsInterface::FormRegionsFrom",
@@ -1206,7 +1257,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
       
       @attention The master region that was successfully partitioned is removed.
 
-      @param group The name of the region that may be non-contiguous.
+      @param region The name of the region that may be non-contiguous.
       If so, new sbregions will be created to the name of which integers
       will be appended that correspond to the number of subdomains
       that are created in this process.
@@ -1221,66 +1272,66 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
 
       @section application Application
 
-      To automatically partition groups that consist of a multitude of
+      To automatically partition regions that consist of a multitude of
       non-contiguous model subdomains so that the latter can be addressed
       individually in computations.
 
       @section messages Messages
 
-      The method will report if the group is already contiguous in which
+      The method will report if the region is already contiguous in which
       case no changes are made.
       
       @attention this method cannot be applied to the region model or the master region
   */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* group )
+size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions( const char* region )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-      if ( string("Model") == group ) {
+      if ( string("Model") == region ) {
          csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions:",
                            "this operation is not allowed for region 'Model' or the master region." );
             return 0U;
         }
      
       // renumbering elements and nodes of model
-      csmp::Region<dim>&  gref(Region(group));
-      const bool          unique_group(IsUnique(group));
+      csmp::Region<dim>&  gref(Region(region));
+      const bool          unique_region(IsUnique(region));
 
-      // getting a set of the element numbers of the target group
+      // getting a set of the element numbers of the target region
       set<Element<dim>*>  elements( gref.CellsBegin(), gref.CellsEnd() );
 
-      // detecting via a flood-fill whether the group can be partitioned, else nothing is done
+      // detecting via a flood-fill whether the region can be partitioned, else nothing is done
       set<Element<dim>*>  elements_contiguous_subset;
       floodFill( gref.E(0), elements_contiguous_subset );
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( elements.size() <= elements_contiguous_subset.size() ) {
            cout <<"\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions: ";
-           cout <<"region '"<< group <<"' is already contiguous, nothing was done."<< endl;
+           cout <<"region '"<< region <<"' is already contiguous, nothing was done."<< endl;
            return 0U;
         }
 
       // else partitions can be created
-      string  region_name(group);
+      string  region_name(region);
       string  subregion_name;
-      char         num[128];
-      size_t       n_subgroups(1);
+      char    num[128];
+      size_t  n_subgroups(1);
     
-      // creating new contiguous group from the element subset
+      // creating new contiguous region from the element subset
       while ( !elements.empty() )
         {
-           // creating name of contiguous subgroup
+           // creating name of contiguous subregion
            sprintf( num, "%lu", n_subgroups );
            subregion_name = region_name + num;
            if ( n_subgroups == 1U ) {
                  cout <<"\nModel<"<< dim <<">::PartitionRegionIntoContiguousSubRegions: ";
-                 cout <<"region '"<< group <<"' is divided into the subregion(s):\n";
+                 cout <<"region '"<< region <<"' is divided into the subregion(s):\n";
              }
            cout <<"\t\t\t'"<< subregion_name <<"'";
            cout <<" ("<< elements_contiguous_subset.size() <<" elmts)"<< endl;
          
-           // creating either a unique or non-unique group depending on uniqueness of original region
+           // creating either a unique or non-unique region depending on uniqueness of original region
            pair<typename map<string,csmp::Region<dim> >::iterator,bool>
-             it = ( unique_group ) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
+             it = ( unique_region ) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
                                    : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
            if ( !it.second )
              throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions",
@@ -1294,7 +1345,7 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
                 (*it.first).second.LVS( gref.LVS() );
              }
          
-           // subtracting the elements that constitute the new group from the remaining element list
+           // subtracting the elements that constitute the new region from the remaining element list
            for ( typename set<Element<dim>*>::const_iterator
                  sit=elements_contiguous_subset.begin(); sit!=elements_contiguous_subset.end(); ++sit )
              elements.erase( (*sit) );
@@ -1306,9 +1357,11 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
            n_subgroups++;
         }
 
-      // if the region has been partitioned succesfully and its name is not model, it will be removed
-      if ( IsUnique(group) )
-        RemoveRegion( group );
+      // if the region has been partitioned successfully and its name is not model, it will be removed
+      if ( IsUnique( region ) ) {
+           const bool also_remove_elmts{ false };
+           RemoveRegion( region, also_remove_elmts );
+        }
 
       return n_subgroups;
     
@@ -1330,7 +1383,7 @@ non-unique regions storage.
 
 @return The method returns the number of subgregions that were created, if any.
 
-@param group The name of the region that may be non-contiguous.
+@param region The name of the region that may be non-contiguous.
 
 @section implementation Implementation
 
@@ -1353,10 +1406,10 @@ The method will report if the region is  contiguous to start with. In this case 
 TODO: legacy of Andrew Bromage, not sure whether it makes any sense, needs testing!
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage( const char* group )
+size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage( const char* region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  const string  region_name( group );
+  const string  region_name( region );
 
   if ( region_name == "Model" ) {
     csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage:",
@@ -1365,8 +1418,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   }
 
   // renumbering elements and nodes of model
-  csmp::Region<dim>&  gref( Region( group ) );
-  const bool          unique_group( IsUnique( group ) );
+  csmp::Region<dim>&  gref( Region( region ) );
+  const bool          unique_region( IsUnique( region ) );
 
   // Perform union-find
   UnionFind<Element<dim>*> unionFind;
@@ -1383,7 +1436,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   unionFind.Components( components );
   if ( components.size() <= 1 ) {
     cout << "\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions_Bromage: ";
-    cout << "region '" << group << "' is already contiguous, nothing was done." << endl;
+    cout << "region '" << region << "' is already contiguous, nothing was done." << endl;
     return 0U;
   }
 
@@ -1397,7 +1450,7 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
   // Turn components into regions
   cout << "\nModel<" << dim << ">::PartitionRegionIntoContiguousSubRegions_Bromage: ";
-  cout << "region '" << group << "' is divided into the subregion(s):\n";
+  cout << "region '" << region << "' is divided into the subregion(s):\n";
 
   size_t subgroupNum( 0 );
   auto cmCBegin = componentMemberships.begin();
@@ -1412,14 +1465,14 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
 
     ++subgroupNum;
     string  subregion_name;
-    char         num[128];
+    char    num[128];
     sprintf( num, "%lu", subgroupNum );
     subregion_name = region_name + num;
     cout << "\t\t\t'" << subregion_name << "'";
     cout << " (" << subgroupSize << " elmts)" << endl;
 
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-      it = (unique_group) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
+      it = (unique_region) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
       : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
     if ( !it.second )
       throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage",
@@ -1440,8 +1493,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
   }
 
   // if the region has been partitioned succesfully and its name is not model, it will be removed
-  if ( IsUnique( group ) )
-    MoveToNonUniqueRegions( group );
+  if ( IsUnique( region ) )
+    MoveToNonUniqueRegions( region );
 
   return subgroupNum;
 
@@ -1464,10 +1517,10 @@ Removes subregions of the region identified by name. The subregions are
 defined as regions that have the same name as the aforementioned region,
 but with numbers appended, e.g., 'fractures' and 'fractures1'.
 
-If the user supplies the string 'all subgroups' as method argument
-all subgroups in the current Model object will be removed.
+If the user supplies the string 'all subregions' as method argument
+all subregions in the current Model object will be removed.
 
-@param group The name of the master region, the subregions of which shall be removed.
+@param region The name of the master region, the subregions of which shall be removed.
 
 @section application Application
 
@@ -1485,9 +1538,9 @@ The method will report the names of the subregions that were removed.
 @todo (1) SKM: logic of this method seems to be broken and it does not always work. Refactor!
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const char* group )
+size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const char* region )
 {
-  string            target( group );
+  string            target( region );
   set<string>  region_names, groups_to_remove;
 
   // 1. making a set of all region names
@@ -1496,7 +1549,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
     region_names.insert( (*grit).first );
 
   // 2. For all regions whose name does not contain any numbers,
-  //    find subgroups identified by numbers attached to their names
+  //    find subregions identified by numbers attached to their names
   for ( typename map<string, csmp::Region<dim> >::const_iterator
         grit = UniqueRegionsBegin(); grit != UniqueRegionsEnd(); grit++ )
     if ( (*grit).first.find( target ) == string::npos )
@@ -1505,15 +1558,15 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
       bool hasnumber = false;
       for ( string::const_iterator sit = (*grit).first.begin(); sit != (*grit).first.end(); sit++ )
         if ( isdigit( *sit ) ) { hasnumber = true; break; }
-      // if not it is assumed that this is a primary group
+      // if not it is assumed that this is a primary region
       if ( !hasnumber ) {
-        // and subgroups are searched for in the region_name set
+        // and subregions are searched for in the region_name set
         for ( set<string>::const_iterator it = region_names.begin(); it != region_names.end(); it++ )
-          // if the region_name contains the search string, this is a subgroup to be deleted
+          // if the region_name contains the search string, this is a subregion to be deleted
           if ( (*it).find( target ) != string::npos )
             groups_to_remove.insert( (*it) );
 
-        // the original group, however is kept by removing its name from the deletion list
+        // the original region, however is kept by removing its name from the deletion list
         groups_to_remove.erase( (*grit).first );
       }
     }
@@ -1525,8 +1578,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
           grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
       region_names.insert( (*grit).first );
 
-    // 2. For all groups whose names do not contain any numbers,
-    //    find subgroups identified by numbers attached to their names
+    // 2. For all regions whose names do not contain any numbers,
+    //    find subregions identified by numbers attached to their names
     for ( typename map<string, csmp::Region<dim> >::const_iterator
           grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
       if ( (*grit).first.find( target ) == string::npos )
@@ -1535,15 +1588,15 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
         bool hasnumber = false;
         for ( string::const_iterator sit = (*grit).first.begin(); sit != (*grit).first.end(); sit++ )
           if ( isdigit( *sit ) ) { hasnumber = true; break; }
-        // if not it is assumed that this is a primary group
+        // if not it is assumed that this is a primary region
         if ( !hasnumber ) {
-          // and subgroups are searched for in the region_name set
+          // and subregions are searched for in the region_name set
           for ( set<string>::const_iterator it = region_names.begin(); it != region_names.end(); it++ )
-            // if the region_name contains the search string, this is a subgroup to be deleted
+            // if the region_name contains the search string, this is a subregion to be deleted
             if ( (*it).find( target ) != string::npos )
               groups_to_remove.insert( (*it) );
 
-          // the original group, however is kept by removing its name from the deletion list
+          // the original region, however is kept by removing its name from the deletion list
           groups_to_remove.erase( (*grit).first );
         }
       }
@@ -1552,14 +1605,15 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
   // removing the original region from the removal list, just in case it is contained therein
   groups_to_remove.erase( target );
 
-  // 3. removing the subgroups and extra groups
+  // 3. removing the subregions and extra regions
   size_t  groups_removed( 0 );
   if ( !groups_to_remove.empty() ) cout << "\nRegionsInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor: removing region(s): ";
   for ( set<string>::const_iterator it = groups_to_remove.begin(); it != groups_to_remove.end(); it++ ) {
-    cout << "'" << (*it) << "' ";
-    RemoveRegion( (*it).c_str() );
-    groups_removed++;
-  }
+       cout << "'" << (*it) << "' ";
+       const bool also_remove_elmts{ false };
+       RemoveRegion( (*it).c_str(), also_remove_elmts );
+       groups_removed++;
+    }
   if ( !groups_to_remove.empty() ) cout << endl << endl;
 
   return groups_removed;
@@ -1572,24 +1626,24 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
 
 
 /**
-FormAndAddRectangularRegion() builds a non-unique group from those elements
+FormAndAddRectangularRegion() builds a non-unique region from those elements
 whose node coordinates lie within a user-specified bounding box. This box is
 defined by its lower left and upper right corners.
 
-When a new group is formed a group internal flag will be assigned to
+When a new region is formed a region internal flag will be assigned to
 each node, constraint point and element.
-There are two group-internal object flags, PLAIN and BOUNDARY. When a
-new group is formed, the Region method IdentifyBoundaryAs() assigns the
-group-internal object flags, depending on whether the nodes, constraint
-points or elements in the group lie at the group boundary or inside of
-the group. Elements are assigned a boundary flag if at least one of
-their faces coincides with the group boundary.
+There are two region-internal object flags, PLAIN and BOUNDARY. When a
+new region is formed, the Region method IdentifyBoundaryAs() assigns the
+region-internal object flags, depending on whether the nodes, constraint
+points or elements in the region lie at the region boundary or inside of
+the region. Elements are assigned a boundary flag if at least one of
+their faces coincides with the region boundary.
 
 @section arguments Input Arguments
 
 Assigns the finite elements that are located in a rectangular region that
 is given by the double arguments (x = horizontal, y = vertical) as
-members of a new group with the name char* (first argument).
+members of a new region with the name char* (first argument).
 
 @section implementation Implementation
 
@@ -1605,8 +1659,8 @@ gradients at positions of interest.
 
 @section messages Messages
 
-If the group cannot be formed because no elements in the desired
-coordinate range can be found or because another group with the same
+If the region cannot be formed because no elements in the desired
+coordinate range can be found or because another region with the same
 name already exists, the method will terminate the program, by reporting
 a fatal error.
 */
@@ -1637,7 +1691,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRectangularRegion( const char* 
     {
        (*it.first).second.AccumulateRectangularRegion( regionComplex->Mesh(), min_xyz, max_xyz );
 
-       // removing the group if it contains no elements
+       // removing the region if it contains no elements
        if ( (*it.first).second.Cells() == 0U ) {
           regionMap_.erase( it.first );
           csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::FormRectangularRegion",
@@ -1661,37 +1715,37 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRectangularRegion( const char* 
 
 
 /**
-Makes a copy of an existing group and stores it under a new name.
-NB: The new group will not be unique.
+Makes a copy of an existing region and stores it under a new name.
+NB: The new region will not be unique.
 
-@param existing_group The names of the existing and the new group that shall be created.
+@param existing_region The names of the existing and the new region that shall be created.
 
 @attention since this region will be a copy of an existing one, it will be non-unique
 
 TODO: check whether this copying process is as fast as could be.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_group, const char* new_copied_group, bool unique_group )
+void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_region, const char* new_copied_region, bool unique_region )
 {
-  if ( !ContainsRegion( existing_group ) )
+  if ( !ContainsRegion( existing_region ) )
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion",
                            "region to make a copy of could not be found",
-                           existing_group );
+                           existing_region );
 
-  string output_region( new_copied_group );
-  if ( ContainsRegion( new_copied_group ) ) {
-    cout << "\nModel<" << dim << ">::CopyRegion: WARNING: region '" << new_copied_group;
+  string output_region( new_copied_region );
+  if ( ContainsRegion( new_copied_region ) ) {
+    cout << "\nModel<" << dim << ">::CopyRegion: WARNING: region '" << new_copied_region;
     cout << "' already exists, adding an underscore at end of name: ";
     output_region += "_";
     cout << output_region << endl;
   }
 
-  const csmp::Region<dim>&  gr_ref( Region( existing_group ) );
+  const csmp::Region<dim>&  gr_ref( Region( existing_region ) );
 
   // irrespective of whether the original region was unique or non-unique its copy
   // will not be unique because it overlaps with the original region
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-    it = (unique_group) ? uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) ) :
+    it = (unique_region) ? uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) ) :
     regionMap_.insert( make_pair( output_region, csmp::Region<dim>( gr_ref ) ) );
   if ( !it.second )
     throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::CopyRegion",
@@ -1699,7 +1753,7 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_gro
                            output_region.c_str() );
 
   // assigning new region name
-  (*it.first).second.Name( new_copied_group );
+  (*it.first).second.Name( new_copied_region );
 
 } // end copyRegion
 
@@ -1708,23 +1762,23 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_gro
 
 
 /**
-Adds the first group to the second group so that the latter contains
-both groups after the operation is complete.
+Adds the first region to the second region so that the latter contains
+both regions after the operation is complete.
 
-@param group_to_add The names of the first group that shall be added to the second group.
+@param region_to_add The names of the first region that shall be added to the second region.
 
 @section messages Messages
 
-ERRORs are reported if either the first or the second group does
+ERRORs are reported if either the first or the second region does
 not exist.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::AssimilateRegion( const char* group_to_add, const char* group_to_be_added_to )
+void RegionInterface<dim, REGION_COMPLEX>::AssimilateRegion( const char* region_to_add, const char* region_to_be_added_to )
 {
-  // finding the group in the group list
+  // finding the region in the region list
   try {
-    const csmp::Region<dim>&  gref_to_add( Region( group_to_add ) );
-    csmp::Region<dim>&        gref_to_be_added_to( Region( group_to_be_added_to ) );
+    const csmp::Region<dim>&  gref_to_add( Region( region_to_add ) );
+    csmp::Region<dim>&        gref_to_be_added_to( Region( region_to_be_added_to ) );
 
     gref_to_be_added_to.Add( gref_to_add );
   }
@@ -1743,9 +1797,9 @@ void RegionInterface<dim, REGION_COMPLEX>::AssimilateRegion( const char* group_t
 
 /** Merges regions supplied as argument set into a single region with a new name.
 
-@param input_groups is a set of unique names of the regions that
+@param input_regions is a set of unique names of the regions that
 shall be merged into the
-@param ensemble_group result region (second argument).
+@param ensemble_region result region (second argument).
 
 @section application Application
 
@@ -1758,35 +1812,35 @@ exist, an error or an info message is reported.
 
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& input_groups, const char* ensemble_group )
+void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& input_regions, const char* ensemble_region )
 {
-  string output_region( ensemble_group );
+  string output_region( ensemble_region );
 
   ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
-  if ( ContainsRegion( ensemble_group ) ) {
+  if ( ContainsRegion( ensemble_region ) ) {
     csmp_error.notice( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
-                       ensemble_group, "output region already exists, adding an underscore to its name." );
+                       ensemble_region, "output region already exists, adding an underscore to its name." );
     output_region += "_";
     cout << output_region << endl;
   }
 
-  if ( input_groups.empty() ) {
+  if ( input_regions.empty() ) {
     csmp_error.notice( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                        "No input regions were specified; merge could not be performed; no new region.",
-                       ensemble_group );
+                       ensemble_region );
     return;
   }
 
   typename map<string, csmp::Region<dim> >::const_iterator  iter;
 
-  // collecting element indexes from input groups into set for output
+  // collecting element indexes from input regions into set for output
   vector<Element<dim>*>  element_ptrs;
-  for ( auto it = input_groups.begin(); it != input_groups.end(); it++ ) {
-    // finding the group in the group list
+  for ( auto it = input_regions.begin(); it != input_regions.end(); it++ ) {
+    // finding the region in the region list
     if ( (iter = regionMap_.find( *it )) != regionMap_.end() or
          (iter = uniqueRegionMap_.find( *it )) != uniqueRegionMap_.end() ) {
-      //  outputting the ids of the member elements of the group
+      //  outputting the ids of the member elements of the region
       element_ptrs.reserve( element_ptrs.size() + (*iter).second.Cells() );
       for ( auto eit = (*iter).second.CellsBegin(); eit != (*iter).second.CellsEnd(); eit++ )
         element_ptrs.push_back( const_cast<Element<dim>*>(*eit) );
@@ -1826,14 +1880,14 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& inpu
 
 
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const char* region_name_tag, const char* ensemble_group )
+size_t RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const char* region_name_tag, const char* ensemble_region )
 {
   set<string> regions;
   for ( regionConstIterator rit( UniqueRegionsBegin() ); rit != UniqueRegionsEnd(); ++rit )
     if ( rit->first.find( region_name_tag ) != string::npos )
       regions.insert( rit->first );
   if ( !regions.empty() )
-    MergeRegions( regions, ensemble_group );
+    MergeRegions( regions, ensemble_region );
   return regions.size();
 }
 
@@ -1847,11 +1901,11 @@ size_t RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const char* region_na
 If the first region a contains all the elements of the second region
 b, the method will return the boolean variable 'true'.
 
-@param groupa  a first group which is tested for whether it
-contains all elements of a second group.
+@param groupa  a first region which is tested for whether it
+contains all elements of a second region.
 
 @return The method return either 'true' or 'false' depending on whether the first
-group contains the second group or not.
+region contains the second region or not.
 
 @section application Application
 
@@ -1860,7 +1914,7 @@ supported for Region objects.
 
 @section messages Messages
 
-An error will be reported, if one of the evaluated groups does not
+An error will be reported, if one of the evaluated regions does not
 exist.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -1889,24 +1943,24 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionIncludes( const char* groupa, c
 
 /**
 RegionUnion() will create a new region, defined as the union of two existing
-groups.
+regions.
 
 @section arguments Input Arguments
 
-The names of the two existing groups are supplied as first and second
-method arguments. The third argument specifies the name of the new group
-which will contain both the first and the second group.
+The names of the two existing regions are supplied as first and second
+method arguments. The third argument specifies the name of the new region
+which will contain both the first and the second region.
 
 @section application Application
 
-To build groups on the basis of complex criteria, for instance, one could
-form the union of a group which includes all elements that are hotter than
-670oC with a group representing a granite melt in the model.
+To build regions on the basis of complex criteria, for instance, one could
+form the union of a region which includes all elements that are hotter than
+670oC with a region representing a granite melt in the model.
 
 @section messages Messages
 
-If either one of the groups is empty or does not exist or if the target
-group cannot be formed an error is reported.
+If either one of the regions is empty or does not exist or if the target
+region cannot be formed an error is reported.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, const char* groupb,
@@ -1920,12 +1974,12 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, cons
     cout << output_region << endl;
   }
 
-  // finding the groups in the group list
+  // finding the regions in the region list
   try {
     const csmp::Region<dim>&  itera = Region( groupa );
     const csmp::Region<dim>&  iterb = Region( groupb );
 
-    // adding new group
+    // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
       it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
@@ -1933,7 +1987,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, cons
     {
       groupUnion( itera, iterb, (*it.first).second );
 
-      // removing the group if it contains no elements (extra error message is generated in function)
+      // removing the region if it contains no elements (extra error message is generated in function)
       if ( (*it.first).second.Cells() == 0U ) {
         regionMap_.erase( it.first );
         return false;
@@ -1968,29 +2022,29 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, cons
 
 /**
 RegionIntersection() finds those finite-elements which belong both to a
-first and a second group and forms a third group from them.
+first and a second region and forms a third region from them.
 
 Method returns true if there is an intersection and false if none
 can be found.
 
 @section arguments Input Arguments
 
-The names of the two existing groups are supplied as first and second
-method arguments. The third argument specifies the name of the new group
-which will contain some members of the first and of the second group.
+The names of the two existing regions are supplied as first and second
+method arguments. The third argument specifies the name of the new region
+which will contain some members of the first and of the second region.
 
 @section application Application
 
-RegionIntersection() allows the user to define groups on the basis of
-multiple property criteria. For instance, the user may form a group of
+RegionIntersection() allows the user to define regions on the basis of
+multiple property criteria. For instance, the user may form a region of
 elements which represent granite above a temperature of 500oC. This would
-be achieved by intersecting a 'granite' group with an 'above-500oC'
-group.
+be achieved by intersecting a 'granite' region with an 'above-500oC'
+region.
 
 @section messages Messages
 
-If either the first or the second group does not exist or if the
-desired intersection group would have zero elements, an error is
+If either the first or the second region does not exist or if the
+desired intersection region would have zero elements, an error is
 reported.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -2006,18 +2060,18 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionIntersection( const char* group
     cout << output_region << endl;
   }
 
-  // finding the groups in the group list
+  // finding the regions in the region list
   try {
     const csmp::Region<dim>&  itera = Region( groupa );
     const csmp::Region<dim>&  iterb = Region( groupb );
 
-    // adding new group
+    // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
       it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
     if ( it.second ) {
       intersection( itera, iterb, (*it.first).second );
-      // removing the group if it contains no elements (extra error message is generated in function)
+      // removing the region if it contains no elements (extra error message is generated in function)
       if ( (*it.first).second.Cells() == 0U ) {
         regionMap_.erase( it.first );
         return false;
@@ -2045,27 +2099,27 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionIntersection( const char* group
 
 
 /**
-RegionDifference() forms a new group which will contain those finite
-elements of the first group, which are not contained in the second
-group.
+RegionDifference() forms a new region which will contain those finite
+elements of the first region, which are not contained in the second
+region.
 
 If the difference does not exist false is returned.
 
 @section arguments Input Arguments
 
-The names of the two existing groups are supplied as first and second
-method arguments. The third argument specifies the name of the new group.
+The names of the two existing regions are supplied as first and second
+method arguments. The third argument specifies the name of the new region.
 
 
 @section application Application
 
 To identify for instance what distinguishes a first from a second
-group.
+region.
 
 @section messages Messages
 
-If either the first or the second group does not exist or if the
-desired distinction group would have zero elements, an error is
+If either the first or the second region does not exist or if the
+desired distinction region would have zero elements, an error is
 reported.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -2099,7 +2153,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionDifference( const char* groupa,
         csmp_error.notice( WARNING, "RegionInterface<dim,REGION_COMPLEX>::RegionDifference:", groupdiff,
                            "to be formed. No elements found that belong only to one of the 2 input regions." );
 
-      // removing the group if it contains no elements (extra error message is generated in function)
+      // removing the region if it contains no elements (extra error message is generated in function)
       if ( (*it.first).second.Cells() == 0 ) {
         regionMap_.erase( it.first );
         return false;
@@ -2131,22 +2185,22 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionDifference( const char* groupa,
 /**
 RegionSymmetricDifference() forms a new region which will contain those finite
 elements of a first and a second region, which are not contained in both
-groups.
+regions.
 
 @section arguments Input Arguments
 
-The names of the two existing groups are supplied as first and second
-method arguments. The third argument specifies the name of the new group.
+The names of the two existing regions are supplied as first and second
+method arguments. The third argument specifies the name of the new region.
 
 
 @section application Application
 
-To identify for instance what two groups do not have in common.
+To identify for instance what two regions do not have in common.
 
 @section messages Messages
 
-If either the first or the second group does not exist or if the
-desired distinction group would have zero elements, an error is
+If either the first or the second region does not exist or if the
+desired distinction region would have zero elements, an error is
 reported.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
@@ -2162,19 +2216,19 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionSymmetricDifference( const char
     cout << output_region << endl;
   }
 
-  // finding the groups in the group list
+  // finding the regions in the region list
   try {
     const csmp::Region<dim>&  itera = Region( groupa );
     const csmp::Region<dim>&  iterb = Region( groupb );
 
-    // adding new group
+    // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
       it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
     if ( it.second )
     {
       symmetricDifference( itera, iterb, (*it.first).second );
-      // removing the group if it contains no elements (extra error message is generated in function)
+      // removing the region if it contains no elements (extra error message is generated in function)
       if ( (*it.first).second.Cells() == 0 ) {
         regionMap_.erase( it.first );
         return false;
@@ -2202,7 +2256,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionSymmetricDifference( const char
 
 /**
 
-Concept
+Concept: CreateBetween()
 
 Attempts to create a lower-dimensional region between higher dimensional ones.
 This is done in the following steps:
@@ -2279,7 +2333,6 @@ bool RegionInterface<dim, REGION_COMPLEX>::RemoveFromRegion( const char* region,
 
   // rebuilding the decimated region
   r1_ref.CellVector() = move( new_region1 );
-// NOT AFFECTED  r1_ref.EstablishNeighborConnectivity( false ); // TODO: needed, but this connectivity should have been established long ago !
   r1_ref.CreateNodePointerVector();
   r1_ref.IdentifyPerimeter();
 
@@ -2490,7 +2543,8 @@ template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
  {
      // since this region may now contain a different number of elements
-     RemoveRegion("Model");
+     const bool also_remove_elmts{ false };
+     RemoveRegion("Model", also_remove_elmts );
 
      // 1. rebuilding the region 'Model'
      // --------------------------------

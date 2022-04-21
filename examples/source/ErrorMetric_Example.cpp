@@ -48,8 +48,7 @@ void ErrorMetric_Example::Run()
     const string model_name("prism_test");
     const bool irregular_mesh(false);
     const bool binary_file(true);
-    const bool use_regions_file(true);
-    ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D  model( model_name.c_str(), "example25.txt", irregular_mesh, binary_file );
 
     printModelDimensions( model, true );
 

@@ -807,10 +807,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 7. (optional) remove parent region (including its elements) if no longer required.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( remove_original_region ) {
-         model.RemoveRegion( dim_1_region );
-         model.UpdateRegions();
-      }
+    model.RemoveRegion( dim_1_region, remove_original_region );
+    model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 8. extra diagnostics and output of boundary names
@@ -925,21 +923,39 @@ throw csmp::Exception( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::Create
 
 /**
    Removes the boundary from the map, prompting the MeshManager to delete the corresponding Face objects if so required.
+   Interior nodes that had a boundary specific BOX_BOUNDARY  flag are set back to NOT.
+   
+   @param boundary_name either one of the box boundaries or a name that contains the string BOUNDARY (case insentivite)
+   
+   @attention this does not remove the Face objects associated with the boundary; call MeshManager to do this.
    
        @author SKM (refactored - since design was flawed)
        @date 15/8/2020
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* boundary )
+void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* boundary_name, bool erase_faces )
   {
-    if ( !ContainsBoundary(boundary) ) {
+    if ( !ContainsBoundary(boundary_name) ) {
          ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::RemoveBoundary",
-                                          boundary, "no boundary with this name found; nothing was done");
+                                          boundary_name, "no boundary with this name found; nothing was done");
          return;
       }
+
+    // for interior nodes with a boundary specific flag this flag is set to NOT
+    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+    csmp::Boundary<dim>& boundary = boundaryComplex->Boundary( boundary_name );
+    for ( auto nit=boundary.NodesBegin(); nit!=boundary.PerimeterNodesBegin(); ++nit )
+      if ( (*nit)->AtBoundary() == boundary.AtBoundary() )
+        (*nit)->AtBoundary( NOT );
     
+     // erasing the faces
+     if ( erase_faces ) {
+         // getting the mesh manager to delete faces and nodes and fix up the connectivity
+         boundaryComplex->Mesh().DeleteAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
+       }
+
     // erasing the boundary
-    boundaryMap_.erase( boundary );
+    boundaryMap_.erase( boundary_name );
     
   } // end RemoveBoundary
 
@@ -947,24 +963,33 @@ void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( const char* bound
 
 /**
    Removes the boundary from the map, prompting the MeshManager to delete the corresponding Face objects if so required.
+   Interior nodes that had a boundary specific BOX_BOUNDARY  flag are set back to NOT.
+         
+   @param boundary reference to valid boundary in the model
+
+   @attention this does not remove the Face objects associated with the boundary; call MeshManager to do this.
    
        @author SKM (refactored - since design was flawed)
        @date 15/8/2020
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary )
+void BoundaryInterface<dim, BOUNDARY_COMPLEX>::RemoveBoundary( csmp::Boundary<dim>& boundary, bool erase_faces )
   {
-    // locating the boundary in the boundary map
-    boundaryIterator it = boundaryMap_.find( boundary.Name() );
-    // if the addresses of the objects are the same
-    if ( it != boundaryMap_.end() ) {
-         boundaryMap_.erase( (*it).first );
-         return;
-      }
-    
-    ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::RemoveBoundary",
-                                     boundary.Name(), "no boundary with this name found; nothing was done");
- 
+    // for interior nodes with a boundary specific flag this flag is set to NOT
+     for ( auto nit=boundary.NodesBegin(); nit!=boundary.PerimeterNodesBegin(); ++nit )
+       if ( (*nit)->AtBoundary() == boundary.AtBoundary() )
+         (*nit)->AtBoundary( NOT );
+
+     // erasing the faces
+     if ( erase_faces ) {
+         BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
+         // getting the mesh manager to delete faces and nodes and fix up the connectivity
+         boundaryComplex->Mesh().DeleteAndRepairConnnectivity( boundary.CellVector().begin(), boundary.CellVector().end() );
+       }
+
+     // deleting the Boundary
+     boundaryMap_.erase( boundary.Name() );
+
    } // end RemoveBoundary
 
 
@@ -1884,14 +1909,15 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       // 5. removing input regions and updating other regions
       // ------------------------------------------------------------------------------------
       // (no flagging for rebuilt of regions is necessary as they will be completely removed)
-      if ( top.first != top.second ) model->RemoveRegion( "TOP" );
-      if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR" );
-      model->RemoveRegion( "BOTTOM" );
-      model->RemoveRegion( "RIGHT" );
-      model->RemoveRegion( "LEFT" );
+      const bool erase_elements{ false }; // this was already done above
+      if ( top.first != top.second ) model->RemoveRegion( "TOP", erase_elements );
+      if ( irregular.first != irregular.second ) model->RemoveRegion( "IRREGULAR", erase_elements );
+      model->RemoveRegion( "BOTTOM", erase_elements );
+      model->RemoveRegion( "RIGHT", erase_elements );
+      model->RemoveRegion( "LEFT", erase_elements );
       if constexpr( dim == 3U ) {
-           model->RemoveRegion( "BACK" );
-           model->RemoveRegion( "FRONT" );
+           model->RemoveRegion( "BACK", erase_elements );
+           model->RemoveRegion( "FRONT", erase_elements );
         }
         
       model->UpdateRegions();
@@ -2000,9 +2026,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
 	  // 4. removing the original regions from which the boundaries were created
     // ------------------------------------------------------------------------------------
     // (no flagging for rebuilt of regions is necessary as they will be completely removed)
+    const bool erase_elements{ false }; // this was already done above
     for ( auto& it : eligibleRegions ) {
-         // nor helpful and has side effects: model->Mesh().DetachOutsideNeighborsAlongPerimeter( model->Region( it.first ) );
-         model->RemoveRegion( it.first.c_str() );
+         model->RemoveRegion( it.first.c_str(), erase_elements );
       }
     model->UpdateRegions();
 

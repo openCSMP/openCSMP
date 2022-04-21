@@ -112,10 +112,10 @@ class BoundaryInterface {
     std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
     
     /// Removes boundary with  deletion of its faces in the MeshManager
-    void RemoveBoundary( const char* boundary );
+    void RemoveBoundary( const char* boundary, bool eerase_faces );
     
-    /// Rembove boundary by direct reference to it as is needed by SplitBoundaryInterFace
-    void RemoveBoundary( csmp::Boundary<dim>& );
+    /// Remove boundary, also deleting associated face objects if so requested
+    void RemoveBoundary( csmp::Boundary<dim>&, bool erase_faces );
 
 
     // -----------------------------------------------

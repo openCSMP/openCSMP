@@ -330,7 +330,7 @@ void  Node<dim>::AssignPropertyValuesFrom( const Node<dim>& nd )
     Subsequently midside nodes which exist in higher-order elements are detected and their neighbors are assigned.
 */
 template<uint32_t dim>
-uint32_t  Node<dim>::ReassignNeighbors()
+uint32_t  Node<dim>::AssignNodeNeighbors()
  {
     set<Node<dim>*>  current_nbors;
     const auto       n_parents{ Parents() };

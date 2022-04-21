@@ -123,10 +123,6 @@ public:
   //
   // ==============================================================
   
-  /// for all outside-facing CELL neighbor perimeter face pointers that are not nullptr,/ set  neighbors of the corresponding cell to null, getting subdomain ready for deletion
-  template<template<uint32_t> class CELL>
-  size_t DetachOutsideNeighborsAlongPerimeter( ModelSubDomain<dim,CELL>& );
-  
   /// replaces supplied lower-dimensional elements inside of a model with Face objects, establishing their connectivity; the input Elements are deleted
   std::vector<Face<dim>*>  ReplaceInteriorElementsByFaces( const PropertyDatabase<dim>&,
                                                            typename std::vector<Element<dim>*>::iterator first,
@@ -225,9 +221,12 @@ public:
                                       const IntegrationPointVariables& interface_integration_point_variables,
                                       std::vector<Node<dim>*> outside_nodes );
 
+  // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
+  // --------------------------------------------
+  // NB: elements are responsible for their nodes, nodes for their manifolds
+
   /// updates all connectivity (elements, faces, interfaces, nodes to parents); however, node manifolds are not reconstructed
   void UpdateConnectivity();
-  // TODO: create version of method that permits selective update of cells
 
   /// re-establishes the neighbor connectivity between cells of the same dimensionality (Elements & Faces)
   /// @todo disambiguate connectivity between Face and InterFace object at manifolds
@@ -251,27 +250,25 @@ public:
   void BuildInterFaceConnectivity( typename std::vector<InterFace<dim>*>::const_iterator first,
                                    typename std::vector<InterFace<dim>*>::const_iterator last );
 
-  /// Starting with an existing node-to-parent element relationships, these are validated, removing excess connections, for example after a region was removed
-  void RebuildNodeParentElementRelationships();
+  ///  for nodes attached to elements in the supplied element range, the parent and the neighbor connectivity is reconstructed from scratch
+  void ConnectNodesToParentsAndNeighbors( typename std::vector<Element<dim>*>::iterator first,
+                                          typename std::vector<Element<dim>*>::iterator last );
 
+  /// disconnects nodes from potential manifolds and deletes them
+  size_t DeleteAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
+                                       typename std::vector<Node<dim>*>::iterator last );
 
-  // DELETIONS & MAINTANANCE OF MESH CONNECTIVITY
-  // --------------------------------------------
-  // NB: elements are responsible for the nodes, nodes for their manifolds
+  /// deletes elements and potentially orphaned nodes if any;  parent element storage of the nodes is rebuild and connectivity repaired;  input pointers are nulled
+  size_t DeleteAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
+                                       typename std::vector<Element<dim>*>::iterator last );
 
-  /// after disconnecting the nodes from potential manifolds, the supplied range of nodes is deleted
-  size_t Delete( typename std::vector<Node<dim>*>::iterator first,
-                 typename std::vector<Node<dim>*>::iterator last );
+  /// disconnects face patch from potential adjacent faces before deleting faces; input pointers are nulled
+  size_t DeleteAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
+                                       typename std::vector<Face<dim>*>::iterator last );
 
-  /// deletes the supplied range of elements, and orphaned nodes if any; the parent element storage of the nodes is rebuild; @note all input pointers are nulled
-  size_t Delete( typename std::vector<Element<dim>*>::iterator first,
-                 typename std::vector<Element<dim>*>::iterator last );
-
-  size_t Delete( typename std::vector<InterFace<dim>*>::iterator first,
-                 typename std::vector<InterFace<dim>*>::iterator last );
-
-  size_t Delete( typename std::vector<Face<dim>*>::iterator first,
-                 typename std::vector<Face<dim>*>::iterator last );
+  /// disconnectes interfaces from not-targeted neighbors before deleting them;  does not remove multiplicated nodes or manifolds;  input pointers are nulled
+  size_t DeleteAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
+                                       typename std::vector<InterFace<dim>*>::iterator last );
 
   /// JCK's method to test the connectivity of a mesh after it had been read from binary file
   size_t CheckElementConnectivity() const;
@@ -304,7 +301,7 @@ private:
   
   /// puts nodes, elements, faces, and interfaces into the order given by Idx() variables; removes nullptr cells first
   void ReorderObjectsByIndexes();
-
+  
   /// returns numbered Node, Element, Face and InterFace objects, and outputs mesh as polygonal dataset (VSet, see HDF doc of NCSA, Urbana, Champagne, Il, US)
   void OutputMeshTo( VSet<dim>&, bool get_indices_from_stored_variables=false );
 
