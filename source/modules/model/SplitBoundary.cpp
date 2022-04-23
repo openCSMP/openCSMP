@@ -820,8 +820,8 @@ void SplitBoundary<dim>::Out() const
           }
        elmt_idx++;
     }
-  if constexpr( dim == 2 ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
-  if constexpr( dim == 3 ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
+  if constexpr( dim == 2U ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
+  if constexpr( dim == 3U ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
 
   cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );

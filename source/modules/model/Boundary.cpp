@@ -1105,37 +1105,40 @@ void Boundary<dim>::Out() const
 {
   // high-level output
   cout << "\n"<<"Boundary<" << dim << ">::Out: (" << parseBoundary( boundaryFlag_ ) << ") '" << this->Name();
-  cout << "', Face objects interior: " << this->InteriorCells() << ", perimeter: " << this->PerimeterCells() << endl;
-  cout << "   Node objects interior: " << this->InteriorNodes() << ", perimeter: " << this->PerimeterNodes() << endl;
+  if constexpr ( dim == 2U ) cout <<"', length "<< Area() <<" m";
+  if constexpr ( dim == 3U ) cout <<"', area "<< Area() <<" m2";
+  cout <<"\n\t"<<"Face objects interior: " << this->InteriorCells() << ", perimeter: " << this->PerimeterCells() << endl;
+  cout <<"\n\t"<<"Node objects interior: " << this->InteriorNodes() << ", perimeter: " << this->PerimeterNodes() << endl;
 
   // member faces
-  cout << "\n\tFace objects, their area, nodes (,), and lower-(:) and higher-dimensional neighbor elements:\n";
+  cout << "\n\tFace type followed by number: nodes (,), (inner:outer) parent elements, and (::) neighbor faces:\n";
   for ( const auto& it : this->cell_vec_ ) {
-    if ( it == NULL ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "member element pointer not initialized." );
-    cout << "\t\t" << it->Idx() << ": " << it->Area() << ", ";
-    // Nodes
-    for ( auto i{0U}; i<it->Nodes(); ++i ) {
-      const string str = (it->N( i ) == nullptr) ? "none" : to_string( it->N( i )->Idx() );
-      cout << str << ",";
-    }
-    cout << "\t\t ";
-    // Face neighbors
-    for ( auto i{0U}; i<it->Neighbors(); ++i ) {
-      const string str = (it->Neighbor( i ) == nullptr) ? "none" : to_string( it->Neighbor( i )->Idx() );
-      if ( i<it->Neighbors() - 1 ) cout << str << ":";
-      else cout << str;
-    }
-    cout << ",\t\t";
-    // Element neighbors
-    const string inner = (it->InnerParent() == nullptr) ? "none" : to_string( it->InnerParent()->Idx() );
-    const string outer = (it->OuterParent() == nullptr) ? "none" : to_string( it->OuterParent()->Idx() );
-    cout << inner << ":" << outer << "\n";
+      if ( it == nullptr ) throw csmp::Exception( ERROR, "Boundary<dim>::Out:", "nullptr in face vector." );
+      cout <<"\t\t"<< parseFiniteElementType( it->FE_Type() ) <<" "<< it->Idx() << ": ";
+      // Nodes
+      for ( auto i{0U}; i<it->Nodes(); ++i ) {
+          const string str = (it->N(i) == nullptr) ? "none" : to_string( it->N(i)->Idx() );
+          cout << str << ",";
+        }
+      cout << "\t\t";
+      // Element neighbors
+      const string inner = (it->InnerParent() == nullptr) ? "none" : to_string( it->InnerParent()->Idx() );
+      const string outer = (it->OuterParent() == nullptr) ? "none" : to_string( it->OuterParent()->Idx() );
+      cout << inner << ":" << outer;
+      cout << ",\t\t";
+      // Face neighbors
+      for ( auto i{0U}; i<it->Neighbors(); ++i ) {
+        const string str = (it->Neighbor(i) == nullptr) ? "none" : to_string( it->Neighbor(i)->Idx() );
+        if ( i<it->Neighbors() - 1U ) cout << str << ":";
+        else cout << str;
+      }
+     cout << endl;
   }
 
   // printing the Faces
   //for ( auto it=this->CellsBegin(); it!=this->CellsEnd(); ++it )  (*it)->Out();
 
-  cout << "\n\tperimeter Faces and edge numbers (current local numbering):\n";
+  cout << "\n\tperimeter Faces and perimeter-edge numbers (local numbering):\n";
   auto  bit( this->bd_face_vec_.begin() );
   for ( auto i = this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << i << ":";

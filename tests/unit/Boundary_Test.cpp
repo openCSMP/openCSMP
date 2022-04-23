@@ -157,7 +157,7 @@ void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
     const auto domainElementsEnd( boundary.CellsEnd() );
     for( auto it = boundary.CellsBegin(); it != domainElementsEnd; ++it )
       {
-        size_t notNullNeighbors(0);
+        int notNullNeighbors{0};
         const auto neighbors( (*it)->Neighbors() );
         for( auto i = 0; i < neighbors; ++i )
           {
@@ -166,7 +166,7 @@ void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
           }
         _test( notNullNeighbors > 0 );
         // diagnostics
-        if ( notNullNeighbors == 0U ) {
+        if ( notNullNeighbors == 0 ) {
              cerr <<"\n"<< boundary.Name() <<": Face "<< (*it)->Idx() <<": ";
              cerr << parseFiniteElementType( (*it)->FE_Type() ) <<"  ";
           }
@@ -305,7 +305,6 @@ void Boundary_Test::runLegacy()
 
     // 2D TESTS I
     // ==========
-    
     ANSYS_Model2D model2D( "BoxHalfs2D", "CSMP-variables.txt" );
     CheckFaceUnitNormalOrientation( model2D.Boundary("LEFT") );
     CheckFaceUnitNormalOrientation( model2D.Boundary("RIGHT") );
@@ -332,23 +331,27 @@ void Boundary_Test::runLegacy()
     _test( model2D.ContainsBoundary( boundary2D_BETWEENname ) );
     Boundary<2>& boundary2D_BETWEEN( model2D.Boundary( result.first ) ); 
     _test( InputElementAreaAsVolumeVariable<2>( model2D, boundary2D_BETWEEN, "face variable" ) > 0 );
-    vtu2D.OutputDataToVTU( "2DTestFaceVariable", "face variable", boundary2D_BETWEEN, static_cast<int>(0) );
+    vtu2D.OutputDataToVTU( "TestFaceVariable2D_BETWEEN", "face variable", boundary2D_BETWEEN, static_cast<int>(0) );
     CheckFaceNeighbors(boundary2D_BETWEEN);
     CheckNodeFlags( boundary2D_BETWEEN, IRREGULAR );
     CheckFaceUnitNormalOrientation( boundary2D_BETWEEN );
     CheckNodeParents( boundary2D_BETWEEN );
     innerOuterParents( model2D, vtu2D, boundary2D_BETWEEN, "Parents3" );
 
-    ///  FROM - adapted to new functionality SKM 26/1/2020 
+    ///  getting rid of the boundary so that a new one can be created
+    const bool erase_faces{true};
+    model2D. RemoveBoundary( boundary2D_BETWEENname.c_str(), erase_faces );
+    
     pair<set<string>,bool>  result2 = model2D.CreateInternalBoundaryFrom( "STANDARD" );
     _test( result2.first.size() == 1 );
     string boundary2D_FROMname( (*result2.first.begin()) );
     _test( model2D.ContainsBoundary( boundary2D_FROMname ) );
-    Boundary<2>& boundary2D_FROM( model2D.Boundary( boundary2D_FROMname ) ); 
+    Boundary<2>& boundary2D_FROM( model2D.Boundary( boundary2D_FROMname ) );
+    boundary2D_FROM.Out();
     _test( InputElementAreaAsVolumeVariable<2>( model2D, boundary2D_FROM, "face variable" ) > 0 );
-    vtu2D.OutputDataToVTU( "TestFaceVariable2D", "face variable", boundary2D_FROM, static_cast<int>(0) );
+    vtu2D.OutputDataToVTU( "TestFaceVariable2D_INTERNAL", "face variable", boundary2D_FROM, static_cast<int>(0) );
     CheckFaceNeighbors(boundary2D_FROM);
-    CheckFaceUnitNormalOrientation( boundary2D_BETWEEN );
+    CheckFaceUnitNormalOrientation( boundary2D_FROM );
     CheckNodeFlags( boundary2D_FROM, IRREGULAR );
     CheckNodeParents( boundary2D_FROM );
     

@@ -2446,7 +2446,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
       
     // else
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value || is_same< CELL<dim>,InterFace<dim> >::value  ) {
-        // 2D case
+        // dim-1 case
         if constexpr ( dim == 3U || dim == 2U ) {
              surface_cells.reserve( n_cells_max );
              line_cells.reserve( n_cells_max/6 );
@@ -2460,7 +2460,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
              if ( !line_cells.empty() )    BuildLineConnectivity<CELL>( line_cells.begin(), line_cells.end() );
           }
         // 1D case
-        if constexpr ( dim == 1 ) {
+        if constexpr ( dim == 1U ) {
              line_cells.reserve( n_cells_max );
              while ( first != cellsEnd ) {
                   line_cells.push_back(*first);
@@ -2729,10 +2729,10 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
            while ( first != elementsEnd ) {
                 assert( (*first) != nullptr );
                 const auto n_faces{ (*first)->Faces() };
-                for ( auto face{0}; face < n_faces; ++face ) {
+                for ( auto face{0U}; face < n_faces; ++face ) {
                      // now there is only a single corner node corresponding to the opposite face of the line element
                      // (node 1 is at Face 0 and node 0 at Face 1 as for all simplex elements)
-                     auto it = elmt_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ), map<CELL<dim>*,uint32_t>{make_pair(*first,face)} ) );
+                     auto it = elmt_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ), map<CELL<dim>*,uint32_t>{make_pair((*first),face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );

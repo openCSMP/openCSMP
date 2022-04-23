@@ -602,10 +602,11 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ------------------------------------------------------------------------------------------------------------------------------------------------
     // 1. Verify input lower-dimensional region object from which the boundary shall be created: must be lower dimensional and must lie inside of model
     // ------------------------------------------------------------------------------------------------------------------------------------------------
+    const string creation_failed( string("CreateInternalBoundaryFrom(") +  dim_1_region +") failed");
     // does the parent region exist
     if ( model.ContainsRegion(dim_1_region) == false ) {
           ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "does not exist; nothing was done." );
-          return make_pair( set<string>({}), false );
+          return make_pair( set<string>({creation_failed}), false );
       }
     // do such boundaries already exist ?
     const set<string> intersected_regions{dim_1_region};
@@ -618,33 +619,45 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
             }
           ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:",
                                            error_info.c_str(), "boundaries are already contained in this model." );
-          return make_pair( set<string>({}), false );
+          return make_pair( set<string>({creation_failed}), false );
       }
     // does the model contain unique regions
     if ( model.UniqueRegions() < 1 ) {
           ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", "model contains no unique regions; cannot proceed." );
-          return make_pair( set<string>({}), false );
+          return make_pair( set<string>({creation_failed}), false );
       }
     // verifying that we are indeed dealing with a region of surface or line elements only and that their normals all point into same direction
     Region<dim>&  subdomain(model.Region(dim_1_region));
     if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
                                          "region appears to have inconsistent surface-normal orientations; nothing was done." );
-         return make_pair( set<string>({}), false );
+         return make_pair( set<string>({creation_failed}), false );
       }
+    // checking that the region is not already an internal boundary
+    size_t nodes_flagged_internal_boundary{0U}, nodes_flagged_external_boundary{0U};
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+         if ( (*nit)->AtBoundary() == INTERNAL ) nodes_flagged_internal_boundary++;
+         else if ( (*nit)->AtBoundary() != NOT ) nodes_flagged_external_boundary++;
+      }
+    if ( nodes_flagged_internal_boundary >= subdomain.Nodes() - nodes_flagged_external_boundary ) {
+         ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
+                                                   "region may already be a boundary; nothing was done." );
+         return make_pair( set<string>({creation_failed}), false );
+      }
+    
     // checking that the region is not located at the model boundary
-    size_t boundary_elements(0);
+    size_t boundary_elements{0U};
     for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
       for ( auto i{0U}; i<(*eit)->Neighbors(); ++i ) {
            const BOX_BOUNDARY bflag = (*eit)->AtBoundary(i);
            if ( bflag != NOT and bflag != INTERNAL and bflag != IRREGULAR ) boundary_elements++;
         }
-      
     if ( boundary_elements == subdomain.Cells() ) {
          ErrorHandler::Instance().notice( WARNING, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region,
                                                    "region appears to lie at the model boundary; nothing was done." );
-         return make_pair( set<string>({}), false );
+         return make_pair( set<string>({creation_failed}), false );
       }
+      
     // creating region labels and tagging the regions with unique integer indentifiers
     const string region_tag("region identifier");
     if ( !model.Database().IsDefined(region_tag.c_str()) )
@@ -776,7 +789,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
     //      - this method also updates node to parent element connectivity
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: these are global changes! - do this only for nodes that are affected
+    // TODO: these are global changes! - not sure how to improve this because so many regions are affected
     model.Mesh().UpdateConnectivity();
    
    
