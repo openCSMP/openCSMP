@@ -49,7 +49,14 @@ void LUdcmp_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   }
 
 
-/// LU decomposition
+
+
+/** LU decomposition
+      
+    @note this is super slow because it operates directly on the SparseMatrix class, creating and deleting entries!
+  
+    @todo replace with Eigen / work of a DenseMatrix object with size limited to 10k rows =  columns (100 million entries!)
+*/
 void LUdcmp_Solver::ludcmp( SparseMatrix& a,
                             long n,
                             std::vector<size_t>& indx)

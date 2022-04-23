@@ -14,8 +14,9 @@
 #include "RegionMonitor.h"
 #include "vsetMakers.h"
 
-// algebraic multigrid solvers
+// solvers
 #include "LinearSolver.h"
+#include "compareFloats.h"
 
 // Interrelations
 #include "ConstantFactor.h"
@@ -30,17 +31,6 @@
 using namespace std;
 
 namespace csmp {
-
-Region_Test::Region_Test( bool verbose )
- : verbose_(verbose)
-{
-}
-
-
-Region_Test::~Region_Test()
-{
-
-}
 
 /**
     SKM revised 8/3/2016 
@@ -66,6 +56,7 @@ void Region_Test::run()
     // -----------------------------------------------------
     const char* model_name="prism_test";
     const string varFileName( "CSMP-1phase-variables.txt" );
+    // TODO: use CSMP native model from file here
     ANSYS_Model3D model( model_name, varFileName.data() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model ) );
         
@@ -85,17 +76,21 @@ void Region_Test::run()
                                                fluid_viscosity );
     model.Apply( conductivity );
 
-    printRangeOfVariable( model, "conductivity" );
+    double max_k = printRangeOfVariable( model, "permeability" );
+    double max_K = printRangeOfVariable( model, "conductivity" );
+    _test( approximatelyEqual(max_K,max_k/fluid_viscosity) );
 
     VTK_Interface<DIM>  vtk_output;
     if ( verbose_ ) vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
 
     // compute steady-state fluid pressure and Darcy velocity
-    SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
-    VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
-    steady_state_pressure.AddPostProcess( &postpro );
-
-    steady_state_pressure.ComputeSteadyState( model.Region("Model") );
+    /* WOULD BE NICE BUT NOT EXACTLY THE GOAL OF THIS TEST
+        SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+        VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
+        steady_state_pressure.AddPostProcess( &postpro );
+        steady_state_pressure.ComputeSteadyState( model.Region("Model") );
+    */
+    model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,1.5e6) );
 
     // output result
     if ( verbose_ ) {

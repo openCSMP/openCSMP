@@ -2428,7 +2428,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
     const auto   cellsEnd{last};
     
     // if we are dealing with element connectivity in 3D
-    if constexpr ( dim == 3 && is_same< CELL<dim>,Element<dim> >::value ) {
+    if constexpr ( dim == 3U && is_same< CELL<dim>,Element<dim> >::value ) {
         volume_cells.reserve( n_cells_max );
         surface_cells.reserve( n_cells_max/3 );
         line_cells.reserve( n_cells_max/6 );
@@ -2447,7 +2447,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
     // else
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value || is_same< CELL<dim>,InterFace<dim> >::value  ) {
         // 2D case
-        if constexpr ( dim == 3 || dim == 2 ) {
+        if constexpr ( dim == 3U || dim == 2U ) {
              surface_cells.reserve( n_cells_max );
              line_cells.reserve( n_cells_max/6 );
              while ( first != cellsEnd ) {
@@ -2763,7 +2763,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      const size_t            n_samples{2};
                      deque<vector<int64_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
-                     // finding the combination of surfaces with the smallest acute angle between them
+                     // finding the combination of lines with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
                      for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
@@ -3025,7 +3025,7 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
 
 
 /**
-      (Re)-establishes the connections between Elements, Faces and Interfaces, however, restricted to those of the same dimenisonality
+      Wholesale re-establishment of the connections between Elements, Faces and Interfaces, however, restricted to those of the same dimenisonality
       (volumetric Elements to volumetric Elements, surface to surface and line to line). Since lower-dimensional cells can be manifolds
       (multiple neighbors per face), these are disambiguated by chosing those cells as neigbors that lie in the same plane (or closest to)
       or define the same direction.
@@ -3089,7 +3089,8 @@ void MeshManager<dim>::UpdateConnectivity()
           }
       }
 
-    // re-assigning the parent elements
+    // 2. re-assigning the parent elements to nodes
+    // --------------------------------------------
     for ( auto& n : parent_elmts_per_node ) {
          const auto n_parents = static_cast<uint32_t>( n.second.size() );
          n.first->ResizeParentStorage( n_parents );
@@ -3106,13 +3107,13 @@ void MeshManager<dim>::UpdateConnectivity()
          assert( n.first->Parents() >= 1 );
       }
     
-    // 2. Rebuilding the node connectivity
+    // 3. Rebuilding the node connectivity
     // -----------------------------------
     for ( auto& nit : nodes_ ) nit.AssignNodeNeighbors();
     
-    // 3. Update node manifolds
+    // 4. Update node manifolds
     // ------------------------
-    // TODO: extend the update procedure to include potential NodeManifolds
+    // TODO: extend method to also update potential NodeManifolds
     if ( node_manifold_manager_ != nullptr )
       ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
     
@@ -3169,6 +3170,8 @@ void MeshManager<dim>::ConnectNodesToParentsAndNeighbors( typename vector<Elemen
     // 3. Connecting the nodes to their node neighbors
     // -----------------------------------------------
     for ( auto& nit : nodes_to_update ) nit->AssignNodeNeighbors();
+    
+    // TODO: update potential node manifolds here as well
     
  } // end ConnectNodesToParentsAndNeighbors
 

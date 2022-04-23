@@ -98,13 +98,11 @@ class BoundaryInterface {
     /// uses the Face ids stored in the model topology object to form boundaries with corresponding names; returns number of boundaries formed
     size_t FormBoundariesFrom( const ModelTopology& );
     
-    /// creates Faces and uniquely named boundary patches, returning their names if successful; the patches are created from meshed surface inside of model which will be removed by default
-    std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region, 
-                                                                       bool remove_dim_minus1_region=true );
+    /// creates uniquely named boundary (Face) patches, returning their names if successful; the input element patch is removed but its name precedes that of the Boundaries
+    std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region );
+    // external boundaries are usually build automatically during model construction using
+    // EstablishBoxBoundaries() or EstablishBoundariesFromRegions(), see protected method
                                                                        
-    /// creates boundary on the outside of the model; no partitioning based on contacting regions will occur
-    bool CreateExternalBoundaryFrom( const char* dimension_minus1_region, BOX_BOUNDARY boxBoundary );
-
     /// creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside
     bool CreateBoundaryAround( const char* region );
 
@@ -157,7 +155,7 @@ class BoundaryInterface {
 
     // EDGES
     
-    /// creates edge Boundary objects for box-shaped model from side boundaries
+    /// creates EDGE#  Boundary line objects for box-shaped model by intersecting side boundaries objects
     bool EstablishEdgeBoundariesOfBoxShapedModel();
 
  protected:

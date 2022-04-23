@@ -2001,9 +2001,9 @@ size_t  difference( const Region<dim>& a, const Region<dim>& b, Region<dim>& res
   // since both regions are sorted already, a will be searched first
   if ( !res.CellVector().empty() ) res.CellVector().clear();
   res.CellVector().reserve( min(a.Cells(),b.Cells()) );
-  for ( auto it=b.CellsBegin(); it!=b.CellsEnd(); ++it )
-    if ( !binary_search( a.CellsBegin(), a.PerimeterCellsBegin(), (*it) ) &&
-         !binary_search( a.PerimeterCellsBegin(), a.CellsEnd(), (*it) ) )
+  for ( auto it=a.CellsBegin(); it!=a.CellsEnd(); ++it )
+    if ( !binary_search( b.CellsBegin(), b.PerimeterCellsBegin(), (*it) ) &&
+         !binary_search( b.PerimeterCellsBegin(), b.CellsEnd(), (*it) ) )
       res.CellVector().push_back( const_cast<Element<dim>* const>(*it) );
 
   res.CellVector().shrink_to_fit();

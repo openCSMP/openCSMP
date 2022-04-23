@@ -14,11 +14,11 @@ namespace csmp {
  */
 class Boundary_Test : public Test {
 public:
-  Boundary_Test( bool verbose=false ) : verbose_(verbose) {}
-
   virtual void run();
 
 private:
+  const static bool verbose_ = true;
+
   void runLegacy();
   void runCurrent();
 
@@ -48,8 +48,6 @@ private:
 
   template<uint32_t dim>
   void NoSurfaceElementsAsNodeParents( const Region<dim>& region );
-  
-  bool verbose_;
 };
 
 } // csmp

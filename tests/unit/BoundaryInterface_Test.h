@@ -22,8 +22,6 @@ namespace csmp {
 */
 class BoundaryInterface_Test : public Test {
   public:
-    explicit BoundaryInterface_Test( bool verbose=false ) : verbose_(verbose) {}
-  
     /// testing new and refactored functionality from 2016-17
     virtual void run();
   
@@ -35,7 +33,7 @@ class BoundaryInterface_Test : public Test {
     bool TestRegionContactDetection( const Model<3U>& );
 
   private:
-    bool verbose_; ///< turn off to supress output of files etc.
+    const static bool verbose_ = true; ///< turn off to supress output of files etc.
 };
 
 

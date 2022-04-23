@@ -588,9 +588,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     SPLITBOUNDARY_COMPLEX<dim>* model( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
   
     // 1. Converting the lower dimensional region into a single Boundary or multiple Boundaries (patches of juxtaposed rocks)
-    const bool remove_original_region(true);
     //    CreateInternalBoundaryFrom checks whether dim_1_region actually exists
-    pair<set<string>,bool> boundary_names = model->CreateInternalBoundaryFrom( dim_1_region, remove_original_region );
+    pair<set<string>,bool> boundary_names = model->CreateInternalBoundaryFrom( dim_1_region );
     if ( boundary_names.second == false ) 
       return boundary_names;
     

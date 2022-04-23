@@ -150,24 +150,27 @@ size_t Boundary_Test::InputElementAreaAsVolumeVariable( Model<dim>& model, Bound
   }
 
 
-/// checks for that at least one neigbor is present
+/// checks that at least one neighbor is present
 template <uint32_t dim>
 void Boundary_Test::CheckFaceNeighbors( const Boundary<dim>& boundary )
-  {
-
-
-  const auto domainElementsEnd( boundary.CellsEnd() );
-  for( auto it = boundary.CellsBegin(); it != domainElementsEnd; ++it )
-    {
-      size_t notNullNeighbors(0);
-      const auto neighbors( (*it)->Neighbors() );
-      for( auto i = 0; i < neighbors; ++i )
-        {
-          if( (*it)->Neighbor(i) )
-            ++notNullNeighbors;
-        }
-      _test( notNullNeighbors > 0 );
-    }
+ {
+    const auto domainElementsEnd( boundary.CellsEnd() );
+    for( auto it = boundary.CellsBegin(); it != domainElementsEnd; ++it )
+      {
+        size_t notNullNeighbors(0);
+        const auto neighbors( (*it)->Neighbors() );
+        for( auto i = 0; i < neighbors; ++i )
+          {
+            if( (*it)->Neighbor(i) )
+              ++notNullNeighbors;
+          }
+        _test( notNullNeighbors > 0 );
+        // diagnostics
+        if ( notNullNeighbors == 0U ) {
+             cerr <<"\n"<< boundary.Name() <<": Face "<< (*it)->Idx() <<": ";
+             cerr << parseFiniteElementType( (*it)->FE_Type() ) <<"  ";
+          }
+      }
   }
 
 
@@ -535,106 +538,73 @@ void Boundary_Test::runLegacy()
 
 
 
-
-  void Boundary_Test::runCurrent()
-    {      
-      ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true, true );
-      NoSurfaceElementsAsNodeParents( m0.Region("Model") );
+/**
+       refactored tests from Philip Lang
+*/
+// TODO: move to ANSYS_Model3D_Test
+void Boundary_Test::runCurrent()
+  {
+      size_t n_nodes_model{0U};
       
-      // these are redundant checks to make sure the ANSYS_Model no csmp::Boundary constructor works
-      // for both legacy box and irregular models (legacy functionality)    
-      ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true );
-        _test( m01.Boundaries() == 0 );
+      // test that model contains no surface elements after boundary construction
+      {
+         ANSYS_Model3D m0( "BoxHalfs3D", "BoxHalfs3DirregularNoHalf", "CSMP-variables.txt", true, true );
+         NoSurfaceElementsAsNodeParents( m0.Region("Model") );
+         n_nodes_model = m0.Mesh().Nodes();
+      }
+      
+      // test standard model with box boundaries
+      {
+        ANSYS_Model3D m01( "BoxHalfs3D", "CSMP-variables.txt", false, true );
+        _test( m01.Boundaries() == 6 ); // six surfaces of the box-shaped model
+        _test( m01.Regions() == 4 );
+        _test( n_nodes_model == m01.Region("Model").Nodes() );
+        if ( verbose_ ) {
+            cout << "m03.Boundaries: " << m01.Boundaries() << "\n";
+            cout << "m03.Regions: " << m01.Regions() << "\n";
+            cout << "nodeCount: " << m01.Mesh().Nodes() << "\n";
+            cout << "m03.Region(Model).Nodes(): " << m01.Region("Model").Nodes() << "\n";
+          }
+        // creating boundaries from the edges
+        m01.EstablishEdgeBoundariesOfBoxShapedModel();
+        _test( m01.Boundaries() == 18 );
+      }
  
-      const bool irregular_mesh(true);   /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
-      const bool binary_file(true);      /* true = binary, false = ascii */
-      ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
-                          irregular_mesh, binary_file ); 
-                          
-      _test( m02.Boundaries() == 0 );
-        
-      const size_t nodeCount( m01.Region("Model").Nodes() );
-      _test( nodeCount == m02.Region("Model").Nodes() );
+      // testing case where no boundaries are created because there are no boundary-regions listed in regions file
+      {
+        const bool irregular_mesh(true);   /* true = free-form model, but box boundaries will still be picked up; false = only box boundaries */
+        const bool binary_file(true);      /* true = binary, false = ascii */
+        ANSYS_Model3D m02( "BoxHalfs3D", "BoxHalfs3DirregularNoBoundaries", "CSMP-variables.txt",
+                            irregular_mesh, binary_file );
+                            
+        _test( m02.Boundaries() == 0 );
+        _test( n_nodes_model == m02.Region("Model").Nodes() );
 
-      size_t nullNeighborCount(0);
-      Region<3>& rref( m02.Region("Model") );
-      for ( vector<Element<3>*>::const_iterator eit = rref.CellsBegin(); eit != rref.CellsEnd(); ++eit ) 
-        {
-          for ( auto i{0U}; i < (*eit)->Neighbors(); ++i )
-            if ( !(*eit)->Neighbor(i) )
-              ++nullNeighborCount; 
-        }
-      _test( nullNeighborCount != 0 );
+        size_t nullNeighborCount(0);
+        Region<3>& rref( m02.Region("Model") );
+        for ( auto eit = rref.CellsBegin(); eit != rref.CellsEnd(); ++eit )
+          {
+            for ( auto i{0U}; i < (*eit)->Neighbors(); ++i )
+              if ( !(*eit)->Neighbor(i) )
+                ++nullNeighborCount;
+          }
+        _test( nullNeighborCount != 0 );
 
-      if ( verbose_ ) cout << "\nNull neighbor count: " << nullNeighborCount << endl;
-
-      _test( nodeCount == m02.Region("Model").Nodes() );
-
+        if ( verbose_ ) cout << "\nNull neighbor count: " << nullNeighborCount << endl;
+      }
       
-      // one big irregular boundary
-      m02.EstablishBoundariesFromRegions();
-      _test( m02.Boundaries() >= 1 );
-      Boundary<3U>& b0102 = m02.Boundary("IRREGULAR");
+      // irregular model again
+      {
+        ANSYS_Model3D m04( "BoxHalfs3D", "BoxHalfs3Dirregular", "CSMP-1phase-variables.txt", true );
+        cout << "m04.Boundaries(): " << m04.Boundaries() << "\n";
+        cout << "m04.Regions(): " << m04.Regions() << "\n";
+        cout << "nodeCount: " << m04.Mesh().Nodes() << "\n";
+        cout << "m04.Region(Model).Nodes(): " << m04.Region("Model").Nodes() << "\n";
+        _test( m04.Boundaries() == 6 );
+        _test( m04.Regions() == 4 );
+        _test( n_nodes_model == m04.Region("Model").Nodes() );
+      }
 
-      VTU_Interface<3> v02(m02);
-      m02.InputPropertyValue( "face variable", makeScalar( PLAIN, 1. ) );
-      v02.OutputDataToVTU( "IRREGULAR", "face variable", b0102, static_cast<int>(0) );
-
-      Model<3>::boundaryIterator boundary( m02.Boundary(b0102) );
-      deque<string> regionsToRemove;
-      for( Model<3>::regionIterator it( m02.UniqueRegionsBegin() ); it != m02.UniqueRegionsEnd(); ++it )
-        {
-          if( m02.IsBoundaryName( it->first ) )
-            {
-              regionsToRemove.push_back( it->first );
-            }
-          if( boundary->second.Cells() == 0 )
-            m02.RemoveBoundary( boundary->second, false );
-        }
-
-      for( size_t i(0); i < regionsToRemove.size(); ++i ) {
-          // SKM FIX m02.RemoveRegion( regionsToRemove.at(i).c_str() );
-          m02.RemoveFromRegion( "Model", regionsToRemove.at(i).c_str() );
-          m02.MoveToNonUniqueRegions( regionsToRemove.at(i).c_str() );
-        }
-
-      _test( nodeCount == m02.Region("Model").Nodes() );
-
-      v02.DeleteConnectivity();
-
-      for( Model<3>::boundaryIterator it( m02.BoundariesBegin() ); it != m02.BoundariesEnd(); ++it )
-        {
-          it->second.InputPropertyValue( "face variable", makeScalar( PLAIN, 1. ) );
-          if ( verbose_ ) v02.OutputDataToVTU( "ModelBoundarySplit", "face variable", it->second, static_cast<int>(0) );
-        }
-
-      m02.InputPropertyValue( "nodal variable", makeScalar( PLAIN, 1. ) );
-      
-      m02.Boundary("TOP").InputPropertyValue( "nodal variable", makeScalar( PLAIN, 2. ) );
-      if ( verbose_ ) v02.OutputDataToVTU( "BoundaryValue", "nodal variable", "Model", static_cast<int>(0) );
-
-      ANSYS_Model3D m03( "BoxHalfs3D", "CSMP-variables.txt" );
-      cout << "m03.Boundaries(): " << m03.Boundaries() << "\n";
-      cout << "m03.Regions(): " << m03.Regions() << "\n";
-      cout << "nodeCount: " << nodeCount << "\n";
-      cout << "m03.Region(Model).Nodes(): " << m03.Region("Model").Nodes() << "\n";
-	  
-      _test( m03.Boundaries() == 18 );
-      _test( m03.Regions() == 4 );
-      _test( nodeCount == m03.Region("Model").Nodes() );
-
-      ANSYS_Model3D m04( "BoxHalfs3D", "BoxHalfs3Dirregular", "CSMP-1phase-variables.txt", true );
-      cout << "m04.Boundaries(): " << m04.Boundaries() << "\n";
-      cout << "m04.Regions(): " << m04.Regions() << "\n";
-      cout << "nodeCount: " << nodeCount << "\n";
-      cout << "m04.Region(Model).Nodes(): " << m04.Region("Model").Nodes() << "\n";
-      _test( m04.Boundaries() == 6 );  
-      _test( m04.Regions() == 4 );
-      _test( nodeCount == m04.Region("Model").Nodes() );
-
-      return;
-    }
-
-
+  } // end runCurrent
 
 } // csmp

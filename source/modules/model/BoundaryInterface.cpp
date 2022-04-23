@@ -594,7 +594,7 @@ FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const c
 
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( const char* dim_1_region, bool remove_original_region )
+pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom( const char* dim_1_region )
  {
     BOUNDARY_COMPLEX<dim>& model( static_cast<BOUNDARY_COMPLEX<dim>&>(*this) );
 
@@ -762,8 +762,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
                                                                         model_domain.E( (*pit).OuterElement() ),
                                                                         (*pit).InnerElementFace(),
                                                                         (*pit).OuterElementFace(),
-                                                                        lvsFaces, lvsIntegrationPoints,
-                                                                        remove_original_region ) );
+                                                                        lvsFaces, lvsIntegrationPoints ) );
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
            }
@@ -797,21 +796,14 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 6. Remove parent region of the boundary from “Model” and into the non-unique list of regions so that it does not get included into computations.
+    // 6. remove lower-dimensional input region (its elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    if ( !remove_original_region ) {
-         model.RemoveFromRegion( "Model", dim_1_region );
-         model.MoveToNonUniqueRegions( dim_1_region );
-      }
-   
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 7. (optional) remove parent region (including its elements) if no longer required.
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    model.RemoveRegion( dim_1_region, remove_original_region );
+    const bool remove_elmts{ false };
+    model.RemoveRegion( dim_1_region, remove_elmts );
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 8. extra diagnostics and output of boundary names
+    // 7. extra diagnostics and output of boundary names
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     if ( patch_names.empty() ) {
          ErrorHandler::Instance().notice( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "no Boundary patches could be created." );
@@ -861,60 +853,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
 
 
 
-
-
-
-template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom( const char* dim_m1_region, BOX_BOUNDARY boxBoundary )
-  {
-throw csmp::Exception( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateExternalBoundaryFrom",
-                      "method not tested yet." );
-  
-    BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
-
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-    // if the region appears to be valid a reference to it is created
-    if ( !boundaryComplex->ContainsRegion(dim_m1_region) ) {
-      csmp_error.notice( ERROR, "BoundaryInterFace::CreateExternalBoundaryFrom:", dim_m1_region, "region does not exist." );
-         return false;
-      }
-      
-    // verifying that this is a lower-dimensional region
-    csmp::Region<dim>&  dim_m1_domain( boundaryComplex->Region(dim_m1_region) );
-    if ( !hasLowerDimensionalRepresentation(dim_m1_domain) ) {
-         csmp_error.notice( ERROR, "BoundaryInterface::CreateExternalBoundaryFrom:", dim_m1_region,
-                                   "region is not lower dimensional. Therefore it cannot be converted into Boundary" );
-         return false;
-      }
-    
-    // establishing region name from the name of the region supplied if it contains boundary
-    // else, a boundary name is created from string 'BOUNDARY_' preceding the region name
-    string regionName( dim_m1_region );
-    if ( !isDiagnosticBoxBoundaryClassifier(dim_m1_region) &&
-          regionName != "IRREGULAR" &&
-          regionName.find("BOUNDARY") == string::npos &&
-          regionName.find("boundary") == string::npos )
-       regionName = "BOUNDARY_" + regionName;
-    
-    string bName( regionName );
-    
-    // inserting boundary if not existing yet
-    pair<typename map<string,csmp::Boundary<dim> >::iterator,bool>
-        it = boundaryMap_.insert( make_pair( bName, csmp::Boundary<dim>( bName, boundaryComplex->Database(), boxBoundary ) ) );
-    if ( it.second )
-      {
-        // creates connectivity among Faces
-        bool succeeded( (*it.first).second.CreateFrom( dim_m1_domain, boundaryComplex->Mesh(), boxBoundary ) );
-        cout << "\nBoundaryInterface<"<< dim <<">::CreateExternalBoundaryFrom: done: " << regionName << endl;
-        return succeeded;
-      }
-    else csmp_error.notice( INFO, "BoundaryInterface::CreateExternalBoundaryFrom:",
-                            bName.c_str(), "Boundary already exists. Nothing was done.");
-    // shouldn't get here
-    return false;
-    
-  } // end CreateExternalBoundaryFrom
 
 
 
@@ -1477,7 +1415,7 @@ static void createLineFaceConnectivity( vector<Face<3U>*>& line_faces )
                // line faces only have a role on model edges
                // ony those edge node parents are kept in the map which have two nodes flagged as edge
                for ( auto iit=it.second.begin(); iit!=it.second.end(); ++iit ) {
-                    for ( size_t j{0}; j<(*iit)->Nodes(); ++j )
+                    for ( auto j{0U}; j<(*iit)->Nodes(); ++j )
                       if ( !isEdge( (*iit)->N(j)->AtBoundary() ) ) {
                            // returns a valid iterator to the set after the erasure
                            iit = it.second.erase( iit );
@@ -1490,7 +1428,7 @@ static void createLineFaceConnectivity( vector<Face<3U>*>& line_faces )
                                    "edge node is connected to more than 2 line Faces;\
                                     don't know how to deal with this manifold.");
             }
-           /* NOTHING NEEDS TO BE DONE BECAUSE FACE POINTERS ALREADY ARE NULLPTRs
+           /* NOTHING EXTRA NEEDS TO BE DONE BECAUSE FACE POINTERS ALREADY ARE NULLPTRs
              // this neighbor of the face is set to nullptr=no neighbor
              for ( auto fit=it.second.begin(); fit!=it.second.end(); ++fit )
                for ( size_t node=0U; node<(*fit)->Nodes(); ++node )
@@ -1610,8 +1548,10 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
       }
    
     // assigning the equidimensional neighbors to the newly created faces
-    createLineFaceConnectivity( shared_faces );
-    // model.Mesh().BuildLineConnectivity<Face>( shared_faces.begin(), shared_faces.end() );
+    // createLineFaceConnectivity( shared_faces ); // works fine but this is the task of the MeshManager
+    
+    // interconnecting the edges with one-another
+    model.Mesh().BuildLineConnectivity<Face>( shared_faces.begin(), shared_faces.end() );
 		
     // false if no shared faces could be detected
     return ( !shared_faces.empty() );
@@ -1635,6 +1575,8 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
    @attention EXCEPTION: the edge curves are represented by Face objects, however these 
    are dim-2 entities. Following CSMP's rules, these edges will be connected to their face neighbors
    AND their higher-dimensional parent elements with which they share edges.
+   
+   @test OK - for BoxHalfs3D
 
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
