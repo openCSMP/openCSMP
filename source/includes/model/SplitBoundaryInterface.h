@@ -68,10 +68,10 @@ class SplitBoundaryInterface {
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( const char* split_boundary );
+    void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( csmp::SplitBoundary<dim>& );
+    void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
 
     // -----------------------------------------------------------
     // Input/output

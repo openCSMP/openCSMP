@@ -141,7 +141,7 @@ namespace csmp
       TensorVariable<3> tvPlain;
       
       if ( verbose ) cout <<"Building ModelOutput..."<<endl;
-      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true,true );
+      ANSYS_Model3D modelOutput2( "FracBox", "Vset_TestCase.txt",true,true );
       ArrayVariable na( "nodal array", modelOutput2.Database(), 2., ROBIN );
       Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
       Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
@@ -246,7 +246,7 @@ namespace csmp
       _test( back.Cells() != 0 );
       
       // testing model with finite volume variables
-      ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true,true);
+      ANSYS_Model3D modelOutput3( "FracBox", "FracBoxNoFrac", "Vset_TestCase.txt",true,true);
 
       Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
       Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );
@@ -348,7 +348,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
         cout << "\n-------------------------------------------------------";
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
         model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true, true );
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true );
  
         //writing ansys model to file deleting it and then recreating a csmp native model from the file
         if ( reconstruct_from_file ) {

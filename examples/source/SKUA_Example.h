@@ -11,6 +11,7 @@ public:
   virtual void Specifications();
 private:
   static void ListModels();
+  static void RunSuperSimple();
 };
 
 } // csmp

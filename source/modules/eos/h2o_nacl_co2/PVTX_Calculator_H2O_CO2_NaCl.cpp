@@ -122,22 +122,22 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
     ToC_ = n->Read( props_.key_T ); // temperature in centrigrade
     if ( Pf_ <= 100325. ) {
          cerr <<"\n\t"<< Pf_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too low for EOS-scheme (min pf=1bar); errors may occur");
       }
     else if ( Pf_ >= 6e7 ) {
          cerr <<"\n\t"<< Pf_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too high for EOS-scheme (max pf=600bar); errors may occur");
       }
     if ( ToC_ <= 12. ) {
          cerr <<"\n\t"<< ToC_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too low for EOS-scheme (min T(oc)=12); errors may occur");
       }
     else if ( ToC_ >= 100. ) {
          cerr <<"\n\t"<< ToC_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too high for EOS-scheme (max T(oc)=100); errors may occur");
       }
 
@@ -440,7 +440,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
         const double diff_co2_aq = flash_.D_Co2();
         if ( first_warning && (diff_co2_aq < 2.0e-10 || diff_co2_aq > 12.5e-9) ) {
              cerr <<"\n\t"<< diff_co2_aq <<" m2/s.";
-             csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate:",
+             csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate:",
                                "CO2 diffusivity in brine is out of bounds as defined by Cardogan et al. 2014.");
              first_warning = false;
           }
@@ -471,22 +471,22 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
     InterpolateInputVariablesToBaryCenter( e );
     if ( Pf_ <= 100325. ) {
          cerr <<"\n\t"<< Pf_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too low for EOS-scheme (min pf=1bar); errors may occur");
       }
     else if ( Pf_ >= 6e7 ) {
          cerr <<"\n\t"<< Pf_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too high for EOS-scheme (max pf=600bar); errors may occur");
       }
     if ( ToC_ <= 12. ) {
          cerr <<"\n\t"<< ToC_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too low for EOS-scheme (min T(oc)=12); errors may occur");
       }
     else if ( ToC_ >= 100. ) {
          cerr <<"\n\t"<< ToC_;
-         csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
+         csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too high for EOS-scheme (max T(oc)=100); errors may occur");
       }
 
@@ -550,7 +550,7 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
         diff_co2_aq = flash_.D_Co2();
         if ( diff_co2_aq < diff_CO2_min || diff_co2_aq > diff_CO2_max ) {
              cerr <<"\n\t"<< diff_co2_aq <<" m2/s.";
-             csmp_error.notice( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate:",
+             csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate:",
                                          "CO2 diffusivity in brine is out of bounds as defined by Cardogan et al. 2014; setting it to minimum value.");
              diff_co2_aq = diff_CO2_min;
           }

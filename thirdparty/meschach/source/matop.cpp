@@ -27,7 +27,7 @@
 /* matop.c 1.3 11/25/87 */
 
 #include <cstring>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 using namespace std;
 

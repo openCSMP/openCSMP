@@ -34,7 +34,7 @@
 #define SPARSE_H 
 
 
-#include "matrix.h"
+#include "meschach_matrix.h"
 
 
 /* basic sparse types */

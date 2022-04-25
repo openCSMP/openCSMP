@@ -658,7 +658,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !model.ContainsRegion(region) ) {
-         csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+         csmp_error.Note( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                             region, " not found, nothing was done.");
          return;
       }
@@ -667,13 +667,13 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
     csmp::Index  key = model.Database().StorageKey( (*outvars.begin()).c_str() );
     for ( list<string>::const_iterator it=outvars.begin(); it!=outvars.end(); it++ )
       if ( model.Database().Placement( (*it).c_str() ) != key.place ) {
-           csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+           csmp_error.Note( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                              (*it).c_str(), "has different placement than other variables; this cannot be handled.");
            return;
         }
 
     if ( key.place != NODE and key.place != ELEMENT ) {
-         csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
+         csmp_error.Note( ERROR, "TextInterface::OutputDataAsTextColumns(multiple variables):",
                            "method works only for NODE and ELEMENT variable placements; nothing was done.");
          return;
       }
@@ -689,7 +689,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
      outfile_prefix +=".txt";
      FILE*  fp(0);
      if ((fp = fopen ( outfile_prefix.c_str(),"wt")) == NULL ) {
-          csmp_error.notice( ERROR, "TextInterface::OutputDataAsTextColumns",
+          csmp_error.Note( ERROR, "TextInterface::OutputDataAsTextColumns",
                              outfile_prefix.c_str(), "could not be created." );
           return;
        }

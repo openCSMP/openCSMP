@@ -72,7 +72,7 @@ void IndexTracker::Attach( csmp::Index* newIndex, const csmp::Index* existingInd
            ErrorHandler&  csmp_error( ErrorHandler::Instance() );
            cerr <<"\nregistered index objects:";
            Out();
-           csmp_error.notice( WARNING, "IndexTracker::Attach:", "Existing Index object could not be re-attached as it was not registered." );
+           csmp_error.Note( WARNING, "IndexTracker::Attach:", "Existing Index object could not be re-attached as it was not registered." );
         }
       else parameterName = it->second;
       Attach( newIndex, parameterName );
@@ -101,7 +101,7 @@ void IndexTracker::Detach( const csmp::Index* existingIndex )
                cerr <<"\nregistered index objects: "<< trackedIndices_.size();
                Out();
             }
-          csmp_error.notice( WARNING, "IndexTracker::Detach:", "target Index was not registered." );
+          csmp_error.Note( WARNING, "IndexTracker::Detach:", "target Index was not registered." );
        }
      else trackedIndices_.erase(it);
   }

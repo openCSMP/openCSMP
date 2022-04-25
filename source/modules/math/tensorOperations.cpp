@@ -41,7 +41,7 @@ double magnitude( const PLACE<dim>& site, const csmp::Index& prop_key )
       }
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( ERROR, "propertyMagnitude:", parseType(prop_key.type).c_str(),
+    csmp_error.Note( ERROR, "propertyMagnitude:", parseType(prop_key.type).c_str(),
                       "method for calculating magnitude of this variable type undefined; returning NaN.");
 
     return std::numeric_limits<double>::signaling_NaN();

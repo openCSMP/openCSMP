@@ -32,7 +32,7 @@
 #ifndef MATRIX2H
 #define MATRIX2H
 
-#include "matrix.h"
+#include "meschach_matrix.h"
 
 /* Unless otherwise specified, factorisation routines overwrite the
    matrix that is being factorised */

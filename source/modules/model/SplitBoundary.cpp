@@ -288,7 +288,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
       if ( prop_key.place == SPLIT_BOUNDARY ) {
            if ( sd != COMPLETE )
-             csmp_error.notice( WARNING, "Region<dim>::InputPropertyValue",
+             csmp_error.Note( WARNING, "Region<dim>::InputPropertyValue",
                                           input_prop, "is a Region property and no distinction between INTERIOR and PERIMETER can be made" );
            this->Store( prop_key, new_value );
            return;
@@ -297,7 +297,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       // incorrect applications of method  
       if ( prop_key.place == BOUNDARY || prop_key.place == REGION || prop_key.place == MODEL ||
            prop_key.place == ELEMENT || prop_key.place == FACE )
-        csmp_error.notice( ERROR, "Region<dim>::InputPropertyValue",
+        csmp_error.Note( ERROR, "Region<dim>::InputPropertyValue",
                            input_prop, "must be a SPLIT_BOUNDARY, INTER_FACE/IP or NODE property for this method call to work" );        
     
      // for any different property placement, the method of the base-class is called
@@ -333,7 +333,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       
       if ( key.place == SPLIT_BOUNDARY ) {
            if ( sd != COMPLETE )
-             csmp_error.notice( WARNING, "SplitBoundary<dim>::InputPropertyValue",
+             csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
                                 input_prop, "is a SPLIT_BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
                                 
            // only overwriting those variable components / rows that are not flagged 'do_not_overwrite' 
@@ -344,7 +344,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       // incorrect applications of method  
       if ( key.place == REGION  || key.place == BOUNDARY || key.place == MODEL || 
            key.place == ELEMENT || key.place == FACE )
-        csmp_error.notice( ERROR, "SplitBoundary<dim>::InputPropertyValue",
+        csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue",
                            input_prop, "must be a SPLIT_BOUNDARY, INTER_FACE/IP or NODE property for this method call to work" );        
     
      // for any different property placement, the method of the base-class is called
@@ -432,11 +432,11 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( cell_ids.empty() )
-    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+    csmp_error.Note( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
                       "user-supplied interface-number vector is empty. Nothing is done." );
 
   if ( !this->cell_vec_.empty() ) {
-      csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+      csmp_error.Note( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
                          "SplitBoundary is not empty", "erasing all members..." );
       this->cell_vec_.clear();
     }
@@ -447,11 +447,11 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   sort( cell_ids.begin(), cell_ids.end() );
   cell_ids.erase( unique( cell_ids.begin(), cell_ids.end() ), cell_ids.end() );
   if ( cell_ids.size() < n_cells )
-    csmp_error.notice( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
+    csmp_error.Note( WARNING, "SplitBoundary<dim>::AccumulateByNumber",
                       "user-supplied interface ID set contained duplicates which were removed." );
 #endif
   if ( cell_ids.size() > mesh.InterFaces() )
-    csmp_error.notice( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
+    csmp_error.Note( ERROR, "SplitBoundary<dim>::AccumulateByNumber",
                        "user-supplied interface-number vector is larger than range of index-to-element-pointer mapping." );
 
   // creating the element vector for the region
@@ -499,11 +499,11 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
   if ( distance(ifacesBegin,ifacesEnd) == 0 ) {
-       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom", "supplied InterFace range is empty; nothing was done");
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::CreateFrom", "supplied InterFace range is empty; nothing was done");
        return false;
     }
   if ( (*ifacesBegin)->ConnectedNeighbors() == 0 ) {
-       csmp_error.notice( ERROR, "SplitBoundary<dim>::CreateFrom:", "some supplied InterFace objects do not have neighbors; nothing was done");
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::CreateFrom:", "some supplied InterFace objects do not have neighbors; nothing was done");
        return false;
     }
     
@@ -562,7 +562,7 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if constexpr ( dim != 3U ) {
-    csmp_error.notice( WARNING, "SplitBoundary<>::Perimeter:",
+    csmp_error.Note( WARNING, "SplitBoundary<>::Perimeter:",
                        "returning 1.0 since perimeter is a point." );
     return 1.;
   }
@@ -608,7 +608,7 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
   
   if constexpr ( dim == 1U ) {
        // TODO: should be a static assert
-       csmp_error.notice( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D" );
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::Area", "not defined in 1D" );
     }
 
   return integrated_area;
@@ -813,15 +813,15 @@ void SplitBoundary<dim>::Out() const
   for ( const auto& it : this->cell_vec_ ) {
         if ( it == nullptr ) {
              cerr <<" interface pointer "<< elmt_idx <<" not valid.";
-             csmp_err.notice( ERROR, "SplitBoundary<dim>::Out", "'nullptr' detected" );
+             csmp_err.Note( ERROR, "SplitBoundary<dim>::Out", "'nullptr' detected" );
           }
         else {
              geom_measure += it->Area();
           }
        elmt_idx++;
     }
-  if constexpr( dim == 2 ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
-  if constexpr( dim == 3 ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
+  if constexpr( dim == 2U ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
+  if constexpr( dim == 3U ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
 
   cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );

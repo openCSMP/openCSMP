@@ -338,13 +338,12 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
     size_t n_elmts_region1{ interface1.Cells() };
     size_t n_elmts_region2{ interface2.Cells() };
     
-    bool remove_original_region{false};
-    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
+    // removes input region
+    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1" );
     const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
     _test( boundary1.Cells() == n_elmts_region1 );
     
-    remove_original_region=true;
-    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
+    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2" );
     const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
     _test( boundary2.Cells() == n_elmts_region2 );
 
@@ -394,7 +393,8 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     model.SplitBoundariesOut();
 
     // 2. remove split boundary 1 here before creating new ones in the same place
-    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+    const bool erase_interfaces{ true };
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str(), erase_interfaces ); // INTERFACE1
         
     model.RegionsOut();
 
@@ -405,7 +405,6 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     ANSYS_Model2D model2( model2d_name_.c_str(), varFileName.c_str() );
     // now the nodes are shared so this should work
     model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
-
 
 } // end Test_CreatInternalBoundary
 

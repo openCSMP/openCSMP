@@ -35,7 +35,7 @@ ConstantFactor<dim,operation >::ConstantFactor( const PropertyDatabase<dim>& p,
     if ( res_.Key() == arg_.Key() ) res_prop_equal_to_arg_prop_ = true;
 
     if ( res_.Type() != SCALAR or arg_.Type() != SCALAR )
-      csmp_error.notice( FATAL_ERROR, "ConstantFactor<dim,operation >(constructor)",
+      csmp_error.Note( FATAL_ERROR, "ConstantFactor<dim,operation >(constructor)",
                                       "Interrelation only works for scalar variables" );
 
     if ( res_.Placement() != arg_.Placement() )

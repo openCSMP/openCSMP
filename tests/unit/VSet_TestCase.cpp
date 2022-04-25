@@ -189,7 +189,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     // Testing model without boundaries, variable&topology tests
     // TODO: test does not require boundaries
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true);
+    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true);
     ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
     const size_t elementCount1( modelOutput1.Region("Model").Cells() );
     const size_t nodeCount1( modelOutput1.Region("Model").Nodes() );
@@ -222,10 +222,10 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
     // Testing model with boundaries, variable&topology tests (requires 'FracBox' model)
     if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    const bool irregular_mesh{true}, binary_file{true}, use_regions_file{true};
+    const bool irregular_mesh{true}, binary_file{true};
                
     ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),
-                                irregular_mesh,binary_file,use_regions_file );
+                                irregular_mesh,binary_file );
     
     Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
     Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
@@ -262,7 +262,7 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     
 
     // testing model with finite volume variables
-    ANSYS_Model3D modelOutput3( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true,true);
+    ANSYS_Model3D modelOutput3( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true);
     NodeCenteredFiniteVolumeTransport<3> fvModule1( "Model", modelOutput3, "diffusivity", "nodal variable", "element vector", "nodal variable", false, false );
     Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
     Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );

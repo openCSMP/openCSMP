@@ -488,7 +488,7 @@ bool MeshManager_Test::Test_MeshTraversal3D()
          for ( auto i{0}; i < (*nit)->Neighbors(); ++i )
            node_neighbors.push_back( (*nit)->Neighbor(i) );
          // rebuilding the connectivity
-         _test( (*nit)->ReassignNeighbors() == node_neighbors.size() );
+         _test( (*nit)->AssignNodeNeighbors() == node_neighbors.size() );
          // comparing the sorted node pointers with one another
          for ( auto i{0}; i < (*nit)->Neighbors(); ++i )
            _test( (*nit)->Neighbor(i) == node_neighbors[i] );
@@ -635,7 +635,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test( mesh.Elements() == n_original_elmts );
 
 	// 2. deleting these nodes again
-	mesh.Delete( nodes.begin(), nodes.end() );
+	mesh.DeleteAndRepairConnnectivity( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
 
 // TODO: test insertion / deletion / connection of Face and InterFace objects
@@ -702,7 +702,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
 	
 	// delete the new face(s) again
   vector<Face<3U>*> face_ptrs{ fptr1, fptr2 };
-	mesh.Delete( face_ptrs.begin(), face_ptrs.end() );
+	mesh.DeleteAndRepairConnnectivity( face_ptrs.begin(), face_ptrs.end() );
   _test( fptr1 == nullptr );
   _test( fptr2 == nullptr );
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of faces):\n";
@@ -785,7 +785,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
 	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
  
 	// delete the new interface(s) again
-	mesh.Delete( iface_ptrs.begin(), iface_ptrs.end() );
+	mesh.DeleteAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of interfaces):\n";
 	cout << "\nFaces: " << mesh.InterFaces() << "\n";
 

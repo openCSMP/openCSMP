@@ -23,20 +23,20 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !model.Database().IsDefined(variable) ) {
-        csmp_error.notice( WARNING, "nearestNeighborFill:", variable, "is not defined, nothing could be done.");
+        csmp_error.Note( WARNING, "nearestNeighborFill:", variable, "is not defined, nothing could be done.");
         return;
       }
     csmp::Index var_key = model.Database().StorageKey(variable);
     if ( var_key.type != SCALAR ) {
-        csmp_error.notice( WARNING, "nearestNeighborFill:", "method currently only handles scalars, nothing could be done.");
+        csmp_error.Note( WARNING, "nearestNeighborFill:", "method currently only handles scalars, nothing could be done.");
         return;
       }
     if ( var_key.place != ELEMENT && var_key.place != NODE ) {
-        csmp_error.notice( WARNING, "nearestNeighborFill:", "method currently only handles variables placed on element or nodes, nothing could be done.");
+        csmp_error.Note( WARNING, "nearestNeighborFill:", "method currently only handles variables placed on element or nodes, nothing could be done.");
         return;
       }
     if ( !model.ContainsRegion(target_region) ) {
-        csmp_error.notice( WARNING, "nearestNeighborFill:", target_region, "is not defined, nothing could be done.");
+        csmp_error.Note( WARNING, "nearestNeighborFill:", target_region, "is not defined, nothing could be done.");
         return;
       }
     Region<dim>& gref(model.Region(target_region));
@@ -52,7 +52,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
              elementsMissingDataValues.insert( (*it) );
           
          if ( elementsMissingDataValues.empty() ) {
-              csmp_error.notice( INFO, "nearestNeighborFill:", "all elements have valid data values, nothing was done.");
+              csmp_error.Note( INFO, "nearestNeighborFill:", "all elements have valid data values, nothing was done.");
               return;
            }
          // starting nearest neighbor-fill loop
@@ -110,7 +110,7 @@ void nearestNeighborFill( Model<dim>& model, const char* target_region, const ch
              nodesMissingDataValues.insert( (*it) );
           
          if ( nodesMissingDataValues.empty() ) {
-              csmp_error.notice( INFO, "nearestNeighborFill:", "all nodes have valid data values, nothing was done.");
+              csmp_error.Note( INFO, "nearestNeighborFill:", "all nodes have valid data values, nothing was done.");
               return;
            }
          // starting nearest neighbor-fill loop

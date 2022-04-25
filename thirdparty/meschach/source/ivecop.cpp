@@ -28,8 +28,8 @@
 
 #include <cstdlib>
 #include <cstring>
-#include 	"matrix.h"
-#include        "platform.h"
+#include 	"meschach_matrix.h"
+#include  "platform.h"
 
 using namespace std;
 

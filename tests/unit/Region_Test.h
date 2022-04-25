@@ -10,9 +10,7 @@ namespace csmp
   class Region_Test: public Test
   {
   public:
-      Region_Test( bool verbose=false );
-      ~Region_Test();
-      void run();
+     void run();
     
   private:
      bool TestBoundaryFaceFunctionality( /* "VSET_MAKER" */ );
@@ -21,7 +19,7 @@ namespace csmp
      /// test covers functionality of the base class ModelSubDomain
      bool TestRegionFileInputOutput( Model<3U>& model, const char* region );
 
-    const bool verbose_;
+    const static bool verbose_ = false;
 };
   
 /// checks whether the neighbor information matches the boundary face info for region "Model"

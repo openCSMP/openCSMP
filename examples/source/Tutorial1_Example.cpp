@@ -66,8 +66,8 @@ void Tutorial1_Example::Specifications()
 // 6. Write a new function that reads in porosity and computes the compressibility as
 //    a function of the user-specified fluid- and rock-compressibilities, i.e. solves
 //    c = phi * c_f + (1-phi) * c_r for each FE with phi = porosity, c_f = fluid compressibility
-//    and c_r = rock compressibility. Look at other classes in /souce_code/interrelations for
-//    inspration.
+//    and c_r = rock compressibility. Look at other classes in /source_code/interrelations for
+//    inspiration.
 //
 // **********************************************************************************************
 
@@ -86,14 +86,14 @@ void Tutorial1_Example::Run()
     // txt file defines the physical variables to be used in the simulation
     VSet<2U>   vset=readTextPixelData();
     Model<2U>  model( vset, "tutorial1_variables.txt" );
-    const PropertyDatabase<2>& p_ref(model.Database());  // constand reference to the property database
+    const PropertyDatabase<2>& p_ref(model.Database());  // constant reference to the property database
 
     // give the model dimensions
     printModelDimensions( model, true );
 
     // -----------------------------------------------------------------------
     // 2.0 Now we apply boundary and initial conditions (this can also be done,
-    //     more conveniently, in a configuration file for more realistic runs
+    //     more conveniently, in a configuration file for more realistic runs)
     // -----------------------------------------------------------------------
 
     // assigning material properties
@@ -112,7 +112,7 @@ void Tutorial1_Example::Run()
 
 
     // ----------------------------------------------------------------------------------------------
-    // 3.0 Now we use an Interrelation (ConstantFactor, inherited from base class Interrelation
+    // 3.0 Now we use an Interrelation (ConstantFactor, inherited from base class Interrelation)
     //     to compute the hydraulic conductivity K = k/mu (k = permeability, mu = viscosity) at each
     //     finite element
     // ----------------------------------------------------------------------------------------------

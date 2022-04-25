@@ -314,7 +314,7 @@ bool  ModelSubDomain<dim,CELL>::IsContiguous() const
 
   pair<int32_t, int32_t>  dimensionality = SpatialDimensions();
   if ( dimensionality.first > 1U ) {
-      csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::IsContiguous:",
+      csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::IsContiguous:",
                          "method can determine contiguity only for domains which consist only of same shape cells (line, surface or volume type); returned false." );
       return false;
     }
@@ -461,8 +461,8 @@ void  ModelSubDomain<dim,CELL>::IdentifyPerimeter()
     // 1. putting the perimeter cells at the end of the elmt_vec and sorting
     //    interior and perimeter cell ranges subsequently
     // ----------------------------------------------------
-    const size_t first_bd_elmt = this->PartitionCellVector();
-    assert( first_bd_elmt <= this->cell_vec_.size() );
+    const size_t first_bd_elmt = PartitionCellVector();
+    assert( first_bd_elmt <= cell_vec_.size() );
 
  } // end IdentifyPerimeter
 
@@ -484,26 +484,26 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
 
      // verification of suitable model state
      if ( cell_vec_.empty() )
-       csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+       csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                           Name(), "model subdomain: CELL vector not initialised yet.");
                               
      if ( interior_cells > cell_vec_.size() ) {
            cerr <<"\ninterior cells: "<< interior_cells;
-           csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                               Name(), "model subdomain: less CELLs in CELL vector than interior cells specified.");
        }
 
      if ( !is_sorted( cell_vec_.begin(), next(cell_vec_.begin(),interior_cells)) ) {
           cerr <<"\ninterior cells: "<< interior_cells;
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                              Name(), "model subdomain: supplied CELL vector not sorted.");
        }
        
      // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
-     this->bd_face_vec_.resize( cell_vec_.size() - interior_cells );
+     bd_face_vec_.resize( cell_vec_.size() - interior_cells );
 
-     const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(this->cell_vec_.begin(),interior_cells) );
-     const typename vector<CELL<dim>*>::const_iterator cellsEnd( this->cell_vec_.end() );
+     const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(cell_vec_.begin(),interior_cells) );
+     const typename vector<CELL<dim>*>::const_iterator cellsEnd( cell_vec_.end() );
      vector<uint32_t>  boundary_faces;
      size_t            counter(0U);
 
@@ -515,7 +515,7 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
           boundary_faces.reserve( faces );
           for ( auto face(0U); face<faces; ++face )
             //   located on model boundary          or  neighbor is not contained in this subdomain
-            if ( (*it)->Neighbor( face ) == nullptr || !(this->Contains((*it)->Neighbor(face))) )
+            if ( (*it)->Neighbor( face ) == nullptr || !(Contains((*it)->Neighbor(face))) )
               boundary_faces.push_back( static_cast<ONE_BYTE_NUMBER>(face) );
           // storing the boundary face vector for the current cell
           if ( boundary_faces.size() == faces ) {
@@ -526,7 +526,7 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
                     cout <<" is a stand-alone cell in this subdomain.";
                  }
             }
-          this->bd_face_vec_[counter] = boundary_faces;
+          bd_face_vec_[counter] = boundary_faces;
           boundary_faces.clear();
           counter++;
        }
@@ -564,10 +564,10 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
  {
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
-    if ( this->cell_vec_.empty() )
+    if ( cell_vec_.empty() )
       throw logic_error( (string("ModelSubDomain<dim>::PartitionCellVector: method called on empty region: ") + Name()).c_str() );
 
-    sort( this->cell_vec_.begin(), this->cell_vec_.end() );
+    sort( cell_vec_.begin(), cell_vec_.end() );
 
     // --------------------------------------------------------------------
     // 0. detecting whether this region contains lower-dimensional cells
@@ -586,9 +586,9 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
 
     // 1.1 If all cells have the same spatial dimension
     // ---------------------------------------------------
-    if ( elmt_dim.first == 1 )
+    if ( elmt_dim.first == 1U )
       {
-        for ( auto& eit : this->cell_vec_ )
+        for ( auto& eit : cell_vec_ )
           {
             // identifying the boundary faces and their nodes
             // (each face potentially has a neighbor cell)
@@ -596,7 +596,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
             const auto n_faces{ eit->Faces() };
             for ( auto i{0U}; i<n_faces; i++ )
               // if the face is at a model boundary or has a neighbor that does not belong to the region
-              if ( !eit->Neighbor(i) || !binary_search( this->cell_vec_.begin(), this->cell_vec_.end(), eit->Neighbor(i)) )
+              if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i)) )
                 {
                   // boundary faces
                   boundary_faces.insert( make_pair( eit, i ) );
@@ -634,7 +634,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
         set<CELL<dim>*> lesser_dim_elmts;
         set<Node<dim>*> highest_dim_elmt_nodes;
 
-        for ( auto& eit : this->cell_vec_ )
+        for ( auto& eit : cell_vec_ )
           {
               // cells of the highest spatial dimension are used to define the boundary
               assert( parseFiniteElementDimension( eit->FE_Type() ) != 0 );
@@ -652,7 +652,7 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                    const auto n_faces{ eit->Faces() };
                    for ( auto i{0U}; i<n_faces; ++i )
                      // 1) the cell is on model boundary  or  2) one of its neighbors does not belong to its parent region
-                     if ( !eit->Neighbor(i) || !binary_search( this->cell_vec_.begin(), this->cell_vec_.end(), eit->Neighbor(i) ) )
+                     if ( !eit->Neighbor(i) || !binary_search( cell_vec_.begin(), cell_vec_.end(), eit->Neighbor(i) ) )
                        {
                           // the cell pointer and the face number are used to create a unique key for the discovered boundary face
                           boundary_faces.insert( make_pair( eit, i ) );
@@ -669,12 +669,12 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                 }
                else lesser_dim_elmts.insert( eit );
             }
-        assert( /* all cells are accounted for */ this->cell_vec_.size() == interior_elmts.size() + boundary_elmts.size() + lesser_dim_elmts.size() );
+        assert( /* all cells are accounted for */ cell_vec_.size() == interior_elmts.size() + boundary_elmts.size() + lesser_dim_elmts.size() );
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\nModelSubDomain<" << dim <<">::PartitionCellVector: '"<< this->Name() <<"' highest subdomain cell dim: "<< elmt_dim.second <<"\n";
+cout <<"\nModelSubDomain<" << dim <<">::PartitionCellVector: '"<< Name() <<"' highest subdomain cell dim: "<< elmt_dim.second <<"\n";
 cout <<"\n\tlesser-dim cells: "<< lesser_dim_elmts.size() <<", boundary cells: "<< boundary_elmts.size();
-cout <<"\n\ttotal nodes: "<< this->node_vec_.size() <<", highest-dim cell nodes: "<< highest_dim_elmt_nodes.size() << endl;
+cout <<"\n\ttotal nodes: "<< node_vec_.size() <<", highest-dim cell nodes: "<< highest_dim_elmt_nodes.size() << endl;
 cout.flush();
 #endif
 
@@ -762,7 +762,7 @@ cout.flush();
              interior_elmts.insert( it );
 
          if ( !lesser_dim_elmts_detached.empty() ) {             
-              csmp_error.notice( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
+              csmp_error.Note( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
                                 "subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.");
               // do some additional diagnostics on these cells
               // ------------------------------------------------
@@ -773,10 +773,10 @@ cout.flush();
            }
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\n\ttotal cells: "<< this->cell_vec_.size() <<", interior ones: "<< interior_elmts.size() <<", boundary cells: "<< boundary_elmts.size();
+cout <<"\n\ttotal cells: "<< cell_vec_.size() <<", interior ones: "<< interior_elmts.size() <<", boundary cells: "<< boundary_elmts.size();
 cout <<", stand-alone lower-dim cells: "<< lesser_dim_elmts_detached.size();
 cout <<" (sum="<< interior_elmts.size() + boundary_elmts.size() <<").";
-cout <<"\n\ttotal nodes: "<< this->node_vec_.size() <<", boundary nodes: "<< boundary_nodes.size() << endl << endl;
+cout <<"\n\ttotal nodes: "<< node_vec_.size() <<", boundary nodes: "<< boundary_nodes.size() << endl << endl;
 cout.flush();
 #endif
 
@@ -786,14 +786,14 @@ cout.flush();
     // --------------------------------------------------
     // 2. rebuilding the cell vector
     // --------------------------------------------------
-    assert( interior_elmts.size() + boundary_elmts.size() == this->cell_vec_.size() );
+    assert( interior_elmts.size() + boundary_elmts.size() == cell_vec_.size() );
     // appending the boundary cell vector<double> to the interior cell vector
-    this->cell_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
-    back_insert_iterator<vector<CELL<dim>*> >  back_it(this->cell_vec_);
+    cell_vec_.assign( interior_elmts.begin(), interior_elmts.end() );
+    back_insert_iterator<vector<CELL<dim>*> >  back_it(cell_vec_);
     copy( boundary_elmts.begin(), boundary_elmts.end(), back_it );
 
     // swap trick to trim excess memory from end of vector
-    vector<CELL<dim>*>( this->cell_vec_ ).swap( this->cell_vec_ );
+    vector<CELL<dim>*>( cell_vec_ ).swap( cell_vec_ );
 
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
@@ -818,11 +818,11 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // --------------------------------------------------
     // 3. creating the boundary face vector
     // --------------------------------------------------
-    if ( !this->bd_face_vec_.empty() ) this->bd_face_vec_.clear();
+    if ( !bd_face_vec_.empty() ) bd_face_vec_.clear();
     // bd_face_vec_ is only available if there are boundary cells
     if (boundary_elmts.size() > 0)
       {
-        this->bd_face_vec_.reserve(this->cell_vec_.size() - boundary_elmts.size());
+        bd_face_vec_.reserve(cell_vec_.size() - boundary_elmts.size());
         //       parent cell of face, face
         typename set<pair<CELL<dim>*, size_t> >::const_iterator  bfit(boundary_faces.begin());
         typename set<pair<CELL<dim>*, size_t> >::const_iterator  ffit(boundary_faces.begin());
@@ -830,7 +830,7 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
         size_t            counter(0U);
 
         while ( bfit != boundary_faces.end() ) {
-            assert((*ffit).first == this->cell_vec_[counter + interior_elmts.size()]);
+            assert((*ffit).first == cell_vec_[counter + interior_elmts.size()]);
             bface_data.reserve(3);
             // as long as we considering faces of the same cell
             while ( (*bfit).first == (*ffit).first ) {
@@ -840,32 +840,32 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
               }
             ffit = bfit;
             assert( bface_data.size() > 0 );
-            this->bd_face_vec_.push_back(bface_data);
+            bd_face_vec_.push_back(bface_data);
             bface_data.clear();
             counter++;
           }
-        this->bd_face_vec_.shrink_to_fit();
+        bd_face_vec_.shrink_to_fit();
         // debug checks
         for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
           assert( (*it).size() >= 1 );
-        assert(this->bd_face_vec_.size() == this->Cells() - this->InteriorCells());
+        assert(bd_face_vec_.size() == Cells() - InteriorCells());
      }
 
 
     // --------------------------------------------------
     // 4. building and partitioning the node vector
     // --------------------------------------------------
-    assert( this->node_vec_.size() >= boundary_nodes.size() );
-    this->first_bd_node_ = this->node_vec_.size() - boundary_nodes.size();
+    assert( node_vec_.size() >= boundary_nodes.size() );
+    first_bd_node_ = node_vec_.size() - boundary_nodes.size();
     
     // rebuilding and sorting the node vector (noting that set nodes are already sorted)
     // ---------------------------------------------------------------------------------
-    sort( this->node_vec_.begin(), this->node_vec_.end() );
+    sort( node_vec_.begin(), node_vec_.end() );
     // a temporary new node vector is created
     vector<csmp::Node<dim>*>  temp;
-    temp.reserve(this->node_vec_.size());
+    temp.reserve(node_vec_.size());
     // all nodes that are not in the boundary node vector are considered as interior nodes
-    for ( const auto& nit : this->node_vec_ ) {
+    for ( const auto& nit : node_vec_ ) {
           assert( nit );
           if ( boundary_nodes.find(nit) == boundary_nodes.end() )
             temp.push_back( nit );
@@ -874,19 +874,19 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     for ( const auto& nit : boundary_nodes )
       temp.push_back( nit );
     // now the temporary vector is assigned to the permanent one
-    assert( temp.size() == this->node_vec_.size() );
-    this->node_vec_ = move( temp );
-    this->node_vec_.shrink_to_fit();
+    assert( temp.size() == node_vec_.size() );
+    node_vec_ = move( temp );
+    node_vec_.shrink_to_fit();
     
-    assert( this->first_bd_node_ <= this->node_vec_.size() );
+    assert( first_bd_node_ <= node_vec_.size() );
 
 #ifdef MODEL_SUBDOMAIN_DEBUG
-cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< this->Name() <<"': of the ";
-cout << this->cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
+cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< Name() <<"': of the ";
+cout << cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
 cout.flush();
 #endif
 
-    return this->cell_vec_.size() - boundary_elmts.size();
+    return cell_vec_.size() - boundary_elmts.size();
 
  } // end PartitionCellVector
 
@@ -901,26 +901,69 @@ cout.flush();
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 {
-  assert( !this->cell_vec_.empty() );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( !this->node_vec_.empty() )
-    this->node_vec_.clear();
+  if ( cell_vec_.empty() ) {
+        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+                                  "cannot create 'node_vec_', current cell vector is empty");
+        return;
+     }
 
-  // creating the node index vector
-  this->node_vec_.reserve( cell_vec_.size() * 4 );
-  for ( auto it : this->cell_vec_ ) {
+  if ( !node_vec_.empty() )
+    node_vec_.clear();
+
+  // creating the node pointer vector
+  node_vec_.reserve( cell_vec_.size() * 4 );
+  for ( auto& it : cell_vec_ ) {
        const auto nodes{ it->Nodes() };
        for ( auto i{0U}; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
-            this->node_vec_.push_back( it->N( i ) );
+            node_vec_.push_back( it->N( i ) );
          }
     }
 
   // removing duplicates and trimming excess memory from node vector
-  sort( this->node_vec_.begin(), this->node_vec_.end() );
-  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-  this->node_vec_.shrink_to_fit();
+  sort( node_vec_.begin(), node_vec_.end() );
+  node_vec_.erase( unique( node_vec_.begin(), node_vec_.end() ), node_vec_.end() );
+  node_vec_.shrink_to_fit();
 }
+
+
+
+
+
+
+    /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
+template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells )
+ {
+     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+     if ( contacting_cells.empty() ) {
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+                                    "provided argument vector does not contain any cells");
+          return;
+       }
+
+  if ( !node_vec_.empty() ) node_vec_.clear();
+  node_vec_.reserve( contacting_cells.size() ); // rough guess of n-nodes
+   
+  // creating the node pointer vector
+  for ( const auto& it : contacting_cells ) {
+       // taking the nodes from the inside of the cell pairs
+       vector<uint32_t> fnids;
+       it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+       for ( auto i : fnids )
+         node_vec_.push_back( it.first.first->N(i) );
+    }
+
+  // removing duplicates and trimming excess memory from node vector
+  sort( node_vec_.begin(), node_vec_.end() );
+  node_vec_.erase( unique( node_vec_.begin(), node_vec_.end() ), node_vec_.end() );
+  node_vec_.shrink_to_fit();
+
+ } // end CreateNodePointerVector
+
 
 
 
@@ -1015,7 +1058,7 @@ PLACEMENT ModelSubDomain<dim,CELL>::Placement() const
 template<uint32_t dim, template<uint32_t> class CELL>
 bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const
   {
-    const PLACEMENT p( this->pref_.Placement( variableName ) );
+    const PLACEMENT p( pref_.Placement( variableName ) );
     if ( p == NODE || p == ELEMENT )
       return true;
     return false;
@@ -1314,20 +1357,20 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
      ScalarVariable    sc;
 
      if ( prop_key.place != ELEMENT and prop_key.type != SCALAR ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                     "method assigns only to scalar cell properties");
           return;
        }
      if ( dim != 1U and !strcmp( characteristic, "length" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+       csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                    "'length' will only be assigned to line cells, nothing done to others");
 
      if ( dim != 2U and !strcmp( characteristic, "area" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+       csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                    "'area' will only be assigned to surface cells, nothing done to others");
 
      if ( dim != 3U and !strcmp( characteristic, "volume" ) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                     "'volume' can only be assigned to volume cells. Nothing was done");
           return;
        }
@@ -1373,7 +1416,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
             }
       }
      else {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                              characteristic,  " entered as characteristic was not identified; nothing done");
           cout <<"\nYour options are: "<< endl;
           cout <<"\n\t inner radius"   << endl;
@@ -1501,7 +1544,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double& gmin, dou
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
     if ( !pref_.IsDefined(property) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
           return;
       }
     csmp::Index  gprop_key(pref_.StorageKey(property));
@@ -1547,25 +1590,25 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
     // properties / variables placed on the model
     /*
     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY ) {
-          if ( prop_key.type == SCALAR ) vmin = vmax = this->Read( prop_key );
+          if ( prop_key.type == SCALAR ) vmin = vmax = Read( prop_key );
           else if ( prop_key.type == VECTOR ) {
                VectorVariable<dim>  vc;
-               this->Read( prop_key, vc );
+               Read( prop_key, vc );
                vmin = vmax = vc.Length();
             }
           else if ( prop_key.type == TENSOR ) {
                TensorVariable<dim>  ts;
-               this->Read( prop_key, ts );
+               Read( prop_key, ts );
                minMaxEigenValues( ts, vmin, vmax );
             }
           else if ( prop_key.type == ARRAY ) {
                ArrayVariable  a(prop_key.dataDepth);
-               this->Read( prop_key, a );
+               Read( prop_key, a );
                a.MinMax( vmin, vmax );
             }
           else if ( prop_key.type == FLAGGEDARRAY ) {
                FlaggedArrayVariable  a(prop_key.dataDepth);
-               this->Read( prop_key, a );
+               Read( prop_key, a );
                a.MinMax( vmin, vmax );
             }
           return;
@@ -1975,7 +2018,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
     vmin = vmax = std::numeric_limits<double>::signaling_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
-    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
+    csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
                       "placement of property coould not be indentified");
 
  } // end MinMaxOf(index)
@@ -2378,7 +2421,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !pref_.IsDefined(property) ) {
-        csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
+        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
     const csmp::Index  prop_key = pref_.StorageKey(property);
@@ -2400,12 +2443,12 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
          prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
          prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT )
     {
-        csmp_error.notice( ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
+        csmp_error.Note( ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
         return ANY;
     }
 
     if ( cell_vec_.empty() ) {
-        csmp_error.notice( ERROR, src.c_str(), "ModelSubDomain is empty");
+        csmp_error.Note( ERROR, src.c_str(), "ModelSubDomain is empty");
         return ANY;
     }
 
@@ -2628,7 +2671,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( cell_vec_.empty() ) {
-         csmp_error.notice( ERROR, src.c_str(), "Region is empty.");
+         csmp_error.Note( ERROR, src.c_str(), "Region is empty.");
          return;
       }
 
@@ -2822,7 +2865,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( cell_vec_.empty() ) {
-         csmp_error.notice( ERROR, src.c_str(), "Region is empty");
+         csmp_error.Note( ERROR, src.c_str(), "Region is empty");
          return;
       }
 
@@ -4011,17 +4054,17 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
      if ( n_key.place != NODE ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( n_key.type != c_key.type ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4104,7 +4147,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
 
     // TENSOR PROPERTIES
     if ( n_key.type == TENSOR ) {
-          csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
          // creating a zero-initialized temporary vector<double>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
@@ -4866,7 +4909,7 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
     // 2. reading the interior cell records of the region
     binaryFileRead( fp, info.interior_elmts );
     if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
+        csmp_error.Note( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior cells: ", name );
     }
 
@@ -4893,9 +4936,9 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
   {
-     ofstream ofs( this->Name() + "_node_attribute.csv" );
+     ofstream ofs( Name() + "_node_attribute.csv" );
 
-     //ofs <<"\n"<< this->Name();
+     //ofs <<"\n"<< Name();
      ofs <<"\nx,y,z,node_id,bflag,rflag";
      for ( auto n=NodesBegin(); n!=PerimeterNodesBegin(); ++n ) {
           ofs <<"\n"<< (*n)->x() <<","<< (*n)->y() <<","<< (*n)->z() <<","<< (*n)->Idx() <<",";
@@ -4937,7 +4980,7 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
     nodes_removed -= node_vec_.size();
     
     if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
-      csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
+      csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
                         "removed nodes but not cells? - subdomain may be corrupt now.");
     
     return n_cells - n_cells_new;
@@ -5019,11 +5062,11 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Nod
  {
     if ( start == end ) return 0U;
  
-    auto   first1(this->PerimeterNodesBegin());
+    auto   first1(PerimeterNodesBegin());
     size_t shared_nodes(0U);
 
     // comparing the boundary nodes
-    while ( first1 != this->NodesEnd() and start != end )
+    while ( first1 != NodesEnd() and start != end )
       {
         if ( *first1 < *start ) ++first1;
         else if ( *start < *first1 ) ++start;
@@ -5140,6 +5183,122 @@ template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>& g1, co
 
 
 
+
+
+/**
+       Finds the higher-dimensional perimeter cells that share their perimeter faces on the touching two subdomains.
+       
+       @param subdomain1 any unique (non-overlapping) Region, Boundary or Splitboundary
+       @param subdomain2 subdomain that is expected to share outside faces with the first subdomain
+       @param matching_cells  map of higher-dimensional cells that share a face at the contact between the two subdomains
+       @return the number of shared perimeter faces that were found.
+       
+       @todo check for interpenetrating regions
+       
+       @author SKM
+       @date 16.4.22
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
+                              vector<pair<pair<CELL<dim>*,uint32_t>,pair<CELL<dim>*,uint32_t> > >& matching_cells )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    // 0. some initial checks
+    // ----------------------
+    if ( subdomain1.Name() == subdomain2.Name() ) {
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", "argument regions are the same; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain1.Empty() ) {
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain1.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain2.Empty() ) {
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain2.Empty() ) {
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         return 0U;
+      }
+    if ( subdomain1.NeedsRebuilt() || subdomain2.NeedsRebuilt() ) {
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
+         return 0U;
+      }
+
+    // 1. is there a shared interface? - looping over the perimeter faces of the adjacent regions
+    // ------------------------------------------------------------------------------------------
+    map<set<Node<dim>*>,pair<pair<CELL<dim>*,uint32_t>,pair<CELL<dim>*,uint32_t> > >  shared_perimeter_cells;
+    // (determining contacts via shared corner-node-ptrs of cells adjacent to interface)
+    // (not only these elements but also their face numbers will be recorded (inside elements will be first in pair)
+
+    // starting with region1 - assuming that no face-matching can occur at this stage
+    for ( size_t i{ subdomain1.InteriorCells() }; i<subdomain1.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain1.PerimeterFaces(i); j++ ) {
+           auto pface = subdomain1.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !subdomain1.E(i)->IsLine() );
+           shared_perimeter_cells.insert( make_pair( subdomain1.E(i)->CornerNodesOfFace(pface),
+                                          make_pair( make_pair( subdomain1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+        }
+    // for the second region2, do the same, but when matching faces are found corresponding elements and face ids are assigned to second element-face pair
+    size_t n_matching_faces{0U};
+    for ( size_t i{ subdomain2.InteriorCells() }; i<subdomain2.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain2.PerimeterFaces(i); j++ ) {
+           auto pface = subdomain2.PerimeterFace(i,j);
+           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
+           assert( !subdomain2.E(i)->IsLine() );
+           auto it = shared_perimeter_cells.insert( make_pair( subdomain2.E(i)->CornerNodesOfFace(pface),
+                                                    make_pair( make_pair( subdomain2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+           // if a matching face is found
+           if ( it.second == false ) { // no new insertion could be made into map with unique keys
+                (*it.first).second.second = make_pair( subdomain2.E(i), pface );
+                n_matching_faces++;
+             }
+        }
+
+    if ( n_matching_faces == 0U ) {
+         string message( string(" input regions '") + subdomain1.Name() + "' and '" + subdomain2.Name() +"'");
+         csmp_error.Note( WARNING, "sharedPerimeterCells:",
+                            message, "do not share any faces, nothing could be done");
+         return 0U;
+      }
+
+    // 2. Eliminating the single element entries from the 'shared_perimeter_faces' map
+    // -------------------------------------------------------------------------------
+    for ( auto it = shared_perimeter_cells.begin(); it != shared_perimeter_cells.end() /* not hoisted */; /* no increment */ ) {
+         // there is only a single element in the Element-pointer pair, the map entry will be deleted
+         if ( (*it).second.second.first == nullptr ) it = shared_perimeter_cells.erase(it); // since C++11
+         else ++it;
+      }
+
+    // 3. collecting the required cell pairs from the 'shared_perimeter_faces' map
+    // ---------------------------------------------------------------------------
+    //vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matching_cells;
+    matching_cells.reserve( shared_perimeter_cells.size() );
+    for ( const auto& pit : shared_perimeter_cells )
+      if ( pit.second.second.first != nullptr )
+        matching_cells.emplace_back( pit.second );
+
+    return matching_cells.size();
+  
+ } // end sharedPerimeterCells
+
+
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,Element>&, const ModelSubDomain<1U,Element>&, vector<pair<pair<Element<1>*,uint32_t>,pair<Element<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,Element>&, const ModelSubDomain<2U,Element>&, vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,Element>&, const ModelSubDomain<3U,Element>&, vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > >& );
+
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,Face>&, const ModelSubDomain<1U,Face>&, vector<pair<pair<Face<1>*,uint32_t>,pair<Face<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,Face>&, const ModelSubDomain<2U,Face>&, vector<pair<pair<Face<2>*,uint32_t>,pair<Face<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,Face>&, const ModelSubDomain<3U,Face>&, vector<pair<pair<Face<3>*,uint32_t>,pair<Face<3>*,uint32_t> > >& );
+
+/* MORE COMPLICATED BECAUSE face nodes might not be shared
+template size_t sharedPerimeterCells( const ModelSubDomain<1U,InterFace>&, const ModelSubDomain<1U,InterFace>&, vector<pair<pair<Element<1>*,uint32_t>,pair<Element<1>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<2U,InterFace>&, const ModelSubDomain<2U,InterFace>&, vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > >& );
+template size_t sharedPerimeterCells( const ModelSubDomain<3U,InterFace>&, const ModelSubDomain<3U,InterFace>&, vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > >& );
+*/
 
 
 
