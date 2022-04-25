@@ -69,6 +69,12 @@ bool isoparametricElementMesh( const Model<dim>& );
 template<uint32_t dim>
 size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
 
+/// finds cells that have the same nodes and reports their numbers; verbose reports the duplicate cells
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename std::vector<CELL<dim>*>::const_iterator begin,
+                             typename std::vector<CELL<dim>*>::const_iterator end,
+                             bool verbose );
+
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,

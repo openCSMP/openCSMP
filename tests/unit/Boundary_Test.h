@@ -17,10 +17,10 @@ public:
   virtual void run();
 
 private:
-  const static bool verbose_ = true;
+  const static bool verbose_ = false;
 
-  void runLegacy();
-  void runCurrent();
+  void runLegacy(); // Ansys models TODO: refactor to use CSMP native models
+  void runCurrent(); // Ansys models
 
   template<uint32_t dim>
   size_t InputElementAreaAsVolumeVariable( Model<dim>& model, Boundary<dim>& boundary, const char* variableName );

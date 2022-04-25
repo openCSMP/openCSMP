@@ -1341,19 +1341,21 @@ void  InterFace<dim>::Out() const
       node_connector_[i]->Out();
     cout << endl;
 
-    /// @todo (2-D) Rm rtti
-    cout << "\n\nParent (higher-dimensional) Element objects:     " << endl;
-    if ( innerParent_ != 0 ) {
-      cout << "\tinward  facing Element: ";
-      cout << " (" << typeid(*(this->Parent( INSIDE )->FE())).name() << ")" << endl;
-      this->innerParent_->Out();
-    }
+    cout <<"\nParent (higher-dimensional) Element objects:\n";
+    if ( innerParent_ != nullptr ) {
+         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
+         cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
+      }
+    else cout <<"\tnone.\n";
+    if ( this->outerParent_ != nullptr ) {
+         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
+         cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
+      }
     else cout << "\tnone.\n";
-    if ( this->outerParent_ != 0 ) {
-      cout << "\toutward facing Element: ";
-      cout << " (" << typeid(*(this->Parent( OUTSIDE )->FE())).name() << ")" << endl;
-      this->outerParent_->Out();
-    }
+    if ( this->middleElement_ != nullptr ) {
+         cout <<"\t"<<"intervening same-dimensional Element: "<< this->middleElement_->Idx();
+         cout <<" ("<< parseFiniteElementType(this->Parent(MIDDLE)->FE_Type()) <<")"<< endl;
+      }
     else cout << "\tnone.\n";
 
     cout << "\tUnit Normal:            ";

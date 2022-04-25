@@ -22,7 +22,7 @@ namespace csmp {
 */
 class BoundaryInterface_Test : public Test {
   public:
-    /// testing new and refactored functionality from 2016-17
+    /// testing ""fault_boundary_test" creation of a segmented boundary from region 'fault'
     virtual void run();
   
     /// can Box-shaped model creation be accomplished and how fast
@@ -33,7 +33,7 @@ class BoundaryInterface_Test : public Test {
     bool TestRegionContactDetection( const Model<3U>& );
 
   private:
-    const static bool verbose_ = true; ///< turn off to supress output of files etc.
+    const static bool verbose_ = false; ///< turn off to supress output of files etc.
 };
 
 

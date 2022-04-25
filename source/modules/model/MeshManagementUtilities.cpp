@@ -130,7 +130,57 @@ template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, se
 
 
 
+/// finds cells that have the same nodes and reports their numbers
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename vector<CELL<dim>*>::const_iterator first,
+                             typename vector<CELL<dim>*>::const_iterator last,
+                             bool verbose )
+ {
+    map<set<Node<dim>*>,set<CELL<dim>*> > potential_duplicates;
+    size_t                                n_duplicates{0U};
+    
+    while( first != last ) {
+         // creating cell keys from their node pointers
+         set<Node<dim>*> node_set;
+         const auto n_nodes{ (*first)->Nodes() };
+         for ( auto i{0U}; i<n_nodes; i++ ) node_set.insert( (*first)->N(i) );
+         // recording the cells
+         auto it = potential_duplicates.insert( make_pair( node_set, set<CELL<dim>*>{(*first)} ) );
+         // if there is a cell with the same nodes but a different pointer, it is recorded
+         if ( it.second == false ) {
+              auto cit =(*it.first).second.insert( (*first) );
+              if ( verbose && cit.second == false ) {
+                  cout <<"\ndetectDuplicateCells: input vector contains multiple copies of:";
+                  (*first)->Out();
+                }
+              n_duplicates++;
+           }
+         first++;
+      }
+      
+    // printing the duplicate cells if any
+    if ( n_duplicates  > 0U && verbose ) {
+         cout <<"\n\n"<<"detectDuplicateCells: found "<< n_duplicates <<" cells sharing all nodes in input range:";
+         for ( auto pd : potential_duplicates )
+           if ( pd.second.size() > 1U )
+             (*pd.second.begin())->Out();
+      }
+  
+    return n_duplicates;
+    
+ } // end detectDuplicateCells
 
+template size_t detectDuplicateCells<3,Element>( vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Element>( vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Element>( vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,Face>( vector<Face<3>*>::const_iterator, vector<Face<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Face>( vector<Face<2>*>::const_iterator, vector<Face<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Face>( vector<Face<1>*>::const_iterator, vector<Face<1>*>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,InterFace>( vector<InterFace<3>*>::const_iterator, vector<InterFace<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,InterFace>( vector<InterFace<2>*>::const_iterator, vector<InterFace<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,InterFace>( vector<InterFace<1>*>::const_iterator, vector<InterFace<1>*>::const_iterator, bool );
 
 
 

@@ -341,7 +341,6 @@ void Boundary_Test::runLegacy()
     ///  getting rid of the boundary so that a new one can be created
     const bool erase_faces{true};
     model2D. RemoveBoundary( boundary2D_BETWEENname.c_str(), erase_faces );
-    
     pair<set<string>,bool>  result2 = model2D.CreateInternalBoundaryFrom( "STANDARD" );
     _test( result2.first.size() == 1 );
     string boundary2D_FROMname( (*result2.first.begin()) );
@@ -523,8 +522,6 @@ void Boundary_Test::runLegacy()
     // CREATE AROUND
     // -------------
     // removing pre-existing boundary so that new one can be created in its place
-    Boundary<DIM3>& bdry = model.Boundary( betweenBoundary.first );
-    model.Mesh().DeleteAndRepairConnnectivity( bdry.CellVector().begin(), bdry.CellVector().end() ); // getting rid of the faces
     model.RemoveBoundary( (betweenBoundary.first).c_str(), true ); // so that a new boundary can be created
     // creating and checking the new boundary
     _test( model.CreateBoundaryAround( "MATRIX_LEFT" ) );
@@ -603,7 +600,8 @@ void Boundary_Test::runCurrent()
         cout << "m04.Regions(): " << m04.Regions() << "\n";
         cout << "nodeCount: " << m04.Mesh().Nodes() << "\n";
         cout << "m04.Region(Model).Nodes(): " << m04.Region("Model").Nodes() << "\n";
-        _test( m04.Boundaries() == 6 );
+        // regions file does not contain any boundaries
+        _test( m04.Boundaries() == 0 );
         _test( m04.Regions() == 4 );
         _test( n_nodes_model == m04.Region("Model").Nodes() );
       }

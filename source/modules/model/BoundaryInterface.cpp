@@ -719,13 +719,13 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       patch_numbers.insert( make_pair( (*it).second, static_cast<uint32_t>((*it).first )) );
    
     // 2.2.2 building new map where the patch faces are organised by patch names
-    map<string,vector<FaceConstructionData> > patch_simplexes;
+    map<string,vector<FaceConstructionData> > patch_data;
     vector<FaceConstructionData>              empty_vec;
     for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
-      patch_simplexes.insert( make_pair( (*it).second, empty_vec ) );
+      patch_data.insert( make_pair( (*it).second, empty_vec ) );
    
     // 2.2.3 inserting the patch identifiers into the vectors in the map
-    for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
+    for ( auto pit=patch_data.begin(); pit!=patch_data.end(); ++pit )
       {
          assert( patch_numbers.find((*pit).first) != patch_numbers.end() );
          const size_t patch_number((*patch_numbers.find((*pit).first)).second);
@@ -737,7 +737,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
              (*pit).second.push_back( (*it) );
       }
     // 2.2.4 trimming excess storage of the face-data vectors
-    for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
+    for ( auto pit=patch_data.begin(); pit!=patch_data.end(); ++pit )
       vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
 
  
@@ -750,16 +750,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const size_t       new_faces_required(subdomain.Cells());
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
-    const size_t original_faces(model.Mesh().Faces());
+    const size_t n_original_faces(model.Mesh().Faces());
+    const size_t n_original_elmts(model.Mesh().Elements());
 
     // establish the storage requirements for face variables
     const LocalVariables             lvsFaces( model.Database().LocalVariablesAt(FACE) );
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
-    vector<vector<Face<dim>*> >      face_ptr_per_patch(patch_simplexes.size());
+    vector<vector<Face<dim>*> >      face_ptr_per_patch(patch_data.size());
    
     size_t patch_counter(0);	
     for ( map<string,vector<FaceConstructionData> >::const_iterator
-          it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it )
+          it=patch_data.begin(); it!=patch_data.end(); ++it )
       {
          face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
 
@@ -781,9 +782,13 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
            }
          patch_counter++;
       }
-    patch_simplexes.clear();
-    cout << "\n\tAdded "<< model.Mesh().Faces() - original_faces <<" faces to mesh.\n";
-
+    patch_data.clear();
+    
+#ifdef DEBUG
+    cout <<"\n\nBoundaryInterface<"<< dim <<">::CreateInternalBoundaryFrom:";
+    cout << "\n\t\t"<<"Added "<< model.Mesh().Faces() - n_original_faces <<" faces to mesh.";
+    cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
+#endif
    
     //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
     //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
@@ -791,7 +796,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // TODO: these are global changes! - not sure how to improve this because so many regions are affected
     model.Mesh().UpdateConnectivity();
-   
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >

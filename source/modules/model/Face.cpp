@@ -1208,12 +1208,12 @@ void  Face<dim>::Out() const
 
     cout <<"\nParent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\tinward  facing Element: "<< this->innerParent_->Idx();
+         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
          cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\toutward facing Element: "<< this->outerParent_->Idx();
+         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
          cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";

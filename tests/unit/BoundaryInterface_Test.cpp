@@ -211,17 +211,16 @@ void BoundaryInterface_Test::run()
            if ( verbose_ ) cout << "\n Boundary: " << (*it).first;
            (*it).second.InputPropertyValue("nodal variable", makeScalar(PLAIN, bvalue) );
            // testing VTU output
-           if ( verbose_ ) vtu.OutputDataToVTU( "patch", string("nodal variable"), (*it).second, 0 );
+           if ( verbose_ ) vtu.OutputDataToVTU( (*it).first, string("nodal variable"), (*it).second, 0 );
            // creating different pressure values for each boundary patch
            bvalue += 1.0e5;
         }
       if ( verbose_ ) cout << endl;
 
-// TODO: JC: check this!!!
       // testing whether boundary segments can be found by combined search criteria
-      //const set<string> intersected_regions{ "BOUNDARY", "BOTTOM", "TOP" };
-      //string patch_name = findBoundary( model, intersected_regions );	  
-      //_test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
+      const set<string> intersected_regions{ "BOUNDARY", "LAYER_BOTTOM", "LAYER_TOP" };
+      string patch_name = findBoundary( model, intersected_regions );
+      _test( patch_name == "NORMAL_FAULT_BOUNDARY3_LAYER_BOTTOM_LAYER_TOP" );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
       const size_t patches_found = model.FindBoundaryByNames( search_strings, region_patches_found );
