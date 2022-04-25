@@ -849,7 +849,7 @@ void readPropertyStatusOfScalar( size_t depth, bool& digit, uint32_t& position, 
   if ( token == NULL )
   {
     cout << "\n" << token << endl;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                        "readPropertyStatusOfScalar:",
                        "Flag of 'scalar' property could not be read" );
     terminate();
@@ -871,7 +871,7 @@ void readPropertyStatusOfScalar( size_t depth, bool& digit, uint32_t& position, 
       if ( token == NULL )
       {
         cout << "\nflag" << position << ": " << token << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readPropertyStatusOfScalar:",
                            "Flag of 'scalar' property could not be read" );
         terminate();
@@ -895,7 +895,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, uint32_t& position, 
   if ( token == NULL )
   {
     cout << "\n" << token << endl;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                        "readPropertyStatusOfVector:",
                        "Flag of 'vector' property could not be read" );
     terminate();
@@ -931,7 +931,7 @@ void readPropertyStatusOfVector( size_t depth, bool& digit, uint32_t& position, 
       if ( token == NULL )
       {
         cout << "\nflag" << position << ": " << token << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readPropertyStatusOfVector:",
                            "Flag of 'vector' property could not be read" );
         terminate();
@@ -955,7 +955,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, uint32_t& position, 
   if ( token == NULL )
   {
     cout << "\n" << token << endl;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                        "readPropertyStatusOfTensor:",
                        "Flag of 'tensor' property could not be read" );
     terminate();
@@ -998,7 +998,7 @@ void readPropertyStatusOfTensor( size_t depth, bool& digit, uint32_t& position, 
       if ( token == NULL )
       {
         cout << "\nflag" << position << ": " << token << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readPropertyStatusOfTensor:",
                            "Flag of 'tensor' property could not be read" );
         terminate();
@@ -1021,7 +1021,7 @@ void readPropertyStatusOfArray( size_t depth, bool& digit, uint32_t& position, v
   if ( token == NULL )
   {
     cout << "\n" << token << endl;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                        "readPropertyStatusOfArray:",
                        "Flag of 'array' property could not be read" );
     terminate();
@@ -1043,7 +1043,7 @@ void readPropertyStatusOfArray( size_t depth, bool& digit, uint32_t& position, v
       if ( token == NULL )
       {
         cout << "\nflag" << position << ": " << token << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readPropertyStatusOfArray:",
                            "Flag of 'array' property could not be read" );
         terminate();
@@ -1066,7 +1066,7 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, uint32_t& posi
   if ( token == NULL )
   {
     cout << "\n" << token << endl;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                        "readPropertyStatusOfFlaggedArray:",
                        "Flag of 'flagged array' property could not be read" );
     terminate();
@@ -1102,7 +1102,7 @@ void readPropertyStatusOfFlaggedArray( size_t depth, bool& digit, uint32_t& posi
       if ( token == NULL )
       {
         cout << "\nflag" << position << ": " << token << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readPropertyStatusOfFlaggedArray:",
                            "Flag of 'flagged array' property could not be read" );
         terminate();
@@ -1842,7 +1842,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\n" << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readBoxBoundaryPropertyValuesAndConditions",
                            "Condition type specifier missing (Dirichlet, Neumann..." );
         return false;
@@ -1855,7 +1855,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\n" << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readBoxBoundaryPropertyValuesAndConditions",
                            "Property name could not be read" );
         return false;
@@ -1917,7 +1917,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
           // reading setting condition flags for assignment
           if ( (token = strtok( NULL, delims )) == NULL ) { // condition flag 1
             if ( token != nullptr ) std::cerr << "\n" << token << endl;
-            csmp_error.notice( ERROR,
+            csmp_error.Note( ERROR,
                                "readBoxBoundaryPropertyValuesAndConditions",
                                "Vector variable entry 1 VARIABLE_FLAG could not be read" );
             return false;
@@ -1925,7 +1925,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
           else flag1 = token;
           if ( (token = strtok( NULL, delims )) == NULL ) { // condition flag 2
             if ( token != nullptr ) std::cerr << "\n" << token << endl;
-            csmp_error.notice( ERROR,
+            csmp_error.Note( ERROR,
                                "readBoxBoundaryPropertyValuesAndConditions",
                                "Vector variable entry 2 VARIABLE_FLAG could not be read" );
             return false;
@@ -1951,7 +1951,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
           // reading and setting condition flags for assignment
           if ( (token = strtok( NULL, delims )) == NULL ) { // condition flag 1
             std::cerr << "\n" << token << endl;
-            csmp_error.notice( ERROR,
+            csmp_error.Note( ERROR,
                                "readBoxBoundaryPropertyValuesAndConditions",
                                "Vector variable entry 1 VARIABLE_FLAG could not be read" );
             return false;
@@ -1959,7 +1959,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
           else flag1 = token;
           if ( (token = strtok( NULL, delims )) == NULL ) { // condition flag 2
             std::cerr << "\n" << token << endl;
-            csmp_error.notice( ERROR,
+            csmp_error.Note( ERROR,
                                "readBoxBoundaryPropertyValuesAndConditions",
                                "Vector variable entry 2 VARIABLE_FLAG could not be read" );
             return false;
@@ -1967,7 +1967,7 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
           else flag2 = token;
           if ( (token = strtok( NULL, delims )) == NULL ) { // condition flag 3
             std::cerr << "\n" << token << endl;
-            csmp_error.notice( ERROR,
+            csmp_error.Note( ERROR,
                                "readBoxBoundaryPropertyValuesAndConditions",
                                "Vector variable entry 3 VARIABLE_FLAG could not be read" );
             return false;
@@ -2374,7 +2374,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\nFor region '" << boundary_name << "' text line: " << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readBoundaryPropertyConditions:",
                            "Qualifier could not be parsed (interior, boundary or complete" );
         return false;
@@ -2390,7 +2390,7 @@ bool readBoundaryPropertyConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\nFor region '" << boundary_name << "' text_line: " << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readBoundaryPropertyConditions:",
                            "Property name could not be read" );
         return false;
@@ -2511,7 +2511,7 @@ bool readRegionPropertyConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\nFor region '" << group_name << "' text line: " << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readRegionPropertyConditions:",
                            "Qualifier could not be parsed (interior, boundary or complete" );
         return false;
@@ -2527,7 +2527,7 @@ bool readRegionPropertyConditions( Model<dim>& model,
       if ( token == NULL )
       {
         std::cerr << "\nFor region '" << group_name << "' text_line: " << text_line << endl;
-        csmp_error.notice( ERROR,
+        csmp_error.Note( ERROR,
                            "readRegionPropertyConditions:",
                            "Property name could not be read" );
         return false;
@@ -2973,7 +2973,7 @@ bool readRegionPropertyValues( Model<dim>& model,
 
         // Check that minimum and maximum eigenvalues are in range
         if ( !ts.EigenNonSymmetric( eigVals, eigVecs ) ) {
-          csmp_error.notice( FATAL_ERROR, "readRegionPropertyValues",
+          csmp_error.Note( FATAL_ERROR, "readRegionPropertyValues",
                              "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
         for ( auto i = 0; i < dim; ++i ) {
@@ -3163,7 +3163,7 @@ bool readDefaultPropertyValues( Model<dim>& model,
 
         // Check that minimum and maximum eigenvalues are in range
         if ( !ts.EigenNonSymmetric( eigVals, eigVecs ) ) {
-          error_handler.notice( FATAL_ERROR, "readDefaultPropertyValues",
+          error_handler.Note( FATAL_ERROR, "readDefaultPropertyValues",
                                 "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
         for ( auto i = 0; i < dim; ++i ) {

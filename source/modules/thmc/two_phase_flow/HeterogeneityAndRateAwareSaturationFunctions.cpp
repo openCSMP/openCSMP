@@ -76,7 +76,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr( Element<d
         case 16: swr = get<16>(Otway_.rocktype_).Swi_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwr", "rocktype not recognized");
     }
 
     return swr;
@@ -110,7 +110,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr( Element<d
         case 16: snr = get<16>(Otway_.rocktype_).Sgr_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSnr", "rocktype not recognized");
     }
 
     return snr;
@@ -144,7 +144,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi( Element<d
         case 16: phi = get<16>(Otway_.rocktype_).phi_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPhi", "rocktype not recognized");
     }
 
     return phi;
@@ -179,7 +179,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK( Element<dim
         case 16: k = get<16>(Otway_.rocktype_).k_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetK", "rocktype not recognized");
     }
 
     return k;
@@ -213,7 +213,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV( Element<di
         case 16: k = get<16>(Otway_.rocktype_).k_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKV", "rocktype not recognized");
     }
 
     return k;
@@ -247,7 +247,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc( Element
         case 16: swi_pc = get<16>(Otway_.rocktype_).Swi_pc_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetSwiPc", "rocktype not recognized");
     }
 
     return swi_pc;
@@ -281,7 +281,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG( Element<d
         case 16: m_VG = get<16>(Otway_.rocktype_).m_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmVG", "rocktype not recognized");
     }
 
     return m_VG;
@@ -309,7 +309,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow( Element<
         case 14: m_low = get<14>(Otway_.rocktype_).m_low_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetmLow", "rocktype not supported");
     }
 
     return m_low;
@@ -344,7 +344,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd( Element<di
         case 16: pd = get<16>(Otway_.rocktype_).pd_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd", "rocktype not recognized");
     }
 
     return pd;
@@ -388,7 +388,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd_VG( Element
         case 16: pd = get<16>(Otway_.rocktype_).pd_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPd", "rocktype not recognized");
     }
 
     return pd;
@@ -416,7 +416,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow( Element
         case 14: pd_low = get<14>(Otway_.rocktype_).pd_low_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetPdLow", "rocktype not supported");
     }
 
     return pd_low;
@@ -451,7 +451,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp( Element<d
         case 16: bcp = Bcp(e); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp", "rocktype not recognized");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetBcp", "rocktype not recognized");
     }
 
     return bcp;
@@ -476,7 +476,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw( Element<d
         case 16: krw= get<16>(Otway_.rocktype_).Krw(Sw); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrw", "rocktype not supported");
     }
 
     return krw;
@@ -500,7 +500,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn( Element<d
         case 16: krn= get<16>(Otway_.rocktype_).Krn(Sw); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrn", "rocktype not supported");
     }
 
     return krn;
@@ -522,7 +522,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDra
         case 9: krw_parallel_drainage = get<9>(Otway_.rocktype_).Krw_ParallelDrainage( Sw ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage", "rocktype not supported");
     }
 
     return krw_parallel_drainage;
@@ -548,7 +548,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDra
         case 14: krw_parallel_drainage = get<14>(Otway_.rocktype_).Krw_ParallelDrainage( Sw, vt_magnitude ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwParallelDrainage", "rocktype not supported");
     }
 
     return krw_parallel_drainage;
@@ -569,7 +569,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDraina
         case 9: krw_cross_drainage = get<9>(Otway_.rocktype_).Krw_CrossDrainage( Sw ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage", "rocktype not supported");
     }
 
     return krw_cross_drainage;
@@ -595,7 +595,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDraina
         case 14: krw_cross_drainage = get<14>(Otway_.rocktype_).Krw_CrossDrainage( Sw, vt_magnitude ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrwCrossDrainage", "rocktype not supported");
     }
 
     return krw_cross_drainage;
@@ -616,7 +616,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDra
         case 9: Krn_parallel_drainage = get<9>(Otway_.rocktype_).Krn_ParallelDrainage( Sw ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage", "rocktype not supported");
     }
 
     return Krn_parallel_drainage;
@@ -642,7 +642,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDra
         case 14: Krn_parallel_drainage = get<14>(Otway_.rocktype_).Krn_ParallelDrainage( Sw, vt_magnitude ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnParallelDrainage", "rocktype not supported");
     }
 
     return Krn_parallel_drainage;
@@ -663,7 +663,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDraina
         case 9: Krn_cross_drainage = get<9>(Otway_.rocktype_).Krn_CrossDrainage( Sw ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage", "rocktype not supported");
     }
 
     return Krn_cross_drainage;
@@ -689,7 +689,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDraina
         case 14: Krn_cross_drainage = get<14>(Otway_.rocktype_).Krn_CrossDrainage( Sw, vt_magnitude ); break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKrnCrossDrainage", "rocktype not supported");
     }
 
     return Krn_cross_drainage;
@@ -716,7 +716,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow( Element
         case 14: LY_low = get<14>(Otway_.rocktype_).LY_low_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYLow", "rocktype not supported");
     }
 
     return LY_low;
@@ -743,7 +743,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh( Elemen
         case 14: LY_high = get<14>(Otway_.rocktype_).LY_high_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetLYHigh", "rocktype not supported");
     }
 
     return LY_high;
@@ -770,7 +770,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKLow( Element<
         case 14: k_low = get<14>(Otway_.rocktype_).k_low_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetkLow", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetkLow", "rocktype not supported");
     }
 
     return k_low;
@@ -797,7 +797,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh( Element
         case 14: k_high = get<14>(Otway_.rocktype_).k_high_; break;
         default:
             cerr <<"\n\t rocktype: "<< rock_type;
-            csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh", "rocktype not supported");
+            csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::GetKHigh", "rocktype not supported");
     }
 
     return k_high;
@@ -850,7 +850,7 @@ bool HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite( Elemen
        is_composite = true;
     if(rock_type<0 || rock_type>16) {
        cerr <<"\n\t rocktype: "<< rock_type;
-       csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite", "rocktype not recognized");    
+       csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::IsComposite", "rocktype not recognized");    
     }
     
     return is_composite;
@@ -900,7 +900,7 @@ VectorVariable<dim> HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::Init
         if(isnan(vt[i])) {has_nan = true; break;}
     
     if ( has_nan )
-      csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitializeVelocity ", "the velocity variable has not been initialised.");
+      csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::InitializeVelocity ", "the velocity variable has not been initialised.");
     
     double vt_magnitude = vt.Length();
     // in zero velocity case, the horizontal relative permeability is set to dominate
@@ -1188,7 +1188,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Ele
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "wrong input flow direction, mush be 0 or 2");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "wrong input flow direction, mush be 0 or 2");
     
     double parallel_krw(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
@@ -1203,7 +1203,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel( Ele
         double vt_magnitude = fabs(vt[direction]);
         parallel_krw = GetKrwParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel", "this function only supports composite rock type");
     }
     
     return parallel_krw;
@@ -1228,7 +1228,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow( El
         double vt_magnitude = fabs(vt[1]);
         crossflow_krw = GetKrwCrossDrainage( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_x", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_x", "this function only supports composite rock type");
     }
     
     return crossflow_krw;
@@ -1241,7 +1241,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "wrong input flow direction, mush be 0 or 2");    
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "wrong input flow direction, mush be 0 or 2");    
     
     double krw_parallel(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
@@ -1254,7 +1254,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at( 
         double vt_magnitude = fabs(vt[direction]);
         krw_parallel = GetKrwParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_parallel_at", "this function only supports composite rock type");
     }
     
     return krw_parallel;
@@ -1277,7 +1277,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at(
         double vt_magnitude = fabs(vt[1]);
         krw_crossflow = GetKrwCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krw_crossflow_at", "this function only supports composite rock type");
     }
     
     return krw_crossflow;
@@ -1366,7 +1366,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_fl
         K_reduction = K_flow_direction / k_parallel;         
         
     } else {
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_flow_direction", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::K_reduction_in_flow_direction", "this function only supports composite rock type");
     }
     
     return K_reduction;
@@ -1441,7 +1441,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Ele
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if(direction != 0 && direction != 2) 
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "wrong input flow direction, mush be 0 or 2");     
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "wrong input flow direction, mush be 0 or 2");     
     
     double parallel_krn(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
@@ -1456,7 +1456,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel( Ele
         double vt_magnitude = fabs(vt[direction]);
         parallel_krn = GetKrnParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel", "this function only supports composite rock type");
     }
     
     return parallel_krn;
@@ -1481,7 +1481,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow( El
         double vt_magnitude = fabs(vt[1]);
         crossflow_krn = GetKrnCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow", "this function only supports composite rock type");
     }
     
     return crossflow_krn;
@@ -1494,7 +1494,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if(direction != 0 && direction != 2) 
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "wrong input flow direction, mush be 0 or 2");       
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "wrong input flow direction, mush be 0 or 2");       
     
     double krn_parallel(numeric_limits<double>::quiet_NaN());
     const int  rock_type = RockType(e);
@@ -1507,7 +1507,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at( 
         double vt_magnitude = fabs(vt[direction]);
         krn_parallel = GetKrnParallelDrainage( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_parallel_at", "this function only supports composite rock type");
     }
     
     return krn_parallel;
@@ -1530,7 +1530,7 @@ double HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at(
         double vt_magnitude = fabs(vt[1]); 
         krn_crossflow = GetKrnCrossDrainage ( e, Sw, vt_magnitude );
     } else { //not composite
-        csmp_error.notice( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at", "this function only supports composite rock type");
+        csmp_error.Note( ERROR, "HeterogeneityAndRateAwareSaturationFunctions<dim,USER>::krn_crossflow_at", "this function only supports composite rock type");
     }
     
     return krn_crossflow;

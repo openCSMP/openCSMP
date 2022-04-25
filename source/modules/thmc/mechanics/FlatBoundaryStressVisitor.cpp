@@ -106,7 +106,7 @@ void FlatBoundaryStressVisitor<dim>::Visit( Face<dim>* f )
    // This would accumulate NaN values to the rhs vector. 
    ErrorHandler&  csmp_error(ErrorHandler::Instance());
    if (isnan(Sn) || isnan(Ss_magnitude)) {
-      csmp_error.notice(WARNING, "csmp::FlatBoundaryStressVisitor::Visit:", "Boundaries without boundary stresses are visited, returning NaN values.");
+      csmp_error.Note(WARNING, "csmp::FlatBoundaryStressVisitor::Visit:", "Boundaries without boundary stresses are visited, returning NaN values.");
       terminate();
    }
    

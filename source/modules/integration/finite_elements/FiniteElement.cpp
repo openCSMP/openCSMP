@@ -965,7 +965,7 @@ double  FiniteElement::JacobianInverse()
               // values increase linearly from first to last node (so that node numbering direction can be seen)
               for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
               OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
-              csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
+              csmp_error.Note( WARNING, "FiniteElement::JacobianInverse:",
                                 "the value of the Jacobian is negative; check node-numbering.");
            }
       
@@ -988,7 +988,7 @@ double  FiniteElement::JacobianInverse()
                   cerr << XY(i,j) <<" ";
               cerr << std::defaultfloat << endl;
             }
-          csmp_error.notice( WARNING, "FiniteElement::JacobianInverse:",
+          csmp_error.Note( WARNING, "FiniteElement::JacobianInverse:",
                             "the value of the Jacobian is negative; check node-numbering.");
        
 //          detJ = fabs(detJ);

@@ -94,11 +94,11 @@ void smoothElementData( Model<dim>& model,
      bool interpolation_problem(false);
 
      if ( key.type != SCALAR ) {
-          csmp_error.notice( ERROR, "smoothElementData", "method works only for scalar variables; not done");
+          csmp_error.Note( ERROR, "smoothElementData", "method works only for scalar variables; not done");
           return;
        }
       if ( key.place != ELEMENT ) {
-          csmp_error.notice( ERROR, "smoothElementData", "for the smoothing, the property variables must be placed on the element");
+          csmp_error.Note( ERROR, "smoothElementData", "for the smoothing, the property variables must be placed on the element");
           return;
        }
    
@@ -110,7 +110,7 @@ void smoothElementData( Model<dim>& model,
            if ( min_val_database <= 0. ) {
                 cerr <<"\n\n value range of '"<< variable_name <<"'': ";
                 cerr << min_val_database <<" - "<< max_val_database <<"\n";
-                csmp_error.notice( ERROR, "smoothElementData:", "log10 of 0 or negative number is undefined; smoothing data as is...");
+                csmp_error.Note( ERROR, "smoothElementData:", "log10 of 0 or negative number is undefined; smoothing data as is...");
                 can_be_logarithmically_smoothed = false;
              }
            // logarithmic values 
@@ -141,7 +141,7 @@ void smoothElementData( Model<dim>& model,
                       (*it)->Store( log_key, ts );
                    }
                  else 
-                 csmp_error.notice( ERROR, "smoothElementData", variable_name, "property type cannot be logarithmitised.");
+                 csmp_error.Note( ERROR, "smoothElementData", variable_name, "property type cannot be logarithmitised.");
              }
            // using the log10 of the value as opposed to original values                                                 
            key = log_key;

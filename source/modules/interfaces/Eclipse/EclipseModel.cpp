@@ -101,7 +101,7 @@ void EclipseModel::Initialize()
 					message += *prop_it;
 				}
 				message += " !!!";
-				error_handler.notice(csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str());
+				error_handler.Note(csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str());
 			}
 		}
     
@@ -312,7 +312,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 			else if (boundary_nodes.count(n) > 3U) { // potentially a hexahedron which sits at a model edge (7-boundary nodes)
 				(*it)->Out();
 				cerr << "\n\tdetected " << boundary_nodes.count(n) << " boundary flags for element " << (*it)->Idx();
-				error_handler.notice(WARNING, "EclipseModel<3U>::AssignBoxBoundaryFlagsWherePossible:",
+				error_handler.Note(WARNING, "EclipseModel<3U>::AssignBoxBoundaryFlagsWherePossible:",
 					"this may be a completely disconnected element.");
 			}
 		}

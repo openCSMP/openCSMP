@@ -49,7 +49,7 @@ void Meschach_Solver::SolveMatrixEquation(SparseMatrix& A,
         // outputting matrices to text files
         Out( A );
         Out( b );
-        skm_err.notice( FATAL_ERROR, "Solver::SolveMatrixEquation",
+        skm_err.Note( FATAL_ERROR, "Solver::SolveMatrixEquation",
                         "No convergence occurred..." );
     }
 }

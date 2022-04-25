@@ -1823,8 +1823,8 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy
     if(bulk.beta < 0.0e0)
       {
         DumpStatus();
-        //	csmp_error.notice( FATAL_ERROR,
-        csmp_error.notice( WARNING,
+        //	csmp_error.Note( FATAL_ERROR,
+        csmp_error.Note( WARNING,
                         "H2ONaClFluidProperties::UpdatePropertiesVH() -",
                         "bulk compressibility < 0 for above condition: Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
         bulk.beta  = -bulk.beta; // just simple workaround if you downgrade fatal error to warning or less
@@ -1911,8 +1911,8 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy
     if(bulk.beta < 0.0e0)
       {
         DumpStatus();
-        //	csmp_error.notice( FATAL_ERROR,
-        csmp_error.notice( WARNING,
+        //	csmp_error.Note( FATAL_ERROR,
+        csmp_error.Note( WARNING,
                         "H2ONaClFluidProperties::UpdatePropertiesLH() -",
                         "bulk compressibility < 0 for above condition: Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
         bulk.beta  = -bulk.beta; // just simple workaround if you downgrade fatal error to warning or less
@@ -1944,8 +1944,8 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy
     if(bulk.beta < 0.0e0)
       {
         DumpStatus();
-        //	csmp_error.notice( FATAL_ERROR,
-        csmp_error.notice( WARNING,
+        //	csmp_error.Note( FATAL_ERROR,
+        csmp_error.Note( WARNING,
                         "H2ONaClFluidProperties::UpdatePropertiesL() -",
                         "liquid compressibility < 0 for above condition: Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
         bulk.beta  = -bulk.beta; // just simple workaround if you downgrade fatal error to warning or less
@@ -1985,8 +1985,8 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy
     if(bulk.beta < 0.0e0)
       {
         DumpStatus();
-        //	csmp_error.notice( FATAL_ERROR,
-        csmp_error.notice( WARNING,
+        //	csmp_error.Note( FATAL_ERROR,
+        csmp_error.Note( WARNING,
                         "H2ONaClFluidProperties::UpdatePropertiesF() -",
                         "liquid compressibility < 0 for above condition: Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
         bulk.beta  = -bulk.beta; // just simple workaround if you downgrade fatal error to warning or less
@@ -2035,8 +2035,8 @@ void H2ONaClFluidProperties::UpdateEnthalpyNaClMeltingCurve_ForP(double enthalpy
         else
           {
             DumpStatus();
-            //	    csmp_error.notice( FATAL_ERROR,
-            csmp_error.notice( WARNING,
+            //	    csmp_error.Note( FATAL_ERROR,
+            csmp_error.Note( WARNING,
                             "H2ONaClFluidProperties::UpdatePropertiesV() -",
                             "vapor compressibility < 0 for above condition: Thomas Driesner, thomas.driesner@erdw.ethz.ch"); 
             // simple workaround if you want to downgrade fatal error ...

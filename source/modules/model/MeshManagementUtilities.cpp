@@ -214,7 +214,7 @@ size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_co
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "findContiguousMeshPatch", "entry cell pointer is a nullptr; nothing was done.");
+         csmp_error.Note( ERROR, "findContiguousMeshPatch", "entry cell pointer is a nullptr; nothing was done.");
          return 0;
       }
 
@@ -313,7 +313,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
-             csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+             csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
                                          "input CELL pointer range is empty." );
             return 0U;
         }
@@ -332,7 +332,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
       // if no contiguous cells could be found
       if ( cells_contiguous_subset.empty() ) {
-           csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+           csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
                                        "No contiguous cells found. Is the neighbor connectivity missing? - nothing was done" );
            return 0U;
         }
@@ -383,12 +383,12 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
                                                    move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
                                                                              cells_contiguous_subset.end() ) ) ) );
                 if ( insertion.second == false ) {
-                     csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
+                     csmp_error.Note( ERROR, "findStandAloneMeshPatches:", patch_name,
                                                "could not be inserted into patch map" );
                   }
                 n_patches++;
               }
-           else csmp_error.notice( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
+           else csmp_error.Note( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
               
            // deleting the cells that constitute the contiguous subset from the cell storage
            cells.erase( remove_if( cells.begin(), cells.end(),
@@ -443,7 +443,7 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
     if ( nptr == nullptr ) {
-         csmp_error.notice( ERROR, "findInterconnectedNodeCluster", "entry node is a nullpointer; nothing was done");
+         csmp_error.Note( ERROR, "findInterconnectedNodeCluster", "entry node is a nullpointer; nothing was done");
          return 0U;
       }
     
@@ -500,7 +500,7 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
-             csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+             csmp_error.Note( WARNING, "findPointersToStandAloneMeshPatches:",
                                          "input CELL pointer range is empty." );
             return 0U;
         }
@@ -553,7 +553,7 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
                 pair<typename map<CELL<dim>*,MeshPatch<dim>>::iterator,bool>
                   insertion = root_pointers.insert( make_pair( (*cells.begin()), attributes ) );
                 if ( insertion.second == false ) {
-                     csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+                     csmp_error.Note( WARNING, "findPointersToStandAloneMeshPatches:",
                                                  "mesh patch could not be inserted into root cell map. Does it already exist?" );
                   }
                 findContiguousMeshPatch<dim>( (*cells.begin()), cells_contiguous_subset );
@@ -592,7 +592,7 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( eptr == nullptr ) {
-             csmp_error.notice( ERROR, "connectNeighborsUsingNodeParents:",
+             csmp_error.Note( ERROR, "connectNeighborsUsingNodeParents:",
                                "invalid element pointer" );
             return 0U;
         }
@@ -683,11 +683,11 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // 0. verifying the input
    // pointers
    if ( face == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
    if ( inner_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
    if ( outer_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. Creating a map of the faces of the outer element
    //      face key
@@ -745,11 +745,11 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // 0. verifying the input
    // pointers
    if ( interface == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
    if ( inner_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
    if ( outer_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. creating a search map from the nodes of the outer element
    //  key    inner local id, outer local node id
@@ -797,7 +797,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
           }
      }
    if ( !inner_face_found )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of inner higher-dim neighbor element");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of inner higher-dim neighbor element");
     
    // OUTER ELEMENT
    const auto n_outer_elmt_faces(outer_nbor->Faces());
@@ -818,7 +818,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
           }
      }
    if ( !outer_face_found )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of outer higher-dim neighbor element");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of outer higher-dim neighbor element");
 
  } // end findNodesViaHigherDimensionalNeighbors
 
@@ -838,15 +838,15 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    if ( eptr1 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to first element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to first element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr2 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to second element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to second element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr1 == eptr2 ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "the supplied pointers point to the same element!");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     
@@ -894,15 +894,15 @@ pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    if ( eptr1 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr2 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr1 == eptr2 ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     
@@ -998,7 +998,7 @@ void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subs
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
+         csmp_error.Note( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
          return;
       }
     // identifying the neighbors of the first element to be looked at
@@ -1334,7 +1334,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
        else non_surface_elements++;
    
     if ( non_surface_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
+      ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
                                        subdomain.Name(), "region contained not only surface elements." );
     return true;
    
@@ -1367,7 +1367,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
        else non_line_elements++;
    
     if ( non_line_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
+      ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
                                        subdomain.Name(), "region contained not only line elements." );
     return true;
    
@@ -1385,7 +1385,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain )
  {
-    ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
+    ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
                                      subdomain.Name(), "one-dimensional models have no boundaries." );
     return false;
    
@@ -1673,7 +1673,7 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, 
          stringstream  out("The targeted node with the coordinate (x): ");
          out << pxyz <<" could not be found; ";
          out <<" returning node index="<< -1 << endl;
-         csmp_error.notice( WARNING, "findNode:", out.str() );
+         csmp_error.Note( WARNING, "findNode:", out.str() );
       }
     return -1;
      

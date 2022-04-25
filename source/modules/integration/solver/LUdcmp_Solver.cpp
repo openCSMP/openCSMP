@@ -26,7 +26,7 @@ void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( A.Rows() > 500U )
-       csmp_error.notice( WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
+       csmp_error.Note( WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
                          "the matrix is rather large; try SAMG to get a result in a decent time." );
 
 

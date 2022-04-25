@@ -128,20 +128,20 @@ A reference to the ErrorHanlder instance is acquired as such
 ...
 ErrorHandler& csmp_error( ErrorHandler::Instance() );
 ...
-csmp_error.notice( ERROR, "MyClass::ProblematicMethod()", "what actually went wrong" );
+csmp_error.Note( ERROR, "MyClass::ProblematicMethod()", "what actually went wrong" );
 
 @endcode
 
 after which one can call the handler
 
 @code
-csmp_error.notice( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
+csmp_error.Note( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
 @endcode
 
 alternatively, if i.e. just a single call is to be made
 
 @code
-ErrorHandler::Instance().notice( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
+ErrorHandler::Instance().Note( ERROR, "IterativeAlgorithm<dim>::Iterations", "Solution did not converge! " );
 @endcode
 
 @todo SKM - resolve how ErrorHandler should interact with exception handling
@@ -160,31 +160,31 @@ class ErrorHandler : public GenericSingleton<ErrorHandler> {
     ~ErrorHandler();
 
     /// sets output reporting level to verbose (reporting of all events to cout and cerr)
-    void   Verbose( bool VERBOSE );
+    void Verbose( bool VERBOSE );
   
     /// reports whether the reporting level is set to VERBOSE
-    bool   Verbose() const;
+    bool Verbose() const;
   
     /// sets output to corresponding CSMP_OUTPUT_LEVEL
-    void   ReportingLevel( CSMP_OUTPUT_LEVEL verb );
+    void ReportingLevel( CSMP_OUTPUT_LEVEL verb );
   
     /// returns the current setting of the CSMP_OUTPUT_LEVEL
     CSMP_OUTPUT_LEVEL ReportingLevel() const;
 
-    /// use as @code ErrorHandler& csmp_error( ErrorHandler::Instance() ); csmp_error.notice( WARNING, "class::method where this comes from", messsage ); @endcode
-    void notice( CSMP_MESSAGE err_type,
-                 const std::string& source, 
-                 const std::string& message );
+    /// use as @code ErrorHandler& csmp_error( ErrorHandler::Instance() ); csmp_error.Note( WARNING, "class::method where this comes from", messsage ); @endcode
+    void Note( CSMP_MESSAGE err_type,
+               const std::string& source,
+               const std::string& message );
   
     /// 4 argument version of notice
-    void notice( CSMP_MESSAGE err_type,
-                 const std::string& source,
-                 const std::string& message1,
-                 const std::string& message2 );
+    void Note( CSMP_MESSAGE err_type,
+               const std::string& source,
+               const std::string& message1,
+               const std::string& message2 );
 
-    void   PrintInfos() const;
-    void   PrintWarnings() const;
-    void   PrintErrors() const;
+    void PrintInfos() const;
+    void PrintWarnings() const;
+    void PrintErrors() const;
   
     /// returns how many errors are allowed before program termination is triggered
     size_t MaximumNumberOfErrors() const;

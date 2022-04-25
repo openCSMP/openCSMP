@@ -381,7 +381,7 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
        else non_surface_elements++;
    
     if ( non_surface_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation:",
+      ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation:",
                                        subdomain.Name(), "region contained not only surface elements." );
     return true;
    
@@ -442,12 +442,12 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundary:", "supplied set of substrings is empty; returning '\0'." );
+         ErrorHandler::Instance().Note( WARNING, "findBoundary:", "supplied set of substrings is empty; returning '\0'." );
          return std::string("\0");
       }
     // if the model has no boundaries
     if ( model.Boundaries() == 0 ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundary:", "model has no boundaries; returning '\0'." );
+         ErrorHandler::Instance().Note( WARNING, "findBoundary:", "model has no boundaries; returning '\0'." );
          return std::string("\0");
       }
      // making a set of boundary names
@@ -482,12 +482,12 @@ static size_t findBoundaries( const Model<3U>& model, const set<string>& interse
  {
     // if the substring set is empty
     if ( intersected_regions.empty() ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundaries:", "supplied set of substrings is empty; returning '\0'." );
+         ErrorHandler::Instance().Note( WARNING, "findBoundaries:", "supplied set of substrings is empty; returning '\0'." );
          return 0U;
       }
     // if the model has no boundaries
     if ( model.Boundaries() == 0 ) {
-         ErrorHandler::Instance().notice( WARNING, "findBoundaries:", "model has no boundaries; returning '\0'." );
+         ErrorHandler::Instance().Note( WARNING, "findBoundaries:", "model has no boundaries; returning '\0'." );
          return 0U;
       }
     region_patches_found.clear();
@@ -645,11 +645,11 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     // 1. verification of input to function
     // ------------------------------------
     if ( model.ContainsRegion(dim_1_region) == false ) {
-          ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "does not exist; nothing was done." );
+          ErrorHandler::Instance().Note( ERROR, "labelRegionPatches:", dim_1_region, "does not exist; nothing was done." );
           return 0;
       }
     if ( model.UniqueRegions() <= 1 ) {
-          ErrorHandler::Instance().notice( WARNING, "labelRegionPatches:", "model contains only a single unique region; so there is only one patch." );
+          ErrorHandler::Instance().Note( WARNING, "labelRegionPatches:", "model contains only a single unique region; so there is only one patch." );
           return 1;
       }
     // verifying that we are indeed dealing with a region of surface elements only
@@ -657,7 +657,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     pair<int32_t,int32_t>  dimensionality = subdomain.ElementSpatialDimensions();
     //   number of dims in region      dimension of contained elements
     if ( dimensionality.first != 1 and dimensionality.second != 2 ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region does not consist of surface elements only; nothing was done." );
+         ErrorHandler::Instance().Note( ERROR, "labelRegionPatches:", dim_1_region, "region does not consist of surface elements only; nothing was done." );
          return 0;
       }
     // verifying that the region lies inside of the model
@@ -671,18 +671,18 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
            }
       }
     if ( boundary_elements > 0 ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
+         ErrorHandler::Instance().Note( ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );
          return 0;
       }
     if ( !model.Database().IsDefined(diagnostic_elmt_variable) ) {
-         ErrorHandler::Instance().notice( ERROR, "labelRegionPatches:", diagnostic_elmt_variable, "variable to discern regions is not defined; nothing was done." );
+         ErrorHandler::Instance().Note( ERROR, "labelRegionPatches:", diagnostic_elmt_variable, "variable to discern regions is not defined; nothing was done." );
          return 0;
       }
       {  // check whether there are multiple region identifiers
          double rmin, rmax;
          model.MinMaxOf( diagnostic_elmt_variable, rmin, rmax );
          if ( fabs(rmax - rmin) <= numeric_limits<double>::epsilon() ) {
-              ErrorHandler::Instance().notice( WARNING, "labelRegionPatches:", diagnostic_elmt_variable, "is single valued; so there is only one patch." );
+              ErrorHandler::Instance().Note( WARNING, "labelRegionPatches:", diagnostic_elmt_variable, "is single valued; so there is only one patch." );
               return 1;
            }
       }

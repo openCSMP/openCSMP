@@ -47,7 +47,7 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
   std::ifstream ifs( file_name.c_str() );
 
   if ( !ifs.is_open() )
-    csmp_error.notice( FATAL_ERROR,
+    csmp_error.Note( FATAL_ERROR,
                        "namedPropertyValuesToRegions:", file_name,
                        "ASCII property identifier file could not be opened." );
 
@@ -112,7 +112,7 @@ void  namedPropertyValuesToRegions( Model<dim>& model, const string& prop_name, 
   }
   if ( !region_identifiers_without_name.empty() ) {
        for ( auto& p : region_identifiers_without_name ) cerr << p << " ";
-       csmp_error.notice( WARNING, "namedPropertyValuesToRegions:",
+       csmp_error.Note( WARNING, "namedPropertyValuesToRegions:",
                          "there were elements with unrecognized property identifiers; they were ignored." );
     }
 

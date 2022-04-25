@@ -1468,7 +1468,7 @@ bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double& eig
     n = (n > 0) ? std::cbrt( n ) : -1 * std::cbrt( -1 * n );
     eigenValue0 = m + n - a2 / 3.0;
 
-    //csmp_error.notice( WARNING, "TensorVariable::EigenValues(double,double,double):",
+    //csmp_error.Note( WARNING, "TensorVariable::EigenValues(double,double,double):",
     //                  "found complex conjugate roots when calculating the eigenvalues of a tensor.");
     return false;
   }

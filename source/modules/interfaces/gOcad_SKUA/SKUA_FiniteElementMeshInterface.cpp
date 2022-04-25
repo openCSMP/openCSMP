@@ -162,15 +162,15 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
     string   asc_name  = meshfile; asc_name += ".asc";
     ifstream ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                        "ASCII geometry input file with extension '.asc' could not be opened");
     
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) )     // O.K.
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                     "File header not read correctly");
 
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) { // O.K. - produces object_specs_
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                     "Region and element type information not read correctly");
       }
    
@@ -182,7 +182,7 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
     string dat_name = meshfile; dat_name += ".dat";
 
     if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == nullptr )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                          "DAT input file with extension '.dat' could not be opened");
 
     if ( csmp_error.Verbose() ) {
@@ -191,15 +191,15 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
       }
 
     if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                  "Node coordinates not read correctly");
 
     if ( !ReadBoundaryFlagsAndConditionsBinary( ifs_dat, vset ) )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                      "Boundary flags and conditions not read correctly");
 
     if ( !ReadPelementBinary( ifs_dat, vset ) )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                      "Element types not read correctly");
                                        
     else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
@@ -207,15 +207,15 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
            vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
        }
     if ( !ReadPlistBinary( ifs_dat, vset ) )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                    "Nodes per element information not read correctly");
                                        
     if ( !ReadPfvertsBinary( ifs_dat, vset ) )
-      csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                    "Element neighbor information not read correctly");
                                        
     if ( !ReadPmaterialBinary( ifs_dat, vset ) )
-       csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
+       csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary",
                                    "Material property identifiers for elements not read correctly");
       
     // TODO: read property data  
@@ -224,7 +224,7 @@ void SKUA_FiniteElementMeshInterface::ReadMeshBinary( const string&  meshfile,
 
     if ( object_specs_.size() != object_elements_.size() )
     {
-      csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary():",
+      csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshBinary():",
                                 "Mismatch in object names and object specifiers");
     }
     else if( csmp_error.Verbose() )
@@ -302,15 +302,15 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
     string    asc_name = meshfile; asc_name += ".asc";
     ifstream  ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
-       csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+       csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                  "ASCII geometry input file with extension '.asc' could not be opened");
 
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) ) {     // O.K.
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "File header not read correctly");
       }
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) { // O.K.
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
     ifs_asc.close(); // '*.asc' geometry file
@@ -322,7 +322,7 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
     ifstream  ifs_dat( dat_name.c_str() );
 
     if ( !ifs_dat.is_open() )
-         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                    "DAT pdata input file with extension '.dat' could not be opened");
 
     if( csmp_error.Verbose() )
@@ -332,15 +332,15 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
     }
 
     if ( !ReadNodeCoordinatesASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Node coordinates not read correctly");
       }
     if ( !ReadBoundaryFlagsAndConditionsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Boundary flags and conditions not read correctly");
       }
     if ( !ReadPelementASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Element types not read correctly");
       }
     else { // if 'pelmt' was read correctly, CSMP element-type identifiers are created from SKUA integer identifiers
@@ -349,27 +349,27 @@ void SKUA_FiniteElementMeshInterface::ReadMeshASCII( const string& meshfile,
            vset.ElementType( i, convertSKUA_ElementType( vset.ElementType(i), isoparametric_ ) );
       }
     if ( !ReadPlistASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Nodes per element information not read correctly");
       }
     if ( !ReadPfvertsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Element neighbor information not read correctly");
       }
     if ( !ReadPmaterialASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII",
                                     "Material property identifiers for elements not read correctly");
       } // OK
     // reading potential property data (SKM 2/12/20)
     if ( !ReadPropertyRecordsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+         csmp_error.Note(  ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                                     "Property data were not read correctly");
       }
     ifs_dat.close(); // '*.data' pdata file
 
     if ( object_specs_.size() != object_elements_.size() )
       {
-        csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII():",
+        csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadMeshASCII():",
                                   "Mismatch in object names and object specifiers");
       }
     else if( csmp_error.Verbose() )
@@ -445,7 +445,7 @@ void SKUA_FiniteElementMeshInterface::AdvancePastCommentLine( ifstream& ifs ) co
  {
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
     if ( !ifs.is_open() or ifs.eof() ) {
-         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::AdvancePastCommentLine",
+         csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::AdvancePastCommentLine",
                             "end of file or file that is not open supplied as an argument." );
          return;
       }
@@ -830,7 +830,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPelementASCII( ifstream& ifs, VSet<dim
     SkipPotentialComment( ifs );
 
     if ( records == 0U ) {
-         csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPelementASCII",
+         csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPelementASCII",
                                   "Record of element types per element appears empty." );
          return false;
       }
@@ -967,7 +967,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
     SkipPotentialComment( ifs );
 
     if ( total_items == 0 ) {
-         csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
+         csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
                                      "File record of nodes per element (plist) appears empty" );
          return false;
       }
@@ -997,12 +997,12 @@ bool SKUA_FiniteElementMeshInterface::ReadPlistASCII( ifstream& ifs, VSet<dim>& 
          // does the record start with 0 and ends with n-1?
          if ( (*node_ids.begin()) != 0U ) {
              cerr <<"\nID of first node: "<< (*node_ids.begin());
-             csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
+             csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
                                        "Node numbering does not start with zero" );
            }
          else if ( (*node_ids.rbegin()) != vset.Vertices()-1U ) {
              cerr <<"\nID of last node vs. nodes in VSet: "<< (*node_ids.rbegin()) <<" vs. "<< vset.Vertices();
-             csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
+             csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadPlistASCII", 
                                        "Node numbering does not end with number of nodes in VSet-1 (=non-consecutive)" );
            }
       }
@@ -1051,7 +1051,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>
     SkipPotentialComment( ifs );
 
     if ( total_items == 0 ) {
-         csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPfvertsASCII", 
+         csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPfvertsASCII", 
                                      "File record of neighbors per element (pfverts) appears empty" );
          return false;
       }
@@ -1130,7 +1130,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
     SkipPotentialComment( ifs );
 
     if ( records == 0 ) {
-         csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPmaterialASCII:",
+         csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPmaterialASCII:",
                                   "Record of material types per element appears empty." );
          return false;
       }
@@ -1146,7 +1146,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPmaterialASCII( ifstream& ifs, VSet<di
 
     if ( elmt_mtrls.size() < vset.Elements() ) {
          cerr <<"\nFor the "<< vset.Elements() <<" elements, material parameter values were provided for only "<< records <<"\n";
-         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPmaterialASCII:",
+         csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadPmaterialASCII:",
                            "Element material information could not be obtained for all elements." );
          return false;
       }
@@ -1203,11 +1203,11 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
    
     // 0. checking how many properties are contained in file if any
     if ( ifs.eof() ) 
-      csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+      csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                         "end of file reached; input fle does not contain any property data" );  
     ifs >> integer;
     if ( integer <= 0 ) {
-         csmp_error.notice( INFO, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+         csmp_error.Note( INFO, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                             "text file does not contain any property data"); 
          return true;
       }
@@ -1237,7 +1237,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
              ifs >> integer;
              if ( integer <= 0 ) {
                   cerr <<"\n\tarray length = "<< integer;
-                  csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
+                  csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII",
                                     "negative or zero array length read for variable", property_name.c_str() );
                   return false;
                }
@@ -1250,7 +1250,7 @@ bool SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII( ifstream& ifs, V
         ifs >> records;
 
         if ( records == 0 ) {
-             csmp_error.notice( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII:",
+             csmp_error.Note( WARNING, "SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII:",
                                       "Record of variable values appears to be empty." );
              return false;
           }
@@ -1359,7 +1359,7 @@ bool SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary( FILE* fp, VSet<
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( fp == nullptr )
-      csmp_error.notice( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary", "file pointer is zero.");
+      csmp_error.Note( FATAL_ERROR, "SKUA_FiniteElementMeshInterface::ReadNodeCoordinatesBinary", "file pointer is zero.");
 
     const size_t  uibytes = sizeof(int32_t);
     const size_t  dbytes  = sizeof(double);
@@ -1754,7 +1754,7 @@ CSMP_FEM_TYPE  convertSKUA_ElementType( int32_t etype, bool isoparametric )
          if ( etype == 2 ) return ISOPARAMETRIC_CUBIC_HEXAHEDRON,
       */       
          cerr <<"\n\telement type "<< etype << endl;
-         csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
+         csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
                            "isoparametric finite element type not recognised" );
       }
 
@@ -1763,7 +1763,7 @@ CSMP_FEM_TYPE  convertSKUA_ElementType( int32_t etype, bool isoparametric )
    if ( etype == 2 ) return LINEAR_BAR;    						            // BAR_2            = 2,
 
    cerr <<"\n\telement type "<< etype << endl;
-   csmp_error.notice( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
+   csmp_error.Note( ERROR, "SKUA_FiniteElementMeshInterface::ConvertSKUA_ElementType",
                      "finite element type not recognised" );
 
    // types not yet treated

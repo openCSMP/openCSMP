@@ -352,7 +352,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                   const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
                   if ( index >= n_elmts ) {
                        cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
-                       csmp_error.notice( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
+                       csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
                     }
                   else if ( index >= 0 )
                     e.Assign( j, &(*next(elements_.begin(),index)) );
@@ -362,7 +362,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
          }
     }
   else
-  csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
+  csmp_error.Note( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
 
   // ----------------------------------------------------------
   // 3. constructing the Faces using the VSet node information
@@ -387,7 +387,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
             if ( csmpElementType == UNKNOWN ) {
                  cerr <<"\n\t"<< parseFiniteElementType(csmpElementType) <<" encountered for Face "<< face_idx <<"\n";
-                 csmp_error.notice( FATAL_ERROR, "MeshManager::Initialise:", "encountered UNKNOWN Face element type." );
+                 csmp_error.Note( FATAL_ERROR, "MeshManager::Initialise:", "encountered UNKNOWN Face element type." );
               }
             typename plf::colony<Face<dim>>::iterator
                fit = faces_.emplace( Face<dim>( face_idx, fem_manager_.E( csmpElementType ),
@@ -408,7 +408,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        // --------------------------------------------------------------------
        // necessary info is stored in 'pfverts' record for Face
        if ( !vset.WithNeighbourConnectivity() )
-         csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for Face objects; nothing was done." );
+         csmp_error.Note( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for Face objects; nothing was done." );
        else
          {
             if ( csmp_error.Verbose() )
@@ -426,7 +426,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                       const int64_t  index( vset.Pfvert( e.Idx(), j ) );
                       if ( index >= n_elmts+n_faces ) {
                            cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
-                           csmp_error.notice( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
+                           csmp_error.Note( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
                       // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                       if ( index >= n_elmts )
@@ -445,18 +445,18 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  const int64_t  index1( vset.Pfvert( e.Idx(), neighbors ) );
                  if ( index1 >= n_elmts ) {
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index1 <<" vs. "<< n_elmts <<" elements.\n";
-                      csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of first higher-dimensional element of Face out of range.");
+                      csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of first higher-dimensional element of Face out of range.");
                    }
                  else if ( index1 < 0 ) {
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index1 <<"\n";
-                      csmp_error.notice( ERROR, "MeshManager::Initialise", "First higher-dimensional element out of range.");
+                      csmp_error.Note( ERROR, "MeshManager::Initialise", "First higher-dimensional element out of range.");
                    }
 
                  // Outside neighbor 2: outer neighbor element will only be there if Face on INTERNAL model boundary
                  const int64_t  index2( vset.Pfvert( e.Idx(), neighbors + 1U ) );
                  if ( index2 >= n_elmts ) {
                       cerr <<"\n\tFace "<< e.Idx() <<": "<< index2 <<" vs. "<< n_elmts <<" elements.\n";
-                      csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of second higher-dimensional element of Face out of range.");
+                      csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of second higher-dimensional element of Face out of range.");
                    }
                  // assignment of higher-dimensional neighbors
                  Element<dim>* const innerElement = (index1 < 0) ? nullptr : &(*next(elements_.begin(),index1));
@@ -509,7 +509,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  const size_t node(vset.Plist( interface_idx, j ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
-                      csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
+                      csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), INSIDE );
               }
@@ -518,7 +518,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                  const size_t node(vset.Plist( interface_idx, j+nodes ));
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
-                      csmp_error.notice( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
+                      csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
                    }
                  (*ifit).Assign( j, &(*next(nodes_.begin(),node)), OUTSIDE );
               }
@@ -531,7 +531,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        // -------------------------------------------------------------------------
        // necessary info is stored in 'pfverts' record for InterFace: inner nbors first, then outer, then higher-dimensional ones
        if ( !vset.WithNeighbourConnectivity() )
-         csmp_error.notice( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for InterFace objects; nothing was done." );
+         csmp_error.Note( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity for InterFace objects; nothing was done." );
        else {
          if ( csmp_error.Verbose() )
            cout << "\nMeshManager<" << dim << ">::Initialize: connecting interfaces to their higher-dimensional neighbors..." << endl;
@@ -558,7 +558,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 #ifdef DEBUG       // if the index is out of range
                    if ( index >= n_cells || index <= n_elmts ) {
                         cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< n_cells << endl;
-                        csmp_error.notice( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
+                        csmp_error.Note( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
                      }
 #endif
                    // NB: the number of the interface in the container is the number from the VSet - elements and faces
@@ -575,11 +575,11 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 #ifdef DEBUG
              if ( index1 < 0 || index2 < 0 ) {
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
-                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
+                  csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
                }
              if ( index1 >= n_elmts || index2 >= n_elmts ) {
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
-                  csmp_error.notice( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor indices of InterFace out of range.");
+                  csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor indices of InterFace out of range.");
                }
 #endif
              // assignment: inner and outer Element objects
@@ -766,7 +766,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
  
    // if the node location needs to be compared with existing ndes
    if ( nearby_node >=nodes_.size() ) {
-        csmp_error.notice( WARNING, "MeshManager<dim>::AddNodeAt",
+        csmp_error.Note( WARNING, "MeshManager<dim>::AddNodeAt",
                           "nearby Node not contained in Mesh:", to_string(nearby_node) );
         // using the last node
         nearby_node = nodes_.size() - 1U;
@@ -827,7 +827,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
    // 0. verifying the input
    // node vector
    if ( nodes.empty() )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
 
    // 1. constructing new element
    typename plf::colony<Element<dim>>::iterator
@@ -848,7 +848,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
-         csmp_error.notice( ERROR, "MeshManager<dim>::AddElement",
+         csmp_error.Note( ERROR, "MeshManager<dim>::AddElement",
                           "neighbor information could not be created because node has no parent element info");
          return &(*eit);
       }
@@ -856,7 +856,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
    // 4. if the nodes have parents, this method tries to find and connect the neighbors
    // ---------------------------------------------------------------------------------
    if ( connectNeighborsUsingNodeParents( &(*eit) ) < (*eit).FE()->Faces()-1 )
-     csmp_error.notice( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
+     csmp_error.Note( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
    
    return &(*eit);
   
@@ -887,17 +887,17 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    
    // 0. verifying the InterFace
    if ( ifptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "finite element pointer not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "finite element pointer not initialised");
    if ( ifptr->HasInterveningElement() ) {
         ifptr->InterveningElement()->Out();
-        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
      }
      
    // 1. checking the node vector
    if ( nodes.empty() )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector is empty");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector is empty");
    if ( nodes.size() != ifptr->Nodes() )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector has the wrong size");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector has the wrong size");
      
    // 2. checking the validity of the node vector in debug mode
 #ifdef DEBUG
@@ -905,12 +905,12 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
    for ( auto i{0U}; i<ifptr->FE()->Nodes(); ++i ) {
          if ( nodes[i] == nullptr ) {
               cerr <<"\n\tnode "<< i;
-              csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
+              csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
    break;
            }
          else if ( nodes[i]->Coordinate() != ifptr->N(i)->Coordinate() ) {
               cerr <<"\n\tnode "<< i;
-              csmp_error.notice( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
+              csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
    break;
            }
        }
@@ -960,22 +960,22 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
    // 0. verifying the input
    // pointers
    if ( eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element pointer not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByFace", "element pointer not initialised");
 
    // is the element indeed lower dimensional?
    if constexpr ( dim == 3 )
      if ( !eptr->IsSurface() )
-     csmp_error.notice( ERROR, "MeshManager<3>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional surface element");
+     csmp_error.Note( ERROR, "MeshManager<3>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional surface element");
    if constexpr ( dim == 2 )
      if ( !eptr->IsLine() )
-     csmp_error.notice( ERROR, "MeshManager<2>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional line element");
+     csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional line element");
 
    if ( eptr->FV() == nullptr )
-     csmp_error.notice( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
+     csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "pointer to higher dimensional element on inside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByFace", "pointer to higher dimensional element on inside not initialised");
    if ( inner_eptr == outer_eptr ) {
-        csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceElementByFace", "cannot create Face"
+        csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByFace", "cannot create Face"
                                   "pointer to higher dimensional elements are the same");
         return nullptr;
      }
@@ -1021,11 +1021,11 @@ Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent, ui
    // 0. verifying the input
    // pointers
    if ( inner_parent == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on inside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
-     csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
+     csmp_error.Note( INFO, "MeshManager<dim>::AddFace", "pointer to higher dimensional element on ouside not initialised");
    if ( outer_parent == inner_parent ) {
-        csmp_error.notice( INFO, "MeshManager<dim>::AddFace", "cannot create Face",
+        csmp_error.Note( INFO, "MeshManager<dim>::AddFace", "cannot create Face",
                                  "pointers to higher dimensional elements are both the same.");
         return nullptr;
      }
@@ -1061,11 +1061,11 @@ Face<dim>* const MeshManager<dim>::AddEdgeFace( Face<dim>* const adjacent_face1,
    // 0. verifying the input
    // pointers
    if ( adjacent_face1 == nullptr ) {
-       csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional Face1 on inside not initialised");
+       csmp_error.Note( ERROR, "MeshManager<dim>::AddFace", "pointer to higher dimensional Face1 on inside not initialised");
        return nullptr;
     }
    if ( adjacent_face1 == adjacent_face2 ) {
-       csmp_error.notice( ERROR, "MeshManager<dim>::AddFace", "Face pointers point to same Face", "Nothing was done");
+       csmp_error.Note( ERROR, "MeshManager<dim>::AddFace", "Face pointers point to same Face", "Nothing was done");
        return nullptr;
      }
 
@@ -1109,11 +1109,11 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    // 0. verifying the input
    // pointers
    if ( eptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "element pointer not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "element pointer not initialised");
    if ( local_face_id >= eptr->Faces() )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddBoundaryFace", "face ID does not exist in element");
    if ( eptr->Neighbor(local_face_id) != nullptr )
-     csmp_error.notice( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it really located at model boundary?");
+     csmp_error.Note( WARNING, "MeshManager<dim>::AddBoundaryFace", "element face has a neighbor; is it really located at model boundary?");
 
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
@@ -1147,11 +1147,11 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    // 0. verifying the input
    // pointers
    if ( inner_parent == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
    if ( inner_parent == outer_parent ) {
-        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
                                   "inner and outer parent pointers are the same");
         return nullptr;
      }
@@ -1217,11 +1217,11 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    // 0. verifying the input
    // pointers
    if ( inner_parent == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on inside not initialised");
    if ( outer_parent == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
    if ( inner_parent == outer_parent ) {
-        csmp_error.notice( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
+        csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
                                   "inner and outer parent pointers are the same");
         return nullptr;
      }
@@ -1277,7 +1277,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
    // 0. verifying the input
    // pointers
    if ( fptr == nullptr )
-     csmp_error.notice( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceFaceByInterFace", "Face pointer not initialised");
 
    // 1. constructing new interface
    // -----------------------------
@@ -1391,7 +1391,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceInteriorElementsByFaces( const Prop
     const long         n_faces_to_build{ distance(first,last) };
 
     if ( n_faces_to_build == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceInteriorElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
     else face_ptrs.reserve( n_faces_to_build );
@@ -1481,7 +1481,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
     const long         n_faces_to_build{ distance(first,last) };
 
     if ( n_faces_to_build == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceBoundaryElementsByFaces", "supplied iterator range is empty; nothing was done.");
          return face_ptrs;
       }
     else face_ptrs.reserve( n_faces_to_build );
@@ -1616,7 +1616,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
     const size_t  n_original_faces{ faces_.size() };
 
     if ( distance(first,last) == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
          return iface_ptrs;
       }
     else iface_ptrs.reserve( n_original_faces );
@@ -1741,7 +1741,7 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( face_nbor_elmts.empty() ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::CreateFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::CreateFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
          return vector<Face<dim>*>{}; // empty vec
       }
     
@@ -1793,7 +1793,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( interface_nbor_elmts.empty() ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
          return vector<InterFace<dim>*>{}; // empty vec
       }
     
@@ -2037,7 +2037,7 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Element<d
      // ---------------------------------------------------------------------------------------------------------------------
      const CELL_SHAPE cell_shape = parseFiniteElementDimension( (*first)->FE_Type() );
      if ( parseFiniteElementDimension( (*prev(last,1))->FE_Type() ) != cell_shape ) {
-          csmp_error.notice( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+          csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
                             "range of supplied elements appear to be of different cell shape; nothing was done" );
           return 0U;
        }
@@ -2175,7 +2175,7 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
      vector<Face<dim>*> face_ptrs( first, last );
      sort( face_ptrs.begin(), face_ptrs.end() );
      if ( binary_search( face_ptrs.begin(), face_ptrs.end(), static_cast<Face<dim>*>(nullptr) ) )
-       csmp_error.notice( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
                          "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
           
      auto first1{ first };
@@ -2232,7 +2232,7 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<InterFace
      vector<InterFace<dim>*> interface_ptrs( first, last );
      sort( interface_ptrs.begin(), interface_ptrs.end() );
      if ( binary_search( interface_ptrs.begin(), interface_ptrs.end(), static_cast<InterFace<dim>*>(nullptr) ) )
-       csmp_error.notice( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
                          "input range contains 'nullptr' InterFace objects; have these InterFaces already been deleted?");
 
      auto first1{ first };
@@ -2286,7 +2286,7 @@ void  MeshManager<dim>::BuildConnectivity( typename vector<CELL<dim>*>::const_it
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     const size_t   n_cells_max = distance(first,last);
     if ( n_cells_max == 0U ) {
-         csmp_error.notice( WARNING, "MeshManager<dim>::BuildConnectivity:", "supplied cell vector is empty; nothing was done." );
+         csmp_error.Note( WARNING, "MeshManager<dim>::BuildConnectivity:", "supplied cell vector is empty; nothing was done." );
          return;
       }
     //cout << "\nMeshManager<"<< dim <<">::BuildConnectivity: Establishing CSMP FE neighbor connectivity...\n";
@@ -2984,7 +2984,7 @@ void MeshManager<dim>::UpdateConnectivity()
     // ------------------------
     // TODO: extend method to also update potential NodeManifolds
     if ( node_manifold_manager_ != nullptr )
-      ErrorHandler::Instance().notice( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
+      ErrorHandler::Instance().Note( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
     
  } // end UpdateConnectivity
 
@@ -3208,7 +3208,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   ErrorHandler& csmp_error( ErrorHandler::Instance() );
   
   if ( elements_.empty() ) {
-       csmp_error.notice( WARNING, "MeshManager<dim>::OutputMeshTo", "Mesh Manager does not currently store a mesh; no output");
+       csmp_error.Note( WARNING, "MeshManager<dim>::OutputMeshTo", "Mesh Manager does not currently store a mesh; no output");
        return;
     }
 
@@ -3550,7 +3550,7 @@ break;
             }
           break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of node variable not recognized." );
       }
     // storing the data in the VSet
@@ -3616,7 +3616,7 @@ break;
           }
        break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of element variable not recognized." );
     }
     // storing the data in the VSet
@@ -3696,7 +3696,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of element integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -3792,7 +3792,7 @@ break;
             }
          break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of element sector integraton point variable not recognized." );
       }
       // storing the data in the VSet
@@ -3888,7 +3888,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of facet integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -3955,7 +3955,7 @@ break;
           }
         break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of face variable not recognized." );
     }
     // storing the data in the VSet
@@ -4035,7 +4035,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4132,7 +4132,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face-sector integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4229,7 +4229,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face facet integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4296,7 +4296,7 @@ break;
       }
    break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface variable not recognized." );
     }
     // storing the data in the VSet
@@ -4373,7 +4373,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4468,7 +4468,7 @@ break;
         }
      break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface sector integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4563,7 +4563,7 @@ break;
             }
 break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface facet integration point variable not recognized." );
       }
       // storing the data in the VSet
@@ -4595,7 +4595,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
        vset.Elements()   != elements_.size() ||
        vset.Faces()      != faces_.size() ||
        vset.InterFaces() != interfaces_.size() ) {
-       csmp_error.notice( ERROR, "MeshManager<dim>::InputStoredVariablesFrom",
+       csmp_error.Note( ERROR, "MeshManager<dim>::InputStoredVariablesFrom",
                          "mismatch between property data sizes and mesh stored in manager; no input." );
        return;
     }
@@ -4669,7 +4669,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             }
           break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of node variable not recognized." );
       }
     }
@@ -4735,7 +4735,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
               }
  break;
           default:
-            csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+            csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element variable not recognized." );
         }
     }
@@ -4819,7 +4819,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
               }
  break;
           default:
-            csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+            csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element integration point variable not recognized." );
         }
     }
@@ -4923,7 +4923,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
               }
  break;
           default:
-            csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+            csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element sector integraton point variable not recognized." );
         }
     }
@@ -5027,7 +5027,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
        break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of facet integration point variable not recognized." );
     }
   }
@@ -5098,7 +5098,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             }
          break;
         default:
-          csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+          csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of face variable not recognized." );
       }
     }
@@ -5182,7 +5182,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
         break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of face integration point variable not recognized." );
     }
   }
@@ -5281,7 +5281,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
         break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of face-sector integration point variable not recognized." );
     }
   }
@@ -5380,7 +5380,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           }
         break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of face facet integration point variable not recognized." );
     }
   }
@@ -5455,7 +5455,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
    break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface variable not recognized." );
     }
   }
@@ -5539,7 +5539,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
    break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface integration point variable not recognized." );
     }
   }
@@ -5638,7 +5638,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
    break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface sector integration point variable not recognized." );
     }
   }
@@ -5737,7 +5737,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
       }
    break;
       default:
-        csmp_error.notice( ERROR, "Region<dim>::OutputVariableTo:",
+        csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                            (*pit).first, "type of interface facet integration point variable not recognized." );
     }
   }
@@ -5918,7 +5918,7 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
       }
 
     if ( !lesser_dim_elmts_detached.empty() ) {
-      csmp_error.notice( WARNING, "MeshManager::CheckElementConnectivity:",
+      csmp_error.Note( WARNING, "MeshManager::CheckElementConnectivity:",
                         "model contains lower-dimensional elements detached from higher dimensional elements" );
 
       // do some additional diagnostics on these elements

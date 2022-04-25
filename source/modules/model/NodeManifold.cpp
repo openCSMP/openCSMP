@@ -289,7 +289,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side )
     
     //a node can only exist in one manifold
     if(nd->Manifold() != nullptr) {
-        csmp_error.notice( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+        csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
                                  "Node already in another manifold. Nothing was done.");         
         return false;
     }
@@ -297,7 +297,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side )
     //the node is already in current manifold
     for ( auto& nit : branches_ )
       if ( nit.first == nd ) {
-          csmp_error.notice( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+          csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
                                    "Node already part of current manifold. Nothing was done.");
           return false;
         }
@@ -330,7 +330,7 @@ bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
        }
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
+    csmp_error.Note( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
                                 "Node does not exist in manifold. Nothing was done.");
     return false;
 

@@ -314,7 +314,7 @@ bool  ModelSubDomain<dim,CELL>::IsContiguous() const
 
   pair<int32_t, int32_t>  dimensionality = SpatialDimensions();
   if ( dimensionality.first > 1U ) {
-      csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::IsContiguous:",
+      csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::IsContiguous:",
                          "method can determine contiguity only for domains which consist only of same shape cells (line, surface or volume type); returned false." );
       return false;
     }
@@ -484,18 +484,18 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( size_t interior_cells 
 
      // verification of suitable model state
      if ( cell_vec_.empty() )
-       csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+       csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                           Name(), "model subdomain: CELL vector not initialised yet.");
                               
      if ( interior_cells > cell_vec_.size() ) {
            cerr <<"\ninterior cells: "<< interior_cells;
-           csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                               Name(), "model subdomain: less CELLs in CELL vector than interior cells specified.");
        }
 
      if ( !is_sorted( cell_vec_.begin(), next(cell_vec_.begin(),interior_cells)) ) {
           cerr <<"\ninterior cells: "<< interior_cells;
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                              Name(), "model subdomain: supplied CELL vector not sorted.");
        }
        
@@ -762,7 +762,7 @@ cout.flush();
              interior_elmts.insert( it );
 
          if ( !lesser_dim_elmts_detached.empty() ) {             
-              csmp_error.notice( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
+              csmp_error.Note( WARNING, "ModelSubdomain<dim,CELL>::PartitionCellVector:", Name().c_str(),
                                 "subdomain contains lower-dimensional cells detached from higher dimensional domain; these will be treated as boundary.");
               // do some additional diagnostics on these cells
               // ------------------------------------------------
@@ -904,7 +904,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( cell_vec_.empty() ) {
-        csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
                                   "cannot create 'node_vec_', current cell vector is empty");
         return;
      }
@@ -940,7 +940,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector( std::vector<std::pair<st
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( contacting_cells.empty() ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
                                     "provided argument vector does not contain any cells");
           return;
        }
@@ -1357,20 +1357,20 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
      ScalarVariable    sc;
 
      if ( prop_key.place != ELEMENT and prop_key.type != SCALAR ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                     "method assigns only to scalar cell properties");
           return;
        }
      if ( dim != 1U and !strcmp( characteristic, "length" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+       csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                    "'length' will only be assigned to line cells, nothing done to others");
 
      if ( dim != 2U and !strcmp( characteristic, "area" ) )
-       csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+       csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                    "'area' will only be assigned to surface cells, nothing done to others");
 
      if ( dim != 3U and !strcmp( characteristic, "volume" ) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                                     "'volume' can only be assigned to volume cells. Nothing was done");
           return;
        }
@@ -1416,7 +1416,7 @@ void ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo( const char* characte
             }
       }
      else {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::AssignCellCharacteristicsTo",
                              characteristic,  " entered as characteristic was not identified; nothing done");
           cout <<"\nYour options are: "<< endl;
           cout <<"\n\t inner radius"   << endl;
@@ -1544,7 +1544,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const char* property, double& gmin, dou
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
 
     if ( !pref_.IsDefined(property) ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf", property, "is undefined; nothing could be done" );
           return;
       }
     csmp::Index  gprop_key(pref_.StorageKey(property));
@@ -2018,7 +2018,7 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
     vmin = vmax = std::numeric_limits<double>::signaling_NaN();
 
     ErrorHandler&  csmp_error(ErrorHandler::Instance());
-    csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
+    csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::MinMaxOf(index)",
                       "placement of property coould not be indentified");
 
  } // end MinMaxOf(index)
@@ -2421,7 +2421,7 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( !pref_.IsDefined(property) ) {
-        csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
+        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PropertyStatus", property, "is undefined; nothing could be done" );
         return ANY;
     }
     const csmp::Index  prop_key = pref_.StorageKey(property);
@@ -2443,12 +2443,12 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
          prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ||
          prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT )
     {
-        csmp_error.notice( ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
+        csmp_error.Note( ERROR, src.c_str(), "Method is not implemented for facet and sector integration points");
         return ANY;
     }
 
     if ( cell_vec_.empty() ) {
-        csmp_error.notice( ERROR, src.c_str(), "ModelSubDomain is empty");
+        csmp_error.Note( ERROR, src.c_str(), "ModelSubDomain is empty");
         return ANY;
     }
 
@@ -2671,7 +2671,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( cell_vec_.empty() ) {
-         csmp_error.notice( ERROR, src.c_str(), "Region is empty.");
+         csmp_error.Note( ERROR, src.c_str(), "Region is empty.");
          return;
       }
 
@@ -2865,7 +2865,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( cell_vec_.empty() ) {
-         csmp_error.notice( ERROR, src.c_str(), "Region is empty");
+         csmp_error.Note( ERROR, src.c_str(), "Region is empty");
          return;
       }
 
@@ -4054,17 +4054,17 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
      ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
      if ( n_key.place != NODE ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg2 is not a node property, nothing was done...");
           return;
        }
      if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Property arg1 is not a constraint point property, nothing was done...");
           return;
        }
      if ( n_key.type != c_key.type ) {
-          csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
@@ -4147,7 +4147,7 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty( const
 
     // TENSOR PROPERTIES
     if ( n_key.type == TENSOR ) {
-          csmp_error.notice( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
+          csmp_error.Note( WARNING, "ModelSubDomain<dim,CELL>::ExtrapolateIntegrationPointToNodeProperty",
                             "distance weighting is not applied; tensor values are simply averaged at the nodes.");
          // creating a zero-initialized temporary vector<double>
          TensorVariable<dim>  zero_ts; zero_ts=0.;
@@ -4909,7 +4909,7 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
     // 2. reading the interior cell records of the region
     binaryFileRead( fp, info.interior_elmts );
     if (dim > 2 && info.interior_elmts.empty() ) {
-        csmp_error.notice( WARNING, "readDomainIndexesFromBinaryFile:",
+        csmp_error.Note( WARNING, "readDomainIndexesFromBinaryFile:",
                           "Model appears to have a region with no interior cells: ", name );
     }
 
@@ -4980,7 +4980,7 @@ size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
     nodes_removed -= node_vec_.size();
     
     if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
-      csmp_error.notice( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
+      csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
                         "removed nodes but not cells? - subdomain may be corrupt now.");
     
     return n_cells - n_cells_new;
@@ -5207,23 +5207,23 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
     // 0. some initial checks
     // ----------------------
     if ( subdomain1.Name() == subdomain2.Name() ) {
-         csmp_error.notice( ERROR, "sharedPerimeterCells:", "argument regions are the same; nothing was done.");
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", "argument regions are the same; nothing was done.");
          return 0U;
       }
     if ( subdomain1.Empty() ) {
-         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain1.Name(), "is empty; nothing was done.");
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain1.Name(), "is empty; nothing was done.");
          return 0U;
       }
     if ( subdomain2.Empty() ) {
-         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
          return 0U;
       }
     if ( subdomain2.Empty() ) {
-         csmp_error.notice( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", subdomain2.Name(), "is empty; nothing was done.");
          return 0U;
       }
     if ( subdomain1.NeedsRebuilt() || subdomain2.NeedsRebuilt() ) {
-         csmp_error.notice( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
+         csmp_error.Note( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
          return 0U;
       }
 
@@ -5260,7 +5260,7 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
 
     if ( n_matching_faces == 0U ) {
          string message( string(" input regions '") + subdomain1.Name() + "' and '" + subdomain2.Name() +"'");
-         csmp_error.notice( WARNING, "sharedPerimeterCells:",
+         csmp_error.Note( WARNING, "sharedPerimeterCells:",
                             message, "do not share any faces, nothing could be done");
          return 0U;
       }

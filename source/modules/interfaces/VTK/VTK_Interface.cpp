@@ -1220,7 +1220,7 @@ void VTK_Interface<dim>::IntegrationPointData( const Region<dim>& gref,
       
     default:
     {
-      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData",
+      csmp_error.Note( FATAL_ERROR, "VTK_Interface<dim>::IntegrationPointData",
                         "Placement currently not handled", parsePlacement(prop_key.place) );
     }
   }
@@ -1241,7 +1241,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( prop_key.place != ELEMENT_INTEGRATION_POINT )
-      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
+      csmp_error.Note( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
                                       "Method only applies to element integration points" );
     VectorVariable<dim>  vc;
     TensorVariable<dim>  ts;
@@ -1320,7 +1320,7 @@ void VTK_Interface<dim>::ElmtIntegrationPointData( const Region<dim>& gref,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( prop_key.place != FACET_INTEGRATION_POINT )
-      csmp_error.notice( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
+      csmp_error.Note( FATAL_ERROR, "VTK_Interface<dim>::ElmtIntegrationPointData",
                         "Method only applies to element integration points" );
     VectorVariable<dim>  vc;
     TensorVariable<dim>  ts;
@@ -2072,7 +2072,7 @@ void VTK_Interface<dim>::OutputRegionByRegionToVTK( const Model<dim>& model,
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
     if ( !model.Database().IsDefined(var_name.c_str()) ) {
-         csmp_error.notice( ERROR,
+         csmp_error.Note( ERROR,
                             "VTK_Interface<dim>::OutputRegionByRegionToVTK",
                             var_name.c_str(),
                             "output property is not defined. Nothing was done.");
@@ -2121,7 +2121,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
                           const char* file_name, const char* variable_name )
   {
      if ( key.place != NODE ) {
-          ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", "output variable must be placed on the node; nothing was done." );
+          ErrorHandler::Instance().Note( ERROR, "outputNodeDataToVTK:", "output variable must be placed on the node; nothing was done." );
           return;
        }
 
@@ -2140,7 +2140,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs ) {
-          ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", "output file could not be opened; nothing was done." );
+          ErrorHandler::Instance().Note( ERROR, "outputNodeDataToVTK:", "output file could not be opened; nothing was done." );
           return;
        }
 
@@ -2224,7 +2224,7 @@ void outputNodeDataToVTK( const Element<dim>& e, const csmp::Index& key,
                ofs << endl;
             }
        }
-     else ErrorHandler::Instance().notice( ERROR, "outputNodeDataToVTK:", parseType(key.type),
+     else ErrorHandler::Instance().Note( ERROR, "outputNodeDataToVTK:", parseType(key.type),
                                           "node property placement cannot be output; nothing was done." );
      ofs << endl;
      ofs.close();
@@ -2582,7 +2582,7 @@ void outputIntegrationPointDataToVTK( const Element<dim>& element, const csmp::I
                ofs << endl;
             }
        }
-     else ErrorHandler::Instance().notice( ERROR, "outputIntegrationPointDataToVTK:", parseType(key.type),
+     else ErrorHandler::Instance().Note( ERROR, "outputIntegrationPointDataToVTK:", parseType(key.type),
                                           "integration-point property placement cannot be output; nothing was done." );
      ofs << endl;
      cout <<"\nVTK file '"<< outfile <<"' written successfully."<< endl;
@@ -2786,7 +2786,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
                     }
                  break;
                default:
-                 csmp_error.notice( WARNING, "outputRegionBoundaryToVTK:",
+                 csmp_error.Note( WARNING, "outputRegionBoundaryToVTK:",
                                    "treatment of Array and FlaggedArray variables not handled yet.");
             }
             

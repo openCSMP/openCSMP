@@ -103,7 +103,7 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
                                                    new DiffusionLHS<dim>(Notation.key_D,Notation.key_C1)) );
               break;
             case DISPERSION:
-                 error_handler.notice( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "DISPERSION not implemented yet");
+                 error_handler.Note( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "DISPERSION not implemented yet");
               break;
             case SOURCE_SINK:
                  vec_operators_.insert( make_pair( Operation("SourceTermRHS",csmp::ADD,2,false), 
@@ -121,13 +121,13 @@ IntegralEquation<dim,VARIABLE_SET>::IntegralEquation( const PropertyDatabase<dim
                                                                                            true /* interpolate_pf_to_sector_ip */ )) );
               break;
             case SORPTION: // essentially a sink term
-                 error_handler.notice( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "SORPTION not implemented yet");
+                 error_handler.Note( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "SORPTION not implemented yet");
               break;
             case DECAY: // and another sink term
-                 error_handler.notice( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "DECAY not implemented yet");
+                 error_handler.Note( ERROR, "IntegralEquation<dim,VARIABLE_SET>::IntegralEquation", "DECAY not implemented yet");
               break;
             default:
-                error_handler.notice( ERROR, "IntegralEquation:ctor", "ADE component term not recognised." );
+                error_handler.Note( ERROR, "IntegralEquation:ctor", "ADE component term not recognised." );
               return;
          }
       }
@@ -173,13 +173,13 @@ void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, Matrix
     // checking for incompatibilities
     if ( operation.ExecutionLevel() == 1 && 
          ( operation.OperationType() == MULTIPLY || operation.OperationType() == DIVIDE ) )
-      error_handler.notice( ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "mutiply/divide have no effect on empty matrix." );
+      error_handler.Note( ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "mutiply/divide have no effect on empty matrix." );
     
     // adding lefthand operator
     pair<typename map<Operation,MatrixOperator<dim>*>::iterator,bool> it = mat_operators_.insert( make_pair(operation,mop) );
     if ( it.second == false ) {
          operation.Out();
-         error_handler.notice( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & matrix (lefthand) operator");
+         error_handler.Note( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & matrix (lefthand) operator");
       }
  }
  
@@ -192,13 +192,13 @@ void IntegralEquation<dim,VARIABLE_SET>::Add( const Operation& operation, Vector
     // checking for incompatibilities
     if ( operation.ExecutionLevel() == 1 && 
          ( operation.OperationType() == MULTIPLY || operation.OperationType() == DIVIDE ) )
-      error_handler.notice( ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "mutiply/divide have no effect on empty vector." );
+      error_handler.Note( ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "mutiply/divide have no effect on empty vector." );
 
     // adding righthand operator
     pair<typename map<Operation,VectorOperator<dim>*>::iterator,bool> it = vec_operators_.insert( make_pair(operation,vop) );
     if ( it.second == false ) {
          operation.Out();
-         error_handler.notice( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & (righthand) vector operator");
+         error_handler.Note( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & (righthand) vector operator");
       }
  }
 
@@ -213,7 +213,7 @@ void IntegralEquation<dim, VARIABLE_SET>::AddPostProcess( MatrixOperator<dim>* m
     pair<typename map<string,MatrixOperator<dim>*>::iterator,bool> it = postpro_operators_.insert( make_pair(opname,mop) );
     if ( it.second == false ) {
          cerr <<"\n\t"<< opname;
-         error_handler.notice( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & (righthand) vector operator");
+         error_handler.Note( FATAL_ERROR, "IntegralEquation<dim,VARIABLE_SET>::Add", "unable to add operation & (righthand) vector operator");
       }
  }
  

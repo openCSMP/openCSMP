@@ -23,18 +23,18 @@ NodeManifoldManager<dim>::NodeManifoldManager( const vertexManifoldIndices& indi
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( indices.empty() ) {
-        csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+        csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                           "no manifold information contained in vertexManifoldIndices map; no manifolds were constructed" );
         return;
       }
     if ( mesh_nodes.empty() ) {
-        csmp_error.notice( ERROR, "NodeManifoldManager::constructor:",
+        csmp_error.Note( ERROR, "NodeManifoldManager::constructor:",
                           "no nodes available to create manifolds from" );
         return;
       }
     // checking that the deque does indeed have ther required node entries
     if ( indices.size() > mesh_nodes.size() )
-      csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+      csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                         "it appears that more manifold indices are supplied than nodes" );
 
 #ifdef DEBUG
@@ -44,7 +44,7 @@ for ( auto& nit : indices ) {
     for ( const auto& mf_nodes : nit.second ) mnodes.insert( mf_nodes.first );
     // if the key node is not contained this is reported
     if ( mnodes.find(nit.first) == mnodes.end() )
-        csmp_error.notice( WARNING, "NodeManifoldManager::constructor:",
+        csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
                           "manifold does not contain key node: ", to_string(nit.first) );
   }
 #endif
@@ -120,7 +120,7 @@ typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::Add
 
     // both nodes must be manifolds
      if ( inside == nullptr || outside == nullptr ) {
-          csmp_error.notice( ERROR, "NodeManifoldManager<dim>::AddManifold",
+          csmp_error.Note( ERROR, "NodeManifoldManager<dim>::AddManifold",
                             "input parameters contain nullptr nodes; nothing can be done" );
           return node_manifolds_.end();
        }
@@ -153,7 +153,7 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
 
     // both nodes must be manifolds
      if ( nmf1 == nullptr || nmf2 == nullptr ) {
-          csmp_error.notice( ERROR, "NodeManifoldManager<dim>::MergeManifolds",
+          csmp_error.Note( ERROR, "NodeManifoldManager<dim>::MergeManifolds",
                             "input contains nullptr manifolds; nothing can be done" );
           return false;
        }
@@ -261,7 +261,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( node_manifolds_.empty() ) {
-         csmp_error.notice( ERROR, "NodeManifoldManager::OutputNodeManifoldsToBinary:",
+         csmp_error.Note( ERROR, "NodeManifoldManager::OutputNodeManifoldsToBinary:",
                            "no node manifolds found; call this method only if there are SplitBoundaries in the model" );
          return;
       }
@@ -269,7 +269,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
     std::string bin_file( file_name );
     std::fstream fp( bin_file.c_str(), std::ios::out | std::ios::binary );
     if ( !fp.is_open() ) {
-        csmp_error.notice( ERROR, "NodeManifoldManager::OutputNodeManifoldsToBinary:",
+        csmp_error.Note( ERROR, "NodeManifoldManager::OutputNodeManifoldsToBinary:",
                            bin_file, "file could not be opened; nothing was done." );
         return;
       }
@@ -367,7 +367,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     std::string bin_file( file_name );
     std::fstream fp( bin_file.c_str(), std::ios::out | std::ios::binary );
     if ( !fp.is_open() ) {
-        csmp_error.notice( ERROR, "NodeManifoldManager::InputNodeManifoldsFromBinary:",
+        csmp_error.Note( ERROR, "NodeManifoldManager::InputNodeManifoldsFromBinary:",
                            bin_file, "file could not be opened; nothing was done." );
         return "unknown";
       }

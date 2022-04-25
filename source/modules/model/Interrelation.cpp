@@ -714,10 +714,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
             // ----------------------------------------------------------------------------
             // 3.1 range checking
             if ( ResultWithinRange() == false ) {
-                 csmp_error.notice( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
+                 csmp_error.Note( ERROR, "Interrelation<dim>::Apply:", name_.c_str(),
                                            "calculated result out of range; nothing is done.");
                  (*result_).second.Out();
-                 csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                 csmp_error.Note( INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  
             else {
@@ -875,7 +875,7 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
                                                            "boundary variable type could not be resolved.");
                                   }
                             break;
-                           default: csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                           default: csmp_error.Note( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                   "so fR, calculations with 'IntegrationPoint' target cannot involve Face variables.");
                                   return;
                      } // end switch
@@ -891,10 +891,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
                 // 3.1 range checking
                 if ( ResultWithinRange() == false )
                   {
-                     csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                     csmp_error.Note( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                             "calculated result out of range; nothing is done");
                      (*result_).second.Out();
-                     csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                     csmp_error.Note( INFO, "This affects the result property ", result_property_.c_str() );
                   }
                 // 3.2 if the calculated variable exists in database the result is stored in Model  
                 else 
@@ -1075,10 +1075,10 @@ void  Interrelation<dim>::Apply( ModelSubDomain<dim,CELL>& gref )
             // 3.1 range checking
             if ( ResultWithinRange() == false )
               {
-                 csmp_error.notice( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
+                 csmp_error.Note( ERROR, "Interrelation<dim>::Apply", name_.c_str(),
                                         "calculated result out of range; nothing is done");
                  (*result_).second.Out();
-                 csmp_error.notice( INFO, "This affects the result property ", result_property_.c_str() );
+                 csmp_error.Note( INFO, "This affects the result property ", result_property_.c_str() );
               }
             // 3.2 if the calculated variable exists in database the result is stored in Model  
             else 

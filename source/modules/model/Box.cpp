@@ -1409,11 +1409,11 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( eptr->Neighbor(b_face) != nullptr ) {
-//         csmp_error.notice( ERROR, "atBoundary:", "element face is not a boundary face.");
+//         csmp_error.Note( ERROR, "atBoundary:", "element face is not a boundary face.");
          return NOT;
       }
     if ( b_face >= eptr->Neighbors() ) {
-         csmp_error.notice( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
+         csmp_error.Note( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
          return NOT;
       }
 
@@ -1459,7 +1459,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
               cerr <<"\n\tmissed case: ";
               for ( const auto& boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
-              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              csmp_error.Note( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
            }
          // in 2D, a face can only have 2D nodes unless this is a higher order element
@@ -1470,7 +1470,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
+                   csmp_error.Note( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
                 }
               else {
                    // only the corner nodes are considered
@@ -1515,7 +1515,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                       return bit;
                 }
               else {
-                   csmp_error.notice( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
+                   csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
                 }
 
            }
@@ -1606,11 +1606,11 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr( dim == 1 ) {
          if ( eflags.size() == 1U ) {
               if ( eptr->N(0)->AtBoundary() != NOT && eptr->N(1)->AtBoundary() != NOT )
-                csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the same 2 bflags.");
+                csmp_error.Note( ERROR, "atBoundary(1D):", "1D line element has the same 2 bflags.");
               return (*eflags.begin());
            }
          // there may only be 2 different flags when this is a single element model
-         csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the two different 2 bflags.");
+         csmp_error.Note( ERROR, "atBoundary(1D):", "1D line element has the two different 2 bflags.");
       }
     
     // Case 2: two-dimensional model
@@ -1641,7 +1641,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               cerr <<"\n\tmissed case: ";
               for ( auto boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
-              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              csmp_error.Note( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
            }
          // corner cases
@@ -1652,7 +1652,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):",
+                   csmp_error.Note( ERROR, "atBoundary(2D):",
                     "triangular element with two faces at boundary should be removed because it may cause problems when applying boundary conditions.");
                 }
               else {
@@ -1668,7 +1668,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
+                   csmp_error.Note( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
               }
           return MULTIPLE;
             
@@ -1703,7 +1703,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
+                   csmp_error.Note( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
                 }
               else {
                    if ( isIn( eflags, {BOTTOM,LEFT} ) ) return CNR1;
@@ -1736,7 +1736,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
                           cerr << endl;
-                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of triangular boundary face.");
+                          csmp_error.Note( ERROR, "atBoundary(3D):", "could not resolve placement of triangular boundary face.");
                        }
                   }
            }
@@ -1764,7 +1764,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
                           cerr << endl;
-                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of quadrilateral boundary face.");
+                          csmp_error.Note( ERROR, "atBoundary(3D):", "could not resolve placement of quadrilateral boundary face.");
                        }
                   }
            }
@@ -1825,7 +1825,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                     cerr << parseBoundary( boundary ) << " ";
                   cerr << endl;
                 }
-              csmp_error.notice( ERROR, "atBoundary(3D):", "implausible case where more than 4 element nodes are located on model boundary.");
+              csmp_error.Note( ERROR, "atBoundary(3D):", "implausible case where more than 4 element nodes are located on model boundary.");
            }
          
         return MULTIPLE;
@@ -2057,7 +2057,7 @@ void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
   const csmp::Index  prop_key = sg.Database().StorageKey( node_property );
   
   if ( prop_key.place != NODE || prop_key.type != SCALAR )
-    csmp_error.notice( ERROR, "boxBoundaryPropertyRange",
+    csmp_error.Note( ERROR, "boxBoundaryPropertyRange",
                       "Property must a scalar placed on the nodes; nothing was done.");
 
   bool  first_value( true ), verbose( false );

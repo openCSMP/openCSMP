@@ -605,7 +605,7 @@ void PropertyDatabase<dim>::CountVariables()
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
-          csmp_error.notice( WARNING, "PropertyDatabase<dim>::CountVariables", 
+          csmp_error.Note( WARNING, "PropertyDatabase<dim>::CountVariables", 
                                       "the property list is empty");
           return;
        }
@@ -648,7 +648,7 @@ void PropertyDatabase<dim>::AssignVariableIndices()
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      
      if ( (propList_.empty()) ) {
-          csmp_error.notice( WARNING, "PropertyDatabase<dim>::AssignVariableIndices", 
+          csmp_error.Note( WARNING, "PropertyDatabase<dim>::AssignVariableIndices", 
                                       "the property list is empty");
           return;
        }
@@ -1041,7 +1041,7 @@ void PropertyDatabase<dim>::DeleteProperty( const char* s )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( iter == propList_.end() ) { 
-         csmp_error.notice( WARNING, "PropertyDatabase<dim>::DeleteProperty", const_cast<char*>(s), 
+         csmp_error.Note( WARNING, "PropertyDatabase<dim>::DeleteProperty", const_cast<char*>(s), 
                                      "target property was not defined");
          return;
       }
@@ -1355,7 +1355,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double& var ) const
             ss << var << ' ' << mn;
             ss >> msg1 >> msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while minimum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," value is below the database minimum.",errmsg.c_str());
+            error_handler.Note(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," value is below the database minimum.",errmsg.c_str());
          }
       else if ( var > mx )
          {
@@ -1365,7 +1365,7 @@ void PropertyDatabase<dim>::CheckRange( const char* s, double& var ) const
             ss<<var<<' '<< mx;
             ss>>msg1>>msg2;
             errmsg=" variable : "+string(s)+" user defined : "+msg1+" while maximum was established at: "+msg2;
-            error_handler.notice(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," value is below the database minimum.",errmsg.c_str());
+            error_handler.Note(FATAL_ERROR,"PropertyDatabase<dim>::CheckRange"," value is below the database minimum.",errmsg.c_str());
          }
         
  } // end CheckRange
@@ -1486,7 +1486,7 @@ void PropertyDatabase<dim>::SetRangeOf( const char* property_name, double vmin, 
     if ( iter != propList_.end() )
       (*iter).second.Range( vmin, vmax );
     else
-      error_handler.notice( ERROR, "PropertyDatabase<dim>::SetRangeOf:", property_name, "property could not be identified.");
+      error_handler.Note( ERROR, "PropertyDatabase<dim>::SetRangeOf:", property_name, "property could not be identified.");
  }
 
 

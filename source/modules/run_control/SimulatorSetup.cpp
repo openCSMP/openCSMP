@@ -141,7 +141,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if (this->Verbose()) this->CheckModelMinMaxCoordinates();
 
     if( !created_lists_ )
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.Note(FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Something is wrong in the creation of default parameter list. This is a developer issue.",
                           "\n Revise the method CreateParameterList.");
 
@@ -149,7 +149,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if( !associated_notations_all_variables)
     {
         this->OutputSampleVariablesFile();
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.Note(FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Property name or notation is incorrect.",
                           "\n Please specify the notation of your variables according to the template file SimulatorSetupSampleVariables.txt supplied after this message is printed out.");
 
@@ -159,7 +159,7 @@ void SimulatorSetup<dim>::CheckModel(){
     if ( !checked_range_and_placement_of_properties)
     {
         this->OutputSampleVariablesFile();
-        csmp_error.notice(FATAL_ERROR,"\n SimulatorSetup<dim>::",
+        csmp_error.Note(FATAL_ERROR,"\n SimulatorSetup<dim>::",
                           "Property placement or range is incorrect.",
                           "\n Please specify the notation of your variables according to the template file SimulatorSetupSampleVariables.txt supplied after this message is printed out.");
 

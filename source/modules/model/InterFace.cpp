@@ -953,7 +953,7 @@ uint32_t  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side ) const
     }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
   return inner_parent_face_id_;
 }
@@ -977,7 +977,7 @@ void  InterFace<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
     }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::InterFace<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
 } // end ParentFaceID(assignment)
 
@@ -1014,7 +1014,7 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 
   if ( side == MIDDLE ) {
        if ( middleElement_ != nullptr ) return middleElement_->Volume();
-       csmp_error.notice( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
+       csmp_error.Note( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
        return numeric_limits<double>::signaling_NaN();
     }
 

@@ -912,7 +912,7 @@ uint32_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
   }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
   return inner_parent_face_id_;
 }
@@ -937,7 +937,7 @@ void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
     }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
 } // end ParentFaceID(assignment)
 

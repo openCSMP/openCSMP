@@ -120,7 +120,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
    
    if ( WithLowerDimensionalElements(sg) ) {
-        csmp_error.notice( WARNING, "VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux:",
+        csmp_error.Note( WARNING, "VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux:",
                           "your model contains lower dimensional elements, have you taken care of a thickness attribute?" );
      }
     
