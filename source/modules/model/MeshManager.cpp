@@ -555,12 +555,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                    // are already set to 'null' per default
                    if ( index < 0 ) continue;
                    
-#ifdef DEBUG       // if the index is out of range
+                   // if the index is out of range
                    if ( index >= n_cells || index <= n_elmts ) {
                         cerr <<"\n\t"<< index <<" vs. number of elements+faces+interfaces = "<< n_cells << endl;
                         csmp_error.Note( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
                      }
-#endif
+
                    // NB: the number of the interface in the container is the number from the VSet - elements and faces
                    // because the interface container is counts from 0..n-1
                    const size_t neighbor_idx = index - n_elmts - n_faces;
@@ -572,7 +572,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              // (both higher-dimensional neighbors must be defined because interfaces exist only on the inside of models)
              const int64_t  index1 = vset.Pfvert( iface_idx, neighbors );
              const int64_t  index2 = vset.Pfvert( iface_idx, neighbors+1U );
-#ifdef DEBUG
+             
              if ( index1 < 0 || index2 < 0 ) {
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
                   csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
@@ -581,7 +581,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                   cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
                   csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor indices of InterFace out of range.");
                }
-#endif
+
              // assignment: inner and outer Element objects
              assert( index1 > MULTIPLE );
              assert( index2 > MULTIPLE );
@@ -680,9 +680,9 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
      
 #ifdef MESH_MANAGER_DEBUG
 if ( !interfaces_.empty() ) {
-   cerr <<"\nMeshManager: current node manifolds:\n";
+   cerr <<"\nMeshManager::Initialise: current node manifolds:\n";
    for ( const auto& nit : nodes_ ) {
-        cerr <<" "<< nit.Idx();
+        cerr <<"\t"<<"manifold: "<< nit.Idx();
         if ( nit.IsManifold() )
           nit.Manifold()->Out();
      }
@@ -1152,7 +1152,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "pointer to higher dimensional element on ouside not initialised");
    if ( inner_parent == outer_parent ) {
         csmp_error.Note( ERROR, "MeshManager<dim>::AddInterFace", "cannot create InterFace",
-                                  "inner and outer parent pointers are the same");
+                                "inner and outer parent pointers are the same" );
         return nullptr;
      }
 
@@ -1342,7 +1342,7 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
     if ( nptr_inside->IsManifold() ) {
          // if we are already dealing with a manifold, the new node is added to it
          nptr_inside->Manifold()->Add( &(*nit), new_node_side );
-         (*nit).Assign( (*nptr_inside->Manifold()) );
+         // (*nit).Assign( (*nptr_inside->Manifold()) ); is already done by Add()
       }
     else {
          // checking that the NodeManifoldManager has been initialised
@@ -1931,10 +1931,115 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
 
 
 
+/**
+    Creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
+*/
+template<uint32_t dim>
+vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements( const PropertyDatabase<dim>& dbase,
+                                           const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( interface_nbor_elmts.empty() ) {
+         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements",
+                                   "supplied range of element pairs is empty; nothing was done.");
+         return vector<InterFace<dim>*>{}; // empty vec
+      }
+    
+    // 1. Constructing the node manifold manager if necessary
+    // ------------------------------------------------------
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+    
+    const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
+    const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
+    const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+        
+    // 2. Creating InterFace objects
+    // -----------------------------
+    // (all nodes are already duplicated)
+    // vector of interfaces which will be returned
+    vector<InterFace<dim>*>  interface_ptrs;
+    interface_ptrs.reserve( interface_nbor_elmts.size() );
+    // unique set of node pairs needed to create the manifolds later on
+    // (inside,outside)
+    set<pair<Node<dim>*,Node<dim>*> > node_ptr_pairs;
+    
+    for ( const auto& it : interface_nbor_elmts )
+      {
+         // 2.1 Collecting node pairs to form manifolds and outside nodes to construct interface
+         // --------------------------------------------------------------------------------------------
+         vector<uint32_t>   inside_fnids, outside_fnids;
+         it.first.first->FE()->NodesOfFace( it.first.second, inside_fnids );
+         it.first.first->FE()->NodesOfFace( it.second.second, outside_fnids );
+         
+         const auto n_face_nodes{ inside_fnids.size() };
+         for ( auto i{0U}; i<n_face_nodes; i++ )
+               node_ptr_pairs.insert( make_pair( it.first.first->N(inside_fnids[i]),
+                                                 it.second.first->N(outside_fnids[n_face_nodes-i-1U]) ) );
+            
+         vector<Node<dim>*>  outside_nodes( n_face_nodes, nullptr );
+         uint32_t nd_count{0U};
+         for ( auto nit : outside_fnids )
+           outside_nodes[nd_count++] = it.second.first->N(nit);
+
+         // 2.2 constructing InterFace objects
+         // ----------------------------------
+         //     - higher-dimensional nbors are already known
+         //     - faces of higher dimensional neighbors are also known
+         //     - nodes on inside are deduced by constructor, outside nodes are supplied as 'outside_nodes'
+         interface_ptrs.push_back( AddInterFace( it.first.first, it.first.second,
+                                                 it.second.first, it.second.second,
+                                                 lvars, ivars, outside_nodes ) );
+      }
+
+    // 3. Creating the node manifolds
+    // ------------------------------
+    for ( const auto& nit : node_ptr_pairs )
+      {
+cerr << nit.first->Idx() <<"--"<< nit.second->Idx() <<" ";
+          // if inside or outside nodes already are manifolds, the non-manifold nodes are added to them
+          // (Note: Add() also assigns the argument node to this manifold)
+          if ( nit.first->IsManifold() && !nit.second->IsManifold() )
+             nit.first->Manifold()->Add( nit.second, OUTSIDE );
+          else if ( !nit.first->IsManifold() && nit.second->IsManifold() )
+             nit.second->Manifold()->Add( nit.first, INSIDE );
+          else {
+               // a new manifold is created using the provided default geometric classifier
+               auto nmf = node_manifold_manager_->AddManifold( nodes_,
+                                                               nit.first,
+                                                               nit.second,
+                                                               ManifoldType::INTERFACE );
+               // and its nodes are connected to it
+               nit.first->Assign( (*nmf) );
+               nit.second->Assign( (*nmf) );
+            }
+
+           // working out whether the original classification as an interface was correct
+           consistencyCheck( (*nit.first->Manifold()) );
+        }
 
 
+     // 4. cleaning up inter-CELL and node to parent connectivity
+     // ---------------------------------------------------------
+     BuildConnectivity<InterFace>( interface_ptrs.begin(), interface_ptrs.end() );
+     
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeMatchingElements: created "<< interface_ptrs.size();
+     cout <<" new interfaces"<< endl;
+     
+     return interface_ptrs;
+     
+ } // end CreateInterFacesBetweenNodeMatchingElements
 
 
+// DEBUGGING - OK
+/*
+cerr <<"\n"<<"inside-outside matching node points:\n";
+cerr << it.first.first->N(inside_fnids[i])->Coordinate() <<" ";
+cerr << it.second.first->N(outside_fnids[n_face_nodes-i-1U])->Coordinate();
+
+*/
 
 
 

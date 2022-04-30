@@ -109,7 +109,19 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
 
 
 
-/// creates a node manifold to which nodes can be added
+/**
+    Creates a node manifold from the 2 pointers to co-located nodes.
+    Additional nodes can be added to it later.
+    
+    @param nodes reference to the primary storage of the nodes in the MeshManager
+    @param inside pointer to the node that will assumed to be on the INSIDE of the interface that that manifold is part of
+    @param outside opposing yet collocated node in the manifold
+    @param manifold_type geometric classifier of the new manifold, default is INTERFACE but may need to be revised if the node is at a model boudary or other.
+    @return an iterator to the new manifold stored in a colony in the NodeManifoldManager.
+    
+    @attention this method does not assign the nodes to the new manifold.; this must be done by calling  Node::Assign( manifold ) after its successful creation
+    which only happens on the return from this method.
+ */
 template<uint32_t dim>
 typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::AddManifold( plf::colony<Node<dim> >& nodes,
                                                                                           Node<dim>* const inside,

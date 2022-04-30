@@ -15,7 +15,7 @@ template<uint32_t> class Region;
 template<typename> class FEM_Data;
 
 /**
-    Set of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
+    Vector of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
     For each InterFace we have a pair or Element pointer - face ID pairs
         1) inner higher-dim element pointer
         2) local face number of element face that is located at interface to outer element
@@ -24,12 +24,12 @@ template<typename> class FEM_Data;
         5) pointer to potential  lower-dimensional intervening Element
 */
 template<uint32_t dim> ///
-struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
+struct InterFaceParentElements : public std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
     // constructor
-    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& set )
-      : std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(set) {}
+    InterFaceParentElements( const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& data )
+      : std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(data) {}
       
-    typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
+    typedef typename InterFaceParentElements<dim>::const_iterator ifaceIterator;
     // data members
     Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
     Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
@@ -90,9 +90,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
  {
   public:
     SplitBoundary() = delete;
+    
     /// constructor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
-                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
+                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceParentElements<dim>& );
                    
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     

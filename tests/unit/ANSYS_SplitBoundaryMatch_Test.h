@@ -11,13 +11,13 @@ namespace csmp {
 */
 class ANSYS_SplitBoundaryMatch_Test : public Test {
   public:
-    ANSYS_SplitBoundaryMatch_Test( bool verbose=false ) : verbose_(verbose) {}
-    virtual ~ANSYS_SplitBoundaryMatch_Test() {}
-
     virtual void run();
 
   private:
-    bool verbose_;
+    const static bool verbose_ = true;
+    
+    bool TestForContiguousModel( /* "Split_Edges" */ );
+    bool TestForDiscontiguousModel();
 };
 
 } // csmp

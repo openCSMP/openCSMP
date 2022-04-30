@@ -130,7 +130,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    const FiniteElementManager& femgr,
                                    MeshManager<dim>& mesh,
-                                   const InterFaceSet<dim>& ifset )
+                                   const InterFaceParentElements<dim>& ifset )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
 {
   const LocalVariables&             ifvars( pref.LocalVariablesAt( INTER_FACE ) );
