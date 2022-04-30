@@ -130,24 +130,28 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
   
-    /// reestablishes the pointers to the nodes associated with the stored elements
+    /// initialises the node pointer vector with the inside nodes of  the stored InterFaces (only inside nodes are needed since they are manifolds)
     void CreateNodePointerVector();
 
     // ----------------------------------------
     // user interface
     // ----------------------------------------
 
+    /// returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
+    const NodeManifold<dim>* const ManifoldNode( size_t ) const;
+    NodeManifold<dim>* const ManifoldNode( size_t );
+
     /// for the assignment of properties that are unique to the instance of this subclass
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
+    /// input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE)
+    template<class Var>
+    void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
-
-    /// input node variable values on specific side of split boundary
-    template<class Var>
-    void InputNodePropertyValue( const char* input_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE=INSIDE );
 
     // returns location of split boundary relative to adjacent region
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );

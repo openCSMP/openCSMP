@@ -1362,27 +1362,23 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
     
   // all regions
   if ( prop_key.place == REGION ) {
-      for ( typename map<string, csmp::Region<dim> >::iterator
-            it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
+      for ( auto it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
         (*it).second.Store( prop_key, value );
-      for ( typename map<string, csmp::Region<dim> >::iterator
-            it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
+      for ( auto it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
         (*it).second.Store( prop_key, value );
       return;
     }
     
   // all boundaries  
   if ( prop_key.place == BOUNDARY ) {
-       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+       for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
          (*it).second.Store( prop_key, value );
       return;
    }
   
   // split boundaries 
   if ( prop_key.place == SPLIT_BOUNDARY ) {
-       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
-             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+       for ( auto it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
          (*it).second.Store( prop_key, value );
       return;
    }
@@ -1399,8 +1395,7 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
   if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT )
     {
-       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+       for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
          (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
        return;
     }
@@ -1409,8 +1404,7 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
   if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
     {
-       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
-             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+       for ( auto it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
          (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
        return;
     }

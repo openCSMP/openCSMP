@@ -266,7 +266,7 @@ void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_v
       if ( prop_key.place == REGION || prop_key.place == SPLIT_BOUNDARY || prop_key.place == MODEL || 
            prop_key.place == ELEMENT || prop_key.place == INTER_FACE )
         csmp_error.Note( ERROR, "Boundary<dim>::InputPropertyValue",
-                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method call to work" );        
+                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method to work" );
     
      // for any different property placement, the method of the base-class is called
      ModelSubDomain<dim,Face>::InputPropertyValue( input_prop, new_value, sd );
@@ -315,7 +315,7 @@ void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_v
       if ( key.place == REGION  || key.place == SPLIT_BOUNDARY || key.place == MODEL || 
            key.place == ELEMENT || key.place == INTER_FACE )
         csmp_error.Note( ERROR, "Boundary<dim>::InputPropertyValue",
-                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method call to work" );        
+                           input_prop, "must be a BOUNDARY, FACE/IP or NODE property for this method to work" );        
     
      // for any different property placement, the method of the base-class is called
      ModelSubDomain<dim,Face>::InputPropertyValue( input_prop, new_value, do_not_overwrite, sd );

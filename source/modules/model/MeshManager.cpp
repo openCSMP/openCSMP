@@ -1998,7 +1998,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingEl
     // ------------------------------
     for ( const auto& nit : node_ptr_pairs )
       {
-cerr << nit.first->Idx() <<"--"<< nit.second->Idx() <<" ";
+//cerr << nit.first->Idx() <<"--"<< nit.second->Idx() <<" ";
           // if inside or outside nodes already are manifolds, the non-manifold nodes are added to them
           // (Note: Add() also assigns the argument node to this manifold)
           if ( nit.first->IsManifold() && !nit.second->IsManifold() )
@@ -2026,7 +2026,7 @@ cerr << nit.first->Idx() <<"--"<< nit.second->Idx() <<" ";
      BuildConnectivity<InterFace>( interface_ptrs.begin(), interface_ptrs.end() );
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeMatchingElements: created "<< interface_ptrs.size();
-     cout <<" new interfaces"<< endl;
+     cout <<" new interfaces."<< endl;
      
      return interface_ptrs;
      

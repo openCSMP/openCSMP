@@ -189,11 +189,11 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
        if ( verbose_ ) cout <<"\nrun: parameterising region: "<< splitdomain.Name() <<"\n";
        model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
        // inside of boundary: OK
-       splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,10.), INTERIOR, INSIDE );
-       splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,11.), PERIMETER, INSIDE );
+       splitdomain.InputPropertyValue( "nodal variable", makeScalar(ANY,10.), INTERIOR, INSIDE );
+       splitdomain.InputPropertyValue( "nodal variable", makeScalar(ANY,11.), PERIMETER, INSIDE );
        // outside of boundary: OK
-       splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-10.), INTERIOR, OUTSIDE );
-       splitdomain.InputNodePropertyValue( "nodal variable", makeScalar(ANY,-11.), PERIMETER, OUTSIDE );
+       splitdomain.InputPropertyValue( "nodal variable", makeScalar(ANY,-10.), INTERIOR, OUTSIDE );
+       splitdomain.InputPropertyValue( "nodal variable", makeScalar(ANY,-11.), PERIMETER, OUTSIDE );
 
        // split boundary variable "interface flux" OK
        const csmp::Index key = model.Database().StorageKey("split boundary flux");
@@ -203,7 +203,11 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
        if ( verbose_ ) {
             // output the split boundary here
             SplitBoundary<3U>& splitBoundary1 = (*model.SplitBoundariesBegin()).second;
-            set<string> var_names{ "element variable", "nodal variable"};
+            splitBoundary1.Out(); // too many nodes in manifolds!
+            const csmp::Index var_key = model.Database().StorageKey("nodal variable");
+            PrintSplitBoundaryNodeVariableVector( var_key, splitBoundary1.NodesBegin(), splitBoundary1.NodesEnd(), INSIDE );
+            set<string> var_names{"nodal variable"};
+            // TODO: this method is broken
             vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
          }
      }
@@ -246,5 +250,36 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
    return test_was_successful;
 
  } // end TestForContiguousModel
+ 
+ 
+ 
+     /// for testing how the nodes are organised in the node vector
+void ANSYS_SplitBoundaryMatch_Test::PrintSplitBoundaryNodeVariableVector( const csmp::Index& var_key,
+                                                                          vector<Node<3U>*>::const_iterator begin,
+                                                                          vector<Node<3U>*>::const_iterator end,
+                                                                          INTERFACE_SIDE iside )
+ {
+    assert( distance(begin,end) > 0U );
+    assert( var_key.place == NODE );
+    assert( var_key.type == SCALAR );
+    assert( iside != MIDDLE ); // there should be no access to the nodes of another region, other than through the node manifold
+    
+    if ( iside == INSIDE ) {
+         cout <<"\n\nPrintSplitBoundaryNodeVariableVector: "<< distance(begin,end);
+         cout <<" INSIDE values of scalar node variable in the order stored in 'node_vec_':\n";
+         while( begin != end ) {
+              cout << (*begin)->Idx() <<": "<< (*begin)->Read( var_key ) <<", ";
+              begin++;
+           }
+         cout << endl << endl;
+         return;
+      }
+      
+    // OUTSIDE
+    cout <<"\n\nPrintSplitBoundaryNodeVariableVector: use ManifoldNode(size_t) method to get access to outside.";
+    cout << endl << endl;
+     
+ } // end PrintSplitBoundaryNodeVariableVector
+
 
 } // csmp

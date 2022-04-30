@@ -1159,8 +1159,7 @@ bool VTU_Interface<dim>
 {
   /// initialize file
   XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMap( subDomain );
+  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap = GetConnectivityMap( subDomain );
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
@@ -2868,6 +2867,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileHeader( XML_Document& connecti
     connectivityFile.AddComment( problemTitle_.c_str() );
   }
 
+// TODO: broken for splitboundary output
 /// establishes the connectivity file for given region
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -2902,6 +2902,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   connectivityFile.BringToLevel();
   // looping over all the region's nodes
   const auto domainVerticesEnd( subDomain.NodesEnd() );
+// TODO: for a SplitBoundary, only the inside nodes will be captured here
   for( auto it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
   {
     // writing x,y and z coordinates(tab seperated)
