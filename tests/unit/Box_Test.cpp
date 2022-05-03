@@ -262,10 +262,9 @@ bool Box_Test::TestBoundaryFlagging()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
     const bool debug(true);
    
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
    
     string node_variable("nodal box flag"), elmt_variable("element box flag");
     model.CreateProperty( node_variable.c_str(), "flag", SCALAR, NODE );
@@ -301,9 +300,8 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
    
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file );
     Region<3U>    model_domain(model.Region("Model"));
 
     // 1. testing the unit normals of the (volumetric elements)
@@ -364,7 +362,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     // -----------------------------------
     Boundary<3U>  left(model.Boundary("LEFT"));
     for ( auto it=left.CellsBegin(); it!=left.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
              // testing for alignment
@@ -376,7 +374,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  right(model.Boundary("RIGHT"));
     for ( auto it=right.CellsBegin(); it!=right.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
              // testing for alignment
@@ -388,7 +386,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  bottom(model.Boundary("BOTTOM"));
     for ( auto it=bottom.CellsBegin(); it!=bottom.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
              // testing for alignment
@@ -400,7 +398,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  top(model.Boundary("TOP"));
     for ( auto it=top.CellsBegin(); it!=top.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
              // testing for alignment
@@ -412,7 +410,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  back(model.Boundary("BACK"));
     for ( auto it=back.CellsBegin(); it!=back.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
              // testing for alignment
@@ -424,7 +422,7 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
    
     Boundary<3U>  front(model.Boundary("FRONT"));
     for ( auto it=front.CellsBegin(); it!=front.CellsEnd(); ++it ) {
-         if ( (*it)->IsSurfaceElement() ) {
+         if ( (*it)->IsSurface() ) {
              (*it)->UnitNormal( eUnitNormal );
              const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
              // testing for alignment
@@ -443,8 +441,7 @@ bool Box_Test::TestWhetherSideBoundaryFlagsArePresent()
  {
     const bool irregular_mesh(false);
     const bool binary_file(true);
-    const bool use_regions_file(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
     return hasAllSideBoundaries( model );
 }
 
@@ -457,8 +454,7 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
     return isStrictlyBoxShaped( model );
 }
   
@@ -470,10 +466,9 @@ bool Box_Test::TestBoundaryFlagRecreation()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
    
     // build a model with valid boundaries
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
 
     // testing whether the reflagging works correctly
     recreateBoxBoundaryFlags( model );
@@ -490,9 +485,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
 
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
     const Region<3>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison
@@ -536,9 +530,8 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
  {
     const bool irregular_mesh(true);
     const bool binary_file(true);
-    const bool use_regions_file(true);
 
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file, use_regions_file );
+    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
     const Region<3>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison

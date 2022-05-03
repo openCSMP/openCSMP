@@ -338,13 +338,12 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
     size_t n_elmts_region1{ interface1.Cells() };
     size_t n_elmts_region2{ interface2.Cells() };
     
-    bool remove_original_region{false};
-    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
+    // removes input region
+    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1" );
     const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
     _test( boundary1.Cells() == n_elmts_region1 );
     
-    remove_original_region=true;
-    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
+    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2" );
     const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
     _test( boundary2.Cells() == n_elmts_region2 );
 
@@ -366,6 +365,8 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
     string varFileName = "CSMP-variables.txt";
     ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+    const size_t n_original_cells = model.Mesh().Elements() + model.Mesh().Faces();  // only those
+    const size_t n_original_faces = model.Mesh().Faces();
      
     // 1. creating the SplitBoundary from lower-dimensional region
     size_t n_elmts_region1 = model.Region( "INTERFACE1" ).Cells();
@@ -377,11 +378,23 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     assert( splitBoundaryName2.first.size() == 1 );
     _test( model.SplitBoundary( (*splitBoundaryName1.first.begin()) ).Cells() == n_elmts_region1 );
     _test( model.SplitBoundary( (*splitBoundaryName2.first.begin()) ).Cells() == n_elmts_region2 );
+    // the number of total cells in the model should not have changed
+    size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
+    _test( currentCellTypes( model.Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) == n_original_cells );
+    // now the line elements should be gone and Interfaces there instead
+    _test( line_elmts == 0 );
+    // the number of Faces should have stayed constant because the once created new must have been removed again
+    currentCellTypes( model.Mesh(), FACE, volume_elmts, surface_elmts, line_elmts );
+    _test( line_elmts == n_original_faces );
+    // there should be x interfaces
+    currentCellTypes( model.Mesh(), INTER_FACE, volume_elmts, surface_elmts, line_elmts );
+    _test( line_elmts == n_elmts_region1 + n_elmts_region2 );
     
     model.SplitBoundariesOut();
 
     // 2. remove split boundary 1 here before creating new ones in the same place
-    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+    const bool erase_interfaces{ true };
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str(), erase_interfaces ); // INTERFACE1
         
     model.RegionsOut();
 
@@ -392,7 +405,6 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     ANSYS_Model2D model2( model2d_name_.c_str(), varFileName.c_str() );
     // now the nodes are shared so this should work
     model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
-
 
 } // end Test_CreatInternalBoundary
 

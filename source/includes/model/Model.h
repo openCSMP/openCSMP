@@ -197,17 +197,17 @@ public:
   /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name is "*-variables.txt" where * is the name of the model
   Model( ModelTopology&, VSet<dim>&, const char* var_file, bool treat_domains_as_regions_and_use_regions_file_if_any );
 
-  /// Reconstructor:  reads model from set of CSMP native binary files
+  /// Reconstructor:  reads model from set of CSMP's native binary files
   explicit Model( const std::string& binaryFiles );
+
+  /// Reconstructor: reads model from set of CSMP's native binary file, but only reading the specified subset of variables
+  Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// using the supplied polygonal data constructs unnamed single-domain model without regions or boundaries
   Model( VSet<dim>&, const char* var_file );
 
   /// constructs purely topological unnamed single-domain model without regions, boundaries nor variable storage
   explicit Model( VSet<dim>& );
-
-  /// Reconstructor reads model from CSMP native binary files; but only bringing in the specified subset of variables
-  Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
   /// destructor that needs to be overloaded when a subclass is derived from model
   virtual ~Model();

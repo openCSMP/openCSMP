@@ -95,7 +95,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
    */
   bool PropertyConstraints_Test::PointInVolumeElementTest()
   {
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true, true );
+    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", true, true );
     
     Point<3u> query(2434.0f, -1510.0f, 5400.0f);
     
@@ -103,7 +103,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
     
     auto eend = gref.CellsEnd();
     for (auto eit = gref.CellsBegin(); eit != eend; ++eit) {
-      if (!(*eit)->IsVolumeElement()) {
+      if (!(*eit)->IsVolume()) {
         continue;
       }
       const Point<3u> bctr = (*eit)->BaryCenter();

@@ -8,7 +8,6 @@
 #include "Element.h"
 #include "FemToGridVisitor.h"
 #include "FemFromGridVisitor.h"
-#include "CSMP_highLevelUtilities.h"
 #include "Exception.h"
 
 using namespace std;

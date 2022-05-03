@@ -8,7 +8,6 @@
 #include "Region.h"
 #include "Model.h"
 #include "Exception.h"
-#include "CSMP_highLevelUtilities.h"
 #include "ErrorHandler.h"
 
 using namespace std;
@@ -4091,7 +4090,7 @@ bool  PropertyHandle<dim>::IsWithinRange() const
  {
     if ( key_.type == TENSOR ) {
          ErrorHandler&  csmp_error(ErrorHandler::Instance());
-         csmp_error.notice( WARNING, "PropertyHandle<dim>::IsWithinRange:",
+         csmp_error.Note( WARNING, "PropertyHandle<dim>::IsWithinRange:",
                            "cannot return range of arbitrary tensors for which Eigenvalues cannot be found.");
          return true;
       }

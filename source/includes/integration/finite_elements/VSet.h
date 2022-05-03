@@ -149,6 +149,13 @@ class VSet : public VData {
     friend class VSet_Test;
 };
 
+/// extrapolates element property values stored in VSet to its vertices
+template<uint32_t dim, class VarType>
+void extrapolateElementToNodeProperty( VSet<dim>&,
+                                       const std::vector<VarType>&  elmnt_values,
+                                       std::vector<VarType>&        nodal_values );
+
+
 } // csmp
 
 #endif

@@ -1,4 +1,194 @@
 
+/**
+    SUPERSEDED re-constructor of boundary from index data stored in SubDomainInfo and faces using an element and a face vector
+    
+        @attention assumes that the faces in SubDomainInfo are numbered from  elements..elements+faces-1
+*/
+template<uint32_t dim>
+Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
+                         const size_t& elements,
+                         const std::deque<Node<dim>*>& nodes,
+                         const std::deque<Face<dim>*>& faces,
+                         const SubDomainInfo& info,
+                         BOX_BOUNDARY bflag )
+  : ModelSubDomain<dim, Face>( info.name, pref ),
+    boundaryFlag_( bflag )
+{
+  // building the face vector
+  // ------------------------
+  if ( info.interior_elmts[0] != elements )
+    throw csmp::Exception( ERROR, "Boundary(reconstructor)",
+                          "error Face numbering is expected to start at the number of elements.");
+  
+  this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
+
+  // assigning pointers to the interior faces
+  for ( size_t i : info.interior_elmts )
+    if( (i - elements) < faces.size() )
+      this->cell_vec_.push_back( faces[i - elements] );
+
+  // assigning pointers to the perimeter faces
+  for ( size_t i : info.perimeter_elmts )
+    if ( (i - elements) < faces.size() )
+      this->cell_vec_.push_back( faces[i - elements] );
+
+  // building the node vector
+  // ------------------------
+  // assigning pointers to the interior and perimeter nodes
+  this->first_bd_node_ = info.interior_nodes.size();
+  this->node_vec_.reserve( info.interior_nodes.size() + info.perimeter_nodes.size() );
+
+  // assigning pointers to the interior faces
+  for ( size_t i : info.interior_nodes )
+    this->node_vec_.push_back( nodes[i] );
+
+  // assigning pointers to the perimeter faces
+  for ( size_t i : info.perimeter_nodes )
+    this->node_vec_.push_back( nodes[i] );
+
+  this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
+
+  // building the vector of vectors of those faces (edges) of the faces that lie on the subdomain perimeter
+  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
+
+  // allocating the storage for boundary properties
+  // ----------------------------------------------
+  this->ResizePropertyStorage( pref.LocalVariablesAt( BOUNDARY ) );
+  
+} // end re-constructor (Nodes,Faces)
+
+
+
+
+
+  // TESTING BOUNDARY - createLineFaceConnectivity()
+  this->RenumberElements();
+  this->RenumberNodes();
+  cerr <<"\nBoundary<"<< dim <<">::Initialize: '"<< this->Name() <<"': printing element id(nodes): and neighbor ids";
+  for ( auto it=this->cell_vec_.begin(); it!=this->cell_vec_.end(); ++it )
+  {
+  cerr <<"\n\t"<< (*it)->Idx() <<" (";
+  for ( auto i{0U}; i<(*it)->Nodes(); ++i ) cerr << (*it)->N(i)->Idx() <<",";
+  cerr <<"): ";
+  for ( auto i{0U}; i<(*it)->Neighbors(); ++i )
+  if ( (*it)->Neighbor(i) == nullptr ) cerr <<"nullptr ";
+  else cerr << (*it)->Neighbor(i)->Idx() <<" ";
+  }
+  cerr << endl;
+
+
+
+
+
+// DEBUGGING
+/*
+vector<double> unrml;
+(*eit)->UnitNormal( unrml );
+if ( eit == subdomain.CellsBegin() ) cerr <<"\n"<< subdomain.Name() <<" printing element normals:";
+cerr <<"\n\t\t"<< (*eit)->Idx() <<": "<< unrml[0] <<" "<< unrml[1];
+*/
+
+/* OLD CODE THAT WAS USED TO CREATE THE CONNECTIVITY BETWEEN FACES NOW DONE IN THE MESH MANAGER
+
+    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
+    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+
+    cout << "\n\tEstablishing neighbor connectivity among faces as it is needed to build the boundaries...\n";
+    // 3.2.1 building search map for face neighbors
+    // --------------------------------------------
+    //       key             face number neighbor
+    multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >  surface_neighbor_keys, line_neighbor_keys;
+    vector<uint32_t>   fnids;
+    set<Node<dim>*>  key;
+
+    for ( typename vector<Face<dim>*>::const_iterator it=face_vector.begin(); it!= face_vector.end(); ++it )
+      for ( uint32_t face{0U}; face<(*it)->Faces(); face++ )
+        {
+           // creating face key from idx's of face
+           (*it)->FE()->NodesOfFace( face, fnids );
+           for ( uint32_t j{0U}; j<fnids.size(); j++ ) key.insert( (*it)->N( fnids[j] ) );
+           // inserting newly generated keys into multimap
+           if ( (*it)->IsSurface() )
+             surface_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
+           else // for all line elements
+             line_neighbor_keys.insert( make_pair( key, make_pair( face, (*it) ) ) );
+           key.clear();
+        }
+
+    // 3.2.2 building face neigborhoods
+    // --------------------------------
+    // (the assumption here is that adjacent neighbors are arranged consecutively in the multimap)
+    cout << "\n\tBuilding face neighbor connectivity...";
+
+    // 3.2.2.1 line faces
+    // ---------------------
+    if ( !line_neighbor_keys.empty() ) {
+        Face<dim>* e1Ptr(nullptr);
+        Face<dim>* e2Ptr(nullptr);
+        cout << "\n\t\tline elements...";
+        //                key              n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(line_neighbor_keys.begin()),
+                                                                             it2(line_neighbor_keys.begin());
+        it2++;
+        while ( it2 != line_neighbor_keys.end() )
+          {
+              // if there is a pair of valid neighbor elements, neighbor assignments are made
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
+                   // assigning eachothers faces
+                   //     face pointer                   nbor face idx  neighbor pointer
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
+                   
+                   // both iterators are advanced (so that with the second increment a new pair of faces is reached)
+                   ++it1;
+                   ++it2;
+                }
+              // both iterators are advanced
+              if ( it2 == line_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // line faces
+    
+    // 3.2.2.2 surface faces
+    // ------------------------
+    if ( !surface_neighbor_keys.empty() ) {
+        Face<dim>* e1Ptr(NULL);
+        Face<dim>* e2Ptr(NULL);
+        cout << "\n\t\tsurface elements...";
+        //                key              n-face neighbor
+        typename multimap<set<Node<dim>*>,pair<size_t,Face<dim>*> >::iterator it1(surface_neighbor_keys.begin()),
+                                                                              it2(surface_neighbor_keys.begin());
+        it2++;
+        while ( it2 != surface_neighbor_keys.end() ) {
+              if ( (*it1).first == (*it2).first )
+                {
+                   assert( (*it1).second.second != nullptr );
+                   assert( (*it2).second.second != nullptr );
+                   e1Ptr = (*it1).second.second;
+                   e2Ptr = (*it2).second.second;
+                   assert( e1Ptr != e2Ptr ); // avoid self-assignment
+                   ((*it1).second.second)->Assign( (*it1).second.first, e2Ptr );
+                   ((*it2).second.second)->Assign( (*it2).second.first, e1Ptr );
+                   ++it1;
+                   ++it2;
+                }
+              if ( it2 == surface_neighbor_keys.end() ) break;
+              ++it1;
+              ++it2;
+          }
+      } // etablish neighbors of surface faces
+*/
+
+
+
 /// retrieves and returns the element ids of the first contiguous element patch that can be reached by mesh traversal from the starting element
 template<size_t dim>
 void floodFillViaIndexes( const Region<dim>&, size_t starting_idx,

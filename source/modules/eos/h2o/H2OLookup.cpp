@@ -245,7 +245,7 @@ double H2OLookup::SinglePhaseProperty( const double& t, const double& p, const i
     if ( p >= 10000.0e5 )
     {
       // top back corner of lookup table
-      csmp_err.notice( WARNING,
+      csmp_err.Note( WARNING,
                        "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                        "temperature > 2000C and pressure > 1000MPa, i.e., out of valid range. Returning index for 2000C, 1000MPa properties" );
       cout << t << "\t" << p << endl;
@@ -256,7 +256,7 @@ double H2OLookup::SinglePhaseProperty( const double& t, const double& p, const i
     {
       // t extreme but p ok
       // p-interpolation is still missing but unlikely to make any difference
-      csmp_err.notice( WARNING,
+      csmp_err.Note( WARNING,
                        "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                        "temperature > 2000C, i.e., out of valid range. Returning index for 2000C properties" );
       cout << p << endl;
@@ -280,7 +280,7 @@ double H2OLookup::SinglePhaseProperty( const double& t, const double& p, const i
   {
     // t ok but p extreme
     // t-interpolation is still missing but unlikely to make any real difference
-    csmp_err.notice( WARNING,
+    csmp_err.Note( WARNING,
                      "H2OLookup::SinglePhaseProperty(const double& t, const double& p, const int& property_index) -",
                      "pressure > 1000 MPa, i.e., out of valid range. Returning index for 1000 MPa properties" );
     cout << p << endl;

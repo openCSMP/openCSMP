@@ -30,7 +30,7 @@
 
 static	char	rcsid[] = "$Id: spswap.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 #include	"sparse.h"
 #include    "sparse2.h"
 

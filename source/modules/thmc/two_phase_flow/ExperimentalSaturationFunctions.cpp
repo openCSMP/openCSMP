@@ -62,27 +62,27 @@ size_t ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes( 
  
         if ( fabs(pc_start_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of pc at sw_min: "<< pc_start_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
         if ( fabs(pc_end_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of pc at sw_max: "<< pc_end_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
         if ( fabs(krw_start_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of krw at sw_min: "<< krw_start_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
         if ( fabs(krw_end_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of krw at sw_max: "<< krw_end_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
         if ( fabs(kro_start_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of krn at sw_min: "<< kro_start_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
         if ( fabs(kro_end_derivative) > max_derivative_ ) {
              cerr <<"\n\tsaturation derivative of krn at sw_max: "<< kro_end_derivative;
-             csmp_error.notice( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
+             csmp_error.Note( ERROR, "ExperimentalSaturationFunctions<dim,USER>::InitialiseReservoirRockTypes:", "derivative out of range; check input table.");
           }
       
         std::cout << "sw\tkro\tkrw\tpc\n";

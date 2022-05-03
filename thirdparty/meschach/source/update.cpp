@@ -31,7 +31,7 @@
 /* update.c 1.3 11/25/87 */
 static	char	rcsid[] = "$Id: update.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 #include    "matrix2.h"
 
 

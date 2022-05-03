@@ -8,7 +8,6 @@
 #include "ErrorHandler.h"
 #include "ModelTopology.h"
 #include "ModelTime.h"
-#include "CSMP_highLevelUtilities.h"
 
 using namespace std;
 
@@ -117,7 +116,7 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
           pit!=vset.PropertyValuesEnd(); ++pit ) {
          printRangeOfVariable( *this, (*pit).first.c_str(), true );
          if ( !IsWithinRange( (*pit).first.c_str() ) )
-           csmp_error.notice( ERROR, "SKUA_Model::Initialize",
+           csmp_error.Note( ERROR, "SKUA_Model::Initialize",
                              (*pit).first.c_str(), "variable is outside of range specified in database");
       }
   }

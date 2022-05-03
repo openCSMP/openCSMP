@@ -122,7 +122,7 @@ size_t IterativeIntegrator<dim,COMPUTATION_DOMAIN>::Iterations( COMPUTATION_DOMA
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
   if ( i == max_iter_ && res > target_residual_ ) {
-       csmp_error.notice( ERROR, "IterativeIntegrator<dim>::Iterations", "Solution did not converge! " );
+       csmp_error.Note( ERROR, "IterativeIntegrator<dim>::Iterations", "Solution did not converge! " );
       if ( verbose_ ) {
         cout << "\nIterativeIntegrator< dim>::Iterations: After: " << max_iter_ << " iterations, residual is: " << res << " and target: " << target_residual_ << endl;
         cout << "\n************* SOLUTION DID NOT CONVERGE *************" << endl; 

@@ -110,8 +110,8 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// copies property values from the argument node to the current node
     void CopyPropertyValuesFrom( Node<dim>& );
 
-    /// rebuilds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
-    uint32_t ReassignNeighbors();
+    /// builds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
+    uint32_t AssignNodeNeighbors();
 
     /// removes null pointers and potential duplicates returning the resulting number of neighbors
     uint32_t UpdateNeighbors();

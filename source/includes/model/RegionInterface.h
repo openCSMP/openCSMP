@@ -197,8 +197,8 @@ class RegionInterface {
     void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
     size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-    /// removes region and associated variable storage; DOES NOT!  erase  the underlying elements and nodes, this is the task of the MeshManager
-    void    RemoveRegion( const char* regionname );
+    /// removes region and associated variable storage; gets MeshManager to remove elements and rebuild connectivity if requested, but only if the region is unique
+    void    RemoveRegion( const char* regionname, bool erase_elements );
 
     /// excludes the intersection of elements of the 2 regions from the non-unique region
     bool    RemoveFromRegion( const char* region, const char* region_to_subtract );
@@ -228,8 +228,8 @@ class RegionInterface {
     size_t  SharedPerimeterFaces( const char* region_a, const char* region_b,
                                   std::vector<std::tuple<Element<dim>*, Element<dim>*, size_t, size_t> >& shared ) const;
 
-    /// if the mesh changed this brute-force method rebuild the node and element vectors of all regions
-    void RebuildRegions();
+    /// if the mesh changed this safe but model-wide method rebuilds the node and element vectors of all regions
+    void UpdateRegions();
 
   protected:
     /// rebuilds unique regions, but only if they contain some nulled element pointers

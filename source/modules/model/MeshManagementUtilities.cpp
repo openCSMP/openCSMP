@@ -20,6 +20,76 @@ using namespace std;
 
 namespace csmp {
 
+
+/**
+     @note Model is used for convenience here. MeshManager would be mode appropriate.
+*/
+template<uint32_t dim>
+size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& volume_cells, size_t& surface_cells, size_t& line_cells )
+ {
+    size_t n_cells_model{ mesh.Elements() + mesh.Faces() + mesh.InterFaces() };
+    volume_cells = surface_cells = line_cells = 0U;
+    
+    // elements
+    if ( etype == ELEMENT ) {
+         if constexpr ( dim == 3U ) {
+             for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+                  if      ( (*it).IsVolume() ) volume_cells++;
+                  else if ( (*it).IsSurface() ) surface_cells++;
+                  else { assert( (*it).IsLine() ); line_cells++; }
+               }
+           }
+         else if constexpr ( dim == 2U ) {
+             for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+                  if ( (*it).IsSurface() ) surface_cells++;
+                  else { assert( (*it).IsLine() ); line_cells++; }
+               }
+           }
+         else // 1D
+           line_cells = mesh.Elements();
+      }
+    // faces
+    else if ( etype == FACE ) {
+         surface_cells = count_if( mesh.FacesBegin(), mesh.FacesEnd(), []( const Face<dim>& e ){ return e.IsSurface(); } );
+         line_cells = mesh.Faces() - surface_cells;
+      }
+    // interfaces
+    else if ( etype == INTER_FACE ) {
+         surface_cells = count_if( mesh.InterFacesBegin(), mesh.InterFacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } );
+         line_cells = mesh.InterFaces() - surface_cells;
+      }
+    else cerr <<"\n\n"<< "currentCellTypes: invalid celltype: "<< parsePlacement(etype) << endl;
+ 
+   return n_cells_model;
+ 
+ } // end currentCellTypes
+
+template size_t currentCellTypes( const MeshManager<3U>&, PLACEMENT, size_t&, size_t&, size_t& );
+template size_t currentCellTypes( const MeshManager<2U>&, PLACEMENT, size_t&, size_t&, size_t& );
+template size_t currentCellTypes( const MeshManager<1U>&, PLACEMENT, size_t&, size_t&, size_t& );
+
+
+
+
+
+template<uint32_t dim>
+bool isoparametricElementMesh( const Model<dim>& sg )
+ {
+    string  etype(parseFiniteElementType((*sg.Region("Model").CellsBegin())->FE()->ElementType()));
+
+    if ( etype.find("ISOPARAMETRIC") != std::string::npos ) return true;
+    return false;
+
+ } // end isoparametricElementMesh
+ 
+template bool isoparametricElementMesh<1U>( const Model<1U>& );
+template bool isoparametricElementMesh<2U>( const Model<2U>& );
+template bool isoparametricElementMesh<3U>( const Model<3U>& );
+
+
+
+
+
 /**
 Counts elements the nodes of which are all located on the model boundary.
 
@@ -60,7 +130,57 @@ template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, se
 
 
 
+/// finds cells that have the same nodes and reports their numbers
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename vector<CELL<dim>*>::const_iterator first,
+                             typename vector<CELL<dim>*>::const_iterator last,
+                             bool verbose )
+ {
+    map<set<Node<dim>*>,set<CELL<dim>*> > potential_duplicates;
+    size_t                                n_duplicates{0U};
+    
+    while( first != last ) {
+         // creating cell keys from their node pointers
+         set<Node<dim>*> node_set;
+         const auto n_nodes{ (*first)->Nodes() };
+         for ( auto i{0U}; i<n_nodes; i++ ) node_set.insert( (*first)->N(i) );
+         // recording the cells
+         auto it = potential_duplicates.insert( make_pair( node_set, set<CELL<dim>*>{(*first)} ) );
+         // if there is a cell with the same nodes but a different pointer, it is recorded
+         if ( it.second == false ) {
+              auto cit =(*it.first).second.insert( (*first) );
+              if ( verbose && cit.second == false ) {
+                  cout <<"\ndetectDuplicateCells: input vector contains multiple copies of:";
+                  (*first)->Out();
+                }
+              n_duplicates++;
+           }
+         first++;
+      }
+      
+    // printing the duplicate cells if any
+    if ( n_duplicates  > 0U && verbose ) {
+         cout <<"\n\n"<<"detectDuplicateCells: found "<< n_duplicates <<" cells sharing all nodes in input range:";
+         for ( auto pd : potential_duplicates )
+           if ( pd.second.size() > 1U )
+             (*pd.second.begin())->Out();
+      }
+  
+    return n_duplicates;
+    
+ } // end detectDuplicateCells
 
+template size_t detectDuplicateCells<3,Element>( vector<Element<3>*>::const_iterator, vector<Element<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Element>( vector<Element<2>*>::const_iterator, vector<Element<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Element>( vector<Element<1>*>::const_iterator, vector<Element<1>*>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,Face>( vector<Face<3>*>::const_iterator, vector<Face<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,Face>( vector<Face<2>*>::const_iterator, vector<Face<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,Face>( vector<Face<1>*>::const_iterator, vector<Face<1>*>::const_iterator, bool );
+
+template size_t detectDuplicateCells<3,InterFace>( vector<InterFace<3>*>::const_iterator, vector<InterFace<3>*>::const_iterator, bool );
+template size_t detectDuplicateCells<2,InterFace>( vector<InterFace<2>*>::const_iterator, vector<InterFace<2>*>::const_iterator, bool );
+template size_t detectDuplicateCells<1,InterFace>( vector<InterFace<1>*>::const_iterator, vector<InterFace<1>*>::const_iterator, bool );
 
 
 
@@ -94,7 +214,7 @@ size_t findContiguousMeshPatch( CELL<dim>* const eptr, set<CELL<dim>*>& cells_co
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "findContiguousMeshPatch", "entry cell pointer is a nullptr; nothing was done.");
+         csmp_error.Note( ERROR, "findContiguousMeshPatch", "entry cell pointer is a nullptr; nothing was done.");
          return 0;
       }
 
@@ -193,7 +313,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
-             csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+             csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
                                          "input CELL pointer range is empty." );
             return 0U;
         }
@@ -212,7 +332,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
       // if no contiguous cells could be found
       if ( cells_contiguous_subset.empty() ) {
-           csmp_error.notice( WARNING, "findStandAloneMeshPatches:",
+           csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
                                        "No contiguous cells found. Is the neighbor connectivity missing? - nothing was done" );
            return 0U;
         }
@@ -263,12 +383,12 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
                                                    move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
                                                                              cells_contiguous_subset.end() ) ) ) );
                 if ( insertion.second == false ) {
-                     csmp_error.notice( ERROR, "findStandAloneMeshPatches:", patch_name,
+                     csmp_error.Note( ERROR, "findStandAloneMeshPatches:", patch_name,
                                                "could not be inserted into patch map" );
                   }
                 n_patches++;
               }
-           else csmp_error.notice( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
+           else csmp_error.Note( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
               
            // deleting the cells that constitute the contiguous subset from the cell storage
            cells.erase( remove_if( cells.begin(), cells.end(),
@@ -310,7 +430,19 @@ template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::iterator,
 template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::iterator,
                                             plf::colony<InterFace<2U>>::iterator,
                                             map<string,vector<InterFace<2U>*> >& );
+                                            
+// 1D version
+template size_t  findStandAloneMeshPatches( plf::colony<Element<1U>>::iterator,
+                                            plf::colony<Element<1U>>::iterator,
+                                            map<string,vector<Element<1U>*> >& );
 
+template size_t  findStandAloneMeshPatches( plf::colony<Face<1U>>::iterator,
+                                            plf::colony<Face<1U>>::iterator,
+                                            map<string,vector<Face<1U>*> >& );
+
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<1U>>::iterator,
+                                            plf::colony<InterFace<1U>>::iterator,
+                                            map<string,vector<InterFace<1U>*> >& );
 
 
 
@@ -323,7 +455,7 @@ size_t findInterconnectedNodeCluster( Node<dim>* const nptr, std::set<Node<dim>*
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
     if ( nptr == nullptr ) {
-         csmp_error.notice( ERROR, "findInterconnectedNodeCluster", "entry node is a nullpointer; nothing was done");
+         csmp_error.Note( ERROR, "findInterconnectedNodeCluster", "entry node is a nullpointer; nothing was done");
          return 0U;
       }
     
@@ -380,7 +512,7 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
-             csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+             csmp_error.Note( WARNING, "findPointersToStandAloneMeshPatches:",
                                          "input CELL pointer range is empty." );
             return 0U;
         }
@@ -433,7 +565,7 @@ size_t  findPointersToStandAloneMeshPatches( typename vector<CELL<dim>*>::const_
                 pair<typename map<CELL<dim>*,MeshPatch<dim>>::iterator,bool>
                   insertion = root_pointers.insert( make_pair( (*cells.begin()), attributes ) );
                 if ( insertion.second == false ) {
-                     csmp_error.notice( WARNING, "findPointersToStandAloneMeshPatches:",
+                     csmp_error.Note( WARNING, "findPointersToStandAloneMeshPatches:",
                                                  "mesh patch could not be inserted into root cell map. Does it already exist?" );
                   }
                 findContiguousMeshPatch<dim>( (*cells.begin()), cells_contiguous_subset );
@@ -472,7 +604,7 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( eptr == nullptr ) {
-             csmp_error.notice( ERROR, "connectNeighborsUsingNodeParents:",
+             csmp_error.Note( ERROR, "connectNeighborsUsingNodeParents:",
                                "invalid element pointer" );
             return 0U;
         }
@@ -563,11 +695,11 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // 0. verifying the input
    // pointers
    if ( face == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to target Face is not initialised");
    if ( inner_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to inner higher-dim Element not initialised");
    if ( outer_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(Face)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. Creating a map of the faces of the outer element
    //      face key
@@ -625,11 +757,11 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    // 0. verifying the input
    // pointers
    if ( interface == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to target InterFace is not initialised");
    if ( inner_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to inner higher-dim Element not initialised");
    if ( outer_nbor == nullptr )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. creating a search map from the nodes of the outer element
    //  key    inner local id, outer local node id
@@ -677,7 +809,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
           }
      }
    if ( !inner_face_found )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of inner higher-dim neighbor element");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of inner higher-dim neighbor element");
     
    // OUTER ELEMENT
    const auto n_outer_elmt_faces(outer_nbor->Faces());
@@ -698,7 +830,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
           }
      }
    if ( !outer_face_found )
-     csmp_error.notice( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of outer higher-dim neighbor element");
+     csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "failed to find nodes of outer higher-dim neighbor element");
 
  } // end findNodesViaHigherDimensionalNeighbors
 
@@ -718,15 +850,15 @@ pair<size_t,size_t> findAdjacentFacesFromNeighbors( Element<dim>* const eptr1, E
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    if ( eptr1 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to first element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to first element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr2 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to second element.");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "null pointer to second element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr1 == eptr2 ) {
-        csmp_error.notice( ERROR, "findAdjacentFacesFromNeighbors", "the supplied pointers point to the same element!");
+        csmp_error.Note( ERROR, "findAdjacentFacesFromNeighbors", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     
@@ -774,15 +906,15 @@ pair<size_t,size_t> findAdjacentElementFaces( Element<dim>* const eptr1, Element
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    if ( eptr1 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to first element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr2 == nullptr ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "null pointer to second element.");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
    if ( eptr1 == eptr2 ) {
-        csmp_error.notice( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
+        csmp_error.Note( ERROR, "findAdjacentElementFaces", "the supplied pointers point to the same element!");
         return make_pair( UNSPECIFIED, UNSPECIFIED );
      }
     
@@ -878,7 +1010,7 @@ void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subs
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( eptr == nullptr ) {
-         csmp_error.notice( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
+         csmp_error.Note( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
          return;
       }
     // identifying the neighbors of the first element to be looked at
@@ -1017,37 +1149,47 @@ template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<N
 
 
 /**
-    finds those elements in a model that contact eachother across split interfaces.
+    Finds elements in region 'subdomain' that contact eachother across split interfaces via matching face nodes.
     Only those elements are discovered that are node-matched.
+    
+    The neighborhood relations of the elements discovered on either side of the internal boundary are returned in the element pair vector.
  
-    @param subdomain (non-unique) region which contains the split boundary
+    @param subdomain (non-unique) region which is anticipated to contain a node-matched split boundary
  
-    @return returns false if none of the perimeter elements are node matched
+    @return returns false if none of the perimeter elements has nodes that match another perimeter face
  
-    @attention method only looks at highest dimensional elements in the model;
-    thus, lower dimensional elements are ignored and the neighborhood relations
-    on either side of them are returned.
+    @attention method only looks at elements with the same spatial dimension as the  model, i.e. volumes in 3D, surfaces in 2D etc.
+    lower-dimensional elements are ignored.
  
     @attention the elements inside the model that are located along the splitboundary
     do not have neighbor pointers yet.
  
     @author SKM
     @date 14/01/2018
+    @date 25/4/2022 refactored
  
     @TODO do we need to remember which side of the interface we are on?
     @todo test method on Chloe's dataset
 */
 template<uint32_t dim>
 bool findSplitInterfaceElements( const Region<dim>& subdomain,
-                                 set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >& interface_elmt_pairs )
+                                 vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_elmt_pairs )
  {
+    // get coordinate ranges to determine the tolerance of the point matching that will be performed
+    /*
+       pair<Point<dim>,Point<dim>> box = boundingBox<dim>( subdomain.PerimeterNodesBegin(), subdomain.NodesEnd() );
+       const double tolerance = fabs( box.first.DistanceTo( box.second ) ) * numeric_limits<double>::epsilon();
+       NOTE: a specific tolerance cannot be used unless a specific comparitor is defined for set below
+    */
+    
     // multi-element container for all elements that are located on split boundaries
     //       face search key      element      face number
-    multimap<set<Point<dim> >,pair<Element<dim>*,size_t> > element_face_keys;
+    multimap<set<Point<dim> >,pair<Element<dim>*,uint32_t> > element_face_keys;
    
     // 1. for all elements on the perimeter of the model subdomain,
-    //    generate keys from their node coordinates that are then matched with one-another
+    //    generate keys from their node coordinates that will later be matched with one-another
     //    in order to connect these elements
+    // -------------------------------------
     for ( auto n=subdomain.InteriorCells(); n<subdomain.Cells(); ++n )
         {
            // for those element faces that define the perimeter surface
@@ -1057,9 +1199,9 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
                 vector<uint32_t> fnids;
                 subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
                 // add the corresponding node points to a set that will form the element face key
-                pair<set<Point<dim> >,size_t> face_key;
-                for ( size_t j{0U}; j<fnids.size(); ++j )
-                  face_key.first.insert( subdomain.E(n)->N( fnids[j] )->Coordinate() );
+                pair<set<Point<dim> >,uint32_t> face_key;
+                for ( auto j : fnids )
+                  face_key.first.insert( subdomain.E(n)->N(j)->Coordinate() );
                 // remembering the face id
                 face_key.second = subdomain.PerimeterFace( n, i );
                 // storing the key in the correspondance search map
@@ -1069,6 +1211,7 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
         }
    
     // 2. searching map for matching interface elements
+    // ------------------------------------------------
     //    - a match is obtained if the element pointers are different
     //    - if there is a match, the element pair is added to the OppositeElement container
     if ( !interface_elmt_pairs.empty() ) interface_elmt_pairs.clear();
@@ -1092,27 +1235,27 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // first element
            Element<dim>* e1 = (*it).second.first;
            for ( auto face = 0U; face<e1->Faces(); ++face ) {
-             e1->FE()->NodesOfFace( face, nids );
-             set<Point<dim> >  face_key;
-             for ( auto j{0U}; j<nids.size(); ++j )
-               face_key.insert( e1->N( nids[j] )->Coordinate() );
-             outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
-           }
+               e1->FE()->NodesOfFace( face, nids );
+               set<Point<dim> >  face_key;
+               for ( auto j : nids )
+                 face_key.insert( e1->N(j)->Coordinate() );
+               outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+             }
            // second element
            Element<dim>* e2 = (*result.first).second.first;
            for ( auto face = 0U; face<e2->Faces(); ++face ) {
-             e2->FE()->NodesOfFace( face, nids );
-             set<Point<dim> >  face_key;
-             for ( size_t j{0U}; j<nids.size(); ++j )
-               face_key.insert( e2->N( nids[j] )->Coordinate() );
-             inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
-           }
+               e2->FE()->NodesOfFace( face, nids );
+               set<Point<dim> >  face_key;
+               for ( auto j : nids )
+                 face_key.insert( e2->N(j)->Coordinate() );
+               inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+             }
 
            // 2. finding the shared faces
            bool found( false );
            int64_t  inner_face_id(-1), outer_face_id(-1);
-           for ( auto& inner_face : inner_elmt_faces ) {
-             for ( auto& outer_face : outer_elmt_faces ) {
+           for ( const auto& inner_face : inner_elmt_faces ) {
+             for ( const auto& outer_face : outer_elmt_faces ) {
                if ( inner_face.first == outer_face.first ) {
                  inner_face_id = inner_face.second.second;
                  outer_face_id = outer_face.second.second;
@@ -1126,10 +1269,10 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // we store the matching element pair
            // set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >
            if ( found )
-           interface_elmt_pairs.insert( make_pair(
-                                        make_pair( (*it).second.first, (*it).second.second ),
-                                        make_pair( (*result.first).second.first, (*result.first).second.second ) )
-                                      );
+           interface_elmt_pairs.push_back( make_pair(
+                                           make_pair( (*it).second.first, (*it).second.second ),
+                                           make_pair( (*result.first).second.first, (*result.first).second.second ) )
+                                         );
           }
       }
   
@@ -1140,9 +1283,135 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     
  } // end findSplitInterfaceElements
 
-template bool findSplitInterfaceElements( const Region<3U>&, set<pair<pair<Element<3U>*,size_t>,pair<Element<3U>*,size_t> > >& );
-template bool findSplitInterfaceElements( const Region<2U>&, set<pair<pair<Element<2U>*,size_t>,pair<Element<2U>*,size_t> > >& );
-template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Element<1U>*,size_t>,pair<Element<1U>*,size_t> > >& );
+template bool findSplitInterfaceElements( const Region<3U>&, vector<pair<pair<Element<3U>*,uint32_t>,pair<Element<3U>*,uint32_t> > >& );
+template bool findSplitInterfaceElements( const Region<2U>&, vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >& );
+template bool findSplitInterfaceElements( const Region<1U>&, vector<pair<pair<Element<1U>*,uint32_t>,pair<Element<1U>*,uint32_t> > >& );
+
+
+
+
+
+/**
+        Finds  node-matched Element faces in the supplied model domain, if any.
+        The pairs of elements in the model that share these faces are recorded.
+        Using property values, the ordering of the elements into inside and outside of the boundary is determined.
+        Elements on the inside of this domain are enlisted first in the output Element-face number pairs.
+        If neither of the elements is found in the model subdomain, an error is reported.
+        
+        @param model a  CSMP contiguous or discontiguous model
+        @param property_to_distinguish_regions scalar placed on element: the inside of any split boundary will be where the value is lower; where the values are the same no interface will be created
+        @param interface_elmt_pairs interface construction data consisting of pairs of elements that share a face across the boundary
+        @return number of interfaces created.
+*/
+template<uint32_t dim>
+size_t findSplitInterfaceElements( const Model<dim>& model, const string& property_to_distinguish_regions,
+                                   vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_elmt_pairs )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    // get coordinate ranges to determine the tolerance of the point matching that will be performed
+    /*
+       pair<Point<dim>,Point<dim>> box = boundingBox<dim>( subdomain.PerimeterNodesBegin(), subdomain.NodesEnd() );
+       const double tolerance = fabs( box.first.DistanceTo( box.second ) ) * numeric_limits<double>::epsilon();
+       NOTE: a specific tolerance cannot be used unless a specific comparitor is defined for set below
+    */
+    const Region<dim>&  model_domain{ model.Region("Model") };
+    
+    if ( !model.Database().IsDefined( property_to_distinguish_regions.c_str() ) ) {
+         csmp_error.Note( ERROR, "findSplitInterfaceElements", property_to_distinguish_regions, "is not defined" );
+         return 0U;
+      }
+    const csmp::Index reg_key = model.Database().StorageKey( property_to_distinguish_regions.c_str() );
+    if ( reg_key.place != ELEMENT && reg_key.type != SCALAR )
+      csmp_error.Note( ERROR, "findSplitInterfaceElements", property_to_distinguish_regions,
+                      "must be scalar placed on the element" );
+    
+    // multi-element container for all elements that are located on split boundaries
+    //   face search key      element      face number
+    map<set<Point<dim>>,set<pair<Element<dim>*,uint32_t>>>  element_face_keys;
+   
+    // 1. for the faces of all elements on the perimeter of the model subdomain,
+    //    generate keys from their node coordinates that will later be matched with one-another
+    //    in order to connect these elements
+    // -------------------------------------
+    for ( auto n{model_domain.InteriorCells()}; n<model_domain.Cells(); ++n )
+        {
+           // making sure that the perimeter elements considered have the same dimension as the model
+           // (else, they do share their nodes with higher dimensional elements and are therefore considered as well)
+           assert( model_domain.E(n)->IsEquidimensional() );
+           // for those element faces that define the perimeter surface
+           for ( auto i{0U}; i<model_domain.PerimeterFaces(n); ++i )
+             {
+                // create a search key for the face from the coordinates of the corner nodes
+                pair<set<Point<dim> >,uint32_t> face_key;
+                for ( const auto& nit : model_domain.E(n)->CornerNodesOfFace( model_domain.PerimeterFace( n, i ) ) )
+                  face_key.first.insert( nit->Coordinate() );
+                // remembering the face id
+                face_key.second = model_domain.PerimeterFace( n, i );
+                // storing the key in the correspondance search map
+                set<pair<Element<dim>*,uint32_t>>  elmt_face{ { model_domain.E(n), face_key.second } };
+                //                                        node-coordinate set  element pointer   local face id
+                auto it = element_face_keys.insert( make_pair( face_key.first, elmt_face ) );
+                // if a matching face is detected, its parent element and face id are added to the map
+                if ( it.second == false ) {
+                     (*it.first).second.insert( make_pair(model_domain.E(n), face_key.second) );
+                  }
+             }
+        }
+   
+    // 2. creating interface construction data
+    // ------------------------------------------------
+    // map<set<Point<dim>>,set<pair<Element<dim>*,uint32_t>>>  element_face_keys;
+    for ( auto& fit : element_face_keys )
+      // if there are matching faces
+      if ( fit.second.size() > 1U )
+        {
+           // interface pairs are generated of the first and the subsequent elmt-face pairs in the map
+           auto inside_it = fit.second.begin();
+           for ( auto outside_it{next(inside_it,1)}; outside_it!=fit.second.end(); ++outside_it ) {
+                // we store the matching element pair
+                // vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  interface_elmt_pairs;
+                interface_elmt_pairs.push_back( make_pair( (*inside_it), (*outside_it) ) );
+             }
+        }
+     if (  interface_elmt_pairs.empty() ) {
+          ErrorHandler::Instance().Note( ERROR, "findSplitInterfaceElements", "No node-matched interfaces were detected.");
+          return 0U;
+       }
+       
+        
+    // 3. Re-ordering the element pairs such that elements which belong to inside region are first in the output pair
+    // --------------------------------------------------------------------------------------------------------------
+    set<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > pairs_to_eliminate;
+    for ( auto& it : interface_elmt_pairs ) {
+         const double value1 = it.first.first->Read( reg_key );
+         const double value2 = it.second.first->Read( reg_key );
+         // value based re-ordering
+         if ( value1 > value2 ) swap( it.first, it.second );
+         // pairs of elements with the same value will be eliminated
+         if ( !(value1 < value2) && !(value1 > value2) )
+           pairs_to_eliminate.insert( make_pair( it.first, it.second ) );
+      }
+  
+    // removing the interface without property jump from output vector
+    // ---------------------------------------------------------------
+    if ( pairs_to_eliminate.size() > 0U ) {
+         cerr <<"\n\n"<<"findSplitInterfaceElements: removing "<< pairs_to_eliminate.size() <<" element pairs without ";
+         cerr << property_to_distinguish_regions <<" contrast.";
+         // removal
+         interface_elmt_pairs.erase( remove_if( interface_elmt_pairs.begin(),
+                                                interface_elmt_pairs.end(),
+                                                [&](auto x) {
+                                                     return (pairs_to_eliminate.find(x) != pairs_to_eliminate.end());
+                                                  } ) );
+      }
+ 
+    return interface_elmt_pairs.size();
+    
+ } // end findSplitInterfaceElements
+
+template size_t findSplitInterfaceElements( const Model<3U>&, const string&, vector<pair<pair<Element<3U>*,uint32_t>,pair<Element<3U>*,uint32_t> > >& );
+template size_t findSplitInterfaceElements( const Model<2U>&, const string&, vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >& );
+template size_t findSplitInterfaceElements( const Model<1U>&, const string&, vector<pair<pair<Element<1U>*,uint32_t>,pair<Element<1U>*,uint32_t> > >& );
 
 
 
@@ -1196,7 +1465,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
     size_t non_surface_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers surface elements
-      if ( (*it)->IsSurfaceElement() ) {
+      if ( (*it)->IsSurface() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
            for ( auto i{0U}; i<neighbors; ++i )
@@ -1214,8 +1483,8 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
        else non_surface_elements++;
    
     if ( non_surface_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
-                                       subdomain.Name(), "region contained not only surface elements." );
+      ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
+                                     subdomain.Name(), "region contained not only surface elements." );
     return true;
    
  } // end checkNeighborNormalsForConsistentOrientation
@@ -1229,7 +1498,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
     size_t non_line_elements(0U);
     for ( auto it=subdomain.CellsBegin(); it!=subdomain.CellsEnd(); ++it )
       // this method only considers line elements
-      if ( (*it)->IsLineElement() ) {
+      if ( (*it)->IsLine() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
            for ( auto i{0U}; i<neighbors; ++i )
@@ -1247,7 +1516,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
        else non_line_elements++;
    
     if ( non_line_elements > 0U )
-      ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
+      ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (2D):",
                                        subdomain.Name(), "region contained not only line elements." );
     return true;
    
@@ -1265,7 +1534,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<2U>&  subdomain 
 template<>
 bool checkNeighborNormalsForConsistentOrientation( const Region<1U>&  subdomain )
  {
-    ErrorHandler::Instance().notice( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
+    ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (1D):",
                                      subdomain.Name(), "one-dimensional models have no boundaries." );
     return false;
    
@@ -1278,8 +1547,8 @@ double angleBetweenSurfaceCells( const CELL<3>* const cell1, const CELL<3>* cons
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
-    assert( cell1->FE()->IsSurfaceElement() );
-    assert( cell2->FE()->IsSurfaceElement() );
+    assert( cell1->FE()->IsSurface() );
+    assert( cell2->FE()->IsSurface() );
     
     Point<3> nrml1( cell1->UnitNormal() );
     Point<3> nrml2( cell2->UnitNormal() );
@@ -1306,8 +1575,8 @@ double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* con
  {
     assert( cell1 != nullptr );
     assert( cell2 != nullptr );
-    assert( cell1->FE()->IsLineElement() );
-    assert( cell2->FE()->IsLineElement() );
+    assert( cell1->FE()->IsLine() );
+    assert( cell2->FE()->IsLine() );
     
     // cos theta = dot-product over cross-product (length1 * length2)
     // already in degrees
@@ -1369,7 +1638,7 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
           node_processing:
           const auto n_parents{ nit->Parents() };
           for ( auto i{0U}; i<n_parents; ++i )
-            if ( nit->Parent(i)->IsVolumeElement() )
+            if ( nit->Parent(i)->IsVolume() )
               {
                  // checking which of the neighbor nodes of the parent element
                  // are also contained in the shared nodes vector
@@ -1436,6 +1705,155 @@ size_t parentElementsSharingMultipleEdgeNodes( const vector<Node<3U>*>&  edge_no
      return segm_parents.size();
      
  } // end parentElementsSharingMultipleEdgeNodes
+
+
+
+
+
+/**
+
+Returns the ID (0..n-1) of any node which is located within the tolerance of the
+target coordinates. If the node cannot be found it returns max() of index type.
+
+@section arguments Input Arguments
+
+The current model that shall be searched for the node, the node
+coordinates, and the tolerance which shall be applied in comparing the
+supplied coordinates with those of the actual node points.
+
+@return The Idx (0..n-1) of the node of interest or UINTMAX
+(if this node does not exist) will
+be returned.
+
+@section application Application
+
+The method is used to retrieve point locations from the mesh in order to
+identify points that cannot be grouped into individual families using
+the ANSYS mesher.
+
+*/
+size_t  findNode( const Model<3U>& sg, double nx, double ny, double nz,
+                  double tolerance )
+ {
+    const Region<3>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
+         if ( fabs(nx-(*it)->x()) <= tolerance and
+              fabs(ny-(*it)->y()) <= tolerance and
+              fabs(nz-(*it)->z()) <= tolerance )
+           return (*it)->Idx();
+      }
+ 
+    stringstream  out("The targeted node with the coordinate (x,y,z): ");
+    out << nx <<" "<< ny <<" "<< nz <<" could not be found; ";
+    out <<" returning node index="<< std::numeric_limits<uint32_t>::max() << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+
+size_t  findNode( const Model<2U>& sg, double nx, double ny,
+                  double tolerance )
+ {
+    const Region<2>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ ) {
+           if ( fabs(nx-(*it)->x()) <= tolerance and
+                fabs(ny-(*it)->y()) <= tolerance )
+             return (*it)->Idx();
+      }
+ 
+    stringstream  out("The targeted node with the coordinates (x,y): ");
+    out << nx <<" "<< ny <<" could not be found; ";
+    out <<" returning node index="<< UINT_MAX << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+
+size_t  findNode( const Model<1U>& sg, double nx, double tolerance )
+ {
+    const Region<1>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+      if ( fabs(nx-(*it)->x()) <= tolerance ) return (*it)->Idx();
+         
+    stringstream  out("The targeted node with the coordinate (x): ");
+    out << nx <<" could not be found; ";
+    out <<" returning node index="<< UINT_MAX << endl;
+    throw csmp::Exception( WARNING, "findNode", out.str() );
+    
+    return std::numeric_limits<uint32_t>::max();
+     
+} // end find_node
+
+
+/**
+    Generic version for 1-3 dimensions, using Point object to identify the node
+    location.
+    
+    If a node is found its local Idx() number is returned
+    (care has to be taken that this index is a valid number.
+    
+    If the node cannot be found, -1, is returned.
+    
+    @attention if verbose is on and the point cannot be found this is reported.
+    
+    @author SKM 22/9/2014.
+*/
+template<uint32_t dim>
+long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, bool verbose )
+ {
+    const Region<dim>&  sgroup(sg.Region("Model"));
+ 
+    for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
+      if ( pxyz.CoincidesWithWithinTolerance( (*it)->Coordinate(), tolerance ) )
+        return (*it)->Idx();
+
+    ErrorHandler& csmp_error(ErrorHandler::Instance());
+   
+    if ( verbose ) {
+         stringstream  out("The targeted node with the coordinate (x): ");
+         out << pxyz <<" could not be found; ";
+         out <<" returning node index="<< -1 << endl;
+         csmp_error.Note( WARNING, "findNode:", out.str() );
+      }
+    return -1;
+     
+} // end find_node
+
+template long findNode( const Model<1U>&, const Point<1U>&, double, bool );
+template long findNode( const Model<2U>&, const Point<2U>&, double, bool );
+template long findNode( const Model<3U>&, const Point<3U>&, double, bool );
+
+
+
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim, template<uint32_t> class CELL>
+void printNodes( const CELL<dim>& c )
+ {
+    set<size_t> nodes;
+    for ( auto i{0U}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
+    cout <<" "<< c.Idx() <<": ";
+    for ( auto& it : nodes ) cout << it <<",";
+    cout <<" ";
+ }
+
+template void printNodes( const Element<1U>& );
+template void printNodes( const Element<2U>& );
+template void printNodes( const Element<3U>& );
+template void printNodes( const Face<1U>& );
+template void printNodes( const Face<2U>& );
+template void printNodes( const Face<3U>& );
+template void printNodes( const InterFace<1U>& );
+template void printNodes( const InterFace<2U>& );
+template void printNodes( const InterFace<3U>& );
 
 
 
@@ -1646,47 +2064,8 @@ template bool integrityCheck<3,InterFace>( typename plf::colony<InterFace<3>>::c
 template bool integrityCheck<2,InterFace>( typename plf::colony<InterFace<2>>::const_iterator, typename plf::colony<InterFace<2>>::const_iterator );
 template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::const_iterator, typename plf::colony<InterFace<1>>::const_iterator );
                                           
-/* OLD METHOD
 
-    while ( first != last ) {
-         // FE policy
-         if ( (*first).FE() == nullptr ) {
-              cerr <<"\n"<< celltype << (*first).Idx() <<": FE pointer corrupt.";
-              issues++;
-           }
-         else {
-             // connected nodes
-             for ( auto i{0U}; i<(*first).Nodes(); ++i )
-               if ( (*first).N(i) == nullptr ) {
-                    cerr <<"\n"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
-                    issues++;
-                 }
-               else shared_nodes.push_back( (*first).N(i) );
-             // there should be at least one neighbor
-             size_t n_valid_nbors{0};
-             for ( auto i{0U}; i<(*first).Neighbors(); ++i )
-               if ( (*first).Neighbor(i) != nullptr )
-                 n_valid_nbors++;
-             if ( n_valid_nbors == 0 ) {
-                  cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
-                  issues++;
-               }
-             // valid neighbors should not be corrupt
-             const long one_billion{1000000000};
-             cerr <<"\n"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" "<< (*first).BaryCenter();
-             for ( auto i{0U}; i<(*first).Nodes(); ++i )
-               cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
-             for ( auto i{0U}; i<(*first).Neighbors(); ++i ) {
-                 if ( (*first).Neighbor(i) != nullptr ) {
-                      if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
-                      if ( (*first).Neighbor(i)->Idx() > one_billion )
-                        cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
-                   }
-               }
-           }
-         first++;
-      }
-*/
+
 
 template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( const plf::colony<CELL<dim> >& cells,
@@ -1747,24 +2126,24 @@ size_t connectivityCheck( typename std::vector<Element<dim>*>::const_iterator fi
           for ( auto i{0U}; i<(*first)->Neighbors(); ++i )
             if ( (*first)->Neighbor(i) ) {
                  if constexpr ( dim == 3 ) {
-                      if ( (*first)->IsVolumeElement() && !(*first)->Neighbor(i)->IsVolumeElement() ) {
+                      if ( (*first)->IsVolume() && !(*first)->Neighbor(i)->IsVolume() ) {
                            cerr <<"\nconnectivityCheck: volume Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
-                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                      if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
                            cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
-                      if ( (*first)->IsLineElement() && !(*first)->Neighbor(i)->IsLineElement() ) {
+                      if ( (*first)->IsLine() && !(*first)->Neighbor(i)->IsLine() ) {
                            cerr <<"\nconnectivityCheck: line Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a ";
                            cerr << parseAbbreviated_FE_Type( (*first)->Neighbor(i)->FE_Type() );
                            issues++;
                         }
                    }
                  if constexpr ( dim == 2 ) {
-                      if ( (*first)->IsSurfaceElement() && !(*first)->Neighbor(i)->IsSurfaceElement() ) {
+                      if ( (*first)->IsSurface() && !(*first)->Neighbor(i)->IsSurface() ) {
                            cerr <<"\nconnectivityCheck: surface Element "<< (*first)->Idx() <<": neighbor("<< i <<") is a line element!";
                            issues++;
                         }
@@ -1845,58 +2224,6 @@ template pair<Point<2>,Point<2>>  boundingBox( vector<Node<2>*>::const_iterator,
 template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator );
 
 
-/* CLIPPING OF FACE NUMBERING FUNCTION FOR INTERFACE
-
-    const size_t neighbors2x( f->Neighbors() * 2 );
-    for ( size_t j{0U}; j<neighbors2x; ++j ) {
-      InterFace<dim>* const ptr( f->Neighbor( j ) );
-      if ( ptr != nullptr ) {
-        // building search maps that we will use to find the shared interfaces
-        // key=pointset   face iD
-        map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
-        vector<uint32_t>  nids;
-        // first element
-        Element<dim>* e1 = f->InnerParent();
-        for ( size_t face = 0U; face<e1->Faces(); ++face ) {
-          e1->FE()->NodesOfFace( face, nids );
-          set<Point<dim> >  face_key;
-          for ( size_t j{0U}; j<nids.size(); ++j )
-            face_key.insert( e1->N( nids[j] )->Coordinate() );
-          outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
-        }
-        // second element
-        Element<dim>* e2 = f->OuterParent();
-        for ( size_t face = 0U; face<e2->Faces(); ++face ) {
-          e2->FE()->NodesOfFace( face, nids );
-          set<Point<dim> >  face_key;
-          for ( size_t j{0U}; j<nids.size(); ++j )
-            face_key.insert( e2->N( nids[j] )->Coordinate() );
-          inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
-        }
-
-        // 2. finding the shared faces
-        bool found( false );
-        int64_t  inner_face_id( -1 ), outer_face_id( -1 );
-        for ( auto& inner_face : inner_elmt_faces ) {
-          for ( auto& outer_face : outer_elmt_faces ) {
-            if ( inner_face.first == outer_face.first ) {
-              inner_face_id = inner_face.second.second;
-              outer_face_id = outer_face.second.second;
-              found = true;
-              break;
-            }
-          }
-          if ( found ) break;
-        }
-
-        vset.Pfvert( eidx, j, static_cast<int32_t>(ptr->Idx()) );
-      }
-      else
-        vset.Pfvert( eidx, j, REGION_BOUNDARY );
-    }
-
-*/ // FACE NUMBERING
-
 
 
 
@@ -1909,13 +2236,13 @@ template<uint32_t dim>
 bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* const elmt2 )
  {
     if constexpr ( dim == 3 )
-      if ( !elmt1->IsVolumeElement() || !elmt2->IsVolumeElement() ) {
+      if ( !elmt1->IsVolume() || !elmt2->IsVolume() ) {
            cerr <<"\ninterPenetrating<3>: only works for equidimensional (volumetric) elements.\n";
            return false;
         }
 
     if constexpr ( dim == 2 )
-      if ( !elmt1->IsSurfaceElement() || !elmt2->IsSurfaceElement() ) {
+      if ( !elmt1->IsSurface() || !elmt2->IsSurface() ) {
            cerr <<"\ninterPenetrating<2>: only works for equidimensional (surface) elements.\n";
         }
 
@@ -1982,7 +2309,7 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
 
         // 1. Volume elements only
         
-        if (!(*eit)->IsVolumeElement()) continue;
+        if (!(*eit)->IsVolume()) continue;
 
         // 2. Test against axis-aligned bounding box
 
@@ -2088,7 +2415,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     if ( forward ) {
          cout <<"in forward direction:"<< endl;
          while( eptr1 != nullptr ) {
-              if ( !eptr1->IsLineElement() )
+              if ( !eptr1->IsLine() )
                 throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
               // Ideally (where the numbers are nodes and the labels are BOX_BOUNDARY flags)
               // we should get something like: TOP 1--0 0--11 11--12...56--56 BOTTOM
@@ -2116,7 +2443,7 @@ size_t printLineElementRegion( const Model<dim>& model, const char* region_name,
     else {
          cout <<"from back to front:"<< endl;
          while( eptr2 != nullptr ) {
-              if ( !eptr2->IsLineElement() )
+              if ( !eptr2->IsLine() )
                 throw csmp::Exception( ERROR, "printLineElementRegion", "current element is not a line element; aborting printing" );
               if ( !eptr2->Neighbor(0) )
                 cout <<"  "<< parseBoundary( eptr2->N(1)->AtBoundary() ) <<" "<< eptr2->N(1)->Idx();

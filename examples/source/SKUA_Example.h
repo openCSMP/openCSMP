@@ -11,6 +11,9 @@ public:
   virtual void Specifications();
 private:
   static void ListModels();
+  static void RunSKUA_model();
+  static void RunSKUA_box_shaped_with_boundary();
+  static void RunSKUA_split_boundary_layer();
 };
 
 } // csmp

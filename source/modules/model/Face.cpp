@@ -59,8 +59,8 @@ Face<dim>::Face( const Element<dim>& elmt,
     inner_parent_face_id_(inner_parent_face_id),
     outer_parent_face_id_(outer_parent_face_id)
  {
-    if constexpr ( dim == 3 ) assert( elmt.IsSurfaceElement() );
-    if constexpr ( dim == 2 ) assert( elmt.IsLineElement() );
+    if constexpr ( dim == 3 ) assert( elmt.IsSurface() );
+    if constexpr ( dim == 2 ) assert( elmt.IsLine() );
     assert( innerParent_ != nullptr );
     assert( outerParent_ != nullptr );
     assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
@@ -222,7 +222,9 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  uint32_t outer_parent_face_id,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
-  : idx_(NULL_IDX),
+  : FiniteElementPolicy<dim,Face>( fem_manager.E( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+    FiniteVolumePolicy<dim,Face>( fvm_manager.Stencil( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+    idx_(NULL_IDX),
     innerParent_(inner_parent),
     outerParent_(outer_parent),
     inner_parent_face_id_(inner_parent_face_id),
@@ -239,8 +241,20 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
          assert( innerParent_ != outerParent_ );
          return;
       }
-    assert( inner_parent->Neighbor(inner_parent_face_id) == outer_parent->Neighbor(outer_parent_face_id) );
+    assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+    assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+
+    // resizing the node and neighbor vectors
+    node_connector_.resize(this->FE()->Nodes(),nullptr);
+    face_connector_.resize(this->FE()->Faces(),nullptr);
     
+    // assigning the nodes
+    vector<uint32_t> fnids;
+    inner_parent->FE()->NodesOfFace( inner_parent_face_id_, fnids );
+    uint32_t i_node{0};
+    for ( auto i : fnids )
+      node_connector_[i_node++] = inner_parent->N(i);
+
     // creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
         this->ResizePropertyStorage( ep, ip );
@@ -250,59 +264,6 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
  } // end (constructor that infers face from higher-dimensional parent elements)
 
 
-
-/*
-   // checking the type of element
-   if ( feptr->ElementType() != outer_parent->FE()->ElementTypeOfFace(i) ) {
-        cerr <<"\nFace<"<< dim <<">(ctor: face between parents): mismatch of supplied FiniteElement ";
-        cerr <<"and element type of shared face: ";
-        cerr << parseFiniteElementType( feptr->ElementType() ) <<" vs ";
-        cerr << parseFiniteElementType( outer_parent->FE()->ElementTypeOfFace(i) );
-     }
-*/
-
-/*
-    // finding face which is shared between parents
-    // --------------------------------------------
-    bool  matching_face_found{false};
-    const auto n_faces_inner{innerParent_->Faces()};
-    for ( auto i{0U}; i<n_faces_inner; ++i )
-      if ( inner_parent->Neighbor(i) == outer_parent ) {
-           inner_parent_face_id_ = i;
-           // assigning the finite element
-           const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
-           FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
-           FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager.Stencil(etype) );
-           node_connector_.resize(this->FE()->Nodes(),nullptr);
-           face_connector_.resize(this->FE()->Faces(),nullptr);
-           // assigning the nodes
-           vector<uint32_t> fnids;
-           inner_parent->FE()->NodesOfFace( i, fnids );
-           const auto n_face_nodes{fnids.size()};
-           for ( auto k{0}; k < n_face_nodes; ++k )
-             node_connector_[k] = inner_parent->N( fnids[k] );
-           // finding the number of the shared face in the outer element
-           const auto n_faces_outer{outerParent_->Faces()};
-           for ( auto j{0U}; j<n_faces_outer; ++j )
-             if ( outer_parent->Neighbor(j) == inner_parent ) {
-                  outer_parent_face_id_ = j;
-                  break;
-               }
-           matching_face_found = true;
-           break;
-        }
- 
-    // reporting the failed construction
-    if ( !matching_face_found ) {
-         cerr <<"\n\nFace<"<< dim <<">(ctor: face between parents): parent elements "<< inner_parent->Idx();
-         cerr <<" and "<< outer_parent->Idx() <<" do not seem to share a face:\n";
-         inner_parent->Out();
-         outer_parent->Out();
-         innerParent_ = nullptr;
-         outerParent_ = nullptr;
-         return;
-      }
-*/
 
 
 
@@ -336,8 +297,8 @@ Face<dim>::Face( Element<dim>& e,
  {
     assert( boundary_face < e.Faces() );
     if ( e.Neighbor(boundary_face) != nullptr ) outerParent_ = e.Neighbor(boundary_face);
-    if constexpr ( dim == 2 ) assert( e.IsSurfaceElement() );
-    if constexpr ( dim == 3 ) assert( e.IsVolumeElement() );
+    if constexpr ( dim == 2 ) assert( e.IsSurface() );
+    if constexpr ( dim == 3 ) assert( e.IsVolume() );
 
     // 1. creating local storage for face and face integration point variables
     if ( this->UsesLocalCoordinates() )
@@ -655,13 +616,13 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
     // 1. argument checks and assignments
     // ----------------------------------
     assert( innerElement != nullptr ); // inner element must be defined
-    if constexpr ( dim == 3U ) assert( innerElement->IsVolumeElement() );
-    if constexpr ( dim == 2U ) assert( innerElement->IsSurfaceElement() );
+    if constexpr ( dim == 3U ) assert( innerElement->IsVolume() );
+    if constexpr ( dim == 2U ) assert( innerElement->IsSurface() );
     innerParent_ = innerElement;
     
     if ( outerElement != nullptr ) { // outer element is defined if face is in model interior
-         if constexpr ( dim == 3U ) assert( outerElement->IsVolumeElement() );
-         if constexpr ( dim == 2U ) assert( outerElement->IsSurfaceElement() );
+         if constexpr ( dim == 3U ) assert( outerElement->IsVolume() );
+         if constexpr ( dim == 2U ) assert( outerElement->IsSurface() );
          outerParent_ = outerElement;
       }
     
@@ -678,8 +639,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
 
     // 2.1 matching the lower-dimensional face to a face of inner higher-dimensional element
     // -------------------------------------------------------------------------------------
-    if ( ((dim == 3U) && this->IsSurfaceElement() ) || // Face is either a triangle or a quadrilateral in 3D
-         ((dim == 2U) && this->IsLineElement()) )      // Face is a line in 2D
+    if ( ((dim == 3U) && this->IsSurface() ) || // Face is either a triangle or a quadrilateral in 3D
+         ((dim == 2U) && this->IsLine()) )      // Face is a line in 2D
       {
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);
@@ -951,7 +912,7 @@ uint32_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
   }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
   return inner_parent_face_id_;
 }
@@ -976,7 +937,7 @@ void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
     }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
 } // end ParentFaceID(assignment)
 
@@ -1247,12 +1208,12 @@ void  Face<dim>::Out() const
 
     cout <<"\nParent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\tinward  facing Element: "<< this->innerParent_->Idx();
+         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
          cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\toutward facing Element: "<< this->outerParent_->Idx();
+         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
          cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";

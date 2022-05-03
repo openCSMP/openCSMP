@@ -89,8 +89,11 @@ class ModelSubDomain {
     /// distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
     
-    /// creates node vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
+    /// creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
     void CreateNodePointerVector();
+
+    /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
+    void CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells );
 
     /// sorts the node and CELL vectors split into the interior and perimeter ranges (4 sorting operations)
     void SortVectors( size_t interior_cells, size_t interior_nodes );
@@ -101,7 +104,7 @@ class ModelSubDomain {
     /// removes any cells or node pointers that were set to zero elsewhere; returns number of cells removed
     size_t RemoveNullPointerCells();
     
-    /// for remeshing:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
+    /// for rebuilding subdomains when nodes or cells changed:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
     void ScheduleForRebuilt();
     bool NeedsRebuilt() const;
 
@@ -327,6 +330,11 @@ size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,C
 /// returns number of nodes on the subdomain perimeters that are shared by the two subdomains (matches by pointers)
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
+
+/// maps potential contacting faces and cell pointers of cells that are contacting each other in the two regions; @return the number of these cells, pointers to them, and corresponding face number written into the argument map
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
+                              std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
 
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
 void readDomainIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& );

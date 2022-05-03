@@ -30,7 +30,7 @@
 static	char	rcsid[] = "$Id: norm.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
 #include <cmath>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 using namespace std;
 

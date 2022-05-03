@@ -101,9 +101,9 @@ namespace csmp {
 					break;
 				}
 			if (broken_elmt) {
-				if ((*it)->IsVolumeElement()) volume_e_removed++;
-				else if ((*it)->IsSurfaceElement()) surface_e_removed++;
-				else if ((*it)->IsLineElement()) line_e_removed++;
+				if ((*it)->IsVolume()) volume_e_removed++;
+				else if ((*it)->IsSurface()) surface_e_removed++;
+				else if ((*it)->IsLine()) line_e_removed++;
 				degenerate_elements.push_back((*it)->Idx());
 				auto eclipseCoord = modelOut.EclipseCoordinates(*it);
 				std::cerr << "Broken element at " << eclipseCoord.i << ' ' << eclipseCoord.j << ' ' << eclipseCoord.k << ' '

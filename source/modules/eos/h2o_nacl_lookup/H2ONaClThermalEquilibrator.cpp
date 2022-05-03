@@ -302,8 +302,8 @@ namespace csmp
             cerr << "Upcoming non-convergence message for H2ONaClThermalEquilibrator::Equilibrate(), this \n";
             cerr << "was the status:\n";
             ErrorConditionsToScreen();
-            csmp_error.notice( FATAL_ERROR,
-                               //csmp_error.notice( WARNING,
+            csmp_error.Note( FATAL_ERROR,
+                               //csmp_error.Note( WARNING,
                                "H2ONaClThermalEquilibrator::Equilibrate() -",
                                "tmin == tmax but no convergence based on enthalpy-criterion, see above data!\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch"
                                );
@@ -337,8 +337,8 @@ namespace csmp
         //     tmax, that's be fatal
         if( definitelyGreaterThan( tmin, tmax, numeric_limits<double>::epsilon()) )
           {	    
-            csmp_error.notice( FATAL_ERROR,
-                               //csmp_error.notice( WARNING,
+            csmp_error.Note( FATAL_ERROR,
+                               //csmp_error.Note( WARNING,
                                "H2ONaClThermalEquilibrator::Equilibrate() -",
                                "tmin > tmax!\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch"
                                );
@@ -384,8 +384,8 @@ namespace csmp
       {
         // cerr << "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t ) encountered fatal from Fluid objetc\n";
         PrintStatusToCerr();
-        csmp_error.notice( FATAL_ERROR,
-                           //                           csmp_error.notice( WARNING,
+        csmp_error.Note( FATAL_ERROR,
+                           //                           csmp_error.Note( WARNING,
                            "H2ONaClThermalEquilibrator::ComputeTotalEnthalpyAtTemperature( const double& t ) encountered fatal from Fluid objetc\n",
                            "send above data to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch"
                            ); 
@@ -413,8 +413,8 @@ namespace csmp
         tstring << tmin;
         message += tstring.str();
         message += "C, and, hence, we are out of range of validity.\nFIRST: check if you initialized your domain correctly to a valid temperatur.\nIf that check doesn't indicate any anomalies, report this incident to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch\n";
-        csmp_error.notice( FATAL_ERROR, source, message );
-        //csmp_error.notice( WARNING, source, message );
+        csmp_error.Note( FATAL_ERROR, source, message );
+        //csmp_error.Note( WARNING, source, message );
       }
     return;
   }
@@ -437,8 +437,8 @@ namespace csmp
         tstring << tmin;
         message += tstring.str();
         message += "C, and, hence, we are out of range of validity.\nFIRST: check if you initialized your domain correctly to a valid temperatur.\nIf that check doesn't indicate any anomalies, report this incident to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch\n";
-        csmp_error.notice( FATAL_ERROR, source, message );
-        //csmp_error.notice( WARNING, source, message );
+        csmp_error.Note( FATAL_ERROR, source, message );
+        //csmp_error.Note( WARNING, source, message );
       }
     return;
   }
@@ -733,8 +733,8 @@ namespace csmp
     if( tmin > tmax )
       {
         ErrorConditionsToScreen();
-        csmp_error.notice( FATAL_ERROR,
-                           //csmp_error.notice( WARNING,
+        csmp_error.Note( FATAL_ERROR,
+                           //csmp_error.Note( WARNING,
                            "H2ONaClThermalEquilibrator::FindInitialValues() -",
                            "tmin > tmax, send above data to responsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch"
                            );

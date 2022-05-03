@@ -50,7 +50,7 @@ void Accumulator<dim,USER>::Accumulate( double time_increment )
             if ( execution_level == 1 && ( (*et).first.OperationType() == MULTIPLY || (*et).first.OperationType() == DIVIDE ) ) {
                  (*et).first.Out();
                  cerr << typeid( (*et).second ).name();
-                 error_handler.notice( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate",
+                 error_handler.Note( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate",
                                       "mutiplication/division on empty matrix has no effect; nothing was done.");
                  continue;  
               }
@@ -59,10 +59,10 @@ void Accumulator<dim,USER>::Accumulate( double time_increment )
             switch( (*et).first.OperationType() ) {
                  case SUBTRACT: factor *= -1.;
                    break;
-                 case MULTIPLY: error_handler.notice( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate", "MULTIPLY not implemented yet" );
+                 case MULTIPLY: error_handler.Note( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate", "MULTIPLY not implemented yet" );
                       // TODO: mutiply corresponding matrix entries with the ones from the matrix?
                    break;
-                 case DIVIDE: error_handler.notice( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate", "DIVIDE not implemented yet" );
+                 case DIVIDE: error_handler.Note( ERROR, "Accumulator<dim,SUBDOMAIN,USER>::Accumulate", "DIVIDE not implemented yet" );
                    break;
                  default: factor = 1.; // = ADD
               }

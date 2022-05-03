@@ -6,12 +6,10 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#ifndef QUADRATURE_POINT_OUTPUT_TO_VTK_H
-#define QUADRATURE_POINT_OUTPUT_TO_VTK_H
+#ifndef CSMP_QUADRATURE_POINT_OUTPUT_TO_VTK_H
+#define CSMP_QUADRATURE_POINT_OUTPUT_TO_VTK_H
 
-#include "ErrorHandler.h"
-#include "VTK_Interface.h"
-#include "CSMP_highLevelUtilities.h"
+#include "CSMP_definitions.h"
 
 namespace csmp {
 

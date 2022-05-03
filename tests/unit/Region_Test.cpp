@@ -14,8 +14,9 @@
 #include "RegionMonitor.h"
 #include "vsetMakers.h"
 
-// algebraic multigrid solvers
+// solvers
 #include "LinearSolver.h"
+#include "compareFloats.h"
 
 // Interrelations
 #include "ConstantFactor.h"
@@ -30,17 +31,6 @@
 using namespace std;
 
 namespace csmp {
-
-Region_Test::Region_Test( bool verbose )
- : verbose_(verbose)
-{
-}
-
-
-Region_Test::~Region_Test()
-{
-
-}
 
 /**
     SKM revised 8/3/2016 
@@ -66,6 +56,7 @@ void Region_Test::run()
     // -----------------------------------------------------
     const char* model_name="prism_test";
     const string varFileName( "CSMP-1phase-variables.txt" );
+    // TODO: use CSMP native model from file here
     ANSYS_Model3D model( model_name, varFileName.data() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model ) );
         
@@ -85,17 +76,21 @@ void Region_Test::run()
                                                fluid_viscosity );
     model.Apply( conductivity );
 
-    printRangeOfVariable( model, "conductivity" );
+    double max_k = printRangeOfVariable( model, "permeability" );
+    double max_K = printRangeOfVariable( model, "conductivity" );
+    _test( approximatelyEqual(max_K,max_k/fluid_viscosity) );
 
     VTK_Interface<DIM>  vtk_output;
     if ( verbose_ ) vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
 
     // compute steady-state fluid pressure and Darcy velocity
-    SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
-    VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
-    steady_state_pressure.AddPostProcess( &postpro );
-
-    steady_state_pressure.ComputeSteadyState( model.Region("Model") );
+    /* WOULD BE NICE BUT NOT EXACTLY THE GOAL OF THIS TEST
+        SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+        VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
+        steady_state_pressure.AddPostProcess( &postpro );
+        steady_state_pressure.ComputeSteadyState( model.Region("Model") );
+    */
+    model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,1.5e6) );
 
     // output result
     if ( verbose_ ) {
@@ -158,7 +153,8 @@ void Region_Test::run()
     _test( model.Region("permeability_regions").Cells() == model.Region("Model").Cells() );
     if ( verbose_ ) cout <<"\n\n\nRegion_Test::run: RemoveRegion()  removing region 'permeability_regions' and other new regions."<< endl;
 
-    model.RemoveRegion( "permeability_regions" );
+    // removing the region but not its elements
+    model.RemoveRegion( "permeability_regions", false );
 
     //test of remove
     // removal of the new permeability-based unique regions:
@@ -166,7 +162,7 @@ void Region_Test::run()
 
     for ( set<string>::const_iterator it=group_names.begin(); it!=group_names.end(); it++ )
     {
-        model.RemoveRegion( (*it).c_str() );
+        model.RemoveRegion( (*it).c_str(), false );
        _test( model.ContainsRegion((*it).c_str()) == false );
     }
 
@@ -225,8 +221,8 @@ void Region_Test::run()
     _test( model.ContainsRegion("pressure_permeability_overlap2") == true );
 
     // removal
-    model.RemoveRegion( "pressure_permeability_overlap1" );
-    model.RemoveRegion( "pressure_permeability_overlap2" );
+    model.RemoveRegion( "pressure_permeability_overlap1", false );
+    model.RemoveRegion( "pressure_permeability_overlap2", false );
     // regions should no longer be there
     _test( model.ContainsRegion("pressure_permeability_overlap1") == false );
     _test( model.ContainsRegion("pressure_permeability_overlap2") == false );
@@ -238,7 +234,7 @@ void Region_Test::run()
     model.FormRegionFrom( "pf_window", "fluid pressure", 1.5e6, 1.7e6 );
     _test( model.ContainsRegion("pf_window") == true );
     if ( verbose_ ) vtk_output.OutputDataToVTK( model, "pf_window", "pf_window", "fluid pressure", 1, true );
-    model.RemoveRegion( "pf_window" );
+    model.RemoveRegion( "pf_window", false );
 
 
     // creating and testing rectangular regions
@@ -271,7 +267,7 @@ void Region_Test::run()
     _test( p1 == p1_newRegion or p1 < p1_newRegion );
     _test( p2 == p2_newRegion or p2 > p2_newRegion );
 
-    model.RemoveRegion( "rectangular region" );
+    model.RemoveRegion( "rectangular region", false );
 
 
     // Region Union Test
@@ -289,7 +285,7 @@ void Region_Test::run()
     if ( verbose_ ) cout <<"\nRegion_Test::run: Is Model a part of FRAC_VOLUMES(no):  "<< endl;
     _test( model.RegionIncludes( "FRAC_VOLUMES","MODEL" ) == false );
 
-    model.RemoveRegion( "MODEL" );
+    model.RemoveRegion( "MODEL", false );
 
     // Region Intersection Test
     if ( verbose_ ) {
@@ -318,7 +314,7 @@ void Region_Test::run()
     _test( model.RegionSymmetricDifference( "MATRIX", "Model", "diff" ) == true );
     // should contain all volumetric elements from FRAC_VOLUMES
     _test( model.Region("diff").Cells() == model.Region("FRAC_VOLUMES").Cells() );
-    model.RemoveRegion( "diff" );
+    model.RemoveRegion( "diff", false );
 
     // breaking a region into contiguous sub-regions
     // ---------------------------------------------

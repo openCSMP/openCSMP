@@ -1409,11 +1409,11 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( eptr->Neighbor(b_face) != nullptr ) {
-//         csmp_error.notice( ERROR, "atBoundary:", "element face is not a boundary face.");
+//         csmp_error.Note( ERROR, "atBoundary:", "element face is not a boundary face.");
          return NOT;
       }
     if ( b_face >= eptr->Neighbors() ) {
-         csmp_error.notice( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
+         csmp_error.Note( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
          return NOT;
       }
 
@@ -1459,7 +1459,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
               cerr <<"\n\tmissed case: ";
               for ( const auto& boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
-              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              csmp_error.Note( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
            }
          // in 2D, a face can only have 2D nodes unless this is a higher order element
@@ -1470,7 +1470,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
+                   csmp_error.Note( ERROR, "atBoundary(2D):", "too many nodes in boundary flag array.");
                 }
               else {
                    // only the corner nodes are considered
@@ -1495,7 +1495,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() >= 2U ) {
               // if a surface element face is located on a model edge
-              if ( eptr->FE()->IsSurfaceElement() ) {
+              if ( eptr->FE()->IsSurface() ) {
                    auto flag_it = eflags.begin();
                    const BOX_BOUNDARY flag1 = (*flag_it);
                    flag_it++;
@@ -1509,13 +1509,13 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    return whichBoundary( flag1, flag2 );
                 }
               // only the sides of the model are an option
-              else if ( eptr->FE()->IsVolumeElement() ) {
+              else if ( eptr->FE()->IsVolume() ) {
                    for ( auto bit : eflags )
                      if ( isSide(bit) )
                       return bit;
                 }
               else {
-                   csmp_error.notice( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
+                   csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
                 }
 
            }
@@ -1532,7 +1532,7 @@ template BOX_BOUNDARY atBoundary( const Element<3U>* const, uint32_t  );
 
 // TESTING
 /*
-if ( eptr->FE()->IsLineElement() ) {
+if ( eptr->FE()->IsLine() ) {
      cerr <<"\nelement "<< eptr->Idx() <<": "<< parseFiniteElementType(eptr->FE_Type()) <<", nodes:\n";
      for ( auto i{0U}; i<eptr->Nodes(); ++i )
        cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
@@ -1606,11 +1606,11 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr( dim == 1 ) {
          if ( eflags.size() == 1U ) {
               if ( eptr->N(0)->AtBoundary() != NOT && eptr->N(1)->AtBoundary() != NOT )
-                csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the same 2 bflags.");
+                csmp_error.Note( ERROR, "atBoundary(1D):", "1D line element has the same 2 bflags.");
               return (*eflags.begin());
            }
          // there may only be 2 different flags when this is a single element model
-         csmp_error.notice( ERROR, "atBoundary(1D):", "1D line element has the two different 2 bflags.");
+         csmp_error.Note( ERROR, "atBoundary(1D):", "1D line element has the two different 2 bflags.");
       }
     
     // Case 2: two-dimensional model
@@ -1618,7 +1618,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr ( dim == 2 ) {
          // elements are considered boundary elements only if they have a face on the model boundary
          if ( eflags.size() == 1U ) {
-              if ( eptr->FE()->IsLineElement() ) return (*eflags.begin());
+              if ( eptr->FE()->IsLine() ) return (*eflags.begin());
               else {
                    // checking that there is indeed a face on the model boundary
                    const size_t n_nbors{eptr->Neighbors()};
@@ -1641,7 +1641,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
               cerr <<"\n\tmissed case: ";
               for ( auto boundary : eflags )
                 cerr << parseBoundary( boundary ) << " ";
-              csmp_error.notice( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
+              csmp_error.Note( ERROR, "atBoundary(2D):", "did not succeed in finding a unique box boundary flag for cell.");
               return flag1;
            }
          // corner cases
@@ -1652,7 +1652,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):",
+                   csmp_error.Note( ERROR, "atBoundary(2D):",
                     "triangular element with two faces at boundary should be removed because it may cause problems when applying boundary conditions.");
                 }
               else {
@@ -1668,7 +1668,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
+                   csmp_error.Note( ERROR, "atBoundary(2D):", "all nodes of 2D triangular element appear to be located on boundary.");
               }
           return MULTIPLE;
             
@@ -1680,12 +1680,12 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
     if constexpr ( dim == 3U )
       {
          // only line and surface elements may be at boundary if there is only one boundary flag
-         if ( eflags.size() == 1U && !eptr->IsVolumeElement() )
+         if ( eflags.size() == 1U && !eptr->IsVolume() )
            return (*eflags.begin());
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() == 2U ) {
-              if ( eptr->FE()->IsSurfaceElement() ) {
+              if ( eptr->FE()->IsSurface() ) {
                    // if there is a corner involved, the other flag is chosen because an element must not span a corner
                    // and its boundary face will lie on one of the sides of the model
                    auto flag_it = eflags.begin();
@@ -1703,7 +1703,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                    for ( auto i{0U}; i<eptr->Nodes(); ++i )
                      cerr <<" "<< eptr->N(i)->Idx() <<": "<< parseBoundary( eptr->N(i)->AtBoundary() );
                    cerr << endl;
-                   csmp_error.notice( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
+                   csmp_error.Note( ERROR, "atBoundary(3D):", "simplex element with two faces at boundary.");
                 }
               else {
                    if ( isIn( eflags, {BOTTOM,LEFT} ) ) return CNR1;
@@ -1736,7 +1736,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
                           cerr << endl;
-                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of triangular boundary face.");
+                          csmp_error.Note( ERROR, "atBoundary(3D):", "could not resolve placement of triangular boundary face.");
                        }
                   }
            }
@@ -1764,7 +1764,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                           for ( size_t j{0}; j<fnids.size(); ++j )
                             cerr <<" "<< eptr->N( fnids[j] )->Idx() <<": "<< parseBoundary( eptr->N( fnids[j] )->AtBoundary() );
                           cerr << endl;
-                          csmp_error.notice( ERROR, "atBoundary(3D):", "could not resolve placement of quadrilateral boundary face.");
+                          csmp_error.Note( ERROR, "atBoundary(3D):", "could not resolve placement of quadrilateral boundary face.");
                        }
                   }
            }
@@ -1825,7 +1825,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr )
                     cerr << parseBoundary( boundary ) << " ";
                   cerr << endl;
                 }
-              csmp_error.notice( ERROR, "atBoundary(3D):", "implausible case where more than 4 element nodes are located on model boundary.");
+              csmp_error.Note( ERROR, "atBoundary(3D):", "implausible case where more than 4 element nodes are located on model boundary.");
            }
          
         return MULTIPLE;
@@ -2057,7 +2057,7 @@ void boxBoundaryPropertyRange( const Model<dim>& sg, BOX_BOUNDARY boundary,
   const csmp::Index  prop_key = sg.Database().StorageKey( node_property );
   
   if ( prop_key.place != NODE || prop_key.type != SCALAR )
-    csmp_error.notice( ERROR, "boxBoundaryPropertyRange",
+    csmp_error.Note( ERROR, "boxBoundaryPropertyRange",
                       "Property must a scalar placed on the nodes; nothing was done.");
 
   bool  first_value( true ), verbose( false );
@@ -2095,40 +2095,34 @@ BOX_BOUNDARY  whichEdge( BOX_BOUNDARY side1, BOX_BOUNDARY side2 )
   // dealing with the case where the 2 flags are the same so that this is not an EDGE
   if (side1 == side2) return side1;
 
-  if (side1 == LEFT and side2 == BOTTOM) return EDGE1;
-  if (side1 == LEFT and side2 == RIGHT)  return EDGE2;
-  if (side1 == LEFT and side2 == TOP)    return EDGE3;
-  if (side1 == LEFT and side2 == FRONT)  return EDGE4;
+  if (side1 > side2) swap( side1, side2 );
 
-  if (side1 == BOTTOM and side2 == FRONT) return EDGE5;
-  if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
-  if (side1 == BOTTOM and side2 == BACK) return EDGE6;
-  if (side1 == BOTTOM and side2 == TOP) return EDGE7;
+  if (side1 == BACK and side2 == BOTTOM) return EDGE1;
+  if (side1 == BACK and side2 == RIGHT)  return EDGE2;
+  if (side1 == BACK and side2 == TOP)    return EDGE3;
+  if (side1 == BACK and side2 == LEFT)  return EDGE4;
 
-  if (side1 == TOP and side2 == FRONT) return EDGE8;
-  if (side1 == TOP and side2 == LEFT) return EDGE3;
-  if (side1 == TOP and side2 == BACK) return EDGE7;
-  if (side1 == TOP and side2 == RIGHT) return EDGE12;
+  if (side1 == FRONT and side2 == BOTTOM) return EDGE9;
+  if (side1 == FRONT and side2 == RIGHT) return EDGE10;
+  if (side1 == FRONT and side2 == TOP) return EDGE11;
+  if (side1 == FRONT and side2 == LEFT) return EDGE12;
 
-  if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
-  if (side1 == FRONT and side2 == LEFT) return EDGE4;
-  if (side1 == FRONT and side2 == TOP) return EDGE8;
-  if (side1 == FRONT and side2 == RIGHT) return EDGE12;
+  if (side1 == TOP and side2 == RIGHT) return EDGE7;
+  if (side1 == TOP and side2 == LEFT) return EDGE8;
 
-  if (side1 == RIGHT and side2 == BOTTOM) return EDGE9;
-  if (side1 == RIGHT and side2 == BACK) return EDGE10;
-  if (side1 == RIGHT and side2 == TOP) return EDGE11;
-  if (side1 == RIGHT and side2 == FRONT) return EDGE12;
+  if (side1 == BOTTOM and side2 == RIGHT) return EDGE6;
+  if (side1 == BOTTOM and side2 == LEFT) return EDGE5;
+
   return NOT;
-}
+} // end whichEdge
 
 
 BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY side3 )
 {
   set<BOX_BOUNDARY> sides({ side1,side2,side3 });
-  auto s3 = (*sides.begin());
+  auto s1 = (*sides.begin());
   auto s2 = (*(next(sides.begin(), 1)));
-  auto s1 = (*sides.rbegin());
+  auto s3 = (*sides.rbegin());
 
   if (sides.empty()) return NOT;
 
@@ -2137,67 +2131,53 @@ BOX_BOUNDARY  whichCorner( BOX_BOUNDARY side1, BOX_BOUNDARY side2, BOX_BOUNDARY 
   // dealing with duplicates (there will only be 1 or 2 entries so this can only be a corner if the entries are edges)
   if (sides.size() == 2U) {
     // 2 edges EDGE12, EDGE11... EDGE1
-    if (side1 == EDGE12 and side2 == EDGE11) return CNR8;
-    if (side1 == EDGE12 and side2 == EDGE9) return CNR5;
+    if (s1 == EDGE12 and s2 == EDGE11) return CNR8;
+    if (s1 == EDGE12 and s2 == EDGE9) return CNR5;
 
-    if (side1 == EDGE11 and side2 == EDGE10) return CNR7;
+    if (s1 == EDGE11 and s2 == EDGE10) return CNR7;
 
-    if (side1 == EDGE10 and side2 == EDGE9) return CNR6;
-    if (side1 == EDGE10 and side2 == EDGE6) return CNR6;
+    if (s1 == EDGE10 and s2 == EDGE9) return CNR6;
+    if (s1 == EDGE10 and s2 == EDGE6) return CNR6;
 
-    if (side1 == EDGE9 and side2 == EDGE6) return CNR6;
-    if (side1 == EDGE9 and side2 == EDGE5) return CNR5;
+    if (s1 == EDGE9 and s2 == EDGE6) return CNR6;
+    if (s1 == EDGE9 and s2 == EDGE5) return CNR5;
 
-    if (side1 == EDGE8 and side2 == EDGE4) return CNR4;
-    if (side1 == EDGE8 and side2 == EDGE3) return CNR4;
+    if (s1 == EDGE8 and s2 == EDGE4) return CNR4;
+    if (s1 == EDGE8 and s2 == EDGE3) return CNR4;
 
-    if (side1 == EDGE7 and side2 == EDGE3) return CNR3;
-    if (side1 == EDGE7 and side2 == EDGE2) return CNR3;
+    if (s1 == EDGE7 and s2 == EDGE3) return CNR3;
+    if (s1 == EDGE7 and s2 == EDGE2) return CNR3;
 
-    if (side1 == EDGE6 and side2 == EDGE2) return CNR2;
-    if (side1 == EDGE6 and side2 == EDGE1) return CNR2;
+    if (s1 == EDGE6 and s2 == EDGE2) return CNR2;
+    if (s1 == EDGE6 and s2 == EDGE1) return CNR2;
 
-    if (side1 == EDGE5 and side2 == EDGE4) return CNR1;
-    if (side1 == EDGE5 and side2 == EDGE1) return CNR1;
+    if (s1 == EDGE5 and s2 == EDGE4) return CNR1;
+    if (s1 == EDGE5 and s2 == EDGE1) return CNR1;
 
-    if (side1 == EDGE4 and side2 == EDGE3) return CNR4;
-    if (side1 == EDGE4 and side2 == EDGE1) return CNR1;
+    if (s1 == EDGE4 and s2 == EDGE3) return CNR4;
+    if (s1 == EDGE4 and s2 == EDGE1) return CNR1;
 
-    if (side1 == EDGE3 and side2 == EDGE2) return CNR3;
+    if (s1 == EDGE3 and s2 == EDGE2) return CNR3;
 
-    if (side1 == EDGE2 and side2 == EDGE1) return CNR2;
+    if (s1 == EDGE2 and s2 == EDGE1) return CNR2;
 
     // not a corner
-    if (side1 == BACK and side2 == TOP) return EDGE7;
-    if (side1 == BACK and side2 == BOTTOM) return EDGE6;
-    if (side1 == BACK and side2 == RIGHT) return EDGE10;
-    if (side1 == BACK and side2 == LEFT) return EDGE2;
-
-    if (side1 == FRONT and side2 == TOP) return EDGE8;
-    if (side1 == FRONT and side2 == BOTTOM) return EDGE5;
-    if (side1 == FRONT and side2 == RIGHT) return EDGE12;
-    if (side1 == FRONT and side2 == LEFT) return EDGE4;
-
-    if (side1 == TOP and side2 == RIGHT) return EDGE11;
-    if (side1 == TOP and side2 == LEFT) return EDGE3;
-
-    if (side1 == BOTTOM and side2 == LEFT) return EDGE1;
-    if (side1 == BOTTOM and side2 == RIGHT) return EDGE9;
+    return whichEdge(side1, side2);
   }
 
   // obeying increasing value constraint: BACK, FRONT, TOP, BOTTOM, RIGHT, LEFT
-  if (s1 == FRONT and s2 == BOTTOM and s3 == LEFT) return CNR1;
-  if (s1 == BACK  and s2 == BOTTOM and s3 == LEFT) return CNR2;
-  if (s1 == BACK  and s2 == TOP    and s3 == BOTTOM) return CNR3;
-  if (s1 == FRONT and s2 == TOP    and s3 == LEFT) return CNR4;
+  if (s1 == BACK and s2 == BOTTOM and s3 == LEFT)  return CNR1;
+  if (s1 == BACK and s2 == BOTTOM and s3 == RIGHT) return CNR2;
+  if (s1 == BACK and s2 == TOP    and s3 == RIGHT) return CNR3;
+  if (s1 == BACK and s2 == TOP    and s3 == LEFT)  return CNR4;
 
-  if (s1 == FRONT and s2 == BOTTOM and s3 == RIGHT) return CNR5;
-  if (s1 == BACK  and s2 == BOTTOM and s3 == RIGHT) return CNR6;
-  if (s1 == BACK  and s2 == TOP    and s3 == RIGHT) return CNR7;
-  if (s1 == FRONT and s2 == TOP    and s3 == RIGHT) return CNR5;
+  if (s1 == FRONT and s2 == BOTTOM and s3 == LEFT)  return CNR5;
+  if (s1 == FRONT and s2 == BOTTOM and s3 == RIGHT) return CNR6;
+  if (s1 == FRONT and s2 == TOP    and s3 == RIGHT) return CNR7;
+  if (s1 == FRONT and s2 == TOP    and s3 == LEFT)  return CNR8;
 
   return NOT;
-}
+} // end whichCorner
 
 
 
@@ -2234,14 +2214,234 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
 
 
 
+double bilinearInterpolate( uint32_t idx_x, uint32_t,
+                            const Point<1U>& xy1,
+                            const Point<1U>& xy2,
+                            const Point<1U>& coord,
+                            double p1, double p2, double, double )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 )
+        {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2) / 2.0;
+        }
+
+      if ( p1 == p2 ) return p1;
+    
+      // 4. computing interpolation function. Num. Recip. p. 105
+      double t = (coord[idx_x] - xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      
+      // 5 bi-linear interpolation
+      return (1. - t) * p1 + t * p2;
+
+} // end bilinearInterpolate
 
 
-template void boxBoundaryPropertyRange( const Model<1U>&, BOX_BOUNDARY, const char*, double&, double& );
-template void boxBoundaryPropertyRange( const Model<2U>&, BOX_BOUNDARY, const char*, double&, double& );
-template void boxBoundaryPropertyRange( const Model<3U>&, BOX_BOUNDARY, const char*, double&, double& );
 
 
 
+/**
+
+interpolateXY() uses bilinear interpolation to find the value of a
+property specified at the corner points of a rectangle, at the coordinates
+of a point located inside of this rectangle.
+
+Since interpolateXY() carries out an interpolation on a planar surface
+in 3D space, it also needs the integer indices which give the axis
+in the reference coordinate system.
+
+@section arguments Input Arguments
+
+The first two arguments of interpolateXY() specify the coordinate axis
+indices of the following Point<dim> arguments which shall be used in
+the interpolation. For instance, for i=0, j=1, the interpolation will be
+carried out in the XY plane.
+
+The three following VectorVariable<2U> arguments specify the lower left and
+upper right right corners of the rectangle in which the variable value shall
+be interpolated at a point given by the third VectorVariable<2U> argument.
+
+The last four floating point arguments define the values of the variable
+which is to be interpolated. They are the corner points of the rectangle
+listed in counter-clockwise fashion (e.g., lower left, lower right, upper
+right and upper left corners, respectively).
+
+@return The result of the interpolation is returned into a double type variable.
+
+@section application Application
+
+Function is used by AssignBoundaryValues().
+
+@section messages Messages
+
+The function will report an error and return the average value of the
+four cornerpoints if their coordinates are identical.
+*/
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<2U>& xy1,
+                            const Point<2U>& xy2,
+                            const Point<2U>& coord,
+                            double p1, double p2, double p3, double p4 )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 ) {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2+p3+p4) / 4.0;
+        }
+
+      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
+    
+      // 4. computing interpolation functions. Num. Recip. p. 105
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      
+      // 5 bi-linear interpolation
+      return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;
+
+} // end bilinearInterpolate
+
+
+
+
+/**
+
+interpolateXY() uses bilinear interpolation to find the value of a
+property specified at the corner points of a rectangle, at the coordinates
+of a point located inside of this rectangle.
+
+Since interpolateXY() carries out an interpolation on a planar surface
+in 3D space, it also needs the integer indices which give the axis
+in the reference coordinate system.
+
+@section arguments Input Arguments
+
+The first two arguments of interpolateXY() specify the coordinate axis
+indices of the following VectorVariable<dim> arguments which shall be used in
+the interpolation. For instance, for i=0, j=1, the interpolation will be
+carried out in the XY plane.
+
+The three following VectorVariable<dim> arguments specify the lower left and
+upper right right corners of the rectangle in which the variable value shall
+be interpolated at a point given by the third VectorVariable<dim> argument.
+
+The last four floating point arguments define the values of the variable
+which is to be interpolated. They are the corner points of the rectangle
+listed in counter-clockwise fashion (e.g., lower left, lower right, upper
+right and upper left corners, respectively).
+
+@return The result of the interpolation is returned into a double type variable.
+
+@section application Application
+
+Function is used by AssignBoundaryValues().
+
+@section messages Messages
+
+The function will report an error and return the average value of the
+four cornerpoints if their coordinates are identical.
+*/
+double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
+                            const Point<3U>& xy1,
+                            const Point<3U>& xy2,
+                            const Point<3U>& coord,
+                            double p1, double p2, double p3, double p4 )
+{
+      // If min-coords. are equivalent to max-coords. the boundary-value average
+      // is assigned.
+      if ( xy1 == xy2 ) {
+           cout <<"\nbilinearInterpolate: min/max coordinates are identical:"<< endl;
+           xy1.Out();
+           xy2.Out();
+           return (p1+p2+p3+p4) / 4.0;
+        }
+
+      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
+    
+      // 4. computing interpolation functions. Num. Recip. p. 105
+      double t = (coord[idx_x]-xy1[idx_x] ) / (xy2[idx_x] - xy1[idx_x] );
+      double u = (coord[idx_y]-xy1[idx_y] ) / (xy2[idx_y] - xy1[idx_y] );
+      
+      // 5 bi-linear interpolation
+      return (1.-t) * (1.-u) * p1 + t * (1.-u) * p2 + t * u * p3 + (1.-t) * u * p4;
+
+} // end bilinearInterpolate
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<1U>,double>& p1, // endpoint1, value1
+                          const pair<Point<1U>,double>& p2, // endpoint2, value2
+                          const Point<1U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx = p2.first[0] - p1.first[0];
+    
+    // distance between current point and point 1
+    double dist = pt[0] - p1.first[0];
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
+
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<2U>,double>& p1, // endpoint1, value1
+                          const pair<Point<2U>,double>& p2, // endpoint2, value2
+                          const Point<2U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) );
+    
+    // distance between current point and point 1
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) );
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
+
+
+/// interpolate along boundaries of 2D rectangle-shaped model
+double linearInterpolate( const pair<Point<3U>,double>& p1, // endpoint1, value1
+                           const pair<Point<3U>,double>& p2, // endpoint2, value2
+                           const Point<3U>& pt )                // current point x,y,z
+{
+    // endmember value range
+    double dval = p2.second - p1.second;
+    
+    // distance between endpoints
+    double dx   = sqrt( (p2.first[0]-p1.first[0])*(p2.first[0]-p1.first[0]) +
+                           (p2.first[1]-p1.first[1])*(p2.first[1]-p1.first[1]) +
+                           (p2.first[2]-p1.first[2])*(p2.first[2]-p1.first[2]) );
+    
+    // distance between current point and point 1
+    double dist = sqrt( (pt[0]-p1.first[0])*(pt[0]-p1.first[0]) +
+                           (pt[1]-p1.first[1])*(pt[1]-p1.first[1]) +
+                           (pt[2]-p1.first[2])*(pt[2]-p1.first[2]) );
+
+    // computing the interpolated value (y = b + mx)
+    //     min     normalized distance    gradient
+    return p1.second + (dist * dval) / dx;
+
+} // end
 
 
 } // end namespace csmp

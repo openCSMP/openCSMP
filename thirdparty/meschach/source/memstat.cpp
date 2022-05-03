@@ -30,7 +30,7 @@
 
 
 #include  "platform.h"
-#include  "matrix.h"
+#include  "meschach_matrix.h"
 #include  "meminfo.h"
 #ifdef COMPLEX   
 #include  "zmatrix.h"

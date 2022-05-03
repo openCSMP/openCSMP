@@ -18,6 +18,45 @@
 
 #include "TextFileIO.h"
 
+// For RunSKUA_model -------------------------
+#include "ConstantFactor.h"
+#include "ModelTime.h"
+
+// the FE algorithm
+#include "PDE_Integrator.h"
+
+// PDE operators building the FE algorithm
+#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "VelocityAndVolumeFlux.h"
+// -------------------------------------------
+
+
+// For RunSKUA_box_shaped_with_boundary ------
+// FE algorithm
+#include "SteadyStateDiffusor.h"
+#include "VelocityAndVolumeFlux.h"
+
+// FV algorithms
+#include "TwoPhaseImplicitNodeCenteredFVTransport.h"
+#include "TwoPhaseExplicitNodeCenteredFVTransport.h"
+#include "ExplicitStencilProcessor.h"
+
+// relative permeability calculations
+#include "BrooksCorey.h"
+
+// monitoring individual regions
+#include "RegionMonitor.h"
+// -------------------------------------------
+
+
+// output interfaces
+#include "InputDataManager.h"
+#include "MatlabInterface.h"
+#include "VTK_Interface.h"
+#include "VTU_Interface.h"
+
 #include <filesystem>
 
 using namespace std;
@@ -45,6 +84,18 @@ void SKUA_Example::Run()
       cout << endl << "Please enter model name, 'q' to exit or anything else to list available models: ";
       cin >> input;
       if( input == string( "q" ) || input == string( "Q" ) ) {
+          return;
+      }
+      if( input == string( "skua_model" ) || input == string( "SKUA_model" )  ) {
+          RunSKUA_model();
+          return;
+      }
+      if( input == string( "skua_box_shaped_with_boundary" ) || input == string( "SKUA_box_shaped_with_boundary" )  ) {
+          RunSKUA_box_shaped_with_boundary();
+          return;
+      }
+      if( input == string( "skua_split_boundary_layer" ) || input == string( "SKUA_split_boundary_layer" )  ) {
+          RunSKUA_split_boundary_layer();
           return;
       }
       if( !fs::exists( input ) ) {
@@ -123,6 +174,311 @@ void SKUA_Example::ListModels() {
 
     }
 }
+
+void RunTutorial1OnSetUpModel( Model<3U>& model ) {
+
+  double model_time = 0.0;
+  PropertyDatabase<3U>& p_ref(model.Database());  // reference to the property database
+
+  // Adapting Tutorial1
+  
+    // ----------------------------------------------------------------------------------------------
+    // 3.0 Now we use an Interrelation (ConstantFactor, inherited from base class Interrelation)
+    //     to compute the hydraulic conductivity K = k/mu (k = permeability, mu = viscosity) at each
+    //     finite element
+    // ----------------------------------------------------------------------------------------------
+    model.CreateProperty( "conductivity", "m2 Pa-1 s-1", SCALAR, ELEMENT );
+    ConstantFactor<3U,divides>  conductivity( p_ref, "conductivity", "permeability", 0.001 ); // viscosity 1 cp = 0.001 Pa s
+
+    // the Model applies the object "conductivity", which is instantiated from class ConstantFactor
+    // the result variable "conductivity" is computed automatically and its range is checked
+    model.Apply( conductivity );
+
+    // output the range of the result variable
+    printRangeOfVariable( model, "conductivity" );
+
+    // Create additional required variables
+    model.CreateProperty( "velocity", "m s-1", VECTOR, ELEMENT );
+    model.CreateProperty( "pore velocity", "m s-1", VECTOR, ELEMENT );
+    model.CreateProperty( "volume flux", "m3 s-1", SCALAR, ELEMENT );
+    model.CreateProperty( "nodal velocity", "m s-1", VECTOR, NODE );
+    model.CreateProperty( "nodal pore velocity", "m s-1", VECTOR, NODE );
+    model.CreateProperty( "nodal volume flux", "m3 s-1", SCALAR, NODE );
+
+    // ------------------------------------------------------------------------------------------
+    // 4.0 Setting up an FE algorithm to solve the diffusion equation c dp/dt = div(K grad p) + S
+    //     p = fluid pressure
+    //     c = compressibility (fluid and rock)
+    //     K = k/mu = hydraulic conductivity (from above)
+    //     S = volumetric source term
+    //
+    //     We solve the discretised equation full implict as
+    //
+    //     ([c]/dt + [K]){p}t+dt = {c}/dt{p}t + {S}t+dt
+    //
+    //     Note: [] denotes a matrix, {} a vector
+    //
+    //     This results in the linear system [A] * {x} = {b}
+    //     where [A] is the discretisation of div(K grad p) and c dp/dt
+    //     {b} contains the known pressure at time t and the unknown source at
+    //     time t+dt; {x} is the unknown pressure at time t+dt that we are solving for
+    //
+    // ------------------------------------------------------------------------------------------
+
+    // create the CSMP FE Algorithm with GaussJordan solver to invert linear system
+    GaussJordan_Solver linear_solver;
+    PDE_Integrator<3U,Region>  fluid_pressure(linear_solver);
+
+    // LHS stiffness matrix                              operand         basis function    test function
+    NumIntegral_dNT_op_dN_dV<3U,Element<3U> >  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+
+    // LHS mass matrix
+    NumIntegral_NT_lhsop_N_dV<3U,Element<3U> > mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
+
+    // RHS mass vector
+    NumIntegral_NT_op_N_dV<3U,Element<3U> >    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
+
+    // RHS mass vector for integrating source term
+    NumIntegral_NT_op_N_dV<3U,Element<3U> >    source_term( p_ref, "fluid volume source", "fluid pressure" );
+
+    // mass matrices for dp/dt term must be divided by time increment
+    mass_matrix_lhs.MultiplyWithTimeIncrement(true);
+    mass_matrix_rhs.MultiplyWithTimeIncrement(true);
+
+    // use lumped formulation for all mass matrices (i.e., diagonalise matrices)
+    mass_matrix_lhs.LumpedFormulation(true);
+    mass_matrix_rhs.LumpedFormulation(true);
+    source_term.LumpedFormulation(true);
+
+    // evaluate source term last
+    source_term.AddAccumulateLater();
+
+    // define a post-processing step that computes the velocity in each finite element by solving Darcy's law
+    VelocityAndVolumeFlux<3U,Element<3U> >     velo( model, "conductivity", "porosity", "fluid pressure", true ); // true = extrapolate element velocities to nodes
+
+    // now add each FE operation (i.e., PDE Operator) to the FE algorithm
+    fluid_pressure.Add( &stiffness_matrix );
+    fluid_pressure.Add( &source_term );
+    fluid_pressure.Add( &mass_matrix_lhs );
+    fluid_pressure.Add( &mass_matrix_rhs );
+    fluid_pressure.AddPostProcess( &velo );
+
+
+    // -----------------------
+    // 5.0 Time Loop Variables
+    // -----------------------
+    // write output in VTK format
+    VTK_Interface<3U>  vtk_output;
+
+    vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", 0 );
+
+    // define some constant variables
+    const double     hour(3600.0);
+    const double     max_time(48.0*hour); // run for 2 days
+    double           time_increment(2.0*hour); // timestep 2 hours
+    const long         save_frequency(4); // write results to file every 8 hours
+    size_t	           save_counter(1), time;
+
+    // set the time increment for the FE algorithm
+    fluid_pressure.TimeIncrement( 1.0/time_increment );
+
+
+    // -----------------------
+    // 6.0 Transient loop
+    // -----------------------
+    while ( model_time < max_time )
+      {
+         // pressure diffusion is computed as the Model applies the FE algorithm
+         model.Apply( fluid_pressure );
+
+         // show results
+         printRangeOfVariable( model, "fluid pressure" );
+         printRangeOfVariable( model, "velocity" );
+
+         // increment time
+         model_time += time_increment;
+
+         // output variables
+         if ( save_counter == save_frequency ) {
+              time = static_cast<long>(model_time/hour);
+              // to VTK files
+              vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", time );
+              save_counter = 0;
+          }
+         save_counter++;
+
+         // runtime info
+         cout <<"\n\nmain: RUNTIME (HRS): "<< model_time/hour << endl << endl;
+      }
+
+    // final output
+    // VTK
+    time = static_cast<long>(model_time/hour);
+    vtk_output.OutputDataToVTK( model, "fluid_pressure", "fluid pressure", time );
+
+} // RunTutorial1OnSetUpModel
+
+void ExportSKUAProperties( Model<3U>& model ) {
+  VTK_Interface<3U>  vtk_output;
+  vtk_output.OutputDataToVTK( model, "SKUA_porosity", "porosity", 0 );
+  vtk_output.OutputDataToVTK( model, "SKUA_permeability", "permeability", 0 );
+  vtk_output.OutputDataToVTK( model, "SKUA_compressibility", "compressibility", 0 );
+}
+
+void SKUA_Example::RunSKUA_model() {
+
+  // Read VSet binary file generated by SKUA
+  string model_name = "SKUA_model";
+  VSet<3U> vset;
+  double model_time = 0.0;
+  vset.InputFrom( model_name.c_str(), model_time );
+
+  // Read ModelTopology file generated by SKUA
+  ModelTopology model_topology(true);
+  model_topology.InputFromTextFile( model_name.c_str() );
+  
+  // Build Model using variables file generated by SKUA
+  const string variables_file = model_name + "-variables.txt";
+  Model<3U>  model( model_topology, vset, variables_file.c_str(), false );
+
+  // Checks...
+  printModelDimensions( model, true );
+  
+  // Adapting Tutorial1
+    // -----------------------------------------------------------------------
+    // 2.0 Now we apply boundary and initial conditions (this can also be done,
+    //     more conveniently, in a configuration file for more realistic runs)
+    // -----------------------------------------------------------------------
+
+  // material properties are assigned from SKUA already
+  //model.InputPropertyValue( "porosity",         makeScalar(PLAIN,0.1) ); // always as a fraction
+  //model.InputPropertyValue( "permeability",     makeScalar(PLAIN,1.0e-15) ); // always in m2
+  //model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
+  ExportSKUAProperties( model );
+
+  // assigning initial conditions
+  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+  model.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,1.0e+07) ); // always in Pascal
+  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.0) ); // no sources/sinks (units m3 m-2 s-1)
+
+  // assigning boundary conditions for fluid pressure at the LEFT and RIGHT model boundaries
+  // such that a pressure wave travels from left to right through the model
+  Boundary<3U>& left = model.Boundary( "x_0_boundary" );
+  left.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,3.0e+07) );
+  Boundary<3U>& right = model.Boundary( "x_75_Boundary" );
+  right.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,1.0e+07) );
+  
+  RunTutorial1OnSetUpModel( model );
+  
+  cout <<"\nSKUA_Example SKUA_model: That's it!\n";
+
+}
+
+void SKUA_Example::RunSKUA_box_shaped_with_boundary()
+{
+    // -------------------------------------
+    // 0.0 Set variables used throughout the simulation
+    // -------------------------------------
+    double model_time(0.); // time
+
+    // ---------------------------------------------------
+    // 1.0 Create Model directly from SKUA-exported files
+    // ---------------------------------------------------
+  // Read VSet binary file generated by SKUA
+  string model_name = "SKUA_box_shaped_with_boundary";
+  VSet<3U> vset;
+  vset.InputFrom( model_name.c_str(), model_time );
+
+  // Read ModelTopology file generated by SKUA
+  ModelTopology model_topology(true);
+  model_topology.InputFromTextFile( model_name.c_str() );
+  
+  // Build Model using variables file generated by SKUA
+  const string variables_file = model_name + "-variables.txt";
+  Model<3U>  model( model_topology, vset, variables_file.c_str(), false );
+
+  // Checks...
+  printModelDimensions( model, true );
+  ExportSKUAProperties( model );
+  
+  // Adapting Tutorial1, but using a configuration file.
+  // Adding required properties which are not read from SKUA exported file
+  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+
+    // --------------------------------------------
+    // 3.0 Configure the simulation from a file
+    // --------------------------------------------
+    InputDataManager<3U>  model_configuration;
+    model_configuration.Configure_ANSYS_ModelFromFile( model, model_name.c_str() );
+  //model.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,1.0e+07) ); // always in Pascal
+  //model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.0) ); // no sources/sinks (units m3 m-2 s-1)
+  //Boundary<3U>& left = model.Boundary( "LEFT" );
+  //left.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,3.0e+07) );
+  //Boundary<3U>& right = model.Boundary( "RIGHT" );
+  //right.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,1.0e+07) );
+
+    RunTutorial1OnSetUpModel( model );
+
+    // terminate
+    cerr << "\nRunSKUA_box_shaped_with_boundary: That's it..."<< endl;
+
+} // RunSKUA_box_shaped_with_boundary
+
+void SKUA_Example::RunSKUA_split_boundary_layer() {
+    // -------------------------------------
+    // 0.0 Set variables used throughout the simulation
+    // -------------------------------------
+    double model_time(0.); // time
+
+    // ---------------------------------------------------
+    // 1.0 Create Model directly from SKUA-exported files
+    // ---------------------------------------------------
+  // Read VSet binary file generated by SKUA
+  string model_name = "SKUA_split_boundary_layer";
+  VSet<3U> vset;
+  vset.InputFrom( model_name.c_str(), model_time );
+
+  // Read ModelTopology file generated by SKUA
+  ModelTopology model_topology(true);
+  model_topology.InputFromTextFile( model_name.c_str() );
+  
+  // Build Model using variables file generated by SKUA
+  const string variables_file = model_name + "-variables.txt";
+  Model<3U>  model( model_topology, vset, variables_file.c_str(), false );
+
+  // Checks...
+  printModelDimensions( model, true );
+  ExportSKUAProperties( model );
+  
+  // Adapting Tutorial1, but using a configuration file.
+  // Adding required properties which are not read from SKUA exported file
+  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+
+    // --------------------------------------------
+    // 3.0 Configure the simulation from a file
+    // --------------------------------------------
+    InputDataManager<3U>  model_configuration;
+    model_configuration.ConfigureFromFile(
+        model,
+        model_name.c_str(),
+        false, // Regions
+        true,  // Property values for whole model
+        false, // Property values for regions
+        false, // Box boundary conditions
+        false, // Regional property conditions
+        true   // Boundary conditions for arbitrary-shaped model
+    );
+
+    RunTutorial1OnSetUpModel( model );
+
+    // terminate
+    cerr << "\nRunSKUA_split_boundary_layer: That's it..."<< endl;
+
+} // RunSKUA_split_boundary_layer()
+
 
 } // namespace csmp
 

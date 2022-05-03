@@ -190,7 +190,7 @@ class Region : public ModelSubDomain<dim, Element>,
     /// accumulates region of elements whose barycenter lies within the defined bounding box
     size_t AccumulateRectangularRegion( MeshManager<dim>&, const Point<dim>& xyz_min, const Point<dim>& xyz_max );
 
-    /// merges supplied region with the current one
+   /// merges supplied region with the current one
     void  Add( const Region& );
 
     /// removes those elements in the region whose id matches one of the numbers contained in vector 'element_ids'
@@ -199,13 +199,6 @@ class Region : public ModelSubDomain<dim, Element>,
     /// removes those elements from the target region whose pointers matches the ones in the range supplied and subsequently rebuilds the region
     size_t RemoveRange( typename std::vector<csmp::Element<dim>*>::iterator begin,
                         typename std::vector<csmp::Element<dim>*>::iterator end );
-
-    /// creates surface / perimeter line of Elements between regions (the first is on the inside); TODO: @todo check whether this works
-    bool CreateBetween( MeshManager<dim>&,
-                        const FiniteElementManager&,
-                        const Region<dim>&,
-                        const Region<dim>&,
-                        int32_t material_id_for_new_region );
 
     // ----------------------------------------
     // geometry manipulations

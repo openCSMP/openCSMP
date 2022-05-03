@@ -14,13 +14,13 @@ namespace csmp {
  */
 class Boundary_Test : public Test {
 public:
-  Boundary_Test( bool verbose=false ) : verbose_(verbose) {}
-
   virtual void run();
 
 private:
-  void runLegacy();
-  void runCurrent();
+  const static bool verbose_ = false;
+
+  void runLegacy(); // Ansys models TODO: refactor to use CSMP native models
+  void runCurrent(); // Ansys models
 
   template<uint32_t dim>
   size_t InputElementAreaAsVolumeVariable( Model<dim>& model, Boundary<dim>& boundary, const char* variableName );
@@ -48,8 +48,6 @@ private:
 
   template<uint32_t dim>
   void NoSurfaceElementsAsNodeParents( const Region<dim>& region );
-  
-  bool verbose_;
 };
 
 } // csmp

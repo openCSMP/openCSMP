@@ -77,17 +77,17 @@ size_t CornerPointCell::GetNumFaces( size_t ) const
 
 // TYPE OF ELEMENT ( DIMENSION )
 
-bool CornerPointCell::IsVolumeElement() const
+bool CornerPointCell::IsVolume() const
 {
     return ( ( cell_category_ == CORNER_POINT_CELL_DIM_3_NON_OVERLAPPING ) || ( cell_category_ == CORNER_POINT_CELL_DIM_3_OVERLAPPING ) );
 }
 
-bool CornerPointCell::IsSurfaceElement() const
+bool CornerPointCell::IsSurface() const
 {
     return ( cell_category_ == CORNER_POINT_CELL_DIM_2 );
 }
 
-bool CornerPointCell::IsLineElement() const
+bool CornerPointCell::IsLine() const
 {
     return ( cell_category_ == CORNER_POINT_CELL_DIM_1 );
 }
@@ -199,7 +199,7 @@ void CornerPointCell::CheckFaceOrder()
     for( size_t fid = 0; fid<num_faces; ++fid )
         order.insert( this->GetOriginalFaceId(fid) );
     if( order.size() != num_faces )
-        csmp_error.notice( csmp::ERROR, "CornerPointCell::CheckFaceOrder()",
+        csmp_error.Note( csmp::ERROR, "CornerPointCell::CheckFaceOrder()",
                            "Face order is not unique!!!" );
 }
 
@@ -210,7 +210,7 @@ void CornerPointCell::CheckNodeOrder()
     for( size_t nid = 0; nid<this->GetNumNodes(); ++nid )
         order.insert( this->GetOriginalNodeId(nid) );
     if( order.size() != this->GetNumNodes() )
-        csmp_error.notice( csmp::ERROR, "CornerPointCell::CheckNodeOrder()",
+        csmp_error.Note( csmp::ERROR, "CornerPointCell::CheckNodeOrder()",
                            "Node order is not unique!!!" );
 }
 
@@ -965,7 +965,7 @@ void CornerPointCell::ProcessPolyWellElement( std::map<std::set<uint32_t>,GridNo
     const bool add_edge_centroids( true );
     const bool add_face_centroids( true );
     const bool add_cell_centroids( true );
-    const bool is_volumetric_element( IsVolumeElement() );
+    const bool is_volumetric_element( IsVolume() );
     processCellWithCentroids( add_edge_centroids, add_face_centroids, add_cell_centroids, is_volumetric_element, tetra_mesh,
                               this->grid_, additional_points, additional_edges,
                               this->elements_,this->faces_,this->extra_nodes_,
@@ -979,7 +979,7 @@ void CornerPointCell::ProcessPolyNonWellElement( std::map<std::set<uint32_t>,Gri
 {
     const bool tetra_mesh( true );
     const bool do_not_add_cell_centroids( false );
-    const bool is_volumetric_element( IsVolumeElement() );
+    const bool is_volumetric_element( IsVolume() );
     if( this->GetNumNodes() == 8U )
         processCellWithCentroids( add_edge_centroids, add_face_centroids, add_cell_centroids, is_volumetric_element, tetra_mesh,
                                   this->grid_, additional_points, additional_edges,
@@ -1308,7 +1308,7 @@ void CornerPointCell
         this->AssignFaceOrder( 5, point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.Note( csmp::FATAL_ERROR,
                            "CornerPointCell::InitializePoly7Element():", "Unpredictable case for 7 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1559,7 +1559,7 @@ void CornerPointCell
         this->AssignFaceOrder( 5, ( point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] != this->GetOriginalFaceId(4) ? point_tri_faces.at( this->GetPointCustomOrder(3) )[ 0 ] : point_tri_faces.at( this->GetPointCustomOrder(3) )[ 1 ] ) );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.Note( csmp::FATAL_ERROR,
                            "CornerPointCell::InitializePoly6Element():", "Unpredictable case for 6 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1788,7 +1788,7 @@ void CornerPointCell
             this->AssignFaceOrder( ++fid, *fit );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.Note( csmp::FATAL_ERROR,
                            "CornerPointCell::InitializePoly5Element():", "Unpredictable case for 5 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();
@@ -1932,7 +1932,7 @@ void CornerPointCell
         assert( current_fid == 6 );
     }
     else
-        csmp_error.notice( csmp::FATAL_ERROR,
+        csmp_error.Note( csmp::FATAL_ERROR,
                            "CornerPointCell::InitializePoly4Element():", "Unpredictable case for 4 point cell!!");
     CheckFaceOrder();
     CheckNodeOrder();

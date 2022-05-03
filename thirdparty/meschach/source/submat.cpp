@@ -28,7 +28,7 @@
 
 #include	<cstdio>
 #include <cstdlib>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 
 static	char	rcsid[] = "$Id: submat.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
