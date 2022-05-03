@@ -1932,6 +1932,41 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
 
 
 /**
+    Reorganises 'outside' node pointer vector so that the locations of the nodes pointed to match those nodes
+    in the 'inside' vector but in reverse order.
+*/
+template<uint32_t dim>
+bool matchNodesByPosition( const vector<Node<dim>*>& inside_nodes,
+                           vector<Node<dim>*>& outside_nodes )
+ {
+    assert( !inside_nodes.empty() );
+    assert( inside_nodes.size() ==  outside_nodes.size() );
+    
+    vector<Node<dim>*>  temp;
+    temp.reserve( inside_nodes.size() );
+    
+    for ( auto& iit : inside_nodes )
+      for ( auto& oit : outside_nodes ) {
+           // if less than fails twice the points are assumed to be equal
+           if ( !(oit->Coordinate() < iit->Coordinate()) &&
+                !(oit->Coordinate() > iit->Coordinate()) ) {
+                temp.push_back( oit );
+                break;
+             }
+        }
+    
+    reverse( temp.begin(), temp.end() );
+    outside_nodes = temp;
+    
+    return ( temp.size() == inside_nodes.size() );
+    
+ } // end matchNodesByPosition
+
+template bool matchNodesByPosition( const vector<Node<3U>*>&, vector<Node<3U>*>& );
+
+
+
+/**
     Creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
 */
 template<uint32_t dim>
@@ -1965,25 +2000,34 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingEl
     // unique set of node pairs needed to create the manifolds later on
     // (inside,outside)
     set<pair<Node<dim>*,Node<dim>*> > node_ptr_pairs;
-    
+
     for ( const auto& it : interface_nbor_elmts )
       {
          // 2.1 Collecting node pairs to form manifolds and outside nodes to construct interface
-         // --------------------------------------------------------------------------------------------
+         // ------------------------------------------------------------------------------------
          vector<uint32_t>   inside_fnids, outside_fnids;
          it.first.first->FE()->NodesOfFace( it.first.second, inside_fnids );
-         it.first.first->FE()->NodesOfFace( it.second.second, outside_fnids );
+         it.second.first->FE()->NodesOfFace( it.second.second, outside_fnids );
          
          const auto n_face_nodes{ inside_fnids.size() };
+         vector<Node<dim>*> inside_nodes, outside_nodes;
+         inside_nodes.reserve( n_face_nodes );
+         outside_nodes.reserve( n_face_nodes );
+         
+         for ( const auto& i : inside_fnids )
+           inside_nodes.push_back( it.first.first->N(i) );
+         for ( const auto& i : outside_fnids )
+           outside_nodes.push_back( it.second.first->N(i) );
+         
+         // organising the interface nodes in the outside vector such that they match the inside ones by position
+         const bool all_nodes_matched = matchNodesByPosition( inside_nodes, outside_nodes );
+         assert( all_nodes_matched );
+         
+         // and storing them as pairs that will become manifolds
          for ( auto i{0U}; i<n_face_nodes; i++ )
-               node_ptr_pairs.insert( make_pair( it.first.first->N(inside_fnids[i]),
-                                                 it.second.first->N(outside_fnids[n_face_nodes-i-1U]) ) );
+           node_ptr_pairs.insert( make_pair( inside_nodes[i],
+                                             outside_nodes[n_face_nodes-i-1U] ) );
             
-         vector<Node<dim>*>  outside_nodes( n_face_nodes, nullptr );
-         uint32_t nd_count{0U};
-         for ( auto nit : outside_fnids )
-           outside_nodes[nd_count++] = it.second.first->N(nit);
-
          // 2.2 constructing InterFace objects
          // ----------------------------------
          //     - higher-dimensional nbors are already known

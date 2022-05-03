@@ -8,6 +8,7 @@ namespace csmp {
 
 class Index;
 template<uint32_t> class Node;
+template<uint32_t> class SplitBoundary;
 
 /**
     Tests high level utility function that matches node-matched elements
@@ -28,6 +29,8 @@ class ANSYS_SplitBoundaryMatch_Test : public Test {
                                                std::vector<Node<3U>*>::const_iterator begin,
                                                std::vector<Node<3U>*>::const_iterator end,
                                                INTERFACE_SIDE );
+                                               
+    void TestThatManifoldNodesAreColocated( const SplitBoundary<3U>& );
 };
 
 } // csmp

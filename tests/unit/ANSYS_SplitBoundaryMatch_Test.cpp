@@ -204,11 +204,12 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
             // output the split boundary here
             SplitBoundary<3U>& splitBoundary1 = (*model.SplitBoundariesBegin()).second;
             splitBoundary1.Out(); // too many nodes in manifolds!
+            TestThatManifoldNodesAreColocated( splitBoundary1 );
             const csmp::Index var_key = model.Database().StorageKey("nodal variable");
             PrintSplitBoundaryNodeVariableVector( var_key, splitBoundary1.NodesBegin(), splitBoundary1.NodesEnd(), INSIDE );
             set<string> var_names{"nodal variable"};
             // TODO: this method is broken
-            vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
+            // vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
          }
      }
    else {
@@ -280,6 +281,40 @@ void ANSYS_SplitBoundaryMatch_Test::PrintSplitBoundaryNodeVariableVector( const 
     cout << endl << endl;
      
  } // end PrintSplitBoundaryNodeVariableVector
+
+
+
+
+void ANSYS_SplitBoundaryMatch_Test::TestThatManifoldNodesAreColocated( const SplitBoundary<3U>& split_boundary )
+ {
+    // getting the coordinate range for scaling
+    Point<3U> minCoord{1e9,1e9,1e9}, maxCoord{-1e9,-1e9,-1e9};
+    for ( size_t i{0U}; i<split_boundary.Nodes(); i++ )
+      {
+         Point<3U> ref_point = split_boundary.N(i)->Coordinate();
+         minCoord = min( minCoord, ref_point );
+         maxCoord = max( maxCoord, ref_point );
+      }
+    const double scale_factor = minCoord.DistanceTo( maxCoord );
+
+    for ( size_t i{0U}; i<split_boundary.Nodes(); i++ )
+      {
+         // adding all manifold points and then dividing by their number before comparing to inside node location
+         Point<3U> ref_point = split_boundary.N(i)->Coordinate();
+         minCoord = min( minCoord, ref_point );
+         Point<3U> avg_point{0.,0.,0.};
+         for ( auto j{0U}; j<split_boundary.ManifoldNode(i)->Branches(); j++ )
+           avg_point += split_boundary.ManifoldNode(i)->N(j)->Coordinate();
+         // averaging
+         avg_point /= static_cast<double>(split_boundary.ManifoldNode(i)->Branches());
+         // testing
+         if ( ref_point.DistanceTo(avg_point) > numeric_limits<double>::epsilon()*scale_factor )
+           cout <<"\nnode "<< split_boundary.N(i)->Idx() <<": offset by: "<< ref_point.DistanceTo(avg_point) << endl;
+         _test( ref_point.DistanceTo(avg_point) <= numeric_limits<double>::epsilon()*scale_factor );
+      }
+      
+ } // end TestThatManifoldNodesAreColocated
+
 
 
 } // csmp
