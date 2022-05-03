@@ -1934,6 +1934,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
 /**
     Reorganises 'outside' node pointer vector so that the locations of the nodes pointed to match those nodes
     in the 'inside' vector but in reverse order.
+    
+    TODO: method fails in Dyke_Split testcase, perhaps because of a tolerance issue
 */
 template<uint32_t dim>
 bool matchNodesByPosition( const vector<Node<dim>*>& inside_nodes,
@@ -2021,21 +2023,34 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingEl
          
          // organising the interface nodes in the outside vector such that they match the inside ones by position
          const bool all_nodes_matched = matchNodesByPosition( inside_nodes, outside_nodes );
-         assert( all_nodes_matched );
-         
-         // and storing them as pairs that will become manifolds
-         for ( auto i{0U}; i<n_face_nodes; i++ )
-           node_ptr_pairs.insert( make_pair( inside_nodes[i],
-                                             outside_nodes[n_face_nodes-i-1U] ) );
-            
-         // 2.2 constructing InterFace objects
-         // ----------------------------------
-         //     - higher-dimensional nbors are already known
-         //     - faces of higher dimensional neighbors are also known
-         //     - nodes on inside are deduced by constructor, outside nodes are supplied as 'outside_nodes'
-         interface_ptrs.push_back( AddInterFace( it.first.first, it.first.second,
-                                                 it.second.first, it.second.second,
-                                                 lvars, ivars, outside_nodes ) );
+         if ( all_nodes_matched == false ) {
+              cerr <<"\n\n"<<"interface between elements "<< it.first.first->Idx() <<" and "<< it.second.first->Idx();
+              cerr <<" with node coordinates (inside vs. outside):\n";
+              for ( auto i{0U}; i<n_face_nodes; i++ ) {
+                   cerr <<"\t"<< i <<": "<< inside_nodes[i]->Coordinate() <<" vs. ";
+                   if ( (n_face_nodes-i-1U) < outside_nodes.size() ) cerr << outside_nodes[n_face_nodes-i-1U]->Coordinate();
+                   else cerr <<"no matching node found.";
+                   cerr << endl;
+                }
+              cerr << endl;
+              csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements",
+                                        "nodes at interface between region could not be matched.");
+           }
+         else {
+             // and storing them as pairs that will become manifolds
+             for ( auto i{0U}; i<n_face_nodes; i++ )
+               node_ptr_pairs.insert( make_pair( inside_nodes[i],
+                                                 outside_nodes[n_face_nodes-i-1U] ) );
+                
+             // 2.2 constructing InterFace objects
+             // ----------------------------------
+             //     - higher-dimensional nbors are already known
+             //     - faces of higher dimensional neighbors are also known
+             //     - nodes on inside are deduced by constructor, outside nodes are supplied as 'outside_nodes'
+             interface_ptrs.push_back( AddInterFace( it.first.first, it.first.second,
+                                                     it.second.first, it.second.second,
+                                                     lvars, ivars, outside_nodes ) );
+          }
       }
 
     // 3. Creating the node manifolds
