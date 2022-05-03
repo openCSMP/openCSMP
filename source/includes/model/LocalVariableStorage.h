@@ -64,20 +64,20 @@ class LocalVariableStorage {
     LocalVariableStorage& operator=( LocalVariableStorage&& ) = default;
 
     // size ops
-    void            ResizePropertyStorage   ( const LocalVariables& lv );
-    void            ResizePropertyStorage   ( const LocalVariables& lv, const IntegrationPointVariables& iv );
-    void            ResizePropertyStorage   ( uint32_t dataComponents, uint32_t flagComponents );
-    void            AddProperty             ( const csmp::Index& );
-    void            DeleteProperty          ( const csmp::Index& );
+    void            ResizePropertyStorage( const LocalVariables& lv );
+    void            ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& iv );
+    void            ResizePropertyStorage( uint32_t dataComponents, uint32_t flagComponents );
+    void            AddProperty( const csmp::Index& );
+    void            DeleteProperty( const csmp::Index& );
 
     // local variables access
     bool            IsWithinRange( const csmp::Index&, double, double ) const;
-    double          Read    ( const csmp::Index& )                          const;
-    void            Read    ( const csmp::Index&, ScalarVariable& )         const;
-    void            Read    ( const csmp::Index&, VectorVariable<dim>& )    const;
-    void            Read    ( const csmp::Index&, TensorVariable<dim>& )    const;
-    void            Read    ( const csmp::Index&, ArrayVariable& )          const;
-    void            Read    ( const csmp::Index&, FlaggedArrayVariable& )   const;
+    double          Read    ( const csmp::Index& ) const;
+    void            Read    ( const csmp::Index&, ScalarVariable& ) const;
+    void            Read    ( const csmp::Index&, VectorVariable<dim>& ) const;
+    void            Read    ( const csmp::Index&, TensorVariable<dim>& ) const;
+    void            Read    ( const csmp::Index&, ArrayVariable& ) const;
+    void            Read    ( const csmp::Index&, FlaggedArrayVariable& ) const;
     void            Store   ( const csmp::Index&, const ScalarVariable& );
     void            Store   ( const csmp::Index&, const VectorVariable<dim>& );
     void            Store   ( const csmp::Index&, const TensorVariable<dim>& );
@@ -90,12 +90,12 @@ class LocalVariableStorage {
 
     // integration point variables (will fail at COMPILE TIME when used for storees without integration points)
     bool            IsWithinRange( uint32_t ip, const csmp::Index&, double, double )  const;
-    double          Read    ( uint32_t ip, const csmp::Index& )                           const;
-    void            Read    ( uint32_t ip, const csmp::Index&, ScalarVariable& )          const;
-    void            Read    ( uint32_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
-    void            Read    ( uint32_t ip, const csmp::Index&, TensorVariable<dim>& )     const;
-    void            Read    ( uint32_t ip, const csmp::Index&, ArrayVariable& )           const;
-    void            Read    ( uint32_t ip, const csmp::Index&, FlaggedArrayVariable& )    const;
+    double          Read    ( uint32_t ip, const csmp::Index& ) const;
+    void            Read    ( uint32_t ip, const csmp::Index&, ScalarVariable& ) const;
+    void            Read    ( uint32_t ip, const csmp::Index&, VectorVariable<dim>& ) const;
+    void            Read    ( uint32_t ip, const csmp::Index&, TensorVariable<dim>& ) const;
+    void            Read    ( uint32_t ip, const csmp::Index&, ArrayVariable& ) const;
+    void            Read    ( uint32_t ip, const csmp::Index&, FlaggedArrayVariable& ) const;
     void            Store   ( uint32_t ip, const csmp::Index&, const ScalarVariable& );
     void            Store   ( uint32_t ip, const csmp::Index&, const VectorVariable<dim>& );
     void            Store   ( uint32_t ip, const csmp::Index&, const TensorVariable<dim>& );
@@ -107,20 +107,20 @@ class LocalVariableStorage {
     void            Status  ( uint32_t ip, const csmp::Index&, uint32_t, VARIABLE_FLAG );  // vectors & tensors  & flagged arrays
 
     // finite volume integration point variables (will fail at COMPILE TIME when used for storees without fv integration points)
-    bool            IsWithinRange( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, double, double )  const;
-    double          Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& )                           const;
-    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, ScalarVariable& )          const;
-    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, VectorVariable<dim>& )     const;
-    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, TensorVariable<dim>& )     const;
-    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, ArrayVariable& )           const;
-    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, FlaggedArrayVariable& )    const;
-    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const ScalarVariable&      );
+    bool            IsWithinRange( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, double, double ) const;
+    double          Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& ) const;
+    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, ScalarVariable& ) const;
+    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, VectorVariable<dim>& ) const;
+    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, TensorVariable<dim>& ) const;
+    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, ArrayVariable& ) const;
+    void            Read    ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, FlaggedArrayVariable& ) const;
+    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const ScalarVariable& );
     void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const VectorVariable<dim>& );
     void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const TensorVariable<dim>& );
-    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const ArrayVariable&       );
-    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const FlaggedArrayVariable&   );
-    VARIABLE_FLAG   Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& ) const;                   // scalars & arrays
-    VARIABLE_FLAG   Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, uint32_t ) const;           // vectors & tensors  & flagged arrays
+    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const ArrayVariable& );
+    void            Store   ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const FlaggedArrayVariable& );
+    VARIABLE_FLAG   Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& ) const;  // scalars & arrays
+    VARIABLE_FLAG   Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, uint32_t ) const;  // vectors & tensors  & flagged arrays
     void            Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, VARIABLE_FLAG );          // scalars & arrays
     void            Status  ( uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, uint32_t, VARIABLE_FLAG );  // vectors & tensors  & flagged arrays
 
@@ -155,7 +155,7 @@ class LocalVariableStorage {
     // TODO: IsWithinRange() methods have not been adapted to INDEX yet
 
     // integration point variables (will fail at COMPILE TIME when used for storees without integration points)
-    template<PLACEMENT place> double        Read  ( uint32_t ip, const csmp::INDEX<SCALAR,place>& ) const;
+    template<PLACEMENT place> double          Read  ( uint32_t ip, const csmp::INDEX<SCALAR,place>& ) const;
     template<PLACEMENT place> void            Read  ( uint32_t ip, const csmp::INDEX<SCALAR,place>&, ScalarVariable& ) const;
     template<PLACEMENT place> void            Read  ( uint32_t ip, const csmp::INDEX<VECTOR,place>&, VectorVariable<dim>& ) const;
     template<PLACEMENT place> void            Read  ( uint32_t ip, const csmp::INDEX<TENSOR,place>&, TensorVariable<dim>& ) const;
