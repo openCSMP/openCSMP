@@ -398,6 +398,11 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Reset( bool delete_math_operators 
          setup_established_ = false;
       }
 
+    // cleaning up matrix and vectors
+    if ( rh_.size() > 0U ) rh_.clear();
+    if ( x_.size() > 0U )  x_.clear();
+    if ( G_.Rows()  > 0U ) G_.Erase();
+
     // restoring defaults
     time_increment_ = 0.;
     retain_matrix_  = false;
@@ -550,7 +555,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
        !basic_operands_.empty() && !test_operands_.empty() )
      {
         if ( rh_.size() > 0U ) fill( rh_.begin(), rh_.end(), 0. );
-        if ( G_.Rows()  > 0U && !retain_matrix_ ) {
+        if ( G_.Rows()  > 0U && retain_matrix_ == false ) {
             G_.Erase();
             G_.Resize( rh_.size() );
           }
@@ -576,15 +581,14 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
 
        // lefthand MathOperators first
        // ----------------------------
-       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+       for ( auto& lhs_it : lhs_operators_ )
          {
             // making list of unique basic operands
-            Index pkey = (*lhs_it).second->BasicOperandKey();
-            if (verbose_) cout <<"\nFor: '"<< (*lhs_it).first <<"' PDE operator is added to lefthand term list."<< endl;
+            Index pkey = lhs_it.second->BasicOperandKey();
+            if (verbose_) cout <<"\nFor: '"<< lhs_it.first <<"' PDE operator is added to lefthand term list."<< endl;
             // checking whether the intended variables exist in the database
             //                                   Index,   calculation offset
-            if ( pkey != unspecified ) basic_operands_[(*lhs_it).second->BasicOperand()] = 0U;
+            if ( pkey != unspecified ) basic_operands_[ lhs_it.second->BasicOperand() ] = 0U;
             else
                 throw csmp::Exception( WARNING,
                                        "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
@@ -595,26 +599,24 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
 
        // righthand MathOperators
        // -----------------------
-       for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-             rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
+       for ( auto& rhs_it : rhs_operators_ )
          {
             // making a list of unique test operands
-            Index pkey = (*rhs_it).second->TestOperandKey();
-            if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE operator is added to righthand term list."<< endl;
-            if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+            Index pkey = rhs_it.second->TestOperandKey();
+            if (verbose_) cout <<"\nFor: '"<< rhs_it.first <<"' PDE operator is added to righthand term list."<< endl;
+            if ( pkey != unspecified ) test_operands_[ rhs_it.second->TestOperand() ] = 0;
             else
               throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
                                              "righthand test operand not found.");
          }
        // including pde operators on the model boundary
        if ( !rhs_boundary_operators_.empty() ) {
-           for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-                 rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+           for ( auto& rhs_it : rhs_boundary_operators_ )
              {
                 // making a list of unique test operands
-                Index pkey = (*rhs_it).second->TestOperandKey();
-                if (verbose_) cout <<"\nFor: '"<< (*rhs_it).first <<"' PDE boundary operator is added to righthand term list."<< endl;
-                if ( pkey != unspecified ) test_operands_[(*rhs_it).second->TestOperand()] = 0;
+                Index pkey = rhs_it.second->TestOperandKey();
+                if (verbose_) cout <<"\nFor: '"<< rhs_it.first <<"' PDE boundary operator is added to righthand term list."<< endl;
+                if ( pkey != unspecified ) test_operands_[ rhs_it.second->TestOperand() ] = 0;
                 else
                   throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
                                                  "righthand test operand not found.");
@@ -623,16 +625,15 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
 
        // Testing: for each righthand operand there must be a basic or test operand on the LHS
        // ------------------------------------------------------------------------------------
-       for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-             lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
-         if ( basic_operands_.find( ((*lhs_it).second->BasicOperand()) ) == basic_operands_.end() &&
-              test_operands_.find( ((*lhs_it).second->TestOperand()) ) == test_operands_.end() )
+       for ( auto& lhs_it : lhs_operators_ )
+         if ( basic_operands_.find( lhs_it.second->BasicOperand() ) == basic_operands_.end() &&
+              test_operands_.find( lhs_it.second->TestOperand() ) == test_operands_.end() )
            {
               cout <<"\nPDE_Integrator<"<<  dim <<">::EstablishMatrixSetup: ";
               cout <<"There is no lefthand operand corresponding to righthand operand. ";
               cout <<"\nThe system of equations is undefined. ";
               cout <<"\nCreate corresponding LHS basic or test Operand for: ";
-              cout << (*lhs_it).first << endl;
+              cout << lhs_it.first << endl;
               throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
                                              "lefthand basic or test operand missing");
            }
@@ -646,53 +647,52 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    // ----------------------------------------------------------------
    size_t       offset(0U);
    const uint32_t dim2(dim * dim);
-   for ( operandsIterator
-         iter=test_operands_.begin(); iter!=test_operands_.end(); iter++ )
+   for ( auto& iter : test_operands_ )
      {
         // calculating the degrees of freedom per node
-        if      ( (*iter).first.key.type == SCALAR )
+        if      ( iter.first.key.type == SCALAR )
           dof_per_node_ += 1U;
-        else if ( (*iter).first.key.type == VECTOR )
+        else if ( iter.first.key.type == VECTOR )
           dof_per_node_ += dim;
-        else if ( (*iter).first.key.type == TENSOR )
+        else if ( iter.first.key.type == TENSOR )
           dof_per_node_ += dim2;
-        else if ( (*iter).first.key.type == ARRAY )
-          dof_per_node_ += (*iter).first.key.dataDepth;
-        else if ( (*iter).first.key.type == FLAGGEDARRAY )
-          dof_per_node_ += (*iter).first.key.dataDepth;
+        else if ( iter.first.key.type == ARRAY )
+          dof_per_node_ += iter.first.key.dataDepth;
+        else if ( iter.first.key.type == FLAGGEDARRAY )
+          dof_per_node_ += iter.first.key.dataDepth;
 
         // the matrix/righthand offsets are stored with the operands
         // offset starts out as zero.
-        switch ( (*iter).first.key.place )
+        switch ( iter.first.key.place )
          {
             case NODE:
-              (*iter).second = offset;
-              switch ( (*iter).first.key.type ) {
+              iter.second = offset;
+              switch ( iter.first.key.type ) {
                    case SCALAR: offset += target_.nodes;
                      break;
                    case VECTOR: offset += target_.nodes * dim;
                      break;
                    case TENSOR: offset += target_.nodes * dim2;
                      break;
-                   case ARRAY:  offset += target_.nodes * (*iter).first.key.dataDepth;
+                   case ARRAY:  offset += target_.nodes * iter.first.key.dataDepth;
                      break;
-                   case FLAGGEDARRAY:  offset += target_.nodes * (*iter).first.key.dataDepth;
+                   case FLAGGEDARRAY:  offset += target_.nodes * iter.first.key.dataDepth;
                 }
               break;
             case ELEMENT:
               cout <<"\nPDE_Integrator<"<< dim <<">::EstablishMatrixSetup: ";
               cout <<" Test operand is an Element variable. Is this intended ?"<< endl;
-              (*iter).second = offset;
-              switch ( (*iter).first.key.type ) {
+              iter.second = offset;
+              switch ( iter.first.key.type ) {
                    case SCALAR: offset += target_.elements;
                      break;
                    case VECTOR: offset += target_.elements * dim;
                      break;
                    case TENSOR: offset += target_.elements * dim2;
                      break;
-                   case ARRAY:  offset += target_.elements * (*iter).first.key.dataDepth;
+                   case ARRAY:  offset += target_.elements * iter.first.key.dataDepth;
                       break;
-                   case FLAGGEDARRAY:  offset += target_.elements * (*iter).first.key.dataDepth;
+                   case FLAGGEDARRAY:  offset += target_.elements * iter.first.key.dataDepth;
                 }
                break;
             default:
@@ -708,57 +708,55 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    operandsIterator  iter;
 
    // LEFT-HANDSIDE
-   for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-         lhs_it=lhs_operators_.begin(); lhs_it!=lhs_operators_.end(); lhs_it++ )
+   for ( auto& lhs_it : lhs_operators_ )
      {
         // since basic and test operand offsets must be the same, but only the test operands
         // have been assigned an offset basic operand offsets are derived from test operand offsets
-        if ( (iter=test_operands_.find((*lhs_it).second->BasicOperand())) != test_operands_.end() ) {
-             (*lhs_it).second->BasicOperandOffset( (*iter).second );
-             if ( (iter=basic_operands_.find((*lhs_it).second->BasicOperand())) != basic_operands_.end() )
-               (*iter).second = (*lhs_it).second->BasicOperandOffset();
+        if ( (iter=test_operands_.find( lhs_it.second->BasicOperand())) != test_operands_.end() ) {
+             lhs_it.second->BasicOperandOffset( (*iter).second );
+             if ( (iter=basic_operands_.find( lhs_it.second->BasicOperand())) != basic_operands_.end() )
+               (*iter).second = lhs_it.second->BasicOperandOffset();
           }
         else
           throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
                                        "LHS basic operand matrix placement i unresolved");
 
-        if ( (iter=test_operands_.find((*lhs_it).second->TestOperand())) != test_operands_.end() )
-          (*lhs_it).second->TestOperandOffset( (*iter).second );
+        if ( (iter=test_operands_.find(lhs_it.second->TestOperand())) != test_operands_.end() )
+          lhs_it.second->TestOperandOffset( (*iter).second );
         else
           throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
    
    // RIGHT-HAND SIDE
-   for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-         rhs_it=rhs_operators_.begin(); rhs_it!=rhs_operators_.end(); rhs_it++ )
+   for ( auto& rhs_it : rhs_operators_ )
      {
-        if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
-          (*rhs_it).second->TestOperandOffset( (*iter).second );
+        if ( (iter=test_operands_.find(rhs_it.second->TestOperand())) != test_operands_.end() )
+          rhs_it.second->TestOperandOffset( (*iter).second );
         else
           throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                          (*rhs_it).first.c_str(), "RHS operand vector^T placement i unresolved...");
+                          rhs_it.first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
    // RIGHT-HAND SIDE: BOUNDARY INTEGRALS
-   for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-         rhs_it=rhs_boundary_operators_.begin(); rhs_it!=rhs_boundary_operators_.end(); rhs_it++ )
+   for ( auto& rhs_it : rhs_boundary_operators_ )
      {
-        if ( (iter=test_operands_.find((*rhs_it).second->TestOperand())) != test_operands_.end() )
-          (*rhs_it).second->TestOperandOffset( (*iter).second );
+        if ( (iter=test_operands_.find(rhs_it.second->TestOperand())) != test_operands_.end() )
+          rhs_it.second->TestOperandOffset( (*iter).second );
         else
           throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
-                                 (*rhs_it).first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
+                                 rhs_it.first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
 
    // ----------------------------------------------------------------------
    // 5. Resizing 'G' and righthand vector 'rh' which is initialised to zero
    // ----------------------------------------------------------------------
+   G_.Erase();
    G_.Resize( offset );
    rh_.resize( offset );
-   if ( trim_vectors_ ) rh_.shrink_to_fit();
    fill( rh_.begin(), rh_.end(), 0. );
+   if ( trim_vectors_ ) rh_.shrink_to_fit();
    x_.resize( offset );
    if ( trim_vectors_ ) x_.shrink_to_fit();
    setup_established_ = true;
@@ -1750,6 +1748,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
     const uint32_t dim2(dim * dim);
     DOF_indexes_.resize(this->rh_.size());
     fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
+    DOF_indexes_.shrink_to_fit();
 
     if (!this->setup_established_)
       throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
@@ -1763,116 +1762,116 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
     size_t DOF{0U};
 
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
-          it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
-        {
-          auto        niter(gref.NodesBegin());
-          csmp::Index prop_key = (*it).first.key;
-          size_t      offset = (*it).second;
+          it = this->test_operands_.begin(); it != this->test_operands_.end(); it++ )
+      {
+        auto        niter(gref.NodesBegin());
+        csmp::Index prop_key = (*it).first.key;
+        size_t      offset = (*it).second;
 
-          if (prop_key.place != NODE)
-            throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
-              "So far no conditions are assigned to elements, faces, segments");
+        if (prop_key.place != NODE)
+          throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+            "So far no conditions are assigned to elements, faces, segments");
 
-          size_t  position(0);
-          switch (prop_key.type) {
-              case SCALAR:
-                while (niter != gref.NodesEnd()) {
-                    position = (*niter)->Idx() + offset;
-                    if ((*niter)->Status(prop_key) == DIRICH) DOF_indexes_[position] = NULL_IDX;
-                    else {
+        size_t  position(0);
+        switch (prop_key.type) {
+            case SCALAR:
+              while (niter != gref.NodesEnd()) {
+                  position = (*niter)->Idx() + offset;
+                  if ((*niter)->Status(prop_key) == DIRICH) DOF_indexes_[position] = NULL_IDX;
+                  else {
+                      DOF_indexes_[position] = DOF;
+                      DOF = DOF + 1U;
+                    }
+                  niter++;
+                }
+              break;
+            case VECTOR:
+              while ( niter != gref.NodesEnd()) {
+                     for ( auto i{0U}; i < dim; ++i ) {
+                          position = (*niter)->Idx() * dim + i + offset;
+                          if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
+                          else {
+                               DOF_indexes_[position] = DOF;
+                               DOF = DOF + 1U;
+                            }
+                       }
+                    niter++;
+                 }
+              break;
+            case TENSOR:
+              // tensors have flags only for their diagonal elements
+              while ( niter != gref.NodesEnd() )
+                {
+                   for (auto i{0U}; i < dim; i++) {
+                      if ( (*niter)->Status(prop_key,i) == DIRICH )
+                        for (size_t j{0U}; j < dim; j++) {
+                             position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                             DOF_indexes_[position] = NULL_IDX;
+                          }
+                      else for ( auto j{0U}; j < dim; j++) {
+                                position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                                DOF_indexes_[position] = DOF;
+                                DOF = DOF + 1U;
+                             }
+
+                     }
+                  niter++;
+                }
+              break;
+            case ARRAY:
+              // array variables only have a single flag
+              while (niter != gref.NodesEnd()) {
+                  if ( (*niter)->Status(prop_key) == DIRICH )
+                    {
+                      for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                        position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                        DOF_indexes_[position] = NULL_IDX;
+                      }
+                    }
+                  else {
+                      for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                        position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                         DOF_indexes_[position] = DOF;
                         DOF = DOF + 1U;
                       }
-                    niter++;
-                  }
-                break;
-              case VECTOR:
-                while ( niter != gref.NodesEnd()) {
-                       for ( auto i{0U}; i < dim; ++i ) {
-                            position = (*niter)->Idx() * dim + i + offset;
-                            if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
-                            else {
-                                 DOF_indexes_[position] = DOF;
-                                 DOF = DOF + 1U;
-                              }
-                         }
-                      niter++;
-                   }
-                break;
-              case TENSOR:
-                // tensors have flags only for their diagonal elements
-                while ( niter != gref.NodesEnd() )
-                  {
-                     for (auto i{0U}; i < dim; i++) {
-                        if ( (*niter)->Status(prop_key,i) == DIRICH )
-                          for (size_t j{0U}; j < dim; j++) {
-                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                               DOF_indexes_[position] = NULL_IDX;
-                            }
-                        else for ( auto j{0U}; j < dim; j++) {
-                                  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                                  DOF_indexes_[position] = DOF;
-                                  DOF = DOF + 1U;
-                               }
-
-                       }
-                    niter++;
-                  }
-                break;
-              case ARRAY:
-                // array variables only have a single flag
-                while (niter != gref.NodesEnd()) {
-                    if ( (*niter)->Status(prop_key) == DIRICH )
-                      {
-                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
-                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                          DOF_indexes_[position] = NULL_IDX;
+                    }// end if
+                  niter++;
+                } // end while
+              break;
+            case FLAGGEDARRAY:
+              while ( niter != gref.NodesEnd() )
+                {
+                   for (auto i{0U}; i < prop_key.dataDepth; i++ )
+                      if ( (*niter)->Status(prop_key,i) == DIRICH ) {
+                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                           DOF_indexes_[position] = NULL_IDX;
                         }
-                      }
-                    else {
-                        for (auto i{0U}; i < prop_key.dataDepth; i++) {
-                          position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                          DOF_indexes_[position] = DOF;
-                          DOF = DOF + 1U;
+                      else {
+                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                           DOF_indexes_[position] = DOF;
+                           DOF = DOF + 1U;
                         }
-                      }// end if
-                    niter++;
-                  } // end while
-                break;
-              case FLAGGEDARRAY:
-                while ( niter != gref.NodesEnd() )
-                  {
-                     for (auto i{0U}; i < prop_key.dataDepth; i++ )
-                        if ( (*niter)->Status(prop_key,i) == DIRICH ) {
-                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                             DOF_indexes_[position] = NULL_IDX;
-                          }
-                        else {
-                             position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                             DOF_indexes_[position] = DOF;
-                             DOF = DOF + 1U;
-                          }
-                     niter++;
-                  }
-             break;
-              default:
-                throw csmp::Exception(FATAL_ERROR,
-                  "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
-                  "Variable type not recognised by this method");
-              }
+                   niter++;
+                }
+           break;
+            default:
+              throw csmp::Exception(FATAL_ERROR,
+                "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+                "Variable type not recognised by this method");
+            }
           
       } // end for (all Dirichlet flagged variables)
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    if ( trim_vectors_ ) vector<double>(this->rh_).swap(this->rh_);
+    if ( trim_vectors_ ) rh_.shrink_to_fit();
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
-    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) x_.shrink_to_fit();
 
     pivotVector_.resize(DOF);
     fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    if ( trim_vectors_ ) vector<double>(this->x_).swap(this->x_);
+    if ( trim_vectors_ ) pivotVector_.shrink_to_fit();
 
  } // end ReduceSystemSizeEliminatingEssentialConditions
 
@@ -1951,49 +1950,50 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Out() const
  {
-     cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::Out:\n";
+     cout <<"\n\n"<<"PDE_Integrator<"<< dim <<",COMPUTATION_DOMAIN>::Out:\n";
    
      if ( basic_operands_.empty() || test_operands_.empty() ) {
-          cout <<"\nintegrator has not been initialized yet.\n";
+          cout <<"\n\t"<<"integrator has not been initialized yet.\n";
           return;
        }
    
-     cout <<"\nsolution variables, their type and their offsets in the righthand vector:\n";
+     cout <<"\n\t"<<"solution variables, their type and their offsets in the righthand vector:";
      //  std::map<Parameter,size_t>  test_operands_;
-     for ( auto it=test_operands_.begin(); it!=test_operands_.end(); it++ )
-       cout <<"\n"<< (*it).first.name <<" ("<< parseType((*it).first.key.type) <<"), offset: "<< (*it).second;
+     for ( const auto& it : test_operands_ )
+       cout <<"\n\t\t"<< it.first.name <<" ("<< parseType(it.first.key.type) <<"), offset: "<< it.second;
 
-     cout <<"\n\nlefthand element integrals that will be accumulated (material, basic and test operands):\n";
-     for ( auto it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
+     cout <<"\n\n\t"<<"lefthand element integrals that will be accumulated (material, basic and test operands):";
+     for ( const auto& it : lhs_operators_ ) {
+          cout <<"\n\t\t"<< it.first <<": ";
           //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     cout <<"\n\nrighthand element integrals that will be accumulated:\n";
-     for ( auto it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
+     cout <<"\n\n\t"<<"righthand element integrals that will be accumulated:";
+     for ( const auto& it : rhs_operators_ ) {
+          cout <<"\n\t\t"<< it.first <<": ";
           //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     cout <<"\n\nsurface element integrals that will be accumulated:\n";
-     for ( auto it=rhs_boundary_operators_.begin(); it!=rhs_boundary_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
+     cout <<"\n\n\t"<<"surface element integrals that will be accumulated:";
+     for ( const auto& it : rhs_boundary_operators_ ) {
+          cout <<"\n\t\t"<< it.first <<": ";
           //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
 
-     cout <<"\n\npost-processing operators:\n";
-     for ( auto it=postpro_operators_.begin(); it!=postpro_operators_.end(); it++ ) {
-          cout <<"\n"<< (*it).first <<": ";
+     cout <<"\n\n\t"<<"post-processing operators:";
+     for ( const auto& it : postpro_operators_ ) {
+          cout <<"\n\t\t"<< it.first <<": ";
           //cout << (*it).second->MaterialOperand().name <<", "<< (*it).second->BasicOperand().name <<", "<< (*it).second->TestOperand().name;
        }
    
-     cout <<"\n\nsystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
+     cout <<"\n\nSystem dimensions: "<< G_.Rows() <<" x "<< G_.Cols() <<"\n";
      cout <<"\n\tdegrees of freedom (dof) per node:  "<< dof_per_node_;
      cout <<"\n\tset up etablished:                  "<< setup_established_;
      cout <<"\n\tkeep solution matrix between steps: "<< retain_matrix_;
      cout <<"\n\ttime increment:                     "<< time_increment_;
    
-     if ( solver_ != NULL ) cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
+     if ( solver_ != nullptr )
+       cout <<"\n\nSolver: "<< typeid(solver_).name() << endl;
    
  } // end Out
 

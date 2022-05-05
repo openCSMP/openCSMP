@@ -31,17 +31,17 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
     const size_t n_dof{ A.Rows() };
     mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     mat.resize(A.Rows(), A.Cols());
-    for (size_t i{0U}; i < A.Rows(); ++i)
-//      for ( const auto& pair : A.Row(i) ) {
-      for ( auto pair = A.RowBegin(i); pair!=A.RowEnd(i); ++pair ) {
+    for (size_t i{0U}; i < A.Rows(); ++i) {
+      const auto rowEnd{ A.RowEnd(i) };
+      for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
 #ifdef DEBUG
            if ( (*pair).first >= n_dof )
-             csmp_error.Note( ERROR, "EigenSolver::SolveMatrixEquation", to_string( (*pair).first ),
-                             "column index retrieved from the SparseMatrix is out of bound.");
+               csmp_error.Note( ERROR, "EigenSolver::SolveMatrixEquation", to_string( (*pair).first ),
+                               "column index retrieved from the SparseMatrix is out of bound.");
 #endif
-           mat.insert( i, (*pair).first ) = (*pair).second;
+               mat.insert( i, (*pair).first ) = (*pair).second;
+            }
         }
-
     mat.makeCompressed();
 
     // 2. conver rhs vector to eigen vector

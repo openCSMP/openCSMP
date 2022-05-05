@@ -412,7 +412,7 @@ class PDE_Integrator {
     std::vector<size_t>   DOF_indexes_; ///< indices of DOFs, but only of the non-Dirichlet dofs, size enumerated 0 - DOF-1 (including Dirich DOF)
     std::vector<double>   pivotVector_; ///< mapping from DOFs to actual node numbers
 
-    Solver*               solver_;
+    Solver*               solver_ = nullptr;
 
     size_t                dof_per_node_;
     bool                  setup_established_, retain_matrix_, trim_vectors_; ///< false, false, false to start with
