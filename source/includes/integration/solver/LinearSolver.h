@@ -8,9 +8,9 @@ Linear Solvers Interface
 */
 // define CSMP_DEFAULT_LINEAR_SOLVER by the priority order
 
-#define CSMP_DEFAULT_LINEAR_SOLVER csmp::LUdcmp_Solver
+#define CSMP_DEFAULT_LINEAR_SOLVER csmp::EigenSolver   // csmp::LUdcmp_Solver
 #define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::SolverSettings
-#include "LUdcmp_Solver.h"
+#include "EigenSolver.h" // LUdcmp_Solver.h"
 
 #ifdef CSMP_WITH_MESCHACH
 #undef CSMP_DEFAULT_LINEAR_SOLVER

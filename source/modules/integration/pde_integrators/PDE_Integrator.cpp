@@ -533,6 +533,9 @@ Typically, the dependent variable in a finite-element computation, e.g.,
 the basic operand is placed on the nodes. This lies in the very nature
 of the finite-element method. If you are doing a finite-volume or
 other computation, just ignore this warning.
+
+TODO: consider case where one might want to retain the right-hand vector, but not the matrix
+TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
@@ -546,10 +549,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         target_.nodes == gref.Nodes() &&
        !basic_operands_.empty() && !test_operands_.empty() )
      {
-        // TODO: one might want to retain the right-hand vector, but not the matrix
-        if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
-        if ( G_.Rows()  > 0 && !retain_matrix_ ) {
-            // TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
+        if ( rh_.size() > 0U ) fill( rh_.begin(), rh_.end(), 0. );
+        if ( G_.Rows()  > 0U && !retain_matrix_ ) {
             G_.Erase();
             G_.Resize( rh_.size() );
           }
@@ -562,6 +563,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
     dof_per_node_    = 0U;
     target_.nodes    = gref.Nodes();
     target_.elements = gref.Cells();
+    // region-specific numbering for the accumulation is applied following the call to this method
 
 
    // ---------------------------------------------------------------------------------
@@ -755,10 +757,10 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    // ----------------------------------------------------------------------
    G_.Resize( offset );
    rh_.resize( offset );
-   if ( trim_vectors_ ) vector<double>( rh_ ).swap( rh_ );
+   if ( trim_vectors_ ) rh_.shrink_to_fit();
    fill( rh_.begin(), rh_.end(), 0. );
    x_.resize( offset );
-   if ( trim_vectors_ ) vector<double>( x_ ).swap( x_ );
+   if ( trim_vectors_ ) x_.shrink_to_fit();
    setup_established_ = true;
 
  } // end EstablishMatrixSetup
@@ -1758,7 +1760,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
         "No (basic) operands have been specified...");
 
 
-    size_t DOF(0);
+    size_t DOF{0U};
 
     for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
           it = this->test_operands_.begin(); it != this->test_operands_.end(); it++)
@@ -1807,7 +1809,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
                                position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                DOF_indexes_[position] = NULL_IDX;
                             }
-                        else for (size_t j{0U}; j < dim; j++) {
+                        else for ( auto j{0U}; j < dim; j++) {
                                   position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                                   DOF_indexes_[position] = DOF;
                                   DOF = DOF + 1U;

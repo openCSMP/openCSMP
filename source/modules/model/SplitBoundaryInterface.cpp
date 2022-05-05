@@ -850,7 +850,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
-                                                                                                                int32_t material_id )
+                                                                                                      int32_t material_id )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -911,7 +911,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
        {
           assert( (*it)->Parent(MIDDLE) == nullptr );
           // extracting element-node subvector
-          const size_t n_nodes( (*it)->FE()->Nodes() );
+          const auto n_nodes( (*it)->FE()->Nodes() );
           vector<Node<dim>*> nodes( &node_pointers[node_offset], &node_pointers[node_offset+n_nodes] );
 
           // construct the new element
@@ -1107,8 +1107,7 @@ set<string>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertLowerDime
   SPLITBOUNDARY_COMPLEX<dim>*  splitboundaryComplex(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
   set<string>                  new_regions;
   
-  for ( typename map<string, csmp::SplitBoundary<dim> >::const_iterator
-        it = splitboundaryComplex->SplitBoundariesBegin(); it != splitboundaryComplex->SplitBoundariesEnd(); ++it )
+  for ( auto it = splitboundaryComplex->SplitBoundariesBegin(); it != splitboundaryComplex->SplitBoundariesEnd(); ++it )
     {
        pair<string,bool>  result = splitboundaryComplex->InsertRegionIntoSplitBoundary( (*it).first.c_str(), material_id );
        if ( result.second == false )

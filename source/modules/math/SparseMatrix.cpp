@@ -72,12 +72,14 @@ std::vector<std::map<size_t,double> >::const_iterator  SparseMatrix::End() const
 
 std::map<size_t,double>::const_iterator  SparseMatrix::RowBegin( size_t i ) const
  {
+    assert( i < Rows() );
     return data[i].begin();
  }
 
 
 std::map<size_t,double>::const_iterator  SparseMatrix::RowEnd( size_t i ) const
  {
+    assert( i < Rows() );
     return data[i].end();
  }
 
