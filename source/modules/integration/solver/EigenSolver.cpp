@@ -29,8 +29,8 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
     // generic eigen sparse matrix is used
     Eigen::SparseMatrix<double> mat;
     const size_t n_dof{ A.Rows() };
-    mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     mat.resize(A.Rows(), A.Cols());
+    mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     for (size_t i{0U}; i < A.Rows(); ++i) {
       const auto rowEnd{ A.RowEnd(i) };
       for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
