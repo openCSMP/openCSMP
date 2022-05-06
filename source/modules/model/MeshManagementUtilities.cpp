@@ -430,7 +430,19 @@ template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::iterator,
 template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::iterator,
                                             plf::colony<InterFace<2U>>::iterator,
                                             map<string,vector<InterFace<2U>*> >& );
+                                            
+// 1D version
+template size_t  findStandAloneMeshPatches( plf::colony<Element<1U>>::iterator,
+                                            plf::colony<Element<1U>>::iterator,
+                                            map<string,vector<Element<1U>*> >& );
 
+template size_t  findStandAloneMeshPatches( plf::colony<Face<1U>>::iterator,
+                                            plf::colony<Face<1U>>::iterator,
+                                            map<string,vector<Face<1U>*> >& );
+
+template size_t  findStandAloneMeshPatches( plf::colony<InterFace<1U>>::iterator,
+                                            plf::colony<InterFace<1U>>::iterator,
+                                            map<string,vector<InterFace<1U>*> >& );
 
 
 
@@ -1137,37 +1149,47 @@ template void distancesAndWeights<3>( vector<Node<3>*>::const_iterator, vector<N
 
 
 /**
-    finds those elements in a model that contact eachother across split interfaces.
+    Finds elements in region 'subdomain' that contact eachother across split interfaces via matching face nodes.
     Only those elements are discovered that are node-matched.
+    
+    The neighborhood relations of the elements discovered on either side of the internal boundary are returned in the element pair vector.
  
-    @param subdomain (non-unique) region which contains the split boundary
+    @param subdomain (non-unique) region which is anticipated to contain a node-matched split boundary
  
-    @return returns false if none of the perimeter elements are node matched
+    @return returns false if none of the perimeter elements has nodes that match another perimeter face
  
-    @attention method only looks at highest dimensional elements in the model;
-    thus, lower dimensional elements are ignored and the neighborhood relations
-    on either side of them are returned.
+    @attention method only looks at elements with the same spatial dimension as the  model, i.e. volumes in 3D, surfaces in 2D etc.
+    lower-dimensional elements are ignored.
  
     @attention the elements inside the model that are located along the splitboundary
     do not have neighbor pointers yet.
  
     @author SKM
     @date 14/01/2018
+    @date 25/4/2022 refactored
  
     @TODO do we need to remember which side of the interface we are on?
     @todo test method on Chloe's dataset
 */
 template<uint32_t dim>
 bool findSplitInterfaceElements( const Region<dim>& subdomain,
-                                 set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >& interface_elmt_pairs )
+                                 vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_elmt_pairs )
  {
+    // get coordinate ranges to determine the tolerance of the point matching that will be performed
+    /*
+       pair<Point<dim>,Point<dim>> box = boundingBox<dim>( subdomain.PerimeterNodesBegin(), subdomain.NodesEnd() );
+       const double tolerance = fabs( box.first.DistanceTo( box.second ) ) * numeric_limits<double>::epsilon();
+       NOTE: a specific tolerance cannot be used unless a specific comparitor is defined for set below
+    */
+    
     // multi-element container for all elements that are located on split boundaries
     //       face search key      element      face number
-    multimap<set<Point<dim> >,pair<Element<dim>*,size_t> > element_face_keys;
+    multimap<set<Point<dim> >,pair<Element<dim>*,uint32_t> > element_face_keys;
    
     // 1. for all elements on the perimeter of the model subdomain,
-    //    generate keys from their node coordinates that are then matched with one-another
+    //    generate keys from their node coordinates that will later be matched with one-another
     //    in order to connect these elements
+    // -------------------------------------
     for ( auto n=subdomain.InteriorCells(); n<subdomain.Cells(); ++n )
         {
            // for those element faces that define the perimeter surface
@@ -1177,9 +1199,9 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
                 vector<uint32_t> fnids;
                 subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
                 // add the corresponding node points to a set that will form the element face key
-                pair<set<Point<dim> >,size_t> face_key;
-                for ( size_t j{0U}; j<fnids.size(); ++j )
-                  face_key.first.insert( subdomain.E(n)->N( fnids[j] )->Coordinate() );
+                pair<set<Point<dim> >,uint32_t> face_key;
+                for ( auto j : fnids )
+                  face_key.first.insert( subdomain.E(n)->N(j)->Coordinate() );
                 // remembering the face id
                 face_key.second = subdomain.PerimeterFace( n, i );
                 // storing the key in the correspondance search map
@@ -1189,6 +1211,7 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
         }
    
     // 2. searching map for matching interface elements
+    // ------------------------------------------------
     //    - a match is obtained if the element pointers are different
     //    - if there is a match, the element pair is added to the OppositeElement container
     if ( !interface_elmt_pairs.empty() ) interface_elmt_pairs.clear();
@@ -1212,27 +1235,27 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // first element
            Element<dim>* e1 = (*it).second.first;
            for ( auto face = 0U; face<e1->Faces(); ++face ) {
-             e1->FE()->NodesOfFace( face, nids );
-             set<Point<dim> >  face_key;
-             for ( auto j{0U}; j<nids.size(); ++j )
-               face_key.insert( e1->N( nids[j] )->Coordinate() );
-             outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
-           }
+               e1->FE()->NodesOfFace( face, nids );
+               set<Point<dim> >  face_key;
+               for ( auto j : nids )
+                 face_key.insert( e1->N(j)->Coordinate() );
+               outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
+             }
            // second element
            Element<dim>* e2 = (*result.first).second.first;
            for ( auto face = 0U; face<e2->Faces(); ++face ) {
-             e2->FE()->NodesOfFace( face, nids );
-             set<Point<dim> >  face_key;
-             for ( size_t j{0U}; j<nids.size(); ++j )
-               face_key.insert( e2->N( nids[j] )->Coordinate() );
-             inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
-           }
+               e2->FE()->NodesOfFace( face, nids );
+               set<Point<dim> >  face_key;
+               for ( auto j : nids )
+                 face_key.insert( e2->N(j)->Coordinate() );
+               inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
+             }
 
            // 2. finding the shared faces
            bool found( false );
            int64_t  inner_face_id(-1), outer_face_id(-1);
-           for ( auto& inner_face : inner_elmt_faces ) {
-             for ( auto& outer_face : outer_elmt_faces ) {
+           for ( const auto& inner_face : inner_elmt_faces ) {
+             for ( const auto& outer_face : outer_elmt_faces ) {
                if ( inner_face.first == outer_face.first ) {
                  inner_face_id = inner_face.second.second;
                  outer_face_id = outer_face.second.second;
@@ -1246,10 +1269,10 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // we store the matching element pair
            // set<pair<pair<Element<dim>*,size_t>,pair<Element<dim>*,size_t> > >
            if ( found )
-           interface_elmt_pairs.insert( make_pair(
-                                        make_pair( (*it).second.first, (*it).second.second ),
-                                        make_pair( (*result.first).second.first, (*result.first).second.second ) )
-                                      );
+           interface_elmt_pairs.push_back( make_pair(
+                                           make_pair( (*it).second.first, (*it).second.second ),
+                                           make_pair( (*result.first).second.first, (*result.first).second.second ) )
+                                         );
           }
       }
   
@@ -1260,9 +1283,135 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
     
  } // end findSplitInterfaceElements
 
-template bool findSplitInterfaceElements( const Region<3U>&, set<pair<pair<Element<3U>*,size_t>,pair<Element<3U>*,size_t> > >& );
-template bool findSplitInterfaceElements( const Region<2U>&, set<pair<pair<Element<2U>*,size_t>,pair<Element<2U>*,size_t> > >& );
-template bool findSplitInterfaceElements( const Region<1U>&, set<pair<pair<Element<1U>*,size_t>,pair<Element<1U>*,size_t> > >& );
+template bool findSplitInterfaceElements( const Region<3U>&, vector<pair<pair<Element<3U>*,uint32_t>,pair<Element<3U>*,uint32_t> > >& );
+template bool findSplitInterfaceElements( const Region<2U>&, vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >& );
+template bool findSplitInterfaceElements( const Region<1U>&, vector<pair<pair<Element<1U>*,uint32_t>,pair<Element<1U>*,uint32_t> > >& );
+
+
+
+
+
+/**
+        Finds  node-matched Element faces in the supplied model domain, if any.
+        The pairs of elements in the model that share these faces are recorded.
+        Using property values, the ordering of the elements into inside and outside of the boundary is determined.
+        Elements on the inside of this domain are enlisted first in the output Element-face number pairs.
+        If neither of the elements is found in the model subdomain, an error is reported.
+        
+        @param model a  CSMP contiguous or discontiguous model
+        @param property_to_distinguish_regions scalar placed on element: the inside of any split boundary will be where the value is lower; where the values are the same no interface will be created
+        @param interface_elmt_pairs interface construction data consisting of pairs of elements that share a face across the boundary
+        @return number of interfaces created.
+*/
+template<uint32_t dim>
+size_t findSplitInterfaceElements( const Model<dim>& model, const string& property_to_distinguish_regions,
+                                   vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_elmt_pairs )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    // get coordinate ranges to determine the tolerance of the point matching that will be performed
+    /*
+       pair<Point<dim>,Point<dim>> box = boundingBox<dim>( subdomain.PerimeterNodesBegin(), subdomain.NodesEnd() );
+       const double tolerance = fabs( box.first.DistanceTo( box.second ) ) * numeric_limits<double>::epsilon();
+       NOTE: a specific tolerance cannot be used unless a specific comparitor is defined for set below
+    */
+    const Region<dim>&  model_domain{ model.Region("Model") };
+    
+    if ( !model.Database().IsDefined( property_to_distinguish_regions.c_str() ) ) {
+         csmp_error.Note( ERROR, "findSplitInterfaceElements", property_to_distinguish_regions, "is not defined" );
+         return 0U;
+      }
+    const csmp::Index reg_key = model.Database().StorageKey( property_to_distinguish_regions.c_str() );
+    if ( reg_key.place != ELEMENT && reg_key.type != SCALAR )
+      csmp_error.Note( ERROR, "findSplitInterfaceElements", property_to_distinguish_regions,
+                      "must be scalar placed on the element" );
+    
+    // multi-element container for all elements that are located on split boundaries
+    //   face search key      element      face number
+    map<set<Point<dim>>,set<pair<Element<dim>*,uint32_t>>>  element_face_keys;
+   
+    // 1. for the faces of all elements on the perimeter of the model subdomain,
+    //    generate keys from their node coordinates that will later be matched with one-another
+    //    in order to connect these elements
+    // -------------------------------------
+    for ( auto n{model_domain.InteriorCells()}; n<model_domain.Cells(); ++n )
+        {
+           // making sure that the perimeter elements considered have the same dimension as the model
+           // (else, they do share their nodes with higher dimensional elements and are therefore considered as well)
+           assert( model_domain.E(n)->IsEquidimensional() );
+           // for those element faces that define the perimeter surface
+           for ( auto i{0U}; i<model_domain.PerimeterFaces(n); ++i )
+             {
+                // create a search key for the face from the coordinates of the corner nodes
+                pair<set<Point<dim> >,uint32_t> face_key;
+                for ( const auto& nit : model_domain.E(n)->CornerNodesOfFace( model_domain.PerimeterFace( n, i ) ) )
+                  face_key.first.insert( nit->Coordinate() );
+                // remembering the face id
+                face_key.second = model_domain.PerimeterFace( n, i );
+                // storing the key in the correspondance search map
+                set<pair<Element<dim>*,uint32_t>>  elmt_face{ { model_domain.E(n), face_key.second } };
+                //                                        node-coordinate set  element pointer   local face id
+                auto it = element_face_keys.insert( make_pair( face_key.first, elmt_face ) );
+                // if a matching face is detected, its parent element and face id are added to the map
+                if ( it.second == false ) {
+                     (*it.first).second.insert( make_pair(model_domain.E(n), face_key.second) );
+                  }
+             }
+        }
+   
+    // 2. creating interface construction data
+    // ------------------------------------------------
+    // map<set<Point<dim>>,set<pair<Element<dim>*,uint32_t>>>  element_face_keys;
+    for ( auto& fit : element_face_keys )
+      // if there are matching faces
+      if ( fit.second.size() > 1U )
+        {
+           // interface pairs are generated of the first and the subsequent elmt-face pairs in the map
+           auto inside_it = fit.second.begin();
+           for ( auto outside_it{next(inside_it,1)}; outside_it!=fit.second.end(); ++outside_it ) {
+                // we store the matching element pair
+                // vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  interface_elmt_pairs;
+                interface_elmt_pairs.push_back( make_pair( (*inside_it), (*outside_it) ) );
+             }
+        }
+     if (  interface_elmt_pairs.empty() ) {
+          ErrorHandler::Instance().Note( ERROR, "findSplitInterfaceElements", "No node-matched interfaces were detected.");
+          return 0U;
+       }
+       
+        
+    // 3. Re-ordering the element pairs such that elements which belong to inside region are first in the output pair
+    // --------------------------------------------------------------------------------------------------------------
+    set<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > pairs_to_eliminate;
+    for ( auto& it : interface_elmt_pairs ) {
+         const double value1 = it.first.first->Read( reg_key );
+         const double value2 = it.second.first->Read( reg_key );
+         // value based re-ordering
+         if ( value1 > value2 ) swap( it.first, it.second );
+         // pairs of elements with the same value will be eliminated
+         if ( !(value1 < value2) && !(value1 > value2) )
+           pairs_to_eliminate.insert( make_pair( it.first, it.second ) );
+      }
+  
+    // removing the interface without property jump from output vector
+    // ---------------------------------------------------------------
+    if ( pairs_to_eliminate.size() > 0U ) {
+         cerr <<"\n\n"<<"findSplitInterfaceElements: removing "<< pairs_to_eliminate.size() <<" element pairs without ";
+         cerr << property_to_distinguish_regions <<" contrast.";
+         // removal
+         interface_elmt_pairs.erase( remove_if( interface_elmt_pairs.begin(),
+                                                interface_elmt_pairs.end(),
+                                                [&](auto x) {
+                                                     return (pairs_to_eliminate.find(x) != pairs_to_eliminate.end());
+                                                  } ) );
+      }
+ 
+    return interface_elmt_pairs.size();
+    
+ } // end findSplitInterfaceElements
+
+template size_t findSplitInterfaceElements( const Model<3U>&, const string&, vector<pair<pair<Element<3U>*,uint32_t>,pair<Element<3U>*,uint32_t> > >& );
+template size_t findSplitInterfaceElements( const Model<2U>&, const string&, vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >& );
+template size_t findSplitInterfaceElements( const Model<1U>&, const string&, vector<pair<pair<Element<1U>*,uint32_t>,pair<Element<1U>*,uint32_t> > >& );
 
 
 
@@ -1335,7 +1484,7 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  subdomain 
    
     if ( non_surface_elements > 0U )
       ErrorHandler::Instance().Note( ERROR, "checkNeighborNormalsForConsistentOrientation (3D):",
-                                       subdomain.Name(), "region contained not only surface elements." );
+                                     subdomain.Name(), "region contained not only surface elements." );
     return true;
    
  } // end checkNeighborNormalsForConsistentOrientation
@@ -1689,7 +1838,7 @@ template long findNode( const Model<3U>&, const Point<3U>&, double, bool );
 template<uint32_t dim, template<uint32_t> class CELL>
 void printNodes( const CELL<dim>& c )
  {
-    set<uint32_t> nodes;
+    set<size_t> nodes;
     for ( auto i{0U}; i<c.Nodes(); i++ ) nodes.insert( c.N(i)->Idx() );
     cout <<" "<< c.Idx() <<": ";
     for ( auto& it : nodes ) cout << it <<",";
@@ -1915,47 +2064,8 @@ template bool integrityCheck<3,InterFace>( typename plf::colony<InterFace<3>>::c
 template bool integrityCheck<2,InterFace>( typename plf::colony<InterFace<2>>::const_iterator, typename plf::colony<InterFace<2>>::const_iterator );
 template bool integrityCheck<1,InterFace>( typename plf::colony<InterFace<1>>::const_iterator, typename plf::colony<InterFace<1>>::const_iterator );
                                           
-/* OLD METHOD
 
-    while ( first != last ) {
-         // FE policy
-         if ( (*first).FE() == nullptr ) {
-              cerr <<"\n"<< celltype << (*first).Idx() <<": FE pointer corrupt.";
-              issues++;
-           }
-         else {
-             // connected nodes
-             for ( auto i{0U}; i<(*first).Nodes(); ++i )
-               if ( (*first).N(i) == nullptr ) {
-                    cerr <<"\n"<< celltype << (*first).Idx() <<": node: "<< i <<": node pointer corrupt.";
-                    issues++;
-                 }
-               else shared_nodes.push_back( (*first).N(i) );
-             // there should be at least one neighbor
-             size_t n_valid_nbors{0};
-             for ( auto i{0U}; i<(*first).Neighbors(); ++i )
-               if ( (*first).Neighbor(i) != nullptr )
-                 n_valid_nbors++;
-             if ( n_valid_nbors == 0 ) {
-                  cerr <<"\n"<< celltype <<" "<< parseFiniteElementType((*first).FE_Type()) <<":"<< (*first).Idx() <<": has no neighbors.";
-                  issues++;
-               }
-             // valid neighbors should not be corrupt
-             const long one_billion{1000000000};
-             cerr <<"\n"<< parseAbbreviated_FE_Type( (*first).FE_Type() ) <<":"<< (*first).Idx() <<" "<< (*first).BaryCenter();
-             for ( auto i{0U}; i<(*first).Nodes(); ++i )
-               cerr <<" "<< parseBoundary((*first).N(i)->AtBoundary());
-             for ( auto i{0U}; i<(*first).Neighbors(); ++i ) {
-                 if ( (*first).Neighbor(i) != nullptr ) {
-                      if ( !(*first).FE() ) cerr <<"\nelement "<< (*first).Idx() <<" has corrupt FE pointer.";
-                      if ( (*first).Neighbor(i)->Idx() > one_billion )
-                        cerr <<"\nis element "<< (*first).Idx() <<" neighbor idx="<< (*first).Neighbor(i)->Idx() <<" really this large?";
-                   }
-               }
-           }
-         first++;
-      }
-*/
+
 
 template<uint32_t dim, template<uint32_t> class CELL>
 bool integrityCheck( const plf::colony<CELL<dim> >& cells,
@@ -2113,58 +2223,6 @@ template pair<Point<3>,Point<3>>  boundingBox( vector<Node<3>*>::const_iterator,
 template pair<Point<2>,Point<2>>  boundingBox( vector<Node<2>*>::const_iterator, vector<Node<2>*>::const_iterator );
 template pair<Point<1>,Point<1>>  boundingBox( vector<Node<1>*>::const_iterator, vector<Node<1>*>::const_iterator );
 
-
-/* CLIPPING OF FACE NUMBERING FUNCTION FOR INTERFACE
-
-    const size_t neighbors2x( f->Neighbors() * 2 );
-    for ( size_t j{0U}; j<neighbors2x; ++j ) {
-      InterFace<dim>* const ptr( f->Neighbor( j ) );
-      if ( ptr != nullptr ) {
-        // building search maps that we will use to find the shared interfaces
-        // key=pointset   face iD
-        map<set<Point<dim> >, pair<INTERFACE_SIDE, size_t> >   inner_elmt_faces, outer_elmt_faces;
-        vector<uint32_t>  nids;
-        // first element
-        Element<dim>* e1 = f->InnerParent();
-        for ( size_t face = 0U; face<e1->Faces(); ++face ) {
-          e1->FE()->NodesOfFace( face, nids );
-          set<Point<dim> >  face_key;
-          for ( size_t j{0U}; j<nids.size(); ++j )
-            face_key.insert( e1->N( nids[j] )->Coordinate() );
-          outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
-        }
-        // second element
-        Element<dim>* e2 = f->OuterParent();
-        for ( size_t face = 0U; face<e2->Faces(); ++face ) {
-          e2->FE()->NodesOfFace( face, nids );
-          set<Point<dim> >  face_key;
-          for ( size_t j{0U}; j<nids.size(); ++j )
-            face_key.insert( e2->N( nids[j] )->Coordinate() );
-          inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
-        }
-
-        // 2. finding the shared faces
-        bool found( false );
-        int64_t  inner_face_id( -1 ), outer_face_id( -1 );
-        for ( auto& inner_face : inner_elmt_faces ) {
-          for ( auto& outer_face : outer_elmt_faces ) {
-            if ( inner_face.first == outer_face.first ) {
-              inner_face_id = inner_face.second.second;
-              outer_face_id = outer_face.second.second;
-              found = true;
-              break;
-            }
-          }
-          if ( found ) break;
-        }
-
-        vset.Pfvert( eidx, j, static_cast<int32_t>(ptr->Idx()) );
-      }
-      else
-        vset.Pfvert( eidx, j, REGION_BOUNDARY );
-    }
-
-*/ // FACE NUMBERING
 
 
 

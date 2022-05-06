@@ -130,7 +130,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    const FiniteElementManager& femgr,
                                    MeshManager<dim>& mesh,
-                                   const InterFaceSet<dim>& ifset )
+                                   const InterFaceParentElements<dim>& ifset )
   : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
 {
   const LocalVariables&             ifvars( pref.LocalVariablesAt( INTER_FACE ) );
@@ -246,6 +246,8 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
 } // end Accept
 
 
+
+
 /// Returns the position of and adjacent region relative to the boundary. Relies on element Idx
 template<uint32_t dim>
 INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
@@ -288,17 +290,17 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
       if ( prop_key.place == SPLIT_BOUNDARY ) {
            if ( sd != COMPLETE )
-             csmp_error.Note( WARNING, "Region<dim>::InputPropertyValue",
-                                          input_prop, "is a Region property and no distinction between INTERIOR and PERIMETER can be made" );
+             csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
+                              input_prop, "is a SplitBoundary property and no distinction between INTERIOR and PERIMETER can be made" );
            this->Store( prop_key, new_value );
            return;
         }
       
       // incorrect applications of method  
       if ( prop_key.place == BOUNDARY || prop_key.place == REGION || prop_key.place == MODEL ||
-           prop_key.place == ELEMENT || prop_key.place == FACE )
-        csmp_error.Note( ERROR, "Region<dim>::InputPropertyValue",
-                           input_prop, "must be a SPLIT_BOUNDARY, INTER_FACE/IP or NODE property for this method call to work" );        
+           prop_key.place == ELEMENT || prop_key.place == FACE|| prop_key.place == NODE )
+        csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue",
+                           input_prop, "must be a SPLIT_BOUNDARY, INTER_FACE/IP property for this method to work" );
     
      // for any different property placement, the method of the base-class is called
      ModelSubDomain<dim,InterFace>::InputPropertyValue( input_prop, new_value, sd );
@@ -334,7 +336,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       if ( key.place == SPLIT_BOUNDARY ) {
            if ( sd != COMPLETE )
              csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
-                                input_prop, "is a SPLIT_BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
+                              input_prop, "is a SPLIT_BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
                                 
            // only overwriting those variable components / rows that are not flagged 'do_not_overwrite' 
            writeVariableIf( this, key, new_value, do_not_overwrite );
@@ -343,9 +345,9 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
       
       // incorrect applications of method  
       if ( key.place == REGION  || key.place == BOUNDARY || key.place == MODEL || 
-           key.place == ELEMENT || key.place == FACE )
+           key.place == ELEMENT || key.place == FACE || key.place == NODE )
         csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue",
-                           input_prop, "must be a SPLIT_BOUNDARY, INTER_FACE/IP or NODE property for this method call to work" );        
+                         input_prop, "must be a SPLIT_BOUNDARY or INTER_FACE/IP property for this method to work" );
     
      // for any different property placement, the method of the base-class is called
      ModelSubDomain<dim,InterFace>::InputPropertyValue( input_prop, new_value, do_not_overwrite, sd );
@@ -381,7 +383,7 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 
 
 /**
-       Indiscriminately accumulates inside, outside and intervening nodes, if any.
+    Only accumulates the inside nodes as these will later be sorted by ModelSubDomain::PartitionCellVector, i.e.  IdentifyPerimeter
 */
 template<uint32_t dim>
 void SplitBoundary<dim>::CreateNodePointerVector()
@@ -390,22 +392,38 @@ void SplitBoundary<dim>::CreateNodePointerVector()
     throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateNodePointerVector:",
                            this->Name(), "interface vector is empty; nothing could be done." );
 
-  if ( !this->node_vec_.empty() )
-    this->node_vec_.clear();
+  if ( !this->node_vec_.empty() ) this->node_vec_.clear();
+    this->node_vec_.reserve( this->cell_vec_.size() );
 
   // creating the node index vector
-  set<csmp::Node<dim>*>  nodes_set;
-  for ( typename vector<InterFace<dim>*>::const_iterator it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
-    for ( auto i{0U}; i<(*it)->FE()->Nodes(); i++ )
-    {
-      nodes_set.insert( (*it)->N( i, INSIDE ) );
-      nodes_set.insert( (*it)->N( i, OUTSIDE ) );
-      if ( (*it)->HasInterveningElement() )
-        nodes_set.insert( (*it)->N( i, MIDDLE ) );
-    }
+  for ( auto& it : this->cell_vec_ )
+    for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+      this->node_vec_.push_back( it->N( i, INSIDE ) );
 
-  this->node_vec_.assign( nodes_set.begin(), nodes_set.end() );
+   //  making the vector unique and trimming of excess memory
+   sort( this->node_vec_.begin(), this->node_vec_.end() );
+   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
+   this->node_vec_.shrink_to_fit();
 }
+
+
+    /// returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
+template<uint32_t dim>
+const NodeManifold<dim>* const SplitBoundary<dim>::ManifoldNode( size_t inside_node_idx ) const
+ {
+    return this->N( inside_node_idx )->Manifold();
+ }
+    
+template<uint32_t dim>
+NodeManifold<dim>* const SplitBoundary<dim>::ManifoldNode( size_t inside_node_idx )
+ {
+    return this->N( inside_node_idx )->Manifold();
+ }
+
+
+
+
+
 
 
 /**
@@ -466,20 +484,7 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     }
     
   // creating node vector
-  if ( this->node_vec_.empty() ) this->node_vec_.clear();
-  this->node_vec_.reserve( cell_ids.size() ); // just a loose measure, asuming that there will always be more elements than nodes
-  // filling the vector
-  for ( auto& it : this->cell_vec_ ) {
-       const auto n_nodes{it->Nodes()};
-       for ( auto i{0U}; i<n_nodes; ++i ) {
-            assert( it->N(i) != nullptr );
-            this->node_vec_.push_back( it->N(i) );
-         }
-     }
-  // removing duplicates and trimming excess memory from node vector
-  sort( this->node_vec_.begin(), this->node_vec_.end() );
-  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-
+  CreateNodePointerVector();
   this->IdentifyPerimeter();
   
   return this->cell_vec_.size();
@@ -510,7 +515,7 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
   this->cell_vec_.assign( ifacesBegin, ifacesEnd );
 
   // initialize boundary essentials
-  this->CreateNodePointerVector();
+  CreateNodePointerVector();
   this->IdentifyPerimeter();
 
   return true;
@@ -531,12 +536,12 @@ bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
   const LocalVariables lvsInterFace( InterFaceVariables() );
   const IntegrationPointVariables lvsIntegrationPoint( InterFaceIntegrationPointVariables() );
 
+  // this method already updates the connectivity of all elements, nodes etc.
   this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
                                                     next(boundary.CellVector().begin(),boundary.InteriorCells()),
                                                     boundary.CellVector().end() );
   // create node vector
-  this->CreateNodePointerVector();
-
+  CreateNodePointerVector();
   this->IdentifyPerimeter();
 
   return true;
@@ -747,54 +752,108 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
 } // end SurfaceIntegral
 
 
-/**
-Property assignment to nodes on either side of the interface or elements colocated with the InterFace objects (MIDDLE).
 
-@todo ugly implementation where the nodes get written too many times as their side of the interface is only known to the InterFace.
+
+
+
+/**
+    Property assignment to nodes on either side of the interface.
+    Relies on the design that the node vector contains the inside nodes.
 */
 template<uint32_t dim>
 template<class Var>
-void SplitBoundary<dim>::InputNodePropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART part, INTERFACE_SIDE innerOuter )
+void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART part, INTERFACE_SIDE interfaceSide )
 {
-  Index ipKey( this->pref_.StorageKey( input_prop ) );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+  Index          ipKey( this->pref_.StorageKey( input_prop ) );
 
-  if ( ipKey.place != NODE )
-    throw csmp::Exception( ERROR, "SplitBoundary<dim>::InputNodePropertyValue:", "This method applies to node properties only!" );
+  if ( ipKey.place != NODE ) {
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue:", "This method applies to node properties only!" );
+       return;
+    }
+  if ( interfaceSide == MIDDLE ) {
+       csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue:",
+                       "To apply node property values to the intervening mesh access the corresponding region" );
+       return;
+    }
+  
+  // INTERIOR in the interior of the SplitBoundary, all nodes will be manifolds
+  if ( part == INTERIOR ) {
+      const auto ifEnd{ this->PerimeterNodesBegin() };
+      if ( interfaceSide == INSIDE )
+        for ( auto nit{ this->NodesBegin() }; nit != ifEnd; ++nit )
+          (*nit)->Store( ipKey, new_value );
+      // outside via node manifold
+      else if ( interfaceSide == OUTSIDE )
+        for ( auto nit{ this->NodesBegin() }; nit != ifEnd; ++nit )
+          for ( auto i{0U}; i<(*nit)->Manifold()->Branches(); i++ )
+            if ( (*nit)->Manifold()->InterFaceSide(i) == OUTSIDE ) {
+                 (*nit)->Manifold()->N(i)->Store( ipKey, new_value );
+                 break;
+              }
+       return;
+    }
 
-  if ( part == COMPLETE ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->CellsEnd() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->CellsBegin() ); ifit != ifEnd; ++ifit )
-      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
-        (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
-  }
-  else if ( part == INTERIOR ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->PerimeterCellsBegin() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->CellsBegin() ); ifit != ifEnd; ++ifit )
-      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
-        (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
-  }
+  // PERIMETER - there may be single nodes by the inside nodes will be defined
   else if ( part == PERIMETER ) {
-    const typename vector<InterFace<dim>*>::const_iterator ifEnd( this->CellsEnd() );
-    for ( typename vector<InterFace<dim>*>::const_iterator ifit( this->PerimeterCellsBegin() ); ifit != ifEnd; ++ifit )
-      for ( auto n( 0 ); n < (*ifit)->FE()->Nodes(); ++n )
-        (*ifit)->N( n, innerOuter )->Store( ipKey, new_value );
-  }
-  else
-    cerr << "\nSplitBoundary<dim>::InputNodePropertyValue: subdomain part not recognized; nothing was done.\n";
+      const auto nodesEnd( this->NodesEnd() );
+      if ( interfaceSide == INSIDE )
+        for ( auto nit{ this->PerimeterNodesBegin() }; nit != nodesEnd; ++nit )
+          (*nit)->Store( ipKey, new_value );
+      // outside via node manifold
+      else if ( interfaceSide == OUTSIDE ) {
+          for ( auto nit{ this->PerimeterNodesBegin() }; nit != nodesEnd; ++nit )
+            if ( (*nit)->IsManifold() ) {
+                for ( auto i{0U}; i<(*nit)->Manifold()->Branches(); i++ )
+                  if ( (*nit)->Manifold()->InterFaceSide(i) == OUTSIDE ) {
+                       (*nit)->Manifold()->N(i)->Store( ipKey, new_value );
+                       break;
+                    }
+               }
+            // there will be only an inside node
+            else (*nit)->Store( ipKey, new_value );
+         }
+       return;
+    }
 
+  // COMPLETE - all nodes but not all of them manifolds
+  if ( part == COMPLETE ) {
+      const auto nodesEnd( this->NodesEnd() );
+      if ( interfaceSide == INSIDE )
+        for ( auto nit{ this->NodesBegin() }; nit != nodesEnd; ++nit )
+          (*nit)->Store( ipKey, new_value );
+      // outside via node manifold
+      else if ( interfaceSide == OUTSIDE ) {
+          for ( auto nit{ this->NodesBegin() }; nit != nodesEnd; ++nit )
+            if ( (*nit)->IsManifold() ) {
+                for ( auto i{0U}; i<(*nit)->Manifold()->Branches(); i++ )
+                  if ( (*nit)->Manifold()->InterFaceSide(i) == OUTSIDE ) {
+                       (*nit)->Manifold()->N(i)->Store( ipKey, new_value );
+                       break;
+                    }
+               }
+            // there will be only an inside node
+            else (*nit)->Store( ipKey, new_value );
+         }
+     }
+     
 } // InputPropertyValue
 
-template void SplitBoundary<1>::InputNodePropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<2>::InputNodePropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<3>::InputNodePropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<1>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<2>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<3>::InputPropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
-template void SplitBoundary<1>::InputNodePropertyValue( const char*, const VectorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<2>::InputNodePropertyValue( const char*, const VectorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<3>::InputNodePropertyValue( const char*, const VectorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<1>::InputPropertyValue( const char*, const VectorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<2>::InputPropertyValue( const char*, const VectorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<3>::InputPropertyValue( const char*, const VectorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
-template void SplitBoundary<1>::InputNodePropertyValue( const char*, const TensorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<2>::InputNodePropertyValue( const char*, const TensorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
-template void SplitBoundary<3>::InputNodePropertyValue( const char*, const TensorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<1>::InputPropertyValue( const char*, const TensorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<2>::InputPropertyValue( const char*, const TensorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+template void SplitBoundary<3>::InputPropertyValue( const char*, const TensorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
+
+
+
 
 
 // SCREEN OUTPUT
@@ -803,27 +862,26 @@ template<uint32_t dim>
 void SplitBoundary<dim>::Out() const
 {
   ErrorHandler& csmp_err( ErrorHandler::Instance() );
-  cout <<"\nSplitBoundary<dim>::Out(): '"<< this->Name()<<"'";
+  cout <<"\nSplitBoundary<dim>::Out: '"<< this->Name()<<"'";
   cout <<"\n\t"<<"InterFace objects: interior: "<< this->InteriorCells() <<", perimeter: "<< this->PerimeterCells();
-  // TODO: output inside and outside Node objects separately
-  cout <<"\n\t"<<"Node objects: interior: " << this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
+  cout <<"\n\t"<<"INSIDE Node objects: interior: " << this->InteriorNodes() <<", perimeter: "<< this->PerimeterNodes() << endl;
 
-  size_t elmt_idx{0};
+  size_t iface_idx{0};
   double geom_measure{0};
   for ( const auto& it : this->cell_vec_ ) {
         if ( it == nullptr ) {
-             cerr <<" interface pointer "<< elmt_idx <<" not valid.";
+             cerr <<" interface pointer "<< iface_idx <<" not valid.";
              csmp_err.Note( ERROR, "SplitBoundary<dim>::Out", "'nullptr' detected" );
           }
         else {
              geom_measure += it->Area();
           }
-       elmt_idx++;
+       iface_idx++;
     }
   if constexpr( dim == 2U ) cout <<"\n\t"<<"split boundary length: " << geom_measure << endl;
   if constexpr( dim == 3U ) cout <<"\n\t"<<"split boundary area: " << geom_measure << endl;
 
-  cout <<"\n\t"<<"perimeter InterFace and its face indices (current numbering): " << endl;
+  cout <<"\n\t"<<"perimeter InterFace objects and their boundary face indices (current numbering): " << endl;
   auto  bit( this->bd_face_vec_.begin() );
   for ( auto i = this->InteriorCells(); i<this->cell_vec_.size(); i++, bit++ ) {
       cout << "\n\t\t"<<"interface "<< i <<": edge numbers: ";

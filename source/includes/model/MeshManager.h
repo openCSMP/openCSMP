@@ -143,8 +143,12 @@ public:
                                                           typename std::vector<Face<dim>*>::iterator first_at_boundary,
                                                           typename std::vector<Face<dim>*>::iterator last );
 
-  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
+  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
+                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
+
+  /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
+  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected

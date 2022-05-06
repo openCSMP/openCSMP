@@ -34,10 +34,9 @@ class SparseMatrix {
     ~SparseMatrix();
     SparseMatrix& operator=( const SparseMatrix& sp );
     SparseMatrix& operator+=( SparseMatrix mat ); /// operator accumulates sparse matrices.  Initially created for OpenMP features.
-    double            operator()( size_t, size_t ) const;
-    double            At( size_t, size_t ) const;
-    const std::map<size_t,double>& Row( size_t i ) const { assert( i < data.size() ); return data[i]; }
-
+    double        operator()( size_t, size_t ) const;
+    double        At( size_t, size_t ) const;
+    
     /// resets the rows=columns of the square matrix, retaining potential extra capacity of the vector used
     void                Resize( size_t n_x_m, bool preserve_allocated_memory=true );
   

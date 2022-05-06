@@ -15,7 +15,7 @@ template<uint32_t> class Region;
 template<typename> class FEM_Data;
 
 /**
-    Set of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
+    Vector of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
     For each InterFace we have a pair or Element pointer - face ID pairs
         1) inner higher-dim element pointer
         2) local face number of element face that is located at interface to outer element
@@ -24,12 +24,12 @@ template<typename> class FEM_Data;
         5) pointer to potential  lower-dimensional intervening Element
 */
 template<uint32_t dim> ///
-struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
+struct InterFaceParentElements : public std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
     // constructor
-    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& set )
-      : std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(set) {}
+    InterFaceParentElements( const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& data )
+      : std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(data) {}
       
-    typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
+    typedef typename InterFaceParentElements<dim>::const_iterator ifaceIterator;
     // data members
     Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
     Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
@@ -90,9 +90,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
  {
   public:
     SplitBoundary() = delete;
+    
     /// constructor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
-                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
+                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceParentElements<dim>& );
                    
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     
@@ -129,24 +130,28 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
   
-    /// reestablishes the pointers to the nodes associated with the stored elements
+    /// initialises the node pointer vector with the inside nodes of  the stored InterFaces (only inside nodes are needed since they are manifolds)
     void CreateNodePointerVector();
 
     // ----------------------------------------
     // user interface
     // ----------------------------------------
 
+    /// returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
+    const NodeManifold<dim>* const ManifoldNode( size_t ) const;
+    NodeManifold<dim>* const ManifoldNode( size_t );
+
     /// for the assignment of properties that are unique to the instance of this subclass
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
+    /// input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE)
+    template<class Var>
+    void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
-
-    /// input node variable values on specific side of split boundary
-    template<class Var>
-    void InputNodePropertyValue( const char* input_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE=INSIDE );
 
     // returns location of split boundary relative to adjacent region
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );

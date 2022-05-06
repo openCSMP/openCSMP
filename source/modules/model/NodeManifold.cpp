@@ -343,7 +343,6 @@ template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
   cout << "\nNodeManifold: "<< parse(parent_geometry_) <<" with nodes (indices):\t";
-  assert( Branches() >= 2 );
   for ( auto i{0U}; i<Branches(); i++ ) {
       if ( NodeManifold<dim>::N(i) )
         cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": "<< parseSide( InterFaceSide(i) ) << "\t";

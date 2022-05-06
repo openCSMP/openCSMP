@@ -2625,8 +2625,8 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
-                                                      VARIABLE_FLAG new_status_of_scalar,
-                                                      SUBDOMAIN_PART sdpart )
+                                                     VARIABLE_FLAG new_status_of_scalar,
+                                                     SUBDOMAIN_PART sdpart )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatus( property, status, sdpart );
@@ -2652,6 +2652,8 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
                                                      const std::vector<VARIABLE_FLAG>& status,
                                                      SUBDOMAIN_PART group_flag )
  {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
     const csmp::Index  prop_key = pref_.StorageKey(property);
     string src("ModelSubDomain<");
     src += to_string(dim);
@@ -2667,9 +2669,14 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 
     if ( status.empty() )
       throw csmp::Exception( ERROR, src.c_str(), "Status vector has not been initialized");
+    else if ( status.size() != 1U && status.size() != dim ) {
+        if ( prop_key.type == SCALAR && prop_key.place == NODE && status.size() != node_vec_.size() )
+          throw csmp::Exception( ERROR, src.c_str(), "Status vector (SCALAR,NODE) has the wrong size");
 
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
+        if ( prop_key.type == VECTOR && prop_key.place == NODE && status.size() != node_vec_.size()*dim )
+          throw csmp::Exception( ERROR, src.c_str(), "Status vector (VECTOR,NODE) has the wrong size");
+      }
+      
     if ( cell_vec_.empty() ) {
          csmp_error.Note( ERROR, src.c_str(), "Region is empty.");
          return;

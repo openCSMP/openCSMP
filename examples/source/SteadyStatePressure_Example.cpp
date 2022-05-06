@@ -29,7 +29,14 @@
 #include "VTK_Interface.h"
 #include "TextInterface.h"
 
+#ifdef DEBUG
+#ifdef CSMP_WITH_IMAGE_OUTPUT   // there is a memory bug in the JPEG library that is picked up by address sanitizer (left-shift of negative value)
+#undef CSMP_WITH_IMAGE_OUTPUT   // not commented out when running in release mode
+#endif
+#endif
+
 using namespace std;
+
 namespace csmp{
 
 void SteadyStatePressure_Example::Specifications()
@@ -224,7 +231,8 @@ void SteadyStatePressure_Example::Run()
   granite_domain.ChangePropertyStatus( "fluid pressure", DIRICH, PERIMETER );
 
   // recomputing fluid pressure in the granite taking into account the source term
-  total_pressure.IntegrateOver( granite_domain );
+  const bool debug{false};
+  total_pressure.IntegrateOver( granite_domain, debug );
 
   printRangeOfVariable( model, "granite", "fluid pressure" );
   printRangeOfVariable( model, "granite", "velocity" );

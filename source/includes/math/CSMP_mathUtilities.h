@@ -33,10 +33,9 @@ inline double radiansToDegrees( double rad ) { return rad * 180./PI; }
 
 /**
     Shave off decimal places from floating point values so that numbers that contain
-    noise match for a given target precision.
+    noise match at  the given target precision.
     
     @param scale 10^decimal places, i.e. 1e-5 to get 5 decimal places
-    
 */
 inline double quantiseToScale(double x, double scale)
 {
