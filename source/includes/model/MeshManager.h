@@ -144,11 +144,12 @@ public:
                                                           typename std::vector<Face<dim>*>::iterator last );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
-  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
-                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
+  std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
+                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >&,
+                                           bool multiplicate_perimeter_nodes );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
-  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
+  std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected

@@ -523,7 +523,10 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
 
 
 /**
-    Creates a split boundary from a boundary. Requires unique indices.
+    Creates a split boundary from a boundary. 
+    
+    @attention this will prompt the MeshManager to delete the faces that the boundary consists of, i.e., destroy the boundary.
+    
     @author SKM 1/11/2013
     @author SKM 21/9/2021
 */
