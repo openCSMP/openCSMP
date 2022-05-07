@@ -181,8 +181,7 @@ const
 
      // 1. go through all groups and do the binning
      // -------------------------------------------
-     for ( typename map<std::string,Region<dim> >::const_iterator
-           grit=sref.UniqueRegionsBegin(); grit!=sref.UniqueRegionsEnd(); grit++ )
+     for ( auto grit=sref.UniqueRegionsBegin(); grit!=sref.UniqueRegionsEnd(); grit++ )
        {
           switch ( prop_key.place )
             {
@@ -226,7 +225,7 @@ const
                    break;
                 case ELEMENT_INTEGRATION_POINT:
                      for ( auto it=(*grit).second.CellsBegin(); it!=(*grit).second.CellsEnd(); it++ )
-                       for ( size_t j{0U}; j<(*it)->IntegrationPoints(); j++ )
+                       for ( auto j{0U}; j<(*it)->IntegrationPoints(); j++ )
                          {
                             if ( prop_key.type == SCALAR ) {
                                   val = (*it)->Read( j, prop_key );
@@ -1319,8 +1318,7 @@ const
 
      // 1. Retrieving histograms from Model
      // ----------------------------------------
-     for ( typename map<std::string,pair<HistogramBins,size_t> >::const_iterator
-           it=results.begin(); it!=results.end(); it++ )
+     for ( auto it=results.begin(); it!=results.end(); it++ )
        {
            // name of the group
            file_name  = (*it).first;
@@ -1363,8 +1361,7 @@ const
 
      // 1. Retrieving histograms from Model
      // ----------------------------------------
-     for ( typename map<std::string,pair<HistogramBins,size_t> >::const_iterator
-           it=results.begin(); it!=results.end(); it++ )
+     for ( auto it=results.begin(); it!=results.end(); it++ )
        {
            file_name  = file_name_prefix;
            file_name +="_";

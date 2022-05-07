@@ -11,7 +11,7 @@ using namespace std;
 
 namespace csmp
 {
-    SparseMatrix_Test::SparseMatrix_Test( bool verbose )
+    SparseMatrix_Test::SparseMatrix_Test()
         :
         A(4),
         ResA(4),
@@ -30,9 +30,7 @@ namespace csmp
         ResG(4),
         H(4),
         SparseMatrix2x2(2),
-        SparseMatrix3x3(2),
-        fTolerance(1.e-6),
-        verbose_(verbose)
+        SparseMatrix3x3(2)
     {
     }
 
@@ -538,6 +536,23 @@ void SparseMatrix_Test::run()
          if ( verbose_ )
            cout << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
   }
+
+
+/**
+    Tests specifically those methods that are used by PDE_Integrator:
+    - Rows(), Cols()
+    - Out()
+    - Erase()
+    - Resize()
+    - Add( i, j, val ) - also checking whether nulled elements are eliminated
+    - At( i, j ) vs. operator()(i,j)
+    - Assign( i, j, val );
+    
+    
+*/
+void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
+ {
+ } // end Test_PDE_IntegratorUseCases
 
 
 } // end csmp
