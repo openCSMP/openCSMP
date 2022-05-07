@@ -1775,7 +1775,7 @@ double  IsoparametricQuadraticTriangle::JacobianInverse()
         // values increase linearly from first to last node (so that node numbering direction can be seen)
         for ( auto j{0u}; j<Nodes(); ++j ) DATA(0,j) = j;
         OutputNodeDataToVTK( file_name.c_str(), "error_code", DATA );
-        csmp_error.notice( WARNING, "IsoparametricQuadraticTriangle::JacobianInverse:",
+        csmp_error.Note( WARNING, "IsoparametricQuadraticTriangle::JacobianInverse:",
                           "the value of the Jacobian is negative; check node-numbering.");
 
         return fabs(detJ);

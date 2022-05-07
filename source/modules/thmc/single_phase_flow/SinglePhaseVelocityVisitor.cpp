@@ -55,28 +55,28 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
     // getting ranges for output variables
 
     if ( conductivity_key_.type != SCALAR || conductivity_key_.place != ELEMENT)
-        ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+        ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                              conductivity, " must be a scalar property placed on the nodes. (anything else needs implementation)" );
 
     if ( phi_key_.type != SCALAR )
-        ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+        ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                              porosity, " must be a scalar property." );
     if ( rho_key_.type != SCALAR )
-        ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+        ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                              fluid_density, " must be a scalar property on the element." );
 
     if ( fpres_key_.place != NODE || fpres_key_.type != SCALAR )
-        ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+        ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                              fluid_pressure, " must be a scalar property placed on the nodes." );
 
     if ( velo_key_.place != ELEMENT || velo_key_.type != VECTOR )
-        ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+        ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                              velocity, " must be a vector property placed on the element." );
     model.Database().RangeOf(velocity, minmaxV_.first, minmaxV_.second );
 
     if ( nvelo_key_!=csmp::Index()){
         if ( ivelo_key_.place != ELEMENT || ivelo_key_.type != VECTOR ){
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                                  pore_velocity, " must be a vector property placed on the element." );
         }
         else{
@@ -85,7 +85,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
     }
     if ( flux_key_!=csmp::Index()){
         if ( flux_key_.place != ELEMENT || flux_key_.type != SCALAR ){
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                                  volume_flux, " must be a scalar property placed on the element." );
         }
         else{
@@ -94,7 +94,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
     }
     if ( nvelo_key_!=csmp::Index()){
         if ( nvelo_key_.place != NODE || nvelo_key_.type != VECTOR ){
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                                  nodal_velocity, " must be a vector property placed on the node." );
         }
         else {
@@ -104,7 +104,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     if ( nivelo_key_!=csmp::Index()){
         if ( nivelo_key_.place != NODE || ivelo_key_.type != VECTOR ){
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                                  nodal_pore_velocity, " must be a vector property placed on the node." );
         }
         else{
@@ -114,7 +114,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
     if ( nflux_key_!=csmp::Index()){
         if ( nflux_key_.place != NODE || nflux_key_.type != SCALAR ){
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor::(constructor)",
                                  nodal_volume_flux, " must be a scalar property placed on the node." );
         }
         else{
@@ -136,7 +136,7 @@ SinglePhaseVelocityVisitor<dim>::SinglePhaseVelocityVisitor(Model<dim>& model,
 
         if ((dim == 2 && (*e)->IsLine()) || (dim == 3 && (*e)->IsSurface() && volume_elements_present))
         {
-            ErrorHandler::Instance().notice(FATAL_ERROR,"SinglePhaseVelocityVisitor, constructor","You have lower dimensional elements in your model",
+            ErrorHandler::Instance().Note(FATAL_ERROR,"SinglePhaseVelocityVisitor, constructor","You have lower dimensional elements in your model",
                                 " Either implement code to support them in this visitor or use another that does.");
         }
     }
@@ -220,7 +220,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
                 e->NodePropertyVector( rho_key_, RHO );
         }
         else
-            ErrorHandler::Instance().notice( FATAL_ERROR, "SinglePhaseVelocityVisitor<dim>::GetOperands",
+            ErrorHandler::Instance().Note( FATAL_ERROR, "SinglePhaseVelocityVisitor<dim>::GetOperands",
                                  "fluid density is neither a node nor element variable; can't deal with this.");
     }
 
@@ -300,7 +300,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
 
             }
             else{
-                ErrorHandler::Instance().notice(FATAL_ERROR,"SinglePhaseVelocityVisitor<dim>::AddGravitationalComponentToVelocity( Element<dim>)",
+                ErrorHandler::Instance().Note(FATAL_ERROR,"SinglePhaseVelocityVisitor<dim>::AddGravitationalComponentToVelocity( Element<dim>)",
                                     " Interpolation for this element is higher than 1, or velocity is not placed on the element",
                                     " Whatever functionality you are attempting to use probably needs implementation.");
             }
@@ -323,7 +323,7 @@ void SinglePhaseVelocityVisitor<dim>::ComputeContribution(Element<dim>* e)
 
     }
     else{
-        ErrorHandler::Instance().notice(FATAL_ERROR,"SinglePhaseVelocityVisitor<dim>::ComputeVelocity( Element<dim>)",
+        ErrorHandler::Instance().Note(FATAL_ERROR,"SinglePhaseVelocityVisitor<dim>::ComputeVelocity( Element<dim>)",
                             " Interpolation for this element is higher than 1, or velocity is not placed on the element",
                             " Whatever functionality you are attempting to use probably needs implementation.");
     }

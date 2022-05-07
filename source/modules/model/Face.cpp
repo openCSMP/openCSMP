@@ -912,7 +912,7 @@ uint32_t  Face<dim>::ParentFaceID( INTERFACE_SIDE side ) const
   }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
   return inner_parent_face_id_;
 }
@@ -937,7 +937,7 @@ void  Face<dim>::ParentFaceID( INTERFACE_SIDE side, uint32_t idx )
     }
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  csmp_error.notice( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
+  csmp_error.Note( WARNING, "csmp::Face<dim>::ParentFaceID:", "Interface 'side' could not be determined." );
 
 } // end ParentFaceID(assignment)
 
@@ -1208,12 +1208,12 @@ void  Face<dim>::Out() const
 
     cout <<"\nParent (higher-dimensional) Element objects:\n";
     if ( innerParent_ != nullptr ) {
-         cout <<"\tinward  facing Element: "<< this->innerParent_->Idx();
+         cout <<"\t"<<"inside higher-dim parent Element: "<< this->innerParent_->Idx();
          cout  <<" ("<< parseFiniteElementType(this->Parent(INSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";
     if ( this->outerParent_ != nullptr ) {
-         cout <<"\toutward facing Element: "<< this->outerParent_->Idx();
+         cout <<"\t"<<"outside higher-dim parent Element: "<< this->outerParent_->Idx();
          cout <<" ("<< parseFiniteElementType(this->Parent(OUTSIDE)->FE_Type()) <<")"<< endl;
       }
     else cout <<"\tnone.\n";

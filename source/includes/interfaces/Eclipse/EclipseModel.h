@@ -11,14 +11,16 @@ namespace csmp {
 
 /**
 
-@brief Input interface which converts a corner-point (hexahedral cell) grid from 
+@brief Input interface which converts a standard corner-point (hexahedral cell) grid from
 Schlumberger's reservoir simulator Eclipse into a CSMP model object in which
 the cells are represented by hexahedra. Degenerate cells are converted to other
 element types like prisms and tetrahedra.
 
+@attention do not apply to Eclipse grids with non-standard (partially overlapping) connections with grid cells.
+
 @author R. Manasipov
-@author Stephan Matthai (refactoring in progress)
-@date 2014, 2016
+@author Stephan Matthai (done some refactoring, but still needs much work)
+@date 2014, 2016, 2018
 @revised SKM 12/04/2018
 
 */
@@ -64,21 +66,22 @@ class EclipseModel : public csmp::Model<3U> {
         { max_I=grid_dim_I_; max_J=grid_dim_J_; max_K=grid_dim_K_; }
 
   private:
-      /// Master method to build the model
-      void Initialize();
+    /// Master method to build the model
+    void Initialize();
 
-      // PROPS and other specs from RUNSPECS file
-	  EclipseInterface			mesh_interface;
-      EclipseModelSettings      eclipse_model_settings_;
-      std::set<std::string>     regions_;
-      std::set<std::string>     faults_;
-      std::set<std::string>     wells_;
+    // PROPS and other specs from RUNSPECS file
+	  EclipseInterface		 	 mesh_interface;
+    EclipseModelSettings   eclipse_model_settings_;
+    std::set<std::string>  regions_;
+    std::set<std::string>  faults_;
+    std::set<std::string>  wells_;
   
-      // Eclipse grid dimensions
-      size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
+    // Eclipse grid dimensions
+    size_t  grid_dim_I_, grid_dim_J_, grid_dim_K_;
   
-      std::unordered_multimap<ijk,Element<3u>*>  ijk_to_elmt_; ///< stores mapping from i,j,k to elements
-      std::unordered_map<Element<3u>*,ijk>       elmt_to_ijk_; ///< stores mapping from elements to i,j,k
+    // TODO: while fast, unordered map might be extremely costly in this context
+    std::unordered_multimap<ijk,Element<3u>*>  ijk_to_elmt_; ///< stores mapping from i,j,k to elements
+    std::unordered_map<Element<3u>*,ijk>       elmt_to_ijk_; ///< stores mapping from elements to i,j,k
 };
 
 } // csmp

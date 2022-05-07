@@ -21,23 +21,23 @@ calculations.
 
 */
 class SparseMatrix {
-
   public:
+    SparseMatrix();
+    explicit SparseMatrix( size_t m_x_n );
+    SparseMatrix( const SparseMatrix& );
+    SparseMatrix( SparseMatrix&& );
+    ~SparseMatrix();
 
     typedef std::vector<std::map<size_t,double> >::const_iterator    rowsConstIterator;
     typedef std::map<size_t,double>::const_iterator                  colsConstIterator;
     typedef std::vector<std::map<size_t,double> >::iterator          rowsIterator;
     typedef std::map<size_t,double>::iterator                        colsIterator;
-    SparseMatrix(); 
-    explicit SparseMatrix( size_t m_x_n );
-    SparseMatrix( const SparseMatrix& sp );
-    ~SparseMatrix();
-    SparseMatrix& operator=( const SparseMatrix& sp );
-    SparseMatrix& operator+=( SparseMatrix mat ); /// operator accumulates sparse matrices.  Initially created for OpenMP features.
-    double            operator()( size_t, size_t ) const;
-    double            At( size_t, size_t ) const;
-    const std::map<size_t,double>& Row( size_t i ) const { assert( i < data.size() ); return data[i]; }
 
+    SparseMatrix& operator=( const SparseMatrix& );
+    SparseMatrix& operator+=( const SparseMatrix& ); /// operator accumulates sparse matrices.  Initially created for OpenMP features.
+    double        operator()( size_t, size_t ) const;
+    double        At( size_t, size_t ) const;
+    
     /// resets the rows=columns of the square matrix, retaining potential extra capacity of the vector used
     void                Resize( size_t n_x_m, bool preserve_allocated_memory=true );
   
@@ -47,7 +47,7 @@ class SparseMatrix {
     size_t              Cols() const;
     rowsConstIterator   Begin() const;
     rowsConstIterator   End() const;
-    colsConstIterator   RowBegin( size_t i) const;
+    colsConstIterator   RowBegin( size_t i ) const;
     colsConstIterator   RowEnd( size_t i ) const;
 
     /// zeroing out rows in the context of parallel computations
@@ -65,15 +65,17 @@ class SparseMatrix {
     void      MultiplyWith(const std::vector<double>& vec, std::vector<double>& res);
 
     /// returns j's of non-zero column entries in row
-    void      ColumnIndices( size_t row, std::vector<uint32_t>& indices ) const;
+    void      ColumnIndices( size_t row, std::vector<size_t>& indices ) const;
+
     /// if suspected that a recent operation modified number of entries
     size_t    RecountEntries() const;
 
-    double  InfinityNorm() const;
+    double    InfinityNorm() const;
 
     bool      Symmetric() const;
     bool      ZeroesInDiagonal() const;
     bool      DiagonallyPositive() const;
+    
     /// writes text matrix of zero's and one's to visualise sparsity pattern
     void      SparsityPattern( const char* txtfile ) const;
     
@@ -83,8 +85,9 @@ class SparseMatrix {
     /// output in the form of C-style arrays indexed 0...n-1
     void      OutCompressedRowFormat( int32_t*  ia, int32_t*  ja, double* a, bool reallocate=true ) const;
     void      OutCompressedRowFormat( long*  ia, long*  ja, double* a, bool reallocate=true ) const;
+    
     /// output to Fortran arrays indexed 1...n
-    void      OutCompressedRowFormat1_n( int32_t*  ia, int32_t*  ja, double* a, bool reallocate=true ) const;
+    void      OutCompressedRowFormat1_n( int32_t* ia, int32_t* ja, double* a, bool reallocate=true ) const;
 
     void      OutCompressedRowFormatParallel( std::vector<int32_t>&, std::vector<int32_t>&,
                                               std::vector<double>, int32_t, bool ) const;
@@ -98,8 +101,8 @@ class SparseMatrix {
 	void OutForMatlab(const char * file) const;
     
   private:
-    std::vector<std::map<size_t,double> >  data;
-    size_t entries;
+    std::vector<std::map<size_t,double> >  data_;         ///< row vector with maps that store the non-zero elements of the matrix
+    size_t                                 entries_ = 0U; ///< total number of elements in the matrix
 
  };
 

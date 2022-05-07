@@ -99,7 +99,7 @@ bool EclipseTextFileInterface<GlobalFunction>
                     std::cerr<<"Keyword [ "<<i<< " ] = "<<(*it)<<std::endl;
                 std::cerr <<"\nEclipseTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::FATAL_ERROR,
+                error_handler.Note( csmp::FATAL_ERROR,
                                    "EclipseTextFileInterface<dim>::ReadFile:",
                                    "Undefined keyword:",
                                    keyword_.c_str() );
@@ -111,7 +111,7 @@ bool EclipseTextFileInterface<GlobalFunction>
             {
                 std::cerr <<"\nEclipseTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::FATAL_ERROR,
+                error_handler.Note( csmp::FATAL_ERROR,
                                    "EclipseTextFileInterface<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );
@@ -156,7 +156,7 @@ bool EclipseTextFileInterface<GlobalFunction>
             {
                 std::cerr <<"\nEclipseTextFileInterface<dim>::ReadFile: Reading was done with errors!" << std::endl;
                 ifs.close();
-                error_handler.notice( csmp::FATAL_ERROR,
+                error_handler.Note( csmp::FATAL_ERROR,
                                    "EclipseTextFileInterface<dim>::ReadFile:",
                                    "Can not read data in block marked by keyword: ",
                                    keyword_.c_str() );

@@ -183,7 +183,7 @@ const csmp::Point<3U>& PolygonCell
     csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
     if( !extra_nodes_.empty() )
         return extra_nodes_[0]->GetPoint();
-    csmp_error.notice( csmp::ERROR,
+    csmp_error.Note( csmp::ERROR,
                        "GetCellCentroidPoint()",
                        "Centroid node doesn't exist!!!");
     return nodes_[0]->GetPoint();
@@ -546,7 +546,7 @@ size_t PolygonCell
     for( size_t nid = 0; nid<num_nodes_; ++nid )
         if( custom_node_order_[nid] == original_nid )
             return nid;
-    csmp_error.notice( ERROR,
+    csmp_error.Note( ERROR,
                       "CustomNodeId()",
                       "Original node id is out of range!!!");
     return -1;
@@ -570,7 +570,7 @@ size_t PolygonCell
     for( size_t fid = 0; fid<num_faces; ++fid )
         if( custom_face_order_[fid] == original_fid )
             return fid;
-    csmp_error.notice(csmp::ERROR,
+    csmp_error.Note(csmp::ERROR,
                       "CustomFaceId()",
                       "Original face id is out of range!!!");
     return -1;

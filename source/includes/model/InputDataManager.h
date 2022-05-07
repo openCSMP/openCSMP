@@ -30,14 +30,14 @@ models / meshes, but subregions and model internal and external boundaries
 are identified by integer or floating point (material property) values,
 this interface should also provide the possibility to create named
 model subregions from property values and ranges. The only possible
-properties for this purpose inside of CSP are element properties. This
+properties for this purpose inside of CSMP are element properties. This
 is because each subregion must at least consist of one finite element.
- 
- 
+
+
 @section design Design Intent
 
 A simple design is achieved by dividing the input data into five 
-different data blocks, The user decides which blocks to read,
+different data blocks. The user decides which blocks to read,
 by setting boolean flag arguments to ConfigureFromFile():
 
 Block 1 - to define named regions of elements with characteristic values
@@ -47,11 +47,11 @@ Block 2 - to set default property values for the entire model.
 These can get overwritten in individual subregions by the values 
 and flags supplied in the data blocks 3-5.
 
-Block 3 - propert values for  model subregions. The user can determine
+Block 3 - property values for model subregions. The user can determine
 whether these values are applied to the entire subregion (option=COMPLETE),
 its boundary (option=PERIMETER), or only the interior of the region 
-(option=INTERIIR). The CSMP user's guide explain how these parts 
-of a region are defined and how Region obkects work in general. 
+(option=INTERIOR). The CSMP user's guide explains how these parts 
+of a region are defined and how Region objects work in general. 
 The perimeter elements of regions are only those which
 have at least one of their faces on the region boundary. 
 
@@ -62,7 +62,7 @@ after initialisation is complete. This is not the case for
 other property placements.
 
 Block 4 - (box-shaped models only): assigns boundary conditions 
-using the boundary identifiers defined by the enumeriation BOX_BOUNDARY
+using the boundary identifiers defined by the enumeration BOX_BOUNDARY
 in 'Box.h'. Box-shaped models offer a few extra configuration 
 possibilities. For instance,
 linear boundary property variations can be assigned,
@@ -86,7 +86,7 @@ specific meshing tools, such as Shewchuk's triangle mesher and ICEM's
 suite of meshing tools. 
 
 Computational Settings - is an additional block that can be appended,
-allowing the user to define the time stepping strategy, during and
+allowing the user to define the time stepping strategy, duration and
 times when simulation results shall be output to file.
 
 Again, a blank line indicates the end of this block and users can 
@@ -140,7 +140,7 @@ left fault zone		tab		permeability	tab		1.0e-12 1.0e-11
 blank line (thereafter default properties and initial conditions assigned to whole model)
 
 @code
-# Block 2: default properties for the entire the model
+# Block 2: default properties for the entire model
 permeability   	tab   1.0e-13
 storativity    	tab   1.0e-9
 @endcode
@@ -175,7 +175,7 @@ well 	tab		interior	tab 	fluid pressure 	tab 	Dirichlet
 blank line (thereafter boundary condition flags for free-form boundaries)
 
 @code
-# Block 6: boundart conditions applied to CSMP Boundary objects (that can have arbitrary shape)
+# Block 6: boundary conditions applied to CSMP Boundary objects (that can have arbitrary shape)
 # Boundary name       part of       flag           variable name      uniform value on boundary
 BOUNDARY_TOP     tab  complete tab  Dirichlet  tab fluid pressure tab 16495146.
 @endcode
@@ -219,7 +219,7 @@ class  InputDataManager {
                             bool block6,            ///< boundary conditions for arbitrary-shaped model
                             ComputationalSettings& settings );
 
-    /// costumized configuration of CSMP models including a particualr configuration file
+    /// customized configuration of CSMP models including a particular configuration file
     bool ConfigureFromSpecificFile( Model<dim>&, const char* configuration_fname,
                             bool block1,            ///< region name from parameter range
                             bool block2,            ///< default property values
@@ -246,7 +246,7 @@ class  InputDataManager {
                                       std::map<std::string,std::vector<double> >& well_data,
                                       ComputationalSettings& settings );
 
-    /// configures box-shaped ANSYS models output using ANSYS' csp input interface
+    /// configures box-shaped ANSYS models output using ANSYS' csmp input interface
     bool Configure_ANSYS_ModelFromFile( Model<dim>&, const char* fname );
 
     /// configures arbitrarily shaped ANSYS models output to CSMP, recognising boundaries if their name contains BOUNDARY

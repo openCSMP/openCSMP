@@ -11,8 +11,8 @@ namespace csmp {
 
 /// Model constructor with provided "variables_file.txt" file is used
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
-	const std::string& model_name,
-	const std::string& variables_file)
+	const string& model_name,
+	const string& variables_file)
 	: csmp::Model<3U>(variables_file.c_str()),
 	eclipse_model_settings_(settings)
 {
@@ -23,7 +23,7 @@ EclipseModel::EclipseModel(EclipseModelSettings& settings,
 
 /// Default Model constructor with empty property data base is called
 EclipseModel::EclipseModel(EclipseModelSettings& settings,
-	const std::string& model_name)
+	const string& model_name)
 	: csmp::Model<3U>(),
 	eclipse_model_settings_(settings)
 {
@@ -59,23 +59,21 @@ void EclipseModel::Initialize()
 		mesh_interface.SetProperties(eclipse_model_settings_.properties_);
 
 		// KEY METHOD here
-		mesh_interface.ReadFile(  vset, mesh_topology,
-                              eclipse_model_settings_.mesh_file_prefix_,
-                              eclipse_model_settings_.exclude_inactive_cells_,
-                              eclipse_model_settings_.tetra_mesh_);
+		mesh_interface.ReadFile( vset, mesh_topology,
+                             eclipse_model_settings_.mesh_file_prefix_,
+                             eclipse_model_settings_.exclude_inactive_cells_,
+                             eclipse_model_settings_.tetra_mesh_);
 
 		// =====================================================================
 		// 1. selectively read properties of interest, adding them to VSET
 		// =====================================================================
 		// porosity, permeability, saturations
-		std::set<std::string> vset_props;
-		std::set<std::string>::iterator prop_it;
-		for (std::map<int, csmp::Parameter>::const_iterator
-			epit = eclipse_model_settings_.properties_.begin(); epit != eclipse_model_settings_.properties_.end(); ++epit)
+		set<string> vset_props;
+		for ( auto epit = eclipse_model_settings_.properties_.begin(); epit != eclipse_model_settings_.properties_.end(); ++epit)
 		{
 			const csmp::Parameter& prop = (*epit).second;
-			prop_it = vset_props.find(prop.name);
-			if (prop_it != vset_props.end())
+			auto prop_it = vset_props.find(prop.name);
+			if ( prop_it != vset_props.end())
 			{
 				if (!this->Database().IsDefined(prop.name.c_str()))
 					// SKM FIX 
@@ -87,23 +85,23 @@ void EclipseModel::Initialize()
 		}
 
 		/// checking whether any undefined properties are left
-		std::set<std::string> undefined_props;
-		for (prop_it = vset_props.begin(); prop_it != vset_props.end(); ++prop_it)
+		set<string> undefined_props;
+		for ( auto prop_it = vset_props.begin(); prop_it != vset_props.end(); ++prop_it)
 			if (!this->Database().IsDefined((*prop_it).c_str()))
 				undefined_props.insert(*prop_it);
 		if (!undefined_props.empty())
 		{
 			if (error_handler.Verbose())
 			{
-				std::string message = "VSet contains data for undefined properties: ";
-				for (prop_it = undefined_props.begin(); prop_it != undefined_props.end(); ++prop_it)
+				string message = "VSet contains data for undefined properties: ";
+				for ( auto prop_it = undefined_props.begin(); prop_it != undefined_props.end(); ++prop_it)
 				{
 					if (prop_it != undefined_props.begin())
 						message += ", ";
 					message += *prop_it;
 				}
 				message += " !!!";
-				error_handler.notice(csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str());
+				error_handler.Note(csmp::INFO, "EclipseModel<3U>::BuildModel", message.c_str());
 			}
 		}
     
@@ -119,47 +117,47 @@ void EclipseModel::Initialize()
 	// ---------------------------------------------------
 	// catching all possible standard and csmp::Exceptions
 	// ---------------------------------------------------
-	catch (std::bad_alloc& ba) {
-		std::cout << "\nbad_alloc: Memory allocation error caused by: " << ba.what() << std::endl;
+	catch (bad_alloc& ba) {
+		cout << "\nbad_alloc: Memory allocation error caused by: " << ba.what() << endl;
 	}
-	catch (std::bad_cast& ba) {
-		std::cout << "\nbad_cast: Type casting error caused by: " << ba.what() << std::endl;
+	catch (bad_cast& ba) {
+		cout << "\nbad_cast: Type casting error caused by: " << ba.what() << endl;
 	}
-	catch (std::bad_exception& ba) {
-		std::cout << "\nbad_exception: Exception error caused by: " << ba.what() << std::endl;
+	catch (bad_exception& ba) {
+		cout << "\nbad_exception: Exception error caused by: " << ba.what() << endl;
 	}
-	catch (std::bad_typeid& ba) {
-		std::cout << "\nbad_typeid: Type ID error caused by: " << ba.what() << std::endl;
+	catch (bad_typeid& ba) {
+		cout << "\nbad_typeid: Type ID error caused by: " << ba.what() << endl;
 	}
-	catch (std::ios_base::failure& ba) {
-		std::cout << "\nios_base::failure: Probable I/O error caused by: " << ba.what() << std::endl;
+	catch (ios_base::failure& ba) {
+		cout << "\nios_base::failure: Probable I/O error caused by: " << ba.what() << endl;
 	}
 	// standard logic errors
-	catch (std::domain_error& ba) {
-		std::cout << "\ndomain_error: Logic error caused by: " << ba.what() << std::endl;
+	catch (domain_error& ba) {
+		cout << "\ndomain_error: Logic error caused by: " << ba.what() << endl;
 	}
-	catch (std::invalid_argument& ba) {
-		std::cout << "\ninvalid_argument: Logic error caused by: " << ba.what() << std::endl;
+	catch (invalid_argument& ba) {
+		cout << "\ninvalid_argument: Logic error caused by: " << ba.what() << endl;
 	}
-	catch (std::length_error& ba) {
-		std::cout << "\nlength_error: Logic error caused by: " << ba.what() << std::endl;
+	catch (length_error& ba) {
+		cout << "\nlength_error: Logic error caused by: " << ba.what() << endl;
 	}
-	catch (std::out_of_range& ba) {
-		std::cout << "\nout_of_range: Logic error caused by: " << ba.what() << std::endl;
+	catch (out_of_range& ba) {
+		cout << "\nout_of_range: Logic error caused by: " << ba.what() << endl;
 	}
 	// runtime errors
-	catch (std::overflow_error& ba) {
-		std::cout << "\noverflow_error: Runtime error caused by: " << ba.what() << std::endl;
+	catch (overflow_error& ba) {
+		cout << "\noverflow_error: Runtime error caused by: " << ba.what() << endl;
 	}
-	catch (std::range_error& ba) {
-		std::cout << "\nrange_error: Runtime error caused by: " << ba.what() << std::endl;
+	catch (range_error& ba) {
+		cout << "\nrange_error: Runtime error caused by: " << ba.what() << endl;
 	}
-	catch (std::underflow_error& ba) {
-		std::cout << "\nunderflow_error: Runtime error caused by: " << ba.what() << std::endl;
+	catch (underflow_error& ba) {
+		cout << "\nunderflow_error: Runtime error caused by: " << ba.what() << endl;
 	}
 	catch (csmp::Exception& ba) {
-		std::cout << "\nException: Exception raised by: " << ba.What() << std::endl;
-		std::cout << "\nDiagnostics:" << std::endl;
+		cout << "\nException: Exception raised by: " << ba.What() << endl;
+		cout << "\nDiagnostics:" << endl;
 		ba.Out();
 	}
 } // end
@@ -172,9 +170,9 @@ void EclipseModel::GetRegions(Container& data)
 	mesh_interface.GetRegions(data);
 }
 
-template void EclipseModel::GetRegions(std::vector<std::string>&);
-template void EclipseModel::GetRegions(std::list<std::string>&);
-template void EclipseModel::GetRegions(std::set<std::string>&);
+template void EclipseModel::GetRegions(vector<string>&);
+template void EclipseModel::GetRegions(list<string>&);
+template void EclipseModel::GetRegions(set<string>&);
 
 
 template<class Container>
@@ -183,9 +181,9 @@ void EclipseModel::GetFaults(Container& data)
 	mesh_interface.GetFaults(data);
 }
 
-template void EclipseModel::GetFaults(std::vector<std::string>&);
-template void EclipseModel::GetFaults(std::list<std::string>&);
-template void EclipseModel::GetFaults(std::set<std::string>&);
+template void EclipseModel::GetFaults(vector<string>&);
+template void EclipseModel::GetFaults(list<string>&);
+template void EclipseModel::GetFaults(set<string>&);
 
 
 template<class Container>
@@ -194,26 +192,30 @@ void EclipseModel::GetWells(Container& data)
 	mesh_interface.GetWells(data);
 }
 
-template void EclipseModel::GetWells(std::vector<std::string>&);
-template void EclipseModel::GetWells(std::list<std::string>&);
-template void EclipseModel::GetWells(std::set<std::string>&);
+template void EclipseModel::GetWells(vector<string>&);
+template void EclipseModel::GetWells(list<string>&);
+template void EclipseModel::GetWells(set<string>&);
 
-void EclipseModel::AddWell(const std::string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point)
+
+
+void EclipseModel::AddWell(const string& well_name, const Point<3U>& well_start_point, const Point<3U>& well_end_point)
 {
 	mesh_interface.AddWell(well_name, well_start_point, well_end_point);
 }
 
+
+
 /// processing special regions
 void EclipseModel::CreateBoundariesAroundFaults( bool keep_fault_regions )
 {
-	this->MergeRegions(faults_, "FAULTS");
-	faults_.insert("FAULTS");
-	this->CreateInternalBoundaryFrom( "FAULTS" );
+	// create external boundaries from regions whose name contains 'BOUNDARY' or a box boundary identifier
+  // ( the input regions are deleted)
+  EstablishBoundariesFromRegions();
 
-	// create boundaries
-	for (std::set<std::string>::const_iterator
-		rit = faults_.begin(); rit != faults_.end(); ++rit)
-		this->CreateExternalBoundaryFrom( (*rit).c_str(), csmp::IRREGULAR );
+   // combine all regions imported under the category of faults into a single one call faults
+	this->MergeRegions( faults_, "FAULTS");
+	faults_.insert("FAULTS");
+// 	this->CreateInternalBoundaryFrom( "FAULTS" );
 }
 
 
@@ -224,7 +226,7 @@ void EclipseModel::CreateSplitBoundariesAroundFaults( bool delete_fault_regions 
 	this->CreateSplitBoundaryFrom("FAULTS");
 
 	// create splitboundaries
-	//for( std::set<std::string>::const_iterator
+	//for( set<string>::const_iterator
 	//     rit = faults_.begin(); rit != faults_.end(); ++rit )
 	//    this->InsertSplitBoundary( (*rit), delete_fault_regions );
 	//faults_.insert("FAULTS");
@@ -290,7 +292,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 				}
 			}
 		// flagging elements with duplicate and triplicate boundary nodes accordingly
-		for (size_t n = 0U; n<(*it)->Nodes(); ++n) {
+		for ( auto n{0U}; n<(*it)->Nodes(); ++n) {
 			// dealing with any cases where there are multiple boundary flags
 			// duplicates = edges
 			if (boundary_nodes.count(n) == 2U) {
@@ -310,7 +312,7 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 			else if (boundary_nodes.count(n) > 3U) { // potentially a hexahedron which sits at a model edge (7-boundary nodes)
 				(*it)->Out();
 				cerr << "\n\tdetected " << boundary_nodes.count(n) << " boundary flags for element " << (*it)->Idx();
-				error_handler.notice(WARNING, "EclipseModel<3U>::AssignBoxBoundaryFlagsWherePossible:",
+				error_handler.Note(WARNING, "EclipseModel<3U>::AssignBoxBoundaryFlagsWherePossible:",
 					"this may be a completely disconnected element.");
 			}
 		}

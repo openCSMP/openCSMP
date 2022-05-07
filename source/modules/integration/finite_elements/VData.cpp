@@ -8,7 +8,6 @@
 #include "TriangularFacet.h"
 #include "CSMP_mathUtilities.h"
 #include "CSMP_highLevelUtilities.h"
-#include "meshManagementUtilities.h"
 #include "CSMP_ElementSpecifications.h"
 #include "compareFloats.h"
 
@@ -727,11 +726,11 @@ void VData::ResizeNodes( size_t nodes )
            if ( (*i) > node_max ) node_max = (*i);
         
        if ( nodes < node_max )
-         csmp_error.notice( WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
+         csmp_error.Note( WARNING, "VData::ResizeNodes", "'plist' contains node numbers larger than desired size" );
       }
       
     if ( px.size() > 0U )
-      csmp_error.notice( WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
+      csmp_error.Note( WARNING, "VData::ResizeNodes", "erasing node coordinates in 'vdata'" );
     px.resize( nodes );  vector<double>( px ).swap( px );
     py.resize( nodes );  vector<double>( py ).swap( py );
     pz.resize( nodes );  vector<double>( pz ).swap( pz );
@@ -2891,7 +2890,7 @@ void  VData::EstablishElementConnectivity2D()
                      {
                        cerr <<"\n\n\telement "<< elmt_idx <<" ("<< parseFiniteElementType( pelmt[elmt_idx] ) <<") ";
                        cerr <<" has "<< boundaries_per_element <<" faces on model boundary.\n";
-                       csmp_error.notice( WARNING, "VData::EstablishElementConnectivity2D:",
+                       csmp_error.Note( WARNING, "VData::EstablishElementConnectivity2D:",
                                          "triangular element with  2 faces on boundary ");
                        triangle_with_all_nodes_on_boundary = true;
                      }
@@ -2945,7 +2944,7 @@ void  VData::EstablishElementConnectivity2D()
                      const size_t            n_elmts_to_combine(2U);
                      deque<vector<int64_t> > combinations;
                      if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
-                       csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                       csmp_error.Note( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
                      // finding inter-element angle for all combinations
                      //             angle, combination number
                      vector<pair<double,size_t> > inter_element_angles;
@@ -3143,15 +3142,15 @@ void VData::EstablishElementConnectivity3D()
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( plist.empty() ) {
-         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "supplied cell vector is empty; nothing was done." );
+         csmp_error.Note( WARNING, "VData::EstablishElementConnectivity3D:", "supplied cell vector is empty; nothing was done." );
          return;
       }
     if ( Faces() > 0 ) {
-         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "Face objects not handled yet" );
+         csmp_error.Note( WARNING, "VData::EstablishElementConnectivity3D:", "Face objects not handled yet" );
          return;
       }
     if ( InterFaces() > 0 ) {
-         csmp_error.notice( WARNING, "VData::EstablishElementConnectivity3D:", "InterFace objects not handled yet" );
+         csmp_error.Note( WARNING, "VData::EstablishElementConnectivity3D:", "InterFace objects not handled yet" );
          return;
       }
  
@@ -3265,7 +3264,7 @@ void VData::EstablishElementConnectivity3D()
                    const size_t            n_elmts_to_combine(2U);
                    deque<vector<int64_t> > combinations;
                    if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
-                     csmp_error.notice( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
+                     csmp_error.Note( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
                    // finding inter-element angle for all combinations
                    //             angle, combination number
                    vector<pair<double,size_t> > inter_element_angles;
@@ -3369,7 +3368,7 @@ void VData::EstablishElementConnectivity3D()
                    const size_t           n_elmts_to_combine(2U);
                    deque<vector<int64_t> > combinations;
                    if ( createUniqueCombinations( joint_surf_elmts, n_elmts_to_combine, combinations ) == 0 )
-                     csmp_error.notice( ERROR, "EstablishElementConnectivity3D", "no combinations between elements available");
+                     csmp_error.Note( ERROR, "EstablishElementConnectivity3D", "no combinations between elements available");
                    // finding inter-element angle for all combinations
                    //             angle, combination number
                    vector<pair<double,size_t> > inter_element_normal_angles;
@@ -3536,7 +3535,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( plist.empty() ) {
-         csmp_error.notice( WARNING, "VData::EstablishNodeNeighborConnectivity:", "plist is empty; nothing was done." );
+         csmp_error.Note( WARNING, "VData::EstablishNodeNeighborConnectivity:", "plist is empty; nothing was done." );
          return;
       }
 
@@ -3551,7 +3550,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
          // getting the element type
          const auto CSMP_FE_type = (HybridElementTypeMesh()) ? static_cast<CSMP_FEM_TYPE>(pelmt[elmt]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
          if ( !higher_order_elements && CSMP_ElementSpecifications::InterpolationOrder(CSMP_FE_type) > 1 ) {
-              csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
+              csmp_error.Note( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes not tested yet; check!" );
               higher_order_elements = true;
            }
          // for each segment
@@ -3612,7 +3611,7 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
                    }
                }
              else {
-                  csmp_error.notice( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes for O>2 meshes not done yet" );
+                  csmp_error.Note( ERROR, "VData::EstablishNodeNeighborConnectivity", "connectivity of midside nodes for O>2 meshes not done yet" );
                   break;
                }
            }

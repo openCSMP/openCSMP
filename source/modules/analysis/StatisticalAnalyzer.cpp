@@ -49,14 +49,14 @@ const
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( sref.UniqueRegions() == 0 ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
+           csmp_error.Note( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
                              "No regions are defined. Nothing was done.");
            return;
        }
      csmp::Index prop_key = pref.StorageKey(prop);
 
      if ( prop_key.place != ELEMENT ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: Area/volume normalization ",
+           csmp_error.Note( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: Area/volume normalization ",
                                      "only works for element properties." );
            return;
        }
@@ -158,7 +158,7 @@ const
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( sref.UniqueRegions() == 0 ) {
-           csmp_error.notice( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
+           csmp_error.Note( ERROR, "StatisticalAnalyzer::RegionPropertyHistograms: ",
                              "No regions are defined. Nothing was done.");
            return;
        }
@@ -298,7 +298,7 @@ const
                      n = (*grit).second.Cells();
                   break;
                 default:
-                  csmp_error.notice( ERROR, "StatisticalAnalyzer", "property placement not handled yet");
+                  csmp_error.Note( ERROR, "StatisticalAnalyzer", "property placement not handled yet");
             }
          // 2. normalization of results
          // ---------------------------

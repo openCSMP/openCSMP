@@ -69,6 +69,12 @@ bool isoparametricElementMesh( const Model<dim>& );
 template<uint32_t dim>
 size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>&, std::set<size_t>& );
 
+/// finds cells that have the same nodes and reports their numbers; verbose reports the duplicate cells
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t detectDuplicateCells( typename std::vector<CELL<dim>*>::const_iterator begin,
+                             typename std::vector<CELL<dim>*>::const_iterator end,
+                             bool verbose );
+
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,
@@ -76,13 +82,19 @@ void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes
                           std::vector<std::vector<double> >& distances_and_weight );
 
 /// container of element pointers and local face ids of elements contacting each other across a split boundary
-typedef std::pair<std::pair<Element<3U>*, size_t>, std::pair<Element<3U>*, size_t> > OppositeElements;
+typedef std::pair<std::pair<Element<3U>*, uint32_t>, std::pair<Element<3U>*, uint32_t> > OppositeElements;
 
 /// find all elements in a model that contact eachother across split interfaces and are node-matched
 template<uint32_t dim>
 bool findSplitInterfaceElements( const Region<dim>&,
-                                 std::set<std::pair<std::pair<Element<dim>*, size_t>,
-                                 std::pair<Element<dim>*, size_t> > >& opposite_elmts_and_face_ids );
+                                 std::vector<std::pair<std::pair<Element<dim>*, uint32_t>,
+                                                       std::pair<Element<dim>*, uint32_t> > >& opposite_elmts_and_face_ids );
+                                                       
+/// finds node-matched internal split model boundaries, a lower prop value distinguishes the inside; if both values are the same, no boundary is inserted; returns number of interfaces recorded
+template<uint32_t dim>
+size_t findSplitInterfaceElements( const Model<dim>& model, const std::string& property_to_distinguish_regions,
+                                   std::vector<std::pair<std::pair<Element<dim>*, uint32_t>,
+                                                         std::pair<Element<dim>*, uint32_t> > >& opposite_elmts_and_face_ids );
 
 /// for supplied edge nodes, find their volumetric parent elements; if find segment ids is on, their local numbers are assigned to Idx of the parent elements
 size_t parentElementsSharingMultipleEdgeNodes( const std::vector<Node<3U>*>&  edge_nodes,

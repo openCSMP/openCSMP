@@ -277,7 +277,7 @@ void PropertyAtPointVisitor_Test::IsoparametricLinear3DMesh_Test( const char* me
     ANSYS_Model3D model3DRegion( mesh_name,
                                  regionfile_name,
                                  varfile_name,
-                                 true,true,true);
+                                 true,true);
     Element<3>* eptr;
     auto elements_begin    = model3DRegion.Region("Model").CellsBegin();
     auto elements_end      = model3DRegion.Region("Model").CellsEnd();

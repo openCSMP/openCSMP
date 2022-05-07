@@ -188,14 +188,14 @@ namespace csmp
       {
         if( definitelyLessThan (t, cp_h2o.Temperature(),numeric_limits<double>::epsilon() ) )
           {
-            csmp_error.notice( FATAL_ERROR, 
+            csmp_error.Note( FATAL_ERROR, 
                              "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double& t) -",
                              "temperature is less than critical temperature for H2O and therefore out of range, terminating ...\n");
           }
         if( definitelyGreaterThan (t, 1000.0,10.0*numeric_limits<double>::epsilon() ) )
           {
             cerr << "delta is " << t-1000.0e0 << " for t = " << t << endl;
-            csmp_error.notice( FATAL_ERROR, 
+            csmp_error.Note( FATAL_ERROR, 
                              "CriticalCurveLookup::GetTemperatureIndexCriticalCurve(const double& t) -",
                              "temperature is higher than 1000 C and therefore out of range, terminating ...\n");
           }

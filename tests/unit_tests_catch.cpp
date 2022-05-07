@@ -166,15 +166,15 @@ TEST_CASE("Finite elements and math operators", "[FiniteElements]"){
 	TEST_SECTION(Operand)
 	TEST_SECTION(MathOperatorLHS)
 	TEST_SECTION(MathOperatorRHS)
-	TEST_SECTION(PDE_Integrator)
+	//TEST_SECTION(PDE_Integrator) requires a Model as parameter
 }
 
 TEST_CASE("Model-related interdependent functionality", "[ModelFunctionality]") {
 	TEST_SECTION(ModelTopology)
 	TEST_SECTION(Box)
 	TEST_SECTION(ModelSubDomain)
-	TEST_SECTION_V(Region,false)
-	TEST_SECTION_V(BoundaryInterface,false)
+	TEST_SECTION(Region)
+	TEST_SECTION(BoundaryInterface)
 	TEST_SECTION(ANSYS_Model2D)
 	TEST_SECTION(InputDataManager)
 	TEST_SECTION(ANSYS_Model3D)

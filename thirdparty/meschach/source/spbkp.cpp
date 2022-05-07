@@ -36,7 +36,7 @@ static	char	rcsid[] = "$Id: spbkp.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 #include	"sparse.h"
 #include  "sparse2.h"
 

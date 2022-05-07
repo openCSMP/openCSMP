@@ -46,8 +46,11 @@ class SplitBoundaryInterface {
     /// uses the InterFace ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed
     size_t FormSplitBoundariesFrom( const ModelTopology& );
 
-    /// Creates SplitBoundaries detecting and connecting node-matched disconnected perimeter element faces in mesh (already created in ANSYS or other); these are grouped and named for regions
+    /// Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions
     std::pair<std::set<std::string>,bool>  DetectAndCreateSplitBoundaries();
+    
+    /// creates consistently named split boundaries between all unique regions in the model
+    size_t SeparateUniqueRegionsBySplitBoundaries();
     
     /// creation of one or multiple SplitBoundaries from a lower dimensional region 
     std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region );
@@ -55,7 +58,7 @@ class SplitBoundaryInterface {
     /// one-to-one conversion of a model Boundary into a SplitBoundary, non-constant because Boundary gets removed
     std::pair<std::string,bool>  CreateSplitBoundaryFrom( Boundary<dim>& );
 
-    /// Creation of SplitBoundary between regions via boundary that gets deleted afterwards
+    /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
@@ -68,10 +71,10 @@ class SplitBoundaryInterface {
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( const char* split_boundary );
+    void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( csmp::SplitBoundary<dim>& );
+    void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
 
     // -----------------------------------------------------------
     // Input/output

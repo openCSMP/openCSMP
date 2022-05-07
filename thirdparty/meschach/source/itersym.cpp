@@ -33,7 +33,7 @@
 
 #include <cmath>
 #include <cstdlib>
-#include   "matrix.h"
+#include   "meschach_matrix.h"
 #include   "matrix2.h"
 #include   "sparse.h"
 #include   "iter.h"

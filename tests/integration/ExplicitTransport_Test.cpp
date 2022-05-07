@@ -311,9 +311,9 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // test 1: is the finite volume equal to the element volume
     // --------------------------------------------------------
     const csmp::Index  vol_key(model_ptr_->Database().StorageKey("finite volume"));
-    double           total_volume(0.), total_PV(0.);
+    double             total_volume(0.), total_PV(0.);
     Region<3U>         model_domain(model_ptr_->Region("Model"));
-    const double     model_volume = model_domain.Volume(); // finite element estimate
+    const double       model_volume = model_domain.Volume(); // finite element estimate
 
     for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
          total_volume += (*nit)->Read( vol_key );

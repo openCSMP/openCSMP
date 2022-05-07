@@ -2,7 +2,7 @@
 
 #ifdef CSMP_WITH_MESCHACH
 #include "meschach.h"
-#include "matrix.h"
+#include "meschach_matrix.h"
 #include "matrix2.h"
 #endif
 

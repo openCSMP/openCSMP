@@ -101,7 +101,7 @@ void TRIANGLE_Interface::ReadTriangle2DMesh( const char* fname, VSet<dim>& vset,
                             "There were no element property values read");
 
     if ( evalues.size() != plist.size() )
-      csmp_error.notice( ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
+      csmp_error.Note( ERROR, "TRIANGLE_Interface::ReadTriangle2DMesh", 
                             "This method assumes that there is only one property value per element." );
     
     ListZeroPropertyValueElements( evalues, plist, x, y );
@@ -1035,7 +1035,7 @@ void  TRIANGLE_Interface::SplitSingleCornerElements( map<size_t,vector<int64_t> 
                      {
                         new_prop = (eprop1 + eprop2) / 2.0;
                         evalues[ (*eit1).first-1 ] = evalues[ (*eit2).first-1 ] = new_prop;
-                        csmp_error.notice( INFO, "TRIANGLE_Interface::SplitSingleCornerElements", 
+                        csmp_error.Note( INFO, "TRIANGLE_Interface::SplitSingleCornerElements", 
                                        "Element property values were averaged when corner element was flipped");
                         cout <<"\nElement: "<< (*eit1).first <<", original property value: "<< eprop1;
                         cout <<"\nElement: "<< (*eit2).first <<", original property value: "<< eprop2;

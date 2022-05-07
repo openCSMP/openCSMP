@@ -51,7 +51,7 @@ namespace csmp
         Point<3> Point3U;
 
         std::vector<double> x, y, sol_y, solB, solD;
-        std::vector<uint32_t> sizetVector;
+        std::vector<size_t> sizetVector;
 
         double fTolerance          = 1.0e-6;
         static const bool verbose_ = true;

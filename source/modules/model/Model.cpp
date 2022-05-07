@@ -258,11 +258,11 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
      if ( vset.Faces() > 0 || vset.InterFaces() > 0 )
-       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
+       csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "method works only for vsets without Face or InterFace objects as it creates them by itself from lower-dimensiona regions.");
       
      if ( !vset.WithNeighbourConnectivity() )
-       csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
+       csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 1. eliminating unwanted mesh regions from topology and vset, rebuilding boundary flags, check   element numbering etc.
     string prefix( regions_file_prefix );
@@ -281,13 +281,13 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
       
      // the VSet must be correct calling initialise
      if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
+         csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 2. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), vset );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
-      csmp_error.notice( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
+      csmp_error.Note( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "model contains disconnected mesh patches - will attempt to connect them with SplitBoundary objects." );
 
     // 3. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
@@ -297,7 +297,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
-      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "Region 'Model' has zero elements.");
+      csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "Region 'Model' has zero elements.");
 
     // 5. associating supplied subregions with regions (model subdomains)
     const bool ignore_domain_identification_by_name{true};
@@ -315,11 +315,11 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
           if ( contiguous_model )
             this->EstablishBoundariesFromRegions();
           else
-            csmp_error.notice( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
+            csmp_error.Note( ERROR, "Model::Intialise(regionfile,ModelTopology,VSet)", "discontiguous model not handled yet");
 
          // reporting
          this->RegionsOut();
-         this->BoundariesOut();
+         // this->BoundariesOut(); - was already reported when these were created
       }
 
     // 7. forming SplitBoundaries if a discontiguous model was detected
@@ -381,17 +381,17 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !vset.WithNeighbourConnectivity() )
-      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
+      csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
 
      // the VSet must be correct calling initialise
      if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) )
-         csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
+         csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 1. building the finite element mesh and property storage
     mesh_manager_.Initialize( Database(), vset );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
-      csmp_error.notice( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
+      csmp_error.Note( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
                         "model contains disconnected mesh patches. They will be connected with SplitBoundary objects." );
 
     // 2. assigning properties to mesh; this does not depend on regions, but region formation may depend on variable values
@@ -401,7 +401,7 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
     const bool place_into_unique_regions{ mesh_topology.ModelDomains() == 0 };
     const size_t elmts = this->FormModelRegion( place_into_unique_regions );
     if ( elmts == 0U )
-      csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Region 'Model' has zero elements.");
+      csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "Region 'Model' has zero elements.");
 
     // 4. associating supplied subregions with regions (model subdomains)
     this->FormRegionsFrom( mesh_topology );
@@ -486,12 +486,12 @@ void Model<dim>::Initialize( VSet<dim>& vset )
 
   if ( vset.Faces() > 0 ||
        vset.InterFaces() > 0 )
-    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
+    csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
 
   // 1. checking for neighbor connectivity and boundary flags
   // the VSet must be correct calling initialise
   if ( (vset.PfvertsBegin() == vset.PfvertsEnd()) ) {
-       csmp_error.notice( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now.");
+       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'pfverts' array is missing; establishing it now.");
        if constexpr ( dim == 2 )
          vset.EstablishElementConnectivity2D();
        if constexpr ( dim == 3 )
@@ -504,7 +504,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
        tolerance = max( tolerance, fabs( vset.Y_Range().second ) );
        tolerance = max( tolerance, fabs( vset.Z_Range().second ) );
        tolerance *= 1.0e-5;
-       csmp_error.notice( WARNING, "Model<dim>::Initialize(VSet):", "'BOX_BOUNDARY' flags are incomplete.");
+       csmp_error.Note( WARNING, "Model<dim>::Initialize(VSet):", "'BOX_BOUNDARY' flags are incomplete.");
        VSetConverter<dim>().EstablishBoundaryFlagsForBoxModel( vset, tolerance );
     }
 
@@ -515,7 +515,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   const bool unique(true);
   const size_t elmts = this->FormModelRegion( unique );
   if ( elmts == 0U )
-    csmp_error.notice( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
+    csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Region 'Model' has zero elements.");
   
   cout << "\nModel<dim>::Initialize (VSet): mesh has been built successfully..." << endl;
 
@@ -722,7 +722,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
-  else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
+  else ErrorHandler::Instance().Note( INFO, "Model<dim>::InputVariablesFrom:", "No properties found in VSet." );
 
   // properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
@@ -768,7 +768,7 @@ void Model<dim>::InputVariablesFrom( const VSet<dim>& vset )
             }
           break;
         default:
-          csmp_error.notice( ERROR, "Model<dim>::InputVariablesFrom:",
+          csmp_error.Note( ERROR, "Model<dim>::InputVariablesFrom:",
                              (*pit).first, "type of Model variable not recognized." );
       }
   }
@@ -865,13 +865,13 @@ void Model<dim>::IndexByPropertyValues()
          for ( auto nit=mesh.NodesBegin(); nit!=nodes_end; ++nit ) {
               const size_t node_number = static_cast<uint32_t>((*nit).Read(key));
               if ( node_number >= n_nodes )
-                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                             "'node number' exceeds range of available nodes:", to_string(node_number) );
               (*nit).Idx( node_number );
            }
       }
     else {
-         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+         csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
                                   "'node number' is not defined; default unique contiguous numbering will be used" );
          mesh.AssignUniqueNumbers( in_a_single_sequence );
          return;
@@ -884,13 +884,13 @@ void Model<dim>::IndexByPropertyValues()
          for ( auto it=mesh.ElementsBegin(); it!=elmts_end; ++it ) {
               const size_t elmt_number = static_cast<uint32_t>((*it).Read(key));
               if ( elmt_number >= n_elmts )
-                csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                   "'element number' exceeds range of available elements:", to_string(elmt_number) );
               (*it).Idx( elmt_number );
            }
       }
     else {
-         csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+         csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
                                   "'element number' is not defined; default unique contiguous numbering will be used" );
          mesh.AssignUniqueNumbers( in_a_single_sequence );
          return;
@@ -905,14 +905,14 @@ void Model<dim>::IndexByPropertyValues()
              for ( auto it=mesh.FacesBegin(); it!=faces_end; ++it ) {
                   const size_t face_number = static_cast<uint32_t>((*it).Read(key));
                   if ( face_number >= n_faces + mesh.Elements() )
-                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                    csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                       "'face number' exceeds range of available faces:",
                                              to_string(face_number) );
                   (*it).Idx( face_number );
                }
           }
         else {
-             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+             csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
                                       "'face number' is not defined; default unique contiguous numbering will be used" );
              mesh.AssignUniqueNumbers( in_a_single_sequence );
              return;
@@ -929,14 +929,14 @@ void Model<dim>::IndexByPropertyValues()
              for ( auto it=mesh.InterFacesBegin(); it!=ifaces_end; ++it ) {
                   const size_t iface_number = static_cast<uint32_t>((*it).Read(key));
                   if ( iface_number >= n_all_cells )
-                    csmp_error.notice( WARNING, "Model::IndexByPropertyValues:",
+                    csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                       "'interface number' exceeds range of available faces:",
                                             to_string(iface_number) );
                   (*it).Idx( iface_number );
                }
           }
         else {
-             csmp_error.notice( ERROR, "Model::IndexByPropertyValues:",
+             csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
                                       "'interface number' is not defined; default unique contiguous numbering will be used" );
              mesh.AssignUniqueNumbers( in_a_single_sequence );
           }
@@ -966,7 +966,7 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( database_.IsDefined( new_prop ) ) {
-    csmp_error.notice( WARNING, "Model<dim>::CreateProperty:", new_prop, "property already exists." );
+    csmp_error.Note( WARNING, "Model<dim>::CreateProperty:", new_prop, "property already exists." );
     return database_.StorageKey( new_prop );
   }
 
@@ -1362,27 +1362,23 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
     
   // all regions
   if ( prop_key.place == REGION ) {
-      for ( typename map<string, csmp::Region<dim> >::iterator
-            it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
+      for ( auto it = this->UniqueRegionsBegin(); it != this->UniqueRegionsEnd(); ++it )
         (*it).second.Store( prop_key, value );
-      for ( typename map<string, csmp::Region<dim> >::iterator
-            it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
+      for ( auto it = this->RegionsBegin(); it != this->RegionsEnd(); ++it )
         (*it).second.Store( prop_key, value );
       return;
     }
     
   // all boundaries  
   if ( prop_key.place == BOUNDARY ) {
-       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+       for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
          (*it).second.Store( prop_key, value );
       return;
    }
   
   // split boundaries 
   if ( prop_key.place == SPLIT_BOUNDARY ) {
-       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
-             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+       for ( auto it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
          (*it).second.Store( prop_key, value );
       return;
    }
@@ -1399,8 +1395,7 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
   if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT )
     {
-       for ( typename map<std::string, csmp::Boundary<dim> >::iterator
-             it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+       for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
          (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
        return;
     }
@@ -1409,8 +1404,7 @@ void Model<dim>::InputPropertyValue( const char* input_prop, const T& value )
   if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
     {
-       for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
-             it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
+       for ( auto it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
          (*it).second.InputPropertyValue( input_prop, value, COMPLETE );
        return;
     }
@@ -2441,7 +2435,7 @@ void Model<dim>::Apply( Interrelation<dim>& relation, const char* region )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   if ( this->uniqueRegionMap_.empty() ) {
-    csmp_error.notice( ERROR, "Model<dim>::Apply",
+    csmp_error.Note( ERROR, "Model<dim>::Apply",
                        "cannot apply Interrelation because there is no unique group in model" );
     return;
   }
@@ -2530,7 +2524,7 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( !database_.IsDefined( prop ) ) {
-    csmp_error.notice( ERROR, "Model<dim>::MinMaxOf", prop, "is undefined; nothing could be done" );
+    csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "is undefined; nothing could be done" );
     return;
   }
   csmp::Index  prop_key( database_.StorageKey( prop ) );
@@ -2826,7 +2820,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
               }
             break;
           default:
-            csmp_error.notice( ERROR, "Model<dim>::OutputToBinaryFile:",
+            csmp_error.Note( ERROR, "Model<dim>::OutputToBinaryFile:",
                                (*pit).first, "type of Model variable not recognized." );
         }
       // storing the data in the VSet
@@ -2878,7 +2872,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
 
   // 3. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );
-  else ErrorHandler::Instance().notice( INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
+  else ErrorHandler::Instance().Note( INFO, "Model<dim>::InputFromBinaryFile:", "No properties found in VSet." );
 
   // 4. properties and values stored on the model itself
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
@@ -2924,7 +2918,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
             }
           break;
         default:
-          csmp_error.notice( ERROR, "Model<dim>::InputFromBinaryFile:",
+          csmp_error.Note( ERROR, "Model<dim>::InputFromBinaryFile:",
                              (*pit).first, "type of Model variable not recognized." );
       }
   }
@@ -3313,19 +3307,19 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
     if ( eprop_key.place != ELEMENT ) {
-         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
+         csmp_error.Note( ERROR, "smoothElementVariable", "Smoothed variable must be placed on the element" );
          return;
       }
     if ( nprop_key.place != NODE ) {
-         csmp_error.notice( ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
+         csmp_error.Note( ERROR, "smoothElementVariable", "Temporary variable must be placed on the node" );
          return;
       }
     if ( nprop_key.type != eprop_key.type ) {
-         csmp_error.notice( ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
+         csmp_error.Note( ERROR, "smoothElementVariable", "Smoothed and temporary variable must have the same type" );
          return;
       }
     if ( n_smoothing_cycles == 0 ) {
-         csmp_error.notice( WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
+         csmp_error.Note( WARNING, "smoothElementVariable", "smoothing cycles=0; nothing was done" );
          return;
       }
    

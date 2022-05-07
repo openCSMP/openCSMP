@@ -31,7 +31,7 @@
 
 #include <cmath>
 #include <cstring>
-#include	"matrix.h"
+#include	"meschach_matrix.h"
 #include    "matrix2.h"
 
 using namespace std;

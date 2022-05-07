@@ -26,7 +26,7 @@ void LUdcmp_Solver::SolveMatrixEquation( SparseMatrix& A,
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( A.Rows() > 500U )
-       csmp_error.notice( WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
+       csmp_error.Note( WARNING, "LUdcmp_Solver::SolveMatrixEquation:",
                          "the matrix is rather large; try SAMG to get a result in a decent time." );
 
 
@@ -49,7 +49,14 @@ void LUdcmp_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
   }
 
 
-/// LU decomposition
+
+
+/** LU decomposition
+      
+    @note this is super slow because it operates directly on the SparseMatrix class, creating and deleting entries!
+  
+    @todo replace with Eigen / work of a DenseMatrix object with size limited to 10k rows =  columns (100 million entries!)
+*/
 void LUdcmp_Solver::ludcmp( SparseMatrix& a,
                             long n,
                             std::vector<size_t>& indx)
