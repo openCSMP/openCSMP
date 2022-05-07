@@ -1,4 +1,4 @@
 name	MParameter	unit	index	min.	max.	place
 
-nodal_scalar_temperature	n	unitless	1	-1e+50	1e+50	node
-element_scalar_length	e	none	1	-3.40282e+38	3.40282e+38	element
+node_simulation	n	unitless	1	-1e+50	1e+50	node
+center_Z	c	m	1	-3.40282e+38	3.40282e+38	element
