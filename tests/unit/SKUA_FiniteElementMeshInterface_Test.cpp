@@ -7,7 +7,7 @@
 //
 
 #include "SKUA_FiniteElementMeshInterface_Test.h"
-#include "SplitBoundaryInterFace.h"
+#include "SplitBoundaryInterface.h"
 #include "SplitBoundary.h"
 #include "VSet.h"
 #include "ModelTopology.h"
