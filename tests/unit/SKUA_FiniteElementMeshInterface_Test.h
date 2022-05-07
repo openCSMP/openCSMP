@@ -19,6 +19,13 @@ class SKUA_FiniteElementMeshInterface_Test : public Test {
     virtual void run();
     
   private:
+  
+  /// Manifolds: 1) are they present at all split boundaries, 2) do they have the right number of entries
+  void Test_NodeManifolds( const Model<3U>& );
+  
+  /// Interface nodes: 1) are they collocated, 2) do they have the right mapping
+  void Test_InterfaceNodes( const Model<3U>& );
+  
   /// consecutive numbering of nodes and elements
   /// mesh consistency (Jacobians, element volume range, non-manifold vertices, triangle boxes
   

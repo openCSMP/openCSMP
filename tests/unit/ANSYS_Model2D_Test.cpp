@@ -12,8 +12,7 @@
 
 using namespace std;
 
-namespace csmp
-{
+namespace csmp {
 
 // for model building from ANSYS
  static void create_ANSYS2D_Model( bool reconstruct_from_file )
@@ -56,8 +55,16 @@ namespace csmp
       
  } // end create_ANSYS2D_Model
  
+ 
+ 
 
-/*
+/**
+    Using a whole suite of 2D Ansys models with boundaries and even split  boundaries being created :
+    
+    - BoxHalfs2D
+    - Fluid_Flower
+        
+*/
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
@@ -180,14 +187,17 @@ void ANSYS_Model2D_Test::run()
     
     Test_CreateConsistentLineElementOrientations2D();
     
-    Test_CreatInternalBoundary();
+    Test_CreateInternalBoundary();
 
-    Test_CreatInternalSplitBoundaries();
+    Test_CreateSplitBoundaries();
+
+    Test_CreateSplitBoundariesBetweenUniqueRegions();
 
   } // end run
-*/
   
-  
+
+/*  for test development
+ 
 void ANSYS_Model2D_Test::run()
   {
     // Test_printLineElementRegion();
@@ -195,7 +205,7 @@ void ANSYS_Model2D_Test::run()
     // Test_CreateSplitBoundaries();
     Test_CreateSplitBoundariesBetweenUniqueRegions();
   }
-
+*/
  
  
  
