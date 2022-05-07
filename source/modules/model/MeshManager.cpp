@@ -1821,7 +1821,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
     const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
     vector<Node<dim>*>               perimeter_node_ptrs;
     
-    if ( multiplicate_perimeter_nodes )
+    if ( multiplicate_perimeter_nodes == false )
       {
         // 1. finding the perimeter nodes of the interface patch that will be created
         // --------------------------------------------------------------------------
@@ -1897,26 +1897,38 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
          uint32_t           nd_count{0};
          
          for ( auto i : fnids ) {
-             // excluding nodes that will lie on the perimeter of the new interface patch, nodes are duplicated
-             if ( !perimeter_node_ptrs.empty() &&
-                  !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
-                  // but only if they have not already been duplicated
+             // nodes are multiplicated, always if 'multiplicate_perimeter_nodes=true'
+             // or if they do not lie on the perimeter of the new interface patch
+             if ( perimeter_node_ptrs.empty() ) {
+                  // nodes are duplicated unless they were already duplicated
                   if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
                        outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
                        new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                     }
                   else outside_nodes[nd_count] = (*nit).second;
+                }
+              else {
+                  // if perimeter nodes are excluded, nodes are duplicated if they do not lie on the perimeter
+                  if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
+                        // and only if these nodes have not already been duplicated
+                        if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                          }
+                        else outside_nodes[nd_count] = (*nit).second;
+                     }
+                   // or if they are located on the model boundary or if the are already manifolds
+                   else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
+                        if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                             // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                          }
+                        else outside_nodes[nd_count] = (*nit).second;
+                     }
+                   // if the perimeter is considered perimeter nodes are just copied to the opposite side
+                   else outside_nodes[nd_count] = it.first.first->N(i);
                }
-             // perimeter nodes must be duplicated if they are located on the model boundary or are manifolds
-             else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
-                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
-                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
-                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
-                    }
-                  else outside_nodes[nd_count] = (*nit).second;
-               }
-             else outside_nodes[nd_count] = it.first.first->N(i);
              nd_count++;
            }
 
@@ -3170,9 +3182,7 @@ void MeshManager<dim>::UpdateConnectivity()
     
     // 4. Update node manifolds
     // ------------------------
-    // TODO: extend method to also update potential NodeManifolds
-    if ( node_manifold_manager_ != nullptr )
-      ErrorHandler::Instance().Note( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
+    // this is expected to have been done during interface creation
     
  } // end UpdateConnectivity
 

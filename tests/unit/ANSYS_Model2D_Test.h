@@ -20,10 +20,13 @@ class ANSYS_Model2D_Test : public Test
       void Test_CreateConsistentLineElementOrientations2D();
       
       // tests the creation of an internal boundary from the line-element regions
-      void Test_CreatInternalBoundary();
+      void Test_CreateInternalBoundary();
 
       // tests the creation of an internal split boundaries from the line-element region and between domains
-      void Test_CreatInternalSplitBoundaries();
+      void Test_CreateSplitBoundaries();
+      
+      // tests creation of SplitBoundaries between all regions of a model ('Fluid_Flower')
+      void Test_CreateSplitBoundariesBetweenUniqueRegions();
   };
 
 } // csmp

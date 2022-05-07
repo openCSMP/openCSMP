@@ -319,7 +319,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 
          // reporting
          this->RegionsOut();
-         this->BoundariesOut();
+         // this->BoundariesOut(); - was already reported when these were created
       }
 
     // 7. forming SplitBoundaries if a discontiguous model was detected

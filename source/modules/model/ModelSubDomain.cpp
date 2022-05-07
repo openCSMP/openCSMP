@@ -5172,6 +5172,13 @@ size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSub
     set_intersection( g1_nodes.begin(), g1_nodes.end(), g2_nodes.begin(), g2_nodes.end(),
                       back_inserter(shared_nodes) );
 
+#ifdef MODEL_SUBDOMAIN_DEBUG
+if ( shared_nodes.size() == 2U ) {
+    cout <<"\n"<<"Nodes shared between '"<< g1.Name() <<"' and '"<< g2.Name() <<"': ";
+    cout << shared_nodes[0]->Idx() <<": "<< shared_nodes[0]->Coordinate() <<",  ";
+    cout << shared_nodes[1]->Idx() <<": "<< shared_nodes[1]->Coordinate();
+  }
+#endif
     return shared_nodes.size();
 
  } // end sharedPerimeterNodes

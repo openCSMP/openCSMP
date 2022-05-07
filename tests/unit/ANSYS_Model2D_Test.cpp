@@ -190,7 +190,10 @@ void ANSYS_Model2D_Test::run()
   
 void ANSYS_Model2D_Test::run()
   {
-    Test_CreatInternalSplitBoundaries();
+    // Test_printLineElementRegion();
+    // Test_CreateConsistentLineElementOrientations2D();
+    // Test_CreateSplitBoundaries();
+    Test_CreateSplitBoundariesBetweenUniqueRegions();
   }
 
  
@@ -322,11 +325,11 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
 /**
     For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
 */
-void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
+void  ANSYS_Model2D_Test::Test_CreateInternalBoundary()
 {
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
     if ( verbose_ ) {
-         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalBoundary: running test on model '";
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateInternalBoundary: running test on model '";
          cout << model2d_name_ <<"'"<< endl;
          cout.flush();
       }
@@ -347,7 +350,7 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
     const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
     _test( boundary2.Cells() == n_elmts_region2 );
 
-} // end Test_CreatInternalBoundary
+} // end Test_CreateInternalBoundary
 
 
 
@@ -356,10 +359,10 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
 /**
     For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
 */
-void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
+void  ANSYS_Model2D_Test::Test_CreateSplitBoundaries()
 {
     if ( verbose_ ) {
-         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries: running test..."<< endl;
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
          cout.flush();
       }
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
@@ -406,7 +409,102 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     // now the nodes are shared so this should work
     model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
 
-} // end Test_CreatInternalBoundary
+} // end Test_CreateSplitBoundaries
+
+
+
+/**
+       Direct creation of SplitBoundaries between all the unique regions of the model.
+*/
+void  ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions()
+{
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
+         cout.flush();
+      }
+    string model2d_name_ = "Fluid_Flower"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+//    string varFileName = "DES_2phase_variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+     
+    // some initial tests on the model
+    vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >  matching_cells;
+    size_t n_nodes1 = sharedPerimeterNodes( model.Region("F_T"), model.Region("E_BB_T") );
+    size_t n_cells1 = sharedPerimeterCells( model.Region("F_T"), model.Region("E_BB_T"), matching_cells );
+    _test( n_nodes1 > 1U );
+    _test( n_cells1 >= 1U );
+    size_t n_nodes2 = sharedPerimeterNodes( model.Region("D_BB"), model.Region("C_T") );
+    size_t n_cells2 = sharedPerimeterCells( model.Region("D_BB"), model.Region("C_T"), matching_cells );
+    _test( n_nodes2 > 1U );
+    _test( n_cells2 >= 1U );
+    size_t n_nodes3 = sharedPerimeterNodes( model.Region("D_BB"), model.Region("E_T") );
+    size_t n_cells3 = sharedPerimeterCells( model.Region("D_BB"), model.Region("E_T"), matching_cells );
+    _test( n_nodes3 > 1U );
+    _test( n_cells3 >= 1U );
+    size_t n_nodes4 = sharedPerimeterNodes( model.Region("F_BB"), model.Region("E_T") );
+    size_t n_cells4 = sharedPerimeterCells( model.Region("F_BB"), model.Region("E_T"), matching_cells );
+    _test( n_nodes4 > 1U );
+    _test( n_cells4 >= 1U );
+    size_t n_nodes5 = sharedPerimeterNodes( model.Region("E_BB_T"), model.Region("D_T") );
+    size_t n_cells5 = sharedPerimeterCells( model.Region("E_BB_T"), model.Region("D_T"), matching_cells );
+    _test( n_nodes5 > 1U );
+    _test( n_cells5 >= 1U );
+    size_t n_nodes6 = sharedPerimeterNodes( model.Region("C_BB_T"), model.Region("D_T") );
+    size_t n_cells6 = sharedPerimeterCells( model.Region("C_BB_T"), model.Region("D_T"), matching_cells );
+    _test( n_nodes6 > 1U );
+    _test( n_cells6 >= 1U );
+    size_t n_nodes7 = sharedPerimeterNodes( model.Region("C_BB_T"), model.Region("ESF_T") );
+    size_t n_cells7 = sharedPerimeterCells( model.Region("C_BB_T"), model.Region("ESF_T"), matching_cells );
+    _test( n_nodes7 > 1U );
+    _test( n_cells7 >= 1U );
+    size_t n_nodes8 = sharedPerimeterNodes( model.Region("C_T"), model.Region("ESF_BB_T") );
+    size_t n_cells8 = sharedPerimeterCells( model.Region("C_T"), model.Region("ESF_BB_T"), matching_cells );
+    _test( n_nodes8 > 1U );
+    _test( n_cells8 >= 1U );
+    size_t n_nodes9 = sharedPerimeterNodes( model.Region("ESF"), model.Region("F_BA") );
+    size_t n_cells9 = sharedPerimeterCells( model.Region("ESF"), model.Region("F_BA"), matching_cells );
+    _test( n_nodes9 > 1U );
+    _test( n_cells9 >= 1U );
+    size_t n_nodes10 = sharedPerimeterNodes( model.Region("ESF_BA"), model.Region("F") );
+    size_t n_cells10 = sharedPerimeterCells( model.Region("ESF_BA"), model.Region("F"), matching_cells );
+    _test( n_nodes10 > 1U );
+    _test( n_cells10 >= 1U );
+    size_t n_nodes11 = sharedPerimeterNodes( model.Region("F"), model.Region("G_BA") );
+    size_t n_cells11 = sharedPerimeterCells( model.Region("F"), model.Region("G_BA"), matching_cells );
+    _test( n_nodes11 > 1U );
+    _test( n_cells11 >= 1U );
+     
+    // 1. creating the SplitBoundary objects everywhere
+    /* Observations
+       - super slow!
+       - most computational effort goes into UpdateConnectivity and PartitionCellVector
+    */
+    size_t n_split_boundaries = model.SeparateUniqueRegionsBySplitBoundaries();
+    _test( n_split_boundaries == 93 );
+    model.SplitBoundariesOut();
+    
+    // using 'nodal variable' to visualise which nodes are manifolds
+    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
+    Region<2U>        model_domain = model.Region("Model");
+    const csmp::Index var_key = model.Database().StorageKey("nodal variable");
+    
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+      if ( (*nit)->IsManifold() )
+        // there should be as many branches as materials come together
+        (*nit)->Store( var_key, makeScalar(PLAIN,(*nit)->Manifold()->Branches()));
+     
+    // visualisation
+    if ( verbose_ ) {
+         VTU_Interface<2> vtu( model );
+         vtu.OmitZeroInFileName( true );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-node_manifolds", "nodal variable", "Model", static_cast<int>(0) );
+      }
+
+    // TODO: perform some testing
+    cout <<"\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions: completed successfully"<< endl;
+
+} // end Test_CreateSplitBoundaries
+
 
 
 } // csmp

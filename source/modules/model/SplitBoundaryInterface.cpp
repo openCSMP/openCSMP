@@ -626,17 +626,19 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsB
     for ( auto it : region_final_pairs ) // for each of the boundary patches discovered, a uniquely named SplitBoundary object is created
       model->CreateSplitBoundaryBetween( it.first.c_str(), it.second.c_str() );
 
-    // read Model from Binary
-    //modelIN->OutputToBinaryFile( model_name.c_str() );
-
     // screen output
-    model->SplitBoundariesOut();
+    // cout <<"\n\n"<<"SplitBoundaryInterface::SeparateUniqueRegionsBySplitBoundaries: split boundaries after separation.\n";
+    // model->SplitBoundariesOut();
   
     return SplitBoundaries();
   
 } // end SeparateUniqueRegionsBySplitBoundaries
     
-
+/* there are no duplicates
+    // removing potential duplicates
+    for ( auto& pit : region_final_pairs ) if ( pit.first > pit.second ) swap( pit.first, pit.second );
+    region_final_pairs.erase( unique( region_final_pairs.begin(), region_final_pairs.end() ), region_final_pairs.end() );
+*/
 
 
 
@@ -827,56 +829,17 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     const csmp::Region<dim>&  region1(modelComplex->Region(region1_name));
     csmp::Region<dim>&        region2(modelComplex->Region(region2_name)); // not const because must be rebuilt
     
-    // corner-node-ptrs Elements adjacent to interface and their face numbers (inside elements will be first in pair)
-    map<set<Node<dim>*>,pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >  shared_perimeter_faces;
-    // is there a shared interface? - looping over the perimeter faces of the adjacent regions
+    // 2. Is there a shared interface? - if so InterFace objects are created along it
+    // ------------------------------------------------------------------------------
+    vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matched_elmts;
+    sharedPerimeterCells( region1, region2, matched_elmts );
     
-    // starting with region1 - assuming that no face-matching can occur at this stage
-    for ( size_t i{ region1.InteriorCells() }; i<region1.Cells(); i++ )
-      for ( auto j{0U}; j<region1.PerimeterFaces(i); j++ ) {
-           auto pface = region1.PerimeterFace(i,j);
-           // making a search key from the corner nodes of the face and recording the perimeter element and its face number
-           assert( region1.E(i) );
-           assert( !region1.E(i)->IsLine() );
-           shared_perimeter_faces.insert( make_pair( region1.E(i)->CornerNodesOfFace(pface),
-                                          make_pair( make_pair( region1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
-        }
-    // for region 2, do the same, but when matching faces are found, corresponding elements and face ids are assigned to second element-face pair
-    size_t n_matching_faces{0U};
-    for ( size_t i{ region2.InteriorCells() }; i<region2.Cells(); i++ )
-      for ( auto j{0U}; j<region2.PerimeterFaces(i); j++ ) {
-           auto pface = region2.PerimeterFace(i,j);
-           assert( region2.E(i) );
-           assert( !region2.E(i)->IsLine() );
-           // testing whether insertion is possible or fails because there already is an entry with the same key
-           auto it = shared_perimeter_faces.insert( make_pair( region2.E(i)->CornerNodesOfFace(pface),
-                                                    make_pair( make_pair( region2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
-           // if a matching face is found
-           if ( it.second == false ) { // no new insertion into map, but element with same key is added to map
-                (*it.first).second.second = make_pair( region2.E(i), pface );
-                n_matching_faces++;
-             }
-        }
-
-    if ( n_matching_faces == 0U ) {
+    if ( matched_elmts.empty() ) {
          string message( string(" input regions '") + region1_name + "' and '" + region2_name +"'");
          csmp_error.Note( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryBetween:",
-                            message, "do not share any faces; has this boundary been split before?");
+                          message, "may share a node but do not share any faces");
          return make_pair("split boundary not created",false);
       }
-
-    // 2. Eliminating single-element entries from 'shared_perimeter_faces' map and creating element-pair vector
-    // --------------------------------------------------------------------------------------------------------
-    for ( auto it = shared_perimeter_faces.begin(); it != shared_perimeter_faces.end() /* not hoisted */; /* no increment */ ) {
-         // there is only a single element in the Element-pointer pair, the map entry will be deleted
-         if ( (*it).second.second.first == nullptr ) it = shared_perimeter_faces.erase(it);
-         else ++it;
-      }
-    // MATCHING ELEMENTS: moving the required element pairs from perimeter face vector to 'matched_elmts'
-    vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > > matched_elmts;
-    matched_elmts.reserve( shared_perimeter_faces.size() );
-    for ( const auto& pit : shared_perimeter_faces ) matched_elmts.emplace_back( pit.second );
-    shared_perimeter_faces.clear();
         
     // creating the necessary interfaces and nodes, and updates the connectivity of the mesh
     const bool create_manifolds_on_perimeter{true};
@@ -895,8 +858,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
         bool succeeded = (*it.first).second.CreateFrom( interfaces.begin(), interfaces.end() );
  
         if ( !succeeded )
-          csmp_error.Note( WARNING, "SplitBoundaryInterFace::CreateSplitBoundaryBetween:",
-                          "The regions of interest do not share any nodes; trying to create a boundary");
+          csmp_error.Note( ERROR, "SplitBoundaryInterFace::CreateSplitBoundaryBetween:", "creation failed");
         else {
              cout << "\nSplitBoundaryInterface<"<< dim <<">::CreateSplitBoundaryBetween: split boundary '";
              cout << split_boundary_name << "' created successfully."<< endl;
