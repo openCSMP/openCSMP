@@ -331,6 +331,10 @@ size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,C
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
 
+/// returns the shared perimeter nodes into the argument vector
+template<uint32_t dim,template<uint32_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>&, std::vector<Node<dim>*>& );
+
 /// maps potential contacting faces and cell pointers of cells that are contacting each other in the two regions; @return the number of these cells, pointers to them, and corresponding face number written into the argument map
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,

@@ -5145,13 +5145,13 @@ size_t  sharedNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<di
 
  } // end sharedNodes
 
-template size_t sharedNodes( const ModelSubDomain<1U,Element>& g1, const ModelSubDomain<1U,Element>& g2 );
-template size_t sharedNodes( const ModelSubDomain<2U,Element>& g1, const ModelSubDomain<2U,Element>& g2 );
-template size_t sharedNodes( const ModelSubDomain<3U,Element>& g1, const ModelSubDomain<3U,Element>& g2 );
+template size_t sharedNodes( const ModelSubDomain<1U,Element>&, const ModelSubDomain<1U,Element>& );
+template size_t sharedNodes( const ModelSubDomain<2U,Element>&, const ModelSubDomain<2U,Element>& );
+template size_t sharedNodes( const ModelSubDomain<3U,Element>&, const ModelSubDomain<3U,Element>& );
 
-template size_t sharedNodes( const ModelSubDomain<1U,Face>& g1, const ModelSubDomain<1U,Face>& g2 );
-template size_t sharedNodes( const ModelSubDomain<2U,Face>& g1, const ModelSubDomain<2U,Face>& g2 );
-template size_t sharedNodes( const ModelSubDomain<3U,Face>& g1, const ModelSubDomain<3U,Face>& g2 );
+template size_t sharedNodes( const ModelSubDomain<1U,Face>&, const ModelSubDomain<1U,Face>& );
+template size_t sharedNodes( const ModelSubDomain<2U,Face>&, const ModelSubDomain<2U,Face>& );
+template size_t sharedNodes( const ModelSubDomain<3U,Face>&, const ModelSubDomain<3U,Face>& );
 
 
 
@@ -5183,17 +5183,55 @@ if ( shared_nodes.size() == 2U ) {
 
  } // end sharedPerimeterNodes
 
-template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Element>& g1, const ModelSubDomain<1U,Element>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Element>& g1, const ModelSubDomain<2U,Element>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Element>& g1, const ModelSubDomain<3U,Element>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Element>&, const ModelSubDomain<1U,Element>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Element>&, const ModelSubDomain<2U,Element>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Element>&, const ModelSubDomain<3U,Element>& );
 
-template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Face>& g1, const ModelSubDomain<1U,Face>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Face>& g1, const ModelSubDomain<2U,Face>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Face>& g1, const ModelSubDomain<3U,Face>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Face>&, const ModelSubDomain<1U,Face>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Face>&, const ModelSubDomain<2U,Face>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Face>&, const ModelSubDomain<3U,Face>& );
 
-template size_t sharedPerimeterNodes( const ModelSubDomain<1U,InterFace>& g1, const ModelSubDomain<1U,InterFace>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<2U,InterFace>& g1, const ModelSubDomain<2U,InterFace>& g2 );
-template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>& g1, const ModelSubDomain<3U,InterFace>& g2 );
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,InterFace>&, const ModelSubDomain<1U,InterFace>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,InterFace>&, const ModelSubDomain<2U,InterFace>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>&, const ModelSubDomain<3U,InterFace>& );
+
+
+
+
+/**
+    As method above, but returning pointers to the Nodes found into the argument vector.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>& g1, const ModelSubDomain<dim,CELL>& g2, vector<Node<dim>*>& shared_nodes )
+ {
+    if ( !shared_nodes.empty() ) shared_nodes.clear();
+ 
+    // creating some copies of the sorted node vectors
+    vector<Node<dim>*>  g1_nodes( g1.PerimeterNodesBegin(), g1.NodesEnd() );
+    vector<Node<dim>*>  g2_nodes( g2.PerimeterNodesBegin(), g2.NodesEnd() );
+    
+    // not sorting is required because the node ranges are already sorted
+    set_intersection( g1_nodes.begin(), g1_nodes.end(), g2_nodes.begin(), g2_nodes.end(),
+                      back_inserter(shared_nodes) );
+
+    return shared_nodes.size();
+
+ } // end sharedPerimeterNodes
+
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Element>&, const ModelSubDomain<1U,Element>&, vector<Node<1U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Element>&, const ModelSubDomain<2U,Element>&, vector<Node<2U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Element>&, const ModelSubDomain<3U,Element>&, vector<Node<3U>*>& );
+
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,Face>&, const ModelSubDomain<1U,Face>&, vector<Node<1U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,Face>&, const ModelSubDomain<2U,Face>&, vector<Node<2U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,Face>&, const ModelSubDomain<3U,Face>&, vector<Node<3U>*>& );
+
+template size_t sharedPerimeterNodes( const ModelSubDomain<1U,InterFace>&, const ModelSubDomain<1U,InterFace>&, vector<Node<1U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<2U,InterFace>&, const ModelSubDomain<2U,InterFace>&, vector<Node<2U>*>& );
+template size_t sharedPerimeterNodes( const ModelSubDomain<3U,InterFace>&, const ModelSubDomain<3U,InterFace>&, vector<Node<3U>*>& );
+
+
+
 
 
 
