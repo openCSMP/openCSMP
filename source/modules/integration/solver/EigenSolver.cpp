@@ -32,8 +32,8 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
     mat.resize(A.Rows(), A.Cols());
     mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     for (size_t i{0U}; i < A.Rows(); ++i) {
-      const auto rowEnd{ A.RowEnd(i) };
-      for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
+        const auto rowEnd{ A.RowEnd(i) };
+        for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
 #ifdef DEBUG
            if ( (*pair).first >= n_dof )
                csmp_error.Note( ERROR, "EigenSolver::SolveMatrixEquation", to_string( (*pair).first ),
