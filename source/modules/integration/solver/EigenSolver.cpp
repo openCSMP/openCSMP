@@ -13,10 +13,10 @@ using namespace std;
  
 namespace csmp {
 
-void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
-                                      std::vector<double> &b,
-                                      std::vector<double> &x,
-                                      size_t no_unknowns)
+void EigenSolver::SolveMatrixEquation( SparseMatrix& A,
+                                       vector<double>& b,
+                                       vector<double>& x,
+                                       size_t no_unknowns )
   {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
@@ -67,10 +67,10 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
 /**
 Not implemented yet!
 */
-  void EigenSolver::SolveMatrixEquation(CompressedRowMatrix &A,
-                                        std::vector<double> &b,
-                                        std::vector<double> &x,
-                                        size_t no_unknowns)
+  void EigenSolver::SolveMatrixEquation( CompressedRowMatrix& A,
+                                         vector<double>& b,
+                                         vector<double>& x,
+                                         size_t no_unknowns)
   {
       throw csmp::Exception( ERROR, "EigenSolver::SolveMatrixEquation",
                              "compressed row-matrix based version not implemented yet");

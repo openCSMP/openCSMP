@@ -3,46 +3,48 @@
 // Date of Modification: 21.11.2010
 
 #include "SparseMatrix_Test.h"
-#include "PL_Utilities.h"
 #include "DenseMatrix.h"
 #include "Matrix.h"
+#include "compareFloats.h"
 
 using namespace std;
 
-namespace csmp
+namespace csmp {
+
+SparseMatrix_Test::SparseMatrix_Test()
+    :
+    A(4),
+    ResA(4),
+    B(6),
+    BB(6),
+    BBB(6),
+    ResAB(4),
+    C(4),
+    ResC(4),
+    D(4),
+    ResD(4),
+    E(4),
+    F(4),
+    ResF(4),
+    G(4),
+    ResG(4),
+    H(4),
+    SparseMatrix2x2(2),
+    SparseMatrix3x3(2)
 {
-    SparseMatrix_Test::SparseMatrix_Test( bool verbose )
-        :
-        A(4),
-        ResA(4),
-        B(6),
-        BB(6),
-        BBB(6),
-        ResAB(4),
-        C(4),
-        ResC(4),
-        D(4),
-        ResD(4),
-        E(4),
-        F(4),
-        ResF(4),
-        G(4),
-        ResG(4),
-        H(4),
-        SparseMatrix2x2(2),
-        SparseMatrix3x3(2),
-        fTolerance(1.e-6),
-        verbose_(verbose)
-    {
-    }
-
-    SparseMatrix_Test::~SparseMatrix_Test()
-    {
-    }
+}
 
 
+SparseMatrix_Test::~SparseMatrix_Test()
+{
+}
+
+
+// checked: SKM 8/5/2022
 void SparseMatrix_Test::run()
  {
+    Test_PDE_IntegratorUseCases();
+    
     if ( verbose_ ) {
         cout << "\n====================";
         cout << "\nTesting SparseMatrix" << endl;
@@ -76,14 +78,14 @@ void SparseMatrix_Test::run()
         cout << "SparsityMatrix A = " << endl;
         A.Out();
       }
-        _test( A( 0,1 ) == 2. );
-        _test( A( 3,3 ) == 5. );
+        _test( essentiallyEqual( A( 0,1 ), 2.) );
+        _test( essentiallyEqual( A( 3,3 ), 5.) );
 
         DenseMatrix<4> DenseMatrix2x2;
-        DenseMatrix2x2( 0, 0 ) = 2;
-        DenseMatrix2x2( 0, 1 ) = 3;
-        DenseMatrix2x2( 1, 0 ) = 4;
-        DenseMatrix2x2( 1, 1 ) = 5;
+        DenseMatrix2x2( 0, 0 ) = 2.;
+        DenseMatrix2x2( 0, 1 ) = 3.;
+        DenseMatrix2x2( 1, 0 ) = 4.;
+        DenseMatrix2x2( 1, 1 ) = 5.;
 
         Matrix Matrix2x2Val(4,4);
         Matrix2x2Val( 0, 0 ) = 40.;
@@ -97,12 +99,12 @@ void SparseMatrix_Test::run()
             B.Out();
           }
         BB = B;
-        D=A;
+        D  = A;
 
-        _test( B( 2, 2 ) == 40. );
-        _test( B( 3, 3 ) == 30. );
-        _test( B( 4, 4 ) == 20. );
-        _test( B( 5, 5 ) == 10. );
+        _test( essentiallyEqual( B( 2, 2 ), 40.) );
+        _test( essentiallyEqual( B( 3, 3 ), 30.) );
+        _test( essentiallyEqual( B( 4, 4 ), 20.) );
+        _test( essentiallyEqual( B( 5, 5 ), 10.) );
 
 
     //Testing MultiplyWith function
@@ -166,7 +168,7 @@ void SparseMatrix_Test::run()
         {
             for ( int j = 0; j < 3; j++ )
             {
-                _test( B( i, j ) == A( i, j ) );
+                _test( essentiallyEqual( B( i, j ), A( i, j ) ) );
 
             }
         }
@@ -207,8 +209,8 @@ void SparseMatrix_Test::run()
           B.Out();
         }
    
-        _test( B( 0, 0 ) == 32. );
-        _test( B( 0, 1 ) == 15. );
+        _test( essentiallyEqual( B( 0, 0 ), 32.) );
+        _test( essentiallyEqual( B( 0, 1 ), 15.) );
 
 
     //Testing Rows function
@@ -253,7 +255,7 @@ void SparseMatrix_Test::run()
             for ( int j = 0; j < 4; j++ )
             {
                 _test( B( i, j ) == 0. );
-                cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
+                if ( verbose_ ) cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
             }
         }
 
@@ -277,8 +279,8 @@ void SparseMatrix_Test::run()
         {
             for ( int j = 3; j < 4; j++ )
             {
-                _test( B( i, j ) == 0. );
-                cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
+                _test( essentiallyEqual( B( i, j ), 0.) );
+                if ( verbose_ ) cout << "B( "<< i <<", " << j << " ) = " << B( i, j ) << endl;
             }
         }
      if ( verbose_ )  cout << endl;
@@ -298,7 +300,7 @@ void SparseMatrix_Test::run()
         cout << "\nEntry B( 0, 0 ) = " <<  B( 0, 0 ) << endl;
       }
         _test( B.Entries() == 8. );
-        _test( B( 0, 0 ) == 0. );
+        _test( essentiallyEqual( B( 0, 0 ), 0.) );
 
 
     //Testing Zero function
@@ -372,7 +374,7 @@ void SparseMatrix_Test::run()
         _test( A.Rows() == 2. );
         _test( A.Cols() == 2. );
 
-        cout << "SparseMatrix A after Resize(5)";
+        if ( verbose_ ) cout << "SparseMatrix A after Resize(5)";
         A.Resize(5);
         A.Out();
 
@@ -390,7 +392,7 @@ void SparseMatrix_Test::run()
 
        cout << "SparseMatrix B.At( 3, 4 ) = " << BB.At( 3, 4 ) << endl;
      }
-      _test( BB.At( 3, 4 ) == 5. );
+      _test( essentiallyEqual( BB.At( 3, 4 ), 5.) );
 
 
    //Testing Operator() ( size_t, size_t )
@@ -403,7 +405,7 @@ void SparseMatrix_Test::run()
 
       cout << "SparseMatrix B( 3, 4 ) = " << BB(3,4) << endl;
      }
-     _test( BB( 3, 4 ) == 5. );
+     _test( essentiallyEqual( BB( 3, 4 ), 5.) );
 
 
       //Testing Symmetric function
@@ -419,7 +421,7 @@ void SparseMatrix_Test::run()
 
          cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
         }
-         _test( BB.Symmetric() == 0 );
+         _test( BB.Symmetric() == false );
 
          BB.RemoveEntry( 3, 4 );
       if ( verbose_ ) {
@@ -428,7 +430,7 @@ void SparseMatrix_Test::run()
 
          cout << "SparseMatrix B is symmetric = " << BB.Symmetric();
         }
-         _test( BB.Symmetric() == 1 );
+         _test( BB.Symmetric() == true );
 
 
      //Testing ZeroesInDiagonal function
@@ -440,7 +442,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
        }
-         _test( BB.ZeroesInDiagonal() == 0 );
+         _test( BB.ZeroesInDiagonal() == false );
 
          BB.RemoveEntry( 0, 0 );
          //BB.Assign( 0, 0, 0. );
@@ -449,7 +451,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal() << endl;
        }
-         _test( BB.ZeroesInDiagonal() == 1 );
+         _test( BB.ZeroesInDiagonal() == true );
 
          BB.RemoveEntry( 0, 0 );
      if ( verbose_ ) {
@@ -457,7 +459,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Does SparseMatrix B has zeros in its diagonal? " << BB.ZeroesInDiagonal();
        }
-         _test( BB.ZeroesInDiagonal() == 1 );
+         _test( BB.ZeroesInDiagonal() == true );
 
 
      //Testing DiagonallyPositive function
@@ -469,7 +471,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
       }
-         _test( BB.DiagonallyPositive() == 1 );
+         _test( BB.DiagonallyPositive() == true );
 
          BB.Assign( 0, 0, -5. );
          BB.Assign( 2, 2, -10. );
@@ -478,7 +480,7 @@ void SparseMatrix_Test::run()
          BB.Out();
          cout << "Is SparseMatrix B diagonally positive? " << BB.DiagonallyPositive() << endl;
        }
-         _test( BB.DiagonallyPositive() == 0 );
+         _test( BB.DiagonallyPositive() == false );
 
 
      //Testing RecountEntries function
@@ -534,10 +536,85 @@ void SparseMatrix_Test::run()
          D.MultiplyEntryWith(2,3,-1.);
          D.MultiplyEntryWith(3,0,-1);
          if ( verbose_ ) D.Out();
-         _test( D.InfinityNorm() == 13 );
+         _test( essentiallyEqual( D.InfinityNorm(), 13.) );
          if ( verbose_ )
            cout << "SparseMatrix D infinity norm = " << D.InfinityNorm() << endl;
   }
+
+
+/**
+    Tests specifically those methods that are used by PDE_Integrator:
+    - Rows(), Cols()
+    - Out()
+    - Erase()
+    - Resize()
+    - Add( i, j, val ) - also checking whether nulled elements are eliminated
+    - At( i, j ) vs. operator()(i,j)
+    - Assign( i, j, val )
+    
+    @author SKM
+    @date 8/5/22
+*/
+void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
+ {
+    // comparison with zero
+    double val{1.3423456765e-102};
+    _test( val != 0. );
+    _test( val != static_cast<double>(0.) );
+    _test( !essentiallyEqual(val,0.) );
+    _test( !( !(val < 0.) && !(val > 0.) ) );
+ 
+    // testing addition of a negative number that should lead to element cancelation
+    /* A =
+         1  0  0  0
+         0  2 -2  0
+         0 -2  3  0
+         0  0  0  4
+    */
+    SparseMatrix A(4);
+    // diagonal
+    A.Assign( 0, 0, 1. );
+    A.Assign( 1, 1, 2. );
+    A.Assign( 2, 2, 3. );
+    A.Assign( 3, 3, 4. );
+    // off-diagonal terms
+    A.Assign( 1, 2, -2. );
+    A.Assign( 2, 1, -2. );
+    // assign a zero element (should have no effect)
+    A.Assign( 0, 3, 0. );
+    // make an element zero by adding a number
+    A.Add( 1, 2, 2. );
+    _test( essentiallyEqual( A(1,2), 0. ) );
+    A.Add( 1, 2, -2. );
+    _test( essentiallyEqual( A.At(1,2), -2. ) );
+    // adding very small numbers to the off-diagonal at the bottom
+    A.Assign( 2, 3, -1.0e-21 );
+    A.Assign( 3, 2, -1.0e-21 );
+    _test( essentiallyEqual( A(3,2), -1.0e-21 ) );
+    A.Add( 2, 3, -1.0e-21 );
+    A.Add( 3, 2, -1.0e-21 );
+    _test( essentiallyEqual( A(3,2), -2.0e-21 ) );
+    // checking
+    _test( A.Symmetric() );
+    _test( A.DiagonallyPositive() );
+    _test( A.ZeroesInDiagonal() == false );
+    A.Assign( 3, 3, 1.0e-30 );
+    _test( A.ZeroesInDiagonal() == false );
+    A.ZeroRow( 3 );
+    _test( A.ZeroesInDiagonal() );
+    
+    // failing At()
+    if ( verbose_ ) {
+        A.At(3,5);
+        A.At(5,3);
+      }
+    
+    // resizing
+    A.Resize(6);
+    _test( A.Cols() == 6 );
+    if ( verbose_ ) A.Out();
+ 
+ } // end Test_PDE_IntegratorUseCases
 
 
 } // end csmp

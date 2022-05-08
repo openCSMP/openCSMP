@@ -11,9 +11,15 @@ namespace csmp
     class SparseMatrix_Test : public Test
     {
       public:
-        explicit SparseMatrix_Test( bool verbose=false );
+        
+        SparseMatrix_Test();
         ~SparseMatrix_Test();
+        
         void run();
+        
+        /// retests those specific methods that are used by PDE_Integrator
+        void Test_PDE_IntegratorUseCases();
+        
         SparseMatrix A;
         SparseMatrix ResA;
         SparseMatrix B;
@@ -47,8 +53,8 @@ namespace csmp
         std::vector<double> x, y, sol_y, solB, solD;
         std::vector<size_t> sizetVector;
 
-        double   fTolerance;
-        const bool verbose_;
+        double fTolerance          = 1.0e-6;
+        static const bool verbose_ = false;
     };
 }
 
