@@ -1,6 +1,7 @@
 #include "SparseMatrix.h"
 #include "DenseMatrix.h"
 #include "Matrix.h"
+#include "compareFloats.h"
 #include <fstream>
 #include <ctime>
 
@@ -24,6 +25,14 @@ SparseMatrix::SparseMatrix( const SparseMatrix& sp )
    entries_(sp.entries_)
  {
  }
+ 
+ 
+SparseMatrix::SparseMatrix( SparseMatrix&& sp )
+ : data_(move(sp.data_)),
+   entries_(move(sp.entries_))
+ {
+ }
+ 
 
 
 SparseMatrix& SparseMatrix::operator=( const SparseMatrix& sp )
@@ -97,19 +106,31 @@ size_t SparseMatrix::Cols() const
 
 double SparseMatrix::operator()( size_t i, size_t j ) const
  {
-    if ( i >= data_.size() ) {
-         cerr <<"\nSparseMatrix::operator("<< i <<","<< j <<") const: ";
-         cerr <<"Row access index out of range."<< endl;
-         return numeric_limits<double>::signaling_NaN();
-      }
+    assert( i < data_.size() );
+    assert( j < data_.size() );
     auto ditc = data_[i].find(j);
-    if ( ditc == data_[i].end() ) return static_cast<double>(0.);
+    if ( ditc == data_[i].end() ) return 0.;
     return (*ditc).second;
  }
   
     
 double SparseMatrix::At( size_t i, size_t j ) const
  {
+    if ( i >= data_.size() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Row access index greater or equal to rows ("<< Rows() <<"). Returning: NaN"<< endl;
+         return numeric_limits<double>::signaling_NaN();
+      }
+    if ( j >= data_.size() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Column access index greater or equal to cols ("<< Cols() <<"). Returning: NaN"<< endl;
+         return numeric_limits<double>::signaling_NaN();
+      }
+    if ( data_[i].find(j) == data_[i].end() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Matrix entry does not exist. Returning: 0."<< endl;
+        return 0.;
+      }
     return (*this)(i,j);
  }
 
@@ -138,11 +159,14 @@ void SparseMatrix::Erase()
     entries_ = 0;
  }
 
+
 void SparseMatrix::Zero()
 {
     Erase();
 }
 
+
+// deletes all entries from the row
 void SparseMatrix::ZeroRow( size_t row )
  {
     entries_ -= data_[row].size();
@@ -164,43 +188,43 @@ void SparseMatrix::ZeroColumn( size_t col )
 
 void SparseMatrix::Assign( size_t i, size_t j, double val )
  {
+    if ( !(val != 0.) ) return;
+    
     if ( i >= data_.size() ) {
-         cout <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
-         cout <<"Row index out of range."<< endl;
+         cerr <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
+         cerr <<"Row index out of range."<< endl;
          throw range_error("SparseMatrix::Assign");
       }
     if ( j >= data_.size() ) {
-         cout <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
-         cout <<"Column index out of range."<< endl;
+         cerr <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
+         cerr <<"Column index out of range."<< endl;
          throw range_error("SparseMatrix::Assign");
       }
-    // more costly than insert, operator[] overwrites or adds element
-    const size_t n = data_[i].size();
-    data_[i][j] = val;
-    if ( data_[i].size() > n ) entries_++;
-
-    // remove entry if val is zero
-    if ( !( val > static_cast<double>(0.) || val < static_cast<double>(0.) ) ){
-        data_[i].erase( j );
-        entries_--;
-    }
+    
+    auto it = data_[i].insert( make_pair( j, val ) );
+    // if insertion was successful, there are now more non-zero elements
+    if ( it.second ) entries_++;
+    else  // value is overwritten
+      (*it.first).second = val;
  }
+
+
 
 
 /// more efficient additions to matrix than attainable with operator()
 void SparseMatrix::Add( size_t i, size_t j, double val )
  {
     // zero elements are not stored
-    if ( fabs(val) < numeric_limits<double>::epsilon() ) return;
+    if ( !(val != 0.) ) return;
 
     if ( i >= data_.size() ) {
-         cout <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
-         cout <<"Row index out of range."<< endl;
+         cerr <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Row index out of range."<< endl;
          throw range_error("SparseMatrix::Add");
       }
     if ( j >= data_.size() ) {
-         cout <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
-         cout <<"Column index out of range."<< endl;
+         cerr <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Column index out of range."<< endl;
          throw range_error("SparseMatrix::Add");
       }
  
@@ -209,8 +233,9 @@ void SparseMatrix::Add( size_t i, size_t j, double val )
     // if matrix element already exists, the value is added to it
     if ( !addit.second ) {
         (*addit.first).second += val;
-         if ( !( (*addit.first).second > static_cast<double>(0.) ||
-          (*addit.first).second < static_cast<double>(0.) ) ) {
+         // if a < b = false and a > b = false then a == b
+         if ( !((*addit.first).second > 0.) &&
+              !((*addit.first).second < 0.) ) {
              data_[i].erase( (*addit.first).first );
              entries_--;
           }
@@ -226,7 +251,7 @@ void SparseMatrix::Add( size_t i, size_t j, double val )
 SparseMatrix& SparseMatrix::operator+=( const SparseMatrix& mat )
   {
     if ( this->Rows() != mat.Rows() ) {
-        cout <<" Added sparse matrices must have the same number of rows (even if they are empty)."<< endl;
+        cerr <<" Added sparse matrices must have the same number of rows (even if they are empty)."<< endl;
         throw range_error("SparseMatrix::operator+=");
     }
 
@@ -238,7 +263,8 @@ SparseMatrix& SparseMatrix::operator+=( const SparseMatrix& mat )
             // if matrix element already exists, the value is added to it
             if ( !addit.second ) {
                 (*addit.first).second += cit->second;
-                if ( fabs((*addit.first).second) < numeric_limits<double>::epsilon() ) {
+                if ( !((*addit.first).second > 0.) &&
+                     !((*addit.first).second < 0.) ) {
                     recipient_iterator->erase( (*addit.first).first );
                     entries_--;
                 }
@@ -257,13 +283,8 @@ SparseMatrix& SparseMatrix::operator+=( const SparseMatrix& mat )
 void SparseMatrix::MultiplyEntryWith( size_t i, size_t j, double val )
  {
     if ( i >= data_.size() ) {
-         cout <<"\nSparseMatrix::MultiplyEntryWith("<< i <<","<< j <<","<< val <<"): ";
-         cout <<"Row index out of range."<< endl;
-         throw range_error("SparseMatrix::MultiplyEntryWith");
-      }
-    if ( j >= data_.size() ) {
-         cout <<"\nSparseMatrix::MultiplyEntryWith("<< i <<","<< j <<","<< val <<"): ";
-         cout <<"Column index out of range."<< endl;
+         cerr <<"\nSparseMatrix::MultiplyEntryWith("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Row index out of range."<< endl;
          throw range_error("SparseMatrix::MultiplyEntryWith");
       }
  
@@ -271,27 +292,30 @@ void SparseMatrix::MultiplyEntryWith( size_t i, size_t j, double val )
     // if the element does not exist, i.e. is zero, the result would also be zero
     // so nothing needs to be done
     if ( dit == data_[i].end() ) return;
-    // removing element which becomes zero when multiplied with 'val'
-    if ( fabs(val) <= numeric_limits<double>::epsilon() ) {
+    
+    // multiplying entry with 'val'
+    (*dit).second *= val;
+    
+    // removing entry if it has become zero by multiplication with 'val'
+    if ( !((*dit).second > 0.) &&
+         !((*dit).second < 0.) ) {
           data_[i].erase( j );
           entries_--;
-         return;
       }
-    (*dit).second *= val;
 }
 
 
 void SparseMatrix::MultiplyWith( const vector<double>& vec, vector<double>& res )
   {
     if ( vec.size() != Cols() ) {
-         cout <<"\nSparseMatrix::MultiplyWith: first argument vector must have the same size as matrix columns. ";
-         cout <<"Row index out of range."<< endl;
+         cerr <<"\nSparseMatrix::MultiplyWith: first argument vector must have the same size as matrix columns. ";
+         cerr <<"Row index out of range."<< endl;
          throw range_error("SparseMatrix::MultiplyWith");
       }
   
   res.resize(Rows());
   vector<double>( res ).swap( res );
-  fill(res.begin(), res.end(), 0.);
+  fill(res.begin(), res.end(), 0. );
   
   size_t i{0U};
   for ( const auto& it : data_ ) {
@@ -307,8 +331,8 @@ void SparseMatrix::MultiplyWith( const vector<double>& vec, vector<double>& res 
 void SparseMatrix::ColumnIndices( size_t row, vector<size_t>& indices ) const
  {
     if ( row >= data_.size() ) {
-         cout <<"\nSparseMatrix::ColumnIndices("<< row <<",..): ";
-         cout <<"Row index out of range."<< endl;
+         cerr <<"\nSparseMatrix::ColumnIndices("<< row <<",..): ";
+         cerr <<"Row index out of range."<< endl;
          throw range_error("SparseMatrix::ColumnIndices");
       }
       
@@ -341,17 +365,18 @@ size_t SparseMatrix::RecountEntries() const
 
 double SparseMatrix::InfinityNorm() const
  {
-    double sum(0.0), maxsum(0.0);
+    double maxsum{0.};
 
     // loop over all rows
-    for ( size_t i{0U}; i<data_.size(); i++ ) {
-        sum = 0.;
-        // loop over all columns and add up entries
-        for ( const auto& it : data_[i] ) sum += fabs(it.second);  // take maximum rowsum
-        if ( sum > maxsum ) maxsum = sum;
+    for ( const auto& vit : data_ ) {
+         double sum{0.};
+         // loop over all columns, adding up entries
+         for ( const auto& it : vit ) sum += fabs(it.second);  // take maximum rowsum
+         maxsum = max( sum, maxsum );
       }
     return maxsum;
  }
+
 
 
 bool SparseMatrix::Symmetric() const
@@ -359,7 +384,7 @@ bool SparseMatrix::Symmetric() const
     for ( size_t i{0U}; i<data_.size(); i++ )
       {
           if ( data_[i].empty() ) {
-               cout <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
+               cerr <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
                return false;
             }
           for ( const auto& ditc : data_[i] )
@@ -387,8 +412,8 @@ bool SparseMatrix::ZeroesInDiagonal() const
     for ( const auto& it : data_ ) {
          if ( it.empty() ||
               it.find(i) == it.end() ||
-              fabs((*it.find(i)).second) <= numeric_limits<double>::epsilon() ) {
-                cout <<"\nSparseMatrix::ZeroesInDiagonal: Zero entry at ("<< i <<","<< i <<").";
+              essentiallyEqual( (*it.find(i)).second, 0. ) ) {
+                //cout <<"\nSparseMatrix::ZeroesInDiagonal: Zero entry at ("<< i <<","<< i <<").";
                 return true;
             }
          i++;
@@ -403,8 +428,8 @@ bool SparseMatrix::DiagonallyPositive() const
     for ( size_t i{0U}; i<data_.size(); i++ ) {
          auto diagonal_elmt = data_[i].find(i);
          if ( diagonal_elmt == data_[i].end() ) {
-               cout <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
-               cout <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
+               cerr <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
+               cerr <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
                return true;
             }
          if ( (*diagonal_elmt).second < 0. ) return false;
@@ -418,7 +443,7 @@ bool SparseMatrix::DiagonallyPositive() const
 void SparseMatrix::SparsityPattern( const char* txtfile ) const
  {
     if ( data_.empty() ) {
-         cout <<"\nSparseMatrix::SparsityPattern: Matrix is empty."<< endl;
+         cerr <<"\nSparseMatrix::SparsityPattern: Matrix is empty."<< endl;
          return;
       }
 
@@ -448,21 +473,11 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
 template<class cspMat1, class cspMat2>
 void SparseMatrix::Assign( const cspMat1& idx, const cspMat2& d )
  {
-    for ( size_t i{0U}; i<idx.Rows(); ++i )
-      for ( size_t j{0U}; j<idx.Cols(); ++j )
+    for ( uint32_t i{0U}; i<idx.Rows(); ++i )
+      for ( uint32_t j{0U}; j<idx.Cols(); ++j )
         Add( idx(i,j), idx(i,j), d(i,j) );
 
  } // end Assign
-
-//template
-//void SparseMatrix::Assign<DenseMatrix<DM_MAX>,DenseMatrix<DM_MAX> >(
-//const DenseMatrix<DM_MAX>&,
-//const DenseMatrix<DM_MAX>& );
-
-//template
-//void SparseMatrix::Assign<DenseMatrix<DM_MIN>,DenseMatrix<DM_MIN> >(
-//const DenseMatrix<DM_MIN>&,
-//const DenseMatrix<DM_MIN>& );
 
 template void SparseMatrix::Assign<DenseMatrix<DM4>,Matrix>( const DenseMatrix<DM4>&, const Matrix& );
 
@@ -527,12 +542,12 @@ void SparseMatrix::OutCompressedRowFormat1_n( int32_t*  ia, int32_t*  ja,
      }
 
    map<size_t,double>::const_iterator rit;
-   uint32_t         i;
-   int32_t          j, diag, istart, jatemp;
-   double       atemp;
-   bool           zero_diag_element(false);
+   int32_t  j, diag, istart, jatemp;
+   double   atemp;
+   bool     zero_diag_element(false);
 
-   for ( i=0, ia[0]=j=0; i<Rows(); i++ )
+   size_t i{0U};
+   for ( ia[0]=j=0; i<Rows(); i++ )
     {
        for ( diag=-1, rit=data_[i].begin(); rit!=data_[i].end(); rit++ ) {
             a[j]  = (*rit).second;
@@ -555,7 +570,7 @@ void SparseMatrix::OutCompressedRowFormat1_n( int32_t*  ia, int32_t*  ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat_n: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat_n: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -590,12 +605,12 @@ void SparseMatrix::OutCompressedRowFormat( int32_t*  ia, int32_t*  ja,
         a  = new double[ entries_ ];
      }
 
-   size_t    i;
-   int32_t     j, diag, istart, jatemp;
+   int32_t j, diag, istart, jatemp;
    double  atemp;
-   bool      zero_diag_element(false);
+   bool    zero_diag_element(false);
 
-   for ( i=0U, ia[0]=j=0; i<Rows(); i++ )
+   size_t i{0U};
+   for ( ia[0]=j=0; i<Rows(); i++ )
     {
        map<size_t,double>::const_iterator rit=data_[i].begin();
        for ( diag=-1; rit!=data_[i].end(); rit++ ) {
@@ -620,7 +635,7 @@ void SparseMatrix::OutCompressedRowFormat( int32_t*  ia, int32_t*  ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -693,7 +708,7 @@ void SparseMatrix::OutCompressedRowFormatParallel( vector<int32_t>& ia, vector<i
      }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormatParallel: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormatParallel: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormatParallel");
     }
 
@@ -769,7 +784,7 @@ void SparseMatrix::OutCompressedRowFormat( long* ia, long* ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -800,7 +815,7 @@ void SparseMatrix::In( const char* file_name_without_extension )
       ifstream  ifs( in_file.c_str() );
       
       if ( !ifs.is_open() ) {
-            cout <<"\n SparseMatrix::In: failed to read '"<< in_file <<"'; nothing was done\n";
+            cerr <<"\n SparseMatrix::In: failed to read '"<< in_file <<"'; nothing was done\n";
             return;
         }
         
