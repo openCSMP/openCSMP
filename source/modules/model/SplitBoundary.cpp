@@ -524,7 +524,7 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
   if ( disconnected_cells > 0U ) {
        cout <<"\nSplitBoundary<dim>::CreateFrom: creating '"<< this->Name() <<"'";
        csmp_error.Note( WARNING, "SplitBoundary<dim>::CreateFrom:", to_string(disconnected_cells),
-                       "InterFace object(s) do(es) not have neighbors");
+                       "InterFace object(s) do(es) not have neighbors, implying a split-boundary patch consisting of a single InterFace");
     }
     
   this->cell_vec_.assign( ifacesBegin, ifacesEnd );
