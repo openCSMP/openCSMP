@@ -341,11 +341,12 @@ if ( mesh_manager_.InterFaces() > 0 )
   integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
 #endif
 
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
     if ( this->Mesh().Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
-         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< this->Mesh().Nodes() <<")";
          cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
     if ( this->Mesh().Faces() > 0 ) {
@@ -360,7 +361,7 @@ if ( mesh_manager_.InterFaces() > 0 )
          assert( volume_ifaces == 0U );
          cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << endl;
 
 } // end Initialize (regionfile,ModelTopology,VSet)
@@ -424,11 +425,12 @@ if ( mesh_manager_.InterFaces() > 0 )
   integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
 #endif
 
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
     if ( this->Mesh().Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
-         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< this->Mesh().Nodes() <<")";
          cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
     if ( this->Mesh().Faces() > 0 ) {
@@ -443,7 +445,7 @@ if ( mesh_manager_.InterFaces() > 0 )
          assert( volume_ifaces == 0U );
          cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << endl;
 
   

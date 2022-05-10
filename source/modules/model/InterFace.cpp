@@ -350,7 +350,7 @@ These elements are stored in the local pair  of pointers called parents_.
 
 @attention The node numbering of the Face determines the direction of its normal.
 Here the convention is assumed that the first parent element is that on the inside
-of the Face with regard to the outward pointing normal and the second element is on
+of the InterFace with regard to the outward pointing normal and the second element is on
 the outside.
 
 Same method as in Face, but - in addition - connects InterFace to the multiplicated nodes
@@ -805,23 +805,13 @@ template<uint32_t dim>
 csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) const
 {
   assert( n < this->FE()->Nodes() );
-  
-  // the number of nodes on a single side of the interface
-  const auto if_FE_nodes( this->FE()->Nodes() );
-
-  if ( side == INSIDE )
-    return node_connector_[n];
+  if ( side == INSIDE ) return node_connector_[n];
 
   if ( side == OUTSIDE ) {
-    uint32_t outside_idx = n + if_FE_nodes;
-// TODO: suspicious branching
-    if ( n < if_FE_nodes )
-      return node_connector_[outside_idx];
-    else {
-      outside_idx %= node_connector_.size();
+      // the number of nodes on a single side of the interface
+      const uint32_t outside_idx = n + this->FE()->Nodes();
       return node_connector_[outside_idx];
     }
-  }
 
   assert( side == MIDDLE );
   if ( middleElement_ != nullptr )
@@ -1049,10 +1039,18 @@ void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side )
 }
 
 
+/**
+    For Interfaces the nodes of which are not collocated one would need to form the average of the normals or take the bisector
+    or the middle element.
+*/
 template<uint32_t dim>
 void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
 {
-  UnitNormal( vc, INSIDE );
+   if ( middleElement_ != nullptr ) {
+        middleElement_->UnitNormal( vc );
+        return;
+     }
+   UnitNormal( vc, INSIDE );
 }
 
 
@@ -1063,6 +1061,12 @@ template<uint32_t dim>
 csmp::Point<dim>  InterFace<dim>::UnitNormal() const
  {
     if ( middleElement_ != nullptr ) return middleElement_->UnitNormal();
+    
+    // TODO: perhaps one could use the averaged node positions of the manifold here
+    this->CoordinateMatrix();
+    vector<double> unrml( dim );
+    this->FE()->UnitNormal( unrml );
+    return Point<dim>( unrml );
  
     throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal:", "InterFace FE type not recognized." );
 

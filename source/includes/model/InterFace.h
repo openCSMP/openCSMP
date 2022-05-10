@@ -37,8 +37,22 @@ the method
 
 InterFace::N( n_node, interface_side ) has to be used.
 
-Else the nodes are ordered sequentially, INSIDE nodes first, then outside nodes.
-The nodes in the middle can only be accessed via BaseElement().
+The nodes are ordered sequentially, INSIDE nodes first, then outside nodes.
+The inside nodes follow the numbering of the nodes of the face of the higher-dimensional
+element on the inside.
+The outside nodes follow the face-node number of the OUTSIDE parent element.
+This means that they are stored in the opposite order as those on the inside.
+
+Inside and outside nodes start out to be matched (by point location).
+Because of their different ordering (demanded to get the correct normals),
+the first inside node matches the last outside node.
+It follows that
+@code
+    auto n_nodes = FE()->Nodes() // of the finite element type of the interface.
+    for ( auto i{0U}; i<n_nodes; i++ )
+      assert( N(0,INSIDE)->Coordinate() == N(n_nodes-i-1U,OUTSIDE)->Coordinate() );
+@endcode
+should not fail.
 
 The normal to the interface points from the INSIDE to the OUTSIDE element of the InterFace
 and it is inherited from the lower dimensional element that the InterFace (or Face) was built from.
@@ -50,6 +64,9 @@ Default is true.
 If the nodes are not collocated, the UnitNormal() method will return the normal to the mirror
 symmetry plane between the 2 sides of the InterFace.
 
+Nodes in the middle can only be accessed if the MIDDLE element pointer has been assigned
+to a lower-dimensional intervening element inside of the InterFace.
+If this is indeed the case, then access it via BaseElement().
 The base (csmp::Element) of the InterFace is a nullptr by default, but it can be connected
 to an intervening lower-dimensional element mesh once the InterFace has been created.
 
@@ -57,7 +74,7 @@ to an intervening lower-dimensional element mesh once the InterFace has been cre
 
 @author SKM & Junchul Kim, refactored changing design to node-pointer based etc.
 @author first version by P. Lang
-@date 2011, 2014, 2016, 2019.
+@date 2011, 2014, 2016, 2019, 2022.
 
 */
 template<uint32_t dim>
