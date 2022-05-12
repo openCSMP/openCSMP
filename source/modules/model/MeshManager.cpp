@@ -1005,7 +1005,14 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
 
 
 /**
-    As above but for InterFace
+    As above but for InterFace. All nodes get duplicated unless they are those of an element at the perimeter of the lower-dimensional region
+    and flagged NOT. In that case inside and outside nodes are taken to be the same (inside) node.
+    
+    If one of the nodes involved in the construction process is already a manifold, no extra nodes are added but the inside and outside nodes
+    are used for the manifold construction.
+    @todo is this sufficient? - else the manifold type might have to be checked for additional diagnostics.
+    
+    @attention This assumes that the element from which the InterFace is created is appropriately connected to its neighbors.
 */
 template<uint32_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element<dim>* eptr,
@@ -1014,41 +1021,54 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
                                                                    uint32_t adjacent_face_of_inner_element,
                                                                    uint32_t adjacent_face_of_outer_element,
                                                                    const LocalVariables& lvars,
-                                                                   const IntegrationPointVariables& ivars )
+                                                                   const IntegrationPointVariables& ivars,
+                                                                   const LocalVariables& nvars )
  {
    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
    
    // 0. verifying the input
+   // ----------------------
    // pointers
    if ( eptr == nullptr )
      csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "element pointer not initialised");
-
    // is the element indeed lower dimensional?
-   if constexpr ( dim == 3U )
-     if ( !eptr->IsSurface() )
+   if constexpr ( dim == 3U ) if ( !eptr->IsSurface() )
      csmp_error.Note( ERROR, "MeshManager<3>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional surface element");
-   if constexpr ( dim == 2U )
-     if ( !eptr->IsLine() )
+   if constexpr ( dim == 2U ) if ( !eptr->IsLine() )
      csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional line element");
 
    if ( eptr->FV() == nullptr )
      csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByInterFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
      csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "pointer to higher dimensional element on inside not initialised");
+
    if ( inner_eptr == outer_eptr ) {
-        csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "cannot create Face"
-                                  "pointer to higher dimensional elements are the same");
+        csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "cannot create InterFace"
+                                "pointers to higher dimensional elements are the same");
         return nullptr;
      }
-       
    assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
    if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
    
-   // duplicating the inside nodes if necessary and creating corresponding manifolds
-   vector<Node<dim>*>  outside_nodes( eptr->Nodes(), nullptr );
-   // TODO: duplicate nodes and assign
+   
+   // 1. duplicating inside nodes when necessary and creating corresponding manifolds
+   // -------------------------------------------------------------------------------
+   const auto n_nodes{ eptr->Nodes() };
+   vector<Node<dim>*>  outside_nodes( n_nodes, nullptr );
+   
+   for ( uint32_t i{0U}; i<n_nodes; i++ )
+     // if the node already is a manifold, the outside node in it is found and assigned
+     if ( eptr->N(i)->IsManifold() ) {
+          for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
+            if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+              outside_nodes[i] = eptr->N(i)->Manifold()->N(j);
+       }
+     // else the node is duplicated including creation of the manifold
+     else outside_nodes[i] = Duplicate( eptr->N(i), OUTSIDE, nvars );
 
-   // constructing new interface
+
+   // 2. constructing the new interface
+   // ---------------------------------
    const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
    typename plf::colony<InterFace<dim>>::iterator
      fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
@@ -1056,13 +1076,14 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
                                                 lvars, ivars, outside_nodes ) );
    (*fit).Idx( face_id );
 
-   // 3. deleting original Element
+   // 3. deleting the original Element
+   // --------------------------------
    elements_.erase( elements_.get_iterator(eptr) );
    eptr = nullptr;
 
    return &(*fit);
    
- } // end ReplaceElementByFace
+ } // end ReplaceElementByInterFace
        
 
 
@@ -1378,7 +1399,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
 
 /**
-    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold, else, the existing node is returned.
+    Duplicates existing node and connects it to corresponding manifold, else, the existing node is returned.
     
     @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
     

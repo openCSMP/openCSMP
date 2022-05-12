@@ -12,7 +12,7 @@ template<uint32_t> class Element;
 template<uint32_t> class Boundary;
 template<uint32_t> class Region;
 template<uint32_t> class VSet;
-class FaceConstructionData;
+template<uint32_t> class FaceConstructionData;
 
 /**
 
@@ -122,7 +122,8 @@ class BoundaryInterface {
  protected:
  
     /// combines strings (including 'BOUNDARY') into a unique name of the boundary
-    std::string CreateBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
+    std::string CreateBoundaryNameFrom( const FaceConstructionData<dim>&,
+                                        const std::vector<std::string>& region_names ) const;
 
     /// creates boundary from already interconnected faces that also know their parent elements
     bool AddBoundary( const char* name,

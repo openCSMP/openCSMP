@@ -30,13 +30,13 @@ namespace csmp {
     cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
     cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
     std::map<std::string,std::vector<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nElement Groups: " << findContiguousMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
     cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
     std::map<std::string,std::vector<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nFace Groups: " << findContiguousMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
     cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
     std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
     
     if (reconstruct_from_file) {
         model2d_->OutputToBinaryFile(model2d_name_.c_str());
@@ -46,11 +46,11 @@ namespace csmp {
         cout << "\nNodes: " << mesh.Nodes() << "\n";
         cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
         cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nElement Groups: " << findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
+        cout << "\nFace Groups: " << findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
         cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
       }
       
  } // end create_ANSYS2D_Model

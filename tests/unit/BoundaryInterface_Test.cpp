@@ -408,7 +408,8 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
      @attention  where the boundary just intersects a layer (same material on either side), the layer name appears
      only once. The second instance is replaced by INTERSECTION.
 */
-static std::string internalBoundaryNameFrom( const FaceConstructionData& fdata, const std::vector<std::string>& region_names )
+template<uint32_t dim>
+static std::string internalBoundaryNameFrom( const FaceConstructionData<dim>& fdata, const std::vector<std::string>& region_names )
  {
      assert( fdata.ElementMaterial() < region_names.size() );
      std::string boundary_name( region_names[ fdata.ElementMaterial() ] );
@@ -466,169 +467,6 @@ std::string  findBoundary( const Model<3U>& model, const set<string>& intersecte
 
 
 
-// TRANSFERRED
-/**
-    Searches the model for boundaries the name of which contains the search strings
-    provided via the first set. The results are returnd into the second set.
-    
-    @note Use this method, for example, to retrieve multiple boundary patches that were generated
-    from a single lower-dimensional regon, like a fault surface.
-
-     @author SKM 
-     @date March 2016
-*/
-static size_t findBoundaries( const Model<3U>& model, const set<string>& intersected_regions,
-                              set<string>& region_patches_found )
- {
-    // if the substring set is empty
-    if ( intersected_regions.empty() ) {
-         ErrorHandler::Instance().Note( WARNING, "findBoundaries:", "supplied set of substrings is empty; returning '\0'." );
-         return 0U;
-      }
-    // if the model has no boundaries
-    if ( model.Boundaries() == 0 ) {
-         ErrorHandler::Instance().Note( WARNING, "findBoundaries:", "model has no boundaries; returning '\0'." );
-         return 0U;
-      }
-    region_patches_found.clear();
-   
-     // making a set of boundary names
-     const size_t substrings_used_in_search(intersected_regions.size());
-     for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); ++it ) {
-          size_t substrings_found(0U);
-          for ( auto ir=intersected_regions.begin(); ir!=intersected_regions.end(); ++ir )
-            // if the substring is found
-            if ( (*it).first.find(*ir) !=std::string::npos ) substrings_found++;
-          // when all substrings are contained in the boundary name, it is returned
-          if ( substrings_found == substrings_used_in_search )
-            region_patches_found.insert( (*it).first );
-       }
-    // return how many region patches contain the search string(s)
-    return region_patches_found.size();
- }
-
-
-
-
-
-
-
-// TRANSFERRED
-/**
-     higherDimensionalNeighbors()
- 
-     - finds the IDs of the higher dimensional neibors of the current element
- 
-     - identifies which of the neighbors is on the inside and which on the outside
-       as indicated by the normal direction of the lower dimensional element
- 
-     - identifies the materials on either side
-     
-     @return two inside-outside pairs of element idx numbers and corresponding materials on either side
-     all the data are stored in the returnd FaceConstructionData object.
-     
-     assumptions
-     - assumes that the nodes and elements in the entire model domain are numbered continuously
-     
-     application
-     - use this function for finding neighbors of a surface element that sits on the inside of another region
-     
-     TODO: output the numbers of matching faces of the discovered the elements so that they can later be connected
- 
-*/
-static FaceConstructionData  higherDimensionalNeighbors( const Element<3U>& e, const csmp::Index& mtrl_key )
- {
-     assert( e.IsSurface() );
-
-     // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
-     // -----------------------------------------------------------------------------------------------------------------------------
-     // making a set of element nodes to later identify faces by comparison
-     set<size_t> node_set, test_set;
-     const size_t  nodes(e.Nodes());
-     for ( auto i{0}; i<nodes; ++i ) node_set.insert(e.N(i)->Idx());
-     map<const Element<3U>*,uint32_t> nbor_elmts;
-     vector<uint32_t> fnids;
-     for ( auto i{0}; i<nodes; i++ ) {
-          const auto parents(e.N(i)->Parents());
-          for ( auto j=0U; j<parents; ++j ) {
-               const Element<3U>* const eptr(e.N(i)->Parent(j));
-               const auto faces(eptr->Faces());
-               for ( auto k=0U; k<faces; ++k ) {
-                     eptr->FE()->NodesOfFace( k, fnids );
-                     size_t fnodes(fnids.size());
-                     for ( size_t l=0U; l<fnodes; ++l )
-                       test_set.insert( eptr->N( fnids[l])->Idx() );
-                     // if the face is shared the element and its face are recorded
-                     if ( node_set == test_set ) {
-                          // storing a pointer to this element and its local face number
-                          // making sure that no duplicate is received
-                          nbor_elmts.insert( make_pair(eptr,k) );
-                       }
-                     test_set.clear();
-                 }
-            }
-       }
-    assert( nbor_elmts.size() == 2U );
-   
-    // 2. finding which of the neighbors is the inside one by projecting face normals onto lower dim element normal
-    // -------------------------------------------------------------------------------------------------------------
-    vector<double>  enrml, fnrml;
-    e.UnitNormal( enrml );
-    map<const Element<3U>*,uint32_t>::const_iterator  nbit(nbor_elmts.begin());
-    bool inside_elmt_found(false);
-    bool outside_elmt_found(false);
-    pair<size_t,size_t>     nbors;
-    pair<uint32_t,uint32_t> faces;
-    pair<long,long>     materials;
-
-    // first element
-    // -------------
-    assert( (*nbit).first != nullptr );
-    faces.first = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.first, fnrml );
-    double dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
-   
-    // if the projection is negative, the first element lies on the outside
-    if ( dotproduct < 0. ) {
-         nbors.second       = (*nbit).first->Idx();
-         materials.second   = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         outside_elmt_found = true;
-      }
-    else {
-         nbors.first        = (*nbit).first->Idx();
-         materials.first    = static_cast<long>((*nbit).first->Read( mtrl_key ));
-         inside_elmt_found  = true;
-      }
-    nbit++;
-
-
-// TODO: SKM: this could be done without 2 normal projections for speedup
-
-    // second element
-    // --------------
-    assert( (*nbit).first != nullptr );
-    faces.second = (*nbit).second;
-    (*nbit).first->UnitNormalToFace( faces.second, fnrml );
-    dotproduct = enrml[0] * fnrml[0] + enrml[1] * fnrml[1] + enrml[2] * fnrml[2];
-
-   // if the projection is negative, the second element lies on the outside
-    if ( dotproduct < 0. ) {
-         // checking that we have no duplication here
-         assert( outside_elmt_found == false );
-         nbors.second     = (*nbit).first->Idx();
-         materials.second = static_cast<long>((*nbit).first->Read( mtrl_key ));
-      }
-    else {
-         assert( inside_elmt_found == false );
-         nbors.first      = (*nbit).first->Idx();
-         materials.first  = static_cast<long>((*nbit).first->Read( mtrl_key ));
-      }
-   
-    // initialise with nbors, their faces, adjacent materials, and patch numbers
-    return FaceConstructionData( e.Idx(), nbors,  faces, materials,
-                                 static_cast<long>(e.Read( mtrl_key)) );
-   
- } // end higherDimensionalNeighbors
 
 
 
@@ -700,11 +538,11 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     model.Region("Model").UpdateMemberIndexes();
    
     // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,uint32_t> patches;
-    vector<FaceConstructionData>  face_construction_data;
-    map<uint32_t,string>          patch_names;
-    string                        patch_name;
-    uint32_t                      n_juxtapositions(0);
+    map<pair<long,long>,uint32_t>     patches;
+    vector<FaceConstructionData<3U>>  face_construction_data;
+    map<uint32_t,string>              patch_names;
+    string                            patch_name;
+    uint32_t                          n_juxtapositions(0);
 
     // 3. looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
@@ -741,8 +579,8 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
       patch_numbers.insert( make_pair( (*it).second, (*it).first ) );
    
     // 4.2 building new map where the patch faces are organised by patch names
-    map<string,vector<FaceConstructionData> > patch_simplexes;
-    vector<FaceConstructionData>              empty_vec;
+    map<string,vector<FaceConstructionData<3U>> > patch_simplexes;
+    vector<FaceConstructionData<3U>>              empty_vec;
     for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
       patch_simplexes.insert( make_pair( (*it).second, empty_vec ) );
    
@@ -761,7 +599,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     // 4.4 trimming excess storage of the face-data vectors
     for ( auto pit=patch_simplexes.begin(); pit!=patch_simplexes.end(); ++pit )
       //std::vector<uint32_t>(elementIds).swap(elementIds);
-      vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
+      vector<FaceConstructionData<3U>>( (*pit).second ).swap( (*pit).second );
 
 /* TESTING
 cout <<"\n\n\n\nBoundary patches and their face data:\n";

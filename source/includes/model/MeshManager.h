@@ -189,14 +189,14 @@ public:
                                          bool delete_original_face=true );
 
 /// multiplicates nodes and replaces (deletes)  lower-dimensional Element with InterFace object
-// TODO: needs to be implemented 
 InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
                                                  csmp::Element<dim>* inner_eptr,
                                                  csmp::Element<dim>* outer_eptr,
                                                  uint32_t adjacent_face_of_inner_element,
                                                  uint32_t adjacent_face_of_outer_element,
-                                                 const LocalVariables& lvars,
-                                                 const IntegrationPointVariables& ivars );
+                                                 const LocalVariables& interface_variables,
+                                                 const IntegrationPointVariables& interface__ipoint_vars,
+                                                 const LocalVariables& node_variables );
 
   /// creates face and assigns nodes and higher-dimensional neighbors @note the face neighbor element pointers are not assigned;
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,

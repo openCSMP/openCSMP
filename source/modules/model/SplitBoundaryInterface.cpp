@@ -436,7 +436,7 @@ string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNa
      only once. The second instance is replaced by INTERSECTION.
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
-string SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNameFrom( const FaceConstructionData& fdata,
+string SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNameFrom( const FaceConstructionData<dim>& fdata,
                                                                                        const vector<string>& region_names ) const
  {
      assert( fdata.ElementMaterial() < region_names.size() );
@@ -569,7 +569,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
   // ----------------------------------------------------------------------------------------------------------------
 #ifdef DEBUG
   map<string,vector<Element<dim>*> >  mesh_patches;
-  size_t n_mesh_patches = findStandAloneMeshPatches( splitboundaryComplex->Mesh().ElementsBegin(),
+  size_t n_mesh_patches = findContiguousMeshPatches( splitboundaryComplex->Mesh().ElementsBegin(),
                                                      splitboundaryComplex->Mesh().ElementsEnd(),
                                                      mesh_patches );
   // checking the dimensionality of the patches
@@ -923,11 +923,11 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     //    The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,uint32_t> patches;
-    vector<FaceConstructionData>  interface_construction_data;
-    map<long,string>              patch_names;
-    string                        patch_name;
-    uint32_t                      n_juxtapositions(0);
+    map<pair<long,long>,uint32_t>      patches;
+    vector<FaceConstructionData<dim>>  interface_construction_data;
+    map<long,string>                   patch_names;
+    string                             patch_name;
+    uint32_t                           n_juxtapositions(0);
 
     // 2.1 looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
@@ -961,8 +961,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
       patch_numbers.insert( make_pair( it.second, static_cast<uint32_t>(it.first ) ) );
    
     // 2.2.2 building new map where the patch faces are organised by patch names
-    map<string,vector<FaceConstructionData> > patch_data;
-    vector<FaceConstructionData>              empty_vec;
+    map<string,vector<FaceConstructionData<dim>>>  patch_data;
+    vector<FaceConstructionData<dim>>              empty_vec;
     for ( const auto& it : patch_names )
       patch_data.insert( make_pair( it.second, empty_vec ) );
    
@@ -997,25 +997,26 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // establish the storage requirements for face variables
     const LocalVariables             lvsInterfaces( model.Database().LocalVariablesAt(INTER_FACE) );
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(INTER_FACE) );
+    const LocalVariables             lvsNode( model.Database().LocalVariablesAt(NODE) );
     vector<vector<InterFace<dim>*> > iface_ptrs_per_patch(patch_data.size());
    
     size_t patch_counter(0);
-    for ( const auto& it : patch_data )
+    for ( auto& it : patch_data )
       {
          iface_ptrs_per_patch[patch_counter].reserve( it.second.size() );
 
          // for each of the new patches
-         for ( const auto& pit : it.second )
+         for ( auto& pit : it.second )
            {
               // creating the faces
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
-              iface_vector.push_back( model.Mesh().ReplaceElementByInterFace( model_domain.E( pit.Element() ),
-                                                                              model_domain.E( pit.InnerElement() ),
-                                                                              model_domain.E( pit.OuterElement() ),
+              iface_vector.push_back( model.Mesh().ReplaceElementByInterFace( pit.LowerDimElement(),
+                                                                              pit.InnerElement(),
+                                                                              pit.OuterElement(),
                                                                               pit.InnerElementFace(),
                                                                               pit.OuterElementFace(),
-                                                                              lvsInterfaces, lvsIntegrationPoints ) );
+                                                                              lvsInterfaces, lvsIntegrationPoints, lvsNode ) );
               // remembering which faces make up the patch
               iface_ptrs_per_patch[patch_counter].push_back( iface_vector.back() );
            }

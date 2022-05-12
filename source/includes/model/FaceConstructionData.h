@@ -15,37 +15,40 @@ namespace csmp {
 template<uint32_t> class Element;
 
 /// all it takes to build a face later
+template<uint32_t dim>
 class FaceConstructionData {
   public:
-    FaceConstructionData( size_t  parent_element,
-                          std::pair<size_t,size_t>& neighbor_elements,
+    FaceConstructionData( Element<dim>& parent_element,
+                          std::pair<Element<dim>*,Element<dim>*>& neighbor_elements,
                           std::pair<uint32_t,uint32_t>& neighbor_element_faces,
                           std::pair<long,long>& neighbor_element_materials,
                           long   this_material );
 
-    FaceConstructionData( size_t  parent_element,
-                          std::pair<size_t,size_t>& neighbor_elements,
+    FaceConstructionData( Element<dim>& parent_element,
+                          std::pair<Element<dim>*,Element<dim>*>& neighbor_elements,
                           std::pair<uint32_t,uint32_t>& neighbor_element_faces,
                           std::pair<long,long>& neighbor_element_materials,
                           long   this_material,
                           uint32_t number_of_patch_this_data_belongs_to );
   
     FaceConstructionData( const FaceConstructionData& );
+    
      // NO ASSIGMENT OPERATOR BECAUSE ALL CLASS MEMBERS ARE CONSTANT
   
     /// inner (first) and out (second) higher-order parent element
-    std::pair<size_t,size_t> NeighborElements() const;
+    std::pair<Element<dim>*,Element<dim>*> NeighborElements() const;
   
     /// idx of lower-dimensional element from which face data were derived if it exists
-    size_t Element() const;
+    Element<dim>* LowerDimElement();
   
     /// idx of element on the opposite site of the outward pointing normal
-    size_t   InnerElement() const;
+    Element<dim>* const InnerElement() const;
+    
     /// the local id of the face located at the boundary
     uint32_t InnerElementFace() const;
   
     /// idx of element on the side to which the normal points to
-    size_t   OuterElement() const;
+    Element<dim>* const OuterElement() const;
     uint32_t OuterElementFace() const;
   
     /// the material out of which the element consists from which the boundary face shall be constructed
@@ -68,25 +71,18 @@ class FaceConstructionData {
     FaceConstructionData& operator=( const FaceConstructionData& );
   
   private:
-    const size_t  parent_element_;                  ///< idx of lower-dimensional parent element
-    const std::pair<size_t,size_t>     neighbors_;  ///< indices of higher-dimensional elements on inside (first) and outside (second)
-    const std::pair<uint32_t,uint32_t> nbor_faces_; ///< matching faces on inside (first) and outside (second)
-    const std::pair<long,long>         materials_;  ///< integer codified juxtaposed regions
-    const long                         material_;   ///< of the element from which the Face shall be constructed
-    uint32_t patch_number_;                         ///< unique identifier for the internal boundary patch this data relates to
+    Element<dim>&                                dim_m1_element_; ///< idx of lower-dimensional parent element
+    const std::pair<Element<dim>*,Element<dim>*> neighbors_;    ///< indices of higher-dimensional elements on inside (first) and outside (second)
+    const std::pair<uint32_t,uint32_t>           nbor_faces_;   ///< matching faces on inside (first) and outside (second)
+    const std::pair<long,long>                   materials_;    ///< integer codified juxtaposed regions
+    const long                                   material_;     ///< of the element from which the Face shall be constructed
+    uint32_t                                     patch_number_; ///< unique identifier for the internal boundary patch this data relates to
 };
 
 
-/// finds inside neighbor of dim-1 element, and the face that connects to it; index records neighbor materials
-template<uint32_t dim>
-const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
-                                                            size_t& local_face_number_of_e, double& material_ID  );
-template<uint32_t dim>
-bool  higherDimensionalNeighbors( const Element<dim>&, std::vector<Element<dim>*>& );
-
 /// finds the neighbors of dim-1 element, and their faces that connect to it; index records neighbor materials
 template<uint32_t dim>
-FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, const csmp::Index& );
+FaceConstructionData<dim>  higherDimensionalNeighbors( csmp::Element<dim>&, const csmp::Index& );
 
 } // end csmp
 

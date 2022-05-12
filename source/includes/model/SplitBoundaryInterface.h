@@ -7,7 +7,7 @@
 namespace csmp {
 
 class ModelTopology;
-class FaceConstructionData;
+template<uint32_t> class FaceConstructionData;
 template<uint32_t> class InterFace;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
@@ -95,7 +95,9 @@ class SplitBoundaryInterface {
     /// creating name for the case when the SplitBoundary was already present in the input mesh
     std::string CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
     
-    std::string CreateSplitBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
+    /// creates name for one specific patch of the new split boundary
+    std::string CreateSplitBoundaryNameFrom( const FaceConstructionData<dim>&,
+                                             const std::vector<std::string>& region_names ) const;
 
     /// searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set
     size_t FindSplitBoundaryByNames( const std::set<std::string>& intersected_regions,
