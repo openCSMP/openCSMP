@@ -117,11 +117,18 @@ class ModelSubDomain {
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
-    /// renumbers nodes in domain 0..n-1
+    
+    /// renumbers cells in domain 0..n-1
     size_t  RenumberCells() const;
-    /// renumber cells and nodes
+    
+    /// renumber cells and nodes consecutively from 0..n-1
     void    UpdateMemberIndexes() const;
+    
+    /// output current indices to vector
     void    MemberCellIndexes( std::vector<size_t>& ) const;
+    
+    /// setting all cell indices to a specific value
+    void    SetCellIndexes( size_t new_idx );
 
     // ----------------------------------------
     // access

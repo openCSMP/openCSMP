@@ -1158,9 +1158,10 @@ void  ModelSubDomain<dim,CELL>::MemberCellIndexes( vector<size_t>& ids ) const
     for ( const auto& it : cell_vec_ ) ids.push_back( it->Idx() );
  }
 
+
+
 /** Renumbers nodes from 0 to n-1.
 */
-
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
  {
@@ -1170,6 +1171,8 @@ size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
 
     return counter;
  }
+
+
 
 /** Renumbers cells from 0 to n-1.
 */
@@ -1184,6 +1187,7 @@ size_t ModelSubDomain<dim,CELL>::RenumberCells() const
  } // end RenumberCells
 
 
+
 /** Renumbers cells and nodes from 0 to n-1.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -1195,6 +1199,12 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
  } // end UpdateRegionMemberIndexes
 
 
+    /// setting all cell indices to a specific value
+template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim,CELL>::SetCellIndexes( size_t new_idx )
+ {
+    for( auto& it : cell_vec_ ) it->Idx(new_idx);
+ }
 
 
 

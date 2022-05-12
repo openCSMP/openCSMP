@@ -2,10 +2,13 @@
 #define SPLIT_BOUNDARY_INTERFACE_H
 
 #include "CSMP_definitions.h"
+#include "Box.h"
 
 namespace csmp {
 
 class ModelTopology;
+class FaceConstructionData;
+template<uint32_t> class InterFace;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
 
@@ -26,9 +29,9 @@ class SplitBoundaryInterface {
     // -----------------------------------------------
     // Access of SplitBoundaries objects
     // -----------------------------------------------
-    csmp::SplitBoundary<dim>&         SplitBoundary( const std::string& spbName );
-    const csmp::SplitBoundary<dim>&   SplitBoundary( const std::string& spbName ) const;
-    bool                              ContainsSplitBoundary( const std::string& bname ) const;
+    csmp::SplitBoundary<dim>&         SplitBoundary( const std::string& );
+    const csmp::SplitBoundary<dim>&   SplitBoundary( const std::string& ) const;
+    bool                              ContainsSplitBoundary( const std::string& ) const;
 
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::iterator         splitBoundaryIterator;
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::const_iterator   splitBoundaryConstIterator;
@@ -91,8 +94,19 @@ class SplitBoundaryInterface {
 
     /// creating name for the case when the SplitBoundary was already present in the input mesh
     std::string CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
+    
+    std::string CreateSplitBoundaryNameFrom( const FaceConstructionData&, const std::vector<std::string>& region_names ) const;
+
+    /// searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set
+    size_t FindSplitBoundaryByNames( const std::set<std::string>& intersected_regions,
+                                     std::set<std::string>& region_patches_found ) const;
  
-  protected:
+     /// creates split boundary from already interconnected faces that also know their parent elements
+    bool AddSplitBoundary( const char* name,
+                           typename std::vector<InterFace<dim>*>::iterator first,
+                           typename std::vector<InterFace<dim>*>::iterator last,
+                           BOX_BOUNDARY );
+ protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };
 

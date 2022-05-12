@@ -257,7 +257,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-     if ( vset.Faces() > 0 || vset.InterFaces() > 0 )
+     if ( vset.Faces() > 0 || vset.Interfaces() > 0 )
        csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "method works only for vsets without Face or InterFace objects as it creates them by itself from lower-dimensiona regions.");
       
@@ -271,7 +271,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
         mesh_topology.ReduceToDomains( regions_file_prefix );
         //    reducing the element data to the desired elements specified in the topology object
         //    if the element numbers in the two are different.
-        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.InterFaces() ) {
+        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.Interfaces() ) {
             map<size_t,size_t>  old_and_new_elmtids;
             mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
             vset.ReduceTo( old_and_new_elmtids );
@@ -487,7 +487,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( vset.Faces() > 0 ||
-       vset.InterFaces() > 0 )
+       vset.Interfaces() > 0 )
     csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
 
   // 1. checking for neighbor connectivity and boundary flags
@@ -2938,7 +2938,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
     this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
   
   // 7. reconstructing the splitboundaries, if any
-  if ( vset.InterFaces() > 0 )
+  if ( vset.Interfaces() > 0 )
     this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";

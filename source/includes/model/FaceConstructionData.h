@@ -8,11 +8,11 @@
 #ifndef FACE_CONSTRUCTION_DATA_H
 #define FACE_CONSTRUCTION_DATA_H
 
-#include <iostream>
-#include <vector>
-#include <limits>
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
 
 /// all it takes to build a face later
 class FaceConstructionData {
@@ -76,6 +76,17 @@ class FaceConstructionData {
     uint32_t patch_number_;                         ///< unique identifier for the internal boundary patch this data relates to
 };
 
+
+/// finds inside neighbor of dim-1 element, and the face that connects to it; index records neighbor materials
+template<uint32_t dim>
+const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
+                                                            size_t& local_face_number_of_e, double& material_ID  );
+template<uint32_t dim>
+bool  higherDimensionalNeighbors( const Element<dim>&, std::vector<Element<dim>*>& );
+
+/// finds the neighbors of dim-1 element, and their faces that connect to it; index records neighbor materials
+template<uint32_t dim>
+FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, const csmp::Index& );
 
 } // end csmp
 

@@ -31,6 +31,10 @@ void SKUA_FiniteElementMeshInterface_Test::run()
     VSet<3U> vset;
     double   time = 0.;
     vset.InputFrom( model_name.c_str(), time );
+    
+    // connectivity checks before VSet is turned into csmp::Model
+    Test_NodeNumberingConsistencyBetweenTetrahedraAndInterFaces( vset );
+    
     // adding node and element numbering to it
     {
       PropertyData elmt_numbers( ELEMENT, SCALAR, 3U );
@@ -308,6 +312,91 @@ bool SKUA_FiniteElementMeshInterface_Test::TestElementNeighborConnectivity( Mode
     return true;
     
  } // end TestElementNeighborConnectivity
+ 
+ 
+ 
+ 
+/** tests whether the number of nodes in InterFace cells is consistent with their parent tetrahedral Element cells
+ 
+        Uses the VSet 'pfvert' record to recover the necessary information for each InterFace: this record is expect to contain:
+        interface neighbors(entries 0..2), inner-parent elmt(3), outer-parent elmt(4), inner-face idx(5), outer-face idx(6), intervening-elmt idx(7) or INTERNAL (see OutputMeshToVSet)
+ */
+void SKUA_FiniteElementMeshInterface_Test::Test_NodeNumberingConsistencyBetweenTetrahedraAndInterFaces( const VData& vdata )
+ {
+    assert( vdata.HybridElementTypeMesh() );
+    assert( vdata.IsoparametricElementMesh() );
+    assert( vdata.Interfaces() > 0U );
+    
+     // looping over the InterFace records in VSet
+     for ( size_t i{ vdata.Faces() }; i<vdata.TotalNumberOfCells(); i++ )
+       {
+          assert( vdata.ElementType(i) == ISOPARAMETRIC_LINEAR_TRIANGLE );
+          assert( vdata.PfvertsSize(i) == 7U );
+          
+          // checking inside element first
+          // -----------------------------
+          // - the nodes of the INSIDE parent face touching the interface must be exactly the same
+          //   (for the linear tet, these are: face 0: 1 2 3, face 1: 0 3 2, 2: 0 1 3, and face 3: 0 2 1)
+          const size_t inner_elmt     = vdata.Pfvert(i,3);
+          const size_t inner_face_idx = vdata.Pfvert(i,5);
+          const size_t node0(vdata.Plist(i,0)), node1(vdata.Plist(i,1)), node2(vdata.Plist(i,2));
+          switch( inner_face_idx ) {
+              case 0:
+                  // first 3 nodes of interface must match those of face 1 of the tetrahedron
+                  _test( node0 == vdata.Plist(inner_elmt,1) );
+                  _test( node1 == vdata.Plist(inner_elmt,2) );
+                  _test( node2 == vdata.Plist(inner_elmt,3) );
+                break;
+              case 1:
+                  _test( node0 == vdata.Plist(inner_elmt,0) );
+                  _test( node1 == vdata.Plist(inner_elmt,3) );
+                  _test( node2 == vdata.Plist(inner_elmt,2) );
+                break;
+              case 2:
+                  _test( node0 == vdata.Plist(inner_elmt,0) );
+                  _test( node1 == vdata.Plist(inner_elmt,1) );
+                  _test( node2 == vdata.Plist(inner_elmt,3) );
+                break;
+              case 3:
+                  _test( node0 == vdata.Plist(inner_elmt,0) );
+                  _test( node1 == vdata.Plist(inner_elmt,2) );
+                  _test( node2 == vdata.Plist(inner_elmt,1) );
+            }
+          // checking outside element
+          // ------------------------
+          // - the nodes of the INSIDE parent face touching the interface must be exactly the same
+          //   (for the linear tet, these are: face 0: 1 2 3, face 1: 0 3 2, 2: 0 1 3, and face 3: 0 2 1)
+          const size_t outer_elmt     = vdata.Pfvert(i,4);
+          const size_t outer_face_idx = vdata.Pfvert(i,6);
+          const size_t node3(vdata.Plist(i,3)), node4(vdata.Plist(i,4)), node5(vdata.Plist(i,5));
+          switch( outer_face_idx ) {
+              case 0:
+                  // for the outside, these nodes must be listed in reverse order
+                  _test( node5 == vdata.Plist(outer_elmt,1) );
+                  _test( node4 == vdata.Plist(outer_elmt,2) );
+                  _test( node3 == vdata.Plist(outer_elmt,3) );
+                break;
+              case 1:
+                  _test( node5 == vdata.Plist(outer_elmt,0) );
+                  _test( node4 == vdata.Plist(outer_elmt,3) );
+                  _test( node3 == vdata.Plist(outer_elmt,2) );
+                break;
+              case 2:
+                  _test( node5 == vdata.Plist(outer_elmt,0) );
+                  _test( node4 == vdata.Plist(outer_elmt,1) );
+                  _test( node3 == vdata.Plist(outer_elmt,3) );
+                break;
+              case 3:
+                  _test( node5 == vdata.Plist(outer_elmt,0) );
+                  _test( node4 == vdata.Plist(outer_elmt,2) );
+                  _test( node3 == vdata.Plist(outer_elmt,1) );
+            }
+       }
+       
+ } // end Test_NodeNumberingConsistencyBetweenTetrahedraAndInterFaces
+  
+ 
+ 
  
  
  

@@ -14,17 +14,6 @@ template<uint32_t> class Region;
 template<uint32_t> class VSet;
 class FaceConstructionData;
 
-/// finds the neighbors of dim-1 element, and their faces that connect to it; index records neighbor materials
-template<uint32_t dim>
-FaceConstructionData  higherDimensionalNeighbors( const csmp::Element<dim>&, const csmp::Index& );
-
-/// finds inside neighbor of dim-1 element, and the face that connects to it; index records neighbor materials
-template<uint32_t dim>
-const csmp::Element<dim>* const  higherDimensionalNeighbor( const csmp::Element<dim>&, const csmp::Index&,
-                                                            size_t& local_face_number_of_e, double& material_ID  );
-template<uint32_t dim>
-bool  higherDimensionalNeighbors( const Element<dim>& , std::vector<Element<dim>*>& );
-
 /**
 
 @brief Policy of Model class for the management of internal and external

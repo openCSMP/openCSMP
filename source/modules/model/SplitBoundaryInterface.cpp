@@ -1,19 +1,13 @@
 #include "SplitBoundaryInterface.h"
 #include "ModelTopology.h"
+#include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
-#include "Model.h"
 #include "MeshManagementUtilities.h"
-#include "smoothElementData.h"
 #include "MeshManager.h"
+#include "FaceConstructionData.h"
 #include "Node.h"
-#include "NodeManifold.h"
-#include "FiniteElementManager.h"
-#include "FiniteVolumeStencilManager.h"
-#include "IsoparametricLinearLineElement.h" 
-#include "IsoparametricLinearTriangle.h" 
-#include "IsoparametricLinearQuadrilateral.h"
 #include "binaryReadWrite.h"
 
 #include "Exception.h"
@@ -423,6 +417,135 @@ string SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNa
 
 
 /**
+     protected METHOD (not known beyond this compilation unit)
+ 
+     creates underscore-separated unique names for the region patches based on the juxtapositions relationships
+     across the lower-dimensional regions, the names are composed of:
+ 
+     1. the name of the master region
+     
+     2. "SPLITBOUNDARY"
+     
+     3. the patch identifier number attached to boundary
+     
+     4. the name of the inner region, i.e. the region that the lower-dimensional element normals point away from
+     
+     5. the name of the outer region, i.e. that into which the normals point
+     
+     @attention  where the boundary just intersects a single layer (same material on either side), the layer name appears
+     only once. The second instance is replaced by INTERSECTION.
+*/
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+string SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryNameFrom( const FaceConstructionData& fdata,
+                                                                                       const vector<string>& region_names ) const
+ {
+     assert( fdata.ElementMaterial() < region_names.size() );
+     string boundary_name( region_names[ fdata.ElementMaterial() ] );
+     boundary_name += "_SPLITBOUNDARY";
+     boundary_name += to_string(fdata.PatchNumber());
+     boundary_name += '_';
+     pair<long,long> materials(fdata.Materials());
+     assert( materials.first  < region_names.size() );
+     assert( materials.second < region_names.size() );
+     boundary_name += region_names[ materials.first ];
+     boundary_name += '_';
+     if ( materials.first == materials.second ) boundary_name +="INTERSECTION";
+     else boundary_name += region_names[ materials.second ];
+   
+     return boundary_name;
+ }
+
+
+
+
+
+
+
+/**
+    Searches the model for splitboundaries the name of which contains the search strings
+    provided via the first set. The results are returnd into the second set.
+    
+    @note Use this method, for example, to retrieve multiple splitboundary patches that were generated
+    from a single lower-dimensional regon, like a fault surface.
+
+     @author SKM
+     @date March 2016
+*/
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FindSplitBoundaryByNames( const set<string>& intersected_regions,
+                                                                                    set<string>& region_patches_found ) const
+ {
+    const SPLITBOUNDARY_COMPLEX<dim>& splitBoundaryComplex( static_cast<const SPLITBOUNDARY_COMPLEX<dim>& >(*this) );
+    // if the substring set is empty
+    if ( intersected_regions.empty() ) {
+         ErrorHandler::Instance().Note( WARNING, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::FindSplitBoundaryByNames:",
+                                         "supplied set of substrings is empty; returning '\0'." );
+         return 0U;
+      }
+    // if the model has no boundaries
+    if ( splitBoundaryComplex.Boundaries() == 0 ) {
+         ErrorHandler::Instance().Note( WARNING, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::FindSplitBoundaryByNames:",
+                                         "model has no boundaries; returning '\0'." );
+         return 0U;
+      }
+    region_patches_found.clear();
+   
+     // making a set of boundary names
+     const size_t substrings_used_in_search(intersected_regions.size());
+     for ( auto it=splitBoundaryComplex.SplitBoundariesBegin(); it!=splitBoundaryComplex.SplitBoundariesEnd(); ++it ) {
+          size_t substrings_found(0U);
+          for ( auto ir=intersected_regions.begin(); ir!=intersected_regions.end(); ++ir )
+            // if the substring is found
+            if ( (*it).first.find(*ir) !=string::npos ) substrings_found++;
+          // when all substrings are contained in the boundary name, it is returned
+          if ( substrings_found == substrings_used_in_search )
+            region_patches_found.insert( (*it).first );
+       }
+    // return how many region patches contain the search string(s)
+    return region_patches_found.size();
+    
+ } // end FindSplitBoundaryByNames
+
+
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::AddSplitBoundary( const char* split_boundary_name,
+                                                                          typename vector<InterFace<dim>*>::iterator ifacesBegin,
+                                                                          typename vector<InterFace<dim>*>::iterator ifacesEnd,
+                                                                          BOX_BOUNDARY bflag )
+ {
+    SPLITBOUNDARY_COMPLEX<dim>* const splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>* const>(this) );
+    assert( splitBoundaryComplex != nullptr );
+
+    // inserting boundary if it does not existing yet
+    auto it = splitBoundaryMap_.insert( make_pair( split_boundary_name, csmp::SplitBoundary<dim>( split_boundary_name,
+                                                                                                  splitBoundaryComplex->Database() ) ) );
+    if ( it.second ) {
+         (*it.first).second.CreateFrom( ifacesBegin, ifacesEnd );
+         cout << "\nBoundaryInterface<"<< dim <<">::AddBoundary: successfully created boundary '";
+         cout << split_boundary_name <<"' from input faces.";
+      }
+    else {
+         ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+         csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary:",
+                            split_boundary_name, "SplitBoundary already exists or other problem arose. Nothing was done.");
+         return false;
+      }
+
+     return true;
+   
+ } // end AddSplitBoundary
+
+
+
+
+
+
+/**
     Creates SplitBoundaries detecting, them in the (ANSYS) input model
     as node-matched interfaces, connecting such disconnected perimeter element faces
     in mesh; these are detected and grouped by bordering regions and turned into SplitBoundary objects
@@ -567,17 +690,22 @@ template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsBySplitBoundaries()
   {
     SPLITBOUNDARY_COMPLEX<dim>* model( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
-    //ErrorHandler&               csmp_error( ErrorHandler::Instance() );
+    //ErrorHandler&             csmp_error( ErrorHandler::Instance() );
     
     cout << "\nStart creating splitBoundaries between the unique regions (and respecting the existing boundaries:\n"<<endl;
     // creating region labels and tagging the regions with unique integer indentifiers
-    const string region_tag("region identifier");
-    if ( !model->Database().IsDefined(region_tag.c_str()) )
-      model->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
-    // TODO: use ElementMaterial_ID here rather than relying on a new variable
-    const csmp::Index mtrl_key = model->Database().StorageKey(region_tag.c_str());
+    const string    region_tag("region identifier");
     vector<string>  region_names;
-    const size_t model_regions = model->CountAndLabelRegions( region_tag.c_str(), region_names );
+    if ( !model->Database().IsDefined(region_tag.c_str()) ) {
+          model->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+         model->CountAndLabelRegions( region_tag.c_str(), region_names );
+      }
+    else { // assigning region names
+         region_names.reserve( distance( model->UniqueRegionsBegin(),model->UniqueRegionsEnd()) );
+         for ( auto rit=model->UniqueRegionsBegin(); rit!=model->UniqueRegionsEnd(); ++rit )
+           region_names.push_back( (*rit).first );
+      }
+    const csmp::Index mtrl_key = model->Database().StorageKey(region_tag.c_str());
 
     // search the existing unique sub-regions
     set<pair<string, string>>     discovered;
@@ -708,12 +836,263 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
  {
+    SPLITBOUNDARY_COMPLEX<dim>& model( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
+
+    cout <<"\nSplitBoundaryInterface<"<< dim <<",Model>::CreateSplitBoundaryFrom: forming splitboundary(ies) from region: '";
+    cout << dim_1_region <<"'...\n";
+    
+    // ------------------------------------------------------------------------------------------------------------------------------------------------
+    // 1. Verify input lower-dimensional region object from which splitboundary shall be created: must be lower dimensional and lie on inside of model
+    // ------------------------------------------------------------------------------------------------------------------------------------------------
+    const string creation_failed( string("CreateSplitBoundaryFrom(") +  dim_1_region +") failed");
+    // does the parent region exist
+    if ( model.ContainsRegion(dim_1_region) == false ) {
+          ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region, "does not exist; nothing was done." );
+          return make_pair( set<string>({creation_failed}), false );
+      }
+    // do such split boundaries already exist ?
+    const set<string> intersected_regions{dim_1_region};
+    set<string>       pre_existing_splitboundaries;
+    if ( FindSplitBoundaryByNames( intersected_regions, pre_existing_splitboundaries ) > 0 ) {
+          string error_info;
+          for ( auto it : pre_existing_splitboundaries ) {
+               error_info += it;
+               error_info +=", ";
+            }
+          ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:",
+                                           error_info.c_str(), "boundaries are already contained in this model." );
+          return make_pair( set<string>({creation_failed}), false );
+      }
+    // does the model contain unique regions
+    if ( model.UniqueRegions() < 1U ) {
+          ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", "model contains no unique regions; cannot proceed." );
+          return make_pair( set<string>({creation_failed}), false );
+      }
+    // verifying that we are indeed dealing with a region of surface or line elements only and that their normals all point into same direction
+    Region<dim>&  subdomain(model.Region(dim_1_region));
+    if ( checkNeighborNormalsForConsistentOrientation( subdomain ) == false ) {
+         ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region,
+                                       "region appears to have inconsistent surface-normal orientations; nothing was done." );
+         return make_pair( set<string>({creation_failed}), false );
+      }
+    // checking that the region is not already an internal boundary
+    size_t nodes_flagged_internal_boundary{0U}, nodes_flagged_external_boundary{0U};
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+         if ( (*nit)->AtBoundary() == INTERNAL ) nodes_flagged_internal_boundary++;
+         else if ( (*nit)->AtBoundary() != NOT ) nodes_flagged_external_boundary++;
+      }
+    if ( nodes_flagged_internal_boundary >= subdomain.Nodes() - nodes_flagged_external_boundary ) {
+         ErrorHandler::Instance().Note( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region,
+                                                   "region may already be a boundary; nothing was done." );
+         return make_pair( set<string>({creation_failed}), false );
+      }
+    
+    // checking that the region is not located at the model boundary
+    size_t boundary_elements{0U};
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
+      for ( auto i{0U}; i<(*eit)->Neighbors(); ++i ) {
+           const BOX_BOUNDARY bflag = (*eit)->AtBoundary(i);
+           if ( bflag != NOT and bflag != INTERNAL and bflag != IRREGULAR ) boundary_elements++;
+        }
+    if ( boundary_elements == subdomain.Cells() ) {
+         ErrorHandler::Instance().Note( WARNING, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region,
+                                                   "region appears to lie at the model boundary; nothing could be done." );
+         return make_pair( set<string>({creation_failed}), false );
+      }
+      
+    // creating region labels and tagging the regions with unique integer identifiers
+    // if "region identifier" is already defined it is assumed that it has already been initialised as well
+    const string    region_tag("region identifier");
+    vector<string>  region_names;
+    if ( !model.Database().IsDefined(region_tag.c_str()) ) {
+         model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
+         if ( model.CountAndLabelRegions( region_tag.c_str(), region_names ) == 1U )
+            ErrorHandler::Instance().Note( INFO, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", region_tag.c_str(),
+                                                  "is single valued; so there is only one patch." );
+      }
+    else { // assigning region names
+         region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+         for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
+           region_names.push_back( (*rit).first );
+      }
+    const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
+         
+         
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 2. Determine number of splitboundary segments (sub-boundaries) that the new boundary will consist of.
+    //    The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // looping over the region, identifying and recording the juxtaposition relationships
+    map<pair<long,long>,uint32_t> patches;
+    vector<FaceConstructionData>  interface_construction_data;
+    map<long,string>              patch_names;
+    string                        patch_name;
+    uint32_t                      n_juxtapositions(0);
+
+    // 2.1 looping over lower dimensional region identifying juxtaposition relationships
+    // ----------------------------------------------------------------------------------------
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
+      {
+          // 2.1.1 identifying neighbors, facing relations, and juxtaposed materials for current element
+          FaceConstructionData  fdata( higherDimensionalNeighbors( *(*eit), mtrl_key ) );
+        
+          // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
+          auto it = patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
+          // incrementing number of juxtapositions and corresponding patch names
+          if ( it.second == true ) {
+               fdata.PatchNumber( (*it.first).second );
+               patch_name = CreateSplitBoundaryNameFrom( fdata, region_names );
+               patch_names.insert( make_pair(n_juxtapositions,patch_name) );
+               n_juxtapositions++;
+            }
+          fdata.PatchNumber( (*it.first).second );
+        
+          // 2.1.3 recording the data for the element that will later be used to construct the face from
+          interface_construction_data.push_back( fdata );
+      }
+    assert( interface_construction_data.size() == subdomain.Cells() );
+
+   
+    // 2.2 creating labeled boundary patches from the face-defining data
+    // -----------------------------------------------------------------
+    // 2.2.1 making a map 'patch_numbers' from 'patch_names' to search for patch identifiers
+    map<string,size_t>  patch_numbers;
+    for ( const auto& it : patch_names )
+      patch_numbers.insert( make_pair( it.second, static_cast<uint32_t>(it.first ) ) );
+   
+    // 2.2.2 building new map where the patch faces are organised by patch names
+    map<string,vector<FaceConstructionData> > patch_data;
+    vector<FaceConstructionData>              empty_vec;
+    for ( const auto& it : patch_names )
+      patch_data.insert( make_pair( it.second, empty_vec ) );
+   
+    // 2.2.3 inserting the patch identifiers into the vectors in the map
+    for ( auto& pit : patch_data )
+      {
+         assert( patch_numbers.find(pit.first) != patch_numbers.end() );
+         const size_t patch_number((*patch_numbers.find(pit.first)).second);
+         // reserving storage
+         pit.second.reserve(interface_construction_data.size());
+         // looping over all face data assigning the ones that are suitable
+         for ( const auto& it : interface_construction_data )
+           if ( it.PatchNumber() == patch_number )
+             pit.second.push_back( it );
+      }
+    // 2.2.4 trimming excess storage of the face-data vectors
+    for ( auto& pit : patch_data ) pit.second.shrink_to_fit();
+
+ 
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 3. Getting the MeshManager object to create Face objects for all boundary patches at the same time
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    //  3.1 creating the required face objects
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    Region<dim>&            model_domain(model.Region("Model"));
+    const size_t            new_interfaces_required(subdomain.Cells());
+    vector<InterFace<dim>*> iface_vector;
+    iface_vector.reserve(new_interfaces_required);
+    const size_t n_original_faces(model.Mesh().Faces());
+    const size_t n_original_elmts(model.Mesh().Elements());
+
+    // establish the storage requirements for face variables
+    const LocalVariables             lvsInterfaces( model.Database().LocalVariablesAt(INTER_FACE) );
+    const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(INTER_FACE) );
+    vector<vector<InterFace<dim>*> > iface_ptrs_per_patch(patch_data.size());
+   
+    size_t patch_counter(0);
+    for ( const auto& it : patch_data )
+      {
+         iface_ptrs_per_patch[patch_counter].reserve( it.second.size() );
+
+         // for each of the new patches
+         for ( const auto& pit : it.second )
+           {
+              // creating the faces
+              // ------------------
+              // storing pointers to the new faces in the vector from which the boundary will be constructed
+              iface_vector.push_back( model.Mesh().ReplaceElementByInterFace( model_domain.E( pit.Element() ),
+                                                                              model_domain.E( pit.InnerElement() ),
+                                                                              model_domain.E( pit.OuterElement() ),
+                                                                              pit.InnerElementFace(),
+                                                                              pit.OuterElementFace(),
+                                                                              lvsInterfaces, lvsIntegrationPoints ) );
+              // remembering which faces make up the patch
+              iface_ptrs_per_patch[patch_counter].push_back( iface_vector.back() );
+           }
+         patch_counter++;
+      }
+    patch_data.clear();
+    
+#ifdef DEBUG
+    cout <<"\n\n"<<"SplitBoundaryInterface<"<< dim <<">::CreateInternalBoundaryFrom:";
+    cout << "\n\t\t"<<"Added "<< model.Mesh().Faces() - n_original_faces <<" faces to mesh.";
+    cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
+#endif
+   
+    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
+    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
+    //      - this method also updates node to parent element connectivity
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // TODO: these are global changes! - not sure how to improve this because so many regions are affected
+    model.Mesh().UpdateConnectivity();
+   
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // using map<size_t,string>  patch_names   from above
+    for ( auto i{0U}; i<patch_names.size(); ++i )
+       // creating the boundary patch
+       AddSplitBoundary( patch_names[i].c_str(), iface_ptrs_per_patch[i].begin(), iface_ptrs_per_patch[i].end(), INTERNAL );
+
+    iface_ptrs_per_patch.clear();
+      
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
+ 
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 6. remove lower-dimensional input region (its elements were already removed above).
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    const bool remove_elmts{ false };
+    model.RemoveRegion( dim_1_region, remove_elmts );
+    model.UpdateRegions();
+   
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 7. extra diagnostics and output of boundary names
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    if ( patch_names.empty() ) {
+         ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region, "no SplitBoundary patches could be created." );
+         return make_pair( set<string>({}), false );
+      }
+      
+    set<string> split_boundary_names;
+    for ( const auto& it : patch_names ) split_boundary_names.insert( it.second );
+
+    if ( patch_names.size() > split_boundary_names.size() ) {
+         ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region, "not all of the created patchnames are unique." );
+         return make_pair( set<string>({}), false );
+      }
+
+
+    return make_pair( split_boundary_names, true );
+       
+ } // end CreateSplitBoundaryFrom
+
+
+
+
+/* OLD VERSION THAT DID NOT UPDATE ADJACENT REGIONS
+
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
+ {
     SPLITBOUNDARY_COMPLEX<dim>* model( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this) );
   
     // 1. Converting the lower dimensional region into a single Boundary or multiple Boundaries (patches of juxtaposed rocks)
     //    CreateInternalBoundaryFrom checks whether dim_1_region actually exists
     pair<set<string>,bool> boundary_names = model->CreateInternalBoundaryFrom( dim_1_region );
-    if ( boundary_names.second == false ) 
+    if ( boundary_names.second == false )
       return boundary_names;
     
     set<string>  split_boundary_names;
@@ -726,6 +1105,9 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     return make_pair( split_boundary_names, true );
        
  } // end CreateSplitBoundaryFrom
+
+*/
+
 
 
 

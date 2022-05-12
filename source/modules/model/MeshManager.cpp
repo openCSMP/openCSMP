@@ -238,10 +238,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
   hybrid_element_mesh_ = vset.HybridElementTypeMesh();
   cout <<"\nMeshManager<"<< dim <<">::Initialize: building mesh with "<< vset.Elements() <<" elements, "<< vset.Vertices() <<" nodes, ";
-  cout << vset.Faces() <<" faces, and "<< vset.InterFaces() <<" interfaces.\n";
+  cout << vset.Faces() <<" faces, and "<< vset.Interfaces() <<" interfaces.\n";
   if ( vset.HybridElementTypeMesh() ) cout <<"mesh consists of multiple element types.\n";
   if ( vset.Faces() > 0 ) cout <<"mesh contains 'Boundary' objects.\n";
-  if ( vset.InterFaces() > 0 ) cout <<"mesh contains 'SplitBoundary' objects.\n";
+  if ( vset.Interfaces() > 0 ) cout <<"mesh contains 'SplitBoundary' objects.\n";
   cout << endl;
 
   // ------------------------------------------------------------------------------------
@@ -479,7 +479,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // 4. constructing Interfaces objects using the VSet node information
   // ------------------------------------------------------------------
   // (continuous running index 'idx' will also be used for interfaces)
-  if ( vset.InterFaces() > 0 )
+  if ( vset.Interfaces() > 0 )
     {
        assert( vset.HybridElementTypeMesh() );
        if ( csmp_error.Verbose() )
@@ -525,7 +525,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             ++interface_idx;
             ++first;
           }
-       assert( interfaces_.size() == vset.InterFaces() );
+       assert( interfaces_.size() == vset.Interfaces() );
 
        // connecting the interfaces to their equi- and higher-dimensional neighbors
        // -------------------------------------------------------------------------
@@ -1002,6 +1002,68 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
  } // end ReplaceElementByFace
        
 
+
+
+/**
+    As above but for InterFace
+*/
+template<uint32_t dim>
+InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element<dim>* eptr,
+                                                                   csmp::Element<dim>* inner_eptr,
+                                                                   csmp::Element<dim>* outer_eptr,
+                                                                   uint32_t adjacent_face_of_inner_element,
+                                                                   uint32_t adjacent_face_of_outer_element,
+                                                                   const LocalVariables& lvars,
+                                                                   const IntegrationPointVariables& ivars )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // pointers
+   if ( eptr == nullptr )
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "element pointer not initialised");
+
+   // is the element indeed lower dimensional?
+   if constexpr ( dim == 3U )
+     if ( !eptr->IsSurface() )
+     csmp_error.Note( ERROR, "MeshManager<3>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional surface element");
+   if constexpr ( dim == 2U )
+     if ( !eptr->IsLine() )
+     csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional line element");
+
+   if ( eptr->FV() == nullptr )
+     csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByInterFace", "finite volume stencil pointer not initialised");
+   if ( inner_eptr == nullptr )
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "pointer to higher dimensional element on inside not initialised");
+   if ( inner_eptr == outer_eptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "cannot create Face"
+                                  "pointer to higher dimensional elements are the same");
+        return nullptr;
+     }
+       
+   assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
+   if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
+   
+   // duplicating the inside nodes if necessary and creating corresponding manifolds
+   vector<Node<dim>*>  outside_nodes( eptr->Nodes(), nullptr );
+   // TODO: duplicate nodes and assign
+
+   // constructing new interface
+   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
+   typename plf::colony<InterFace<dim>>::iterator
+     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
+                                                adjacent_face_of_inner_element, adjacent_face_of_outer_element,
+                                                lvars, ivars, outside_nodes ) );
+   (*fit).Idx( face_id );
+
+   // 3. deleting original Element
+   elements_.erase( elements_.get_iterator(eptr) );
+   eptr = nullptr;
+
+   return &(*fit);
+   
+ } // end ReplaceElementByFace
+       
 
 
        
@@ -4792,7 +4854,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
   if ( vset.Vertices()   != nodes_.size() ||
        vset.Elements()   != elements_.size() ||
        vset.Faces()      != faces_.size() ||
-       vset.InterFaces() != interfaces_.size() ) {
+       vset.Interfaces() != interfaces_.size() ) {
        csmp_error.Note( ERROR, "MeshManager<dim>::InputStoredVariablesFrom",
                          "mismatch between property data sizes and mesh stored in manager; no input." );
        return;

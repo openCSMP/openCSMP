@@ -13,6 +13,66 @@ using namespace std;
 
 namespace csmp {
 
+template<uint32_t dim>
+InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
+               csmp::Element<dim>* inner_parent,
+               csmp::Element<dim>* outer_parent,
+               uint32_t adjacent_face_of_inner_element,
+               uint32_t adjacent_face_of_outer_element,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props,
+               std::vector<Node<dim>*> outside_nodes )
+  : FiniteElementPolicy<dim,csmp::InterFace>( elmt.FE() ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( elmt.FV() ),
+    idx_( numeric_limits<size_t>::max() ),
+    node_connector_( elmt.Nodes() * 2, nullptr ),
+    interface_connector_( elmt.Neighbors(), nullptr ),
+    middleElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( inner_parent ),
+    outerParent_( outer_parent ),
+    inner_parent_face_id_( adjacent_face_of_inner_element ),
+    outer_parent_face_id_( adjacent_face_of_outer_element ),
+    collocated_nodes_(true)
+{
+   assert( elmt.FE() != nullptr );
+   assert( innerParent_ != nullptr );
+   assert( outerParent_ != nullptr );
+   assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+   assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+   assert( outside_nodes.size() == elmt.Nodes() );
+
+#ifdef DEBUG
+   for ( const auto& nit : outside_nodes ) assert( nit != nullptr );
+#endif
+
+   // 1. assigning the nodes to the new InterFace
+   // -------------------------------------------
+   const auto n_nodes{ outside_nodes.size() };
+   for ( auto i{0U}; i< n_nodes; i++ ) {
+        Assign( i, elmt.N(i), INSIDE );
+        Assign( i, outside_nodes[i], OUTSIDE );
+     }
+     
+   // 2. replacing the nodes on the outside element with the new outside nodes
+   // ------------------------------------------------------------------------
+   vector<uint32_t> fnids;
+   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
+   for ( auto i{0U}; i< n_nodes; i++ )
+     outerParent_->Assign( fnids[i], outside_nodes[i] );
+     
+   // 3. detaching the higher-dimensional element neighbors from one another
+   // ----------------------------------------------------------------------
+   innerParent_->Unassign( outerParent_ );
+   outerParent_->Unassign( innerParent_ );
+
+ } // end complete custom constructor (Element)
+
+
+
+
+
+
 /**
    Contructs complete InterFace using the Face nodes as inside nodes; outside nodes in opposite order are supplied by node-pointer vector'
    

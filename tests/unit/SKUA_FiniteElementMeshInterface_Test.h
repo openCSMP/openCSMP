@@ -14,6 +14,8 @@
 
 namespace csmp {
 
+class VData;
+
 /** @brief Tests SKUA models from basic to more advanced.
 
     /// consecutive numbering of nodes and elements
@@ -52,6 +54,9 @@ class SKUA_FiniteElementMeshInterface_Test : public Test {
 
 
   // SPLIT-BOUNDARY SPECIFIC TESTS
+  
+    /// tests whether the number of nodes in InterFace cells is consistent with their parent tetrahedral Element cells
+    void Test_NodeNumberingConsistencyBetweenTetrahedraAndInterFaces( const VData& );
   
     /// Manifolds: 1) are they present at all split boundaries, 2) do they have the right number of entries
     void Test_NodesAndTheirManifolds( const Model<3U>& );
