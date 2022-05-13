@@ -57,7 +57,7 @@ class FaceConstructionData {
     /// in the order: 1) parent, 2) inner, 3) outer
     void Materials( std::vector<long>& ) const;
   
-    /// those of the neighboring higher-dimensional elements
+    /// Returns the materials of the neighboring higher-dimensional elements, inside followed by outside
     std::pair<long,long> Materials() const;
   
     /// identifier of the boundary that the face will belong to

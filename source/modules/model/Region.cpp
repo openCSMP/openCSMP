@@ -2485,29 +2485,28 @@ double  Region<dim>::Volume( bool multiply_with_porosity ) const
 
   // recording contributions of different types of elements making up the group
   if ( multiply_with_porosity ) {
-    csmp::Index  phi_key = this->pref_.StorageKey( "porosity" );
-    for ( typename vector<csmp::Element<dim>*>::const_iterator
-          it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
-      if ( (*it)->FE()->IsVolume() )  volume += (*it)->Volume() * (*it)->Read( phi_key );
-      else if ( (*it)->FE()->IsSurface() ) area += (*it)->Volume() * (*it)->Read( phi_key );
-      else if ( (*it)->FE()->IsLine() )    length += (*it)->Volume() * (*it)->Read( phi_key );
+      csmp::Index  phi_key = this->pref_.StorageKey( "porosity" );
+      for ( const auto& it : this->cell_vec_ ) {
+          if      ( it->IsVolume() )  volume += it->Volume() * it->Read( phi_key );
+          else if ( it->IsSurface() ) area   += it->Volume() * it->Read( phi_key );
+          else if ( it->IsLine() )    length += it->Volume() * it->Read( phi_key );
+        }
     }
-  }
   else
-    for ( typename vector<csmp::Element<dim>*>::const_iterator
-          it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
-      if ( (*it)->FE()->IsVolume() )  volume += (*it)->Volume();
-      else if ( (*it)->FE()->IsSurface() ) area += (*it)->Volume();
-      else if ( (*it)->FE()->IsLine() )    length += (*it)->Volume();
-    }
+    for ( const auto& it : this->cell_vec_ ) {
+        if      ( it->IsVolume() )  volume += it->Volume();
+        else if ( it->IsSurface() ) area   += it->Volume();
+        else if ( it->IsLine() )    length += it->Volume();
+      }
 
   // counting only the contributions of the elements with the highest spatial dimension
-  if ( dim == 3U ) {
-    if ( volume > 0. ) return volume;
-    if ( area >   0. ) return area;
-    if ( length > 0. ) return length;
-  }
-  else if ( dim == 2U )
+  if constexpr ( dim == 3U ) {
+      if ( volume > 0. ) return volume;
+      if ( area >   0. ) return area;
+      if ( length > 0. ) return length;
+    }
+  
+  if constexpr ( dim == 2U )
     return (area > 0.) ? area : length;
 
   return length;

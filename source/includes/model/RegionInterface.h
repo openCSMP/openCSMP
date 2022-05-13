@@ -173,7 +173,7 @@ class RegionInterface {
     // -----------------------------------------------
 
     /// assigns unique region-indicative variable values to the elements of all unique regions and returns name value mapping vector[value]=name
-    size_t  CountAndLabelRegions( const char* region_identifier, std::vector<std::string>& region_names );
+    size_t  CountAndLabelUniqueRegions( const char* region_identifier, std::vector<std::string>& region_names );
 
     /// finds disconnected subregions in region, dividing it into these. The new subregion are numbered and their total # is returned
     size_t  PartitionRegionIntoContiguousSubRegions( const char* region );

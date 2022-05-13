@@ -537,8 +537,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const string region_tag("region identifier");
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
-         model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
-         const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
+         model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
+         const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
          if ( model_regions == 1 )
            ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
                                                 "is single valued; so there is only one patch." );
@@ -620,7 +620,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  3.1 creating the required face objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    Region<dim>&       model_domain(model.Region("Model"));
     const size_t       new_faces_required(subdomain.Cells());
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
@@ -670,19 +669,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     model.Mesh().UpdateConnectivity();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
+    // 4. Create Boundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // using map<size_t,string>  patch_names   from above
     for ( auto i{0U}; i<patch_names.size(); ++i )
-       // creating the boundary patch
-       AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
-
-    face_ptr_per_patch.clear();
+      AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
       
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit )
+      if ( (*nit)->AtBoundary() == NOT )
+        (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (its elements were already removed above).

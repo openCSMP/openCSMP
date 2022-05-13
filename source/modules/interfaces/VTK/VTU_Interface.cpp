@@ -406,9 +406,7 @@ string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const string& fil
 {
     // write to file
     string outputName( fileName );
-    // SKM_FIX: if Model is not contained in the file name
-    if ( domainName.find("Model") == string::npos )
-    //  if( regionNameString != "Model" )
+    if( domainName != "Model" )
     {
         outputName += "_";
         outputName += domainName;
@@ -856,8 +854,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& initial_file_name,
     ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
     string fileNamePrefix( this->OutputFileNamePrefix( initial_file_name ) );
-    // SKM_FIX: this method used to append (BOUNDARY) or (SPLITBOUNDARY). This is not needed because the name already tells this
-    // fileNamePrefix = DomainSpecificOutputFileNamePrefix( fileNamePrefix, DomainName(subDomain) );
+    fileNamePrefix = DomainSpecificOutputFileNamePrefix( fileNamePrefix, DomainName(subDomain) );
     string relativeFileNamePrefix( DomainSpecificOutputFileNamePrefix( initial_file_name, DomainName(subDomain) ) );
 
     // split list into separate ones for node and element placed indices

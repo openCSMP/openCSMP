@@ -594,7 +594,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
     splitboundaryComplex->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
   const csmp::Index reg_key = splitboundaryComplex->Database().StorageKey(region_tag.c_str());
   vector<string>  region_names;
-  const size_t model_regions = splitboundaryComplex->CountAndLabelRegions( region_tag.c_str(), region_names );
+  const size_t model_regions = splitboundaryComplex->CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
   assert( model_regions > 1U );
 
 
@@ -698,7 +698,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsB
     vector<string>  region_names;
     if ( !model->Database().IsDefined(region_tag.c_str()) ) {
           model->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
-         model->CountAndLabelRegions( region_tag.c_str(), region_names );
+         model->CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
       }
     else { // assigning region names
          region_names.reserve( distance( model->UniqueRegionsBegin(),model->UniqueRegionsEnd()) );
@@ -906,7 +906,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
          model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
-         if ( model.CountAndLabelRegions( region_tag.c_str(), region_names ) == 1U )
+         // for each of labels created (0..regions-1), region_names remembers which region the label refers to
+         if ( model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names ) == 1U )
             ErrorHandler::Instance().Note( INFO, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", region_tag.c_str(),
                                                   "is single valued; so there is only one patch." );
       }
@@ -983,13 +984,12 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
 
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 3. Getting the MeshManager object to create Face objects for all boundary patches at the same time
+    // 3. Getting the MeshManager object to create InterFace objects for all boundary patches at the same time
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    //  3.1 creating the required face objects
+    //  3.1 creating the required objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    Region<dim>&            model_domain(model.Region("Model"));
-    const size_t            new_interfaces_required(subdomain.Cells());
-    vector<InterFace<dim>*> iface_vector;
+    const size_t             new_interfaces_required(subdomain.Cells());
+    vector<InterFace<dim>*>  iface_vector;
     iface_vector.reserve(new_interfaces_required);
     const size_t n_original_faces(model.Mesh().Faces());
     const size_t n_original_elmts(model.Mesh().Elements());
@@ -1001,11 +1001,16 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     vector<vector<InterFace<dim>*> > iface_ptrs_per_patch(patch_data.size());
    
     size_t patch_counter(0);
+    // for each of the new patches
     for ( auto& it : patch_data )
       {
          iface_ptrs_per_patch[patch_counter].reserve( it.second.size() );
+         
+         // flagging the regions on the outside of the new split boundaries for update of their connectivity
+         // because they will contain new nodes
+         model.Region( region_names[ it.second[0U].Materials().second ] ).ScheduleForRebuilt();
 
-         // for each of the new patches
+         // for all the elements contained in the patch
          for ( auto& pit : it.second )
            {
               // creating the faces
@@ -1038,22 +1043,20 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     model.Mesh().UpdateConnectivity();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
+    // 4. Creating SplitBoundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // using map<size_t,string>  patch_names   from above
     for ( auto i{0U}; i<patch_names.size(); ++i )
-       // creating the boundary patch
-       AddSplitBoundary( patch_names[i].c_str(), iface_ptrs_per_patch[i].begin(), iface_ptrs_per_patch[i].end(), INTERNAL );
-
-    iface_ptrs_per_patch.clear();
+      AddSplitBoundary( patch_names[i].c_str(), iface_ptrs_per_patch[i].begin(), iface_ptrs_per_patch[i].end(), INTERNAL );
       
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit )
+      if ( (*nit)->AtBoundary() == NOT )
+        (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 6. remove lower-dimensional input region (its elements were already removed above).
+    // 6. remove lower-dimensional input region (their elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     const bool remove_elmts{ false };
     model.RemoveRegion( dim_1_region, remove_elmts );

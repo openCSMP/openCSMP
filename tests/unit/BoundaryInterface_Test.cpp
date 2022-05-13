@@ -50,7 +50,7 @@ void BoundaryInterface_Test::run()
       /// assuming a dim-1 region, label and count material juxtaposition relationships
       const string    region_tag("region identifier");
       vector<string>  region_names;
-      size_t regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
+      size_t regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
       //out( region_names );
 
       VTU_Interface<dim>  vtu(model);
@@ -81,7 +81,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if(model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }	  
 	  {
 		  std::string boundary_name("RIGHT");
@@ -100,7 +100,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if (model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }
 	  {
 		  std::string boundary_name("FRONT");
@@ -119,7 +119,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if (model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }
 	  {
 		  std::string boundary_name("BACK");
@@ -138,7 +138,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if (model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }
 	  {
 		  std::string boundary_name("TOP");
@@ -157,7 +157,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if (model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }
 	  {
 		  std::string boundary_name("BOTTOM");		  
@@ -176,7 +176,7 @@ void BoundaryInterface_Test::run()
 			  ++surfaceElementCount;
 		  }
 		  if (model.ContainsBoundary(boundary_name))
-			vtu.OutputDataToVTU("test", variableName, boundary, 0);
+			if ( verbose_ ) vtu.OutputDataToVTU("test", variableName, boundary, 0);
 	  }
 
 	  
@@ -530,7 +530,7 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     csmp::Index mtrl_key = model.Database().StorageKey(diagnostic_elmt_variable);
    
     if ( !model.Database().IsDefined(patch_variable) )
-      model.CreateProperty( patch_variable, "X", SCALAR, ELEMENT );
+      model.CreateProperty( patch_variable, "node", SCALAR, ELEMENT );
     // patch-discerning variable
     csmp::Index pvar_key = model.Database().StorageKey(patch_variable);
    

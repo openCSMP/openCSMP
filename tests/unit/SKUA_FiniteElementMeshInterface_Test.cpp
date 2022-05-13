@@ -328,10 +328,10 @@ void SKUA_FiniteElementMeshInterface_Test::Test_NodeNumberingConsistencyBetweenT
     assert( vdata.Interfaces() > 0U );
     
      // looping over the InterFace records in VSet
-     for ( size_t i{ vdata.Faces() }; i<vdata.TotalNumberOfCells(); i++ )
+     for ( size_t i{ vdata.Elements() + vdata.Faces() }; i<vdata.TotalNumberOfCells(); i++ )
        {
           assert( vdata.ElementType(i) == ISOPARAMETRIC_LINEAR_TRIANGLE );
-          assert( vdata.PfvertsSize(i) == 7U );
+          assert( vdata.PfvertsSize(i) == 8U );
           
           // checking inside element first
           // -----------------------------

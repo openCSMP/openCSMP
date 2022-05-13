@@ -1053,6 +1053,11 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
    
    // 1. duplicating inside nodes when necessary and creating corresponding manifolds
    // -------------------------------------------------------------------------------
+    // constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+
    const auto n_nodes{ eptr->Nodes() };
    vector<Node<dim>*>  outside_nodes( n_nodes, nullptr );
    
@@ -1061,10 +1066,11 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
      if ( eptr->N(i)->IsManifold() ) {
           for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
             if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
-              outside_nodes[i] = eptr->N(i)->Manifold()->N(j);
+              // the outside nodes must be listed in reverse order
+              outside_nodes[ n_nodes-i-1U ] = eptr->N(i)->Manifold()->N(j);
        }
      // else the node is duplicated including creation of the manifold
-     else outside_nodes[i] = Duplicate( eptr->N(i), OUTSIDE, nvars );
+     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), OUTSIDE, nvars );
 
 
    // 2. constructing the new interface
