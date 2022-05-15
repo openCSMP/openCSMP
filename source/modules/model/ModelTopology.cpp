@@ -196,7 +196,7 @@ bool ModelTopology::InputFromTextFile( const char* file_dot_asc ) {
         ifs.getline( text_line, 256 );
     }
 
-	cout << "\n\tFile read successfully." << endl;
+	cout << "\nModelTopology::InputFromTextFile: ModelTopology has been successfully read from: " << file << endl;
 
 	return true;
 

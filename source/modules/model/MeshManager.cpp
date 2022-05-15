@@ -587,7 +587,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              assert( index2 > MULTIPLE );
              Element<dim>* const innerElement = &(*next(elements_.begin(),index1));
              Element<dim>* const outerElement = &(*next(elements_.begin(),index2));
-             itf.Assign( innerElement, outerElement );
+             itf.Assign( innerElement, outerElement, false );
              // assignment: local number of faces adjacent to InterFace; these face numbers must always be defined
              const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+2U ));
              const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+3U ));

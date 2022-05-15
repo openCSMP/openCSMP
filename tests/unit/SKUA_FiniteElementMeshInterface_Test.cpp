@@ -266,7 +266,7 @@ void SKUA_FiniteElementMeshInterface_Test::OutputRegionsToVTK( const Model<3U>& 
 
 
 /**
-   Checks whethe the assignment of element neighbors from SKUA is identical with that done by CSMP; the side boundary flags are not considered.
+   Checks whether the assignment of element neighbors from SKUA is identical with that done by CSMP; the side boundary flags are not considered.
    
       TODO: also check neighbor connectivity of Face and InterFace objects
 */
@@ -364,32 +364,74 @@ void SKUA_FiniteElementMeshInterface_Test::Test_NodeNumberingConsistencyBetweenT
             }
           // checking outside element
           // ------------------------
-          // - the nodes of the INSIDE parent face touching the interface must be exactly the same
+          // - the nodes of the OUTSIDE parent face touching the interface must be exactly the same
           //   (for the linear tet, these are: face 0: 1 2 3, face 1: 0 3 2, 2: 0 1 3, and face 3: 0 2 1)
+          //   and they must *not* be listed in reverse order, because the INSIDE and OUTSIDE
+          //   outward-pointing normals point in opposite directions
           const size_t outer_elmt     = vdata.Pfvert(i,4);
           const size_t outer_face_idx = vdata.Pfvert(i,6);
           const size_t node3(vdata.Plist(i,3)), node4(vdata.Plist(i,4)), node5(vdata.Plist(i,5));
           switch( outer_face_idx ) {
+              // For each facet, check possible circular permutations
               case 0:
-                  // for the outside, these nodes must be listed in reverse order
-                  _test( node5 == vdata.Plist(outer_elmt,1) );
-                  _test( node4 == vdata.Plist(outer_elmt,2) );
-                  _test( node3 == vdata.Plist(outer_elmt,3) );
+                  _test((
+                      node3 == vdata.Plist(outer_elmt,1) &&
+                      node4 == vdata.Plist(outer_elmt,2) &&
+                      node5 == vdata.Plist(outer_elmt,3)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,3) &&
+                      node4 == vdata.Plist(outer_elmt,1) &&
+                      node5 == vdata.Plist(outer_elmt,2)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,2) &&
+                      node4 == vdata.Plist(outer_elmt,3) &&
+                      node5 == vdata.Plist(outer_elmt,1)
+                  ));
                 break;
               case 1:
-                  _test( node5 == vdata.Plist(outer_elmt,0) );
-                  _test( node4 == vdata.Plist(outer_elmt,3) );
-                  _test( node3 == vdata.Plist(outer_elmt,2) );
+                  _test((
+                      node3 == vdata.Plist(outer_elmt,0) &&
+                      node4 == vdata.Plist(outer_elmt,3) &&
+                      node5 == vdata.Plist(outer_elmt,2)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,2) &&
+                      node4 == vdata.Plist(outer_elmt,0) &&
+                      node5 == vdata.Plist(outer_elmt,3)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,3) &&
+                      node4 == vdata.Plist(outer_elmt,2) &&
+                      node5 == vdata.Plist(outer_elmt,0)
+                  ));
                 break;
               case 2:
-                  _test( node5 == vdata.Plist(outer_elmt,0) );
-                  _test( node4 == vdata.Plist(outer_elmt,1) );
-                  _test( node3 == vdata.Plist(outer_elmt,3) );
+                  _test((
+                      node3 == vdata.Plist(outer_elmt,0) &&
+                      node4 == vdata.Plist(outer_elmt,1) &&
+                      node5 == vdata.Plist(outer_elmt,3)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,3) &&
+                      node4 == vdata.Plist(outer_elmt,0) &&
+                      node5 == vdata.Plist(outer_elmt,1)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,1) &&
+                      node4 == vdata.Plist(outer_elmt,3) &&
+                      node5 == vdata.Plist(outer_elmt,0)
+                  ));
                 break;
               case 3:
-                  _test( node5 == vdata.Plist(outer_elmt,0) );
-                  _test( node4 == vdata.Plist(outer_elmt,2) );
-                  _test( node3 == vdata.Plist(outer_elmt,1) );
+                  _test((
+                      node3 == vdata.Plist(outer_elmt,0) &&
+                      node4 == vdata.Plist(outer_elmt,2) &&
+                      node5 == vdata.Plist(outer_elmt,1)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,1) &&
+                      node4 == vdata.Plist(outer_elmt,0) &&
+                      node5 == vdata.Plist(outer_elmt,2)
+                  ) || (
+                      node3 == vdata.Plist(outer_elmt,2) &&
+                      node4 == vdata.Plist(outer_elmt,1) &&
+                      node5 == vdata.Plist(outer_elmt,0)
+                  ));
             }
        }
        
