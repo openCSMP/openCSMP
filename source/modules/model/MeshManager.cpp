@@ -587,14 +587,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              assert( index2 > MULTIPLE );
              Element<dim>* const innerElement = &(*next(elements_.begin(),index1));
              Element<dim>* const outerElement = &(*next(elements_.begin(),index2));
-             itf.Assign( innerElement, outerElement, false );
              // assignment: local number of faces adjacent to InterFace; these face numbers must always be defined
              const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+2U ));
              const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+3U ));
              assert( inner_face_id < innerElement->Faces() );
              assert( outer_face_id < outerElement->Faces() );
-             itf.ParentFaceID( INSIDE,  inner_face_id );
-             itf.ParentFaceID( OUTSIDE, outer_face_id );
+             itf.Assign( innerElement, inner_face_id, outerElement, outer_face_id );
              // assignment: intervening Element else boundary flag INTERNAL
              const int64_t  index3 = vset.Pfvert( iface_idx, neighbors+4U );
              assert( index3 < n_elmts );
@@ -1257,8 +1255,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
-   const bool assign_nodes{false};
-   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
    (*ifp).Idx( iface_id );
    
    // 4. assigning the inside nodes to the new InterFace (which are those of the face of the inside element)
@@ -1327,11 +1324,36 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
-   const bool assign_nodes{true};
-   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
    (*ifp).Idx( iface_id );
+
+   // 4. assigning nodes
+   //     4.1 Inside face: straightforward assignment from face indices
+   vector<uint32_t> nids;
+   inner_parent->FE()->NodesOfFace( inner_element_face_id, nids );
+   uint32_t node_count{0U};
+   for( auto i: nids ) {
+       (*ifp).Assign( node_count++, inner_parent->N(i), INSIDE );
+   }
+
+   //    4.2 Outside face: find correct circular permutation of face indices
+   //    which will preserve Node collocation
+   outer_parent->FE()->NodesOfFace( outer_element_face_id, nids );
+   node_count = 0U;
+   while( outer_parent->N( nids[0] )->Coordinate() != (*ifp).N( nids.size()-1 )->Coordinate() && node_count < nids.size()) {
+       rotate( nids.begin(), nids.begin()+1, nids.end() );
+       node_count++;
+   }
+   if( node_count == nids.size() ) {
+       throw Exception( ERROR, "MeshManager<dim>::AddInterFace", "No circular permutation found from INSIDE face to OUTSIDE" );
+   }
+
+   node_count = 0U;
+   for( auto i: nids ) {
+       (*ifp).Assign( node_count++, outer_parent->N(i), OUTSIDE );
+   }
    
-   // 4. detaching the input Elements from one-anothers
+   // 5. detaching the input Elements from one-another
    inner_parent->Unassign( outer_parent );
    outer_parent->Unassign( inner_parent );
 

@@ -139,14 +139,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Assign( Element<dim>* const intervening_elmt );
 
     /// connect interface to its higher-dimensional neighbors, finding the matching nodes automatically
-    void Assign( Element<dim>* const inner_elmt,
-                 Element<dim>* const outer_elmt,
-                 bool assign_nodes = true );
-  
-    /// as Assign, for the case that the shared faces are already known
     void Assign( Element<dim>* const inner_elmt, uint32_t inner_local_face_id,
-                 Element<dim>* const outer_elmt, uint32_t outer_local_face_id,
-                 bool assign_nodes );
+                 Element<dim>* const outer_elmt, uint32_t outer_local_face_id );
 
     /// connect interface to its higher-dimensional neighbor on the given side
     void Assign( Element<dim>* const parent, uint32_t faceId, INTERFACE_SIDE side );
@@ -287,9 +281,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
   
     /// connect the nodes of the higher dimensional neighbor elements to the InterFace; @note can also be done individually with Assign
     void InitializeNodeVector();
-
-    /// as above when the local indices of the shared faces of the higher-dimensional elements adjacent to the face are already known
-    void InitializeNodeVector( uint32_t inner_face_ID, uint32_t outer_face_ID );
 
     // ------------------------------------------------------------------------
     // Data members

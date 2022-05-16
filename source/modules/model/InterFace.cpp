@@ -417,27 +417,8 @@ Same method as in Face, but - in addition - connects InterFace to the multiplica
 on either side.
 */
 template<uint32_t dim>
-void InterFace<dim>::Assign( Element<dim>* const inner_elmt, Element<dim>* const outer_elmt, bool assign_nodes )
-{
-  assert( inner_elmt != nullptr );
-  assert( outer_elmt != nullptr );
-  innerParent_ = inner_elmt;
-  outerParent_ = outer_elmt;
-  if ( assign_nodes )
-    // connect the nodes of the higher dimensional neighbors to the interface
-    InitializeNodeVector();
-  
-  // TODO: check whether nodes are collocated
-}
-
-
-/**
-As above, but with the extra knowledge of the indices of the element faces that are juxtaposed
-*/
-template<uint32_t dim>
 void InterFace<dim>::Assign( Element<dim>* const inner_elmt, uint32_t inner_local_face_id,
-                             Element<dim>* const outer_elmt, uint32_t outer_local_face_id,
-                             bool assign_nodes )
+                             Element<dim>* const outer_elmt, uint32_t outer_local_face_id )
 {
   assert( inner_elmt != nullptr );
   assert( outer_elmt != nullptr );
@@ -447,12 +428,6 @@ void InterFace<dim>::Assign( Element<dim>* const inner_elmt, uint32_t inner_loca
   assert( outer_local_face_id < outerParent_->Faces() );
   inner_parent_face_id_ = inner_local_face_id;
   outer_parent_face_id_ = outer_local_face_id;
-
-  if ( assign_nodes )
-    // connect the nodes of the higher dimensional neighbors to the interface
-    InitializeNodeVector( inner_parent_face_id_, outer_parent_face_id_ );
-  
-  // TODO: check whether nodes are collocated
 }
 
 
@@ -674,6 +649,8 @@ std::pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
 template<uint32_t dim>
 void InterFace<dim>::InitializeNodeVector()
 {
+    throw Exception( ERROR, "InterFace<dim>::InitializeNodeVector", "Initialise Outer Face circular permutation" );
+
   // 1. get shared faces and assign them
   std::pair<uint32_t, uint32_t> shared_faces = SharedElementFaces();
   inner_parent_face_id_ = shared_faces.first;
@@ -701,6 +678,7 @@ void InterFace<dim>::InitializeNodeVector()
   else Assign( 0U, innerParent_->N( 1 ), INSIDE );
 
   // outside
+  // TODO: find correct circular permutation that maintains node matching
   outerParent_->FE()->NodesOfFace( shared_faces.second, nids );
   // we retain the order in which the nodes are given to
   if ( dim != 1U ) {
@@ -712,60 +690,6 @@ void InterFace<dim>::InitializeNodeVector()
 
 } // end InitializeNodeVector
 
-
-
-
-/**
-    Same as initialise node vector, but for the case where the shared faces have
-    already been established.
-
-    @note Nodes() cannot not be used here because the node_connector_ vector is
-    just getting initialised
-*/
-template<uint32_t dim>
-void InterFace<dim>::InitializeNodeVector( uint32_t inner_elmt_face_id,
-                                           uint32_t outer_elmt_face_id )
-{
-  assert( inner_elmt_face_id < innerParent_->Faces() );
-  assert( outer_elmt_face_id < outerParent_->Faces() );
-
-  // 1. get shared faces and assign them
-  inner_parent_face_id_ = inner_elmt_face_id;
-  outer_parent_face_id_ = outer_elmt_face_id;
-
-  // resizing the nodevector (x2 because there are 2 sides of the interface
-  if ( node_connector_.empty() ) {
-      if constexpr ( dim == 1U ) {
-           node_connector_.resize( 2U );
-           // in 1D there is only one node per Face and we are done
-           Assign( 0U, innerParent_->N(1), INSIDE );
-           Assign( 0U, outerParent_->N(0), OUTSIDE );
-           return;
-        }
-      if constexpr ( dim  > 1U ) node_connector_.resize( this->FE()->Nodes() * 2U );
-      node_connector_.shrink_to_fit();
-  }
-
-  // 2. 2 and 3D cases starting with the inside
-  const auto        n_nodes_per_face{this->FE()->Nodes()};
-  vector<uint32_t>  nids;
-
-  // inside
-  innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
-  assert( nids.size() == n_nodes_per_face );
-  // assuming that the unit normal points from the inside to the outside
-  // we retain the order in which the nodes are given to
-  for ( auto n{0}; n<n_nodes_per_face; ++n )
-    Assign( n, innerParent_->N( nids[n] ), INSIDE );
-
-  // outside
-  outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
-  assert( nids.size() == n_nodes_per_face );
-  // we retain the order in which the nodes are given to
-  for ( auto n{0}; n<n_nodes_per_face; ++n )
-    Assign( n, outerParent_->N( nids[n] ), OUTSIDE );
-
-} // end InitializeNodeVector (version 2)
 
 
 
