@@ -126,28 +126,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
   
     ~InterFace();
 
-    /// reference to provide efficiency hack in MeshManager
-    typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
-
-    /// connect InterFace to its equidimensional neighbors (=number of finite-element faces)
-    void Assign( uint32_t nbor, InterFace<dim>* const );
-    
-    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
-    void Unassign( const InterFace<dim>* const );
-  
-    /// connect interface to a lower dimensional element that shall act as intervening element in triple-layer boundary representations
-    void Assign( Element<dim>* const intervening_elmt );
-
-    /// connect interface to its higher-dimensional neighbors, finding the matching nodes automatically
-    void Assign( Element<dim>* const inner_elmt, uint32_t inner_local_face_id,
-                 Element<dim>* const outer_elmt, uint32_t outer_local_face_id );
-
-    /// connect interface to its higher-dimensional neighbor on the given side
-    void Assign( Element<dim>* const parent, uint32_t faceId, INTERFACE_SIDE side );
-
-    /// assign node of the higher-dimensional neigbor element (order as on corresponding InterFace sides)
-    void Assign( uint32_t n_local, Node<dim>*, INTERFACE_SIDE side );
-  
     InterFace& operator=( const InterFace& );
 
     /// hand-coded move assignment that deals with the pointers
@@ -155,6 +133,32 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     /// self-detection in the interface construction process
     bool operator==( const InterFace<dim>& );
+
+    /// reference to provide efficiency hack in MeshManager
+    typename  std::vector<csmp::InterFace<dim>*>& NeighborElementVector();
+
+    /// assigns nodes of  higher-dimensional neigbor elements to interface in the order they have in their corresponding faces
+    void Assign( uint32_t n_local, Node<dim>*, INTERFACE_SIDE side );
+  
+    /// connects interFace to its higher-dimensional neighbors
+    void Assign( Element<dim>* const inner_elmt, uint32_t inner_local_face_id,
+                 Element<dim>* const outer_elmt, uint32_t outer_local_face_id );
+
+    /// connects interFace to its higher-dimensional neighbors and nodes establishing connections by itself
+    void AssignElementsAndNodes( Element<dim>* const inner_elmt,
+                                 Element<dim>* const outer_elmt );
+
+    /// connects InterFace to its higher-dimensional neighbor on the given side
+    void Assign( Element<dim>* const parent, uint32_t faceId, INTERFACE_SIDE side );
+
+    /// connects InterFace to its equidimensional neighbors (=number of InterFace finite-element faces)
+    void Assign( uint32_t nbor, InterFace<dim>* const );
+    
+    /// sets neighbor pointer that was pointing to the argument object to 'nullptr'
+    void Unassign( const InterFace<dim>* const );
+  
+    /// connects interface to a lower-dimensional element with extra nodes situated inside the InterFace in a triple-layer mesh representation for fractures
+    void Assign( Element<dim>* const intervening_elmt );
 
 
     // ------------------------------------------------------------------------
@@ -195,6 +199,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     INTERFACE_SIDE  CurrentSide() const;
     
     /// END_POINT is a  classifier that applies on the perimeter of SplitBoundary objects terminating within models where INSIDE and OUTSIDE nodes are identical
+    // TODO: review this functionality / adapt to manifolds
     bool IsEndPointNode( uint32_t n_local ) const;
 
     /// returns neighbor InterFace of interface
@@ -233,54 +238,57 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     // ------------------------------------------------------------------------
 
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
-    double         Area( INTERFACE_SIDE=INSIDE ) const;
+    double  Area( INTERFACE_SIDE=INSIDE ) const;
     
     /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
-    void           UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
+    void    UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
   
     /// returns normal to original side of interface (the one of the surface element from which the InterFace was constructed originally)
-    void           UnitNormal( VectorVariable<dim>& ) const;
+    void    UnitNormal( VectorVariable<dim>& ) const;
   
     /// returns normal pointing from inside to outside higher-dimensional Element of InterFace, calculated for bisector plane if intervening element is present
     csmp::Point<dim>  UnitNormal() const;
 
     /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
     // TODO: review this functionality / adapt to manifolds
-    bool           NodeSpacing( uint32_t n_local, VectorVariable<dim>& ) const;
+    bool    NodeSpacing( uint32_t n_local, VectorVariable<dim>& ) const;
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
-    void           NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
+    void    NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
 
     /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
-    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE ) const;
+    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE ) const;
 
     /// inputs node coordinates into supplied matrix; treating the Interface like a volumetric element; @note makes  sense only if there is a finite node separation, else degenerate
-    void           NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
+    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
-    Point<dim>     BaryCenter() const;
+    Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double       LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double  LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
 
     // ------------------------------------------------------------------------
     // Screen Output
     // ------------------------------------------------------------------------
 
     void Out() const;
-
-  private:
-    /// for exclusive use by MeshManager
-    template<uint32_t> friend class MeshManager;
-    void* operator new( size_t size );
-    void operator delete( void* p );
+    
+  protected:
 
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<uint32_t,uint32_t>  SharedElementFaces();
   
-    /// connect the nodes of the higher dimensional neighbor elements to the InterFace; @note can also be done individually with Assign
-    void InitializeNodeVector();
+    /// connects the nodes of already connected higher dimensional neighbor elements to the InterFace
+    void InitialiseNodeVector();
+
+  private:
+  
+    /// for exclusive use by MeshManager
+    template<uint32_t> friend class MeshManager;
+    void* operator new( size_t size );
+    void operator delete( void* p );
 
     // ------------------------------------------------------------------------
     // Data members
@@ -298,6 +306,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
     bool           collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
+    friend class InterFace_Test; ///< friend declaration needed for the testing of private methods
 };
 
 

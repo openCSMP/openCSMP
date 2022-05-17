@@ -1328,30 +1328,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    (*ifp).Idx( iface_id );
 
    // 4. assigning nodes
-   //     4.1 Inside face: straightforward assignment from face indices
-   vector<uint32_t> nids;
-   inner_parent->FE()->NodesOfFace( inner_element_face_id, nids );
-   uint32_t node_count{0U};
-   for( auto i: nids ) {
-       (*ifp).Assign( node_count++, inner_parent->N(i), INSIDE );
-   }
-
-   //    4.2 Outside face: find correct circular permutation of face indices
-   //    which will preserve Node collocation
-   outer_parent->FE()->NodesOfFace( outer_element_face_id, nids );
-   node_count = 0U;
-   while( outer_parent->N( nids[0] )->Coordinate() != (*ifp).N( nids.size()-1 )->Coordinate() && node_count < nids.size()) {
-       rotate( nids.begin(), nids.begin()+1, nids.end() );
-       node_count++;
-   }
-   if( node_count == nids.size() ) {
-       throw Exception( ERROR, "MeshManager<dim>::AddInterFace", "No circular permutation found from INSIDE face to OUTSIDE" );
-   }
-
-   node_count = 0U;
-   for( auto i: nids ) {
-       (*ifp).Assign( node_count++, outer_parent->N(i), OUTSIDE );
-   }
+   (*ifp).InitialiseNodeVector();
    
    // 5. detaching the input Elements from one-another
    inner_parent->Unassign( outer_parent );
