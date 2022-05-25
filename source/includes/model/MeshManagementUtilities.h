@@ -42,9 +42,9 @@ bool checkNeighborNormalsForConsistentOrientation( const Region<dim>& );
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t findContiguousMeshPatch( CELL<dim>* const entry_cell, std::set<CELL<dim>*>& contiguous_subset_of_cells );
 
-/// finds the connected (contiguous) mesh patches in the supplied range of cells storing them in map with names that reflect their dimensionality and cell numbers
+/// distinguishes the contiguous mesh patches represented by the supplied range of cells; each patch is given a name and stored in the argument map
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
+size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
                                    typename plf::colony<CELL<dim>>::iterator end,
                                    std::map<std::string,std::vector<CELL<dim>*> >& );
 

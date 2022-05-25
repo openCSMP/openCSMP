@@ -399,9 +399,11 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Reset( bool delete_math_operators 
       }
 
     // cleaning up matrix and vectors
-    if ( rh_.size() > 0U ) rh_.clear();
-    if ( x_.size() > 0U )  x_.clear();
-    if ( G_.Rows()  > 0U ) G_.Erase();
+    if ( rh_.size()          > 0 ) rh_.clear();
+    if ( x_.size()           > 0 ) x_.clear();
+    if ( G_.Rows()           > 0 ) G_.Erase();
+    if ( DOF_indexes_.size() > 0 ) DOF_indexes_.clear();
+    if ( pivotVector_.size() > 0 ) pivotVector_.clear();
 
     // restoring defaults
     time_increment_ = 0.;
@@ -554,8 +556,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         target_.nodes == gref.Nodes() &&
        !basic_operands_.empty() && !test_operands_.empty() )
      {
-        if ( rh_.size() > 0U ) fill( rh_.begin(), rh_.end(), 0. );
-        if ( G_.Rows()  > 0U && retain_matrix_ == false ) {
+        if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
+        if ( G_.Rows()  > 0 && retain_matrix_ == false ) {
             G_.Erase();
             G_.Resize( rh_.size() );
           }
@@ -755,10 +757,12 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    G_.Erase();
    G_.Resize( offset );
    rh_.resize( offset );
-   fill( rh_.begin(), rh_.end(), 0. );
-   if ( trim_vectors_ ) rh_.shrink_to_fit();
    x_.resize( offset );
-   if ( trim_vectors_ ) x_.shrink_to_fit();
+   fill( rh_.begin(), rh_.end(), 0. );
+   if ( trim_vectors_ ) {
+       rh_.shrink_to_fit();
+       x_.shrink_to_fit();
+     }
    setup_established_ = true;
 
  } // end EstablishMatrixSetup
@@ -1747,8 +1751,8 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
  {
     const uint32_t dim2(dim * dim);
     DOF_indexes_.resize(this->rh_.size());
-    fill(DOF_indexes_.begin(), DOF_indexes_.end(), 0);
-    DOF_indexes_.shrink_to_fit();
+    fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
+    if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 
     if (!this->setup_established_)
       throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
@@ -1761,12 +1765,11 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
 
     size_t DOF{0U};
 
-    for ( typename PDE_Integrator<dim,COMPUTATION_DOMAIN>::operandsConstIterator
-          it = this->test_operands_.begin(); it != this->test_operands_.end(); it++ )
+    for ( auto& it : test_operands_ )
       {
         auto        niter(gref.NodesBegin());
-        csmp::Index prop_key = (*it).first.key;
-        size_t      offset = (*it).second;
+        csmp::Index prop_key = it.first.key;
+        size_t      offset = it.second;
 
         if (prop_key.place != NODE)
           throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
@@ -1804,7 +1807,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
                 {
                    for (auto i{0U}; i < dim; i++) {
                       if ( (*niter)->Status(prop_key,i) == DIRICH )
-                        for (size_t j{0U}; j < dim; j++) {
+                        for ( auto j{0U}; j < dim; j++ ) {
                              position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                              DOF_indexes_[position] = NULL_IDX;
                           }
@@ -1864,14 +1867,16 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
 
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
-    if ( trim_vectors_ ) rh_.shrink_to_fit();
     fill(this->rh_.begin(), this->rh_.end(), 0.);
     this->x_.resize(DOF);
-    if ( trim_vectors_ ) x_.shrink_to_fit();
-
     pivotVector_.resize(DOF);
     fill(pivotVector_.begin(), pivotVector_.end(), 0.);
-    if ( trim_vectors_ ) pivotVector_.shrink_to_fit();
+
+    if ( trim_vectors_ ) {
+         rh_.shrink_to_fit();
+         x_.shrink_to_fit();
+         pivotVector_.shrink_to_fit();
+      }
 
  } // end ReduceSystemSizeEliminatingEssentialConditions
 

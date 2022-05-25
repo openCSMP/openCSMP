@@ -338,6 +338,21 @@ bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
 
 
 
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+template<uint32_t dim>
+bool NodeManifold<dim>::AreNodesCollocated() const
+ {
+    const Point<dim> pt = branches_[0].first->Coordinate();
+    for ( const auto& nit : branches_ )
+      if ( pt != nit.first->Coordinate() )
+        return false;
+        
+    return true;
+ }
+
+
+
+
 
 template<uint32_t dim>
 void NodeManifold<dim>::Out() const

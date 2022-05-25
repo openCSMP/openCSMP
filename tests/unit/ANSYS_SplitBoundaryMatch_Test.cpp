@@ -207,7 +207,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
       model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
-    const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
+    const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
     assert( model_regions > 1U );
 
       // reports local ids of shared face on either side of the split boundary

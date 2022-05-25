@@ -268,7 +268,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::IsBoundaryName( const string& regi
      only once. The second instance is replaced by INTERSECTION.
 */
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
-string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const FaceConstructionData& fdata,
+string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const FaceConstructionData<dim>& fdata,
                                                                          const vector<string>& region_names ) const
  {
      assert( fdata.ElementMaterial() < region_names.size() );
@@ -423,132 +423,6 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 
 
 
-/**
-     Method used by CreateInternalBoundaryFrom( dim_minus1_region...
-
-     higherDimensionalNeighbors() - finds the higher-dim neighbor elements of 
-     a dim-1 element embedded within the higher-dim mesh.
-     
-     @attention both neighbors have to be present for this to work.
-     
-     = LOCAL METHOD ONLY KNOWN TO THIS COMPILATION UNIT
- 
-     - finds the IDs of the higher dimensional neghibors of the current element
- 
-     - identifies which of the neighbors is on the inside and which on the outside
-       as indicated by the normal direction of the lower dimensional element
- 
-     - identifies the materials on either side
-     
-     @return two inside-outside pairs of element idx numbers and corresponding materials on either side
-     all the data are stored in the returnd FaceConstructionData object.
-     
-     assumptions
-     - assumes that the nodes and elements in the entire model domain are numbered continuously
-     
-     application
-     - use this function for finding neighbors of a surface element that sits on the inside of another region
-     
-     @author SKM
-     @date 2016
-  
-*/
-template<uint32_t dim>
-FaceConstructionData  higherDimensionalNeighbors( const Element<dim>& e, const csmp::Index& mtrl_key )
- {
-     if constexpr ( dim == 2 ) assert( e.IsLine() );
-     if constexpr ( dim == 3 ) assert( e.IsSurface() );
-     assert( mtrl_key.place != UNDEFINED );
-
-     // 1. looping over the parent elements of the nodes searching for the faces which are shared with the lower dimensional element
-     // -----------------------------------------------------------------------------------------------------------------------------
-     // making a set of element nodes to later identify faces by comparison
-     set<size_t> node_set, test_set;
-     const auto  nodes(e.Nodes());
-     for ( auto i{0U}; i<nodes; ++i )   node_set.insert(e.N(i)->Idx());
-     // neighbor elements and their faces
-     map<const Element<dim>*,uint32_t>  nbor_elmts;
-     vector<uint32_t> fnids;
-     for ( auto i{0U}; i<nodes; i++ ) {
-          const auto parents(e.N(i)->Parents());
-          for ( auto j{0U}; j<parents; ++j ) {
-               const Element<dim>* const eptr(e.N(i)->Parent(j));
-               const auto faces(eptr->Faces());
-               for ( auto k{0U}; k<faces; ++k ) {
-                     eptr->FE()->NodesOfFace( k, fnids );
-                     size_t fnodes(fnids.size());
-                     for ( auto l{0U}; l<fnodes; ++l )
-                       test_set.insert( eptr->N( fnids[l])->Idx() );
-                     // if the face is shared the element and its face are recorded
-                     if ( node_set == test_set ) {
-                          // storing a pointer to this element and its local face number
-                          // making sure that no duplicate is received
-                          nbor_elmts.insert( make_pair(eptr,k) );
-                       }
-                     test_set.clear();
-                 }
-            }
-       }
-
-#ifdef DEBUG
-    // VERIFICATION
-    assert( nbor_elmts.size() == 2U );
-    const auto e1{ nbor_elmts.begin() };
-    const auto e2{ nbor_elmts.rbegin() };
-    assert( (*e1).first->Neighbor( (*e1).second ) == (*e2).first );
-    assert( (*e2).first->Neighbor( (*e2).second ) == (*e1).first );
-#endif
-
-    // 2. finding the inside neighbors by projecting face normals onto lower dim element normal
-    // ----------------------------------------------------------------------------------------
-    vector<double>  enrml, fnrml;
-    e.UnitNormal( enrml );
-    const auto nbor1{ nbor_elmts.begin() };
-    const auto nbor2{ nbor_elmts.rbegin() };
-    enum POSITION { INNER_ELMT, OUTER_ELMT };
-    //                             inside first           outside second
-    pair<size_t,size_t>     nbors{ (*nbor1).first->Idx(), (*nbor2).first->Idx() };
-    pair<uint32_t,uint32_t> faces{ (*nbor1).second, (*nbor2).second };
-    pair<long,long>         materials{ (*nbor1).first->Read( mtrl_key ), (*nbor2).first->Read( mtrl_key ) };
-
-    // first element
-    // -------------
-    (*nbor1).first->UnitNormalToFace( faces.first, fnrml );
-    double dotproduct(0.);
-    for ( auto k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
-   
-    // if the projection is negative, the first element lies on the outside
-    POSITION  epos_elmt1 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
-
-    // second element
-    // --------------
-    (*nbor2).first->UnitNormalToFace( faces.second, fnrml );
-    dotproduct = 0.;
-    for ( auto k{0U}; k<dim; ++k ) dotproduct += enrml[k] * fnrml[k];
-
-    POSITION  epos_elmt2 = ( dotproduct < 0. ) ? OUTER_ELMT : INNER_ELMT;
-
-    // checking that we have no duplication here
-    assert( epos_elmt1 != epos_elmt2 );
-
-    // swapping sides if necessary
-    if ( epos_elmt1 != INNER_ELMT ) {
-         swap( nbors.first, nbors.second );
-         swap( faces.first, faces.second );
-         swap( materials.first, materials.second );
-      }
-
-    // initialise with nbors, their faces, adjacent materials, and patch numbers
-    if ( mtrl_key.place != UNDEFINED )
-      return FaceConstructionData( e.Idx(), nbors,  faces, materials,
-                                   static_cast<long>(e.Read( mtrl_key)) );
-    else
-      return FaceConstructionData( e.Idx(), nbors, faces, materials, -1 );
-      
- } // end higherDimensionalNeighbors
-
-
-
 
 
 
@@ -659,32 +533,33 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       }
       
     // creating region labels and tagging the regions with unique integer indentifiers
+    // if "region identifier is already defined it is assumed that the unique regions have already been labeled correctly
     const string region_tag("region identifier");
-    if ( !model.Database().IsDefined(region_tag.c_str()) )
-      model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
-    // TODO: use ElementMaterial_ID here rather than relying on a new variable
-    const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
-    const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
-   
-    if ( model_regions == 1 )
-       ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
-                                              "is single valued; so there is only one patch." );
-
+    if ( !model.Database().IsDefined(region_tag.c_str()) ) {
+         model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
+         const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
+         if ( model_regions == 1 )
+           ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
+                                                "is single valued; so there is only one patch." );
+      }
+    else { // assigning region names
+         region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+         for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
+           region_names.push_back( (*rit).first );
+      }
+    const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 2. Determine number of boundary segments (sub-boundaries) that the new boundary will consist of.
     //    The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // renumbering nodes and elements
-    model.Region("Model").UpdateMemberIndexes();
-   
     // looping over the region, identifying and recording the juxtaposition relationships
-    map<pair<long,long>,uint32_t> patches;
-    vector<FaceConstructionData>  face_construction_data;
-    map<long,string>              patch_names;
-    string                        patch_name;
-    uint32_t                      n_juxtapositions(0);
+    map<pair<long,long>,uint32_t>      patches;
+    vector<FaceConstructionData<dim>>  face_construction_data;
+    map<long,string>                   patch_names;
+    string                             patch_name;
+    uint32_t                           n_juxtapositions(0);
 
     // 2.1 looping over lower dimensional region identifying juxtaposition relationships
     // ----------------------------------------------------------------------------------------
@@ -715,30 +590,29 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // -----------------------------------------------------------------
     // 2.2.1 making a map 'patch_numbers' from 'patch_names' to search for patch identifiers
     map<string,size_t>  patch_numbers;
-    for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
-      patch_numbers.insert( make_pair( (*it).second, static_cast<uint32_t>((*it).first )) );
+    for ( const auto& it : patch_names )
+      patch_numbers.insert( make_pair( it.second, static_cast<uint32_t>(it.first) ) );
    
     // 2.2.2 building new map where the patch faces are organised by patch names
-    map<string,vector<FaceConstructionData> > patch_data;
-    vector<FaceConstructionData>              empty_vec;
-    for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it )
-      patch_data.insert( make_pair( (*it).second, empty_vec ) );
+    map<string,vector<FaceConstructionData<dim>> > patch_data;
+    vector<FaceConstructionData<dim>>              empty_vec;
+    for ( const auto& it : patch_names )
+      patch_data.insert( make_pair( it.second, empty_vec ) );
    
     // 2.2.3 inserting the patch identifiers into the vectors in the map
-    for ( auto pit=patch_data.begin(); pit!=patch_data.end(); ++pit )
+    for ( auto& pit : patch_data )
       {
-         assert( patch_numbers.find((*pit).first) != patch_numbers.end() );
-         const size_t patch_number((*patch_numbers.find((*pit).first)).second);
+         assert( patch_numbers.find(pit.first) != patch_numbers.end() );
+         const size_t patch_number((*patch_numbers.find(pit.first)).second);
          // reserving storage
-         (*pit).second.reserve(face_construction_data.size());
+         pit.second.reserve(face_construction_data.size());
          // looping over all face data assigning the ones that are suitable
-         for ( auto it=face_construction_data.begin(); it!=face_construction_data.end(); ++it )
-           if ( (*it).PatchNumber() == patch_number )
-             (*pit).second.push_back( (*it) );
+         for ( const auto& it : face_construction_data )
+           if ( it.PatchNumber() == patch_number )
+             pit.second.push_back( it );
       }
     // 2.2.4 trimming excess storage of the face-data vectors
-    for ( auto pit=patch_data.begin(); pit!=patch_data.end(); ++pit )
-      vector<FaceConstructionData>( (*pit).second ).swap( (*pit).second );
+    for ( auto& pit : patch_data ) pit.second.shrink_to_fit();
 
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
@@ -746,7 +620,6 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  3.1 creating the required face objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    Region<dim>&       model_domain(model.Region("Model"));
     const size_t       new_faces_required(subdomain.Cells());
     vector<Face<dim>*> face_vector;
     face_vector.reserve(new_faces_required);
@@ -758,24 +631,22 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(FACE) );
     vector<vector<Face<dim>*> >      face_ptr_per_patch(patch_data.size());
    
-    size_t patch_counter(0);	
-    for ( map<string,vector<FaceConstructionData> >::const_iterator
-          it=patch_data.begin(); it!=patch_data.end(); ++it )
+    size_t patch_counter{0U};
+    for ( auto& it : patch_data ) // not const because elements will be deleted
       {
-         face_ptr_per_patch[patch_counter].reserve( (*it).second.size() );
+         face_ptr_per_patch[patch_counter].reserve( it.second.size() );
 
          // for each of the new patches
-         for ( vector<FaceConstructionData>::const_iterator
-               pit=(*it).second.begin(); pit!=(*it).second.end(); ++pit )
+         for ( auto& pit : it.second )
            {
               // creating the faces
               // ------------------
               // storing pointers to the new faces in the vector from which the boundary will be constructed
-              face_vector.push_back( model.Mesh().ReplaceElementByFace( model_domain.E( (*pit).Element() ),
-                                                                        model_domain.E( (*pit).InnerElement() ),
-                                                                        model_domain.E( (*pit).OuterElement() ),
-                                                                        (*pit).InnerElementFace(),
-                                                                        (*pit).OuterElementFace(),
+              face_vector.push_back( model.Mesh().ReplaceElementByFace( pit.LowerDimElement(),
+                                                                        pit.InnerElement(),
+                                                                        pit.OuterElement(),
+                                                                        pit.InnerElementFace(),
+                                                                        pit.OuterElementFace(),
                                                                         lvsFaces, lvsIntegrationPoints ) );
               // remembering which faces make up the patch
               face_ptr_per_patch[patch_counter].push_back( face_vector.back() );
@@ -798,19 +669,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     model.Mesh().UpdateConnectivity();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 4. Create the Boundary segments, one-by-one from the map< bname, FaceConstructionData >
+    // 4. Create Boundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // using map<size_t,string>  patch_names   from above
     for ( auto i{0U}; i<patch_names.size(); ++i )
-       // creating the boundary patch
-       AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
-
-    face_ptr_per_patch.clear();
+      AddBoundary( patch_names[i].c_str(), face_ptr_per_patch[i].begin(), face_ptr_per_patch[i].end(), INTERNAL );
       
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) (*nit)->AtBoundary(INTERNAL);
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit )
+      if ( (*nit)->AtBoundary() == NOT )
+        (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (its elements were already removed above).
@@ -828,7 +697,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       }
       
     set<string> boundary_names;
-    for ( auto it=patch_names.begin(); it!=patch_names.end(); ++it ) boundary_names.insert( (*it).second );
+    for ( const auto& it : patch_names ) boundary_names.insert( it.second );
 
     if ( patch_names.size() > boundary_names.size() ) {
          ErrorHandler::Instance().Note( ERROR, "BoundaryInterface::CreateInternalBoundaryFrom:", dim_1_region, "not all of the created patchnames are unique." );

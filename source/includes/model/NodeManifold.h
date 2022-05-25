@@ -98,8 +98,11 @@ class NodeManifold {
       /// reports manifold classifier that indicates the topologic position of the manifold
       ManifoldType GeometricClassifier() const;
       void GeometricClassifier( ManifoldType );
+      
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+      bool AreNodesCollocated() const;
 
-      /// print out information
+      /// prints out state of the manifold
       void Out() const;
 
     private:

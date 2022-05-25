@@ -1,6 +1,7 @@
 #include "SparseMatrix.h"
 #include "DenseMatrix.h"
 #include "Matrix.h"
+#include "compareFloats.h"
 #include <fstream>
 #include <ctime>
 
@@ -9,30 +10,40 @@ using namespace std;
 namespace csmp {
 
 SparseMatrix::SparseMatrix()
- : entries(0)
  {
  }
  
 
 SparseMatrix::SparseMatrix( size_t m_x_n )
- : entries(0), data(m_x_n)
+ : data_(m_x_n)
  {
  }
  
  
 SparseMatrix::SparseMatrix( const SparseMatrix& sp )
+ : data_(sp.data_),
+   entries_(sp.entries_)
  {
-    *this = sp;
  }
  
+ 
+SparseMatrix::SparseMatrix( SparseMatrix&& sp )
+ : data_(move(sp.data_)),
+   entries_(move(sp.entries_))
+ {
+ }
+ 
+
+
 SparseMatrix& SparseMatrix::operator=( const SparseMatrix& sp )
  {
     if ( &sp != this ) {
-         entries = sp.entries;
-         data    = sp.data;
+         entries_ = sp.entries_;
+         data_    = sp.data_;
       }
     return *this;
  }
+
 
 SparseMatrix::~SparseMatrix()
  {
@@ -41,75 +52,85 @@ SparseMatrix::~SparseMatrix()
 
 void SparseMatrix::Resize( size_t n_x_m, bool preserve_allocated_memory )
  {
-    data.resize( n_x_m );
+    data_.resize( n_x_m );
     if ( !preserve_allocated_memory )
-      vector<map<size_t,double> >( data ).swap( data );
+      data_.shrink_to_fit();
  }
-
-
-
 
 
 
 size_t SparseMatrix::Entries() const 
  { 
-    return entries; 
+    return entries_;
  }
 
+
 /// iterator over the matrix rows
-std::vector<std::map<size_t,double> >::const_iterator  SparseMatrix::Begin() const
+vector<map<size_t,double> >::const_iterator  SparseMatrix::Begin() const
  {
-    return data.begin();
+    return data_.begin();
  }
 
 
 /// iterator over the rows of the matrix
-std::vector<std::map<size_t,double> >::const_iterator  SparseMatrix::End() const
+vector<map<size_t,double> >::const_iterator  SparseMatrix::End() const
  {
-    return data.end();
+    return data_.end();
  }
 
 
-std::map<size_t,double>::const_iterator  SparseMatrix::RowBegin( size_t i ) const
+map<size_t,double>::const_iterator  SparseMatrix::RowBegin( size_t i ) const
  {
     assert( i < Rows() );
-    return data[i].begin();
+    return data_[i].begin();
  }
 
 
-std::map<size_t,double>::const_iterator  SparseMatrix::RowEnd( size_t i ) const
+map<size_t,double>::const_iterator  SparseMatrix::RowEnd( size_t i ) const
  {
     assert( i < Rows() );
-    return data[i].end();
+    return data_[i].end();
  }
 
 size_t SparseMatrix::Rows() const
   {
-     return data.size();
+     return data_.size();
   }
 
 
 size_t SparseMatrix::Cols() const
   {
-     return data.size();
+     return data_.size();
   }
 
 
 double SparseMatrix::operator()( size_t i, size_t j ) const
  {
-    if ( i >= data.size() ) {
-         std::cerr <<"\nSparseMatrix::operator("<< i <<","<< j <<") const: ";
-         std::cerr <<"Row access index out of range."<< std::endl;
-         return std::numeric_limits<double>::signaling_NaN();
-      }
-    std::map<size_t,double>::const_iterator ditc = data[i].find(j);
-    if ( ditc == data[i].end() ) return static_cast<double>(0.0);
+    assert( i < data_.size() );
+    assert( j < data_.size() );
+    auto ditc = data_[i].find(j);
+    if ( ditc == data_[i].end() ) return 0.;
     return (*ditc).second;
  }
   
     
 double SparseMatrix::At( size_t i, size_t j ) const
  {
+    if ( i >= data_.size() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Row access index greater or equal to rows ("<< Rows() <<"). Returning: NaN"<< endl;
+         return numeric_limits<double>::signaling_NaN();
+      }
+    if ( j >= data_.size() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Column access index greater or equal to cols ("<< Cols() <<"). Returning: NaN"<< endl;
+         return numeric_limits<double>::signaling_NaN();
+      }
+    if ( data_[i].find(j) == data_[i].end() ) {
+         cerr <<"\nSparseMatrix::At("<< i <<","<< j <<") const: ";
+         cerr <<"ERROR, Matrix entry does not exist. Returning: 0."<< endl;
+        return 0.;
+      }
     return (*this)(i,j);
  }
 
@@ -118,122 +139,137 @@ double SparseMatrix::At( size_t i, size_t j ) const
 
 void SparseMatrix::RemoveHalo( int nrhalo )
  {
-   for ( size_t row=data.size()-nrhalo; row!=data.size(); row++ )
+   for ( size_t row=data_.size()-nrhalo; row!=data_.size(); row++ )
      ZeroRow(row);
  }
 
 /// remove a single element from the matrix
 void SparseMatrix::RemoveEntry( size_t i, size_t j )
  {
-    std::map<size_t,double>::iterator dit = data[i].find(j);
-    if ( dit != data[i].end() ) {
-         data[i].erase( dit );
-         entries--;
+    map<size_t,double>::iterator dit = data_[i].find(j);
+    if ( dit != data_[i].end() ) {
+         data_[i].erase( dit );
+         entries_--;
       }
  }
 
 void SparseMatrix::Erase()
  {
-    data.erase( data.begin(), data.end() );
-    entries = 0;
+    data_.erase( data_.begin(), data_.end() );
+    entries_ = 0;
  }
+
 
 void SparseMatrix::Zero()
 {
     Erase();
 }
 
+
+// deletes all entries from the row
 void SparseMatrix::ZeroRow( size_t row )
  {
-    entries -= data[row].size();
-    data[row].erase( data[row].begin(), data[row].end() );
+    entries_ -= data_[row].size();
+    data_[row].erase( data_[row].begin(), data_[row].end() );
  }
 
 
 void SparseMatrix::ZeroColumn( size_t col )
  {
-    for ( vector<map<size_t,double> >::iterator it=data.begin(); it!=data.end(); it++ ) {
-        map<size_t,double>::iterator dit=(*it).find(col);
-        if ( dit != (*it).end() ) {
-             (*it).erase( dit );
-             entries--;
+    for ( auto& it : data_ ) {
+        auto dit=it.find(col);
+        if ( dit != it.end() ) {
+             it.erase( dit );
+             entries_--;
           }
      }
  }
 
+
 void SparseMatrix::Assign( size_t i, size_t j, double val )
  {
-    if ( i >= data.size() ) {
-         std::cout <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
-         std::cout <<"Row access index out of range."<< std::endl;
-         throw std::range_error("SparseMatrix::Assign");
+    if ( !(val != 0.) ) return;
+    
+    if ( i >= data_.size() ) {
+         cerr <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
+         cerr <<"Row index out of range."<< endl;
+         throw range_error("SparseMatrix::Assign");
       }
-    // more costly than insert, operator[] overwrites or adds element
-    const size_t n = data[i].size();
-    data[i][j] = val;
-    if ( data[i].size() > n ) entries++;
-
-    // remove entry if val is zero
-    if ( !( val > static_cast<double>(0.) || val < static_cast<double>(0.) ) ){
-        data[i].erase( j );
-        entries--;
-    }
+    if ( j >= data_.size() ) {
+         cerr <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
+         cerr <<"Column index out of range."<< endl;
+         throw range_error("SparseMatrix::Assign");
+      }
+    
+    auto it = data_[i].insert( make_pair( j, val ) );
+    // if insertion was successful, there are now more non-zero elements
+    if ( it.second ) entries_++;
+    else  // value is overwritten
+      (*it.first).second = val;
  }
+
+
 
 
 /// more efficient additions to matrix than attainable with operator()
 void SparseMatrix::Add( size_t i, size_t j, double val )
  {
     // zero elements are not stored
-    if ( !( val > static_cast<double>(0.) || val < static_cast<double>(0.) ) ) return; 
+    if ( !(val != 0.) ) return;
 
-    if ( i >= data.size() ) {
-         std::cout <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
-         std::cout <<"Row access index out of range."<< std::endl;
-         throw std::range_error("SparseMatrix::Add");
+    if ( i >= data_.size() ) {
+         cerr <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Row index out of range."<< endl;
+         throw range_error("SparseMatrix::Add");
+      }
+    if ( j >= data_.size() ) {
+         cerr <<"\nSparseMatrix::Add("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Column index out of range."<< endl;
+         throw range_error("SparseMatrix::Add");
       }
  
     // if matrix element does not exist this statement inserts it
-    pair<std::map<size_t,double>::iterator,bool>
-      addit = data[i].insert( std::make_pair(j,val) );
+    auto addit = data_[i].insert( make_pair(j,val) );
     // if matrix element already exists, the value is added to it
     if ( !addit.second ) {
         (*addit.first).second += val;
-         if ( !( (*addit.first).second > static_cast<double>(0.) ||
-          (*addit.first).second < static_cast<double>(0.) ) ) {
-             data[i].erase( (*addit.first).first );
-             entries--;
+         // if a < b = false and a > b = false then a == b
+         if ( !((*addit.first).second > 0.) &&
+              !((*addit.first).second < 0.) ) {
+             data_[i].erase( (*addit.first).first );
+             entries_--;
           }
       }
-    else entries++;
+    else entries_++;
  }
+
+
 
 /// Operator accumulates sparse matrices.  Initially created for OpenMP features.
 /// All need to have the same number of row entries. Column entries may be differenct
 /// @author Julian E. Mindel
-SparseMatrix& SparseMatrix::operator+=( SparseMatrix mat )
+SparseMatrix& SparseMatrix::operator+=( const SparseMatrix& mat )
   {
     if ( this->Rows() != mat.Rows() ) {
-        std::cout <<" Added sparse matrices must have the same number of rows (even if they are empty)."<< std::endl;
-        throw std::range_error("SparseMatrix::operator+=");
+        cerr <<" Added sparse matrices must have the same number of rows (even if they are empty)."<< endl;
+        throw range_error("SparseMatrix::operator+=");
     }
 
-    rowsIterator recipient_iterator=this->data.begin();
+    rowsIterator recipient_iterator=data_.begin();
     for ( rowsConstIterator rit = mat.Begin(); rit!= mat.End();rit++){
         for (colsConstIterator cit = rit->begin(); cit!= rit->end();cit++){
             // if matrix element does not exist in the recipient this statement inserts it
-            pair<std::map<size_t,double>::iterator,bool>
-                    addit = recipient_iterator->insert( std::make_pair(cit->first,cit->second) );
+            auto addit = recipient_iterator->insert( make_pair(cit->first,cit->second) );
             // if matrix element already exists, the value is added to it
             if ( !addit.second ) {
                 (*addit.first).second += cit->second;
-                if ( !( (*addit.first).second > static_cast<double>(0.) ||
-                        (*addit.first).second < static_cast<double>(0.) ) ) {
+                if ( !((*addit.first).second > 0.) &&
+                     !((*addit.first).second < 0.) ) {
                     recipient_iterator->erase( (*addit.first).first );
-                    entries--;
+                    entries_--;
                 }
             }
-            else entries++;
+            else entries_++;
         }
         recipient_iterator++;
     }
@@ -241,63 +277,84 @@ SparseMatrix& SparseMatrix::operator+=( SparseMatrix mat )
     return *this;
   }
 
+
+
 /// multiply an element of the matrix with val; if result is zero, the element is eliminated
 void SparseMatrix::MultiplyEntryWith( size_t i, size_t j, double val )
  {
-    std::map<size_t,double>::iterator dit = data[i].find(j);
+    if ( i >= data_.size() ) {
+         cerr <<"\nSparseMatrix::MultiplyEntryWith("<< i <<","<< j <<","<< val <<"): ";
+         cerr <<"Row index out of range."<< endl;
+         throw range_error("SparseMatrix::MultiplyEntryWith");
+      }
+ 
+    map<size_t,double>::iterator dit = data_[i].find(j);
     // if the element does not exist, i.e. is zero, the result would also be zero
     // so nothing needs to be done
-    if ( dit == data[i].end() ) return;
-    // removing element which becomes zero when multiplied with 'val'
-    if ( std::fabs(val) <= std::numeric_limits<double>::epsilon() ) {
-          data[i].erase( j );
-          entries--;
-         return;
-      }
+    if ( dit == data_[i].end() ) return;
+    
+    // multiplying entry with 'val'
     (*dit).second *= val;
+    
+    // removing entry if it has become zero by multiplication with 'val'
+    if ( !((*dit).second > 0.) &&
+         !((*dit).second < 0.) ) {
+          data_[i].erase( j );
+          entries_--;
+      }
 }
 
 
-void SparseMatrix::MultiplyWith( const std::vector<double>& vec, std::vector<double>& res ) {
-  assert(vec.size() == Cols());
+void SparseMatrix::MultiplyWith( const vector<double>& vec, vector<double>& res )
+  {
+    if ( vec.size() != Cols() ) {
+         cerr <<"\nSparseMatrix::MultiplyWith: first argument vector must have the same size as matrix columns. ";
+         cerr <<"Row index out of range."<< endl;
+         throw range_error("SparseMatrix::MultiplyWith");
+      }
   
   res.resize(Rows());
   vector<double>( res ).swap( res );
-  fill(res.begin(), res.end(), 0.);
+  fill(res.begin(), res.end(), 0. );
   
-  size_t  i(0U);
-  for ( vector<map<size_t,double> >::iterator it = data.begin(); it != data.end(); ++it, ++i )
-    for ( map<size_t,double>::iterator dit = it->begin(); dit != it->end(); ++dit )
-      res[i] += dit->second * vec[dit->first];
+  size_t i{0U};
+  for ( const auto& it : data_ ) {
+      for ( const auto& dit : it )
+        res[i] += dit.second * vec[ dit.first ];
+      i++;
+    }
 }
 
 
 
 /// j's of cols with data
-void SparseMatrix::ColumnIndices( size_t row, vector<uint32_t>& indices ) const
+void SparseMatrix::ColumnIndices( size_t row, vector<size_t>& indices ) const
  {
-    size_t i(0);
+    if ( row >= data_.size() ) {
+         cerr <<"\nSparseMatrix::ColumnIndices("<< row <<",..): ";
+         cerr <<"Row index out of range."<< endl;
+         throw range_error("SparseMatrix::ColumnIndices");
+      }
+      
+    indices.resize( data_[row].size() );
 
-    indices.resize( data[row].size() );
-    vector<uint32_t>( indices ).swap( indices );
-
-    for ( map<size_t,double>::const_iterator
-          ditc=data[row].begin(); ditc!=data[row].end(); ditc++ )
-      indices[i++] = (*ditc).first;
+    size_t i{0U};
+    for ( const auto& ditc : data_[row] )
+      indices[i++] = ditc.first;
  }
+
+
 
 size_t SparseMatrix::RecountEntries() const
  {
-    size_t current_entries(0U);
+    size_t current_entries{0U};
 
-    for ( auto n=0U; n<data.size(); n++ )
-      for ( map<size_t,double>::const_iterator
-            rit=data[n].begin(); rit!=data[n].end(); rit++ )
-        current_entries++;
+    for ( const auto& row : data_ )
+      current_entries += row.size();
 
-    if ( current_entries != entries ) {
-         cout <<"\nSparseMatrix::RecountEntries: Entries was not uptodate anymore (old vs. new): ";
-         cout << entries <<" vs. "<< current_entries << endl;
+    if ( current_entries != entries_ ) {
+         cout <<"\nSparseMatrix::RecountEntries: private 'entries_' is not uptodate anymore (old vs. recount): ";
+         cout << entries_ <<" vs. "<< current_entries << endl;
       }
 
     return current_entries;
@@ -308,38 +365,35 @@ size_t SparseMatrix::RecountEntries() const
 
 double SparseMatrix::InfinityNorm() const
  {
-    std::map<size_t,double>::const_iterator it;
-    double sum(0.0), maxsum(0.0);
+    double maxsum{0.};
 
     // loop over all rows
-    for ( size_t i{0U}; i<data.size(); i++ ) {
-        sum = 0.;
-        // loop over all columns and add up entries
-        for ( it = data[i].begin(); it != data[i].end(); it++ ) {
-            sum += std::abs((*it).second);
-          }
-        // take maximum rowsum
-        if ( sum > maxsum ) maxsum = sum;
+    for ( const auto& vit : data_ ) {
+         double sum{0.};
+         // loop over all columns, adding up entries
+         for ( const auto& it : vit ) sum += fabs(it.second);  // take maximum rowsum
+         maxsum = max( sum, maxsum );
       }
     return maxsum;
  }
 
 
+
 bool SparseMatrix::Symmetric() const
  {
-    for ( size_t i{0U}; i<data.size(); i++ ) 
+    for ( size_t i{0U}; i<data_.size(); i++ )
       {
-          if ( data[i].empty() ) {
-               cout <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
+          if ( data_[i].empty() ) {
+               cerr <<"\nSparseMatrix::Symmetric: Matrix contains zero rows."<< endl;
                return false;
             }
-          for ( map<size_t,double>::const_iterator ditc=data[i].begin(); ditc!=data[i].end(); ditc++ )
+          for ( const auto& ditc : data_[i] )
             // only for non-diagonal elements
-            if ( i != (*ditc).first ) {
+            if ( i != ditc.first ) {
                   // checking whether there is a matrix element with exchanged indices
-                  if ( data[ (*ditc).first ].find(i) != data[ (*ditc).first ].end() ) {
+                  if ( data_[ ditc.first ].find(i) != data_[ ditc.first ].end() ) {
                        // if such an element exists a comparison of element values is made
-                       if ( (*this)( (*ditc).first, i ) != (*ditc).second ) return false;
+                       if ( (*this)( ditc.first, i ) != ditc.second ) return false;
                     }
                   else return false;
               }
@@ -348,19 +402,22 @@ bool SparseMatrix::Symmetric() const
     
  } // end Symmetric
 
+
+
 bool SparseMatrix::ZeroesInDiagonal() const
  {
-    if ( entries < Rows() ) return true;
+    if ( entries_ < Rows() ) return true;
     
-    map<size_t,double>::const_iterator  ditc;
-    for ( size_t i{0U}; i<data.size(); i++ )
-      if ( data[i].empty() ||
-          (ditc=data[i].find(i)) == data[i].end() ||
-          (*ditc).second == static_cast<double>(0.) ) {
-           cout <<"\nSparseMatrix::ZeroesInDiagonal: Zero entry at ("<< i <<","<< i <<").";
-           return true;
-        }
-    
+    size_t i{0U};
+    for ( const auto& it : data_ ) {
+         if ( it.empty() ||
+              it.find(i) == it.end() ||
+              essentiallyEqual( (*it.find(i)).second, 0. ) ) {
+                //cout <<"\nSparseMatrix::ZeroesInDiagonal: Zero entry at ("<< i <<","<< i <<").";
+                return true;
+            }
+         i++;
+      }
     return false;
  }
 
@@ -368,23 +425,25 @@ bool SparseMatrix::ZeroesInDiagonal() const
 /// if there are negative elements in the diagonal of the matrix
 bool SparseMatrix::DiagonallyPositive() const
  {
-    map<size_t,double>::const_iterator  ditc;
-    for ( size_t i{0U}; i<data.size(); i++ ) {
-         if ( (ditc=data[i].find(i)) == data[i].end() ) {
-               cout <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
-               cout <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
+    for ( size_t i{0U}; i<data_.size(); i++ ) {
+         auto diagonal_elmt = data_[i].find(i);
+         if ( diagonal_elmt == data_[i].end() ) {
+               cerr <<"\nSparseMatrix::DiagonallyPositive: Warning: ";
+               cerr <<" This test can't be performed since there are zeroes in matrix diagonal."<< endl;
                return true;
             }
-         if ( (*ditc).second < static_cast<double>(0.) ) return false;
+         if ( (*diagonal_elmt).second < 0. ) return false;
       }
     
     return true;
  }
 
+
+
 void SparseMatrix::SparsityPattern( const char* txtfile ) const
  {
-    if ( data.empty() ) {
-         cout <<"\nSparseMatrix::SparsityPattern: Matrix is empty."<< endl;
+    if ( data_.empty() ) {
+         cerr <<"\nSparseMatrix::SparsityPattern: Matrix is empty."<< endl;
          return;
       }
 
@@ -414,26 +473,13 @@ void SparseMatrix::SparsityPattern( const char* txtfile ) const
 template<class cspMat1, class cspMat2>
 void SparseMatrix::Assign( const cspMat1& idx, const cspMat2& d )
  {
-    for ( size_t i{0U}; i<idx.Rows(); ++i )
-      for ( size_t j{0U}; j<idx.Cols(); ++j )
-        Add( static_cast<uint32_t>(idx(i,j)), static_cast<uint32_t>(idx(i,j)), d(i,j) );
+    for ( uint32_t i{0U}; i<idx.Rows(); ++i )
+      for ( uint32_t j{0U}; j<idx.Cols(); ++j )
+        Add( idx(i,j), idx(i,j), d(i,j) );
 
  } // end Assign
 
-//template
-//void SparseMatrix::Assign<DenseMatrix<DM_MAX>,DenseMatrix<DM_MAX> >(
-//const DenseMatrix<DM_MAX>&,
-//const DenseMatrix<DM_MAX>& );
-
-//template
-//void SparseMatrix::Assign<DenseMatrix<DM_MIN>,DenseMatrix<DM_MIN> >(
-//const DenseMatrix<DM_MIN>&,
-//const DenseMatrix<DM_MIN>& );
-
-template
-void SparseMatrix::Assign<DenseMatrix<DM4>,Matrix >(
-const DenseMatrix<DM4>&,
-const Matrix& );
+template void SparseMatrix::Assign<DenseMatrix<DM4>,Matrix>( const DenseMatrix<DM4>&, const Matrix& );
 
 
 /**
@@ -496,14 +542,14 @@ void SparseMatrix::OutCompressedRowFormat1_n( int32_t*  ia, int32_t*  ja,
      }
 
    map<size_t,double>::const_iterator rit;
-   uint32_t         i;
-   int32_t          j, diag, istart, jatemp;
-   double       atemp;
-   bool           zero_diag_element(false);
+   int32_t  j, diag, istart, jatemp;
+   double   atemp;
+   bool     zero_diag_element(false);
 
-   for ( i=0, ia[0]=j=0; i<Rows(); i++ )
+   size_t i{0U};
+   for ( ia[0]=j=0; i<Rows(); i++ )
     {
-       for ( diag=-1, rit=data[i].begin(); rit!=data[i].end(); rit++ ) {
+       for ( diag=-1, rit=data_[i].begin(); rit!=data_[i].end(); rit++ ) {
             a[j]  = (*rit).second;
             ja[j] = static_cast<int32_t>((*rit).first);
             if ( ja[j] == static_cast<int32_t>(i) ) diag = j;
@@ -524,7 +570,7 @@ void SparseMatrix::OutCompressedRowFormat1_n( int32_t*  ia, int32_t*  ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat_n: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat_n: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -555,19 +601,19 @@ void SparseMatrix::OutCompressedRowFormat( int32_t*  ia, int32_t*  ja,
         // ia indexing is from 0...rows
         ia = new int32_t[ Rows() + 1 ];
         // fortran indexing will be used
-        ja = new int32_t[ entries ];
-        a  = new double[ entries ];
+        ja = new int32_t[ entries_ ];
+        a  = new double[ entries_ ];
      }
 
-   size_t    i;
-   int32_t     j, diag, istart, jatemp;
+   int32_t j, diag, istart, jatemp;
    double  atemp;
-   bool      zero_diag_element(false);
+   bool    zero_diag_element(false);
 
-   for ( i=0U, ia[0]=j=0; i<Rows(); i++ )
+   size_t i{0U};
+   for ( ia[0]=j=0; i<Rows(); i++ )
     {
-       map<size_t,double>::const_iterator rit=data[i].begin();
-       for ( diag=-1; rit!=data[i].end(); rit++ ) {
+       map<size_t,double>::const_iterator rit=data_[i].begin();
+       for ( diag=-1; rit!=data_[i].end(); rit++ ) {
             a[j]  = (*rit).second;
             // rit.first points to matrix entries indexed from 0..rows-1
             ja[j] = static_cast<int32_t>((*rit).first);
@@ -589,7 +635,7 @@ void SparseMatrix::OutCompressedRowFormat( int32_t*  ia, int32_t*  ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -606,8 +652,11 @@ void SparseMatrix::OutCompressedRowFormat( int32_t*  ia, int32_t*  ja,
 
 
 
-void SparseMatrix::OutCompressedRowFormatParallel( std::vector<int32_t>& ia, std::vector<int32_t>& ja, 
-                                                   std::vector<double> a, int32_t nrhalo, bool reallocate ) const
+
+
+
+void SparseMatrix::OutCompressedRowFormatParallel( vector<int32_t>& ia, vector<int32_t>& ja,
+                                                   vector<double> a, int32_t nrhalo, bool reallocate ) const
  {
    cout <<"\nSparseMatrix::OutCompressedRowFormatParallel: Copying sparse matrix to AMG vectors..."<< endl;
  
@@ -619,23 +668,23 @@ void SparseMatrix::OutCompressedRowFormatParallel( std::vector<int32_t>& ia, std
         ja.clear();
         a.clear();
         ia.resize(Rows()+1-nrhalo); vector<int32_t>( ia ).swap( ia );
-        ja.resize(entries);         vector<int32_t>( ja ).swap( ja );
-        a.resize(entries);          vector<double>( a ).swap( a);
+        ja.resize(entries_);        vector<int32_t>( ja ).swap( ja );
+        a.resize(entries_);         vector<double>( a ).swap( a);
      }
 
-   size_t    i(0U), j(0U), istart;
-   int32_t     diag, jatemp;
-   double  atemp;
-   bool      zero_diag_element(false);
+   size_t   i(0U), j(0U), istart;
+   int32_t  diag, jatemp;
+   double   atemp;
+   bool     zero_diag_element(false);
 
    ia[0] = 0;
 
-   for ( vector<int32_t>::const_iterator it1=ia.begin(); it1!=ia.end(); it1++, i++ )
+   for ( auto it1=ia.begin(); it1!=ia.end(); it1++, i++ )
       {
-         assert( i < data.size() );
-         assert( !data[i].empty() );
-         map<size_t,double>::const_iterator rit =data[i].begin();
-         for ( diag=-1; rit!=data[i].end(); rit++ )
+         assert( i < data_.size() );
+         assert( !data_[i].empty() );
+         map<size_t,double>::const_iterator rit =data_[i].begin();
+         for ( diag=-1; rit!=data_[i].end(); rit++ )
            {
               a[j]  = (*rit).second;
               // rit.first points to matrix entries indexed from 0..rows-1
@@ -659,13 +708,13 @@ void SparseMatrix::OutCompressedRowFormatParallel( std::vector<int32_t>& ia, std
      }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormatParallel: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormatParallel: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormatParallel");
     }
 
    // converting C array indices (0..n-1) into Fortran indices (1..n) 
-   for (std::vector<int32_t>::iterator it1=ia.begin(); it1!=ia.end(); it1++ ) (*it1)++;
-   for (std::vector<int32_t>::iterator it1=ja.begin(); it1!=ja.end(); it1++ ) (*it1)++;
+   for ( auto it1=ia.begin(); it1!=ia.end(); it1++ ) (*it1)++;
+   for ( auto it1=ja.begin(); it1!=ja.end(); it1++ ) (*it1)++;
 
    ticks = clock() - ticks;
   
@@ -680,7 +729,7 @@ void SparseMatrix::OutCompressedRowFormatParallel( std::vector<int32_t>& ia, std
 
 /// This is the version which is used for the old AMG solver
 void SparseMatrix::OutCompressedRowFormat( long* ia, long* ja, 
-                                               double* a, bool reallocate ) const
+                                           double* a, bool reallocate ) const
  {
    cout <<"\nSparseMatrix::OutCompressedRowFormat: Copying sparse matrix to AMG vectors..."<< endl;
  
@@ -694,8 +743,8 @@ void SparseMatrix::OutCompressedRowFormat( long* ia, long* ja,
         // ia indexing is from 0...rows+1
         ia = new long[ Rows() + 1 ];
         // fortran indexing will be used
-        ja = new long[ entries ];
-        a  = new double[ entries ];
+        ja = new long[ entries_ ];
+        a  = new double[ entries_ ];
      }
 
    size_t    i;
@@ -708,8 +757,8 @@ void SparseMatrix::OutCompressedRowFormat( long* ia, long* ja,
    // is done in 2
    for ( i=0U, ia[0]=j=0; i<Rows(); i++ )
     {
-       map<size_t,double>::const_iterator rit=data[i].begin();
-       for ( diag=-1; rit!=data[i].end(); rit++ ) {
+       map<size_t,double>::const_iterator rit=data_[i].begin();
+       for ( diag=-1; rit!=data_[i].end(); rit++ ) {
             a[j]  = (*rit).second;
             ja[j] = static_cast<long>((*rit).first);
             if ( ja[j] == static_cast<long>(i) ) diag = j;
@@ -735,7 +784,7 @@ void SparseMatrix::OutCompressedRowFormat( long* ia, long* ja,
     }
 
    if ( zero_diag_element ) {
-       cout <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
+       cerr <<"\nSparseMatrix::OutCompressedRowFormat: Error: Zero value(s) in matrix diagonal: ";
        throw underflow_error("SparseMatrix::OutCompressedRowFormat");
     }
 
@@ -766,7 +815,7 @@ void SparseMatrix::In( const char* file_name_without_extension )
       ifstream  ifs( in_file.c_str() );
       
       if ( !ifs.is_open() ) {
-            cout <<"\n SparseMatrix::In: failed to read '"<< in_file <<"'; nothing was done\n";
+            cerr <<"\n SparseMatrix::In: failed to read '"<< in_file <<"'; nothing was done\n";
             return;
         }
         
@@ -792,7 +841,7 @@ void SparseMatrix::In( const char* file_name_without_extension )
 */
 void SparseMatrix::Out( long digits ) const
  {
-    if ( data.empty() ) {
+    if ( data_.empty() ) {
          cerr <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
          return;
       }
@@ -801,15 +850,14 @@ void SparseMatrix::Out( long digits ) const
     size_t pcols(1);
 
     cout <<"\nSparseMatrix::Out: entries (non-zero elements): "<< Entries();
-    cout <<"\nrows: "<< data.size() <<", columns: "<< data.size() << endl;
+    cout <<"\nrows: "<< data_.size() <<", columns: "<< data_.size() << endl;
     
     if ( digits != 0 ) cout.setf(ios::scientific);
 
     // for all rows
-    for ( size_t i{0U}; i<data.size(); i++ )
+    for ( size_t i{0U}; i<data_.size(); i++ )
       // for all column entries
-      for ( map<size_t,double>::const_iterator
-            ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
+      for ( auto ditc=data_[i].begin(); ditc!=data_[i].end(); ditc++ ) {
          // print the column index
          cout <<"("<< i <<","<< (*ditc).first;
          // prints values with extra spaces to achieve an alignment even if there are
@@ -817,7 +865,7 @@ void SparseMatrix::Out( long digits ) const
          if ( (*ditc).second > 0 ) cout <<"):  "<< (*ditc).second <<" ";
          else                      cout <<"): "<< (*ditc).second <<" ";
          // wraps the lines if there are more than 10 entries per line
-         if ( pcols == 10 || pcols == data[i].size() ) {
+         if ( pcols == 10 || pcols == data_[i].size() ) {
               cout << endl;
               pcols = 0;
            }
@@ -837,7 +885,7 @@ void SparseMatrix::Out( const char* file ) const
  {
     ofstream  ofs(file);
 
-    if ( data.empty() ) {
+    if ( data_.empty() ) {
          ofs <<"\nSparseMatrix::Out: Matrix is empty."<< endl;
          return;
       }
@@ -847,19 +895,18 @@ void SparseMatrix::Out( const char* file ) const
     size_t pcols(1);
 
     ofs <<"\nSparseMatrix::Out: Entries: "<< Entries();
-    ofs <<"\nrows: "<< data.size() <<", columns: "<< data.size() << endl;
+    ofs <<"\nrows: "<< data_.size() <<", columns: "<< data_.size() << endl;
     
     if ( digits != 0 ) { 
         ofs.setf(ios::scientific);
         prec = ofs.precision(digits);
      }
 
-    for ( size_t i{0U}; i<data.size(); i++ )
-      for ( map<size_t,double>::const_iterator
-            ditc=data[i].begin(); ditc!=data[i].end(); ditc++ ) {
+    for ( size_t i{0U}; i<data_.size(); i++ )
+      for ( auto ditc=data_[i].begin(); ditc!=data_[i].end(); ditc++ ) {
          ofs <<"("<< i <<","<< (*ditc).first;
          ofs <<"): "<< (*ditc).second <<" ";
-         if ( pcols == 10 || pcols == data[i].size() ) {
+         if ( pcols == 10 || pcols == data_[i].size() ) {
               ofs << endl;
               pcols = 0;
            }
@@ -873,28 +920,29 @@ void SparseMatrix::Out( const char* file ) const
       }
  }
 
+
+
 void SparseMatrix::OutForMatlab(const char* file) const
-{
-	ofstream  ofs(file);
+  {
+    ofstream  ofs(file);
 
-	long         prec;
-	const long   digits(3);
+    long         prec;
+    const long   digits(3);
 
-	if (digits != 0) {
-		ofs.setf(ios::scientific);
-		prec = ofs.precision(digits);
-	}
+    if (digits != 0) {
+        ofs.setf(ios::scientific);
+        prec = ofs.precision(digits);
+      }
 
-	for (auto i = 0; i<data.size(); i++)
-		for (map<size_t, double>::const_iterator
-			ditc = data[i].begin(); ditc != data[i].end(); ditc++) {
-			ofs << i + 1 << " " << ((*ditc).first) + 1 << " " << (*ditc).second << "\n";
-		}
+    for ( size_t i{0U}; i<data_.size(); i++)
+      for ( auto ditc = data_[i].begin(); ditc != data_[i].end(); ditc++)
+        ofs << i + 1 << " " << ((*ditc).first) + 1 << " " << (*ditc).second << "\n";
 
-	if (digits != 0) {
-		ofs.unsetf(ios::scientific);
-		ofs.precision(prec);
-	}
-}
+    if (digits != 0) {
+        ofs.unsetf(ios::scientific);
+        ofs.precision(prec);
+      }
+  }
+
 } // csmp
 

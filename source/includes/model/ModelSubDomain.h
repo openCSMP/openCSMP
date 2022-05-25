@@ -117,11 +117,18 @@ class ModelSubDomain {
 
     /// renumbers nodes in domain 0..n-1
     size_t  RenumberNodes() const;
-    /// renumbers nodes in domain 0..n-1
+    
+    /// renumbers cells in domain 0..n-1
     size_t  RenumberCells() const;
-    /// renumber cells and nodes
+    
+    /// renumber cells and nodes consecutively from 0..n-1
     void    UpdateMemberIndexes() const;
+    
+    /// output current indices to vector
     void    MemberCellIndexes( std::vector<size_t>& ) const;
+    
+    /// setting all cell indices to a specific value
+    void    SetCellIndexes( size_t new_idx );
 
     // ----------------------------------------
     // access
@@ -330,6 +337,10 @@ size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,C
 /// returns number of nodes on the subdomain perimeters that are shared by the two subdomains (matches by pointers)
 template<uint32_t dim,template<uint32_t> class CELL>
 size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
+
+/// returns the shared perimeter nodes into the argument vector
+template<uint32_t dim,template<uint32_t> class CELL>
+size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>&, std::vector<Node<dim>*>& );
 
 /// maps potential contacting faces and cell pointers of cells that are contacting each other in the two regions; @return the number of these cells, pointers to them, and corresponding face number written into the argument map
 template<uint32_t dim, template<uint32_t> class CELL>

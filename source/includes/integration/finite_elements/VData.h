@@ -112,7 +112,7 @@ class VData {
     size_t Faces() const;
   
     /// number of split-boundary faces; faces with multiplicated nodes at boundaries
-    size_t InterFaces() const;
+    size_t Interfaces() const;
   
     /// combined number of any entities: elements + faces + interfaces
     size_t TotalNumberOfCells() const;

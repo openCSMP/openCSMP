@@ -13,10 +13,10 @@ using namespace std;
  
 namespace csmp {
 
-void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
-                                      std::vector<double> &b,
-                                      std::vector<double> &x,
-                                      size_t no_unknowns)
+void EigenSolver::SolveMatrixEquation( SparseMatrix& A,
+                                       vector<double>& b,
+                                       vector<double>& x,
+                                       size_t no_unknowns )
   {
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
     
@@ -29,11 +29,11 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
     // generic eigen sparse matrix is used
     Eigen::SparseMatrix<double> mat;
     const size_t n_dof{ A.Rows() };
-    mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     mat.resize(A.Rows(), A.Cols());
+    mat.reserve(Eigen::VectorXi::Constant(A.Rows(), 24));
     for (size_t i{0U}; i < A.Rows(); ++i) {
-      const auto rowEnd{ A.RowEnd(i) };
-      for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
+        const auto rowEnd{ A.RowEnd(i) };
+        for ( auto pair = A.RowBegin(i); pair!=rowEnd; ++pair ) {
 #ifdef DEBUG
            if ( (*pair).first >= n_dof )
                csmp_error.Note( ERROR, "EigenSolver::SolveMatrixEquation", to_string( (*pair).first ),
@@ -67,10 +67,10 @@ void EigenSolver::SolveMatrixEquation(SparseMatrix &A,
 /**
 Not implemented yet!
 */
-  void EigenSolver::SolveMatrixEquation(CompressedRowMatrix &A,
-                                        std::vector<double> &b,
-                                        std::vector<double> &x,
-                                        size_t no_unknowns)
+  void EigenSolver::SolveMatrixEquation( CompressedRowMatrix& A,
+                                         vector<double>& b,
+                                         vector<double>& x,
+                                         size_t no_unknowns)
   {
       throw csmp::Exception( ERROR, "EigenSolver::SolveMatrixEquation",
                              "compressed row-matrix based version not implemented yet");

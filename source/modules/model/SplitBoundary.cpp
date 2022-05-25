@@ -492,6 +492,19 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 } // end AccumulateByNumber
 
 
+// helper function for method below
+template<uint32_t dim>
+static size_t countDisconnectedCells( typename vector<InterFace<dim>*>::const_iterator first,
+                                      typename vector<InterFace<dim>*>::const_iterator last )
+ {
+     size_t disconnected_cells{0U};
+     while ( first != last ) {
+          if ( (*first)->ConnectedNeighbors() == 0U ) disconnected_cells++;
+          first++;
+       }
+       
+     return disconnected_cells;
+  }
 
 
 /**
@@ -503,13 +516,15 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
-  if ( distance(ifacesBegin,ifacesEnd) == 0 ) {
+  if ( distance(ifacesBegin,ifacesEnd) == 0U ) {
        csmp_error.Note( ERROR, "SplitBoundary<dim>::CreateFrom", "supplied InterFace range is empty; nothing was done");
        return false;
     }
-  if ( (*ifacesBegin)->ConnectedNeighbors() == 0 ) {
-       csmp_error.Note( ERROR, "SplitBoundary<dim>::CreateFrom:", "some supplied InterFace objects do not have neighbors; nothing was done");
-       return false;
+  size_t disconnected_cells = countDisconnectedCells<dim>( ifacesBegin, ifacesEnd );
+  if ( disconnected_cells > 0U ) {
+       cout <<"\nSplitBoundary<dim>::CreateFrom: creating '"<< this->Name() <<"'";
+       csmp_error.Note( WARNING, "SplitBoundary<dim>::CreateFrom:", to_string(disconnected_cells),
+                       "InterFace object(s) do(es) not have neighbors, implying a split-boundary patch consisting of a single InterFace");
     }
     
   this->cell_vec_.assign( ifacesBegin, ifacesEnd );
@@ -523,7 +538,10 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
 
 
 /**
-    Creates a split boundary from a boundary. Requires unique indices.
+    Creates a split boundary from a boundary. 
+    
+    @attention this will prompt the MeshManager to delete the faces that the boundary consists of, i.e., destroy the boundary.
+    
     @author SKM 1/11/2013
     @author SKM 21/9/2021
 */

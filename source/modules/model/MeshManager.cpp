@@ -238,10 +238,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
   hybrid_element_mesh_ = vset.HybridElementTypeMesh();
   cout <<"\nMeshManager<"<< dim <<">::Initialize: building mesh with "<< vset.Elements() <<" elements, "<< vset.Vertices() <<" nodes, ";
-  cout << vset.Faces() <<" faces, and "<< vset.InterFaces() <<" interfaces.\n";
+  cout << vset.Faces() <<" faces, and "<< vset.Interfaces() <<" interfaces.\n";
   if ( vset.HybridElementTypeMesh() ) cout <<"mesh consists of multiple element types.\n";
   if ( vset.Faces() > 0 ) cout <<"mesh contains 'Boundary' objects.\n";
-  if ( vset.InterFaces() > 0 ) cout <<"mesh contains 'SplitBoundary' objects.\n";
+  if ( vset.Interfaces() > 0 ) cout <<"mesh contains 'SplitBoundary' objects.\n";
   cout << endl;
 
   // ------------------------------------------------------------------------------------
@@ -479,7 +479,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // 4. constructing Interfaces objects using the VSet node information
   // ------------------------------------------------------------------
   // (continuous running index 'idx' will also be used for interfaces)
-  if ( vset.InterFaces() > 0 )
+  if ( vset.Interfaces() > 0 )
     {
        assert( vset.HybridElementTypeMesh() );
        if ( csmp_error.Verbose() )
@@ -525,7 +525,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             ++interface_idx;
             ++first;
           }
-       assert( interfaces_.size() == vset.InterFaces() );
+       assert( interfaces_.size() == vset.Interfaces() );
 
        // connecting the interfaces to their equi- and higher-dimensional neighbors
        // -------------------------------------------------------------------------
@@ -587,14 +587,12 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              assert( index2 > MULTIPLE );
              Element<dim>* const innerElement = &(*next(elements_.begin(),index1));
              Element<dim>* const outerElement = &(*next(elements_.begin(),index2));
-             itf.Assign( innerElement, outerElement );
              // assignment: local number of faces adjacent to InterFace; these face numbers must always be defined
              const auto inner_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+2U ));
              const auto outer_face_id = static_cast<uint32_t>(vset.Pfvert( iface_idx, neighbors+3U ));
              assert( inner_face_id < innerElement->Faces() );
              assert( outer_face_id < outerElement->Faces() );
-             itf.ParentFaceID( INSIDE,  inner_face_id );
-             itf.ParentFaceID( OUTSIDE, outer_face_id );
+             itf.Assign( innerElement, inner_face_id, outerElement, outer_face_id );
              // assignment: intervening Element else boundary flag INTERNAL
              const int64_t  index3 = vset.Pfvert( iface_idx, neighbors+4U );
              assert( index3 < n_elmts );
@@ -1004,6 +1002,95 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
 
 
 
+/**
+    As above but for InterFace. All nodes get duplicated unless they are those of an element at the perimeter of the lower-dimensional region
+    and flagged NOT. In that case inside and outside nodes are taken to be the same (inside) node.
+    
+    If one of the nodes involved in the construction process is already a manifold, no extra nodes are added but the inside and outside nodes
+    are used for the manifold construction.
+    @todo is this sufficient? - else the manifold type might have to be checked for additional diagnostics.
+    
+    @attention This assumes that the element from which the InterFace is created is appropriately connected to its neighbors.
+*/
+template<uint32_t dim>
+InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element<dim>* eptr,
+                                                                   csmp::Element<dim>* inner_eptr,
+                                                                   csmp::Element<dim>* outer_eptr,
+                                                                   uint32_t adjacent_face_of_inner_element,
+                                                                   uint32_t adjacent_face_of_outer_element,
+                                                                   const LocalVariables& lvars,
+                                                                   const IntegrationPointVariables& ivars,
+                                                                   const LocalVariables& nvars )
+ {
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   
+   // 0. verifying the input
+   // ----------------------
+   // pointers
+   if ( eptr == nullptr )
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "element pointer not initialised");
+   // is the element indeed lower dimensional?
+   if constexpr ( dim == 3U ) if ( !eptr->IsSurface() )
+     csmp_error.Note( ERROR, "MeshManager<3>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional surface element");
+   if constexpr ( dim == 2U ) if ( !eptr->IsLine() )
+     csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional line element");
+
+   if ( eptr->FV() == nullptr )
+     csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByInterFace", "finite volume stencil pointer not initialised");
+   if ( inner_eptr == nullptr )
+     csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "pointer to higher dimensional element on inside not initialised");
+
+   if ( inner_eptr == outer_eptr ) {
+        csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "cannot create InterFace"
+                                "pointers to higher dimensional elements are the same");
+        return nullptr;
+     }
+   assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
+   if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
+   
+   
+   // 1. duplicating inside nodes when necessary and creating corresponding manifolds
+   // -------------------------------------------------------------------------------
+    // constructing the node manifold manager if necessary
+    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
+    if ( no_previous_manifolds )
+      node_manifold_manager_ = new NodeManifoldManager<dim>();
+
+   const auto n_nodes{ eptr->Nodes() };
+   vector<Node<dim>*>  outside_nodes( n_nodes, nullptr );
+   
+   for ( uint32_t i{0U}; i<n_nodes; i++ )
+     // if the node already is a manifold, the outside node in it is found and assigned
+     if ( eptr->N(i)->IsManifold() ) {
+          for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
+            if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+              // the outside nodes must be listed in reverse order
+              outside_nodes[ n_nodes-i-1U ] = eptr->N(i)->Manifold()->N(j);
+       }
+     // else the node is duplicated including creation of the manifold
+     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), OUTSIDE, nvars );
+
+
+   // 2. constructing the new interface
+   // ---------------------------------
+   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
+   typename plf::colony<InterFace<dim>>::iterator
+     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
+                                                adjacent_face_of_inner_element, adjacent_face_of_outer_element,
+                                                lvars, ivars, outside_nodes ) );
+   (*fit).Idx( face_id );
+
+   // 3. deleting the original Element
+   // --------------------------------
+   elements_.erase( elements_.get_iterator(eptr) );
+   eptr = nullptr;
+
+   return &(*fit);
+   
+ } // end ReplaceElementByInterFace
+       
+
+
        
        
        
@@ -1168,8 +1255,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
-   const bool assign_nodes{false};
-   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
    (*ifp).Idx( iface_id );
    
    // 4. assigning the inside nodes to the new InterFace (which are those of the face of the inside element)
@@ -1238,11 +1324,13 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
      ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
-   const bool assign_nodes{true};
-   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id, assign_nodes );
+   (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
    (*ifp).Idx( iface_id );
+
+   // 4. assigning nodes
+   (*ifp).InitialiseNodeVector();
    
-   // 4. detaching the input Elements from one-anothers
+   // 5. detaching the input Elements from one-another
    inner_parent->Unassign( outer_parent );
    outer_parent->Unassign( inner_parent );
 
@@ -1316,7 +1404,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
 
 
 /**
-    Duplicates existing node inside of the MeshManager and connects it to corresponding manifold, else, the existing node is returned.
+    Duplicates existing node and connects it to corresponding manifold, else, the existing node is returned.
     
     @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
     
@@ -1784,16 +1872,30 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
 
 
 
-  /// creates InterFace objects between face/node sharing Elements adding the necessary nodes and node manfolds as well as updating the connectivity; inside elements are first in pair
+/**
+    Creates InterFace objects between face and node sharing Elements adding the necessary extra nodes on the outside,
+    and node manifolds where multiple nodes end up collocated.
+    Finally the method creates the neighbor connectivity among the interfaces so that they can be organised into interior and perimeter.
+    Then the connectivity of the overall mesh is updated, taking into account that elements and nodes loose their connections
+    across the new interface.
+
+    @param dbase a reference to property database needed for the initialisation of the LocalVariableStorage of potential interface variables
+    @param interface_nbor_elmts vector of higher-dimensional elements that share a face where the new interface will be created.
+    The iinside elements are first in Element-element face pairs.
+    
+    @return returns vector of pointers to the newly created InterFace objects.
+ */
 template<uint32_t dim>
-vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
+vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
                                                                                        const vector<pair<pair<Element<dim>*,uint32_t>,
-                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
+                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
+                                                                                       bool multiplicate_perimeter_nodes )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( interface_nbor_elmts.empty() ) {
-         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeSharingElements", "supplied range of element pairs is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterfacesBetweenNodeSharingElements",
+                                   "supplied range of element pairs is empty; nothing was done.");
          return vector<InterFace<dim>*>{}; // empty vec
       }
     
@@ -1805,56 +1907,60 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
     const LocalVariables             nvars(dbase.LocalVariablesAt(NODE));
     const LocalVariables             lvars(dbase.LocalVariablesAt(INTER_FACE));
     const IntegrationPointVariables& ivars(dbase.IntegrationPointVariablesAt(INTER_FACE));
+    vector<Node<dim>*>               perimeter_node_ptrs;
     
-    // 1. finding the perimeter nodes of the interface patch that will be created
-    // --------------------------------------------------------------------------
-    vector<Node<dim>*>  perimeter_node_ptrs;
-    perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
+    if ( multiplicate_perimeter_nodes == false )
+      {
+        // 1. finding the perimeter nodes of the interface patch that will be created
+        // --------------------------------------------------------------------------
+        perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
+        
+        for ( const auto& it : interface_nbor_elmts ) {
+             vector<uint32_t> fnids;
+             it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+             for ( auto i : fnids )
+               perimeter_node_ptrs.push_back( it.first.first->N(i) );
+          }
+          
+        // sorting and removing duplicates from node vector, making it searchable
+        sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+        perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
+        // printNodeCoordinates<dim>( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
+        // NB: tested: at this point we only have perimeter nodes left
+
+
+        // 2. Finding the subset of these nodes which will also be on the perimeter of the SplitBoundary
+        // ---------------------------------------------------------------------------------------------
+        // IMPORTANT: this needs to be done before creating the InterFace objects because it influences which of its nodes will have to be manifolds
+        // How? - in 2D, these are the nodes that are only contained in of of the faces
+        if constexpr (dim == 2U ) {
+             vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
+             // again
+             for ( const auto& it : interface_nbor_elmts ) {
+                  vector<uint32_t> fnids;
+                  it.first.first->FE()->NodesOfFace( it.first.second, fnids );
+                  for ( auto i : fnids ) {
+                       // finding the vector index corresponding to the perimeter node
+                       auto lb = perimeter_node_ptrs.end();
+                       if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
+                       face_count[ distance(perimeter_node_ptrs.begin(),lb) ]++;
+                    }
+               }
+             // eliminating those pointers from 'perimeter_node_ptrs' that are shared by multiple elements
+             for ( size_t i{0}; i<face_count.size(); i++ )
+               if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
+             perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
+          }
+        // In 3D, does one need a triangulation
+        if constexpr (dim == 3U ) {
+             throw csmp::Exception( ERROR, "CreateInterfacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
+             MeshPatch<3U> patch( SURFACE );
+             patch.BuildInterveningPatch( interface_nbor_elmts, false, perimeter_node_ptrs );
+          }
     
-    for ( const auto& it : interface_nbor_elmts ) {
-         vector<uint32_t> fnids;
-         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-         for ( auto i : fnids )
-           perimeter_node_ptrs.push_back( it.first.first->N(i) );
-      }
+      } // end multiplicate perimeter nodes
       
-    // sorting and removing duplicates from node vector, making it searchable
-    sort( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
-    perimeter_node_ptrs.erase( unique( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() ), perimeter_node_ptrs.end() );
-    // printNodeCoordinates<dim>( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end() );
-    // NB: tested: at this point we only have perimeter nodes left
-
-
-    // 2. Finding the subset of these nodes which will also be on the perimeter of the SplitBoundary
-    // ---------------------------------------------------------------------------------------------
-    // IMPORTANT: this needs to be done before creating the InterFace objects because it influences which of its nodes will have to be manifolds
-    // How? - in 2D, these are the nodes that are only contained in of of the faces
-    if constexpr (dim == 2U ) {
-         vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
-         // again
-         for ( const auto& it : interface_nbor_elmts ) {
-              vector<uint32_t> fnids;
-              it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-              for ( auto i : fnids ) {
-                   // finding the vector index corresponding to the perimeter node
-                   auto lb = perimeter_node_ptrs.end();
-                   if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
-                   face_count[ distance(perimeter_node_ptrs.begin(),lb) ]++;
-                }
-           }
-         // eliminating those pointers from 'perimeter_node_ptrs' that are shared by multiple elements
-         for ( size_t i{0}; i<face_count.size(); i++ )
-           if ( face_count[i] > 1 ) perimeter_node_ptrs[i] = nullptr;
-         perimeter_node_ptrs.erase( remove( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), nullptr ), perimeter_node_ptrs.end() );
-      }
-    // In 3D, does one need a triangulation
-    if constexpr (dim == 3U ) {
-         throw csmp::Exception( ERROR, "CreateInterFacesBetweenNodeSharingElements", "interface patch perimeter identification not implemented yet");
-         MeshPatch<3U> patch( SURFACE );
-         patch.BuildInterveningPatch( interface_nbor_elmts, false, perimeter_node_ptrs );
-      }
-    
-
+      
     // 3. Creating InterFace objects, duplicating nodes and dealing with boundaries
     // ----------------------------------------------------------------------------
     // tracking already duplicated nodes to avoid further duplication
@@ -1879,25 +1985,38 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
          uint32_t           nd_count{0};
          
          for ( auto i : fnids ) {
-             // excluding nodes that will lie on the perimeter of the new interface patch, nodes are duplicated
-             if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
-                  // but only if they have not already been duplicated
+             // nodes are multiplicated, always if 'multiplicate_perimeter_nodes=true'
+             // or if they do not lie on the perimeter of the new interface patch
+             if ( perimeter_node_ptrs.empty() ) {
+                  // nodes are duplicated unless they were already duplicated
                   if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
                        outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
                        new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                     }
                   else outside_nodes[nd_count] = (*nit).second;
+                }
+              else {
+                  // if perimeter nodes are excluded, nodes are duplicated if they do not lie on the perimeter
+                  if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
+                        // and only if these nodes have not already been duplicated
+                        if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                          }
+                        else outside_nodes[nd_count] = (*nit).second;
+                     }
+                   // or if they are located on the model boundary or if the are already manifolds
+                   else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
+                        if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
+                             // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
+                          }
+                        else outside_nodes[nd_count] = (*nit).second;
+                     }
+                   // if the perimeter is considered perimeter nodes are just copied to the opposite side
+                   else outside_nodes[nd_count] = it.first.first->N(i);
                }
-             // perimeter nodes must be duplicated if they are located on the model boundary or are manifolds
-             else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
-                  if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                       // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
-                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
-                       new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
-                    }
-                  else outside_nodes[nd_count] = (*nit).second;
-               }
-             else outside_nodes[nd_count] = it.first.first->N(i);
              nd_count++;
            }
 
@@ -1922,12 +2041,17 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeSharingEle
      // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
      
-     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
      cout << new_nodes.size() <<" new nodes."<< endl;
      
      return interface_ptrs;
      
-  } // end CreateInterFacesBetweenNodeSharingElements
+  } // end CreateInterfacesBetweenNodeSharingElements
+
+
+
+
+
 
 
 
@@ -1972,13 +2096,13 @@ template bool matchNodesByPosition( const vector<Node<3U>*>&, vector<Node<3U>*>&
     Creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
 */
 template<uint32_t dim>
-vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements( const PropertyDatabase<dim>& dbase,
+vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>& dbase,
                                            const vector<pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( interface_nbor_elmts.empty() ) {
-         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements",
+         csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterfacesBetweenNodeMatchingElements",
                                    "supplied range of element pairs is empty; nothing was done.");
          return vector<InterFace<dim>*>{}; // empty vec
       }
@@ -2033,7 +2157,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingEl
                    cerr << endl;
                 }
               cerr << endl;
-              csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterFacesBetweenNodeMatchingElements",
+              csmp_error.Note( WARNING, "MeshManager<dim>::CreateInterfacesBetweenNodeMatchingElements",
                                         "nodes at interface between region could not be matched.");
            }
          else {
@@ -2084,12 +2208,12 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterFacesBetweenNodeMatchingEl
      // ---------------------------------------------------------
      BuildConnectivity<InterFace>( interface_ptrs.begin(), interface_ptrs.end() );
      
-     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterFacesBetweenNodeMatchingElements: created "<< interface_ptrs.size();
+     cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeMatchingElements: created "<< interface_ptrs.size();
      cout <<" new interfaces."<< endl;
      
      return interface_ptrs;
      
- } // end CreateInterFacesBetweenNodeMatchingElements
+ } // end CreateInterfacesBetweenNodeMatchingElements
 
 
 // DEBUGGING - OK
@@ -3146,9 +3270,7 @@ void MeshManager<dim>::UpdateConnectivity()
     
     // 4. Update node manifolds
     // ------------------------
-    // TODO: extend method to also update potential NodeManifolds
-    if ( node_manifold_manager_ != nullptr )
-      ErrorHandler::Instance().Note( WARNING, "MeshManager::UpdateConnectivity", "node manifolds are not touched by this method, expecting that this was done already");
+    // this is expected to have been done during interface creation
     
  } // end UpdateConnectivity
 
@@ -4758,7 +4880,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
   if ( vset.Vertices()   != nodes_.size() ||
        vset.Elements()   != elements_.size() ||
        vset.Faces()      != faces_.size() ||
-       vset.InterFaces() != interfaces_.size() ) {
+       vset.Interfaces() != interfaces_.size() ) {
        csmp_error.Note( ERROR, "MeshManager<dim>::InputStoredVariablesFrom",
                          "mismatch between property data sizes and mesh stored in manager; no input." );
        return;

@@ -7,7 +7,7 @@
 namespace csmp {
 
 class FiniteElementManager;
-class FaceConstructionData;
+template<uint32_t> class FaceConstructionData;
 template<uint32_t> class PropertyDatabase;
 template<uint32_t> class MeshManager;
 template<typename> class FEM_Data;

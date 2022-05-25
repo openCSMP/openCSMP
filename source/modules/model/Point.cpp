@@ -1,6 +1,5 @@
-#include <cassert>
 #include "Point.h"
-#include "CSMP_definitions.h"
+#include "compareFloats.h"
 
 using namespace std;
 
@@ -234,14 +233,13 @@ Point<1U>& Point<1U>::operator/=( double val )
 
 bool Point<1U>::operator==( const Point<1U>& pt ) const
  {
-    if ( x_ != pt.x_ ) return false;
-    return true;
+    if ( essentiallyEqual(x_,pt.x_) ) return true;
+    return false;
  }
 
 bool Point<1U>::operator!=( const Point<1U>& pt ) const
  {
-    if ( x_ != pt.x_ ) return true;
-    return false;
+    return !(*this == pt);
  }
 
 bool Point<1U>::operator<( const Point<1U>& pt ) const
@@ -486,7 +484,7 @@ Point<2U>& Point<2U>::operator/=( double val )
 
 bool Point<2U>::operator==( const Point<2U>& pt ) const
  {
-    return (x_ == pt.x_) && (y_ == pt.y_);
+    return essentiallyEqual(x_,pt.x_) && essentiallyEqual(y_,pt.y_);
  }
 
 bool Point<2U>::operator!=( const Point<2U>& pt ) const
@@ -750,7 +748,7 @@ Point<3U>& Point<3U>::operator/=( double val )
 
 bool Point<3U>::operator==( const Point<3U>& pt ) const
  {
-    return (x_ == pt.x_) && (y_ == pt.y_) && (z_ == pt.z_);
+    return essentiallyEqual(x_,pt.x_) && essentiallyEqual(y_,pt.y_) && essentiallyEqual(z_,pt.z_);
  }
 
 bool Point<3U>::operator!=( const Point<3U>& pt ) const

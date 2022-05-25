@@ -69,8 +69,8 @@ void InterFace_Test::Assign_tests(){
     ///Beginning Use and Tests
     /// -----------------------------------------------------------------
     ///Assign 0
-    //Only assigns element
-    if_obj0.Assign(&e1, &e2,  false);
+    //Only assign elements
+    if_obj0.Assign( &e1, faceID_of_e1, &e2, faceID_of_e2 );
     _test(e1 == *(if_obj0.InnerParent()) );
     _test(e2 == *(if_obj0.OuterParent()) );
     //assigns nodes manually
@@ -94,7 +94,7 @@ void InterFace_Test::Assign_tests(){
 
     ///Assign 2
     //Assigns Element and nodes
-    if_obj2.Assign(&e1, &e2, true) ;
+    if_obj2.AssignElementsAndNodes( &e1, &e2 );
     //Test Element sides
     _test( e1 == *(if_obj2.InnerParent()) );
     _test( e2 == *(if_obj2.OuterParent()) );
@@ -106,7 +106,9 @@ void InterFace_Test::Assign_tests(){
 
 
     ///Assign 3
-    if_obj3.Assign(&e1, faceID_of_e1, &e2, faceID_of_e2, true);
+    if_obj3.Assign( &e1, faceID_of_e1, &e2, faceID_of_e2 );
+    // connect the nodes
+    if_obj3.InitialiseNodeVector();
     //Testing correct element sides
     _test(e1 == *(if_obj3.InnerParent()) );
     _test(e2 == *(if_obj3.OuterParent()) );
@@ -177,7 +179,8 @@ void InterFace_Test::Geometry_tests(){
                   if_obj2( &face_FE, &line_stencil, lvars, ivars );
 
     //Assign 0
-    if_obj0.Assign(&e1, &e2, true);
+    if_obj0.AssignElementsAndNodes( &e1, &e2 );
+
     //Assign 1
     if_obj1.Assign(&e1, faceID_of_e1, INSIDE);
     if_obj1.Assign(&e2, faceID_of_e2, OUTSIDE);
@@ -187,7 +190,9 @@ void InterFace_Test::Geometry_tests(){
     if_obj1.Assign(0, &n6, OUTSIDE);
     if_obj1.Assign(1, &n4, OUTSIDE);
     //Assign 2
-    if_obj2.Assign(&e1, faceID_of_e1, &e2, faceID_of_e2, true);
+    if_obj2.Assign( &e1, faceID_of_e1, &e2, faceID_of_e2 );
+    if_obj2.InitialiseNodeVector();
+
 
 
     ///Beginning Geometry Tests
