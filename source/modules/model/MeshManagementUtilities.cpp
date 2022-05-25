@@ -307,14 +307,14 @@ template void detachNeighborsFrom( InterFace<3>* const );
              @author SKM 14/8/21
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
+size_t  findContiguousMeshPatches( typename plf::colony<CELL<dim>>::iterator begin,
                                    typename plf::colony<CELL<dim>>::iterator end,
                                    map<string,vector<CELL<dim>*> >& mesh_patches )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
      if ( begin == end ) {
-             csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
-                                         "input CELL pointer range is empty." );
+             csmp_error.Note( WARNING, "findContiguousMeshPatches:",
+                                       "input CELL pointer range is empty." );
             return 0U;
         }
      
@@ -332,14 +332,14 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
       // if no contiguous cells could be found
       if ( cells_contiguous_subset.empty() ) {
-           csmp_error.Note( WARNING, "findStandAloneMeshPatches:",
-                                       "No contiguous cells found. Is the neighbor connectivity missing? - nothing was done" );
+           csmp_error.Note( WARNING, "findContiguousMeshPatches:",
+                                     "No contiguous cells found. Is the neighbor connectivity missing? - nothing was done" );
            return 0U;
         }
 
       // if the first flood-fill reached all elements of the region or more on the outside it is contiguous
       if ( cells.size() <= cells_contiguous_subset.size() ) {
-           std::cout <<"\nfindStandAloneMeshPatches: ";
+           std::cout <<"\n"<<"findContiguousMeshPatches: ";
            std::cout <<"mesh is already contiguous, nothing was done."<< std::endl;
            
            // creating name for contiguous patch from finite-element type
@@ -372,7 +372,7 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
                 patch_name += to_string( cells_contiguous_subset.size() );
                 patch_name +="cells";
                 if ( n_patches == 1U ) {
-                     cout <<"\nfindStandAloneMeshPatches: ";
+                     cout <<"\n"<<"findContiguousMeshPatches: ";
                      cout <<"mesh is divided into disconnected patch(es):\n";
                   }
                 cout <<"\t\t\t'"<< patch_name <<"'";
@@ -383,12 +383,12 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
                                                    move( vector<CELL<dim>*>( cells_contiguous_subset.begin(),
                                                                              cells_contiguous_subset.end() ) ) ) );
                 if ( insertion.second == false ) {
-                     csmp_error.Note( ERROR, "findStandAloneMeshPatches:", patch_name,
+                     csmp_error.Note( ERROR, "findContiguousMeshPatches:", patch_name,
                                                "could not be inserted into patch map" );
                   }
                 n_patches++;
               }
-           else csmp_error.Note( ERROR, "findStandAloneMeshPatches:", "patch contains no elements, nothing was done" );
+           else csmp_error.Note( ERROR, "findContiguousMeshPatches:", "patch contains no elements, nothing was done" );
               
            // deleting the cells that constitute the contiguous subset from the cell storage
            cells.erase( remove_if( cells.begin(), cells.end(),
@@ -403,44 +403,44 @@ size_t  findStandAloneMeshPatches( typename plf::colony<CELL<dim>>::iterator beg
 
       return n_patches;
     
-   } // end findStandAloneMeshPatches
+   } // end findContiguousMeshPatches
 
 // 3D version
-template size_t  findStandAloneMeshPatches( plf::colony<Element<3U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Element<3U>>::iterator,
                                             plf::colony<Element<3U>>::iterator,
                                             map<string,vector<Element<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<Face<3U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Face<3U>>::iterator,
                                             plf::colony<Face<3U>>::iterator,
                                             map<string,vector<Face<3U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<InterFace<3U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<InterFace<3U>>::iterator,
                                             plf::colony<InterFace<3U>>::iterator,
                                             map<string,vector<InterFace<3U>*> >& );
 
 // 2D version
-template size_t  findStandAloneMeshPatches( plf::colony<Element<2U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Element<2U>>::iterator,
                                             plf::colony<Element<2U>>::iterator,
                                             map<string,vector<Element<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<Face<2U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Face<2U>>::iterator,
                                             plf::colony<Face<2U>>::iterator,
                                             map<string,vector<Face<2U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<InterFace<2U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<InterFace<2U>>::iterator,
                                             plf::colony<InterFace<2U>>::iterator,
                                             map<string,vector<InterFace<2U>*> >& );
                                             
 // 1D version
-template size_t  findStandAloneMeshPatches( plf::colony<Element<1U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Element<1U>>::iterator,
                                             plf::colony<Element<1U>>::iterator,
                                             map<string,vector<Element<1U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<Face<1U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<Face<1U>>::iterator,
                                             plf::colony<Face<1U>>::iterator,
                                             map<string,vector<Face<1U>*> >& );
 
-template size_t  findStandAloneMeshPatches( plf::colony<InterFace<1U>>::iterator,
+template size_t  findContiguousMeshPatches( plf::colony<InterFace<1U>>::iterator,
                                             plf::colony<InterFace<1U>>::iterator,
                                             map<string,vector<InterFace<1U>*> >& );
 

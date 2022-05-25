@@ -78,7 +78,7 @@ bool MeshManager_Test::CheckConnectivityOfModel3D( Model<3>& model )
       }
     else {
          map<string,vector<Element<3U>*> > elmt_map3;
-         _test( findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), elmt_map3 ) > 1 );
+         _test( findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), elmt_map3 ) > 1 );
          cout <<"\nMeshManager_Test::CheckConnectivityOfModel3D: the model is discontiguous and consists of the mesh patches:";
          for ( auto& it : elmt_map3 ) {
               cout <<"\n\t\t'"<< it.first <<"': "<< it.second.size() <<" elements.";
@@ -87,13 +87,13 @@ bool MeshManager_Test::CheckConnectivityOfModel3D( Model<3>& model )
     cout << "\n\nExamining the connectivity of  Faces: " << mesh.Faces() << "\n";
     if ( mesh.Faces() > 0 ) {
         map<string,vector<Face<3U>*> >  face_map3;
-        _test( findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) >= 1 );
+        _test( findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map3 ) >= 1 );
         cout << "\nInterconnected faces: " << (*face_map3.begin()).second.size() << "\n";
       }
     cout << "\nExamining the connectivity of  Interfaces: " << mesh.InterFaces() << "\n";
     if ( mesh.InterFaces() > 0 ) {
         map<string,vector<InterFace<3U>*> >  iface_map3;
-        _test( findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) >= 1 );
+        _test( findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map3 ) >= 1 );
         cout << "\nInterconnected Interfaces: " << (*iface_map3.begin()).second.size() << "\n";
       }
     
@@ -435,7 +435,7 @@ bool MeshManager_Test::Test_MeshTraversal3D()
     _test( elements.size() == model_domain.Cells() );
     
     map<string,vector<Element<3>*> > elmt_patches;
-    size_t patches = findStandAloneMeshPatches( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd(),
+    size_t patches = findContiguousMeshPatches( model.Mesh().ElementsBegin(), model.Mesh().ElementsEnd(),
                                                 elmt_patches );
     _test( patches == 1 );
     _test( (*elmt_patches.begin()).second.size() == model_domain.Cells() );

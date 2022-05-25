@@ -50,19 +50,64 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
       
       // BINARY IO
       // ---------
-      const string model_name("Dyke_Split");
+      const string model_name("ModelDykeAllLayersSplit");
       if ( verbose_ ) {
            cout <<"\nNSYS_SplitBoundaryMatch_Test::run: "<<this->getName()<<endl<<endl;
            cout <<"Building Model: '"<< model_name <<"''"<< endl;
         }
       const string variablesFile("ANSYS_SplitBoundaryMatch_Test-variables.txt");
+      // SPLIT BOUNDARY OBJECTS ARE ALREADY CREATED DURING MODEL CONSTRUCTION
       ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true, true );
       Region<3U>    model_domain(model.Region("Model"));
       model_domain.UpdateMemberIndexes();
       VTK_Interface<3U>  vtk_output;
       VTU_Interface<3U>  vtu_output( model );
-      
-      return true;
+
+    // 0. assigning unique values to visualise the model regions
+    // ---------------------------------------------------------
+     double evar(1.);
+     cerr <<"\nrun: assigning values to unique regions:\n";
+     for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it ) {
+          cerr <<"\t'"<< (*it).first <<"'";
+          (*it).second.InputPropertyValue( "element variable", makeScalar(PLAIN,evar) );
+          evar += 1.;
+       }
+     cerr << endl;
+     // painting internal boundary elements (they are flagged neither INTERNAL nor IRREGULAR
+     const double color(0.);
+     const csmp::Index evar_key(model.Database().StorageKey("element variable"));
+     for ( auto eit=model_domain.PerimeterCellsBegin(); eit!=model_domain.CellsEnd(); ++eit )
+       (*eit)->Store( evar_key, makeScalar(PLAIN,color) );
+
+     // "nodal variable" is assigned 0 in interior and 2 on perimeter; if perimeter is not
+     // flagged correctly a value of 5 is assigned to the perimeter node
+     const csmp::Index    nvar_key(model.Database().StorageKey("nodal variable"));
+     multiset<Point<3U> > split_nodes;
+     model_domain.InputPropertyValue( "nodal variable", makeScalar(PLAIN,0.) );
+     for ( auto nit=model_domain.PerimeterNodesBegin(); nit!=model_domain.NodesEnd(); ++nit ) {
+          // external model boundary
+          if ( (*nit)->AtBoundary() != NOT && (*nit)->AtBoundary() != INTERNAL )
+            (*nit)->Store( nvar_key, makeScalar(PLAIN,5.) );
+          // internal (split) boundary
+          else {
+               (*nit)->Store( nvar_key, makeScalar(PLAIN,2.) );
+               split_nodes.insert( (*nit)->Coordinate() );
+            }
+       }
+  
+     if ( verbose_ ) {
+          vtk_output.OutputDataToVTK( model, "test-evar", "element variable", 0U );
+          vtk_output.OutputDataToVTK( model, "test-nvar", "nodal variable", 0U );
+          // output of perimeter elements to VTK (whole perimenter gets identified)
+          outputRegionBoundaryToVTK( model, "Model", "model-boundary" );
+       }
+
+     // 1. checking which boundaries were created
+     // ---------------------------------------------------------------------------------------
+     model.SplitBoundariesOut();
+     // TODO: create a series of tests here that verify that the SplitBoundaries created have indeed the correct surface area
+
+    return true;
       
  } // end TestForDiscontiguousModel
 
@@ -78,6 +123,9 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
           }
      */
      
+     
+     
+     
 
 
 
@@ -88,6 +136,8 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForDiscontiguousModel()
       
       To avoid self-intersection (for which the   findSplitInterFace() mesh utility function does not work,
       a model subregion other than "Model" has to be specified as input.
+      
+      @todo Testing is missing, but could be based on checks of the surface area of the created splitboundary etc.
 */
 bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
  {
@@ -157,7 +207,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
       model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
-    const size_t model_regions = model.CountAndLabelRegions( region_tag.c_str(), region_names );
+    const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
     assert( model_regions > 1U );
 
       // reports local ids of shared face on either side of the split boundary
@@ -208,8 +258,8 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
             const csmp::Index var_key = model.Database().StorageKey("nodal variable");
             PrintSplitBoundaryNodeVariableVector( var_key, splitBoundary1.NodesBegin(), splitBoundary1.NodesEnd(), INSIDE );
             set<string> var_names{"nodal variable"};
-            // TODO: this method is broken
-            // vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
+            // TODO: this method is broken because it expects that 'node_vec' contains all duplicated nodes
+            vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );
          }
      }
    else {
@@ -281,6 +331,8 @@ void ANSYS_SplitBoundaryMatch_Test::PrintSplitBoundaryNodeVariableVector( const 
     cout << endl << endl;
      
  } // end PrintSplitBoundaryNodeVariableVector
+
+
 
 
 

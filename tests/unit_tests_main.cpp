@@ -170,10 +170,10 @@ int main()
   {
   const bool verbose(false);
 
-  const bool test_fundamentals(true),
-             test_interdependent1(true),
-             test_interdependent2(true),
-             test_composite(true),
+  const bool test_fundamentals(false),
+             test_interdependent1(false),
+             test_interdependent2(false),
+             test_composite(false),
              test_refactoring(true),
              test_new_developments(false),
              test_interfaces{false};
@@ -193,24 +193,26 @@ int main()
     // REFACTORING: tests related to code that is currently being refactored
     // ---------------------------------------------------------------------
     if ( test_refactoring ) {
-      cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
-      TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
-      
-      // TODO: review and get these tests to run (in this sequence)
-// OK      refactored.addTest( new ModelBasics_Test() );
-//      refactored.addTest( new ANSYS_Model2D_Test() );
-      refactored.addTest( new Boundary_Test() );
+        cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
+        TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+        
+        // TODO: review and get these tests to run (in this sequence)
+  // OK      refactored.addTest( new ModelBasics_Test() );
+  //      refactored.addTest( new ANSYS_Model2D_Test() );
+  //      refactored.addTest( new SplitBoundary_Test() );
 
-//      refactored.addTest( new MeshManager_Test() );
-//      refactored.addTest( new NodeManifoldManager_Test() );
+  refactored.addTest( new SparseMatrix_Test() );
 
-// FAILS TO RUN	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
+  //      refactored.addTest( new MeshManager_Test() );
+  //      refactored.addTest( new NodeManifoldManager_Test() );
 
-      refactored.run();
-      fails_refactoring = refactored.report();
-      refactored.free();
-      cerr << "\nunit_tests_main: 5. CSMP refactored functionality: Total unit test failures: " << fails_refactoring << endl;
-    }
+  // FAILS TO RUN	  basic.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
+
+        refactored.run();
+        fails_refactoring = refactored.report();
+        refactored.free();
+        cerr << "\nunit_tests_main: 5. CSMP refactored functionality: Total unit test failures: " << fails_refactoring << endl;
+      }
 
 
     // NEW STUFF: tests related to code that is currently being refactored
@@ -278,7 +280,7 @@ int main()
       // utilities tests
       basic.addTest( new Matrix_Test(verbose) );
       basic.addTest( new DenseMatrix_Test(verbose) );
-      basic.addTest( new SparseMatrix_Test(verbose) );
+      basic.addTest( new SparseMatrix_Test() );
       basic.addTest( new CompressedRowMatrix_Test() );
       basic.addTest( new CubicSpline_Test() );
       basic.addTest( new FibonacciHeap_Test() );

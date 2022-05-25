@@ -286,7 +286,7 @@ ModelTopology  test_CreateSimplestPolyElement2DModel( VSet<2U>& vset )
     mesh_topology.AddDomain( "TOP",    set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{7,8} );
     mesh_topology.AddDomain( "LEFT",   set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{9} );
 
-    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.InterFaces() );
+    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.Interfaces() );
     assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
 
     // adding corresponding materials to VSet
@@ -768,7 +768,7 @@ ModelTopology  test_Create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     mesh_topology.AddDomain( "horizontal_splitboundary", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{36,37,38,39} );
     mesh_topology.AddDomain( "inclined_split_boundary", set<string>{"ISOPARAMETRIC_LINEAR_BAR"}, vector<size_t>{40,41,42} );
 
-    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.InterFaces() );
+    assert( mesh_topology.Cells() == vset.Elements() + vset.Faces() + vset.Interfaces() );
     assert( mesh_topology.Cells() == vset.TotalNumberOfCells() );
 
     // adding corresponding materials to VSet

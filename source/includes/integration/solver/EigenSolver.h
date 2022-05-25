@@ -1,0 +1,44 @@
+#ifndef CSMP_EIGEN_SOLVER_H
+#define CSMP_EIGEN_SOLVER_H
+
+#include "Solver.h"
+
+/**
+  @brief a csmp-eigen interface solver class
+  @author Luat Khoa Tran
+ */
+namespace csmp {
+
+class SparseMatrix;
+class CompressedRowMatrix;
+
+class EigenSolver : public Solver
+  {
+  public:
+    EigenSolver() = default;
+    virtual ~EigenSolver() = default;
+
+  protected:
+
+   /**
+     @brief solves matrix equation A x = b using direct Eigen Matrix solver.
+     
+     @param A csmp sparse matrix
+     @param b RHS vector
+     @param x vector of unknowns
+     @param no_unknowns degrees of freedom of the problem
+   */
+    virtual void SolveMatrixEquation(SparseMatrix& A,
+                                     std::vector<double>& b,
+                                     std::vector<double>& x,
+                                     size_t no_unknowns);
+
+    virtual void SolveMatrixEquation(CompressedRowMatrix& A,
+                                     std::vector<double>& b,
+                                     std::vector<double>& x,
+                                     size_t no_unknowns);
+  };
+
+} // end namespace csmp
+
+#endif

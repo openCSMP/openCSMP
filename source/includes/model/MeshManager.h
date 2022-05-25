@@ -144,11 +144,12 @@ public:
                                                           typename std::vector<Face<dim>*>::iterator last );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
-  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
-                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
+  std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
+                                           const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >&,
+                                           bool multiplicate_perimeter_nodes );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
-  std::vector<InterFace<dim>*>  CreateInterFacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
+  std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
@@ -186,6 +187,16 @@ public:
                                          const LocalVariables& face_variables,
                                          const IntegrationPointVariables& face_integration_point_variables,
                                          bool delete_original_face=true );
+
+/// multiplicates nodes and replaces (deletes)  lower-dimensional Element with InterFace object
+InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
+                                                 csmp::Element<dim>* inner_eptr,
+                                                 csmp::Element<dim>* outer_eptr,
+                                                 uint32_t adjacent_face_of_inner_element,
+                                                 uint32_t adjacent_face_of_outer_element,
+                                                 const LocalVariables& interface_variables,
+                                                 const IntegrationPointVariables& interface__ipoint_vars,
+                                                 const LocalVariables& node_variables );
 
   /// creates face and assigns nodes and higher-dimensional neighbors @note the face neighbor element pointers are not assigned;
   Face<dim>* const AddFace( Element<dim>* const inner_parent, uint32_t inner_parent_face_id,

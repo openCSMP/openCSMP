@@ -696,8 +696,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     set<Element<dim>*> shared_parents;
     for ( auto i{0U}; i<n_parents; ++i ) {
          assert( (*nit)->Parent(i) != nullptr );
-         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+         if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+         if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
          shared_parents.insert( (*nit)->Parent(i) );
       }
       
@@ -710,8 +710,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
          const auto parents{(*nit)->Parents()};
          for ( auto i{0U}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
-              if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-              if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+              if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+              if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
               if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
                 temp.insert( (*nit)->Parent(i) );
            }
@@ -721,15 +721,15 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       
     // drawing the results together
     assert( !shared_parents.empty() );
-    if ( shared_parents.size() == 1 ) return make_pair( (*shared_parents.begin()), nullptr );
+    if ( shared_parents.size() == 1U ) return make_pair( (*shared_parents.begin()), nullptr );
     
     // if two parent elements were found, the one on the inside needs to be determined
-    assert( shared_parents.size() == 2 );
+    assert( shared_parents.size() == 2U );
     // initial guess
     pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
     
     // 3D case where face is either a triangle or a quadrilateral
-    if constexpr ( dim == 3 ) {
+    if constexpr ( dim == 3U ) {
          vector<Node<3>*> face_nodes( first, last );
          assert( face_nodes.size() >= 3 );
          // getting normal to face from the first 3 node coordinates
@@ -747,9 +747,9 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       }
     
     // 2D case where the face is line and the non-existing normal points out of the plane
-    if constexpr ( dim == 2 ) {
+    if constexpr ( dim == 2U ) {
          vector<Node<2>*> face_nodes( first, last );
-         assert( face_nodes.size() == 2 );
+         assert( face_nodes.size() == 2U );
          Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
          // rotating this line clockwise to get the normal
          Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
@@ -764,7 +764,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       }
  
      // in a 1D model faces coincide with nodes and have just a single node
-     if constexpr ( dim == 1 ) {
+     if constexpr ( dim == 1U ) {
          // the inside element is that for which the node is node 2
          const uint32_t parent_element{0};
          if ( (*first)->ParentNodeNumber( parent_element ) == 0 ) {

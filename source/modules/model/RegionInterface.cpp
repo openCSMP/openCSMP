@@ -2426,23 +2426,32 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 Numbers the unique regions of the models, labeling their elements with the region number
 as "region identifier".
 
-@parameter vector of region names to retrieve them from the integer keys
+@param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
+@param region_names vector of region names to retrieve them from the integer keys
+
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
-size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelRegions( const char* region_identifier, vector<string>& region_names )
+size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const char* region_identifier, vector<string>& region_names )
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
   REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
 
   // setting element variable up to identify all unique regions - uniquely
-  const string rvariable( region_identifier );
-  if ( !regionComplex.Database().IsDefined( rvariable.c_str() ) )
-    regionComplex.CreateProperty( rvariable.c_str(), "X", SCALAR, ELEMENT );
+  if ( regionComplex.Database().IsDefined( region_identifier ) ) {
+       if ( regionComplex.Database().Placement(region_identifier) != ELEMENT ||
+            regionComplex.Database().Type(region_identifier)      != SCALAR  )
+         csmp_error.Note( ERROR, "RegionInterface<dim,REGION_COMPLEX>::CountAndLabelUniqueRegions:",
+                          region_identifier, "this property must be a scalar placed on the element." );
+    }
+  else
+    regionComplex.CreateProperty( region_identifier, "none", SCALAR, ELEMENT );
 
   // counting the regions and initialising them with the unique identifiers
   region_names.resize( UniqueRegions() );
-  size_t regions( 0 );
+  size_t regions{ 0U };
   for ( auto it = UniqueRegionsBegin(); it != UniqueRegionsEnd(); it++ ) {
-    (*it).second.InputPropertyValue( rvariable.c_str(), makeScalar( PLAIN, static_cast<double>(regions) ) );
+    (*it).second.InputPropertyValue( region_identifier, makeScalar( PLAIN, static_cast<double>(regions) ) );
     region_names[regions] = (*it).first;
     regions++;
   }

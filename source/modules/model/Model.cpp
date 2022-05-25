@@ -257,7 +257,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-     if ( vset.Faces() > 0 || vset.InterFaces() > 0 )
+     if ( vset.Faces() > 0 || vset.Interfaces() > 0 )
        csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
                          "method works only for vsets without Face or InterFace objects as it creates them by itself from lower-dimensiona regions.");
       
@@ -271,7 +271,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
         mesh_topology.ReduceToDomains( regions_file_prefix );
         //    reducing the element data to the desired elements specified in the topology object
         //    if the element numbers in the two are different.
-        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.InterFaces() ) {
+        if ( mesh_topology.Cells() != vset.Elements() + vset.Faces() + vset.Interfaces() ) {
             map<size_t,size_t>  old_and_new_elmtids;
             mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
             vset.ReduceTo( old_and_new_elmtids );
@@ -319,7 +319,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 
          // reporting
          this->RegionsOut();
-         this->BoundariesOut();
+         // this->BoundariesOut(); - was already reported when these were created
       }
 
     // 7. forming SplitBoundaries if a discontiguous model was detected
@@ -341,11 +341,12 @@ if ( mesh_manager_.InterFaces() > 0 )
   integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
 #endif
 
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
     if ( this->Mesh().Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
-         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< this->Mesh().Nodes() <<")";
          cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
     if ( this->Mesh().Faces() > 0 ) {
@@ -360,7 +361,7 @@ if ( mesh_manager_.InterFaces() > 0 )
          assert( volume_ifaces == 0U );
          cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << endl;
 
 } // end Initialize (regionfile,ModelTopology,VSet)
@@ -424,11 +425,12 @@ if ( mesh_manager_.InterFaces() > 0 )
   integrityCheck<dim,InterFace>( mesh_manager_.InterFacesBegin(), mesh_manager_.InterFacesEnd() );
 #endif
 
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << "\nModel '"<< this->Name() <<"' has been established successfully ";
     if ( this->Mesh().Elements() > 0 ) {
          size_t volume_elmts{0U}, surface_elmts{0U}, line_elmts{0U};
-         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts ) << ")";
+         cout <<"(total cells "<< currentCellTypes( this->Mesh(), ELEMENT, volume_elmts, surface_elmts, line_elmts );
+         cout <<", nodes "<< this->Mesh().Nodes() <<")";
          cout <<"\n\t\t\t("<< Mesh().Elements() <<" elements: volumes "<< volume_elmts <<", surfaces "<< surface_elmts <<", lines "<< line_elmts <<")";
       }
     if ( this->Mesh().Faces() > 0 ) {
@@ -443,7 +445,7 @@ if ( mesh_manager_.InterFaces() > 0 )
          assert( volume_ifaces == 0U );
          cout <<"\n\t\t\t("<< Mesh().InterFaces() <<" interfaces: surfaces "<< surface_ifaces <<", lines "<< line_ifaces <<")";
       }
-    cout << "\n============================================================================";
+    cout << "\n==================================================================================================";
     cout << endl;
 
   
@@ -485,7 +487,7 @@ void Model<dim>::Initialize( VSet<dim>& vset )
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
   if ( vset.Faces() > 0 ||
-       vset.InterFaces() > 0 )
+       vset.Interfaces() > 0 )
     csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(VSet):", "Face and InterFace objects not handled by this method.");
 
   // 1. checking for neighbor connectivity and boundary flags
@@ -2936,7 +2938,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
     this->InputBoundariesFromBinary( BinaryBoundariesFileName( model_name ).c_str(), subset_variables );
   
   // 7. reconstructing the splitboundaries, if any
-  if ( vset.InterFaces() > 0 )
+  if ( vset.Interfaces() > 0 )
     this->InputSplitBoundariesFromBinary( BinarySplitBoundariesFileName(model_name).c_str(), subset_variables );
 
   cout << "\nModel<" << dim << ">::InputFromBinaryFile: input from binaries (file set: " << model_name << ") completed successfully.\n\n";

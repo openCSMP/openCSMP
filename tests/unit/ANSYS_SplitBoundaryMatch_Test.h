@@ -13,6 +13,9 @@ template<uint32_t> class SplitBoundary;
 /**
     Tests high level utility function that matches node-matched elements
     across SplitBoundaries created in ANSYS.
+    
+    @todo insert _test() macros into the two test functions deciding on quantities to analyse
+    @todo function that matches node coordinates across interfaces fails in some cases although the interfaces themselves were matched before; fix
 */
 class ANSYS_SplitBoundaryMatch_Test : public Test {
   public:

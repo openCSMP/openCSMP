@@ -199,7 +199,7 @@ size_t VData::Elements() const { return plist.size() - (plist.size() - first_fac
 
 size_t VData::Faces() const { return first_interface_ - first_face_; }
 
-size_t VData::InterFaces() const { return plist.size() - first_interface_; }
+size_t VData::Interfaces() const { return plist.size() - first_interface_; }
 
 /// the plist contains all: elements, faces and interfaces
 size_t VData::TotalNumberOfCells() const { return plist.size(); }
@@ -819,7 +819,7 @@ void VData::ResizeElementTypes( size_t elements )
 void VData::ResizePlist( size_t elements, uint32_t nperelmt )
 {
     assert( Faces() == 0 );
-    assert( InterFaces() == 0 );
+    assert( Interfaces() == 0 );
     vector<int64_t>  empty_vec(nperelmt,0);
     const size_t old_size( plist.size() );
     assert( elements > old_size );
@@ -1368,7 +1368,7 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     ofs <<"};\n";
     
     ofs <<"\nvset.Resize( etypes, npes, epes, ";
-    ofs << Vertices() <<", "<< Faces() <<", "<< InterFaces() <<" );\n";
+    ofs << Vertices() <<", "<< Faces() <<", "<< Interfaces() <<" );\n";
  
   	//--------------------------NODE COORDINATES
     // px, py, pz
@@ -3149,7 +3149,7 @@ void VData::EstablishElementConnectivity3D()
          csmp_error.Note( WARNING, "VData::EstablishElementConnectivity3D:", "Face objects not handled yet" );
          return;
       }
-    if ( InterFaces() > 0 ) {
+    if ( Interfaces() > 0 ) {
          csmp_error.Note( WARNING, "VData::EstablishElementConnectivity3D:", "InterFace objects not handled yet" );
          return;
       }
@@ -3882,7 +3882,7 @@ elementToVTK( vdata, nbr, "b_interior_tetrahedron" );
     // (and assuming that there are no Faces or InterFaces,
     //  or lower-dimensional elements covering the sides of the tetrahedra)
     assert( vdata.Faces() == 0 );
-    assert( vdata.InterFaces() == 0 );
+    assert( vdata.Interfaces() == 0 );
     const size_t n_elements_new{ vdata.Elements() + 1 };
     if ( vdata.HybridElementTypeMesh() ) {
          assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(cnr)) ) );
