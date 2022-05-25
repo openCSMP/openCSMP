@@ -254,13 +254,13 @@ int main()
       basic.addTest( new Face_Test() );
       basic.addTest( new InterFace_Test() );
       basic.addTest( new ModelSubDomain_Test() );       
-      basic.addTest( new Region_Test(false) );          
-      basic.addTest( new BoundaryInterface_Test(false) );
+      basic.addTest( new Region_Test() );
+      basic.addTest( new BoundaryInterface_Test() );
       basic.addTest( new ModelBasics_Test() );
       
       //mesh manager    
       basic.addTest(new MeshManager_Test());
-      basic.addTest(new BoundaryInterface_Test(true));
+      basic.addTest(new BoundaryInterface_Test());
       basic.addTest(new Boundary_Test());
       
       // Variable tests
