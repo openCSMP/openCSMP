@@ -262,11 +262,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
 
   cout << "\nMeshManager<" << dim << ">::Initialize: ";
   cout << "input VSet contains the following finite element types:\n\t";
-  for ( typename set<CSMP_FEM_TYPE>::const_iterator
-        iit = input_etypes.begin(); iit != input_etypes.end(); iit++ ) {
-      cout << parseFiniteElementType( (*iit) ) << "  ";
-      if ( !fem_manager_.ContainsElementType( *iit ) ) {
-        cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( *iit ) << endl;
+  for ( auto iit : input_etypes ) {
+      cout << parseFiniteElementType( iit ) << "  ";
+      if ( !fem_manager_.ContainsElementType( iit ) ) {
+        cerr << "\n\n\tFinite element type not available: " << parseFiniteElementType( iit ) << endl;
         fem_manager_.Out();
         throw Exception( FATAL_ERROR,
                          "MeshManager<dim>::Initialize(VSet):",
@@ -342,27 +341,41 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   if ( vset.WithNeighbourConnectivity() ) {
        if ( csmp_error.Verbose() )
           cout << "\nMeshManager<" << dim << ">::Initialize: assigning neighbors to elements..." << endl;
-
-       for ( auto& e : elements_ ) {
-            const int8_t csmpElementType = (!hybrid_element_mesh_) ? vset.ElementType( 0U ) : vset.ElementType( e.Idx() );
-            const size_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
-//assert( n_neighbors == distance(vset.PfvertsBegin(e.Idx()),vset.PfvertsEnd(e.Idx())) );
-
-            for ( auto j{0U}; j < n_neighbors; ++j ) {
-                  const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
-                  if ( index >= n_elmts ) {
-                       cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
-                       csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
-                    }
-                  else if ( index >= 0 )
-                    e.Assign( j, &(*next(elements_.begin(),index)) );
-                  // negative numbers indicate boundaries where nothing needs to be done since neighbors are initialised to null pointers anyway
-                  //  e.Assign( nidx++, static_cast<Element<dim>*>(nullptr) );
-              }
+       if ( !hybrid_element_mesh_ ) {
+            const uint32_t n_neighbors = fem_manager_.E( vset.ElementType( 0U ) )->Neighbors();
+            for ( auto& e : elements_ )
+              for ( auto j{0U}; j < n_neighbors; ++j ) {
+                      const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
+                      if ( index >= n_elmts ) {
+                           cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
+                           csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
+                        }
+                      // only if there is a neighbor something needs to be done; else nullptr was aready assigned
+                      else if ( index >= 0 )
+                        e.Assign( j, &(*next(elements_.begin(),index)) );
+                  }
          }
+       // if this is a hybrid element mesh
+       else {
+           for ( auto& e : elements_ ) {
+                const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( e.Idx() ));
+                const uint32_t n_neighbors( fem_manager_.E( csmpElementType )->Neighbors() );
+                for ( auto j{0U}; j < n_neighbors; ++j ) {
+                      const int64_t  index{ vset.Pfvert( e.Idx(), j ) };
+                      if ( index >= n_elmts ) {
+                           cerr <<"\n\t"<< index <<" vs. number of elements = "<< n_elmts << endl;
+                           csmp_error.Note( ERROR, "MeshManager::Initialise: ", "element ID in 'pfverts' out of range.");
+                        }
+                      // only if there is a neighbor something needs to be done; else nullptr was aready assigned
+                      else if ( index >= 0 )
+                        e.Assign( j, &(*next(elements_.begin(),index)) );
+                  }
+             }
+        }
     }
   else
-  csmp_error.Note( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
+    csmp_error.Note( WARNING, "MeshManager::Initialize:", "Input VSet does not contain any neighbor connectivity; nothing was done." );
+
 
   // ----------------------------------------------------------
   // 3. constructing the Faces using the VSet node information
@@ -2763,39 +2776,39 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
                      ptr2->Assign( face_e2, ptr1 );
                   }
                 // else this is a manifold and two most suitable neighbors must be found
-                else if ( n_face_nbors > 2 ) { // TODO: test
+                else if ( n_face_nbors > 2 ) {
                      // finding all possible combinations of surface elements
-                     vector<int64_t> sequence( n_face_nbors );
+                     vector<uint32_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
-                     const size_t            n_samples{2};
-                     deque<vector<int64_t> >  combinations;
+                     const uint32_t            n_samples{2U};
+                     deque<vector<uint32_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
-                     map<double,size_t>  ordered_combinations;
+                     map<double,uint32_t>  ordered_combinations;
                      for ( auto i{0U}; i < n_combinations; ++i ) {
-                          CELL<3>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
-                          CELL<3>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
+                          CELL<3U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
+                          CELL<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
                           assert( ptr2 != nullptr );
-                          const double angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
-                                                   angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
-                          // using smallest angle
-                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double acute_angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
+                                                       angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
-                     // the first element in the map has the smallest angle
-                     const size_t combi   = (*ordered_combinations.begin()).second;
-                     CELL<3>* const ptr1  = (*next(it.second.begin(),combinations[combi][0])).first;
-                     CELL<3>* const ptr2  = (*next(it.second.begin(),combinations[combi][1])).first;
-                     assert( ptr1 != nullptr );
-                     assert( ptr2 != nullptr );
-                     const uint32_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
-                     const uint32_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
-                     // uff! - finally.
-                     ptr1->Assign( face_e1, ptr2 );
-                     ptr2->Assign( face_e2, ptr1 );
-                  }
+                     // processing the combinations until there are no more pairs of cells left to process
+                     for ( const auto& n : ordered_combinations ) {
+                           // starting with the first combination with the smallest angle between the line elements
+                           CELL<3U>* const ptr1 = (*next(it.second.begin(),combinations[n.second][0])).first;
+                           CELL<3U>* const ptr2 = (*next(it.second.begin(),combinations[n.second][1])).first;
+                           const uint32_t face_e1  = (*next(it.second.begin(),combinations[n.second][0])).second;
+                           const uint32_t face_e2  = (*next(it.second.begin(),combinations[n.second][1])).second;
+                           // checking whether cells have already been assigned a neighbor
+                           if ( ptr1->Neighbor(face_e1) != nullptr || ptr2->Neighbor(face_e2) != nullptr )
+                             continue;
+                           ptr1->Assign( face_e1, ptr2 );
+                           ptr2->Assign( face_e2, ptr1 );
+                        }
+                   }
                 // else no assignments have to be made as there is no neighbor
              }
         }
@@ -2826,7 +2839,7 @@ void MeshManager<dim>::BuildSurfaceConnectivity( typename std::vector<CELL<dim>*
            for ( auto& it : cell_pairs ) {
                 size_t n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
-                if ( n_face_nbors == 2 ) {
+                if ( n_face_nbors == 2U ) {
                      CELL<2>* const ptr1  = (*it.second.begin()).first;
                      CELL<2>* const ptr2  = (*it.second.rbegin()).first;
                      assert( ptr1 != nullptr );
@@ -2889,7 +2902,8 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                 for ( auto face{0U}; face < n_faces; ++face ) {
                      // now there is only a single corner node corresponding to the opposite face of the line element
                      // (node 1 is at Face 0 and node 0 at Face 1 as for all simplex elements)
-                     auto it = cell_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ), map<CELL<dim>*,uint32_t>{make_pair((*first),face)} ) );
+                     auto it = cell_pairs.insert( make_pair( (*first)->N( n_faces - face - 1U ),
+                                                              map<CELL<dim>*,uint32_t>{make_pair((*first),face)} ) );
                      // if the face record already exists, the new element pointer - face is added to it
                      if ( it.second == false )
                        (*it.first).second.insert( make_pair( (*first), face ) );
@@ -2902,7 +2916,7 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
  
            // processing the results, connecting the cells to one another
            for ( auto& it : cell_pairs ) {
-                size_t n_face_nbors{ it.second.size() };
+                auto n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
                 if ( n_face_nbors == 2U ) {
                      CELL<dim>* const ptr1  = (*it.second.begin()).first;
@@ -2913,32 +2927,35 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
                      ptr2->Assign( face_e2, ptr1 );
                   }
                 // else this is a manifold and two most suitable neighbors must be found
-                else if ( n_face_nbors > 2U ) { // TODO: test
-                     // finding all possible combinations of surface elements
-                     vector<int64_t> sequence( n_face_nbors );
+                else if ( n_face_nbors > 2U ) {
+                     // finding all possible combinations of line elements
+                     vector<uint32_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
-                     const size_t            n_samples{2};
-                     deque<vector<int64_t> >  combinations;
+                     const uint32_t           n_samples{2U};
+                     deque<vector<uint32_t>>  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of lines with the smallest acute angle between them
-                     map<double,size_t>  ordered_combinations;
+                     map<double,uint32_t>  ordered_combinations;
                      for ( auto i{0U}; i < n_combinations; ++i ) {
                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
-                          const double angle = angleBetweenLineCells( ptr1, ptr2 );
-                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double acute_angle = angleBetweenLineCells( ptr1, ptr2 );
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
-                     // the first element in the map has the smallest angle
-                     const size_t combi    = (*ordered_combinations.begin()).second;
-                     CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
-                     CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
-                     const uint32_t face_e1  = (*next(it.second.begin(),combinations[combi][0])).second;
-                     const uint32_t face_e2  = (*next(it.second.begin(),combinations[combi][1])).second;
-                     // uff! - finally.
-                     ptr1->Assign( face_e1, ptr2 );
-                     ptr2->Assign( face_e2, ptr1 );
+                     // processing the combinations until there are no more pairs of cells left to process
+                     for ( const auto& n : ordered_combinations ) {
+                           // starting with the first combination with the smallest angle between the line elements
+                           CELL<dim>* const ptr1 = (*next(it.second.begin(),combinations[n.second][0])).first;
+                           CELL<dim>* const ptr2 = (*next(it.second.begin(),combinations[n.second][1])).first;
+                           const uint32_t face_e1  = (*next(it.second.begin(),combinations[n.second][0])).second;
+                           const uint32_t face_e2  = (*next(it.second.begin(),combinations[n.second][1])).second;
+                           // checking whether cells have already been assigned a neighbor
+                           if ( ptr1->Neighbor(face_e1) != nullptr || ptr2->Neighbor(face_e2) != nullptr )
+                             continue;
+                           ptr1->Assign( face_e1, ptr2 );
+                           ptr2->Assign( face_e2, ptr1 );
+                        }
                   }
                 // else no assignments have to be made as there is no neighbor
              }
@@ -2968,9 +2985,9 @@ void MeshManager<dim>::BuildLineConnectivity( typename std::vector<CELL<dim>*>::
              
            // processing the results, connecting the elements to one another
            for ( auto& it : cell_pairs ) {
-                size_t n_face_nbors{ it.second.size() };
+                auto n_face_nbors{ it.second.size() };
                 // if there is just a single matching neighbor
-                if ( n_face_nbors == 2 ) {
+                if ( n_face_nbors == 2U ) {
                      CELL<1>* const ptr1  = (*it.second.begin()).first;
                      CELL<1>* const ptr2  = (*it.second.rbegin()).first;
                      const uint32_t face_e1 = (*it.second.begin()).second;
@@ -3069,10 +3086,10 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                 // else this is an interface manifold and two most suitable surface neighbors must be found
                 else if ( n_face_nbors > 2U ) { // TODO: test
                      // finding all possible combinations of surface elements
-                     vector<int64_t> sequence( n_face_nbors );
+                     vector<uint32_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
-                     const size_t n_samples{2U};
-                     deque<vector<int64_t> >  combinations;
+                     const uint32_t n_samples{2U};
+                     deque<vector<uint32_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces or line elements with the smallest acute angle between them
                      map<double,size_t>  ordered_combinations;
@@ -3081,24 +3098,24 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                           InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
                           assert( ptr1 != nullptr );
                           assert( ptr2 != nullptr );
-                          const double angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
-                                                   angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
-                          // using smallest angle
-                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double acute_angle = ( ptr1->IsSurface() && ptr2->IsSurface() ) ?
+                                                       angleBetweenSurfaceCells( ptr1, ptr2 ) : angleBetweenLineCells( ptr1, ptr2 );
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
-                     // the first element in the map has the smallest angle
-                     const size_t combi = (*ordered_combinations.begin()).second;
-                     InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
-                     InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
-                     assert( ptr1 != nullptr );
-                     assert( ptr2 != nullptr );
-                     const uint32_t face_e1 = (*next(it.second.begin(),combinations[combi][0])).second;
-                     const uint32_t face_e2 = (*next(it.second.begin(),combinations[combi][1])).second;
-                     // uff! - finally.
-                     ptr1->Assign( face_e1, ptr2 );
-                     ptr2->Assign( face_e2, ptr1 );
+                     // processing the combinations until there are no more pairs of cells left to process
+                     for ( const auto& n : ordered_combinations ) {
+                           // starting with the first combination with the smallest angle between the line elements
+                           InterFace<3U>* const ptr1 = (*next(it.second.begin(),combinations[n.second][0])).first;
+                           InterFace<3U>* const ptr2 = (*next(it.second.begin(),combinations[n.second][1])).first;
+                           const uint32_t face_e1  = (*next(it.second.begin(),combinations[n.second][0])).second;
+                           const uint32_t face_e2  = (*next(it.second.begin(),combinations[n.second][1])).second;
+                           // checking whether cells have already been assigned a neighbor
+                           if ( ptr1->Neighbor(face_e1) != nullptr || ptr2->Neighbor(face_e2) != nullptr )
+                             continue;
+                           ptr1->Assign( face_e1, ptr2 );
+                           ptr2->Assign( face_e2, ptr1 );
+                        }
                   }
                 // else no assignments have to be made as there is no neighbor
              }
@@ -3147,30 +3164,33 @@ void MeshManager<dim>::BuildInterFaceConnectivity( typename std::vector<InterFac
                 // else this is a manifold and two most suitable neighbors must be found
                 else if ( n_face_nbors > 2U ) {
                      // finding all possible combinations of surface elements
-                     vector<int64_t> sequence( n_face_nbors );
+                     vector<uint32_t> sequence( n_face_nbors );
                      iota( sequence.begin(), sequence.end(), 0 ); // fill 0..n-1
-                     const size_t n_samples{2U};
-                     deque<vector<int64_t> >  combinations;
+                     const uint32_t n_samples{2U};
+                     deque<vector<uint32_t> >  combinations;
                      const size_t n_combinations = createUniqueCombinations( sequence, n_samples, combinations );
                      // finding the combination of surfaces with the smallest acute angle between them
-                     map<double,size_t>  ordered_combinations;
+                     map<double,uint32_t>  ordered_combinations;
                      for ( auto i{0U}; i < n_combinations; ++i ) {
                           InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[i][0])).first;
                           InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[i][1])).first;
-                          const double angle = angleBetweenLineCells( ptr1, ptr2 );
-                          const double acute_angle = (angle > 90.) ? 180. -angle : angle;
+                          const double acute_angle = angleBetweenLineCells( ptr1, ptr2 );
                           // ordering
                           ordered_combinations.insert( make_pair(acute_angle,i) );
                        }
-                     // the first element in the map has the smallest angle
-                     const size_t combi = (*ordered_combinations.begin()).second;
-                     InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[combi][0])).first;
-                     InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[combi][1])).first;
-                     const uint32_t face_e1  = (*next(it.second.begin(),combinations[combi][0])).second;
-                     const uint32_t face_e2  = (*next(it.second.begin(),combinations[combi][1])).second;
-                     // uff! - finally.
-                     ptr1->Assign( face_e1, ptr2 );
-                     ptr2->Assign( face_e2, ptr1 );
+                     // processing the combinations until there are no more pairs of cells left to process
+                     for ( const auto& n : ordered_combinations ) {
+                           // starting with the first combination with the smallest angle between the line elements
+                           InterFace<2U>* const ptr1 = (*next(it.second.begin(),combinations[n.second][0])).first;
+                           InterFace<2U>* const ptr2 = (*next(it.second.begin(),combinations[n.second][1])).first;
+                           const uint32_t face_e1  = (*next(it.second.begin(),combinations[n.second][0])).second;
+                           const uint32_t face_e2  = (*next(it.second.begin(),combinations[n.second][1])).second;
+                           // checking whether cells have already been assigned a neighbor
+                           if ( ptr1->Neighbor(face_e1) != nullptr || ptr2->Neighbor(face_e2) != nullptr )
+                             continue;
+                           ptr1->Assign( face_e1, ptr2 );
+                           ptr2->Assign( face_e2, ptr1 );
+                        }
                   }
                 // else no assignments have to be made as there is no neighbor
              }

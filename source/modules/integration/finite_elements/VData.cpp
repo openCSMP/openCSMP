@@ -2940,8 +2940,8 @@ void  VData::EstablishElementConnectivity2D()
                 else { // n_connections > 1 )
                      // finding the pair of most closely aligned line elements starting at node
                      // establish element combinations
-                     std::vector<int64_t>    joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
-                     const size_t            n_elmts_to_combine(2U);
+                     vector<int64_t>         joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
+                     const int64_t           n_elmts_to_combine(2U);
                      deque<vector<int64_t> > combinations;
                      if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
                        csmp_error.Note( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
@@ -3261,7 +3261,7 @@ void VData::EstablishElementConnectivity3D()
                    // finding the pair of most closely aligned line elements starting at node
                    // establish element combinations
                    vector<int64_t>         joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
-                   const size_t            n_elmts_to_combine(2U);
+                   const int64_t           n_elmts_to_combine(2U);
                    deque<vector<int64_t> > combinations;
                    if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
                      csmp_error.Note( ERROR, "EstablishElementConnectivity2D", "no combinations between elements available");
@@ -3365,7 +3365,7 @@ void VData::EstablishElementConnectivity3D()
                    std::vector<int64_t>  joint_surf_elmts;
                    joint_surf_elmts.reserve( (*it).second.size() );
                    for ( const auto& i : (*it).second ) joint_surf_elmts.push_back( i.first ); // actual element ids
-                   const size_t           n_elmts_to_combine(2U);
+                   const int64_t           n_elmts_to_combine(2U);
                    deque<vector<int64_t> > combinations;
                    if ( createUniqueCombinations( joint_surf_elmts, n_elmts_to_combine, combinations ) == 0 )
                      csmp_error.Note( ERROR, "EstablishElementConnectivity3D", "no combinations between elements available");
@@ -3419,7 +3419,6 @@ void VData::EstablishElementConnectivity3D()
                          assert ( unassigned_elmt >= 0 );
                          // finding the correct side of the surface element and assigning a bflag to it
                          const size_t boundary_face = (*(*it).second.find(unassigned_elmt)).second;
-                         // TODO: one could narrow down which boundary this is, but it will not be used later
                          pfverts[unassigned_elmt][boundary_face] = IRREGULAR;
                       }
                }

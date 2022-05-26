@@ -44,7 +44,7 @@ FiniteElementManager::FiniteElementManager()
  
 
 FiniteElementManager::FiniteElementManager( uint32_t dim, 
-                                            size_t interpolation_order,
+                                            uint32_t interpolation_order,
                                             bool isoparametric )
   : dimensions(dim), 
     interpolation(interpolation_order),
@@ -164,14 +164,14 @@ FiniteElement*  FiniteElementManager::E( CSMP_FEM_TYPE e_type ) const
  }
 
 
-size_t  FiniteElementManager::NodesOfElementType( CSMP_FEM_TYPE etype ) const
+uint32_t  FiniteElementManager::NodesOfElementType( CSMP_FEM_TYPE etype ) const
  {
     return E( etype )->Nodes();
  }
 
 
 
-size_t  FiniteElementManager::Dimensions() const
+uint32_t  FiniteElementManager::Dimensions() const
  { return dimensions; }
 
 
@@ -293,13 +293,13 @@ void FiniteElementManager::InitializeElements( uint32_t dim, size_t interpolatio
 
 
     // can be changed, but intermediate nodes will become defunct
-void      FiniteElementManager::InterpolationOrder( size_t interpolation_order )
+void FiniteElementManager::InterpolationOrder( uint32_t interpolation_order )
  {
     interpolation = interpolation_order;
  }
  
  
-size_t FiniteElementManager::InterpolationOrder() const
+uint32_t FiniteElementManager::InterpolationOrder() const
  {
     return interpolation;
  }

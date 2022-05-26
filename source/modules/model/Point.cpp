@@ -97,7 +97,7 @@ Point<1U>::Point( const Point<1U>& pt ) : x_(pt.x_)
  {
  }
 
-Point<1U>::Point( const std::vector<double>& v )
+Point<1U>::Point( const vector<double>& v )
  : x_(v[0])
  {
     assert( v.size() == 1U );
@@ -119,7 +119,7 @@ const double& Point<1U>::operator[]( uint32_t) const
  }
 
 
-void Point<1U>::Set( const std::vector<double>& v )
+void Point<1U>::Set( const vector<double>& v )
  {
     x_ = v[0];
  }
@@ -257,7 +257,7 @@ bool Point<1U>::operator>( const Point<1U>& pt ) const
 
 double  Point<1U>::Length() const
  {
-    return std::fabs(x_);
+    return fabs(x_);
  }
 
 double  Point<1U>::SquaredLength() const
@@ -274,14 +274,14 @@ void Point<1U>::NormalizeLengthTo( double len )
 
 double  Point<1U>::DistanceTo( const Point<1U>& pt ) const
  {
-    return std::fabs(pt.x_ - x_); 
+    return fabs(pt.x_ - x_);
  }
 
 
 bool Point<1U>::CoincidesWithWithinTolerance( const Point<1U>& pt, 
                                               double tolerance ) const
  {
-    if ( std::fabs(pt.x_ - x_) > tolerance ) return false;
+    if ( fabs(pt.x_ - x_) > tolerance ) return false;
     return true;
  }
 
@@ -292,17 +292,17 @@ bool Point<1U>::IsBetween( const Point<1U>& pt1, const Point<1U>& pt2)
  }
 
 
-std::vector<double> Point<1U>::Coordinates() const
+vector<double> Point<1U>::Coordinates() const
  {
-    return std::vector<double>(1U,x_);
+    return vector<double>(1U,x_);
  }
 
 
 void Point<1U>::Out() const
  {
-    std::cout <<"\nPoint<" << 1U;
-    std::cout <<">::Out(): coordinates: "<< x_ << std::endl;
-    std::cout.flush();
+    cout <<"\nPoint<" << 1U;
+    cout <<">::Out(): coordinates: "<< x_ << endl;
+    cout.flush();
  }
 
 
@@ -327,7 +327,7 @@ Point<2U>::Point( const Point<2U>& pt ) : x_(pt.x_), y_(pt.y_)
  {
  }
 
-Point<2U>::Point( const std::vector<double>& v )
+Point<2U>::Point( const vector<double>& v )
  : x_(v[0]), y_(v[1])
  {
  }
@@ -348,7 +348,7 @@ const double& Point<2U>::operator[]( uint32_t i ) const
  }
 
 
-void Point<2U>::Set( const std::vector<double>& v )
+void Point<2U>::Set( const vector<double>& v )
  {
     assert( v.size() == 2U );
     x_ = v[0];
@@ -506,7 +506,7 @@ bool Point<2U>::operator>( const Point<2U>& pt )  const
 
 double  Point<2U>::Length() const
  {
-    return std::hypot( x_, y_ );
+    return hypot( x_, y_ );
  }
 
 double  Point<2U>::SquaredLength() const
@@ -542,18 +542,18 @@ bool Point<2U>::IsBetween( const Point<2U>& pt1, const Point<2U>& pt2 )
 }
 
 
-std::vector<double> Point<2U>::Coordinates() const
+vector<double> Point<2U>::Coordinates() const
  {
-    return std::vector<double>{x_,y_};
+    return vector<double>{x_,y_};
  }
 
 
 
 void Point<2U>::Out() const
  {
-    std::cout <<"\nPoint<"<< 2U;
-    std::cout <<">::Out(): coordinates: "<< x_ <<","<< y_ << std::endl;
-    std::cout.flush();
+    cout <<"\nPoint<"<< 2U;
+    cout <<">::Out(): coordinates: "<< x_ <<","<< y_ << endl;
+    cout.flush();
  }
 
 
@@ -580,7 +580,7 @@ Point<3U>::Point( const Point<3U>& pt ) : x_(pt.x_), y_(pt.y_), z_(pt.z_)
  {
  }
 
-Point<3U>::Point( const std::vector<double>& v )
+Point<3U>::Point( const vector<double>& v )
  : x_(v[0]), y_(v[1]), z_(v[2])
  {
     assert( v.size() == 3U );
@@ -601,7 +601,7 @@ const double& Point<3U>::operator[]( uint32_t i ) const
  }
 
 
-void Point<3U>::Set( const std::vector<double>& v )
+void Point<3U>::Set( const vector<double>& v )
  {
     assert( v.size() == 3U );
     x_ = v[0];
@@ -769,7 +769,7 @@ bool Point<3U>::operator>( const Point<3U>& p )  const
 
 double  Point<3U>::Length() const
  {
-    return std::sqrt( x_ * x_ + y_ * y_ + z_ * z_ );
+    return sqrt( x_ * x_ + y_ * y_ + z_ * z_ );
  }
 
 double  Point<3U>::SquaredLength() const
@@ -806,19 +806,19 @@ bool Point<3U>::IsBetween( const Point<3U>& pt1, const Point<3U>& pt2 )
 }
 
 
-std::vector<double> Point<3U>::Coordinates() const
+vector<double> Point<3U>::Coordinates() const
  {
-    return std::vector<double>{x_,y_,z_};
+    return vector<double>{x_,y_,z_};
  }
 
 
 
 void Point<3U>::Out() const
  {
-    std::cout <<"\nPoint<"<< 3U;
-    std::cout <<">::Out(): coordinates: ";
-    std::cout << x_ <<","<< y_ <<","<< z_ << std::endl;
-    std::cout.flush();
+    cout <<"\nPoint<"<< 3U;
+    cout <<">::Out(): coordinates: ";
+    cout << x_ <<","<< y_ <<","<< z_ << endl;
+    cout.flush();
  }
 
 
@@ -982,7 +982,7 @@ To avoid ambiguities, NAN is returned in the second component of Point.
 */
 Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 )
   {
-     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], std::numeric_limits<double>::quiet_NaN() ));
+     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], numeric_limits<double>::quiet_NaN() ));
   }
 
  // tested: SKM O.K.
@@ -1003,19 +1003,21 @@ template<uint32_t dim>
 Point<dim> crossProduct( const Point<dim>&, const Point<dim>& )
   {
      cerr <<"\ncrossProduct<dim>: not defined for generic case."<< endl;
-     return std::numeric_limits<double>::signaling_NaN();
+     return numeric_limits<double>::signaling_NaN();
   }
 
 
 /**
-    returns smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge
+    Calculates smallest angle in degrees between the line segments that start with the first point and terminate at the last point of thedge
+    
+    @return smallest angle between edges in degrees (= always less than 90o).
     
     @note, to get the acute (smallest angle) between the edges ignoring their orientation, adjust the angle as follows:
        
-          acute_angle = (angle > 90.) ? 180. -angle : angle;
+    @note this is equivalent to the      acute_angle  =  (angle > 90.) ? 180. -angle : angle;
 */
 template<uint32_t dim>
-double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
+double angleBetweenEdges( const pair<Point<dim>,Point<dim> >& edge1, const pair<Point<dim>,Point<dim> >& edge2 )
  {
     const Point<dim> a(edge1.second - edge1.first), b(edge2.second - edge2.first);
     
@@ -1026,10 +1028,10 @@ double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const 
     
     // ||a||  ||b||
     // ------------
-    double a_b{std::numeric_limits<double>::quiet_NaN()};
-    if constexpr (dim == 2) a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]) * (b[0]*b[0]+b[1]*b[1]) );
+    double a_b{numeric_limits<double>::quiet_NaN()};
+    if constexpr (dim == 2) a_b = sqrt( (a[0]*a[0]+a[1]*a[1]) * (b[0]*b[0]+b[1]*b[1]) );
     else if constexpr (dim == 3 )
-      a_b = std::sqrt( (a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) * (b[0]*b[0]+b[1]*b[1]+b[2]*b[2]) );
+      a_b = sqrt( (a[0]*a[0]+a[1]*a[1]+a[2]*a[2]) * (b[0]*b[0]+b[1]*b[1]+b[2]*b[2]) );
       
     double cos_angle = ab / a_b;
 
@@ -1039,12 +1041,12 @@ double angleBetweenEdges( const std::pair<Point<dim>,Point<dim> >& edge1, const 
     if ( cos_angle >  1. ) return   0.;
     if ( cos_angle < -1. ) return 180.;
         
-    return (180./3.14159265358979323) * std::acos(cos_angle);
+    return (180./3.14159265358979323) * acos(cos_angle);
 
  } // end angleBetweenEdges
 
-template double angleBetweenEdges( const std::pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
-template double angleBetweenEdges( const std::pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
+template double angleBetweenEdges( const pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
+template double angleBetweenEdges( const pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
 
 
 

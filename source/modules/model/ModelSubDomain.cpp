@@ -2063,9 +2063,13 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "placed on Region cannot be assigned just on perimeter");
 
-     if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
+     if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "use Store() to assign Region/SplitBoundary/Boundary values");
+
+     if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::InputPropertyValue",
+                            input_prop, "for InterFace nodes, node property needs to be assigned with SplitBoundary::InputPropertyValue");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -2252,6 +2256,10 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
      if( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                             input_prop, "use Store() to assign Region/SplitBoundary/Boundary valuese");
+
+     if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::InputPropertyValue",
+                            input_prop, "for InterFace nodes, node property needs to be assigned with SplitBoundary::InputPropertyValue");
 
      if ( sdp == COMPLETE ) {
            if ( prop_key.place == ELEMENT or prop_key.place == FACE or prop_key.place == INTER_FACE ) {
@@ -2444,6 +2452,10 @@ VARIABLE_FLAG  ModelSubDomain<dim,CELL>::PropertyStatus( const char* property, S
 
     if ( prop_key.place == REGION or prop_key.place == BOUNDARY or prop_key.place == SPLIT_BOUNDARY )
       throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION/BOUNDARY/SPLIT_BUNDARY variables.");
+
+     if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::PropertyStatus",
+                            property, "for InterFace nodes, node property needs to be assigned with SplitBoundary::PropertyStatus");
 
     if ( prop_key.place == FACET_INTEGRATION_POINT ||
          prop_key.place == SECTOR_INTEGRATION_POINT ||
@@ -2687,6 +2699,10 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
           throw csmp::Exception( ERROR, src.c_str(), "Status vector (VECTOR,NODE) has the wrong size");
       }
       
+    if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::ChangePropertyStatus",
+                            property, "for InterFace nodes, node property needs to be assigned with SplitBoundary::ChangePropertyStatus");
+
     if ( cell_vec_.empty() ) {
          csmp_error.Note( ERROR, src.c_str(), "Region is empty.");
          return;
@@ -2879,6 +2895,10 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor properties yet");
 
+    if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::ChangePropertyStatus",
+                            property, "for InterFace nodes, node property needs to be assigned with SplitBoundary::ChangePropertyStatus");
+
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( cell_vec_.empty() ) {
@@ -3039,6 +3059,9 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 
 
 
+
+
+
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
                                                           const std::vector<VARIABLE_FLAG>& status,
@@ -3052,6 +3075,11 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
     if ( status.empty() )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
                             "Status vector has not been initialized");
+
+    if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::ChangePropertyStatusWhere",
+                            property, "for InterFace nodes, node property needs to be assigned with SplitBoundary::ChangePropertyStatusWhere");
+
     if ( cell_vec_.empty() )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
 
@@ -3235,6 +3263,10 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
     if ( prop_key.type == TENSOR )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere",
                             "Method not implemented for tensor properties yet");
+
+    if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::ChangePropertyStatusWhere",
+                            property, "for InterFace nodes, node property needs to be assigned with SplitBoundary::ChangePropertyStatusWhere");
 
     if ( cell_vec_.empty() )
       throw csmp::Exception( ERROR, "ModelSubDomain<dim>::ChangePropertyStatusWhere", "Region is empty");
@@ -3463,6 +3495,10 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToCellProperty( const char* nprop
           return;
        }
 
+    if ( n_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::InterpolateNodeToCellProperty",
+                              nprop, "for InterFace nodes, node property needs to be assigned with SplitBoundary::InterpolateNodeToCellProperty");
+
      switch( e_key.type )
        {
            case SCALAR: {
@@ -3526,6 +3562,10 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const
                                  "Properties are not of the same type, nothing was done...");
           return;
        }
+
+    if ( n_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
+       throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::InterpolateNodeToIntegrationPointProperty",
+                              nprop, "for InterFace nodes, node property needs to be assigned with SplitBoundary::InterpolateNodeToIntegrationPointProperty");
 
      vector<double>  IPOL;
 

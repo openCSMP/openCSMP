@@ -224,8 +224,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
       VSet<2U>      vset;
       ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
       Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
-       
-      // works fine
+
       const bool renumber_nodes{false};
       _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
       _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );

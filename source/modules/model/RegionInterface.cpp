@@ -2600,11 +2600,11 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
           cout <<"\t\t"<< (*rit).first;
           cout <<" "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
-          if ( rdim.second == 3 )
+          if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 2 )
+          else if ( rdim.second == 2U )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 1 )
+          else if ( rdim.second == 1U )
             cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }
@@ -2613,11 +2613,11 @@ void RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
           cout <<"\t\t"<< (*rit).first;
           cout <<" "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
-          if ( rdim.second == 3 )
+          if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 2 )
+          else if ( rdim.second == 2U )
             cout <<" surface area (m2): "<< (*rit).second.Volume() <<", perimeter length (m): "<< (*rit).second.SurfaceArea();
-          else if ( rdim.second == 1 )
+          else if ( rdim.second == 1U )
             cout <<" length (m): "<< (*rit).second.Volume();
           cout <<", range of element spatial dimensions: "<< rdim.first <<", highest spatial dimension "<< rdim.second << endl;
        }

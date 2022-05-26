@@ -78,10 +78,9 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
 }
 
 /// find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque.
-size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
-                                 std::deque<std::vector<int64_t> >& combinations );
-
-
+template<typename intType>
+size_t createUniqueCombinations( std::vector<intType>& sequence, intType samples,
+                                 std::deque<std::vector<intType> >& combinations );
 
 
 /// Returns true if file on ifstream is empty.
