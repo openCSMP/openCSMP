@@ -1237,69 +1237,82 @@ If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is creat
 
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleDomainsAcrossSplitBoudary( COMPUTATION_DOMAIN<dim>& subdomain )
+void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleDomainsAcrossSplitBoundary( COMPUTATION_DOMAIN<dim>& subdomain )
 {
-   if ( test_operands_.size() > 1U )
-     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleDomainsAcrossSplitBoudary",
+  if ( test_operands_.size() > 1U )
+    throw csmp::Exception( ERROR, "PDE_Integrator::CoupleDomainsAcrossSplitBoundary",
                            "method implemented for only one test-function operand so far");
-     
-    // TODO: get this info from the solution variable
-    // const INDEX<SCALAR,NODE> key_continuous_p = INDEX<SCALAR,NODE>( model.Database().StorageKey("pressure continuity status") );
-    const INDEX<SCALAR,NODE> var_key = INDEX<SCALAR,NODE>{ (*test_operands_.begin()).first.key };
-    const VARIABLE_FLAG couple_if{ ROBIN };
 
-    // manifolds can only be present at the subdomain perimeter
-    for ( auto mit = subdomain.PerimeterNodesBegin(); mit != subdomain.NodesEnd(); ++mit )
-      if ( (*mit)->IsManifold() )
-        {
-          const auto n_branches{ (*mit)->Manifold()->Branches() };
-          
-          // 1. RHS: compute total load at master dof then copy that value to slave node
-          size_t masterIDX = (*mit)->Manifold()->N(0)->Idx();
-          for ( auto n{1U}; n < n_branches; n++ ) {
-                auto slave_node = (*mit)->Manifold()->N(n);
-                // here the assumption is made that if the control variable value = 1, the interface should be coupled
-                // int continuous_p = static_cast<int>(slave_node->Read(key_continuous_p)); - use ROBIN status instead
-                if ( slave_node->Status(var_key) == couple_if )
-                  rh_[masterIDX] += rh_[slave_node->Idx()];
+  // TODO: get this info from the solution variable
+  const INDEX<SCALAR,NODE> var_key = INDEX<SCALAR,NODE>{ (*test_operands_.begin()).first.key };
+  const VARIABLE_FLAG couple_if{ ROBIN };
+
+  // manifolds can only be present at the subdomain perimeter
+  for ( auto nit = subdomain.PerimeterNodesBegin(); nit != subdomain.NodesEnd(); ++nit )
+    if ( (*nit)->IsManifold() )
+    {
+      const auto md = (*nit)->Manifold();
+      const auto n_branches{ md->Branches() };
+
+      // 1. RHS: compute total load at master dof then copy that value to slave node
+      size_t masterIDX = md->N(0)->Idx();
+      size_t masterPOS = DOF_indexes_[masterIDX];
+      if(masterPOS != NULL_IDX) {
+        for (auto n{1U}; n < n_branches; n++) {
+          auto slave_node = md->N(n);
+          // here the assumption is made that if the control variable value = 1, the interface should be coupled
+          if ( slave_node->Status(var_key) == couple_if ) {
+            size_t slaveIDX = slave_node->Idx();
+            size_t slavePOS = DOF_indexes_[slaveIDX];
+            if (slavePOS != NULL_IDX) rh_[masterPOS] += rh_[slavePOS];
+          }
+        }
+
+        // 2. RHS: apply reciprocal coupling
+        for (auto n{1U}; n < n_branches; n++) {
+          auto slave_node = md->N(n);
+          if ( slave_node->Status(var_key) == couple_if ) {
+            size_t slaveIDX = slave_node->Idx();
+            size_t slavePOS = DOF_indexes_[slaveIDX];
+            if (slavePOS != NULL_IDX) rh_[slavePOS] = rh_[masterPOS];
+          }
+        }
+
+        // 3. LHS: adding all the element on slave row to master dof - except slave dof
+        for (auto n{1U}; n < n_branches; n++) {
+          auto slave_node = md->N(n);
+          if ( slave_node->Status(var_key) == couple_if ) {
+            size_t slaveIDX = slave_node->Idx();
+            size_t slavePOS = DOF_indexes_[slaveIDX];
+            if (slavePOS != NULL_IDX) {
+              for (size_t j(0U); j < G_.Cols(); ++j)
+                if (j != slavePOS && j != masterPOS)
+                  G_.Add(masterPOS, j, G_(slavePOS, j));
+
+              // 4. adding diagonal value to master dof
+              G_.Add(masterPOS, masterPOS, G_(slavePOS, slavePOS));
             }
-            
-          // 2. RHS: apply reciprocal coupling
-          for ( auto n{1U}; n < n_branches; n++ ) {
-                auto slave_node = (*mit)->Manifold()->N(n);
-                if ( slave_node->Status(var_key) == couple_if )
-                  rh_[slave_node->Idx()] = rh_[masterIDX];
-             }
-
-          // 3. LHS: adding all the element on slave row to master dof - except slave dof
-          for( auto n{1U}; n_branches; n++ ) {
-                auto slave_node = (*mit)->Manifold()->N(n);
-                if ( slave_node->Status(var_key) == couple_if ) {
-                    size_t slaveIDX = slave_node->Idx();
-                    for (size_t j(0U); j < G_.Cols(); ++j )
-                      if (j != slaveIDX && j != masterIDX)
-                        G_.Add(masterIDX, j, G_.At(slaveIDX, j));
-                    
-                    // 4. adding diagonal value to master dof
-                    G_.Add(masterIDX, masterIDX, G_.At(slaveIDX, slaveIDX));
-                 }
+          }
         }
 
-      // 5. copy that value from master dof to slave dof - except slave and master dofs position
-      for ( auto n{1U}; n_branches; n++ ) {
-            auto slave_node = (*mit)->Manifold()->N(n);
-            if ( slave_node->Status(var_key) == couple_if ) {
-                size_t slaveIDX = slave_node->Idx();
-                for ( size_t j(0); j < G_.Cols(); ++j )
-                   if ( j != slaveIDX && j != masterIDX)
-                     G_.Assign( slaveIDX, j, G_.At(masterIDX, j) );
- 
-                // 6.  copy diagonal value from master dof to slave dof
-                G_.Assign(slaveIDX, slaveIDX, G_.At(masterIDX, masterIDX) );
-             }
+        // 5. copy that value from master dof to slave dof - except slave and master dofs position
+        for (auto n{1U}; n < n_branches; n++) {
+          auto slave_node = md->N(n);
+          if ( slave_node->Status(var_key) == couple_if ) {
+            size_t slaveIDX = slave_node->Idx();
+            size_t slavePOS = DOF_indexes_[slaveIDX];
+            if (slavePOS != NULL_IDX) {
+              for (size_t j(0); j < G_.Cols(); ++j)
+                if (j != slavePOS && j != masterPOS)
+                  G_.Assign(slavePOS, j, G_(masterPOS, j));
+
+              // 6.  copy diagonal value from master dof to slave dof
+              G_.Assign(slavePOS, slavePOS, G_(masterPOS, masterPOS));
+            }
+          }
         }
+      }
     }
-    
 } // end CoupleContacts
 
 
@@ -1532,20 +1545,23 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
 
     // 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
     AssignEssentialConditions( domain );
+
+    // 6. couple pressures across split boundaries if pressure is continuous
+    CoupleDomainsAcrossSplitBoundary( domain );
     
-    // 6. diagnostics
+    // 7. diagnostics
     if ( debug ) {
          Out();
          OutputGlobals();
       }
  
-    // 7. invert global matrix
+    // 8. invert global matrix
     Solve();
 
-    // 8. write results back into Model
+    // 9. write results back into Model
     OutputResults( domain );
                            
-    // 9. Calculation of result-dependent properties                                 
+    // 10. Calculation of result-dependent properties
     PostProcess( domain );
 
  } // end IntegrateOver
