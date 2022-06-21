@@ -7,5 +7,5 @@ fluid pressure							1.0e+07
 # (2) local material properties 
 
 # (3) boundary conditions on model boundaries
-FRONT	Dirichlet	fluid pressure		1.0e7	3.0e7	3.0e7	3.0e7
-BACK	Dirichlet	fluid pressure		3.0e7	1.0e7	1.0e7	1.0e7
+FRONT	Dirichlet	fluid pressure		1.0e7	1.0e7	1.0e7	1.0e7
+BACK	Dirichlet	fluid pressure		3.0e7	3.0e7	3.0e7	3.0e7
