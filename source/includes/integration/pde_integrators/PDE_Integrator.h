@@ -386,7 +386,7 @@ class PDE_Integrator {
     virtual void  LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>&, const SplitBoundary<dim>& );
     
     /// couples domains separated by SplitBoundaries using the information from NodeManifolds
-    void CoupleDomainsAcrossSplitBoudary( COMPUTATION_DOMAIN<dim>& );
+    void CoupleDomainsAcrossSplitBoundary( COMPUTATION_DOMAIN<dim>& );
 
     /// calls connected solver object to find x in G x = rh problem
     virtual void  Solve();
