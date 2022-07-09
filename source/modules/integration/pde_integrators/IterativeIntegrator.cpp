@@ -169,8 +169,8 @@ template class IterativeIntegrator<1U,Boundary>;
 template class IterativeIntegrator<2U,Boundary>;
 template class IterativeIntegrator<3U,Boundary>;
 
-template class IterativeIntegrator<1U,SplitBoundary>;
-template class IterativeIntegrator<2U,SplitBoundary>;
-template class IterativeIntegrator<3U,SplitBoundary>;
+//template class IterativeIntegrator<1U,SplitBoundary>;
+//template class IterativeIntegrator<2U,SplitBoundary>;
+//template class IterativeIntegrator<3U,SplitBoundary>;
 
 } // end namespace csmp

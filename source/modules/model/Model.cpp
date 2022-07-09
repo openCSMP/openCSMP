@@ -2360,15 +2360,6 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, bool debug
 }
 
 
-/// application to all boundaries
-template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::SplitBoundary>& problem, bool debug )
-{
-  for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator it = this->SplitBoundariesBegin(); it != this->SplitBoundariesEnd(); ++it )
-    problem.IntegrateOver( (*it).second, debug );
-
-}
-
 
 /**
 specific regions
@@ -2390,13 +2381,6 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, const std:
 } // Apply (PDE_Integrator)
 
 
-
-  /// PDE solution applied to a specific split boundary
-template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::SplitBoundary>& problem, const std::string& splitboundary_name, bool debug )
-{
-  problem.IntegrateOver( this->SplitBoundary( splitboundary_name ), debug );
-} // Apply (PDE_Integrator)
 
 
 

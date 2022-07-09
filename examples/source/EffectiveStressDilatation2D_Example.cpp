@@ -177,7 +177,7 @@ void EffectiveStressDilatation2D_Example::Run()
   // gas static pressure in the well
   const double pg(2300. * 9.81 * 100. + 100325.);
   well.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,pg), COMPLETE, INSIDE );
-  well.ChangePropertyStatus( "fluid pressure", DIRICH );
+  well.ChangeNodePropertyStatus( "fluid pressure", DIRICH, COMPLETE, INSIDE );
   well.InputPropertyValue( "fracture permeability", makeScalar(PLAIN,1.0e-7) );
   well.InputPropertyValue( "fracture porosity",     makeScalar(PLAIN,1.0) );
 
@@ -352,10 +352,8 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
 void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2U>& model, const char* split_boundary_name, double time_increment )
  {
     static bool first_call(true);
-
-
     // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
-    PDE_Integrator<2U,SplitBoundary>  transient_pressure;
+    PDE_Integrator<2U,Region>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
@@ -366,21 +364,21 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
     transient_pressure.SetSolver( linear_solver );
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U,InterFace<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                                conductance.MultiplyWithTimeIncrement(true);
 
-    NumIntegral_NT_lhsop_N_dV<2U,InterFace<2U> > capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                                capacitance_lhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U,InterFace<2U> >  capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>  capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                                capacitance_rhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U,InterFace<2U> >  source( model.Database(), "fluid volume source",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>  source( model.Database(), "fluid volume source",  "fluid pressure" );
                                                source.MultiplyWithTimeIncrement(true);
                                                source.AddAccumulateLater();
                                                source.LumpedFormulation(true);
    
-    PointSource_rhsop<2U>                      nsource( model.Database(), "nodal fluid volume source",  "fluid pressure" );
+    PointSource_rhsop<2U>  nsource( model.Database(), "nodal fluid volume source",  "fluid pressure" );
                                                source.MultiplyWithTimeIncrement(true);
                                                source.AddAccumulateLater();
                                                source.LumpedFormulation(true);
@@ -438,7 +436,8 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
     cout <<"\n\t\t(FD Backward-Euler time increment, delta_t="<< time_increment <<" secs)."<< endl;
     transient_pressure.TimeIncrement( 1. / time_increment );
 
-    transient_pressure.IntegrateOver( model.SplitBoundary(split_boundary_name) );
+    // integration over the lower dimensional region representing the SplitBoundary
+    transient_pressure.IntegrateOver( model.Region(split_boundary_name) );
 
     // setting relative solution tolerance after first solve
     if ( first_call )  {

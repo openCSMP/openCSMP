@@ -854,32 +854,35 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
 
     // --------------------------------------------------
     // 4. building and partitioning the node vector
+    //   (which SplitBoundary objects do not have)
     // --------------------------------------------------
-    assert( node_vec_.size() >= boundary_nodes.size() );
-    first_bd_node_ = node_vec_.size() - boundary_nodes.size();
-    
-    // rebuilding and sorting the node vector (noting that set nodes are already sorted)
-    // ---------------------------------------------------------------------------------
-    sort( node_vec_.begin(), node_vec_.end() );
-    // a temporary new node vector is created
-    vector<csmp::Node<dim>*>  temp;
-    temp.reserve(node_vec_.size());
-    // all nodes that are not in the boundary node vector are considered as interior nodes
-    for ( const auto& nit : node_vec_ ) {
-          assert( nit );
-          if ( boundary_nodes.find(nit) == boundary_nodes.end() )
-            temp.push_back( nit );
+    if ( !node_vec_.empty() )
+      {
+        assert( node_vec_.size() >= boundary_nodes.size() );
+        first_bd_node_ = node_vec_.size() - boundary_nodes.size();
+        
+        // rebuilding and sorting the node vector (noting that set nodes are already sorted)
+        // ---------------------------------------------------------------------------------
+        sort( node_vec_.begin(), node_vec_.end() );
+        // a temporary new node vector is created
+        vector<csmp::Node<dim>*>  temp;
+        temp.reserve(node_vec_.size());
+        // all nodes that are not in the boundary node vector are considered as interior nodes
+        for ( const auto& nit : node_vec_ ) {
+              assert( nit );
+              if ( boundary_nodes.find(nit) == boundary_nodes.end() )
+                temp.push_back( nit );
+          }
+        // second, the already sorted perimeter nodes are appended
+        for ( const auto& nit : boundary_nodes )
+          temp.push_back( nit );
+        // now the temporary vector is assigned to the permanent one
+        assert( temp.size() == node_vec_.size() );
+        node_vec_ = move( temp );
+        node_vec_.shrink_to_fit();
+        
+        assert( first_bd_node_ <= node_vec_.size() );
       }
-    // second, the already sorted perimeter nodes are appended
-    for ( const auto& nit : boundary_nodes )
-      temp.push_back( nit );
-    // now the temporary vector is assigned to the permanent one
-    assert( temp.size() == node_vec_.size() );
-    node_vec_ = move( temp );
-    node_vec_.shrink_to_fit();
-    
-    assert( first_bd_node_ <= node_vec_.size() );
-
 #ifdef MODEL_SUBDOMAIN_DEBUG
 cout <<"\nModelSubDomain<dim,CELL>::PartitionCellVector: '"<< Name() <<"': of the ";
 cout << cell_vec_.size() <<" cells, "<< boundary_elmts.size() <<" lie at the domain boundary."<< endl;
@@ -2658,9 +2661,9 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
-                                                           VARIABLE_FLAG new_status_of_scalar,
-                                                           double min_value_to_change,
-                                                           double max_value_to_change )
+                                                          VARIABLE_FLAG new_status_of_scalar,
+                                                          double min_value_to_change,
+                                                          double max_value_to_change )
  {
     vector<VARIABLE_FLAG>  status(1U,new_status_of_scalar);
     ChangePropertyStatusWhere( property, status, min_value_to_change, max_value_to_change );
@@ -2671,7 +2674,7 @@ void ModelSubDomain<dim,CELL>::ChangePropertyStatusWhere( const char* property,
 /// changes the variable flag to status for those group members which carry the group_flag.
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::ChangePropertyStatus( const char* property,
-                                                     const std::vector<VARIABLE_FLAG>& status,
+                                                     const vector<VARIABLE_FLAG>& status,
                                                      SUBDOMAIN_PART group_flag )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );

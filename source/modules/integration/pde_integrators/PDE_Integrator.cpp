@@ -2014,9 +2014,9 @@ template class PDE_Integrator<1U,Boundary>;
 template class PDE_Integrator<2U,Boundary>;
 template class PDE_Integrator<3U,Boundary>;
 
-template class PDE_Integrator<1U,SplitBoundary>;
-template class PDE_Integrator<2U,SplitBoundary>;
-template class PDE_Integrator<3U,SplitBoundary>;
+//template class PDE_Integrator<1U,SplitBoundary>;
+//template class PDE_Integrator<2U,SplitBoundary>;
+//template class PDE_Integrator<3U,SplitBoundary>;
 
 template class PDE_Integrator<1U,NimbleRegion>;
 template class PDE_Integrator<2U,NimbleRegion>;

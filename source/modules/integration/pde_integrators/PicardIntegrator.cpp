@@ -42,8 +42,8 @@ template class PicardIntegrator<1U,Boundary>;
 template class PicardIntegrator<2U,Boundary>;
 template class PicardIntegrator<3U,Boundary>;
 
-template class PicardIntegrator<1U,SplitBoundary>;
-template class PicardIntegrator<2U,SplitBoundary>;
-template class PicardIntegrator<3U,SplitBoundary>;
+//template class PicardIntegrator<1U,SplitBoundary>;
+//template class PicardIntegrator<2U,SplitBoundary>;
+//template class PicardIntegrator<3U,SplitBoundary>;
 
 } // end namespace csmp

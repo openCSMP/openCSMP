@@ -1305,7 +1305,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      // NB: the use of Duplicate() ascertains that the MeshManager registers the new collocated nodes with the NodeManifoldManager
      set<Node<dim>*>     unique_new_nodes;
      vector<Node<dim>*>  node_pointers; // linear array of the nodes of one face after another
-     node_pointers.reserve( splitBoundary.Nodes() );
+     node_pointers.reserve( splitBoundary.Cells() );
      for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it ) {
           const size_t n_nodes((*it)->Nodes());
           // looping over the nodes on the inside of the interface which must be manifolds

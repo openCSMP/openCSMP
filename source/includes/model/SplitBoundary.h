@@ -12,7 +12,8 @@ template<uint32_t> class MeshManager;
 template<uint32_t> class Boundary;
 template<uint32_t> class Element;
 template<uint32_t> class Region;
-template<typename> class FEM_Data;
+template<uint32_t> class NodeManifold;
+//template<typename> class FEM_Data;
 
 /**
     Vector of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
@@ -129,29 +130,43 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
-  
-    /// initialises the node pointer vector with the inside nodes of  the stored InterFaces (only inside nodes are needed since they are manifolds)
-    void CreateNodePointerVector();
 
     // ----------------------------------------
     // user interface
     // ----------------------------------------
 
-    /// returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
-    const NodeManifold<dim>* const ManifoldNode( size_t ) const;
-    NodeManifold<dim>* const ManifoldNode( size_t );
+    /// generates a vector of NodeManifold pointers that can be iterated over
+    std::vector<NodeManifold<dim>*>  NodeManifolds() const;
+    
+    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    std::pair<std::vector<Node<dim>*>,size_t>  InsideNodes() const;
 
-    /// for the assignment of properties that are unique to the instance of this subclass
-    template<typename Var>
-    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    std::pair<std::vector<Node<dim>*>,size_t>  OutsideNodes() const;
+
+    /// NEW: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE)
+    template<class Var>
+    void InputNodePropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
     /// input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE)
     template<class Var>
     void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
-    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    /// for the assignment of properties that are unique to the instance of this subclass
+    template<typename Var>
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// as InputPropertyValue, but with more selective overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+
+    /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary or its interior or perimeter
+    void ChangeNodePropertyStatus( const char* property,
+                                   VARIABLE_FLAG new_status_of_scalar,
+                                   SUBDOMAIN_PART, INTERFACE_SIDE );
+
+    /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary but only where the variable value is in the target range
+    void ChangeNodePropertyStatusWhere( const char*, VARIABLE_FLAG, INTERFACE_SIDE, double, double );
 
     // returns location of split boundary relative to adjacent region
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );
@@ -173,6 +188,29 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// writes all contained data on the screen
     void Out() const;
+
+    // base class methods not available for SplitBoundary
+    
+    size_t            Nodes() const = delete;
+    size_t            InteriorNodes() const = delete;
+    size_t            PerimeterNodes() const = delete;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const = delete;
+    csmp::Node<dim>*  N( size_t n ) const = delete;
+    bool              IsPerimeterNode( const size_t nidx ) const = delete;
+    void              AssignNodeCoordinatesTo( const char* vector_prop ) = delete;
+    void              AssignNodeCoordinatesTo( const char* scalar_prop, char coord ) = delete;
+    void              NodeAttributesToCSV() = delete;
+
+    void ChangePropertyStatus( const char*, VARIABLE_FLAG, SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, VARIABLE_FLAG, double, double ) = delete;
+    void ChangePropertyStatus( const char*, const std::vector<VARIABLE_FLAG>& ,SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, const std::vector<VARIABLE_FLAG>&, double, double ) = delete;
+    void ChangePropertyStatus( const char*, uint32_t, VARIABLE_FLAG, SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, uint32_t, VARIABLE_FLAG, double, double ) = delete;
+    VARIABLE_FLAG  PropertyStatus( const char*, SUBDOMAIN_PART, uint32_t ) const = delete;
+
+    void InterpolateNodeToCellProperty( const char*, const char* ) = delete;
+    void InterpolateNodeToIntegrationPointProperty( const char*, const char* ) = delete;
 
   protected:
 

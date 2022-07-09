@@ -1935,7 +1935,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     // creating faces on the outside of the model
     const csmp::Region<dim>& model_domain( boundaryComplex->Region("Model") );
     for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i )
-      for ( size_t j{0}; j < model_domain.PerimeterFaces(i); ++j ) {
+      for ( auto j{0U}; j < model_domain.PerimeterFaces(i); ++j ) {
            // ascertaining that we are indeed at the model boundary
            assert( model_domain.E(i)->Neighbor( model_domain.PerimeterFace(i,j) ) == nullptr );
            // creating the boundary face

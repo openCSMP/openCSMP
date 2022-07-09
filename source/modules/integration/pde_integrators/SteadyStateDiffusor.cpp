@@ -592,8 +592,8 @@ template class SteadyStateDiffusor<1U,Region>;
 template class SteadyStateDiffusor<2U,Region>;
 template class SteadyStateDiffusor<3U,Region>;
 
-template class SteadyStateDiffusor<1U,Boundary>;
-template class SteadyStateDiffusor<2U,Boundary>;
-template class SteadyStateDiffusor<3U,Boundary>;
+//template class SteadyStateDiffusor<1U,Boundary>;
+//template class SteadyStateDiffusor<2U,Boundary>;
+//template class SteadyStateDiffusor<3U,Boundary>;
 
 } // end csmp

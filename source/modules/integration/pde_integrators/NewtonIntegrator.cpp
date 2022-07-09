@@ -26,8 +26,8 @@ template class NewtonIntegrator<1U,Boundary>;
 template class NewtonIntegrator<2U,Boundary>;
 template class NewtonIntegrator<3U,Boundary>;
 
-template class NewtonIntegrator<1U,SplitBoundary>;
-template class NewtonIntegrator<2U,SplitBoundary>;
-template class NewtonIntegrator<3U,SplitBoundary>;
+//template class NewtonIntegrator<1U,SplitBoundary>;
+//template class NewtonIntegrator<2U,SplitBoundary>;
+//template class NewtonIntegrator<3U,SplitBoundary>;
 
 } // end namespace csmp
