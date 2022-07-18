@@ -1,4 +1,6 @@
 name	MParameter	unit	index	min.	max.	place
 
 nodal_scalar_length	n	unitless	1	-1e+50	1e+50	node
-element_vector_velocity	e	none	2	-1e+50	1e+50	element
+compressibility					C	Pa-1		1	1.00E-25	1.00E-05	element
+permeability					k	m2			1	1.00E-25	1.00E-02	element
+porosity						PHI	X			1	1.00E-05	1.00E+01	element

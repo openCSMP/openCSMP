@@ -63,7 +63,7 @@ pair<Element<dim>*,bool>  containsPoint( Element<dim>* elmt, const Point<dim>& p
     // if the point is contained in this element, 'true' and the element pointer are returned
     if ( point_is_inside ) {
          if ( region_idx != elmt->Idx() ) {
-              csmp_error.notice( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
+              csmp_error.Note( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
            }
          else return make_pair( elmt, true );
       }
@@ -135,7 +135,7 @@ pair<Element<dim>*,bool>  containsPointLinearTriangle( Element<dim>* elmt, const
     // if the point is contained in this element, 'true' and the element pointer are returned
     if ( point_is_inside ) {
          if ( region_idx != elmt->Idx() ) {
-              csmp_error.notice( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
+              csmp_error.Note( ERROR, "containsPoint", "point in cell that is not part of region is ignored");
            }
          else return make_pair( elmt, true );
       }
@@ -165,7 +165,7 @@ std::vector<Element<dim>*>  findCellsEnclosingPoints( const Model<dim>& model,
     ErrorHandler& csmp_error( ErrorHandler::Instance() );
           
     if ( points_to_search.empty() )
-      csmp_error.notice( ERROR, "WhichCellContainsPoint<dim>::WhichCellContainsPoint", "no points were supplied, visits will have no effect");
+      csmp_error.Note( ERROR, "WhichCellContainsPoint<dim>::WhichCellContainsPoint", "no points were supplied, visits will have no effect");
 
 
     // marking the elements of the region with the unique key UINT_MAX so that containment is readily detected
@@ -317,7 +317,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
 
     const csmp::Index prop_key = model.Database().StorageKey( target_variable.c_str() );
     if ( prop_key.place != ELEMENT || prop_key.type != SCALAR )
-      csmp_error.notice( ERROR, "PointPropertyToCellMapper2D::MapPointDataToElements", target_variable,
+      csmp_error.Note( ERROR, "PointPropertyToCellMapper2D::MapPointDataToElements", target_variable,
                         "should be a scalar placed on the Element");
     
     // 1. searching the points in the model
@@ -409,11 +409,11 @@ void PointPropertyToCellMapper2D::MapNodeToPointData( Model<2>& model, string ta
     const csmp::Index nprop_key = model.Database().StorageKey((target_variable + " node").c_str());
 
     if ( eprop_key.type != SCALAR || nprop_key.type != SCALAR )
-      csmp_error.notice( ERROR, "PointPropertyToCellMapper2D::MapNodeToPointData",
+      csmp_error.Note( ERROR, "PointPropertyToCellMapper2D::MapNodeToPointData",
                          "node and element variables must be SCALAR types");
        
     if ( eprop_key.place != ELEMENT || nprop_key.place != NODE )
-      csmp_error.notice( ERROR, "PointPropertyToCellMapper2D::MapNodeToPointData",
+      csmp_error.Note( ERROR, "PointPropertyToCellMapper2D::MapNodeToPointData",
                          "the target variable must be placed on the ELEMENT with a node version in addition");
        
     // interpolating the node values to the barycentres of the elements

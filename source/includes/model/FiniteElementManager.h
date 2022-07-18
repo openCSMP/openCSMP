@@ -27,7 +27,7 @@ class FiniteElementManager {
   public:
     FiniteElementManager();
     FiniteElementManager( uint32_t dimensions, 
-                          size_t interpolation_order,
+                          uint32_t interpolation_order,
                           bool isoparametric );
 
     FiniteElementManager( const FiniteElementManager& mgr );
@@ -36,26 +36,26 @@ class FiniteElementManager {
 
     void InitializeElements( uint32_t dim, size_t interpolation_order, bool isoparametric );
     
-    size_t            Dimensions() const;
+    uint32_t          Dimensions() const;
     bool              ContainsElementType( CSMP_FEM_TYPE etype ) const;
     void              CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etypes ) const;
     FiniteElement*    E( int8_t csmp_etype ) const;
     FiniteElement*    E( CSMP_FEM_TYPE csmp_etype ) const;
-    size_t            NodesOfElementType( CSMP_FEM_TYPE etype ) const;
+    uint32_t          NodesOfElementType( CSMP_FEM_TYPE etype ) const;
     // standard types
     FiniteElement*    LinearBarElement() const;
     FiniteElement*    LinearTriangleElement() const;
     FiniteElement*    LinearTetrahedronElement() const;
     
     // can be changed, but intermediate nodes will become defunct
-    void              InterpolationOrder( size_t interpolation_order );
-    size_t            InterpolationOrder() const;
+    void              InterpolationOrder( uint32_t interpolation_order );
+    uint32_t          InterpolationOrder() const;
     
     void              Out() const;
   
   private:
-    bool    mixed_element_formulation; // different-order elements at same time
-    size_t  dimensions, interpolation;
+    bool      mixed_element_formulation; ///< different-order elements at same time
+    uint32_t  dimensions, interpolation;
     // volume elements
     FiniteElement*  hexa_ptr, *pyra_ptr, *pris_ptr, *tetr_ptr;
     // surface elements

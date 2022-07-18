@@ -229,8 +229,8 @@ respective maps for later output.
 Especially, to direct messages to a target output device and to create a
 protocol of a simulation run. 
 */
-void ErrorHandler::notice( CSMP_MESSAGE err_type, 
-                           const string& source, const string& msg )
+void ErrorHandler::Note( CSMP_MESSAGE err_type,
+                         const string& source, const string& msg )
  {
     string message(source);
    
@@ -288,20 +288,20 @@ void ErrorHandler::notice( CSMP_MESSAGE err_type,
        throw Exception( err_type, source.c_str(), msg );
    }
 
- } // end notice
+ } // end Note
 
 
 
 /**
     Combines multiple message strings into a single one
 */
-void ErrorHandler::notice( CSMP_MESSAGE err_type, const string& source,
-                           const string& message1, const string& message2 )
+void ErrorHandler::Note( CSMP_MESSAGE err_type, const string& source,
+                         const string& message1, const string& message2 )
  {
      string  msg(message1);
      msg +=", ";
      msg += message2;
-     notice( err_type, source, msg );
+     Note( err_type, source, msg );
    
  } // end
 

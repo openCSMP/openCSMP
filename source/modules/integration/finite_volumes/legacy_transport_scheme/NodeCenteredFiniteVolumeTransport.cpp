@@ -6,7 +6,6 @@
 #include "Exception.h"
 #include "ErrorHandler.h"
 #include "CSMP_mathUtilities.h"
-#include "meshManagementUtilities.h"
 #include "Box.h"
 #include "PropertyDatabase.h"
 #include "Element.h"
@@ -1841,7 +1840,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable( double time_inter
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !apply_flux_balance_correction )
-        csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable",
+        csmp_error.Note( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariable",
                            "without flux balance correction boundary condition assignment may not be suitable; watch for erratic concentrations");
 
     // 0. backup of fluxes from last time level
@@ -1932,7 +1931,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep( double ti
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( !apply_flux_balance_correction )
-        csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep",
+        csmp_error.Note( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::AdvectVariableSingleStep",
                            "without flux balance correction boundary condition assignment may not be suitable; watch for erratic concentrations");
 
     // 0. backup of fluxes from last time level
@@ -2812,7 +2811,7 @@ double NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElemen
         assert( phi_key.place == ELEMENT );
 
         if ( phi_key != prop_key )
-            csmp_error.notice( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElementVariable",
+            csmp_error.Note( WARNING, "NodeCenteredFiniteVolumeTransport<dim>::VolumeIntegrateScalarFiniteElementVariable",
                                "you are trying to scale the integral over the porosity with porosity");
 
         double interim_result;

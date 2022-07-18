@@ -54,7 +54,7 @@ namespace csmp
     if( max_index-1 != 7)
       {
         cout << "max_index is " << max_index << endl;
-        csmp_error.notice( FATAL_ERROR, 
+        csmp_error.Note( FATAL_ERROR, 
                            "Constructor VLH_LiquidLookup::VLH_LiquidLookup(const double& externaltemperature) -",
                            "FATAL_ERROR: wrong size of properties_at_tmax vector compared to LookupPropertyIndex.h!\ncontact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
         return;
@@ -94,7 +94,7 @@ namespace csmp
           {
             if(essentiallyEqual( tcurrent, tmax, numeric_limits<double>::epsilon() ) )
               {
-                csmp_error.notice( FATAL_ERROR, 
+                csmp_error.Note( FATAL_ERROR, 
                                    "Constructor VLH_LiquidLookup::VLH_LiquidLookup(const double& externaltemperature) -",
                                    "while building lookup table, tcurrent was == tmax of vlh curve.\nThis can potentially mess up computations of fluid\nproperties during simulations.\nProbably you or somebody else changed the t-resolution of lookup tables - re-think those.\nElse: if you have source code access you might set the error level associated\nwith this message to WARNING and pray ;-) but better contact developer.\nResponsible developer: Thomas Driesner, thomas.driesner@erdw.ethz.ch");
                 return;
@@ -263,7 +263,7 @@ namespace csmp
     // ambiguities regarding on which side of the pressure maximum this pressure was hit 
     if( definitelyGreaterThan( press, pmax, numeric_limits<double>::epsilon() ) )
       {
-        csmp_error.notice( FATAL_ERROR, 
+        csmp_error.Note( FATAL_ERROR, 
                            "VLH_LiquidLookup::TfromP(const double& press, const double& t_estimate) -",
                            "FATAL_ERROR: you tried to invoke this function at p>pmax, this makes no sense, terminating!\nThomas Driesner, thomas.driesner@erdw.ethz.ch");
         return 9.9e99;

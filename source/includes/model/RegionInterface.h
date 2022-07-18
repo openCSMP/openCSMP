@@ -173,7 +173,7 @@ class RegionInterface {
     // -----------------------------------------------
 
     /// assigns unique region-indicative variable values to the elements of all unique regions and returns name value mapping vector[value]=name
-    size_t  CountAndLabelRegions( const char* region_identifier, std::vector<std::string>& region_names );
+    size_t  CountAndLabelUniqueRegions( const char* region_identifier, std::vector<std::string>& region_names );
 
     /// finds disconnected subregions in region, dividing it into these. The new subregion are numbered and their total # is returned
     size_t  PartitionRegionIntoContiguousSubRegions( const char* region );
@@ -197,8 +197,8 @@ class RegionInterface {
     void    MergeRegions( const std::set<std::string>& input_regions, const char* ensemble_region );
     size_t  MergeRegions( const char* region_name_tag, const char* ensemble_region );
 
-    /// removes region and associated variable storage; DOES NOT!  erase  the underlying elements and nodes, this is the task of the MeshManager
-    void    RemoveRegion( const char* regionname );
+    /// removes region and associated variable storage; gets MeshManager to remove elements and rebuild connectivity if requested, but only if the region is unique
+    void    RemoveRegion( const char* regionname, bool erase_elements );
 
     /// excludes the intersection of elements of the 2 regions from the non-unique region
     bool    RemoveFromRegion( const char* region, const char* region_to_subtract );

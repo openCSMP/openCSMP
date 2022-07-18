@@ -650,12 +650,12 @@ void SAMG_Solver::SolveMatrixEquation( CompressedRowMatrix& A,
 #endif
 
   if ( ierr_ > 0 ) {
-    csmp_error.notice( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
+    csmp_error.Note( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
                        "SAMG solver returned with an error; error code: ", (to_string( ierr_ )).c_str() );
 
   }
   else if ( ierr_ < 0 and ierr_ != -841 ) { // bicgstab restart
-    csmp_error.notice( WARNING, "SAMG_Solver::SolveMatrixEquation:",
+    csmp_error.Note( WARNING, "SAMG_Solver::SolveMatrixEquation:",
                        "SAMG solver returned with a warning; code: ", (to_string( ierr_ )).c_str() );
   }
 
@@ -1189,11 +1189,11 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
 #endif
 
     if ( ierr_ > 0 ) {
-        csmp_error.notice( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
+        csmp_error.Note( ERROR, "SAMG_Solver::SolveMatrixEquation: ",
                           "SAMG solver returned with an error; error code: ", (to_string(ierr_)).c_str() );
 
     } else if ( ierr_ < 0 and ierr_ != -841 ) { // bicgstab restart
-        csmp_error.notice( WARNING, "SAMG_Solver::SolveMatrixEquation:",
+        csmp_error.Note( WARNING, "SAMG_Solver::SolveMatrixEquation:",
                            "SAMG solver returned with a warning; code: ", (to_string(ierr_)).c_str() );
     }
 
@@ -1509,7 +1509,7 @@ bool SAMG_Solver::CheckConvergence( double eps ) const
     if ( eps < 0. )
     {
         if ( res_out_ > fabs( eps ) ) {
-            csmp_error.notice( WARNING,
+            csmp_error.Note( WARNING,
                                "SAMG_Solver::CheckConvergence",
                                "Absolute error L2-norm solution criterion was not fulfilled");
             return false;
@@ -1524,7 +1524,7 @@ bool SAMG_Solver::CheckConvergence( double eps ) const
         cout <<"\n\trelative residual = " << relative_residual << "\n\n";
         // make sure that the target residual is strongly violated (best single prec. solution)
         if ( relative_residual > eps ) {
-            csmp_error.notice( WARNING,
+            csmp_error.Note( WARNING,
                                "SAMG_Solver::CheckConvergence",
                                "Relative solution criterion was not fulfilled" );
             return false;

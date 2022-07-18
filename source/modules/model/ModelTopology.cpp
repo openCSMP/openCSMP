@@ -196,7 +196,7 @@ bool ModelTopology::InputFromTextFile( const char* file_dot_asc ) {
         ifs.getline( text_line, 256 );
     }
 
-	cout << "\n\tFile read successfully." << endl;
+	cout << "\nModelTopology::InputFromTextFile: ModelTopology has been successfully read from: " << file << endl;
 
 	return true;
 
@@ -515,7 +515,7 @@ void ModelTopology::ChangeCellType( const string& old_element_type,
   }
   
   if ( counter == 0U )
-    csmp_error.notice( ERROR, "ModelTopology::ChangeCellType",
+    csmp_error.Note( ERROR, "ModelTopology::ChangeCellType",
                       "topology did not contain requested element type (should be ANSYS type)" );
 }
 
@@ -1121,7 +1121,7 @@ bool  ModelTopology::Contains( const char* region ) const
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( region == NULL ) {
-         csmp_error.notice( WARNING, "ModelTopology::Contains",
+         csmp_error.Note( WARNING, "ModelTopology::Contains",
                            "method was passed empty const char* string" );
          return false;
       }
@@ -1211,7 +1211,7 @@ void  ModelTopology::ReduceToDomains( const set<string>& desired_regions )
           string errorMessage("unrecognized region in region file");
           string token_message("token: ");
           token_message += (*rit);
-          csmp_error.notice( ERROR, "ModelTopology::ReduceToDomains:",
+          csmp_error.Note( ERROR, "ModelTopology::ReduceToDomains:",
                              token_message.c_str(), errorMessage.c_str() );
         }
 
@@ -1785,7 +1785,7 @@ bool  ModelTopology::CheckCellNumbering() const
               if ( litp1 != (*rit).second.second.end() and (*lit+1U) != *litp1 )
               {
                   if( csmp_error.Verbose() )
-                      csmp_error.notice( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
+                      csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
                   return false;
               }
               // sequence is not consecutive if next element number cannot be inserted into it because it is non-unique
@@ -1793,7 +1793,7 @@ bool  ModelTopology::CheckCellNumbering() const
               if ( it.second == false )
               {
                   if( csmp_error.Verbose() )
-                      csmp_error.notice( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
+                      csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
                   return false;
               }
               if( litp1 != litEnd ) ++litp1;
@@ -1806,7 +1806,7 @@ bool  ModelTopology::CheckCellNumbering() const
                 string  err_msg("first element number ");
                 err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
                 err_msg +=" is not equal to zero.";
-                csmp_error.notice( WARNING, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
+                csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
             }
           return false;
       }
@@ -1818,7 +1818,7 @@ bool  ModelTopology::CheckCellNumbering() const
                 err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
                 err_msg +="-1 is not equal to the total number of elements ";
                 err_msg += to_string( element_ids.size() );
-                csmp_error.notice( ERROR, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
+                csmp_error.Note( ERROR, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
             }
           return false;
       }
@@ -1864,7 +1864,7 @@ void  ModelTopology::CreateNewCellNumbers( map<size_t /* old-# */,size_t /* new-
     // ConsecutiveSequenceChecker::Test_ConsecutiveSequenceChecker();
          const bool check_whether_max_value_is_size_minus1(true);
          if ( !ConsecutiveSequenceChecker::IsValueRangeUniqueAndBounded( eid_mapping, check_whether_max_value_is_size_minus1 ) )
-           csmp_error.notice( WARNING, "ModelTopology::CreateNewCellNumbers:",
+           csmp_error.Note( WARNING, "ModelTopology::CreateNewCellNumbers:",
                             "the renumbered element range is not consecutive and unique; trying to fix this.");
       }
 
@@ -1900,7 +1900,7 @@ void  ModelTopology::RenumberCells( const map<size_t,size_t>& eid_mapping )
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
     if ( eid_mapping.empty() ) {
-         csmp_error.notice( WARNING, "ModelTopology::RenumberCells",
+         csmp_error.Note( WARNING, "ModelTopology::RenumberCells",
                            "The element number correspondance map is empty. Nothing was done.");
          return;
       }
@@ -1981,7 +1981,7 @@ void  ModelTopology::RenumberCells( VSet<dim>& vset, bool check_range )
   if ( check_range ) {
         const bool check_whether_max_value_is_size_minus1(true);
         if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) )
-          csmp_error.notice( ERROR, "ModelTopology::RenumberCells:", "failed to calculate consecutive new element idx range.");
+          csmp_error.Note( ERROR, "ModelTopology::RenumberCells:", "failed to calculate consecutive new element idx range.");
     }
 }
 
@@ -2030,7 +2030,7 @@ bool ModelTopology::EstablishTopology( VSet<dim>& vset,
     // --------------------------------------------
     if ( reassign_boundary_flags ) {
         if ( !AssignBoxShapedModelFlags(vset) )
-          csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:",
+          csmp_error.Note( WARNING, "ModelTopology::EstablishTopology:",
                             "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
      }
      
@@ -2080,7 +2080,7 @@ bool ModelTopology::EstablishTopology( VSet<dim>& vset,
     CreateNewCellNumbers( old_and_new_elmtids, false );
     bool check_whether_max_value_is_size_minus1( true );
     if ( !ConsecutiveSequenceChecker::IsKeyRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
-         csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:", "input element number range is not consecutive.");
+         csmp_error.Note( WARNING, "ModelTopology::EstablishTopology:", "input element number range is not consecutive.");
          // looking at the input  range
          cerr <<"\n\tfirst element-Idx stored in model topology: "<< (*old_and_new_elmtids.begin()).first;
          cerr <<"\n\tlast element-Idx stored in model topology: "<< (*old_and_new_elmtids.rbegin()).first <<"\n";
@@ -2100,7 +2100,7 @@ bool ModelTopology::EstablishTopology( VSet<dim>& vset,
       }
 
     if ( !ConsecutiveSequenceChecker::IsValueRangeOfUnsignedIntConsecutive( old_and_new_elmtids, check_whether_max_value_is_size_minus1 ) ) {
-         csmp_error.notice( WARNING, "ModelTopology::EstablishTopology:", "output (new) element number range is not consecutive.");
+         csmp_error.Note( WARNING, "ModelTopology::EstablishTopology:", "output (new) element number range is not consecutive.");
          RenumberCells( vset, check_whether_max_value_is_size_minus1=false ); // false=done already
          checks_passed = false;
       }
@@ -2109,7 +2109,7 @@ bool ModelTopology::EstablishTopology( VSet<dim>& vset,
     // -----------------------------------------------
     if ( reassign_boundary_flags ) {
          if ( !AssignBoxShapedModelFlags(vset) )
-           csmp_error.notice( ERROR, "ModelTopology::EstablishTopology:",
+           csmp_error.Note( ERROR, "ModelTopology::EstablishTopology:",
                              "although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established." );
       }
       
@@ -2511,7 +2511,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
 bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VSet<2U>& vset ) const
  {
      ErrorHandler& csmp_error ( ErrorHandler::Instance() );
-     csmp_error.notice( WARNING, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
+     csmp_error.Note( WARNING, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
                        "Rectangular model has no edges.");
      // checking for the presence of corners
      set<BOX_BOUNDARY> corners;
@@ -2527,7 +2527,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
                  cerr << parseBoundary( (*cit) ) <<" ";
                cerr << endl;
             }
-          csmp_error.notice( ERROR, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
+          csmp_error.Note( ERROR, "ModelTopology<2>::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags:",
                             "Some of the model corners are not flagged.");
           return false;
        }

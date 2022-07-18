@@ -106,7 +106,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
 
     ifstream  bc_ifs( bc_file_name );
     if ( !bc_ifs.is_open() ) {
-      csmp_error.notice( ERROR, "importElementPropertyValuesFromSKUA:", bc_file_name, "could not be opened." );
+      csmp_error.Note( ERROR, "importElementPropertyValuesFromSKUA:", bc_file_name, "could not be opened." );
       return false;
     }
 
@@ -132,11 +132,11 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
     bool all_properties_known(true);
     for ( size_t i=first_prop; i<items_per_line; i++ )
        if ( !model.Database().IsDefined( properties[i].c_str() ) ) {
-            csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:", properties[i], "input property unknown to current model." );
+            csmp_error.Note( WARNING, "importElementPropertyValuesFromSKUA:", properties[i], "input property unknown to current model." );
             all_properties_known = false;
          }
     if ( !all_properties_known ) {
-         csmp_error.notice( ERROR, "importElementPropertyValuesFromSKUA:", "unknown input properties; terminating mapping." );
+         csmp_error.Note( ERROR, "importElementPropertyValuesFromSKUA:", "unknown input properties; terminating mapping." );
          return false;
       }
     // getting bounds for the property values to be read
@@ -226,12 +226,12 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
       {
           // ignoring regions that do not exist in model
           if ( !model.ContainsRegion( (*it).first ) ) {
-               csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:", (*it).first,
+               csmp_error.Note( WARNING, "importElementPropertyValuesFromSKUA:", (*it).first,
                                  "region enlisted in file does not exist in current model; related data are ignored." );
                continue;
             }
           else if ( (*it).second.empty() )
-            csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:", (*it).first,
+            csmp_error.Note( WARNING, "importElementPropertyValuesFromSKUA:", (*it).first,
                               "region is enlisted in file, but without any assigneable values; nothing was done." );
           else {
                // finding the elements corresponding to element numbers in current model region
@@ -262,7 +262,7 @@ bool SKUA_Interface::ImportElementPropertyValuesFromSKUA( Model<dim>& model, con
    
    // reporting
    if ( !range_check_failures.empty() ) {
-        csmp_error.notice( WARNING, "importElementPropertyValuesFromSKUA:",
+        csmp_error.Note( WARNING, "importElementPropertyValuesFromSKUA:",
                               "range checks failed for several variable values." );
         for ( auto it=range_check_failures.begin(); it!=range_check_failures.end(); ++it )
           cerr <<"\n\t"<< (*it).second <<" range check failures occured for variable '"<< (*it).first <<"'";
@@ -559,7 +559,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
 
     ifstream  bc_ifs( datafile );
     if ( !bc_ifs.is_open() ) {
-         csmp_error.notice( ERROR, "detect_NO_DATA_ElementsInDatasetFromSKUA:", datafile, "could not be opened." );
+         csmp_error.Note( ERROR, "detect_NO_DATA_ElementsInDatasetFromSKUA:", datafile, "could not be opened." );
          return false;
       }
     if ( !no_data_elmt_numbers.empty() ) no_data_elmt_numbers.clear();
@@ -623,7 +623,7 @@ bool SKUA_Interface::Detect_NO_DATA_ElementsInDatasetFromSKUA( const string& inp
    
    // reporting
    if ( no_data_elmt_numbers.empty() ) {
-        csmp_error.notice( INFO, "detect_NO_DATA_ElementsInDatasetFromSKUA:", target_region,
+        csmp_error.Note( INFO, "detect_NO_DATA_ElementsInDatasetFromSKUA:", target_region,
                           "no empty element property records found for target region in datafile." );
         return false;
      }
@@ -666,41 +666,13 @@ void SKUA_Interface::Erase_NO_DATA_ElementsFromModel( Model<3U>& model, const st
   if ( model.IsUnique(target_region) ) {
        // finding the target elements
        vector<Element<3U>*> elmt_ptrs;
-       model.Mesh().Delete( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
+       model.Mesh().DeleteAndRepairConnnectivity( ptrs_to_removed_elements.begin(), ptrs_to_removed_elements.end() );
        return;
     }
 
   // if the region was non-unique, i.e., overlapping other regions, all regions the overlapped regions need to be rebuild
   // updating regions
   model.Mesh().UpdateConnectivity();
-  
-  /*
-  for ( auto rit = model.RegionsBegin(); rit != model.RegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector2();
-    rit->second.EstablishNeighborConnectivity();
-    rit->second.IdentifyPerimeter();
-  }
-
-  // updating unique regions
-  for ( auto rit = model.UniqueRegionsBegin(); rit != model.UniqueRegionsEnd(); ++rit ) {
-    rit->second.CreateNodePointerVector2();
-    rit->second.EstablishNeighborConnectivity();
-    rit->second.IdentifyPerimeter();
-  }
-  // updating boundaries
-  for ( auto bit = model.BoundariesBegin(); bit != model.BoundariesEnd(); ++bit ) {
-    //bit->second.UpdateElementPointerVector( model.Mesh() );
-    bit->second.CreateNodePointerVector2();
-    bit->second.EstablishNeighborConnectivity();
-    bit->second.IdentifyPerimeter();
-  }
-  // updating split boundaries
-  for ( auto sbit = model.SplitBoundariesBegin(); sbit != model.SplitBoundariesEnd(); ++sbit ) {
-    sbit->second.CreateNodePointerVector2();
-    sbit->second.EstablishNeighborConnectivity();
-    sbit->second.IdentifyPerimeter();
-  }
-  */
   
 } // end Remove_NO_DATA_ElementsInModel
 
@@ -739,7 +711,7 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
   std::ifstream ifs( file_name.c_str() );
 
   if ( !ifs.is_open() )
-    csmp_error.notice( FATAL_ERROR,
+    csmp_error.Note( FATAL_ERROR,
                        "convertRockTypesIntoRegions:", file_name,
                        "ASCII rocktype identifier file could not be opened." );
 
@@ -796,7 +768,7 @@ void  SKUA_Interface::ConvertRockTypesIntoRegions( Model<3U>& model, const strin
     }
   if ( !unknown_identifiers.empty() ) {
     for ( auto p : unknown_identifiers ) cerr << p << " ";
-    csmp_error.notice( WARNING, "convertRockTypesIntoRegions:",
+    csmp_error.Note( WARNING, "convertRockTypesIntoRegions:",
                        "there were elements with unrecognized rocktype identifiers; they were ignored." );
   }
 

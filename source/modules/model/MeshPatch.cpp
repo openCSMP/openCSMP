@@ -92,7 +92,7 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
     
     const size_t  n_elmts_to_create{ input_elmts.size() };
     if ( n_elmts_to_create == 0U ) {
-         csmp_error.notice( ERROR, "MeshPatch<dim>::BuildInterveningPatch",
+         csmp_error.Note( ERROR, "MeshPatch<dim>::BuildInterveningPatch",
                                    "no interface elements were provided as input; nothing was done");
          return 0U;
       }
@@ -135,7 +135,7 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
                break;
              default: {
                   cerr <<"\n\n"<< parseFiniteElementType( etype );
-                  csmp_error.notice( ERROR, "MeshPatch<dim>::BuildInterveningPatch", "element type not recognised; nothing could be done.");
+                  csmp_error.Note( ERROR, "MeshPatch<dim>::BuildInterveningPatch", "element type not recognised; nothing could be done.");
                   return 0U;
                }
            }
@@ -190,7 +190,7 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
                 else if ( n_face_nbors > 2 ) {
                      (*it.second.begin()).first->Out();
                      (*it.second.rbegin()).first->Out();
-                     csmp_error.notice( ERROR, "creatInterveningElementPatchFrom", "Elements on either side of the face cannot be matched");
+                     csmp_error.Note( ERROR, "creatInterveningElementPatchFrom", "Elements on either side of the face cannot be matched");
                   }
        } // end 3D
       

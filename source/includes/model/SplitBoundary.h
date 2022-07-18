@@ -12,10 +12,11 @@ template<uint32_t> class MeshManager;
 template<uint32_t> class Boundary;
 template<uint32_t> class Element;
 template<uint32_t> class Region;
-template<typename> class FEM_Data;
+template<uint32_t> class NodeManifold;
+//template<typename> class FEM_Data;
 
 /**
-    Set of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
+    Vector of InterFace  (higher-dim) Element - face idx pairs and Element co-located with InterFace (if present).
     For each InterFace we have a pair or Element pointer - face ID pairs
         1) inner higher-dim element pointer
         2) local face number of element face that is located at interface to outer element
@@ -24,12 +25,12 @@ template<typename> class FEM_Data;
         5) pointer to potential  lower-dimensional intervening Element
 */
 template<uint32_t dim> ///
-struct InterFaceSet : public std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
+struct InterFaceParentElements : public std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > > {
     // constructor
-    InterFaceSet( const std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& set )
-      : std::set<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(set) {}
+    InterFaceParentElements( const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >& data )
+      : std::vector<std::pair<std::pair<Element<dim>*,uint32_t>, std::pair<Element<dim>*,uint32_t> > >(data) {}
       
-    typedef typename InterFaceSet<dim>::const_iterator ifaceIterator;
+    typedef typename InterFaceParentElements<dim>::const_iterator ifaceIterator;
     // data members
     Element<dim>* InnerElement( ifaceIterator it ) const { return (*it).first.first; }
     Element<dim>* OuterElement( ifaceIterator it ) const { return (*it).second.first; }
@@ -90,9 +91,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
  {
   public:
     SplitBoundary() = delete;
+    
     /// constructor of split boundary with given name from set of juxtaposed elements; prompts MeshManager to create elements
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>&, 
-                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceSet<dim>& );
+                   const FiniteElementManager&, MeshManager<dim>&, const InterFaceParentElements<dim>& );
                    
     SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& );
     
@@ -128,25 +130,43 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
     bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
-  
-    /// reestablishes the pointers to the nodes associated with the stored elements
-    void CreateNodePointerVector();
 
     // ----------------------------------------
     // user interface
     // ----------------------------------------
 
+    /// generates a vector of NodeManifold pointers that can be iterated over
+    std::vector<NodeManifold<dim>*>  NodeManifolds() const;
+    
+    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    std::pair<std::vector<Node<dim>*>,size_t>  InsideNodes() const;
+
+    /// returns sorted node pointer vector partitioned into an interior and perimenter range; perimeter starts at size_t number of nodes in returned pair
+    std::pair<std::vector<Node<dim>*>,size_t>  OutsideNodes() const;
+
+    /// NEW: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE)
+    template<class Var>
+    void InputNodePropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
+    /// input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE)
+    template<class Var>
+    void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
     /// for the assignment of properties that are unique to the instance of this subclass
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
-    /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
+    /// as InputPropertyValue, but with more selective overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
-    /// input node variable values on specific side of split boundary
-    template<class Var>
-    void InputNodePropertyValue( const char* input_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE=INSIDE );
+    /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary or its interior or perimeter
+    void ChangeNodePropertyStatus( const char* property,
+                                   VARIABLE_FLAG new_status_of_scalar,
+                                   SUBDOMAIN_PART, INTERFACE_SIDE );
+
+    /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary but only where the variable value is in the target range
+    void ChangeNodePropertyStatusWhere( const char*, VARIABLE_FLAG, INTERFACE_SIDE, double, double );
 
     // returns location of split boundary relative to adjacent region
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );
@@ -168,6 +188,29 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
 
     /// writes all contained data on the screen
     void Out() const;
+
+    // base class methods not available for SplitBoundary
+    
+    size_t            Nodes() const = delete;
+    size_t            InteriorNodes() const = delete;
+    size_t            PerimeterNodes() const = delete;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const = delete;
+    csmp::Node<dim>*  N( size_t n ) const = delete;
+    bool              IsPerimeterNode( const size_t nidx ) const = delete;
+    void              AssignNodeCoordinatesTo( const char* vector_prop ) = delete;
+    void              AssignNodeCoordinatesTo( const char* scalar_prop, char coord ) = delete;
+    void              NodeAttributesToCSV() = delete;
+
+    void ChangePropertyStatus( const char*, VARIABLE_FLAG, SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, VARIABLE_FLAG, double, double ) = delete;
+    void ChangePropertyStatus( const char*, const std::vector<VARIABLE_FLAG>& ,SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, const std::vector<VARIABLE_FLAG>&, double, double ) = delete;
+    void ChangePropertyStatus( const char*, uint32_t, VARIABLE_FLAG, SUBDOMAIN_PART ) = delete;
+    void ChangePropertyStatusWhere( const char*, uint32_t, VARIABLE_FLAG, double, double ) = delete;
+    VARIABLE_FLAG  PropertyStatus( const char*, SUBDOMAIN_PART, uint32_t ) const = delete;
+
+    void InterpolateNodeToCellProperty( const char*, const char* ) = delete;
+    void InterpolateNodeToIntegrationPointProperty( const char*, const char* ) = delete;
 
   protected:
 

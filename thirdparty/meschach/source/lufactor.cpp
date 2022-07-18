@@ -34,7 +34,7 @@ static	char	rcsid[] = "$Id: lufactor.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Ex
 #include <cstdio>
 #include <cmath>
 #include <cstring>
-#include "matrix.h"
+#include "meschach_matrix.h"
 #include "matrix2.h"
 
 using namespace std;

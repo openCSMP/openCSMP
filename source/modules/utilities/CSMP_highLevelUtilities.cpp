@@ -76,9 +76,9 @@ bool areFartherApartThan( const double* pn, const double* pw, double distance )
  * Returns true if file on ifstream is empty.(Aug 2014)
  * @author Julian E. Mindel
  */
-bool isInputFileEmpty( std::ifstream& pFile )
+bool isInputFileEmpty( ifstream& pFile )
 {
-   return pFile.peek() == std::ifstream::traits_type::eof();
+   return pFile.peek() == ifstream::traits_type::eof();
 }
 
 
@@ -168,8 +168,8 @@ void printRangeOfVectorOfVectors( const vector<vector<double> >&  data )
     
     for ( auto it=data.begin(); it!=data.end(); it++ )
       for ( auto dit=(*it).begin(); dit!=(*it).end(); dit++ ) {
-           vmin = std::min( vmin, (*dit) );
-           vmax = std::max( vmax, (*dit) );
+           vmin = min( vmin, (*dit) );
+           vmax = max( vmax, (*dit) );
         }
     
     cout <<"\nprintRangeOfVectorOfVectors: Data range: "<< vmin <<" to "<< vmax << endl;
@@ -186,8 +186,8 @@ void printRangeOf( const vector<pair<double,double> >&  data )
               vmax(data[0].second);
     
     for ( auto it=data.begin(); it!=data.end(); it++ ) {
-           vmin = std::min( vmin, (*it).first );
-           vmax = std::max( vmax, (*it).second );
+           vmin = min( vmin, (*it).first );
+           vmax = max( vmax, (*it).second );
         }
     
     cout <<"\nprintRangeOf: Data range: "<< vmin <<" to "<< vmax << endl;
@@ -464,12 +464,12 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 
 
 /// Utility that tokenises string into substrings using the supplied delimiter(s).
-std::vector<std::string> splitString( std::string str, char delimiter )
+vector<string> splitString( string str, char delimiter )
 {
   size_t pos = 0U;
   string token, s = str;
   vector<string> items;
-  while ( (pos = s.find( delimiter )) != std::string::npos ) {
+  while ( (pos = s.find( delimiter )) != string::npos ) {
     token = s.substr( 0, pos );
     items.push_back( token );
     s.erase( 0, pos + 1 );
@@ -498,8 +498,9 @@ std::vector<std::string> splitString( std::string str, char delimiter )
       @date 4/10/2021
       
  */
-size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
-                                 std::deque<std::vector<int64_t> >& combinations )
+template<typename intType>
+size_t createUniqueCombinations( vector<intType>& sequence, intType samples,
+                                 deque<vector<intType> >& combinations )
  {
     // checking the input
     if ( sequence.empty() ) return 0U;
@@ -512,23 +513,27 @@ size_t createUniqueCombinations( std::vector<int64_t>& sequence, size_t samples,
     const size_t N{sequence.size()};
     
     // generating combinations by selectively sampling sequence using 011.. pattern in bitmap
-    std::string bitmask(samples, 1); // generating leading 1's
-    bitmask.resize(N, 0);            // adding (N - samples) trailing 0's
+    string bitmask(samples, 1); // generating leading 1's
+    bitmask.resize(N, 0);       // adding (N - samples) trailing 0's
  
     do {
-        combinations.push_back( std::vector<int64_t>{} );
+        combinations.push_back( vector<intType>{} );
         combinations.back().reserve( samples );
-        for ( size_t i{0U}; i < N; ++i ) { // [0..N-1] integers
+        for ( intType i{0U}; i < N; ++i ) { // [0..N-1] integers
              if ( bitmask[i] == 1 )
                combinations.back().push_back( sequence[i] );
           }
       }
-    while ( std::prev_permutation( bitmask.begin(), bitmask.end() ) );
+    while ( prev_permutation( bitmask.begin(), bitmask.end() ) );
     
     return combinations.size();
     
 } // end createUniqueCombinations
  
+template size_t createUniqueCombinations( vector<int64_t>& sequence, int64_t samples, deque<vector<int64_t> >& combinations );
+template size_t createUniqueCombinations( vector<uint32_t>&, uint32_t, deque<vector<uint32_t> >& );
+template size_t createUniqueCombinations( vector<size_t>&, size_t, deque<vector<size_t> >& );
+template size_t createUniqueCombinations( vector<int>&, int, deque<vector<int> >& );
 
 
 

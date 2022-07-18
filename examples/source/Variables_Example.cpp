@@ -30,8 +30,7 @@ void Variables_Example::Run()
     const size_t D(3);
     ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true ); 
     
-    const bool remove_dim_minus1_region(true);
-    pair<set<string>,bool> boundary_patches = model.CreateInternalBoundaryFrom( "FRACTURE", remove_dim_minus1_region );  
+    pair<set<string>,bool> boundary_patches = model.CreateInternalBoundaryFrom( "FRACTURE" );  
     assert( boundary_patches.second == true );
     assert( boundary_patches.first.size() == 1 );
     const string boundary_name = (*boundary_patches.first.begin());

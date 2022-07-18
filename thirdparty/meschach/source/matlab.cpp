@@ -33,10 +33,10 @@
 */
 
 
-#include    <cstdio>
+#include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include    "matrix.h"
+#include "meschach_matrix.h"
 #include	"matlab.h"
 
 using namespace std;

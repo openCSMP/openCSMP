@@ -129,7 +129,7 @@ void ComputeGravityTermVisitor<dim>::ComputeContribution( Element<dim>* element 
 #if defined(_OPENMP )
         ErrorHandler& error_handler (ErrorHandler::Instance());
         string errmsg="Unfortunately two-phase functions are not yet Openmp-ized.";
-        error_handler.notice(FATAL_ERROR,"ComputeGravityTermVisitor<dim>::ComputeContribution(element)",errmsg);
+        error_handler.Note(FATAL_ERROR,"ComputeGravityTermVisitor<dim>::ComputeContribution(element)",errmsg);
 #endif
       saturationFunctions_->Initialize( *element );
       saturationFunctions_->InitializeForBaryCenter( *element);

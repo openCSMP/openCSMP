@@ -202,6 +202,8 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${CMAKE_SOURCE_DIR}/thirdparty/samg
     ${CMAKE_SOURCE_DIR}/thirdparty/plf_colony
     ${CMAKE_SOURCE_DIR}/thirdparty/catch2
+    ${CMAKE_SOURCE_DIR}/thirdparty/eigen
+    ${CMAKE_SOURCE_DIR}/thirdparty
     ${CMAKE_SOURCE_DIR}/examples/source
 )
 

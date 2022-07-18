@@ -194,16 +194,16 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
     string   asc_name  = meshfile; asc_name += ".asc";
     ifstream ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                     "ASCII geometry input file with extension '.asc' could not be opened");
     
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) )
-      csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                  "File header not read correctly");
 
     // initialise object_specs_ that is used in the construction of the model topology further below
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) )
-      csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                  "Region and element type information not read correctly");
    
     convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_, dim );
@@ -215,7 +215,7 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
     string dat_name = meshfile; dat_name += ".dat";
 
     if ( (ifs_dat=fopen( dat_name.c_str(), "rb" )) == NULL )
-      csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+      csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                      "DAT input file with extension '.dat' could not be opened");
 
     if( csmp_error.Verbose() )
@@ -225,36 +225,36 @@ void ANSYS_Interface::ReadMeshBinary( const string&  meshfile,
     }
 
     if ( !ReadNodeCoordinatesBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Node coordinates not read correctly");
       }
     if ( !ReadBoundaryFlagsAndConditionsBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Boundary flags and conditions not read correctly");
       }
     if ( !ReadPelementBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Element types not read correctly");
       }
     convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
 
     if ( !ReadPlistBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Nodes per element information not read correctly");
       }
     if ( !ReadPfvertsBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Element neighbor information not read correctly");
       }
     if ( !ReadPmaterialBinary( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshBinary",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshBinary",
                                        "Material property identifiers for elements not read correctly");
       }
     fclose( ifs_dat ); // '*.dat' pdata file
 
     if ( object_specs_.size() != object_elements_.size() )
     {
-      csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshBinary():",
+      csmp_error.Note( ERROR, "ANSYS_Interface::ReadMeshBinary():",
                                 "Mismatch in object names and object specifiers");
     }
     else if( csmp_error.Verbose() )
@@ -347,16 +347,16 @@ void ANSYS_Interface::ReadMeshASCII( const string& meshfile,
     string    asc_name = meshfile; asc_name += ".asc";
     ifstream  ifs_asc( asc_name.c_str() );
     if ( !ifs_asc.is_open() )
-       csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII",
+       csmp_error.Note( ERROR, "ANSYS_Interface::ReadMeshASCII",
                                  "ASCII geometry input file with extension '.asc' could not be opened");
 
     if ( !ReadTitleASCII( ifs_asc, file_header_ ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "File header not read correctly");
       }
     // initialises 'object_specs_' that is used in EstablishTopology, see below
     if ( !ReadRegionsAndElementTypesASCII( ifs_asc ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Region and element type information not read correctly");
       }
     convert_ANSYS_To_CSMP_FiniteElementTypes( object_specs_, isoparametric_ , dim );
@@ -369,7 +369,7 @@ void ANSYS_Interface::ReadMeshASCII( const string& meshfile,
     ifstream  ifs_dat( dat_name.c_str() );
 
     if ( !ifs_dat.is_open() )
-         csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note( ERROR, "ANSYS_Interface::ReadMeshASCII",
                                    "DAT pdata input file with extension '.dat' could not be opened");
 
     if( csmp_error.Verbose() )
@@ -379,36 +379,36 @@ void ANSYS_Interface::ReadMeshASCII( const string& meshfile,
     }
 
     if ( !ReadNodeCoordinatesASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Node coordinates not read correctly");
       }
     if ( !ReadBoundaryFlagsAndConditionsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Boundary flags and conditions not read correctly");
       }
     if ( !ReadPelementASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Element types not read correctly");
       }
     convert_ANSYS_To_CSMP_FiniteElementTypes( vset, isoparametric_ );
 
     if ( !ReadPlistASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Nodes per element information not read correctly");
       }
     if ( !ReadPfvertsASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Element neighbor information not read correctly");
       }
     if ( !ReadPmaterialASCII( ifs_dat, vset ) ) {
-         csmp_error.notice(  ERROR, "ANSYS_Interface::ReadMeshASCII",
+         csmp_error.Note(  ERROR, "ANSYS_Interface::ReadMeshASCII",
                                     "Material property identifiers for elements not read correctly");
       }
     ifs_dat.close(); // '*.data' pdata file
 
     if ( object_specs_.size() != object_elements_.size() )
     {
-      csmp_error.notice( ERROR, "ANSYS_Interface::ReadMeshASCII():",
+      csmp_error.Note( ERROR, "ANSYS_Interface::ReadMeshASCII():",
                                 "Mismatch in object names and object specifiers");
     }
     else if( csmp_error.Verbose() )
@@ -916,7 +916,7 @@ bool ANSYS_Interface::ReadPelementASCII( ifstream& ifs, VSet<dim>& vset )
     SkipPotentialComment( ifs );
 
     if ( records == 0U ) {
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPelementASCII",
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPelementASCII",
                                   "Record of element types per element appears empty." );
          return false;
       }
@@ -987,7 +987,7 @@ bool ANSYS_Interface::ReadPlistASCII( ifstream& ifs, VSet<dim>& vset )
     SkipPotentialComment( ifs );
 
     if ( total_items == 0 ) {
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPlistASCII", 
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPlistASCII", 
                                      "File record of nodes per element (plist) appears empty" );
          return false;
       }
@@ -1071,7 +1071,7 @@ bool ANSYS_Interface::ReadPfvertsASCII( ifstream& ifs, VSet<dim>& vset )
     SkipPotentialComment( ifs );
 
     if ( total_items == 0 ) {
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsASCII", 
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsASCII", 
                                      "File record of neighbors per element (pfverts) appears empty" );
          return false;
       }
@@ -1161,7 +1161,7 @@ bool ANSYS_Interface::ReadPmaterialASCII( ifstream& ifs, VSet<dim>& vset )
     SkipPotentialComment( ifs );
 
     if ( records == 0 ) {
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPmaterialASCII:",
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPmaterialASCII:",
                                   "Record of material types per element appears empty." );
          return false;
       }
@@ -1178,7 +1178,7 @@ bool ANSYS_Interface::ReadPmaterialASCII( ifstream& ifs, VSet<dim>& vset )
 
     if ( elmt_mtrls.size() < vset.Elements() ) {
          cerr <<"\nFor the "<< vset.Elements() <<" elements, material parameter values were provided for only "<< records <<"\n";
-         csmp_error.notice( ERROR, "ANSYS_Interface::ReadPmaterialASCII:",
+         csmp_error.Note( ERROR, "ANSYS_Interface::ReadPmaterialASCII:",
                            "Element material information could not be obtained for all elements." );
          return false;
       }
@@ -1314,7 +1314,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
 
     if ( flag_value_errors > 0 ) {
          cerr <<"\n\n\t"<<"encountered "<< flag_value_errors <<" BOX_BUNDARY flag values that were out of the range defined for this enum [-29,0].\n";
-         csmp_error.notice( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
+         csmp_error.Note( INFO, "ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range, setting to IRREGULAR.");
       }
 
 
@@ -1480,7 +1480,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
     
     if ( entries != n_pfverts_entries_expected ) {
          cerr <<"\nneighbor records "<< entries <<" vs expected: "<< n_pfverts_entries_expected;
-         csmp_error.notice( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
+         csmp_error.Note( WARNING, "ANSYS_Interface::ReadPfvertsBinary",
                            "neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced");
       }
     if ( csmp_error.Verbose() ) {
@@ -1488,7 +1488,7 @@ bool ANSYS_Interface::ReadPfvertsBinary( FILE* fp, VSet<dim>& vset )
          cout.flush();
       }
     if ( entries >= 2147483647 )
-      csmp_error.notice( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
+      csmp_error.Note( ERROR, "ANSYS_Interface::ReadPfvertsBinary", "too many elements in file to be read by this reader");
       
     int32_t*  pfverts = new int32_t[ entries ];
     fread( (void*) pfverts, ibytes, entries, fp );

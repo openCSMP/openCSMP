@@ -23,8 +23,6 @@ template<uint32_t> class Model;
   class SplitBoundaryInterface_Test : public Test
     {
     public:
-      explicit SplitBoundaryInterface_Test( bool verbose=false ) : verbose_(verbose) {}
-    
       virtual void run();
 
       // testing split boundary creation methods 
@@ -98,7 +96,7 @@ template<uint32_t> class Model;
       void OutputToFile( const char* file_name,
                          const std::set<std::string>& fractures );
       private:
-        const bool verbose_;
+        static const bool verbose_ = true;
   };
 
   } // csmp

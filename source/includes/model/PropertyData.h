@@ -65,7 +65,7 @@ template<uint32_t dim> void read( const PropertyData&, size_t position, TensorVa
 */
 class PropertyData {
   public:
-    /// constructor (but no initializer) for all possible csmp variable types; array length gives number elements in array
+    /// constructor (but no initializer) for all possible csmp variable types; array length gives the number of elements in array or flagged array variable
     PropertyData( PLACEMENT, VARIABLE_TYPE, uint32_t dim, uint32_t array_length=0U );
   
     PropertyData( const PropertyData& );

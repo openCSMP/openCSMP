@@ -31,7 +31,7 @@ void Variables_Test::run()
   {
     // Run Test for 3D Model constructed by ANSYS mesh reader
 	  const string variables_filename = (string)(this->getName() + ".txt");
-    ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true, true, true );
+    ANSYS_Model3D m0(prefix_, variables_filename.c_str(), true, true );
     m0.OutputToBinaryFile("Variables_Test_BinaryModel");
     runModel(m0);
 

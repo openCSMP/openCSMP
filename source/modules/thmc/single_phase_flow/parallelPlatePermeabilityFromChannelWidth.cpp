@@ -8,7 +8,6 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "ExtractVectorVariableLength.h"
 #include "CSMP_definitions.h"
-#include "meshManagementUtilities.h"
 
 using namespace std;
 

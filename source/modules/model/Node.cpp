@@ -324,17 +324,20 @@ void  Node<dim>::AssignPropertyValuesFrom( const Node<dim>& nd )
 
 
 /**
-   Remove duplicates, nullptrs, and sort the vector again.
+    Re-establishes the node neighbors of the node using the parent element connectivity.
+    Since lower-dimensional elements share the nodes with the higher dimensional ones, they are ignored.
+    Only corner nodes are considered in the first pass.
+    Subsequently midside nodes which exist in higher-order elements are detected and their neighbors are assigned.
 */
 template<uint32_t dim>
-uint32_t  Node<dim>::ReassignNeighbors()
+uint32_t  Node<dim>::AssignNodeNeighbors()
  {
     set<Node<dim>*>  current_nbors;
     const auto       n_parents{ Parents() };
     
     for ( auto i{0U}; i < n_parents; ++i )
-      if ( Parent(i) != nullptr &&
-           Parent(i)->IsEquidimensional() ) {
+      // only considering parent elements with the same dimensions as the model
+      if ( Parent(i) && Parent(i)->IsEquidimensional() ) {
            for ( auto& j :  Parent(i)->CornerNodesConnectedTo( ParentNodeNumber(i) ) )
              current_nbors.insert( j );
         }
@@ -474,6 +477,10 @@ existing entries. The values of potential new elements are set to zero.
 template<uint32_t dim>
 void  Node<dim>::ResizeParentStorage( uint32_t n )
   {
+     // while this does not release the memory, it is essential to zap previous content of parent storage
+     parent_node_indexes_.clear();
+     parent_element_pointers_.clear();
+     // resize, initialising contained pointers to null and indices to NOT_INITIALIZED
      parent_node_indexes_.resize( n, NOT_INITIALIZED );
      std::vector<ONE_BYTE_NUMBER>( parent_node_indexes_ ).swap( parent_node_indexes_ );
      parent_element_pointers_.resize( n, nullptr );
@@ -689,8 +696,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
     set<Element<dim>*> shared_parents;
     for ( auto i{0U}; i<n_parents; ++i ) {
          assert( (*nit)->Parent(i) != nullptr );
-         if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-         if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+         if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+         if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
          shared_parents.insert( (*nit)->Parent(i) );
       }
       
@@ -703,8 +710,8 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
          const auto parents{(*nit)->Parents()};
          for ( auto i{0U}; i<parents; ++i ) {
               assert( (*nit)->Parent(i) != nullptr );
-              if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-              if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+              if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+              if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
               if ( shared_parents.find( (*nit)->Parent(i) ) != shared_parents.end() )
                 temp.insert( (*nit)->Parent(i) );
            }
@@ -714,15 +721,15 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       
     // drawing the results together
     assert( !shared_parents.empty() );
-    if ( shared_parents.size() == 1 ) return make_pair( (*shared_parents.begin()), nullptr );
+    if ( shared_parents.size() == 1U ) return make_pair( (*shared_parents.begin()), nullptr );
     
     // if two parent elements were found, the one on the inside needs to be determined
-    assert( shared_parents.size() == 2 );
+    assert( shared_parents.size() == 2U );
     // initial guess
     pair<Element<dim>*,Element<dim>*> result( (*shared_parents.begin()), (*shared_parents.rbegin()) );
     
     // 3D case where face is either a triangle or a quadrilateral
-    if constexpr ( dim == 3 ) {
+    if constexpr ( dim == 3U ) {
          vector<Node<3>*> face_nodes( first, last );
          assert( face_nodes.size() >= 3 );
          // getting normal to face from the first 3 node coordinates
@@ -740,9 +747,9 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       }
     
     // 2D case where the face is line and the non-existing normal points out of the plane
-    if constexpr ( dim == 2 ) {
+    if constexpr ( dim == 2U ) {
          vector<Node<2>*> face_nodes( first, last );
-         assert( face_nodes.size() == 2 );
+         assert( face_nodes.size() == 2U );
          Point<2> vec(face_nodes[1]->Coordinate() - face_nodes[0]->Coordinate()); // line element node numbering
          // rotating this line clockwise to get the normal
          Point<2> nrml( -vec[1] /* -y */, vec[0] /* x */ );
@@ -757,7 +764,7 @@ pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename vector<N
       }
  
      // in a 1D model faces coincide with nodes and have just a single node
-     if constexpr ( dim == 1 ) {
+     if constexpr ( dim == 1U ) {
          // the inside element is that for which the node is node 2
          const uint32_t parent_element{0};
          if ( (*first)->ParentNodeNumber( parent_element ) == 0 ) {
@@ -785,6 +792,8 @@ template pair<Element<1>*,Element<1>*>  parentElementsSharedByFace( typename vec
        @param first and last are iterators to the nodes of the Face.
        
        @return pair of Element and the face or segment of the element that has the same nodes.
+       
+       @attention method works only if all the parent element pointers that the node stores are valid.
 */
 template<uint32_t dim>
 pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_iterator first,
@@ -806,9 +815,9 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
 
     // creating set of parent elements shared by first and second node
     for ( auto i{0U}; i<n_parents; ++i )
-      if ( (*nit)->Parent(i) ) {
-           if constexpr ( dim == 3 ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
-           if constexpr ( dim == 2 ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
+      if ( (*nit)->Parent(i) != nullptr ) {
+           if constexpr ( dim == 3U ) if ( !(*nit)->Parent(i)->IsVolume() ) continue;
+           if constexpr ( dim == 2U ) if ( !(*nit)->Parent(i)->IsSurface() ) continue;
            // is this parent also one of the first node
            bool parent_to_all{true};
            for ( auto nit2=first; nit2!=nodesEnd; ++nit2 )
@@ -824,7 +833,7 @@ pair<Element<dim>*,size_t>  parentElement( typename vector<Node<dim>*>::const_it
     if (  shared_parents.empty() ) {
           for ( ; first!=last; ++first )
             printParents( (*first) );
-          ErrorHandler::Instance().notice( ERROR, "parentElement", "no suitable parent element was found" );
+          ErrorHandler::Instance().Note( ERROR, "parentElement", "no suitable parent element was found" );
 
           return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );
        }
@@ -845,10 +854,10 @@ for ( int i{0}; i<elmt2->Nodes(); ++i ) DATA2(0,i) = static_cast<double>(elmt2->
 elmt2->FE()->OutputNodeDataToVTK( "parent_elmt", "node_flag", DATA2 );
 // if there are two elements, are they overlapping?
 if ( interPenetrating<dim>( elmt1, elmt2 ) )
-  ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+  ErrorHandler::Instance().Note( ERROR, "parentElement", "more than one element was found",
                                          "and they are interpenetrating (=partially or fully overlapping)");
 
-         ErrorHandler::Instance().notice( ERROR, "parentElement", "more than one element was found",
+         ErrorHandler::Instance().Note( ERROR, "parentElement", "more than one element was found",
                                          "this may be the case for a lower-dimensional element inside the model; use other function");
 
          return make_pair( (*shared_parents.begin()), numeric_limits<size_t>::max() );

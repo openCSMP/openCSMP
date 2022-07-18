@@ -22,12 +22,12 @@ PointSource_rhsop<dim,CELL>::PointSource_rhsop( const PropertyDatabase<dim>& pre
  
      if ( MathOperatorRHS<dim>::TestOperandType() != SCALAR || 
           MathOperatorRHS<dim>::TestOperandPlacement() != NODE )
-       csmp_error.notice( ERROR, "MathOperatorRHS->PointSource_rhsop<dim>::(constructor)", 
+       csmp_error.Note( ERROR, "MathOperatorRHS->PointSource_rhsop<dim>::(constructor)", 
                           test, "must be a scalar variable placed on the node" ); 
                           
      if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR || 
           MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE )
-       csmp_error.notice( ERROR, "MathOperatorRHS->PointSource_rhsop<dim>::(constructor)", 
+       csmp_error.Note( ERROR, "MathOperatorRHS->PointSource_rhsop<dim>::(constructor)", 
                           oper, "must be a scalar variable placed on the node" ); 
  }
 

@@ -88,7 +88,7 @@ void HeterogeneityAndRateAwareModel<dim>::InitializeVelocity( const Element<dim>
     
     e.Read( vt_key_, vt_ );
     if ( isnan(vt_[0]) || isnan(vt_[1]) )
-      csmp_error.notice( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "the velocity variable has not been initialised.");
+      csmp_error.Note( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "the velocity variable has not been initialised.");
     
     vt_magnitude_ = vt_.Length();
     vt_magnitude_x_ = fabs(vt_[0]);
@@ -133,7 +133,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
       }
     // else warning is issued and values are interpolated to barycentre
     else {
-         csmp_error.notice( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize", "variable placement set to nodal" );
+         csmp_error.Note( INFO, "HeterogeneityAndRateAwareModel<dim>::Initialize", "variable placement set to nodal" );
          Sw_ = TwoPhaseModel<dim>::sat_ = e.PropertyValueAtBaryCenter( TwoPhaseModel<dim>::sat_key_ );
          TwoPhaseModel<dim>::mun_ = e.PropertyValueAtBaryCenter( TwoPhaseModel<dim>::mun_key_ );
          TwoPhaseModel<dim>::muw_ = e.PropertyValueAtBaryCenter( TwoPhaseModel<dim>::muw_key_ );
@@ -448,7 +448,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( const Element<dim>& e )
            break;
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
-           csmp_error.notice( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
+           csmp_error.Note( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
       }
      
     // uses the poroperms discretised on the simulation model 
@@ -923,7 +923,7 @@ void HeterogeneityAndRateAwareModel<dim>::Initialize( long rocktype, double Sw, 
            break;         
          default:
            cerr <<"\n\t rocktype: "<< rocktype_;
-           csmp_error.notice( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
+           csmp_error.Note( ERROR, "HeterogeneityAndRateAwareModel<dim>::Initialize", "rocktype not recognized");
       }
    
     // determine permeability anisotropy TODO: here we assume that laminations are horizontal

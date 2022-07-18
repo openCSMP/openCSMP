@@ -9,7 +9,7 @@ namespace csmp {
 template<uint32_t dim> class Node;
 class Index;
 
-// TODO: include parent InterFace connectivity to the NodeManifolds because this is missing for InterFace nodes
+// TODO: shall we include parent InterFace connectivity to the NodeManifolds because this is missing for InterFace nodes?
 // TODO: distinguish perimeter nodes in SplitBoundaries from interior nodes, using criteria below
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
 /**
@@ -71,7 +71,7 @@ class NodeManifold {
 
       ~NodeManifold();
       
-      /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for  Manifold geometry
+      /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for Manifold geometry to be addressed later
       bool Add( Node<dim>*, INTERFACE_SIDE );
 
       /// removes node from the current manifold and sets its manifold pointer to zero because a Node can only belong to a single manifold
@@ -98,8 +98,11 @@ class NodeManifold {
       /// reports manifold classifier that indicates the topologic position of the manifold
       ManifoldType GeometricClassifier() const;
       void GeometricClassifier( ManifoldType );
+      
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+      bool AreNodesCollocated() const;
 
-      /// print out information
+      /// prints out state of the manifold
       void Out() const;
 
     private:

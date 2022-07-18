@@ -34,17 +34,17 @@ RegionBoundaryFluxVisitor<dim,COMPUTATION_DOMAIN>::RegionBoundaryFluxVisitor( Mo
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( domain_ptr_ == NULL )
-      csmp_error.notice( ERROR,
+      csmp_error.Note( ERROR,
                         "RegionBoundaryFluxVisitor<dim>(custom constructor):",
                         "the target region remains undefined.");
 
     if ( flux_key_.place != ELEMENT )
-      csmp_error.notice( ERROR,
+      csmp_error.Note( ERROR,
                         "RegionBoundaryFluxVisitor<dim>(custom constructor):",
                         Darcy_velocity, "must be an element property.");
 
     if ( flux_key_.type != VECTOR )
-      csmp_error.notice( ERROR,
+      csmp_error.Note( ERROR,
                         "RegionBoundaryFluxVisitor<dim>(custom constructor):",
                         Darcy_velocity, "must be a vector property.");
  } // end

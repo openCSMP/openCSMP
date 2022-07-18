@@ -282,11 +282,14 @@ map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::Get
     return splitBoundaryConnectivityFiles_multiblock_;
 }
 
+
+
 // INTERFACES
 // ----------------
 
-/// provide aliases for csmp variables that will be shown in vtu instead
-/// returns if existing was empty
+/** provide aliases for csmp variables that will be shown in vtu instead
+    @return returns if existing was empty
+*/
 template<uint32_t dim>
 bool VTU_Interface<dim>::VariableNameAliases( const map<string,string>& variableNameAliases )
 {
@@ -294,6 +297,7 @@ bool VTU_Interface<dim>::VariableNameAliases( const map<string,string>& variable
   variableNameAliases_ = variableNameAliases;
   return variableNameAliasesWasEmpty;
 }
+
 
 /// for a given csmp variable, returns output alias if existing. returns variable name otherwise
 template<uint32_t dim>
@@ -308,15 +312,18 @@ string VTU_Interface<dim>::FindVariableOutputAlias( const string& csmpVariableNa
   return outputAliasName;
 }
 
-/// allows the creation of an index-to-name correspondance.  If the resulting container is
-/// empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
-/// If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
-/// Julian, July 2014
+
+/** allows the creation of an index-to-name correspondance.  If the resulting container is
+    empty or the array variable name does not exist upon the output call, the behaviour is the detault one (output of [#] suffix).
+    If the component name exists,it gets prefixed to the variable name for the vtu file. Works for flagged arrays, too.
+    Julian, July 2014
+*/
 template<uint32_t dim>
 void VTU_Interface<dim>::CreateArrayComponentPrefixNames(string array_var_name, vector<string>& index_to_name )
 {
     this->array_index_to_name_.insert(make_pair(array_var_name,index_to_name));
 }
+
 
 /// Allows adding text after the timestep number to the vtu filename. By default, this string is empty.
 template<uint32_t dim>
@@ -325,11 +332,13 @@ void VTU_Interface<dim>::SetSuffixText(string text)
     this->suffix_text_=text;
 }
 
+
 template<uint32_t dim>
 const string& VTU_Interface<dim>::GetProblemTitle( ) const
 {
     return this->problemTitle_;
 }
+
 
 /// control whether '0' is appended
 template<uint32_t dim>
@@ -337,22 +346,30 @@ void VTU_Interface<dim>::OmitZeroInFileName( bool omitZeroInFileName )
 {
     omitZeroInFileName_ = omitZeroInFileName;
 }
+
+
 template<uint32_t dim>
 bool VTU_Interface<dim>::OmitZeroInFileName() const
 {
     return omitZeroInFileName_;
 }
+
+
 template<uint32_t dim>
 void VTU_Interface<dim>::OutputElementVectorAndTensorDataAtCellCenters( bool flag )
 {
    elementVecAndTensDataAtCellCenters_ = flag;
 }
 
+
+
 template<uint32_t dim>
 void VTU_Interface<dim>::OutputRegionVectorAndTensorDataAtRegionCenters( bool flag )
 {
    regionVecAndTensDataAtCellCenters_ = flag;
 }
+
+
 
 template<uint32_t dim>
 string VTU_Interface<dim>::OutputFileNamePrefix( const string& fileName )
@@ -382,14 +399,14 @@ string VTU_Interface<dim>::OutputFileNamePrefix( const string& fileName )
     return fileName;
 }
 
+
+
 template<uint32_t dim>
 string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const string& fileName, const string& domainName )
 {
     // write to file
     string outputName( fileName );
-    // SKM_FIX: if Model is not contained in the file name
-    if ( domainName.find("Model") == string::npos )
-    //  if( regionNameString != "Model" )
+    if( domainName != "Model" )
     {
         outputName += "_";
         outputName += domainName;
@@ -405,6 +422,8 @@ string VTU_Interface<dim>::DomainSpecificOutputFileNamePrefix( const string& fil
 
     return outputName;
 }
+
+
 
 template<uint32_t dim>
 template<class T>
@@ -1137,8 +1156,7 @@ bool VTU_Interface<dim>
 {
   /// initialize file
   XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMap( subDomain );
+  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap = GetConnectivityMap( subDomain );
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
@@ -2846,6 +2864,7 @@ void VTU_Interface<dim>::EstablishConnectivityFileHeader( XML_Document& connecti
     connectivityFile.AddComment( problemTitle_.c_str() );
   }
 
+// TODO: broken for splitboundary output
 /// establishes the connectivity file for given region
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -2880,6 +2899,7 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   connectivityFile.BringToLevel();
   // looping over all the region's nodes
   const auto domainVerticesEnd( subDomain.NodesEnd() );
+// TODO: for a SplitBoundary, only the inside nodes will be captured here
   for( auto it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
   {
     // writing x,y and z coordinates(tab seperated)

@@ -1962,7 +1962,7 @@ bool Operand<dim>::IsWithinRange( const cspT& val ) const
           std::cerr <<"\n'"<< name_ <<"' has erratic value:";
           val.Out();
           std::cerr << std::endl << std::endl;
-          csmp_error.notice( ERROR, "Operand::IsWithinRange", "Property value out of range.");
+          csmp_error.Note( ERROR, "Operand::IsWithinRange", "Property value out of range.");
           return false;
        }
 

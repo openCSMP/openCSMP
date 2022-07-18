@@ -12,8 +12,7 @@
 
 using namespace std;
 
-namespace csmp
-{
+namespace csmp {
 
 // for model building from ANSYS
  static void create_ANSYS2D_Model( bool reconstruct_from_file )
@@ -31,13 +30,13 @@ namespace csmp
     cout << "\nInterconnected elements: " << findContiguousMeshPatch<2,Element>( &(*model2d_->Mesh().ElementsBegin()), elements ) << "\n";
     cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
     std::map<std::string,std::vector<Element<2U>*> > patch_map;
-    cout << "\nElement Groups: " << findStandAloneMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
+    cout << "\nElement Groups: " << findContiguousMeshPatches( model2d_->Mesh().ElementsBegin(), model2d_->Mesh().ElementsEnd(), patch_map ) << "\n";
     cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
     std::map<std::string,std::vector<Face<2U>*> >  face_map;
-    cout << "\nFace Groups: " << findStandAloneMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
+    cout << "\nFace Groups: " << findContiguousMeshPatches( model2d_->Mesh().FacesBegin(), model2d_->Mesh().FacesEnd(), face_map ) << "\n";
     cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
     std::map<std::string,std::vector<InterFace<2U>*> >  iface_map;
-    cout << "\nInterface Groups: " << findStandAloneMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
+    cout << "\nInterface Groups: " << findContiguousMeshPatches( model2d_->Mesh().InterFacesBegin(), model2d_->Mesh().InterFacesEnd(), iface_map ) << "\n";
     
     if (reconstruct_from_file) {
         model2d_->OutputToBinaryFile(model2d_name_.c_str());
@@ -47,17 +46,25 @@ namespace csmp
         cout << "\nNodes: " << mesh.Nodes() << "\n";
         cout << "\nNode Groups: " << findContiguousMeshPatch<2,Element>( &(*mesh.ElementsBegin()), elements ) << "\n";
         cout << "\nElements: " << model2d_->Mesh().Elements() << "\n";
-        cout << "\nElement Groups: " << findStandAloneMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
+        cout << "\nElement Groups: " << findContiguousMeshPatches( mesh.ElementsBegin(), mesh.ElementsEnd(), patch_map ) << "\n";
         cout << "\nFaces: " << model2d_->Mesh().Faces() << "\n";
-        cout << "\nFace Groups: " << findStandAloneMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
+        cout << "\nFace Groups: " << findContiguousMeshPatches( mesh.FacesBegin(), mesh.FacesEnd(), face_map ) << "\n";
         cout << "\nInterfaces: " << model2d_->Mesh().InterFaces() << "\n";
-        cout << "\nInterface Groups: " << findStandAloneMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
+        cout << "\nInterface Groups: " << findContiguousMeshPatches( mesh.InterFacesBegin(), mesh.InterFacesEnd(), iface_map ) << "\n";
       }
       
  } // end create_ANSYS2D_Model
  
+ 
+ 
 
-/*
+/**
+    Using a whole suite of 2D Ansys models with boundaries and even split  boundaries being created :
+    
+    - BoxHalfs2D
+    - Fluid_Flower
+        
+*/
 void ANSYS_Model2D_Test::run()
   {
     const bool verbose(false);
@@ -180,19 +187,25 @@ void ANSYS_Model2D_Test::run()
     
     Test_CreateConsistentLineElementOrientations2D();
     
-    Test_CreatInternalBoundary();
+    Test_CreateInternalBoundary();
 
-    Test_CreatInternalSplitBoundaries();
+    Test_CreateSplitBoundaries();
+
+    Test_CreateSplitBoundariesBetweenUniqueRegions();
 
   } // end run
-*/
   
-  
+
+/*  for test development
+ 
 void ANSYS_Model2D_Test::run()
   {
-    Test_CreatInternalSplitBoundaries();
+    // Test_printLineElementRegion();
+    // Test_CreateConsistentLineElementOrientations2D();
+    // Test_CreateSplitBoundaries();
+    Test_CreateSplitBoundariesBetweenUniqueRegions();
   }
-
+*/
  
  
  
@@ -211,8 +224,7 @@ void ANSYS_Model2D_Test::Test_printLineElementRegion()
       VSet<2U>      vset;
       ModelTopology topo = test_Create_MeshPatchWithLineElements_VSet( vset );
       Model<2U>     model( topo, vset, "CSMP-1phase-variables.txt", true );
-       
-      // works fine
+
       const bool renumber_nodes{false};
       _test( printLineElementRegion( model, "FRAC1", renumber_nodes ) == 3 );
       _test( printLineElementRegion( model, "FRAC2", renumber_nodes ) == 3 );
@@ -322,11 +334,11 @@ void  ANSYS_Model2D_Test::Test_CreateConsistentLineElementOrientations2D()
 /**
     For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
 */
-void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
+void  ANSYS_Model2D_Test::Test_CreateInternalBoundary()
 {
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
     if ( verbose_ ) {
-         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalBoundary: running test on model '";
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateInternalBoundary: running test on model '";
          cout << model2d_name_ <<"'"<< endl;
          cout.flush();
       }
@@ -338,17 +350,16 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
     size_t n_elmts_region1{ interface1.Cells() };
     size_t n_elmts_region2{ interface2.Cells() };
     
-    bool remove_original_region{false};
-    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1", remove_original_region );
+    // removes input region
+    pair<set<string>,bool> boundaryName1 = model.CreateInternalBoundaryFrom( "INTERFACE1" );
     const Boundary<2U>& boundary1(model.Boundary( (*(boundaryName1.first).begin()) ) );
     _test( boundary1.Cells() == n_elmts_region1 );
     
-    remove_original_region=true;
-    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2", remove_original_region );
+    pair<set<string>,bool> boundaryName2 = model.CreateInternalBoundaryFrom( "INTERFACE2" );
     const Boundary<2U>& boundary2(model.Boundary( (*(boundaryName2.first).begin()) ) );
     _test( boundary2.Cells() == n_elmts_region2 );
 
-} // end Test_CreatInternalBoundary
+} // end Test_CreateInternalBoundary
 
 
 
@@ -357,10 +368,10 @@ void  ANSYS_Model2D_Test::Test_CreatInternalBoundary()
 /**
     For model   'three_layers'   converts the line-element regions INTERFACE1 and INTERFACE2 into internal boundaries
 */
-void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
+void  ANSYS_Model2D_Test::Test_CreateSplitBoundaries()
 {
     if ( verbose_ ) {
-         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries: running test..."<< endl;
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
          cout.flush();
       }
     string model2d_name_ = "three_layers"; // TODO: use model that is already in the testing fixtures
@@ -394,7 +405,8 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     model.SplitBoundariesOut();
 
     // 2. remove split boundary 1 here before creating new ones in the same place
-    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str() ); // INTERFACE1
+    const bool erase_interfaces{ true };
+    model.RemoveSplitBoundary( (*splitBoundaryName1.first.begin()).c_str(), erase_interfaces ); // INTERFACE1
         
     model.RegionsOut();
 
@@ -406,8 +418,126 @@ void  ANSYS_Model2D_Test::Test_CreatInternalSplitBoundaries()
     // now the nodes are shared so this should work
     model2.CreateSplitBoundaryBetween( "MIDDLE_REGION", "UPPER_REGION" ); // INTERFACE 1
 
+} // end Test_CreateSplitBoundaries
 
-} // end Test_CreatInternalBoundary
+
+
+/**
+       Direct creation of SplitBoundaries between all the unique regions of the model.
+*/
+void  ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions()
+{
+    if ( verbose_ ) {
+         cout <<"\n\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundaries: running test..."<< endl;
+         cout.flush();
+      }
+    string model2d_name_ = "Fluid_Flower"; // TODO: use model that is already in the testing fixtures
+    string varFileName = "CSMP-variables.txt";
+    ANSYS_Model2D model( model2d_name_.c_str(), varFileName.c_str() );
+    model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.) );
+    VTU_Interface<2> vtu( model );
+    vtu.OmitZeroInFileName( true );
+     
+    // some initial tests on the model
+    vector<pair<pair<Element<2U>*,uint32_t>,pair<Element<2U>*,uint32_t> > >  matching_cells;
+    vector<Node<2U>*>  matching_nodes;
+    size_t n_nodes = sharedPerimeterNodes( model.Region("F_T"), model.Region("E_BB_T"), matching_nodes );
+    size_t n_cells = sharedPerimeterCells( model.Region("F_T"), model.Region("E_BB_T"), matching_cells );
+    // in this case the regions touch at single nodes do not share a parent element
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_F_T", "nodal variable", "F_T", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_E_BB_T", "nodal variable", "E_BB_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("D_BB"), model.Region("C_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("D_BB"), model.Region("C_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_D_BB", "nodal variable", "D_BB", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_C_T", "nodal variable", "C_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("D_BB"), model.Region("E_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("D_BB"), model.Region("E_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_D_BB", "nodal variable", "D_BB", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_E_T", "nodal variable", "E_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("F_BB"), model.Region("E_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("F_BB"), model.Region("E_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_F_BB", "nodal variable", "F_BB", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_E_T", "nodal variable", "E_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("E_BB_T"), model.Region("D_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("E_BB_T"), model.Region("D_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_E_BB_T", "nodal variable", "E_BB_T", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_D_T", "nodal variable", "D_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("C_BB_T"), model.Region("D_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("C_BB_T"), model.Region("D_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_C_BB_T", "nodal variable", "C_BB_T", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_D_T", "nodal variable", "D_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("C_BB_T"), model.Region("ESF_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("C_BB_T"), model.Region("ESF_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_C_BB_T", "nodal variable", "C_BB_T", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_ESF_T", "nodal variable", "ESF_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("C_T"), model.Region("ESF_BB_T"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("C_T"), model.Region("ESF_BB_T"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_ESF_BB_T", "nodal variable", "ESF_BB_T", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_C_T", "nodal variable", "C_T", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("ESF"), model.Region("F_BA"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("ESF"), model.Region("F_BA"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_ESF", "nodal variable", "ESF", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_F_BA", "nodal variable", "F_BA", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("ESF_BA"), model.Region("F"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("ESF_BA"), model.Region("F"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_ESF_BA", "nodal variable", "ESF_BA", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_F", "nodal variable", "F", static_cast<int>(0) );
+      }
+    n_nodes = sharedPerimeterNodes( model.Region("F"), model.Region("G_BA"), matching_nodes );
+    n_cells = sharedPerimeterCells( model.Region("F"), model.Region("G_BA"), matching_cells );
+    if ( verbose_ && ( n_nodes==2U && n_cells==0U ) ) {
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region1_F", "nodal variable", "F", static_cast<int>(0) );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-region2_G_BA", "nodal variable", "G_BA", static_cast<int>(0) );
+      }
+     
+    // 1. creating the SplitBoundary objects everywhere
+    /* Observations
+       - super slow!
+       - most computational effort goes into UpdateConnectivity and PartitionCellVector
+    */
+    size_t n_split_boundaries = model.SeparateUniqueRegionsBySplitBoundaries();
+    _test( n_split_boundaries < 93 );
+    model.SplitBoundariesOut();
+    
+    // using 'nodal variable' to visualise which nodes are manifolds
+    Region<2U>  model_domain = model.Region("Model");
+    const csmp::Index var_key = model.Database().StorageKey("nodal variable");
+    
+    for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); ++nit )
+      if ( (*nit)->IsManifold() )
+        // there should be as many branches as materials come together
+        (*nit)->Store( var_key, makeScalar(PLAIN,(*nit)->Manifold()->Branches()));
+     
+    // visualisation
+    if ( verbose_ ) {
+         vtu.OmitZeroInFileName( true );
+         vtu.OutputDataToVTU( "ANSYS_Model2D_Test-node_manifolds", "nodal variable", "Model", static_cast<int>(0) );
+      }
+
+    // TODO: perform some testing
+    cout <<"\n"<<"ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions: completed successfully"<< endl;
+
+} // end Test_CreateSplitBoundaries
+
 
 
 } // csmp

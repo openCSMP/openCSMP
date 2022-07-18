@@ -74,8 +74,7 @@ void DES2PhaseSlightlyCompressibleFlow2D_Example::Run()
     bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
     bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?"); 
     
-    ANSYS_Model2D                model( input_file.c_str(), "DES_2phase_variables.txt" );
-    //const PropertyDatabase<2>&   p_ref = model.Database();  
+    ANSYS_Model2D  model( input_file.c_str(), "DES_2phase_variables.txt" );
 
     // give the model dimensions
     printModelDimensions( model, true );

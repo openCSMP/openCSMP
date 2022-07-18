@@ -27,7 +27,7 @@
 static	char	rcsid[] = "$Id: copy.c,v 1.1.1.1 2006/08/09 13:57:52 apaluszn Exp $";
 
 #include <cstring>
-#include "matrix.h"
+#include "meschach_matrix.h"
 
 /* _m_copy -- copies matrix into new area */
   MAT	*_m_copy(MAT *in, MAT *out,u_int i0, u_int j0)

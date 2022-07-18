@@ -2,10 +2,13 @@
 #define SPLIT_BOUNDARY_INTERFACE_H
 
 #include "CSMP_definitions.h"
+#include "Box.h"
 
 namespace csmp {
 
 class ModelTopology;
+template<uint32_t> class FaceConstructionData;
+template<uint32_t> class InterFace;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
 
@@ -26,9 +29,9 @@ class SplitBoundaryInterface {
     // -----------------------------------------------
     // Access of SplitBoundaries objects
     // -----------------------------------------------
-    csmp::SplitBoundary<dim>&         SplitBoundary( const std::string& spbName );
-    const csmp::SplitBoundary<dim>&   SplitBoundary( const std::string& spbName ) const;
-    bool                              ContainsSplitBoundary( const std::string& bname ) const;
+    csmp::SplitBoundary<dim>&         SplitBoundary( const std::string& );
+    const csmp::SplitBoundary<dim>&   SplitBoundary( const std::string& ) const;
+    bool                              ContainsSplitBoundary( const std::string& ) const;
 
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::iterator         splitBoundaryIterator;
     typedef typename std::map<std::string,csmp::SplitBoundary<dim> >::const_iterator   splitBoundaryConstIterator;
@@ -46,8 +49,11 @@ class SplitBoundaryInterface {
     /// uses the InterFace ids stored in the model topology object (if any) to form split boundaries with corresponding names; returns number of split boundaries formed
     size_t FormSplitBoundariesFrom( const ModelTopology& );
 
-    /// Creates SplitBoundaries detecting and connecting node-matched disconnected perimeter element faces in mesh (already created in ANSYS or other); these are grouped and named for regions
+    /// Creates SplitBoundaries detecting disconnected but node-matched perimeter element faces in mesh (already created in meshing tool); these are grouped and named for regions
     std::pair<std::set<std::string>,bool>  DetectAndCreateSplitBoundaries();
+    
+    /// creates consistently named split boundaries between all unique regions in the model
+    size_t SeparateUniqueRegionsBySplitBoundaries();
     
     /// creation of one or multiple SplitBoundaries from a lower dimensional region 
     std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region );
@@ -55,7 +61,7 @@ class SplitBoundaryInterface {
     /// one-to-one conversion of a model Boundary into a SplitBoundary, non-constant because Boundary gets removed
     std::pair<std::string,bool>  CreateSplitBoundaryFrom( Boundary<dim>& );
 
-    /// Creation of SplitBoundary between regions via boundary that gets deleted afterwards
+    /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
@@ -68,10 +74,10 @@ class SplitBoundaryInterface {
     bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( const char* split_boundary );
+    void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
-    void RemoveSplitBoundary( csmp::SplitBoundary<dim>& );
+    void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
 
     // -----------------------------------------------------------
     // Input/output
@@ -88,8 +94,21 @@ class SplitBoundaryInterface {
 
     /// creating name for the case when the SplitBoundary was already present in the input mesh
     std::string CreateSplitBoundaryName( const std::pair<std::string,std::string>& juxtaposed_regions ) const;
+    
+    /// creates name for one specific patch of the new split boundary
+    std::string CreateSplitBoundaryNameFrom( const FaceConstructionData<dim>&,
+                                             const std::vector<std::string>& region_names ) const;
+
+    /// searches the split boundary map for split-boundary names that contain the names of the regions stored in the first set
+    size_t FindSplitBoundaryByNames( const std::set<std::string>& intersected_regions,
+                                     std::set<std::string>& region_patches_found ) const;
  
-  protected:
+     /// creates split boundary from already interconnected faces that also know their parent elements
+    bool AddSplitBoundary( const char* name,
+                           typename std::vector<InterFace<dim>*>::iterator first,
+                           typename std::vector<InterFace<dim>*>::iterator last,
+                           BOX_BOUNDARY );
+ protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };
 

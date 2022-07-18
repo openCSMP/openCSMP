@@ -289,7 +289,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side )
     
     //a node can only exist in one manifold
     if(nd->Manifold() != nullptr) {
-        csmp_error.notice( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+        csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
                                  "Node already in another manifold. Nothing was done.");         
         return false;
     }
@@ -297,7 +297,7 @@ bool NodeManifold<dim>::Add( Node<dim>* nd, INTERFACE_SIDE side )
     //the node is already in current manifold
     for ( auto& nit : branches_ )
       if ( nit.first == nd ) {
-          csmp_error.notice( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+          csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
                                    "Node already part of current manifold. Nothing was done.");
           return false;
         }
@@ -330,11 +330,26 @@ bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
        }
 
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.notice( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
+    csmp_error.Note( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
                                 "Node does not exist in manifold. Nothing was done.");
     return false;
 
 }
+
+
+
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+template<uint32_t dim>
+bool NodeManifold<dim>::AreNodesCollocated() const
+ {
+    const Point<dim> pt = branches_[0].first->Coordinate();
+    for ( const auto& nit : branches_ )
+      if ( pt != nit.first->Coordinate() )
+        return false;
+        
+    return true;
+ }
+
 
 
 
@@ -343,7 +358,6 @@ template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
   cout << "\nNodeManifold: "<< parse(parent_geometry_) <<" with nodes (indices):\t";
-  assert( Branches() >= 2 );
   for ( auto i{0U}; i<Branches(); i++ ) {
       if ( NodeManifold<dim>::N(i) )
         cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": "<< parseSide( InterFaceSide(i) ) << "\t";

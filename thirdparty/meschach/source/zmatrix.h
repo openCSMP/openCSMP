@@ -28,7 +28,7 @@
 #ifndef ZMATRIXH
 #define ZMATRIXH
 
-#include "matrix.h"
+#include "meschach_matrix.h"
 
 
           /*  Type definitions for complex vectors and matrices  */
