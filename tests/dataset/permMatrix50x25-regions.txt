@@ -1,0 +1,7 @@
+'permMatrix50x25-regions.txt' - regions for Quadrilaterator example
+no properties
+LEFT
+RIGHT
+TOP
+BOTTOM
+sediments
