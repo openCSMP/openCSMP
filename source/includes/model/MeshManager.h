@@ -9,6 +9,7 @@
 #include "FiniteElementManager.h"
 #include "FiniteVolumeStencilManager.h"
 #include "plf_colony.h"
+#include "Region.h" 
 
 namespace csmp {
 
@@ -146,7 +147,8 @@ public:
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >&,
-                                           bool multiplicate_perimeter_nodes );
+                                           bool multiplicate_perimeter_nodes,
+                                           Region<dim>& out_region );
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary node manifolds and InterFace connectivity; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeMatchingElements( const PropertyDatabase<dim>&,
