@@ -1901,8 +1901,9 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
                                                                                        const vector<pair<pair<Element<dim>*,uint32_t>,
-                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
-                                                                                       bool multiplicate_perimeter_nodes )
+                                                                                       pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
+                                                                                       bool multiplicate_perimeter_nodes,
+                                                                                       Region<dim>& out_region )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -2053,6 +2054,33 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
      // ---------------------------------------------------------
      // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
+
+     //find parent elemets of old nodes that are in outside region, unassign them from old nodes and assign to correspoinding new nodes 
+     std::map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
+     for(auto nd_pair : new_nodes) {
+       auto old_node = nd_pair.first;
+       for (uint32_t i{0}; i < old_node->Parents(); ++i) {
+         auto parent_elmt = old_node->Parent(i);
+         bool higher_dimension (false);
+         if(dim == 2U && parent_elmt->IsSurface()) higher_dimension = true;
+         else if (dim == 3U && parent_elmt->IsVolume()) higher_dimension = true;
+         if(higher_dimension && out_region.Contains(parent_elmt)) {
+           auto local_nd_index = old_node->ParentNodeNumber(i);
+           old_node_unassigned_element_map.insert(std::make_pair(old_node,parent_elmt));
+           auto new_node = nd_pair.second;
+           parent_elmt->Assign(local_nd_index, new_node );
+         }
+       }
+     }
+
+     for(auto old_node_unassigned_element : old_node_unassigned_element_map){
+       auto old_node = old_node_unassigned_element.first;
+       auto parent_elmt = old_node_unassigned_element.second;
+       old_node->Unassign(parent_elmt);
+     }
+
+     UpdateConnectivity();
+
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
      cout << new_nodes.size() <<" new nodes."<< endl;
