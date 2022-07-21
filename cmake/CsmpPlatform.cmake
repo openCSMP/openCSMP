@@ -3,7 +3,9 @@ set(PLATFORM_EXTERNAL_LIBRARIES)
 if (CMAKE_HOST_APPLE)
     # OS X is a Unix, but it's not a normal Unix as far as search paths go.
     message(STATUS "This is an Apple platform")
-    set(PLATFORM_FLAGS "-DCSMP_WITH_MESCHACH -DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE -DPYRAMID_TRIANGULAR_FACETS")
+    #set(PLATFORM_FLAGS "-DCSMP_WITH_MESCHACH -DCSMP_WITH_SAMG_SOLVER -DSAMG_MULTIPLE_INSTANCES -DSAMG_UNIX_LINUX -DSAMG_LCASE_USCORE -DPYRAMID_TRIANGULAR_FACETS")
+    #E.P Changed for Mac M1 where SAMG doesnt compile
+    set(PLATFORM_FLAGS "-DPYRAMID_TRIANGULAR_FACETS")
     set(PLATFORM_LDFLAGS)
     set(PLATFORM_LIBS ${CMAKE_SOURCE_DIR}/thirdparty/samg/macosx ${CMAKE_SOURCE_DIR}/build/macosx ${CMAKE_SOURCE_DIR}/bin/macosx)
     set(PLATFORM_INCLUDES)
@@ -34,7 +36,8 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(COMMON_CXX_FLAGS "-fno-common -fshort-enums -funroll-loops -fvisibility-inlines-hidden -std=c++17 -stdlib=libc++ -Wno-c++98-compat -Wno-c++98-compat-pedantic -Wno-float-equal")
      if (CMAKE_HOST_APPLE)
 	# MacBooks are a little behind other platforms
-	set(PLATFORM_ARCH "-march=core2")
+        #E.P Changed
+        #set(PLATFORM_ARCH "-march=core2")
     else()
 	set(PLATFORM_ARCH "-march=corei7 -msse4.2")
     endif()
