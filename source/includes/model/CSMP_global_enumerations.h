@@ -99,6 +99,60 @@ enum INTERFACE_SIDE : std::int32_t
     MIDDLE  =  0
 };
 
+/**
+  @note This classification is for NodeManifolds (topologically collocated Nodes) only)!
+  @note Not all of these classifiers apply to manifolds, like endpoint
+  @note NodeManifolds exist only at SplitBoundary objects
+  @note SplitBoundary objects exist only inside of models
+  @note since SplitBoundaries are surfaces, this is the highest dimension
+  @note Classification applies to all nodes within Manifold simultaneously (including intervening ones)
+*/
+enum class ManifoldType : int8_t {
+                                    STAND_ALONE,                ///< multiplicated point
+                                    SPLIT_BOUNDARY,             ///<  2-node manifold along a SplitBoundary (most common)
+                                    SPLIT_BOUNDARY_WITH_INTERNAL_MESH,
+                                    SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
+                                    MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
+                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs are termination of SB against Boundary
+                                    SPLIT_BOUNDARY_END,         ///<  termination against model boundary
+                                };
+
+/// converts classifiers to strings so that they can be printed
+std::string parse( ManifoldType );
+
+
+
+/**
+       Geometric classification of nodes / points, BREP stands for boundary representation.
+       @author SKM
+       @date 9/07/2022
+       
+       @attention Help! - current scheme still contains apparent ambiguities of features difficult to resolve:
+       What is an interior surface in 3D (is it the inside of a lower-dim fracture?)?
+       PERIMETER_SURFACE in 3D refers to the perimeter of a volumetric region...
+       
+       @todo some flags do not exist in certain dimensions: in 1D PERIMETER_POINT is the same as INTERSECTION_POINT
+*/
+enum TOPOTYPE : std::int8_t {
+                                MESH_VERTEX,       ///< a point within the model volume
+                                INTERSECTION_POINT,///< a point where lines cross or multiple surfaces intersect
+                                PERIMETER_POINT,   ///< point at the end of a line inside a 2D model
+                                EXTERIOR_POINT,    ///< on an outside surface of the model
+                                INTERIOR_LINE,     ///< a line on the interior of the model
+                                PERIMETER_LINE,    ///< a surface edge inside of the model
+                                EXTERIOR_LINE,     ///< an edge of the model
+                                INTERSECTION_LINE, ///<  belonging to multiple surfaces
+                                INTERIOR_SURFACE,  ///< a surface withing the model
+                                PERIMETER_SURFACE, ///< a surface forming the hull of an object inside of the model
+                                EXTERIOR_SURFACE  ///< a surface delimiting the model
+                            };
+
+// TODO: add T_INTERSECTION_POINT ?
+
+/// converts classifiers to strings so that they can be printed
+std::string parseTopology( TOPOTYPE );
+
+
 
 /// variable flag indicating treatment in computations
 enum NORM_INDEX : std::int8_t

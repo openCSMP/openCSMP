@@ -187,11 +187,11 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              vset.Px( plist[n][2], j + 1 );
          
              // 2.1.5 assigning boundary flag (node) values 
-             if ( j == 1 )      vset.AddBFlag( plist[n][0], bleft );
-             if ( j == 1 )      vset.AddBFlag( plist[n][1], bleft );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][1], bbottom );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][2], bbottom );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][2], bright );
+             if ( j == 1 )      vset.BFlag( plist[n][0], bleft );
+             if ( j == 1 )      vset.BFlag( plist[n][1], bleft );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][1], bbottom );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][2], bbottom );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][2], bright );
  
              // 2.1.6 getting face-edge values, setting 
              // face edges are the elements that sit on the opposite site of a certain
@@ -228,12 +228,12 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              vset.Px( plist[n][2], j );
           
              // 2.2.5 assigning boundary flags 
-             if ( i == 1 )      vset.AddBFlag( plist[n][2], btop );
-             if ( i == 1 )      vset.AddBFlag( plist[n][1], btop );
-             if ( j == 1 )      vset.AddBFlag( plist[n][2], bleft );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][0], bbottom );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][0], bright );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][1], bright );
+             if ( i == 1 )      vset.BFlag( plist[n][2], btop );
+             if ( i == 1 )      vset.BFlag( plist[n][1], btop );
+             if ( j == 1 )      vset.BFlag( plist[n][2], bleft );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][0], bbottom );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][0], bright );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][1], bright );
 
              // 2.2.6 getting face-edge values, setting 
              if ( i == 1 ) fed1 = TOP_OUTSIDE;  // O.K.
@@ -281,12 +281,12 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              vset.Px( plist[n][2], j + 1 );
          
              // 3.1.5 assigning boundary flags
-             if ( i == 1 )      vset.AddBFlag( plist[n][0], btop );
-             if ( i == 1 )      vset.AddBFlag( plist[n][2], btop );
-             if ( j == 1 )      vset.AddBFlag( plist[n][0], bleft );
-             if ( j == 1 )      vset.AddBFlag( plist[n][1], bleft );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][1], bbottom );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][2], bright );
+             if ( i == 1 )      vset.BFlag( plist[n][0], btop );
+             if ( i == 1 )      vset.BFlag( plist[n][2], btop );
+             if ( j == 1 )      vset.BFlag( plist[n][0], bleft );
+             if ( j == 1 )      vset.BFlag( plist[n][1], bleft );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][1], bbottom );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][2], bright );
 
              // 3.1.6 getting face-edge values, setting 
              fed1 = static_cast<int32_t>((n+1) + 1);  // O.K.
@@ -323,12 +323,12 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
              vset.Px( plist[n][2], j + 1 );
 
              // 3.2.5 reading the boundary values as we go along 
-             if ( i == 1 )      vset.AddBFlag( plist[n][2], btop );
-             if ( j == 1 )      vset.AddBFlag( plist[n][0], bleft );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][0], bbottom );
-             if ( i == m_mtrx ) vset.AddBFlag( plist[n][1], bbottom );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][1], bright );
-             if ( j == n_mtrx ) vset.AddBFlag( plist[n][2], bright );
+             if ( i == 1 )      vset.BFlag( plist[n][2], btop );
+             if ( j == 1 )      vset.BFlag( plist[n][0], bleft );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][0], bbottom );
+             if ( i == m_mtrx ) vset.BFlag( plist[n][1], bbottom );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][1], bright );
+             if ( j == n_mtrx ) vset.BFlag( plist[n][2], bright );
 
              // 3.2.6 getting face-edge values, setting 
              if ( j >= n_mtrx ) fed1 = RIGHT_OUTSIDE;  
@@ -355,10 +355,10 @@ void Triangulator::TrianglesFromRegularGrid( const Matrix& grid, VSet<2U>& vset 
      } // end i-loop 
    
    // flagging the 4 corner elements, overwriting the side flags
-   vset.AddBFlag( m_mtrx * (n_mtrx+1), CNR_MIN );   // CNR1 
-   vset.AddBFlag( n_vertices-1U,   CNR_MIN_MAXX );  // CNR2 
-   vset.AddBFlag( 2 * n_mtrx + 1U, CNR_MAX_MAXX );  // CNR3 
-   vset.AddBFlag( 0U,              CNR_MAX_MINXZ ); // CNR4 
+   vset.BFlag( m_mtrx * (n_mtrx+1), CNR_MIN );   // CNR1
+   vset.BFlag( n_vertices-1U,   CNR_MIN_MAXX );  // CNR2
+   vset.BFlag( 2 * n_mtrx + 1U, CNR_MAX_MAXX );  // CNR3
+   vset.BFlag( 0U,              CNR_MAX_MINXZ ); // CNR4 
    
    // setting up the vset
    vset.AddPlist( plist.begin(), plist.end() );

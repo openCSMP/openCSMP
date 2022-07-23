@@ -23,7 +23,7 @@ void VSetConverter<dim>::ConvertElementTypesToOnesUsingLocalCoordinateSystem( VS
     
     // looping over the element types converting them
     for ( auto n{0}; n<vset.Vertices(); ++n )
-      vset.AddBFlag( n, CSMP_ElementSpecifications::CSMP_TypeUsingLocalCoordinates( vset.BFlag(n)) );
+      vset.BFlag( n, CSMP_ElementSpecifications::CSMP_TypeUsingLocalCoordinates( vset.BFlag(n)) );
     
  } // end ConvertElementTypesToOnesUsingLocalCoordinateSystem
 
@@ -337,7 +337,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[0], (*pit)[1] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -358,7 +358,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[1], (*pit)[2] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -379,7 +379,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTriangles3D( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[2], (*pit)[0] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -549,7 +549,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[0], (*pit)[1] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -568,7 +568,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[1], (*pit)[2] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -587,7 +587,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTriangles( VSet<dim>& vset )
               // If new point lies at the model boundary a boundary flag is assigned to the new point
               if ( (bflag=TestForBoundaryFlags( bflags, (*pit)[2], (*pit)[0] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1662,7 +1662,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[0], (*pit)[1] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1688,7 +1688,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[1], (*pit)[2] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1714,7 +1714,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[2], (*pit)[0] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1740,7 +1740,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[0], (*pit)[3] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1766,7 +1766,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[1], (*pit)[3] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -1792,7 +1792,7 @@ void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset )
               const int8_t bflag{BoundaryFlags3D( bflags, (*pit)[2], (*pit)[3] )};
               if ( bflag != 0 )
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2011,7 +2011,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
               // (should also work in 3D)
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[0], (*pit)[1] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2036,7 +2036,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
                 cout <<"\nNew coordinates, node 5("<< nID <<"): "<< x <<", "<< y <<", "<< z << endl;
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[1], (*pit)[2] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2061,7 +2061,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
                 cout <<"\nNew coordinates, node 6("<< nID <<"): "<< x <<", "<< y <<", "<< z << endl;
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[2], (*pit)[0] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2086,7 +2086,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
                 cout <<"\nNew coordinates, node 7("<< nID <<"): "<< x <<", "<< y <<", "<< z << endl;
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[1], (*pit)[3] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2111,7 +2111,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
                 cout <<"\nNew coordinates, node 8("<< nID <<"): "<< x <<", "<< y <<", "<< z << endl;
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[2], (*pit)[3] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }
@@ -2136,7 +2136,7 @@ void VSetConverter<dim>::ConvertLinearToQuadraticTetrahedra( VSet<dim>& vset )
                 cout <<"\nNew coordinates, node 9("<< nID <<"): "<< x <<", "<< y <<", "<< z << endl;
               if ( (bflag=BoundaryFlags3D( bflags, (*pit)[0], (*pit)[3] )) != 0 ) 
                 {
-                   vset.AddBFlag( nID, bflag );
+                   vset.BFlag( nID, bflag );
                 }
              (*pit).push_back( nID++ );
           }

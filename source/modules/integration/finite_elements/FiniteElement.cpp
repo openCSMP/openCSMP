@@ -156,6 +156,14 @@ bool isQuadrilateral( CSMP_FEM_TYPE etype )
  }
 
 
+bool isSurfaceElement( CSMP_FEM_TYPE etype )
+ {
+    if ( isTriangular(etype) ) return true;
+    else if ( isQuadrilateral(etype) ) return true;
+    return false;
+ }
+
+
 bool isTetrahedral( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_TETRAHEDRON ||
@@ -208,8 +216,16 @@ bool isPyramid( CSMP_FEM_TYPE etype )
     return false;
  }
 
- 
- 
+
+bool isVolumeElement( CSMP_FEM_TYPE etype )
+ {
+    if ( isTetrahedral( etype ) ) return true;
+    else if ( isHexahedral( etype ) ) return true;
+    else if ( isPrism( etype ) ) return true;
+    else if ( isPyramid( etype ) ) return true;
+    return false;
+ }
+
 
 
 void    FiniteElement::CurrentID( size_t id ) { object_id = id; }

@@ -189,7 +189,11 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// writes all contained data on the screen
     void Out() const;
 
+
     // base class methods not available for SplitBoundary
+
+    /// different version than in the base class that does not attempt to write nodes
+    void WriteIndexesToBinaryFile( std::fstream& ) const;
     
     size_t            Nodes() const = delete;
     size_t            InteriorNodes() const = delete;
@@ -213,7 +217,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     void InterpolateNodeToIntegrationPointProperty( const char*, const char* ) = delete;
 
   protected:
-
+  
     /// return physical variable count at given integration points
     IntegrationPointVariables  InterFaceIntegrationPointVariables() const;
     LocalVariables             InterFaceVariables() const;
@@ -230,6 +234,9 @@ void inputNodePropertyValue( SplitBoundary<dim>&,
                              const char* input_prop,
                              const Var&,
                              size_t side );
+   
+  /// matches member function to write domain indices
+  void readIndexesFromBinaryFile( uint32_t dim, std::fstream&, SubDomainInfo& info );
 
 } // end csmp
 

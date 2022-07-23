@@ -167,7 +167,7 @@ std::istream& operator >> ( std::istream& iStream, FiniteElement_TestData& femTe
   for( auto i = 0; i < femTestData.NodeCount(); ++i )
   {
     iStream >> x; iStream >> y; iStream >> z;
-    femTestData.NodePtr( i, new Node<3U>( i, Point<3U>(x,y,z), LocalVariables{} ) );
+    femTestData.NodePtr( i, new Node<3U>( i, Point<3U>(x,y,z), LocalVariables{}, NOT, MESH_VERTEX ) );
     if ( verbose ) {
         cout << "Node(" << i << ") read in with: " << femTestData.NodePtr( i )->x() << "(" << x << ")" << " / ";
         cout                                       << femTestData.NodePtr( i )->y() << "(" << y << ")" << " / ";

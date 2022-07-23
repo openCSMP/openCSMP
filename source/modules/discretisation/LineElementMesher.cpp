@@ -489,8 +489,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset )
         vset.AddPfverts( pfvert.begin(), pfvert.end() );
 
         //4.0 VSet - adding boundary flags
-        vset.AddBFlag( 0,            CNR1 );
-        vset.AddBFlag( n_vertices-1, CNR2 );
+        vset.BFlag( 0,            CNR1 );
+        vset.BFlag( n_vertices-1, CNR2 );
     }
 
 } // EstablishConnectivity
@@ -592,8 +592,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
                     node_counter++;
 
                     // assign boundary flags to splitnode
-                    vset.AddBFlag( node_counter - 2U, REGION_BOUNDARY );
-                    vset.AddBFlag( node_counter - 1U, REGION_BOUNDARY );
+                    vset.BFlag( node_counter - 2U, REGION_BOUNDARY );
+                    vset.BFlag( node_counter - 1U, REGION_BOUNDARY );
 
                     // assign boundary flags to elements across the interface
                     pfvert[element_counter][1U]     = REGION_BOUNDARY;
@@ -612,8 +612,8 @@ void LineElementMesher<dim>::EstablishConnectivity( VSet<dim>& vset,
             }
 
             //3.2 VSet - adding boundary flags
-            vset.AddBFlag( 0,            CNR1 );
-            vset.AddBFlag( n_vertices-1, CNR2 );
+            vset.BFlag( 0,            CNR1 );
+            vset.BFlag( n_vertices-1, CNR2 );
 
             //3.3 VSet - adding PList, PFVerts
             vset.AddPlist( plist.begin(), plist.end() );

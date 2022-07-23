@@ -212,7 +212,7 @@ class ModelTopology {
     bool  AssignBoxShapedModelFlags( VSet<dim>& ) const;
 
     template<uint32_t dim>
-    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements);
+    void  AssignMaterialProperties( VSet<dim>&,const std::multimap<std::string,std::vector<size_t> >& object_elements );
 
     bool  CheckCellNumbering() const;
 

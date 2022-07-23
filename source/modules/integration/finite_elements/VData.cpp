@@ -18,7 +18,6 @@ namespace csmp {
 /// default constructor: not hybrid, no nodes, nor elements
 VData::VData()
  : hybrid_mesh_(false),
-   bflags(),
    first_interface_(0U),
    first_face_(0U)
  {
@@ -45,6 +44,7 @@ VData::VData( const deque<uint32_t>& npes,
     py(nodes),
     pz(nodes),
     bflags(nodes),
+    gflags_(nodes),
     pelmt(epes.size()),
     plist(epes.size()),
     pfverts(epes.size()),
@@ -68,7 +68,7 @@ VData::VData( const deque<uint32_t>& npes,
    @note it is assumed that there are no faces nor interfaces
 */
 VData::VData( uint32_t nodes_per_element, uint32_t nbors_per_element, size_t nodes, size_t elmts )
-  : px(nodes), py(nodes), pz(nodes), bflags(nodes), pelmt(elmts),
+  : px(nodes), py(nodes), pz(nodes), bflags(nodes), gflags_(nodes), pelmt(elmts),
     hybrid_mesh_(false),
     first_face_(elmts),
     first_interface_(elmts)
@@ -92,9 +92,11 @@ VData::VData( const VData& vd )
    plist(vd.plist), pfverts(vd.pfverts),
    pelmt(vd.pelmt),
    bflags(vd.bflags),
+   gflags_(vd.gflags_),
    hybrid_mesh_(vd.hybrid_mesh_),
    first_face_( vd.first_face_ ),
-   first_interface_(vd.first_interface_ )
+   first_interface_(vd.first_interface_ ),
+   pmanifolds_( vd.pmanifolds_ )
 {
 }
 
@@ -113,9 +115,11 @@ VData& VData::operator=( const VData& a )
   plist            = a.plist;
   pfverts          = a.pfverts;
   bflags           = a.bflags;
+  gflags_          = a.gflags_;
   hybrid_mesh_     = a.hybrid_mesh_;
   first_face_      = a.first_face_;
   first_interface_ = a.first_interface_;
+  pmanifolds_      = a.pmanifolds_;
 
   return *this;
 }
@@ -144,29 +148,28 @@ double VData::Py( size_t i ) const
 double VData::Pz( size_t i ) const 
 { assert( i<pz.size() ); return pz[i]; }
 
+
+
 void  VData::P( uint32_t coordinate_axis, size_t i, double val )
   {
-    if( coordinate_axis == 0U )
-    {
+    if( coordinate_axis == 0U ) {
         assert( i<px.size() );
         px[i] = val;
         return;
     }
     
-    if( coordinate_axis == 1U )
-    {
+    if( coordinate_axis == 1U ) {
         assert( i<py.size() );
         py[i] = val;
         return;
     }
     
-    if( coordinate_axis == 2U )
-    {
+    if( coordinate_axis == 2U ) {
         assert( i<pz.size() );
         pz[i] = val;
         return;
     }
-    throw std::overflow_error( "VData::P: coordinate axis is out of range");
+    throw overflow_error( "VData::P: coordinate axis is out of range");
   }
 
 
@@ -189,7 +192,7 @@ double VData::P( uint32_t coordinate_axis, size_t i ) const
         return pz[i];
     }
 
-  throw std::overflow_error( "VData::P: coordinate axis is out of range");
+  throw overflow_error( "VData::P: coordinate axis is out of range");
 }
 
 
@@ -200,6 +203,8 @@ size_t VData::Elements() const { return plist.size() - (plist.size() - first_fac
 size_t VData::Faces() const { return first_interface_ - first_face_; }
 
 size_t VData::Interfaces() const { return plist.size() - first_interface_; }
+
+size_t VData::NodeManifolds() const { return pmanifolds_.size(); }
 
 /// the plist contains all: elements, faces and interfaces
 size_t VData::TotalNumberOfCells() const { return plist.size(); }
@@ -217,14 +222,26 @@ bool VData::HybridElementTypeMesh() const { return hybrid_mesh_; }
 
 void VData::HybridElementTypeMesh( bool hybrid_mesh ) { hybrid_mesh_ = hybrid_mesh; }
 
-void VData::AddElementTypes( std::vector<int8_t>::const_iterator first,
-                             std::vector<int8_t>::const_iterator last )
+void VData::AddElementTypes( vector<int8_t>::const_iterator first,
+                             vector<int8_t>::const_iterator last )
  { pelmt.assign( first, last ); }
 
-  void VData::AddElementTypes( std::deque<int8_t>::const_iterator first,
-                               std::deque<int8_t>::const_iterator last )
+  void VData::AddElementTypes( deque<int8_t>::const_iterator first,
+                               deque<int8_t>::const_iterator last )
   { pelmt.assign( first, last ); }
   
+
+
+void VData::AddNodeManifolds( VData::manifoldContainer::const_iterator first,
+                              VData::manifoldContainer::const_iterator last )
+ {
+    assert( Interfaces() > 0 );
+    assert( distance(first,last) < Vertices() );
+    pmanifolds_.assign( first, last );
+ }
+                          
+
+
 
     /// reports whether the model contains only isoparametric element types
 bool  VData::IsoparametricElementMesh() const
@@ -234,6 +251,7 @@ bool  VData::IsoparametricElementMesh() const
          return false;
      return true;
  }
+
 
 
 /// using element types, coordinate range, and boundary flags, asesses whether this is a 1D, 2D , or three dimensional model
@@ -264,67 +282,67 @@ int VData::SpatialDimension() const
 
 
 //  aelement ID's 0...n-1              
-std::vector<int64_t>::iterator  VData::PlistBegin( size_t eidx ) {
+vector<int64_t>::iterator  VData::PlistBegin( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PlistBegin: input Element ID out of range");
+       throw overflow_error( "VData::PlistBegin: input Element ID out of range");
 #endif
      return plist[eidx].begin();
   } 
   
-std::vector<int64_t>::iterator  VData::PlistEnd( size_t eidx ) {
+vector<int64_t>::iterator  VData::PlistEnd( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PlistEnd: input Element ID out of range");
+       throw overflow_error( "VData::PlistEnd: input Element ID out of range");
 #endif
      return plist[eidx].end();
   }  
      
-std::vector<int64_t>::iterator  VData::PfvertsBegin( size_t eidx ) {
+vector<int64_t>::iterator  VData::PfvertsBegin( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PfvertsBegin: input Element ID out of range");
+       throw overflow_error( "VData::PfvertsBegin: input Element ID out of range");
 #endif
      return pfverts[eidx].begin();
   } 
   
-std::vector<int64_t>::iterator  VData::PfvertsEnd( size_t eidx ) {
+vector<int64_t>::iterator  VData::PfvertsEnd( size_t eidx ) {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PfvertsEnd: input Element ID out of range");
+       throw overflow_error( "VData::PfvertsEnd: input Element ID out of range");
 #endif
      return pfverts[eidx].end();
   }
 
 // constant versions
-std::vector<int64_t>::const_iterator  VData::PlistBegin( size_t eidx ) const {
+vector<int64_t>::const_iterator  VData::PlistBegin( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PlistBegin: input Element ID out of range");
+       throw overflow_error( "VData::PlistBegin: input Element ID out of range");
 #endif
      return plist[eidx].begin();
   } 
   
-std::vector<int64_t>::const_iterator  VData::PlistEnd( size_t eidx ) const {
+vector<int64_t>::const_iterator  VData::PlistEnd( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > plist.size() )
-       throw std::overflow_error( "VData::PlistEnd: input Element ID out of range");
+       throw overflow_error( "VData::PlistEnd: input Element ID out of range");
 #endif
      return plist[eidx].end();
   }  
      
-std::vector<int64_t>::const_iterator  VData::PfvertsBegin( size_t eidx ) const {
+vector<int64_t>::const_iterator  VData::PfvertsBegin( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > pfverts.size() )
-       throw std::overflow_error( "VData::PfvertsBegin: input Element ID out of range");
+       throw overflow_error( "VData::PfvertsBegin: input Element ID out of range");
 #endif
      return pfverts[eidx].begin();
   } 
   
-std::vector<int64_t>::const_iterator  VData::PfvertsEnd( size_t eidx ) const {
+vector<int64_t>::const_iterator  VData::PfvertsEnd( size_t eidx ) const {
 #ifndef NDEBUG
      if ( eidx > pfverts.size() )
-       throw std::overflow_error( "VData::PfvertsEnd: input Element ID out of range");
+       throw overflow_error( "VData::PfvertsEnd: input Element ID out of range");
 #endif
      return pfverts[eidx].end();
   }
@@ -347,22 +365,22 @@ int8_t  VData::ElementType( size_t eidx ) const
 
 // Accessors (iterators)
 
-std::deque<std::vector<int64_t> >::iterator VData::PlistBegin()
+deque<vector<int64_t> >::iterator VData::PlistBegin()
  { return plist.begin(); }
 
-std::deque<std::vector<int64_t> >::iterator VData::PlistEnd()
+deque<vector<int64_t> >::iterator VData::PlistEnd()
  { return plist.end(); }
 
-std::deque<std::vector<int64_t> >::iterator VData::PfvertsBegin()
+deque<vector<int64_t> >::iterator VData::PfvertsBegin()
  { return pfverts.begin(); }
 
-std::deque<std::vector<int64_t> >::iterator VData::PfvertsEnd()
+deque<vector<int64_t> >::iterator VData::PfvertsEnd()
  { return pfverts.end(); }
 
-std::vector<std::int8_t>::iterator VData::BFlagsBegin()
+vector<int8_t>::iterator VData::BFlagsBegin()
  { return bflags.begin(); }
 
-std::vector<std::int8_t>::iterator VData::BFlagsEnd()
+vector<int8_t>::iterator VData::BFlagsEnd()
  { return bflags.end(); }
 
 
@@ -372,41 +390,56 @@ size_t  VData::PlistSize( size_t eidx ) const
 
 
 // const iterators
-std::vector<int8_t>::const_iterator  VData::PelmtBegin() const
+vector<int8_t>::const_iterator  VData::PelmtBegin() const
  { return pelmt.begin(); }
     
-std::vector<int8_t>::const_iterator  VData::PelmtEnd() const
+vector<int8_t>::const_iterator  VData::PelmtEnd() const
  { return pelmt.end(); }
 
-std::deque<std::vector<int64_t> >::const_iterator VData::PlistBegin() const
+deque<vector<int64_t> >::const_iterator VData::PlistBegin() const
  { return plist.begin(); }
 
-std::deque<std::vector<int64_t> >::const_iterator VData::PlistEnd() const
+deque<vector<int64_t> >::const_iterator VData::PlistEnd() const
  { return plist.end(); }
 
 size_t  VData::PfvertsSize( size_t eidx ) const
  { return pfverts[eidx].size(); }
 
-std::deque<std::vector<int64_t> >::const_iterator VData::PfvertsBegin() const
+deque<vector<int64_t> >::const_iterator VData::PfvertsBegin() const
  { return pfverts.begin(); }
 
-std::deque<std::vector<int64_t> >::const_iterator VData::PfvertsEnd() const
+deque<vector<int64_t> >::const_iterator VData::PfvertsEnd() const
  { return pfverts.end(); }
 
-std::vector<std::int8_t>::const_iterator VData::BFlagsBegin() const
+vector<int8_t>::const_iterator VData::BFlagsBegin() const
  { return bflags.begin(); }
 
-std::vector<std::int8_t>::const_iterator VData::BFlagsEnd() const
+vector<int8_t>::const_iterator VData::BFlagsEnd() const
  { return bflags.end(); }
 
 
-void VData::AddBFlag( size_t node_id, std::int8_t bflag )
+
+vector<int8_t>::iterator VData::BREP_FlagsBegin()
+ { return gflags_.begin(); }
+
+vector<int8_t>::iterator VData::BREP_FlagsEnd()
+ { return gflags_.end(); }
+
+vector<int8_t>::const_iterator VData::BREP_FlagsBegin() const
+ { return gflags_.begin(); }
+
+vector<int8_t>::const_iterator VData::BREP_FlagsEnd() const
+ { return gflags_.end(); }
+
+
+
+void VData::BFlag( size_t node_id, int8_t bflag )
  {
     assert( node_id < bflags.size() );
     BOX_BOUNDARY flag = static_cast<BOX_BOUNDARY>(bflag);
     // if the boundary flag integer value is outside of the range of defined values
     if ( flag < MULTIPLE_BOUNDARIES - 1 ) {
-         cerr <<"\nVData::AddBFlag: boundary flag "<< parseBoundary( flag );
+         cerr <<"\nVData::BFlag: boundary flag "<< parseBoundary( flag );
          cerr <<" is uninterpretable; no assignment was made.\n";
          return;
       }
@@ -424,10 +457,34 @@ int8_t VData::BFlag( size_t node_id ) const
 
  
  
+ void VData::BREP_Flag( size_t node_id, int8_t bflag )
+ {
+    assert( node_id < gflags_.size() );
+    TOPOTYPE flag = static_cast<TOPOTYPE>(bflag);
+    // if the boundary flag integer value is outside of the range of defined values
+    if ( flag < 0 ) {
+         cerr <<"\nVData::BREP_Flag: BREP topology / geometry entity flag "<< parseTopology( flag );
+         cerr <<" is uninterpretable; no assignment was made.\n";
+         return;
+      }
+    gflags_[ node_id ] = bflag;
+ }
+ 
+ 
+ 
+     /// returns the boundary flag of the node
+int8_t VData::BREP_Flag( size_t node_id ) const
+ {
+    assert( node_id < gflags_.size() );
+    return gflags_[node_id];
+ }
+
+ 
+ 
 /**
-      Finds boundary identifier if any.
+      Returns boundary identifier if any.
 */
-std::int8_t VData::BoundaryFlag( size_t vertex ) const
+int8_t VData::BoundaryFlag( size_t vertex ) const
  {
     if ( bflags.empty() ) {
          cerr <<"\nVData::ABoundaryFlag: cannot determine boundary flag because VData contains no boundary identifiers.\n";
@@ -448,48 +505,74 @@ std::int8_t VData::BoundaryFlag( size_t vertex ) const
 
 // specific element, face and interface iterators
 /// iterator to CSMP finite element type of first face stored in mesh
-std::vector<int8_t>::const_iterator  VData::PelmtFacesBegin() const {
-    return std::next( pelmt.begin(), first_face_ );
+vector<int8_t>::const_iterator  VData::PelmtFacesBegin() const {
+    return next( pelmt.begin(), first_face_ );
  }
  
 /// iterator to CSMP finite element type of first interface stored in mesh
-std::vector<int8_t>::const_iterator  VData::PelmtInterfacesBegin() const {
-    return std::next( pelmt.begin(), first_interface_ );
+vector<int8_t>::const_iterator  VData::PelmtInterfacesBegin() const {
+    return next( pelmt.begin(), first_interface_ );
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistElmtsBegin() const {
+deque<vector<int64_t> >::const_iterator  VData::PlistElmtsBegin() const {
     return plist.begin();
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistElmtsEnd() const {
-    return std::next( plist.begin(), first_face_ );
+deque<vector<int64_t> >::const_iterator  VData::PlistElmtsEnd() const {
+    return next( plist.begin(), first_face_ );
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistFacesBegin() const {
-    return std::next( plist.begin(), first_face_ );
+deque<vector<int64_t> >::const_iterator  VData::PlistFacesBegin() const {
+    return next( plist.begin(), first_face_ );
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistFacesEnd() const {
-    return std::next( plist.begin(), first_interface_ );
+deque<vector<int64_t> >::const_iterator  VData::PlistFacesEnd() const {
+    return next( plist.begin(), first_interface_ );
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistInterFacesBegin() const {
-    return std::next( plist.begin(), first_interface_ );
+deque<vector<int64_t> >::const_iterator  VData::PlistInterFacesBegin() const {
+    return next( plist.begin(), first_interface_ );
  }
 
-std::deque<std::vector<int64_t> >::const_iterator  VData::PlistInterFacesEnd() const {
+deque<vector<int64_t> >::const_iterator  VData::PlistInterFacesEnd() const {
     return plist.end();
  }
 
 /// neighbor iterator for first face in plist (use PlistInterFacesBegin() to find last one)
-std::deque<std::vector<int64_t> >::const_iterator  VData::PfvertsFacesBegin() const {
-    return std::next( pfverts.begin(), first_face_ );
+deque<vector<int64_t> >::const_iterator  VData::PfvertsFacesBegin() const {
+    return next( pfverts.begin(), first_face_ );
  }
  
 /// neighbor iterator for first interface plist; equivalent to PlistFacesEnd; use PlistEnd() for last one
-std::deque<std::vector<int64_t> >::const_iterator  VData::PfvertsInterfaceBegin() const {
-    return std::next( pfverts.begin(), first_interface_ );
+deque<vector<int64_t> >::const_iterator  VData::PfvertsInterfaceBegin() const {
+    return next( pfverts.begin(), first_interface_ );
  }
+ 
+ 
+ 
+
+/// read / write access to the stored node manifolds
+VData::manifoldContainer::iterator  VData::PmanifoldsBegin()
+ {
+    return pmanifolds_.begin();
+ }
+ 
+VData::manifoldContainer::iterator  VData::PmanifoldsEnd()
+ {
+    return pmanifolds_.end();
+ }
+
+VData::manifoldContainer::const_iterator  VData::PmanifoldsBegin() const
+ {
+    return pmanifolds_.begin();
+ }
+ 
+VData::manifoldContainer::const_iterator  VData::PmanifoldsEnd() const
+ {
+    return pmanifolds_.end();
+ }
+
+ 
  
  
 
@@ -504,7 +587,7 @@ int64_t  VData::Plist( size_t eidx, uint32_t nidx ) const
   { 
      assert( eidx < plist.size() );
     if (nidx >= plist[eidx].size()) {
-      std::cerr << "plist[" << eidx << ".size() = " <<plist[eidx].size() << '\n';
+      cerr << "plist[" << eidx << ".size() = " <<plist[eidx].size() << '\n';
     }
      assert( nidx < plist[eidx].size() ); 
      return plist[eidx][nidx]; 
@@ -598,6 +681,7 @@ void VData::Resize( size_t nodes_per_element,
     py.resize(nodes);  vector<double>( py ).swap( py );
     pz.resize(nodes);  vector<double>( pz ).swap( pz );
     ResizeBFlags();
+    ResizeBREP_Flags();
     
     pelmt.clear();
     plist.clear();
@@ -661,6 +745,7 @@ to be included into the supplied deques.
     py.resize(nodes);  vector<double>( py ).swap( py );
     pz.resize(nodes);  vector<double>( pz ).swap( pz );
     ResizeBFlags();
+    ResizeBREP_Flags();
     
     plist.clear();
     pfverts.clear();
@@ -735,6 +820,7 @@ void VData::ResizeNodes( size_t nodes )
     py.resize( nodes );  vector<double>( py ).swap( py );
     pz.resize( nodes );  vector<double>( pz ).swap( pz );
     ResizeBFlags();
+    ResizeBREP_Flags();
         
  } // end ResizeNodes
 
@@ -742,16 +828,30 @@ void VData::ResizeNodes( size_t nodes )
 
 
 /**
-      Updates length of vector to that of the node vector, setting potential new flags to zero.
+    Updates length of vector to that of the node vector, setting potential new flags to zero.
+    preserving the original values if the size of the VSet increases.
 */
 void VData::ResizeBFlags()
  {
+    const size_t orig_size{ bflags.size() };
     bflags.resize( px.size() );
-    vector<std::int8_t>( bflags ).swap( bflags );
-    fill( bflags.begin(), bflags.end(), NOT );
+    if ( bflags.size() > orig_size )
+    fill( next(bflags.begin(),orig_size), bflags.end(), NOT );
+    bflags.shrink_to_fit();
  }
 
 
+/**
+     If the record grows in size, the original values are preserved and the new ones are initialised to MESH_VERTEX.
+*/
+void VData::ResizeBREP_Flags()
+ {
+    const size_t orig_size{ gflags_.size() };
+    gflags_.resize( px.size() );
+    if ( gflags_.size() > orig_size )
+    fill( next(gflags_.begin(),orig_size), gflags_.end(), MESH_VERTEX );
+    gflags_.shrink_to_fit();
+ }
 
 
 /**
@@ -1111,9 +1211,9 @@ void VData::EstablishZeroBasedNumbering()
 */ 
 void VData::OutBinary( fstream& fp ) const
  {
-    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::OutBinary: on this system 'std::streamsize' is not equal to size_t" );
-    size_t n0(0), n1(1), records;
-    double*  ptr(0);
+    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::OutBinary: on this system 'streamsize' is not equal to size_t" );
+    size_t n0(0U), n1(1U), records;
+    double* ptr(0);
     
     // 1. writing whether we are dealing with a mixed mesh
     // ---------------------------------------------------
@@ -1122,55 +1222,87 @@ void VData::OutBinary( fstream& fp ) const
     
     // 2. writing all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
-   {
-     BinaryFileSectionWrite sect(fp, "VSETCORD");
-     // px
-    if ( (records=px.size()) > 0 && (ptr=const_cast<double*>( &(*px.begin()) )) != NULL ) 
-      {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
-         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
-      }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
-    // py
-    if ( (records=py.size()) > 0 && (ptr=const_cast<double*>( &(*py.begin()) )) != NULL ) 
-      {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
-         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
-      }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
-    // pz
-    if ( (records=pz.size()) > 0 && (ptr=const_cast<double*>( &(*pz.begin()) )) != NULL ) 
-      {
-         fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
-         fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
-      }
-    else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
-   }
+     {
+       BinaryFileSectionWrite sect(fp, "VSETCORD");
+       // px
+      if ( (records=px.size()) > 0 && (ptr=const_cast<double*>( &(*px.begin()) )) != nullptr )
+        {
+           fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
+           fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
+        }
+      else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
+      // py
+      if ( (records=py.size()) > 0 && (ptr=const_cast<double*>( &(*py.begin()) )) != nullptr )
+        {
+           fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
+           fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
+        }
+      else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
+      // pz
+      if ( (records=pz.size()) > 0 && (ptr=const_cast<double*>( &(*pz.begin()) )) != nullptr )
+        {
+           fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
+           fp.write( reinterpret_cast<const char*>(ptr), sizeof(double) * records );
+        }
+      else fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
+     }
 
-    // 3. writing pelmt, plist, pfverts, bflags
-    // ----------------------------------------
-   {
-     BinaryFileSectionWrite sect(fp, "VSETPELT");
-     binaryFileWrite( fp, pelmt );
-   }
-   {
-     BinaryFileSectionWrite sect(fp, "VSETPLST");
-     binaryFileWrite( fp, plist );
-   }
-   {
-     BinaryFileSectionWrite sect(fp, "VSETPFVT");
-     binaryFileWrite( fp, pfverts );
-   }
-   {
-     BinaryFileSectionWrite sect(fp, "VSETBFLG");
-     binaryFileWrite( fp, bflags );
-   }
+    // 3. writing pelmt, plist, pfverts, bflags, gflags
+    // ------------------------------------------------
+     {
+       BinaryFileSectionWrite sect(fp, "VSETPELT");
+       binaryFileWrite( fp, pelmt );
+     }
+     {
+       BinaryFileSectionWrite sect(fp, "VSETPLST");
+       binaryFileWrite( fp, plist );
+     }
+     {
+       BinaryFileSectionWrite sect(fp, "VSETPFVT");
+       binaryFileWrite( fp, pfverts );
+     }
+     {
+       BinaryFileSectionWrite sect(fp, "VSETBFLG");
+       binaryFileWrite( fp, bflags );
+     }
+     {
+       BinaryFileSectionWrite sect(fp, "VSETGFLG");
+       binaryFileWrite( fp, gflags_ );
+     }
    
-    // 4. offsets for faces and interfaces
+     // writing the manifold classifiers first
+     if ( (records=pmanifolds_.size()) > 0 )
+        {
+           fp.write( reinterpret_cast<const char*>(&records), sizeof(size_t) );
+           
+           // splitting 'pmanifold' into a vector of ManifoldTypes and a deque of node-number vectors
+           // ---------------------------------------------------------------------------------------
+           // (vector< pair< vector<int64_t>, ManifoldType > > pmanifolds_)
+           deque<vector<size_t> > manifold_nodes;
+           vector<ManifoldType>    manifold_types; manifold_types.reserve( records );
+           for ( const auto& nmf : pmanifolds_ ) {
+                manifold_nodes.push_back( nmf.first );
+                manifold_types.push_back( nmf.second );
+             }
+           // 4. node manifolds, if any
+           // --------------------------
+           { // node numbers
+             BinaryFileSectionWrite sect(fp, "VSETNMND");
+             binaryFileWrite( fp, manifold_nodes );
+           }
+           { // node flags
+             BinaryFileSectionWrite sect(fp, "VSETNMMT");
+             binaryFileWrite( fp, manifold_types );
+           }
+       }
+      else // indicating that there are no records
+        fp.write( reinterpret_cast<const char*>(&n0), sizeof(size_t) );
+
+    // 5. offsets for faces and interfaces
     // -----------------------------------
     fp.write( reinterpret_cast<const char*>(&first_face_), sizeof(int64_t ) );
     fp.write( reinterpret_cast<const char*>(&first_interface_), sizeof(int64_t ) );
-   
+    
     cout <<"\nVData::OutBinary: Mesh has been successfully written to file."<< endl;
 
  } // end OutBinary
@@ -1184,7 +1316,7 @@ void VData::OutBinary( fstream& fp ) const
 */
 void VData::InBinary( fstream& fp )
  {
-    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::InBinary: on this system 'std::streamsize' is not equal to size_t" );
+    static_assert( sizeof(size_t) == sizeof(streamsize), "VData::InBinary: on this system 'streamsize' is not equal to size_t" );
     size_t mixed(0U), records(0U);
     
     // 1. reading whether we are dealing with a mixed mesh
@@ -1195,61 +1327,90 @@ void VData::InBinary( fstream& fp )
     
     // 2. reading all the p,c arrays or length identifiers = 0
     // -------------------------------------------------------
-   {
-     BinaryFileSectionRead sect(fp, "VSETCORD");
+     {
+       BinaryFileSectionRead sect(fp, "VSETCORD");
 
-    // px
-    fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
-    if ( records > 0U ) {
-         px.resize( records );
-         vector<double>( px ).swap( px );
-         fp.read( reinterpret_cast<char*>(&(*px.begin())), sizeof(double) * records );
-      }
+      // px
+      fp.read( reinterpret_cast<char*>(&records), sizeof(size_t));
+      if ( records > 0U ) {
+           px.resize( records );
+           vector<double>( px ).swap( px );
+           fp.read( reinterpret_cast<char*>(&(*px.begin())), sizeof(double) * records );
+        }
 
-    // py
-    fp.read( (char*) &records, sizeof(size_t));
-    if ( records > 0U ) {
-         py.resize( records );
-         vector<double>( py ).swap( py );
-         fp.read( reinterpret_cast<char*>(&(*py.begin())), sizeof(double) * records );
-      }
+      // py
+      fp.read( (char*) &records, sizeof(size_t));
+      if ( records > 0U ) {
+           py.resize( records );
+           vector<double>( py ).swap( py );
+           fp.read( reinterpret_cast<char*>(&(*py.begin())), sizeof(double) * records );
+        }
 
-    // pz
-    fp.read( (char*) &records, sizeof(size_t));
-    if ( records > 0U ) {
-         pz.resize( records );
-         vector<double>( pz ).swap( pz );
-         fp.read( reinterpret_cast<char*>(&(*pz.begin())), sizeof(double) * records );
-      }
-   }
+      // pz
+      fp.read( (char*) &records, sizeof(size_t));
+      if ( records > 0U ) {
+           pz.resize( records );
+           vector<double>( pz ).swap( pz );
+           fp.read( reinterpret_cast<char*>(&(*pz.begin())), sizeof(double) * records );
+        }
+     }
 
     // 3. reading pelmt, plist, pfverts, bflags
     // ----------------------------------------
-   {
-      BinaryFileSectionRead sect(fp, "VSETPELT");
-      binaryFileRead( fp, pelmt );
-   }
-   {
-      BinaryFileSectionRead sect(fp, "VSETPLST");
-      binaryFileRead( fp, plist );
-   }
-   {
-      BinaryFileSectionRead sect(fp, "VSETPFVT");
-      binaryFileRead( fp, pfverts );
-   }
-   {
-      BinaryFileSectionRead sect(fp, "VSETBFLG");
-      binaryFileRead( fp, bflags );
-   }
-    
-    // 4. offsets for faces and interfaces
+     {
+        BinaryFileSectionRead sect(fp, "VSETPELT");
+        binaryFileRead( fp, pelmt );
+     }
+     {
+        BinaryFileSectionRead sect(fp, "VSETPLST");
+        binaryFileRead( fp, plist );
+     }
+     {
+        BinaryFileSectionRead sect(fp, "VSETPFVT");
+        binaryFileRead( fp, pfverts );
+     }
+     {
+        BinaryFileSectionRead sect(fp, "VSETBFLG");
+        binaryFileRead( fp, bflags );
+     }
+     {
+       BinaryFileSectionRead sect(fp, "VSETGFLG");
+       binaryFileRead( fp, gflags_ );
+     }
+   
+     // 4. node manifolds, if any
+     // --------------------------
+     fp.read( reinterpret_cast<char*>(&records), sizeof(size_t) );
+     if ( records > 0 )
+       {
+          deque<vector<size_t> > manifold_nodes;
+          vector<ManifoldType>   manifold_types;
+          {
+            BinaryFileSectionRead sect(fp, "VSETNMND");
+            binaryFileRead( fp, manifold_nodes );
+          }
+          {
+            BinaryFileSectionRead sect(fp, "VSETNMMT");
+            binaryFileRead( fp, manifold_types );
+          }
+          // initialising the manifold container in VData
+          if ( !pmanifolds_.empty() ) pmanifolds_.clear();
+          pmanifolds_.reserve( manifold_nodes.size() );
+          for ( size_t i{0U}; i<manifold_nodes.size(); i++ )
+            pmanifolds_.push_back( make_pair( manifold_nodes[i], manifold_types[i] ) );
+       }
+
+    // 5. offsets for faces and interfaces
     // -----------------------------------
     fp.read( reinterpret_cast<char*>(&first_face_), sizeof(int64_t ) );
     fp.read( reinterpret_cast<char*>(&first_interface_), sizeof(int64_t ) );
+    
     cout <<"\nVData::InBinary: Mesh has been successfully read from file."<< endl;
         
  } // end InBinary
 
+ 
+ 
  
 
 /**
@@ -1326,7 +1487,29 @@ void VData::OutASCII( const char* file ) const
      size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
        ofs << n_node++ <<": \t"<< static_cast<int>(*bf) << endl;
-       
+
+     // gflags
+     // ------
+     if ( !gflags_.empty() ) ofs <<"\nBREP geometry flags 'gflags_':"<< endl;
+     n_node = 0U;
+     for ( auto bf=gflags_.begin(); bf!=gflags_.end(); bf++ )
+       ofs << n_node++ <<": \t"<< static_cast<int>(*bf) << endl;
+
+     // node manifolds
+     // --------------
+     if ( !pmanifolds_.empty() ) {
+         ofs <<"\nNode manifolds (topologically collocated nodes) in model 'pmanifolds_':"<< endl;
+         n_node = 0U;
+         for ( size_t n{0U}; n<pmanifolds_.size(); ++n )
+           {
+              ofs << n_node++ <<": ";
+              for ( auto j{0U}; j<pmanifolds_[i].first.size(); j++ )
+                 cerr  << pmanifolds_[i].first[j] <<" ";
+               cerr <<", manifold type: "<< parse( pmanifolds_[i].second );
+           }
+         cerr << endl << endl;
+       }
+     ofs.close();
      cout <<"\nVData::OutASCII: ascii file '"<< file_name <<"' written successfully."<< endl;
 
   } // end Out
@@ -1339,7 +1522,7 @@ void VData::OutASCII( const char* file ) const
 
 
     /// writes initialiser lists for the current VData in C++17 format
-void VData::OutCPP17( std::ofstream& ofs ) const
+void VData::OutCPP17( ofstream& ofs ) const
  {
     //--------------------------ELEMENT TYPES
     // vector<int8_t> pelmt;
@@ -1408,6 +1591,15 @@ void VData::OutCPP17( std::ofstream& ofs ) const
     ofs <<"};\n";
     ofs <<"\n\nvset.AddBFlags( bflags.begin(), bflags.end());\n";
       
+     //------------------------------GEOMETRY FLAGS
+    ofs <<"\n\nvector<int8_t>  gflags{";
+    for ( size_t i{0U}; i<Vertices(); ++i ) {
+         ofs << static_cast<int>(BREP_Flag(i));
+         if ( i <Vertices()-1 ) ofs <<",";
+      }
+    ofs <<"};\n";
+    ofs <<"\n\nvset.AddBREP_Flags( gflags_.begin(), gflags_.end());\n";
+
     //------------------------------PLIST
     ofs <<"\n//'plist' nodes that make up the elements";
     ofs <<"\ndeque<vector<int64_t>> plist( "<< pelmt.size() <<" );";
@@ -1435,6 +1627,23 @@ void VData::OutCPP17( std::ofstream& ofs ) const
         ofs <<" };";
       }
     ofs <<"\n\nvset.AddPfverts( pfverts.begin(), pfverts.end());";
+
+    //--------------------------------node manifolds
+    // TODO: TEST this output
+    if ( !pmanifolds_.empty() ) {
+        ofs <<"\n//''pmanifolds_' node manifolds (topologically collocated nodes):"<< endl;
+        ofs <<"\ndeque<pair<vector<int64_t>,ManifoldType> > pmanifolds( "<< pmanifolds_.size() <<" );";
+        for ( size_t n{0U}; n<pmanifolds_.size(); ++n )
+          {
+             ofs <<"\n\tpmanifolds_["<< n <<"] = { {";
+             for ( auto j{0U}; j<pmanifolds_[n].first.size(); j++ ) {
+                  ofs  << pmanifolds_[n].first[j];
+                  if ( j < pmanifolds_[n].first.size()-1 ) ofs <<", ";
+               }
+             ofs <<"}, "<< parse( pmanifolds_[n].second );
+          }
+        ofs <<" };";
+      }
 
  } // end OutCPP17
 
@@ -1519,8 +1728,30 @@ void VData::Out() const
      size_t n_node(0U);
      for ( auto bf=bflags.begin(); bf!=bflags.end(); bf++ )
        cout << n_node++ <<": \t"<< parseBoundary( static_cast<BOX_BOUNDARY>(*bf) ) << endl;
+       
+     // gflags
+     // ------
+     if ( !bflags.empty() ) cout <<"\nGeometry classification flags 'gflags' (TOPOTYPE):"<< endl;
+     n_node = 0U;
+     for ( auto gf=gflags_.begin(); gf!=gflags_.end(); gf++ )
+       cout << n_node++ <<": \t"<< parseTopology( static_cast<TOPOTYPE>(*gf) ) << endl;
+       
+     // node manifolds, if any
+     // ----------------------
+     // vector< pair< vector<int64_t>, ManifoldType > > pmanifolds_
+     if ( !pmanifolds_.empty() ) {
+          cout <<"\nNode manifolds 'pmanifolds' connecting node-matched mesh patches at SplitBoundaries:"<< endl;
+          size_t manifold{0U};
+          for ( const auto& nit : pmanifolds_ ) {
+               cout << manifold++ <<": \t"<< parse( nit.second ) <<", connecting nodes: ";
+               for ( const auto& n : nit.first )
+                 cout << n <<" ";
+               cout << endl;
+            }
+          cout << endl;
+       }
 
-  } // end Out()
+  } // end Out
 
 
 
@@ -1531,7 +1762,7 @@ void VData::Out() const
     
     @note no faces or interfaces are considered
 */
-void VData::InText( std::ifstream& ifs )
+void VData::InText( ifstream& ifs )
  {
      assert( ifs.is_open() );
      
@@ -1756,7 +1987,7 @@ bool  VData::operator==( const VData& vd ) const
 //    if ( !(pz == vd.pz) ) { cerr<<"\nVData::operator== failed 'pz' comparison."; return_value = false; }
 
     if ( !(pelmt == vd.pelmt) ) {
-         cerr<<"\nVData::operator== failed 'pelmt' comparison.";
+         cerr<<"\nVData::operator== failed 'pelmt' (finite-element type) comparison.";
          if ( pelmt.size() != vd.pelmt.size() ) cerr <<"\nelement type records have different sizes.\n";
          for ( size_t i{0U}; i<pelmt.size(); ++i )
            if ( pelmt[i] != vd.pelmt[i] )
@@ -1766,7 +1997,7 @@ bool  VData::operator==( const VData& vd ) const
       }
     
     if ( !(plist == vd.plist) ) {
-         cerr<<"\nVData::operator== failed 'plist' comparison.";
+         cerr<<"\nVData::operator== failed 'plist' (nodes of element) comparison.";
          for ( size_t i{0U}; i<plist.size(); ++i )
            if ( plist[i] != vd.plist[i] ) {
                 if ( plist[i].size() != vd.plist[i].size() ) cerr <<"\ncell "<< i <<" nodes-per-element records have different sizes.\n";
@@ -1781,7 +2012,7 @@ bool  VData::operator==( const VData& vd ) const
       }
     
     if ( !(pfverts == vd.pfverts) ) {
-         cerr<<"\nVData::operator== failed 'pfverts' comparison.\n";
+         cerr<<"\nVData::operator== failed 'pfverts' (element neighbor) comparison.\n";
          for ( size_t i{0U}; i<pfverts.size(); ++i )
            if ( pfverts[i] != vd.pfverts[i] ) {
                 if ( pfverts[i].size() != vd.pfverts[i].size() ) cerr <<"\n\tcell "<< i <<" element-neighbor records have different sizes.\n";
@@ -1796,15 +2027,42 @@ bool  VData::operator==( const VData& vd ) const
       }
       
     if ( !(bflags == vd.bflags) ) {
-         cerr<<"\nVData::operator== failed 'bflags' comparison.";
+         cerr<<"\nVData::operator== failed 'bflags' (box-boundary flag) comparison.";
          if ( bflags.size() != vd.bflags.size() ) cerr <<"\n\tboundary flag records have different sizes.\n";
          for ( size_t i{0U}; i<bflags.size(); ++i )
            if ( bflags[i] != vd.bflags[i] )
-             cerr <<"\n\t\tnode flag "<< i <<": "<< static_cast<int>(bflags[i]) <<" vs "<< static_cast<int>(vd.bflags[i]);
+             cerr <<"\n\t\tnode flag "<< i <<": "<< parseBoundary(intToBOX_BOUNDARY(bflags[i])) <<" vs "<< parseBoundary(intToBOX_BOUNDARY(vd.bflags[i]));
          cerr << endl << endl;
          return_value = false;
       }
-    
+
+    if ( !(gflags_ == vd.gflags_) ) {
+         cerr<<"\nVData::operator== failed 'gflags' (node-parent BREP entity identifier) comparison.";
+         if ( gflags_.size() != vd.gflags_.size() ) cerr <<"\n\tTOPOTYPE flag records have different sizes.\n";
+         for ( size_t i{0U}; i<gflags_.size(); ++i )
+           if ( gflags_[i] != vd.gflags_[i] )
+             cerr <<"\n\t\tlefthandside node geometry flag "<< i <<": "<< parseTopology(static_cast<TOPOTYPE>(gflags_[i])) <<" vs "<< parseTopology(static_cast<TOPOTYPE>(vd.gflags_[i]));
+         cerr << endl << endl;
+         return_value = false;
+      }
+
+    if ( !(pmanifolds_ == vd.pmanifolds_) ) {
+         cerr<<"\nVData::operator== failed 'pmanifolds_' (node-manifold) comparison.";
+         if ( pmanifolds_.size() != vd.pmanifolds_.size() ) cerr <<"\n\tnode-manifold records have different sizes.\n";
+         for ( size_t i{0U}; i<pmanifolds_.size(); ++i )
+           if ( pmanifolds_[i] != vd.pmanifolds_[i] ) {
+               cerr <<"\n\t\tnode records in manifold "<< i <<" are not the same: (";
+               for ( auto j{0U}; j<pmanifolds_[i].first.size(); j++ )
+                 cerr  << pmanifolds_[i].first[j] <<" ";
+               cerr <<") vs. (";
+               for ( auto j{0U}; j<pmanifolds_[i].first.size(); j++ )
+                 cerr  << pmanifolds_[i].first[j] <<" ";
+               cerr <<").";
+             }
+         cerr << endl << endl;
+         return_value = false;
+      }
+
     return return_value;
     
  } // end operator==
@@ -1932,17 +2190,16 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     // ----------------------------------------------
     if ( HybridElementTypeMesh() ) {
          vector<int32_t> new_element_types( o_n_elmt_ids.size() );
-         for ( map<size_t,size_t>::const_iterator 
-               it=o_n_elmt_ids.begin(); it!=o_n_elmt_ids.end(); ++it ) {
+         for ( const auto& it : o_n_elmt_ids ) {
               // range-checked access of the 2 containers using at()
-              new_element_types.at( (*it).second ) = pelmt.at( (*it).first ); 
+              new_element_types.at( it.second ) = pelmt.at( it.first );
            }
 	       pelmt.assign( new_element_types.begin(), new_element_types.end() );
       }
     // else nothing needs to be done
    
     // checking wether the mesh is still mixed element type and resizing 
-    // the element type deque if not
+    // the element type deque if it is not
     set<int8_t>  n_etypes( pelmt.begin(), pelmt.end() );
     if ( n_etypes.size() == 1U ) {
          pelmt.resize(1U);
@@ -1960,11 +2217,10 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     //  old   & new node numbers
     o_n_node_ids.clear();
     assert( plist.size() == pfverts.size() || !with_connectivity );
-    for ( map<size_t,size_t>::const_iterator
-          it=o_n_elmt_ids.begin(); it!=o_n_elmt_ids.end(); it++ )
+    for ( const auto& it : o_n_elmt_ids )
       {
-         const size_t  eidx( (*it).first );
-         const size_t  neidx( (*it).second );
+         const size_t  eidx( it.first );
+         const size_t  neidx( it.second );
          if ( eidx > plist.size()-1U ) {
               cerr <<"\nVData::ReduceTo: attempt to read element "<< eidx;
               cerr <<" of original 'plist' with size: "<< plist.size();
@@ -1986,49 +2242,48 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
            }
       }
     // verifying that plist and pfverts do not contain empty elements
-    for ( vector<vector<int64_t> >::const_iterator
-          it=new_plist.begin(); it!=new_plist.end(); it++ )
-      if ( (*it).empty() )
+    for ( const auto& it : new_plist )
+      if ( it.empty() )
         throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
                               "The reduced 'plist' deque contains empty entries. Unable to continue");
     if( with_connectivity )
-        for ( vector<vector<int64_t> >::const_iterator
-              it=new_pfverts.begin(); it!=new_pfverts.end(); it++ )
-          if ( (*it).empty() )
+        for ( const auto& it : new_pfverts )
+          if ( it.empty() )
             throw csmp::Exception( FATAL_ERROR, "VData::ReduceTo",
                                   "The reduced 'pverts' deque contains empty entries. Unable to continue");
 
     // reassigning the plist and pfverts now
     plist.assign( new_plist.begin(), new_plist.end() );
     new_plist.clear();
+    
     if( with_connectivity )
-    {
-        pfverts.assign( new_pfverts.begin(), new_pfverts.end() );
-        new_pfverts.clear();
+      {
+          pfverts.assign( new_pfverts.begin(), new_pfverts.end() );
+          new_pfverts.clear();
 
-        // 2. 'pfverts': assigning new contiguous element IDs to 'pfverts' map
-        // -------------------------------------------------------------------
-        bool first_incidence(true);
-        for ( deque<vector<int64_t> >::iterator it=pfverts.begin(); it!=pfverts.end(); it++ )
-          for ( vector<int64_t>::iterator pit=(*it).begin(); pit!=(*it).end(); pit++ )
-            // only if there was a neighboring element before its ID is updated
-            if ( (*pit) > 0 ) {
-                 map<size_t,size_t>::const_iterator
-                   eit=o_n_elmt_ids.find( *pit );
-                 if ( eit == o_n_elmt_ids.end() ) {
-                       if ( first_incidence ) {
-                             if ( csmp_error.Verbose() ) {
-                                 cerr <<"\nVData::ReduceTo 'pfvert' neighbor element ID could not be updated for element ";
-                                 cerr << *pit <<" and possible others.\n Treating them as 'REGION_BOUNDARY'"<< endl;
-                               }
-                             first_incidence = false;
-                         }
-                       *pit = REGION_BOUNDARY;
-                   }
-                 else
-                 *pit = static_cast<int64_t>((*eit).second);
-              }
-    }
+          // 2. 'pfverts': assigning new contiguous element IDs to 'pfverts' map
+          // -------------------------------------------------------------------
+          bool first_incidence(true);
+          for ( deque<vector<int64_t> >::iterator it=pfverts.begin(); it!=pfverts.end(); it++ )
+            for ( vector<int64_t>::iterator pit=(*it).begin(); pit!=(*it).end(); pit++ )
+              // only if there was a neighboring element before its ID is updated
+              if ( (*pit) > 0 ) {
+                   map<size_t,size_t>::const_iterator
+                     eit=o_n_elmt_ids.find( *pit );
+                   if ( eit == o_n_elmt_ids.end() ) {
+                         if ( first_incidence ) {
+                               if ( csmp_error.Verbose() ) {
+                                   cerr <<"\nVData::ReduceTo 'pfvert' neighbor element ID could not be updated for element ";
+                                   cerr << *pit <<" and possible others.\n Treating them as 'REGION_BOUNDARY'"<< endl;
+                                 }
+                               first_incidence = false;
+                           }
+                         *pit = REGION_BOUNDARY;
+                     }
+                   else
+                   *pit = static_cast<int64_t>((*eit).second);
+                }
+      }
 
     // 3. 'plist': updating node IDs if necessary
     // ------------------------------------------
@@ -2083,11 +2338,23 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
 
          // 5. updating boundary flags
          // --------------------------
-         vector<std::int8_t> new_bflags(px.size(),0);
+         vector<int8_t> new_bflags(px.size(),0);
          //        old_ID    new_ID
          for ( map<size_t,size_t>::const_iterator
                nit=o_n_node_ids.begin(); nit!=o_n_node_ids.end(); nit++ )
            new_bflags[ (*nit).second ] = bflags[ (*nit).first ];
+         bflags = new_bflags;
+         new_bflags.clear();
+
+         // 6. updating geometry flags
+         // --------------------------
+         vector<int8_t> new_gflags(px.size(),0);
+         //        old_ID    new_ID
+         for ( map<size_t,size_t>::const_iterator
+               nit=o_n_node_ids.begin(); nit!=o_n_node_ids.end(); nit++ )
+           new_gflags[ (*nit).second ] = gflags_[ (*nit).first ];
+         gflags_ = new_gflags;
+         new_gflags.clear();
       }
 
     // 6. updating the 'mixed_mesh' boolean variable
@@ -2097,8 +2364,8 @@ void VData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids, ///< the element  
     size_t  nodes_per_element = plist[0].size();
 
     hybrid_mesh_=false;
-    for ( deque<vector<int64_t> >::iterator it=plist.begin(); it!=plist.end(); it++ )
-      if ( (*it).size() != nodes_per_element ) {
+    for ( const auto& it : plist )
+      if ( it.size() != nodes_per_element ) {
            hybrid_mesh_ = true;
            break;
         }
@@ -3362,7 +3629,7 @@ void VData::EstablishElementConnectivity3D()
              else {
                    // finding the pair of most elements with the most closely aligned normals
                    // establish element combinations
-                   std::vector<int64_t>  joint_surf_elmts;
+                   vector<int64_t>  joint_surf_elmts;
                    joint_surf_elmts.reserve( (*it).second.size() );
                    for ( const auto& i : (*it).second ) joint_surf_elmts.push_back( i.first ); // actual element ids
                    const int64_t           n_elmts_to_combine(2U);
@@ -3529,7 +3796,7 @@ throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
       
       @test OK SKM 8/12/21
 */
-void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode ) const
+void VData::EstablishNodeNeighborConnectivity( vector<set<size_t>>& pnode ) const
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -3636,12 +3903,13 @@ void VData::EstablishNodeNeighborConnectivity( std::vector<set<size_t>>& pnode )
 
 
 
-/**
+/* DEPRECATED
+
     vertex manifolds: pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::deque<std::set<std::pair<size_t,int8_t> > > vertexManifoldIndices;
+    typedef deque<set<pair<size_t,int8_t> > > vertexManifoldIndices;
     
     Checks for collocated vertices into transfer data structure.
-*/
+
 size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
  {
     // 0.  if there are no interfaces, method returns false
@@ -3663,7 +3931,7 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
         // the second half of the indices represent the outside nodes in matching albeit reverse order
         assert( !(*it).empty() );
         const auto plist_entries((*it).size());
-        assert( (plist_entries & 1) == 0 /* even number */ );
+        assert( (plist_entries & 1) == 0  ); // even number
         const auto iface_nodes(plist_entries/2);
         
         // creating a new entry in the manifold map or getting an iterator to an existing one
@@ -3724,27 +3992,331 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
    // 5. populating the output datastructure: map<size_t,set<pair<size_t,INTERFACE_SIDE> > >
    if ( !indexes.empty() ) indexes.clear();
    for ( auto& mit : manifold_node_clusters ) {
-        set<pair<size_t,INTERFACE_SIDE> > vertices_with_attributes;
+        set<size_t>  vertices;
         // for all the stored vertices
         for ( auto& sit : mit.second ) {
               auto attribute_it = manifold_vertex_classifications.find( sit );
               // the vertex must be present in map
               assert( attribute_it != manifold_vertex_classifications.end() );
-              vertices_with_attributes.insert( make_pair( sit, (*attribute_it).second ) );
+              //vertices_with_attributes.insert( make_pair( sit, (*attribute_it).second ) );
           }
-        indexes.insert( make_pair( mit.first, vertices_with_attributes ) );
+        indexes.insert( make_pair( mit.first, vertices ) );
      }
    
    return manifold_node_clusters.size();
    
  } // end ExtractNodeManifolds
 
+*/
 
 
 
 
 
+ /**
+     Initialises the TOPOTYPE flags, indicating the role that the nodes play in defining the Boundary Representation (BREP) of the model,
+     i.e., whether they represent essential crossing or corner points,
+     define lines or surfaces on the inside or the outer model boundaries,
+     or whether they are just mesh vertices that can be changed during remeshing.
+     
+     Depending on whether the VSet contains only 'Element' objects and 'Faces' or whether it already contains split mesh patches
+     joint by 'InterFace' objects and therefore NodeManifolds, the geometry flags are initialised differently.
+     
+     All previous flags are overwritten.
+     
+     @attention this must done before line and surface elements dividing the volume mesh into different regions are removed but AFTER the BOX_BOUNDARY flags have been assigned.
+     
+     @attention successful applicaton of the method requires and intact element connectivity with disambiguated manifolds of lower dimensional elements.
+     
+     TODO: not tested yet, use Anne-Laure's VSets to perform testing
+*/
+void VData::InitialiseNodeTopologyIdentifiers()
+ {
+    const uint32_t dim = SpatialDimension();
+    
+    // 1. resetting all TOPOTYPE flags of the nodes in the mesh to a default chosen as MESH_VERTEX
+    // -------------------------------------------------------------------------------------------
+    for ( auto nit=BREP_FlagsBegin(); nit!=BREP_FlagsEnd(); ++nit )
+      (*nit) = MESH_VERTEX; // default
+      
+    // 2. processing nodes on the basis of BOX_BOUNDARY information
+    // ------------------------------------------------------------
+    for ( size_t i{0U}; i<Vertices(); ++i ) {
+         const BOX_BOUNDARY flag{ BFlag(i) };
+         // nodes on the exterior of the model
+         if ( flag != NOT ) {
+              if ( dim == 1U ) {
+                   // opposite boundaries depending whether 1D model is horizontal or vertical
+                   if ( (!belongsToSide(LEFT,flag) || !belongsToSide(RIGHT,flag)) ||
+                        (!belongsToSide(BOTTOM,flag) || !belongsToSide(TOP,flag)) )
+                     BREP_Flag( i, INTERSECTION_POINT );
+                   else if ( isCorner( flag ) )
+                     BREP_Flag( i, EXTERIOR_POINT );
+                }
+              else if ( dim == 2U ) {
+                   if ( isCorner( flag ) ) BREP_Flag( i, EXTERIOR_POINT );
+                   else if ( isSide( flag ) )
+                     BREP_Flag( i, EXTERIOR_LINE );
+                }
+              else if ( dim == 3U ) {
+                   if ( isCorner( flag ) ) BREP_Flag( i, EXTERIOR_POINT );
+                   else if ( isEdge( flag ) )
+                     BREP_Flag( i, EXTERIOR_LINE );
+                   else if ( isSide( flag ) )
+                     BREP_Flag( i, EXTERIOR_SURFACE );
+                }
+              // internal boundaries (defaults; perimeter points/lines/surfaces are considered later)
+              if ( flag == INTERNAL ) {
+                   if      ( dim == 1U ) BREP_Flag( i, PERIMETER_POINT );
+                   else if ( dim == 2U ) BREP_Flag( i, INTERIOR_LINE );
+                   else if ( dim == 3U ) BREP_Flag( i, INTERIOR_SURFACE );
+                }
+              // else MESH_VERTEX flagging remains
+           }
+      }
 
+    // 3. If InterFace objects are already present the stored node manifold information in the model is used
+    // -----------------------------------------------------------------------------------------------------
+    if ( Interfaces() > 0 ) {
+         assert( NodeManifolds() > 0 );
+         // 3.1 looping over the node manifolds to identify crossing points
+         for ( auto nit=PmanifoldsBegin(); nit!=PmanifoldsEnd(); ++nit  ) {
+              // if the manifolds are located at the model boundary, they have already been dealt with
+              bool at_outer_boundary{false};
+              for ( const auto& n : (*nit).first )
+                if ( BFlag(n) != NOT && BFlag(n) != INTERNAL ) {
+                     at_outer_boundary = true;
+                     break;
+                  }
+              // processing the manifolds on the inside of the model
+              if ( !at_outer_boundary ) {
+                   // crossings
+                   if ( (*nit).second == ManifoldType::SPLIT_BOUNDARY_CROSSING ||
+                        (*nit).second == ManifoldType::MULTI_SB_CROSSING ||
+                        (*nit).second == ManifoldType::SPLIT_BOUNDARY_TERMINATION ) // T-intersection
+                     for ( const auto& n : (*nit).first )
+                       BREP_Flag( n, INTERSECTION_POINT );
+                   // intersection lines (interior lines) already handled
+                }
+           }
+         // 3.2 dealing with perimeter nodes on SplitBoundaries
+         for ( auto it=PlistInterFacesBegin(); it!=PlistInterFacesEnd(); ++it ) {
+               // flagging those nodes which are shared between the inside and the outside of the interfaces
+               const auto n_inside_nodes{ (*it).size() / 2 };
+               for ( auto i{0U}; i<n_inside_nodes; ++i )
+                 // node that outside nodes are in reverse order!
+                 if ( (*it)[i] == (*it)[(*it).size()-1-i] ) {
+                      if     ( dim == 2U ) BREP_Flag( (*it)[i], PERIMETER_POINT );
+                      else if( dim == 3U ) BREP_Flag( (*it)[i], PERIMETER_LINE );
+                   }
+           }
+         return;
+      }
+      
+
+    // 4. If there are only Elements or Elements + Faces, meaning that the nodes are not duplicated,
+    //    the lower-dimensional finite elements that the node forms part of are recorded in maps
+    // ------------------------------------------------------------------------------------------
+    CSMP_FEM_TYPE   elmt_type = ( HybridElementTypeMesh() ) ? UNKNOWN : static_cast<CSMP_FEM_TYPE>(ElementType(0U));
+    //  node       elmt or face
+    map<size_t,set<size_t> > node_parent_line_elmts;
+    map<size_t,set<size_t> > node_parent_surf_elmts;
+    
+    for ( size_t i{0U}; i<TotalNumberOfCells(); i++ )
+      {
+         // getting the element type
+         if ( HybridElementTypeMesh() ) elmt_type = static_cast<CSMP_FEM_TYPE>(ElementType(i));
+         // line elements
+         if ( isLineElement( elmt_type ) ) {
+              // finding end-points and points somewhere on a polyline
+              // -----------------------------------------------------
+              // getting the indices of the corner nodes
+              const uint32_t n0 = static_cast<uint32_t>(Plist( i, 0 ));
+              const uint32_t n1 = static_cast<uint32_t>(Plist( i, 1 ));
+              // recording parent elements of nodes on INTERNAL boundaries
+              auto nit0 = node_parent_line_elmts.insert( make_pair( n0, set<size_t>{i} ) );
+              if ( nit0.second == false ) (*nit0.first).second.insert( i );
+              auto nit1 = node_parent_line_elmts.insert( make_pair( n1, set<size_t>{i} ) );
+              if ( nit1.second == false ) (*nit1.first).second.insert( i );
+           }
+         // surface elements
+         else if ( dim == 3U && isSurfaceElement( elmt_type ) ) {
+             // creating the map
+             for ( auto j{0U}; j<PlistSize(i); j++ ) {
+                  const int64_t node{ Plist( i, j ) };
+                  auto nit = node_parent_surf_elmts.insert( make_pair( node, set<size_t>{i} ) );
+                  if ( nit.second == false ) (*nit.first).second.insert( (i) );
+               }
+          }
+      }
+    
+    
+    // 4. classification of BREP type based on the line elements discovered
+    // --------------------------------------------------------------------
+   //     finding crossing points of two or multiple polylines
+   // (assuming that these are flagged INTERNAL
+   for ( const auto& nit : node_parent_line_elmts )
+     {
+        // processing the nodes of the lower dimensional elements to discern intersection and perimeter points
+        for ( auto& ne : nit.second ) {
+              // getting the node Idx of the corner nodes of the line element
+              const size_t n0 = static_cast<size_t>(Plist( ne, 0 ));
+              const size_t n1 = static_cast<size_t>(Plist( ne, 1 ));
+              // if the line element has no neighbor opposite the key node, the node is located on the perimeter point of an internal boundary
+              if ( nit.first == n0 && BFlag(n0) == INTERNAL ) {
+                   // if there is no neighbor line element
+                   if ( Pfvert( ne, 1 ) < 0 )
+                     BREP_Flag( nit.first, PERIMETER_POINT );
+                }
+              if ( nit.first == n1 && BFlag(n1) == INTERNAL ) {
+                   if ( Pfvert( ne, 0 ) < 0 )
+                     BREP_Flag( nit.first, PERIMETER_POINT );
+                }
+              // intersections of internal line elements with the model boundary
+              // need to be flagged EXTERIOR_POINT
+              if ( nit.first == n0 && BFlag(n0) != INTERNAL && BFlag(n0) != NOT ) {
+                   // if there is no neighbor line element
+                   if ( Pfvert( ne, 1 ) < 0 )
+                     BREP_Flag( nit.first, EXTERIOR_POINT );
+                }
+              if ( nit.first == n1 && BFlag(n1) != INTERNAL && BFlag(n0) != NOT ) {
+                   if ( Pfvert( ne, 0 ) < 0 )
+                     BREP_Flag( nit.first, EXTERIOR_POINT );
+                }
+          }
+
+         // T-intersections are treated the same as crossing lines
+         size_t n_connected_lines{ nit.second.size() };
+         //    T-intersection             lines crossing
+         if (  n_connected_lines == 3U || n_connected_lines >= 4U ) {
+              if ( BFlag(nit.first) == INTERNAL )
+                BREP_Flag( nit.first, INTERSECTION_POINT );
+           }
+         // MULTIPLE_INTERSECTIONS else if ( nit.second.size() >= 5U )
+     }
+       
+       
+   // 5. processing surface-related topology in three-dimensional models:
+   //    - perimeter lines of internal surfaces
+   //    - intersection lines of internal surfaces
+   //    - touching points of internal surfaces
+   //    - intersection points of surface and curves made of line elements
+   //      (not for lines that terminate at surfaces because their end-points are already flagged)
+   // --------------------------------------------------------------------------------------------
+   // TODO: test with a predefined 3D model (SKUA?)
+   if ( dim == 3U ) {
+       for ( const auto& nit : node_parent_surf_elmts )
+         // internal surfaces
+         if ( BFlag(nit.first) == INTERNAL || BFlag(nit.first) == NOT )
+           {
+              // recording the lower-dimensional parent elements of the node
+              set<CSMP_FEM_TYPE> etypes;
+              for ( const auto& eit : nit.second ) {
+                   const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>(ElementType(eit));
+                   if ( !isVolumeElement(etype) )
+                     etypes.insert( etype );
+                }
+              // if there are only surface elements
+              if ( etypes.size() == 1U  ) {
+                  assert( isSurfaceElement(*etypes.begin()) );
+                  // 0. case INTERIOR_SURFACE where node lies in the middle of an interior surface was already covered above
+                  
+                  // 1. case PERIMETER_LINE defined by nodes on the perimeter curve of an internal surface
+                  // -------------------------------------------------------------------------------------
+                  // (criterion: >2 of the surface-elmt edges that the node is part of, must have no neighbor)
+                  int edge_elmt_count{0};
+                  // 1.1 finding the (neighbor-free) edges of the parent surface elements that the node is part of
+                  for ( const auto& eit : nit.second ) {
+                       // looping over each elements pfverts
+                       for ( auto face{0U}; face<pfverts[eit].size(); face++ )
+                         // if the face has no neighbor we check whether the node is a corner node of it
+                         if ( pfverts[eit][face] < 0 ) {
+                             uint32_t fn0 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 0U );
+                             uint32_t fn1 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 1U );
+                             if ( fn0 == nit.first || fn1 == nit.first )
+                               edge_elmt_count++;
+                           }
+                    }
+                  if ( edge_elmt_count >= 2 )
+                    BREP_Flag( nit.first, PERIMETER_LINE );
+                    
+                  // 2. case INTERSECTION_LINE along which multiple surfaces intersect
+                  // -----------------------------------------------------------------
+                  // (an internal node on a quad-only surface has 4-quad parents)
+                  if ( isQuadrilateral(*etypes.begin()) && nit.second.size() > 4U )
+                    BREP_Flag( nit.first, INTERSECTION_LINE );
+                  // for triangular elements this criterion does not work
+                  // so that element orientations must be considered
+                  else if ( nit.second.size() > 3U ) {
+                       // finding all possible combinations of surface elements
+                       deque<vector<size_t> > combinations;
+                       const size_t           n_elmts_to_combine{2};
+                       vector<size_t>         surf_elmts( nit.second.begin(), nit.second.end() );
+                       createUniqueCombinations( surf_elmts, n_elmts_to_combine, combinations );
+                       // measuring the angles
+                       set<double> angle_between_surf_elmts;
+                       for ( const auto& it : combinations ) {
+                       angle_between_surf_elmts.insert( AngleBetweenSurfaceElements3D( it[0], it[1] ) );
+                       // ideally, a bi-modal distribution would indicate an intersection line
+                       // TODO: how can this be detected?
+                       // here we use the criterion that 2 element interangles must be greater than 45o
+                       int angles_greater45deg{0};
+                       for ( const auto& ia : angle_between_surf_elmts )
+                         if ( ia > 45. ) angles_greater45deg++;
+                       if ( angles_greater45deg >= 2 )
+                         BREP_Flag( nit.first, INTERSECTION_LINE );
+                    }
+                }
+           } // end etypes == 1
+         
+         // 3. case INTERSECTION_POINT between internal curves and surfaces
+         //----------------------------------------------------------------
+         if ( etypes.size() == 2U ) {
+              // nodes that are FLAGGED INTERNAL but not PERIMETER_POINT will become INTERSECTION_POINT
+              if ( BREP_Flag( nit.first) != PERIMETER_POINT )
+                BREP_Flag( nit.first, INTERSECTION_POINT );
+           }
+              
+       } // end nodes on internal boundaries
+
+     // 4. case EXTERIOR_LINE or EXTERIOR_POINT where internal surfaces touch model boundary
+     //-------------------------------------------------------------------------------------
+     for ( const auto& nit : node_parent_surf_elmts )
+       // for nodes on the model exterior that are connected to internal surfaces
+       if ( BFlag(nit.first) != INTERNAL && BFlag(nit.first) != NOT )
+         {
+            int BREP_flags_assignments_made{0};
+            // criteria: only surface elements with nodes on model interior are considered
+            // - these are perimeter points if only this node of the parent surface is located on the model boundary
+            // - and perimeter lines if two nodes located on the p
+            for ( const auto& eit : nit.second ) {
+                 // does the element have interior nodes?
+                 int elmt_interior_nodes{false};
+                 for ( const auto& n : plist[eit] )
+                   if ( bflags[n] == NOT || bflags[n] == INTERNAL )
+                     elmt_interior_nodes++;
+                 // if so, the element gets considered
+                 if ( elmt_interior_nodes > 0 ) {
+                     for ( auto face{0U}; face<pfverts[eit].size(); face++ )
+                       // if the face has no neighbor we check whether the node is a corner node of it
+                       if ( pfverts[eit][face] < 0 ) {
+                           uint32_t fn0 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 0U );
+                           uint32_t fn1 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 1U );
+                           if ( fn0 == nit.first || fn1 == nit.first ) {
+                                BREP_Flag( nit.first, EXTERIOR_LINE );
+                                BREP_flags_assignments_made++;
+                             }
+                         }
+                   }
+              }
+           // if none of the surface elements that the node is part of has an edge on the model boundary,
+           // this must be a touching point
+           if ( BREP_flags_assignments_made == 0 )
+             BREP_Flag( nit.first, EXTERIOR_POINT );
+        }
+    } // if dim == 3
+    
+ } // end InitialiseNodeTopologyIdentifiers
 
 
 

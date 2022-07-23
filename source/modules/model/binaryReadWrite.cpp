@@ -9,12 +9,15 @@ namespace csmp {
 BinaryFileSectionRead::BinaryFileSectionRead( std::fstream& fp, const char* header )
 	: fp_(fp)
 {
+  // getting the size of the header string
 	char  readhdr[CSMP_BINARY_FILE_HDR_SIZE];
 	const size_t hdrlen = strlen(header);
 	assert(hdrlen <= CSMP_BINARY_FILE_HDR_SIZE);
+  // C-style filling of the block of memory represented by the member variable 'hdr_'
 	memset(hdr_, 0, sizeof(hdr_));
 	memcpy(hdr_, header, std::min(hdrlen, (size_t)CSMP_BINARY_FILE_HDR_SIZE));
 	fp.read(readhdr, sizeof(char) * CSMP_BINARY_FILE_HDR_SIZE);
+  // checking that the first 8 character read match the file-block identifier 'header'
 	if ( memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE) ) {
 		throw csmp::Exception(FATAL_ERROR, "BinaryFileSectionRead", hdr_, "Binary file entry appears to be corrupt");
 	}

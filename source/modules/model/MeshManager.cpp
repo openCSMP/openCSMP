@@ -285,9 +285,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-          for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
-          // TODO: for some reason the move constructor is not called here (copy elision, but?)
-          nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
+           for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
+           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars,
+                                      static_cast<BOX_BOUNDARY>(vset.BFlag(idx)),
+                                      static_cast<TOPOTYPE>(vset.BREP_Flag(idx)) ) );
         }
     }
 
@@ -683,11 +684,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // ------------------------------------------------------------------------------
   // 8. Constructing NodeManifolds if any
   // -------------------------------------------------------------------------------
-   if ( !interfaces_.empty() ) {
-       VData::vertexManifoldIndices  indexes;
-       vset.ExtractNodeManifolds( indexes );
-       node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
-     }
+   if ( !interfaces_.empty() )
+     node_manifold_manager_ = new NodeManifoldManager<dim>( nodes_, vset.PmanifoldsBegin(), vset.PmanifoldsEnd() );
      
 #ifdef MESH_MANAGER_DEBUG
 if ( !interfaces_.empty() ) {
@@ -739,10 +737,11 @@ if ( !interfaces_.empty() ) {
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location,
                                               const LocalVariables& lvars,
-                                              BOX_BOUNDARY bdry )
+                                              BOX_BOUNDARY bdry,
+                                              TOPOTYPE topo )
 {
    typename plf::colony<Node <dim>>::iterator
-     nit = nodes_.emplace( Node<dim>( nodes_.size(), location, lvars, bdry ) );
+     nit = nodes_.emplace( Node<dim>( nodes_.size(), location, lvars, bdry, topo ) );
    return &(*nit);
 }
 
@@ -771,7 +770,8 @@ template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt,
                                                             size_t nearby_node,
                                                             const LocalVariables& nvars,
-                                                            BOX_BOUNDARY bflag )
+                                                            BOX_BOUNDARY bflag,
+                                                            TOPOTYPE topo )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
  
@@ -807,7 +807,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
   
    // else a new node is created
    typename plf::colony<Node <dim>>::iterator
-     nit = nodes_.emplace( Node<dim>( nodes_.size(), pt, nvars, bflag ) );
+     nit = nodes_.emplace( Node<dim>( nodes_.size(), pt, nvars, bflag, topo ) );
      
    return &(*nit);
 }
@@ -1076,12 +1076,13 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
      // if the node already is a manifold, the outside node in it is found and assigned
      if ( eptr->N(i)->IsManifold() ) {
           for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
-            if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+            // FORMERLY: if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+            if ( eptr->N(i) != eptr->N(j) )
               // the outside nodes must be listed in reverse order
               outside_nodes[ n_nodes-i-1U ] = eptr->N(i)->Manifold()->N(j);
        }
      // else the node is duplicated including creation of the manifold
-     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), OUTSIDE, nvars );
+     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), nvars );
 
 
    // 2. constructing the new interface
@@ -1422,12 +1423,10 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
     @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
     
     @param nptr_inside pointer to the node that will be on the inside of the InterFace that gets created if any.
-    @param new_node_side manifold-type qualifier for the new node
     @return pointer to the new node now stored by the MeshManager.
 */
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
-                                              INTERFACE_SIDE new_node_side,
                                               const LocalVariables& lvars )
   {
     if ( nptr_inside == nullptr )
@@ -1442,7 +1441,7 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
          // if we are already dealing with a manifold, the new node is added to it
-         nptr_inside->Manifold()->Add( &(*nit), new_node_side );
+         nptr_inside->Manifold()->Add( &(*nit) );
          // (*nit).Assign( (*nptr_inside->Manifold()) ); is already done by Add()
       }
     else {
@@ -1450,14 +1449,16 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
          assert ( node_manifold_manager_ != nullptr );
            
          // a new manifold from the old and the new node using the provided default geometric classifier
-         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::INTERFACE );
+         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::SPLIT_BOUNDARY );
          // and its nodes are connected to it
          nptr_inside->Assign( (*nmf) );
          (*nit).Assign( (*nmf) );
       }
 
     // working out whether the original classification as an interface was correct
+#ifdef DEBUG
     consistencyCheck( (*(*nit).Manifold()) );
+#endif
     return &(*nit);
     
   } // end Duplicate
@@ -1756,7 +1757,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            // if there a matching outside node has not been created yet
            if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                 new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
              }
            // if the necessary new node was already created earlier it was retrieved and is assigned here
@@ -1795,7 +1796,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
                 if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                     outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                      new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
                   }
                 else outside_nodes[i] = (*nit).second;
@@ -2003,7 +2004,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
              if ( perimeter_node_ptrs.empty() ) {
                   // nodes are duplicated unless they were already duplicated
                   if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                        new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                     }
                   else outside_nodes[nd_count] = (*nit).second;
@@ -2013,7 +2014,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
                   if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
                         // and only if these nodes have not already been duplicated
                         if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                              new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                           }
                         else outside_nodes[nd_count] = (*nit).second;
@@ -2022,7 +2023,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
                    else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
                         if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
                              // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
-                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                              new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                           }
                         else outside_nodes[nd_count] = (*nit).second;
@@ -2198,24 +2199,25 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
           // if inside or outside nodes already are manifolds, the non-manifold nodes are added to them
           // (Note: Add() also assigns the argument node to this manifold)
           if ( nit.first->IsManifold() && !nit.second->IsManifold() )
-             nit.first->Manifold()->Add( nit.second, OUTSIDE );
+             nit.first->Manifold()->Add( nit.second );
           else if ( !nit.first->IsManifold() && nit.second->IsManifold() )
-             nit.second->Manifold()->Add( nit.first, INSIDE );
+             nit.second->Manifold()->Add( nit.first );
           else {
                // a new manifold is created using the provided default geometric classifier
                auto nmf = node_manifold_manager_->AddManifold( nodes_,
                                                                nit.first,
                                                                nit.second,
-                                                               ManifoldType::INTERFACE );
+                                                               ManifoldType::SPLIT_BOUNDARY );
                // and its nodes are connected to it
                nit.first->Assign( (*nmf) );
                nit.second->Assign( (*nmf) );
             }
 
            // working out whether the original classification as an interface was correct
+#ifdef DEBUG
            consistencyCheck( (*nit.first->Manifold()) );
+#endif
         }
-
 
      // 4. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
@@ -3612,8 +3614,12 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // boundary flags
   vset.ResizeBFlags( /* nodes */ );
   for ( const auto& n : nodes_ )
-    vset.AddBFlag( n.Idx(), n.AtBoundary() );
-  
+    vset.BFlag( n.Idx(), n.AtBoundary() );
+    
+  // geometry flags
+  vset.ResizeBREP_Flags( /* nodes */ );
+  for ( const auto& n : nodes_ )
+    vset.BREP_Flag( n.Idx(), n.Attribute() );
   
   // 'pelmt' was already set above
   
@@ -3744,7 +3750,17 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       
     ++eidx;
   }
-  
+
+  // 'pmanifolds' supporting interfaces: initialising VData::manifold_container
+  // --------------------------------------------------------------------------
+  if ( !interfaces_.empty() ) {
+       assert( node_manifold_manager_ );
+       VData::manifoldContainer  node_manifolds;
+       node_manifolds.reserve( node_manifold_manager_->Manifolds() );
+       for ( auto nmf=node_manifold_manager_->ManifoldsBegin(); nmf!=node_manifold_manager_->ManifoldsEnd(); ++nmf )
+         node_manifolds.push_back( (*nmf).Data() );
+    }
+
   cout << "\nMeshManager<" << dim << ">::OutputMeshTo: MeshManager successfully output to VSet..." << endl;
 
 } // end OutputMeshTo( VSet )

@@ -25,9 +25,9 @@ void ElementPolicyIntegrity_Test::run()
    // testing the stand-alone element for a triangle
    ElementOnly<2U>  elmt1( 0, 3, 3 );
    // connecting it up
-   Node<2U> nd1( 0, Point<2U>(0.,0.), var_set );
-   Node<2U> nd2( 1, Point<2U>(3.,1.), var_set );
-   Node<2U> nd3( 2, Point<2U>(1.,2.), var_set );
+   Node<2U> nd1( 0, Point<2U>(0.,0.), var_set, IRREGULAR, MESH_VERTEX );
+   Node<2U> nd2( 1, Point<2U>(3.,1.), var_set, IRREGULAR, MESH_VERTEX );
+   Node<2U> nd3( 2, Point<2U>(1.,2.), var_set, IRREGULAR, MESH_VERTEX );
    // nd1.Assign( 0 /* parent number */, elmt1 );
    // nodes
    elmt1.Assign( 0, &nd1 );

@@ -863,9 +863,9 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsASCII( ifstream& ifs, VSet<d
          if ( flag != 0 ) {
               bconds[i] = true;
               // '0...n-1' since nodes are numbered this way
-              vset.AddBFlag( i, flag );
+              vset.BFlag( i, flag );
            }
-         else vset.AddBFlag( i, NOT );
+         else vset.BFlag( i, NOT );
       }
       
     AdvancePastCommentLine( ifs );
@@ -1309,7 +1309,7 @@ bool ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary( FILE* fp, VSet<dim>&
               ival = IRREGULAR;
               flag_value_errors++;
            }
-         vset.AddBFlag( i, static_cast<int8_t>(ival) );
+         vset.BFlag( i, static_cast<int8_t>(ival) );
      }
 
     if ( flag_value_errors > 0 ) {
