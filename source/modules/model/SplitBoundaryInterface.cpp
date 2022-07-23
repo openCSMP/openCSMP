@@ -1231,7 +1231,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     const bool create_manifolds_on_perimeter{true};
     vector<InterFace<dim>*>  interfaces = modelComplex->Mesh().CreateInterfacesBetweenNodeSharingElements( modelComplex->Database(),
                                                                                                            matched_elmts,
-                                                                                                           create_manifolds_on_perimeter );
+                                                                                                           create_manifolds_on_perimeter,
+                                                                                                           region2 );
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );

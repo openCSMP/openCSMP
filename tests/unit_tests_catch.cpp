@@ -133,7 +133,7 @@ TEST_CASE("Variable tests", "[Variables]") {
 TEST_CASE("Utilities tests", "[Utilities]") {
 	TEST_SECTION_V(Matrix,false)
 	TEST_SECTION_V(DenseMatrix,false)
-	TEST_SECTION_V(SparseMatrix,false)
+	TEST_SECTION(SparseMatrix)
   TEST_SECTION(CompressedRowMatrix)
   TEST_SECTION(CubicSpline)
 	TEST_SECTION(FibonacciHeap)

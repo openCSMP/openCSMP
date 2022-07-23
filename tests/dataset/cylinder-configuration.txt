@@ -1,0 +1,126 @@
+Cylindrical test model - 1 well penetrating 1 reservoir layer with impermeable layers above and below (CM 28/01/2013)
+
+# ---------------------------------------------------------------
+# 1. global rock & fluid properties as well as initial conditions
+# ---------------------------------------------------------------
+thickness				1.
+porosity				0.1
+permeability				1.00E-14
+compressibility rock			1.00E-10
+total system compressibility		1.00E-09
+brooks corey parameter			0.
+entry pressure				1000.
+capillary diffusivity			1.00E-15
+residual saturation wetting phase	0.
+residual saturation non-wetting phase	0.
+# ------------------------------------
+# fluid properties (... MPa, ...oC)"
+# ------------------------------------
+fluid volume source		0.
+nodal fluid volume source	0.
+density oil			1000.
+density water			1000.
+viscosity oil			1E-03
+viscosity water			1E-03
+# supercritical black oil
+compressibility oil		1.021E-9
+compressibility water		5.00E-10
+# -------------------------------------
+# upscaled relative permeability model properties
+# -----------------------------------------------
+fracture matrix interface area	10
+fracture porosity		1.00E-05
+fracture matrix flux ratio	1000
+fracture intensity	0.
+block radius			0.3
+initial water saturation	0.8
+# -------------------------------------
+# initial conditions
+# -------------------------------------
+saturation oil			1.
+saturation water		0.
+previous fluid pressure	0.
+volume flux			0.
+cfl				1.0
+total velocity			0.	0.	0.
+face total mobility		1.
+# specified only that Paraview does not get the initial NAN values
+fluid pressure			1.00E+05
+
+# ----------------------------------------------------------------------
+# 2. Assign properties and variable values to model subdomains = regions
+# ----------------------------------------------------------------------
+# flow volumes
+LAYER1	complete	porosity	0.1
+LAYER1	complete	permeability	1.00E-16
+LAYER1	complete	brooks corey parameter	0.
+LAYER2	complete	porosity	0.1
+LAYER2	complete	permeability	1.00E-12
+LAYER2	complete	brooks corey parameter	0.
+ABOVE_LAYER2	complete	porosity	0.1
+ABOVE_LAYER2	complete	permeability	1.00E-16
+ABOVE_LAYER2	complete	brooks corey parameter	0.
+# well properties
+# porosity = 1 (for well testing this must be x-sec area of well (m2)
+WELL	complete	porosity	1
+WELL	complete	saturation oil	0
+WELL	complete	saturation water	1
+# permeability = very high
+WELL	complete	permeability	1.00E-07
+# injection rate: 1PV in 3 years, distributed over 200m completion length
+WELL	complete	fluid volume source	0.003423317684
+
+# ----------------------------------------------------------------------
+# 3. regional variable flags
+# ----------------------------------------------------------------------
+WELL	complete	saturation water	Dirichlet
+WELL	complete	saturation oil		Dirichlet
+
+# ----------------------------------------------------------------------
+# 4. (Essential) constant values assigned to model boundaries
+#    (Note that 'BOUNDARY' must be part of the boundary name)
+# ----------------------------------------------------------------------
+BOUNDARY_BOTTOM		boundary	Dirichlet	fluid pressure		1.0e+8
+
+# ----------------------------------------------------------------------
+# 5. computational settings
+# ----------------------------------------------------------------------
+time stepping	conservative
+duration	92016000.0
+output time	86400.0
+output time	2678400.0
+output time	5097600.0
+output time	7776000.0
+output time	10368000.0
+output time	13046400.0
+output time	15638400.0
+output time	18316800.0
+output time	20995200.0
+output time	23587200.0
+output time	26265600.0
+output time	28857600.0
+output time	31536000.0
+output time	34214400.0
+output time	36633600.0
+output time	39312000.0
+output time	41904000.0
+output time	44582400.0
+output time	47174400.0
+output time	49852800.0
+output time	52531200.0
+output time	55123200.0
+output time	57801600.0
+output time	60393600.0
+output time	63072000.0
+output time	65750400.0
+output time	68256000.0
+output time	70934400.0
+output time	73526400.0
+output time	76204800.0
+output time	78796800.0
+output time	81475200.0
+output time	84153600.0
+output time	86745600.0
+output time	89424000.0
+output time	92016000.0
+
