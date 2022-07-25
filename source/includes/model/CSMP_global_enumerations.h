@@ -113,7 +113,7 @@ enum class ManifoldType : int8_t {
                                     SPLIT_BOUNDARY_WITH_INTERNAL_MESH,
                                     SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
                                     MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
-                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs are termination of SB against Boundary
+                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs or termination of SB against Boundary
                                     SPLIT_BOUNDARY_END,         ///<  termination against model boundary
                                 };
 
@@ -141,10 +141,10 @@ enum TOPOTYPE : std::int8_t {
                                 INTERIOR_LINE,     ///< a line on the interior of the model
                                 PERIMETER_LINE,    ///< a surface edge inside of the model
                                 EXTERIOR_LINE,     ///< an edge of the model
-                                INTERSECTION_LINE, ///<  belonging to multiple surfaces
-                                INTERIOR_SURFACE,  ///< a surface withing the model
-                                PERIMETER_SURFACE, ///< a surface forming the hull of an object inside of the model
-                                EXTERIOR_SURFACE  ///< a surface delimiting the model
+                                INTERSECTION_LINE, ///<  belonging to multiple surfaces in a 3D model
+                                INTERIOR_SURFACE,  ///< a surface within a 3D model
+                                PERIMETER_SURFACE, ///< a surface forming the hull of an object inside of a 3D model
+                                EXTERIOR_SURFACE   ///< a surface delimiting a 3D model
                             };
 
 // TODO: add T_INTERSECTION_POINT ?
