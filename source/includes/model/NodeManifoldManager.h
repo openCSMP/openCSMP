@@ -1,8 +1,9 @@
 #ifndef CSMP_NODE_MANIFOLD_MANAGER_H
 #define CSMP_NODE_MANIFOLD_MANAGER_H
 
-#include "NodeManifold.h"
 #include "plf_colony.h"
+#include "NodeManifold.h"
+#include "VData.h"
 
 namespace csmp {
 
@@ -18,12 +19,10 @@ template<uint32_t> class Node;
 template<uint32_t dim>
 class NodeManifoldManager {
   public:
-       /// vertex manifolds indices for construction: key=-vertex index, value = set of pairs of nodes and their INSIDE,OUTSIDE, MIDDLE classifers
-    typedef std::map<size_t,std::set<std::pair<size_t,INTERFACE_SIDE> > > vertexManifoldIndices;
-    
     /// Re-constructor when node manifolds are read back from a CSMP native binary fileset
-    NodeManifoldManager( const vertexManifoldIndices&,
-                         plf::colony<Node<dim>>& node_pointer_storage );
+    NodeManifoldManager( plf::colony<Node<dim>>& node_pointer_storage,
+                         VData::manifoldContainer::const_iterator first,
+                         VData::manifoldContainer::const_iterator last );
 
     NodeManifoldManager()                                        = default;
     NodeManifoldManager( const NodeManifoldManager& )            = delete;
@@ -33,8 +32,8 @@ class NodeManifoldManager {
     ~NodeManifoldManager();
     
     /// for sorting the manifolds by their pointers
-    typedef typename plf::colony< NodeManifold<dim>>::iterator manifoldIterator;
-    typedef typename plf::colony< NodeManifold<dim>>::const_iterator manifoldConstIterator;
+    typedef typename plf::colony< NodeManifold<dim>>::iterator  manifoldIterator;
+    typedef typename plf::colony< NodeManifold<dim>>::const_iterator  manifoldConstIterator;
 
     manifoldIterator       ManifoldsBegin();
     manifoldIterator       ManifoldsEnd();

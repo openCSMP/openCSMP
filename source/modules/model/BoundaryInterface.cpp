@@ -1468,10 +1468,10 @@ static bool createBoundaryFromSharedEdge( Model<3U>& model,
 template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
 bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShapedModel()
  {
-    if constexpr ( dim != 3 )
+    if constexpr ( dim != 3U )
       throw csmp::Exception( ERROR, "BoundaryInterface<::EstablishEdgeBoundariesOfBoxShapedModel: ","edges required only in 3D; nothing was done" );
      
-    if constexpr ( dim == 3 ) {
+    if constexpr ( dim == 3U ) {
       // getting references to all necessary side boundaries of the box-shaped model
       BOUNDARY_COMPLEX<dim>* boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>*>(this) );
       csmp::Boundary<dim>&  bottom(boundaryComplex->Boundary("BOTTOM"));
@@ -1713,6 +1713,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
            back  = collectLowerDimensionalElementsFrom( *model, "BACK", elmts_to_become_faces );
         }
 
+// TODO: include edges into the transformations if there are any in the input (-regions.txt) file
+
       // 3. getting MeshManager to create faces and delete pre-cursor elements
       // ---------------------------------------------------------------------
       vector<Face<dim>*> faces = model->Mesh().ReplaceBoundaryElementsByFaces( model->Database(),
@@ -1751,7 +1753,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
       model->UpdateRegions();
       cout << "\n\n EstablishBoxBoundaries: done!\n";
       return true;
-  }
+      
+  } // EstablishBoxBoundaries
 
 
 

@@ -228,7 +228,8 @@ size_t MeshPatch<dim>::BuildInterveningPatch( const vector<pair<pair<Element<dim
                    (*inserted.first).second = &(*nodes_.insert( Node<dim>( nodes_.size(),
                                                                            it.N(i)->Coordinate(),
                                                                            LocalVariables(),
-                                                                           it.N(i)->AtBoundary() ) ));
+                                                                           it.N(i)->AtBoundary(),
+                                                                           it.N(i)->Attribute() ) ));
           }
       // 2.2 replacing the existing nodes with the new locally stored ones
       // (can't be done in one loop as it would confuse old and new nodes)

@@ -18,7 +18,8 @@ template<uint32_t dim>
 Node<dim>::Node()
     : idx_(numeric_limits<size_t>::max()),
       manifold_(nullptr),
-      at_boundary_(NOT)
+      at_boundary_(NOT),
+      BREP_entity_(MESH_VERTEX)
   {
   }
 
@@ -28,12 +29,14 @@ Node<dim>::Node()
     Initialises everything except for parent element related vectors.
 */
 template<uint32_t dim>
-Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs, BOX_BOUNDARY boundary_flag )
+Node<dim>::Node( size_t idx, const Point<dim>& pt, const LocalVariables& lvs,
+                 BOX_BOUNDARY boundary_flag, TOPOTYPE topotype )
  : LocalVariableStorage<dim,Node>(lvs),
    xyz_(pt),
    idx_(idx),
    manifold_(nullptr),
-   at_boundary_(boundary_flag)
+   at_boundary_(boundary_flag),
+   BREP_entity_(topotype)
  {
  }
 
@@ -51,7 +54,8 @@ Node<dim>::Node( const Node<dim>& nd )
     neighbor_node_pointers_(nd.neighbor_node_pointers_),
     manifold_(nd.manifold_),
     parent_node_indexes_(nd.parent_node_indexes_),
-    at_boundary_(nd.at_boundary_)
+    at_boundary_(nd.at_boundary_),
+    BREP_entity_(nd.BREP_entity_)
   {
     this->LVS( nd.LVS() );
     // NB: if this is a manifold, the new Node must be added to it,
@@ -71,7 +75,8 @@ Node<dim>::Node( Node<dim>&& nd )
     neighbor_node_pointers_{ move(nd.neighbor_node_pointers_) },
     manifold_{ move(nd.manifold_) },
     parent_node_indexes_{ move(nd.parent_node_indexes_) },
-    at_boundary_{ move(nd.at_boundary_) }
+    at_boundary_{ move(nd.at_boundary_) },
+    BREP_entity_{ move(nd.BREP_entity_)}
   {
     this->LVS( move(nd.LVS()) );
   }
@@ -97,6 +102,7 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
          xyz_                     = nd.xyz_;
          idx_                     = nd.idx_;
          at_boundary_             = nd.at_boundary_;
+         BREP_entity_             = nd.BREP_entity_;
          parent_element_pointers_ = nd.parent_element_pointers_;
          neighbor_node_pointers_  = nd.neighbor_node_pointers_;
          manifold_                = nd.manifold_;
@@ -121,6 +127,7 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
     xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
+    BREP_entity_             = move( nd.BREP_entity_ );
     parent_element_pointers_ = move( nd.parent_element_pointers_ );
     neighbor_node_pointers_  = move( nd.neighbor_node_pointers_ );
     manifold_                = move( nd.manifold_ );
@@ -147,33 +154,34 @@ bool  Node<dim>::operator==( const Node<dim>& nd )
     // TODO: fix Node comparitor
     cerr <<"Node<"<< dim <<">: called operato== Node comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
-    {
-        if( Coordinate() == nd.Coordinate() )
-        {
-            if( parent_element_pointers_.size() == nd.parent_element_pointers_.size() )
+      {
+          if ( BREP_entity_ != nd.BREP_entity_ ) return false;
+          if ( Coordinate() == nd.Coordinate() )
             {
-                if( parent_element_pointers_.empty() )
+                if ( parent_element_pointers_.size() == nd.parent_element_pointers_.size() )
                 {
-                    if( idx_ == nd.idx_ )
+                    if ( parent_element_pointers_.empty() )
+                      {
+                          if( idx_ == nd.idx_ )
+                              return true;
+                          return false;
+                      }
+
+                    set<Element<dim>*> elmts1(parent_element_pointers_.begin(), parent_element_pointers_.end());
+                    set<Element<dim>*> elmts2(nd.parent_element_pointers_.begin(), nd.parent_element_pointers_.end());
+                    vector<Element<dim>*> elmts_intersect;
+                    set_intersection( elmts1.begin(), elmts1.end(),
+                                      elmts2.begin(), elmts2.end(),
+                                      back_inserter(elmts_intersect) );
+                    if( elmts_intersect.size() == parent_element_pointers_.size() )
                         return true;
+
                     return false;
                 }
-
-                std::set<Element<dim>*> elmts1(parent_element_pointers_.begin(), parent_element_pointers_.end());
-                std::set<Element<dim>*> elmts2(nd.parent_element_pointers_.begin(), nd.parent_element_pointers_.end());
-                std::vector<Element<dim>*> elmts_intersect;
-                std::set_intersection( elmts1.begin(), elmts1.end(),
-                                       elmts2.begin(), elmts2.end(),
-                                       std::back_inserter(elmts_intersect) );
-                if( elmts_intersect.size() == parent_element_pointers_.size() )
-                    return true;
-
                 return false;
             }
-            return false;
-        }
-        return false;
-    }
+          return false;
+      }
     return true;
  }
  
@@ -297,7 +305,7 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 
 /// initialises the corner-node to neighbor corner node pointer vector
 template<uint32_t dim>
-void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
+void  Node<dim>::Assign( set<Node<dim>*>& neighbor_nodes )
  {
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
  }
@@ -305,7 +313,7 @@ void  Node<dim>::Assign( std::set<Node<dim>*>& neighbor_nodes )
  
  
 template<uint32_t dim>
-void  Node<dim>::Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
+void  Node<dim>::Assign( vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
  {
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
     if ( sort_neighbors )
@@ -915,6 +923,94 @@ template pair<Element<2>*,size_t> parentElement( typename vector<Node<2>*>::cons
                                                  typename vector<Node<2>*>::const_iterator );
 template pair<Element<1>*,size_t> parentElement( typename vector<Node<1>*>::const_iterator,
                                                  typename vector<Node<1>*>::const_iterator );
+
+
+
+/**
+    Determines role of Node (simple mesh node vs. geometric constraint), using BOX_BOUNDARY flagging and parent element connectivity.
+    Returns the inferred topo type classifier.
+    
+    @attention full diagnostics are possible only if the mesh contains line elements for each (edge) curve and triangles or quadrilaterals for each surface of the original BREP.
+    
+    @return geometric classifier of the node point.
+*/
+template<uint32_t dim>
+TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const node )
+ {
+   // establishing the geometric attributes of the nodes
+   const bool at_external_boundary = ( node->AtBoundary() != NOT && node->AtBoundary() != INTERNAL ) ? true : false;
+   const bool BREP_defining_node   = ( at_external_boundary == true || node->AtBoundary() == INTERNAL ) ? true : false;
+   
+   // using parent elements to determine whether the node is situated on a line or surface
+   int part_of_line{0}, part_of_surface{0};
+   const auto n_parent_elmts{ node->Parents() };
+   if ( BREP_defining_node ) {
+       // ! works only if the topology defining cells are elements because node has no connection to Face or InterFace
+       if ( n_parent_elmts > 0U ) {
+           for ( uint32_t i{0U}; i<n_parent_elmts; i++ ) {
+                if ( node->Parent(i)->IsLine() )
+                  part_of_line++;
+                else if ( node->Parent(i)->IsSurface() )
+                  part_of_surface++;
+             }
+         }
+     }
+ 
+   switch( node->Attribute() ) {
+        // if the point serves the sole purpose of discretisation, away from any BREP entities
+        case MESH_VERTEX: if ( !BREP_defining_node ) return MESH_VERTEX;
+        // essential point of the input geometry such as a line intersection, two surfaces touching etc.
+        case INTERSECTION_POINT: if ( BREP_defining_node && part_of_line > 2U ) return INTERSECTION_POINT;
+        // includes end points of lines
+        case PERIMETER_POINT:
+               if constexpr ( dim == 2U ) if ( BREP_defining_node && part_of_line == 1U )
+                 return PERIMETER_POINT;
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && part_of_line == 2U )
+                 return PERIMETER_POINT;
+        // point where a line touches the outside boundary of a model
+        case EXTERIOR_POINT: if ( at_external_boundary && part_of_line == 0U ) return EXTERIOR_POINT;
+        case INTERIOR_LINE:
+               if constexpr ( dim == 2U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 1U )
+                 return INTERIOR_LINE;
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+                 return INTERIOR_LINE;
+        case PERIMETER_LINE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+                 return INTERIOR_LINE;
+        case EXTERIOR_LINE:
+               if ( BREP_defining_node && at_external_boundary && part_of_line >= 1U ) return EXTERIOR_LINE;
+        case INTERSECTION_LINE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
+                                               part_of_line >= 1U && part_of_surface >= 2U )
+                 return INTERSECTION_LINE;
+        case INTERIOR_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return INTERIOR_SURFACE;
+        case PERIMETER_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return PERIMETER_SURFACE;
+        case EXTERIOR_SURFACE:
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && at_external_boundary &&
+                                               part_of_line == 0U && part_of_surface == 1U )
+                 return EXTERIOR_SURFACE;
+        default:
+          cerr <<"\nconsistencyCheck(NodeManifold): TOPOTYPE of Node could not be resolved."<< endl;
+      
+      } // end switch
+      
+    return MESH_VERTEX;
+          
+ } // end checkModelPartThatNodeBelongsTo
+
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<3U>* const );
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<2U>* const );
+template TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<1U>* const );
+
+
+
+
 
 
 

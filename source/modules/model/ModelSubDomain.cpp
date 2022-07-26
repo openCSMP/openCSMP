@@ -4984,7 +4984,7 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
     binaryFileRead( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
- } // end readRegionIndexesFromBinaryFile
+ } // end readDomainIndexesFromBinaryFile
 
 
 

@@ -91,10 +91,12 @@ bool isQuadrilateralElement( CSMP_FEM_TYPE );
 bool isLineElement( CSMP_FEM_TYPE );
 bool isTriangular( CSMP_FEM_TYPE );
 bool isQuadrilateral( CSMP_FEM_TYPE );
+bool isSurfaceElement( CSMP_FEM_TYPE );
 bool isTetrahedral( CSMP_FEM_TYPE );
 bool isHexahedral( CSMP_FEM_TYPE );
 bool isPrism( CSMP_FEM_TYPE );
 bool isPyramid( CSMP_FEM_TYPE );
+bool isVolumeElement( CSMP_FEM_TYPE );
 
 CELL_SHAPE      parseFiniteElementDimension( CSMP_FEM_TYPE );
 CSMP_FEM_TYPE   parseFiniteElementTypeEnum( int8_t csp_etype );

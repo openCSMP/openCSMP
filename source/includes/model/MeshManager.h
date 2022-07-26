@@ -155,17 +155,17 @@ public:
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
-  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
+                                  BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
 
   /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
   Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
                                                 const LocalVariables& node_variables,
-                                                BOX_BOUNDARY = NOT );
+                                                BOX_BOUNDARY = NOT,
+                                                TOPOTYPE = MESH_VERTEX );
 
    /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
-  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside,
-                                  INTERFACE_SIDE new_node_side,
-                                  const LocalVariables& lvars );
+  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside, const LocalVariables& lvars );
 
   /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,

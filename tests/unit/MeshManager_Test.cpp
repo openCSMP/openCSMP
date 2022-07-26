@@ -755,9 +755,9 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
             middle_nodes.reserve( fnids.size() );
             outside_nodes.reserve( fnids.size() );
             for ( auto j=0U; j<fnids.size(); ++j ) {
-                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), MIDDLE, nvars );
+                 Node<3U>* mnptr = mesh.Duplicate( eptr->N( fnids[j] ), nvars );
                  middle_nodes.push_back( mnptr );
-                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), OUTSIDE, nvars );
+                 Node<3U>* onptr = mesh.Duplicate( eptr->N( fnids[j] ), nvars );
                  outside_nodes.push_back( onptr );
               }
             // find matching faces via the shared nodes

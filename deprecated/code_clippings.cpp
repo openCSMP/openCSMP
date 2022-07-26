@@ -1,4 +1,75 @@
 
+// removed interface side flag
+
+template<uint32_t dim>
+class NodeManifold {
+    public:
+      NodeManifold() = default;
+
+      using manifold              = std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >;
+      using manifoldIterator      = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::iterator;
+      using manifoldConstIterator = typename std::vector<std::pair<Node<dim>*,INTERFACE_SIDE> >::const_iterator;
+
+      /// main constructor in NodeManifoldManager: sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
+      NodeManifold( plf::colony<Node<dim> >& nodes,
+                    const std::set<std::pair<size_t,INTERFACE_SIDE> >& manifold_nodes,
+                    ManifoldType );
+      
+      /// constructs new Manifold from two nodes on the inside and outside of it; @attention nodes must be assigned to this manifold once it has been constructed
+      NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node, ManifoldType );
+
+      /// constructs manifold from vector pointer and qualifier pairs
+      NodeManifold( const manifold&, ManifoldType );
+
+      NodeManifold( const NodeManifold& );
+      NodeManifold( NodeManifold&& );
+      NodeManifold& operator=( const NodeManifold& );
+      NodeManifold& operator=( NodeManifold&& );
+
+      ~NodeManifold();
+      
+      /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for Manifold geometry to be addressed later
+      bool Add( Node<dim>*, INTERFACE_SIDE );
+
+      /// removes node from the current manifold and sets its manifold pointer to zero because a Node can only belong to a single manifold
+      bool Remove( const Node<dim>* const );
+
+      /// asscending sort (scalar on Node or Element only) - default is sorted by pointer in sequence entered
+      void SortByVariableValue( const Index& scalar_node_variable );
+
+      /// number of entries
+      size_t Branches() const;
+
+      /// access to node
+      Node<dim>* const N( size_t branch ) const;
+      
+      /// where the node resides
+      INTERFACE_SIDE InterFaceSide( size_t branch ) const;
+      
+      /// returns the  Node of an intervening element; else returns nullptr
+      Node<dim>* const MIDDLE_Node() const;
+      
+      /// retrieve node(s) with specific flags (manifold should only contain one intervening Node (MIDDLE)
+      std::vector<Node<dim>*>  NodesLocatedAt( INTERFACE_SIDE ) const;
+
+      /// reports manifold classifier that indicates the topologic position of the manifold
+      ManifoldType GeometricClassifier() const;
+      void GeometricClassifier( ManifoldType );
+      
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+      bool AreNodesCollocated() const;
+
+      /// prints out state of the manifold
+      void Out() const;
+
+    private:
+      manifold      branches_;         ///< vector of Node - classifier pairs
+      ManifoldType  parent_geometry_;  ///< classifier for the manifold as a whole
+};
+
+
+
+
 /**
     SUPERSEDED re-constructor of boundary from index data stored in SubDomainInfo and faces using an element and a face vector
     
