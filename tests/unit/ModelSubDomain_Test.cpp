@@ -118,6 +118,10 @@ void ModelSubDomain_Test::run()
               edge5_fail(false), edge6_fail(false), edge7_fail(false), edge8_fail(false),
               edge9_fail(false), edge10_fail(false), edge11_fail(false), edge12_fail(false);
 
+         // E.P Need to create EDGE boundaries in the first place for this to Work!!! NEED TO CALL METHOD BELOW FIRST
+         // model1.EstablishEdgeBoundariesOfBoxShapedModel();
+
+
 	       for ( auto it = model1.BoundariesBegin(); it != model1.BoundariesEnd(); ++it ) {
                const string bname((*it).first);
                // the interior part of the edges comes first
