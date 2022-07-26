@@ -62,8 +62,13 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model( const string& model_name )
     model_topology.InputFromTextFile( model_name.c_str() );
     
     // Assign box boundary flags TODO: remove this once Anne-Laure automated the creation of this info
-    model_topology.AssignBoxShapedModelFlags( vset );
-    
+/*
+model_topology.AssignBoxShapedModelFlags( vset );
+cout <<"\n bflags created by ModelTopology:"<< endl;
+for ( size_t i{0U}; i<vset.Vertices(); i++ )
+  cout << static_cast<int>(vset.BFlag(i)) <<" ";
+*/
+
     // assigning element and node numbers needed for VSet comparison
     // element numbers
     const uint32_t dim{3};
@@ -93,22 +98,39 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model( const string& model_name )
 
     // Checks...
     printModelDimensions( model, true );
+    // are the manifolds there?
+    size_t manifold_count{0U};
+    const Region<3U>& model_domain( model.Region("Model"));
+    for ( const auto& nit : model_domain.NodeVector() )
+      if ( nit->IsManifold() ) manifold_count++;
+    _test( vset.NodeManifolds() == manifold_count/2 ); // since there are 2 distinct 1nodes connected to each manifold
     
     // Creating property values
     model.CreateProperty( "compressibility", "Pa-1", SCALAR, ELEMENT );
     model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
     
+    // Adding required properties which are not read from SKUA exported file
+    model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+    model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+    
+    // Using 'node variable' to see whether perimeter nodes are discovered correctly
+    model.InputPropertyValue( "node variable",  makeScalar(PLAIN,0.) );
+    // assigning values at inside, outside and perimeter
+    SplitBoundary<3U>& split_boundary( model.SplitBoundary("split_boundary_inside"));
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,1.), INTERIOR, INSIDE );
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,2.), INTERIOR, OUTSIDE );
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,3.), PERIMETER, INSIDE );
+
     if ( verbose_ ) {
         VTK_Interface<3U>  vtk_output;
         vtk_output.OutputDataToVTK( model, "SKUA_porosity", "porosity", 0 );
         vtk_output.OutputDataToVTK( model, "SKUA_permeability", "permeability", 0 );
         vtk_output.OutputDataToVTK( model, "SKUA_compressibility", "compressibility", 0 );
+        // specially flagged split boundary (O.K.)
+        vtk_output.OutputDataToVTK( model, "inside_outside_perimeter", "node variable", 0 );
       }
     
-    // Adding required properties which are not read from SKUA exported file
-    model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-    model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
-
+/*
     InputDataManager<3U>  model_configuration;
     model_configuration.ConfigureFromFile(  model, model_name.c_str(),
                                             false,   // region name from parameter range
@@ -117,11 +139,12 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model( const string& model_name )
                                             true,    // boundary conditions for box-shaped model
                                             false,   // essential conditions for regions
                                             false );
+*/
     // TESTING
     // -------
     // comparing original VSet with one that was output from model
     VSet<3U> vset_restored;
-    const bool get_indices_from_stored_variables{true};
+    const bool get_indices_from_stored_variables{false}; // no need because the model was not saved to disk in between
     model.OutputMeshTo( vset_restored, get_indices_from_stored_variables );
     
     _test( vset_restored == vset );

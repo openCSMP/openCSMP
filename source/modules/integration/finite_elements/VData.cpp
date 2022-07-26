@@ -2000,14 +2000,20 @@ bool  VData::operator==( const VData& vd ) const
          cerr<<"\nVData::operator== failed 'plist' (nodes of element) comparison.";
          for ( size_t i{0U}; i<plist.size(); ++i )
            if ( plist[i] != vd.plist[i] ) {
-                if ( plist[i].size() != vd.plist[i].size() ) cerr <<"\ncell "<< i <<" nodes-per-element records have different sizes.\n";
+                string csmp_class{"Element"};
+                if ( i >= Elements() && i<Elements() + Faces() ) csmp_class = "Face";
+                if ( i >= Elements() + Faces() ) csmp_class = "InterFace";
+                if ( plist[i].size() != vd.plist[i].size() ) {
+                     cerr <<"\n\t\t"<< csmp_class <<" "<< i <<" nodes-per-element records have different sizes";
+                     cerr <<" ("<< plist[i].size() <<" vs "<< vd.plist[i].size() <<").";
+                  }
                 else {
-                     cerr <<"\n"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'plist' member comparison: ";
+                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'plist' member comparison: ";
                      for ( size_t j{0}; j<plist[i].size(); ++j )
                        cerr <<"\n\t\t"<< j <<": "<< plist[i][j] <<" vs "<< vd.plist[i][j];
                   }
-                cerr << endl << endl;
              }
+         cerr << endl << endl;
          return_value = false;
       }
     
@@ -2015,14 +2021,20 @@ bool  VData::operator==( const VData& vd ) const
          cerr<<"\nVData::operator== failed 'pfverts' (element neighbor) comparison.\n";
          for ( size_t i{0U}; i<pfverts.size(); ++i )
            if ( pfverts[i] != vd.pfverts[i] ) {
-                if ( pfverts[i].size() != vd.pfverts[i].size() ) cerr <<"\n\tcell "<< i <<" element-neighbor records have different sizes.\n";
+                string csmp_class{"Element"};
+                if ( i >= Elements() && i<Elements() + Faces() ) csmp_class = "Face";
+                if ( i >= Elements() + Faces() ) csmp_class = "InterFace";
+                if ( pfverts[i].size() != vd.pfverts[i].size() ) {
+                     cerr <<"\n\t\t"<< csmp_class <<" "<< i <<" neighbor records have different sizes";
+                     cerr <<" ("<< pfverts[i].size() <<" vs "<< vd.pfverts[i].size() <<").";
+                  }
                 else {
-                     cerr <<"\n"<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'pfvert' member comparison: ";
+                     cerr <<"\n"<< csmp_class <<" "<< parseFiniteElementType(pelmt[i]) <<" "<< i <<": 'pfvert' member comparison: ";
                      for ( size_t j{0}; j<pfverts[i].size(); ++j )
                        cerr <<"\n\t\t"<< j <<": "<< pfverts[i][j] <<" vs "<< vd.pfverts[i][j];
                   }
-                cerr << endl << endl;
              }
+         cerr << endl << endl;
          return_value = false;
       }
       
@@ -2054,9 +2066,9 @@ bool  VData::operator==( const VData& vd ) const
                cerr <<"\n\t\tnode records in manifold "<< i <<" are not the same: (";
                for ( auto j{0U}; j<pmanifolds_[i].first.size(); j++ )
                  cerr  << pmanifolds_[i].first[j] <<" ";
-               cerr <<") vs. (";
-               for ( auto j{0U}; j<pmanifolds_[i].first.size(); j++ )
-                 cerr  << pmanifolds_[i].first[j] <<" ";
+               cerr <<") vs (";
+               for ( auto j{0U}; j<vd.pmanifolds_[i].first.size(); j++ )
+                 cerr  << vd.pmanifolds_[i].first[j] <<" ";
                cerr <<").";
              }
          cerr << endl << endl;
