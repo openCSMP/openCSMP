@@ -26,13 +26,16 @@ namespace csmp {
   class SplitBoundary_Test : public Test
     {
     public:
-      explicit SplitBoundary_Test( bool verbose=false ) : verbose_(verbose) {}
+      SplitBoundary_Test() {}
     
       virtual void run();
       
       // TESTING of public methods in the order in which they appear in SplitBoundary
       // ----------------------------------------------------------------------------
       // SplitBoundary creation gets tested by SplitBoundaryInterface_Test
+       
+      /// initialises 2022 SKUA model with properties from binary version of VSet
+      void Test_InitialiseSKUA_Model( const std::string& file_name );
         
       bool Test_InputNodePropertyValue();
 
@@ -92,7 +95,7 @@ namespace csmp {
                                            const std::set<std::string>& interface_basic_set,
                                            std::set<std::string>& interface_sets );
       private:
-        const bool verbose_;
+        static const bool verbose_ = true;
   };
 
   } // csmp

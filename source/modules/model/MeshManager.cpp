@@ -5047,7 +5047,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t i( 0U );
@@ -5056,7 +5056,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t i( 0U );
@@ -5065,7 +5065,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -5074,7 +5074,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -5083,7 +5083,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           default:
             csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element variable not recognized." );
