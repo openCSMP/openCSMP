@@ -839,10 +839,11 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // using their integration weights
       ScalarVariable  sc;
       for ( auto& ife : this->cell_vec_ ) {
-        const double interface_area = ife->Area( side );
+        ife->CurrentSide(side);             //needed so that property at int point calls correct fe nodes
         for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ) {
+          double det_j = ife->det_JINV_AtIntegrationPoint(i);
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
-          property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * sc();
+          property_integral += det_j * ife->WeightAtIntegrationPoint( i ) * sc();
         }
       }
       return property_integral;
@@ -851,9 +852,11 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
       for ( auto& ife : this->cell_vec_ ) {
-        const double interface_area = ife->Area( side );
-        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i )
-          property_integral += interface_area * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
+        ife->CurrentSide(side);             //needed so that property at int point calls correct fe nodes
+        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ){
+          double det_j = ife->det_JINV_AtIntegrationPoint(i);
+          property_integral += det_j * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
+        }
       }
       return property_integral;
     }
@@ -910,71 +913,41 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_node_prop, co
          csmp_error.Note( ERROR, "SplitBoundary<dim>::InputNodePropertyValue:", "This method applies to node properties only!" );
          return;
       }
-    if ( side == MIDDLE ) {
-         csmp_error.Note( ERROR, "SplitBoundary<dim>::InputNodePropertyValue:",
-                         "To apply node property values to the intervening mesh access the corresponding region" );
-         return;
-      }
   
    // dealing with the simplest cases (=whole inside or outside first)
    if ( part == COMPLETE ) {
-        if ( side == INSIDE )
-          for ( auto& it : this->cell_vec_ ) {
-                const auto n_nodes{ it->FE()->Nodes() };
+       for ( auto& it : this->cell_vec_ ) {
+             const auto n_nodes{ it->FE()->Nodes() };
+             for ( uint32_t i{0U}; i<n_nodes; i++ )
+               it->N(i,side)->Store( prop_key, var );
+         }
+        return;
+   }
+
+   if ( part == INTERIOR ) {
+        for ( auto it=this->CellsBegin(); it!=this->PerimeterCellsBegin(); ++it ) {
+                const auto n_nodes{ (*it)->FE()->Nodes() };
                 for ( uint32_t i{0U}; i<n_nodes; i++ )
-                  it->N(i,INSIDE)->Store( prop_key, var );
-            }
-        else if ( side == OUTSIDE )
-          for ( auto& it : this->cell_vec_ ) {
-                const auto n_nodes{ it->FE()->Nodes() };
-                for ( uint32_t i{0U}; i<n_nodes; i++ )
-                  it->N(i,OUTSIDE)->Store( prop_key, var );
+                  (*it)->N(i,side)->Store( prop_key, var );
             }
         return;
-     }
-     
-   if ( part == INTERIOR ) {
-        if ( side == INSIDE )
-          for ( auto it=this->CellsBegin(); it!=this->PerimeterCellsBegin(); ++it ) {
-                const auto n_nodes{ (*it)->FE()->Nodes() };
-                for ( uint32_t i{0U}; i<n_nodes; i++ )
-                  (*it)->N(i,INSIDE)->Store( prop_key, var );
-            }
-        else if ( side == OUTSIDE )
-          for ( auto it=this->CellsBegin(); it!=this->PerimeterCellsBegin(); ++it ) {
-                const auto n_nodes{ (*it)->FE()->Nodes() };
-                for ( uint32_t i{0U}; i<n_nodes; i++ )
-                  (*it)->N(i,OUTSIDE)->Store( prop_key, var );
-            }
-     }
-   else if ( part == PERIMETER ) {
-        if ( side == INSIDE ) {
-             const size_t n_sb_cells{ this->Cells() };
-             for ( size_t i{ this->InteriorCells() }; i<n_sb_cells; i++ )
-               for ( auto j{0U}; j < this->PerimeterFaces(i); ++j ) {
-                    // ascertaining that we are indeed at the model boundary
-                    assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
-                    // getting the nodes
-                    vector<uint32_t>  fnids;
-                    this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
-                    for ( auto& nit : fnids )
-                      this->E(i)->N(nit,INSIDE)->Store( prop_key, var );
-                 }
-          }
-        else if ( side == OUTSIDE ) {
-             const size_t n_sb_cells{ this->Cells() };
-             for ( size_t i{ this->InteriorCells() }; i<n_sb_cells; i++ )
-               for ( auto j{0U}; j < this->PerimeterFaces(i); ++j ) {
-                    // ascertaining that we are indeed at the model boundary
-                    assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
-                    // getting the nodes
-                    vector<uint32_t>  fnids;
-                    this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
-                    for ( auto& nit : fnids )
-                      this->E(i)->N(nit,OUTSIDE)->Store( prop_key, var );
-                 }
-          }
-    }
+   }
+
+   if ( part == PERIMETER ) {
+         const size_t n_sb_cells{ this->Cells() };
+         for ( size_t i{ this->InteriorCells() }; i<n_sb_cells; i++ )
+           for ( auto j{0U}; j < this->PerimeterFaces(i); ++j ) {
+                // ascertaining that we are indeed at the model boundary
+                assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
+                // getting the nodes
+                vector<uint32_t>  fnids;
+                this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
+                for ( auto& nit : fnids )
+                  this->E(i)->N(nit,side)->Store( prop_key, var );
+             }
+
+         return;
+         }
       
  } // end InputNodePropertyValue
 

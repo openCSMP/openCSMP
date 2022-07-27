@@ -71,7 +71,7 @@ class SplitBoundaryInterface {
     std::set<std::string>  InsertLowerDimensionalRegionsIntoSplitBoundaries( int32_t material_id_for_new_elements );
 
     /// Creates a single lower-dimensional mesh region taking into account all split boundaries objects; returning its name and whether this operation was successful
-    bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
+    //bool  SingleRegionFromAllSplitBoundaries( const char* name_of_new_region );
 
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( const char* split_boundary, bool erase_interfaces );

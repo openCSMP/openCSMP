@@ -336,9 +336,8 @@ private:
   /// access is via root node or element only
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
   plf::colony<Node<dim>>      nodes_;          ///<  nodes
-  plf::colony<Element<dim>>   elements_;       ///<  pointers elements
+  plf::colony<Element<dim>>   elements_;       ///<  pointers to elements in the model
   plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
   plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
   // only used in models that contain node SplitBoundaries / IterFace objects

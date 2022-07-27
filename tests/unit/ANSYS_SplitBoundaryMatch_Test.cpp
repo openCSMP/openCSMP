@@ -153,7 +153,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
         }
       const string variablesFile("ANSYS_SplitBoundaryMatch_Test-variables.txt");
       //                   fileset             regions-file
-      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true, true );
+      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), false, true );
       Region<3U>    model_domain(model.Region("Model"));
       model_domain.UpdateMemberIndexes();
       VTK_Interface<3U>  vtk_output;

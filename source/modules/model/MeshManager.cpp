@@ -906,11 +906,11 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
         ifptr->InterveningElement()->Out();
         csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
      }
-     
+
    // 1. checking the node vector
    if ( nodes.empty() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector is empty");
-   if ( nodes.size() != ifptr->Nodes() )
+   if ( nodes.size() != ifptr->FE()->Nodes() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector has the wrong size");
      
    // 2. checking the validity of the node vector in debug mode
@@ -6146,7 +6146,9 @@ bool  MeshManager<dim>::IsContiguous() const
    set<Node<dim>*> node_pointers;
    findInterconnectedNodeCluster<dim>( const_cast<Node<dim>*>(&(*nodes_.begin())), node_pointers );
    
-   if ( node_pointers.size() < nodes_.size() ) return false;
+   size_t total_corner_nodes = countCornerNodes<dim>( ElementsBegin(), ElementsEnd() );
+
+   if ( node_pointers.size() < total_corner_nodes ) return false;
    return true;
 
  } // end IsContiguous

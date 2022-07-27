@@ -495,6 +495,26 @@ template size_t findInterconnectedNodeCluster( Node<2>* const nptr, set<Node<2>*
 template size_t findInterconnectedNodeCluster( Node<1>* const nptr, set<Node<1>*>& contiguous_set_of_nodes );
 
 
+template<uint32_t dim>
+size_t countCornerNodes(typename plf::colony<Element<dim>>::const_iterator elmts_begin,
+                        typename plf::colony<Element<dim>>::const_iterator elmts_end ){
+
+  set<Node<dim>*> corner_nodes;
+
+  for (typename plf::colony<Element<dim>>::const_iterator eit = elmts_begin; eit != elmts_end; eit++ ){
+    uint32_t n_corner_nds = eit->FE()->CornerNodes();
+    for ( size_t n{0U}; n<n_corner_nds; n++ ){
+      corner_nodes.insert( eit->N(n) );
+    }
+  }
+
+  return corner_nodes.size();
+
+}
+
+template size_t countCornerNodes<3>( typename plf::colony<Element<3>>::const_iterator , typename plf::colony<Element<3>>::const_iterator  );
+template size_t countCornerNodes<2>( typename plf::colony<Element<2>>::const_iterator , typename plf::colony<Element<2>>::const_iterator  );
+template size_t countCornerNodes<1>( typename plf::colony<Element<1>>::const_iterator , typename plf::colony<Element<1>>::const_iterator  );
 
 
 
