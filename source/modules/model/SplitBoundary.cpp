@@ -233,12 +233,11 @@ void SplitBoundary<dim>::Accept( Visitor<dim>& v )
       return;
       // element, interface and interface are treated the same
     case INTER_FACE:
-      for ( auto it = this->CellsBegin(); it != this->CellsEnd(); it++ )
-        (*it)->Accept( v );
+      for ( auto& it : this->CellVector() ) it->Accept( v );
       return;
     case NODE:
-      for ( auto nd_it = this->NodesBegin(); nd_it != this->NodesEnd(); nd_it++ )
-        (*nd_it)->Accept( v );
+      throw csmp::Exception( ERROR, "SplitBoundary<dim>::Accept",
+                             "Visitor application target NODE not valid for SplitBoundary; nothing was done" );
       return;
     default:
       throw csmp::Exception( ERROR, "SplitBoundary<dim>::Accept",

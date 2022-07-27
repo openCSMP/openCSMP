@@ -2555,9 +2555,9 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
           const string region_name{ it.first };
           if ( region_name.find("BOUNDARY") != string::npos ||
                region_name.find("IRREGULAR") != string::npos ) {
-               // if it is a lower dimensional region
                const auto etype = it.second.first.begin(); // .first.begin());
-               if ( isLineElement( parseFiniteElementType(*etype) ) == true )
+               // if it is a lower dimensional region
+               if ( !isVolumeElement( parseFiniteElementType(*etype) ) == true )
                  boundary_regions.insert( region_name );
             }
        }

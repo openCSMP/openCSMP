@@ -190,11 +190,15 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     void Out() const;
 
 
-    // base class methods not available for SplitBoundary
+    // base class methods that are not available for SplitBoundary because it has no node vector
 
     /// different version than in the base class that does not attempt to write nodes
     void WriteIndexesToBinaryFile( std::fstream& ) const;
-    
+ 
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const = delete;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const = delete;
+    typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const = delete;
+
     size_t            Nodes() const = delete;
     size_t            InteriorNodes() const = delete;
     size_t            PerimeterNodes() const = delete;

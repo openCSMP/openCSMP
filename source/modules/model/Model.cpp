@@ -865,11 +865,19 @@ void Model<dim>::IndexByPropertyValues()
          const size_t n_nodes{mesh.Nodes()};
          const typename plf::colony<csmp::Node<dim>>::iterator nodes_end(mesh.NodesEnd());
          for ( auto nit=mesh.NodesBegin(); nit!=nodes_end; ++nit ) {
-              const size_t node_number = static_cast<uint32_t>((*nit).Read(key));
-              if ( node_number >= n_nodes )
-                csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
-                                            "'node number' exceeds range of available nodes:", to_string(node_number) );
-              (*nit).Idx( node_number );
+              const double number{ (*nit).Read(key) };
+              if ( !isnan(number) ) {
+                   const size_t node_number = static_cast<size_t>(number);
+                   if ( node_number >= n_nodes )
+                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                               "'node number' exceeds range of available nodes:", to_string(node_number) );
+                   (*nit).Idx( node_number );
+                }
+              else {
+                     (*nit).Idx( numeric_limits<size_t>::max() );
+                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                     "double turned into 'node number' was a NaN; setting value to MAX");
+                }
            }
       }
     else {
@@ -884,11 +892,19 @@ void Model<dim>::IndexByPropertyValues()
          const size_t n_elmts{mesh.Elements()};
          const typename plf::colony<csmp::Element<dim>>::iterator elmts_end(mesh.ElementsEnd());
          for ( auto it=mesh.ElementsBegin(); it!=elmts_end; ++it ) {
-              const size_t elmt_number = static_cast<uint32_t>((*it).Read(key));
-              if ( elmt_number >= n_elmts )
-                csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
-                                  "'element number' exceeds range of available elements:", to_string(elmt_number) );
-              (*it).Idx( elmt_number );
+              const double number{ (*it).Read(key) };
+              if ( !isnan(number) ) {
+                   const size_t elmt_number = static_cast<size_t>(number);
+                   if ( elmt_number >= n_elmts )
+                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                       "'element number' exceeds range of available elements:", to_string(elmt_number) );
+                   (*it).Idx( elmt_number );
+                }
+              else {
+                     (*it).Idx( numeric_limits<size_t>::max() );
+                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
+                                     "double turned into 'element number' was a NaN; setting value to MAX");
+                }
            }
       }
     else {
@@ -915,7 +931,7 @@ void Model<dim>::IndexByPropertyValues()
           }
         else {
              csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
-                                      "'face number' is not defined; default unique contiguous numbering will be used" );
+                                     "'face number' is not defined; default unique contiguous numbering will be used" );
              mesh.AssignUniqueNumbers( in_a_single_sequence );
              return;
           }

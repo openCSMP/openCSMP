@@ -18,7 +18,12 @@ NodeManifold<dim>::~NodeManifold()
 }
 
 
-// tested: OK
+/**
+    Transfers manifold information directly from supplied data to new manifold,
+    connecting the nodes from the container in the MeshManager with the newly created manifolds.
+    
+    @attention the manifold vector does not get sorted!
+ */
 template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
                                  const vector<size_t>& manifold_nodes,
@@ -38,7 +43,7 @@ NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes,
       }
 
     // sorting branches using the node pointers as keys (default of sort)
-    sort( branches_.begin(), branches_.end() );
+    // sort( branches_.begin(), branches_.end() );
 }
 
 
@@ -53,6 +58,7 @@ template<uint32_t dim>
 NodeManifold<dim>::NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node, ManifoldType classifier )
  : parent_geometry_(classifier)
  {
+     branches_.reserve(2U);
      branches_.push_back( &inside_node );
      branches_.push_back( &outside_node );
  }
