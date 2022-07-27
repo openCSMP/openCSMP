@@ -27,7 +27,7 @@ FiniteElement::FiniteElement()
    order_of_shape_functions(1),
    element_category(SURFACE),
    csp_fem_type(UNKNOWN),
-   object_id( InitialID() )  
+   object_id_( InitialID() )
  {
  }
 
@@ -42,7 +42,7 @@ FiniteElement::FiniteElement( CSMP_FEM_TYPE csp_fem_type,
    order_of_shape_functions(order_of_shape_functions),
    element_category(SURFACE),
    csp_fem_type(csp_fem_type),
-   object_id( InitialID() )
+   object_id_( InitialID() )
  {
  }
 
@@ -72,7 +72,7 @@ FiniteElement&  FiniteElement::operator=( const FiniteElement& e )
         order_of_shape_functions = e.order_of_shape_functions;
         element_category         = e.element_category;
         csp_fem_type             = e.csp_fem_type;
-        object_id                = e.object_id;
+        object_id_               = e.object_id_;
         XY  = e.XY;
         M   = e.M;
       }
@@ -228,8 +228,8 @@ bool isVolumeElement( CSMP_FEM_TYPE etype )
 
 
 
-void    FiniteElement::CurrentID( size_t id ) { object_id = id; }
-size_t  FiniteElement::CurrentID() const      { return object_id; }
+void    FiniteElement::CurrentID( size_t id ) { object_id_ = id; }
+size_t  FiniteElement::CurrentID() const      { return object_id_; }
 
 /// initalizing to a value that makes sure that ID does not equal initial element idx
 size_t  FiniteElement::InitialID() { return std::numeric_limits<uint32_t>::max(); }
@@ -302,14 +302,14 @@ void FiniteElement::VolumeElement()   { element_category = VOLUME; }
 double FiniteElement::AspectRatio()
   {
      InstructUser("FiniteElement::AspectRatio()");
-     cout <<"\ncalled by object: "<< object_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ << endl;
      return 0.0;
   }
   
 double FiniteElement::InnerRadius()
   {
      InstructUser("FiniteElement::InnerRadius()");
-     cout <<"\ncalled by object: "<< object_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ << endl;
      return 0.0;
   }
   
@@ -317,7 +317,7 @@ void FiniteElement::EdgeLengths( vector<double>& vec )
   {
      InstructUser("FiniteElement::EdgeLengths(vector<double>)");
      out(vec);
-     cout <<"\ncalled by object: "<< object_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ << endl;
   }
 
 
@@ -326,7 +326,7 @@ void FiniteElement::NodesOfSegment( uint32_t sid, vector<uint32_t>& snids ) cons
   {
      cout <<"\nFiniteElement::NodesOfSegment: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element segment with the entered (local) ID number. "<< endl;
-     cout <<"\ncalled by object: "<< object_id <<" for face "<< sid << endl;
+     cout <<"\ncalled by object: "<< object_id_ <<" for face "<< sid << endl;
      out(snids);
      throw invalid_argument("FiniteElement::NodesOfSegment");
   }
@@ -338,7 +338,7 @@ void FiniteElement::NodesOfFace( uint32_t fid, vector<uint32_t>& fnids ) const
      cout <<"the nodes which constitute the element face with the entered ID number. ";
      cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
      cout <<"the nodes with the same ID." << endl;
-     cout <<"\ncalled by object: "<< object_id <<" for face "<< fid << endl;
+     cout <<"\ncalled by object: "<< object_id_ <<" for face "<< fid << endl;
      out(fnids);
      throw invalid_argument("FiniteElement::NodesOfFace");
   }
@@ -350,7 +350,7 @@ std::vector<uint32_t> FiniteElement::CornerNodesOfFace( uint32_t face_id ) const
      cout <<"the corner nodes of the element face with the entered ID number. ";
      cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
      cout <<"the nodes with the same ID." << endl;
-     cout <<"\ncalled by object: "<< object_id <<" for face "<< face_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ <<" for face "<< face_id << endl;
      throw invalid_argument("FiniteElement::CornerNodesOfFace");
      return vector<uint32_t>{};
  }
@@ -362,7 +362,7 @@ vector<uint32_t>  FiniteElement::NodesConnectedTo( uint32_t node_id ) const
      cout <<"the corner nodes of the element face with the entered ID number. ";
      cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
      cout <<"the nodes with the same ID." << endl;
-     cout <<"\ncalled by object: "<< object_id <<" for node "<< node_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ <<" for node "<< node_id << endl;
      throw invalid_argument("FiniteElement::NodesConnectedTo");
      return vector<uint32_t>{};
   }
@@ -372,7 +372,7 @@ void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM )
   {
      InstructUser("FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )");
      DM.Out();
-     cout <<"\ncalled by object: "<< object_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ << endl;
      throw invalid_argument("FiniteElement::IntegraldNdN");
   }
   
@@ -387,7 +387,7 @@ void FiniteElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
      cout <<"\nnodes at boundary: "<< endl;
      out(bnodes);
      out(fnids);
-     cout <<"\ncalled by object: "<< object_id << endl;
+     cout <<"\ncalled by object: "<< object_id_ << endl;
      throw invalid_argument("FiniteElement::ConsecutiveNodesAtBoundary");
   }
 
@@ -462,7 +462,7 @@ CSMP_FEM_TYPE FiniteElement::ElementTypeOfSegment( uint32_t ) const
 
 
 
-void  FiniteElement::UnitNormal( vector<double>& ) const
+vector<double>  FiniteElement::UnitNormal() const
   {
      InstructUser("FiniteElement::UnitNormal");
      cout <<"\nThis method is not defined for the FE element implementation which you are using"<< endl;

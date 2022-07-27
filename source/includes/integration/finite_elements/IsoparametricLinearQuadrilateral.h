@@ -25,7 +25,7 @@ public:
     virtual void    CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t  MidSideNodes() const { return 0; }
     virtual uint32_t  CornerNodes() const  { return 4; }
-    virtual void      UnitNormal( std::vector<double>& vc ) const;
+    virtual std::vector<double>  UnitNormal() const;
     virtual void      UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_LINEAR_BAR; };

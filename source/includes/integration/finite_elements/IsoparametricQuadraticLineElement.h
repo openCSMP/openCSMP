@@ -27,8 +27,6 @@ public:
     virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
                                                   std::vector<uint32_t>& fnids );
 
-    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
-
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
     virtual void      JacobianAtIntegrationPoint( uint32_t IP );
@@ -41,8 +39,10 @@ public:
 
     virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
 
-    virtual void      UnitNormal( std::vector<double>& vc ) const;
+    virtual std::vector<double>  UnitNormal() const;
     
+    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+
     virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR, 

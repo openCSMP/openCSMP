@@ -35,7 +35,7 @@ public:
     virtual void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t  MidSideNodes() const { return 3U; }
     virtual uint32_t  CornerNodes() const  { return 3U; }
-    virtual void      UnitNormal( std::vector<double>& vc ) const;
+    virtual std::vector<double> UnitNormal() const;
     // TODO: virtual void UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
     virtual void      ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
                                                   std::vector<uint32_t>& fnids );

@@ -161,7 +161,7 @@ void InterFace_Test::Geometry_tests(){
     n3.x(2.0); n3.y(3.0); //topologically collocated with n6
     n4.x(2.0); n4.y(1.0); //topologically collocated with n2
     n5.x(3.0); n5.y(1.0);
-    n6.x(2.0); n6.y(3.0);//topologically collocated with n3
+    n6.x(2.0); n6.y(3.0); //topologically collocated with n3
 
     ConstructInterFaceIngredients(e1, e2, n1, n2, n3, n4, n5, n6, e_nb_in1, e_nb_in2, e_nb_ou1, e_nb_ou2);
     //Knowledge of face ID -- a result of this particular constrution
@@ -311,9 +311,18 @@ void InterFace_Test::Geometry_tests(){
     DenseMatrix<DM_MIN> XY(2,2);
     if_obj0.CoordinateMatrix();
     _test( XY_inside == if_obj0.FE()->XY );
+    if ( verbose_ ) {
+        XY_inside.Out();
+        if_obj0.FE()->XY.Out();
+      }
     if_obj0.CurrentSide( OUTSIDE );
+    if_obj0.Idx( 734 ); // to prompt update
     if_obj0.CoordinateMatrix();
     _test( XY_outside == if_obj0.FE()->XY );
+    if ( verbose_ ) {
+        XY_outside.Out();
+        if_obj0.FE()->XY.Out();
+      }
 }
 
 

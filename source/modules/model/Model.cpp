@@ -549,6 +549,21 @@ if ( mesh_manager_.InterFaces() > 0 )
 
 
 
+/**
+     Instantiates FiniteVolumeStencilManager and initialises FiniteVolumeStencils
+     if correpoding pointers are NULL.
+     
+     delegates this step to MeshManager::InitializeFiniteVolumeStencils()
+ 
+*/
+template<uint32_t dim>
+void Model<dim>::InstantiateFiniteVolumes()
+{
+   Mesh().InitializeFiniteVolumeStencils( Database() );
+}
+
+
+
 
 
 template<uint32_t dim>

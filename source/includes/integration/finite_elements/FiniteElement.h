@@ -107,7 +107,7 @@ FV_FACET_TYPE   parseFacetType( const std::string& ftype );
 const char*     parseFacetType( int8_t ftype );
 
 /// returns UNKNOWN if more information is required
-CSMP_FEM_TYPE      finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
+CSMP_FEM_TYPE   finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
 
 
 /**
@@ -150,16 +150,16 @@ class FiniteElement {
     virtual ~FiniteElement() {}
 
     /// assigns integer value used to avoid repeating the same operation
-    void               CurrentID( size_t id );
+    void           CurrentID( size_t id );
   
     /// returns integer value for comparison to avoid repeating the same operation
-    size_t             CurrentID() const;
+    size_t         CurrentID() const;
   
     /// returns ID value set to FEM during construction
-    static size_t      InitialID();
+    static size_t  InitialID();
   
     /// return minimum spatial dimension in which this element can exist
-    uint32_t             Dim() const;
+    uint32_t       Dim() const;
   
     uint32_t             Nodes() const;
   
@@ -247,57 +247,55 @@ class FiniteElement {
     /// reports the element type that would match that of its corresponding segment
     virtual CSMP_FEM_TYPE ElementTypeOfSegment( uint32_t segment ) const;
 
-    /// returns the unit normal where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates
-    virtual void       UnitNormal( std::vector<double>& unrml ) const;
+    /// returns  unit normal to element where it makes sense (line and surface elements); expects XY matrix to be initialised with node coordinates
+    virtual std::vector<double> UnitNormal() const;
 
-    // TODO: SKM: add more efficient unit-normal calculation that returns point 
     /// returns the unit normal to element face (for planar elements, normal lies in that plane; expects XY matrix to be initialised with node coordinates
-    virtual void       UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual void      UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
   
     /// computes unit normal to face using a parametric to physical space transformation available in elements with a local coordinate framework
-    virtual void       UnitNormalAtFaceBarycenter( uint32_t face, std::vector<double>& nrml );
+    virtual void      UnitNormalAtFaceBarycenter( uint32_t face, std::vector<double>& nrml );
   
     /// accessor for coordinate matrix which is associated with the element
-    double             XYZ( uint32_t i, uint32_t j ) const;
+    double            XYZ( uint32_t i, uint32_t j ) const;
 
     /// mutator for coordinate matrix which is associated with the element
-    void               XYZ( uint32_t i, uint32_t j, double val );
+    void              XYZ( uint32_t i, uint32_t j, double val );
 
     /// for element types defined using a local coordinate system, returns the node coordinates into the argument matrix
-    virtual void       ReferenceCoordinates( DenseMatrix<DM_MIN>& matCoords ) const;
+    virtual void      ReferenceCoordinates( DenseMatrix<DM_MIN>& matCoords ) const;
 
     /// using the interpolation functions, the supplied suite of scalar variable values is extrapolated from the Gauss points to the nodes
-    virtual   void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
-                                                                    const std::vector<double>& IVAR,
-                                                                    std::vector<double>&       NVAR ) const;
-
+    virtual   void    ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
+                                                                  const std::vector<double>& IVAR,
+                                                                  std::vector<double>&       NVAR ) const;
     /// returns the global coordinates of the element integration point
-    virtual   void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
+    virtual   void    IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
   
     /// returns the integration weight of the desired quadrature point
-    virtual   double     WeightAtIntegrationPoint( uint32_t i ) const;
+    virtual   double  WeightAtIntegrationPoint( uint32_t i ) const;
   
     /// reports the local node numbers in counter clockwise order
     // DEPRECATE, but check whether this is used by any of ther applications
-    virtual   void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual   void    CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
 
     /// reports the values of the interpolation functions at the point given in global coordinates; @attention slow for numerically integrated elements
     // REMOVE: use XYZtoRST(); to find the point of interest
-    virtual   void      N( std::vector<double>& N, const std::vector<double>& xyz );
+    virtual   void    N( std::vector<double>& N, const std::vector<double>& xyz );
   
     /// reports the values of the interpolation functions at the given quadrature point
     // RENAME: N_AtPoint();
-    virtual   void      N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
+    virtual   void    N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
   
     /// reports the values of the interpolation functions at the center of gravity of the element
-    virtual   void      N_AtBaryCenter( std::vector<double>& N );
+    virtual   void    N_AtBaryCenter( std::vector<double>& N );
     
     /// first derivatives of interpolation functions for elements where this is a single constant value
-    virtual   void      dN( DenseMatrix<DM_MIN>& );
+    virtual   void    dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
     // REMOVE: only RST should be supported; use XYZtoRST to compute point location
-    virtual   double    dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
+    virtual   double  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well
     // RENAME dN_AtPoint();
@@ -417,8 +415,8 @@ class FiniteElement {
     bool    isoparametric,               ///< true if interpolation order of basis- and shape functions is the same
             uses_local_coordinates;      ///< for elements defined in a local (r,s,t) coordinate system
   
-    uint32_t  order_of_shape_functions;    ///< order of element shape functions
-    size_t    object_id;                   ///< number used to track operations done on a particular element
+    uint32_t       order_of_shape_functions; ///< order of element shape functions
+    size_t         object_id_;       ///< number used to track operations done on a particular element
   
     CELL_SHAPE     element_category; ///< element classifier
     CSMP_FEM_TYPE  csp_fem_type;     ///< elements supported by CSMP, see definition above

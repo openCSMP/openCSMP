@@ -778,8 +778,9 @@ objects, multiplying the boundary normal componet with their area.
 @author SKM 21/8/2018
 */
 template<uint32_t dim>
-double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property,
-                                              INTERFACE_SIDE side ) const
+double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
+                                            const char* property,
+                                            INTERFACE_SIDE side ) const
 {
   csmp::Index prop_key = p.StorageKey( property );
 
@@ -812,7 +813,7 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
       // and integrated over the area of its interface
       double prop_value;
       for ( auto& ife : this->cell_vec_ ) {
-        double face_area = ife->Parent( side )->FaceArea( ife->ParentFaceID( side ) );
+        double face_area = ife->Volume();
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
         else {
           if ( ife->HasInterveningElement() ) prop_value = ife->InterveningElement()->Read( prop_key );
@@ -868,20 +869,20 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, cons
   if ( prop_key.type == VECTOR ) {
     // the values projected onto the normal are integrated over the interface.
     if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
-      VectorVariable<dim>  unrml, vc;
+      VectorVariable<dim>  vc;
       for ( auto& it : this->cell_vec_ ) {
-        it->UnitNormal( unrml );
+        auto unrml = it->UnitNormal();
         it->Read( prop_key, vc );
-        property_integral += dotProduct( unrml, vc ) * it->Area( side );
+        property_integral += vc.DotProduct(unrml) * it->Area( side );
       }
     }
     // nodal properties are interpolated to the barycentre because this is where the normal is placed
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
-      VectorVariable<dim>  unrml, vc;
+      VectorVariable<dim>  vc;
       for ( auto& it : this->cell_vec_ ) {
-        it->UnitNormal( unrml );
+        auto unrml = it->UnitNormal();
         it->PropertyValueAtBaryCenter( prop_key, vc );
-        property_integral += dotProduct( unrml, vc ) * it->Area( side );
+        property_integral += vc.DotProduct(unrml) * it->Area( side );
       }
     }
     else {

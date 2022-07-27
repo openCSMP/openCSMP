@@ -942,6 +942,7 @@ correct spatial dimension.
 @author SKM 4/6/2014
 
 */
+/*
 template<uint32_t dim, template<uint32_t> class CELL>
 double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
   {
@@ -988,7 +989,7 @@ double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
     return 1.;
 
   } // end FaceArea
-
+*/
 
 
 
@@ -1037,10 +1038,9 @@ void  FiniteElementPolicy<dim,CELL>::UnitNormal( VectorVariable<dim>& nrml ) con
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double> un( dim, 0. );
-    fptr_->UnitNormal(un);
-    for ( auto d(0); d < dim; ++d )
-        nrml(d) = un[d];
+    uint32_t count{0U};
+    for ( auto d : fptr_->UnitNormal() )
+      nrml( count++ ) = d;
   }
 
 
@@ -1049,7 +1049,7 @@ void  FiniteElementPolicy<dim,CELL>::UnitNormal( std::vector<double>& nrml ) con
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    fptr_->UnitNormal(nrml);
+    nrml = fptr_->UnitNormal();
   }
 
 
@@ -1058,9 +1058,7 @@ Point<dim>  FiniteElementPolicy<dim,CELL>::UnitNormal() const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    std::vector<double> un(dim,0.);
-    fptr_->UnitNormal(un);
-    return Point<dim>(un);
+    return Point<dim>( fptr_->UnitNormal() );
   }
 
 

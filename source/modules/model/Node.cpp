@@ -152,7 +152,7 @@ template<uint32_t dim>
 bool  Node<dim>::operator==( const Node<dim>& nd )
  {
     // TODO: fix Node comparitor
-    cerr <<"Node<"<< dim <<">: called operato== Node comparitor, extremely costly and of questionable value\n";
+    cerr <<"Node<"<< dim <<">: called operator==(Node) comparitor, extremely costly and of questionable value\n";
     if ( &nd != this )
       {
           if ( BREP_entity_ != nd.BREP_entity_ ) return false;

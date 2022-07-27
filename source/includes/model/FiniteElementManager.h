@@ -50,6 +50,7 @@ class FiniteElementManager {
     // can be changed, but intermediate nodes will become defunct
     void              InterpolationOrder( uint32_t interpolation_order );
     uint32_t          InterpolationOrder() const;
+    bool              UsesElementsWithLocalCoordinateSystem() const;
     
     void              Out() const;
   

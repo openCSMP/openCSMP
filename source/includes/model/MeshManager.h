@@ -22,18 +22,17 @@ template<uint32_t> class NodeManifoldManager;
 template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
 /**
-@brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
-internal application is hidden and may vary between models (tree-storage is default).
+    @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
+    internal application is hidden and may vary between models (tree-storage is default).
 
-@author S.K. Matthai
-@date 2021 (complete rewrite)
+    @author S.K. Matthai
+    @date 2021 (complete rewrite)
 
-@remark gain access via Mesh() public interface of Model.
+    @remark gain access via Mesh() public interface of Model.
 
-@attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
-Region or Boundary objects merely contain pointers to these.
+    @attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
+    Region or Boundary objects merely contain pointers to these.
 
-TODO: which kind of mesh error diagnostics should the MeshManager implement? - should these be in a separate compilation unit?
 */
 template<uint32_t dim>
 class MeshManager {
@@ -115,9 +114,12 @@ public:
   const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 
   /// direct access for backward compatibility
-  const FiniteVolumeStencilManager<dim>& FiniteVolumes() const { return fvm_manager_; }
+  const FiniteVolumeStencilManager<dim>* const FiniteVolumes() const { return fvm_manager_; }
 
+  ///  assigns the finite volume stencils to the finite volume policies of the element, face, and interface so that this functionality can be used
+  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& );
   
+ 
   // ==============================================================
   //
   // MESH MODIFICATION
@@ -330,8 +332,8 @@ private:
 
 private:
 
-  FiniteElementManager             fem_manager_;
-  FiniteVolumeStencilManager<dim>  fvm_manager_; ///< current finite volume specifications // TODO: make this a trait class because it needs no dynamic data!
+  FiniteElementManager              fem_manager_;
+  FiniteVolumeStencilManager<dim>*  fvm_manager_ = nullptr; ///< current finite volume specifications
 
   /// access is via root node or element only
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types

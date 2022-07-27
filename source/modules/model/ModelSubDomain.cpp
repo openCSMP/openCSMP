@@ -1185,8 +1185,10 @@ size_t ModelSubDomain<dim,CELL>::RenumberCells() const
     size_t counter(0U);
 
     for( auto& it : cell_vec_ ) it->Idx(counter++);
+    cell_vec_[0]->FE()->CurrentID( numeric_limits<size_t>::max() );
 
     return counter;
+    
  } // end RenumberCells
 
 

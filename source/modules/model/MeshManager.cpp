@@ -23,7 +23,7 @@ namespace csmp {
 template<uint32_t dim>
 MeshManager<dim>::MeshManager()
   : fem_manager_( dim, 1, true ), // linear interpolation functions, isoparametric elements
-    fvm_manager_(fem_manager_),
+    fvm_manager_(nullptr),
     hybrid_element_mesh_( false )
 {
 }
@@ -32,12 +32,13 @@ MeshManager<dim>::MeshManager()
 
 
 /**
-      input objects need to be fully constructed for this to work.
+    Constructs a customised version of the MeshManager , appropriately initialising the FiniteElementManager.
+    If the model uses linear, isoparametric elements, corresponding finite volume stencils are constructed and initialised.
 */
 template<uint32_t dim>
 MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim>& vset )
   : fem_manager_( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() ),
-    fvm_manager_(fem_manager_),
+    fvm_manager_( (vset.OrderOfFiniteElementInterpolationFunctions()==1u && vset.IsoparametricElementMesh() ) ? new FiniteVolumeStencilManager<dim>(fem_manager_) : nullptr ),
     hybrid_element_mesh_( vset.HybridElementTypeMesh() )
 {
    assert( pref.VariableCount() > 0 );
@@ -59,6 +60,7 @@ template<uint32_t dim>
 MeshManager<dim>::~MeshManager()
   {
      delete node_manifold_manager_;
+     delete fvm_manager_;
     
  } // end destructor
 
@@ -306,7 +308,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             {
               // create the element
               typename plf::colony<Element<dim>>::iterator
-                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
+                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ),
+                                                                                 fvm_manager_->Stencil( csmpElementType ),
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
@@ -326,8 +329,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             {
               const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( elmt_idx ));
               typename plf::colony<Element<dim>>::iterator
-                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
-                                                                                 evars, cvars, vset.Pmtrl(elmt_idx) ) );
+                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ),
+                                                       fvm_manager_->Stencil( csmpElementType ),
+                                                       evars, cvars, vset.Pmtrl(elmt_idx) ) );
+                                                       
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
               elmt_idx++;
@@ -405,7 +410,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
               }
             typename plf::colony<Face<dim>>::iterator
                fit = faces_.emplace( Face<dim>( face_idx, fem_manager_.E( csmpElementType ),
-                                                          fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
+                                                          fvm_manager_->Stencil( csmpElementType ), evars, cvars ) );
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
             for ( auto j{0U}; j<nodes; ++j ) {
@@ -512,7 +517,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             typename plf::colony<InterFace<dim>>::iterator
               ifit = interfaces_.emplace( InterFace<dim>( interface_idx,
                                                           fem_manager_.E( csmpElementType ),
-                                                          fvm_manager_.Stencil( csmpElementType ),
+                                                          fvm_manager_->Stencil( csmpElementType ),
                                                           evars, cvars ) );
                                                        
             // number of nodes of the finite-element corresponding to the interface
@@ -710,6 +715,78 @@ if ( !interfaces_.empty() ) {
 
 
 
+/**
+  Initialises the finite volume policy of the elements, faces, and interfaces by assigning the finite volume stencil pointers of the elements to the
+  corresponding finite volume stencils.
+
+@attention If a stencil is assigned already, noting is done. Remove stencil first (NULL ptr in elements)
+
+*/
+template<uint32_t dim>
+void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( fem_manager_.InterpolationOrder() != 1U  ||
+        !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist only for linear FE with local coordinate system.");
+         return;
+      }
+
+    if ( elements_.empty() ) {
+         csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently no Element objects exist to which stencils could be assigned.");
+         return;
+      }
+
+    // 1. initialize the stencil manager (the stencils are build and assigned the correct properties
+    if ( !fvm_manager_ ) {
+         fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
+      }
+
+    // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
+    // storage for fv integration (sector/facet) point properties
+    {
+      const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+      const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+      for ( auto& e : elements_ ) {
+            if ( !e.FV() ) {
+                e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                e.ResizePropertyStorage( lvs, ipvs );
+              }
+        }
+    }
+    // faces
+    if ( !faces_.empty() )
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : faces_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+    // interfaces
+    if ( !interfaces_.empty() )
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : interfaces_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+
+ } // end InitializeFiniteVolumeStencils
+
+
+
+
   // ==============================================================
   //
   // MESH MODIFICATION (following methods)
@@ -846,7 +923,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
    // 1. constructing new element
    typename plf::colony<Element<dim>>::iterator
      eit = elements_.emplace( Element<dim>( elements_.size(),
-                              fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars, material_id ) );
+                              fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) );
 
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
@@ -1136,7 +1213,7 @@ Face<dim>* const MeshManager<dim>::AddFace( Element<dim>* const inner_parent, ui
    // 1. constructing new face
    const size_t face_id = faces_.size();
    typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( fem_manager_, fvm_manager_, inner_parent, outer_parent,
+     fit = faces_.emplace( Face<dim>( fem_manager_, *fvm_manager_, inner_parent, outer_parent,
                                       inner_parent_face_id, outer_parent_face_id, lvars, ivars ) );
    (*fit).Idx( face_id );
 
@@ -1184,7 +1261,7 @@ Face<dim>* const MeshManager<dim>::AddEdgeFace( Face<dim>* const adjacent_face1,
    const size_t face_id = faces_.size();
    const CSMP_FEM_TYPE etype = adjacent_face1->FE()->ElementTypeOfFace(adjacent_face1->InnerParentFaceID());
    typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( fem_manager_.E(etype), fvm_manager_,
+     fit = faces_.emplace( Face<dim>( fem_manager_.E(etype), *fvm_manager_,
                                       adjacent_face1->InnerParent(), adjacent_face2->InnerParent(),
                                       parent_elmt1_segm_id, parent_elmt2_segm_id,
                                       nodes, lvars, ivars ) );
@@ -1222,7 +1299,8 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
    typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ), fvm_manager_, local_face_id, lvars, ivars ) );
+     fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ),
+                                      *fvm_manager_, local_face_id, lvars, ivars ) );
 
    (*fit).Idx( face_number );
 
@@ -1269,7 +1347,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    // 2. constructing new interface
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
@@ -1338,7 +1416,7 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    // 2. constructing new interface
    const size_t iface_id = interfaces_.size();
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
@@ -6424,7 +6502,7 @@ void MeshManager<dim>::Out() const
   cout <<"\nFinite volume stencils: ";
   for ( const auto& fit : etypes ) {
        cout <<"\n"<< parseFiniteElementType( fit );
-       fvm_manager_.Stencil(fit)->Out();
+       if ( fvm_manager_ ) fvm_manager_->Stencil(fit)->Out();
     }
   cout << endl;
   

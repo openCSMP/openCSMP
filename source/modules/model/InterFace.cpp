@@ -792,7 +792,6 @@ bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
 
 
 /**
-
     Returns pointers to the nodes on either side of the Interface.
 
     @section input Input Arguments
@@ -804,6 +803,11 @@ bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
     @param side  side refers to the first or second parent element.
 
     @section implementation Implementation
+    
+    @attention since the nodes match the face of of the adjacent higher-dimensional elements,
+    they are numbered like these within the node container. It follows that the inside nodes in the
+    node connector are in normal order, but the ones for the outside are in reverse order starting
+    with the last node. This is taking into account when they are returned by this method.
 
     A range check is performed.
 
@@ -817,6 +821,8 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
   if ( side == OUTSIDE ) {
       // the number of nodes on a single side of the interface
+      // SKM fix to pass InterFace_Test
+      // const uint32_t outside_idx = static_cast<uint32_t>(node_connector_.size()) - 1U - n;
       const uint32_t outside_idx = n + this->FE()->Nodes();
       return node_connector_[outside_idx];
     }
@@ -836,9 +842,6 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 /**
     Access to nodes on the CURRENT_SIDE of the interface. Taken from member current_side_
     @param n must be the local node index counting from 0 to the number of nodes on one side of the element
-
-
-
 */
 template<uint32_t dim>
 csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
@@ -1017,9 +1020,8 @@ double InterFace<dim>::Area( INTERFACE_SIDE side ) const
         return numeric_limits<double>::signaling_NaN();
      }
    else {
-   // this uses the Coordinate matrix initialised here
-        current_side_ = side;
-        CoordinateMatrix();
+        // this uses the Coordinate matrix initialised here
+        NodeCoordinateMatrix( this->FE()->XY, side );
         return this->FE()->Volume();
      }
 
@@ -1041,7 +1043,7 @@ csmp::Point<dim>  InterFace<dim>::UnitNormal() const
      return middleElement_->UnitNormal();
 
    BisectorCoordinateMatrix();
-   return this->UnitNormal();
+   return Point<dim>( this->FE()->UnitNormal() );
 }
 
 
@@ -1056,9 +1058,8 @@ csmp::Point<dim>  InterFace<dim>::UnitNormal( INTERFACE_SIDE side ) const
     if ( side == MIDDLE && middleElement_ != nullptr )
       return middleElement_->UnitNormal();
     
-    current_side_ = side;
-    CoordinateMatrix();
-    return this->UnitNormal();
+    NodeCoordinateMatrix( this->FE()->XY, side );
+    return Point<dim>( this->FE()->UnitNormal() );
 
  } // end UnitNormal
 
@@ -1088,10 +1089,7 @@ the finite-element matrix assembly. Since the number of element nodes
 may vary among different elements types, the number of rows in XY may
 also vary from element to element.
 
-@param side refers to the parent elements, but can also assume the
-value MIDDLE, referrring to the intervening element.
-
-XY is the DenseMatrix<DM_MIN> class object (value type fT) stored in FiniteElement.
+@param XY is the DenseMatrix<DM_MIN> class object (value type fT) stored in FiniteElement.
 This matrix is dynamically resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
@@ -1099,26 +1097,29 @@ The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
-Finite-element forms of differential equations require the global node
-coordinates of the element to calculate the element constribution to the
-global solution matrix. If the element uses local coordinates, the global
-node coordinates will still be required to compute Jacobian (coordinate-
-transformation) matrix.
+Method will be called by FiniteElementPolicy to initialise XY matrix inside the finite element
 
 @attention when INTERFACE_SIDE == MIDDLE, the node locations on either side of the interface
 are used to find mid-points.
 
 */
 template<uint32_t dim>
-void  InterFace<dim>::CoordinateMatrix() const
+void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+{
+   NodeCoordinateMatrix( XY, current_side_ );
+
+} // end NodeCoordinateMatrix
+
+template<uint32_t dim>
+void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
   const auto n_nodes( this->FE()->Nodes() );
-  this->FE()->XY.Resize( n_nodes, dim );
+  XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i )
-    this->FE()->XY.AssignRow( i, N( i, current_side_ )->Coordinate() );
+    XY.AssignRow( i, N( i, side )->Coordinate() );
 
-} // end CoordinateMatrix
+} // end NodeCoordinateMatrix
 
 
 /**
@@ -1131,7 +1132,7 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   this->FE()->XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i ) {
-       const Point<dim> mid_point = (N( i, INSIDE )->Coordinate() + N( i, OUTSIDE )->Coordinate()) / 2.;
+       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
     }
 

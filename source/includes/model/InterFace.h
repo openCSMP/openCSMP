@@ -259,11 +259,12 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// projects node points onto line returning max distance between them; vec direction can have any length
     double  LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
     
-    /// as needed by FiniteElementPolicy
-    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const { BisectorCoordinateMatrix(); }
+    /// as needed by FiniteElementPolicy (uses current_side_ to retrieve matrix)
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
-    /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
-    void CoordinateMatrix() const;
+    /// as needed in the accumulation process in pde operators for a specifc side
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE side ) const;
+
 
     // ------------------------------------------------------------------------
     // Screen Output

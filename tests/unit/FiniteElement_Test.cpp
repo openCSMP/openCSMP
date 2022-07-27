@@ -223,7 +223,7 @@ void FiniteElement_Test::run()
   {
     std::vector<double> unitNormal;
     std::vector<double> unitNormalTest( femData_.UnitNormal() );
-    femPtr_->UnitNormal( unitNormal );
+    unitNormal = femPtr_->UnitNormal();
     for( auto i = 0; i < femData_.Dim(); ++i )
       _equal( unitNormal.at( i ), unitNormalTest.at( i ) ,femData_.Tolerance());
   }

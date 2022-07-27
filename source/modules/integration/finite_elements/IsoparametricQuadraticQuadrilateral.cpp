@@ -1712,34 +1712,25 @@ Method assumes that the quad is planar. For the case that the
 quad is warped, normals must be calculated for each integration
 point.
 */
-void
-IsoparametricQuadraticQuadrilateral::UnitNormal( std::vector<double>& vc ) const
+vector<double> IsoparametricQuadraticQuadrilateral::UnitNormal() const
  {
-    // normal only exists in 3D
-    vc.resize(3);
+    if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
 
-    if ( dim == 2 ) {
-         vc[0] = vc[1] = static_cast<double>(0.0);
-         vc[2] = static_cast<double>(1.0);
-         return;
-      }
-
-    double X12 = XY(1,0) - XY(0,0), // X
-              X31 = XY(0,0) - XY(2,0),
-              Y12 = XY(1,1) - XY(0,1), // Y
-              Y31 = XY(0,1) - XY(2,1),
-              Z12 = XY(1,2) - XY(0,2), // Z
-              Z31 = XY(0,2) - XY(2,2);
+    const double  X12 = XY(1,0) - XY(0,0), // X
+                  X31 = XY(0,0) - XY(2,0),
+                  Y12 = XY(1,1) - XY(0,1), // Y
+                  Y31 = XY(0,1) - XY(2,1),
+                  Z12 = XY(1,2) - XY(0,2), // Z
+                  Z31 = XY(0,2) - XY(2,2);
 
     // normal to quad
-    vc[0]  = -Y12*Z31 + Z12*Y31;
-    vc[1]  = -Z12*X31 + X12*Z31;
-    vc[2]  = -X12*Y31 + Y12*X31;
+    vector<double> vc{ -Y12*Z31 + Z12*Y31, -Z12*X31 + X12*Z31, -X12*Y31 + Y12*X31 };
     // normalization to unit length
     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
+    return vc;
  }
 
 

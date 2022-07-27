@@ -125,7 +125,7 @@ public:
   void      Component( uint32_t, double );
 
   /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
-  double  Component( uint32_t i ) const;
+  double    Component( uint32_t i ) const;
 
   /// number of entries in tensor (dim x dim = 9 in this 3D case)
   uint32_t  Size() const { return 9U; }

@@ -96,7 +96,7 @@ class FiniteElementPolicy {
   
     /// returns the value of any property interpolated to the element's center of gravity
     template<class Var>
-    void       PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
+    void     PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
 
     /// scalar version
     double   PropertyValueAtBaryCenter( const csmp::Index& ) const;
@@ -140,9 +140,6 @@ class FiniteElementPolicy {
 
     /// retrieve barycenter of element face
     Point<dim> FaceBaryCenter( uint32_t face ) const;
-
-    /// returns area of face i (to be scaled with thickness attribute if this is a lower-dimensional element)
-    double     FaceArea( uint32_t face ) const;
 
     /// returns unit normal to face of element i
     Point<dim> UnitNormalToFace( uint32_t face ) const;
