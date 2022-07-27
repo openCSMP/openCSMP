@@ -786,12 +786,12 @@ void FiniteElementPolicy<dim,CELL>
 
     /// returns search key to match element faces
 template<uint32_t dim, template<uint32_t> class CELL>
-std::set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( uint32_t face_id )
+std::set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( uint32_t face_id ) const
  {
     assert( fptr_ != nullptr );
     assert( face_id < fptr_->Faces() );
  
-    CELL<dim>* eptr( static_cast<CELL<dim>*>(this) );
+    const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
 
     std::set<Node<dim>*>  temp;
     for ( auto nit : fptr_->CornerNodesOfFace(face_id) ) {
@@ -808,12 +808,12 @@ std::set<Node<dim>*>  FiniteElementPolicy<dim,CELL>::CornerNodesOfFace( uint32_t
 /** returns search key to match element faces; pointers in order so that they can be searched
  */
 template<uint32_t dim, template<uint32_t> class CELL>
-std::set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( uint32_t node_id )
+std::set<Node<dim>*> FiniteElementPolicy<dim,CELL>::CornerNodesConnectedTo( uint32_t node_id ) const
  {
     assert( fptr_ != nullptr );
     assert( node_id < fptr_->CornerNodes() );
  
-    CELL<dim>* eptr( static_cast<CELL<dim>*>(this) );
+    const CELL<dim>* const eptr( static_cast<const CELL<dim>* const>(this) );
 
     std::set<Node<dim>*>  temp;
     for ( auto nit : fptr_->NodesConnectedTo(node_id) ) {

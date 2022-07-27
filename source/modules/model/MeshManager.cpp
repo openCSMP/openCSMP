@@ -3720,7 +3720,17 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
            // if the neighbor exists
            if ( f.Neighbor(j) != nullptr )
              vset.Pfvert( eidx, j, f.Neighbor(j)->Idx() );
-           else vset.Pfvert( eidx, j, IRREGULAR );
+           else {
+                // the face is either located on a model boundary or an internal boundary
+                bool all_nodes_at_external_boundary{true};
+                for ( const auto& fnit : f.CornerNodesOfFace(j) )
+                  if ( fnit->AtBoundary() == NOT || fnit->AtBoundary() == INTERNAL ) {
+                       all_nodes_at_external_boundary = false;
+                       break;
+                    }
+                if ( all_nodes_at_external_boundary ) vset.Pfvert( eidx, j, IRREGULAR );
+                else vset.Pfvert( eidx, j, INTERNAL );
+             }
         }
       // higher-dimensional neighbors second
       // inner neighbor
