@@ -231,26 +231,21 @@ void InterFace_Test::Geometry_tests(){
 */
 
     //Unit Normal Test
-    VectorVariable<2> nrml;
-    VectorVariable<2> n_inside, n_outside, n_middle;
-    n_inside.Component(0,  1.0); //True unit normal to
-    n_inside.Component(1,  0.0);
-    n_outside.Component(0,-1.0);
-    n_outside.Component(1, 0.0);
+    Point<2U> nrml, n_inside{1.,0.}, n_outside{-1.,0.}, n_middle;
     n_middle = n_inside;
 
     //starting test
-    if_obj0.UnitNormal(nrml, INSIDE);
+    nrml = if_obj0.UnitNormal(INSIDE);
     _test(nrml == n_inside);
-    if_obj1.UnitNormal(nrml, INSIDE);
+    nrml = if_obj1.UnitNormal(INSIDE);
     _test(nrml == n_inside);
-    if_obj2.UnitNormal(nrml, INSIDE);
+    nrml = if_obj2.UnitNormal(INSIDE);
     _test(nrml == n_inside);
-    if_obj0.UnitNormal(nrml, OUTSIDE);
+    nrml = if_obj0.UnitNormal(OUTSIDE);
     _test(nrml == n_outside);
-    if_obj1.UnitNormal(nrml, OUTSIDE);
+    nrml = if_obj1.UnitNormal(OUTSIDE);
     _test(nrml == n_outside);
-    if_obj2.UnitNormal(nrml, OUTSIDE);
+    nrml = if_obj2.UnitNormal(OUTSIDE);
     _test(nrml == n_outside);
 
     // Testing that unit normal throws exception when it has no base element
@@ -298,12 +293,13 @@ void InterFace_Test::Geometry_tests(){
     _equal( sqrt(2.0), if_obj1.LengthInDirection(vec), 1.0E-4);
     _equal( sqrt(2.0), if_obj2.LengthInDirection(vec), 1.0E-4);
 
-    _test( if_obj0.LengthInDirection(nrml) == 0.0);
-    _test( if_obj1.LengthInDirection(nrml) == 0.0);
-    _test( if_obj2.LengthInDirection(nrml) == 0.0);
+    VectorVariable<2> direction( nrml );
+    _test( if_obj0.LengthInDirection(direction) == 0.0);
+    _test( if_obj1.LengthInDirection(direction) == 0.0);
+    _test( if_obj2.LengthInDirection(direction) == 0.0);
 
 
-    //Testing Coordinate matrix -- WHICH ONE???
+    //Testing Coordinate matrix member Element, Face, InterFace
     DenseMatrix<DM_MIN> XY_inside(2, 2);
     XY_inside.AssignRow(0, n2.Coordinate());
     XY_inside.AssignRow(1, n3.Coordinate());
@@ -313,10 +309,11 @@ void InterFace_Test::Geometry_tests(){
     XY_outside.AssignRow(1, n4.Coordinate());
 
     DenseMatrix<DM_MIN> XY(2,2);
-    if_obj0.NodeCoordinateMatrix( XY , INSIDE);
-    //_test( XY_inside == XY);
-    if_obj0.NodeCoordinateMatrix( XY, OUTSIDE);
-
+    if_obj0.CoordinateMatrix();
+    _test( XY_inside == if_obj0.FE()->XY );
+    if_obj0.CurrentSide( OUTSIDE );
+    if_obj0.CoordinateMatrix();
+    _test( XY_outside == if_obj0.FE()->XY );
 }
 
 

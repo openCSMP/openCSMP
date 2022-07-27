@@ -38,19 +38,16 @@ namespace csmp {
       /// initialises 2022 SKUA model with properties from binary version of VSet
       void Test_InitialiseSKUA_Model( const std::string& file_name );
         
-
       /// tests that all properties are properly added to nodes on split boundary
       bool Test_InputNodePropertyValue(const char* mesh_file);
 
       /// integrates the property over the boundary line or surface
       bool Test_Area_and_SurfaceIntegral(const char* mesh_file);
 
-
       // TODO - ALl tests below are still to be done
 
       /// returns location of split boundary relative to adjacent region
       bool Test_FacingDirection();
-
 
       /// outputs length of perimeter curve of a 3D split boundary; no meaning in 1 or 2D models
       bool Test_PerimeterCalculation();

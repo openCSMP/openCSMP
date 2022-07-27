@@ -240,34 +240,30 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// returns area of the interface; MIDDLE case is returned only if there is an intervening element
     double  Area( INTERFACE_SIDE=INSIDE ) const;
     
-    /// unit normals on either side point from INSIDE to OUTSIDE, but have different orientation when nodes are spatially separated 
-    void    UnitNormal( VectorVariable<dim>&, INTERFACE_SIDE side ) const;
+    /// returns the outward-pointing unit normal (from INSIDE to OUTSIDE)  using the middle element (if any) or inside node coordinates to construct face
+    csmp::Point<dim>  UnitNormal( INTERFACE_SIDE side ) const;
   
-    /// returns normal to original side of interface (the one of the surface element from which the InterFace was constructed originally)
-    void    UnitNormal( VectorVariable<dim>& ) const;
-  
-    /// returns normal pointing from inside to outside higher-dimensional Element of InterFace, calculated for bisector plane if intervening element is present
+    /// returns the outward-pointing unit normal (from INSIDE to OUTSIDE)  using the middle element (if any) or bisector node coordinates to construct face
     csmp::Point<dim>  UnitNormal() const;
 
     /// computes distance between corresponding pairs of nodes; @return false if nodes overlap, true if they are separated
-    // TODO: review this functionality / adapt to manifolds
-    bool    NodeSpacing( uint32_t n_local, VectorVariable<dim>& ) const;
+    double NodeSpacing( uint32_t n_local ) const;
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
     void    NodePropertyVector( const csmp::Index&, std::vector<Var>&, INTERFACE_SIDE=INSIDE ) const;
-
-    /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
-    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>&, INTERFACE_SIDE ) const;
-
-    /// inputs node coordinates into supplied matrix; treating the Interface like a volumetric element; @note makes  sense only if there is a finite node separation, else degenerate
-    void    NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const;
 
     /// the centre of gravity of the element (returns the mid-point of the 2-sides if detached)
     Point<dim>  BaryCenter() const;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
     double  LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    
+    /// as needed by FiniteElementPolicy
+    void NodeCoordinateMatrix( DenseMatrix<DM_MIN>& ) const { BisectorCoordinateMatrix(); }
+
+    /// inputs node coordinates into supplied matrix; for MIDDLE the nodes of the intervening element are used if this is present
+    void CoordinateMatrix() const;
 
     // ------------------------------------------------------------------------
     // Screen Output
@@ -276,6 +272,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     void Out() const;
     
   protected:
+
+    /// calculates the coordinate matrix from node coordinates representing the average of the inside and outside nodes of the interface
+    void    BisectorCoordinateMatrix() const;
 
     /// finds the local numbers of the faces of the higher-dimensional element that will be connected by the interface; uses point coordinates that must be matched
     std::pair<uint32_t,uint32_t>  SharedElementFaces();
@@ -303,8 +302,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     uint32_t       inner_parent_face_id_ = UNSPECIFIED; ///< face number of inside higher-dimensional parent element
     uint32_t       outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
     // used for compatibility with Element and Face methods (Neighbor etc.)
-    INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
-    bool           collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
+    mutable INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
+    bool                   collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
     friend class InterFace_Test; ///< friend declaration needed for the testing of private methods
 };
