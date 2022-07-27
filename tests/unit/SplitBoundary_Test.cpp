@@ -13,6 +13,174 @@ using namespace std;
 namespace csmp
 {
 
+
+
+
+
+//Main funtion where all tests inut here will be run
+void SplitBoundary_Test::run()
+{
+
+
+ //linear 2d tests
+ Test_InputNodePropertyValue("InternalBoundary_test");
+ Test_Area_and_SurfaceIntegral("InternalBoundary_test");
+
+ //quadratic 2d tests
+ Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
+ Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
+
+
+  // test splitboundary between 2D regions
+  /*
+  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
+  test_splitboundary_between_regions<2U>( "ThreeZones2D" );
+
+  // test splitboundary between 3D regions
+  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
+  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
+
+  // test splitboundary around interfaces
+  // JC: working on the QC process which is requried for the following models
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+
+  // test splitboundary from constructor of ansys model
+  // JC: working on the QC process which is requried for the following models
+  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
+
+  // test splitboundary for complex ansys models
+  test_splitboundary_between_regions<3U>( "lamination" );
+  test_splitboundary_between_regions<2U>( "kueper_one_interface" );
+  */
+
+
+}
+
+
+
+
+//E.P Added Tests to SplitBoundary
+
+//Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
+bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
+
+  enum {dim=2U};
+  // Model initialization
+  //const char* mesh_file_lin("InternalBoundary_Test");
+  //const char* mesh_file_quad("InternalBoundary_Test_quadratic");
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+
+  ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+
+  pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
+  std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+
+  int32_t material_id = 1;
+  model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
+  model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+
+  SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+
+  ScalarVariable val1(PLAIN, 1.0);
+  ScalarVariable val2(PLAIN, 2.0);
+  ScalarVariable val3(PLAIN, 3.0);
+  s_ref.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
+  s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
+  s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
+
+  for (typename std::vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
+    for (size_t i=0; i < (*ifit)->FE()->Nodes(); i++){
+      _test( (*ifit)->N(i, INSIDE)->Read(model.Database().StorageKey("inside"))   == 1.0);
+      _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside"))  == 2.0);
+      _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))  == 3.0);
+    }
+  }
+
+return true;
+
+
+}
+
+//Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
+bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
+
+  enum {dim=2U};
+  // Model initialization
+  //const char* mesh_file_lin("InternalBoundary_Test");
+  //const char* mesh_file_quad("InternalBoundary_Test_quadratic");
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+
+  //model construction
+  ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+
+  //split boundary construction
+  pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
+  std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+
+  int32_t material_id;
+  model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+
+  model.Database().Out();
+  //property construction
+  model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+
+  SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+
+  ScalarVariable val1(PLAIN, 1.0);
+  ScalarVariable val2(PLAIN, 2.0);
+  ScalarVariable val3(PLAIN, 3.0);
+  s_ref.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
+  s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
+  s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
+
+  double area_inside  =  s_ref.Area(INSIDE);
+  double area_outside =  s_ref.Area(OUTSIDE);
+  double area_middle  =  s_ref.Area(MIDDLE);
+
+  _test(area_inside == area_outside);
+  _test(area_middle == area_inside);
+  _equal(area_inside, 2.12121, 0.0001); //actual area of crack not pulled apart
+
+  double int_inside = s_ref.SurfaceIntegral(model.Database(), "inside", INSIDE);
+  double int_outside = s_ref.SurfaceIntegral(model.Database(), "outside", OUTSIDE);
+  double int_middle = s_ref.SurfaceIntegral(model.Database(), "middle", MIDDLE);
+
+  _equal(     area_inside ,  int_inside,  0.0001);
+  _equal( 2.0*area_outside,  int_outside, 0.0001);
+  _equal( 3.0*area_middle ,  int_middle , 0.0001);
+
+  SplitBoundaryInterface_Test vis_method;
+  vis_method.PullApartSplitboundaries(model, 1.0);
+
+  //spltting boundaries and testing area again
+  area_inside  =  s_ref.Area(INSIDE);
+  area_outside =  s_ref.Area(OUTSIDE);
+  double new_area_middle  =  s_ref.Area(MIDDLE);
+  _test(area_inside > area_middle);
+  _test(area_outside > area_middle);
+  _test(area_middle == new_area_middle);    //not changed area of middle element
+
+return true;
+
+
+}
+
+
+
+
+
+
 template<uint32_t dim>
 void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
 {
@@ -676,36 +844,5 @@ void SplitBoundary_Test::OutputToFile( const char* file_name,
 
 } // end outputToFile
 
-
-
-void SplitBoundary_Test::run()
-{
-  // test splitboundary between 2D regions
-  /*
-  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
-  test_splitboundary_between_regions<2U>( "ThreeZones2D" );
-
-  // test splitboundary between 3D regions
-  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
-  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
-
-  // test splitboundary around interfaces
-  // JC: working on the QC process which is requried for the following models
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
-  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
-
-  // test splitboundary from constructor of ansys model
-  // JC: working on the QC process which is requried for the following models
-  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
-  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
-
-  // test splitboundary for complex ansys models
-  test_splitboundary_between_regions<3U>( "lamination" );
-  test_splitboundary_between_regions<2U>( "kueper_one_interface" );
-  */
-
-}
 
 } // csmp

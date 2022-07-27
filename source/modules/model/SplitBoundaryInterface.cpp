@@ -1337,10 +1337,10 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
       
      // 2. creating elements within InterFace objects with node-numbering matching that of corresponding INNER parent element face
      // --------------------------------------------------------------------------------------------------------------------------
-     vector<Node<dim>*>  nodes;  nodes.reserve(4);
      counter = 0U;
      for ( auto& it : splitBoundary.CellVector() ) {
            // nodes
+         vector<Node<dim>*>  nodes;  nodes.reserve(4);
            for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
              nodes.push_back( node_pointers[ it->N(i)->Idx() ] );
            // interior and perimeter elements

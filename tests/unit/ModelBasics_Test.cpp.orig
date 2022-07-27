@@ -88,8 +88,13 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      test_Create_FracBox( topology, vset );
 
      // creating model
+<<<<<<< HEAD
+     const bool create_boundaries_from_faces{false};
+     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", create_boundaries_from_faces );
+=======
      const bool do_not_use_regions_file{true};
      Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", do_not_use_regions_file );
+>>>>>>> 4ace9e140c95f86626ccb12058cf7370dbc8c37e
      model.Name("FracBox");
      
      // assigning some dummy values to verify functionality

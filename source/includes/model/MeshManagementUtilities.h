@@ -142,6 +142,10 @@ double angleBetweenLineCells( const CELL<dim>* const cell1, const CELL<dim>* con
 template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
 
+///Loops over begin and end iterators of an element colony and counts all the corner nodes
+template<uint32_t dim>
+size_t countCornerNodes( typename plf::colony<Element<dim>>::const_iterator elmts_begin, typename plf::colony<Element<dim>>::const_iterator elmts_end  );
+
 /// relying on the parent element information from its nodes, method finds higher-dim neighbors of each element face and connects itself with them and vice versa; returns # found
 template<uint32_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const );

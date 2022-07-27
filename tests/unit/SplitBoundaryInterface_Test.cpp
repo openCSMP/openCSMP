@@ -67,7 +67,7 @@ void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
       else
         (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
       displacementPerpedicularToInterface *= shift;
-      const size_t nodes( (*it)->Nodes() );
+      const size_t nodes( (*it)->FE()->Nodes() );
       for ( auto i{0U}; i < nodes; ++i )
       {
         if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )

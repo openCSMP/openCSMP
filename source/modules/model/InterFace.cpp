@@ -834,13 +834,17 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
 
 /**
-    Access to all nodes of the interface.
+    Access to nodes on the CURRENT_SIDE of the interface. Taken from member current_side_
+    @param n must be the local node index counting from 0 to the number of nodes on one side of the element
+
+
+
 */
 template<uint32_t dim>
 csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
 {
-  assert( n < node_connector_.size() );
-  return node_connector_[n];
+  assert( n < this->FE()->Nodes() );
+  return this->N(n,current_side_);
 }
 
 
@@ -1140,15 +1144,20 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_S
 } // end CoordinateMatrix
 
 
+/**
+ * @brief InterFace::NodeCoordinateMatrix
+ * @param XY returns the coordinate matrix with the nodes of the CURRENT_SIDE_ of the Interface object
+ *
+ */
 
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
-  const auto n_nodes( Nodes() );
+  const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i )
-    XY.AssignRow( i, N( i )->Coordinate() );
+    XY.AssignRow( i, N( i, current_side_ )->Coordinate() );
 
 } // end CoordinateMatrix
 

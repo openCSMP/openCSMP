@@ -188,7 +188,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsBegin() const;
     typename std::vector<csmp::InterFace<dim>*>::const_iterator   NeighborsEnd()   const;
 
-    /// access to all nodes connected to the InterFace (inside nodes first)
+    /// access ONLY to the nodes on the Current_Side of the interface (determined by member current_side_)
     csmp::Node<dim>* const N( uint32_t n_local ) const;
     
     /// access the nodes that are connected to either, the inside or the outside of the Face
