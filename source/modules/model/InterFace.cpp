@@ -374,12 +374,12 @@ typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd()
 template<uint32_t dim>
 void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 {
-  if ( vis.ApplicationTarget() == INTER_FACE )
-  {
-    vis.Visit( this );
-    return;
-  }
+  if ( vis.ApplicationTarget() == INTER_FACE ) {
+      vis.Visit( this );
+      return;
+    }
   throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
+  
 } // end Accept
 
 
@@ -1192,12 +1192,11 @@ BaryCentre().
 template<uint32_t dim>
 Point<dim>  InterFace<dim>::BaryCenter() const
 {
-  Point<dim>  pt( N( 0U )->Coordinate() );
-  const auto  n_nodes( node_connector_.size() );
+  Point<dim>  pt; // initialised to zero
 
   // all the nodes on both sides
-  for ( auto i = 1U; i<n_nodes; ++i )
-    pt += N( i )->Coordinate();
+  for ( const auto& n : node_connector_ )
+    pt += n->Coordinate();
 
   return pt / static_cast<double>(Nodes());
 }
@@ -1239,10 +1238,9 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
   // avoid division by zero
   assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
-  const auto n_nodes( node_connector_.size() );
-  for ( auto i = 0; i<n_nodes; ++i ) {
+  for ( const auto& n : node_connector_ ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-    double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
+    double fTemp( vecDirection.DotProduct( n->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
 
     // update minimum value
