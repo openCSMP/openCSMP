@@ -47,7 +47,7 @@ public:
   ~MeshManager();
 
   /// sets up distributed storage for variables, finite elements, and mesh connectivity, returns vectors of pointers remembering index-pointer mapping
-  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>& );
+  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>&, bool initialise_FV_stencils = false );
 
   // ==============================================================
   //

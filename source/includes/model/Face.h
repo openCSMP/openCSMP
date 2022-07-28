@@ -70,14 +70,14 @@ class Face : public FiniteElementPolicy<dim,Face>,
     /// constructs model-boundary face as n-th (external) boundary face of the supplied higher dimensional parent element; no neighbor faces yet
     Face( Element<dim>& inner_parent,
           csmp::FiniteElement* FE_type_of_boundary_face,
-          const FiniteVolumeStencilManager<dim>&,
+          const FiniteVolumeStencilManager<dim>*,
           uint32_t n_boundary_face,
           const LocalVariables&,
           const IntegrationPointVariables& );
 
     /// constructs face shared by the two volumetric elements inside of the model 
     Face( const FiniteElementManager&,
-          const FiniteVolumeStencilManager<dim>&,
+          const FiniteVolumeStencilManager<dim>*,
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           uint32_t inner_parent_face_id,
@@ -87,7 +87,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
    /// constructs face shared by the two volumetric elements inside of the model auto-detecting shared faces and nodes
     Face( const FiniteElementManager&,
-          const FiniteVolumeStencilManager<dim>&,
+          const FiniteVolumeStencilManager<dim>*,
           Element<dim>* const inner_parent,
           Element<dim>* const outer_parent,
           const LocalVariables&,
@@ -95,7 +95,7 @@ class Face : public FiniteElementPolicy<dim,Face>,
 
     /// constructs model-edge line-element face connected with one or two Element objects that share their edge nodes with the Face on the model boundary
     Face( csmp::FiniteElement* FE_type_of_boundary_face,
-          const FiniteVolumeStencilManager<dim>&,
+          const FiniteVolumeStencilManager<dim>*,
           Element<dim>* const parent_of_face1,
           Element<dim>* const parent_of_face2,
           uint32_t parent_elmt1_segm_id,

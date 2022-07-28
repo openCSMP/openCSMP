@@ -58,9 +58,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
     node_connector_( f->Nodes(), nullptr )
 {
    assert( f != nullptr );
-   // currently we only have FV stencils for linear isoparametric elements
-   if ( this->UsesLocalCoordinates() && this->Interpolation() == 1 )
-     assert( fvs != nullptr );
 }
 
 
@@ -80,8 +77,6 @@ Element<dim>::Element( csmp::FiniteElement* f,
 {
   assert( f != nullptr );
   if ( this->UsesLocalCoordinates() ) {
-       // currently we only have FV stencils for linear isoparametric elements
-       if ( this->Interpolation() == 1 ) assert( fvs != nullptr );
        this->ResizePropertyStorage( ep, cp );
     }
   else
@@ -111,8 +106,6 @@ Element<dim>::Element( size_t idx,
 {
   assert( f != nullptr );
   if ( this->UsesLocalCoordinates() ) {
-       // currently we only have FV stencils for linear isoparametric elements
-       if ( this->Interpolation() == 1 ) assert( s != nullptr );
        this->ResizePropertyStorage( ep, cp );
     }
   else
