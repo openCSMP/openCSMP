@@ -41,6 +41,7 @@
 #include <exception>
 #include <cassert>
 #include <cerrno>
+#include <limits>
 
 namespace io {
         ////////////////////////////////////////////////////////////////////////////
