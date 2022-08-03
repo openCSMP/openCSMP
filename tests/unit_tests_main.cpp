@@ -360,7 +360,8 @@ int main()
       interdependent2.addTest( new PropertyHandle_Test() );       // XCode OK (SKM)
       
       // model subdomains
-      interdependent2.addTest(new SplitBoundaryInterface_Test());
+      interdependent2.addTest(new SplitBoundaryInterface_Test<2U>());
+      interdependent2.addTest(new SplitBoundaryInterface_Test<3U>());
       interdependent2.addTest(new SplitBoundary_Test());
       
       // interfaces
