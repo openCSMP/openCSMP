@@ -229,7 +229,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::OutputSplitBoundariesTo
           BinaryFileSectionWrite hdr(fp, "ONE_BDRY");
           cout <<"'"<< (*bit).first <<"' ";
           cout.flush();
-          (*bit).second.WriteDomainIndexesToBinaryFile( fp );
+          (*bit).second.WriteIndexesToBinaryFile( fp );
           // NB: splitboundary objects have no BOX_BOUNDARY flag values because these always default to INTERNAL.
           // writing the stored variables
           domainVariablesOut( fp, (*bit).second, splitBoundaryComplex.Database() );
@@ -297,7 +297,7 @@ bool SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InputSplitBoundariesFro
 
            // 1.1 reading name and face indices for each boundaries
            SubDomainInfo  info;
-           readDomainIndexesFromBinaryFile( dim, fp, info );
+           readIndexesFromBinaryFile( dim, fp, info );
           
            // 1.3 reading the split boundary objects
            pair<typename map<string,csmp::SplitBoundary<dim> >::iterator,bool>
@@ -1283,6 +1283,9 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
     2) Extends an already existing lower dimensional middle region of the split boundary to include any new interface objects which have the Middle_Element = nullptr.
 
     //E.P TODO: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case!
+    
+    TODO: May be do this mainly in the MeshManager using one of the methds that takes the adjacent higher-dim elements as an input
+    TODO: In this case, the input information is similar to entries of a VSet: new 'nodes', 'pelmt' and 'plist' vectors
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
@@ -1296,73 +1299,62 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
          return make_pair("no Region created",false);
        }
      
-     SPLITBOUNDARY_COMPLEX<dim>*  model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
-     csmp::SplitBoundary<dim>&    splitBoundary( model->SplitBoundary(split_boundary) );
-     csmp::MeshManager<dim>&      mesh( model->Mesh() );
-     const LocalVariables&        lvars( model->Database().LocalVariablesAt( NODE ) );
+     SPLITBOUNDARY_COMPLEX<dim>*      model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+     csmp::SplitBoundary<dim>&        splitBoundary( model->SplitBoundary(split_boundary) );
+     csmp::MeshManager<dim>&          mesh( model->Mesh() );
+     const LocalVariables&            nlvars( model->Database().LocalVariablesAt( NODE ) );
+     const LocalVariables&            lvars( model->Database().LocalVariablesAt( ELEMENT ) );
+     const IntegrationPointVariables& ivars( model->Database().IntegrationPointVariablesAt( ELEMENT ) );
      
      // 1. creating unique set of nodes matching those on the inside of the SplitBoundary in position
-     // --------------------------------------------------------------------------------------------------------------------------
-     // NB: the use of Duplicate() ascertains that the MeshManager registers the new collocated nodes with the NodeManifoldManager
-     set<Node<dim>*>     unique_new_nodes;
-     vector<Node<dim>*>  node_pointers; // linear array of the nodes of one face after another
-     node_pointers.reserve( splitBoundary.Cells() );
-     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it ) {
-          const size_t n_nodes((*it)->Nodes());
-          // looping over the nodes on the inside of the interface which must be manifolds
-          for ( auto i{0U}; i<n_nodes; ++i ) {
-               assert( (*it)->N(i)->IsManifold() );
-               pair<typename set<Node<dim>*>::iterator,bool> nit=unique_new_nodes.insert( (*it)->N(i) );
-               // if the node is not yet contained in 'unique_new_nodes' it is created and added, but only if
-               if ( nit.second ) {
-                    // the corresponding NodeManifold does not already contain an isolated central node from another SB with intervening elements
-                    // (this also covers the case of a SplitBoundary intersection where there should only be one intervening node in the middle)
-                    if (  (*it)->N(i)->Manifold()->Branches() > 2U ) {
-                         // finding intervening node, if any, and inserting it into the node pointer
-                         Node<dim>* nptr = (*it)->N(i)->Manifold()->MIDDLE_Node();
-                         if ( nptr != nullptr )
-                           node_pointers.push_back( nptr );
-                         else // a new node has to be generated
-                           node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
-                      }
-                    //                            inserts the new node it creates into the corresponding NodeManifold
-                    else node_pointers.push_back( mesh.Duplicate( (*it)->N(i), MIDDLE, lvars ) );
-                 }
-               // else the already created new node is added
-               else node_pointers.push_back( (*nit.first) );
-            }
-       }
-     unique_new_nodes.clear();
+     // ---------------------------------------------------------------------------------------------
+     vector<Node<dim>*>    node_pointers; // to the new nodes
+     vector<Element<dim>*> elmt_pointers; // new elements
      
+     // 1.1 to start with, a unique set of inside nodes is created for duplication
+     pair<vector<Node<dim>*>,size_t>  inside_nodes = splitBoundary.InsideNodes();
      
+     // 1.2 the indices of these nodes are numbered so that the new duplicated node vector can be accessed for assignments
+     size_t counter{0U};
+     for ( auto& nit : inside_nodes.first )
+       nit->Idx( counter++ );
+     
+     // 1.3 now the nodes are duplicated except for the ones on the perimeter of the SplitBoundary
+     //     away from model boundaries. Without duplication, the original node is stored
+     // interior nodes
+     for ( size_t i{0U}; i<inside_nodes.second; i++ )
+       node_pointers.push_back( mesh.Duplicate( inside_nodes.first[i], nlvars ) );
+     // perimeter nodes
+      for ( size_t i{ inside_nodes.second }; i<inside_nodes.first.size(); i++ ) {
+           // duplicating the nodes only if they are not free-standing in a volume
+           if ( inside_nodes.first[i]->AtBoundary() != NOT )
+             // NODE GENERATION
+             node_pointers.push_back( mesh.Duplicate( inside_nodes.first[i], nlvars ) );
+           else // pointers to the existing nodes are inserted
+             node_pointers.push_back( inside_nodes.first[i] );
+        }
+     assert( node_pointers.size() == inside_nodes.first.size() );
+      
      // 2. creating elements within InterFace objects with node-numbering matching that of corresponding INNER parent element face
      // --------------------------------------------------------------------------------------------------------------------------
-     const LocalVariables             element_props           = model->Database().LocalVariablesAt( ELEMENT );
-     const IntegrationPointVariables  integration_point_props = model->Database().IntegrationPointVariablesAt( ELEMENT );
-     vector<Element<dim>*>            new_elmts;
-     new_elmts.reserve( splitBoundary.Cells() );
-     size_t node_offset(0U); // for moving through the node-pointer vector
-     
-     for ( auto it=splitBoundary.CellsBegin(); it!=splitBoundary.CellsEnd(); ++it )
-       {
-          assert( (*it)->Parent(MIDDLE) == nullptr );
-          // extracting element-node subvector
-          const auto n_nodes( (*it)->FE()->Nodes() );
-          vector<Node<dim>*> nodes( &node_pointers[node_offset], &node_pointers[node_offset+n_nodes] );
-
-          // construct the new element
-          new_elmts.push_back(  model->Mesh().AddInterveningElement( (*it),
-                                                                     element_props, integration_point_props,
-                                                                     nodes, material_id ) );
-          node_offset += n_nodes;
+     counter = 0U;
+     for ( auto& it : splitBoundary.CellVector() ) {
+           // nodes
+         vector<Node<dim>*>  nodes;  nodes.reserve(4);
+           for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+             nodes.push_back( node_pointers[ it->N(i)->Idx() ] );
+           // interior and perimeter elements
+           it->Idx( counter++ );
+           // ELEMENT GENERATION - the elements are connected to their nodes and the middle element
+           elmt_pointers.push_back( mesh.AddInterveningElement( it, lvars, ivars, nodes, material_id ) );
        }
        
      // 3. establishing neighbor connectivity among the new elements
      // ------------------------------------------------------------
      if constexpr ( dim == 2U )
-       mesh.template BuildLineConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
+       mesh.template BuildLineConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
      if constexpr ( dim == 3U )
-       mesh.template BuildSurfaceConnectivity<Element>( new_elmts.begin(), new_elmts.end() );
+       mesh.template BuildSurfaceConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
 
 
      // 4. construct the new unique region between the interface elements in the model
@@ -1373,7 +1365,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      region_name.replace( region_name.find("SPLIT_BOUNDARY"), str_length, "REGION" );
      
      const bool  unique_map(true);
-     model->FormRegionFrom( region_name.c_str(), new_elmts.begin(), new_elmts.end(), unique_map );
+     model->FormRegionFrom( region_name.c_str(), elmt_pointers.begin(), elmt_pointers.end(), unique_map );
      // add new unique region to model region
      model->Region("Model").Add( model->Region(region_name) );
      

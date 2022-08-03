@@ -1,4 +1,5 @@
 #include "DenseMatrix.h"
+#include "compareFloats.h"
 #include <algorithm>
 
 // #define CSMP_DENSE_MATRIX_DEBUG // uncomment this to invoke debugging
@@ -1601,10 +1602,23 @@ void DenseMatrix<mn_max>::Out( long digits ) const
 
 
 // ------------------------------------------------------------------------------
-// template instantiations
+// template instantiations, specialisations and overloaded operators
 // ------------------------------------------------------------------------------
 
 template class DenseMatrix<DM3>;
+
+template<>
+bool operator==( const DenseMatrix<DM_MIN>& MA, const DenseMatrix<DM_MIN>& MB )
+ {
+    assert( MA.Rows() == MB.Rows() );
+    assert( MA.Cols() == MB.Cols() );
+    for ( auto i{0U}; i<MA.Rows(); i++ )
+      for ( auto j{0U}; j<MA.Cols(); j++ )
+        if ( essentiallyEqual( MA(i,j), MB(i,j) ) == false ) return false;
+         
+    return true;
+ }
+
 
 template DenseMatrix<DM3>  operator+( 
                       const DenseMatrix<DM3>& a, 

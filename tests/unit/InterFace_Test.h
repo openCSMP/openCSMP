@@ -34,7 +34,7 @@ class InterFace_Test : public Test
                                          Element<2> &e_nb_ou1, Element<2> &e_nb_ou2 );
 
   private:
-    const bool verbose_ = true;
+    const static bool verbose_ = true;
 };
 
 } //end csmp

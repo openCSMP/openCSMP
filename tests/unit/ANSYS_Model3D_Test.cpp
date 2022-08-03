@@ -24,7 +24,7 @@ namespace csmp
       Timer timer;
       timer.Start();
       //                          fileset       regions-file
-      ANSYS_Model3D modelOutput1( "BoxHalfs3D", "BoxHalfs3Dirregular", variablesFile.c_str(), true );
+      ANSYS_Model3D modelOutput1( "BoxHalfs3D", "BoxHalfs3D", variablesFile.c_str(), true );
       const double icemModelTime( timer.Stop() );
 
       size_t nullNeighborsOut(0);
@@ -269,7 +269,7 @@ namespace csmp
         modelOutput3.OutputToBinaryFile("ANSYS_Model3D_Test_modelOutput3");
 
         const string file_name3("ANSYS_Model3D_Test_modelOutput3");
-        Model<3> modelInput3( file_name, set<string>({}) );
+        Model<3> modelInput3( file_name3, set<string>({}) );
         _test( modelInput3.Boundary("BOUNDARY1").Nodes() == modelOutput3_boundar1NodesOut );
         _test( modelInput3.Boundary("BOUNDARY2").Nodes() == modelOutput3_boundar2NodesOut );
         _test( modelInput3.Boundary("BOUNDARY3").Nodes() == modelOutput3_boundar3NodesOut );

@@ -522,15 +522,16 @@ void SKUA_Example::RunSKUA_cross_bedded_xsmall()
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
     // --------------------------------------------
-    InputDataManager<3U>  model_configuration;
-    model_configuration.Configure_ANSYS_ModelFromFile( model, model_name.c_str() );
-  //model.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,1.0e+07) ); // always in Pascal
-  //model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.0) ); // no sources/sinks (units m3 m-2 s-1)
-  //Boundary<3U>& left = model.Boundary( "LEFT" );
-  //left.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,3.0e+07) );
-  //Boundary<3U>& right = model.Boundary( "RIGHT" );
-  //right.InputPropertyValue( "fluid pressure", makeScalar(DIRICH,1.0e+07) );
-
+    //InputDataManager<3U>  model_configuration;
+    /*
+    model_configuration.ConfigureFromFile(  model, model_name.c_str(),
+                                            false,   // region name from parameter range
+                                            true,    // default property values
+                                            true,    // regional property values
+                                            true,    // boundary conditions for box-shaped model
+                                            false,   // essential conditions for regions
+                                            false );
+    */
     RunTutorial1OnSetUpModel( model );
 
     // terminate

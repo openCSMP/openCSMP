@@ -18,6 +18,9 @@ class VData_Test : public Test {
   public:
     virtual void run();
     
+    // test read-write complete VSet, including boundaries and interfaces
+    void TestBinaryIO();
+    
     // checks whether mesh is still intact after corner elements were split
     // test model FracBox
     bool TestReplacementOfCornerTetrahedra();
@@ -27,6 +30,8 @@ class VData_Test : public Test {
     */
     void Test_CreateConsistentLineElementOrientations2D();
 
+    void Test_InitialiseNodeTopologyIdentifiers();
+  
 };
 
 

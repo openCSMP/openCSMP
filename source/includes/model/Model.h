@@ -226,6 +226,9 @@ public:
 
   /// read-only access to the finite element types that are needed to support the current mesh
   const  FiniteElementManager&  FE_Manager() const;
+  
+  /// prompts the finite volume manager to connect the elements and faces with finite volume stencils 
+  void InstantiateFiniteVolumes();
 
   PLACEMENT Placement() const { return MODEL; }
 

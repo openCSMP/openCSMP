@@ -63,12 +63,12 @@ double  ArrayVariable::Component( uint32_t i ) const
       return data_[i];
    }
 
-size_t ArrayVariable::Size() const
+uint32_t ArrayVariable::Size() const
     {
-      return data_.size();
+      return static_cast<uint32_t>(data_.size());
     }
 
-void ArrayVariable::Resize( size_t newSize, double newValue )
+void ArrayVariable::Resize( uint32_t newSize, double newValue )
     {
       data_.resize( newSize, newValue );
     }

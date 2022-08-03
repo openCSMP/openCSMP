@@ -36,22 +36,23 @@ void ANSYS_Model2D::InitializeANSYS( bool isoparametric,
     // 1. recreating 'pfverts' information because ANSYS ICEM CFD does not get the neighbor connectivity right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
+    vset.InitialiseNodeTopologyIdentifiers();
 
     // 2. writing original element and node numbers to property data and storing them in VSet
     if ( Database().IsDefined( "element number" ) ) {
-      // element numbers
-      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
-      elmt_nums.Reserve( vset.Elements() );
-      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
-      vset.AddData( "element number", elmt_nums );
-    }
+        // element numbers
+        PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+        elmt_nums.Reserve( vset.Elements() );
+        for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+        vset.AddData( "element number", elmt_nums );
+      }
     if ( Database().IsDefined( "node number" ) ) {
-      // node numbers
-      PropertyData node_nums( NODE, SCALAR, 2U );
-      node_nums.Reserve( vset.Vertices() );
-      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
-      vset.AddData( "node number", node_nums );
-    }
+        // node numbers
+        PropertyData node_nums( NODE, SCALAR, 2U );
+        node_nums.Reserve( vset.Vertices() );
+        for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+        vset.AddData( "node number", node_nums );
+      }
 
     // 3. constructing model from the polygonal data in the VSet and the region information in model topology
     // 3.1 using only the selected regions from the -regions.txt file
@@ -143,6 +144,7 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
     // create 'pfverts' information because the one ANSYS does not get the line element orientations right
     vset.RemovePfverts();
     vset.EstablishElementConnectivity2D();
+    vset.InitialiseNodeTopologyIdentifiers();
     
     // 1. writing element and node numbers to property data and storing them in the VSet
     if ( Database().IsDefined( "element number" ) ) {

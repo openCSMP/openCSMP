@@ -567,16 +567,16 @@ void IsoparametricQuadraticTetrahedron_Test::CheckInterpolation( const Element<3
 */
 void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const Element<3U>& e )
  {
-    vector<double>   nrml;
-    VectorVariable<3>  flux(PLAIN,PLAIN,PLAIN,0.3,0.5,1.0);
-    vector<double>   IPOL(6);
-    double           flux_balance(0.);
+    vector<double>    nrml;
+    VectorVariable<3> flux(PLAIN,PLAIN,PLAIN,0.3,0.5,1.0);
+    vector<double>    IPOL(6);
+    double            flux_balance(0.);
  
     cout <<"\nElement "<< e.Idx() <<", volume: "<< e.Volume();
  
     // 0. generating face normals, scaling and storing them
     // -----------------------------------------------------------
-    for ( size_t i=0; i<e.Faces(); i++ ) {
+    for ( uint32_t i{0U}; i<e.Faces(); i++ ) {
          // computing and storing normal to face
          e.FE()->UnitNormalAtFaceBarycenter( i, nrml );
          VectorVariable<3U>  fn(nrml);
@@ -586,7 +586,12 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
          cout <<"\nFace "<< i <<", projected flux:         "<< projflux;
          
          // integrating flux over the face
-         double fflux = projflux * e.FaceArea( i );
+         vector<uint32_t> fnids;
+         e.FE()->NodesOfFace( i, fnids );
+         double face_area = triangleArea( e.N( fnids[0] )->Coordinate(),
+                                          e.N( fnids[1] )->Coordinate(),
+                                          e.N( fnids[2] )->Coordinate() );
+         double fflux = projflux * face_area;
       
          // summing flux balance
          flux_balance += fflux;  

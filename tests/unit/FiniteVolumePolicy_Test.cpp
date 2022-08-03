@@ -172,14 +172,14 @@ void FiniteVolumePolicy_Test::Test_CreateVSet()
     deqElementNeighbors[3]=vecNeighbors;
     vset.AddPfverts( deqElementNeighbors.begin(), deqElementNeighbors.end());
 
-  	vset.AddBFlag( 0, CNR1 );
-    vset.AddBFlag( 1, BOTTOM_OUTSIDE );
-    vset.AddBFlag( 2, CNR2 );
-    vset.AddBFlag( 3, LEFT_OUTSIDE );
-    vset.AddBFlag( 5, RIGHT_OUTSIDE );
-    vset.AddBFlag( 6, CNR4 );
-	  vset.AddBFlag( 7, TOP_OUTSIDE );
-    vset.AddBFlag( 8, CNR3 );
+  	vset.BFlag( 0, CNR1 );
+    vset.BFlag( 1, BOTTOM_OUTSIDE );
+    vset.BFlag( 2, CNR2 );
+    vset.BFlag( 3, LEFT_OUTSIDE );
+    vset.BFlag( 5, RIGHT_OUTSIDE );
+    vset.BFlag( 6, CNR4 );
+	  vset.BFlag( 7, TOP_OUTSIDE );
+    vset.BFlag( 8, CNR3 );
 
     vset.Out();
 

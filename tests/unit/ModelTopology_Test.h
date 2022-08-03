@@ -11,6 +11,8 @@ class ModelTopology_Test : public Test
 {
 public:
   virtual void run();
+  
+  static const bool verbose_ = true;
 };
 
 } // csmp

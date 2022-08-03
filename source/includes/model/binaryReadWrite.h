@@ -18,7 +18,7 @@ constexpr int CSMP_BINARY_FILE_HDR_SIZE(8); // JCK header for data record in fil
    Helper class for reading fixed-size strings from binary files
    
       defines strings that are used to read the possible datablocks that are abbreviated as
-      VSETCORD
+        VSETCORD
         VSETPELT
         VSETPLST
         VSETPFVT
@@ -423,7 +423,8 @@ bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
 	// read size of the record and check it 
   const size_t elements = checkContainerSize( fp );
 
-	if ( elements > 0 ) {
+	// TODO: write the elements in one go, rather than one by one
+  if ( elements > 0 ) {
         if (!stl_ctner.empty())
           stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
         stl_ctner.reserve(elements);
@@ -444,6 +445,16 @@ bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
 	return true;
 }
 
+/* ALTERNATIVE
+std::vector<uint8_t> read_vector_from_disk(std::string file_path)
+  {
+      std::ifstream instream(file_path, std::ios::in | std::ios::binary);
+      std::vector<uint8_t> data((std::istreambuf_iterator<char>(instream)), std::istreambuf_iterator<char>());
+      return data;
+  }
+*/
+
+
 
 /// deque version
 template<typename T>
@@ -459,6 +470,7 @@ bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
 	// read size of the record and assert this 
   size_t elements = checkContainerSize( fp );
 
+	// TODO: write the elements in one go, rather than one by one
 	if ( elements > 0 )
     {
       if (!stl_ctner.empty())
@@ -586,6 +598,7 @@ bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner)
 	// 1. reading number of vector records and assert this reading
   const int64_t  elements = checkContainerSize( fp );
 
+	// TODO: write the elements in one go, rather than one by one
 	size_t counter(0);
 	if ( elements > 0U ) {
       if (!stl_ctner.empty())
@@ -736,6 +749,7 @@ bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
 	// 1. read number of record in the map and assert reading
   const int64_t  elements = checkContainerSize( fp );
 
+	// TODO: write the elements in one go, rather than one by one
 	if (elements > 0) {
 		// 2. reading all map records
 		for ( auto i = 0; i<elements; i++ )
@@ -876,6 +890,7 @@ bool binaryFileRead(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
 	// 1. read number of record in the map and assert reading
   const size_t elements = checkContainerSize( fp );
 
+	// TODO: write the elements in one go, rather than one by one
 	if (elements > 0) {
       if (!stl_ctner.empty())
         stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
@@ -1015,6 +1030,7 @@ bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
 	// 1. read number of record in the map and assert reading
   const size_t elements = checkContainerSize( fp );
 
+	// TODO: write the elements in one go, rather than one by one
 	if (elements > 0) {
     if (!stl_ctner.empty())
       stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());

@@ -11,6 +11,34 @@ template<uint32_t> class Face;
 template<uint32_t> class InterFace;
 template<uint32_t> class Model;
 
+// utility functions
+
+template<uint32_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift );
+
+template<uint32_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift );
+
+template<uint32_t dim>
+void shiftInterfaceTips( Region<dim>& region, double shift );
+
+template<uint32_t dim>
+void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShift );
+
+template<uint32_t dim>
+void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps );
+
+template<uint32_t dim>
+void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps );
+
+template<uint32_t dim>
+void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yScale, double zScale );
+
+template<uint32_t dim>
+void scaleRegion( Region<dim>& region, double xScale, double yScale, double zScale );
+
+
+
 
 /**
     SplitBoundaryInterface_Test unit test tests all functionality related to the creation and destruction of SplitBoundary objects.
@@ -20,65 +48,50 @@ template<uint32_t> class Model;
      @author refactored by Junchul Kim (2019).
      @date ported to 2016 version by SKM.
  */
-  class SplitBoundaryInterface_Test : public Test
+ 
+template<uint32_t dim>
+class SplitBoundaryInterface_Test : public Test
     {
     public:
       virtual void run();
 
       // testing split boundary creation methods 
       
-      template<uint32_t dim>
       void Test_splitboundary_between_regions( const std::string& model_name );
 
-      template<uint32_t dim>
       void Test_splitboundary_around_regions( const std::string& model_name );
 
-      template<uint32_t dim>
       void Detect_and_create_splitboundaries( const std::string& model_name );
 
-      template<uint32_t dim>
       void Detect_and_create_splitboundaries_from_constructor( const std::string& model_name );
 
-      template<uint32_t dim>
       void NodeParents( const csmp::Region<dim>& region, size_t minParentCount = 2 );
 
-      template<uint32_t dim>
       void ElementNodes( const csmp::Region<dim>& region );
 
-      template<uint32_t dim>
       void CheckRemovedLowDimParents( csmp::Boundary<dim>& boundary );
 
       /// tests whether all InterFace elements of the SplitBoundary have both higher-dimensional neighbors
-      template<uint32_t dim>
       bool NoNeighborNull( const csmp::InterFace<dim>& interFace );
 
       /// tests whether the splitted nodes share parent elements, located on different sides of interfaces
-      template<uint32_t dim>
       void TestSplitNodeAssignment( const csmp::Model<dim>& );
 
-      template<uint32_t dim>
       void TestUnitNormals( csmp::Model<dim>&, const std::string& test_name  );
 
-      template<uint32_t dim>
       void VisualiseSplitBoundaries( csmp::Model<dim>&, const std::string&test_name  );
 
-      template<uint32_t dim>
       void PullApartSplitboundaries( Model<dim>& model, std::vector<std::string>& fractures, double displacement );
 
-      template<uint32_t dim>
       void PullApartSplitboundaries( Model<dim>& model, double displacement );
 
-      template<uint32_t dim>
       void LoadModel( const std::string& model_name );
 
-      template<uint32_t dim>
       void LoadModel( const std::string& model_name, std::vector<std::string>& regions );
 
-      template<uint32_t dim>
       void LoadContiguousModel( const std::string& model_name, std::vector<std::string>& fractures );
 
-      template<uint32_t dim>
-      void EstablishContiguousRegionsList( Model<dim>& model,
+       void EstablishContiguousRegionsList( Model<dim>& model,
                                            const std::set<std::string>& fractures_basic_set,
                                            std::set<std::string>& fractures );
 

@@ -57,7 +57,7 @@ class IsoparametricLinearLineElement : public FiniteElement {
 
     virtual void    IntegralN( DenseMatrix<DM_MIN>& M );
 
-    virtual void    UnitNormal( std::vector<double>& vc ) const;
+    virtual std::vector<double>  UnitNormal() const;
   
     /// 2 normals located on the nodes and aligned with the elements
     virtual void    UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;

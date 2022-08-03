@@ -153,7 +153,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
         }
       const string variablesFile("ANSYS_SplitBoundaryMatch_Test-variables.txt");
       //                   fileset             regions-file
-      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), true, true );
+      ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), variablesFile.c_str(), false, true );
       Region<3U>    model_domain(model.Region("Model"));
       model_domain.UpdateMemberIndexes();
       VTK_Interface<3U>  vtk_output;
@@ -256,7 +256,9 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
             splitBoundary1.Out(); // too many nodes in manifolds!
             TestThatManifoldNodesAreCollocated( splitBoundary1 );
             const csmp::Index var_key = model.Database().StorageKey("nodal variable");
-            PrintSplitBoundaryNodeVariableVector( var_key, splitBoundary1.NodesBegin(), splitBoundary1.NodesEnd(), INSIDE );
+            pair<vector<Node<3U>*>,size_t> inside_nodes  = splitBoundary1.InsideNodes();
+            // pair<vector<Node<3U>*>,size_t> outside_nodes = splitBoundary1.OutsideNodes();
+            PrintSplitBoundaryNodeVariableVector( var_key, inside_nodes.first.begin(), inside_nodes.first.end(), INSIDE );
             set<string> var_names{"nodal variable"};
             // TODO: this method is broken because it expects that 'node_vec' contains all duplicated nodes
             vtu_output.OutputDataToVTU( splitBoundary1.Name(), var_names, splitBoundary1, 0L );

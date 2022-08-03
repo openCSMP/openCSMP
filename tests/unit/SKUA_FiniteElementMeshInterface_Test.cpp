@@ -170,22 +170,26 @@ void SKUA_FiniteElementMeshInterface_Test::Test_NodesAndTheirManifolds( const Mo
     // 1a. internal split boundary nodes must be manifolds
     bool all_interior_nodes_are_manifolds{true};
     for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); split++ )
-      for ( auto nit=(*split).second.NodesBegin(); nit!=(*split).second.PerimeterNodesBegin(); nit++ )
-        if ( (*nit)->IsManifold() == false ) {
-             all_interior_nodes_are_manifolds = false;
-             break;
-          }
+      for ( const auto& it : (*split).second.CellVector() )
+        for ( auto i{0U}; i<it->Nodes(); i++ )
+          // nodes on the perimeter of a split boundary are not flagged INTERNAL
+          if ( it->N(i)->AtBoundary() == INTERNAL && it->N(i)->IsManifold() == false ) {
+               all_interior_nodes_are_manifolds = false;
+               break;
+            }
     _test( all_interior_nodes_are_manifolds == true );
 
     // 1b. perimeter nodes on Box boundaries must also be manifolds
     bool box_boundary_nodes_are_manifolds{true};
     for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); split++ )
-      for ( auto nit=(*split).second.PerimeterNodesBegin(); nit!=(*split).second.NodesEnd(); nit++ )
-        if ( ((*nit)->AtBoundary() != NOT && (*nit)->AtBoundary() != INTERNAL) &&
-               (*nit)->IsManifold() == false ) {
-             box_boundary_nodes_are_manifolds = false;
-             break;
-          }
+      for ( const auto& it : (*split).second.CellVector() )
+        for ( auto i{0U}; i<it->Nodes(); i++ )
+          // nodes on the perimeter of a split boundary
+          if ( (it->N(i)->AtBoundary() != NOT && it->N(i)->AtBoundary() != INTERNAL) &&
+                it->N(i)->IsManifold() == false ) {
+               box_boundary_nodes_are_manifolds = false;
+               break;
+            }
     _test( box_boundary_nodes_are_manifolds == true );
 
 

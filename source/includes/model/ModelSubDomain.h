@@ -34,11 +34,11 @@ class PropertyConstraints;
 */
 struct SubDomainInfo {
    std::string         name;                           ///< unique name
-   std::vector<uint32_t> interior_elmts;                 ///< cells that have no face on the perimeter
-   std::vector<uint32_t> perimeter_elmts;                ///< cells that have at least one face on perimeter
+   std::vector<uint32_t> interior_elmts;               ///< cells that have no face on the perimeter
+   std::vector<uint32_t> perimeter_elmts;              ///< cells that have at least one face on perimeter
    std::vector<std::vector<int8_t> > perimeter_faces;  ///< local 0..faces-1 identifiers of the faces of the simplices that lie on domain boundary
-   std::vector<uint32_t> interior_nodes;                 ///< nodes within the subdomain
-   std::vector<uint32_t> perimeter_nodes;                ///< nodes on the perimeter of the subdomain
+   std::vector<uint32_t> interior_nodes;               ///< nodes within the subdomain
+   std::vector<uint32_t> perimeter_nodes;              ///< nodes on the perimeter of the subdomain
 };
 
 

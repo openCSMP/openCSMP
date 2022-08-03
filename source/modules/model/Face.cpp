@@ -126,7 +126,7 @@ Face<dim>::Face( const Element<dim>& elmt,
 */
 template<uint32_t dim>
 Face<dim>::Face( const FiniteElementManager& fem_manager,
-                 const FiniteVolumeStencilManager<dim>& fvm_manager,
+                 const FiniteVolumeStencilManager<dim>* fvm_manager,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
                  const LocalVariables& ep,
@@ -160,7 +160,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            // assigning the finite element
            const CSMP_FEM_TYPE etype = outer_parent->FE()->ElementTypeOfFace(i);
            FiniteElementPolicy<dim,csmp::Face>::Assign( fem_manager.E(etype) );
-           FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager.Stencil(etype) );
+           if ( fvm_manager ) FiniteVolumePolicy<dim,csmp::Face>::AssignFiniteVolume( fvm_manager->Stencil(etype) );
            node_connector_.resize(this->FE()->Nodes(),nullptr);
            face_connector_.resize(this->FE()->Faces(),nullptr);
            // assigning the nodes
@@ -215,7 +215,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 */
 template<uint32_t dim>
 Face<dim>::Face( const FiniteElementManager& fem_manager,
-                 const FiniteVolumeStencilManager<dim>& fvm_manager,
+                 const FiniteVolumeStencilManager<dim>* fvm_manager,
                  Element<dim>* const inner_parent,
                  Element<dim>* const outer_parent,
                  uint32_t inner_parent_face_id,
@@ -223,7 +223,7 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,Face>( fem_manager.E( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
-    FiniteVolumePolicy<dim,Face>( fvm_manager.Stencil( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) ),
+    FiniteVolumePolicy<dim,Face>( (fvm_manager) ? fvm_manager->Stencil( inner_parent->FE()->ElementTypeOfFace( inner_parent_face_id ) ) : nullptr ),
     idx_(NULL_IDX),
     innerParent_(inner_parent),
     outerParent_(outer_parent),
@@ -282,12 +282,12 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
 template<uint32_t dim>
 Face<dim>::Face( Element<dim>& e,
                  csmp::FiniteElement* FE_type_for_face,
-                 const FiniteVolumeStencilManager<dim>& fvm_manager,
+                 const FiniteVolumeStencilManager<dim>* fvm_manager,
                  uint32_t boundary_face,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
   : FiniteElementPolicy<dim,csmp::Face>(FE_type_for_face),
-    FiniteVolumePolicy<dim,csmp::Face>(fvm_manager.Stencil(FE_type_for_face->ElementType())),
+    FiniteVolumePolicy<dim,csmp::Face>( (fvm_manager) ? fvm_manager->Stencil(FE_type_for_face->ElementType()) : nullptr ),
     idx_(NULL_IDX),
     node_connector_(FE_type_for_face->Nodes(),nullptr),
     face_connector_(FE_type_for_face->Neighbors(),nullptr),
@@ -340,7 +340,7 @@ Face<dim>::Face( Element<dim>& e,
 */
 template<uint32_t dim>
 Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
-                 const FiniteVolumeStencilManager<dim>& fvm_manager,
+                 const FiniteVolumeStencilManager<dim>* fvm_manager,
                  Element<dim>* const parent_of_face1,
                  Element<dim>* const parent_of_face2,
                  uint32_t parent_elmt1_segm_id,
@@ -349,7 +349,7 @@ Face<dim>::Face( csmp::FiniteElement* FE_type_of_boundary_face,
                  const LocalVariables& ep,
                  const IntegrationPointVariables& ip )
  : FiniteElementPolicy<dim,csmp::Face>(FE_type_of_boundary_face),
-   FiniteVolumePolicy<dim,csmp::Face>(fvm_manager.Stencil(FE_type_of_boundary_face->ElementType())),
+   FiniteVolumePolicy<dim,csmp::Face>( (fvm_manager) ? fvm_manager->Stencil(FE_type_of_boundary_face->ElementType()) : nullptr ),
    idx_(NULL_IDX),
    innerParent_(parent_of_face1),
    outerParent_(parent_of_face2),

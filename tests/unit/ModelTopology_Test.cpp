@@ -1,6 +1,7 @@
 #include "ModelTopology_Test.h"
 #include "ANSYS_ElementSpecifications.h"
 #include "PL_Utilities.h"
+#include "vsetMakers.h"
 
 using namespace std;
 
@@ -8,10 +9,8 @@ namespace csmp{
 
 void ModelTopology_Test::run()
 {
-  const bool verbose(false);
-
   setName( "csmp::ModelTopology_Test" );
-  if ( verbose ) cout << "\nUnit Test " << getName() << endl;
+  if ( verbose_ ) cout << "\nUnit Test " << getName() << endl;
   typedef ANSYS_ElementSpecifications fem_specs;
   const bool isoparametric( true );
   const uint32_t dim( 3 );
@@ -27,9 +26,9 @@ void ModelTopology_Test::run()
   _test( topology2.ModelName() == modelName );
 
   // .)ADDREGION
-  set<string> femTypes;
-  vector<size_t>   elmIDS;
-  const size_t elms( 8 );
+  set<string>    femTypes;
+  vector<size_t> elmIDS;
+  const size_t   elms( 8 );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "TETRA_4", isoparametric, dim ) );
@@ -117,7 +116,7 @@ void ModelTopology_Test::run()
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
-  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
+// POLYGON does not exist:  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
   for( auto i = 0; i < 23; ++i )
     elmIDS.push_back( i );
   ModelTopology topology6( topology2 );
@@ -127,13 +126,13 @@ void ModelTopology_Test::run()
   // .)ELEMENT TYPES
   ModelTopology topTypes( topology6 );
   string oldType( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
-  topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim ) );
+  topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim ) );
   set<string> region3Types;
   topTypes.CellTypesOfDomain( "Region3", region3Types );
   for( set<string>::const_iterator it = region3Types.begin(); it != region3Types.end(); ++it )
     _test( *it != fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("HEXA_27", isoparametric, dim ) );
   // ISSUES, check with stephan
-  topology6.EliminateLineCells();
+  topology6.EliminateLineCells(); // FAIL
   set<string> top6types;
   topology6.CellTypesOfDomain( "Region3", top6types );
   // ISSUES, check with stephan
@@ -142,24 +141,25 @@ void ModelTopology_Test::run()
   _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_3",isoparametric,dim) ) == top6types.end() );
   _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("POLYGON",isoparametric,dim) ) == top6types.end() );
   */
-  if ( verbose ) cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
+  if ( verbose_ ) cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
   for( set<string>::const_iterator it = top6types.begin(); it != top6types.end(); ++it )
-    if ( verbose ) cout << *it << endl;
+    if ( verbose_ ) cout << *it << endl;
   set<string> csmpTypes;
   topology6.FiniteElementTypes( csmpTypes );
-  if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
+  if ( verbose_ ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
   for( set<string>::const_iterator it = csmpTypes.begin(); it != csmpTypes.end(); ++it )
-    if ( verbose ) cout << *it << endl;
+    if ( verbose_ ) cout << *it << endl;
   set<int32_t> csmpTypesENUM;
   topology6.FiniteElementTypes( csmpTypesENUM );
-  if ( verbose ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
+  if ( verbose_ ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
   for( set<int32_t>::const_iterator it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
-    if ( verbose ) cout << *it << endl;
+    if ( verbose_ ) cout << *it << endl;
   set<string> typesCheck;
-  _test( 22 == topTypes.FiniteElementTypes( typesCheck ) );
-  oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_QUADRATIC", isoparametric, dim );
+  _test( topTypes.FiniteElementTypes( typesCheck ) == 21 );
+  oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim );
+  // adding an extra element type
   topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_27", isoparametric, dim ) );
-  _test( 23 == topTypes.FiniteElementTypes( typesCheck ) );
+  _test( topTypes.FiniteElementTypes( typesCheck ) == 22 );
 
   // .)REGION OPS
   ModelTopology topology7( topology2 );
@@ -214,18 +214,9 @@ void ModelTopology_Test::run()
   topology7.UseIsoparametricFiniteElementTypes();
   _test( topology7.IsoparametricFiniteElements() == true );
 
-
 } // run
 
-/*
-PropertiesOfRegions() not tested
 
-Container class that stores the region names and their contained elements(through IDs)
-and corresponding fem types.
-
-ModelTopology Does not check for proper input!!! (ie if vector and set are of same size...)
-
-*/
 
 } // csmp
 

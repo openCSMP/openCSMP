@@ -858,7 +858,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormal( uint32_t iFacet ) const
                                   e->N(fvptr_->OutsideNode(iFacet))->Coordinate()) - e->BaryCenter());
        // segment center for rotation
        e->CoordinateMatrix(); // needed by UnitNormal
-       e->FE()->UnitNormal( e->FE()->NRST );
+       e->FE()->NRST = e->FE()->UnitNormal();
        Point<3U>  enrml( e->FE()->NRST );
        Point<3U>  vecNormal(crossProduct( enrml, segment ));
        vecNormal.NormalizeLengthTo(1.);
@@ -963,7 +963,7 @@ Point<3U>  FiniteVolumePolicy<3U,CELL>::FacetNormalMapped( uint32_t iFacet ) con
 
       // not needed by RST to XYZ but by UnitNormal
       e->CoordinateMatrix();
-      e->FE()->UnitNormal( e->FE()->NRST );
+      e->FE()->NRST = e->FE()->UnitNormal();
       const double x(e->FE()->NRST[0]), y(e->FE()->NRST[1]), z(e->FE()->NRST[2]);
 
       const double j1(-0.5*(fp0[0]-fp1[0]));

@@ -1549,35 +1549,30 @@ double  IsoparametricLinearTriangle::JacobianInverse()
      
      @test OK - SKM 3/3/2016
 */
-void IsoparametricLinearTriangle::UnitNormal( std::vector<double>& vc ) const
+vector<double>  IsoparametricLinearTriangle::UnitNormal() const
  {
-    vc.resize(3);
+    // creates a fictious third dimension perpendicular to triangle plane
+    if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
 
-    // normal points into non-existant third dimension
-    if ( dim == 2U ) {
-         vc[0] = static_cast<double>(0.);
-         vc[1] = static_cast<double>(0.);
-         vc[2] = static_cast<double>(1.);
-         return;
-      }
-
-    double X12 = XY(1,0) - XY(0,0), // X
-           X31 = XY(0,0) - XY(2,0),
-           Y12 = XY(1,1) - XY(0,1), // Y
-           Y31 = XY(0,1) - XY(2,1),
-           Z12 = XY(1,2) - XY(0,2), // Z
-           Z31 = XY(0,2) - XY(2,2);
+    const double X12 = XY(1,0) - XY(0,0), // X
+                 X31 = XY(0,0) - XY(2,0),
+                 Y12 = XY(1,1) - XY(0,1), // Y
+                 Y31 = XY(0,1) - XY(2,1),
+                 Z12 = XY(1,2) - XY(0,2), // Z
+                 Z31 = XY(0,2) - XY(2,2);
 
     // normal to triangle (*- to flip to outside)
-    vc[0]  = -Y12*Z31 + Z12*Y31;
-    vc[1]  = -Z12*X31 + X12*Z31;
-    vc[2]  = -X12*Y31 + Y12*X31;
+    vector<double> vc{ -Y12*Z31 + Z12*Y31,
+                       -Z12*X31 + X12*Z31,
+                       -X12*Y31 + Y12*X31 };
    
     // normalization to unit length
     double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
     vc[0] /= length;
     vc[1] /= length;
     vc[2] /= length;
+    
+    return vc;
  }
 
 

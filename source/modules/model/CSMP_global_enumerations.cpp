@@ -509,4 +509,70 @@ string parseSide( INTERFACE_SIDE side )
     return "UNDEFINED";
  }
 
+
+
+
+/**
+    STAND_ALONE,                ///< multiplicated point
+    SPLIT_BOUNDARY,             ///<  2-node manifold along a SplitBoundary (most common)
+    SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
+    MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
+    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs are termination of SB against Boundary
+    SPLIT_BOUNDARY_END,         ///<  termination against model boundary
+    
+    @note if the split boundary cannot be determined, method returns SPLIT_BOUNDARY
+*/
+string parse( ManifoldType topology )
+ {
+   switch( topology ) {
+        case ManifoldType::STAND_ALONE: return "STAND_ALONE";
+        case ManifoldType::SPLIT_BOUNDARY: return "SPLIT_BOUNDARY";
+        case ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH: return "SPLIT_BOUNDARY_WITH_INTERNAL_MESH";
+        case ManifoldType::SPLIT_BOUNDARY_CROSSING: return "SPLIT_BOUNDARY_CROSSING";
+        case ManifoldType::MULTI_SB_CROSSING: return "MULTI_SB_CROSSING";
+        case ManifoldType::SPLIT_BOUNDARY_TERMINATION: return "SPLIT_BOUNDARY_TERMINATION";
+        case ManifoldType::SPLIT_BOUNDARY_END:  return "SPLIT_BOUNDARY_END";
+        //default: return "NOT_CLASSIFIED";
+      }
+    return "SPLIT_BOUNDARY";
+ }
+
+
+/**
+       Topologic qualifiers include:
+       
+      MESH_VERTEX,              - a point within the model volume
+      INTERSECTION_POINT  - a point where lines cross or multiple surfaces intersect
+      PERIMETER_POINT,       - point at the end of a line inside a 2D model
+      EXTERIOR_POINT,         - on an outside surface of the model
+      INTERIOR_LINE,            - a line on the interior of the model
+      PERIMETER_LINE,        -  a surface edge inside of the model
+      EXTERIOR_LINE,          - an edge of the model
+      INTERSECTION_LINE, - belonging to multiple surfaces
+      INTERIOR_SURFACE,    - a surface withing the model
+      PERIMETER_SURFACE,    - a surface forming the hull of an object inside of the model
+      EXTERIOR_SURFACE       - a surface delimiting the model
+*/
+std::string parseTopology( TOPOTYPE topology )
+ {
+   switch( topology ) {
+        case MESH_VERTEX: return "MESH_VERTEX";
+        case INTERSECTION_POINT: return "INTERSECTION_POINT";
+        case PERIMETER_POINT: return "PERIMETER_POINT";
+        case EXTERIOR_POINT: return "EXTERIOR_POINT";
+        case INTERIOR_LINE: return "INTERIOR_LINE";
+        case PERIMETER_LINE: return "PERIMETER_LINE";
+        case EXTERIOR_LINE:  return "EXTERIOR_LINE";
+        case INTERSECTION_LINE: return "INTERSECTION_LINE";
+        case INTERIOR_SURFACE: return "INTERIOR_SURFACE";
+        case PERIMETER_SURFACE: return "PERIMETER_SURFACE";
+        case EXTERIOR_SURFACE: return "EXTERIOR_SURFACE";
+        //default: return "NOT_CLASSIFIED";
+      }
+    return "STAND_ALONE";
+ }
+
+
+
+
 } // end csmp

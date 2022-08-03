@@ -22,18 +22,17 @@ template<uint32_t> class NodeManifoldManager;
 template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
 /**
-@brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
-internal application is hidden and may vary between models (tree-storage is default).
+    @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
+    internal application is hidden and may vary between models (tree-storage is default).
 
-@author S.K. Matthai
-@date 2021 (complete rewrite)
+    @author S.K. Matthai
+    @date 2021 (complete rewrite)
 
-@remark gain access via Mesh() public interface of Model.
+    @remark gain access via Mesh() public interface of Model.
 
-@attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
-Region or Boundary objects merely contain pointers to these.
+    @attention the MeshManager takes care of the creation and destruction of Elements, Faces or Interfaces.
+    Region or Boundary objects merely contain pointers to these.
 
-TODO: which kind of mesh error diagnostics should the MeshManager implement? - should these be in a separate compilation unit?
 */
 template<uint32_t dim>
 class MeshManager {
@@ -48,7 +47,7 @@ public:
   ~MeshManager();
 
   /// sets up distributed storage for variables, finite elements, and mesh connectivity, returns vectors of pointers remembering index-pointer mapping
-  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>& );
+  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>&, bool initialise_FV_stencils = false );
 
   // ==============================================================
   //
@@ -115,9 +114,12 @@ public:
   const FiniteElementManager& FiniteElements() const { return fem_manager_; }
 
   /// direct access for backward compatibility
-  const FiniteVolumeStencilManager<dim>& FiniteVolumes() const { return fvm_manager_; }
+  const FiniteVolumeStencilManager<dim>* const FiniteVolumes() const { return fvm_manager_; }
 
+  ///  assigns the finite volume stencils to the finite volume policies of the element, face, and interface so that this functionality can be used
+  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& );
   
+ 
   // ==============================================================
   //
   // MESH MODIFICATION
@@ -155,17 +157,17 @@ public:
                                            const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,std::pair<Element<dim>*,uint32_t> > >& );
 
   /// by location only, no parent element  gets connected
-  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
+  Node<dim>* const		 AddNodeAt( const Point<dim>&, const LocalVariables&,
+                                  BOX_BOUNDARY = NOT, TOPOTYPE = MESH_VERTEX );
 
   /// only if there is not already a node at this location, else a pointer to that node is returned, no parent element  gets connected
   Node<dim>* const		 AddNodeAtUniqueLocation( const Point<dim>&, size_t nearby_node,
                                                 const LocalVariables& node_variables,
-                                                BOX_BOUNDARY = NOT );
+                                                BOX_BOUNDARY = NOT,
+                                                TOPOTYPE = MESH_VERTEX );
 
    /// duplicates Node, automatically creating a node manifold or adding it to an existing one; manifold type is established
-  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside,
-                                  INTERFACE_SIDE new_node_side,
-                                  const LocalVariables& lvars );
+  Node<dim>* const     Duplicate( Node<dim>* const nptr_inside, const LocalVariables& lvars );
 
   /// method tries to find neighbors through the parent connectivity of the nodes
   Element<dim>*	const AddElement( CSMP_FEM_TYPE,
@@ -330,15 +332,14 @@ private:
 
 private:
 
-  FiniteElementManager             fem_manager_;
-  FiniteVolumeStencilManager<dim>  fvm_manager_; ///< current finite volume specifications // TODO: make this a trait class because it needs no dynamic data!
+  FiniteElementManager              fem_manager_;
+  FiniteVolumeStencilManager<dim>*  fvm_manager_ = nullptr; ///< current finite volume specifications
 
   /// access is via root node or element only
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
 
-  // root pointers to contiguous mesh patches; mutable to allow for behind scene updates
   plf::colony<Node<dim>>      nodes_;          ///<  nodes
-  plf::colony<Element<dim>>   elements_;       ///<  pointers elements
+  plf::colony<Element<dim>>   elements_;       ///<  pointers to elements in the model
   plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
   plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
   // only used in models that contain node SplitBoundaries / IterFace objects

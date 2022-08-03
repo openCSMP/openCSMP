@@ -231,14 +231,14 @@ double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
                             const Point<2U>& xy1,
                             const Point<2U>& xy2,
                             const Point<2U>& coord,
-                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            // val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
                             double p1, double p2, double p3, double p4 );
 
 double bilinearInterpolate( uint32_t idx_x, uint32_t idx_y,
                             const Point<3U>& xy1,
                             const Point<3U>& xy2,
                             const Point<3U>& coord,
-                            //                       val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
+                            // val@x0,y0  val@x1,y0  val@x1,y1  val@x0,y1
                             double p1, double p2, double p3, double p4 );
 
 

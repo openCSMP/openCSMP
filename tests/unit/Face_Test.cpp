@@ -99,7 +99,7 @@ void Face_Test::run()
     FiniteVolumeStencilManager<DIM>  fvm_manager( fem_manager );
     
     // constructor with auto-detection of shared face
-    Face<DIM> face2( fem_manager, fvm_manager,
+    Face<DIM> face2( fem_manager, &fvm_manager,
                      &tet1, &tet2,
                      LocalVariables( 1,0,0,0,0,0,0,1,1 ),
                      IntegrationPointVariables() );
@@ -121,7 +121,7 @@ void Face_Test::run()
     // test construction of an Face on face 0 of element tet1
     const size_t boundary_face{0};
     Face<DIM> face4( tet1, fem_manager.E( ISOPARAMETRIC_LINEAR_TRIANGLE ),
-                     fvm_manager, boundary_face,
+                     &fvm_manager, boundary_face,
                      LocalVariables( 1,0,0,0,0,0,0,1,1 ), IntegrationPointVariables() );
     _test( face4.N(0) == &n1 );
     _test( face4.N(1) == &n2 );

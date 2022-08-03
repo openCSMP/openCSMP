@@ -32,6 +32,7 @@ class ModelBasics_Test: public Test {
      bool TestModelConstructionFromVSet();
   
      bool TestWriteModelToDiskAndReadBack();
+     bool TestWriteModelToDiskAndReadBackWithInterfaces();
   
   private:
     const static bool verbose_ = true; // TURN VERBOSE ON HERE

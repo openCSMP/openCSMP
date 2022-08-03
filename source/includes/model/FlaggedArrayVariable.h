@@ -127,11 +127,11 @@ class FlaggedArrayVariable
       /// accessors to the data
       double         operator[]( size_t ) const;
       double&        operator()( size_t );
-      void           Component( size_t, double );
-      double         Component( size_t i ) const;
+      void           Component( uint32_t, double );
+      double         Component( uint32_t ) const;
 
-      size_t         Size() const;
-      void           Resize( size_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+      uint32_t       Size() const;
+      void           Resize( uint32_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
       VARIABLE_FLAG  Flag( const size_t&) const;
       VARIABLE_FLAG& Flag( const size_t&);
       void           Flag( const size_t&, VARIABLE_FLAG);

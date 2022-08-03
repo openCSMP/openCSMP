@@ -778,7 +778,7 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsASCII( ifstr
          if ( flag != 0 ) {
               bconds[i] = true;
               // '0...n-1' since nodes are numbered this way
-              vset.AddBFlag( i, flag );
+              vset.BFlag( i, flag );
            }
       }
       
@@ -1461,14 +1461,14 @@ bool SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary( FILE
     const int32_t  min28(-30), zero(0);
     uint32_t       counter(0);
     size_t nodes(vset.Vertices());
-    for ( size_t i{0U}; i<nodes; i++ ){
+    for ( auto i{0U}; i<nodes; i++ ){
          // TODO: to read models with 10s of billions of cells, ibytes must be int64_t 
          fread( (void*) &ival, ibytes, 1U, fp );
          if ( ival < min28 || ival > zero )
            throw csmp::Exception( ERROR, "SKUA_FiniteElementMeshInterface::ReadBoundaryFlagsAndConditionsBinary","'pbflag' value out of range.");
          // if this is a boundary node
          if ( ival < zero ) {
-              vset.AddBFlag( i, ival );
+              vset.BFlag( i, ival );
               bnodes.insert(i);
               counter++;
            }

@@ -23,7 +23,7 @@ namespace csmp {
 template<uint32_t dim>
 MeshManager<dim>::MeshManager()
   : fem_manager_( dim, 1, true ), // linear interpolation functions, isoparametric elements
-    fvm_manager_(fem_manager_),
+    fvm_manager_(nullptr),
     hybrid_element_mesh_( false )
 {
 }
@@ -32,12 +32,13 @@ MeshManager<dim>::MeshManager()
 
 
 /**
-      input objects need to be fully constructed for this to work.
+    Constructs a customised version of the MeshManager , appropriately initialising the FiniteElementManager.
+    If the model uses linear, isoparametric elements, corresponding finite volume stencils are constructed and initialised.
 */
 template<uint32_t dim>
 MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim>& vset )
   : fem_manager_( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() ),
-    fvm_manager_(fem_manager_),
+    fvm_manager_( (vset.OrderOfFiniteElementInterpolationFunctions()==1u && vset.IsoparametricElementMesh() ) ? new FiniteVolumeStencilManager<dim>(fem_manager_) : nullptr ),
     hybrid_element_mesh_( vset.HybridElementTypeMesh() )
 {
    assert( pref.VariableCount() > 0 );
@@ -59,6 +60,7 @@ template<uint32_t dim>
 MeshManager<dim>::~MeshManager()
   {
      delete node_manifold_manager_;
+     delete fvm_manager_;
     
  } // end destructor
 
@@ -232,7 +234,7 @@ that all operations that build mesh with reference to the input VSet indexing mu
 
 */
 template<uint32_t dim>
-bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, const VSet<dim>& vset )
+bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, const VSet<dim>& vset, bool initialise_FV_stencils )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -285,9 +287,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-          for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
-          // TODO: for some reason the move constructor is not called here (copy elision, but?)
-          nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars, static_cast<BOX_BOUNDARY>(vset.BFlag(idx)) ) );
+           for ( auto j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
+           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars,
+                                      static_cast<BOX_BOUNDARY>(vset.BFlag(idx)),
+                                      static_cast<TOPOTYPE>(vset.BREP_Flag(idx)) ) );
         }
     }
 
@@ -301,11 +304,15 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       // 2.1 If the MeshManager contains only one element type
       if ( !vset.HybridElementTypeMesh() ) {
           const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( 0U ));
+          const FiniteVolumeStencil<dim>* const stencil_ptr = (initialise_FV_stencils==true) ?
+                                                               fvm_manager_->Stencil( csmpElementType ) :
+                                                               static_cast<const FiniteVolumeStencil<dim>* const>(nullptr);
           while ( first != last )
             {
               // create the element
               typename plf::colony<Element<dim>>::iterator
-                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
+                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ),
+                                                                                 stencil_ptr,
                                                                                  evars, cvars, vset.Pmtrl(elmt_idx) ) );
               // assign the nodes
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
@@ -324,9 +331,14 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
           while ( first != last )
             {
               const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( elmt_idx ));
+              const FiniteVolumeStencil<dim>* const stencil_ptr = (initialise_FV_stencils==true) ?
+                                                                   fvm_manager_->Stencil( csmpElementType ) :
+                                                                   static_cast<const FiniteVolumeStencil<dim>* const>(nullptr);
               typename plf::colony<Element<dim>>::iterator
-                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ), fvm_manager_.Stencil( csmpElementType ),
-                                                                                 evars, cvars, vset.Pmtrl(elmt_idx) ) );
+                eit = elements_.emplace( Element<dim>( elmt_idx, fem_manager_.E( csmpElementType ),
+                                                       stencil_ptr,
+                                                       evars, cvars, vset.Pmtrl(elmt_idx) ) );
+                                                       
               const auto nodes( fem_manager_.E( csmpElementType )->Nodes() );
               for ( auto j{0U}; j < nodes; j++ ) (*eit).Assign( j, &(*next(nodes_.begin(),vset.Plist( elmt_idx, j ))) );
               elmt_idx++;
@@ -398,13 +410,16 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        typename deque<vector<int64_t> >::const_iterator  first( vset.PlistFacesBegin() ), last( vset.PlistFacesEnd() );
        while ( first != last ) {
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( face_idx ));
+            const FiniteVolumeStencil<dim>* const stencil_ptr = (initialise_FV_stencils==true) ?
+                                                                 fvm_manager_->Stencil( csmpElementType ) :
+                                                                 static_cast<const FiniteVolumeStencil<dim>* const>(nullptr);
             if ( csmpElementType == UNKNOWN ) {
                  cerr <<"\n\t"<< parseFiniteElementType(csmpElementType) <<" encountered for Face "<< face_idx <<"\n";
                  csmp_error.Note( FATAL_ERROR, "MeshManager::Initialise:", "encountered UNKNOWN Face element type." );
               }
             typename plf::colony<Face<dim>>::iterator
                fit = faces_.emplace( Face<dim>( face_idx, fem_manager_.E( csmpElementType ),
-                                                          fvm_manager_.Stencil( csmpElementType ), evars, cvars ) );
+                                                          stencil_ptr, evars, cvars ) );
             // assigning nodes to faces
             const auto nodes( (*fit).Nodes() );
             for ( auto j{0U}; j<nodes; ++j ) {
@@ -441,10 +456,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                            cerr <<"\n\t"<< index <<" vs. number of elements+faces = "<< n_elmts + n_faces << endl;
                            csmp_error.Note( ERROR, "MeshManager::Initialise: ", "face ID in 'pfverts' out of range.");
                         }
-                      // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                       if ( index >= n_elmts )
                         e.Assign( j, &(*next(faces_.begin(),index - n_elmts)) );
                       else {
+                           // if the Face neighbor has an index smaller than n_elmts it must be a boundary indicator
                            assert( index < 0 );
                            e.Assign( j, static_cast<Face<dim>*>(nullptr) );
                         }
@@ -502,16 +517,19 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
        const IntegrationPointVariables cvars( phys_vars.IntegrationPointVariablesAt( INTER_FACE ) );
 
        typename deque<vector<int64_t> >::const_iterator  first( vset.PlistInterFacesBegin() ),
-                                                        last( vset.PlistInterFacesEnd() );
+                                                         last( vset.PlistInterFacesEnd() );
 
        size_t interface_idx(vset.Elements() + vset.Faces());
        while ( first != last )
          {
             const CSMP_FEM_TYPE csmpElementType = static_cast<CSMP_FEM_TYPE>(vset.ElementType( interface_idx ));
+            const FiniteVolumeStencil<dim>* const stencil_ptr = (initialise_FV_stencils==true) ?
+                                                                 fvm_manager_->Stencil( csmpElementType ) :
+                                                                 static_cast<const FiniteVolumeStencil<dim>* const>(nullptr);
             typename plf::colony<InterFace<dim>>::iterator
               ifit = interfaces_.emplace( InterFace<dim>( interface_idx,
                                                           fem_manager_.E( csmpElementType ),
-                                                          fvm_manager_.Stencil( csmpElementType ),
+                                                          stencil_ptr,
                                                           evars, cvars ) );
                                                        
             // number of nodes of the finite-element corresponding to the interface
@@ -519,7 +537,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
             // assigning nodes
             // inside
             for ( auto j{0U}; j<nodes; ++j ) {
-                 const size_t node(vset.Plist( interface_idx, j ));
+                 const size_t node = vset.Plist( interface_idx, j );
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": INSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
@@ -528,7 +546,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
               }
             // outside
             for ( auto j{0U}; j<nodes; ++j ) {
-                 const size_t node(vset.Plist( interface_idx, j+nodes ));
+                 const size_t node = vset.Plist( interface_idx, j+nodes );
                  if ( node >= n_nodes ) {
                       cerr <<"\n\tInterFace "<< interface_idx <<": OUTSIDE node j "<< node <<" vs. "<< n_nodes <<" nodes.\n";
                       csmp_error.Note( ERROR, "MeshManager::Initialise", "Index of InterFace node out of range.");
@@ -562,7 +580,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
               for ( auto j{0U}; j<neighbors; ++j )
                 {
                    // if there is a neighbor (as is the case if the stored index is greater than zero)
-                   const int64_t  index( vset.Pfvert( iface_idx, j ) );
+                   const int64_t  index = vset.Pfvert( iface_idx, j );
                    
                    // if there is no neighbor nothing needs to be done because all neighbor pointers
                    // are already set to 'null' per default
@@ -574,8 +592,8 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
                         csmp_error.Note( ERROR, "MeshManager::Initialise: ", "interface ID in 'pfverts' out of range.");
                      }
 
-                   // NB: the number of the interface in the container is the number from the VSet - elements and faces
-                   // because the interface container is counts from 0..n-1
+                   // NB: the interface number in the container is the number from the VSet - elements - faces
+                   // because the interface container indexes from 0..n-1
                    const size_t neighbor_idx = index - n_elmts - n_faces;
                    itf.Assign( j, &(*next(interfaces_.begin(),neighbor_idx)) );
                 }
@@ -587,7 +605,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              const int64_t  index2 = vset.Pfvert( iface_idx, neighbors+1U );
              
              if ( index1 < 0 || index2 < 0 ) {
-                  cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer "<< index2 <<"\n";
+                  cerr <<"\n\tInterFace "<< iface_idx <<": inner neighbor "<< index1 <<" and outer neighbor "<< index2 <<"\n";
                   csmp_error.Note( ERROR, "MeshManager::Initialise: ", "Higher dimensional neighbor of InterFace not defined in 'pfverts'.");
                }
              if ( index1 >= n_elmts || index2 >= n_elmts ) {
@@ -606,6 +624,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
              assert( inner_face_id < innerElement->Faces() );
              assert( outer_face_id < outerElement->Faces() );
              itf.Assign( innerElement, inner_face_id, outerElement, outer_face_id );
+             
              // assignment: intervening Element else boundary flag INTERNAL
              const int64_t  index3 = vset.Pfvert( iface_idx, neighbors+4U );
              assert( index3 < n_elmts );
@@ -683,20 +702,19 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // ------------------------------------------------------------------------------
   // 8. Constructing NodeManifolds if any
   // -------------------------------------------------------------------------------
-   if ( !interfaces_.empty() ) {
-       VData::vertexManifoldIndices  indexes;
-       vset.ExtractNodeManifolds( indexes );
-       node_manifold_manager_ = new NodeManifoldManager<dim>( indexes, nodes_ );
-     }
+   if ( !interfaces_.empty() )
+     node_manifold_manager_ = new NodeManifoldManager<dim>( nodes_, vset.PmanifoldsBegin(), vset.PmanifoldsEnd() );
      
 #ifdef MESH_MANAGER_DEBUG
 if ( !interfaces_.empty() ) {
-   cerr <<"\nMeshManager::Initialise: current node manifolds:\n";
-   for ( const auto& nit : nodes_ ) {
-        cerr <<"\t"<<"manifold: "<< nit.Idx();
-        if ( nit.IsManifold() )
-          nit.Manifold()->Out();
+   cerr <<"\n\n"<<"\nMeshManager::Initialise: node manifolds initialised in NodeManifoldManager:\n";
+   size_t counter{0U};
+   for ( auto nit=node_manifold_manager_->ManifoldsBegin(); nit!=node_manifold_manager_->ManifoldsEnd(); ++nit ) {
+        cerr <<"\n\t\t"<< counter++ <<": "<< parse( (*nit).GeometricClassifier() ) <<" ";
+        for ( auto z{0U}; z<(*nit).Branches(); z++ )
+          cerr << (*nit).N(z)->Idx() <<" ";
      }
+    cerr << endl;
   }
 #endif
 
@@ -705,6 +723,78 @@ if ( !interfaces_.empty() ) {
 } // end Initialise
 
 
+
+
+
+
+/**
+  Initialises the finite volume policy of the elements, faces, and interfaces by assigning the finite volume stencil pointers of the elements to the
+  corresponding finite volume stencils.
+
+@attention If a stencil is assigned already, noting is done. Remove stencil first (NULL ptr in elements)
+
+*/
+template<uint32_t dim>
+void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    if ( fem_manager_.InterpolationOrder() != 1U  ||
+        !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist only for linear FE with local coordinate system.");
+         return;
+      }
+
+    if ( elements_.empty() ) {
+         csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently no Element objects exist to which stencils could be assigned.");
+         return;
+      }
+
+    // 1. initialize the stencil manager (the stencils are build and assigned the correct properties
+    if ( !fvm_manager_ ) {
+         fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
+      }
+
+    // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
+    // storage for fv integration (sector/facet) point properties
+    {
+      const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+      const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+      for ( auto& e : elements_ ) {
+            if ( !e.FV() ) {
+                e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                e.ResizePropertyStorage( lvs, ipvs );
+              }
+        }
+    }
+    // faces
+    if ( !faces_.empty() )
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : faces_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+    // interfaces
+    if ( !interfaces_.empty() )
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : interfaces_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+
+ } // end InitializeFiniteVolumeStencils
 
 
 
@@ -739,10 +829,11 @@ if ( !interfaces_.empty() ) {
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::AddNodeAt( const Point<dim>& location,
                                               const LocalVariables& lvars,
-                                              BOX_BOUNDARY bdry )
+                                              BOX_BOUNDARY bdry,
+                                              TOPOTYPE topo )
 {
    typename plf::colony<Node <dim>>::iterator
-     nit = nodes_.emplace( Node<dim>( nodes_.size(), location, lvars, bdry ) );
+     nit = nodes_.emplace( Node<dim>( nodes_.size(), location, lvars, bdry, topo ) );
    return &(*nit);
 }
 
@@ -771,7 +862,8 @@ template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt,
                                                             size_t nearby_node,
                                                             const LocalVariables& nvars,
-                                                            BOX_BOUNDARY bflag )
+                                                            BOX_BOUNDARY bflag,
+                                                            TOPOTYPE topo )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
  
@@ -807,7 +899,7 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
   
    // else a new node is created
    typename plf::colony<Node <dim>>::iterator
-     nit = nodes_.emplace( Node<dim>( nodes_.size(), pt, nvars, bflag ) );
+     nit = nodes_.emplace( Node<dim>( nodes_.size(), pt, nvars, bflag, topo ) );
      
    return &(*nit);
 }
@@ -843,7 +935,7 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
    // 1. constructing new element
    typename plf::colony<Element<dim>>::iterator
      eit = elements_.emplace( Element<dim>( elements_.size(),
-                              fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars, material_id ) );
+                              fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) );
 
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
@@ -903,11 +995,11 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
         ifptr->InterveningElement()->Out();
         csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "InterFace already has intervening element");
      }
-     
+
    // 1. checking the node vector
    if ( nodes.empty() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector is empty");
-   if ( nodes.size() != ifptr->Nodes() )
+   if ( nodes.size() != ifptr->FE()->Nodes() )
      csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector has the wrong size");
      
    // 2. checking the validity of the node vector in debug mode
@@ -1076,12 +1168,13 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
      // if the node already is a manifold, the outside node in it is found and assigned
      if ( eptr->N(i)->IsManifold() ) {
           for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
-            if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+            // FORMERLY: if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
+            if ( eptr->N(i) != eptr->N(j) )
               // the outside nodes must be listed in reverse order
               outside_nodes[ n_nodes-i-1U ] = eptr->N(i)->Manifold()->N(j);
        }
      // else the node is duplicated including creation of the manifold
-     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), OUTSIDE, nvars );
+     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), nvars );
 
 
    // 2. constructing the new interface
@@ -1218,7 +1311,8 @@ Face<dim>* const MeshManager<dim>::AddBoundaryFace( csmp::Element<dim>* const ep
    // 1. constructing new face, connecting it to its higher-dimensional neighbor on the inside, and assigning nodes
    const size_t face_number{faces_.size()};
    typename plf::colony<Face<dim>>::iterator
-     fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ), fvm_manager_, local_face_id, lvars, ivars ) );
+     fit = faces_.emplace( Face<dim>( *eptr, fem_manager_.E( eptr->FE()->ElementTypeOfFace(local_face_id) ),
+                                      fvm_manager_, local_face_id, lvars, ivars ) );
 
    (*fit).Idx( face_number );
 
@@ -1264,8 +1358,9 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 
    // 2. constructing new interface
    const size_t iface_id = interfaces_.size();
+   const FiniteVolumeStencil<dim>* const stencil_ptr = (fvm_manager_) ? fvm_manager_->Stencil(etype) : nullptr;
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), stencil_ptr, lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
@@ -1333,8 +1428,9 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
 
    // 2. constructing new interface
    const size_t iface_id = interfaces_.size();
+   const FiniteVolumeStencil<dim>* const stencil_ptr = (fvm_manager_) ? fvm_manager_->Stencil(etype) : nullptr;
    typename plf::colony<InterFace<dim>>::iterator
-     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), fvm_manager_.Stencil(etype), lvars, ivars ) );
+     ifp = interfaces_.emplace( InterFace<dim>( fem_manager_.E(etype), stencil_ptr, lvars, ivars ) );
      
    // 3. assigning higher dimensional elements and faces
    (*ifp).Assign( inner_parent, inner_element_face_id, outer_parent, outer_element_face_id );
@@ -1422,12 +1518,10 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( csmp::Face<dim>*
     @attention the current node is assumed to be on the INSIDE of the Interface; when there is no manifold yet.
     
     @param nptr_inside pointer to the node that will be on the inside of the InterFace that gets created if any.
-    @param new_node_side manifold-type qualifier for the new node
     @return pointer to the new node now stored by the MeshManager.
 */
 template<uint32_t dim>
 Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
-                                              INTERFACE_SIDE new_node_side,
                                               const LocalVariables& lvars )
   {
     if ( nptr_inside == nullptr )
@@ -1442,7 +1536,7 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
     // creating or updating the NodeManifold
     if ( nptr_inside->IsManifold() ) {
          // if we are already dealing with a manifold, the new node is added to it
-         nptr_inside->Manifold()->Add( &(*nit), new_node_side );
+         nptr_inside->Manifold()->Add( &(*nit) );
          // (*nit).Assign( (*nptr_inside->Manifold()) ); is already done by Add()
       }
     else {
@@ -1450,14 +1544,16 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
          assert ( node_manifold_manager_ != nullptr );
            
          // a new manifold from the old and the new node using the provided default geometric classifier
-         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::INTERFACE );
+         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::SPLIT_BOUNDARY );
          // and its nodes are connected to it
          nptr_inside->Assign( (*nmf) );
          (*nit).Assign( (*nmf) );
       }
 
     // working out whether the original classification as an interface was correct
+#ifdef DEBUG
     consistencyCheck( (*(*nit).Manifold()) );
+#endif
     return &(*nit);
     
   } // end Duplicate
@@ -1756,7 +1852,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            // if there a matching outside node has not been created yet
            if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                 new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
              }
            // if the necessary new node was already created earlier it was retrieved and is assigned here
@@ -1795,7 +1891,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          for ( auto i{0U}; i<n_nodes; i++ )
            if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
                 if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                     outside_nodes[i] = Duplicate( (*first)->N(i), OUTSIDE, nvars );
+                     outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                      new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
                   }
                 else outside_nodes[i] = (*nit).second;
@@ -2004,7 +2100,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
              if ( perimeter_node_ptrs.empty() ) {
                   // nodes are duplicated unless they were already duplicated
                   if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                       outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                        new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                     }
                   else outside_nodes[nd_count] = (*nit).second;
@@ -2014,7 +2110,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
                   if ( !binary_search( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) ) ) {
                         // and only if these nodes have not already been duplicated
                         if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
-                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                              new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                           }
                         else outside_nodes[nd_count] = (*nit).second;
@@ -2023,7 +2119,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
                    else if ( it.first.first->N(i)->AtBoundary() != NOT || it.first.first->N(i)->IsManifold() ) {
                         if ( (nit=new_nodes.find(it.first.first->N(i))) == new_nodes.end() ) {
                              // NB: Duplicate adds the duplicated manifold nodes to the respective manifolds
-                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), OUTSIDE, nvars );
+                             outside_nodes[nd_count] = Duplicate( it.first.first->N(i), nvars );
                              new_nodes.insert( make_pair( it.first.first->N(i), outside_nodes[nd_count] ) );
                           }
                         else outside_nodes[nd_count] = (*nit).second;
@@ -2226,24 +2322,25 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
           // if inside or outside nodes already are manifolds, the non-manifold nodes are added to them
           // (Note: Add() also assigns the argument node to this manifold)
           if ( nit.first->IsManifold() && !nit.second->IsManifold() )
-             nit.first->Manifold()->Add( nit.second, OUTSIDE );
+             nit.first->Manifold()->Add( nit.second );
           else if ( !nit.first->IsManifold() && nit.second->IsManifold() )
-             nit.second->Manifold()->Add( nit.first, INSIDE );
+             nit.second->Manifold()->Add( nit.first );
           else {
                // a new manifold is created using the provided default geometric classifier
                auto nmf = node_manifold_manager_->AddManifold( nodes_,
                                                                nit.first,
                                                                nit.second,
-                                                               ManifoldType::INTERFACE );
+                                                               ManifoldType::SPLIT_BOUNDARY );
                // and its nodes are connected to it
                nit.first->Assign( (*nmf) );
                nit.second->Assign( (*nmf) );
             }
 
            // working out whether the original classification as an interface was correct
+#ifdef DEBUG
            consistencyCheck( (*nit.first->Manifold()) );
+#endif
         }
-
 
      // 4. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
@@ -3285,7 +3382,6 @@ void MeshManager<dim>::UpdateConnectivity()
     map<Node<dim>*,set<Element<dim>*> >  parent_elmts_per_node;
     for ( auto& it : elements_ ) {
         assert( it.FE() );
-        assert( it.FV() );
         const auto nodes_end{ it.NodesEnd() };
         for ( auto nit = it.NodesBegin(); nit != nodes_end; ++nit ) {
              auto mit = parent_elmts_per_node.insert( make_pair( (*nit), set<Element<dim>*>{ &it } ) );
@@ -3562,12 +3658,11 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     {
       const size_t higherDimParents( 2U );
       const size_t higherDimParentsFaceNum( 2U );
-      const size_t interfaceMultiplier( 2U );
       const size_t interfaceExtras( 1U ); // 1 entry for potential high dim element
 
       deque<uint32_t>  nodes_per_element;
       deque<uint32_t>  neighbors_per_element;
-      deque<int8_t>  csmp_fem_types;
+      deque<int8_t>    csmp_fem_types;
 
       // 1.1 identifying how many nodes and neighbors there are per element
       for ( const auto& e : elements_ ) {
@@ -3588,7 +3683,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       if ( !interfaces_.empty() )
         for ( const auto& f : interfaces_ ) {
             // multiplier takes care of the multiplicated interface nodes that the InterFace will be connected to
-            nodes_per_element.push_back( f.Nodes() * interfaceMultiplier );
+            nodes_per_element.push_back( f.Nodes() );
             neighbors_per_element.push_back( f.Neighbors() + higherDimParents + higherDimParentsFaceNum + interfaceExtras );
             csmp_fem_types.push_back( f.FE_Type() );
           }
@@ -3640,11 +3735,16 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // boundary flags
   vset.ResizeBFlags( /* nodes */ );
   for ( const auto& n : nodes_ )
-    vset.AddBFlag( n.Idx(), n.AtBoundary() );
-  
+    vset.BFlag( n.Idx(), n.AtBoundary() );
+    
+  // geometry flags
+  vset.ResizeBREP_Flags( /* nodes */ );
+  for ( const auto& n : nodes_ )
+    vset.BREP_Flag( n.Idx(), n.Attribute() );
   
   // 'pelmt' was already set above
-  
+
+
   // 3. adding 'plist' connectivity list and 'pmtrl'
   // -----------------------------------------------
   vector<int32_t>  pmtrl( elements_.size(), 0 );
@@ -3672,9 +3772,11 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
   // interfaces
   if ( !interfaces_.empty() )
     for ( const auto& f : interfaces_ ) {
-        const auto n_nodes{f.Nodes()};
+        const auto n_nodes{f.FE()->Nodes()};
         for ( auto j{0U}; j<n_nodes; ++j )
-          vset.Plist( eidx, j, (f.N( j )->Idx()) );
+          vset.Plist( eidx, j, (f.N( j, INSIDE )->Idx()) );
+        for ( auto j{0U}; j<n_nodes; ++j )
+          vset.Plist( eidx, n_nodes + j, (f.N( j, OUTSIDE )->Idx()) );
         ++eidx;
       }
 
@@ -3706,11 +3808,20 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       // equidimensional neighbors first
       const auto neighbors{ f.Neighbors() };
       for ( auto j{0U}; j<neighbors; ++j ) {
-           const Face<dim>* const ptr = f.Neighbor(j);
-           // if the neighbor exists (which it must on the inside of the Face)
-           if ( ptr != nullptr )
-             vset.Pfvert( eidx, j, ptr->Idx() );
-           else vset.Pfvert( eidx, j, IRREGULAR );
+           // if the neighbor exists
+           if ( f.Neighbor(j) != nullptr )
+             vset.Pfvert( eidx, j, f.Neighbor(j)->Idx() );
+           else {
+                // the face is either located on a model boundary or an internal boundary
+                bool all_nodes_at_external_boundary{true};
+                for ( const auto& fnit : f.CornerNodesOfFace(j) )
+                  if ( fnit->AtBoundary() == NOT || fnit->AtBoundary() == INTERNAL ) {
+                       all_nodes_at_external_boundary = false;
+                       break;
+                    }
+                if ( all_nodes_at_external_boundary ) vset.Pfvert( eidx, j, IRREGULAR );
+                else vset.Pfvert( eidx, j, INTERNAL );
+             }
         }
       // higher-dimensional neighbors second
       // inner neighbor
@@ -3727,10 +3838,13 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
           // getting the boundary placement of the inner element
           vset.Pfvert( eidx, neighbors + 1U, atBoundary( f.InnerParent(), f.InnerParentFaceID() ) );
         }
+      // face id's converted to
       // adding the local numbers of the faces that the Face is collocated with if any
       vset.Pfvert( eidx, neighbors + 2U, f.InnerParentFaceID() );
-      // if there is no outer element, the face idx will initialised with NULL_IDX
-      vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
+      // if there is no outer element, the face idx will initialised with UNSPECIFIED
+      if ( f.OuterParentFaceID() == numeric_limits<uint32_t>::max() )
+        vset.Pfvert( eidx, neighbors + 3U, UNSPECIFIED );
+      else vset.Pfvert( eidx, neighbors + 3U, f.OuterParentFaceID() );
       ++eidx;
    }
 
@@ -3743,7 +3857,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
     const auto neighbors{ f.Neighbors() };
     for ( auto j{0U}; j<neighbors; ++j ) {
          if ( f.Neighbor(j) != nullptr )
-           vset.Pfvert( eidx, j, f.Idx() );
+           vset.Pfvert( eidx, j, f.Neighbor(j)->Idx() );
          else
            vset.Pfvert( eidx, j, INTERNAL );
       }
@@ -3772,11 +3886,34 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       
     ++eidx;
   }
-  
+
+  // 'pmanifolds' supporting interfaces: initialising VData::manifold_container
+  // --------------------------------------------------------------------------
+  if ( !interfaces_.empty() ) {
+       assert( node_manifold_manager_ );
+       VData::manifoldContainer  node_manifolds;
+       node_manifolds.reserve( node_manifold_manager_->Manifolds() );
+       for ( auto nmf=node_manifold_manager_->ManifoldsBegin(); nmf!=node_manifold_manager_->ManifoldsEnd(); ++nmf )
+         node_manifolds.push_back( (*nmf).Data() );
+       vset.AddNodeManifolds( node_manifolds.begin(), node_manifolds.end() );
+    }
+
   cout << "\nMeshManager<" << dim << ">::OutputMeshTo: MeshManager successfully output to VSet..." << endl;
 
 } // end OutputMeshTo( VSet )
 
+
+/* DEBUGGING
+cout <<"\n\n"<<"testing node numbering:\n";
+for ( const auto& n : nodes_ ) cout << n.Idx() <<" ";
+cout <<"\n\n"<<"testing element numbering:\n";
+for ( const auto& n : elements_ ) cout << n.Idx() <<" ";
+cout <<"\n\n"<<"testing face numbering:\n";
+for ( const auto& n : faces_ ) cout << n.Idx() <<" ";
+cout <<"\n\n"<<"testing interface numbering:\n";
+for ( const auto& n : interfaces_ ) cout << n.Idx() <<" ";
+cout << endl;
+*/
 
 
 
@@ -5031,7 +5168,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t i( 0U );
@@ -5040,7 +5177,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t i( 0U );
@@ -5049,7 +5186,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -5058,7 +5195,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t i( 0U );
@@ -5067,7 +5204,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   e.Store( key, value );
                 }
               }
- break;
+            break;
           default:
             csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element variable not recognized." );
@@ -6100,7 +6237,9 @@ bool  MeshManager<dim>::IsContiguous() const
    set<Node<dim>*> node_pointers;
    findInterconnectedNodeCluster<dim>( const_cast<Node<dim>*>(&(*nodes_.begin())), node_pointers );
    
-   if ( node_pointers.size() < nodes_.size() ) return false;
+   size_t total_corner_nodes = countCornerNodes<dim>( ElementsBegin(), ElementsEnd() );
+
+   if ( node_pointers.size() < total_corner_nodes ) return false;
    return true;
 
  } // end IsContiguous
@@ -6343,8 +6482,10 @@ void MeshManager<dim>::Out() const
   for ( const auto& f : interfaces_ ) {
         cout << "\nInterFace ID: " << f.Idx() <<" ("<< parseFiniteElementType(f.FE_Type()) <<")."<< endl;
         cout << "Member Nodes: " << endl;
-        for ( auto i{0U}; i < f.Nodes(); i++ )
-          cout << f.N( i )->Idx() << "\t";
+        for ( auto i{0U}; i < f.FE()->Nodes(); i++ )
+          cout << f.N( i, INSIDE )->Idx() << "\t";
+        for ( auto i{0U}; i < f.FE()->Nodes(); i++ )
+          cout << f.N( i, OUTSIDE )->Idx() << "\t";
         cout << "\nNeighbor faces: " << endl;
         for ( auto i{0U}; i < f.Neighbors(); i++ )
           if ( f.Neighbor( i ) != NULL )
@@ -6376,7 +6517,7 @@ void MeshManager<dim>::Out() const
   cout <<"\nFinite volume stencils: ";
   for ( const auto& fit : etypes ) {
        cout <<"\n"<< parseFiniteElementType( fit );
-       fvm_manager_.Stencil(fit)->Out();
+       if ( fvm_manager_ ) fvm_manager_->Stencil(fit)->Out();
     }
   cout << endl;
   

@@ -1,5 +1,7 @@
 #include "FibonacciHeap_Test.h"
 
+#include <algorithm>
+
 using namespace std;
 using namespace ajb;
 

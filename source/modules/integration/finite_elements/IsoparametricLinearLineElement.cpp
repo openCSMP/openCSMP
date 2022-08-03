@@ -722,18 +722,13 @@ double IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN 
     here the normal is calculated using the derivative of the shape function at the middle node
     the normal is the 90o counter-clockwise rotated origin to destination vector.
 */
-void  IsoparametricLinearLineElement::UnitNormal( vector<double>& vc ) const
+vector<double>  IsoparametricLinearLineElement::UnitNormal() const
  {
-    if ( dim == 1 ) {
-         const double vc0(1.);
-         vc.resize(1U);
-         vc[0] = vc0;
-         return;
-      }
+    if ( dim == 1U ) return vector<double>{ 1. };
 
     const double rAtBaryCenter(0.0);
     // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2 ) {
+    if ( dim == 2U ) {
          // finding tangent at mid-point node
          dNr( rAtBaryCenter, DNR );
          const double vc0 = JacobianFor( DNR, 0 ); // dx
@@ -743,29 +738,22 @@ void  IsoparametricLinearLineElement::UnitNormal( vector<double>& vc ) const
          // rotating tangent edge clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
-         vc.resize(2U);
-         // flipping normal so that it will be outward pointing 
-         vc[0] = -normal.Destination()[0];
-         vc[1] = -normal.Destination()[1];
-         return;
+         // flipping normal so that it will be outward pointing
+         return vector<double>{ -normal.Destination()[0], -normal.Destination()[1] };
       }
 
-    if ( dim == 3 ) {
-         // using slope at mid-point node
-         dNr( rAtBaryCenter, DNR );
-         double vc0 = JacobianFor( DNR, 0 ); // dx
-         double vc1 = JacobianFor( DNR, 1 ); // dy
-         double vc2 = JacobianFor( DNR, 2 ); // dz
-         const double sum = vc0 + vc1 + vc2;
-         // normalizing the normal
-         vc0 /= sum;
-         vc1 /= sum;
-         vc2 /= sum;
-         vc.resize(3U);
-         vc[0] = vc0; // dx
-         vc[1] = vc1; // dy
-         vc[2] = vc2; // dz
-      }
+    //if ( dim == 3U ) {
+     // using slope at mid-point node
+     dNr( rAtBaryCenter, DNR );
+     double vc0 = JacobianFor( DNR, 0 ); // dx
+     double vc1 = JacobianFor( DNR, 1 ); // dy
+     double vc2 = JacobianFor( DNR, 2 ); // dz
+     const double sum = vc0 + vc1 + vc2;
+     // normalizing the normal
+     vc0 /= sum;
+     vc1 /= sum;
+     vc2 /= sum;
+     return vector<double>{ vc0, vc1, vc2 }; // dx, dy, dz
 
  } // end UnitNormal
 

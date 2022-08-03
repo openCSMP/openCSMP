@@ -1185,8 +1185,10 @@ size_t ModelSubDomain<dim,CELL>::RenumberCells() const
     size_t counter(0U);
 
     for( auto& it : cell_vec_ ) it->Idx(counter++);
+    cell_vec_[0]->FE()->CurrentID( numeric_limits<size_t>::max() );
 
     return counter;
+    
  } // end RenumberCells
 
 
@@ -4984,7 +4986,7 @@ void readDomainIndexesFromBinaryFile( uint32_t dim, fstream& fp, SubDomainInfo& 
     binaryFileRead( fp, info.perimeter_nodes );
     assert( !info.perimeter_nodes.empty() );
    
- } // end readRegionIndexesFromBinaryFile
+ } // end readDomainIndexesFromBinaryFile
 
 
 

@@ -21,10 +21,10 @@ class FiniteElementPolicy {
     void AssignFiniteElementNullPtr() { fptr_ = nullptr; }
     
     /// returns search key to match element faces; pointers in order so that they can be searched
-    std::set<Node<dim>*> CornerNodesOfFace( uint32_t face_id );
+    std::set<Node<dim>*> CornerNodesOfFace( uint32_t face_id ) const;
 
     /// returns set of nodes that are neighbors of the target node in this element
-    std::set<Node<dim>*> CornerNodesConnectedTo( uint32_t node_id );
+    std::set<Node<dim>*> CornerNodesConnectedTo( uint32_t node_id ) const;
 
     /// the type is an enumeration that is used in the generation of finite elements
     CSMP_FEM_TYPE  FE_Type() const;
@@ -96,7 +96,7 @@ class FiniteElementPolicy {
   
     /// returns the value of any property interpolated to the element's center of gravity
     template<class Var>
-    void       PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
+    void     PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
 
     /// scalar version
     double   PropertyValueAtBaryCenter( const csmp::Index& ) const;
@@ -140,9 +140,6 @@ class FiniteElementPolicy {
 
     /// retrieve barycenter of element face
     Point<dim> FaceBaryCenter( uint32_t face ) const;
-
-    /// returns area of face i (to be scaled with thickness attribute if this is a lower-dimensional element)
-    double     FaceArea( uint32_t face ) const;
 
     /// returns unit normal to face of element i
     Point<dim> UnitNormalToFace( uint32_t face ) const;

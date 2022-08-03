@@ -554,42 +554,34 @@ double IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& 
 
 /// here the normal is calculated using the derivative of the shape function
 /// at the middle node
-void  IsoparametricQuadraticLineElement::UnitNormal( vector<double>& vc ) const
+vector<double>  IsoparametricQuadraticLineElement::UnitNormal() const
  {
-    if ( dim == 1 ) {
-         vc[0] = 1.;
-         return;
-      }
+    if ( dim == 1U ) return vector<double>{ 1 };
     
     // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2 ) {
+    if ( dim == 2U ) {
          // finding tangent at mid-point node
          dNr( NX[2], DNR );
-         vc[0] = JacobianFor( DNR, 0 ); // dx
-         vc[1] = JacobianFor( DNR, 1 ); // dy
-         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc[0],vc[1]) ); 
+         const double vc0 = JacobianFor( DNR, 0 ); // dx
+         const double vc1 = JacobianFor( DNR, 1 ); // dy
+         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc0,vc1) ); 
          // rotating tangent edge counter-clockwise to find normal to face
          normal.Rot();
          normal.NormalizeTo( 1. );
-         vc[0] = normal.Destination()[0];
-         vc[1] = normal.Destination()[1];
-         return;
+         return vector<double>{ normal.Destination()[0], normal.Destination()[1] };
       }
 
-    if ( dim == 3 ) {
-         // using slope at mid-point node
-         dNr( NX[2], DNR );
-         vc[0] = JacobianFor( DNR, 0 ); // dx
-         vc[1] = JacobianFor( DNR, 1 ); // dy
-         vc[2] = JacobianFor( DNR, 2 ); // dz
-         double sum = vc[0] + vc[1] + vc[2];
-         // normalizing the normal
-         vc[0] /= sum;
-         vc[1] /= sum;
-         vc[2] /= sum;
-         cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
-         return;
-      }
+    // if ( dim == 3 ) {
+     // using slope at mid-point node
+     dNr( NX[2], DNR );
+     vector<double> vc{ JacobianFor( DNR, 0 ), JacobianFor( DNR, 1 ), JacobianFor( DNR, 2 ) }; // dx dy dz
+     double sum = vc[0] + vc[1] + vc[2];
+     // normalizing the normal
+     vc[0] /= sum;
+     vc[1] /= sum;
+     vc[2] /= sum;
+     cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
+     return vc;
 
  } // end UnitNormal
 

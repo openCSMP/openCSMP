@@ -207,10 +207,10 @@ void Element_Test::VariableAccessAndIterators()
     csmp::Element<2U>  quad( 0, &fe_q, &quad_fv, evars, ivars, mtrl_idx );
    
     // Nodes - constructor: Node( size_t idx, const Point<dim>&, const LocalVariables&, BOX_BOUNDARY = NOT );
-    csmp::Node<2U> n0( 0, Point<2>(0.,0.), evars, CNR1 ),
-                   n1( 1, Point<2>(0.,0.), evars, CNR2 ),
-                   n2( 2, Point<2>(0.,0.), evars, CNR3 ),
-                   n3( 3, Point<2>(0.,0.), evars, CNR4 );
+    csmp::Node<2U> n0( 0, Point<2>(0.,0.), evars, CNR1, EXTERIOR_POINT ),
+                   n1( 1, Point<2>(0.,0.), evars, CNR2, EXTERIOR_POINT ),
+                   n2( 2, Point<2>(0.,0.), evars, CNR3, EXTERIOR_POINT ),
+                   n3( 3, Point<2>(0.,0.), evars, CNR4, EXTERIOR_POINT );
     
     // assigning the nodes
     quad.Assign( 0, &n0 );

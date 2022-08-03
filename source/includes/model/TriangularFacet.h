@@ -14,12 +14,12 @@ namespace csmp {
 
 /// triangle area
 double triangleArea( const Point<3U>&, 
-                       const Point<3U>&, 
-                       const Point<3U>& );
+                     const Point<3U>&,
+                     const Point<3U>& );
 /// area  in 2D
 double triangleArea( const Point<2U>&,
-                       const Point<2U>&,
-                       const Point<2U>& );
+                     const Point<2U>&,
+                     const Point<2U>& );
 
 /// returns the normal of a triangle
 Point<3U>  normalOfTriangle( const Point<3U>&, 

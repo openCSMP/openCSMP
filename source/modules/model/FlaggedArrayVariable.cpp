@@ -17,7 +17,7 @@ FlaggedArrayVariable::FlaggedArrayVariable( const Index& arrayKey,
                                             double defaultValue,
                                             VARIABLE_FLAG flag )
   : data_ ( arrayKey.dataDepth, defaultValue ),
-    flags_( arrayKey.dataDepth,  flag)
+    flags_( arrayKey.dataDepth, flag)
   {
   }
 
@@ -65,12 +65,12 @@ FlaggedArrayVariable& FlaggedArrayVariable::operator=( const ScalarVariable& val
   }
 
 
-size_t FlaggedArrayVariable::Size() const
+uint32_t FlaggedArrayVariable::Size() const
   {
-    return data_.size();
+    return static_cast<uint32_t>(data_.size());
   }
 
-void FlaggedArrayVariable::Resize( size_t newSize, double newValue )
+void FlaggedArrayVariable::Resize( uint32_t newSize, double newValue )
   {
     data_.resize ( newSize, newValue );
     flags_.resize( newSize, ANY );
@@ -104,13 +104,13 @@ double& FlaggedArrayVariable::operator()( size_t i )
     return data_[i];
   }
 
-void  FlaggedArrayVariable::Component( size_t i, double val )
+void  FlaggedArrayVariable::Component( uint32_t i, double val )
  {
     assert( i < Size() );
     data_[i] = val;
  }
 
-double  FlaggedArrayVariable::Component( size_t i ) const
+double  FlaggedArrayVariable::Component( uint32_t i ) const
  {
     assert( i < Size() );
     return data_[i];

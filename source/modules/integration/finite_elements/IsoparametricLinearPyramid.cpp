@@ -13,8 +13,8 @@ namespace csmp {
 IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_PYRAMID, true, true, 1U ),
-      NXYZ(5,3),
-      IP(integrationPoints,3)
+    NXYZ(5,3),
+    IP(integrationPoints,3)
  {
     //AAM, 07.02
     dim = 3;

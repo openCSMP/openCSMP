@@ -150,8 +150,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
-   assert( f   != nullptr );
-   assert( fvs != nullptr );
+   assert( f != nullptr );
 
    if ( this->UsesLocalCoordinates() )
      this->ResizePropertyStorage( ep, ip );
@@ -177,8 +176,7 @@ InterFace<dim>::InterFace( size_t index,
     outerParent_( nullptr ),
     collocated_nodes_(true)
 {
-   assert( f   != nullptr );
-   assert( fvs != nullptr );
+   assert( f != nullptr );
 
    if ( this->UsesLocalCoordinates() )
      this->ResizePropertyStorage( ep, ip );
@@ -374,12 +372,12 @@ typename vector<InterFace<dim>*>::const_iterator  InterFace<dim>::NeighborsEnd()
 template<uint32_t dim>
 void InterFace<dim>::Accept( csmp::Visitor<dim>& vis )
 {
-  if ( vis.ApplicationTarget() == INTER_FACE )
-  {
-    vis.Visit( this );
-    return;
-  }
+  if ( vis.ApplicationTarget() == INTER_FACE ) {
+      vis.Visit( this );
+      return;
+    }
   throw csmp::Exception( ERROR, "InterFace<dim>::Accept", "Target of visitation unresolved." );
+  
 } // end Accept
 
 
@@ -792,7 +790,6 @@ bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
 
 
 /**
-
     Returns pointers to the nodes on either side of the Interface.
 
     @section input Input Arguments
@@ -804,6 +801,11 @@ bool  InterFace<dim>::IsEndPointNode( uint32_t n_local ) const
     @param side  side refers to the first or second parent element.
 
     @section implementation Implementation
+    
+    @attention since the nodes match the face of of the adjacent higher-dimensional elements,
+    they are numbered like these within the node container. It follows that the inside nodes in the
+    node connector are in normal order, but the ones for the outside are in reverse order starting
+    with the last node. This is taking into account when they are returned by this method.
 
     A range check is performed.
 
@@ -817,6 +819,8 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
   if ( side == OUTSIDE ) {
       // the number of nodes on a single side of the interface
+      // SKM fix to pass InterFace_Test
+      // const uint32_t outside_idx = static_cast<uint32_t>(node_connector_.size()) - 1U - n;
       const uint32_t outside_idx = n + this->FE()->Nodes();
       return node_connector_[outside_idx];
     }
@@ -834,13 +838,14 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n, INTERFACE_SIDE side ) cons
 
 
 /**
-    Access to all nodes of the interface.
+    Access to nodes on the CURRENT_SIDE of the interface. Taken from member current_side_
+    @param n must be the local node index counting from 0 to the number of nodes on one side of the element
 */
 template<uint32_t dim>
 csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
 {
-  assert( n < node_connector_.size() );
-  return node_connector_[n];
+  assert( n < this->FE()->Nodes() );
+  return this->N(n,current_side_);
 }
 
 
@@ -1004,79 +1009,55 @@ inline Point<1U> normalOfTriangle( const Point<1U>&, const Point<1U>&, const Poi
 template<uint32_t dim>
 double InterFace<dim>::Area( INTERFACE_SIDE side ) const
 {
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-  if ( side == INSIDE ) return innerParent_->FaceArea( inner_parent_face_id_ );
+   if ( side == MIDDLE ) {
+        // Volume() internally computes the coordinate matrix for the middle element
+        if ( middleElement_ != nullptr ) return middleElement_->Volume();
+        csmp_error.Note( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
+        return numeric_limits<double>::signaling_NaN();
+     }
+   else {
+        // this uses the Coordinate matrix initialised here
+        NodeCoordinateMatrix( this->FE()->XY, side );
+        return this->FE()->Volume();
+     }
 
-  if ( side == OUTSIDE ) return outerParent_->FaceArea( outer_parent_face_id_ );
-
-  if ( side == MIDDLE ) {
-       if ( middleElement_ != nullptr ) return middleElement_->Volume();
-       csmp_error.Note( ERROR, "InterFace<dim>::Area:", "InterFace FE type not recognized." );
-       return numeric_limits<double>::signaling_NaN();
-    }
-
-  // error
-  return numeric_limits<double>::signaling_NaN();
+   // error
+   return numeric_limits<double>::signaling_NaN();
 }
 
-
-/** returns unit normal into argument vector variable depending on corresponding parent element side
-*/
-template<uint32_t dim>
-void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc, INTERFACE_SIDE side ) const
-{
-  if ( side == INSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    innerParent_->UnitNormalToFace( inner_parent_face_id_, vc );
-    return;
-  }
-  else if ( side == OUTSIDE )
-  {
-    assert( innerParent_ != nullptr );
-    outerParent_->UnitNormalToFace( outer_parent_face_id_, vc );
-    return;
-  }
-
-  if ( middleElement_ != nullptr )
-    return middleElement_->UnitNormal( vc );
-
-  throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal(side):", "higher-dimensional parent Element does not exist!" );
-  innerParent_->UnitNormalToFace( inner_parent_face_id_, vc );
-}
 
 
 /**
-    For Interfaces the nodes of which are not collocated one would need to form the average of the normals or take the bisector
-    or the middle element.
+    Returns the outward-pointing unit normal to the InterFace pointing in the direction of the OUTSIDE.
+      Per default, the normal is sourced from the MIDDLE element.
+      If it is not there, the coordinate matrix is initalized with the averages of inside and outside node coordinates.
 */
 template<uint32_t dim>
-void  InterFace<dim>::UnitNormal( VectorVariable<dim>& vc ) const
+csmp::Point<dim>  InterFace<dim>::UnitNormal() const
 {
-   if ( middleElement_ != nullptr ) {
-        middleElement_->UnitNormal( vc );
-        return;
-     }
-   UnitNormal( vc, INSIDE );
+   if ( middleElement_ != nullptr )
+     return middleElement_->UnitNormal();
+
+   BisectorCoordinateMatrix();
+   return Point<dim>( this->FE()->UnitNormal() );
 }
+
+
 
 
 /**
    returns the normal pointing from the inside to the outside higher-dimensional Element of the InterFace, calculated for bisector plane.
 */
 template<uint32_t dim>
-csmp::Point<dim>  InterFace<dim>::UnitNormal() const
+csmp::Point<dim>  InterFace<dim>::UnitNormal( INTERFACE_SIDE side ) const
  {
-    if ( middleElement_ != nullptr ) return middleElement_->UnitNormal();
+    if ( side == MIDDLE && middleElement_ != nullptr )
+      return middleElement_->UnitNormal();
     
-    // TODO: perhaps one could use the averaged node positions of the manifold here
-    this->CoordinateMatrix();
-    vector<double> unrml( dim );
-    this->FE()->UnitNormal( unrml );
-    return Point<dim>( unrml );
- 
-    throw csmp::Exception( ERROR, "InterFace<dim>::UnitNormal:", "InterFace FE type not recognized." );
+    NodeCoordinateMatrix( this->FE()->XY, side );
+    return Point<dim>( this->FE()->UnitNormal() );
 
  } // end UnitNormal
 
@@ -1087,16 +1068,12 @@ csmp::Point<dim>  InterFace<dim>::UnitNormal() const
 Initialises VectorVariable with vector between node pair - returns false if overlap, true if distant
 */
 template<uint32_t dim>
-bool InterFace<dim>::NodeSpacing( uint32_t n, VectorVariable<dim>& innerToOuter ) const
-{
-  assert( n < node_connector_.size() - Nodes() );
-  Point<dim> dxyz = node_connector_[n]->Coordinate() - node_connector_[n + Nodes()]->Coordinate();
-  innerToOuter = dxyz;
-
-  if ( dxyz.Length() < numeric_limits<double>::epsilon() ) return false;
-
-  return true;
-}
+double InterFace<dim>::NodeSpacing( uint32_t n ) const
+  {
+    const uint32_t n_nodes{ this->FE()->Nodes() };
+    assert( n < n_nodes );
+    return node_connector_[n]->Coordinate().DistanceTo( node_connector_[n_nodes-1-n]->Coordinate() );
+  }
 
 
 
@@ -1110,24 +1087,27 @@ the finite-element matrix assembly. Since the number of element nodes
 may vary among different elements types, the number of rows in XY may
 also vary from element to element.
 
-@param XY A DenseMatrix<DM_MIN> class object (value type fT). This matrix is dynamically
-resized if necessary but must have been constructed with a finite size
+@param XY is the DenseMatrix<DM_MIN> class object (value type fT) stored in FiniteElement.
+This matrix is dynamically resized if necessary but must have been constructed with a finite size
 before passing it to CoordinateMatrix().
 
 The node coordinates are returned into the supplied matrix.
 
 @section application Application
 
-Finite-element forms of differential equations require the global node
-coordinates of the element to calculate the element constribution to the
-global solution matrix. If the element uses local coordinates, the global
-node coordinates will still be required to compute Jacobian (coordinate-
-transformation) matrix.
+Method will be called by FiniteElementPolicy to initialise XY matrix inside the finite element
 
 @attention when INTERFACE_SIDE == MIDDLE, the node locations on either side of the interface
 are used to find mid-points.
 
 */
+template<uint32_t dim>
+void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+{
+   NodeCoordinateMatrix( XY, current_side_ );
+
+} // end NodeCoordinateMatrix
+
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
@@ -1137,20 +1117,26 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_S
   for ( auto i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i, side )->Coordinate() );
 
-} // end CoordinateMatrix
+} // end NodeCoordinateMatrix
 
 
-
+/**
+       Interface bisector plane.
+*/
 template<uint32_t dim>
-void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+void  InterFace<dim>::BisectorCoordinateMatrix() const
 {
-  const auto n_nodes( Nodes() );
-  XY.Resize( n_nodes, dim );
+  const auto n_nodes( this->FE()->Nodes() );
+  this->FE()->XY.Resize( n_nodes, dim );
 
-  for ( auto i{0U}; i<n_nodes; ++i )
-    XY.AssignRow( i, N( i )->Coordinate() );
+  for ( auto i{0U}; i<n_nodes; ++i ) {
+       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
+       this->FE()->XY.AssignRow( i, mid_point );
+    }
 
 } // end CoordinateMatrix
+
+
 
 
 
@@ -1183,12 +1169,11 @@ BaryCentre().
 template<uint32_t dim>
 Point<dim>  InterFace<dim>::BaryCenter() const
 {
-  Point<dim>  pt( N( 0U )->Coordinate() );
-  const auto  n_nodes( node_connector_.size() );
+  Point<dim>  pt; // initialised to zero
 
   // all the nodes on both sides
-  for ( auto i = 1U; i<n_nodes; ++i )
-    pt += N( i )->Coordinate();
+  for ( const auto& n : node_connector_ )
+    pt += n->Coordinate();
 
   return pt / static_cast<double>(Nodes());
 }
@@ -1230,10 +1215,9 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
   // avoid division by zero
   assert( fMagnitudeOfDirection >= numeric_limits<double>::epsilon() );
 
-  const auto n_nodes( node_connector_.size() );
-  for ( auto i = 0; i<n_nodes; ++i ) {
+  for ( const auto& n : node_connector_ ) {
     // fTemp is the projection of the vector (0,0,0)-node(i) on the vector direction
-    double fTemp( vecDirection.DotProduct( N( i )->Coordinate() ) );
+    double fTemp( vecDirection.DotProduct( n->Coordinate() ) );
     fTemp /= fMagnitudeOfDirection;
 
     // update minimum value
@@ -1245,6 +1229,8 @@ double  InterFace<dim>::LengthInDirection( const VectorVariable<dim>& vecDirecti
   //substract magnitudes
   return fMaxTemp - fMinTemp;
 }
+
+
 
 
 /**
@@ -1303,11 +1289,11 @@ void  InterFace<dim>::Out() const
   cout << "\nInternal data: ";
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
-  for ( auto i{0U}; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
     str = parseBoundary( N( i, INSIDE )->AtBoundary() );
     cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
   }
-  for ( auto i{0U}; i<this->Nodes(); i++ ) {
+  for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
     str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
     cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
   }
@@ -1344,13 +1330,13 @@ void  InterFace<dim>::Out() const
     }
 
     cout << "\n Connected Node objects, side 1 of interface: ";
-    for ( auto i{0U}; i<this->Nodes(); i++ )
+    for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
       node_connector_[i]->Out();
     cout << endl;
 
     cout << "\n Connected Node objects, side 2 of interface: ";
-    for ( auto i{0U}; i<this->Nodes(); i++ )
-      node_connector_[i]->Out();
+    for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
+      node_connector_[ i+ this->FE()->Nodes() ]->Out();
     cout << endl;
 
     cout <<"\nParent (higher-dimensional) Element objects:\n";
@@ -1371,8 +1357,7 @@ void  InterFace<dim>::Out() const
     else cout << "\tnone.\n";
 
     cout << "\tUnit Normal:            ";
-    VectorVariable<dim> un( PLAIN, 0. );
-    UnitNormal( un );
+    Point<dim> un = UnitNormal();
     for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
     cout << endl;
 
