@@ -1139,7 +1139,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
   // creating boundary name by replacing BOUNDARY with SPLIT_BOUNDARY
   string   splitboundaryName( boundary.Name() );
   const size_t  str_length(string("BOUNDARY").length());
-  splitboundaryName.replace( splitboundaryName.find("BOUNDARY"), str_length, "SPLIT_BOUNDARY" );
+  splitboundaryName.replace( splitboundaryName.find("BOUNDARY"), str_length, "SPLITBOUNDARY" );
 
   // attempt to create a splitboundary
   if ( ContainsSplitBoundary(splitboundaryName) ) {
@@ -1361,8 +1361,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      //    given it the same name as the split boundary but calling it region instead
      // -----------------------------------------------------------------------------
      string       region_name( splitBoundary.Name() );
-     const size_t str_length( string("SPLIT_BOUNDARY").length() );
-     region_name.replace( region_name.find("SPLIT_BOUNDARY"), str_length, "REGION" );
+     const size_t str_length( string("SPLITBOUNDARY").length() );
+     region_name.replace( region_name.find("SPLITBOUNDARY"), str_length, "REGION" );
      
      const bool  unique_map(true);
      model->FormRegionFrom( region_name.c_str(), elmt_pointers.begin(), elmt_pointers.end(), unique_map );

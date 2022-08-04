@@ -1608,7 +1608,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
          for ( list<string>::const_iterator
                it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
               // handling the split boundaries
-              if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+              if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
                    const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
                    cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
                    cout <<" accumulating split boundary: "<< (*it) <<"\n";
@@ -1633,7 +1633,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
          if ( !shared_boundaries.empty() ) {
               for ( list<string>::const_iterator
                     it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
-                  if ( (*it).find("SPLIT_BOUNDARY") != std::string::npos ) {
+                  if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
                         const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
                         LateAccumulateSplitBoundaryIntegrals( domain, domain_boundary );
                      }
