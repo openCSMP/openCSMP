@@ -698,7 +698,10 @@ void InterFace<dim>::InitialiseNodeVector()
    //    which will preserve Node collocation
    outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
    node_count = 0U;
-   while( outerParent_->N( nids[0] )->Coordinate() != N( n_face_nodes_outer-1 )->Coordinate() &&
+
+   const auto n_corner_nodes_outer{ this->FE()->CornerNodes() };
+
+   while( outerParent_->N( nids[0] )->Coordinate() != N( n_corner_nodes_outer - 1 , INSIDE )->Coordinate() &&
           node_count < n_face_nodes_outer ) {
          rotate( nids.begin(), nids.begin()+1, nids.end() );
          node_count++;
@@ -847,6 +850,77 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
   assert( n < this->FE()->Nodes() );
   return this->N(n,current_side_);
 }
+
+
+
+/**
+    Returns pointers to the nodes which match with the INSIDE ordering of the interface
+
+    @section input Input Arguments
+
+    An integer from 0...n-1, where n is the number of nodes per face of the Element.
+    The nodes on the Outside match with (collocated) the nodes on the INSIDE, and therefore they no
+    longer reflect the numbering given by the outer parent elemnts Face.
+
+    @param side  side refers to the first or second parent element.
+
+    @section implementation Implementation
+
+    @attention since the nodes match the face of of the adjacent higher-dimensional elements,
+    they are numbered like these within the node container. It follows that the inside nodes in the
+    node connector are in normal order, but the ones for the outside are in reverse order starting
+    with the last node. Consequently, this method traverses the outside nodes in a reverse order, in order
+    to output Nodes on the outside which are matched with nodes on the inside.
+
+    @warning The ordering on the outside is INCONSISTENT with the ordering given from N(i,outside)!
+
+    A range check is performed.
+
+    @return A pointer to the Target node.
+*/
+template<uint32_t dim>
+csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE side ) const
+{
+  assert( n < this->FE()->Nodes() );
+  if ( side == INSIDE ) return node_connector_[n];
+
+  uint32_t const cn_nodes = this->FE()->CornerNodes();
+  uint32_t const fe_nodes = this->FE()->Nodes();
+  if ( side == OUTSIDE ) {
+    if (  n  < cn_nodes ){
+      //Traverse nodes backwards from the last corner node
+      const uint32_t outside_idx = fe_nodes + cn_nodes - 1 - n  ;
+      assert(outside_idx >= fe_nodes );
+      return node_connector_[outside_idx];
+    }
+
+    //Then we are on the midside nodes
+    int one{1}, md_nodes = this->FE()->MidSideNodes();
+    if (n < cn_nodes + md_nodes ){
+     //Traverse the midside  nodes in reverse, but starting one node before the last node
+      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - uint32_t(one % md_nodes) - (n-cn_nodes) ;
+      assert(outside_idx >= fe_nodes );
+      return node_connector_[outside_idx];
+    } else {
+      //this is a barycentric node
+      const uint32_t outside_idx = n + fe_nodes;
+      return node_connector_[outside_idx];
+    }
+  }
+
+  assert( side == MIDDLE );
+  if ( middleElement_ != nullptr )
+    return middleElement_->N( n );
+
+  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side ) const", "Base Element does not exist!" );
+
+  return nullptr;
+}
+
+
+
+
+
 
 
 
