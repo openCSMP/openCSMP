@@ -186,6 +186,8 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// reports box-boundary flag equivalent which is always INTERNAL because SplitBoundary objects can only exist on the interior of a model
     BOX_BOUNDARY AtBoundary() const { return INTERNAL; }
 
+    void PullApartSplitBoundary( double dist );
+
     /// writes all contained data on the screen
     void Out() const;
 

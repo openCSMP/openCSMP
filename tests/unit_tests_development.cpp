@@ -94,6 +94,9 @@
 
 #include "VSet_TestCase.h"
 
+#include "InterFace_Test.h"
+#include "SplitBoundary_Test.h"
+
 //variable placement tests
 //#include "Placement_Test_2D.h"
 //#include "Placement_Test_3D.h"
@@ -105,7 +108,7 @@ using namespace csmp;
 TEST_CASE("Development tests", "[Dev]") {
   // Operand_Test test;
   // PropertyAtPointVisitor_Test test(true);
-    ModelSubDomain_Test test;
+    //ModelSubDomain_Test test;
     // Vset_TestCase test;
     // GenericFiniteVolumeTransport_Test test;
   //FiniteVolumeTransportBasics_Test test;
@@ -113,7 +116,11 @@ TEST_CASE("Development tests", "[Dev]") {
     // ANSYS_SplitBoundaryMatch_Test  skm_test;
     //Placement_Test_2D test; 
     //Placement_Test_3D test;
+
+  InterFace_Test test;
+  SplitBoundary_Test test2;
   test.run();
+  test2.run();
 
  //   ANSYS_Model2D_Test test;
  //   test.run();

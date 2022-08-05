@@ -17,18 +17,20 @@ namespace csmp {
 void SplitBoundary_Test::run()
 {
    // SKM 26/7/22 - test model received from Anne-Laure Tertois
-   Test_InitialiseSKUA_Model("SKUA_split_boundary_surface");
+   //Test_InitialiseSKUA_Model("SKUA_split_boundary_surface");
     
     
     //E.P Test Splitboundary members
     //linear 2d tests
     Test_InputNodePropertyValue("InternalBoundary_test");
     Test_Area_and_SurfaceIntegral("InternalBoundary_test");
-    
+    Test_NodeCorrespondance("InternalBoundary_test");
+
     //quadratic 2d tests
-    Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
-    Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
-    
+    //Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
+    //Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
+    //Test_NodeCorrespondance("InternalBoundary_Test_quadratic");
+
 
   // test splitboundary between 2D regions
   /*
@@ -262,8 +264,17 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     _equal( 2.0*area_outside,  int_outside, 0.0001);
     _equal( 3.0*area_middle ,  int_middle , 0.0001);
 
+    for ( auto ifp : s_ref.CellVector() ){
+      _test( ifp->UnitNormal(INSIDE)  == ifp->UnitNormal(MIDDLE)  );
+      _test( ifp->UnitNormal(INSIDE)  == Point<dim>(0, 1) );
+      _test( ifp->UnitNormal(OUTSIDE) == Point<dim>(0,-1) );
+    }
+
+
     SplitBoundaryInterface_Test<2U>  vis_method;
-    vis_method.PullApartSplitboundaries(model, 1.0);
+
+    s_ref.PullApartSplitBoundary(1.0);
+    //    vis_method.PullApartSplitboundaries(model, 1.0);
 
     //spltting boundaries and testing area again
     area_inside  =  s_ref.Area(INSIDE);
@@ -279,6 +290,130 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
 }
 
     
+
+
+
+
+//Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
+//correctly calibrated
+bool SplitBoundary_Test::Test_NodeCorrespondance(const char* mesh_file){
+
+  enum {dim=2U};
+  int32_t material_id = 1;
+  //model construction
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+  ANSYS_Model2D model1(mesh_file, regions_file, variables_file, false, true, true);
+  ANSYS_Model2D model2(mesh_file, regions_file, variables_file, false, true, true);
+
+  ///Testing Differnt model creations
+  //Region -> Boundary -> SplitBoundary
+  pair<set<string>,bool> b_name   =  model1.CreateInternalBoundaryFrom("FRACTURE");
+  string sb_name1  = (model1.CreateSplitBoundaryFrom( model1.Boundary( *(b_name.first.begin()) )) ).first ;
+
+  //Region -> SplitBoundary
+  string sb_name2  = *((model2.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+
+  ///Inserting lower dimensional region in each
+  model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+  model2.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+  //Getting splitboundaries
+  SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
+  SplitBoundary<dim>& sb2 = model2.SplitBoundary( sb_name2 );
+
+  std::vector<SplitBoundary<dim>> sb_vec{sb1,sb2};
+  for ( auto& sb : sb_vec){
+    for (auto& ifp : sb.CellVector() ){
+      uint32_t n_nodes = ifp->FE()->Nodes();
+
+      std::vector<uint32_t> nids_in, nids_out ;
+      ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() , nids_in );
+      ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() , nids_out );
+
+      for ( uint32_t n{0U}; n<n_nodes;++n){
+        //Nodes should match that of face
+        _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
+        _test( ifp->N(n,OUTSIDE) == ifp->OuterParent()->N(nids_out[n])) ;
+
+        //Testing matching assignment
+        //inside remains unchanged
+        _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
+
+        //Outside coordinates must match with Inside and middle
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+      }
+    }
+
+  }
+
+  return true;
+
+}
+
+
+
+
+
+
+
+//3d next
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 

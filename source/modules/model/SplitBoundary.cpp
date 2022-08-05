@@ -741,14 +741,14 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
   if constexpr ( dim == 3U ) {
       for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsSurface() )
-          integrated_area += (*it)->Area();
+          integrated_area += (*it)->Area(side);
     }
   
   if constexpr ( dim == 2U ) {
       for ( typename vector<InterFace<dim>*>::const_iterator
             it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsLine() )
-          integrated_area += (*it)->Area();
+          integrated_area += (*it)->Area(side);
     }
   
   if constexpr ( dim == 1U ) {
@@ -1188,6 +1188,36 @@ template void SplitBoundary<3>::InputPropertyValue( const char*, const VectorVar
 template void SplitBoundary<1>::InputPropertyValue( const char*, const TensorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
 template void SplitBoundary<2>::InputPropertyValue( const char*, const TensorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
 template void SplitBoundary<3>::InputPropertyValue( const char*, const TensorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
+
+
+
+
+
+
+/**
+ *   Iterates of InterFace objects and displaces nodes by param dist/2 on both sides, opening up the interface. Leaves middle nodes untouched.
+ *   Uses InterFace->UnitNormal() from bisector plane or middle element
+ *
+ *   @param dist is the final aperture the nodes will have. Each side is displaced by dist/2.
+ *
+ */
+template<uint32_t dim>
+void SplitBoundary<dim>::PullApartSplitBoundary(double dist){
+  for ( auto& ifp : this->CellVector() ){
+    uint32_t n_nodes = ifp->FE()->Nodes();
+    for (uint32_t n{0U}; n<n_nodes;++n){
+      ifp->N(n,INSIDE)->Coordinate(  ifp->N(n,INSIDE)->Coordinate()  - dist/2.0 * ifp->UnitNormal()  ); \
+      ifp->N(n,OUTSIDE)->Coordinate( ifp->N(n,OUTSIDE)->Coordinate() + dist/2.0 * ifp->UnitNormal()  ); \
+    }
+  }
+
+
+}//end of PullApartSplitBoundary
+
+
+
+
 
 
 
