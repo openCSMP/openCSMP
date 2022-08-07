@@ -45,7 +45,11 @@ namespace csmp {
       bool Test_Area_and_SurfaceIntegral(const char* mesh_file);
 
       /// do correspoding nodes coincide
-      bool Test_NodeCorrespondance( const char* mesh_file );
+      bool Test_NodeCorrespondance_2D(const char* mesh_file );
+
+      bool Test_NodeCorrespondance_3D(const char* mesh_file );
+
+
 
 
       // TODO - ALl tests below are still to be done
