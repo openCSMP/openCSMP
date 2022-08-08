@@ -23,6 +23,7 @@ namespace csmp {
  
     - connects face to its higher-dimensiona parent elements
     
+
     @note nodes and node numbering will be exactly that 
     of the original lower-dimensional ELement object.
     It is assumed that this Elemen is numbered correctly in terms of the overall
@@ -99,6 +100,15 @@ Face<dim>::Face( const Element<dim>& elmt,
     else
       this->ResizePropertyStorage( ep );
 
+
+    // 2. Assigning the nodes from that of the Inner Parents face.  Attention! Not the lower-dim element
+    vector<uint32_t> fnids;
+    inner_parent->FE()->NodesOfFace( inner_parent_face_id_, fnids );
+    uint32_t i_node{0};
+    for ( auto i : fnids )
+      node_connector_[i_node++] = inner_parent->N(i);
+
+    /* Old Implementation - Doesnt guarantee nodes of face = InnerParent->NodesOfFace() are the same (e.g could be rotated by one node).
     // 2. connecting the nodes of the face with those of the lower-dimensional element
     //   from which it was created
     const auto nodes(elmt.Nodes()); // nodes of Element object that is replicated by Face
@@ -107,6 +117,7 @@ Face<dim>::Face( const Element<dim>& elmt,
          assert( elmt.N(i) != nullptr );
          Assign( i, elmt.N(i) );
       }
+      */
    
  } // end constructor
 

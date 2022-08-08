@@ -117,9 +117,9 @@ TEST_CASE("Development tests", "[Dev]") {
     //Placement_Test_2D test; 
     //Placement_Test_3D test;
 
-  InterFace_Test test;
+  //InterFace_Test test;
   SplitBoundary_Test test2;
-  test.run();
+  //test.run();
   test2.run();
 
  //   ANSYS_Model2D_Test test;

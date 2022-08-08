@@ -389,23 +389,9 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
   SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
   SplitBoundary<dim>& sb2 = model2.SplitBoundary( sb_name2 );
 
-  /*
-  sb1.PullApartSplitBoundary(0.1);
-  sb2.PullApartSplitBoundary(0.1);
-
-  list<string> outputProps;
-  outputProps.push_back( "nodal id" );
-  VTU_Interface<dim> vtu1( model1 );
-  vtu1.OmitZeroInFileName(true);
-  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_Test1", outputProps, "Model", static_cast<int>(0) );
-
-  VTU_Interface<dim> vtu2( model2 );
-  vtu1.OmitZeroInFileName(true);
-  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_Test2", outputProps, "Model", static_cast<int>(0) );
-*/
 
 //  std::vector<SplitBoundary<dim>> sb_vec{sb1,sb2};
-  std::vector<SplitBoundary<dim>> sb_vec{sb2};
+  std::vector<SplitBoundary<dim>> sb_vec{sb1};
   for ( auto& sb : sb_vec){
     for (auto& ifp : sb.CellVector() ){
       uint32_t n_nodes = ifp->FE()->Nodes();
@@ -413,6 +399,16 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
       std::vector<uint32_t> nids_in, nids_out ;
       ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() , nids_in );
       ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() , nids_out );
+
+      Point<dim> nrml_in  = ifp->UnitNormal(INSIDE);
+      Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
+
+      _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[1] , 1.0 , 0.05  );
+      _test(  nrml_in[0] < 0.05 );
+      _test(  nrml_in[2] < 0.05 );
 
       for ( uint32_t n{0U}; n<n_nodes;++n){
         //Nodes should match that of face
@@ -422,14 +418,39 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
         //Testing matching assignment
         //inside remains unchanged
         _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
+        _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE));
 
         //Outside coordinates must match with Inside and middle
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+
+        std::cout << "Node ID: " << ifp->MatchingN(n,INSIDE)->Idx() << "\t" <<  ifp->N(n,INSIDE)->Idx() << std::endl;
+        std::cout << "Node ID: " << ifp->MatchingN(n,OUTSIDE)->Idx() << "\t" << std::endl;
+
+
+
       }
     }
 
   }
+
+
+
+  sb1.PullApartSplitBoundary(0.1);
+  //sb2.PullApartSplitBoundary(0.1);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_Test1", outputProps, "Model", static_cast<int>(0) );
+
+  VTU_Interface<dim> vtu2( model2 );
+  vtu2.OmitZeroInFileName(true);
+  vtu2.OutputDataToVTU( "../Output/InternalBoundary3D_Test2", outputProps, "Model", static_cast<int>(0) );
+
 
   return true;
 

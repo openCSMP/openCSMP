@@ -1204,13 +1204,29 @@ template void SplitBoundary<3>::InputPropertyValue( const char*, const TensorVar
  */
 template<uint32_t dim>
 void SplitBoundary<dim>::PullApartSplitBoundary(double dist){
+
+  std::set<Node<dim>*> operated_in_nodes;
+  std::set<Node<dim>*> operated_out_nodes;
+
   for ( auto& ifp : this->CellVector() ){
     uint32_t n_nodes = ifp->FE()->Nodes();
     for (uint32_t n{0U}; n<n_nodes;++n){
-      ifp->N(n,INSIDE)->Coordinate(  ifp->N(n,INSIDE)->Coordinate()  - dist/2.0 * ifp->UnitNormal()  ); \
-      ifp->N(n,OUTSIDE)->Coordinate( ifp->N(n,OUTSIDE)->Coordinate() + dist/2.0 * ifp->UnitNormal()  ); \
-    }
-  }
+      Node<dim>* in_node  = ifp->N(n,INSIDE);
+      Node<dim>* out_node = ifp->N(n,OUTSIDE);
+      if ( operated_in_nodes.find(in_node) == operated_in_nodes.end() ){
+        //displace inside node
+        in_node->Coordinate(  in_node->Coordinate()  - dist/2.0 * ifp->UnitNormal()  );
+        //adding nodes to operated nodes
+        operated_in_nodes.insert(  in_node );
+      }
+      if (operated_out_nodes.find(out_node) == operated_out_nodes.end() ){
+        //displace outside node
+        out_node->Coordinate( out_node->Coordinate() + dist/2.0 * ifp->UnitNormal()  );
+        //insert into operated outside nodes
+        operated_out_nodes.insert( out_node );
+      }//end of if
+    }//end of node loop
+  }//end of interface loop
 
 
 }//end of PullApartSplitBoundary
