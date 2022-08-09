@@ -100,6 +100,15 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                const IntegrationPointVariables&  interface_integration_point_props,
                std::vector<Node<dim>*> outside_nodes );
 
+    /// New! SKM 29/7/2022: constructs  InterFace using the nodes and their numbering in the InterFace's higher-dimensional neighbors
+    InterFace( csmp::Element<dim>&,
+               csmp::Element<dim>* inner_parent,
+               csmp::Element<dim>* outer_parent,
+               uint32_t adjacent_face_of_inner_element,
+               uint32_t adjacent_face_of_outer_element,
+               const LocalVariables&  interface_props,
+               const IntegrationPointVariables&  interface_integration_point_props );
+
     /// constructs complete InterFace with Face nodes as inside nodes and outside nodes in opposite order as supplied get connected to outside element
     InterFace( csmp::Face<dim>*,
                const LocalVariables&  interface_props,
@@ -226,6 +235,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
 
     /// is an equi-dimensional element connected to the MIDDLE element pointer of this InterFace
     bool           HasInterveningElement() const { return middleElement_!=nullptr; }
+    
+    /// tests whether the INSIDE nodes match the OUTSIDE nodes w.r.t. their position
+    bool           AreNodesCollocated() const;
   
     /// local number of the face in the inner parent element, which borders against the interface
     void           ParentFaceID( INTERFACE_SIDE, uint32_t idx );
@@ -304,7 +316,6 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     uint32_t       outer_parent_face_id_ = UNSPECIFIED; ///< face number of outside higher-dimensional parent element
     // used for compatibility with Element and Face methods (Neighbor etc.)
     mutable INTERFACE_SIDE current_side_;        ///< switch to return information from INSIDE, OUTSIDE or MIDDLE side of interface (default=INSIDE)
-    bool                   collocated_nodes_;    ///< nodes on both sides of InterFace are co-located = default
 
     friend class InterFace_Test; ///< friend declaration needed for the testing of private methods
 };

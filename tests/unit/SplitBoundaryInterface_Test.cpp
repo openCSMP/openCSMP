@@ -10,8 +10,6 @@
 
 using namespace std;
 
-// TODO: when the new nodes and elements are created, are the property values from the old nodes mapped to them? - would this help a user?
-
 namespace csmp
 {
 
