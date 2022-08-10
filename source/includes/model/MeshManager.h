@@ -144,7 +144,9 @@ public:
   std::vector<InterFace<dim>*>  ReplaceFacesByInterFaces( const PropertyDatabase<dim>&,
                                                           typename std::vector<Face<dim>*>::iterator first,
                                                           typename std::vector<Face<dim>*>::iterator first_at_boundary,
-                                                          typename std::vector<Face<dim>*>::iterator last );
+                                                          typename std::vector<Face<dim>*>::iterator last,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_first,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_last);
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,

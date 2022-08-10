@@ -238,6 +238,11 @@ class ModelTopology {
     bool  FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const;
     bool  FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const;
 
+    /// Boundary Flag nodes on lowerdimensional elements to INTERNAL - ATTENTION - THIS OVERWRITES, SO IT SHOULD BE DONE BEFORE BOXBOUNDARY FLAGS ARE SET
+    //E.P Experimental 08.2022 - This is not used or tested, but may be needed to set TOPO Flags correctly, since they rely on INTERNAL flag being set.
+    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const;
+    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const;
+
 
   private:
     //       region name           etypes-of-region      ids of elements in region

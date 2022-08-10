@@ -679,7 +679,9 @@ bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
   // this method already updates the connectivity of all elements, nodes etc.
   this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
                                                     next(boundary.CellVector().begin(),boundary.InteriorCells()),
-                                                    boundary.CellVector().end() );
+                                                    boundary.CellVector().end(),
+                                                    boundary.PerimeterNodesBegin(),
+                                                    boundary.NodesEnd());
 
   // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
   this->IdentifyPerimeter();
@@ -1211,20 +1213,23 @@ void SplitBoundary<dim>::PullApartSplitBoundary(double dist){
   for ( auto& ifp : this->CellVector() ){
     uint32_t n_nodes = ifp->FE()->Nodes();
     for (uint32_t n{0U}; n<n_nodes;++n){
-      Node<dim>* in_node  = ifp->N(n,INSIDE);
-      Node<dim>* out_node = ifp->N(n,OUTSIDE);
-      if ( operated_in_nodes.find(in_node) == operated_in_nodes.end() ){
-        //displace inside node
-        in_node->Coordinate(  in_node->Coordinate()  - dist/2.0 * ifp->UnitNormal()  );
-        //adding nodes to operated nodes
-        operated_in_nodes.insert(  in_node );
+      Node<dim>* in_node  = ifp->MatchingN(n,INSIDE);
+      Node<dim>* out_node = ifp->MatchingN(n,OUTSIDE);
+      if (in_node != out_node){
+        if ( operated_in_nodes.find(in_node) == operated_in_nodes.end() ){
+          //displace inside node
+          std::cout << in_node->Coordinate( ) << "  \t" <<  dist/2.0 * ifp->UnitNormal() << "  \t" << ifp->UnitNormal()  << std::endl;
+          in_node->Coordinate(  in_node->Coordinate()  - dist/2.0 * ifp->UnitNormal()  );
+          //adding nodes to operated nodes
+          operated_in_nodes.insert(  in_node );
+        }
+        if (operated_out_nodes.find(out_node) == operated_out_nodes.end() ){
+          //displace outside node
+          out_node->Coordinate( out_node->Coordinate() + dist/2.0 * ifp->UnitNormal()  );
+          //insert into operated outside nodes
+          operated_out_nodes.insert( out_node );
+        }//end of if
       }
-      if (operated_out_nodes.find(out_node) == operated_out_nodes.end() ){
-        //displace outside node
-        out_node->Coordinate( out_node->Coordinate() + dist/2.0 * ifp->UnitNormal()  );
-        //insert into operated outside nodes
-        operated_out_nodes.insert( out_node );
-      }//end of if
     }//end of node loop
   }//end of interface loop
 

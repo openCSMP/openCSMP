@@ -1800,12 +1800,17 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
    @author SKM
    @date 6/4/22
 
+
+   //TODO: Take away dependency on PerimeterNodes iterators when the TOPO flags can be relied upon!!
+
 */
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const PropertyDatabase<dim>& dbase,
                                                                      typename vector<Face<dim>*>::iterator first,
                                                                      typename vector<Face<dim>*>::iterator bfirst,
-                                                                     typename vector<Face<dim>*>::iterator last )
+                                                                     typename vector<Face<dim>*>::iterator last,
+                                                                     typename vector<Node<dim>*>::const_iterator perim_first,
+                                                                     typename vector<Node<dim>*>::const_iterator perim_last  )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -1856,9 +1861,9 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          auto               nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
          for ( auto i{0U}; i<n_nodes; i++ ) {
-           if ( (*first)->N(i)->Attribute() != PERIMETER_POINT && (*first)->N(i)->Attribute() != PERIMETER_LINE ){
-             // if there a matching outside node has not been created yet
-             if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+           if ( std::find( perim_first, perim_last, (*first)->N(i) ) == perim_last ){             //using the perimeter nodes (Costly find operation)
+           //if ( (*first)->N(i)->Attribute() != PERIMETER_POINT && (*first)->N(i)->Attribute() != PERIMETER_LINE ){        //WHEN WE CAN RELY ON TOPO FLAGS
+             if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                   new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
                }
@@ -1941,7 +1946,6 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
               if ( found_it != new_nodes.end() ){
                 e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
                 assert( inside_parents.find(e_nbr) == inside_parents.end() );
-                //assert(e_nbr->BaryCenter()[1] > 5.0 );
                 outside_neighbors_to_search.insert( e_nbr ); //add to search, so that neighbors of this neighbor are searched
               }
             } //looped over all nodes
