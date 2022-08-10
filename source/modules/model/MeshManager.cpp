@@ -1829,8 +1829,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
     
     // vector of interfaces which will be returned
     vector<InterFace<dim>*>  interface_ptrs;
-    vector<Element<dim>*>    outer_parents;
-    outer_parents.reserve(  distance(first,last) );
+    set<Element<dim>*>    outside_neighbors_to_search;
+    set<Element<dim>*>    inside_parents;
     interface_ptrs.reserve( distance(first,last) );
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
@@ -1845,8 +1845,9 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          // (input range must not contain any nullptrs)
          assert( (*first) != nullptr );
          
-         // collecting outer parent
-         outer_parents.push_back( (*first-)>OuterParent() );
+         // collecting neighbors of outer parent that dont include inner parent
+         outside_neighbors_to_search.insert( (*first)->OuterParent() );
+         inside_parents.insert( (*first)->InnerParent() );
 
          // 1.2 duplicating the nodes creating manifolds as necessary
          // ---------------------------------------------------------
@@ -1854,16 +1855,20 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
          auto               nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
-         for ( auto i{0U}; i<n_nodes; i++ )
-           // if there a matching outside node has not been created yet
-           if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
-                new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
-             }
-           // if the necessary new node was already created earlier it was retrieved and is assigned here
-           else outside_nodes[i] = (*nit).second;
-           // reversing the sequence
-         reverse( outside_nodes.begin(), outside_nodes.end() );
+         for ( auto i{0U}; i<n_nodes; i++ ) {
+           if ( (*first)->N(i)->Attribute() != PERIMETER_POINT && (*first)->N(i)->Attribute() != PERIMETER_LINE ){
+             // if there a matching outside node has not been created yet
+             if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
+                  outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
+                  new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
+               }
+             // if the necessary new node was already created earlier it was retrieved and is assigned here
+             else outside_nodes[i] = (*nit).second;
+           } else
+             outside_nodes[i] = (*first)->N(i);            //take inside node when node is at perimeter of model
+         }
+           // reversing the sequence once outside nodes are calibrated
+         reverse( outside_nodes.begin(), outside_nodes.end() );             //TODO: STEPHAN -> QUADRATIC WILL NOT WORK
            
          // 1.3 construction of InterFace away from boundaries
          // --------------------------------------------------
@@ -1892,9 +1897,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
          const auto         n_nodes{ (*first)->Nodes() };
          vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
          auto               nit{ new_nodes.end() };
-         
          for ( auto i{0U}; i<n_nodes; i++ )
-           if ( (*first)->N(i)->AtBoundary() != NOT || (*first)->N(i)->IsManifold() ) {
+           if ( ((*first)->N(i)->AtBoundary() != NOT && (*first)->N(i)->AtBoundary() != INTERNAL) || (*first)->N(i)->IsManifold() ) {
                 if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
                      outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
                      new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
@@ -1920,64 +1924,36 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceFacesByInterFaces( const Prope
 
      // 3. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
-     // Reassigning outside parent elements with new node
-      std::map<std::pair<Element<dim>*,uint32_t>, uint32_t> outside_parents_node_data;
+
+      // Reassigning outside parent elements with new node
       // 3.1 Loop over outer parents and search neighbors with old node
-      for ( auto elmt_out : outer_parents ){
+      while ( outside_neighbors_to_search.empty() == false ){
+        typename set<Element<dim>*>::iterator eit = outside_neighbors_to_search.begin(); //take start of set
 
+        //search for neighbor
+        for (uint32_t nbor{0U}; nbor< (*eit)->Neighbors(); nbor++){
+          Element<dim>* e_nbr = (*eit)->Neighbor(nbor);
+          if ( e_nbr != nullptr ){                                              //if neighbor exists
+            //search the nodes of neighbor for inside node
+            uint32_t n_nodes = e_nbr->Nodes();
+            for (uint32_t n{0U}; n < n_nodes; n++ ){
+              typename std::map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
+              if ( found_it != new_nodes.end() ){
+                e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
+                assert( inside_parents.find(e_nbr) == inside_parents.end() );
+                //assert(e_nbr->BaryCenter()[1] > 5.0 );
+                outside_neighbors_to_search.insert( e_nbr ); //add to search, so that neighbors of this neighbor are searched
+              }
+            } //looped over all nodes
+          } //valid neighbor
+        }//end of neighbor search - all relevant neighbors have been added to the future neighbor search - and node numbers updated
 
-      }
+        // Current element has completed its neighbor search and node assignment
+        outside_neighbors_to_search.erase( eit );
 
+      }//search continues untill all inside nodes are updated
 
-      std::unordered_set<Element<dim>*> elmts_to_search{outerParent_};
-      std::set<Element<dim>*> searched_elmts;
-      while ( elmts_to_search.empty() == false ){
-        //get pointer to start of set
-        auto eit = *(elmts_to_search.begin());
-
-        //searching neighbors of element
-        for (uint32_t nbor{0U}; nbor<eit->Neighbors(); nbor++){
-           Element<dim>* e_nbr = eit->Neighbor(nbor);
-           //If neighbor exists
-           if ( e_nbr != nullptr ){
-             uint32_t n_nodes{ e_nbr->Nodes() };
-             //seach all nodes
-             for (uint32_t n{0U}; n<n_nodes; n++){
-               //if neighbor node contains an inside node
-               typename std::set<Node<dim>*>::iterator found_it = inside_nodes.find( e_nbr->N(n) );
-               if ( found_it != inside_nodes.end() ){
-                 //store neighbor as an outside parent, with local node number of nbor elmt, and node number of inside node
-                 outside_parents.insert(std::make_pair( std::make_pair(e_nbr, n), std::distance(inside_nodes.begin(), found_it )) );
-
-                 if ( searched_elmts.find( e_nbr ) == searched_elmts.end() ){
-                   //add neihbor to search if we havent searched already
-                   elmts_to_search.insert( e_nbr );
-                 }
-
-               } //end of found outside
-             }//end of node loop
-           }//end of valid neighbor check
-        }//end of neighbor search
-
-        //add elmt to searched elmt
-        searched_elmts.insert( eit );
-        //erase elmt from search
-        elmts_to_search.erase(eit);
-
-      }//end of outside parent search
-
-
-      //assign matching outside node to outer parents found
-      for (auto it : outside_parents){
-        assert( it.first.first->N(it.first.second) == this->N(it.second, INSIDE) );
-        it.first.first->Assign( it.first.second, this->MatchingN(it.second, OUTSIDE ));
-      }
-
-
-
-
-
-     // TODO: these are global changes! - do this only for nodes that are affected
+      // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< interface_ptrs.size() <<" new interfaces and ";

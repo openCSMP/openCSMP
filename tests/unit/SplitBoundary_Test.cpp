@@ -25,7 +25,7 @@ void SplitBoundary_Test::run()
     //Test_InputNodePropertyValue("InternalBoundary_test");
     //Test_Area_and_SurfaceIntegral("InternalBoundary_test");
 
-    //Test_NodeCorrespondance_2D("InternalBoundary_test");
+    Test_NodeCorrespondance_2D("InternalBoundary_test");
     Test_NodeCorrespondance_3D("InternalBoundary3D_test");
 
 
@@ -352,6 +352,23 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
 
   }
 
+  sb1.PullApartSplitBoundary(0.1);
+  sb2.PullApartSplitBoundary(0.1);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary_TestA", outputProps, "Model", static_cast<int>(0) );
+
+  VTU_Interface<dim> vtu2( model2 );
+  vtu2.OmitZeroInFileName(true);
+  vtu2.OutputDataToVTU( "../Output/InternalBoundary_TestB", outputProps, "Model", static_cast<int>(0) );
+
+
+
   return true;
 
 }
@@ -379,15 +396,27 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
   string sb_name1  = (model1.CreateSplitBoundaryFrom( model1.Boundary( *(b_name.first.begin()) )) ).first ;
 
   //Region -> SplitBoundary
-  string sb_name2  = *((model2.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+  //string sb_name2  = *((model2.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
 
   ///Inserting lower dimensional region in each
   model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
-  model2.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+  //model2.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
 
   //Getting splitboundaries
   SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
-  SplitBoundary<dim>& sb2 = model2.SplitBoundary( sb_name2 );
+  //SplitBoundary<dim>& sb2 = model2.SplitBoundary( sb_name2 );
+
+  sb1.PullApartSplitBoundary(0.1);
+  //sb2.PullApartSplitBoundary(0.1);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_TestA", outputProps, "Model", static_cast<int>(0) );
+
 
 
 //  std::vector<SplitBoundary<dim>> sb_vec{sb1,sb2};
@@ -426,9 +455,6 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
 
         std::cout << "Node ID: " << ifp->MatchingN(n,INSIDE)->Idx() << "\t" <<  ifp->N(n,INSIDE)->Idx() << std::endl;
         std::cout << "Node ID: " << ifp->MatchingN(n,OUTSIDE)->Idx() << "\t" << std::endl;
-
-
-
       }
     }
 
@@ -436,20 +462,10 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
 
 
 
-  sb1.PullApartSplitBoundary(0.1);
-  //sb2.PullApartSplitBoundary(0.1);
 
-  list<string> outputProps;
-  outputProps.push_back( "nodal id" );
-  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
-  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
-  VTU_Interface<dim> vtu1( model1 );
-  vtu1.OmitZeroInFileName(true);
-  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_Test1", outputProps, "Model", static_cast<int>(0) );
-
-  VTU_Interface<dim> vtu2( model2 );
-  vtu2.OmitZeroInFileName(true);
-  vtu2.OutputDataToVTU( "../Output/InternalBoundary3D_Test2", outputProps, "Model", static_cast<int>(0) );
+  //VTU_Interface<dim> vtu2( model2 );
+  //vtu2.OmitZeroInFileName(true);
+  //vtu2.OutputDataToVTU( "../Output/InternalBoundary3D_TestB", outputProps, "Model", static_cast<int>(0) );
 
 
   return true;
