@@ -91,6 +91,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     InterFace() = delete;
 
     /// constructs complete InterFace from Element and supplied outside nodes
+    /*
     InterFace( csmp::Element<dim>&,
                csmp::Element<dim>* inner_parent,
                csmp::Element<dim>* outer_parent,
@@ -99,7 +100,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
                const LocalVariables&  interface_props,
                const IntegrationPointVariables&  interface_integration_point_props,
                std::vector<Node<dim>*> outside_nodes );
-
+    */
+    
     /// New! SKM 29/7/2022: constructs  InterFace using the nodes and their numbering in the InterFace's higher-dimensional neighbors
     InterFace( csmp::Element<dim>&,
                csmp::Element<dim>* inner_parent,

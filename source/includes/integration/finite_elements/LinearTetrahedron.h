@@ -16,8 +16,8 @@ class LinearTetrahedron : public FiniteElement {
     virtual uint32_t  CornerNodes() const  { return 4U; }
     virtual void    CornerNodes( std::vector<uint32_t>& ids ) const;
     virtual void    NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void    NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
     
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     

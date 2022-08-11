@@ -17,6 +17,7 @@ namespace csmp {
 /**
     Constructor that uses separate nodes for the OUTSIDE higher-dimensional parent element substituting these into this element.
 */
+/*
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
                csmp::Element<dim>* inner_parent,
@@ -70,7 +71,7 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
    outerParent_->Unassign( innerParent_ );
 
  } // end complete custom constructor (Element)
-
+*/
 
 
 
@@ -109,15 +110,12 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
    // 1. assigning the nodes to the new InterFace
    // -------------------------------------------
    // INSIDE nodes
-   vector<uint32_t> fnids;
-   innerParent_->FE()->NodesOfFace( inner_parent_face_id_, fnids );
    uint32_t count{0U};
-   for ( const auto& nit : fnids )
+   for ( const auto& nit : innerParent_->FE()->NodesOfFace( inner_parent_face_id_ ) )
      Assign( count++, innerParent_->N(nit), INSIDE );
    // OUTSIDE nodes
    count = 0U;
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
-   for ( const auto& nit : fnids )
+   for ( const auto& nit : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
      Assign( count++, outerParent_->N(nit), OUTSIDE );
 
    // 2. checking that the nodes are collocated
@@ -181,10 +179,9 @@ InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
      
    // 2. replacing the nodes on the outside element with the new outside nodes
    // ------------------------------------------------------------------------
-   vector<uint32_t> fnids;
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
-   for ( auto i{0U}; i< n_nodes; i++ )
-     outerParent_->Assign( fnids[i], outside_nodes[i] );
+   uint32_t n_count{0U};
+   for ( const auto& i : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
+     outerParent_->Assign( i, outside_nodes[ n_count++ ] );
      
    // 3. detaching the higher-dimensional element neighbors from one another
    // ----------------------------------------------------------------------
@@ -555,11 +552,11 @@ void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE s
 {
    assert( nptr != nullptr );
    assert( this->FE() != nullptr );
+   assert( !node_connector_.empty() );
    
    const auto finite_element_nodes( this->FE()->Nodes() );
-   assert( n_local < finite_element_nodes );
-   assert( !node_connector_.empty() );
    assert( finite_element_nodes * 2 == node_connector_.size() );
+   assert( n_local < finite_element_nodes );
 
    if ( side == INSIDE ) {
         node_connector_[n_local] = nptr;
@@ -667,25 +664,20 @@ pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
   // 1. building search maps that we will use to find the shared interfaces
   //    key=pointset   face iD
   map<set<Point<dim> >, pair<INTERFACE_SIDE,uint32_t> >   inner_elmt_faces, outer_elmt_faces;
-  vector<uint32_t>  nids;
   // inner parent element
   const auto ifaces(innerParent_->Faces());
-  for ( auto face = 0U; face < ifaces; ++face ) {
-      innerParent_->FE()->NodesOfFace( face, nids );
+  for ( auto face{0U}; face < ifaces; ++face ) {
       set<Point<dim> >  face_key;
-      const auto nodes(nids.size());
-      for ( uint32_t j{0U}; j<nodes; ++j )
-        face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
+      for ( const auto& j : innerParent_->CornerNodesOfFace(face) )
+        face_key.insert( j->Coordinate() );
       inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
     }
   // outer parent element
   const uint32_t ofaces(outerParent_->Faces());
   for ( uint32_t face = 0U; face < ofaces; ++face ) {
-    outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
-    const auto nodes(nids.size());
-    for ( uint32_t j{0U}; j<nodes; ++j )
-      face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
+    for ( const auto& j : outerParent_->CornerNodesOfFace(face) )
+      face_key.insert( j->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
 
@@ -745,16 +737,15 @@ void InterFace<dim>::InitialiseNodeVector()
    const auto n_face_nodes_inner{ innerParent_->FE()->NodesPerFace(inner_parent_face_id_) };
    const auto n_face_nodes_outer{ outerParent_->FE()->NodesPerFace(outer_parent_face_id_) };
    assert( n_face_nodes_inner == n_face_nodes_outer );
+   
    //     4.1 Inside face: straightforward assignment from face indices
-   vector<uint32_t> nids;
-   innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
    uint32_t node_count{0U};
-   for( auto i : nids )
+   for( const auto& i : innerParent_->FE()->NodesOfFace( inner_parent_face_id_) )
      Assign( node_count++, innerParent_->N(i), INSIDE );
 
    //    4.2 Outside face: find correct circular permutation of face indices
    //    which will preserve Node collocation
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
+   auto nids = outerParent_->FE()->NodesOfFace( outer_parent_face_id_ );
    node_count = 0U;
    while( outerParent_->N( nids[0] )->Coordinate() != N( n_face_nodes_outer-1 )->Coordinate() &&
           node_count < n_face_nodes_outer ) {
@@ -817,7 +808,7 @@ bool  InterFace<dim>::AreNodesCollocated() const
  {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     for ( uint32_t i{0U}; i<n_nodes; i++ )
-      if ( !approximatelyEqual( node_connector_[i]->Coordinate().DistanceTo( node_connector_[i+n_nodes]->Coordinate() ), 0. ) )
+      if ( !approximatelyEqual( node_connector_[i]->Coordinate().DistanceTo( node_connector_[node_connector_.size()-1-i]->Coordinate() ), 0. ) )
         return false;
       
     return true;

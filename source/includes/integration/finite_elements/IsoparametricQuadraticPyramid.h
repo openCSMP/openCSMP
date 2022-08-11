@@ -15,26 +15,24 @@ public:
     virtual double    Volume();
     virtual double    AspectRatio();
     virtual double    InnerRadius();
-    virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      CornerNodes() const  { return 5U; }
-    virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      MidSideNodes() const { return 8U; }
-    virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual void      EdgeLengths( std::vector<double>& vec );
+    virtual void      CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  CornerNodes() const  { return 5U; }
+    virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  MidSideNodes() const { return 8U; }
 
-    virtual void        ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
+    virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR,
                                                                   std::vector<double>&       NVAR ) const;
 
     virtual CSMP_FEM_TYPE ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_QUADRATIC_BAR; };
 
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
-                                                  std::vector<uint32_t>& fnids );
     virtual void        NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void        NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+
+    virtual std::vector<uint32_t> NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t> CornerNodesOfFace( uint32_t face_id ) const;
-    virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
+    virtual std::vector<uint32_t> NodesConnectedTo( uint32_t node_id ) const;
 
     // TODO: virtual void        UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 

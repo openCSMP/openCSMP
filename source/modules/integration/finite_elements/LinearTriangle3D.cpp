@@ -60,6 +60,7 @@ LinearTriangle3D::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids
 
 /// For this element, the faces are numbered such that face 0 lies opposite of
 /// node 0, face 1 node 1 etc.
+/*
 void LinearTriangle3D::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
@@ -81,6 +82,21 @@ void LinearTriangle3D::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fni
       }
     else
     std::cerr <<"\nLinearTriangle3D::NodesOfFace: Erratic face ID: "<< face_id << std::endl;
+ }
+*/
+
+
+
+
+vector<uint32_t>  LinearTriangle3D::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
+      }
+    cerr <<"\nLinearTriangle3D::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
  }
 
 
@@ -117,6 +133,7 @@ std::vector<uint32_t>  LinearTriangle3D::NodesConnectedTo( uint32_t node_id ) co
 
 
 /// The linear triangle is numbered counter-clockwise by default.
+/*
 void LinearTriangle3D::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -124,7 +141,7 @@ void LinearTriangle3D::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
     ids[1] = 1;
     ids[2] = 2;
  }
-
+*/
 
 
 /// clearly all nodes are corner nodes

@@ -161,81 +161,84 @@ class FiniteElement {
     /// return minimum spatial dimension in which this element can exist
     uint32_t       Dim() const;
   
-    uint32_t             Nodes() const;
+    uint32_t       Nodes() const;
   
     /// returns the number of edges of the FE, i.e. the number of connections between nodes
-    uint32_t             Segments() const;
+    uint32_t       Segments() const;
   
     /// returns the number of sides the finite element has
-    uint32_t             Faces() const;
+    uint32_t       Faces() const;
   
     /// neighbor elements that may be connected to this FE in its characteristic space
-    uint32_t             Neighbors() const;
+    uint32_t       Neighbors() const;
   
     /// returns how many nodes make up a particular face
-    uint32_t             NodesPerFace( uint32_t ) const;
+    uint32_t       NodesPerFace( uint32_t face ) const;
   
     /// returns number of quadrature points used by current integration scheme
-    uint32_t             IntegrationPoints() const;
+    uint32_t       IntegrationPoints() const;
   
     /// returns order of interpolation scheme: linear=1, quadratic=2, cubic=3
-    uint32_t             Interpolation() const;
+    uint32_t       Interpolation() const;
   
     /// for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions
-    bool               Isoparametric() const;
+    bool           Isoparametric() const;
   
     /// reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not
-    bool               UsesLocalCoordinates() const;
+    bool           UsesLocalCoordinates() const;
   
     /// returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions
-    uint32_t           OrderOfShapeFunctions() const;
+    uint32_t       OrderOfShapeFunctions() const;
   
-    bool               IsLine() const;
-    bool               IsSurface() const;
-    bool               IsVolume() const;
+    bool           IsLine() const;
+    bool           IsSurface() const;
+    bool           IsVolume() const;
   
     /// true for linear line-, triangle- or tetrahedral elements for which the Jacobian matrix is constant throughout
-    bool               IsSimplex() const;
+    bool           IsSimplex() const;
   
-    CSMP_FEM_TYPE      ElementType() const;
+    CSMP_FEM_TYPE  ElementType() const;
   
     /// computes and returns the volume of the element which is an area for a surface- and a length for a line element
-    virtual double     Volume();
+    virtual double Volume();
   
     /// returns the ratio between the maximum and minimum spatial extent of the element
-    virtual double     AspectRatio();
+    virtual double AspectRatio();
   
     /// returns the radius of the largest sphere that could be inscribed in the element
-    virtual double     InnerRadius();
-  
+    virtual double InnerRadius();
+ 
+ // TODO: depracate these methods replacing them with new ones that return correctly sized vectors
+ 
     /// reports the lengths of all edges (connections between nodes) in the currrent element
-    virtual void       EdgeLengths( std::vector<double>& vec );
+    virtual void  EdgeLengths( std::vector<double>& vec );
   
-    /// returns 0..nodes-1 (local) node numbers of the supplied boundary nodes, i.e., reports the actual ordering
-    virtual void       ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes, 
-                                                   std::vector<uint32_t>& fnids );
-                                                   
     // all of the following give 0...nodes-1 (local) node numbers
     /// reports the egde nodes (0..nodes-1) which can be more than 2 in higher-order elements
-    virtual void       NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
+    virtual void  NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
   
+    /// reports only the corner nodes (0..nodes-1) of the element
+    virtual void  CornerNodes( std::vector<uint32_t>& ids ) const;
+
+    /// reports only the mid-edge nodes (0..nodes-1) of the element
+    virtual void  MidSideNodes( std::vector<uint32_t>& ids ) const;
+
+    /// reports the nodes (0..nodes-1) of the element which are not shared with any other element
+    virtual void  InteriorNodes( std::vector<uint32_t>& ids ) const;
+  
+// TODO: deprecate up to here
+
+
+// REFACTORED (9/08/22) METHODS BEGIN HERE
+
     /// reports the face nodes (0..nodes-1) of the given face
-    virtual void       NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
-    
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
+
     /// returns the local  numbers of the corner nodes of the face
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     
     /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node ) const;
-  
-    /// reports only the corner nodes (0..nodes-1) of the element
-    virtual void       CornerNodes( std::vector<uint32_t>& ids ) const;
-
-    /// reports only the mid-edge nodes (0..nodes-1) of the element
-    virtual void       MidSideNodes( std::vector<uint32_t>& ids ) const;
-
-    /// reports the nodes (0..nodes-1) of the element which are not shared with any other element
-    virtual void       InteriorNodes( std::vector<uint32_t>& ids ) const;
   
     virtual uint32_t   CornerNodes() const;
     virtual uint32_t   MidSideNodes() const;
@@ -275,12 +278,7 @@ class FiniteElement {
     /// returns the integration weight of the desired quadrature point
     virtual   double  WeightAtIntegrationPoint( uint32_t i ) const;
   
-    /// reports the local node numbers in counter clockwise order
-    // DEPRECATE, but check whether this is used by any of ther applications
-    virtual   void    CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
-
-    /// reports the values of the interpolation functions at the point given in global coordinates; @attention slow for numerically integrated elements
-    // REMOVE: use XYZtoRST(); to find the point of interest
+    /// reports the values of the interpolation functions at the point given in global coordinates; @attention due to iteration method is slow for numerically integrated elements
     virtual   void    N( std::vector<double>& N, const std::vector<double>& xyz );
   
     /// reports the values of the interpolation functions at the given quadrature point
@@ -294,7 +292,7 @@ class FiniteElement {
     virtual   void    dN( DenseMatrix<DM_MIN>& );
   
     /// returns first derivative of interpolaton functions at global point; in isoparametric elements, the determinant of the Jacobian is returned as well
-    // REMOVE: only RST should be supported; use XYZtoRST to compute point location
+    // REMOVE: only RST should be supported; use XYZtoRST (ParametricToPhysical) to compute point location, so far only FiniteVolumePolicy::RstToXYZ() exists
     virtual   double  dN_At( DenseMatrix<DM_MIN>&, const std::vector<double>& xyz );
 
     /// returns first derivative of interpolaton functions at quadrature point; determinant of the Jacobian is returned as well

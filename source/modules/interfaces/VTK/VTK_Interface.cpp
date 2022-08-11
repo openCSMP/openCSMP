@@ -2688,7 +2688,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      // 5. writing CELLS (cell-size and member nodes (point)) = plist equivalent
      // ------------------------------------------------------------------------
      ofs <<"CELLS "<< geometric_primitives_VTK.size() <<" "<< cell_list_size << endl;
-     vector<uint32_t> fnids;
+
      for ( size_t i=subdomain.InteriorCells(); i<subdomain.Cells(); ++i )
        for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); ++j ) {
              // writing out the number of nodes per face
@@ -2697,9 +2697,8 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
              else if ( fem_type == LINEAR_TRIANGLE3D )                ofs << 3U <<" ";
              else if ( fem_type == ISOPARAMETRIC_QUADRATIC_TRIANGLE ) ofs << 6U <<" ";
              // writing out the node numbers (indexes)
-             subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j), fnids );
-             for ( size_t k{0U}; k<fnids.size(); ++k )
-               ofs << subdomain.E(i)->N( fnids[k] )->Idx() <<" ";
+             for ( const auto& k : subdomain.E(i)->FE()->NodesOfFace( subdomain.PerimeterFace(i,j) ) )
+               ofs << subdomain.E(i)->N( k )->Idx() <<" ";
              ofs << endl;
          }
      ofs << endl;

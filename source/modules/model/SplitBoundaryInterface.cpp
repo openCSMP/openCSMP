@@ -1122,7 +1122,10 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
      @attention the input boundary is removed in the process and its Face objects will be erased.
      
      @return boolean indicating whether the method was able to create a singe Split boundary and its name
+     
+     SKM: DEPRECATED because it fails to update the higher dimensional regions on either side!
 */
+/*
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( Boundary<dim>& boundary )
 {
@@ -1168,7 +1171,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
 } // end CreateSplitBoundaryFrom( Boundary )
 
-
+*/
 
 
 

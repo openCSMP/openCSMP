@@ -408,6 +408,7 @@ IsoparametricLinearPrism::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t
      Starting with the smallest local node number, the face nodes are returned
      in counter clockwise order from the outside looking in.
 */
+/*
 void IsoparametricLinearPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     // bottom face
@@ -456,7 +457,21 @@ void IsoparametricLinearPrism::NodesOfFace( uint32_t face_id, std::vector<uint32
     else
     std::cerr <<"\nIsoparametricLinearPrism::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
 
+
+vector<uint32_t>  IsoparametricLinearPrism::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,2,1};
+        case 1: return vector<uint32_t>{0,1,4,3};
+        case 2: return vector<uint32_t>{1,2,5,4};
+        case 3: return vector<uint32_t>{0,3,5,2};
+        case 4: return vector<uint32_t>{3,4,5};
+      }
+    cerr <<"\nIsoparametricLinearPrism::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearPrism::CornerNodesOfFace( uint32_t face_id ) const
@@ -1377,6 +1392,7 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
+/*
 void
 IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                       vector<uint32_t>& fnids )
@@ -1390,7 +1406,7 @@ IsoparametricLinearPrism::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bn
 
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

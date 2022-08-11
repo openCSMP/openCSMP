@@ -18,14 +18,13 @@ public:
     virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t    MidSideNodes() const { return 1U; }
     virtual void        NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void        NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual void        N_AtBaryCenter( std::vector<double>& N );
     virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
-                                                  std::vector<uint32_t>& fnids );
 
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );

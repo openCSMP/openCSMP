@@ -582,7 +582,6 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
     set<CELL<dim>*> interior_elmts, boundary_elmts;
     set<Node<dim>*>                 boundary_nodes;
     set<pair<CELL<dim>*,size_t> >   boundary_faces;
-    vector<uint32_t>                fnids;
 
     // 1.1 If all cells have the same spatial dimension
     // ---------------------------------------------------
@@ -602,11 +601,9 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                   boundary_faces.insert( make_pair( eit, i ) );
                   // boundary nodes
                   assert( eit->FE() != nullptr );
-                  eit->FE()->NodesOfFace(i, fnids);
-                  const auto n_face_nodes{ fnids.size() };
-                  for ( auto j{0U}; j<n_face_nodes; ++j ) {
-                       assert( eit->N( fnids[j] ) );
-                       boundary_nodes.insert( eit->N( fnids[j] ) );
+                  for ( const auto& j : eit->FE()->NodesOfFace(i) ) {
+                       assert( eit->N(j) );
+                       boundary_nodes.insert( eit->N(j) );
                     }
                   // counting neighbors
                   nbors_that_belong_to_group--;
@@ -657,10 +654,8 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVector()
                           // the cell pointer and the face number are used to create a unique key for the discovered boundary face
                           boundary_faces.insert( make_pair( eit, i ) );
                           // recording the nodes of the boundary face as boundary nodes
-                          eit->FE()->NodesOfFace( i, fnids );
-                          const auto n_face_nodes{ fnids.size() };
-                          for ( size_t j{0U}; j<n_face_nodes; ++j )
-                            boundary_nodes.insert( eit->N(fnids[j]) );
+                          for ( const auto& j : eit->FE()->NodesOfFace(i) )
+                            boundary_nodes.insert( eit->N(j) );
 
                           nbors_that_belong_to_group--;
                        }
@@ -739,14 +734,12 @@ cout.flush();
                    else {
                         const auto n_faces{ (*it)->Faces() };
                         for ( auto i{0U}; i<n_faces; ++i ) {
-                             (*it)->FE()->NodesOfFace( i, fnids );
                             size_t  bnodes{0U};
-                            const auto n_face_nodes{ fnids.size() };
-                            for ( auto j{0U}; j<n_face_nodes; ++j )
-                              if ( boundary_nodes.find( (*it)->N(fnids[j]) ) != boundary_nodes.end() )
+                            for ( const auto& j : (*it)->FE()->NodesOfFace(i) )
+                              if ( boundary_nodes.find( (*it)->N(j) ) != boundary_nodes.end() )
                                 bnodes++;
                             // if all the nodes of at least one face lie at the boundary, so does the cell
-                            if ( bnodes == n_face_nodes ) {
+                            if ( bnodes == (*it)->FE()->NodesPerFace(i) ) {
                                  boundary_elmts.insert( (*it) );
                                  // boundary faces
                                  boundary_faces.insert( make_pair( (*it), i ) );
@@ -954,9 +947,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector( std::vector<std::pair<st
   // creating the node pointer vector
   for ( const auto& it : contacting_cells ) {
        // taking the nodes from the inside of the cell pairs
-       vector<uint32_t> fnids;
-       it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-       for ( auto i : fnids )
+       for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) )
          node_vec_.push_back( it.first.first->N(i) );
     }
 

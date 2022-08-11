@@ -103,7 +103,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   vector<uint32_t> fnids;
   for ( auto iFace = 0U; iFace < e.Faces(); iFace++ )
   {
-   e.FE()->NodesOfFace( iFace, fnids );
+   fnids = e.FE()->NodesOfFace( iFace );
    ofs << "\nSrfPt ";
    for ( size_t iNode = 0U; iNode < fnids.size(); iNode++ )
    {
@@ -152,7 +152,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
   vector<uint32_t> fnids;
   for ( auto iFace = 0U; iFace < e.Faces(); iFace++ )
   {
-   e.FE()->NodesOfFace( iFace, fnids );
+   fnids = e.FE()->NodesOfFace( iFace );
    ofs << "\nSrfPt ";
    for ( size_t iNode = 0U; iNode < fnids.size(); iNode++ )
    {

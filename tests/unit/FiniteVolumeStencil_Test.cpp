@@ -1011,9 +1011,7 @@ vector< Point<dim> > FiniteVolumeStencil_Test::GetPointsOfFacet(const uint32_t& 
 				for( auto iFace = 0U; iFace < iNrOfFaces; iFace++)
 				{
 					//get nodes of face
-			    	vector<uint32_t> vecNodesOfFace;
-					fe.NodesOfFace( iFace, vecNodesOfFace );
-				
+          vector<uint32_t> vecNodesOfFace = fe.NodesOfFace( iFace );
 					//is the face adjacent to the edge?
 					//check if each node of the edge is contained in the face
 					bool bAdjacent = true;

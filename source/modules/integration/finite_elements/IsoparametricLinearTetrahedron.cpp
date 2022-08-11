@@ -312,7 +312,8 @@ IsoparametricLinearTetrahedron::NodesOfSegment( uint32_t segm_id, std::vector<ui
 
 
 /// local node ids in counter-clockwise order from the outside looking into the faces
-void IsoparametricLinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
+/*
+void IsoparametricLinearTetrahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
     if  ( face_id == 0  )
@@ -342,7 +343,21 @@ void IsoparametricLinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<
     else
     std::cout <<"\nIsoparametricLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
 
+
+
+vector<uint32_t>  IsoparametricLinearTetrahedron::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,3,2};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,2,1};
+      }
+    cerr <<"\nIsoparametricLinearTetrahedron::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearTetrahedron::CornerNodesOfFace( uint32_t face_id ) const
@@ -958,9 +973,9 @@ void IsoparametricLinearTetrahedron::MidSideNodes(std::vector<uint32_t>&) const
  }
 
 
-void
-IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                            vector<uint32_t>& fnids )
+/*
+void IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                                 vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
     cout <<"\nIsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary: not implemented."<< endl;
@@ -969,8 +984,8 @@ IsoparametricLinearTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_
                "Cannot resolve node sequence for element boundary",
                "Probably because element lies at two boundaries simultaneously" );
 
-
  } // end ConsecutiveNodesAtBoundary
+*/
 
 
  /**

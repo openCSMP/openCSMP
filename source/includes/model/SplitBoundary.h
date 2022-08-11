@@ -128,8 +128,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     bool CreateFrom( const typename std::vector<InterFace<dim>*>::const_iterator ifacesBegin,
                      const typename std::vector<InterFace<dim>*>::const_iterator ifacesEnd );
 
-    /// creates split boundary from boundary assuming that nodes have already been duplicated etc.
-    bool CreateFrom( const PropertyDatabase<dim>&, MeshManager<dim>&, Boundary<dim>& );
 
     // ----------------------------------------
     // user interface

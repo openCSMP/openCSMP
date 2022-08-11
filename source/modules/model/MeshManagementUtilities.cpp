@@ -618,7 +618,6 @@ template size_t  findPointersToStandAloneMeshPatches( vector<InterFace<3U>*>::co
  
         @return the number of neighbors that were identified
  */
- // TODO: simplify by using the corner nodes only for the face matching
 template<uint32_t dim>
 size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
  {
@@ -631,16 +630,13 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
         
      // making search keys from the nodes
      // TODO: the number of nodes might be reduced by ignoring boundary nodes ?!
-     set<Node<dim>*>               node_keys( eptr->NodesBegin(), eptr->NodesEnd() );
+     set<Node<dim>*>  node_keys( eptr->NodesBegin(), eptr->NodesEnd() );
      //  key             face
      map<set<Node<dim>*>,uint32_t>  face_keys;
-     const size_t                   n_nbors(face_keys.size());
-     vector<uint32_t>               fnids;
+     //const size_t                   n_nbors(face_keys.size()); // TODO: empty?
+     const auto n_nbors(eptr->Neighbors());
      for ( auto i{0U}; i<n_nbors; ++i ) {
-          eptr->FE()->NodesOfFace( i, fnids );
-          set<Node<dim>*> face_key;
-          for ( auto j : fnids ) face_key.insert( eptr->N(j) );
-          face_keys.insert( make_pair( face_key, i ) );
+          face_keys.insert( make_pair( eptr->CornerNodesOfFace(i), i ) );
           // setting nbor pointers to null
           eptr->Assign( i, static_cast<Element<dim>*>(nullptr) );
        }
@@ -664,16 +660,13 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
          }
      
      // searching the subset of elements
-     set<Node<dim>*> nbor_face_key;
      for ( auto& it : potential_nbors )
        {
           // loop over faces until matching face is found; else report
           const auto n_faces(it->Neighbors());
           for ( auto i{0U}; i<n_faces; ++i ) {
-              it->FE()->NodesOfFace( i, fnids );
-              for ( auto& j : fnids ) nbor_face_key.insert( it->N(j) );
               // searching & assigning neighbors found
-              auto nbor_it(face_keys.find(nbor_face_key));
+              auto nbor_it(face_keys.find(eptr->CornerNodesOfFace(i)));
               if ( nbor_it != face_keys.end() ) {
                    // assigning the neighbor
                    eptr->Assign( (*nbor_it).second, it );
@@ -683,7 +676,6 @@ size_t connectNeighborsUsingNodeParents( Element<dim>* const eptr )
                    // only of face of the neighbor may be connected
                    break;
                 }
-              nbor_face_key.clear();
            }
        }
        
@@ -740,10 +732,8 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
         if ( search_it != outer_elmt_faces.end() ) {
              // assigning the nodes which are in the right order in fnids
              // (remember that the nodes of the Face should match the order at the inner face)
-             vector<uint32_t> fnids;
-             inner_nbor->FE()->NodesOfFace( i, fnids );
              uint32_t k(0U);
-             for ( auto& j : fnids )
+             for ( const auto& j : inner_nbor->FE()->NodesOfFace(i) )
                face->Assign( k++, inner_nbor->N(j) );
              // ending the search because only one matching neighbor is expected
              break;
@@ -784,7 +774,7 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
      csmp_error.Note( ERROR, "findNodesViaHigherDimensionalNeighbors(InterFace)", "pointer to outer higher-dim Element  not initialised");
     
    // 1. creating a search map from the nodes of the outer element
-   //  key    inner local id, outer local node id
+   //  key       inner local id, outer local node id
    map<Point<dim>,pair<uint32_t,uint32_t> > outer_elmt_nodes;
    // OUTER ELEMENT
    const auto n_nodes_outer_elmt(outer_nbor->Nodes());
@@ -809,21 +799,19 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
        }
    
    // 4. searching the faces of the higher-dimensional for the node keys
-   vector<uint32_t> fnids;
    // INNER ELEMENT
    const auto n_inner_elmt_faces(inner_nbor->Faces());
    bool  inner_face_found(false);
    for ( auto i{0U}; i<n_inner_elmt_faces; ++i ) {
-        inner_nbor->FE()->NodesOfFace( i, fnids );
+        auto fnids = inner_nbor->FE()->NodesOfFace(i);
         // creating and recording the search key
         set<uint32_t> face_nodes( fnids.begin(), fnids.end() );
         // if it matches the interface, the nodes are assigned and the loop is stopped
         if ( face_nodes == inner_nodes ) {
              inner_face_found = true;
-             const size_t n_fnids(fnids.size());
              uint32_t k(0U);
-             for ( auto j{0U}; j<n_fnids; ++j )
-               interface->Assign( k++, inner_nbor->N( fnids[j] ), INSIDE );
+             for ( const auto& j : fnids )
+               interface->Assign( k++, inner_nbor->N(j), INSIDE );
              interface->ParentFaceID( INSIDE, i );
              break;
           }
@@ -835,16 +823,15 @@ void findNodesViaHigherDimensionalNeighbors( Element<dim>* const inner_nbor,
    const auto n_outer_elmt_faces(outer_nbor->Faces());
    bool  outer_face_found(false);
    for ( auto i{0U}; i<n_outer_elmt_faces; ++i ) {
-        outer_nbor->FE()->NodesOfFace( i, fnids );
+        auto fnids = outer_nbor->FE()->NodesOfFace( i );
         // creating and recording the search key
         set<uint32_t> face_nodes( fnids.begin(), fnids.end() );
         // if it matches the interface, the nodes are assigned and the loop is stopped
         if ( face_nodes == outer_nodes ) {
              outer_face_found = true;
-             const auto n_fnids(fnids.size());
              auto k(0U);
-             for ( auto j{0U}; j<n_fnids; ++j )
-               interface->Assign( k++, outer_nbor->N( fnids[j] ), OUTSIDE );
+             for ( const auto& j : fnids )
+               interface->Assign( k++, outer_nbor->N(j), OUTSIDE );
              interface->ParentFaceID( OUTSIDE, i );
              break;
           }
@@ -1215,15 +1202,14 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            // for those element faces that define the perimeter surface
            for ( auto i{0U}; i<subdomain.PerimeterFaces(n); ++i )
              {
-                // get the local node numbers of the perimeter face
-                vector<uint32_t> fnids;
-                subdomain.E(n)->FE()->NodesOfFace( subdomain.PerimeterFace( n, i ), fnids );
-                // add the corresponding node points to a set that will form the element face key
                 pair<set<Point<dim> >,uint32_t> face_key;
-                for ( auto j : fnids )
-                  face_key.first.insert( subdomain.E(n)->N(j)->Coordinate() );
+                const uint32_t face_id{ subdomain.PerimeterFace(n,i) };
+                // get the local corner node numbers of the perimeter face
+                for ( const auto& nit : subdomain.E(n)->CornerNodesOfFace( face_id ) )
+                  // add the corresponding node points to a set that will form the element face key
+                  face_key.first.insert( nit->Coordinate() );
                 // remembering the face id
-                face_key.second = subdomain.PerimeterFace( n, i );
+                face_key.second = face_id;
                 // storing the key in the correspondance search map
                 //                              node-coordinate set  element pointer   local face id
                 element_face_keys.insert( make_pair( face_key.first, make_pair( subdomain.E(n), face_key.second ) ) );
@@ -1254,20 +1240,18 @@ bool findSplitInterfaceElements( const Region<dim>& subdomain,
            vector<uint32_t>  nids;
            // first element
            Element<dim>* e1 = (*it).second.first;
-           for ( auto face = 0U; face<e1->Faces(); ++face ) {
-               e1->FE()->NodesOfFace( face, nids );
+           for ( auto face{0U}; face<e1->Faces(); ++face ) {
                set<Point<dim> >  face_key;
-               for ( auto j : nids )
-                 face_key.insert( e1->N(j)->Coordinate() );
+               for ( const auto& nit : e1->CornerNodesOfFace( face ) )
+                 face_key.insert( nit->Coordinate() );
                outer_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
              }
            // second element
            Element<dim>* e2 = (*result.first).second.first;
-           for ( auto face = 0U; face<e2->Faces(); ++face ) {
-               e2->FE()->NodesOfFace( face, nids );
+           for ( auto face{0U}; face<e2->Faces(); ++face ) {
                set<Point<dim> >  face_key;
-               for ( auto j : nids )
-                 face_key.insert( e2->N(j)->Coordinate() );
+               for ( const auto& nit : e2->CornerNodesOfFace( face ) )
+                 face_key.insert( nit->Coordinate() );
                inner_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
              }
 
@@ -2362,7 +2346,7 @@ Element<3u>* const pointInVolumeElement( Region<3u>& region, const Point<3u>& qu
         auto fe = (*eit)->FE();
         const auto iNrFaces = (*eit)->Faces();
         for ( auto iFace = 0; iFace < iNrFaces && !reject; ++iFace ) {
-          fe->NodesOfFace(iFace, fnids);
+          fnids = fe->NodesOfFace(iFace);
           const size_t iNrFacePts = fnids.size();
           for (size_t iFacePt = 0; iFacePt < iNrFacePts; iFacePt += 2) {
             auto p0 = (*eit)->N(fnids[(iFacePt+0) % iNrFacePts])->Coordinate();

@@ -214,12 +214,27 @@ void IsoparametricQuadraticLineElement::NodesOfSegment( uint32_t segm_id, std::v
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Convention: face 0 has only one node which is the first node of the element and face 1 contains the second node.
 */
-void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
+/*
+void  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     assert( face_id <= 1U );
     fnids.resize(1U);
     fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
+*/
+
+
+vector<uint32_t>  IsoparametricQuadraticLineElement::NodesOfFace( uint32_t node_id ) const
+  {
+		switch ( node_id ) {
+        // local corner node numbers are returned in ascending order
+        case 0: return vector<uint32_t>{1};
+        case 1: return vector<uint32_t>{0};
+        default:
+          cerr <<"\nIsoparametricQuadraticLineElement::NodesOfFace: node "<< node_id <<" does not exist.";
+      }
+    return vector<uint32_t>{};
+  }
 
 
 vector<uint32_t>  IsoparametricQuadraticLineElement::CornerNodesOfFace( uint32_t face_id ) const
@@ -705,9 +720,9 @@ void  IsoparametricQuadraticLineElement::IntegrationPoint( uint32_t i, vector<do
 
 
 
-
+/*
 void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                        vector<uint32_t>& fnids )
+                                                                     vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -731,7 +746,7 @@ void  IsoparametricQuadraticLineElement::ConsecutiveNodesAtBoundary( const vecto
        }
             
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

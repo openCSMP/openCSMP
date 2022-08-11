@@ -255,9 +255,8 @@ The number of the desired face (0, 1, or 2).
 When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
-void
-IsoparametricLinearTriangle::NodesOfFace( uint32_t face_id,
-                                          std::vector<uint32_t>& fnids ) const
+/*
+void IsoparametricLinearTriangle::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
 
@@ -279,7 +278,20 @@ IsoparametricLinearTriangle::NodesOfFace( uint32_t face_id,
     else
     std::cerr <<"\nIsoparametricLinearTriangle::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
+*/
 
+
+
+vector<uint32_t>  IsoparametricLinearTriangle::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2};
+        case 1: return vector<uint32_t>{2,0};
+        case 2: return vector<uint32_t>{0,1};
+      }
+    cerr <<"\nIsoparametricLinearTriangle::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearTriangle::CornerNodesOfFace( uint32_t face_id ) const
@@ -1270,9 +1282,9 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
-void
-IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                         vector<uint32_t>& fnids )
+/*
+void IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                              vector<uint32_t>& fnids )
 {
    fnids.resize(3);
 
@@ -1286,7 +1298,7 @@ IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>&
      throw csmp::Exception( ERROR, "IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary",
                               "Cannot resolve node sequence for element boundary",
                               "Probably because element lies at two boundaries simultaneously" );
-/*
+
      // the midside nodes determine the boundaries so they are sought after
      if ( bnodes[0] == 3 || bnodes[1] == 3 || bnodes[2] == 3 ) {
            fnids[0] = 0, fnids[1] = 3, fnids[2] = 1;
@@ -1301,15 +1313,14 @@ IsoparametricLinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>&
            return;
        }
 
-*/
 } // end ConsecutiveNodesAtBoundary
+*/
 
 
 
-void
-IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
-                                                  const char* var_name,
-                                                  DenseMatrix<DM_MIN>& DATA ) const
+void IsoparametricLinearTriangle::OutputNodeDataToVTK( const char* file_name,
+                                                       const char* var_name,
+                                                       DenseMatrix<DM_MIN>& DATA ) const
  {
      assert( file_name != nullptr );
      string  outfile(file_name), elmt(to_string(CurrentID()));

@@ -586,8 +586,7 @@ void IsoparametricQuadraticTetrahedron_Test::CheckElementFaceConsistency( const 
          cout <<"\nFace "<< i <<", projected flux:         "<< projflux;
          
          // integrating flux over the face
-         vector<uint32_t> fnids;
-         e.FE()->NodesOfFace( i, fnids );
+         vector<uint32_t> fnids = e.FE()->NodesOfFace( i );
          double face_area = triangleArea( e.N( fnids[0] )->Coordinate(),
                                           e.N( fnids[1] )->Coordinate(),
                                           e.N( fnids[2] )->Coordinate() );

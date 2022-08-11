@@ -995,7 +995,7 @@ double  FiniteElementPolicy<dim,CELL>::FaceArea( uint32_t n ) const
 
 
 /**
-    SKM new implementation
+    Finds the centre of gravity of the face, using the coordinates of all of its nodes.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 Point<dim>  FiniteElementPolicy<dim,CELL>::FaceBaryCenter( uint32_t face ) const
@@ -1008,12 +1008,10 @@ Point<dim>  FiniteElementPolicy<dim,CELL>::FaceBaryCenter( uint32_t face ) const
                                  "FiniteElementPolicy<dim,CELL>::FaceBaryCenter:",
                                 "encountered element with invalid element pointer.");
        }
-    fptr_->NodesOfFace( face, fptr_->IDX );
-    const auto face_nodes(fptr_->IDX.size());
-    Point<dim>  barycenter(e->N(fptr_->IDX[0])->Coordinate());
-    for ( auto i=1U; i<face_nodes; ++i )
-      barycenter += e->N(fptr_->IDX[i])->Coordinate();
-    barycenter /= static_cast<double>(face_nodes);
+    Point<dim>  barycenter; // initialises to zero
+    for ( const auto& i : fptr_->NodesOfFace(face) )
+      barycenter += e->N(i)->Coordinate();
+    barycenter /= static_cast<double>(fptr_->NodesPerFace(face));
 
     return barycenter;
   }
