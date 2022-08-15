@@ -20,6 +20,7 @@ template<uint32_t> class PropertyDatabase;
 template<uint32_t> class VSet;
 template<uint32_t> class NodeManifoldManager;
 template<uint32_t,template<uint32_t> class> class ModelSubDomain;
+template<uint32_t> class FaceConstructionData;
 
 /**
     @brief Helper class of the Model which takes care of the storage of Element, Face and InterFace objects;
@@ -147,6 +148,15 @@ public:
                                                           typename std::vector<Face<dim>*>::iterator last,
                                                           typename std::vector<Node<dim>*>::const_iterator perim_first,
                                                           typename std::vector<Node<dim>*>::const_iterator perim_last);
+
+  /// replaces supplied Face objects with InterFace ones adding  necessary nodes and node manifolds, establishing new connectivity; the input Faces are deleted
+  std::vector<InterFace<dim>*>  ReplaceElementsByInterFaces( const PropertyDatabase<dim>&,
+                                                          typename std::vector<FaceConstructionData<dim>>::iterator first,
+                                                          typename std::vector<FaceConstructionData<dim>>::iterator last,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_first,
+                                                          typename std::vector<Node<dim>*>::const_iterator perim_last,
+                                                          std::set<size_t>& region_material_ids);
+
 
   /// creates InterFace objects between face/node sharing Elements adding the necessary nodes, node manifolds, and InterFace connectivity, updating overall connectivity as well; inside elements are first in pair
   std::vector<InterFace<dim>*>  CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>&,
