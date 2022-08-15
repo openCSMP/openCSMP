@@ -373,9 +373,15 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
 
 }
 
-
-//Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
-//correctly calibrated
+/**
+ * Test that splitboundary is properly created from Boundary, and from lower dimensional region. Intersections are not handled.
+ * Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
+ *
+ * 1) Test Unit normals
+ * 2) Test Inside nodes of Interface match exactly with the face of the Inner Parent nodes (and not slightly rotated, which is not good enough).
+ * 3)
+ *
+*/
 bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
 
   const uint32_t dim{3U};
@@ -390,13 +396,36 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
   ANSYS_Model3D model1(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
   ANSYS_Model3D model2(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
 
+  //Getting volumetric regions for later use
+  Region<dim>& BottomUnit1 = model1.Region("BOTTOMUNIT");
+  Region<dim>& TopUnit1 = model1.Region("TOPUNIT");
+
+  Region<dim>& BottomUnit2 = model2.Region("BOTTOMUNIT");
+  Region<dim>& TopUnit2 = model2.Region("TOPUNIT");
+
+  //Getting perimeter nodes of region, before splitboundary is created and information is lost
+  std::set<Node<dim>*> perim_nodes1, perim_nodes2;
+  Region<dim>& frac_region1 = model1.Region( "FRACTURE" );
+  Region<dim>& frac_region2 = model2.Region( "FRACTURE" );
+  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++){
+    perim_nodes1.insert(*nit);
+  }
+  _test( perim_nodes1.size() == frac_region1.PerimeterNodes() );
+
+  for ( auto nit = frac_region2.PerimeterNodesBegin(); nit !=frac_region2.NodesEnd(); nit++){
+    perim_nodes2.insert(*nit);
+  }
+  _test( perim_nodes2.size() == frac_region2.PerimeterNodes() );
+
+
   ///Testing Differnt model creations
   //Region -> Boundary -> SplitBoundary
-  pair<set<string>,bool> b_name   =  model1.CreateInternalBoundaryFrom("FRACTURE");
-  string sb_name1  = (model1.CreateSplitBoundaryFrom( model1.Boundary( *(b_name.first.begin()) )) ).first ;
+  //pair<set<string>,bool> b_name   =  model1.CreateInternalBoundaryFrom("FRACTURE");
+  //string sb_name1  = (model1.CreateSplitBoundaryFrom( model1.Boundary( *(b_name.first.begin()) )) ).first ;
+
 
   //Region -> SplitBoundary
-  //string sb_name2  = *((model2.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+  string sb_name2  = *((model2.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
 
   ///Inserting lower dimensional region in each
   model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
@@ -406,39 +435,36 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
   SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
   //SplitBoundary<dim>& sb2 = model2.SplitBoundary( sb_name2 );
 
-  sb1.PullApartSplitBoundary(0.1);
-  //sb2.PullApartSplitBoundary(0.1);
-
-  list<string> outputProps;
-  outputProps.push_back( "nodal id" );
-  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
-  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
-  VTU_Interface<dim> vtu1( model1 );
-  vtu1.OmitZeroInFileName(true);
-  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_TestA", outputProps, "Model", static_cast<int>(0) );
-
-
 
 //  std::vector<SplitBoundary<dim>> sb_vec{sb1,sb2};
   std::vector<SplitBoundary<dim>> sb_vec{sb1};
+  size_t i = 0;
   for ( auto& sb : sb_vec){
     for (auto& ifp : sb.CellVector() ){
-      uint32_t n_nodes = ifp->FE()->Nodes();
 
+      //Check unit normals are 0 1 0 on INSIDE and MIDDLE and the opposite on OUTSIDE
+      Point<dim> nrml_in  = ifp->UnitNormal(INSIDE);
+      Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
+      Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
+      //Inside opposite to outside
+      _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+      //inside is 0 1 0
+      _equal( nrml_in[1] , 1.0 , 0.0001  );
+      _test(  std::fabs(nrml_in[0]) < 0.0001 );
+      _test(  std::fabs(nrml_in[2]) < 0.0001 );
+      //middle is 0 1 0
+      _equal( std::fabs(nrml_mid[1]) , 1.0 , 0.0001  );
+      _test(  std::fabs(nrml_mid[0]) < 0.0001 );
+      _test(  std::fabs(nrml_mid[2]) < 0.0001 );
+
+      //Retrieve the nodes of face that match with INSIDE OUTSIDE
       std::vector<uint32_t> nids_in, nids_out ;
       ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() , nids_in );
       ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() , nids_out );
 
-      Point<dim> nrml_in  = ifp->UnitNormal(INSIDE);
-      Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
-
-      _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
-      _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
-      _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
-      _equal( nrml_in[1] , 1.0 , 0.05  );
-      _test(  nrml_in[0] < 0.05 );
-      _test(  nrml_in[2] < 0.05 );
-
+      uint32_t n_nodes = ifp->FE()->Nodes();
       for ( uint32_t n{0U}; n<n_nodes;++n){
         //Nodes should match that of face
         _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
@@ -447,18 +473,80 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
         //Testing matching assignment
         //inside remains unchanged
         _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
-        _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE));
+
+        //Testing nodes are duplicated in interior and the same on perimeter
+        if (i == 0){
+          //if node is not on perimeter
+          if ( perim_nodes1.find( ifp->N(n,INSIDE) ) == perim_nodes1.end() ){
+            //test node is duplicated
+            _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
+
+            //Inside Node is in bottom half
+            _test( BottomUnit1.Contains( ifp->N(n,INSIDE) ) );
+            //matching Outside Node is in top half
+            _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+            //matching outside node not in bottom half
+            _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+
+            //Testing inside parents assignmnet by checking that are part of BottomUnit region
+            for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
+              _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+              _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
+            }
+            for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
+              _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
+              _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+            }
+
+          }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match
+        }
+
+        if (i == 1){ //use different container of perimeter nodes
+          //if node is not on perimeter
+          if ( perim_nodes2.find( ifp->N(n,INSIDE) ) == perim_nodes2.end() ){
+            //test node is duplicated
+            _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
+
+            //Inside Node is in bottom half
+            _test( BottomUnit2.Contains( ifp->N(n,INSIDE) ) );
+            //matching Outside Node is in top half
+            _test( TopUnit2.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+            //matching outside node not in bottom half
+            _test( !BottomUnit2.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+
+            //Testing inside parents assignmnet by checking they are part of BottomUnit region and not of TopUnit Region
+            for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
+              _test( BottomUnit2.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+              _test( !TopUnit2.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
+            }
+            for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
+              _test( !BottomUnit2.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
+              _test( TopUnit2.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+            }
+
+          }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match
+        }
 
         //Outside coordinates must match with Inside and middle
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
-
-        std::cout << "Node ID: " << ifp->MatchingN(n,INSIDE)->Idx() << "\t" <<  ifp->N(n,INSIDE)->Idx() << std::endl;
-        std::cout << "Node ID: " << ifp->MatchingN(n,OUTSIDE)->Idx() << "\t" << std::endl;
       }
     }
-
+  ++i; //increment i for perimeter nodes test
   }
+
+  //For visualisation purposes
+  double gap = 0.1;
+  sb1.PullApartSplitBoundary(gap);
+  //sb2.PullApartSplitBoundary(gap);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  model2.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_TestA", outputProps, "Model", static_cast<int>(0) );
 
 
 

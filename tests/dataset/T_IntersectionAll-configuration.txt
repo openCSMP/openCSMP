@@ -1,0 +1,79 @@
+'Intersection-configuration.txt'  model for input Fluid pressure induced fracturing of rock. Elasticity, fluid flow and fracture mechanics parameters, for a half-crack in an infinite plate
+#White spaces separate each block... 
+#....So keep them commented
+# Block 1
+# Creates model subregions based on property values which have already been defined (by mesh?)  
+# Note, if reading block 1 is set to false, then the white space between block 1 and 2 must be commented out.
+# name of group  property   min-value    max-value (tab-separated columns)
+#MATRIX		Young's modulus		0.6e+3		0.6e+3
+# Skip to block 2
+# Block 2
+# assigning general material properties to the model
+# fluid properties 
+fluid pressure					0.0
+viscosity					1.0e-4
+conductivity					0.0
+aperture					0.0
+point source					0.0
+displacement old				0.0	0.0
+# mechanical properties
+Poisson's ratio					0.3
+Young's modulus					17.0e+9
+critical stress intensity factor		1.0e+6
+displacement					0.0	0.0
+Neumann stress					0.0	0.0
+load						0.0	0.0
+penalty						0.0
+#Integration point variables 
+stress						0.0	0.0	0.0	0.0
+strain						0.0	0.0	0.0	0.0
+sigma1						0.0	0.0
+sigma2						0.0	0.0
+sigma3						0.0	0.0
+strain1						0.0	0.0
+strain2						0.0	0.0
+strain3						0.0	0.0
+principal stress				0.0	0.0
+principal strain				0.0	0.0
+dilatation					0.0
+mean stress					0.0
+#Visualisation Variables
+stress-x					0.0
+stress-y					0.0
+stress-xy					0.0
+nodal stress-x					0.0
+nodal stress-y					0.0
+nodal stress-xy					0.0
+
+# Block 3 (Not actually used but kept for example)
+# property assignment to model subregions (complete, interior, boundary)
+#FRACTURE_SPLIT_BOUNDARY_REGION	complete	tensile strength	1.0
+#FRACTURE_SPLIT_BOUNDARY_REGION	complete	energy release rate	0.1
+
+# Block 4 (Does interpolation between corner points)
+# essential conditions on model boundaries:
+# Note, for corner boundaries, you still need the second set of values, and they must be the same for them to be ignored
+#LEFT		Dirichlet	displacement	0.0	0.0	0.0	0.0	Dirichlet	Plain
+#CNR1		Dirichlet	displacement	0.0	0.0	0.0	0.0	Dirichlet	Dirichlet
+#CNR2		Dirichlet	displacement	0.0	0.0	0.0	0.0	Plain		Dirichlet
+#CNR3		Dirichlet	displacement	0.0	0.0	0.0	0.0	Plain		Dirichlet
+#TOP		Dirichlet	fluid pressure	9.6e+7	9.6e+7	Dirichlet
+#BOTTOM		Dirichlet	fluid pressure	9.6e+7	9.6e+7	Dirichlet
+
+# Block 5 (Flags for properties)
+MATRIX					complete	fluid pressure		Dirichlet
+FRAC_ALL_Sub_1_SPLIT_BOUNDARY_REGION	complete	fluid pressure		Plain
+FRAC_ALL_Sub_2_SPLIT_BOUNDARY_REGION	complete	fluid pressure		Plain
+FRAC_ALL_Sub_3_SPLIT_BOUNDARY_REGION	complete	fluid pressure		Plain
+FRAC_ALL_Sub_4_SPLIT_BOUNDARY_REGION	complete	fluid pressure		Plain
+FRAC_ALL_Sub_1_SPLIT_BOUNDARY_REGION	complete	displacement		Dirichlet	Dirichlet
+FRAC_ALL_Sub_2_SPLIT_BOUNDARY_REGION	complete	displacement		Dirichlet	Dirichlet
+FRAC_ALL_Sub_3_SPLIT_BOUNDARY_REGION	complete	displacement		Dirichlet	Dirichlet
+FRAC_ALL_Sub_4_SPLIT_BOUNDARY_REGION	complete	displacement		Dirichlet	Dirichlet
+
+# Block 6 (Flags for boundary objects
+#TOP	COMPLETE	Dirichlet	Neumann stress	Neumann	Neumann	0.0	5.0e+5
+#BOTTOM	COMPLETE	Dirichlet	Neumann stress	Neumann	Neumann	0.0	-5.0e+5
+
+
+
