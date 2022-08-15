@@ -61,6 +61,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// Local variable storage interface
     PLACEMENT Placement() const { return NODE; }
     
+    /// if node is part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements
+    bool UnitNormal( Point<dim>& unrml ) const;
+    
     /// which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to
     TOPOTYPE Attribute() const { return BREP_entity_; }
     void Attribute( TOPOTYPE geom_feature ) { BREP_entity_ = geom_feature; }
@@ -194,6 +197,10 @@ std::pair<Element<dim>*,Element<dim>*>  parentElementsSharedByFace( typename std
 template<uint32_t dim>
 std::pair<Element<dim>*,size_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                 typename std::vector<Node<dim>*>::const_iterator last );
+
+/// for a node that lies on an internal surface, method reports which of volumetric parent elements lie on the inside and which on the outside of this surface; throws if assumptions are not met
+template<uint32_t dim>
+std::pair<std::vector<Element<dim>*>,std::vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const low_dim_node );
 
 /// determines role of Node (simple mesh node vs. geometric constraint), using BOX_BOUNDARY flagging and parent element connectivity,
 template<uint32_t dim>

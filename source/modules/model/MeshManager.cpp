@@ -1991,7 +1991,7 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
                                                                                        const vector<pair<pair<Element<dim>*,uint32_t>,
-                                                                                       pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
+                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
                                                                                        bool multiplicate_perimeter_nodes,
                                                                                        Region<dim>& out_region )
  {
@@ -2136,10 +2136,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
 
      // 3. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
-     // TODO: these are global changes! - do this only for nodes that are affected
-     UpdateConnectivity();
-
-     //find parent elemets of old nodes that are in outside region, unassign them from old nodes and assign to correspoinding new nodes 
+     //find parent elements of old nodes that are in outside region, unassign them from old nodes and assign to corresponding new nodes
      std::map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
      for(auto nd_pair : new_nodes) {
        auto old_node = nd_pair.first;
@@ -2163,8 +2160,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
        old_node->Unassign(parent_elmt);
      }
 
+     // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
-
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
      cout << new_nodes.size() <<" new nodes."<< endl;
