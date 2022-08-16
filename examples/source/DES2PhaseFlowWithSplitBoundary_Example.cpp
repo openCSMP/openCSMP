@@ -82,8 +82,6 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 
   template<uint32_t dim>
   void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation(Model<dim>& model) {
-  //void RunSimulation(Model<dim>& model) {
-
     // simulation settings
     Standard_IO_Handler stdio;
     VTU_Interface<dim>  vtu(model);
@@ -344,14 +342,11 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 
   template void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation(Model<2U>& model);
   template void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation(Model<3U>& model);
-  //template void RunSimulation(Model<2U>& model);
-  //template void RunSimulation(Model<3U>& model);
 
 
 
   template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
   void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<dim>& mdl, FLOW_FUNCTIONS<dim>& flowfunctions, bool with_gravity, bool with_tensor_k )
-  //void Compute2PhaseFlowProperties( Model<dim>& mdl, FLOW_FUNCTIONS<dim>& flowfunctions, bool with_gravity, bool with_tensor_k )
   {
     const size_t v( (dim==1u) ? 0u : 1u );
 
@@ -378,8 +373,6 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     const double gravity_acceleration = mdl.Read( mdl.Database().StorageKey("acceleration gravity") );
 
     // 1. Computing the saturation of water = 1 - So
-    //vector<Node<dim>* >::const_iterator nit;
-    //cout<<"number of elements = "<<mref.Cells()<<endl;
     for ( auto nit = mref.NodesBegin(); nit != mref.NodesEnd(); nit++ )
     {
       if( (*nit)->Status(sw_key) != DIRICH ) {
@@ -445,8 +438,6 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
           double gravity_w(0.), gravity_n(0.);
           if(e_sw > e_swr) gravity_w = gravity_acceleration * e_k * thickness * flowfunctions.krw_at(eptr, e_sw) / e_muw * (e_rhow);
           if(e_sn > e_snr) gravity_n = gravity_acceleration * e_k * thickness * flowfunctions.krn_at(eptr, e_sw) / e_mun * (e_rhon);
-          //gravity_w = gravity_acceleration * e_k * thickness * flowfunctions.krw_at(eptr, e_sw) / e_muw * (e_rhow);
-          //gravity_n = gravity_acceleration * e_k * thickness * flowfunctions.krn_at(eptr, e_sw) / e_mun * (e_rhon);
           gravity_w *= fabs(gravity[v]);
           gravity_n *= fabs(gravity[v]);
           gravity *= (gravity_w + gravity_n);
@@ -547,14 +538,11 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 
   template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<2U>&, FlowFunctionsModule1<2U>&, bool, bool );
   template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<3U>&, FlowFunctionsModule1<3U>&, bool, bool );
-  //template void Compute2PhaseFlowProperties( Model<2U>&, FlowFunctionsModule1<2U>&, bool, bool );
-  //template void Compute2PhaseFlowProperties( Model<3U>&, FlowFunctionsModule1<3U>&, bool, bool );
 
 
 
   template<uint32_t dim>
   void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<dim>& mdl, bool with_gravity, bool with_tensor_k)
-  //void ComputeSteadyStatePressure(Model<dim>& mdl, bool with_gravity, bool with_tensor_k)
   {
     bool verbose(false);
 
@@ -612,8 +600,6 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 
   template void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<2U>&, bool, bool);
   template void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<3U>&, bool, bool);
-  //template void ComputeSteadyStatePressure(Model<2U>&, bool, bool);
-  //template void ComputeSteadyStatePressure(Model<3U>&, bool, bool);
 
 
 

@@ -27,16 +27,6 @@ private:
 
 };
 
-/*
-  template<uint32_t dim>
-  void RunSimulation(Model<dim>& model);
-
-  template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
-  void Compute2PhaseFlowProperties( Model<dim>& mdl, FLOW_FUNCTIONS<dim>& flowfunctions, bool with_gravity, bool with_tensor_k );
-
-  template<uint32_t dim>
-  void ComputeSteadyStatePressure(Model<dim>& mdl, bool with_gravity, bool with_tensor_k);
-*/
 
 } // csmp
 
