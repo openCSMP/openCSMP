@@ -1176,6 +1176,10 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
+  if ( side == MIDDLE )
+    throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
+                           "Method cannot be used for intervening (MIDDLE) elements");
+    
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 

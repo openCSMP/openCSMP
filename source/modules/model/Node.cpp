@@ -1168,7 +1168,6 @@ template size_t sizeOf( const Node<1>* const );
     
     @return vectors of pointers to the equidimensional elements on the inside and the outside of the surface that the node lies in the interior of.
     
-    
 */
 template<uint32_t dim>
 pair<vector<Element<dim>*>,vector<Element<dim>*>>  parentElementsAdjacentTo( const Node<dim>* const node )

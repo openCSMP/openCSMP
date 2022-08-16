@@ -284,7 +284,8 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
          csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 2. building the finite element mesh and property storage
-    mesh_manager_.Initialize( Database(), vset );
+    const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
+    mesh_manager_.Initialize( Database(), vset, with_FV_variables );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.Note( INFO, "Model<dim>::Initialize(regionfile,ModelTopology,VSet):",
@@ -389,7 +390,8 @@ void Model<dim>::Initialize( ModelTopology& mesh_topology, VSet<dim>& vset )
          csmp_error.Note( FATAL_ERROR, "Model<dim>::Initialize(ModelTopology,VSet):", "'pfverts' array is missing.");
 
     // 1. building the finite element mesh and property storage
-    mesh_manager_.Initialize( Database(), vset );
+    const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
+    mesh_manager_.Initialize( Database(), vset, with_FV_variables );
     const bool contiguous_model( mesh_manager_.IsContiguous() );
     if ( !contiguous_model )
       csmp_error.Note( INFO, "Model<dim>::Initialize(ModelTopology,VSet):",
@@ -511,7 +513,8 @@ void Model<dim>::Initialize( VSet<dim>& vset )
     }
 
   // 3. building the finite element mesh and property storage
-  mesh_manager_.Initialize( Database(), vset );
+  const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
+  mesh_manager_.Initialize( Database(), vset, with_FV_variables );
   
   // 4. forming default computational domain called "Model" or contiguous multiple domains called "Model_#n"
   const bool unique(true);
@@ -559,7 +562,8 @@ if ( mesh_manager_.InterFaces() > 0 )
 template<uint32_t dim>
 void Model<dim>::InstantiateFiniteVolumes()
 {
-   Mesh().InitializeFiniteVolumeStencils( Database() );
+   const bool assign_stencils_to_elements{true};
+   Mesh().InitializeFiniteVolumeStencils( Database(), assign_stencils_to_elements );
 }
 
 
@@ -2885,7 +2889,8 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time, subset_variables );
 
   // 2. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
-  mesh_manager_.Initialize( database_, vset );
+  const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
+  mesh_manager_.Initialize( database_, vset, with_FV_variables );
 
   // 3. assigning properties to mesh (this reads in the properties output to file via Region::OutputTo(VSet) )
   if ( !vset.DataEmpty() ) mesh_manager_.InputStoredVariablesFrom( Database(), vset );

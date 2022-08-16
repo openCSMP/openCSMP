@@ -402,8 +402,8 @@ bool ArrayVariable::Out( std::fstream& fp ) const
       }    
 
     // flag
-    const int32_t flag(flag_);
-    fp.write( (char*) &flag, sizeof(int32_t));  // VARIABLE_FLAG
+    const int8_t flag(flag_);
+    fp.write( (char*) &flag, sizeof(int8_t));  // VARIABLE_FLAG
 
     // size
     const size_t depth( Size() );
@@ -443,7 +443,7 @@ bool ArrayVariable::In( std::fstream& fp )
       }
 
     // flag
-    if ( !fp.read( (char*) &flag_, sizeof(int32_t)) ) {  // VARIABLE_FLAG
+    if ( !fp.read( (char*) &flag_, sizeof(int8_t)) ) {  // VARIABLE_FLAG
         std::cerr <<"\nArrayVariable::In(): Not able to read binary record flag"<< std::endl;
         return false;
     }
@@ -454,7 +454,7 @@ bool ArrayVariable::In( std::fstream& fp )
       std::cerr <<"\nArrayVariable::In(): could not read bindary record depth"<< std::endl;
       return false;
       }
-    Resize(depth);
+    Resize( static_cast<uint32_t>(depth) );
 
     // data
     const size_t  bytes( sizeof(double) );

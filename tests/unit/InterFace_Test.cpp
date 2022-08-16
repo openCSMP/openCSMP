@@ -249,17 +249,17 @@ void InterFace_Test::Geometry_tests(){
     _test(nrml == n_outside);
 
     // Testing that unit normal throws exception when it has no base element
-#ifdef NDEBUG //TODO: Remove later so tests in debug still appear
+#ifdef NDEBUG 
     try {
-        if_obj0.UnitNormal(nrml, MIDDLE);
+        nrml = if_obj0.UnitNormal(MIDDLE);
         _test( false);                                        //test failed
     } catch ( csmp::Exception normal_thrown ) { _test(true);} //test passed
     try {
-        if_obj1.UnitNormal(nrml, MIDDLE);
+        nrml = if_obj1.UnitNormal(MIDDLE);
         _test( false );
     } catch (csmp::Exception normal_throw) { _test(true); }
     try {
-        if_obj2.UnitNormal(nrml, MIDDLE);
+        nrml = if_obj2.UnitNormal(MIDDLE);
         _test(false);
     } catch (csmp::Exception normal_throw) { _test(true); }
 #endif

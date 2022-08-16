@@ -43,7 +43,8 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim
 {
    assert( pref.VariableCount() > 0 );
    assert( vset.Vertices() > 0 );
-   Initialize( pref, vset );
+   const bool with_FV_variables = (finiteVolumeVariables(pref) > 0 ) ? true : false;
+   Initialize( pref, vset, with_FV_variables );
 }
 
 
@@ -247,7 +248,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   cout << endl;
 
   // ------------------------------------------------------------------------------------
-  // 1. check availability of necessary finite element types, and valid model topology
+  // 1. check availability of necessary finite element & finite volume types
   // ------------------------------------------------------------------------------------
   // initializing the finite-element manager true=isoparametric
   fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() );
@@ -275,6 +276,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       }
     }
   cout << endl;
+  
+  // finite volume stencils
+  if ( initialise_FV_stencils ) {
+       const bool assign_stencils_to_elements{false}; // the elements have not been created yet
+       InitializeFiniteVolumeStencils( phys_vars, assign_stencils_to_elements );
+    }
+    
 
   // --------------------------------------------------------------------------
   // 2. construct nodes and elements using the VSet element type information
@@ -730,69 +738,84 @@ if ( !interfaces_.empty() ) {
 /**
   Initialises the finite volume policy of the elements, faces, and interfaces by assigning the finite volume stencil pointers of the elements to the
   corresponding finite volume stencils.
+  
+  @param assign_stencils_to_elements connects the stencils in the manager with the individual elements, faces and interfaces
 
 @attention If a stencil is assigned already, noting is done. Remove stencil first (NULL ptr in elements)
 
 */
 template<uint32_t dim>
-void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref )
+void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref, bool assign_stencils_to_elements )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    if ( fem_manager_.InterpolationOrder() != 1U  ||
-        !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
-         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
-                         "Currently FV stencils exist only for linear FE with local coordinate system.");
+    // if the FV stencil manager has already been initialised
+    if ( fvm_manager_ )  {
+         csmp_error.Note( INFO, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "The finite volume stencils were already initialised earlier.");
          return;
       }
 
-    if ( elements_.empty() ) {
-         csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
-                         "Currently no Element objects exist to which stencils could be assigned.");
+    if ( !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist in parametric space, requiring FE with a local coordinate system.");
+         return;
+      }
+
+    if ( fem_manager_.InterpolationOrder() != 1U ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist only for finite elements with linear interpolation functions.");
          return;
       }
 
     // 1. initialize the stencil manager (the stencils are build and assigned the correct properties
-    if ( !fvm_manager_ ) {
-         fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
-      }
+    fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
 
-    // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
-    // storage for fv integration (sector/facet) point properties
-    {
-      const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-      const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-      for ( auto& e : elements_ ) {
-            if ( !e.FV() ) {
-                e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                e.ResizePropertyStorage( lvs, ipvs );
-              }
+  if ( assign_stencils_to_elements )
+   {
+      if ( elements_.empty() ) {
+           csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                           "Currently no Element objects exist to which stencils could be assigned.");
+           return;
+        }
+
+      // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
+      // storage for fv integration (sector/facet) point properties
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : elements_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+      // faces
+      if ( !faces_.empty() )
+        {
+          const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+          const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+          for ( auto& e : faces_ ) {
+                if ( !e.FV() ) {
+                    e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                    e.ResizePropertyStorage( lvs, ipvs );
+                  }
+            }
+        }
+      // interfaces
+      if ( !interfaces_.empty() )
+        {
+          const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+          const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+          for ( auto& e : interfaces_ ) {
+                if ( !e.FV() ) {
+                    e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                    e.ResizePropertyStorage( lvs, ipvs );
+                  }
+            }
         }
     }
-    // faces
-    if ( !faces_.empty() )
-      {
-        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-        for ( auto& e : faces_ ) {
-              if ( !e.FV() ) {
-                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                  e.ResizePropertyStorage( lvs, ipvs );
-                }
-          }
-      }
-    // interfaces
-    if ( !interfaces_.empty() )
-      {
-        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-        for ( auto& e : interfaces_ ) {
-              if ( !e.FV() ) {
-                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                  e.ResizePropertyStorage( lvs, ipvs );
-                }
-          }
-      }
 
  } // end InitializeFiniteVolumeStencils
 
@@ -1175,7 +1198,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
 
    // 2. constructing the new interface
    // ---------------------------------
-   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
+   const size_t face_id = interfaces_.size(); // since the face will be added at the end of the colony
    typename plf::colony<InterFace<dim>>::iterator
      fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
                                                 adjacent_face_of_inner_element, adjacent_face_of_outer_element,

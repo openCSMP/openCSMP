@@ -323,6 +323,11 @@ class PropertyDatabase  {
    IntegrationPointVariables  InterFaceIntegrationPointVariables() const;
 };
 
+
+/// counts variables in PropertyDatabase that are placed on finite volumes
+template<uint32_t dim>
+int finiteVolumeVariables( const PropertyDatabase<dim>& );
+
 } // csmp
 
 #endif

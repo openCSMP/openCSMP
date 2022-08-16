@@ -2199,11 +2199,33 @@ void PropertyDatabase<dim>::ListProperties( const set<string>& propertyNames, se
 
 
 
-
-
 template class PropertyDatabase<1U>;
 template class PropertyDatabase<2U>;
 template class PropertyDatabase<3U>;
+
+
+// non-member functions
+
+/// counts variables in PropertyDatabase that are placed on finite volumes
+template<uint32_t dim>
+int finiteVolumeVariables( const PropertyDatabase<dim>& database )
+ {
+    int FV_variables = database.VariableCount( SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( FACET_INTEGRATION_POINT );
+                      
+    FV_variables    += database.VariableCount( FACE_SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( FACE_FACET_INTEGRATION_POINT );
+
+    FV_variables    += database.VariableCount( INTER_FACE_SECTOR_INTEGRATION_POINT );
+    FV_variables    += database.VariableCount( INTER_FACE_FACET_INTEGRATION_POINT );
+
+    return FV_variables;
+ }
+
+template int finiteVolumeVariables( const PropertyDatabase<3>& );
+template int finiteVolumeVariables( const PropertyDatabase<2>& );
+template int finiteVolumeVariables( const PropertyDatabase<1>& );
+
 
 } // end namespace csmp
 
