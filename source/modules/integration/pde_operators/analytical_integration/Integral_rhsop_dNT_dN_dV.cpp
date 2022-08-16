@@ -75,7 +75,7 @@ void Integral_rhsop_dNT_dN_dV<dim,CELL,var>::ComputeContribution( const CELL& e 
     
     MathOperatorRHS<dim>::RHS.resize(e.Nodes());
     for (auto i = 0; i < e.Nodes(); ++i) {
-      for (size_t j = 0; j < e.Nodes(); ++j) {
+      for (auto j = 0; j < e.Nodes(); ++j) {
            MathOperatorRHS<dim>::RHS[i] += DNT(i,j) * basic_var_[j]() * volume * prefactor_;
         }
     }

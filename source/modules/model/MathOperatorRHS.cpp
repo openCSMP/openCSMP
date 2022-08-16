@@ -232,7 +232,7 @@ namespace csmp {
   }
 
   template<uint32_t dim>
-  size_t   MathOperatorRHS<dim>::MaterialOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim>::MaterialOperandDataDepth() const
   {
     return op.key.dataDepth;
   }
@@ -271,7 +271,7 @@ namespace csmp {
   }
 
   template<uint32_t dim>
-  size_t   MathOperatorRHS<dim>::BasicOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim>::BasicOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
@@ -283,7 +283,7 @@ namespace csmp {
   }
 
   template<uint32_t dim>
-  size_t MathOperatorRHS<dim>::BasicOperandOffset() const
+  uint32_t MathOperatorRHS<dim>::BasicOperandOffset() const
   {
     return top.second;
   }
@@ -321,7 +321,7 @@ namespace csmp {
   }
 
   template<uint32_t dim>
-  size_t   MathOperatorRHS<dim>::TestOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim>::TestOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
@@ -333,7 +333,7 @@ namespace csmp {
   }
 
   template<uint32_t dim>
-  size_t MathOperatorRHS<dim>::TestOperandOffset() const
+  uint32_t MathOperatorRHS<dim>::TestOperandOffset() const
   {
     return top.second;
   }

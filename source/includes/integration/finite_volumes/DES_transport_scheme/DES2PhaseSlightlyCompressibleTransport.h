@@ -74,7 +74,9 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FL
 
     //second order in space functions
     void ComputeRateofChange_2nd_order( Event<dim>* event );
-    void LimitProperty_LSMGRAD( const Element<dim>& e, const char* prop, size_t inside_node, size_t outside_node, size_t iFacet, const double prop_inside_node, const double prop_outside_node, double& limited_prop_inside_node, double& limited_prop_outside_node );
+    void LimitProperty_LSMGRAD( const Element<dim>& e, const char* prop, uint32_t inside_node, uint32_t outside_node,
+                                uint32_t iFacet, const double prop_inside_node, const double prop_outside_node,
+                                double& limited_prop_inside_node, double& limited_prop_outside_node );
     void CalculateCenterOfMass();
     void CalculateDistanceFacetFVBary();
     double CalculateSlopeLimiter(Node<dim>* nd, const char* prop, VectorVariable<dim> grad);

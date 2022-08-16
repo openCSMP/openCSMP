@@ -146,7 +146,7 @@ void singlePhaseVelocity( Model<dim>& model, const std::string& regionName,
         for ( auto i = 0; i < (*it)->Nodes(); ++i )
           {
             double pf = (*it)->N(i)->Read( fluidPresssureKey );
-            for( size_t xyz = 0; xyz < dim; ++xyz )
+            for( auto xyz = 0; xyz < dim; ++xyz )
               velo( xyz ) += pf * -DERIV( xyz, i ) * conductivity;
           }
         // storing the computed velocity

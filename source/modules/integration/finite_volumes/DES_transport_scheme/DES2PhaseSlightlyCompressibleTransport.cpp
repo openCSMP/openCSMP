@@ -2,12 +2,19 @@
 #include "Region.h"
 #include "Model.h"
 #include "CSMP_mathUtilities.h"
+#include "compareFloats.h"
 #include "FlowFunctionsModule.h"
 #include "TransientDiffusor.h"
-#include "compareFloats.h"
 #include "NumIntegral_NT_op_N_dS.h"
-#include "VTU_Interface.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
+
+#include "VTU_Interface.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#endif
+
 #if defined(OPENMP)
 #include "omp.h"
 #endif
@@ -300,7 +307,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ReinitializeEve
 
 
 
-
+// TODO: why is the saturation gradient not computed using the neighboring nodes?
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSaturationGradient (Event<dim>* event )
 {
@@ -309,10 +316,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSaturati
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
   
     //check if node is truncated by domain boundary
-    int truncated_node = static_cast<int>(nd->Read(this->key_cut));
+    int64_t truncated_node = static_cast<int64_t>(nd->Read(this->key_cut));
   
-    const size_t parent_elements(nd->Parents());      
-    for ( size_t i=0U; i<parent_elements; ++i )
+    const auto parent_elements(nd->Parents());
+    for ( auto i{0U}; i<parent_elements; ++i )
     {
         Element<dim>* const eptr = nd->Parent(i);
         if(truncated_node == 1 && (this->halo_stencils_.find(eptr) != this->halo_stencils_.end())) { //ignore if parent element located outside domain
@@ -322,10 +329,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSaturati
             eptr->dN_AtBaryCenter(DN);
             VectorVariable<dim> snw_gradient;
             snw_gradient = 0.;
-            for ( size_t j=0U; j<eptr->Nodes(); j++ )
+            for ( auto j{0U}; j<eptr->Nodes(); j++ )
             {
                 const double sn = eptr->N(j)->Read(this->key_sCO2);
-                for ( size_t k=0U; k<dim; k++ ) snw_gradient(k) += DN(k,j) * sn;
+                for ( auto k{0U}; k<dim; k++ ) snw_gradient(k) += DN(k,j) * sn;
             }
             eptr->Store(this->key_gradSn, snw_gradient);   
         }
@@ -342,13 +349,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
     Node<dim>* nd = event->getNode();
     assert( nd  != nullptr );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-    const size_t v( (dim==1u) ? 0u : 1u );
+    const uint32_t  v( (dim==1u) ? 0u : 1u );
   
     //check if node is truncated by domain boundary
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
   
-    const size_t parent_elements(nd->Parents());      
-    for ( size_t i=0U; i<parent_elements; ++i )
+    const auto parent_elements(nd->Parents());
+    for ( auto i{0U}; i<parent_elements; ++i )
     {
         Element<dim>* const eptr = nd->Parent(i);
         
@@ -359,10 +366,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
             eptr->dN_AtBaryCenter(DN);
             VectorVariable<dim> p_gradient;
             p_gradient = 0.;
-            for ( size_t j=0U; j<eptr->Nodes(); j++ )
+            for ( auto j{0U}; j<eptr->Nodes(); j++ )
             {
                 const double p = eptr->N(j)->Read(this->key_pf);
-                for ( size_t k=0U; k<dim; k++ ) p_gradient(k) += -DN(k,j) * p;
+                for ( auto k{0U}; k<dim; k++ ) p_gradient(k) += -DN(k,j) * p;
             }
             eptr->Store(this->key_gradP, p_gradient);   
 
@@ -435,16 +442,16 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
           nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
 
           //some variables to use
-          double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.), dsdn;
+          double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.);
           const size_t v( (dim==1u) ? 0u : 1u );
           VectorVariable<dim> facetNrml, gravity, gradP;
           vector<double> IPOL, NRST;
 
-          const size_t node_parent_elements(nd->Parents());
+          const auto node_parent_elements(nd->Parents());
           double cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
           long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
-          for ( size_t t=0U; t<node_parent_elements; t++ )
+          for ( auto t{0U}; t<node_parent_elements; t++ )
           {
               Element<dim>* const eptr(nd->Parent(t));
               assert( eptr != nullptr );
@@ -453,10 +460,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                   continue;
         
               //element state and properties
-              const size_t nodes(eptr->Nodes());
+              const auto nodes(eptr->Nodes());
               eptr->N_AtBaryCenter( IPOL );
               double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.);
-              for ( size_t i=0U; i<nodes; ++i ) {
+              for ( auto i{0U}; i<nodes; ++i ) {
                   e_sw += IPOL[i] * eptr->N(i)->Read( this->key_sH2O );
 		              e_muw += IPOL[i] * eptr->N(i)->Read( this->key_muH2O );
 		              e_mun += IPOL[i] * eptr->N(i)->Read( this->key_muCO2 );
@@ -479,20 +486,19 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
               eptr->Read(this->key_gradP, gradP); //pressure gradient
               double thickness = eptr->Read(this->key_thi); //thickness
               double e_k = eptr->Read(this->key_k); //permeability
-              double e_phi = eptr->Read(this->key_phi); //porosity
 
               //read in total velocity computed previously
               VectorVariable<dim> e_vt(ANY, 0.);
               eptr->Read(this->key_vt, e_vt);
 
               double inflow(0.), carb_inflow(0.);
-              const size_t pnid(nd->ParentNodeNumber(t));
-              const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-              for ( size_t i=0U; i<sector_facets; i++ )
+              const auto pnid(nd->ParentNodeNumber(t));
+              const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+              for ( auto i{0U}; i<sector_facets; i++ )
               {
-                  const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-                  const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-                  const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+                  const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+                  const auto inside_node(eptr->FV()->InsideNode(iFacet));
+                  const auto outside_node(eptr->FV()->OutsideNode(iFacet));
             
                   eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
                   const double facetArea = eptr->Read( iFacet, 0U,  this->key_fA );
@@ -512,12 +518,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                   //compute facet variables
                   eptr->N_AtFacetIntegrationPoint( iFacet, 0U, NRST );
                   double f_sw(0.), f_muw (0.), f_mun(0.), f_rhow(0.), f_rhon(0.);
-                  for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
-                      f_sw += NRST[i] * eptr->N(i)->Read( this->key_sH2O );
-                      f_muw += NRST[i] * eptr->N(i)->Read( this->key_muH2O );
-                      f_mun += NRST[i] * eptr->N(i)->Read( this->key_muCO2 );
-                      f_rhow += NRST[i] * eptr->N(i)->Read( this->key_rhoH2O );
-                      f_rhon += NRST[i] * eptr->N(i)->Read( this->key_rhoCO2 );
+                  for ( auto x{0U}; x<eptr->Nodes(); x++ ) {
+                      f_sw += NRST[x] * eptr->N(x)->Read( this->key_sH2O );
+                      f_muw += NRST[x] * eptr->N(x)->Read( this->key_muH2O );
+                      f_mun += NRST[x] * eptr->N(x)->Read( this->key_muCO2 );
+                      f_rhow += NRST[x] * eptr->N(x)->Read( this->key_rhoH2O );
+                      f_rhon += NRST[x] * eptr->N(x)->Read( this->key_rhoCO2 );
                   }
 
                   //compute upstream directions at facet integration point
@@ -527,8 +533,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                   if( this->with_gravity_forces_ ) {
                       eptr->Read( key_dip, gravity );
                       if(isnan(gravity(v))) { //dip vector has not been initialised
-                          if(dim==1u) {gravity(0u) = -1.;}
-                          else if(dim==2u) {gravity(0u) = 0.; gravity(1u) = -1.;}
+                          if constexpr (dim==1u) {gravity(0u) = -1.;}
+                          else if constexpr (dim==2u) {gravity(0u) = 0.; gravity(1u) = -1.;}
                           else {gravity(0u) = 0.; gravity(1u) = -1.; gravity(2u) = 0.;}
                           eptr->Store( key_dip, gravity );
                       }
@@ -570,7 +576,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                   double total_f(0.), lw(0.), ln(0.);
                   //aqueous phase determination
                   if(vw_at_facet_int_point != 0.0) {
-                      const size_t upstream_node = (vw_at_facet_int_point  > 0.) ? inside_node : outside_node;
+                      const auto upstream_node = (vw_at_facet_int_point  > 0.) ? inside_node : outside_node;
                       double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
                       if(sw > e_swr) lw = this->flowfunctions_.krw_at(eptr, sw) / f_muw;
                   } else { //vw_at_facet_int_point == 0.0
@@ -587,7 +593,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             
                   //carbonic phase determination
                   if(vn_at_facet_int_point != 0.0) {
-                      const size_t upstream_node = (vn_at_facet_int_point  > 0.) ? inside_node : outside_node;
+                      const auto upstream_node = (vn_at_facet_int_point  > 0.) ? inside_node : outside_node;
                       double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
                       double sn = eptr->N(upstream_node)->Read(this->key_sCO2);
                       if(sn > e_snr) ln = this->flowfunctions_.krn_at(eptr, sw) / f_mun;
@@ -809,7 +815,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
     }
 
     //some variables to use
-    double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.), dsdn, tot_PV(0.);
+    double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.), tot_PV(0.);
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> facetNrml, gravity, gradP;
     vector<double> IPOL, NRST;
@@ -831,7 +837,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
         //double cfl_multiplier = this->CFL_multiplier_ * this->relaxing_factor_; //default value
         long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
-        for (size_t t = 0U; t < node_parent_elements; t++) {
+        for (auto t{0U}; t < node_parent_elements; t++) {
           Element<dim> *const eptr(nd->Parent(t));
           assert(eptr != nullptr);
 
@@ -840,10 +846,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             continue;
 
           //element state and properties
-          const size_t nodes(eptr->Nodes());
+          const auto nodes(eptr->Nodes());
           eptr->N_AtBaryCenter(IPOL);
           double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw(0.), e_mun(0.), e_rhow(0.), e_rhon(0.);
-          for (size_t i = 0U; i < nodes; ++i) {
+          for (auto i = 0U; i < nodes; ++i) {
             e_sw += IPOL[i] * eptr->N(i)->Read(this->key_sH2O);
             e_muw += IPOL[i] * eptr->N(i)->Read(this->key_muH2O);
             e_mun += IPOL[i] * eptr->N(i)->Read(this->key_muCO2);
@@ -866,19 +872,18 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
           eptr->Read(this->key_gradP, gradP); //pressure gradient
           double thickness = eptr->Read(this->key_thi); //thickness
           double e_k = eptr->Read(this->key_k); //permeability
-          double e_phi = eptr->Read(this->key_phi); //porosity
 
           //read in total velocity computed previously
           VectorVariable<dim> e_vt(ANY, 0.);
           eptr->Read(this->key_vt, e_vt);
 
-          double inflow(0.), carb_inflow(0.);
-          const size_t pnid(nd->ParentNodeNumber(t));
-          const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-          for (size_t i = 0U; i < sector_facets; i++) {
-            const size_t iFacet(eptr->FV()->FacetSurroundingSector(pnid, i));
-            const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-            const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+          double carb_inflow(0.);
+          const auto pnid(nd->ParentNodeNumber(t));
+          const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+          for (auto i = 0U; i < sector_facets; i++) {
+            const auto iFacet(eptr->FV()->FacetSurroundingSector(pnid, i));
+            const auto inside_node(eptr->FV()->InsideNode(iFacet));
+            const auto outside_node(eptr->FV()->OutsideNode(iFacet));
 
             eptr->Read(iFacet, 0U, this->key_fn, facetNrml);
             const double facetArea = eptr->Read(iFacet, 0U, this->key_fA);
@@ -898,13 +903,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             //compute facet variables
             eptr->N_AtFacetIntegrationPoint(iFacet, 0U, NRST);
             double f_sw(0.), f_muw(0.), f_mun(0.), f_rhow(0.), f_rhon(0.);
-            for (size_t i = 0U; i < eptr->Nodes(); i++) {
-              f_sw += NRST[i] * eptr->N(i)->Read(this->key_sH2O);
-              f_muw += NRST[i] * eptr->N(i)->Read(this->key_muH2O);
-              f_mun += NRST[i] * eptr->N(i)->Read(this->key_muCO2);
-              f_rhow += NRST[i] * eptr->N(i)->Read(this->key_rhoH2O);
-              f_rhon += NRST[i] * eptr->N(i)->Read(this->key_rhoCO2);
-            }
+            for (auto x{0U}; x < eptr->Nodes(); x++) {
+                f_sw += NRST[x] * eptr->N(x)->Read(this->key_sH2O);
+                f_muw += NRST[x] * eptr->N(x)->Read(this->key_muH2O);
+                f_mun += NRST[x] * eptr->N(x)->Read(this->key_muCO2);
+                f_rhow += NRST[x] * eptr->N(x)->Read(this->key_rhoH2O);
+                f_rhon += NRST[x] * eptr->N(x)->Read(this->key_rhoCO2);
+              }
 
             //compute upstream directions at facet integration point
             double vn_gravity_component_of_velocity(0.0), vw_gravity_component_of_velocity(0.0);
@@ -963,7 +968,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             double total_f(0.), lw(0.), ln(0.);
             //aqueous phase determination
             if (vw_at_facet_int_point != 0.0) {
-              const size_t upstream_node = (vw_at_facet_int_point > 0.) ? inside_node : outside_node;
+              const auto upstream_node = (vw_at_facet_int_point > 0.) ? inside_node : outside_node;
               double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
               if (sw > e_swr) lw = this->flowfunctions_.krw_at(eptr, sw) / f_muw;
             } else { //vw_at_facet_int_point == 0.0
@@ -980,7 +985,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 
             //carbonic phase determination
             if (vn_at_facet_int_point != 0.0) {
-              const size_t upstream_node = (vn_at_facet_int_point > 0.) ? inside_node : outside_node;
+              const auto upstream_node = (vn_at_facet_int_point > 0.) ? inside_node : outside_node;
               double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
               double sn = eptr->N(upstream_node)->Read(this->key_sCO2);
               if (sn > e_snr) ln = this->flowfunctions_.krn_at(eptr, sw) / f_mun;
@@ -1073,10 +1078,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
           double ep_swr = eptr->Read(this->key_srH2O);
           double ep_snr = eptr->Read(this->key_srCO2);
 
-          const size_t nodes(eptr->Nodes());
+          const auto nodes(eptr->Nodes());
           eptr->N_AtBaryCenter(IPOL);
           double ipol_sum(0.), ep_sw(0.), ep_sn(0.), ep_muw(0.), ep_mun(0.), ep_rhow(0.), ep_rhon(0.);
-          for (size_t i = 0U; i < nodes; ++i) {
+          for (auto i{0U}; i < nodes; ++i) {
             ep_sw += IPOL[i] * eptr->N(i)->Read(this->key_sH2O);
             ep_muw += IPOL[i] * eptr->N(i)->Read(this->key_muH2O);
             ep_mun += IPOL[i] * eptr->N(i)->Read(this->key_muCO2);
@@ -1097,7 +1102,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
           if (n_sw > ep_swr) lambda_w = this->flowfunctions_.krw_at(eptr, n_sw) / ep_muw;
           if (n_sn > ep_snr) lambda_n = this->flowfunctions_.krn_at(eptr, n_sw) / ep_mun;
           double lambda_t = lambda_w + lambda_n;
-          double ep_fw = (lambda_t != 0.0 ? lambda_w / lambda_t : 0.0);
+ // not used:         double ep_fw = (lambda_t != 0.0 ? lambda_w / lambda_t : 0.0);
           double ep_fn = (lambda_t != 0.0 ? lambda_n / lambda_t : 0.0);
           //fw_avg += ep_fw;
           fn_avg += ep_fn;
@@ -1368,7 +1373,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
       nd->Read(this->key_time, array);
       array.Component(4, 0.); //reset cumulative change of solution
       nd->Store(this->key_time, array);
-      for ( size_t n=0U; n<nd->Neighbors(); ++n ) {
+      for ( auto n{0U}; n<nd->Neighbors(); ++n ) {
           Node<dim>* neighbor_node = nd->Neighbor(n);
           if( neighbor_node != nullptr && neighbor_node->Status(  this->key_sCO2 ) != DIRICH) {
               size_t index = neighbor_node->Read(this->key_EventIndex);
@@ -1842,7 +1847,6 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
     
     //used for local pressure solves
     time = model_time - time_increment;
-    double previous_time = time;
     double time_level(model_time); //set initial time level to advection end time
     double tolerance = 1.; //1 sec tolerance
     size_t pressure_changed(0);
@@ -1870,7 +1874,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
             cout<<endl<<"  Iterative local transient pressure computations finished in "<<iter<<" steps, time level adjusted from "<<ori_time_level<<" to "<<time_level<<" dt = "<<time_level - time<<endl;
         }
         
-        clock_t T_begin;
+        clock_t T_begin{ clock() };
         const auto stack_end(this->PEPList.end());
         for ( auto it=this->PEPList.begin(); it!=stack_end; ++it )
         {   
@@ -2378,9 +2382,9 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateContactSt
         return pressureChanged;
     }
 
-    // 3. oil damps up at slave side then it breakthroughs
+    // 3. oil dams up at slave side then it breakthroughs
     double master_sw = masterNode->Read(this->key_sH2O);
-    double master_pc = this->flowfunctions_.pc_at(master_e, master_sw);
+//    double master_pc = this->flowfunctions_.pc_at(master_e, master_sw);
     double slave_pe = slave_e->Read(this->key_pd);
     double master_pf = masterNode->Read(this->key_pf);
     double slave_pf = slaveNode->Read(this->key_pf);
@@ -2424,7 +2428,7 @@ Element<dim>* DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Parent
 {
     Element<dim>* parent_elmt = node->Parent(0);
     double largest_value = node->Parent(0)->Read(index);
-    for(size_t e = 1; e < node->Parents(); e++) {
+    for( auto e{1u}; e < node->Parents(); e++) {
         double value = node->Parent(e)->Read(index);
         if(value > largest_value) {parent_elmt = node->Parent(e); largest_value = value; };
     }
@@ -2442,7 +2446,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeFlowPo
     double accumulatedGravityTerm = 0;
     size_t neighborNodes = 0;
 
-    for (size_t i(0); i < node->Parents(); ++i) {
+    for (auto i(0); i < node->Parents(); ++i) {
         auto const& elem = node->Parent(i);
         for (size_t j(0); j < elem->Nodes(); ++j) {
             // accumulate pressure, node can be accumulated multiple times
@@ -2487,7 +2491,7 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateManifold(
         double upperSaturation(1.0), lowerSaturation(0.0);
         Compensator compensator(this, md, t_clock);
         double absoluteConvergenCriteria = 1e-14;
-        size_t maxBrentSearch = 50;
+        int maxBrentSearch = 50;
         double sn = brent_solve<Compensator>(compensator, lowerSaturation, upperSaturation,  absoluteConvergenCriteria, maxBrentSearch);
         //if(sn>1.-master_e->Read(this->key_srH2O) or sn<master_e->Read(this->key_srCO2)) {
         if(sn > 1. or sn < 0.) {
@@ -2788,7 +2792,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
 
     double flux_balance(0.);
 
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    for ( auto t{0U}; t<node_parent_elements; t++ )
     {
       Element<dim>* const eptr(nd->Parent(t));
       assert( eptr != nullptr );
@@ -2800,13 +2804,13 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
       VectorVariable<dim> e_vt(ANY, 0.);
       eptr->Read(this->key_vt, e_vt);
 
-      const size_t pnid(nd->ParentNodeNumber(t));
-      const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-      for ( size_t i=0U; i<sector_facets; i++ )
+      const auto pnid(nd->ParentNodeNumber(t));
+      const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+      for ( auto i{0U}; i<sector_facets; i++ )
       {
-        const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-        const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-        const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+        const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+        const auto inside_node(eptr->FV()->InsideNode(iFacet));
+        const auto outside_node(eptr->FV()->OutsideNode(iFacet));
         eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
         const double facetArea = eptr->Read( iFacet, 0U,  this->key_fA );
         const double sign = ( pnid == inside_node ) ? 1. : -1.;
@@ -2831,7 +2835,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
   template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
   double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofChange( Node<dim>* nd, double input_sn )
   {
-    double PV = nd->Read(this->key_fvPV); //pore volume (m3)
+// not used:    double PV = nd->Read(this->key_fvPV); //pore volume (m3)
     this->rate_count_++;//recording
     nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
 
@@ -2841,15 +2845,15 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
     nd->Store( this->key_sH2O, makeScalar( nd->Status(this->key_sH2O), 1.0-input_sn ) );
 
     //some variables to use
-    double carb_accumulation(0.), aq_accumulation(0.), dsdn;
+    double carb_accumulation(0.), aq_accumulation(0.);
     const size_t v( (dim==1u) ? 0u : 1u );
     VectorVariable<dim> facetNrml, gravity, gradP;
     vector<double> IPOL, NRST;
 
-    const size_t node_parent_elements(nd->Parents());
+    const auto node_parent_elements(nd->Parents());
     long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
-    for ( size_t t=0U; t<node_parent_elements; t++ )
+    for ( auto t{0U}; t<node_parent_elements; t++ )
     {
       Element<dim>* const eptr(nd->Parent(t));
       assert( eptr != nullptr );
@@ -2861,7 +2865,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
       const size_t nodes(eptr->Nodes());
       eptr->N_AtBaryCenter( IPOL );
       double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.);
-      for ( size_t i=0U; i<nodes; ++i ) {
+      for ( auto i{0U}; i<nodes; ++i ) {
         e_sw += IPOL[i] * eptr->N(i)->Read( this->key_sH2O );
         e_muw += IPOL[i] * eptr->N(i)->Read( this->key_muH2O );
         e_mun += IPOL[i] * eptr->N(i)->Read( this->key_muCO2 );
@@ -2884,20 +2888,20 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
       eptr->Read(this->key_gradP, gradP); //pressure gradient
       double thickness = eptr->Read(this->key_thi); //thickness
       double e_k = eptr->Read(this->key_k); //permeability
-      double e_phi = eptr->Read(this->key_phi); //porosity
+//      double e_phi = eptr->Read(this->key_phi); //porosity
 
       //read in total velocity computed previously
       VectorVariable<dim> e_vt(ANY, 0.);
       eptr->Read(this->key_vt, e_vt);
 
       double inflow(0.), carb_inflow(0.);
-      const size_t pnid(nd->ParentNodeNumber(t));
-      const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-      for ( size_t i=0U; i<sector_facets; i++ )
+      const auto pnid(nd->ParentNodeNumber(t));
+      const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+      for ( auto i{0U}; i<sector_facets; i++ )
       {
-        const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-        const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-        const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+        const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+        const auto inside_node(eptr->FV()->InsideNode(iFacet));
+        const auto outside_node(eptr->FV()->OutsideNode(iFacet));
 
         eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
         const double facetArea = eptr->Read( iFacet, 0U,  this->key_fA );
@@ -2906,18 +2910,18 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
         //compute facet fluid flux
         const double  vD_n = e_vt.DotProduct(facetNrml); //m/s
         //update flux balance
-        double f_total = sign * vD_n * facetArea;
+// not used:        double f_total = sign * vD_n * facetArea;
 
         //compute facet variables
         eptr->N_AtFacetIntegrationPoint( iFacet, 0U, NRST );
         double f_sw(0.), f_muw (0.), f_mun(0.), f_rhow(0.), f_rhon(0.);
-        for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
-          f_sw += NRST[i] * eptr->N(i)->Read( this->key_sH2O );
-          f_muw += NRST[i] * eptr->N(i)->Read( this->key_muH2O );
-          f_mun += NRST[i] * eptr->N(i)->Read( this->key_muCO2 );
-          f_rhow += NRST[i] * eptr->N(i)->Read( this->key_rhoH2O );
-          f_rhon += NRST[i] * eptr->N(i)->Read( this->key_rhoCO2 );
-        }
+        for ( auto x{0U}; x<eptr->Nodes(); x++ ) {
+            f_sw += NRST[x] * eptr->N(x)->Read( this->key_sH2O );
+            f_muw += NRST[x] * eptr->N(x)->Read( this->key_muH2O );
+            f_mun += NRST[x] * eptr->N(x)->Read( this->key_muCO2 );
+            f_rhow += NRST[x] * eptr->N(x)->Read( this->key_rhoH2O );
+            f_rhon += NRST[x] * eptr->N(x)->Read( this->key_rhoCO2 );
+          }
 
         //compute upstream directions at facet integration point
         double vn_gravity_component_of_velocity( 0.0 ),vw_gravity_component_of_velocity( 0.0 );
@@ -2952,9 +2956,9 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
         if(this->with_capillary_spreading_) {
           DenseMatrix<DM_MIN> DN;
           eptr->dN_AtBaryCenter(DN);
-          for (size_t j = 0U; j < eptr->Nodes(); j++) {
+          for ( auto j{0U}; j < eptr->Nodes(); j++) {
             const double sn = eptr->N(j)->Read(this->key_sCO2);
-            for (size_t k = 0U; k < dim; k++) sn_gradient(k) += DN(k, j) * sn;
+            for ( auto k{0U}; k < dim; k++) sn_gradient(k) += DN(k, j) * sn;
           }
         }
 
@@ -2979,10 +2983,10 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
         double vn_at_facet_int_point = vD_n - vn_gravity_component_of_velocity - vn_capillary_component_of_velocity;
         double vw_at_facet_int_point = vD_n + vw_gravity_component_of_velocity - vw_capillary_component_of_velocity;
 
-        double total_f(0.), lw(0.), ln(0.);
+        double lw(0.), ln(0.);
         //aqueous phase determination
         if(vw_at_facet_int_point != 0.0) {
-          const size_t upstream_node = (vw_at_facet_int_point  > 0.) ? inside_node : outside_node;
+          const auto upstream_node = (vw_at_facet_int_point  > 0.) ? inside_node : outside_node;
           double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
           if(sw > e_swr) lw = this->flowfunctions_.krw_at(eptr, sw) / f_muw;
         } else { //vw_at_facet_int_point == 0.0
@@ -2999,7 +3003,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
 
         //carbonic phase determination
         if(vn_at_facet_int_point != 0.0) {
-          const size_t upstream_node = (vn_at_facet_int_point  > 0.) ? inside_node : outside_node;
+          const auto upstream_node = (vn_at_facet_int_point  > 0.) ? inside_node : outside_node;
           double sw = eptr->N(upstream_node)->Read(this->key_sH2O);
           double sn = eptr->N(upstream_node)->Read(this->key_sCO2);
           if(sn > e_snr) ln = this->flowfunctions_.krn_at(eptr, sw) / f_mun;
@@ -3095,7 +3099,7 @@ double brent_solve(Function& func, const double x1, const double x2, const doubl
     bool verbose(false);
     size_t iteration(0);
 	  constexpr double  EPS = std::numeric_limits<double>::epsilon();
-	  double  a = x1, b = x2, c = x2, d, e, fa = func(a), fb = func(b), fc, p, q, r, s, tol1, xm;
+	  double  a = x1, b = x2, c = x2, d, e{0.}, fa = func(a), fb = func(b), fc, p, q, r, s, tol1, xm;
 	  if (abs(fa) < EPS) return a;
 	  if (abs(fb) < EPS) return b;
 
@@ -3314,7 +3318,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeFlowProp
     vector<double> IPOL;
     e.N_AtBaryCenter( IPOL );
     double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.), e_cw(0.), e_cn(0.);
-    for ( size_t i=0U; i<nodes; ++i ) {
+    for ( auto i{0U}; i<nodes; ++i ) {
         e_sw += IPOL[i] * e.N(i)->Read( this->key_sH2O );
         e_muw += IPOL[i] * e.N(i)->Read( this->key_muH2O );
 	      e_mun += IPOL[i] * e.N(i)->Read( this->key_muCO2 );
@@ -3454,12 +3458,22 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSteadySt
       if(this->with_gravity_forces_ ) printRangeOfVariable( this->sg_, "gravity term" );
     }
 
-    // SAMG Solver
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
-    SAMG_Solver                    solver(&settings);
-    PDE_Integrator<dim,Region>     steady_pressure(solver);
-    NumIntegral_dNT_op_dN_dV<dim>   conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim>     elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                 samg_solver( &settings );
+    PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+    PDE_Integrator<dim,Region>  steady_pressure(linear_solver);
+#endif
+    NumIntegral_dNT_op_dN_dV<dim>  conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
     //NumIntegral_NT_op_N_dS<dim,Face>     influx( this->sg_.Database(), "boundary influx", "fluid pressure" );
     //influx.LumpedFormulation(true);
@@ -3474,22 +3488,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSteadySt
     if ( this->with_gravity_forces_ ) {
         gravity = new NumIntegral_dNT_op_dV<dim>( this->sg_.Database(), "gravity term", "fluid pressure" );
         steady_pressure.Add( gravity );
-    }
-
-    // iout
-    settings.ExplicitSecondary(true);
-    settings.Set_iout1( -1 );
-    settings.Set_iout2( -1 );
-    settings.Set_idmp( -1 );
-    settings.Set_mode_mess( -2 );
+      }
 
     if(verbose) {
-      cout << "\n\nDES2PhaseSlightlyCompressibleTransport:ComputeSteadyStatePressure: ";
-      cout << " Computing '" << "steady state fluid pressure" << "'" << endl;
-    }
+        cout << "\n\nDES2PhaseSlightlyCompressibleTransport:ComputeSteadyStatePressure: ";
+        cout << " Computing '" << "steady state fluid pressure" << "'" << endl;
+      }
 
-    Region<dim> model_domain(this->sg_.Region("Model"));
-    this->sg_.Apply(steady_pressure);
+    this->sg_.Apply( steady_pressure );
 
     delete gravity;
 
@@ -3518,10 +3524,20 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
       if(this->with_gravity_forces_ ) printRangeOfVariable( this->sg_, "gravity term" );
     }
 
-    // SAMG Solver
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
-    SAMG_Solver                    solver(&settings);
-    PDE_Integrator<dim,NimbleRegion>     steady_pressure(solver);
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                       samg_solver( &settings );
+    PDE_Integrator<dim,NimbleRegion>  steady_pressure(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER        linear_solver;
+    PDE_Integrator<dim,NimbleRegion>  steady_pressure(linear_solver);
+#endif
     NumIntegral_dNT_op_dN_dV<dim>   conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_op_N_dV<dim>     elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
@@ -3536,21 +3552,14 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
 
     NumIntegral_dNT_op_dV<dim>* gravity(nullptr);
     if ( this->with_gravity_forces_ ) {
-        gravity = new NumIntegral_dNT_op_dV<dim>( this->sg_.Database(), "gravity term", "fluid pressure" );
-        steady_pressure.Add( gravity );
-    }
+         gravity = new NumIntegral_dNT_op_dV<dim>( this->sg_.Database(), "gravity term", "fluid pressure" );
+         steady_pressure.Add( gravity );
+      }
 
-    // iout
-    settings.ExplicitSecondary(true);
-    settings.Set_iout1( -1 );
-    settings.Set_iout2( -1 );
-    settings.Set_idmp( -1 );
-    settings.Set_mode_mess( -2 );
-
-    if(verbose) {
-      cout << "\n\nDES2PhaseSlightlyCompressibleTransport:SolveNimbleRegionSteadyStatePressure: ";
-      cout << " Computing '" << "steady state fluid pressure" << "'" << endl;
-    }
+    if (verbose) {
+        cout << "\n\nDES2PhaseSlightlyCompressibleTransport:SolveNimbleRegionSteadyStatePressure: ";
+        cout << " Computing '" << "steady state fluid pressure" << "'" << endl;
+      }
 
     steady_pressure.IntegrateOver(computation_domain, false);
 
@@ -3583,11 +3592,20 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
         if(this->with_gravity_forces_ ) printRangeOfVariable( this->sg_, "gravity term" );
     }
 
-    // SAMG Solver
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
-    SAMG_Solver                    solver(&settings);
-    PDE_Integrator<dim,NimbleRegion>     transient_pressure(solver);
-
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                       samg_solver( &settings );
+    PDE_Integrator<dim,NimbleRegion>  transient_pressure(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER        linear_solver;
+    PDE_Integrator<dim,NimbleRegion>  transient_pressure(linear_solver);
+#endif
     NumIntegral_dNT_op_dN_dV<dim, Element<dim> > conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_lhsop_N_dV<dim, Element<dim> > capacitance_lhs( this->sg_.Database(), "total system compressibility", "fluid pressure", "fluid pressure" );
     NumIntegral_NT_op_N_dV<dim, Element<dim> > capacitance_rhs( this->sg_.Database(), "total system compressibility", "fluid pressure" );
@@ -3596,7 +3614,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
 
     capacitance_lhs.MultiplyWithTimeIncrement( true );
     capacitance_rhs.MultiplyWithTimeIncrement( true );
-    capacitance_lhs .LumpedFormulation( true );
+    capacitance_lhs.LumpedFormulation( true );
     //capacitance_rhs.LumpedFormulation( true );
     elmt_volume_source.AddAccumulateLater();
     //nodal_volume_source.AddAccumulateLater();
@@ -3611,17 +3629,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
     // optional inclusion of the gravity term
     NumIntegral_dNT_op_dV<dim>* gravity(nullptr);
     if ( this->with_gravity_forces_) {
-        gravity = new NumIntegral_dNT_op_dV<dim>( this->sg_.Database(), "gravity term", "fluid pressure" );
-        gravity->AddAccumulateLater();
-        transient_pressure.Add( gravity );
-    }
-
-    // iout
-    settings.ExplicitSecondary(true);
-    settings.Set_iout1( -1 );
-    settings.Set_iout2( -1 );
-    settings.Set_idmp( -1 );
-    settings.Set_mode_mess( -2 );
+          gravity = new NumIntegral_dNT_op_dV<dim>( this->sg_.Database(), "gravity term", "fluid pressure" );
+          gravity->AddAccumulateLater();
+          transient_pressure.Add( gravity );
+      }
 
     transient_pressure.TimeIncrement( 1. / time_increment );
 
@@ -3726,7 +3737,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 
             //some variables to use
             double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.), dsdn;
-            const size_t v( (dim==1u) ? 0u : 1u );
+            const uint32_t v( (dim==1u) ? 0u : 1u );
             VectorVariable<dim> facetNrml, gravity, gradP;
             vector<double> IPOL, NRST;
 
@@ -3734,7 +3745,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             double cfl_multiplier = this->CFL_multiplier_*this->relaxing_factor_; //default value
             long truncated_node = static_cast<long>(nd->Read(this->key_cut));//check if node is truncated by domain boundary
 
-            for ( size_t t=0U; t<node_parent_elements; t++ )
+            for ( auto t{0U}; t<node_parent_elements; t++ )
             {
                 Element<dim>* const eptr(nd->Parent(t));
                 assert( eptr != nullptr );
@@ -3743,10 +3754,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                     continue;
         
                 //element state and properties
-                const size_t nodes(eptr->Nodes());
+                const auto nodes{ eptr->Nodes() };
                 eptr->N_AtBaryCenter( IPOL );
                 double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.);
-                for ( size_t i=0U; i<nodes; ++i ) {
+                for ( auto i{0U}; i<nodes; ++i ) {
                     e_sw += IPOL[i] * eptr->N(i)->Read( this->key_sH2O );
 		                e_muw += IPOL[i] * eptr->N(i)->Read( this->key_muH2O );
 		                e_mun += IPOL[i] * eptr->N(i)->Read( this->key_muCO2 );
@@ -3770,20 +3781,20 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                 eptr->Read(this->key_gradP, gradP); //pressure gradient
                 double thickness = eptr->Read(this->key_thi); //thickness
                 double e_k = eptr->Read(this->key_k); //permeability
-                double e_phi = eptr->Read(this->key_phi); //porosity
+// not used:                double e_phi = eptr->Read(this->key_phi); //porosity
 
                 //read in total velocity computed previously
                 VectorVariable<dim> e_vt(ANY, 0.);
                 eptr->Read(this->key_vt, e_vt);
 
                 double inflow(0.), carb_inflow(0.);
-                const size_t pnid(nd->ParentNodeNumber(t));
-                const size_t sector_facets(eptr->FV()->FacetsPerSector(pnid));
-                for ( size_t i=0U; i<sector_facets; i++ )
+                const auto pnid(nd->ParentNodeNumber(t));
+                const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
+                for ( auto i{0U}; i<sector_facets; i++ )
                 {
-                    const size_t iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
-                    const size_t inside_node(eptr->FV()->InsideNode(iFacet));
-                    const size_t outside_node(eptr->FV()->OutsideNode(iFacet));
+                    const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
+                    const auto inside_node(eptr->FV()->InsideNode(iFacet));
+                    const auto outside_node(eptr->FV()->OutsideNode(iFacet));
             
                     eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
                     const double facetArea = eptr->Read( iFacet, 0U,  this->key_fA );
@@ -3803,13 +3814,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                     //facet properties
                     eptr->N_AtFacetIntegrationPoint( iFacet, 0U );
                     double f_sw(0.), f_sn(0.), f_muw (0.), f_mun(0.), f_rhow(0.), f_rhon(0.);
-                    for ( size_t i=0U; i<eptr->Nodes(); i++ ) {
-                        f_sw += eptr->FE()->NRST[i] * eptr->N(i)->Read( this->key_sH2O );
-                        f_muw += eptr->FE()->NRST[i] * eptr->N(i)->Read( this->key_muH2O );
-                        f_mun += eptr->FE()->NRST[i] * eptr->N(i)->Read( this->key_muCO2 );
-                        f_rhow += eptr->FE()->NRST[i] * eptr->N(i)->Read( this->key_rhoH2O );
-                        f_rhon += eptr->FE()->NRST[i] * eptr->N(i)->Read( this->key_rhoCO2 );
-                    }
+                    for ( auto x{0U}; x<eptr->Nodes(); x++ ) {
+                        f_sw += eptr->FE()->NRST[x] * eptr->N(x)->Read( this->key_sH2O );
+                        f_muw += eptr->FE()->NRST[x] * eptr->N(x)->Read( this->key_muH2O );
+                        f_mun += eptr->FE()->NRST[x] * eptr->N(x)->Read( this->key_muCO2 );
+                        f_rhow += eptr->FE()->NRST[x] * eptr->N(x)->Read( this->key_rhoH2O );
+                        f_rhon += eptr->FE()->NRST[x] * eptr->N(x)->Read( this->key_rhoCO2 );
+                      }
                     f_sn = 1.0 - f_sw;
 
                     //compute upstream directions at facet integration point
@@ -4110,7 +4121,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::LimitProperty_LSMGRAD(  const Element<dim>& e,
                                                                                          const char* prop,
-                                                                                         size_t inside_node, size_t outside_node, size_t iFacet,
+                                                                                         uint32_t inside_node, uint32_t outside_node, uint32_t iFacet,
                                                                                          const double prop_inside_node, const double prop_outside_node,
                                                                                          double& limited_prop_inside_node, 
                                                                                          double& limited_prop_outside_node)
@@ -4133,8 +4144,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::LimitProperty_L
     global_c.assign( dim, 0.0);
 
     // transform local c's to global c's
-    for (size_t m = 0; m<e.Nodes(); m++)
-        for (size_t n = 0; n<dim; n++){
+    for ( uint32_t m = 0; m<e.Nodes(); m++)
+        for ( uint32_t n = 0; n<dim; n++){
           global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
     
@@ -4145,7 +4156,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::LimitProperty_L
     
     VectorVariable<dim> distance_inside_node(PLAIN,0.0);
     VectorVariable<dim> distance_outside_node(PLAIN,0.0);
-    for(size_t l=0U;l<dim;l++) {
+    for( uint32_t l=0U;l<dim;l++) {
         distance_inside_node.Component(l,global_c[l]-mass_center_inside_node[l]);
         distance_outside_node.Component(l,global_c[l]-mass_center_outside_node[l]);
     }    
@@ -4166,7 +4177,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::LimitProperty_L
 
     double prop_linear_increment_inside_node=0.0;
     double prop_linear_increment_outside_node=0.0;
-    for(size_t l=0U;l<dim;l++) {
+    for( uint32_t l=0U;l<dim;l++) {
         prop_linear_increment_inside_node+=grad_prop_inside_node[l]*distance_inside_node[l];
         prop_linear_increment_outside_node+=grad_prop_outside_node[l]*distance_outside_node[l];  
     }
@@ -4197,7 +4208,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateGeneri
         
         if(dim == 1U) {
             double sum_x2(0.);
-            for ( size_t i=0U; i<nd->Neighbors(); i++ ) {
+            for ( uint32_t i=0U; i<nd->Neighbors(); i++ ) {
                 nd->Neighbor(i)->Read(key_mc, xyz2);
                 dxyz.Component(0, xyz2[0]-xyz1[0]);
                 sum_x2 += dxyz[0] * dxyz[0];
@@ -4218,7 +4229,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateGeneri
             
         } else if (dim == 2U) {
             double sum_x2(0.), sum_y2(0.), sum_xy(0.);
-            for ( size_t i=0U; i<nd->Neighbors(); i++ ) {
+            for ( uint32_t i=0U; i<nd->Neighbors(); i++ ) {
                 nd->Neighbor(i)->Read(key_mc, xyz2);
                 dxyz.Component(0, xyz2[0]-xyz1[0]);
                 dxyz.Component(1, xyz2[1]-xyz1[1]);
@@ -4264,7 +4275,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateGeneri
             
         } else if (dim == 3U) {   
             double sum_x2(0.), sum_y2(0.), sum_z2(0.), sum_xy(0.), sum_xz(0.), sum_yz(0.);
-            for ( size_t i=0U; i<nd->Neighbors(); i++ ) {
+            for ( uint32_t i=0U; i<nd->Neighbors(); i++ ) {
                 nd->Neighbor(i)->Read(key_mc, xyz2);
                 dxyz.Component(0, xyz2[0]-xyz1[0]);
                 dxyz.Component(1, xyz2[1]-xyz1[1]);
@@ -4447,26 +4458,26 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateSlop
         //double max = numeric_limits<double>::min();
         
         double val2;
-        for ( size_t i=0U; i<nd->Neighbors(); i++ ) {   
+        for ( uint32_t i=0U; i<nd->Neighbors(); i++ ) {
             val2 = nd->Neighbor(i)->Read(u_key );
             if ( val2 < min ) min = val2;
             if ( val2 > max ) max = val2;
         }
         
         // sitting at a node, loop over parent el's
-        for(  size_t p = 0; p< nd->Parents(); p++ ){        
+        for(  uint32_t p = 0; p< nd->Parents(); p++ ){
             Element<dim>* current_el = nd->Parent(p);  
             size_t global_el_id = current_el->Idx(); // get the global parent id:
             size_t nloc_id = nd->ParentNodeNumber( p ); // get local node number
             // at that parent element, loop over all facets that belong to the current node/fv
-            for ( size_t i=0U; i < current_el->FV()->FacetsPerSector(nloc_id); i++ ) {
-                size_t local_facet_id = current_el->FV()->FacetSurroundingSector( nloc_id,i ); //get local facet_id 
+            for ( uint32_t i=0U; i < current_el->FV()->FacetsPerSector(nloc_id); i++ ) {
+                uint32_t local_facet_id = current_el->FV()->FacetSurroundingSector( nloc_id,i ); //get local facet_id
                 // get distance barycenter - facetcenter for that facet:
                 dist = distance_facet_FVBarycenter_[ global_el_id ][ local_facet_id ][ nloc_id ];
 
                 // construct linear interpolant:
                 double val_left  = val1;
-                for (size_t j=0;j<dim;j++) val_left += grad[j]*dist[j]; 
+                for ( uint32_t j=0U;j<dim;j++) val_left += grad[j]*dist[j];
                 
                 //phi_temp = limitProperty(val_left, val1, min, max);    
                 double phi_temp(1.);
@@ -4520,12 +4531,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateCenter
         auto e = *(*eit);
         ids.resize( e.Nodes() );
         // get vector of global id's
-        for(size_t i=0;i<e.Nodes();i++)
+        for( uint32_t i=0U;i<e.Nodes();i++)
             ids[i]=e.N(i)->Idx();
 
         // loop over sectors
         // -------------------
-        for( size_t i=0U; i < e.FV()->Sectors(); i++ ){
+        for( uint32_t i=0U; i < e.FV()->Sectors(); i++ ){
 
               //get the global node id for the current segment
               glob_n_id = ids[ i ];
@@ -4533,7 +4544,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateCenter
               if( this->sg_.Region("Model").N( glob_n_id)->AtBoundary() ){
                   tmp_p = this->sg_.Region("Model").N( glob_n_id)->Coordinate();
                   temp_ = VectorVariable<dim>( PLAIN,  0.0);
-                  for(size_t k=0;k<dim;k++)
+                  for( uint32_t k=0;k<dim;k++)
                       temp_.Component(k,tmp_p.Coordinates()[k]);
                   center_of_mass[ glob_n_id ].first  = temp_;
                   center_of_mass[ glob_n_id ].second = 1.;
@@ -4555,8 +4566,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateCenter
                   e.CoordinateMatrix();
                   current_bc.assign( dim, 0.0);
                   // transform local c's to global c's
-                  for (size_t i = 0; i<e.Nodes(); i++)
-                      for (size_t j = 0; j<dim; j++)
+                  for ( uint32_t i = 0U; i<e.Nodes(); i++)
+                      for ( uint32_t j = 0U; j<dim; j++)
                           current_bc[j] += e.FE()->XY(i,j) * temp[i];
  
  
@@ -4564,7 +4575,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateCenter
                   volume_ = e.SectorVolume( i );
 
                   temp_ = VectorVariable<dim>( PLAIN,  0.0);
-                  for(size_t k=0;k<dim;k++)
+                  for( uint32_t k=0U;k<dim;k++)
                       temp_.Component(k,current_bc[k] * volume_);
 
                   center_of_mass[ glob_n_id ].first += temp_;
@@ -4613,7 +4624,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateDistan
     for ( auto eit=this->sg_.Region("Model").CellsBegin(); eit!=this->sg_.Region("Model").CellsEnd(); eit++ ){
         auto e = *(*eit);
         // loop over facets
-        for( size_t fi=0U; fi < e.FV()->Facets(); fi++ ){
+        for( uint32_t fi=0U; fi < e.FV()->Facets(); fi++ ){
             // get facet barycenter in global coordinates:
             //ConvertToGlobalCoordinates( e, e.FV()->FacetIntegrationPoint( fi, 0U ),  facet_bc);
             const Point<dim>& local_c_point = e.FV()->FacetIntegrationPoint( fi, 0U );
@@ -4630,8 +4641,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateDistan
             e.CoordinateMatrix();
             facet_bc.assign( dim, 0.0);
             // transform local c's to global c's
-            for (size_t i = 0; i<e.Nodes(); i++)
-                for (size_t j = 0; j<dim; j++)
+            for ( uint32_t i = 0U; i<e.Nodes(); i++)
+                for (uint32_t j = 0U; j<dim; j++)
                     facet_bc[j] += e.FE()->XY(i,j) * temp[i];              
 
 
@@ -4642,7 +4653,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateDistan
             e.N(inside_node_)->Read(key_mc, mass_center );
 
             VectorVariable<dim> face_dist_inside_node( PLAIN,  0.0);
-            for(size_t k=0;k<dim;k++)
+            for( uint32_t k=0U;k<dim;k++)
                 face_dist_inside_node.Component(k,facet_bc[k] - mass_center[k]);
 
             distance_facet_FVBarycenter_[ e.Idx() ][ fi ][ inside_node_ ] =face_dist_inside_node;
@@ -4652,7 +4663,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateDistan
 
             // calculate distance vector:
             VectorVariable<dim> face_dist_outside_node( PLAIN,  0.0);
-            for(size_t k=0;k<dim;k++)
+            for( uint32_t k=0U;k<dim;k++)
                 face_dist_outside_node.Component(k,facet_bc[k] - mass_center[k]);
 
             distance_facet_FVBarycenter_[ e.Idx() ][ fi ][ outside_node_ ] = face_dist_outside_node;
@@ -4669,10 +4680,10 @@ template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateMinMax (Node<dim>* nd, const char* prop, std::pair<double,double>& minmax)
 {
     csmp::Index u_key = this->sg_.Database().StorageKey( prop );
-    VARIABLE_FLAG status = nd->Status(u_key);
+// not used:    VARIABLE_FLAG status = nd->Status(u_key);
 
     minmax.first = minmax.second = nd->Read( u_key );
-    for ( size_t i=0U; i<nd->Neighbors(); i++ ) {
+    for ( uint32_t i=0U; i<nd->Neighbors(); i++ ) {
         const double adv_var(nd->Neighbor(i)->Read( u_key ));
         // if element value is smaller the current minimum is assigned etc.
         minmax.first  = std::min( minmax.first,  adv_var );

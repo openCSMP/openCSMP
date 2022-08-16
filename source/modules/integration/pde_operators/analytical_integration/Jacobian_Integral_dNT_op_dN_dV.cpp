@@ -115,7 +115,7 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL& 
     for (size_t j = 0; j < e.Nodes(); ++j) {
       const double j_factor = el_d_lambda[j]() - el_lambda[j]();
       for (auto i = 0; i < e.Nodes(); ++i) {
-        for (size_t k = 0; k < e.Nodes(); ++k) {
+        for (auto k = 0; k < e.Nodes(); ++k) {
           res_(i, j) += DNT(i, k) * el_test_orig[k]() * j_factor * global_factor;
         }
       }

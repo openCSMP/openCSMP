@@ -246,16 +246,16 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateIntegral_DN_op_dS_LHS( co
 
     double flux(0.0);
     Point<dim>  n;
-    for ( size_t iFacet=0U; iFacet<gref_.E(es.eidx_)->FV()->Facets(); iFacet++ )
+    for ( auto iFacet=0U; iFacet<gref_.E(es.eidx_)->FV()->Facets(); iFacet++ )
     {
         gref_.E(es.eidx_)->FV()->FacetEdgeNodes( iFacet, es.inside_node_, es.outside_node_ );
 
         n = gref_.E(es.eidx_)->FacetNormal(iFacet);
 
-        for ( size_t j{0U}; j<DN.Cols(); j++ ){
+        for ( auto j{0U}; j<DN.Cols(); j++ ){
 
             flux = 0.0;
-            for ( size_t k{0U}; k< DN.Rows(); k++ )
+            for ( auto k{0U}; k< DN.Rows(); k++ )
                 flux += DN(k,j)*n[k];
             flux *= gref_.E(es.eidx_)->FacetArea(iFacet);
 
@@ -612,7 +612,7 @@ void NodeCenteredFiniteVolumeAlgorithm<dim>::AccumulateHigherOrderRHS(
  {
      // summing flux saturation products over the finite volume cell
      // theta  n +  1/2 term          higher-order flux contribution
-     for ( size_t i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
+     for ( auto i{0U}; i<gref_.E(es.eidx_)->FV()->Facets(); i++ ) {
   	      // computing higher order flux
   	      double hflux  = es.theta_[i]     * es.facet_flux_[i]         * es.ipsi1_[i];
   	      hflux += (1. - es.theta_[i]) * FACETFLUXES0[es.eidx_][i] * LTDSATS0[es.eidx_][i]; 
