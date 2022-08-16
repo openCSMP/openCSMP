@@ -29,8 +29,8 @@ class DES2PhaseTransport {
                          FLOW_FUNCTIONS<dim>& ff );
     
     virtual ~DES2PhaseTransport() {}
-    
-    virtual void AdvectVariable_DES( double model_time, size_t num_threads=1 ) = 0;
+
+    virtual void AdvectVariable_DES( double time_increment, double model_time, size_t num_threads=1 ) = 0;
     virtual void AdvectVariable_TDS( double time_interval, size_t num_threads=1 ) = 0;
     
     void SetNoFlowBoundaryCondition(bool no_flow_boundary) {no_flow_boundary_ = no_flow_boundary;}; 
@@ -43,7 +43,6 @@ class DES2PhaseTransport {
     void InitializeFiniteVolumeProperties();
     virtual void InitializeEvents() = 0;
     void ResetCFLMultiplier();
-    virtual void ComputeGradients (Event<dim>* event ) = 0;
     virtual void ComputeRateofChange( Event<dim>* event ) = 0;
     virtual bool Schedule(Event<dim>* event, double t_end) = 0;
     virtual void Update_DES(Event<dim>* event, double t_clock) = 0;
@@ -69,11 +68,12 @@ class DES2PhaseTransport {
     double relaxing_factor_; //relaxing factor for cfl multiplier at areas other than saturation front
     bool no_flow_boundary_ = true;     
     
-    csmp::INDEX<SCALAR,NODE> key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_fvPV, key_sCO2, key_sH2O, key_cut, key_CFL, key_pf;
+    csmp::INDEX<SCALAR,NODE> key_EventIndex, key_update, key_rate, key_schedule, key_synchronize, key_fvPV, key_sCO2, key_sH2O, key_cut, key_CFL, key_pf, key_fv;
     csmp::INDEX<SCALAR,ELEMENT> key_phi, key_thi, key_ssH2O, key_k;
     csmp::INDEX<SCALAR,FACET_INTEGRATION_POINT> key_fA;
     csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> key_fn; 
     csmp::INDEX<VECTOR,ELEMENT> key_gradSn, key_gradP;
+    csmp::INDEX<SCALAR,SECTOR_INTEGRATION_POINT> key_sPV;
     
     std::set<csmp::Element<dim>*>  halo_stencils_;    
     
@@ -86,6 +86,7 @@ class DES2PhaseTransport {
     // [4] cumulative change of solution
     // [5] target change of solution
     // [6] CFL multiplier
+    // [7] previous time stamp
     csmp::INDEX<ARRAY,NODE> key_time;
 };
 

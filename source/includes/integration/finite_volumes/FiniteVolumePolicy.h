@@ -105,6 +105,7 @@ class FiniteVolumePolicy<3U, CELL> {
 
    /// finite-element interpolation function values Ni output to NRST vector (stored by the current finite element) at the numbered facet integration point
     void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip ) const;
+    void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, std::vector<double>& NRST ) const;
     void       N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
   
     /// interpolation function derivatives at point specified in local coordinates; result is returned into NRST vector of current finite element
@@ -184,6 +185,7 @@ class FiniteVolumePolicy<2U,CELL> {
     uint32_t     IntegrationPointsPerSector() const;
     uint32_t     IntegrationPointsPerFacet()  const;
     void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip ) const;
+    void       N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, std::vector<double>& NRST ) const;
     void       N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
     void       Local_dN_At( const Point<2U>& rst ) const;
     double   dN_At( const Point<2U>& rst, DenseMatrix<DM_MIN>& DN )  const;
@@ -226,6 +228,7 @@ class FiniteVolumePolicy<1U, CELL> {
     uint32_t   IntegrationPointsPerSector() const;
     uint32_t   IntegrationPointsPerFacet()  const;
     void     N_AtFacetIntegrationPoint( uint32_t iFacet, uint32_t ip )   const;
+    void     N_AtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, std::vector<double>& NRST ) const;
     void     N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
     void     Local_dN_At( const Point<1U>& rst ) const;
     double   dN_At( const Point<1U>& rst, DenseMatrix<DM_MIN>& DN )  const;
