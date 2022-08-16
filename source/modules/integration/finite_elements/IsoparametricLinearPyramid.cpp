@@ -408,6 +408,7 @@ IsoparametricLinearPyramid::NodesOfSegment( uint32_t segm_id, std::vector<uint32
      
      @test SKM OK
 */
+/*
 void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
 
@@ -453,7 +454,22 @@ void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint
     else
     std::cout <<"\nIsoparametricLinearPyramid::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
 
+
+
+vector<uint32_t>  IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,1,4};
+        case 1: return vector<uint32_t>{1,2,4};
+        case 2: return vector<uint32_t>{2,3,4};
+        case 3: return vector<uint32_t>{0,4,3};
+        case 4: return vector<uint32_t>{0,3,2,1};
+      }
+    cerr <<"\nIsoparametricLinearPyramid::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearPyramid::CornerNodesOfFace( uint32_t face_id ) const
@@ -1395,6 +1411,7 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 
 */
+/*
 void
 IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                         vector<uint32_t>& fnids )
@@ -1407,6 +1424,9 @@ IsoparametricLinearPyramid::ConsecutiveNodesAtBoundary( const vector<uint32_t>& 
                "Probably because element lies at two boundaries simultaneously" );
 
  } // end ConsecutiveNodesAtBoundary
+*/
+
+
 
 
 

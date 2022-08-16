@@ -156,7 +156,7 @@ void FiniteElement_Test::run()
   vector<uint32_t> faceNodes;
   for( auto i = 0; i < femPtr_->Faces(); ++i )
   {
-    femPtr_->NodesOfFace( i, faceNodes );
+    faceNodes = femPtr_->NodesOfFace( i );
     if( global_verbose )
       if ( verbose_ ) cout << "  Face " << i << endl;
     for( auto j = 0; j < faceNodes.size(); ++j )
@@ -283,14 +283,6 @@ void FiniteElement_Test::run()
   cout << "Testing integration point weights...\n";
   for( auto ip = 0; ip < femPtr_->IntegrationPoints(); ++ip )
     _equal( femPtr_->WeightAtIntegrationPoint( ip ), femData_.IntegrationPointWeight( ip ), femData_.Tolerance() );
-
-  // .) COUNTER CLOCK WISE NODES
-  if ( verbose_ ) cout << "Testing counter clock wise nodes...\n";
-  std::vector<uint32_t> counterNodes;
-  femPtr_->CounterClockwiseNodes( counterNodes );
-  for( auto n = 0; n < counterNodes.size(); ++n )
-    _test( counterNodes.at( n ) == femData_.CounterClockWiseNode( n ) );
-
 
   // .) SHAPE FUNCTION: N AT POINT
   if ( verbose_ ) cout << "Testing shape function N at point...\n";

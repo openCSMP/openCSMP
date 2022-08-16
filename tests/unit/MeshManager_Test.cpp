@@ -301,11 +301,9 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     Element<3>*      inner_eptr(nullptr), *outer_eptr(nullptr);
     for ( auto i{0}; i<eptr->Neighbors(); ++i )
      if ( eptr->Neighbor(i) != nullptr ) {
-          vector<uint32_t> fnids;
-          eptr->FE()->NodesOfFace(i,fnids);
-          face_nodes.reserve( fnids.size() );
-          for (size_t j{0}; j<fnids.size(); ++j )
-            face_nodes.push_back( eptr->N( fnids[j] ) );
+          face_nodes.reserve( eptr->FE()->NodesPerFace(i) );
+          for ( const auto& j : eptr->FE()->NodesOfFace(i) )
+            face_nodes.push_back( eptr->N(j) );
           inner_eptr = eptr;
           outer_eptr = eptr->Neighbor(i);
           break;
@@ -321,8 +319,7 @@ bool MeshManager_Test::Test_parentElementsSharedByFace()
     _test( parents.second == outer_eptr );
     
     // now testing for face 4 that is on the left outside
-    vector<uint32_t> fnids;
-    eptr->FE()->NodesOfFace(4,fnids);
+    auto fnids = eptr->FE()->NodesOfFace(4);
     face_nodes.resize( fnids.size() );
     for (size_t j{0}; j<fnids.size(); ++j )
       face_nodes[j] = eptr->N( fnids[j] );
@@ -743,9 +740,8 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
   for ( auto i{0}; i<eptr->Faces(); i++ )
     {
        if ( eptr->Neighbor(i) != nullptr && !interface_constructed ) {
-            vector<uint32_t> fnids;
             // getting the nodes for the inside of the future interface
-            eptr->FE()->NodesOfFace( i, fnids );
+            auto fnids = eptr->FE()->NodesOfFace( i );
             vector<Node<3U>*> inside_nodes;
             inside_nodes.reserve( fnids.size() );
             for ( auto j=0U; j<fnids.size(); ++j )

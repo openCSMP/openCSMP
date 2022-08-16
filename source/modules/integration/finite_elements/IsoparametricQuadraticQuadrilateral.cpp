@@ -128,9 +128,8 @@ The local node numbers are returned into the integer vector 'fnids'.
 When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
-void
-IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id,
-                                                  vector<uint32_t>& fnids ) const
+/*
+void IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
 
@@ -162,7 +161,21 @@ IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id,
     else
     std::cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
+*/
 
+
+
+vector<uint32_t>  IsoparametricQuadraticQuadrilateral::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,1,4};
+        case 1: return vector<uint32_t>{1,2,5};
+        case 2: return vector<uint32_t>{2,3,6};
+        case 3: return vector<uint32_t>{3,0,7};
+      }
+    cerr <<"\nIsoparametricQuadraticQuadrilateral::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricQuadraticQuadrilateral::CornerNodesOfFace( uint32_t face_id ) const
@@ -265,6 +278,8 @@ void  IsoparametricQuadraticQuadrilateral::MidSideNodes( std::vector<uint32_t>& 
     ids[3] = 7;
  }
 
+
+/*
 void  IsoparametricQuadraticQuadrilateral::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -278,6 +293,8 @@ void  IsoparametricQuadraticQuadrilateral::CounterClockwiseNodes( std::vector<ui
     ids[7] = 7;
     ids[8] = 8;
  }
+*/
+
 
 CSMP_FEM_TYPE IsoparametricQuadraticQuadrilateral::ElementTypeOfFace( uint32_t ) const
  {
@@ -1445,8 +1462,8 @@ integrals.
 
 @todo (3) Check index of bnodes
 */
-void
-IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
+/*
+void IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
                                             const vector<uint32_t>& bnodes,
                                             vector<uint32_t>& fnids )
  {
@@ -1483,12 +1500,13 @@ IsoparametricQuadraticQuadrilateral::ConsecutiveNodesAtBoundary(
       }
 
  } // end ConsecutiveNodesAtBoundary
+*/
 
 
-void
-IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK( const char* file_name,
-                                       const char* var_name,
-                                       DenseMatrix<DM_MIN>& DATA ) const
+
+void IsoparametricQuadraticQuadrilateral::OutputNodeDataToVTK( const char* file_name,
+                                                               const char* var_name,
+                                                               DenseMatrix<DM_MIN>& DATA ) const
   {
      char  outfile[NAME_STRING], elmt[30];
      strcpy( outfile, file_name );

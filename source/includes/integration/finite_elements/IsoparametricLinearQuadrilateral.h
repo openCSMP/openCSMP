@@ -17,7 +17,8 @@ public:
     virtual double  InnerRadius();
     virtual void    EdgeLengths( std::vector<double>& vec );
     virtual void    NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void    NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual void    CornerNodes( std::vector<uint32_t>& ids ) const;
@@ -29,8 +30,6 @@ public:
     virtual void      UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_LINEAR_BAR; };
-    virtual void      ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
-                                                  std::vector<uint32_t>& fnids );
 
     virtual   void    IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;

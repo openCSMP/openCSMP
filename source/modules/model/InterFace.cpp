@@ -6,13 +6,18 @@
 #include "CSMP_mathUtilities.h"
 #include "Visitor.h"
 #include "variableOperations.h"
-#include "TriangularFacet.h"
-#include "QuadrilateralFacet.h"
+//#include "TriangularFacet.h"
+//#include "QuadrilateralFacet.h"
+#include "compareFloats.h"
 
 using namespace std;
 
 namespace csmp {
 
+/**
+    Constructor that uses separate nodes for the OUTSIDE higher-dimensional parent element substituting these into this element.
+*/
+/*
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
                csmp::Element<dim>* inner_parent,
@@ -32,8 +37,7 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
     innerParent_( inner_parent ),
     outerParent_( outer_parent ),
     inner_parent_face_id_( adjacent_face_of_inner_element ),
-    outer_parent_face_id_( adjacent_face_of_outer_element ),
-    collocated_nodes_(true)
+    outer_parent_face_id_( adjacent_face_of_outer_element )
 {
    assert( elmt.FE() != nullptr );
    assert( innerParent_ != nullptr );
@@ -67,8 +71,67 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
    outerParent_->Unassign( innerParent_ );
 
  } // end complete custom constructor (Element)
+*/
 
 
+
+/** New! SKM 29/7/2022: constructs  InterFace using the nodes and their numbering from the InterFace's higher-dimensional neighbors.
+    A check is performed to ascertain that the nodes are indeed collocated.
+    If not, the outside nodes are rotated until a match is obtained or a FATAL_ERROR is reported.
+ 
+    @attention constructor expects that the Nodes have already been multiplicated and turned into manifolds elsewhere.
+*/
+template<uint32_t dim>
+InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
+                           csmp::Element<dim>* inner_parent,
+                           csmp::Element<dim>* outer_parent,
+                           uint32_t adjacent_face_of_inner_element,
+                           uint32_t adjacent_face_of_outer_element,
+                           const LocalVariables&  interface_props,
+                           const IntegrationPointVariables&  interface_integration_point_props )
+  : FiniteElementPolicy<dim,csmp::InterFace>( elmt.FE() ),
+    FiniteVolumePolicy<dim,csmp::InterFace>( elmt.FV() ),
+    idx_( numeric_limits<size_t>::max() ),
+    node_connector_( elmt.Nodes() * 2, nullptr ),
+    interface_connector_( elmt.Neighbors(), nullptr ),
+    middleElement_( nullptr ),
+    current_side_( INSIDE ),
+    innerParent_( inner_parent ),
+    outerParent_( outer_parent ),
+    inner_parent_face_id_( adjacent_face_of_inner_element ),
+    outer_parent_face_id_( adjacent_face_of_outer_element )
+{
+   assert( elmt.FE() != nullptr );
+   assert( innerParent_ != nullptr );
+   assert( outerParent_ != nullptr );
+   assert( innerParent_->Neighbor(inner_parent_face_id_) == outerParent_ );
+   assert( outerParent_->Neighbor(outer_parent_face_id_) == innerParent_ );
+
+   // 1. assigning the nodes to the new InterFace
+   // -------------------------------------------
+   // INSIDE nodes
+   uint32_t count{0U};
+   for ( const auto& nit : innerParent_->FE()->NodesOfFace( inner_parent_face_id_ ) )
+     Assign( count++, innerParent_->N(nit), INSIDE );
+   // OUTSIDE nodes
+   count = 0U;
+   for ( const auto& nit : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
+     Assign( count++, outerParent_->N(nit), OUTSIDE );
+
+   // 2. checking that the nodes are collocated
+   // ----------------------------------------------------------------------
+#ifdef DEBUG
+   if ( !AreNodesCollocated() )
+     throw csmp::Exception( ERROR, "InterFace(costum contructor", "supplied interface nodes are not collocated");
+   // TODO: make nodes collocated by rotating outside node vector
+#endif
+
+   // 3. detaching the higher-dimensional element neighbors from one another
+   // ----------------------------------------------------------------------
+   innerParent_->Unassign( outerParent_ );
+   outerParent_->Unassign( innerParent_ );
+
+ } // end complete custom constructor (Element)
 
 
 
@@ -96,8 +159,7 @@ InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
     innerParent_( fptr->InnerParent() ),
     outerParent_( fptr->OuterParent() ),
     inner_parent_face_id_( fptr->InnerParentFaceID() ),
-    outer_parent_face_id_( fptr->OuterParentFaceID() ),
-    collocated_nodes_(true)
+    outer_parent_face_id_( fptr->OuterParentFaceID() )
 {
    assert( fptr != nullptr );
    assert( outerParent_ != nullptr ); // interfaces must have neighbors on all sides
@@ -117,10 +179,9 @@ InterFace<dim>::InterFace( csmp::Face<dim>* fptr,
      
    // 2. replacing the nodes on the outside element with the new outside nodes
    // ------------------------------------------------------------------------
-   vector<uint32_t> fnids;
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, fnids );
-   for ( auto i{0U}; i< n_nodes; i++ )
-     outerParent_->Assign( fnids[i], outside_nodes[i] );
+   uint32_t n_count{0U};
+   for ( const auto& i : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
+     outerParent_->Assign( i, outside_nodes[ n_count++ ] );
      
    // 3. detaching the higher-dimensional element neighbors from one another
    // ----------------------------------------------------------------------
@@ -147,8 +208,7 @@ InterFace<dim>::InterFace( csmp::FiniteElement* f,
     middleElement_( nullptr ),
     current_side_( INSIDE ),
     innerParent_( nullptr ),
-    outerParent_( nullptr ),
-    collocated_nodes_(true)
+    outerParent_( nullptr )
 {
    assert( f != nullptr );
 
@@ -173,8 +233,7 @@ InterFace<dim>::InterFace( size_t index,
     middleElement_( nullptr ),
     current_side_( INSIDE ),
     innerParent_( nullptr ),
-    outerParent_( nullptr ),
-    collocated_nodes_(true)
+    outerParent_( nullptr )
 {
    assert( f != nullptr );
 
@@ -198,8 +257,7 @@ InterFace<dim>::InterFace( const InterFace<dim>& ifc )
     innerParent_( ifc.innerParent_ ),
     outerParent_( ifc.outerParent_ ),
     inner_parent_face_id_( ifc.inner_parent_face_id_ ),
-    outer_parent_face_id_( ifc.outer_parent_face_id_ ),
-    collocated_nodes_( ifc.collocated_nodes_ )
+    outer_parent_face_id_( ifc.outer_parent_face_id_ )
 {
   assert( !interface_connector_.empty() /* detected unitialized element*/ );
   // variable storage: call of initialization function
@@ -220,8 +278,7 @@ InterFace<dim>::InterFace( InterFace<dim>&& ifc )
     middleElement_( ifc.middleElement_ ),
     node_connector_( move( ifc.node_connector_ ) ),
     interface_connector_( move( ifc.interface_connector_ ) ),
-    current_side_( ifc.current_side_ ),
-    collocated_nodes_( ifc.collocated_nodes_ )
+    current_side_( ifc.current_side_ )
 {
   assert( !interface_connector_.empty() ); // detected unitialized element
                                            // variable storage: call of initialization function
@@ -263,7 +320,6 @@ InterFace<dim>&  InterFace<dim>::operator=( const InterFace<dim>& ifc )
       idx_ = ifc.idx_;
       node_connector_ = ifc.node_connector_;
       interface_connector_ = ifc.interface_connector_;
-      collocated_nodes_    = ifc.collocated_nodes_;
       middleElement_ = ifc.middleElement_;
       current_side_ = ifc.current_side_;
       innerParent_ = ifc.innerParent_;
@@ -294,7 +350,6 @@ InterFace<dim>&  InterFace<dim>::operator=( InterFace<dim>&& ifc )
   interface_connector_  = move( ifc.interface_connector_ );
   node_connector_       = move( ifc.node_connector_ );
   current_side_         = ifc.current_side_;
-  collocated_nodes_     = ifc.collocated_nodes_;
 
   this->LVS( move( ifc.LVS() ) );
 
@@ -497,11 +552,11 @@ void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE s
 {
    assert( nptr != nullptr );
    assert( this->FE() != nullptr );
+   assert( !node_connector_.empty() );
    
    const auto finite_element_nodes( this->FE()->Nodes() );
-   assert( n_local < finite_element_nodes );
-   assert( !node_connector_.empty() );
    assert( finite_element_nodes * 2 == node_connector_.size() );
+   assert( n_local < finite_element_nodes );
 
    if ( side == INSIDE ) {
         node_connector_[n_local] = nptr;
@@ -609,25 +664,20 @@ pair<uint32_t,uint32_t>  InterFace<dim>::SharedElementFaces()
   // 1. building search maps that we will use to find the shared interfaces
   //    key=pointset   face iD
   map<set<Point<dim> >, pair<INTERFACE_SIDE,uint32_t> >   inner_elmt_faces, outer_elmt_faces;
-  vector<uint32_t>  nids;
   // inner parent element
   const auto ifaces(innerParent_->Faces());
-  for ( auto face = 0U; face < ifaces; ++face ) {
-      innerParent_->FE()->NodesOfFace( face, nids );
+  for ( auto face{0U}; face < ifaces; ++face ) {
       set<Point<dim> >  face_key;
-      const auto nodes(nids.size());
-      for ( uint32_t j{0U}; j<nodes; ++j )
-        face_key.insert( innerParent_->N( nids[j] )->Coordinate() );
+      for ( const auto& j : innerParent_->CornerNodesOfFace(face) )
+        face_key.insert( j->Coordinate() );
       inner_elmt_faces.emplace( make_pair( face_key, make_pair( INSIDE, face ) ) );
     }
   // outer parent element
   const uint32_t ofaces(outerParent_->Faces());
   for ( uint32_t face = 0U; face < ofaces; ++face ) {
-    outerParent_->FE()->NodesOfFace( face, nids );
     set<Point<dim> >  face_key;
-    const auto nodes(nids.size());
-    for ( uint32_t j{0U}; j<nodes; ++j )
-      face_key.insert( outerParent_->N( nids[j] )->Coordinate() );
+    for ( const auto& j : outerParent_->CornerNodesOfFace(face) )
+      face_key.insert( j->Coordinate() );
     outer_elmt_faces.emplace( make_pair( face_key, make_pair( OUTSIDE, face ) ) );
   }
 
@@ -687,16 +737,15 @@ void InterFace<dim>::InitialiseNodeVector()
    const auto n_face_nodes_inner{ innerParent_->FE()->NodesPerFace(inner_parent_face_id_) };
    const auto n_face_nodes_outer{ outerParent_->FE()->NodesPerFace(outer_parent_face_id_) };
    assert( n_face_nodes_inner == n_face_nodes_outer );
+   
    //     4.1 Inside face: straightforward assignment from face indices
-   vector<uint32_t> nids;
-   innerParent_->FE()->NodesOfFace( inner_parent_face_id_, nids );
    uint32_t node_count{0U};
-   for( auto i : nids )
+   for( const auto& i : innerParent_->FE()->NodesOfFace( inner_parent_face_id_) )
      Assign( node_count++, innerParent_->N(i), INSIDE );
 
    //    4.2 Outside face: find correct circular permutation of face indices
    //    which will preserve Node collocation
-   outerParent_->FE()->NodesOfFace( outer_parent_face_id_, nids );
+   auto nids = outerParent_->FE()->NodesOfFace( outer_parent_face_id_ );
    node_count = 0U;
 
    const auto n_corner_nodes_outer{ this->FE()->CornerNodes() };
@@ -751,6 +800,22 @@ vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVector()
 {
   return interface_connector_;
 }
+
+
+
+/**
+      Performs test using the distanceTo operator on the node points
+*/
+template<uint32_t dim>
+bool  InterFace<dim>::AreNodesCollocated() const
+ {
+    const uint32_t n_nodes{ this->FE()->Nodes() };
+    for ( uint32_t i{0U}; i<n_nodes; i++ )
+      if ( !approximatelyEqual( node_connector_[i]->Coordinate().DistanceTo( node_connector_[node_connector_.size()-1-i]->Coordinate() ), 0. ) )
+        return false;
+      
+    return true;
+ }
 
 
 

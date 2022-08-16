@@ -118,6 +118,7 @@ IsoparametricQuadraticPrism::CornerNodes( std::vector<uint32_t>& ids ) const
 @param ids Returns the counter-clockwise local node numbering for the element.
 
 */
+/*
 void
 IsoparametricQuadraticPrism::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
@@ -141,7 +142,7 @@ IsoparametricQuadraticPrism::CounterClockwiseNodes( std::vector<uint32_t>& ids )
     ids[16] =5;
     ids[17] =14;
  }
-
+*/
 
 
 void
@@ -205,6 +206,7 @@ IsoparametricQuadraticPrism::NodesOfSegment( uint32_t segm_id, std::vector<uint3
 
 For this element, the faces are numbered such that the lower left closest is 1 ->
 */
+/*
 void
 IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
@@ -276,8 +278,25 @@ IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t
     else
     std::cerr <<"\nIsoparametricQuadraticPrism::NodesOfFace: Invalid Face ID requested: "<< face_id <<std::endl;
  }
+*/
 
 
+
+
+vector<uint32_t>  IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,2,1, 8, 7, 6 };
+        case 1: return vector<uint32_t>{0,1,4,3, 6, 10, 12, 9 };
+        case 2: return vector<uint32_t>{1,2,5,4, 7, 11, 13, 10 };
+        case 3: return vector<uint32_t>{0,3,5,2, 9, 14, 11, 8 };
+        case 4: return vector<uint32_t>{3,4,5, 12, 13, 14 };
+      }
+    cerr <<"\nIsoparametricQuadraticPrism::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
+ 
+ 
 
 vector<uint32_t>  IsoparametricQuadraticPrism::CornerNodesOfFace( uint32_t face_id ) const
  {
@@ -1464,6 +1483,7 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
+/*
 void
 IsoparametricQuadraticPrism::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                          vector<uint32_t>& fnids )
@@ -1476,6 +1496,8 @@ IsoparametricQuadraticPrism::ConsecutiveNodesAtBoundary( const vector<uint32_t>&
                       "Probably because element lies at two boundaries simultaneously" );
 
  } // end ConsecutiveNodesAtBoundary
+*/
+
 
 
 /** Returns 4 local node ids of the nodes 4-9 located at the midsides of

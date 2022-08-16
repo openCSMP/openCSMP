@@ -18,7 +18,8 @@ class IsoparametricLinearTriangle : public FiniteElement {
     virtual double    InnerRadius();
     virtual void      EdgeLengths( std::vector<double>& vec );
     virtual void      NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids ) const;
-    virtual void      NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const;
+
+    virtual std::vector<uint32_t>  NodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  CornerNodesOfFace( uint32_t face_id ) const;
     virtual std::vector<uint32_t>  NodesConnectedTo( uint32_t node_id ) const;
     virtual void      CornerNodes( std::vector<uint32_t>& ids ) const;
@@ -32,8 +33,6 @@ class IsoparametricLinearTriangle : public FiniteElement {
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_LINEAR_BAR; };
 
-    virtual void        ConsecutiveNodesAtBoundary( const std::vector<uint32_t>& bnodes,
-                                                  std::vector<uint32_t>& fnids );
     // shape functions
     virtual void      N( std::vector<double>& N, const std::vector<double>& xyz );
     virtual void      N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );

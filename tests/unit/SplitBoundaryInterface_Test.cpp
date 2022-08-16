@@ -10,8 +10,6 @@
 
 using namespace std;
 
-// TODO: when the new nodes and elements are created, are the property values from the old nodes mapped to them? - would this help a user?
-
 namespace csmp
 {
 
@@ -748,12 +746,8 @@ void SplitBoundaryInterface_Test<dim>::LoadContiguousModel( const string& model_
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
 
   // 3. creating SplitBoundaries
-  for ( auto it = interfaces.begin(); it != interfaces.end(); it++ ) {
-       cerr <<"\nRecode this so that it does the right thing!\n";
-       model->CreateInternalBoundaryFrom( (*it).c_str() );
-       Boundary<dim>& bdry = model->Boundary( (*it).c_str() );
-       model->CreateSplitBoundaryFrom( bdry );
-    }
+  for ( auto it = interfaces.begin(); it != interfaces.end(); it++ )
+    model->CreateSplitBoundaryFrom( (*it).c_str() );
 
   // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
   //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')

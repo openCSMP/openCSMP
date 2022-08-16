@@ -102,8 +102,7 @@ Face<dim>::Face( const Element<dim>& elmt,
 
 
     // 2. Assigning the nodes from that of the Inner Parents face.  Attention! Not the lower-dim element
-    vector<uint32_t> fnids;
-    inner_parent->FE()->NodesOfFace( inner_parent_face_id_, fnids );
+    vector<uint32_t> fnids = inner_parent->FE()->NodesOfFace( inner_parent_face_id_ );
     uint32_t i_node{0};
     for ( auto i : fnids )
       node_connector_[i_node++] = inner_parent->N(i);
@@ -175,11 +174,9 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
            node_connector_.resize(this->FE()->Nodes(),nullptr);
            face_connector_.resize(this->FE()->Faces(),nullptr);
            // assigning the nodes
-           vector<uint32_t> fnids;
-           inner_parent->FE()->NodesOfFace( i, fnids );
-           const size_t n_face_nodes{fnids.size()};
-           for ( size_t k{0}; k < n_face_nodes; ++k )
-             node_connector_[k] = inner_parent->N( fnids[k] );
+           uint32_t n_count{0U};
+           for ( const auto& k : inner_parent->FE()->NodesOfFace(i) )
+             node_connector_[n_count++] = inner_parent->N(k);
            // finding the number of the shared face in the outer element
            const auto n_faces_outer{outerParent_->Faces()};
            for ( auto j{0U}; j<n_faces_outer; ++j )
@@ -260,10 +257,8 @@ Face<dim>::Face( const FiniteElementManager& fem_manager,
     face_connector_.resize(this->FE()->Faces(),nullptr);
     
     // assigning the nodes
-    vector<uint32_t> fnids;
-    inner_parent->FE()->NodesOfFace( inner_parent_face_id_, fnids );
     uint32_t i_node{0};
-    for ( auto i : fnids )
+    for ( const auto& i : inner_parent->FE()->NodesOfFace( inner_parent_face_id_ ) )
       node_connector_[i_node++] = inner_parent->N(i);
 
     // creating local storage for face and face integration point variables
@@ -319,13 +314,11 @@ Face<dim>::Face( Element<dim>& e,
 
     // 2. assigning nodes to face in the same order as the face nodes
     //    of the inner parent element
-    vector<uint32_t> fnids;
+    uint32_t n_count{0U};
     // nodes of the Element object from wich this Face is constructed
-    e.FE()->NodesOfFace( boundary_face, fnids );
-    const auto n_nodes{fnids.size()};
-    for ( auto j{0U}; j<n_nodes; ++j ) {
-         assert( e.N( fnids[j] ) != nullptr );
-         node_connector_[j] = e.N( fnids[j] );
+    for ( const auto& j : e.FE()->NodesOfFace( boundary_face ) ) {
+         assert( e.N(j) != nullptr );
+         node_connector_[n_count++] = e.N(j);
       }
    
  } // end constructor
@@ -656,14 +649,12 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
          // searching the matching Face of the inner parent element
          bool             matching_face_found(false);
          const size_t     faces(innerParent_->Faces());
-         vector<uint32_t>   nodes_of_face;
          set<Node<dim>*>  parent_nds;
         
          // inner parent
          for ( auto i{0U}; i<faces; ++i ) {
-              innerParent_->FE()->NodesOfFace( i, nodes_of_face );
-              for ( size_t j{0U}; j<nodes_of_face.size(); ++j )
-                parent_nds.insert( innerParent_->N( nodes_of_face[j] ) );
+              for ( const auto& j : innerParent_->FE()->NodesOfFace(i) )
+                parent_nds.insert( innerParent_->N(j) );
               // checking
               if ( face_nds == parent_nds ) {
                     matching_face_found = true;
@@ -676,9 +667,8 @@ void Face<dim>::Assign( Element<dim>* const innerElement, Element<dim>* const ou
          // outer parent if any
          if ( outerElement != nullptr ) {
              for ( auto i{0U}; i<faces; ++i ) {
-                  outerParent_->FE()->NodesOfFace( i, nodes_of_face );
-                  for ( size_t j{0U}; j<nodes_of_face.size(); ++j )
-                    parent_nds.insert( outerParent_->N( nodes_of_face[j] ) );
+                  for ( const auto& j : outerParent_->FE()->NodesOfFace(i) )
+                    parent_nds.insert( outerParent_->N(j) );
                   // checking
                   if ( face_nds == parent_nds ) {
                         matching_face_found = true;

@@ -332,14 +332,13 @@ void FiniteElement::NodesOfSegment( uint32_t sid, vector<uint32_t>& snids ) cons
   }
 
 
-void FiniteElement::NodesOfFace( uint32_t fid, vector<uint32_t>& fnids ) const
+vector<uint32_t>  FiniteElement::NodesOfFace( uint32_t fid ) const
   {
      cout <<"\nFiniteElement::NodesOfFace: Returns the local node ID numbers of ";
      cout <<"the nodes which constitute the element face with the entered ID number. ";
      cout <<"In triangular and tetrahedral elements the faces lie opposite of ";
      cout <<"the nodes with the same ID." << endl;
      cout <<"\ncalled by object: "<< object_id_ <<" for face "<< fid << endl;
-     out(fnids);
      throw invalid_argument("FiniteElement::NodesOfFace");
   }
 
@@ -379,18 +378,6 @@ void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM )
 
   
 // other information
-
-void FiniteElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                vector<uint32_t>& fnids )
-  {
-     InstructUser("FiniteElement::ConsecutiveNodesAtBoundary");
-     cout <<"\nnodes at boundary: "<< endl;
-     out(bnodes);
-     out(fnids);
-     cout <<"\ncalled by object: "<< object_id_ << endl;
-     throw invalid_argument("FiniteElement::ConsecutiveNodesAtBoundary");
-  }
-
 
 void FiniteElement::CornerNodes( vector<uint32_t>& ids ) const
  {
@@ -524,15 +511,6 @@ void  FiniteElement::IntegrationPoint( uint32_t i, std::vector<double>& xyz ) co
  }
 
 
-
-
-void  FiniteElement::CounterClockwiseNodes( vector<uint32_t>& ids ) const
- {
-     InstructUser("FiniteElement::CounterClockwiseNodes");
-     out(ids);
-     cout <<"\nThis method must be defined by the FE element which you are using"<< endl;
-     throw invalid_argument("FiniteElement::CounterClockwiseNodes");
- }
 
 
 /** Extrapolation member( gauss points to nodes )

@@ -34,14 +34,14 @@ LinearLineElement::~LinearLineElement()
  }
 
 
-
+/*
 void  LinearLineElement::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
     ids[0] = 0;
     ids[1] = 1;
  }
-
+*/
 
 
 void  LinearLineElement::CornerNodes( std::vector<uint32_t>& ids ) const
@@ -64,11 +64,21 @@ void LinearLineElement::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>&
 
 
 /// the Face of a line element is located opposite to the node with the same number
+/*
 void  LinearLineElement::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     assert( face_id <= 1 );
     fnids.resize(1U);
     fnids[0] = ( face_id == 0U ) ? 1U : 0U;
+ }
+*/
+
+
+vector<uint32_t>  LinearLineElement::NodesOfFace( uint32_t face_id ) const
+ {
+    assert( face_id <= 1 );
+    if ( face_id == 1U ) return vector<uint32_t>{0U};
+    return vector<uint32_t>{1U};
  }
 
 

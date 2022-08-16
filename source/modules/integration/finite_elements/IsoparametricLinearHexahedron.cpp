@@ -314,8 +314,8 @@ IsoparametricLinearHexahedron::NodesOfSegment( uint32_t segm_id, std::vector<uin
      @test SKM 2/3/2016
 
 */
-void
-IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
+/*
+void IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(4);
 
@@ -364,6 +364,31 @@ IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& 
     else
     std::cerr <<"\nIsoparametricLinearHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
+
+
+
+// SKM refactored 9/8/22, returns empty vector if face_id is out of range
+
+vector<uint32_t>  IsoparametricLinearHexahedron::NodesOfFace( uint32_t face_id ) const
+ {
+    assert( face_id < Faces() );
+    switch (face_id) {
+        case 0: return vector<uint32_t>{ 0, 3, 2, 1 };
+        case 1: return vector<uint32_t>{ 0, 1, 5, 4 };
+        case 2: return vector<uint32_t>{ 1, 2, 6, 5 };
+        case 3: return vector<uint32_t>{ 2, 3, 7, 6 };
+        case 4: return vector<uint32_t>{ 0, 4, 7, 3 };
+        case 5: return vector<uint32_t>{ 4, 5, 6, 7 };
+      }
+    cerr <<"\nIsoparametricLinearHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << endl;
+    return vector<uint32_t>{};
+    
+ } // end NodesOfFace
+
+
+
+
 
 
 vector<uint32_t>  IsoparametricLinearHexahedron::CornerNodesOfFace( uint32_t face_id ) const
@@ -467,12 +492,10 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
      // 1. writing the faces and points as well of the element
      // -----------------------------------
      DenseMatrix<DM_MIN> COORD(XY);
-     vector<uint32_t> fnids(npf);
      for( uint32_t i{0U};i<fpe;i++)
      {
-
-     NodesOfFace(i,fnids);
-     rhinos<<"SrfPt ";
+        auto fnids = NodesOfFace(i);
+        rhinos<<"SrfPt ";
         for( uint32_t j{0U};j<npf;j++){
             rhinos<<"(";
             for( uint32_t k{0U};k<dim;k++)
@@ -524,7 +547,7 @@ IsoparametricLinearHexahedron::OutputElementToRhino( const char* file_name,
         IsoparametricLinearQuadrilateral isoLinQuad(3);
         Element<3U>  element1( &isoLinQuad );
         vector<Node<3U> >  nodes(npf);
-        NodesOfFace(i,fnids);
+        auto fnids = NodesOfFace(i);
         for( uint32_t j{0U};j<npf;j++) {
                  nodes[j].x(COORD(fnids[j],0));
                  nodes[j].y(COORD(fnids[j],1));
@@ -1579,45 +1602,7 @@ IsoparametricLinearHexahedron::MidSideNodes(std::vector<uint32_t>& ids) const
     ids[0]=0;
  }
 
- /**
-
-Method returns a vector with a size of 3, containing the consecutively
-ordered local node numbers of the side of the element which lies at the
-indicated model boundary. If the element is not on the model boundary an
-error is reported and the vector is initialized to unspecified.
-
-@section arguments Input Arguments
-
-The parent Element, the target boundary of the the Model of elements,
-and a Meschach vector which will hold the the local indices of the identified
-nodes (0...5).
-
-@param fnids the resulting local node id's are returned into the third method argument.
-
-@section implementation Implementation
-
-While only the element knows which nodes are located at the mode boundary,
-the FiniteElement knows in which order these appear.
-
-@section application Application
-
-To assign Neumann boundary conditions with a PDE operator for surface
-integrals.
-*/
-void
-IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                           vector<uint32_t>& fnids )
- {
-     fnids.resize(bnodes.size());
-
-     if ( bnodes.size() != 4 )
-       throw csmp::Exception( ERROR, "IsoparametricLinearHexahedron::ConsecutiveNodesAtBoundary",
-               "Cannot resolve node sequence for element boundary",
-               "Probably because element lies at two boundaries simultaneously" );
-
-
- } // end ConsecutiveNodesAtBoundary
-
+ 
 
 double
 IsoparametricLinearHexahedron::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )

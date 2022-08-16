@@ -36,7 +36,7 @@ namespace csmp {
       // SplitBoundary creation gets tested by SplitBoundaryInterface_Test
        
       /// initialises 2022 SKUA model with properties from binary version of VSet
-      void Test_InitialiseSKUA_Model( const std::string& file_name );
+      void Test_InitialiseSKUA_Model();
         
       /// tests that all properties are properly added to nodes on split boundary
       bool Test_InputNodePropertyValue(const char* mesh_file);
