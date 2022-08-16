@@ -3,7 +3,8 @@
 #include "Model.h"
 #include "CSMP_mathUtilities.h"
 #include "FlowFunctionsModule.h"
-#if defined(_OPENMP)
+#include "VTU_Interface.h"
+#if defined(OPENMP)
 #include "omp.h"
 #endif
 
@@ -35,10 +36,10 @@ DES2PhaseTransport<dim,FLOW_FUNCTIONS>::DES2PhaseTransport(  Model<dim>& m,
     T_RateOfChange_(0.), T_Schedule_(0.), T_InsertToHeap_(0.), T_Update_(0.), T_Synchronize_(0.), T_RemoveFromHeap_(0.), T_AdvectVariable_(0.)
 {
     InitializeBasicVariablsAndKeys();
+    sg_.InstantiateFiniteVolumes();
     InitializeFiniteVolumeProperties();
     cout<<"DES2PhaseTransport constructed"<<endl;
 } // end constructor 
-
 
 
 
@@ -51,7 +52,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
     if(!db_.IsDefined("rate count")) sg_.CreateProperty( "rate count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!db_.IsDefined("schedule count")) sg_.CreateProperty( "schedule count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
     if(!db_.IsDefined("synchronize count")) sg_.CreateProperty( "synchronize count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "none", ARRAY, NODE, 7, -1.00E+10 ,1.00E+10);
+    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "none", ARRAY, NODE, 8, -1.00E+10 ,1.00E+10);
     if(!db_.IsDefined("porosity")) sg_.CreateProperty( "porosity", "none", SCALAR, ELEMENT, 1, 1.00E-05, 1.00E+01); 
     if(!db_.IsDefined("thickness")) sg_.CreateProperty( "thickness", "m", SCALAR, ELEMENT, 1, 0.0E+0, 1.00E+10); 
     if(!db_.IsDefined("facet area")) sg_.CreateProperty( "facet area", "m2", SCALAR, FACET_INTEGRATION_POINT, 1, -1.00E+10, 1.00E+10); 
@@ -66,6 +67,8 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
     if(!db_.IsDefined("pressure gradient")) sg_.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
     if(!db_.IsDefined("fluid pressure")) sg_.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE, 1, 0 ,1.00E+10);
     if(!db_.IsDefined("permeability")) sg_.CreateProperty( "permeability", "m2", SCALAR, ELEMENT, 1, 1E-21, 1.0e-7);
+    if(!db_.IsDefined("sector pore volume")) sg_.CreateProperty( "sector pore volume", "m3", SCALAR, SECTOR_INTEGRATION_POINT, 1, 1.00E-08, 1.00E+08);
+    if(!db_.IsDefined("FV volume")) sg_.CreateProperty( "FV volume", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
     
     //assigning keys 
     key_EventIndex = INDEX<SCALAR,NODE>( db_.StorageKey("event index") );
@@ -88,6 +91,8 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
     key_gradP = INDEX<VECTOR,ELEMENT>( db_.StorageKey("pressure gradient") );
     key_pf = INDEX<SCALAR,NODE>( db_.StorageKey("fluid pressure") );
     key_k = INDEX<SCALAR,ELEMENT>( db_.StorageKey("permeability") );
+    key_sPV = INDEX<SCALAR,SECTOR_INTEGRATION_POINT>( db_.StorageKey("sector pore volume") );
+    key_fv = INDEX<SCALAR,NODE>( db_.StorageKey("FV volume") );
     
     //checking keys
     if ( key_EventIndex.place != NODE || key_EventIndex.type != SCALAR )
@@ -150,16 +155,26 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
     if ( key_k.place != ELEMENT || key_k.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseTransport::initializeKeys:",
         "The 'permeability' variable must be SCALAR and placed on ELEMENT"  );
+    if ( key_fv.place != NODE || key_fv.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "DES2PhaseTransport::initializeKeys:",
+         "The 'FV volume' variable must be SCALAR and placed on NODE"  );
+    if ( key_sPV.place != SECTOR_INTEGRATION_POINT || key_sPV.type != SCALAR )
+      throw csmp::Exception( FATAL_ERROR, "DES2PhaseTransport::InitializeVariablesAndKeys:",
+         "The 'sector pore volume' variable must be SCALAR and placed on SECTOR_INTEGRATION_POINT"  );
 
-    // model-wide initialisation
+  // model-wide initialisation
     Region<dim> region(sg_.Region("Model"));
     region.InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "synchronize count", makeScalar(PLAIN,0.), COMPLETE );
-    region.InputPropertyValue( "DES array", ArrayVariable(7,0.,PLAIN), COMPLETE);
+    region.InputPropertyValue( "DES array", ArrayVariable(8,0.,PLAIN), COMPLETE);
     region.InputPropertyValue( "truncated FV", makeScalar(PLAIN,0), COMPLETE);
-    db_.RangeOf( db_.Name(key_sCO2), lower_limit_, upper_limit_ );    
+    //db_.RangeOf( db_.Name(key_sCO2), lower_limit_, upper_limit_ );
+    //lower_limit_ = -numeric_limits<double>::epsilon();
+    //upper_limit_ = 1.0 + numeric_limits<double>::epsilon();
+    lower_limit_ = 0.;
+    upper_limit_ = 1.;
 }
 
 
@@ -167,7 +182,8 @@ template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
  {
     //zeroing FV pore volumes for accumulation in element loop
-    gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE ); 
+    gref_.InputPropertyValue( "FV pore volume", makeScalar(PLAIN,0.), COMPLETE );
+    gref_.InputPropertyValue( "FV volume", makeScalar(PLAIN,0.), COMPLETE );
     
     // For the interior elements of the region compute relevant variable values
     const auto it_end(gref_.CellsEnd());
@@ -186,6 +202,9 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
               double pore_volume   = (*it)->N(i)->Read( key_fvPV );
               pore_volume   += phi * sector_volume;
               (*it)->N(i)->Store( key_fvPV, makeScalar(PLAIN,pore_volume) );
+              double FV_volume = (*it)->N(i)->Read( key_fv );
+              FV_volume   +=  sector_volume;
+              (*it)->N(i)->Store( key_fv, makeScalar(PLAIN, FV_volume) );
          }
 
          // computing facet normals and areas
@@ -240,6 +259,10 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeFiniteVolumeProperties()
         }
         if (truncated_node) (*nit)->Store( key_cut, makeScalar( (*nit)->Status( key_cut), 1 ) );
    }
+   VTU_Interface<dim>  vtu(this->sg_);
+   vtu.OutputDataToVTU( "truncated_node_id", "truncated FV", gref_.Name(), 0 );
+
+   //for(auto nit = gref_.NodesBegin(); nit != gref_.NodesEnd(); nit++) cout<<(*nit)->Read(key_fvPV)<<endl;
  } // end initializeFiniteVolumeProperties
 
 

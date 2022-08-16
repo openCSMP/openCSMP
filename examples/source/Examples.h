@@ -51,6 +51,7 @@
 #include "DESAdvectionDiffusion3D_Example.h"
 #include "DES2PhaseSlightlyCompressibleFlow2D_Example.h"
 #include "DES2PhaseSlightlyCompressibleFlow3D_Example.h"
+#include "DES2PhaseFlowWithSplitBoundary_Example.h"
 #include "Variables_Example.h"
 #include "SlopeMechanics_Example.h" // developed for UoM SMD course, pore-pressure and gravitational loading
 #include "QuadrilateratorToCSMPbinary_Example.h" // demonstrating the Quadrilaterator 2D mesher

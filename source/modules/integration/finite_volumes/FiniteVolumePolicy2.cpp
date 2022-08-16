@@ -92,6 +92,26 @@ void FiniteVolumePolicy<2U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, ui
  }
 
 
+template<template<uint32_t> class CELL>
+void FiniteVolumePolicy<2U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, uint32_t ip, std::vector<double>& NRST) const
+  {
+    const CELL<2U>* e( static_cast<const CELL<2U>*>(this) );
+    assert( iFacet < fvptr_->Facets());
+    assert( ip < fvptr_->IntegrationPointsPerFacet());
+
+    // surface elements
+    assert( e != nullptr );
+    if ( e->IsSurface() ) {
+      e->FE()->Nrs( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
+                    fvptr_->FacetIntegrationPoint( iFacet, ip, 2U ),
+                    NRST );
+      return;
+    }
+    // line elements
+    e->FE()->Nr( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
+                 NRST );
+  }
+
 
 template<template<uint32_t> class CELL>
 void FiniteVolumePolicy<2U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const

@@ -545,7 +545,77 @@ double BrooksCoreySaturationFunctions<dim,USER>::dpcds_at_Numerical( Element<dim
   return ( pcBC( sw+h, swr, snr, bcp, pd ) - pcBC( sw-h, swr, snr, bcp, pd ) )/ (2. * h);
 }
 
-  
+
+
+/// return wetting-phase saturation based on effective saturation
+  template<uint32_t dim, template<uint32_t> class USER>
+  double BrooksCoreySaturationFunctions<dim,USER>::seff_to_sw( Element<dim>* const e, double seff ) const
+  {
+    const double  swr(e->Read(User()->key_srH2O));
+    const double  snr(e->Read(User()->key_srCO2));
+    return seff * (1. - swr - snr) + swr;
+  }
+
+
+
+/// inverse capillary pressure function
+  template<uint32_t dim, template<uint32_t> class USER>
+  double BrooksCoreySaturationFunctions<dim,USER>::sw_from_pc_at( Element<dim>* const e, double pc, double sw ) const
+  {
+    const double  bcp(e->Read(User()->key_bcp));
+    const double  entry_pressure(e->Read(User()->key_pd));
+    const double  swr(e->Read(User()->key_srH2O));
+    const double  snr(e->Read(User()->key_srCO2));
+    const double  pc_max(MaxCapillaryPressure());
+
+    // for linear relperm model
+    if ( bcp == 0. )
+    {
+      // not unique solution
+      if ( pc_max == entry_pressure )
+        return std::min( std::max( sw, swr), 1.0 - snr);
+
+      if ( pc >= pc_max )
+        return User()->seff_to_sw(e, 0.);
+
+      if ( pc <= entry_pressure )
+        return seff_to_sw(e, 1.);
+
+      double seff = std::min( std::max( 1.0 - ( pc - entry_pressure )/( pc_max - entry_pressure ), 0.0), 1.0 );
+      seff = std::min(std::max(0., seff), 1.);
+      double sw_result = seff_to_sw(e, seff);
+      return sw_result;
+    }
+
+    // for zero entry pressure capillary pressure always is zero, so the saturation is not unique
+    if ( entry_pressure == 0. )
+      return sw;
+
+    const double seff_mult( 1.0/ (1.0 - swr - snr ) );
+    // compute maximum capillary pressure based on maximum dpcds of MAXIMUM_DPCDS
+    // applying the limit on capillary pressure
+    double pcmax = entry_pressure * pow( ( entry_pressure / ( bcp * max_derivative_ / seff_mult ) ), ( -1. / ( 1. + bcp ) ) );
+
+    if ( pc >= pcmax )
+    {
+      // compute minimun effective saturation for which dpcds = MAXIMUM_DPCDS
+      const double Se_min =  pow( ( entry_pressure / ( bcp * max_derivative_/seff_mult ) ), ( bcp / ( 1. + bcp ) ) );
+      // assuming linear changes in capillary pressure below Se_min with slope of MAXIMUM_DPCDS
+      double seff = Se_min - ( pc - pcmax )/max_derivative_*seff_mult;
+      seff = std::min(std::max(0., seff), 1.);
+      double sw_result = seff_to_sw(e, seff);
+      return sw_result;
+    }
+
+    double seff =  std::pow(pc/entry_pressure, -bcp);
+    seff = std::min(std::max(0., seff), 1.);
+    double sw_result = seff_to_sw(e, seff);
+    return sw_result;
+
+  }
+
+
+
 
 template class BrooksCoreySaturationFunctions<1U,FlowFunctionsModule1>;
 template class BrooksCoreySaturationFunctions<2U,FlowFunctionsModule1>;
