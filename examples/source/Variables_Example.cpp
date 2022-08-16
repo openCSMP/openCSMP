@@ -30,13 +30,10 @@ void Variables_Example::Run()
     const size_t D(3);
     ANSYS_Model3D model( "FracBox", "VariablesTutorial.txt", true ); 
     
-    pair<set<string>,bool> boundary_patches = model.CreateInternalBoundaryFrom( "FRACTURE" );  
+    pair<set<string>,bool> boundary_patches = model.CreateSplitBoundaryFrom( "FRACTURE" );
     assert( boundary_patches.second == true );
     assert( boundary_patches.first.size() == 1 );
     const string boundary_name = (*boundary_patches.first.begin());
-    Boundary<D>& fractureBoundary = model.Boundary( boundary_name.c_str() ); 
-    pair<string,bool> split_boundary = model.CreateSplitBoundaryFrom( fractureBoundary );
-    assert( split_boundary.second == true );
     
     // having a look at which regions and boundaries we have at the moment
     model.RegionsOut();
@@ -77,7 +74,7 @@ void Variables_Example::Run()
     arrayVariablePlain.Resize( modelArrayVariable.Size() );
     model.Read( modelArrayKey, arrayVariablePlain );
     
-    for( size_t i(0); i < arrayVariablePlain.Size(); ++i )
+    for( auto i(0U); i < arrayVariablePlain.Size(); ++i )
       arrayVariablePlain(i) = double(i)*1.2;
 
     model.Store( modelArrayKey, arrayVariablePlain );
@@ -94,7 +91,8 @@ void Variables_Example::Run()
     boundary.Read( boundaryVectorKey, vectorVariablePlain );
     cout << "\nBoundary vector: " << vectorVariablePlain << endl;
 
-    SplitBoundary<D>& splitboundary = model.SplitBoundary( split_boundary.first.c_str() );
+    // SKM fix: this does not test all the split-boundary patches that were created
+    SplitBoundary<D>& splitboundary = model.SplitBoundary( (*boundary_patches.first.begin()).c_str() );
     splitboundary.Store( splitBoundaryVectorKey, vectorVariable );
     splitboundary.Read( splitBoundaryVectorKey, vectorVariablePlain );
     cout << "\nSplitBoundary scalar: " << vectorVariablePlain << endl;

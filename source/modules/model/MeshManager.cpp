@@ -1073,8 +1073,6 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
      if ( !eptr->IsLine() )
      csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByFace", "element to be replaced is not a lower-dimensional line element");
 
-   if ( eptr->FV() == nullptr )
-     csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
      csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByFace", "pointer to higher dimensional element on inside not initialised");
    if ( inner_eptr == outer_eptr ) {
@@ -1140,8 +1138,6 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
    if constexpr ( dim == 2U ) if ( !eptr->IsLine() )
      csmp_error.Note( ERROR, "MeshManager<2>::ReplaceElementByInterFace", "element to be replaced is not a lower-dimensional line element");
 
-   if ( eptr->FV() == nullptr )
-     csmp_error.Note( INFO, "MeshManager<dim>::ReplaceElementByInterFace", "finite volume stencil pointer not initialised");
    if ( inner_eptr == nullptr )
      csmp_error.Note( ERROR, "MeshManager<dim>::ReplaceElementByInterFace", "pointer to higher dimensional element on inside not initialised");
 
@@ -1183,7 +1179,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
    typename plf::colony<InterFace<dim>>::iterator
      fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
                                                 adjacent_face_of_inner_element, adjacent_face_of_outer_element,
-                                                lvars, ivars, outside_nodes ) );
+                                                lvars, ivars ) );
    (*fit).Idx( face_id );
 
    // 3. deleting the original Element
@@ -1367,21 +1363,19 @@ InterFace<dim>*	const	MeshManager<dim>::AddInterFace( Element<dim>* const inner_
    (*ifp).Idx( iface_id );
    
    // 4. assigning the inside nodes to the new InterFace (which are those of the face of the inside element)
-   const auto n_nodes_per_face{ outside_nodes.size() };
-   vector<uint32_t>  fnids;
-   inner_parent->FE()->NodesOfFace( inner_element_face_id, fnids );
-   assert( fnids.size() == n_nodes_per_face );
-   for ( auto n{0U}; n<n_nodes_per_face; ++n )
-     (*ifp).Assign( n, inner_parent->N( fnids[n] ), INSIDE );
+   uint32_t n_count{0U};
+   for ( const auto& n : inner_parent->FE()->NodesOfFace( inner_element_face_id ) )
+     (*ifp).Assign( n_count++, inner_parent->N(n), INSIDE );
    
    // 5. assigning the outside nodes to the InterFace
+   const auto n_nodes_per_face{ outside_nodes.size() };
    for ( auto n{0U}; n<n_nodes_per_face; ++n )
      (*ifp).Assign( n, outside_nodes[n], OUTSIDE );
 
    // 6. replacing the original nodes of the face of the outside element with the new nodes
-   outer_parent->FE()->NodesOfFace( outer_element_face_id, fnids );
-   for ( auto n{0U}; n<n_nodes_per_face; ++n )
-     outer_parent->Assign( fnids[n], outside_nodes[n] );
+   n_count = 0U;
+   for ( const auto& n : outer_parent->FE()->NodesOfFace( outer_element_face_id ) )
+     outer_parent->Assign( n, outside_nodes[n_count++] );
      
    // 7. detaching the input Elements from one-anothers
    inner_parent->Unassign( outer_parent );
@@ -1997,7 +1991,7 @@ vector<Face<dim>*>  MeshManager<dim>::CreateFacesBetweenNodeSharingElements( con
 template<uint32_t dim>
 vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingElements( const PropertyDatabase<dim>& dbase,
                                                                                        const vector<pair<pair<Element<dim>*,uint32_t>,
-                                                                                       pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
+                                                                                                         pair<Element<dim>*,uint32_t> > >& interface_nbor_elmts,
                                                                                        bool multiplicate_perimeter_nodes,
                                                                                        Region<dim>& out_region )
  {
@@ -2026,9 +2020,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
         perimeter_node_ptrs.reserve( interface_nbor_elmts.size() * dim ); // just a guess
         
         for ( const auto& it : interface_nbor_elmts ) {
-             vector<uint32_t> fnids;
-             it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-             for ( auto i : fnids )
+             for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) )
                perimeter_node_ptrs.push_back( it.first.first->N(i) );
           }
           
@@ -2047,9 +2039,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
              vector<size_t> face_count( perimeter_node_ptrs.size(), 0U );
              // again
              for ( const auto& it : interface_nbor_elmts ) {
-                  vector<uint32_t> fnids;
-                  it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-                  for ( auto i : fnids ) {
+                  for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) ) {
                        // finding the vector index corresponding to the perimeter node
                        auto lb = perimeter_node_ptrs.end();
                        if ( (lb=lower_bound( perimeter_node_ptrs.begin(), perimeter_node_ptrs.end(), it.first.first->N(i) )) !=  perimeter_node_ptrs.end() )
@@ -2088,13 +2078,11 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
          // - from the corner nodes of the element faces that will be at the interface, segment keys are made
          // - the faces are numbered
          // - segments that have element faces on either side, are inside the patch, the other ones are at the perimeter
-         vector<uint32_t>   fnids;
-         it.first.first->FE()->NodesOfFace( it.first.second, fnids );
-         vector<Node<dim>*> outside_nodes( fnids.size(), nullptr );
+         vector<Node<dim>*> outside_nodes( it.first.first->FE()->NodesPerFace( it.first.second ), nullptr );
          auto               nit{ new_nodes.end() };
          uint32_t           nd_count{0};
          
-         for ( auto i : fnids ) {
+         for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) ) {
              // nodes are multiplicated, always if 'multiplicate_perimeter_nodes=true'
              // or if they do not lie on the perimeter of the new interface patch
              if ( perimeter_node_ptrs.empty() ) {
@@ -2148,10 +2136,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
 
      // 3. cleaning up inter-CELL and node to parent connectivity
      // ---------------------------------------------------------
-     // TODO: these are global changes! - do this only for nodes that are affected
-     UpdateConnectivity();
-
-     //find parent elemets of old nodes that are in outside region, unassign them from old nodes and assign to correspoinding new nodes 
+     //find parent elements of old nodes that are in outside region, unassign them from old nodes and assign to corresponding new nodes
      std::map<Node<dim>*, Element<dim>*> old_node_unassigned_element_map;
      for(auto nd_pair : new_nodes) {
        auto old_node = nd_pair.first;
@@ -2175,8 +2160,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeSharingEle
        old_node->Unassign(parent_elmt);
      }
 
+     // TODO: these are global changes! - do this only for nodes that are affected
      UpdateConnectivity();
-
      
      cout <<"\n"<<"MeshManager<"<< dim <<">::CreateInterfacesBetweenNodeSharingElements: created "<< interface_ptrs.size() <<" new interfaces and ";
      cout << new_nodes.size() <<" new nodes."<< endl;
@@ -2268,18 +2253,14 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
       {
          // 2.1 Collecting node pairs to form manifolds and outside nodes to construct interface
          // ------------------------------------------------------------------------------------
-         vector<uint32_t>   inside_fnids, outside_fnids;
-         it.first.first->FE()->NodesOfFace( it.first.second, inside_fnids );
-         it.second.first->FE()->NodesOfFace( it.second.second, outside_fnids );
-         
-         const auto n_face_nodes{ inside_fnids.size() };
+         const auto n_face_nodes{ it.first.first->FE()->NodesPerFace( it.first.second ) };
          vector<Node<dim>*> inside_nodes, outside_nodes;
          inside_nodes.reserve( n_face_nodes );
          outside_nodes.reserve( n_face_nodes );
          
-         for ( const auto& i : inside_fnids )
+         for ( const auto& i : it.first.first->FE()->NodesOfFace( it.first.second ) )
            inside_nodes.push_back( it.first.first->N(i) );
-         for ( const auto& i : outside_fnids )
+         for ( const auto& i : it.second.first->FE()->NodesOfFace( it.second.second ) )
            outside_nodes.push_back( it.second.first->N(i) );
          
          // organising the interface nodes in the outside vector such that they match the inside ones by position
@@ -6317,9 +6298,8 @@ size_t  MeshManager<dim>::CheckElementConnectivity() const
           {
             // boundary nodes
             assert( eit.FE() != NULL );
-            eit.FE()->NodesOfFace( i, fnids );
-            for ( size_t j{0U}; j<fnids.size(); ++j )
-              boundary_nodes.insert( eit.N( fnids[j] ) );
+            for ( const auto& j : eit.FE()->NodesOfFace(i) )
+              boundary_nodes.insert( eit.N(j) );
             // counting neighbors
             nbors_that_belong_to_group--;
           }

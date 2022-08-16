@@ -984,16 +984,15 @@ double  Boundary<dim>::Perimeter() const
     csmp_error.Note( ERROR, "Boundary<dim>::Perimeter:",
                       "the perimeter of a Boundary is only defined when the boundary is a surface." );
 
-  double          perimeter_length( 0. );
-  vector<uint32_t>  fnids;
-  size_t          n( this->InteriorCells() );
+  double perimeter_length( 0. );
+  size_t n( this->InteriorCells() );
   
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ ) {
       if ( (*it)->IsLine() ) {
            return std::numeric_limits<double>::quiet_NaN();
         }
       for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
-        (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
+        auto fnids = (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ) );
         perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
                              (*it)->N( fnids[0] )->Coordinate()).Length();
       }

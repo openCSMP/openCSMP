@@ -254,6 +254,7 @@ LinearTetrahedron::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snid
     
     @note the nodes are ordered counter-clockwise from the outside looking in.
 */
+/*
 void LinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
  {
     fnids.resize(3);
@@ -287,8 +288,24 @@ void LinearTetrahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fn
          return;
       }
     else
-    std::cerr <<"\nLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
+    cerr <<"\nLinearTetrahedron::NodesOfFace: Invalid Face ID requested: "<< face_id << std::endl;
  }
+*/
+
+
+
+vector<uint32_t>  LinearTetrahedron::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2,3};
+        case 1: return vector<uint32_t>{0,3,2};
+        case 2: return vector<uint32_t>{0,1,3};
+        case 3: return vector<uint32_t>{0,2,1};
+      }
+    cerr <<"\nLinearTetrahedron::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
+
 
 
 

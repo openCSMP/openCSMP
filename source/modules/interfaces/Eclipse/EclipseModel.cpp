@@ -283,12 +283,11 @@ void EclipseModel::AssignBoxBoundaryFlagsWherePossible(const char* target_region
 				else if (dotProduct<3U>(nrml, nrml_front) >= minLength) bflag = FRONT;
 				else if (dotProduct<3U>(nrml, nrml_back) >= minLength) bflag = BACK;
 				// getting the nodes for flagging the faces
-				(*it)->FE()->NodesOfFace(i, fnids);
-				for (auto j{0U}; j<fnids.size(); ++j) {
-					(*it)->N(fnids[j])->AtBoundary(bflag);
+				for ( const auto& j : (*it)->FE()->NodesOfFace(i) ) {
+					(*it)->N(j)->AtBoundary(bflag);
 					// storing the nodes to determine which ones lie on EDGES (duplicates) or even corners (triplicates)
-					//                           local node #              flag   local node #
-					boundary_nodes.insert(make_pair(fnids[j], make_pair(bflag, (*it)->N(fnids[j]))));
+					//                   local node #            flag   local node #
+					boundary_nodes.insert(make_pair(j, make_pair(bflag, (*it)->N(j))));
 				}
 			}
 		// flagging elements with duplicate and triplicate boundary nodes accordingly

@@ -228,6 +228,8 @@ void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vect
  }
 
 
+
+
 /**
     Method returns into its argument vector the local node number of either of its 2 faces located at its nodes.
     Conventions: 
@@ -235,6 +237,7 @@ void IsoparametricLinearLineElement::NodesOfSegment( uint32_t segm_id, std::vect
        - node 0 corresponds to first face 0 opposite to it
        - node 1 corresponds to second face 1 opposite to node 1
 */
+/*
 void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
                                                    vector<uint32_t>& fnids ) const
  {
@@ -242,7 +245,12 @@ void  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id,
     fnids.resize(1U);
     fnids[0] = (face_id == 1U) ? 0U : 1U;
  }
+*/
 
+
+vector<uint32_t>  IsoparametricLinearLineElement::NodesOfFace( uint32_t face_id ) const {
+    return (face_id == 1U) ? vector<uint32_t>{0U} : vector<uint32_t>{1U};
+ }
 
 
 vector<uint32_t>  IsoparametricLinearLineElement::CornerNodesOfFace( uint32_t face_id ) const
@@ -965,6 +973,7 @@ void  IsoparametricLinearLineElement::IntegrationPoint( uint32_t i,
 
 
 // tested OK1
+/*
 void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                                   vector<uint32_t>& fnids )
  {
@@ -977,6 +986,7 @@ void  IsoparametricLinearLineElement::ConsecutiveNodesAtBoundary( const vector<u
        }
 
  } // end ConsecutiveNodesAtBoundary
+*/
 
 
 

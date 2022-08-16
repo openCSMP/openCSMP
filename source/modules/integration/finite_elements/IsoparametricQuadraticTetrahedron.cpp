@@ -408,6 +408,7 @@ Furthermore, NodesOfFace() is used in the construction of faces if
 these are made part of the mesh connectivity by the
 MeshManager.
  */
+/*
 void IsoparametricQuadraticTetrahedron::NodesOfFace( uint32_t face_id,
                                                      vector<uint32_t>& fnids ) const
  {
@@ -446,7 +447,20 @@ void IsoparametricQuadraticTetrahedron::NodesOfFace( uint32_t face_id,
       }
     else std::cerr <<"\nQuadraticTetrahedron::NodesOfFace: Face ID not identified: "<< face_id << std::endl;
  }
+*/
 
+
+vector<uint32_t>  IsoparametricQuadraticTetrahedron::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2,3,5,9,8};
+        case 1: return vector<uint32_t>{0,3,2,7,9,6};
+        case 2: return vector<uint32_t>{0,1,3,4,8,7};
+        case 3: return vector<uint32_t>{0,2,1,6,5,4};
+      }
+    cerr <<"\nIsoparametricQuadraticTetrahedron::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricQuadraticTetrahedron::CornerNodesOfFace( uint32_t face_id ) const
@@ -518,6 +532,7 @@ void  IsoparametricQuadraticTetrahedron::MidSideNodes( std::vector<uint32_t>& id
  }
 
 
+/*
 void  IsoparametricQuadraticTetrahedron::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -532,6 +547,7 @@ void  IsoparametricQuadraticTetrahedron::CounterClockwiseNodes( std::vector<uint
     ids[8] = 9;
     ids[9] = 3;
  }
+*/
 
 
 double IsoparametricQuadraticTetrahedron::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
@@ -1470,6 +1486,7 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
  */
+/*
 void  IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                                      vector<uint32_t>& fnids )
  {
@@ -1482,7 +1499,7 @@ void  IsoparametricQuadraticTetrahedron::ConsecutiveNodesAtBoundary( const vecto
 
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

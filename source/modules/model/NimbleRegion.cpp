@@ -75,7 +75,6 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::const_iterator
 
     // finding the boundary nodes, as those nodes that are on element faces that have no or only an outside-region neighbor
     set<Node<dim>*> perimeter_nodes;
-    vector<uint32_t>  fnids;
    
     for ( auto& it : elements_ ) {
          const auto neighbors(it->Neighbors());
@@ -83,10 +82,8 @@ void NimbleRegion<dim>::Update( typename std::vector<Node<dim>*>::const_iterator
             if ( it->Neighbor(i) == nullptr ||
                 !binary_search( elements_.begin(), elements_.end(), it->Neighbor(i) ) ) {
                  // collecting the perimeter nodes into a set
-                 it->FE()->NodesOfFace( i, fnids );
-                 const auto nodes_of_face(fnids.size());
-                 for ( auto j{0U}; j<nodes_of_face; ++j )
-                   perimeter_nodes.insert( it->N(fnids[j]) );
+                 for ( const auto& j : it->FE()->NodesOfFace(i) )
+                   perimeter_nodes.insert( it->N(j) );
               }
             //else cerr <<"i ";
       }
@@ -296,19 +293,14 @@ void NimbleRegion<dim>::Update3( typename std::vector<Node<dim>*>::const_iterato
     
 
     // finding addtional boundary nodes, as those nodes that are on element faces that have no or only an outside-region neighbor
-    vector<uint32_t>  fnids;
     for ( auto& it : elements_ ) {
          const auto neighbors(it->Neighbors());
          //cout<<"    neighbors = "<<neighbors<<endl;
          for ( auto i{0U}; i<neighbors; ++i )
             if ( it->Neighbor(i) == nullptr ||
                 !binary_search( elements_.begin(), elements_.end(), it->Neighbor(i) ) ) {
-                 // collecting the perimeter nodes into a set
-                 it->FE()->NodesOfFace( i, fnids );
-                 const auto nodes_of_face(fnids.size());
-                 //cout<<"   nodes_of_face = "<<nodes_of_face<<endl;
-                 for ( auto j{0U}; j<nodes_of_face; ++j )
-                   perimeter_nodes.insert( it->N(fnids[j]) );
+                 for ( const auto& j : it->FE()->NodesOfFace(i) )
+                   perimeter_nodes.insert( it->N(j) );
               }
             //else cerr <<"i ";
       }

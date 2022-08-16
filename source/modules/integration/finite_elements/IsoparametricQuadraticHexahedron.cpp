@@ -342,8 +342,8 @@ IsoparametricQuadraticHexahedron::NodesOfSegment( uint32_t segm_id, std::vector<
 
 /** For this element, the faces are numbered such that the lower left closest is 1 ->4
  */
-void
-IsoparametricQuadraticHexahedron::NodesOfFace( uint32_t face_id, std::vector<uint32_t>& fnids ) const
+/*
+void IsoparametricQuadraticHexahedron::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(8);
 
@@ -416,8 +416,23 @@ IsoparametricQuadraticHexahedron::NodesOfFace( uint32_t face_id, std::vector<uin
     else
     std::cerr <<"\nIsoparametricQuadraticHexahedron::NodesOfFace: Invalid Face ID requested: "<< face_id <<std::endl;
  }
+*/
 
 
+
+vector<uint32_t>  IsoparametricQuadraticHexahedron::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{0,3,2,1, 8, 11, 10, 9 };
+        case 1: return vector<uint32_t>{0,1,5,4, 12, 8, 10, 15 };
+        case 2: return vector<uint32_t>{1,2,6,5, 10, 9, 14, 17 };
+        case 3: return vector<uint32_t>{2,3,7,6, 14, 13, 15, 18 };
+        case 4: return vector<uint32_t>{0,4,7,3, 11, 12, 19, 15};
+        case 5: return vector<uint32_t>{4,5,6,7, 19, 16, 17, 18 };
+      }
+    cerr <<"\nIsoparametricQuadraticHexahedron::CornerNodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 vector<uint32_t>  IsoparametricQuadraticHexahedron::CornerNodesOfFace( uint32_t face_id ) const
@@ -1597,9 +1612,9 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
-void
-IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
-                                                              vector<uint32_t>& fnids )
+/*
+void IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
+                                                                   vector<uint32_t>& fnids )
  {
     fnids.resize(bnodes.size());
 
@@ -1610,7 +1625,7 @@ IsoparametricQuadraticHexahedron::ConsecutiveNodesAtBoundary( const vector<uint3
 
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

@@ -486,6 +486,7 @@ When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 
 */
+/*
 void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
                                                   std::vector<uint32_t>& fnids ) const
  {
@@ -512,7 +513,18 @@ void IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id,
     else
     std::cerr <<"\nIsoparametricQuadraticTriangle::NodesOfFace: Erratic input face ID: "<< face_id << std::endl;
  }
+*/
 
+vector<uint32_t>  IsoparametricQuadraticTriangle::NodesOfFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return vector<uint32_t>{1,2,4};
+        case 1: return vector<uint32_t>{2,0,5};
+        case 2: return vector<uint32_t>{0,1,3};
+      }
+    cerr <<"\nIsoparametricQuadraticTriangle::NodesOfFace: face "<< face_id <<" does not exist.";
+    return vector<uint32_t>{};
+ }
 
 
 /// returns the local  numbers of the nodes at the other end of the sgment that the argument node is on
@@ -609,7 +621,7 @@ void  IsoparametricQuadraticTriangle::MidSideNodes( std::vector<uint32_t>& ids )
  }
 
 
-
+/*
 void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<uint32_t>& ids ) const
  {
     ids.resize(npe);
@@ -620,6 +632,8 @@ void  IsoparametricQuadraticTriangle::CounterClockwiseNodes( std::vector<uint32_
     ids[4] = 2;
     ids[5] = 5;
  }
+*/
+
 
 double IsoparametricQuadraticTriangle::WeightAtIntegrationPoint( uint32_t i ) const { return W[i]; }
 
@@ -1478,6 +1492,7 @@ the FiniteElement knows in which order these appear.
 To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 */
+/*
 void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes,
                                                                   vector<uint32_t>& fnids )
  {
@@ -1509,7 +1524,7 @@ void  IsoparametricQuadraticTriangle::ConsecutiveNodesAtBoundary( const vector<u
        }
 
  } // end ConsecutiveNodesAtBoundary
-
+*/
 
 
 

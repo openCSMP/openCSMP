@@ -27,7 +27,7 @@ return;
     Test_Area_and_SurfaceIntegral("InternalBoundary_test");
     
     //quadratic 2d tests
-    Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
+    Test_InputNodePropertyValue("InternalBoundary_Test_quadratic"); // TODO: test for Eddi (breaks in Boundary creation, CornerNodesConnectedTo)
     Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
     
 
@@ -288,8 +288,7 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
 
     ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
 
-    pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
-    std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+    pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE");
 
     int32_t material_id = 1;
     model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
@@ -297,7 +296,8 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
     model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
     model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
 
-    SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+    // SKM fix - please check all the patches that were created
+    SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
 
     ScalarVariable val1(PLAIN, 1.0);
     ScalarVariable val2(PLAIN, 2.0);
@@ -307,7 +307,7 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
     s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
 
     for (typename std::vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
-        for (size_t i=0; i < (*ifit)->FE()->Nodes(); i++){
+        for ( auto i{0U}; i < (*ifit)->FE()->Nodes(); i++ ){
             _test( (*ifit)->N(i, INSIDE)->Read(model.Database().StorageKey("inside"))   == 1.0);
             _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside"))  == 2.0);
             _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))  == 3.0);
@@ -333,10 +333,9 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
 
     //split boundary construction
-    pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
-    std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+    pair<set<string>,bool> sb_name  = model.CreateSplitBoundaryFrom( "FRACTURE" );
 
-    int32_t material_id;
+    int32_t material_id{ 1U };
     model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
 
 
@@ -346,7 +345,7 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
     model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
 
-    SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+    SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
 
     ScalarVariable val1(PLAIN, 1.0);
     ScalarVariable val2(PLAIN, 2.0);

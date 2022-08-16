@@ -1226,7 +1226,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateBoundaryAround( const char* 
 
 
 /**
-    loops over the perimeter of the boundary, making keys from the node-pointers of the boundary face
+    Loops over the perimeter of the boundary, making keys from the node-pointers of the boundary face
     nodes and recording the boundary elements for the faces of which the keys were made
      
      @attention makes sense in 3D only
@@ -1235,17 +1235,14 @@ static void createPerimeterKeysFor( const Boundary<3U>& boundary, map<set<csmp::
  {
     if ( !perimeter_keys.empty() ) perimeter_keys.clear();
    
-    // creating keys for the perimeter element faces of boundary1
-    vector<uint32_t>  fnids;
     // looping over the Face edges on the boundary, creating the keys from sets of node pointers
     for ( size_t i=boundary.InteriorCells(); i<boundary.Cells(); ++i )
       for ( auto j{0U}; j<boundary.PerimeterFaces(i); ++j )
         {
-            const auto pface = boundary.PerimeterFace(i,j);
-            boundary.E(i)->FE()->NodesOfFace( pface, fnids );
+            const auto      pface = boundary.PerimeterFace(i,j);
             set<Node<3U>*>  key;
-            for ( size_t k{0U}; k<fnids.size(); ++k )
-              key.insert( boundary.E(i)->N( fnids[k] ) );
+            for ( const auto& k : boundary.E(i)->FE()->NodesOfFace(pface) )
+              key.insert( boundary.E(i)->N(k) );
             perimeter_keys.insert( make_pair(key,boundary.E(i)) );
               
         }

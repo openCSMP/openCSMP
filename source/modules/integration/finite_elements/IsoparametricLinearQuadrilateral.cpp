@@ -245,9 +245,8 @@ The number of the desired face (0, 1, or 2).
 When boundary conditions shall be applied it is necessary to determine
 the properties associated with the nodes of that element face.
 */
-void
-IsoparametricLinearQuadrilateral::NodesOfFace( uint32_t face_id,
-                                               vector<uint32_t>& fnids ) const
+/*
+void IsoparametricLinearQuadrilateral::NodesOfFace( uint32_t face_id, vector<uint32_t>& fnids ) const
  {
     fnids.resize(2);
     if      ( face_id == 0 )
@@ -276,6 +275,21 @@ IsoparametricLinearQuadrilateral::NodesOfFace( uint32_t face_id,
       }
     else
     cerr <<"\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << endl;
+ }
+*/
+
+
+
+vector<uint32_t> IsoparametricLinearQuadrilateral::NodesOfFace( uint32_t face_id ) const
+ {
+    switch( face_id ) {
+        case 0: return vector<uint32_t>{ 0, 1 };
+        case 1: return vector<uint32_t>{ 1, 2 };
+        case 2: return vector<uint32_t>{ 2, 3 };
+        case 3: return vector<uint32_t>{ 3, 0 };
+      }
+    cerr <<"\nIsoparametricLinearQuadrilateral::NodesOfFace: Erratic input face ID: "<< face_id << endl;
+    return vector<uint32_t>{};
  }
 
 
@@ -1378,6 +1392,7 @@ To assign Neumann boundary conditions with a PDE operator for surface
 integrals.
 
 */
+/*
 void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
                                             const vector<uint32_t>& bnodes,
                                             vector<uint32_t>& fnids )
@@ -1429,47 +1444,11 @@ void IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
        }
 
  } // end ConsecutiveNodesAtBoundary
-
-
-
-
-
-/*void
-IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary(
-                                            const vector<uint32_t>& bnodes,
-                                            vector<uint32_t>& fnids )
- {
-     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-     fnids.resize(3);
-
-     // in 3D, all nodes may be at model boundary
-     if ( use2Dto3Djacobi && bnodes.size() != 2 )
-       throw csmp::Exception( FATAL_ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
-                              "Cannot resolve node sequence for element boundary",
-                              "Probably because element lies at two boundaries simultaneously" );
-
-     if ( bnodes.size() > 2 )
-       throw csmp::Exception( ERROR, "IsoparametricLinearQuadrilateral::ConsecutiveNodesAtBoundary",
-                              "Cannot resolve node sequence for element boundary",
-                              "Probably because element lies at two boundaries simultaneously" );
-
-     // the midside nodes determine the boundaries so they are sought after
-     //if ( bnodes[0] == 3 || bnodes[1] == 3 || bnodes[2] == 3 ) {
-     //      fnids[0] = 0, fnids[1] = 3, fnids[2] = 1;
-     //      return;
-     //  }
-     //if ( bnodes[0] == 4 || bnodes[1] == 4 || bnodes[2] == 4 ) {
-     //      fnids[0] = 1, fnids[1] = 4, fnids[2] = 2;
-     //      return;
-     //  }
-     //if ( bnodes[0] == 5 || bnodes[1] == 5 || bnodes[2] == 5 ) {
-     //      fnids[0] = 2, fnids[1] = 5, fnids[2] = 0;
-     //      return;
-     //  }
-
- } // end ConsecutiveNodesAtBoundary
 */
+
+
+
+
 
 
 void

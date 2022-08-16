@@ -1239,6 +1239,9 @@ If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is creat
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleDomainsAcrossSplitBoundary( COMPUTATION_DOMAIN<dim>& subdomain )
 {
+  static_assert( !is_same<COMPUTATION_DOMAIN<dim>,SplitBoundary<dim> >::value,
+                 "PDE_Integrator::CoupleDomainsAcrossSplitBoundary: only works for Region or Boundary objects" );
+   
   if ( test_operands_.size() > 1U )
     throw csmp::Exception( ERROR, "PDE_Integrator::CoupleDomainsAcrossSplitBoundary",
                            "method implemented for only one test-function operand so far");

@@ -667,6 +667,8 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
     @author SKM 1/11/2013
     @author SKM 21/9/2021
 */
+/* DEPRECATED together with the possibility to create SplitBoundaries from Boundaries
+
 template<uint32_t dim>
 bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
                                       MeshManager<dim>& mesh,
@@ -687,6 +689,7 @@ bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
   return true;
   
 } // CreateFrom
+*/
 
 
 
@@ -695,8 +698,8 @@ bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
 
 
 
+// CALCULATIONS
 
-/// CALCULATIONS
 /**
 Computes length (m) of the SplitBoundary object's perimeter curve.
 Operation makes sense only in 33 because the perimeter of a line are just its end points.
@@ -715,12 +718,11 @@ double  SplitBoundary<dim>::Perimeter( INTERFACE_SIDE side ) const
   double perimeter_length{0.};
   size_t n{ this->InteriorCells() };
 
-  vector<uint32_t>  fnids;
   for ( auto it = this->PerimeterCellsBegin(); it != this->CellsEnd(); it++, n++ )
     for ( auto i{0U}; i<this->PerimeterFaces( n ); i++ ) {
-      (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ), fnids );
+      auto fnids = (*it)->FE()->NodesOfFace( this->PerimeterFace( n, i ) );
       perimeter_length += ((*it)->N( fnids[1] )->Coordinate() -
-                            (*it)->N( fnids[0] )->Coordinate()).Length();
+                           (*it)->N( fnids[0] )->Coordinate()).Length();
     }
 
   return perimeter_length;
@@ -941,9 +943,7 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_node_prop, co
                 // ascertaining that we are indeed at the model boundary
                 assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
                 // getting the nodes
-                vector<uint32_t>  fnids;
-                this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
-                for ( auto& nit : fnids )
+                for ( const auto& nit : this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j) ) )
                   this->E(i)->N(nit,side)->Store( prop_key, var );
              }
 
@@ -1030,9 +1030,7 @@ void SplitBoundary<dim>::ChangeNodePropertyStatus( const char* property,
                     // ascertaining that we are indeed at the model boundary
                     assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
                     // getting the nodes
-                    vector<uint32_t>  fnids;
-                    this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
-                    for ( auto& nit : fnids )
+                    for ( auto& nit : this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j) ) )
                       this->E(i)->N(nit,INSIDE)->Status( prop_key, new_status_of_scalar );
                  }
           }
@@ -1043,9 +1041,7 @@ void SplitBoundary<dim>::ChangeNodePropertyStatus( const char* property,
                     // ascertaining that we are indeed at the model boundary
                     assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
                     // getting the nodes
-                    vector<uint32_t>  fnids;
-                    this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j), fnids );
-                    for ( auto& nit : fnids )
+                    for ( auto& nit : this->E(i)->FE()->NodesOfFace( this->PerimeterFace(i,j) ) )
                       this->E(i)->N(nit,OUTSIDE)->Status( prop_key, new_status_of_scalar );
                  }
           }

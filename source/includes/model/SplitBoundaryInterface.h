@@ -58,9 +58,6 @@ class SplitBoundaryInterface {
     /// creation of one or multiple SplitBoundaries from a lower dimensional region 
     std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region );
 
-    /// one-to-one conversion of a model Boundary into a SplitBoundary, non-constant because Boundary gets removed
-    std::pair<std::string,bool>  CreateSplitBoundaryFrom( Boundary<dim>& );
-
     /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
 

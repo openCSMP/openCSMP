@@ -1225,44 +1225,38 @@ void recreateBoxBoundaryFlagsForHexahedralModel( Model<3U>& model )
            
          // BOTTOM 
          if ( (*it)->Neighbor(0) == nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 0U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( BOTTOM );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(0U) )
+                (*it)->N(j)->AtBoundary( BOTTOM );
               continue;
            }
          // RIGHT 
          if ( (*it)->Neighbor(1) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(2) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 2U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( RIGHT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(2U) )
+                (*it)->N(j)->AtBoundary( RIGHT );
               continue;
            }
          // TOP 
          if ( (*it)->Neighbor(2) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(3) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 5U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( TOP );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(5U) )
+                (*it)->N(j)->AtBoundary( TOP );
               continue;
            }
          // LEFT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 4U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( LEFT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(4U) )
+                (*it)->N(j)->AtBoundary( LEFT );
               continue;
            }
          // FRONT 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 1U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( FRONT );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(1U) )
+                (*it)->N(j)->AtBoundary( FRONT );
               continue;
            }
          // BACK 
          if ( (*it)->Neighbor(3) == nullptr && (*it)->Neighbor(0) != nullptr && (*it)->Neighbor(1) != nullptr && (*it)->Neighbor(2) != nullptr ) {
-              (*it)->FE()->NodesOfFace( 3U, fnids );
-              for ( size_t j{0U}; j<fnids.size(); ++j )
-                (*it)->N( fnids[j] )->AtBoundary( BACK );
+              for ( const auto& j : (*it)->FE()->NodesOfFace(3U) )
+                (*it)->N(j)->AtBoundary( BACK );
               continue;
            }
          // BACK CORNERS 
