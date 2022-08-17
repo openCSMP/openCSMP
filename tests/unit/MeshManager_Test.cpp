@@ -706,6 +706,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   // creating the interface
   LocalVariables				     ifvars = model.Database().LocalVariablesAt(INTER_FACE);
 	IntegrationPointVariables	 iivars = model.Database().IntegrationPointVariablesAt(INTER_FACE);
+  
   if ( interior_face_constructed ) {
        // INTERFACE CONSTRUCTION
        InterFace<3U>* ifptr = mesh.ReplaceFaceByInterFace( ptrs_to_faces_created.back(), ifvars, iivars, outside_nodes );
@@ -714,6 +715,8 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   _test( mesh.Faces() == ptrs_to_faces_created.size() - 1U );
  // verifying that the pointer to the deleted Face has been set to null
   _test( ptrs_to_faces_created.back() == nullptr );
+  // remove last Face that has now been assigned a nullptr
+  ptrs_to_faces_created.pop_back();
 	
 	// delete the new face(s) again
 	mesh.DeleteAndRepairConnnectivity( ptrs_to_faces_created.begin(), ptrs_to_faces_created.end() );
@@ -783,7 +786,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
             interface_constructed = true;
             // create an intervening element
             const int32_t material_id(5);
-            Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_TRIANGLE, ifvars, iivars, middle_nodes, material_id );
+            Element<3U>*	ieptr = mesh.AddElement( ISOPARAMETRIC_LINEAR_QUADRILATERAL, ifvars, iivars, middle_nodes, material_id );
             
             // connecting the InterFace to the middle element
             ifptr->Assign( ieptr );

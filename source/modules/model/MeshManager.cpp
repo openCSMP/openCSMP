@@ -955,13 +955,11 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
 
    // 1. constructing new element
-   typename plf::colony<Element<dim>>::iterator eit;
-   if ( fvm_manager_ )
-     eit = elements_.emplace( Element<dim>( elements_.size(),
-                              fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) );
-   else
-     eit = elements_.emplace( Element<dim>( elements_.size(),
-                              fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
+   typename plf::colony<Element<dim>>::iterator eit = ( fvm_manager_ ) ?
+               elements_.emplace( Element<dim>( elements_.size(),
+                                  fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) ) :
+               elements_.emplace( Element<dim>( elements_.size(),
+                                  fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
    for ( auto i{0U}; i<n_nodes; ++i )
@@ -1560,7 +1558,8 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
       }
     else {
          // checking that the NodeManifoldManager has been initialised
-         assert ( node_manifold_manager_ != nullptr );
+        if ( !node_manifold_manager_ )
+           node_manifold_manager_ = new NodeManifoldManager<dim>();
            
          // a new manifold from the old and the new node using the provided default geometric classifier
          auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::SPLIT_BOUNDARY );
