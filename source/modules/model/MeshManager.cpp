@@ -933,10 +933,9 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
 
 
 /**
-      Constructs element and connects it up with the supplied nodes and neighbor elements if any.
-      
-   if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes.
-   Warning messages are issued if there are issues with the input data.
+   Constructs element and connects it up with the supplied nodes.
+   Method also tries to find neighbor elements using the parent element connectivity of the nodes.
+   A warning message is issued if there are issues with the input data or the neighbors cannot be identified.
    
    @author SKM
    @date 17/9/21
@@ -956,33 +955,36 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
 
    // 1. constructing new element
-   typename plf::colony<Element<dim>>::iterator
+   typename plf::colony<Element<dim>>::iterator eit;
+   if ( fvm_manager_ )
      eit = elements_.emplace( Element<dim>( elements_.size(),
                               fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) );
-
+   else
+     eit = elements_.emplace( Element<dim>( elements_.size(),
+                              fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
    for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
 
 
-  // 3. trying to establish neighbor information from the nodes assuming that they have parent connectivity
-  // ------------------------------------------------------------------------------------------------------ 
+  // 3. trying to establish neighbor information from the nodes assuming if they have parent connectivity
+  // ----------------------------------------------------------------------------------------------------
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
   for ( auto i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
-         csmp_error.Note( ERROR, "MeshManager<dim>::AddElement",
-                          "neighbor information could not be created because node has no parent element info");
+         csmp_error.Note( INFO, "MeshManager<dim>::AddElement",
+                          "neighbor information could not be created because node(s) miss parent element info");
          return &(*eit);
       }
       
    // 4. if the nodes have parents, this method tries to find and connect the neighbors
    // ---------------------------------------------------------------------------------
    if ( connectNeighborsUsingNodeParents( &(*eit) ) < (*eit).FE()->Faces()-1 )
-     csmp_error.Note( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
+     csmp_error.Note( INFO, "MeshManager<dim>::AddElement", "could not find neighbors for all element faces");
    
    return &(*eit);
   
@@ -2602,18 +2604,23 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
      
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+     // checks
      vector<Face<dim>*> face_ptrs( first, last );
      sort( face_ptrs.begin(), face_ptrs.end() );
      if ( binary_search( face_ptrs.begin(), face_ptrs.end(), static_cast<Face<dim>*>(nullptr) ) )
        csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
-                         "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
+                       "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
+                       
+     face_ptrs.erase( unique( face_ptrs.begin(), face_ptrs.end() ), face_ptrs.end() );
+     if ( face_ptrs.size() < faces_to_delete )
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+                       "input range contained duplicate Face objects, which have been removed");
           
-     auto first1{ first };
-     
      while ( first != last )
        {
           assert( (*first) != nullptr );
-          // 1. disconnecting faces adjacent to the perimeter of the supplied face patch
+          // 1. disconnecting outside faces touching the perimeter of the input face patch
+          //    by nulling the neighbor pointers of the respective faces
           for ( auto i{0U}; i<(*first)->Neighbors(); i++ )
             if ( (*first)->Neighbor(i) != nullptr &&
                  !binary_search( face_ptrs.begin(), face_ptrs.end(), (*first)->Neighbor(i) ) )
@@ -2627,11 +2634,9 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
      
      // 2. deleting the supplied range of faces, nulling the pointers to them
      size_t deleted_faces{ faces_to_delete };
-     while( first1 != last ) {
-          if ( (*first1) == nullptr ) deleted_faces--;
-          faces_.erase( faces_.get_iterator(*first1) );
-          (*first1) = nullptr;
-          first1++;
+     for ( auto& fit : face_ptrs ) {
+          faces_.erase( faces_.get_iterator(fit) );
+          fit = nullptr;
        }
      
      return deleted_faces;

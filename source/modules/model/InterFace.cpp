@@ -10,6 +10,8 @@
 //#include "QuadrilateralFacet.h"
 #include "compareFloats.h"
 
+// #define DEBUGGING_INTERFACE
+
 using namespace std;
 
 namespace csmp {
@@ -137,7 +139,7 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
 
 
 /**
-   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes in opposite order are supplied by node-pointer vector'
+   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes ready to use in opposite order are supplied by node-pointer vector'
    
    @note it takes care of assigning the higher dimensional neighbor elements
    @note assigns outside nodes to InterFace also changing these nodes on the higher-dimensional outside element
@@ -552,16 +554,16 @@ void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE s
 {
    assert( nptr != nullptr );
    assert( this->FE() != nullptr );
+   assert( n_local < this->FE()->Nodes() );
    assert( !node_connector_.empty() );
-   
-   const auto finite_element_nodes( this->FE()->Nodes() );
-   assert( finite_element_nodes * 2 == node_connector_.size() );
-   assert( n_local < finite_element_nodes );
 
    if ( side == INSIDE ) {
         node_connector_[n_local] = nptr;
         return;
      }
+
+   const auto finite_element_nodes( this->FE()->Nodes() );
+   assert( finite_element_nodes * 2 == node_connector_.size() );
 
    if ( side == OUTSIDE ) {
         assert( n_local + finite_element_nodes < node_connector_.size() );
@@ -1199,13 +1201,28 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   this->FE()->XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i ) {
-       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
+       const Point<dim> mid_point = (node_connector_[i]->Coordinate() + node_connector_[ (n_nodes*2U) - 1U - i ]->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
     }
 
 } // end CoordinateMatrix
 
 
+
+/* version not matching the nodes
+
+template<uint32_t dim>
+void  InterFace<dim>::BisectorCoordinateMatrix() const
+{
+  const auto n_nodes( this->FE()->Nodes() );
+  this->FE()->XY.Resize( n_nodes, dim );
+
+  for ( auto i{0U}; i<n_nodes; ++i ) {
+       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
+       this->FE()->XY.AssignRow( i, mid_point );
+    }
+
+} */
 
 
 
@@ -1359,30 +1376,29 @@ void  InterFace<dim>::Out() const
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
   for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
-    str = parseBoundary( N( i, INSIDE )->AtBoundary() );
-    cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
-  }
+      str = parseBoundary( N( i, INSIDE )->AtBoundary() );
+      cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
+    }
   for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
-    str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
-    cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
-  }
+      str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
+      cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
+    }
   cout << endl;
 
   cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
   for ( auto i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
-      cout << "\t\t" << Idx() << ":";
-      cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      //str = parseBoundary(Neighbor(i)->AtBoundary());
-      //cout << str;
-      cout << endl;
-    }
+        cout << "\t\t" << Idx() << ":";
+        cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
+        //str = parseBoundary(Neighbor(i)->AtBoundary());
+        //cout << str;
+        cout << endl;
+      }
     else cout << "none.  ";
     cout << endl;
 
-    /// @todo (2-P) Remove typeid, implement name fct
     cout << "\tInterFace is connected via bridge pattern to: ";
-    cout << typeid(this).name() << endl;
+    cout << parseFiniteElementType( this->FE_Type() ) << endl;
 
     Point<dim>  pt( this->BaryCenter() );
 
@@ -1394,10 +1410,15 @@ void  InterFace<dim>::Out() const
       cout << "\n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
     const auto ipoints( this->IntegrationPoints() );
-    if ( ipoints > 0U ) {
+    if ( ipoints > 0U )
       cout << "\n\tStorage sites for IntegrationPoint properties: " << ipoints << endl;
-    }
 
+    cout <<"\t"<<"Node coordinates (inside, then outside nodes in stored order): ";
+    for ( auto i{0U}; i<this->Nodes(); i++ )
+      cout <<"\n\t"<< node_connector_[i]->Coordinate() <<"  ";
+    cout << endl;
+
+#ifdef DEBUGGING_INTERFACE
     cout << "\n Connected Node objects, side 1 of interface: ";
     for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
       node_connector_[i]->Out();
@@ -1424,11 +1445,10 @@ void  InterFace<dim>::Out() const
          cout <<" ("<< parseFiniteElementType(this->Parent(MIDDLE)->FE_Type()) <<")"<< endl;
       }
     else cout << "\tnone.\n";
+#endif
 
-    cout << "\tUnit Normal:            ";
-    Point<dim> un = UnitNormal();
-    for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
-    cout << endl;
+    cout << "\n\tUnit Normal:            ";
+    cout << UnitNormal() << endl;
 
 } // end Out
 

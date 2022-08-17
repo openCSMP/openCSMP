@@ -1078,7 +1078,7 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
-                                                                                            const SplitBoundary<dim>& boundary )
+                                                                                const SplitBoundary<dim>& boundary )
  {
     // TODO: include accumulation for LHS operators
     
