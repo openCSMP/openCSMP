@@ -17,19 +17,22 @@ namespace csmp {
 void SplitBoundary_Test::run()
 {
    // SKM 26/7/22 - test model received from Anne-Laure Tertois
-   Test_InitialiseSKUA_Model();
+   //Test_InitialiseSKUA_Model();
     
-return;
 
     //E.P Test Splitboundary members
     //linear 2d tests
-    Test_InputNodePropertyValue("InternalBoundary_test");
-    Test_Area_and_SurfaceIntegral("InternalBoundary_test");
-    
+    //Test_InputNodePropertyValue("InternalBoundary_test");
+    //Test_Area_and_SurfaceIntegral("InternalBoundary_test");
+
+    Test_NodeCorrespondance_2D("InternalBoundary_test");
+    Test_NodeCorrespondance_3D("InternalBoundary3D_test");
+
+
     //quadratic 2d tests
-    Test_InputNodePropertyValue("InternalBoundary_Test_quadratic"); // TODO: test for Eddi (breaks in Boundary creation, CornerNodesConnectedTo)
-    Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
-    
+    //Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
+    //Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
+    //Test_NodeCorrespondance("InternalBoundary_Test_quadratic");
 
   // test splitboundary between 2D regions
   /*
@@ -370,8 +373,15 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     _equal( 2.0*area_outside,  int_outside, 0.0001);
     _equal( 3.0*area_middle ,  int_middle , 0.0001);
 
-    SplitBoundaryInterface_Test<2U>  vis_method;
-    vis_method.PullApartSplitboundaries(model, 1.0);
+    for ( auto ifp : s_ref.CellVector() ){
+      _test( ifp->UnitNormal(INSIDE)  == ifp->UnitNormal(MIDDLE)  );
+      _test( ifp->UnitNormal(INSIDE)  == Point<dim>(0, 1) );
+      _test( ifp->UnitNormal(OUTSIDE) == Point<dim>(0,-1) );
+    }
+
+    // SplitBoundaryInterface_Test<2U>  vis_method;
+    //    vis_method.PullApartSplitboundaries(model, 1.0);
+    s_ref.PullApartSplitBoundary(1.0);
 
     //spltting boundaries and testing area again
     area_inside  =  s_ref.Area(INSIDE);
@@ -388,6 +398,230 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
 
     
     
+
+
+
+
+
+
+//Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
+//correctly calibrated
+bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
+
+  const uint32_t dim{2U};
+  int32_t material_id = 1;
+  //model construction
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+
+  ANSYS_Model2D model1(mesh_file, regions_file, variables_file, false, true, true);
+
+  ///Testing Differnt model creations
+  //Region -> SplitBoundary
+  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+
+  ///Inserting lower dimensional region in each
+  model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+  //Getting splitboundaries
+  SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
+
+  std::vector<SplitBoundary<dim>> sb_vec{sb1};
+  for ( auto& sb : sb_vec){
+    for (auto& ifp : sb.CellVector() ){
+      uint32_t n_nodes = ifp->FE()->Nodes();
+
+      std::vector<uint32_t> nids_in = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID() );
+      std::vector<uint32_t> nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID() );
+
+      for ( uint32_t n{0U}; n<n_nodes;++n){
+        //Nodes should match that of face
+        _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
+        //_test( ifp->N(n,OUTSIDE) == ifp->OuterParent()->N(nids_out[n])) ; The nodes of face of OUTSIDE Volumetric Element are not collocated with the Outside of Interface node_connector.
+
+        //Testing matching assignment
+        //inside remains unchanged
+        _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
+
+        //Outside coordinates must match with Inside and middle
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+      }
+    }
+
+  }
+
+  sb1.PullApartSplitBoundary(0.1);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary_TestA", outputProps, "Model", static_cast<int>(0) );
+
+
+  return true;
+
+}
+
+/**
+ * Test that splitboundary is properly created from Boundary, and from lower dimensional region. Intersections are not handled.
+ * Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
+ *
+ * 1) Test Unit normals
+ * 2) Test Inside nodes of Interface match exactly with the face of the Inner Parent nodes (and not slightly rotated, which is not good enough).
+ * 3)
+ *
+*/
+bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
+
+  const uint32_t dim{3U};
+  int32_t material_id = 1;
+  //model construction
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary3D_Test");
+
+  bool irregular = false;
+  bool reduce_to_regions = true;
+
+  ANSYS_Model3D model1(mesh_file, regions_file, variables_file, irregular, reduce_to_regions);
+
+  //Getting volumetric regions for later use
+  Region<dim>& BottomUnit1 = model1.Region("BOTTOMUNIT");
+  Region<dim>& TopUnit1 = model1.Region("TOPUNIT");
+
+  //Getting perimeter nodes of region, before splitboundary is created and information is lost
+  std::set<Node<dim>*> perim_nodes1, perim_nodes2;
+  Region<dim>& frac_region1 = model1.Region( "FRACTURE" );
+  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++){
+    perim_nodes1.insert(*nit);
+  }
+  _test( perim_nodes1.size() == frac_region1.PerimeterNodes() );
+
+
+  ///Testing splitboundary creation
+
+  //Region -> SplitBoundary
+  string sb_name1  = *((model1.CreateSplitBoundaryFrom( "FRACTURE" ) ).first.begin()) ;
+
+  ///Inserting lower dimensional region in each
+  model1.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+  //Getting splitboundaries
+  SplitBoundary<dim>& sb1 = model1.SplitBoundary( sb_name1 );
+
+
+  std::vector<SplitBoundary<dim>> sb_vec{sb1};
+  for ( auto& sb : sb_vec){
+    for (auto& ifp : sb.CellVector() ){
+
+      //Check unit normals are 0 1 0 on INSIDE and MIDDLE and the opposite on OUTSIDE
+      Point<dim> nrml_in  = ifp->UnitNormal(INSIDE);
+      Point<dim> nrml_out = ifp->UnitNormal(OUTSIDE);
+      Point<dim> nrml_mid = ifp->UnitNormal(MIDDLE);
+      //Inside opposite to outside
+      _equal( nrml_in[0] ,  nrml_out[0] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[1] , -nrml_out[1] , std::numeric_limits<double>::epsilon()  );
+      _equal( nrml_in[2] ,  nrml_out[2] , std::numeric_limits<double>::epsilon()  );
+      //inside is 0 1 0
+      _equal( nrml_in[1] , 1.0 , 0.0001  );
+      _test(  std::fabs(nrml_in[0]) < 0.0001 );
+      _test(  std::fabs(nrml_in[2]) < 0.0001 );
+      //middle is 0 1 0
+      _equal( std::fabs(nrml_mid[1]) , 1.0 , 0.0001  );
+      _test(  std::fabs(nrml_mid[0]) < 0.0001 );
+      _test(  std::fabs(nrml_mid[2]) < 0.0001 );
+
+      //Retrieve the nodes of face that match with INSIDE OUTSIDE
+      std::vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+                            nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
+
+
+      std::set<Node<dim>*> outside_nds_interface;
+      std::set<Node<dim>*> outside_nds_face;
+      uint32_t n_nodes = ifp->FE()->Nodes();
+      for ( uint32_t n{0U}; n<n_nodes;++n){
+        //Nodes should match that of INSIDE face
+        _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
+
+        //Nodes should contain same nodes of OUTSIDE face, but may be rotated, so may not match
+        outside_nds_interface.insert( ifp->N(n,OUTSIDE));
+        outside_nds_face.insert( ifp->OuterParent()->N(nids_out[n]));
+
+        //Testing matching assignment
+        //inside remains unchanged
+        _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
+        //Outside coordinates must match with Inside and middle
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
+        _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+
+        //Testing nodes are duplicated in interior and the same on perimeter
+        //if node is not on perimeter
+        if ( perim_nodes1.find( ifp->N(n,INSIDE) ) == perim_nodes1.end() ){
+          //test node is duplicated
+          _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
+
+          //Inside Node is in bottom half
+          _test( BottomUnit1.Contains( ifp->N(n,INSIDE) ) );
+          //matching Outside Node is in top half
+          _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+          //matching outside node not in bottom half
+          _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+
+          //Testing inside parents assignmnet by checking they are part of BottomUnit region
+          for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
+            _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+            _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
+          }
+          for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
+            _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
+            _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+          }
+
+        }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match if on perimeter
+
+
+      }
+
+      //outside nodes must match in content but may be rotated, so we test just the content
+      _test(outside_nds_interface == outside_nds_face);
+
+    }
+  }
+
+  //For visualisation purposes
+  double gap = 1.0;
+  sb1.PullApartSplitBoundary(gap);
+  //sb2.PullApartSplitBoundary(gap);
+
+  list<string> outputProps;
+  outputProps.push_back( "nodal id" );
+  model1.InputPropertyValue("nodal id", ScalarVariable(PLAIN,1.0));
+  VTU_Interface<dim> vtu1( model1 );
+  vtu1.OmitZeroInFileName(true);
+  vtu1.OutputDataToVTU( "../Output/InternalBoundary3D_TestA", outputProps, "Model", static_cast<int>(0) );
+
+
+  return true;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

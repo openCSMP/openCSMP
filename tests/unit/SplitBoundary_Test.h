@@ -44,6 +44,14 @@ namespace csmp {
       /// integrates the property over the boundary line or surface
       bool Test_Area_and_SurfaceIntegral(const char* mesh_file);
 
+      /// do correspoding nodes coincide
+      bool Test_NodeCorrespondance_2D(const char* mesh_file );
+
+      bool Test_NodeCorrespondance_3D(const char* mesh_file );
+
+
+
+
       // TODO - ALl tests below are still to be done
 
       /// returns location of split boundary relative to adjacent region
@@ -58,9 +66,7 @@ namespace csmp {
       /// do all interfaces have higher dimensional neighbors
       bool Test_HigherDimensionalNeighbors();
     
-      /// do correspoding nodes coincide
-      bool Test_NodeCorrespondance();
-      
+
       bool Test_Manifolds();
       
       /// is there only a single node along the perimeter of a split boundary

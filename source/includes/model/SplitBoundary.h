@@ -124,7 +124,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// forms a split boundary from existing interfaces assuming that these are numbered n=elmts+faces .. interfaces-1
     size_t AccumulateByNumber( MeshManager<dim>&, std::vector<size_t>& cell_ids );
 
-    /// creating from supplied vector of faces
+    /// creating from supplied vector of interfaces
     bool CreateFrom( const typename std::vector<InterFace<dim>*>::const_iterator ifacesBegin,
                      const typename std::vector<InterFace<dim>*>::const_iterator ifacesEnd );
 
@@ -183,6 +183,10 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     
     /// reports box-boundary flag equivalent which is always INTERNAL because SplitBoundary objects can only exist on the interior of a model
     BOX_BOUNDARY AtBoundary() const { return INTERNAL; }
+
+	/// Method that applies half of displacement to both sides of interface (dotted by unitNormal)
+    void PullApartSplitBoundary( double dist );
+
 
     /// writes all contained data on the screen
     void Out() const;

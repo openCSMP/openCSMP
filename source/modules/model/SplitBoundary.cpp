@@ -681,7 +681,9 @@ bool  SplitBoundary<dim>::CreateFrom( const PropertyDatabase<dim>& dbase,
   // this method already updates the connectivity of all elements, nodes etc.
   this->cell_vec_ =  mesh.ReplaceFacesByInterFaces( dbase, boundary.CellVector().begin(),
                                                     next(boundary.CellVector().begin(),boundary.InteriorCells()),
-                                                    boundary.CellVector().end() );
+                                                    boundary.CellVector().end(),
+                                                    boundary.PerimeterNodesBegin(),
+                                                    boundary.NodesEnd());
 
   // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
   this->IdentifyPerimeter();
@@ -743,14 +745,14 @@ double  SplitBoundary<dim>::Area( INTERFACE_SIDE side ) const
   if constexpr ( dim == 3U ) {
       for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsSurface() )
-          integrated_area += (*it)->Area();
+          integrated_area += (*it)->Area(side);
     }
   
   if constexpr ( dim == 2U ) {
       for ( typename vector<InterFace<dim>*>::const_iterator
             it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         if ( (*it)->FE()->IsLine() )
-          integrated_area += (*it)->Area();
+          integrated_area += (*it)->Area(side);
     }
   
   if constexpr ( dim == 1U ) {
@@ -1184,6 +1186,54 @@ template void SplitBoundary<3>::InputPropertyValue( const char*, const VectorVar
 template void SplitBoundary<1>::InputPropertyValue( const char*, const TensorVariable<1>&, SUBDOMAIN_PART, INTERFACE_SIDE );
 template void SplitBoundary<2>::InputPropertyValue( const char*, const TensorVariable<2>&, SUBDOMAIN_PART, INTERFACE_SIDE );
 template void SplitBoundary<3>::InputPropertyValue( const char*, const TensorVariable<3>&, SUBDOMAIN_PART, INTERFACE_SIDE );
+
+
+
+
+
+
+
+/**
+ *   Iterates of InterFace objects and displaces nodes by param dist/2 on both sides, opening up the interface. Leaves middle nodes untouched.
+ *   Uses InterFace->UnitNormal() from bisector plane or middle element
+ *
+ *   @param dist is the final aperture the nodes will have. Each side is displaced by dist/2.
+ *
+ */
+template<uint32_t dim>
+void SplitBoundary<dim>::PullApartSplitBoundary(double dist){
+
+  std::set<Node<dim>*> operated_in_nodes;
+  std::set<Node<dim>*> operated_out_nodes;
+
+  for ( auto& ifp : this->CellVector() ){
+    uint32_t n_nodes = ifp->FE()->Nodes();
+    for (uint32_t n{0U}; n<n_nodes;++n){
+      Node<dim>* in_node  = ifp->MatchingN(n,INSIDE);
+      Node<dim>* out_node = ifp->MatchingN(n,OUTSIDE);
+      if (in_node != out_node){
+        if ( operated_in_nodes.find(in_node) == operated_in_nodes.end() ){
+          //displace inside node
+          in_node->Coordinate(  in_node->Coordinate()  - dist/2.0 * ifp->UnitNormal()  );
+          //adding nodes to operated nodes
+          operated_in_nodes.insert(  in_node );
+        }
+        if (operated_out_nodes.find(out_node) == operated_out_nodes.end() ){
+          //displace outside node
+          out_node->Coordinate( out_node->Coordinate() + dist/2.0 * ifp->UnitNormal()  );
+          //insert into operated outside nodes
+          operated_out_nodes.insert( out_node );
+        }//end of if
+      }
+    }//end of node loop
+  }//end of interface loop
+
+
+}//end of PullApartSplitBoundary
+
+
+
+
 
 
 

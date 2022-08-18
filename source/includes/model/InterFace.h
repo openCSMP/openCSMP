@@ -193,6 +193,8 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     /// access the nodes that are connected to either, the inside or the outside of the Face
     csmp::Node<dim>* const N( uint32_t n_local, INTERFACE_SIDE side ) const;
 
+    csmp::Node<dim>* const MatchingN( uint32_t n_local, INTERFACE_SIDE side) const;
+
     /// switches internal state variable that sets interface side
     void            CurrentSide( INTERFACE_SIDE side );
     INTERFACE_SIDE  CurrentSide() const;
@@ -227,7 +229,7 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     bool           HasInterveningElement() const { return middleElement_!=nullptr; }
     
     /// tests whether the INSIDE nodes match the OUTSIDE nodes w.r.t. their position
-    bool           AreNodesCollocated() const;
+    bool           AreNodesCollocated(double tolerance=std::numeric_limits<double>::epsilon()) const;
   
     /// local number of the face in the inner parent element, which borders against the interface
     void           ParentFaceID( INTERFACE_SIDE, uint32_t idx );

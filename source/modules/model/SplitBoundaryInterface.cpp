@@ -832,6 +832,26 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
 
 /**
     Creates SplitBoundar(ies) from lower dimensional region without the need for a user to create Boundary objects first. The underlying region is removed in the process.
+
+    @brief 1) Checks dim-1 region exists
+           2) Checks no Nodes on the dim-1 region have the label INTERNAL before proceeding
+           3) Counts Unique Regions and creates property "region identifyier" for all elements within each region with a region-specific integer
+              (to be identified after node duplication for region updating)
+           4) For each Element in the dim-1 Region, it constructs FaceConstructionData, which stores:
+                   i)    Inner/Outer Parents of dim-1 element,
+                   ii)   Faces of inner/outer parent elements that are sharing the dim-1 element.
+                   iii)  Region_identifier (Element property) of the Inside and Outside Parent Element -> (materials_)
+                              (THIS HOWEVER IS NOT ALL THE ELEMENTS THAT SHARE THE NODE)
+                   iii)  Region_Identifier of the dim-1 element (material_)
+                   iv)   PatchNumber which is the unique identifier of the subregions determined by the n_juxtoposition
+                            (Patch is the same if you have the same inside/outside materials_ (region identifier))
+
+                4.2) Breaks dim-1 region into smaller subregions based on t
+           5) Breaks dim-1 Region into smaller subregions, and gives each one a unique name
+
+
+
+
 */
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom( const char* dim_1_region )
@@ -902,7 +922,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
       
     // creating region labels and tagging the regions with unique integer identifiers
     // if "region identifier" is already defined it is assumed that it has already been initialised as well
-    const string    region_tag("region identifier");
+    const string    region_tag("region identifier");  //Note: this name is hard coded in MeshManager::ReplaceElementsByInterface()
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
          model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
@@ -940,13 +960,13 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
           // 2.1.2 recording which category of juxtaposition element fall into, naming it and assigning a patch number
           auto it = patches.insert( make_pair(fdata.Materials(),n_juxtapositions) );
           // incrementing number of juxtapositions and corresponding patch names
-          if ( it.second == true ) {
-               fdata.PatchNumber( (*it.first).second );
-               patch_name = CreateSplitBoundaryNameFrom( fdata, region_names );
+          if ( it.second == true ) {                                          //If new element was inserted, then
+               fdata.PatchNumber( (*it.first).second );                       //Set patch number to n_juxtapositions (this should be unique...)
+               patch_name = CreateSplitBoundaryNameFrom( fdata, region_names ); //Make a name based on fdata( materials, juxta, region name)
                patch_names.insert( make_pair(n_juxtapositions,patch_name) );
                n_juxtapositions++;
             }
-          fdata.PatchNumber( (*it.first).second );
+          fdata.PatchNumber( (*it.first).second );          //name set to old n_juxtaposition (should this be an else?)
         
           // 2.1.3 recording the data for the element that will later be used to construct the face from
           interface_construction_data.push_back( fdata );
@@ -994,53 +1014,39 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     const size_t n_original_faces(model.Mesh().Faces());
     const size_t n_original_elmts(model.Mesh().Elements());
 
-    // establish the storage requirements for face variables
-    const LocalVariables             lvsInterfaces( model.Database().LocalVariablesAt(INTER_FACE) );
-    const IntegrationPointVariables  lvsIntegrationPoints( model.Database().IntegrationPointVariablesAt(INTER_FACE) );
-    const LocalVariables             lvsNode( model.Database().LocalVariablesAt(NODE) );
+    //Loop over Patch data to make splitboundaries from subsegments of lower-dim Elements
     vector<vector<InterFace<dim>*> > iface_ptrs_per_patch(patch_data.size());
-   
     size_t patch_counter(0);
+    std::set<size_t> region_material_ids;
     // for each of the new patches
     for ( auto& it : patch_data )
       {
          iface_ptrs_per_patch[patch_counter].reserve( it.second.size() );
-         
-         // flagging the regions on the outside of the new split boundaries for update of their connectivity
-         // because they will contain new nodes
-         model.Region( region_names[ it.second[0U].Materials().second ] ).ScheduleForRebuilt();
 
-         // for all the elements contained in the patch
-         for ( auto& pit : it.second )
-           {
-              // creating the faces
-              // ------------------
-              // storing pointers to the new faces in the vector from which the boundary will be constructed
-              iface_vector.push_back( model.Mesh().ReplaceElementByInterFace( pit.LowerDimElement(),
-                                                                              pit.InnerElement(),
-                                                                              pit.OuterElement(),
-                                                                              pit.InnerElementFace(),
-                                                                              pit.OuterElementFace(),
-                                                                              lvsInterfaces, lvsIntegrationPoints, lvsNode ) );
-              // remembering which faces make up the patch
-              iface_ptrs_per_patch[patch_counter].push_back( iface_vector.back() );
-           }
+         //Creating interfaces for subsegment of dim-1 region, uses subdomain perimeter to avoid duplication at perimeter, and return vector of outside elements region ids
+         //that have been modified. Intersections are also handled .... Hopefully
+         iface_ptrs_per_patch[patch_counter] = model.Mesh().ReplaceElementsByInterFaces( model.Database(),
+                                                                                        it.second.begin(),
+                                                                                        it.second.end(),
+                                                                                        subdomain.PerimeterNodesBegin(),
+                                                                                        subdomain.NodesEnd(),
+                                                                                        region_material_ids);
          patch_counter++;
+
       }
     patch_data.clear();
-    
+
+
+
+    //model.Region( region_names[ it.second[0U].Materials().second ] ).ScheduleForRebuilt();       //TODO: E.P Bug Potential This does not include all elements on OUTSIDE - just ones connected to interface
+
 #ifdef DEBUG
     cout <<"\n\n"<<"SplitBoundaryInterface<"<< dim <<">::CreateInternalBoundaryFrom:";
     cout << "\n\t\t"<<"Added "<< model.Mesh().Faces() - n_original_faces <<" faces to mesh.";
     cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
 #endif
-   
-    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
-    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
-    //      - this method also updates node to parent element connectivity
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: these are global changes! - not sure how to improve this because so many regions are affected
-    model.Mesh().UpdateConnectivity();
+
+    //Connectivity is already handled inside the MeshManager
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Creating SplitBoundary objects for each of the mesh patches established above
@@ -1048,22 +1054,24 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     for ( auto i{0U}; i<patch_names.size(); ++i )
       AddSplitBoundary( patch_names[i].c_str(), iface_ptrs_per_patch[i].begin(), iface_ptrs_per_patch[i].end(), INTERNAL );
       
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit )
-      if ( (*nit)->AtBoundary() == NOT )
-        (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (their elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     const bool remove_elmts{ false };
     model.RemoveRegion( dim_1_region, remove_elmts );
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 7. Flagging the regions on the outside of the new split boundaries for update of their connectivity
+    // because they will contain new nodes
+    for (size_t i : region_material_ids )
+      model.Region( region_names[ i ] ).ScheduleForRebuilt();
+
+    //update outside regions
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 7. extra diagnostics and output of boundary names
+    // 8. extra diagnostics and output of boundary names
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     if ( patch_names.empty() ) {
          ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region, "no SplitBoundary patches could be created." );
@@ -1163,6 +1171,10 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
   // removes boundary, noting that its interface objects were already deleted by CreateFrom()
   const bool erase_faces{ false };
   splitboundaryComplex->RemoveBoundary( boundary, erase_faces );
+
+  //Updates all regions who may have the new nodes now -> Local updates would mean searching each existing region if they had an original node.. is that faster?
+  assert( false ); //E.P 2022 - THIS IS SUPPOSED TO BREAK - The regions of outside elements are not flagged for update! So this method doesnt correctly configure node_vec of outside regions
+  splitboundaryComplex->UpdateRegions();
 
   cout << "\nSplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::CreateSplitBoundaryFrom: created splitboundary: '";
   cout << splitboundaryName <<"' successfully.\n\n";

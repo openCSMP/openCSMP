@@ -10,8 +10,6 @@
 //#include "QuadrilateralFacet.h"
 #include "compareFloats.h"
 
-// #define DEBUGGING_INTERFACE
-
 using namespace std;
 
 namespace csmp {
@@ -82,6 +80,9 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
     If not, the outside nodes are rotated until a match is obtained or a FATAL_ERROR is reported.
  
     @attention constructor expects that the Nodes have already been multiplicated and turned into manifolds elsewhere.
+               Nodes of face of outside element are taken and rotated to be matching in the "reverse" order to Inside Node.
+               Note: "reverse" is in quotation marks because it's not quite reversed if you consider MidPoint Nodes
+
 */
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
@@ -111,21 +112,27 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
 
    // 1. assigning the nodes to the new InterFace
    // -------------------------------------------
-   // INSIDE nodes
+   // INSIDE nodes ---------
    uint32_t count{0U};
    for ( const auto& nit : innerParent_->FE()->NodesOfFace( inner_parent_face_id_ ) )
      Assign( count++, innerParent_->N(nit), INSIDE );
-   // OUTSIDE nodes
+
+   // OUTSIDE nodes --------
    count = 0U;
    for ( const auto& nit : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
      Assign( count++, outerParent_->N(nit), OUTSIDE );
+
+   // Outside nodes are then rotated so that the last corner node of Inside matches with the first corner node on the outside
+   // this is needed to ensure MatchingN(i,INSIDE) == MatchingN(i,OUTSIDE)
+   // this breaks the idea that outside nodes match with the nodes of the face of outside element (they may be rotated )
+   // Therefore N(i,OUTSIDE) != OuterParent->N( OuterParent->NodesOfFace( outer_parent_face_id)[i] )
+   InitialiseNodeVector();
 
    // 2. checking that the nodes are collocated
    // ----------------------------------------------------------------------
 #ifdef DEBUG
    if ( !AreNodesCollocated() )
      throw csmp::Exception( ERROR, "InterFace(costum contructor", "supplied interface nodes are not collocated");
-   // TODO: make nodes collocated by rotating outside node vector
 #endif
 
    // 3. detaching the higher-dimensional element neighbors from one another
@@ -554,16 +561,16 @@ void InterFace<dim>::Assign( uint32_t n_local, Node<dim>* nptr, INTERFACE_SIDE s
 {
    assert( nptr != nullptr );
    assert( this->FE() != nullptr );
-   assert( n_local < this->FE()->Nodes() );
    assert( !node_connector_.empty() );
+   
+   const auto finite_element_nodes( this->FE()->Nodes() );
+   assert( finite_element_nodes * 2 == node_connector_.size() );
+   assert( n_local < finite_element_nodes );
 
    if ( side == INSIDE ) {
         node_connector_[n_local] = nptr;
         return;
      }
-
-   const auto finite_element_nodes( this->FE()->Nodes() );
-   assert( finite_element_nodes * 2 == node_connector_.size() );
 
    if ( side == OUTSIDE ) {
         assert( n_local + finite_element_nodes < node_connector_.size() );
@@ -749,7 +756,10 @@ void InterFace<dim>::InitialiseNodeVector()
    //    which will preserve Node collocation
    auto nids = outerParent_->FE()->NodesOfFace( outer_parent_face_id_ );
    node_count = 0U;
-   while( outerParent_->N( nids[0] )->Coordinate() != N( n_face_nodes_outer-1 )->Coordinate() &&
+
+   const auto n_corner_nodes_outer{ this->FE()->CornerNodes() };
+
+   while( outerParent_->N( nids[0] )->Coordinate() != N( n_corner_nodes_outer - 1 , INSIDE )->Coordinate() &&
           node_count < n_face_nodes_outer ) {
          rotate( nids.begin(), nids.begin()+1, nids.end() );
          node_count++;
@@ -806,11 +816,11 @@ vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVector()
       Performs test using the distanceTo operator on the node points
 */
 template<uint32_t dim>
-bool  InterFace<dim>::AreNodesCollocated() const
+bool  InterFace<dim>::AreNodesCollocated(double tolerance) const
  {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     for ( uint32_t i{0U}; i<n_nodes; i++ )
-      if ( !approximatelyEqual( node_connector_[i]->Coordinate().DistanceTo( node_connector_[node_connector_.size()-1-i]->Coordinate() ), 0. ) )
+      if ( !approximatelyEqual( this->MatchingN(i,INSIDE)->Coordinate().DistanceTo( this->MatchingN(i,OUTSIDE)->Coordinate() ), 0., tolerance ) )
         return false;
       
     return true;
@@ -914,6 +924,77 @@ csmp::Node<dim>* const InterFace<dim>::N( uint32_t n ) const
   assert( n < this->FE()->Nodes() );
   return this->N(n,current_side_);
 }
+
+
+
+/**
+    Returns pointers to the nodes which match with the INSIDE ordering of the interface
+
+    @section input Input Arguments
+
+    An integer from 0...n-1, where n is the number of nodes per face of the Element.
+    The nodes on the Outside match with (collocated) the nodes on the INSIDE, and therefore they no
+    longer reflect the numbering given by the outer parent elemnts Face.
+
+    @param side  side refers to the first or second parent element.
+
+    @section implementation Implementation
+
+    @attention since the nodes match the face of of the adjacent higher-dimensional elements,
+    they are numbered like these within the node container. It follows that the inside nodes in the
+    node connector are in normal order, but the ones for the outside are in reverse order starting
+    with the last node. Consequently, this method traverses the outside nodes in a reverse order, in order
+    to output Nodes on the outside which are matched with nodes on the inside.
+
+    @warning The ordering on the outside is INCONSISTENT with the ordering given from N(i,outside)!
+
+    A range check is performed.
+
+    @return A pointer to the Target node.
+*/
+template<uint32_t dim>
+csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE side ) const
+{
+  assert( n < this->FE()->Nodes() );
+  if ( side == INSIDE ) return node_connector_[n];
+
+  uint32_t const cn_nodes = this->FE()->CornerNodes();
+  uint32_t const fe_nodes = this->FE()->Nodes();
+  if ( side == OUTSIDE ) {
+    if (  n  < cn_nodes ){
+      //Traverse nodes backwards from the last corner node
+      const uint32_t outside_idx = fe_nodes + cn_nodes - 1 - n  ;
+      assert(outside_idx >= fe_nodes );
+      return node_connector_[outside_idx];
+    }
+
+    //Then we are on the midside nodes
+    int one{1}, md_nodes = this->FE()->MidSideNodes();
+    if (n < cn_nodes + md_nodes ){
+     //Traverse the midside  nodes in reverse, but starting one node before the last node
+      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - uint32_t(one % md_nodes) - (n-cn_nodes) ;
+      assert(outside_idx >= fe_nodes );
+      return node_connector_[outside_idx];
+    } else {
+      //this is a barycentric node
+      const uint32_t outside_idx = n + fe_nodes;
+      return node_connector_[outside_idx];
+    }
+  }
+
+  assert( side == MIDDLE );
+  if ( middleElement_ != nullptr )
+    return middleElement_->N( n );
+
+  throw csmp::Exception( ERROR, "InterFace<dim>::N( local_id, side ) const", "Base Element does not exist!" );
+
+  return nullptr;
+}
+
+
+
+
+
 
 
 
@@ -1139,7 +1220,7 @@ double InterFace<dim>::NodeSpacing( uint32_t n ) const
   {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     assert( n < n_nodes );
-    return node_connector_[n]->Coordinate().DistanceTo( node_connector_[n_nodes-1-n]->Coordinate() );
+    return MatchingN(n,INSIDE)->Coordinate().DistanceTo( MatchingN(n,OUTSIDE)->Coordinate() );
   }
 
 
@@ -1171,6 +1252,10 @@ are used to find mid-points.
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
+   if ( current_side_ == MIDDLE )
+   	 throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
+                           "Method cannot be used for intervening (MIDDLE) elements");
+
    NodeCoordinateMatrix( XY, current_side_ );
 
 } // end NodeCoordinateMatrix
@@ -1178,10 +1263,11 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
+ 
   if ( side == MIDDLE )
     throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
                            "Method cannot be used for intervening (MIDDLE) elements");
-    
+
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
@@ -1201,28 +1287,13 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   this->FE()->XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i ) {
-       const Point<dim> mid_point = (node_connector_[i]->Coordinate() + node_connector_[ (n_nodes*2U) - 1U - i ]->Coordinate()) / 2.;
+       const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
     }
 
 } // end CoordinateMatrix
 
 
-
-/* version not matching the nodes
-
-template<uint32_t dim>
-void  InterFace<dim>::BisectorCoordinateMatrix() const
-{
-  const auto n_nodes( this->FE()->Nodes() );
-  this->FE()->XY.Resize( n_nodes, dim );
-
-  for ( auto i{0U}; i<n_nodes; ++i ) {
-       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
-       this->FE()->XY.AssignRow( i, mid_point );
-    }
-
-} */
 
 
 
@@ -1376,24 +1447,24 @@ void  InterFace<dim>::Out() const
   cout << "\n\tconnected nodes with boundary flags:  ";
   string str;
   for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
-      str = parseBoundary( N( i, INSIDE )->AtBoundary() );
-      cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
-    }
+    str = parseBoundary( N( i, INSIDE )->AtBoundary() );
+    cout << N( i, INSIDE )->Idx() << ":" << str << "  ";
+  }
   for ( auto i{0U}; i<this->FE()->Nodes(); i++ ) {
-      str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
-      cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
-    }
+    str = parseBoundary( N( i, OUTSIDE )->AtBoundary() );
+    cout << N( i, OUTSIDE )->Idx() << ":" << str << "  ";
+  }
   cout << endl;
 
   cout << "\n\tconnected neighbor InterFace types / boundary flags:\n";
   for ( auto i{0U}; i<this->Neighbors(); i++ )
     if ( Neighbor( i ) != nullptr ) {
-        cout << "\t\t" << Idx() << ":";
-        cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-        //str = parseBoundary(Neighbor(i)->AtBoundary());
-        //cout << str;
-        cout << endl;
-      }
+      cout << "\t\t" << Idx() << ":";
+      cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
+      //str = parseBoundary(Neighbor(i)->AtBoundary());
+      //cout << str;
+      cout << endl;
+    }
     else cout << "none.  ";
     cout << endl;
 
@@ -1410,15 +1481,10 @@ void  InterFace<dim>::Out() const
       cout << "\n\tBarycentre at (xyz): " << pt[0] << ", " << pt[1] << ", " << pt[2] << endl;
 
     const auto ipoints( this->IntegrationPoints() );
-    if ( ipoints > 0U )
+    if ( ipoints > 0U ) {
       cout << "\n\tStorage sites for IntegrationPoint properties: " << ipoints << endl;
+    }
 
-    cout <<"\t"<<"Node coordinates (inside, then outside nodes in stored order): ";
-    for ( auto i{0U}; i<this->Nodes(); i++ )
-      cout <<"\n\t"<< node_connector_[i]->Coordinate() <<"  ";
-    cout << endl;
-
-#ifdef DEBUGGING_INTERFACE
     cout << "\n Connected Node objects, side 1 of interface: ";
     for ( auto i{0U}; i<this->FE()->Nodes(); i++ )
       node_connector_[i]->Out();
@@ -1445,10 +1511,11 @@ void  InterFace<dim>::Out() const
          cout <<" ("<< parseFiniteElementType(this->Parent(MIDDLE)->FE_Type()) <<")"<< endl;
       }
     else cout << "\tnone.\n";
-#endif
 
-    cout << "\n\tUnit Normal:            ";
-    cout << UnitNormal() << endl;
+    cout << "\tUnit Normal:            ";
+    Point<dim> un = UnitNormal();
+    for ( auto i{0U}; i<dim; i++ ) cout << un[i] << ", ";
+    cout << endl;
 
 } // end Out
 

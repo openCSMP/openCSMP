@@ -2355,7 +2355,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
        for ( bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
-           nodes_irregular.push_back( (*bit) );
+           nodes_irregular.push_back( (*nit) );
 
      // making these containers unique
      sort( nodes_bottom.begin(), nodes_bottom.end() );
@@ -2537,7 +2537,7 @@ bool ModelTopology::Infer_BOX_BOUNDARY_EdgeAndCornerFlagsFromSideFlags( const VS
  }
  
  
- 
+
  
  
  
@@ -2606,7 +2606,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
        for ( auto bit=CellsOfDomainBegin(it.c_str());
              bit!=CellsOfDomainEnd(it.c_str()); bit++ )
          for ( vector<int64_t>::iterator nit=vset.PlistBegin(*bit); nit!=vset.PlistEnd(*bit); ++nit )
-           irregular.push_back( (*bit) );
+           irregular.push_back( (*nit) );      //E.P BUG Fix - Changed to nit , since before it was passing bit which is an Element ID!! (You want to pass the node ID's)
 
      // making these containers unique
      sort( bottom.begin(), bottom.end() );
@@ -2819,6 +2819,117 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
 //       cerr <<" "<< counter <<":"<< parseBoundary( static_cast<BOX_BOUNDARY>(*it) );
 //    }
 //cerr << endl << endl;
+
+
+
+
+
+
+/**
+
+Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
+If poly-element regions exists, then these are ignored.
+
+The method ignores regions on Box Boundaries (including IRREGULAR)
+
+*/
+bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const
+ {
+    std::deque<size_t> internal_nodes;
+
+    // getting the lower_dim regions which have line elements
+    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
+      if ( !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are not on a boundary
+        if ( (*it).second.first.size() == 1U && fem_specs::LineElement( (*(*it).second.first.begin()) ) )  //
+          {
+              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
+              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
+              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
+
+              //save all node id's
+              for (auto eid : (*it).second.second ){
+                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
+                  //adding nodes of element with id "eid" to deque
+                  internal_nodes.push_back(*vit);
+                }
+              }
+          }
+    }
+
+    sort( internal_nodes.begin(), internal_nodes.end() );
+    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
+
+    //setting nodes boundary flags to internal
+    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
+
+    return true;
+
+
+ } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
+
+
+
+/**
+
+Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
+If poly-element regions exists, then these are ignored.
+
+The method ignores regions on Box Boundaries (including IRREGULAR)
+
+*/
+bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const
+ {
+    std::deque<size_t> internal_nodes;
+
+    // getting the lower_dim regions which have line elements
+    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
+      if (  !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are NOT on a boundary
+        if ( (*it).second.first.size() == 1U && (fem_specs::LineElement( (*(*it).second.first.begin()) ) || fem_specs::SurfaceElement( (*(*it).second.first.begin()) ) ) )  // take line and surface elements
+          {
+              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
+              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
+              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
+
+              //save all node id's
+              for (auto eid : (*it).second.second ){
+                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
+                  //adding nodes of element with id "eid" to deque
+                  internal_nodes.push_back(*vit);
+                }
+              }
+          }
+    }
+
+    sort( internal_nodes.begin(), internal_nodes.end() );
+    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
+
+    //setting nodes boundary flags to internal
+    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
+
+    return true;
+
+
+ } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
  } // end namespace csmp
