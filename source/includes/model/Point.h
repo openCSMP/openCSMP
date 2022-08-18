@@ -51,10 +51,10 @@ class Point {
     Point& operator/=( double );
   
     /// accessor and mutator of point (0=x coordinate, 1=y...)
-    double& operator[]( uint32_t);
+    double& operator[]( uint32_t );
   
     /// accessor of point (0=x coordinate, 1=y...)
-    const double& operator[]( uint32_t) const;
+    const double& operator[]( uint32_t ) const;
   
     /// compares points using epsilon from numeric_limits
     bool operator==( const Point& ) const;
