@@ -591,7 +591,7 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
   }
 
   //For visualisation purposes
-  double gap = 0.1;
+  double gap = 1.0;
   sb1.PullApartSplitBoundary(gap);
   //sb2.PullApartSplitBoundary(gap);
 

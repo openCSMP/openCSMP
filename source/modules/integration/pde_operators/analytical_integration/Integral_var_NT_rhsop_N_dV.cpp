@@ -91,7 +91,7 @@ void Integral_var_NT_rhsop_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
     e.IntegralNN(mat);
     
     for (auto i = 0; i < e.Nodes(); ++i) {
-      for (size_t k = 0; k < e.Nodes(); ++k) {
+      for (auto k = 0; k < e.Nodes(); ++k) {
         MathOperatorRHS<dim>::RHS[i] += mat(i, k) * vvar_[k]();
       }
     }
@@ -121,7 +121,7 @@ void Integral_var_NT_rhsop_N_dV<dim,CELL>::ComputeIntegral( const CELL& e ) {
   elMat(2, 2) = 2.0*vvar_[0]() + 2.0*vvar_[1]() + 6.0*vvar_[2]();
   
   for (auto i = 0; i < e.Nodes(); i++) 
-    for (size_t j = 0; j < e.Nodes(); j++) 
+    for (auto j = 0; j < e.Nodes(); j++) 
       MathOperatorRHS<dim>::RHS[i] += elMat(i,j) * basic_var_[j]();
   
   for (auto i = 0; i < e.Nodes(); ++i) {

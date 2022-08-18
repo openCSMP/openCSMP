@@ -347,7 +347,7 @@ bool MeshDiagnostics<dim>::DetectConflictingDirichletConditions( const Model<dim
                     (*eit)->N(i)->Read( key, vc );
                  
                     // for each variable component
-                    for ( size_t j{0U}; j<dim; j++ )
+                    for ( auto j{0U}; j<dim; j++ )
                       {
                          double value(numeric_limits<double>::quiet_NaN());
                          // finding status-flagged nodes and reading their stored values

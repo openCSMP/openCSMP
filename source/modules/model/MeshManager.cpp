@@ -44,7 +44,8 @@ MeshManager<dim>::MeshManager( const PropertyDatabase<dim>& pref, const VSet<dim
 {
    assert( pref.VariableCount() > 0 );
    assert( vset.Vertices() > 0 );
-   Initialize( pref, vset );
+   const bool with_FV_variables = (finiteVolumeVariables(pref) > 0 ) ? true : false;
+   Initialize( pref, vset, with_FV_variables );
 }
 
 
@@ -248,7 +249,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   cout << endl;
 
   // ------------------------------------------------------------------------------------
-  // 1. check availability of necessary finite element types, and valid model topology
+  // 1. check availability of necessary finite element & finite volume types
   // ------------------------------------------------------------------------------------
   // initializing the finite-element manager true=isoparametric
   fem_manager_.InitializeElements( dim, vset.OrderOfFiniteElementInterpolationFunctions(), vset.IsoparametricElementMesh() );
@@ -276,6 +277,13 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       }
     }
   cout << endl;
+  
+  // finite volume stencils
+  if ( initialise_FV_stencils ) {
+       const bool assign_stencils_to_elements{false}; // the elements have not been created yet
+       InitializeFiniteVolumeStencils( phys_vars, assign_stencils_to_elements );
+    }
+    
 
   // --------------------------------------------------------------------------
   // 2. construct nodes and elements using the VSet element type information
@@ -731,69 +739,84 @@ if ( !interfaces_.empty() ) {
 /**
   Initialises the finite volume policy of the elements, faces, and interfaces by assigning the finite volume stencil pointers of the elements to the
   corresponding finite volume stencils.
+  
+  @param assign_stencils_to_elements connects the stencils in the manager with the individual elements, faces and interfaces
 
 @attention If a stencil is assigned already, noting is done. Remove stencil first (NULL ptr in elements)
 
 */
 template<uint32_t dim>
-void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref )
+void MeshManager<dim>::InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& pref, bool assign_stencils_to_elements )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
-    if ( fem_manager_.InterpolationOrder() != 1U  ||
-        !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
-         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
-                         "Currently FV stencils exist only for linear FE with local coordinate system.");
+    // if the FV stencil manager has already been initialised
+    if ( fvm_manager_ )  {
+         csmp_error.Note( INFO, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "The finite volume stencils were already initialised earlier.");
          return;
       }
 
-    if ( elements_.empty() ) {
-         csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
-                         "Currently no Element objects exist to which stencils could be assigned.");
+    if ( !fem_manager_.UsesElementsWithLocalCoordinateSystem() ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist in parametric space, requiring FE with a local coordinate system.");
+         return;
+      }
+
+    if ( fem_manager_.InterpolationOrder() != 1U ) {
+         csmp_error.Note( FATAL_ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                         "Currently FV stencils exist only for finite elements with linear interpolation functions.");
          return;
       }
 
     // 1. initialize the stencil manager (the stencils are build and assigned the correct properties
-    if ( !fvm_manager_ ) {
-         fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
-      }
+    fvm_manager_ = new FiniteVolumeStencilManager<dim>( fem_manager_ );
 
-    // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
-    // storage for fv integration (sector/facet) point properties
-    {
-      const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-      const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-      for ( auto& e : elements_ ) {
-            if ( !e.FV() ) {
-                e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                e.ResizePropertyStorage( lvs, ipvs );
-              }
+  if ( assign_stencils_to_elements )
+   {
+      if ( elements_.empty() ) {
+           csmp_error.Note( ERROR, "MeshManager<dim>::InitializeFiniteVolumeStencils",
+                           "Currently no Element objects exist to which stencils could be assigned.");
+           return;
+        }
+
+      // 2. Now the stencil pointers in each finite element are connected to the correct corresponding stencils and update variable
+      // storage for fv integration (sector/facet) point properties
+      {
+        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+        for ( auto& e : elements_ ) {
+              if ( !e.FV() ) {
+                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                  e.ResizePropertyStorage( lvs, ipvs );
+                }
+          }
+      }
+      // faces
+      if ( !faces_.empty() )
+        {
+          const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+          const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+          for ( auto& e : faces_ ) {
+                if ( !e.FV() ) {
+                    e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                    e.ResizePropertyStorage( lvs, ipvs );
+                  }
+            }
+        }
+      // interfaces
+      if ( !interfaces_.empty() )
+        {
+          const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
+          const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
+          for ( auto& e : interfaces_ ) {
+                if ( !e.FV() ) {
+                    e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
+                    e.ResizePropertyStorage( lvs, ipvs );
+                  }
+            }
         }
     }
-    // faces
-    if ( !faces_.empty() )
-      {
-        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-        for ( auto& e : faces_ ) {
-              if ( !e.FV() ) {
-                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                  e.ResizePropertyStorage( lvs, ipvs );
-                }
-          }
-      }
-    // interfaces
-    if ( !interfaces_.empty() )
-      {
-        const LocalVariables lvs( pref.LocalVariablesAt(ELEMENT) );
-        const IntegrationPointVariables ipvs( pref.IntegrationPointVariablesAt(ELEMENT) );
-        for ( auto& e : interfaces_ ) {
-              if ( !e.FV() ) {
-                  e.AssignFiniteVolume( fvm_manager_->Stencil( e.FE_Type() ) );
-                  e.ResizePropertyStorage( lvs, ipvs );
-                }
-          }
-      }
 
  } // end InitializeFiniteVolumeStencils
 
@@ -911,10 +934,9 @@ Node<dim>* const MeshManager<dim>::AddNodeAtUniqueLocation( const Point<dim>& pt
 
 
 /**
-      Constructs element and connects it up with the supplied nodes and neighbor elements if any.
-      
-   if neighbors are not supplied, method tries to find neighbors through the parent connectivity of the nodes.
-   Warning messages are issued if there are issues with the input data.
+   Constructs element and connects it up with the supplied nodes.
+   Method also tries to find neighbor elements using the parent element connectivity of the nodes.
+   A warning message is issued if there are issues with the input data or the neighbors cannot be identified.
    
    @author SKM
    @date 17/9/21
@@ -934,33 +956,34 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
      csmp_error.Note( ERROR, "MeshManager<dim>::AddElement", "node vector is empty");
 
    // 1. constructing new element
-   typename plf::colony<Element<dim>>::iterator
-     eit = elements_.emplace( Element<dim>( elements_.size(),
-                              fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) );
-
+   typename plf::colony<Element<dim>>::iterator eit = ( fvm_manager_ ) ?
+               elements_.emplace( Element<dim>( elements_.size(),
+                                  fem_manager_.E(etype), fvm_manager_->Stencil(etype), lvars, ivars, material_id ) ) :
+               elements_.emplace( Element<dim>( elements_.size(),
+                                  fem_manager_.E(etype), static_cast<FiniteVolumeStencil<dim>*>(nullptr), lvars, ivars, material_id ) );
    // 2. assigning nodes
    const size_t n_nodes(nodes.size());
    for ( auto i{0U}; i<n_nodes; ++i )
      (*eit).Assign( i, nodes[i] );
 
 
-  // 3. trying to establish neighbor information from the nodes assuming that they have parent connectivity
-  // ------------------------------------------------------------------------------------------------------ 
+  // 3. trying to establish neighbor information from the nodes assuming if they have parent connectivity
+  // ----------------------------------------------------------------------------------------------------
   //    checking whether the nodes have the necessary parent element information
   bool valid_parent_info(true);
   for ( auto i{0U}; i<n_nodes; ++i )
     if ( (*eit).N(i)->Parents() == 0U ) {
          cerr <<"\n\tnode "<< i;
          valid_parent_info = false;
-         csmp_error.Note( ERROR, "MeshManager<dim>::AddElement",
-                          "neighbor information could not be created because node has no parent element info");
+         csmp_error.Note( INFO, "MeshManager<dim>::AddElement",
+                          "neighbor information could not be created because node(s) miss parent element info");
          return &(*eit);
       }
       
    // 4. if the nodes have parents, this method tries to find and connect the neighbors
    // ---------------------------------------------------------------------------------
    if ( connectNeighborsUsingNodeParents( &(*eit) ) < (*eit).FE()->Faces()-1 )
-     csmp_error.Note( WARNING, "MeshManager<dim>::AddElement", "neighbor vector could not be used; found less neighbors than expected");
+     csmp_error.Note( INFO, "MeshManager<dim>::AddElement", "could not find neighbors for all element faces");
    
    return &(*eit);
   
@@ -1512,7 +1535,8 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
       }
     else {
          // checking that the NodeManifoldManager has been initialised
-         assert ( node_manifold_manager_ != nullptr );
+        if ( !node_manifold_manager_ )
+           node_manifold_manager_ = new NodeManifoldManager<dim>();
            
          // a new manifold from the old and the new node using the provided default geometric classifier
          auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::SPLIT_BOUNDARY );
@@ -1867,8 +1891,6 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          //Need to assign outside nodes to OuterParent element
          std::vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
          for ( uint32_t n : outside_fnids){
-           std::cout << "Inside Node:  "   << outside_elmt->N(n)->Coordinate()
-                     << "\nOutside Node: " << in_out_nodes[outside_elmt->N(n)]->Coordinate() << std::endl;
            assert( std::fabs(outside_elmt->N(n)->Coordinate().DistanceTo(in_out_nodes[outside_elmt->N(n)]->Coordinate()))< 0.001 ) ;
            outside_elmt->Assign(n, in_out_nodes[outside_elmt->N(n)] );
          }
@@ -2799,18 +2821,23 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
      
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+     // checks
      vector<Face<dim>*> face_ptrs( first, last );
      sort( face_ptrs.begin(), face_ptrs.end() );
      if ( binary_search( face_ptrs.begin(), face_ptrs.end(), static_cast<Face<dim>*>(nullptr) ) )
        csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
-                         "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
+                       "input range contains 'nullptr' Face objects; have these Faces already been deleted?");
+                       
+     face_ptrs.erase( unique( face_ptrs.begin(), face_ptrs.end() ), face_ptrs.end() );
+     if ( face_ptrs.size() < faces_to_delete )
+       csmp_error.Note( ERROR, "MeshManager<dim>::DeleteAndRepairConnnectivity",
+                       "input range contained duplicate Face objects, which have been removed");
           
-     auto first1{ first };
-     
      while ( first != last )
        {
           assert( (*first) != nullptr );
-          // 1. disconnecting faces adjacent to the perimeter of the supplied face patch
+          // 1. disconnecting outside faces touching the perimeter of the input face patch
+          //    by nulling the neighbor pointers of the respective faces
           for ( auto i{0U}; i<(*first)->Neighbors(); i++ )
             if ( (*first)->Neighbor(i) != nullptr &&
                  !binary_search( face_ptrs.begin(), face_ptrs.end(), (*first)->Neighbor(i) ) )
@@ -2824,11 +2851,9 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
      
      // 2. deleting the supplied range of faces, nulling the pointers to them
      size_t deleted_faces{ faces_to_delete };
-     while( first1 != last ) {
-          if ( (*first1) == nullptr ) deleted_faces--;
-          faces_.erase( faces_.get_iterator(*first1) );
-          (*first1) = nullptr;
-          first1++;
+     for ( auto& fit : face_ptrs ) {
+          faces_.erase( faces_.get_iterator(fit) );
+          fit = nullptr;
        }
      
      return deleted_faces;

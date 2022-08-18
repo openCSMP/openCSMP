@@ -72,7 +72,7 @@ class IsoparametricLinearTetrahedron : public FiniteElement {
   private:
 
     std::vector<double>   W;
-    DenseMatrix<DM_MIN>     DN, NXYZ, IP;
+    DenseMatrix<DM_MIN>   DN, NXYZ, IP;
     double accDistance;
     uint32_t totIterations;
     uint32_t nonConvergenceOfProjections;

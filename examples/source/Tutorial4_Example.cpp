@@ -45,22 +45,22 @@ void Tutorial4_Example::Specifications()
 } // Initialize()
 
 
-// *************************************************************************************************
-//
-// Stokes (lubrication) equation (no inertia, incompressible, viscous flow)
-//
-// A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing
-// pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure
-// and velocity fields inside the connected pore scale. Note that special SAMG settings are needed
-// for solving the Stokes equation using a standard FE method. Furthermore, a stabilisation parameter
-// is introduced to allow the discretisation of velocity and pressure in the Stokes equation using
-// the same FE basis functions.
-//
-// For details on the numerical scheme see Zaretskiy, Geiger, Sorbie and Foerster
-// Advanced in Water Resources (2010), doi:10.1016/j.advwatres.2010.08.008
-//
-// *************************************************************************************************
 
+/**
+
+Stokes (lubrication) equation (no inertia, incompressible, viscous flow)
+
+A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing
+pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure
+and velocity fields inside the connected pore scale. Note that special SAMG settings are needed
+for solving the Stokes equation using a standard FE method. Furthermore, a stabilisation parameter
+is introduced to allow the discretisation of velocity and pressure in the Stokes equation using
+the same FE basis functions.
+
+For details on the numerical scheme see Zaretskiy, Geiger, Sorbie and Foerster
+Advanced in Water Resources (2010), doi:10.1016/j.advwatres.2010.08.008
+
+*/
 void Tutorial4_Example::Run()
 {
     // ----------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ void Tutorial4_Example::Run()
     model.InputBoundaryValue( BOTTOM, "nodal velocity y", makeScalar(DIRICH,0.0) );
 
     // Dirichlet (no-slip) conditions for velocity at boundaries of mineral grains
-    model.Region("GRAINS").ChangePropertyStatus( "nodal velocity x", DIRICH);
+    model.Region("GRAINS").ChangePropertyStatus( "nodal velocity x", DIRICH );
     model.Region("GRAINS").ChangePropertyStatus( "nodal velocity y", DIRICH );
 
     // Neumann condition for traction term. This uses a work around to translate the flux
@@ -269,7 +269,7 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
         area /= static_cast<double>(2); // 2 nodes per triangle or quadrilateral
 
         // second loop to calculate and scale nodal flux
-        for ( size_t i=0; i<(*eit)->Nodes(); i++ ) {
+        for ( auto i{0U}; i<(*eit)->Nodes(); i++ ) {
               // read existing flux at node i
               double tf  = (*eit)->N( i )->Read( tf_key );
               // read existing source at node i

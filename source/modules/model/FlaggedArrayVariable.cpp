@@ -444,7 +444,7 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
     fp.write( (char*) &depth, sizeof(size_t));
 
     // flags
-    const size_t flag_size(sizeof(int32_t));  // VARIABLE_FLAG
+    const size_t flag_size(sizeof(int8_t));  // VARIABLE_FLAG
     vector<VARIABLE_FLAG>::const_iterator flagsEnd( flags_.end() );
     for ( vector<VARIABLE_FLAG>::const_iterator it( flags_.begin() ); it != flagsEnd; ++it )
       fp.write( (char*) &(*it), flag_size);
@@ -457,6 +457,8 @@ bool FlaggedArrayVariable::Out( std::fstream& fp ) const
 
     return true;
   }
+  
+  
 
 
 /**
@@ -484,10 +486,10 @@ bool FlaggedArrayVariable::In( std::fstream& fp )
       std::cerr <<"\nFlaggedArrayVariable::In(): could not read binary record depth"<< std::endl;
       return false;
       }
-    Resize(depth);
+    Resize( static_cast<uint32_t>(depth) );
 
     // flags
-    const size_t  flags_size( sizeof( int32_t ) );  // VARIABLE_FLAG
+    const size_t  flags_size( sizeof( int8_t ) );  // VARIABLE_FLAG
     for ( size_t i(0); i < depth; ++i )
       {
         if( !fp.read( (char*) &flags_[i], flags_size) )

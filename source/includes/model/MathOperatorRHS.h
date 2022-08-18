@@ -80,7 +80,7 @@ class MathOperatorRHS {
     std::string   MaterialOperandName()         const;
     VARIABLE_TYPE MaterialOperandType()         const;
     PLACEMENT     MaterialOperandPlacement()    const;
-    size_t        MaterialOperandDataDepth()    const;
+    uint32_t      MaterialOperandDataDepth()    const;
 
     /// bop
     const Parameter& BasicOperand()             const;
@@ -88,8 +88,8 @@ class MathOperatorRHS {
     std::string   BasicOperandName()            const;
     VARIABLE_TYPE BasicOperandType()            const;
     PLACEMENT     BasicOperandPlacement()       const;
-    size_t        BasicOperandDataDepth()       const;
-    size_t        BasicOperandOffset()          const;
+    uint32_t      BasicOperandDataDepth()       const;
+    uint32_t      BasicOperandOffset()          const;
     void          BasicOperandOffset( size_t );
 
     /// top
@@ -98,8 +98,8 @@ class MathOperatorRHS {
     std::string   TestOperandName()             const;
     VARIABLE_TYPE TestOperandType()             const;
     PLACEMENT     TestOperandPlacement()        const;
-    size_t        TestOperandDataDepth()        const;
-    size_t        TestOperandOffset()           const;
+    uint32_t      TestOperandDataDepth()        const;
+    uint32_t      TestOperandOffset()           const;
     void          TestOperandOffset( size_t );
 
     /// Accumulation Process Settings

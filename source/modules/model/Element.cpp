@@ -750,7 +750,7 @@ void Element<dim>::Out() const
   if ( this->IsLine() )    cout << "line element";
   else if ( this->IsSurface() ) cout << "surface element";
   else if ( this->IsVolume() )  cout << "volume element";
-  cout <<"\n";
+  cout <<")\n";
 
   cout << "\n\tconnected nodes (indices : boundary flags):  ";
   string str("undefined");
@@ -761,15 +761,15 @@ void Element<dim>::Out() const
   cout << endl;
 
   cout << "\n\tconnected neighbors (finite element types : boundary flags):\n";
-  for ( auto i{0U}; i<this->Neighbors(); i++ )
-    if ( Neighbor( i ) != nullptr ) {
-      cout << "\t\t" << Neighbor( i )->Idx() << ": ";
-      cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << ": ";
-      str = parseBoundary( Neighbor( i )->AtBoundary(i) );
-      cout << str << endl;
-    }
-    else cout << "\t\tnone.\n";
-
+  for ( auto i{0U}; i<this->Neighbors(); i++ ) {
+        if ( Neighbor( i ) != nullptr ) {
+            cout << "\t\t"<<"elmt "<< Neighbor( i )->Idx() << ": ";
+            cout << parseFiniteElementType( Neighbor( i )->FE_Type() ) << " ";
+          }
+        else cout << "\t\tnone ("<< parseBoundary( AtBoundary(i) ) <<").";
+        cout << endl;
+     }
+     
     // barycentre
     Point<dim>  pt( this->BaryCenter() );
     if ( dim == 1U )

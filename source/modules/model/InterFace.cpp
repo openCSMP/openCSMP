@@ -146,7 +146,7 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
 
 
 /**
-   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes in opposite order are supplied by node-pointer vector'
+   Contructs complete InterFace using the Face nodes as inside nodes; outside nodes ready to use in opposite order are supplied by node-pointer vector'
    
    @note it takes care of assigning the higher dimensional neighbor elements
    @note assigns outside nodes to InterFace also changing these nodes on the higher-dimensional outside element
@@ -1252,6 +1252,10 @@ are used to find mid-points.
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 {
+   if ( current_side_ == MIDDLE )
+   	 throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
+                           "Method cannot be used for intervening (MIDDLE) elements");
+
    NodeCoordinateMatrix( XY, current_side_ );
 
 } // end NodeCoordinateMatrix
@@ -1259,6 +1263,11 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
 template<uint32_t dim>
 void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_SIDE side ) const
 {
+ 
+  if ( side == MIDDLE )
+    throw csmp::Exception( ERROR, "InterFace<dim>::NodeCoordinateMatrix",
+                           "Method cannot be used for intervening (MIDDLE) elements");
+
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
@@ -1459,9 +1468,8 @@ void  InterFace<dim>::Out() const
     else cout << "none.  ";
     cout << endl;
 
-    /// @todo (2-P) Remove typeid, implement name fct
     cout << "\tInterFace is connected via bridge pattern to: ";
-    cout << typeid(this).name() << endl;
+    cout << parseFiniteElementType( this->FE_Type() ) << endl;
 
     Point<dim>  pt( this->BaryCenter() );
 

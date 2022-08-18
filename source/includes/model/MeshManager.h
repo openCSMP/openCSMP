@@ -48,7 +48,7 @@ public:
   ~MeshManager();
 
   /// sets up distributed storage for variables, finite elements, and mesh connectivity, returns vectors of pointers remembering index-pointer mapping
-  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>&, bool initialise_FV_stencils = false );
+  bool Initialize( const PropertyDatabase<dim>&, const VSet<dim>&, bool initialise_FV_stencils );
 
   // ==============================================================
   //
@@ -118,7 +118,7 @@ public:
   const FiniteVolumeStencilManager<dim>* const FiniteVolumes() const { return fvm_manager_; }
 
   ///  assigns the finite volume stencils to the finite volume policies of the element, face, and interface so that this functionality can be used
-  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>& );
+  void InitializeFiniteVolumeStencils( const PropertyDatabase<dim>&, bool assign_stencils_to_elements );
   
  
   // ==============================================================
@@ -345,7 +345,8 @@ private:
 private:
 
   FiniteElementManager              fem_manager_;
-  FiniteVolumeStencilManager<dim>*  fvm_manager_ = nullptr; ///< current finite volume specifications
+  FiniteVolumeStencilManager<dim>*  fvm_manager_ = nullptr;           ///<  finite volume specifications
+  NodeManifoldManager<dim>*         node_manifold_manager_ = nullptr; ///<  node manifolds in case there are InterFace objects making up SplitBoundaries
 
   /// access is via root node or element only
   bool hybrid_element_mesh_;	///< true if the mesh consists of different FE types
@@ -354,8 +355,6 @@ private:
   plf::colony<Element<dim>>   elements_;       ///<  pointers to elements in the model
   plf::colony<Face<dim>>      faces_;          ///<  pointers faces making up the boundaries
   plf::colony<InterFace<dim>> interfaces_;     ///<  pointers to interfaces making up the split boundaries
-  // only used in models that contain node SplitBoundaries / IterFace objects
-  NodeManifoldManager<dim>*   node_manifold_manager_ = nullptr; ///<  node manifolds of SplitBoundaries
 
   friend class MeshManager_Test; ///< so that private methods can be tested
   friend class Model<dim>;       ///<  exclusive access to private member functions

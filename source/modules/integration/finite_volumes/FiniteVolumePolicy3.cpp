@@ -124,11 +124,42 @@ void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, ui
     e->FE()->Nr( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ), 
                  e->FE()->NRST );
  }
- 
 
 
- 
-/// SKM add-on
+
+template<template<uint32_t> class CELL>
+void FiniteVolumePolicy<3U,CELL>::N_AtFacetIntegrationPoint( uint32_t iFacet, uint32_t ip, std::vector<double>& NRST ) const
+ {
+    const CELL<3U>* e( static_cast<const CELL<3U>*>(this) );
+    assert( iFacet < fvptr_->Facets());
+    assert( ip < fvptr_->IntegrationPointsPerFacet());
+
+    // volume elements first, since speed matters the most
+    assert( e != nullptr );
+    if ( e->IsVolume() ) {
+      e->FE()->Nrst( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
+                     fvptr_->FacetIntegrationPoint( iFacet, ip, 1U ),
+                     fvptr_->FacetIntegrationPoint( iFacet, ip, 2U ),
+                     NRST );
+      return;
+    }
+
+    // surface elements
+    if ( e->IsSurface() ) {
+      e->FE()->Nrs( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
+                    fvptr_->FacetIntegrationPoint( iFacet, ip, 1U ),
+                    NRST );
+      return;
+    }
+
+    // line elements
+    e->FE()->Nr( fvptr_->FacetIntegrationPoint( iFacet, ip, 0U ),
+                 NRST );
+ }
+
+
+
+  /// SKM add-on
 template<template<uint32_t> class CELL>
 void FiniteVolumePolicy<3U,CELL>::N_AtSectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const
  {

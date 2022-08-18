@@ -98,7 +98,8 @@ void DES2PhaseSlightlyCompressibleFlow2D_Example::Run()
                        Courant_multiplier, 
                        PEP_parameter, 
                        1., //relaxing factor
-                       false, //tensor k 
+                       false, //tensor k
+                       false, //2nd order in space
                        flowfunctions);
 
     computeTotalMobility( model, flowfunctions );

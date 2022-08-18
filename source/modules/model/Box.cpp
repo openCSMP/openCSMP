@@ -1400,6 +1400,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
  {
     assert( eptr != nullptr );
+    assert( b_face < eptr->Faces() );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
     if ( eptr->Neighbor(b_face) != nullptr ) {

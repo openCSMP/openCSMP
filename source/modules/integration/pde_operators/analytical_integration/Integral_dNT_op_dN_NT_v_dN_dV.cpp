@@ -112,7 +112,7 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL& e
     // multiply BT (3x2) with B(2x3) -> (3x3)
     BT *= B;
          
-    const size_t nodes = e.Nodes();
+    const auto nodes = e.Nodes();
     MathOperatorLHS<dim>::LHS.Resize(nodes,nodes);  
     // dispersion term  
     MathOperatorLHS<dim>::LHS = BT; 

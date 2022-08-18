@@ -1214,7 +1214,6 @@ void SplitBoundary<dim>::PullApartSplitBoundary(double dist){
       if (in_node != out_node){
         if ( operated_in_nodes.find(in_node) == operated_in_nodes.end() ){
           //displace inside node
-          std::cout << in_node->Coordinate( ) << "  \t" <<  dist/2.0 * ifp->UnitNormal() << "  \t" << ifp->UnitNormal()  << std::endl;
           in_node->Coordinate(  in_node->Coordinate()  - dist/2.0 * ifp->UnitNormal()  );
           //adding nodes to operated nodes
           operated_in_nodes.insert(  in_node );

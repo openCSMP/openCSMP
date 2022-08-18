@@ -46,7 +46,7 @@ void NumIntegral_PT_op_dS<dim>::GetOperands( const Face<dim>& f )
     if( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR )
       {
         f.Read( this->MaterialOperandKey(), oper_ );
-        for( size_t i(0); i < dim; ++i )
+        for( auto i{0U}; i < dim; ++i )
           if( oper_.Flag(i) != NEUMANN )
             oper_(i) = 0.;
         return;
@@ -80,16 +80,16 @@ void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
 
    std::vector<double> N(0);
-   for ( size_t i(0); i < f.IntegrationPoints(); ++i )
-   {
-     N.clear();
-     f.N_AtIntegrationPoint( i, N );
-     double const detJ = f.det_JINV_AtIntegrationPoint(i);
-     double const weight = f.WeightAtIntegrationPoint(i);
-     for( size_t j(0); j < f.Nodes(); ++j )
-       for( int df(0); df < dim; ++df )
-         MathOperatorRHS<dim>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;
-   }
+   for ( auto i{0U}; i < f.IntegrationPoints(); ++i )
+     {
+       N.clear();
+       f.N_AtIntegrationPoint( i, N );
+       double const detJ = f.det_JINV_AtIntegrationPoint(i);
+       double const weight = f.WeightAtIntegrationPoint(i);
+       for( size_t j(0); j < f.Nodes(); ++j )
+         for( int df(0); df < dim; ++df )
+           MathOperatorRHS<dim>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;
+     }
 } 
 
 

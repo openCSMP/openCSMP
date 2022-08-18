@@ -308,14 +308,14 @@ uint32_t FiniteElementManager::InterpolationOrder() const
 bool FiniteElementManager::UsesElementsWithLocalCoordinateSystem() const
  {
     if ( dimensions == 3U ) {
-	    if ( hexa_ptr != nullptr && hexa_ptr->UsesLocalCoordinates() ) return false;
-	    if ( pyra_ptr != nullptr && pyra_ptr->UsesLocalCoordinates() ) return false;
-	    if ( pris_ptr != nullptr && pris_ptr->UsesLocalCoordinates() ) return false;
-	    if ( tetr_ptr != nullptr && tetr_ptr->UsesLocalCoordinates() ) return false;
+	    if ( hexa_ptr != nullptr && !hexa_ptr->UsesLocalCoordinates() ) return false;
+	    if ( pyra_ptr != nullptr && !pyra_ptr->UsesLocalCoordinates() ) return false;
+	    if ( pris_ptr != nullptr && !pris_ptr->UsesLocalCoordinates() ) return false;
+	    if ( tetr_ptr != nullptr && !tetr_ptr->UsesLocalCoordinates() ) return false;
       }
-    if ( quad_ptr != nullptr && quad_ptr->UsesLocalCoordinates() ) return false;
-	  if ( tria_ptr != nullptr && tria_ptr->UsesLocalCoordinates() ) return false;
-	  if ( line_ptr != nullptr && line_ptr->UsesLocalCoordinates() ) return false;
+    if ( quad_ptr != nullptr && !quad_ptr->UsesLocalCoordinates() ) return false;
+	  if ( tria_ptr != nullptr && !tria_ptr->UsesLocalCoordinates() ) return false;
+	  if ( line_ptr != nullptr && !line_ptr->UsesLocalCoordinates() ) return false;
    
     return true;
  }

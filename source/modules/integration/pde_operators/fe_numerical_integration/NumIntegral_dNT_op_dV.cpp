@@ -49,7 +49,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
                                             this->MaterialOperandPlacement() == FACE    ||
                                             this->MaterialOperandPlacement() == REGION );
     const uint32_t n_nodes{ e.Nodes() };
-   
+ /*
     if ( is_simplex_element_type && piecewise_constant_material ) {
          const double detJ = e.dN_AtBaryCenter( B_ );
          // transposing B -> BT  O.K.
@@ -66,7 +66,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
              MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
          return;
       }
-
+*/
 
     //  When this is not a simplex element but the material property is an element property
     // ------------------------------------------------------------------------------------

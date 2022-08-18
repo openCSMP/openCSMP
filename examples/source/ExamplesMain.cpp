@@ -75,6 +75,7 @@ int main()
             examplesSuite.RegisterExample( new DESAdvectionDiffusion3D_Example() );
             examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow2D_Example() );
             examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow3D_Example() );
+            examplesSuite.RegisterExample( new DES2PhaseFlowWithSplitBoundary_Example() );
             examplesSuite.RegisterExample( new QuadrilateratorToCSMPbinary_Example() );
             examplesSuite.RegisterExample( new Intrepid_Example() );
             examplesSuite.RegisterExample( new SKUA_Example() );

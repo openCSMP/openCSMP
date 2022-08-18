@@ -1385,6 +1385,8 @@ void test_Create_SlitRectangle_VSet( VSet<2U>& vset, size_t x_dimension, size_t 
 
 
 /**
+    3D model, which is a cube of hexahedra with six pyramid elements in the middle.
+    
     Creates:
     - 32 elements (26 hex + 6 pyramids)
     - 64 nodes
@@ -1411,9 +1413,7 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
     int              nodes((iDim_i*iDim_j*iDim_k)+1);  //number of nodes: 64 on a 4x4x4 grid + 1 barycenter
   	deque<uint32_t>  npes(iNrOfElements);  //number of nodes per element
     deque<uint32_t>  epes(iNrOfElements);  //element type per element
-    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON);
-
-// NB: the pyramid elements still need to be dealt with
+    deque<int8_t>    etypes(iNrOfElements,ISOPARAMETRIC_LINEAR_HEXAHEDRON); // NB: the pyramid elements still need to be dealt with
 
     for( int iElement = 0; iElement < 26U; iElement++ )
   	{
