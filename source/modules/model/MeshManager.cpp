@@ -1107,14 +1107,12 @@ Face<dim>* const MeshManager<dim>::ReplaceElementByFace( csmp::Element<dim>* ept
 
 
 /**
-    As above but for InterFace. All nodes get duplicated unless they are those of an element at the perimeter of the lower-dimensional region
-    and flagged NOT. In that case inside and outside nodes are taken to be the same (inside) node.
-    
-    If one of the nodes involved in the construction process is already a manifold, no extra nodes are added but the inside and outside nodes
-    are used for the manifold construction.
-    @todo is this sufficient? - else the manifold type might have to be checked for additional diagnostics.
-    
-    @attention This assumes that the element from which the InterFace is created is appropriately connected to its neighbors.
+  Replaces a lower dimensional element with an InterFace object and deletes lower dim element
+  @attention Construction process assumes Nodes are ALREADY duplicated and assigned to the Inner and Outer Parent.
+
+  @brief Performs input parameter checks. Constructs InterFace object using consgtructor and places in interfaces_ container.
+  Deletes lower dimensional element and returns Interface object pointer
+  Neighbor connectivity of parent elements are updated as they are unnasigned from each other (happens during interface construction).
 */
 template<uint32_t dim>
 InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element<dim>* eptr,
@@ -1150,38 +1148,16 @@ InterFace<dim>* const MeshManager<dim>::ReplaceElementByInterFace( csmp::Element
    assert( adjacent_face_of_inner_element < inner_eptr->Faces() );
    if ( outer_eptr != nullptr ) assert( adjacent_face_of_outer_element < outer_eptr->Faces() );
    
-   
-   // 1. duplicating inside nodes when necessary and creating corresponding manifolds
-   // -------------------------------------------------------------------------------
-    // constructing the node manifold manager if necessary
-    const bool no_previous_manifolds = ( node_manifold_manager_ == nullptr ) ? true : false;
-    if ( no_previous_manifolds )
-      node_manifold_manager_ = new NodeManifoldManager<dim>();
 
-   const auto n_nodes{ eptr->Nodes() };
-   vector<Node<dim>*>  outside_nodes( n_nodes, nullptr );
-   
-   for ( uint32_t i{0U}; i<n_nodes; i++ )
-     // if the node already is a manifold, the outside node in it is found and assigned
-     if ( eptr->N(i)->IsManifold() ) {
-          for ( uint32_t j{0U}; j<eptr->N(i)->Manifold()->Branches(); j++ )
-            // FORMERLY: if ( eptr->N(i)->Manifold()->InterFaceSide(j) == OUTSIDE )
-            if ( eptr->N(i) != eptr->N(j) )
-              // the outside nodes must be listed in reverse order
-              outside_nodes[ n_nodes-i-1U ] = eptr->N(i)->Manifold()->N(j);
-       }
-     // else the node is duplicated including creation of the manifold
-     else outside_nodes[ n_nodes-i-1U ] = Duplicate( eptr->N(i), nvars );
-
-
-   // 2. constructing the new interface
+   // 1. constructing the new interface
    // ---------------------------------
-   const size_t face_id = faces_.size(); // since the face will be added at the end of the colony
+   const size_t iface_id = interfaces_.size(); // since the interface will be added at the end of the colony
+   //Creates interface which unassigns the InnerParent and OuterParent elements that share a face with interface from each other
    typename plf::colony<InterFace<dim>>::iterator
-     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,
+     fit = interfaces_.emplace( InterFace<dim>( *eptr, inner_eptr, outer_eptr,        //gets nodes from higher dim Parent face (nodes should be already duplicated
                                                 adjacent_face_of_inner_element, adjacent_face_of_outer_element,
                                                 lvars, ivars ) );
-   (*fit).Idx( face_id );
+   (*fit).Idx( iface_id );
 
    // 3. deleting the original Element
    // --------------------------------
@@ -1774,26 +1750,36 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
    @param last iterator to the last FaceConstructionData of the dim-1 region which also points behind the last perimeter face
 
-   Steps - starting with the processing of interior FaceConstructionData:
+   @param first iterator to perimeter node vector of dim-1 region
 
-   1. The creation of InterFace objects in the interior and the necessary duplication of nodes occur simultaneously.
+   @param last iterator to perimeter node vector of dim-1 region
 
-   2. Interface objects are constructed from the second range, also duplicating nodes at the model- or domain boundaries. No new nodes are inserted if the boundary terminates inside of a higher dimensional region. In this case, interior and exterior perimeter nodes on the SplitBoundary perimeter are assigned the same, pre-existing perimeter node inherited from the converted boundary.
+   @param An set which will be overwritten by method with region_identifier ids which should be scheduled for rebuilding since the elements (outside) have new nodes
 
-   During the construction of all InterFace objects, the higher dimensional neighbors are assigned and the corresponding Element faces are remembered.
+   @assumption Assumes element property "region identifier" is defined.
 
-   3. Former higher-dimensional Element neighbors that are now separated by the SplitBoundary are disconnected from one another assigning their neighbor  pointers to 'nullptr'.
-     (this step is not necessary if the whole connectivty is rebuilt anyway)
+   Steps - Creation of interfaces from FaceConstructionData:
 
-   4. The new InterFace objects are connected with one-another so that a SplitBoundary constructor has all the necessary information to distinguish interior from perimeter.
+   1. Loops over FaceConstructionData and duplicates nodes of InnerParent if they are found to Not be within the Perimeter Nodes supplied.
+      If nodes are at a perimeter, no duplication occurs. If nodes are already a manifold (intersection), then duplication occurs (even at perimeter).
 
-   5. Finally the node-to-parent element connectivity of the InterFace nodes needs to be rebuilt restricting parent element access to the side of the interface that the node forms part of
+   2. INTERNAL flags are added to nodes on both INSIDE and OUTSIDE unless at a model boundary.
 
-   @author SKM
-   @date 6/4/22
+   3. Outer Parent is assigned the new nodes created
 
+   4. Interface objects are constructed based on Former higher-dimensional Element neighbors that are now connected to different nodes, but which share
+      the same coordinates. Interface construction uses the coordinates to distinguish matching nodes. Higher dim elements unnassign each other as neighbors in the process.
 
-   //TODO: Take away dependency on PerimeterNodes iterators when the TOPO flags can be relied upon!!
+   5. A neighbor search algorithm is performed on the outside of the interface objects which replaces the old inside node with the new duplicate node for all parent elements
+      (perimeter nodes must be well defined for this to exclude the inside nodes from the assignment)
+      All the outside elements are queried for their unique Region they belong to using "region identifier" property, this is stored for SplitBoundaryInterface
+
+   5. Finally the node-to-parent element connectivity for the whole mesh is rebuilt.
+
+   @author E.P
+   @date 18/8/22
+
+   //TODO: Take away dependency on PerimeterNodes iterators when the TOPO flags can be relied upon
 
 */
 template<uint32_t dim>
@@ -1810,6 +1796,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     vector<InterFace<dim>*>  iface_ptrs;
     const size_t  n_original_elmts{ static_cast<size_t>(std::distance(first,last))};
 
+    const csmp::Index region_key = dbase.StorageKey( "region identifier");
+
     if (n_original_elmts == 0U ) {
          csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
          return iface_ptrs;
@@ -1825,8 +1813,6 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     const LocalVariables             lvsNode( dbase.LocalVariablesAt(NODE) );
     const LocalVariables             lvsInterfaces(dbase.LocalVariablesAt(INTER_FACE) );
     const IntegrationPointVariables  lvsIntegrationPoints( dbase.IntegrationPointVariablesAt(INTER_FACE) );
-
-
 
     set<Element<dim>*>    outside_neighbors_to_search;
     set<Element<dim>*>    inside_parents;
@@ -1849,35 +1835,49 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          outside_neighbors_to_search.insert( outside_elmt );
          inside_parents.insert( inside_elmt );
 
-         // 1.2 duplicating the nodes creating manifolds as necessary
+         // 1.2 duplicating the nodes creating manifolds as necessary and adding boundary flags
          // ---------------------------------------------------------
          //getting vector of inside nodes to iterater
          std::vector<uint32_t> inside_fnids = inside_elmt->FE()->NodesOfFace( first->InnerElementFace() );
-
-         vector<Node<dim>*> outside_nodes( inside_fnids.size(), nullptr );
+         map<Node<dim>*, Node<dim>*> in_out_nodes;
          auto               nit{ new_nodes.end() };
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
-         for ( auto i : inside_fnids ) {
-           //If we are at not at perimeter, or if we are at intersection (mani
-           if ( std::find( perim_first, perim_last, inside_elmt->N(i) ) == perim_last || inside_elmt->N(i)->IsManifold()  ){
-           //if ( ((*first)->N(i)->Attribute() != PERIMETER_POINT && (*first)->N(i)->Attribute() != PERIMETER_LINE ) || inside_elmt->N(i)->IsManifold() ){        //WHEN WE CAN RELY ON TOPO FLAGS
-             if ( (nit=new_nodes.find( inside_elmt->N(i) )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
-                  outside_nodes[i] = Duplicate( inside_elmt->N(i), lvsNode );
-                  new_nodes.insert( make_pair( inside_elmt->N(i), outside_nodes[i] ) );
+         for ( uint32_t i{0U}; i<inside_fnids.size(); ++i ) {
+           Node<dim>* inside_node = inside_elmt->N(inside_fnids[i]);
+           //If we are at not at perimeter, or if we are at intersection (manifold)
+           if ( std::find( perim_first, perim_last, inside_node ) == perim_last || inside_node->IsManifold()  ){
+             if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
+                  //duplicating outside node if not already duplicated
+                  Node<dim>* out_node = Duplicate( inside_node, lvsNode );
+                  in_out_nodes.insert( make_pair( inside_node, out_node ));
+                  new_nodes.insert( make_pair( inside_node, out_node ) );
                }
              // if the necessary new node was already created earlier it was retrieved and is assigned here
-             else outside_nodes[i] = (*nit).second;
-           } else
-             outside_nodes[i] = inside_elmt->N(i);            //take inside node when node is at perimeter of model
-         }
-           // reversing the sequence once outside nodes are calibrated
-         reverse( outside_nodes.begin(), outside_nodes.end() );             //TODO: STEPHAN -> QUADRATIC WILL NOT WORK
+             else in_out_nodes.insert( make_pair( inside_node, (*nit).second ));
+           } else in_out_nodes.insert(make_pair( inside_node, inside_node ));            //take inside node when node is at perimeter of model
 
-         // 1.3 construction of InterFace from parent elements
+           // add Inside and outside node INTERNAL flag if not at boundary
+           if ( inside_node->AtBoundary() == NOT ) {
+             inside_node->AtBoundary(INTERNAL);
+             in_out_nodes[inside_node]->AtBoundary(INTERNAL);
+           }
+
+         }//end of node loop and duplication
+
+         //Need to assign outside nodes to OuterParent element
+         std::vector<uint32_t> outside_fnids = outside_elmt->FE()->NodesOfFace( first->OuterElementFace() );
+         for ( uint32_t n : outside_fnids){
+           std::cout << "Inside Node:  "   << outside_elmt->N(n)->Coordinate()
+                     << "\nOutside Node: " << in_out_nodes[outside_elmt->N(n)]->Coordinate() << std::endl;
+           assert( std::fabs(outside_elmt->N(n)->Coordinate().DistanceTo(in_out_nodes[outside_elmt->N(n)]->Coordinate()))< 0.001 ) ;
+           outside_elmt->Assign(n, in_out_nodes[outside_elmt->N(n)] );
+         }
+
+         // 1.4 construction of InterFace from parent elements
          // --------------------------------------------------
-         //     - higher-dimensional nbors are already known
+         //     - higher-dimensional nbors are already known (INSIDE , OUTSIDE)
          //     - faces of higher dimensional neighbors are also known
-         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
+         //     - nodes on outside are known and ASSIGNED to the OuterParent (old nodes are on inside, new nodes on outside)
          //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
          iface_ptrs.push_back(  ReplaceElementByInterFace( first->LowerDimElement(),
                                                            first->InnerElement(),
@@ -1892,103 +1892,46 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
 
 
+    // 2. Assigning new nodes to outside elements - Neighbor search being performed
+    // ---------------------------------------------------------
+     // Loop over outer parents and search neighbors with old node
+     while ( outside_neighbors_to_search.empty() == false ){
+       typename set<Element<dim>*>::iterator eit = outside_neighbors_to_search.begin(); //take start of set
 
+       //search for neighbor
+       for (uint32_t nbor{0U}; nbor< (*eit)->Neighbors(); nbor++){
+         Element<dim>* e_nbr = (*eit)->Neighbor(nbor);
+         if ( e_nbr != nullptr ){                                              //if neighbor exists
+           //search the nodes of neighbor for inside node
+           uint32_t n_nodes = e_nbr->Nodes();
+           for (uint32_t n{0U}; n < n_nodes; n++ ){
+             typename std::map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
+             if ( found_it != new_nodes.end() ){
+               e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
+               assert( inside_parents.find(e_nbr) == inside_parents.end() );
+               outside_neighbors_to_search.insert( e_nbr ); //add to search, so that neighbors of this neighbor are searched
 
-
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-
-    // 2. Converting perimeter faces into interfaces, dealing with boundaries
-    // ----------------------------------------------------------------------
-    // (original Face objects are removed)
-    first = bfirst;
-    while( first != last )
-      {
-         // 2.1 initial checks
-         // (input range must not contain any nullptrs)
-         assert( (*first) != nullptr );
-
-         // 2.2 duplicating nodes but only if we are at a model boundary or the node already is a manifold
-         // ----------------------------------------------------------------------------------------------
-         // (if the node is not duplicated, the original node is inserted into the InterFace outside node vector)
-         const auto         n_nodes{ (*first)->Nodes() };
-         vector<Node<dim>*> outside_nodes( n_nodes, nullptr );
-         auto               nit{ new_nodes.end() };
-         for ( auto i{0U}; i<n_nodes; i++ )
-           if ( ((*first)->N(i)->AtBoundary() != NOT && (*first)->N(i)->AtBoundary() != INTERNAL) || (*first)->N(i)->IsManifold() ) {
-                if ( (nit=new_nodes.find((*first)->N(i))) == new_nodes.end() ) {
-                     outside_nodes[i] = Duplicate( (*first)->N(i), nvars );
-                     new_nodes.insert( make_pair( (*first)->N(i), outside_nodes[i] ) );
-                  }
-                else outside_nodes[i] = (*nit).second;
+               //Extract outside neighbor and his Reg ID (which is defined on the elements within SplitBoundaryInterface
+               ScalarVariable reg_id;
+               e_nbr->Read( region_key, reg_id );
+               region_material_ids.insert( reg_id() );
              }
-           else outside_nodes[i] = (*first)->N(i);
+           } //looped over all nodes
+         } //valid neighbor
+       }//end of neighbor search - all relevant neighbors have been added to the future neighbor search - and node numbers updated
 
-         reverse( outside_nodes.begin(), outside_nodes.end() );
+       // Current element has completed its neighbor search and node assignment
+       outside_neighbors_to_search.erase( eit );
 
-         // 2.3 construction of InterFace on the model perimeter
-         // ----------------------------------------------------
-         //     - higher-dimensional nbors are already known
-         //     - faces of higher dimensional neighbors are also known
-         //     - nodes on outside are not known (old nodes are on inside, new nodes on outside)
-         //     - nodes on inside and outside are the same for perimeter interfaces away from boundaries
-         //     - boundaries are inferred, when:
-         //       - BOX_BOUNDARY flag is !NOT
-         interface_ptrs.push_back( ReplaceFaceByInterFace( (*first), lvars, ivars, outside_nodes ) );
-         first++;
-      }
+     }//search continues untill all inside nodes are updated
 
+     // TODO: these are global changes! - do this only for nodes that are affected
+    UpdateConnectivity();
 
-     // 3. cleaning up inter-CELL and node to parent connectivity
-     // ---------------------------------------------------------
+    cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
+    cout << new_nodes.size() <<" new nodes."<< endl;
 
-      // Reassigning outside parent elements with new node
-      // 3.1 Loop over outer parents and search neighbors with old node
-      while ( outside_neighbors_to_search.empty() == false ){
-        typename set<Element<dim>*>::iterator eit = outside_neighbors_to_search.begin(); //take start of set
-
-        //search for neighbor
-        for (uint32_t nbor{0U}; nbor< (*eit)->Neighbors(); nbor++){
-          Element<dim>* e_nbr = (*eit)->Neighbor(nbor);
-          if ( e_nbr != nullptr ){                                              //if neighbor exists
-            //search the nodes of neighbor for inside node
-            uint32_t n_nodes = e_nbr->Nodes();
-            for (uint32_t n{0U}; n < n_nodes; n++ ){
-              typename std::map<Node<dim>*,Node<dim>*>::iterator found_it = new_nodes.find( e_nbr->N(n) ); //searching for inside Node in element
-              if ( found_it != new_nodes.end() ){
-                e_nbr->Assign(n, found_it->second ); //replacing inside node of neighbor with outside node
-                assert( inside_parents.find(e_nbr) == inside_parents.end() );
-                outside_neighbors_to_search.insert( e_nbr ); //add to search, so that neighbors of this neighbor are searched
-              }
-            } //looped over all nodes
-          } //valid neighbor
-        }//end of neighbor search - all relevant neighbors have been added to the future neighbor search - and node numbers updated
-
-        // Current element has completed its neighbor search and node assignment
-        outside_neighbors_to_search.erase( eit );
-
-      }//search continues untill all inside nodes are updated
-
-      */
-
-      // TODO: these are global changes! - do this only for nodes that are affected
-     UpdateConnectivity();
-
-     cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
-     cout << new_nodes.size() <<" new nodes."<< endl;
-
-     return iface_ptrs;
+    return iface_ptrs;
 
  } // end ReplaceFacesByInterFaces
 

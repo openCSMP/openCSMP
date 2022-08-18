@@ -922,7 +922,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
       
     // creating region labels and tagging the regions with unique integer identifiers
     // if "region identifier" is already defined it is assumed that it has already been initialised as well
-    const string    region_tag("region identifier");
+    const string    region_tag("region identifier");  //Note: this name is hard coded in MeshManager::ReplaceElementsByInterface()
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
          model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
@@ -1036,10 +1036,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
       }
     patch_data.clear();
 
-    // flagging the regions on the outside of the new split boundaries for update of their connectivity
-    // because they will contain new nodes
-    for (size_t i : region_material_ids )
-      model.Region( region_names[ i ] ).ScheduleForRebuilt();
+
 
     //model.Region( region_names[ it.second[0U].Materials().second ] ).ScheduleForRebuilt();       //TODO: E.P Bug Potential This does not include all elements on OUTSIDE - just ones connected to interface
 
@@ -1048,13 +1045,8 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     cout << "\n\t\t"<<"Added "<< model.Mesh().Faces() - n_original_faces <<" faces to mesh.";
     cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;
 #endif
-   
-    //  3.2 connect them with one another (neighbors); Boundary::EstablishNeighborConnectivity( vector<Face<dim>*>& ); this is important because
-    //      any ModelSubDomain creation relies on this connectivity during identification of interior and perimeter.
-    //      - this method also updates node to parent element connectivity
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // TODO: these are global changes! - not sure how to improve this because so many regions are affected
-    model.Mesh().UpdateConnectivity();
+
+    //Connectivity is already handled inside the MeshManager
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Creating SplitBoundary objects for each of the mesh patches established above
@@ -1062,22 +1054,24 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     for ( auto i{0U}; i<patch_names.size(); ++i )
       AddSplitBoundary( patch_names[i].c_str(), iface_ptrs_per_patch[i].begin(), iface_ptrs_per_patch[i].end(), INTERNAL );
       
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. Assign BOX_BOUNDARY flags to the nodes of each new patch by using the underlying region
-    // ----------------------------------------------------------------------------------------------------------------------------------------------
-    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit )
-      if ( (*nit)->AtBoundary() == NOT )
-        (*nit)->AtBoundary(INTERNAL);
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (their elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     const bool remove_elmts{ false };
     model.RemoveRegion( dim_1_region, remove_elmts );
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // 7. Flagging the regions on the outside of the new split boundaries for update of their connectivity
+    // because they will contain new nodes
+    for (size_t i : region_material_ids )
+      model.Region( region_names[ i ] ).ScheduleForRebuilt();
+
+    //update outside regions
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 7. extra diagnostics and output of boundary names
+    // 8. extra diagnostics and output of boundary names
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     if ( patch_names.empty() ) {
          ErrorHandler::Instance().Note( ERROR, "SplitBoundaryInterface::CreateSplitBoundaryFrom:", dim_1_region, "no SplitBoundary patches could be created." );

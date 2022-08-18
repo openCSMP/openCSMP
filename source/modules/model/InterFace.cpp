@@ -80,6 +80,9 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
     If not, the outside nodes are rotated until a match is obtained or a FATAL_ERROR is reported.
  
     @attention constructor expects that the Nodes have already been multiplicated and turned into manifolds elsewhere.
+               Nodes of face of outside element are taken and rotated to be matching in the "reverse" order to Inside Node.
+               Note: "reverse" is in quotation marks because it's not quite reversed if you consider MidPoint Nodes
+
 */
 template<uint32_t dim>
 InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
@@ -109,21 +112,27 @@ InterFace<dim>::InterFace( csmp::Element<dim>& elmt,
 
    // 1. assigning the nodes to the new InterFace
    // -------------------------------------------
-   // INSIDE nodes
+   // INSIDE nodes ---------
    uint32_t count{0U};
    for ( const auto& nit : innerParent_->FE()->NodesOfFace( inner_parent_face_id_ ) )
      Assign( count++, innerParent_->N(nit), INSIDE );
-   // OUTSIDE nodes
+
+   // OUTSIDE nodes --------
    count = 0U;
    for ( const auto& nit : outerParent_->FE()->NodesOfFace( outer_parent_face_id_ ) )
      Assign( count++, outerParent_->N(nit), OUTSIDE );
+
+   // Outside nodes are then rotated so that the last corner node of Inside matches with the first corner node on the outside
+   // this is needed to ensure MatchingN(i,INSIDE) == MatchingN(i,OUTSIDE)
+   // this breaks the idea that outside nodes match with the nodes of the face of outside element (they may be rotated )
+   // Therefore N(i,OUTSIDE) != OuterParent->N( OuterParent->NodesOfFace( outer_parent_face_id)[i] )
+   InitialiseNodeVector();
 
    // 2. checking that the nodes are collocated
    // ----------------------------------------------------------------------
 #ifdef DEBUG
    if ( !AreNodesCollocated() )
      throw csmp::Exception( ERROR, "InterFace(costum contructor", "supplied interface nodes are not collocated");
-   // TODO: make nodes collocated by rotating outside node vector
 #endif
 
    // 3. detaching the higher-dimensional element neighbors from one another
@@ -807,11 +816,11 @@ vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVector()
       Performs test using the distanceTo operator on the node points
 */
 template<uint32_t dim>
-bool  InterFace<dim>::AreNodesCollocated() const
+bool  InterFace<dim>::AreNodesCollocated(double tolerance) const
  {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     for ( uint32_t i{0U}; i<n_nodes; i++ )
-      if ( !approximatelyEqual( node_connector_[i]->Coordinate().DistanceTo( node_connector_[node_connector_.size()-1-i]->Coordinate() ), 0. ) )
+      if ( !approximatelyEqual( this->MatchingN(i,INSIDE)->Coordinate().DistanceTo( this->MatchingN(i,OUTSIDE)->Coordinate() ), 0., tolerance ) )
         return false;
       
     return true;
@@ -1211,7 +1220,7 @@ double InterFace<dim>::NodeSpacing( uint32_t n ) const
   {
     const uint32_t n_nodes{ this->FE()->Nodes() };
     assert( n < n_nodes );
-    return node_connector_[n]->Coordinate().DistanceTo( node_connector_[n_nodes-1-n]->Coordinate() );
+    return MatchingN(n,INSIDE)->Coordinate().DistanceTo( MatchingN(n,OUTSIDE)->Coordinate() );
   }
 
 
@@ -1269,7 +1278,7 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   this->FE()->XY.Resize( n_nodes, dim );
 
   for ( auto i{0U}; i<n_nodes; ++i ) {
-       const Point<dim> mid_point = (this->N( i, INSIDE )->Coordinate() + this->N( i, OUTSIDE )->Coordinate()) / 2.;
+       const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
     }
 

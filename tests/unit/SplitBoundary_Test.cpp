@@ -17,9 +17,8 @@ namespace csmp {
 void SplitBoundary_Test::run()
 {
    // SKM 26/7/22 - test model received from Anne-Laure Tertois
-   Test_InitialiseSKUA_Model();
+   //Test_InitialiseSKUA_Model();
     
-return;
 
     //E.P Test Splitboundary members
     //linear 2d tests
@@ -438,7 +437,7 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
       for ( uint32_t n{0U}; n<n_nodes;++n){
         //Nodes should match that of face
         _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
-        _test( ifp->N(n,OUTSIDE) == ifp->OuterParent()->N(nids_out[n])) ;
+        //_test( ifp->N(n,OUTSIDE) == ifp->OuterParent()->N(nids_out[n])) ; The nodes of face of OUTSIDE Volumetric Element are not collocated with the Outside of Interface node_connector.
 
         //Testing matching assignment
         //inside remains unchanged
@@ -514,7 +513,6 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
 
 
   std::vector<SplitBoundary<dim>> sb_vec{sb1};
-  size_t i = 0;
   for ( auto& sb : sb_vec){
     for (auto& ifp : sb.CellVector() ){
 
@@ -540,49 +538,56 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_3D( const char* mesh_file){
                             nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
+      std::set<Node<dim>*> outside_nds_interface;
+      std::set<Node<dim>*> outside_nds_face;
       uint32_t n_nodes = ifp->FE()->Nodes();
       for ( uint32_t n{0U}; n<n_nodes;++n){
-        //Nodes should match that of face
+        //Nodes should match that of INSIDE face
         _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
-        _test( ifp->N(n,OUTSIDE) == ifp->OuterParent()->N(nids_out[n])) ;
+
+        //Nodes should contain same nodes of OUTSIDE face, but may be rotated, so may not match
+        outside_nds_interface.insert( ifp->N(n,OUTSIDE));
+        outside_nds_face.insert( ifp->OuterParent()->N(nids_out[n]));
 
         //Testing matching assignment
         //inside remains unchanged
         _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
-
-        //Testing nodes are duplicated in interior and the same on perimeter
-        if (i == 0){
-          //if node is not on perimeter
-          if ( perim_nodes1.find( ifp->N(n,INSIDE) ) == perim_nodes1.end() ){
-            //test node is duplicated
-            _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
-
-            //Inside Node is in bottom half
-            _test( BottomUnit1.Contains( ifp->N(n,INSIDE) ) );
-            //matching Outside Node is in top half
-            _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
-            //matching outside node not in bottom half
-            _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
-
-            //Testing inside parents assignmnet by checking that are part of BottomUnit region
-            for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
-              _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
-              _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
-            }
-            for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
-              _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
-              _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
-            }
-
-          }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match
-        }
-
         //Outside coordinates must match with Inside and middle
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
         _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+
+        //Testing nodes are duplicated in interior and the same on perimeter
+        //if node is not on perimeter
+        if ( perim_nodes1.find( ifp->N(n,INSIDE) ) == perim_nodes1.end() ){
+          //test node is duplicated
+          _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
+
+          //Inside Node is in bottom half
+          _test( BottomUnit1.Contains( ifp->N(n,INSIDE) ) );
+          //matching Outside Node is in top half
+          _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+          //matching outside node not in bottom half
+          _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE) ) );
+
+          //Testing inside parents assignmnet by checking they are part of BottomUnit region
+          for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
+            _test( BottomUnit1.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+            _test( !TopUnit1.Contains( ifp->N(n,INSIDE)->Parent(p)));    //top unit doenst have parent of inside node
+          }
+          for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
+            _test( !BottomUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
+            _test( TopUnit1.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+          }
+
+        }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match if on perimeter
+
+
       }
+
+      //outside nodes must match in content but may be rotated, so we test just the content
+      _test(outside_nds_interface == outside_nds_face);
+
     }
-  ++i; //increment i for perimeter nodes test
   }
 
   //For visualisation purposes
