@@ -192,8 +192,8 @@ void PropertyDatabase_Test::VariablesModelTest(size_t v)
 
 void PropertyDatabase_Test::SubsetVariablesTest()
 {
-  PropertyDatabase<3> restored_pdb( "CSMP-variables-vsTestLocked.txt" );
-  restored_pdb.BinaryOut( "CSMP-variables-vsTestLocked.dat" );
+  PropertyDatabase<3> restored_pdb( "PropertyDatabase_Test-variables.txt" );
+  restored_pdb.BinaryOut( "PropertyDatabase_Test-variables.dat" );
   _test( restored_pdb.VariableCount() == 51 );
 
   set<string> subset_variables;
@@ -207,7 +207,7 @@ void PropertyDatabase_Test::SubsetVariablesTest()
     subset_size++;
   }
 
-  PropertyDatabase<3> pdb_subset( "CSMP-variables-vsTestLocked.dat", subset_variables );  
+  PropertyDatabase<3> pdb_subset( "PropertyDatabase_Test-variables.dat", subset_variables );  
   _test( pdb_subset.VariableCount() == subset_variables.size() );
 }
 
@@ -237,7 +237,7 @@ void PropertyDatabase_Test::run()
 
 void PropertyDatabase_Test::FromFile()
 {
-  PropertyDatabase<3> restored_pdb("CSMP-variables-vsTestLocked.txt");
+  PropertyDatabase<3> restored_pdb("PropertyDatabase_Test-variables.txt");
 }
 
 }

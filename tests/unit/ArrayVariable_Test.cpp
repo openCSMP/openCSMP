@@ -34,7 +34,7 @@ namespace csmp {
        _test( !av2.IsWithinRange( 11.2, 12. ) );
        _test( !av2.IsWithinRange( 10.2, 10.8 ) );
 
-       PropertyDatabase<3> pdb("CSMP-variables-vsTestLocked.txt");
+       PropertyDatabase<3> pdb("PropertyDatabase_Test-variables.txt");
        ArrayVariable av3( "element array 2", pdb, 1.3, DIRICH );
        _test( av3.Size() == 22 );
        _test( av3.Flag() == DIRICH );

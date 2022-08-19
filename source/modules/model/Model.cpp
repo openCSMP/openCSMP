@@ -191,6 +191,9 @@ carried out since all basic variables are initialized to NAN (not a number)
 by default.
 
 @attention per default this constructor will not create any boundaries
+
+@attention the regions file is used only if there is one
+
 */
 template<uint32_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset,

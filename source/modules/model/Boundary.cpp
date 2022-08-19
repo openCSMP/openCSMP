@@ -257,7 +257,7 @@ void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_v
       if ( prop_key.place == BOUNDARY ) {
            if ( sd != COMPLETE )
              csmp_error.Note( WARNING, "Boundary<dim>::InputPropertyValue",
-                                          input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
+                              input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
            this->Store( prop_key, new_value );
            return;
         }
