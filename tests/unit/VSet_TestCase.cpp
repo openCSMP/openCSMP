@@ -1,17 +1,13 @@
 #include "VSet_TestCase.h"
 #include "Boundary.h"
 #include "Region.h"
-#include "ANSYS_Interface.h"
 #include "ModelTopology.h"
-#include "CSMP_highLevelUtilities.h"
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "vsetMakers.h"
 #include "VTK_Interface.h"
-
-// File I/O and Initialization
-#include "ANSYS_Model3D.h"
+#include "ANSYS_Interface.h"
 
 using namespace std;
 
@@ -37,8 +33,7 @@ void VSet_TestCase::run()
    _test( Test_EstablishElementConnectivity2D() );
    _test( Test_EstablishElementConnectivity3D() );
    _test( Test_ModelConstructionAndSaving2D() );
-   Test_ANSYS_ModelConstructionAndSaving2D( "HorFracs2D" );
-   Test_ANSYS_ModelConstructionAndSaving3D( "FracBox" ); 
+   Test_ModelConstructionAndSaving3D(); // uses FracBox and other models
     
 } // end VSet_TestCase
 
@@ -93,83 +88,13 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
 
 
 
-void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name )
-  {
-    enum{DIM=2U};
-    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
-    
-    // read ANSYS model data and build model
-    ANSYS_Interface mesh_interface(true); // true = isoparametric elements
-    ModelTopology   mesh_topology(true);
-    VSet<DIM>       vset;
-
-    const bool binary_file( true ), recreate_bflags(true);
-    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, recreate_bflags );
-    // for ( auto i{0}; i<vset.BFlags(); ++i )
-    //  cout <<" "<< static_cast<int>(vset.BoundaryFlag(i) );
-    //cout << endl;
-
-    // keep all mesh regions from topology and vset
-    // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
-    mesh_topology.ReduceToDomains( input_file_name.c_str() );
-    map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
-    vset.ReduceTo( old_and_new_elmtids );
-    old_and_new_elmtids.clear();
-    _test( mesh_topology.Cells() == vset.Elements() );
-    
-    // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
-    vset.RemovePfverts();
-    vset.EstablishElementConnectivity2D();
-    
-    // testing whether connectivity of the boundary faces has been achieved
-    // looping over element faces that have a neighbor, reporting those where both nodes are at the boundary
-    auto dodgy_neighbors{0};
-    for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
-        CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
-        // faces=neighbors
-        auto face{0};
-        for ( auto j=vset.PfvertsBegin(eidx); j!=vset.PfvertsEnd(eidx); ++j, ++face )
-          if ( isTriangularElement(etype) && (*j) >= 0 ) {
-             // face 0
-             if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
-                  dodgy_neighbors++;
-               }
-             if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
-                  dodgy_neighbors++;
-               }
-             if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
-                  dodgy_neighbors++;
-               }
-          }
-      }
-    _test( dodgy_neighbors == 0 );
-
-    // build model from mesh
-    const bool get_domain_info_from_regions_file{true};
-    Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", get_domain_info_from_regions_file );
-    printModelDimensions( model, true );
-    
-    // saving model to binary
-    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_TestCase" ).c_str() );
-    
-  } // end Test_ANSYS_ModelConstructionAndSaving2D
  
  
  
  
   
-  
-void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_name )
+// various input models from vsetMakers.h
+void VSet_TestCase::Test_ModelConstructionAndSaving3D()
   {
     enum{DIM=3U};
   
