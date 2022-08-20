@@ -1,6 +1,11 @@
 #ifndef  CSMP_EXAMPLES_H
 #define  CSMP_EXAMPLES_H
 
+// TODO: refactor this suite to cover more functionality and have a more atomistic approach to what is demonstrated
+// TODO: needed:  example that converts ANSYS (and other input models) into a CSMP model with all bells and whistles
+// TODO: example that reads and writes selected variables to a CSMP binary file
+
+
 // this is where you declare your examples
 // =======================================
 

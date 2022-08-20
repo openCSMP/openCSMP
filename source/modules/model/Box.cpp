@@ -1403,10 +1403,6 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
     assert( b_face < eptr->Faces() );
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( eptr->Neighbor(b_face) != nullptr ) {
-//         csmp_error.Note( ERROR, "atBoundary:", "element face is not a boundary face.");
-         return NOT;
-      }
     if ( b_face >= eptr->Neighbors() ) {
          csmp_error.Note( ERROR, "atBoundary:", "element face number is out of range:", to_string(b_face) );
          return NOT;
@@ -1415,16 +1411,13 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
     // storing the box-boundary flags of the boundary face in a set
     set<BOX_BOUNDARY>  eflags;
     for ( const auto& fnit : eptr->CornerNodesOfFace(b_face) )
-      if ( fnit->AtBoundary() == NOT ) eflags.insert( fnit->AtBoundary() );
-      
-    // even if all flags=NOT, since the face has no neighbor it must lie on an internal (split) boundary
-    if ( eflags.empty() ) return INTERNAL;
+      if ( fnit->AtBoundary() != NOT ) eflags.insert( fnit->AtBoundary() );
+    if ( eflags.empty() ) return NOT;
 
     // Case 1: one-dimensional model
     // -----------------------------
-    if constexpr( dim == 1U ) {
-         if ( eflags.size() == 1U ) return (*eflags.begin());
-      }
+    if constexpr( dim == 1U )
+      if ( eflags.size() == 1U ) return (*eflags.begin());
     
     // Case 2: two-dimensional model
     // -----------------------------
@@ -1474,7 +1467,7 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
          
          // only for surface elements two different flags if they belong to the same face indicate a boundary position
          if ( eflags.size() >= 2U ) {
-              // for faces of volume elements only the sides of the model are valid options
+              // for faces of volume elements only the sides of a model are valid options
               if ( eptr->IsVolume() ) {
                    for ( auto bit : eflags )
                      if ( isSide(bit) )
@@ -1491,8 +1484,8 @@ BOX_BOUNDARY atBoundary( const CELL<dim>* const eptr, uint32_t b_face )
                    if ( flag1 != NOT && flag2 == INTERNAL ) return flag1;
                    if ( flag2 != NOT && flag1 == INTERNAL ) return flag2;
                    // if there is a corner involved, the other flag is chosen because the face of a surface cell cannot span a corner
-                   if ( isCorner(flag1) || flag1 == MULTIPLE ) return flag2;
-                   if ( isCorner(flag2) || flag2 == MULTIPLE ) return flag1;
+                   if ( isCorner(flag1) ) return flag2;
+                   if ( isCorner(flag2) ) return flag1;
                    return whichBoundary( flag1, flag2 );
                 }
               else csmp_error.Note( ERROR, "atBoundary(3D):", "Line element face should only have a single flag.");
@@ -2183,6 +2176,8 @@ BOX_BOUNDARY  whichBoundary( BOX_BOUNDARY node_flag1, BOX_BOUNDARY node_flag2 )
     if ( node_flag1 == EDGE10 || node_flag2 == EDGE10 ) return EDGE10;
     if ( node_flag1 == EDGE11 || node_flag2 == EDGE11 ) return EDGE11;
     if ( node_flag1 == EDGE12 || node_flag2 == EDGE12 ) return EDGE12;
+    
+    // corner cases are handled in first block
     
     return MULTIPLE;
  

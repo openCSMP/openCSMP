@@ -150,6 +150,9 @@ class BoundaryInterface {
 
  protected:
    std::map<std::string,csmp::Boundary<dim> >  boundaryMap_; ///< storage of the boundaries
+  
+  friend class Box_Test;
+  friend class BoundaryInterFace_Test;
 };
 
 } // csmp

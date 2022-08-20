@@ -1568,6 +1568,24 @@ void ModelTopology::DomainNames( vector<string>& region_names ) const
 	for ( auto it : model_domains_ ) region_names.push_back( it.first );
 }
 
+
+
+/** changes the name of a domain in the most efficient way; reports whether operation was successful
+ */
+bool ModelTopology::ChangeDomainName( const std::string& old_name, const std::string& new_name )
+ {
+    // getting a handle to the existing key
+    auto domainHandler  = model_domains_.extract(old_name);
+    // if empty handed
+    if ( domainHandler.empty() ) return false;
+    // else the record is renamed and re-inserted (moved)
+    domainHandler.key() = new_name;
+    model_domains_.insert( move(domainHandler) );
+    
+    return true; // success
+ }
+
+
 /*
     Domain properties
 */

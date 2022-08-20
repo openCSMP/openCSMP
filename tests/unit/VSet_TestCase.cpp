@@ -44,17 +44,66 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
+    // build 2D model from mesh
     VSet<DIM> vset, vset2;
     ModelTopology mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
-    
     _test( mesh_topology.Cells() == vset.Elements() );
-
-    // build model from mesh
+    {
+      // adding the original element numbers to VSet, assigning the same numbers as face numbers as these will be converted later
+      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+      elmt_nums.Reserve( vset.Elements() );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", elmt_nums );
+      // face numbers (to be retrieved when the elements will later be converted to Face objects)
+      /* (not possible because there are no face objects stored in the VSet)
+      PropertyData face_nums( FACE, SCALAR, 2U );
+      face_nums.Reserve( vset.Elements() );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+      vset.AddData( "face number", face_nums );
+      */
+      // node numbers
+      PropertyData node_nums( NODE, SCALAR, 2U );
+      node_nums.Reserve( vset.Vertices() );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      vset.AddData( "node number", node_nums );
+    }
     const bool vset_only_contains_elements{ true };
     Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
     printModelDimensions( model, true );
     _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
     _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
+    _test( vset.Faces() == 0U );
+    
+    // copying "element number" to "face number" for the faces created from lower-dimensional elements
+    const csmp::Index fn_key = model.Database().StorageKey("face number");
+    _test( mesh_topology.CellsWithinDomain("BOTTOM") == model.Boundary("BOTTOM").Cells() );
+    _test( mesh_topology.CellsWithinDomain("RIGHT")  == model.Boundary("RIGHT").Cells() );
+    _test( mesh_topology.CellsWithinDomain("TOP")    == model.Boundary("TOP").Cells() );
+    _test( mesh_topology.CellsWithinDomain("LEFT")   == model.Boundary("LEFT").Cells() );
+    Boundary<2U>& bottom{ model.Boundary("BOTTOM") }, right{ model.Boundary("RIGHT") },
+                  top{ model.Boundary("TOP") }, left{ model.Boundary("LEFT") };
+    // BOTTOM
+    size_t n_face{0U};
+    const auto end1 = mesh_topology.CellsOfDomainEnd("BOTTOM");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("BOTTOM"); it!=end1; ++it )
+      bottom.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // RIGHT
+    n_face = 0U;
+    const auto end2 = mesh_topology.CellsOfDomainEnd("RIGHT");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("RIGHT"); it!=end2; ++it )
+      right.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // TOP
+    n_face = 0U;
+    const auto end3 = mesh_topology.CellsOfDomainEnd("TOP");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("TOP"); it!=end3; ++it )
+      top.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // LEFT
+    n_face = 0U;
+    const auto end4 = mesh_topology.CellsOfDomainEnd("LEFT");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("LEFT"); it!=end4; ++it )
+      left.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    
+    // testing whether original Face numbers are preserved in output
     const bool   get_indices_from_stored_variables{true};
     const auto zero_errors{0};
     _test( model.Mesh().CheckElementConnectivity() == zero_errors );
@@ -80,6 +129,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     model2.OutputMeshTo( vset2 );
     
     // comparing it to original VSet
+    // TODO: fails because the faces numbers are not the same 
     if ( vset2 == vset ) return true;
     return false;
     
@@ -102,11 +152,11 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
     //------------------------------------
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
 
-    ScalarVariable    diff( ANY, 1. );
-    VectorVariable<3> vv( DIRICH, 2. );
-    VectorVariable<3> vvPlain;
-    TensorVariable<3> tv( ANY, 3. );
-    TensorVariable<3> tvPlain;
+    const ScalarVariable    diff( ANY, 1. );
+    const VectorVariable<3> vv( DIRICH, 2. );
+    VectorVariable<3>       vvPlain;
+    const TensorVariable<3> tv( ANY, 3. );
+    TensorVariable<3>       tvPlain;
     
     //------------------------------------
     // 1. Model Output Regions only test
@@ -227,7 +277,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
       const Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor 1") );
       
       modelOutput3.InputPropertyValue( "faip vector 1", vv );
-      modelOutput3.InputPropertyValue( "seip tensor 2", tv );
+      modelOutput3.InputPropertyValue( "seip tensor 1", tv );
       Element<3>* ePtr = (*modelOutput3.Region("Model").CellsBegin());
       for( auto f(0); f < ePtr->Facets(); ++f )
         for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
@@ -235,6 +285,12 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
             ePtr->Read( f, fip, faipVectorKey, vvPlain );
             _test( vvPlain == vv );
           }
+      for( auto s(0); s < ePtr->Sectors(); ++s )
+        for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+        {
+          ePtr->Read( s, sip, seipTensorKey, tvPlain );
+          _test( tvPlain == tv );
+        }
       modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
     }
     
@@ -248,45 +304,21 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
 
       Element<3>*  ePtr = *modelInput3.Region("Model").CellsBegin();
       auto ctr(0);
-      for( auto f(0); f < ePtr->Facets(); ++f )
-        for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+      for( auto f{0U}; f < ePtr->Facets(); ++f )
+        for( auto fip{0U}; fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
           ++ctr;
         }
-      for( auto s(0); s < ePtr->Sectors(); ++s )
-        for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+      for( auto s{0U}; s < ePtr->Sectors(); ++s )
+        for( auto sip{0U}; sip < ePtr->IntegrationPointsPerSector(); ++sip )
         {
           ePtr->Read( s, sip, seipTensorKey, tvPlain );
           _test( tvPlain == tv );
           ++ctr;
         }
         _test( ctr == 10 );
-
-       NodeCenteredFiniteVolumeTransport<3> fvModule2( "Model", modelInput3,
-                                                      "element variable", // porosity var
-                                                      "diffusivity",      // diffusivity var
-                                                      "nodal variable",   // advected var
-                                                      "element vector",   // transport var
-                                                      "nodal variable",   // source var
-                                                      false, false );
-
-        for( auto f{0U}; f < ePtr->Facets(); ++f )
-          for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
-          {
-            ePtr->Read( f, fip, faipVectorKey, vvPlain );
-            _test( vvPlain == vv );
-            ++ctr;
-          }
-      _test( ctr == 16 );
-      for( auto s{0U}; s < ePtr->Sectors(); ++s )
-        for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
-        {
-          ePtr->Read( s, sip, seipTensorKey, tvPlain );
-          _test( tvPlain == tv );
-          ++ctr;
-        }
       
     } // end test case with FV functionality
     
@@ -294,6 +326,8 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
       cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
 
   } // end 
+
+
 
 
 

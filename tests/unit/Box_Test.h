@@ -36,6 +36,7 @@ class Box_Test : public Test
 
   private:
     std::string model_name_;
+    static const bool verbose_ = true;
 };
 
 } // csmp

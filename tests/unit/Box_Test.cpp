@@ -260,11 +260,12 @@ bool Box_Test::TestBoundaryFlagAssigment2D()
 */
 bool Box_Test::TestBoundaryFlagging()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
-    const bool debug(true);
-   
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    //const bool irregular_mesh(true), binary_file(true);
+    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    
+    VSet<3U>  vset;
+    testCreateTetra_VSet( vset );
+    Model<3U> model( vset, "CSMP-variables.txt" );
    
     string node_variable("nodal box flag"), elmt_variable("element box flag");
     model.CreateProperty( node_variable.c_str(), "flag", SCALAR, NODE );
@@ -274,7 +275,7 @@ bool Box_Test::TestBoundaryFlagging()
    
     boxFlagsToVariable( model, node_variable.c_str(), elmt_variable.c_str() );
 
-    if ( debug ) {
+    if ( verbose_ ) {
          VTU_Interface<3>  vtu(model);
          std::list<std::string> outputProps;
          outputProps.push_back(node_variable.c_str());
@@ -298,11 +299,15 @@ bool Box_Test::TestBoundaryFlagging()
 */
 void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
-   
-    ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file );
-    Region<3U>    model_domain(model.Region("Model"));
+    // const bool irregular_mesh(false), binary_file(true);
+    // ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file ); // ANSYS dependence & too costly
+    VSet<3U>  vset;
+    const bool bSkewed{false};
+    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    Model<3U>  model( vset, "CSMP-variables.txt" );
+    Region<3U> model_domain(model.Region("Model"));
+    
+    _test( model.EstablishBoxBoundariesFromOrientation() );
 
     // 1. testing the unit normals of the (volumetric elements)
     // --------------------------------------------------------
@@ -317,7 +322,12 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i ) {
          for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
                 const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
-                assert( flag != NOT );
+                _test( flag != NOT );
+                if ( flag == NOT ) {
+                     cout <<"\n"<< parseFiniteElementType( model_domain.E(i)->FE_Type() );
+                     cout <<": Element face boundary identification is not correct.";
+                     model_domain.E(i)->Out();
+                  }
                 // verifying alignment of the element's unit normal with that of the model boundary
                 model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
                 // checking whether the normals are aligned and of of same unit magnitude
@@ -325,32 +335,38 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
                      const double dotProduct(vector_product<3U,double>(leftNormal,eUnitNormal));
                      // testing for alignment
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at LEFT boundary");
                      // testing for unit length
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == RIGHT )  {
                      const double dotProduct(vector_product<3U,double>(rightNormal,eUnitNormal));
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at RIGHT boundary");
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == BOTTOM )  {
                      const double dotProduct(vector_product<3U,double>(bottomNormal,eUnitNormal));
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at BOTTOM boundary");
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == TOP )  {
                      const double dotProduct(vector_product<3U,double>(topNormal,eUnitNormal));
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at TOP boundary");
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == BACK )  {
                      const double dotProduct(vector_product<3U,double>(backNormal,eUnitNormal));
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at BACK boundary");
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
                 else if ( flag == FRONT )  {
                      const double dotProduct(vector_product<3U,double>(frontNormal,eUnitNormal));
                      _test( dotProduct > 0. );
+                     _fail("negative dot product for normal at FRONT boundary");
                      _equal( dotProduct, 1., numeric_limits<double>::epsilon() * 5. );
                   }
             }
@@ -439,9 +455,13 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
 
 bool Box_Test::TestWhetherSideBoundaryFlagsArePresent()
  {
-    const bool irregular_mesh(false);
-    const bool binary_file(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    //const bool irregular_mesh(false), binary_file(true);
+    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+
+    VSet<3U>  vset;
+    testCreateTetra_VSet( vset );
+    Model<3U> model( vset, "CSMP-variables.txt" );
+
     return hasAllSideBoundaries( model );
 }
 
@@ -452,9 +472,14 @@ bool Box_Test::TestWhetherSideBoundaryFlagsArePresent()
 */
 bool Box_Test::TestWhetherAllBoxFlagsArePresent()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    // const bool irregular_mesh(true), binary_file(true);
+    // ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    
+    VSet<3U>  vset;
+    const bool bSkewed{false};
+    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    Model<3U>  model( vset, "CSMP-variables.txt" );
+
     return isStrictlyBoxShaped( model );
 }
   
@@ -464,11 +489,25 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
 */
 bool Box_Test::TestBoundaryFlagRecreation()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
-   
-    // build a model with valid boundaries
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    //const bool irregular_mesh(true), binary_file(true);
+    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+
+    VSet<3U>      vset;
+    ModelTopology topo;
+    test_Create_FracBox( topo, vset );
+    // renaming the boundaries according to a box-shaped model
+    topo.ChangeDomainName( "BOUNDARY1", "BACK");
+    topo.ChangeDomainName( "BOUNDARY2", "BOTTOM" );
+    topo.ChangeDomainName( "BOUNDARY3", "RIGHT" );
+    topo.ChangeDomainName( "BOUNDARY4", "TOP" );
+    topo.ChangeDomainName( "BOUNDARY5", "LEFT" );
+    topo.ChangeDomainName( "BOUNDARY6", "FRONT" );
+    
+    // change the name so that the regions file is not found (and all regions are used)
+    topo.ModelName("FracBox_without_regions_file");
+    
+    const bool create_boundaries_from_surf_elmts{ true };
+    Model<3U> model( topo, vset, "CSMP-variables.txt", create_boundaries_from_surf_elmts );
 
     // testing whether the reflagging works correctly
     recreateBoxBoundaryFlags( model );
@@ -483,10 +522,15 @@ bool Box_Test::TestBoundaryFlagRecreation()
 */
 bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
-
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    //const bool irregular_mesh(true);
+    //const bool binary_file(true);
+    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    
+    VSet<3U>  vset;
+    const bool bSkewed{false};
+    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    Model<3U>  model( vset, "CSMP-variables.txt" );
+    
     const Region<3>&  mregion(model.Region("Model"));
    
     // storing the flags in node and element order in a list for comparison
@@ -528,12 +572,15 @@ bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile()
 */
 bool Box_Test::TestWhetherBoundaryFlagsArePreservedInBinaryFile1()
  {
-    const bool irregular_mesh(true);
-    const bool binary_file(true);
+    //const bool irregular_mesh(true), binary_file(true);
+    //ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
 
-    ANSYS_Model3D model( model_name_.c_str(), "CSMP-variables.txt", irregular_mesh, binary_file );
+    VSet<3U>  vset;
+    const bool bSkewed{false};
+    test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    Model<3U>  model( vset, "CSMP-variables.txt" );
     const Region<3>&  mregion(model.Region("Model"));
-   
+
     // storing the flags in node and element order in a list for comparison
     list<BOX_BOUNDARY>  node_flags_before;
     for ( auto nit=mregion.NodesBegin(); nit!=mregion.NodesEnd(); nit++ )

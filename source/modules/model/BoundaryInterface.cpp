@@ -338,19 +338,20 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
   cout << "\nBoundaryInterface::FormBoundariesFrom: Forming the boundaries: ";
 
   size_t new_boundaries{0};
-  for ( auto lit = boundaries.begin(); lit != boundaries.end(); lit++ )
+  for ( const auto& lit : boundaries )
     {
-      string domain_name( *lit );
-      auto boundary_flag = parseBoundary( domain_name );
-      auto it = boundaryMap_.insert( make_pair( domain_name, csmp::Boundary<dim>( domain_name, static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Database(), boundary_flag ) ) );
+      string domain_name( lit );
+      const auto boundary_flag = parseBoundary( domain_name );
+      auto it = boundaryMap_.insert( make_pair( domain_name, csmp::Boundary<dim>( domain_name,
+                                                static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Database(), boundary_flag ) ) );
       // if the region was successfully inserted
       if ( it.second )
         {
           // making a list of the element numbers
           vector<size_t>  cell_ids;
-          cell_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
-          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
-                topo.CellsOfDomainEnd( (*lit).c_str() ),
+          cell_ids.reserve( topo.CellsWithinDomain( lit.c_str() ) );
+          copy( topo.CellsOfDomainBegin( lit.c_str() ),
+                topo.CellsOfDomainEnd( lit.c_str() ),
                 back_inserter( cell_ids ) );
 
           // retrieving the elements by their IDs and assigning them  to the region
@@ -361,7 +362,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
           if ( (*it.first).second.Cells() == 0U ) {
               boundaryMap_.erase( it.first );
               csmp_error.Note( WARNING, "BoundaryInterface::FormBoundariesFrom",
-                                 "Boundary could not be formed", (*lit).c_str() );
+                                 "Boundary could not be formed", lit.c_str() );
             }
           else {
                // reporting the name of the newly generated region
@@ -371,7 +372,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
         }
       else
         throw csmp::Exception( ERROR, "BoundaryInterface::FormBoundariesFrom",
-                               "Boundary could not be formed. Does this region already exist?", (*lit).c_str() );
+                               "Boundary could not be formed. Does this region already exist?", lit.c_str() );
     }
   cout << endl;
 
@@ -2013,7 +2014,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     // 4. checking whether faces remain that could not be assigned
     // -------------------------------------------------------------------------------------------------
     size_t n_faces_assigned = Boundary("BOTTOM").Cells() + Boundary("RIGHT").Cells() +
-                              Boundary("TOP").Cells() + Boundary("LEFT").Cells() + Boundary("IRREGULAR").Cells() ;
+                              Boundary("TOP").Cells() + Boundary("LEFT").Cells();
+    if ( !irregular_faces.empty() ) n_faces_assigned += Boundary("IRREGULAR").Cells() ;
+    
     if constexpr ( dim == 3 )
       n_faces_assigned += Boundary("FRONT").Cells() + Boundary("BACK").Cells();
       

@@ -1791,8 +1791,10 @@ void test_Create_Pyramid_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
 /**
     Generates 24 hexahedra + 6 prism elements.
     The model can be distorted on demand.
+    
+    @note model comes with the correct box boundary flags.
 */
-void test_Create_Prism_Hexa_VSet(VSet<3U> & vset, bool bSkewed )
+void test_Create_Prism_Hexa_VSet( VSet<3U> & vset, bool bSkewed )
 {
     const size_t iNrOfElements(30/*24 hexahedrons + 6 prisms*/);
     
@@ -2739,6 +2741,7 @@ void test_Create_Prism_VSet(VSet<3U> & vset, bool bSkewed )
 
 /**
        Decomposition of a hexahedron into 6 tetrahedra.
+       Only 6 elements!
 */
 void testCreateTetra_VSet( VSet<3U>& vset )
  {
