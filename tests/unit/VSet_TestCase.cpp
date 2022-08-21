@@ -129,7 +129,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     model2.OutputMeshTo( vset2 );
     
     // comparing it to original VSet
-    // TODO: fails because the faces numbers are not the same 
+    // TODO: test still fails because the faces numbers are not the same 
     if ( vset2 == vset ) return true;
     return false;
     

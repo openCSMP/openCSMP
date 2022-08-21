@@ -15,6 +15,8 @@ using namespace std;
 namespace csmp
 {
 
+// TODO: test should not depend on ANSYS_Models
+// TODO: run 2 and 3D versions
 void NodeManifoldManager_Test::run()
 {
   
@@ -39,8 +41,6 @@ void NodeManifoldManager_Test::run()
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "kueper_one_interface" );
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "lens2D" );
   //Test_nodemanifolds_created_from_splitboundaries_between_regions<2U>( "UnitSquareFracs_yline" );
-  
-
 }
 
 

@@ -100,8 +100,7 @@ void Tecplot_Interface<dim>
   
      // 0. creating list of element ID's of associated Region
      // --------------------------------------------------------------------
-     vector<size_t>     elmt_ids;
-     gref.MemberCellIndexes( elmt_ids );
+     vector<size_t>  elmt_ids = gref.MemberCellIndexes();
                 
 
      // 1. getting new node mapping and updating storage if geometry has changed
@@ -227,8 +226,7 @@ void Tecplot_Interface<dim>
     
     // 0. creating list of element ID's of associated Region
     // --------------------------------------------------------------------
-    vector<size_t>     elmt_ids;
-    gref.MemberCellIndexes( elmt_ids );
+    vector<size_t>  elmt_ids = gref.MemberCellIndexes();
     
     // 1. getting new node mapping and updating storage if geometry has changed
     // ------------------------------------------------------------------------

@@ -1008,7 +1008,9 @@ Point<dim>  FiniteElementPolicy<dim,CELL>::FaceBaryCenter( uint32_t face ) const
                                  "FiniteElementPolicy<dim,CELL>::FaceBaryCenter:",
                                 "encountered element with invalid element pointer.");
        }
+    // not needed as the nodes are accessed directly: CoordinateMatrix();
     Point<dim>  barycenter; // initialises to zero
+    assert( face < fptr_->Faces() );
     for ( const auto& i : fptr_->NodesOfFace(face) )
       barycenter += e->N(i)->Coordinate();
     barycenter /= static_cast<double>(fptr_->NodesPerFace(face));

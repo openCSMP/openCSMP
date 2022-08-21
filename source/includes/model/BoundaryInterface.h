@@ -89,15 +89,19 @@ class BoundaryInterface {
     
     /// creates uniquely named boundary (Face) patches, returning their names if successful; the input element patch is removed but its name precedes that of the Boundaries
     std::pair<std::set<std::string>,bool>  CreateInternalBoundaryFrom( const char* dimension_minus1_region );
-    // external boundaries are usually build automatically during model construction using
-    // EstablishBoxBoundaries() or EstablishBoundariesFromRegions(), see protected method
+ 
+    // external boundaries are build automatically during model construction using
+    // EstablishBoxBoundaries() or EstablishBoundariesFromRegions(), see protected methods
                                                                        
     /// creates INTERNAL boundary, ignoring already existing boundaries or split-boundaries as well as lower-dimensional regions, region will be on inside
     bool CreateBoundaryAround( const char* region );
 
     /// insert lower-dimensional Region between two equidimensional unique regions, and then converts it into Boundary; returns boundary name
     std::pair<std::string,bool>  CreateBoundaryBetween( const char* region1, const char* region2 );
-    
+        
+    /// creates EDGE#  Boundary line objects for box-shaped model by intersecting side boundaries objects
+    bool EstablishEdgeBoundariesOfBoxShapedModel();
+
     /// Removes boundary with  deletion of its faces in the MeshManager
     void RemoveBoundary( const char* boundary, bool eerase_faces );
     
@@ -142,11 +146,6 @@ class BoundaryInterface {
     
     /// creates BOX boundaries using the node flags to identify sides, edges, and corners; use for simple models where corresponding lines or surfaces are missing
     void EstablishBoxBoundariesFromNodeFlags( bool recreate_box_boundary_flags_before );
-
-    // EDGES
-    
-    /// creates EDGE#  Boundary line objects for box-shaped model by intersecting side boundaries objects
-    bool EstablishEdgeBoundariesOfBoxShapedModel();
 
  protected:
    std::map<std::string,csmp::Boundary<dim> >  boundaryMap_; ///< storage of the boundaries

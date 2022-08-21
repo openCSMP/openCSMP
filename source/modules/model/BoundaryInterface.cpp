@@ -276,7 +276,8 @@ string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const F
      boundary_name += "_BOUNDARY";
      boundary_name += to_string(fdata.PatchNumber());
      boundary_name += '_';
-     pair<long,long> materials(fdata.Materials());
+     // inside/outside
+     pair<long,long> materials{ fdata.Materials() };
      assert( materials.first  < region_names.size() );
      assert( materials.second < region_names.size() );
      boundary_name += region_names[ materials.first ];
@@ -429,8 +430,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 
 
 /** 
-     Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches; 
-     region is moved from "Model" to non-unique regions, connectivity is updated.
+     Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches. The MeshManager updates the connectivity.
+     The original region is removed (including removal from "Model") to non-unique regions.
      
      Uses node-to-parent relationship to find the higher dimensional elements that will 
      share a face with the Face:  usng    higherDimensionalNeighbors()
@@ -539,17 +540,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
          model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
-         const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
-         if ( model_regions == 1 )
-           ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
-                                                "is single valued; so there is only one patch." );
-      }
-    else { // assigning region names
-         region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
-         for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
-           region_names.push_back( (*rit).first );
       }
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
+    // needs to be done everytime because the number of unique regions may have changed
+    const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
+    if ( model_regions == 1 )
+      ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
+                                           "is single valued; so there is only one patch." );
+    // assigning region names
+    region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+    for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
+      region_names.push_back( (*rit).first );
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 2. Determine number of boundary segments (sub-boundaries) that the new boundary will consist of.

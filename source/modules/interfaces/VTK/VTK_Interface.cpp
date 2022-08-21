@@ -460,8 +460,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      //    target Region object.
      // ------------------------------------------------------------
      // finding the group in the group list
-     vector<size_t>  elmt_ids;
-     gref.MemberCellIndexes( elmt_ids );
+     vector<size_t>  elmt_ids = gref.MemberCellIndexes();
 
      if ( elmt_ids.empty() )     
        throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",

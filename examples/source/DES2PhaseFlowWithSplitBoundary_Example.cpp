@@ -7,6 +7,11 @@
 // FV algorithms
 #include "DES2PhaseSlightlyCompressibleTransport.h"
 
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#endif
+
 // monitoring individual regions
 #include "RegionMonitor.h"
 
@@ -45,6 +50,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
   AddRequirement( "variables(DES_2phase_variables.txt)" );
 } 
 
+
 /** 
     Two phase slightly compressible flow simulation with splitboundaries via CSMP's DES transport method
     combining finite elements (for pressure) with finite volumes (for advection of non-wetting phase)
@@ -52,10 +58,9 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     Use models 'box2d_fault' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
 */
 
-  void DES2PhaseFlowWithSplitBoundary_Example::Run()
+void DES2PhaseFlowWithSplitBoundary_Example::Run()
   {
-
-    // model dimension
+    // reading in an ANSYS model, first determining whether it will be 2 or 3 dimensional.
     uint32_t dimension;
     cerr << "\nPlease enter the dimension of the model (2 for 2D, 3 for 3D):" << endl;
     cin >> dimension;
@@ -67,7 +72,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     cerr << "\nPlease enter the name of input mesh (default: box2d_fault):" << endl;
     cin >> input_file;
 
-    string variables_file("DES_2phase_variables.txt");
+    const string variables_file("DES_2phase_variables.txt");
 
     if (dimension == 2U) {
       ANSYS_Model2D model(input_file.c_str(), variables_file.c_str());
@@ -77,11 +82,18 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
       RunSimulation(model);
     }
 
-  }
+  } // end run
+  
+  
 
-
-  template<uint32_t dim>
-  void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation(Model<dim>& model) {
+/**
+    Performs either discrete-event simulation (DES) or time-driven simulation (TDS) of 2-phase flow through a porous medium.
+*/
+template<uint32_t dim>
+void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
+ {
+    // 1. MODEL CONFIGURATION
+    // ----------------------
     // simulation settings
     Standard_IO_Handler stdio;
     VTU_Interface<dim>  vtu(model);
@@ -91,10 +103,10 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     cerr <<"\nEnter CFL multiplier (suggested value: 0.3 for TDS, 0.1 for DES) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
      
-    bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?"); 
-    bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?");
+    const bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?");
+    const bool  with_capillary_spreading = stdio.YesNo("Do you want to include capillary effect (y/n)?");
 
-    bool  with_split_boundaries = stdio.YesNo("Do you want to create split boundaries (y/n)?");
+    const bool  with_split_boundaries = stdio.YesNo("Do you want to create split boundaries (y/n)?");
 
     // give the model dimensions
     printModelDimensions( model, true );
@@ -120,6 +132,9 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     if(with_tensor_permeability) cout<<"\ntensor permeability is in use"<<endl;
     else  cout<<"\nscalar permeability is in use"<<endl;
 
+
+    // 2. RELATIVE PERMEABILITY & CAPILLARY PRESSURE MODEL
+    // ---------------------------------------------------
     // flow functions (Brooks Corey)
     FlowFunctionsModule1<dim> flowfunctions(model.Database(), model.Read( model.Database().StorageKey("acceleration gravity") ));
 
@@ -154,7 +169,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     } //end create split boundaries
 
     //sort manifold nodes by entry pressure
-    if( with_split_boundaries ) {
+    if ( with_split_boundaries ) {
       const csmp::Index pd_key = model.Database().StorageKey("entry pressure");
       for(auto mit = model.Mesh().NodeManifoldsBegin();mit!=model.Mesh().NodeManifoldsEnd();mit++)
         (*mit).SortByVariableValue(pd_key);
@@ -164,19 +179,19 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
         model.CreateProperty( "parent element id", "none", SCALAR, ELEMENT, 1, 0 ,1.00E+08);
         model.Region("Model").InputPropertyValue( "parent element id", makeScalar(PLAIN,0), COMPLETE);
       }
-      csmp::INDEX<SCALAR,ELEMENT> key_parent = csmp::INDEX<SCALAR,ELEMENT>( model.Database().StorageKey("parent element id") );
+      const csmp::INDEX<SCALAR,ELEMENT> key_parent = csmp::INDEX<SCALAR,ELEMENT>( model.Database().StorageKey("parent element id") );
       size_t parent_id(1);
       for(auto mit = model.Mesh().NodeManifoldsBegin();mit!=model.Mesh().NodeManifoldsEnd();mit++) {
         parent_id = 1;
         auto md = (*mit);
         auto master_node = md.N(0);
-        for(size_t e = 0; e < master_node->Parents(); e++)
+        for( auto e{0U}; e < master_node->Parents(); e++)
           master_node->Parent(e)->Store(key_parent, makeScalar(PLAIN, parent_id));
 
         for(size_t n=1;n<md.Branches();n++) {
           auto slave_node = md.N(n);
           parent_id++;
-          for(size_t e = 0; e < slave_node->Parents(); e++)
+          for( auto e{0U}; e < slave_node->Parents(); e++)
             slave_node->Parent(e)->Store(key_parent, makeScalar(PLAIN, parent_id));
         }
       }
@@ -191,7 +206,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
                                                                                              with_capillary_spreading,
                                                                                              Courant_multiplier,
                                                                                              PEP_parameter,
-                                                                                             1., //relaxing factor
+                                                                                             1., //relaxation factor
                                                                                              with_tensor_permeability, //tensor k
                                                                                              false, //2nd order in space
                                                                                              flowfunctions);
@@ -345,6 +360,8 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 
 
 
+
+
   template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
   void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<dim>& mdl, FLOW_FUNCTIONS<dim>& flowfunctions, bool with_gravity, bool with_tensor_k )
   {
@@ -392,7 +409,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
         vector<double> IPOL;
         eptr->N_AtBaryCenter( IPOL );
         double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.), e_cw(0.), e_cn(0.);
-        for ( size_t i=0U; i<nodes; ++i ) {
+        for ( auto i{0U}; i<nodes; ++i ) {
           e_sw += IPOL[i] * eptr->N(i)->Read( sw_key );
           e_muw += IPOL[i] * eptr->N(i)->Read( muw_key );
           e_mun += IPOL[i] * eptr->N(i)->Read( mun_key );
@@ -466,7 +483,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
         vector<double> IPOL;
         eptr->N_AtBaryCenter( IPOL );
         double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.), e_cw(0.), e_cn(0.);
-        for ( size_t i=0U; i<nodes; ++i ) {
+        for ( auto i{0U}; i<nodes; ++i ) {
           e_sw += IPOL[i] * eptr->N(i)->Read( sw_key );
           e_muw += IPOL[i] * eptr->N(i)->Read( muw_key );
           e_mun += IPOL[i] * eptr->N(i)->Read( mun_key );
@@ -536,13 +553,16 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     }
   }
 
-  template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<2U>&, FlowFunctionsModule1<2U>&, bool, bool );
-  template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<3U>&, FlowFunctionsModule1<3U>&, bool, bool );
+template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<2U>&, FlowFunctionsModule1<2U>&, bool, bool );
+template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowProperties( Model<3U>&, FlowFunctionsModule1<3U>&, bool, bool );
+
+
+
 
 
 
   template<uint32_t dim>
-  void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<dim>& mdl, bool with_gravity, bool with_tensor_k)
+  void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure( Model<dim>& mdl, bool with_gravity, bool with_tensor_k )
   {
     bool verbose(false);
 
@@ -560,13 +580,22 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     if(!with_tensor_k) conductance_operator = "total mobility permeability product";
     else conductance_operator = "tensor total mobility permeability product";
 
-    // SAMG Solver
-    //SAMG_Settings settings;
-    //SAMG_Solver                    solver(&settings);
-    EigenSolver  solver;
-    PDE_Integrator<dim,Region>      steady_pressure(solver);
-    NumIntegral_dNT_op_dN_dV<dim>   conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim>     elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                 samg_solver( &settings );
+    PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+    PDE_Integrator<dim,Region>  steady_pressure(linear_solver);
+#endif
+    NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( mdl.Database(), "nodal fluid volume source", "fluid pressure" );
     steady_pressure.Add( &conductance );
     steady_pressure.Add( &elmt_volume_source );

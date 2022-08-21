@@ -38,6 +38,7 @@ Point<3U>  normalOfTriangle( const Point<3U>& pt0,
   
 }
 
+// TODO: clarify / fix this (suggestion 1(z-direction) if counter-clockwise nodes, else -1
 /// normal is zero as it points into the coordinate direction that does not exist
 Point<2U>  normalOfTriangle( const Point<2U>&,
                              const Point<2U>&,
