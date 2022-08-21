@@ -4,16 +4,16 @@
 namespace csmp {
 
 double triangleArea( const Point<3U>& pt0, 
-                       const Point<3U>& pt1, 
-                       const Point<3U>& pt2 )
+                     const Point<3U>& pt1, 
+                     const Point<3U>& pt2 )
 {
    return crossProduct(pt1-pt0, pt2-pt0).Length()/2.;
 }
 
 
 double triangleArea( const Point<2U>& pt0, 
-                       const Point<2U>& pt1, 
-                       const Point<2U>& pt2 )
+                     const Point<2U>& pt1,
+                     const Point<2U>& pt2 )
 {
    return std::fabs( 0.5 * ( pt1[0]*pt2[1] + pt0[0]*pt1[1] + 
                              pt0[1]*pt2[0] - pt2[1]*pt0[0] -

@@ -176,7 +176,7 @@ void Box_Test::run()
   // tests whether the boundaries of a 2D box model are assigned correctly
   _test( TestBoundaryFlagAssigment2D() );
 
-  TestWhetherSimplexNormalsAreOutwardPointing();
+  TestWhetherElementNormalsAreOutwardPointing();
 
 } // end run
 
@@ -297,7 +297,7 @@ bool Box_Test::TestBoundaryFlagging()
     as the normals of the elements or faces on the outside boundary
     of the model.
 */
-void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
+void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
  {
     // const bool irregular_mesh(false), binary_file(true);
     // ANSYS_Model3D model( "prism_test", "CSMP-variables.txt", irregular_mesh, binary_file ); // ANSYS dependence & too costly
@@ -308,7 +308,8 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     printModelDimensions( model );
     Region<3U> model_domain(model.Region("Model"));
     // verifying that the perimeter of the Model region matches that of the overall model
-    _equal( model_domain.SurfaceArea(), 6. * 3. * 3., 10. ); // 6-faces with 9m2, tolerance=10 eps
+    const double model_surface_area = model_domain.SurfaceArea();
+    _equal( model_surface_area, 6. * 3. * 3., 10. ); // 6-faces with 9m2, tolerance=10 eps
     
     _test( model.EstablishBoxBoundariesFromOrientation() );
 
@@ -322,15 +323,29 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
     Box().UnitNormalTo( FRONT,  3, frontNormal );
     Box().UnitNormalTo( BACK,   3, backNormal );
 
+    double accumulated_area{ 0. };
     for ( size_t i=model_domain.InteriorCells(); i<model_domain.Cells(); ++i ) {
          for ( auto j=0U; j<model_domain.PerimeterFaces(i); ++j ) {
-                const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary(j);
+                const BOX_BOUNDARY flag = model_domain.E(i)->AtBoundary( model_domain.PerimeterFace(i,j) );
                 _test( flag != NOT );
                 if ( flag == NOT ) {
                      cout <<"\n"<< parseFiniteElementType( model_domain.E(i)->FE_Type() );
                      cout <<": Element face boundary identification is not correct.";
                      model_domain.E(i)->Out();
                   }
+                // verifying that area of perimeter faces adds up to model surface area
+                const auto          fnids = model_domain.E(i)->FE()->NodesOfFace( model_domain.PerimeterFace(i,j) );
+                const CSMP_FEM_TYPE etype = model_domain.E(i)->FE()->ElementTypeOfFace( model_domain.PerimeterFace(i,j) );
+                if ( isTriangular(etype) )
+                  accumulated_area += triangleArea( model_domain.E(i)->N( fnids[0] )->Coordinate(),
+                                                    model_domain.E(i)->N( fnids[1] )->Coordinate(),
+                                                    model_domain.E(i)->N( fnids[2] )->Coordinate() );
+                else if ( isQuadrilateral(etype) )
+                  accumulated_area += facetArea4( model_domain.E(i)->N( fnids[0] )->Coordinate(),
+                                                  model_domain.E(i)->N( fnids[1] )->Coordinate(),
+                                                  model_domain.E(i)->N( fnids[2] )->Coordinate(),
+                                                  model_domain.E(i)->N( fnids[3] )->Coordinate() );
+                  
                 // verifying alignment of the element's unit normal with that of the model boundary
                 model_domain.E(i)->UnitNormalToFace( model_domain.PerimeterFace(i,j), eUnitNormal );
                 // checking whether the normals are aligned and of of same unit magnitude
@@ -423,7 +438,9 @@ void Box_Test::TestWhetherSimplexNormalsAreOutwardPointing()
                   }
             }
       }
-   
+
+    _equal( model_surface_area, accumulated_area, 10. ); // 6-faces with 9m2, tolerance=10 eps
+
    
     // 2. testing whether the unit normals of the faces making up the outside boundaries of the model
     //    are outward pointing and aligned

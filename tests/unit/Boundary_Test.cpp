@@ -255,7 +255,8 @@ void Boundary_Test::UnitNormalTest3D()
                _test( dotproduct > 0. );
 // debugging
 if ( dotproduct < 0. ) {
-     cerr <<"\n"<< parseFiniteElementType( (*it)->FE_Type() ) <<", face: "<< face <<", dotproduct: "<< dotproduct <<" ";
+     cerr <<"\n"<< parseFiniteElementType( (*it)->FE_Type() ) <<", face: "<< face;
+     cerr <<", ("<< parseFiniteElementType( (*it)->FE()->ElementTypeOfFace(face) ) <<"), dotproduct: "<< dotproduct <<" ";
   }
                if ( verbose_ and dotproduct < 0. ) {
                     cerr <<"\nunit normal to face "<< face <<" is inward pointing:";
