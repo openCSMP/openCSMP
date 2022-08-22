@@ -1144,12 +1144,13 @@ Returns a vector<double> with the ID numbers of the Elements which belong
 to the Region.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-void  ModelSubDomain<dim,CELL>::MemberCellIndexes( vector<size_t>& ids ) const
+vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const
  {
-    ids.clear();
+    vector<size_t> ids;
     ids.reserve( cell_vec_.size() );
-
     for ( const auto& it : cell_vec_ ) ids.push_back( it->Idx() );
+    
+    return ids;
  }
 
 
@@ -1193,14 +1194,6 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     RenumberCells();
    
  } // end UpdateRegionMemberIndexes
-
-
-    /// setting all cell indices to a specific value
-template<uint32_t dim, template<uint32_t> class CELL>
-void ModelSubDomain<dim,CELL>::SetCellIndexes( size_t new_idx )
- {
-    for( auto& it : cell_vec_ ) it->Idx(new_idx);
- }
 
 
 
@@ -1264,6 +1257,7 @@ bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( const CELL<dim>* const e_ptr ) 
  }
 
 
+// still used by legacy NodeCenteredFiniteVolumeTransport
 template<uint32_t dim, template<uint32_t> class CELL>
 bool  ModelSubDomain<dim,CELL>::IsPerimeterNode( size_t i ) const
  {

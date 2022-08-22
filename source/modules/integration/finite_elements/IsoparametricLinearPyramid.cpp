@@ -457,6 +457,20 @@ void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint
 */
 
 
+uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 3U;
+        case 1: return 3U;
+        case 2: return 3U;
+        case 3: return 3U;
+        case 4: return 4U;
+      }
+    cerr <<"\nIsoparametricLinearPyramid::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
+
 
 vector<uint32_t>  IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id ) const
  {
@@ -1050,14 +1064,14 @@ void  IsoparametricLinearPyramid::UnitNormalToFace( uint32_t face, std::vector<d
      unrml.resize(3);
    
      // quadrilateral facet at the basis of pyramid
-     if ( face == 4 ) { // OK - counter-clockwise nodes (ouside looking in):
+     if ( face == 4 ) { // 
           Point<3> nrml = normalAtFacetCenter( Point<3>(XY(0,0),XY(0,1),XY(0,2)),
-                                               Point<3>(XY(1,0),XY(1,1),XY(1,2)),
+                                               Point<3>(XY(3,0),XY(3,1),XY(3,2)),
                                                Point<3>(XY(2,0),XY(2,1),XY(2,2)),
-                                               Point<3>(XY(3,0),XY(3,1),XY(3,2)) );
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
+                                               Point<3>(XY(1,0),XY(1,1),XY(1,2)) );
+          unrml[0] = nrml[0];
+          unrml[1] = nrml[1];
+          unrml[2] = nrml[2];
           return;
        }
 

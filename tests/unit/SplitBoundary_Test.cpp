@@ -407,7 +407,7 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
 
 //Test that nodes do match to each other when calling MatchingN (this also tests InterFace::N( i, side) is
 //correctly calibrated
-bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
+bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file ) {
 
   const uint32_t dim{2U};
   int32_t material_id = 1;
@@ -415,6 +415,7 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_2D( const char* mesh_file){
   const char* variables_file("SplitBoundary_Test-variables.txt");
   const char* regions_file("InternalBoundary_Test");
 
+// TODO: replace these ANSYS models with CSMP native models that we construct once and then hand over to the tests
   ANSYS_Model2D model1(mesh_file, regions_file, variables_file, false, true, true);
 
   ///Testing Differnt model creations

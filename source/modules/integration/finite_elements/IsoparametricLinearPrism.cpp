@@ -459,6 +459,20 @@ void IsoparametricLinearPrism::NodesOfFace( uint32_t face_id, std::vector<uint32
  }
 */
 
+uint32_t IsoparametricLinearPrism::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 3U;
+        case 1: return 4U;
+        case 2: return 4U;
+        case 3: return 4U;
+        case 4: return 3U;
+      }
+    cerr <<"\nIsoparametricLinearPrism::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
+
 
 vector<uint32_t>  IsoparametricLinearPrism::NodesOfFace( uint32_t face_id ) const
  {

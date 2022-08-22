@@ -1568,6 +1568,24 @@ void ModelTopology::DomainNames( vector<string>& region_names ) const
 	for ( auto it : model_domains_ ) region_names.push_back( it.first );
 }
 
+
+
+/** changes the name of a domain in the most efficient way; reports whether operation was successful
+ */
+bool ModelTopology::ChangeDomainName( const std::string& old_name, const std::string& new_name )
+ {
+    // getting a handle to the existing key
+    auto domainHandler  = model_domains_.extract(old_name);
+    // if empty handed
+    if ( domainHandler.empty() ) return false;
+    // else the record is renamed and re-inserted (moved)
+    domainHandler.key() = new_name;
+    model_domains_.insert( move(domainHandler) );
+    
+    return true; // success
+ }
+
+
 /*
     Domain properties
 */
@@ -2571,34 +2589,34 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
                     back_bottom, back_left, back_top, back_right,
                     top_left, top_right, irregular;
 
-     for ( auto it=CellsOfDomainBegin("BOTTOM");
-           it!=CellsOfDomainEnd("BOTTOM"); it++ ) {
+     auto end_it{ CellsOfDomainEnd("BOTTOM") };
+     for ( auto it=CellsOfDomainBegin("BOTTOM"); it!=end_it; it++ ) {
            // accessing contiguous ranges of element ID's with it->size_t
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              bottom.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("LEFT");
-           it!=CellsOfDomainEnd("LEFT"); it++ ) {
+     end_it = CellsOfDomainEnd("LEFT");
+     for ( auto it=CellsOfDomainBegin("LEFT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              left.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("RIGHT");
-           it!=CellsOfDomainEnd("RIGHT"); it++ ) {
+     end_it = CellsOfDomainEnd("RIGHT");
+     for ( auto it=CellsOfDomainBegin("RIGHT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              right.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("TOP");
-           it!=CellsOfDomainEnd("TOP"); it++ ) {
+     end_it = CellsOfDomainEnd("TOP");
+     for ( auto it=CellsOfDomainBegin("TOP"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              top.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("FRONT");
-           it!=CellsOfDomainEnd("FRONT"); it++ ) {
+     end_it = CellsOfDomainEnd("FRONT");
+     for ( auto it=CellsOfDomainBegin("FRONT"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              front.push_back( (*vit) );
        }
-     for ( auto it=CellsOfDomainBegin("BACK");
-           it!=CellsOfDomainEnd("BACK"); it++ ) {
+     end_it = CellsOfDomainEnd("BACK");
+     for ( auto it=CellsOfDomainBegin("BACK"); it!=end_it; it++ ) {
            for ( auto vit=vset.PlistBegin(*it); vit!=vset.PlistEnd(*it); vit++ )
              back.push_back( (*vit) );
        }

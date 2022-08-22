@@ -1,15 +1,62 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_Model3D.h"
+#include "ModelSubDomain_Test.h" // for the use of CompareModelSubDomains
 #include "Boundary.h"
 #include "Region.h"
 #include "VTU_Interface.h"
-#include "NodeCenteredFiniteVolumeTransport.h"
+//#include "NodeCenteredFiniteVolumeTransport.h"
 #include "Timer.hpp"
 
 using namespace std;
 
-namespace csmp
-  {
+namespace csmp {
+  
+void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
+ {
+   Model<3>* model3d_(0);
+   string    model3d_name_;
+   
+    // ansys 3d model - discontiguous
+   if ( !contiguous ) {
+        cout << "\n-------------------------------------------------------";
+        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
+        cout << "\n-------------------------------------------------------";
+        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
+        model3d_name_ = "ModelDykeAllLayersSplit";
+        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true );
+ 
+        //writing ansys model to file deleting it and then recreating a csmp native model from the file
+        if ( reconstruct_from_file ) {
+            model3d_->OutputToBinaryFile(model3d_name_.c_str());
+            delete model3d_;
+            model3d_ = new Model<3U>(model3d_name_);
+           }
+        delete model3d_;
+        model3d_ = nullptr;
+        return;
+     }
+
+    // ansys 3d model - contiguous
+    cout << "\n-------------------------------------------------------";
+    cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
+    cout << "\n-------------------------------------------------------";
+    string varFileName = "CSMP-variables.txt";
+    model3d_name_ = "prism_test";
+    model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
+
+    if ( reconstruct_from_file ) {
+        // writing ansys model to file deleting it and then recreating a csmp native model from the file
+        model3d_->OutputToBinaryFile(model3d_name_.c_str());
+        delete model3d_;
+        model3d_ = new Model<3U>(model3d_name_);
+      }
+  
+ } // end create_ANSYS3D_Model
+
+
+
+
+
 
   void ANSYS_Model3D_Test::run()
     {
@@ -336,47 +383,237 @@ namespace csmp
     
     
     
-void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
- {
-   Model<3>* model3d_(0);
-   string    model3d_name_;
-   
-    // ansys 3d model - discontiguous
-   if ( !contiguous ) {
-        cout << "\n-------------------------------------------------------";
-        cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
-        cout << "\n-------------------------------------------------------";
-        string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
-        model3d_name_ = "ModelDykeAllLayersSplit";
-        model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true, true );
- 
-        //writing ansys model to file deleting it and then recreating a csmp native model from the file
-        if ( reconstruct_from_file ) {
-            model3d_->OutputToBinaryFile(model3d_name_.c_str());
-            delete model3d_;
-            model3d_ = new Model<3U>(model3d_name_);
-           }
-        delete model3d_;
-        model3d_ = nullptr;
-        return;
-     }
-
-    // ansys 3d model - contiguous
-    cout << "\n-------------------------------------------------------";
-    cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
-    cout << "\n-------------------------------------------------------";
-    string varFileName = "CSMP-variables.txt";
-    model3d_name_ = "prism_test";
-    model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
-
-    if ( reconstruct_from_file ) {
-        // writing ansys model to file deleting it and then recreating a csmp native model from the file
-        model3d_->OutputToBinaryFile(model3d_name_.c_str());
-        delete model3d_;
-        model3d_ = new Model<3U>(model3d_name_);
-      }
-  
- } // end create_ANSYS3D_Model
     
 
-  } // csmp
+
+void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
+ {
+    // Test: box-shaped model with boundary information (Boundary->ModelSubDomain)
+    // -----------------------------------------------------------------------------
+         ANSYS_Model3D model1( "cube_flag", "CSMP-variables.txt",
+                                 false, /* irregular_mesh */
+                                 true   /* binary_file */
+                             );
+                             
+        _test( model1.EstablishEdgeBoundariesOfBoxShapedModel() );
+        
+         // loop over model boundary verifying consistency between AtBoundary() and region flags
+         bool left_fail(false), right_fail(false), bottom_fail(false), top_fail(false), front_fail(false), back_fail(false);
+	       for ( auto it = model1.BoundariesBegin(); it != model1.BoundariesEnd(); ++it ) {
+               const string bname((*it).first);
+               for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit ) {
+                     if ( bname == "LEFT"   and (*nit)->AtBoundary() != LEFT )   left_fail = true;
+                     if ( bname == "RIGHT"  and (*nit)->AtBoundary() != RIGHT )  right_fail = true;
+                     if ( bname == "TOP"    and (*nit)->AtBoundary() != TOP )    top_fail = true;
+                     if ( bname == "BOTTOM" and (*nit)->AtBoundary() != BOTTOM ) bottom_fail = true;
+                     if ( bname == "FRONT"  and (*nit)->AtBoundary() != FRONT )  front_fail = true;
+                     if ( bname == "BACK"   and (*nit)->AtBoundary() != BACK )   back_fail = true;
+                 }
+            }
+        
+         // testing the side boundaries
+         _test( left_fail   == false );
+         _test( right_fail  == false );
+         _test( bottom_fail == false );
+         _test( top_fail    == false );
+         _test( front_fail  == false );
+         _test( back_fail   == false );
+        
+         // testing the edges and their perimeter nodes=model corners as well
+         bool edge1_fail(false), edge2_fail(false), edge3_fail(false), edge4_fail(false),
+              edge5_fail(false), edge6_fail(false), edge7_fail(false), edge8_fail(false),
+              edge9_fail(false), edge10_fail(false), edge11_fail(false), edge12_fail(false);
+
+         // E.P Need to create EDGE boundaries in the first place for this to Work!!! NEED TO CALL METHOD BELOW FIRST
+         // model1.EstablishEdgeBoundariesOfBoxShapedModel();
+
+
+	       for ( auto it = model1.BoundariesBegin(); it != model1.BoundariesEnd(); ++it ) {
+               const string bname((*it).first);
+               // the interior part of the edges comes first
+               for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit ) {
+                     if ( bname == "EDGE1" and (*nit)->AtBoundary() != EDGE1 ) edge1_fail = true;
+                     if ( bname == "EDGE2" and (*nit)->AtBoundary() != EDGE2 ) edge2_fail = true;
+                     if ( bname == "EDGE3" and (*nit)->AtBoundary() != EDGE3 ) edge3_fail = true;
+                     if ( bname == "EDGE4" and (*nit)->AtBoundary() != EDGE4 ) edge4_fail = true;
+                     if ( bname == "EDGE5" and (*nit)->AtBoundary() != EDGE5 ) edge5_fail = true;
+                     if ( bname == "EDGE6" and (*nit)->AtBoundary() != EDGE6 ) edge6_fail = true;
+                     if ( bname == "EDGE7" and (*nit)->AtBoundary() != EDGE7 ) edge7_fail = true;
+                     if ( bname == "EDGE8" and (*nit)->AtBoundary() != EDGE8 ) edge8_fail = true;
+                     if ( bname == "EDGE9" and (*nit)->AtBoundary() != EDGE9 ) edge9_fail = true;
+                     if ( bname == "EDGE10" and (*nit)->AtBoundary() != EDGE10 ) edge10_fail = true;
+                     if ( bname == "EDGE11" and (*nit)->AtBoundary() != EDGE11 ) edge11_fail = true;
+                     if ( bname == "EDGE12" and (*nit)->AtBoundary() != EDGE12 ) edge12_fail = true;
+                 }
+            }
+
+         // testing the side boundaries
+         _test( edge1_fail == false );
+         _test( edge2_fail == false );
+         _test( edge3_fail == false );
+         _test( edge4_fail == false );
+         _test( edge5_fail == false );
+         _test( edge6_fail == false );
+         _test( edge7_fail == false );
+         _test( edge8_fail == false );
+         _test( edge9_fail == false );
+         _test( edge10_fail == false );
+         _test( edge11_fail == false );
+         _test( edge12_fail == false );
+        
+         // verifying that the perimeter nodes of the edges contain the correct corner nodes
+         set<BOX_BOUNDARY> bnodes;
+         // testing edge1
+         const Boundary<3U> edge1(model1.Boundary("EDGE1"));
+         _test( edge1.PerimeterNodes() == 2 );
+         for ( auto nit=edge1.PerimeterNodesBegin(); nit!=edge1.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR1) > 0 );
+         _test( bnodes.count(CNR2) > 0 );
+         bnodes.clear();
+         // testing edge2
+         const Boundary<3U> edge2(model1.Boundary("EDGE2"));
+         _test( edge2.PerimeterNodes() == 2 );
+         for ( auto nit=edge2.PerimeterNodesBegin(); nit!=edge2.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR3) > 0 );
+         _test( bnodes.count(CNR2) > 0 );
+         bnodes.clear();
+         // testing edge3
+         const Boundary<3U> edge3(model1.Boundary("EDGE3"));
+         _test( edge3.PerimeterNodes() == 2 );
+         for ( auto nit=edge3.PerimeterNodesBegin(); nit!=edge3.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR3) > 0 );
+         _test( bnodes.count(CNR4) > 0 );
+         bnodes.clear();
+         // testing edge4
+         const Boundary<3U> edge4(model1.Boundary("EDGE4"));
+         _test( edge4.PerimeterNodes() == 2 );
+         for ( auto nit=edge4.PerimeterNodesBegin(); nit!=edge4.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR1) > 0 );
+         _test( bnodes.count(CNR4) > 0 );
+         bnodes.clear();
+         // testing edge5
+         const Boundary<3U> edge5(model1.Boundary("EDGE5"));
+         _test( edge5.PerimeterNodes() == 2 );
+         for ( auto nit=edge5.PerimeterNodesBegin(); nit!=edge5.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR1) > 0 );
+         _test( bnodes.count(CNR5) > 0 );
+         bnodes.clear();
+         // testing edge6
+         const Boundary<3U> edge6(model1.Boundary("EDGE6"));
+         _test( edge6.PerimeterNodes() == 2 );
+         for ( auto nit=edge6.PerimeterNodesBegin(); nit!=edge6.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR2) > 0 );
+         _test( bnodes.count(CNR6) > 0 );
+         bnodes.clear();
+         // testing edge7
+         const Boundary<3U> edge7(model1.Boundary("EDGE7"));
+         _test( edge7.PerimeterNodes() == 2 );
+         for ( auto nit=edge7.PerimeterNodesBegin(); nit!=edge7.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR3) > 0 );
+         _test( bnodes.count(CNR7) > 0 );
+         bnodes.clear();
+         // testing edge1
+         const Boundary<3U> edge8(model1.Boundary("EDGE8"));
+         _test( edge8.PerimeterNodes() == 2 );
+         for ( auto nit=edge8.PerimeterNodesBegin(); nit!=edge8.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR4) > 0 );
+         _test( bnodes.count(CNR8) > 0 );
+         bnodes.clear();
+         // testing edge9
+         const Boundary<3U> edge9(model1.Boundary("EDGE9"));
+         _test( edge9.PerimeterNodes() == 2 );
+         for ( auto nit=edge9.PerimeterNodesBegin(); nit!=edge9.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR5) > 0 );
+         _test( bnodes.count(CNR6) > 0 );
+         bnodes.clear();
+         // testing edge10
+         const Boundary<3U> edge10(model1.Boundary("EDGE10"));
+         _test( edge10.PerimeterNodes() == 2 );
+         for ( auto nit=edge10.PerimeterNodesBegin(); nit!=edge10.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR6) > 0 );
+         _test( bnodes.count(CNR7) > 0 );
+         bnodes.clear();
+         // testing edge11
+         const Boundary<3U> edge11(model1.Boundary("EDGE11"));
+         _test( edge11.PerimeterNodes() == 2 );
+         for ( auto nit=edge11.PerimeterNodesBegin(); nit!=edge11.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR7) > 0 );
+         _test( bnodes.count(CNR8) > 0 );
+         bnodes.clear();
+         // testing edge12
+         const Boundary<3U> edge12(model1.Boundary("EDGE12"));
+         _test( edge1.PerimeterNodes() == 2 );
+         for ( auto nit=edge12.PerimeterNodesBegin(); nit!=edge12.NodesEnd(); ++nit )
+           bnodes.insert( (*nit)->AtBoundary() );
+         _test( bnodes.count(CNR8) > 0 );
+         _test( bnodes.count(CNR5) > 0 );
+         bnodes.clear();
+
+         // mapping flags to values to test assignments
+// TODO: adding properties upsets indices for the access of the flagged array
+// call  UpdateParametersAndDatabase(); or  UpdateIndexReferences(); but they are private?
+
+/* CREATE PROPERTY UPSETS flagged array variable storage offset
+         model1.CreateProperty( "box flag", "none", SCALAR, NODE );
+         model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
+         boxFlagsToVariable( model1, "box flag", "box flag element" );
+
+         VTK_Interface<3U>  vtk_output;
+         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 0 );
+        
+         // checking whether the side boundary interior and boundary flags are identified correctly
+         //const csmp::Index  prop_key(model1.Database().StorageKey("box flag"));
+         Boundary<3U>&      bref(model1.Boundary("FRONT"));
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(FRONT)), INTERIOR );
+         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
+
+         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 1 );
+
+         Boundary<3U>&      brefl(model1.Boundary("LEFT"));
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(LEFT)), INTERIOR );
+         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
+
+         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 2 );
+        
+         // testing by comparison with BOX_BOUNDARY flags
+*/
+
+         // saving the model to csmp native binary file format
+         model1.OutputToBinaryFile("ModelSubDomain_Test2");
+        
+         // bringing the model back from binary file
+         Model<3U>  model2( string("ModelSubDomain_Test2") );
+
+         ModelSubDomain_Test comparitor;
+
+         _test( comparitor.CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), true ) );
+
+
+   // TESTING THE SAME WITH  A MORE COMPLEX MODEL
+      {
+         ANSYS_Model3D modelOut( "prism_test", "CSMP-variables.txt",
+                                 false, /* irregular_mesh */
+                                 true   /* binary_file */
+                             );
+        
+         model1.OutputToBinaryFile("ModelSubDomain_Test3");
+         Model<3U>  modelIn( string("ModelSubDomain_Test3") );
+
+         _test( comparitor.CompareModelSubdomains( modelOut.Region("FRAC_VOLUMES"),
+                                                   modelIn.Region("FRAC_VOLUMES"), true ) );
+      }
+
+} // end ModelRecoveryFromFileTest
+
+} // csmp

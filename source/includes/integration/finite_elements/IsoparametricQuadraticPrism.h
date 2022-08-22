@@ -21,6 +21,7 @@ public:
     virtual uint32_t  CornerNodes() const  { return 8; }
     virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t  MidSideNodes() const { return 12; }
+    virtual uint32_t  NodesPerFace( uint32_t face ) const;
 
     virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
                                                                   const std::vector<double>& IVAR,

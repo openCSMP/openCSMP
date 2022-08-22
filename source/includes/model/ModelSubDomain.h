@@ -125,10 +125,7 @@ class ModelSubDomain {
     void    UpdateMemberIndexes() const;
     
     /// output current indices to vector
-    void    MemberCellIndexes( std::vector<size_t>& ) const;
-    
-    /// setting all cell indices to a specific value
-    void    SetCellIndexes( size_t new_idx );
+    std::vector<size_t>  MemberCellIndexes() const;
 
     // ----------------------------------------
     // access

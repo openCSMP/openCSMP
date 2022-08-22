@@ -630,7 +630,7 @@ Point<dim>  Element<dim>::BaryCenter() const
 {
   Point<dim>  pt( N( 0U )->Coordinate() );
   const auto  n_nodes( Nodes() );
-  for ( auto i = 1U; i<n_nodes; ++i )
+  for ( auto i{1U}; i<n_nodes; ++i )
     pt += N( i )->Coordinate();
 
   return pt / static_cast<double>(Nodes());

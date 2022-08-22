@@ -370,7 +370,7 @@ public:
   void Out() const;
 
   void Verbose( bool verbose );
-  bool Verbose();
+  bool Verbose() const;
 
 protected:
 
@@ -412,7 +412,7 @@ private:
   std::string            model_name_;       ///< name of simulation model
   PropertyDatabase<dim>  database_;         ///< where variable specifications are stored
   MeshManager<dim>       mesh_manager_;     ///< stores mesh: all Node, Element, Face, InterFace objects
-  bool                   verbose_;          ///< for detailed screen output todo: replace with global verbose singleton
+  bool                   verbose_ = false;  ///< for detailed screen output todo: replace with global verbose singleton
 };
 
 // SUPPORTING FUNCTIONS

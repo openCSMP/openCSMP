@@ -963,7 +963,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
   if ( side == OUTSIDE ) {
     if (  n  < cn_nodes ){
       //Traverse nodes backwards from the last corner node
-      const uint32_t outside_idx = fe_nodes + cn_nodes - 1 - n  ;
+      const uint32_t outside_idx = fe_nodes + cn_nodes - 1 - n;
       assert(outside_idx >= fe_nodes );
       return node_connector_[outside_idx];
     }
@@ -972,7 +972,7 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
     int one{1}, md_nodes = this->FE()->MidSideNodes();
     if (n < cn_nodes + md_nodes ){
      //Traverse the midside  nodes in reverse, but starting one node before the last node
-      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - uint32_t(one % md_nodes) - (n-cn_nodes) ;
+      const uint32_t outside_idx = fe_nodes + cn_nodes + md_nodes - 1 - uint32_t(one % md_nodes) - (n-cn_nodes);
       assert(outside_idx >= fe_nodes );
       return node_connector_[outside_idx];
     } else {
@@ -997,7 +997,6 @@ csmp::Node<dim>* const InterFace<dim>::MatchingN( uint32_t n, INTERFACE_SIDE sid
 
 
 
-
 /**
     Returns the equal dimensional neighbor of the InterFace which also is an interface element.
 */
@@ -1008,6 +1007,9 @@ csmp::InterFace<dim>* const InterFace<dim>::Neighbor( uint32_t n ) const
   assert( n < this->Neighbors() );
   return interface_connector_[n];
 }
+
+
+
 
 
 /**

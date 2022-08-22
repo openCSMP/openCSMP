@@ -4221,7 +4221,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                 pushBack( data, value );
               }
             }
-break;
+          break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : nodes_ ) {
@@ -4421,7 +4421,7 @@ break;
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4435,7 +4435,7 @@ break;
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4449,7 +4449,7 @@ break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4463,7 +4463,7 @@ break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4477,7 +4477,7 @@ break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-                const auto sectors( it.Sectors() );
+                const auto sectors{ it.Sectors() };
                 for ( auto i{0U}; i<sectors; ++i ) {
                   const auto ips_per_sector( it.IntegrationPointsPerSector() );
                   for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4517,7 +4517,7 @@ break;
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : elements_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4531,7 +4531,7 @@ break;
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4545,7 +4545,7 @@ break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : elements_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4559,7 +4559,7 @@ break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4573,7 +4573,7 @@ break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : elements_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4761,7 +4761,7 @@ break;
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4775,7 +4775,7 @@ break;
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4789,7 +4789,7 @@ break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4803,7 +4803,7 @@ break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4817,7 +4817,7 @@ break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -4858,7 +4858,7 @@ break;
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : faces_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4872,7 +4872,7 @@ break;
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4886,7 +4886,7 @@ break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : faces_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4900,7 +4900,7 @@ break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -4914,7 +4914,7 @@ break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : faces_ ) {
-            const auto facets( it.Facets() );
+            const auto facets{ it.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5003,7 +5003,7 @@ break;
   // interface integration point properties
   // --------------------------------------
   if ( database.ListProperties( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
-    const size_t interface_ips( (*interfaces_.begin()).IntegrationPoints() );
+    const size_t interface_ips{ (*interfaces_.begin()).IntegrationPoints() };
 
     for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
     {
@@ -5082,8 +5082,8 @@ break;
   // ---------------------------------------------
   if ( database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     assert( InterFaces() > 0 );
-    const size_t interface_sector_ips( (*interfaces_.begin()).IntegrationPointsPerSector() );
-    const size_t sectors_per_interface( (*interfaces_.begin()).Sectors() );
+    const size_t interface_sector_ips{ (*interfaces_.begin()).IntegrationPointsPerSector() };
+    const size_t sectors_per_interface{ (*interfaces_.begin()).Sectors() };
 
     for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
     {
@@ -5097,7 +5097,7 @@ break;
         case SCALAR: {
           ScalarVariable value;
           for ( const auto& it : interfaces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -5111,7 +5111,7 @@ break;
         case VECTOR: {
           VectorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -5125,7 +5125,7 @@ break;
         case TENSOR: {
           TensorVariable<dim> value;
           for ( const auto& it : interfaces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -5139,7 +5139,7 @@ break;
         case ARRAY: {
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -5153,7 +5153,7 @@ break;
         case FLAGGEDARRAY: {
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : interfaces_ ) {
-            const auto sectors( it.Sectors() );
+            const auto sectors{ it.Sectors() };
             for ( auto i{0U}; i<sectors; ++i ) {
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
@@ -5192,7 +5192,7 @@ break;
           case SCALAR: {
                 ScalarVariable value;
                 for ( const auto& it : interfaces_ ) {
-                  const auto facets( it.Facets() );
+                  const auto facets{ it.Facets() };
                   for ( auto i{0U}; i<facets; ++i ) {
                     const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                     for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5206,7 +5206,7 @@ break;
         case VECTOR: {
               VectorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
-                const auto facets( it.Facets() );
+                const auto facets{ it.Facets() };
                 for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5220,7 +5220,7 @@ break;
         case TENSOR: {
               TensorVariable<dim> value;
               for ( const auto& it : interfaces_ ) {
-                const auto facets( it.Facets() );
+                const auto facets{ it.Facets() };
                 for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5234,7 +5234,7 @@ break;
         case ARRAY: {
               ArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
-                const auto facets( it.Facets() );
+                const auto facets{ it.Facets() };
                 for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5244,11 +5244,11 @@ break;
                 }
               }
             }
-break;
+          break;
         case FLAGGEDARRAY: {
               FlaggedArrayVariable value( (*pit).second.dataDepth );
               for ( const auto& it : interfaces_ ) {
-                const auto facets( it.Facets() );
+                const auto facets{ it.Facets() };
                 for ( auto i{0U}; i<facets; ++i ) {
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
@@ -5258,7 +5258,7 @@ break;
                 }
               }
             }
-break;
+          break;
         default:
           csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                              (*pit).first, "type of interface facet integration point variable not recognized." );
@@ -5304,9 +5304,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
   for ( auto pit=vset.PmtrlBegin(); pit!=vset.PmtrlEnd(); ++pit, ++it )
     (*it).Material_ID( (*pit) );
 
-  // -------------------
-  // assigns properties
-  // -------------------
+  // -----------------------------------------
+  // assigns properties, NODE properties first
+  // -----------------------------------------
   for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
     {
       // apart from the name string key in the map, PropertyData contains the most important variable specifications
@@ -5462,7 +5462,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t entry( 0U );
@@ -5475,7 +5475,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t entry( 0U );
@@ -5488,7 +5488,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -5501,7 +5501,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t entry( 0U );
@@ -5514,7 +5514,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           default:
             csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element integration point variable not recognized." );
@@ -5539,9 +5539,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto sectors( e.Sectors() );
+              const auto sectors{ e.Sectors() };
               for ( auto i{0U}; i<sectors; ++i ) {
-                const auto ips_per_sector( e.IntegrationPointsPerSector() );
+                const auto ips_per_sector{ e.IntegrationPointsPerSector() };
                 for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
@@ -5550,15 +5550,15 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case VECTOR: {
             VectorVariable<dim> value;
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto sectors( e.Sectors() );
+              const auto sectors{ e.Sectors() };
               for ( auto i{0U}; i<sectors; ++i ) {
-                const auto ips_per_sector( e.IntegrationPointsPerSector() );
+                const auto ips_per_sector{ e.IntegrationPointsPerSector() };
                 for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
@@ -5567,15 +5567,15 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case TENSOR: {
             TensorVariable<dim> value;
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto sectors( e.Sectors() );
+              const auto sectors{ e.Sectors() };
               for ( auto i{0U}; i<sectors; ++i ) {
-                const auto ips_per_sector( e.IntegrationPointsPerSector() );
+                const auto ips_per_sector{ e.IntegrationPointsPerSector() };
                 for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
@@ -5584,15 +5584,15 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case ARRAY: {
             ArrayVariable value( key.dataDepth );
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto sectors( e.Sectors() );
+              const auto sectors{ e.Sectors() };
               for ( auto i{0U}; i<sectors; ++i ) {
-                const auto ips_per_sector( e.IntegrationPointsPerSector() );
+                const auto ips_per_sector{ e.IntegrationPointsPerSector() };
                 for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
@@ -5601,15 +5601,15 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           case FLAGGEDARRAY: {
             FlaggedArrayVariable value( key.dataDepth );
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto sectors( e.Sectors() );
+              const auto sectors{ e.Sectors() };
               for ( auto i{0U}; i<sectors; ++i ) {
-                const auto ips_per_sector( e.IntegrationPointsPerSector() );
+                const auto ips_per_sector{ e.IntegrationPointsPerSector() };
                 for ( auto j{0U}; j<ips_per_sector; ++j ) {
                       read( (*pit).second, entry, value );
                       e.Store( i, j, key, value );
@@ -5618,7 +5618,7 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
                   }
                 }
               }
- break;
+            break;
           default:
             csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
                                (*pit).first, "type of element sector integraton point variable not recognized." );
@@ -5643,9 +5643,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
           size_t entry( 0U );
           for ( auto& e : elements_ ) {
             if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-            const auto facets( e.Facets() );
+            const auto facets{ e.Facets() };
             for ( auto i{0U}; i<facets; ++i ) {
-              const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+              const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 read( (*pit).second, entry, value );
                 e.Store( i, j, key, value );
@@ -5660,9 +5660,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto facets( e.Facets() );
+              const auto facets{ e.Facets() };
               for ( auto i{0U}; i<facets; ++i ) {
-                const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+                const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
                 for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
@@ -5677,9 +5677,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto facets( e.Facets() );
+              const auto facets{ e.Facets() };
               for ( auto i{0U}; i<facets; ++i ) {
-                const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+                const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
                 for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
@@ -5694,9 +5694,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto facets( e.Facets() );
+              const auto facets{ e.Facets() };
               for ( auto i{0U}; i<facets; ++i ) {
-                const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+                const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
                 for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
@@ -5711,9 +5711,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
             size_t entry( 0U );
             for ( auto& e : elements_ ) {
               if ( e.FE_Type() == ISOPARAMETRIC_LINEAR_BAR ) continue;
-              const auto facets( e.Facets() );
+              const auto facets{ e.Facets() };
               for ( auto i{0U}; i<facets; ++i ) {
-                const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+                const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
                 for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
@@ -5901,9 +5901,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ScalarVariable value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -5917,9 +5917,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         VectorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -5933,9 +5933,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         TensorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -5949,9 +5949,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -5965,9 +5965,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6000,9 +6000,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ScalarVariable value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6016,9 +6016,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         VectorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6032,9 +6032,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         TensorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6048,9 +6048,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6064,9 +6064,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : faces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
                   read( (*pit).second, entry, value );
                   e.Store( i, j, key, value );
@@ -6258,9 +6258,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ScalarVariable value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6274,9 +6274,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         VectorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6290,9 +6290,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         TensorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6306,9 +6306,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6322,9 +6322,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto sectors( e.Sectors() );
+          const auto sectors{ e.Sectors() };
           for ( auto i{0U}; i<sectors; ++i ) {
-            const auto ips_per_sector( e.IntegrationPointsPerSector() );
+            const auto ips_per_sector{ e.IntegrationPointsPerSector() };
             for ( auto j{0U}; j<ips_per_sector; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6357,9 +6357,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ScalarVariable value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6373,9 +6373,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         VectorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6389,9 +6389,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         TensorVariable<dim> value;
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6405,9 +6405,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         ArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );
@@ -6421,9 +6421,9 @@ void MeshManager<dim>::InputStoredVariablesFrom( const PropertyDatabase<dim>& da
         FlaggedArrayVariable value( key.dataDepth );
         size_t entry( 0U );
         for ( auto& e : interfaces_ ) {
-          const auto facets( e.Facets() );
+          const auto facets{ e.Facets() };
           for ( auto i{0U}; i<facets; ++i ) {
-            const auto ips_per_facet( e.IntegrationPointsPerFacet() );
+            const auto ips_per_facet{ e.IntegrationPointsPerFacet() };
             for ( auto j{0U}; j<ips_per_facet; ++j ) {
               read( (*pit).second, entry, value );
               e.Store( i, j, key, value );

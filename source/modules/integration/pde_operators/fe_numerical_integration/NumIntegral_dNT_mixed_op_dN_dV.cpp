@@ -16,10 +16,10 @@ integral properties.
  */
 template<uint32_t dim,class CELL>
 NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_dV( const PropertyDatabase<dim>& pref,
-                                                            const char*           oper, 
-                                                            const char*           nodal_oper_multiplier,
-                                                            const char*           basic, 
-                                                            const char*           test ) 
+                                                                          const char*           oper,
+                                                                          const char*           nodal_oper_multiplier,
+                                                                          const char*           basic,
+                                                                          const char*           test ) 
   : MathOperatorLHS<dim>(pref,oper,basic,test),
     B(dim,3), BT(3,dim),
     ip_nmult(3),

@@ -254,6 +254,20 @@ void IsoparametricQuadraticPyramid::NodesOfFace( uint32_t face_id, vector<uint32
 */
 
 
+uint32_t IsoparametricQuadraticPyramid::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 6U;
+        case 1: return 6U;
+        case 2: return 6U;
+        case 3: return 6U;
+        case 4: return 8U;
+      }
+    cerr <<"\nIsoparametricQuadraticPyramid::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
+
 
 vector<uint32_t>  IsoparametricQuadraticPyramid::NodesOfFace( uint32_t face_id ) const
  {

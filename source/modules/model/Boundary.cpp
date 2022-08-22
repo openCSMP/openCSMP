@@ -257,7 +257,7 @@ void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_v
       if ( prop_key.place == BOUNDARY ) {
            if ( sd != COMPLETE )
              csmp_error.Note( WARNING, "Boundary<dim>::InputPropertyValue",
-                                          input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
+                              input_prop, "is a BOUNDARY property and no distinction between INTERIOR and PERIMETER can be made" );
            this->Store( prop_key, new_value );
            return;
         }
@@ -860,6 +860,11 @@ cerr << endl;
 */
 
 
+
+/**
+      Method assumes that face numbers follow consecutively on the element numbers and before the interface numbers in the mesh.
+      Thus, the first Face is expected to have the index  'n_elements'
+*/
 template<uint32_t dim>
 size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
                                           vector<size_t>& cell_ids )
@@ -885,6 +890,7 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
     csmp_error.Note( WARNING, "Boundary<dim>::AccumulateByNumber",
                       "user-supplied face ID set contained duplicates which were removed." );
 #endif
+  // checking that there are not more ids than there are faces in the model
   if ( cell_ids.size() > mesh.Faces() )
     csmp_error.Note( ERROR, "Boundary<dim>::AccumulateByNumber",
                        "user-supplied face-number vector is larger than range of index-to-element-pointer mapping." );
