@@ -457,6 +457,20 @@ void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint
 */
 
 
+uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 3U;
+        case 1: return 3U;
+        case 2: return 3U;
+        case 3: return 3U;
+        case 4: return 4U;
+      }
+    cerr <<"\nIsoparametricLinearPyramid::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
+
 
 vector<uint32_t>  IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id ) const
  {
