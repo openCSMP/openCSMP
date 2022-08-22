@@ -182,6 +182,8 @@ void Box_Test::run()
 
 
 
+
+
 bool Box_Test::TestBoundaryFlagAssigment2D()
  {
     // 1. standard model construction
@@ -304,6 +306,7 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     VSet<3U>  vset;
     const bool bSkewed{false};
     test_Create_Prism_Hexa_VSet( vset, bSkewed );
+    vset.InitialiseNodeTopologyIdentifiers();
     Model<3U>  model( vset, "CSMP-variables.txt" );
     printModelDimensions( model );
     Region<3U> model_domain(model.Region("Model"));
@@ -312,7 +315,74 @@ void Box_Test::TestWhetherElementNormalsAreOutwardPointing()
     _equal( model_surface_area, 6. * 3. * 3., 10. ); // 6-faces with 9m2, tolerance=10 eps
     
     _test( model.EstablishBoxBoundariesFromOrientation() );
-
+    
+    // 0. Testing that the boundaries get correctly flagged
+    // ----------------------------------------------------
+    {
+      recreateBoxBoundaryFlags( model );
+      const Boundary<3U>& back   = model.Boundary("BACK");
+      const Boundary<3U>& bottom = model.Boundary("BOTTOM");
+      const Boundary<3U>& right  = model.Boundary("RIGHT");
+      const Boundary<3U>& top    = model.Boundary("TOP");
+      const Boundary<3U>& left   = model.Boundary("LEFT");
+      const Boundary<3U>& front  = model.Boundary("FRONT");
+      
+      for ( auto nit=back.NodesBegin(); nit!=back.NodesEnd(); ++nit ) {
+           _test( isBACK( (*nit)->AtBoundary() ) );
+           if ( !isBACK( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+      for ( auto nit=bottom.NodesBegin(); nit!=bottom.NodesEnd(); ++nit ) {
+           _test( isBOTTOM( (*nit)->AtBoundary() ) );
+           if ( !isBOTTOM( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+      for ( auto nit=right.NodesBegin(); nit!=right.NodesEnd(); ++nit ) {
+           _test( isRIGHT( (*nit)->AtBoundary() ) );
+           if ( !isRIGHT( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+      for ( auto nit=top.NodesBegin(); nit!=top.NodesEnd(); ++nit ) {
+           _test( isTOP( (*nit)->AtBoundary() ) );
+           if ( !isTOP( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+      for ( auto nit=left.NodesBegin(); nit!=left.NodesEnd(); ++nit ) {
+           _test( isLEFT( (*nit)->AtBoundary() ) );
+           if ( !isLEFT( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+      for ( auto nit=front.NodesBegin(); nit!=front.NodesEnd(); ++nit ) {
+           _test( isFRONT( (*nit)->AtBoundary() ) );
+           if ( !isFRONT( (*nit)->AtBoundary() ) ) {
+                cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+             }
+        }
+        
+      if ( model.ContainsBoundary("IRREGULAR") ) {
+           const Boundary<3U>& irregular = model.Boundary("IRREGULAR");
+           for ( auto nit=irregular.NodesBegin(); nit!=irregular.NodesEnd(); ++nit ) {
+                _test( canBeIRREGULAR( (*nit)->AtBoundary() ) );
+                 if ( !canBeIRREGULAR( (*nit)->AtBoundary() ) ) {
+                      cout <<"\n\t"<< (*nit)->Idx() <<": "<< parseBoundary( (*nit)->AtBoundary() );
+                      cout <<", geometry: "<< parseTopology( (*nit)->Attribute() ) << endl;
+                   }
+               }
+        }
+    } // end testing boundary flags
+    
+    
     // 1. testing the unit normals of the (volumetric elements)
     // --------------------------------------------------------
     vector<double> leftNormal, rightNormal, topNormal, bottomNormal, frontNormal, backNormal, eUnitNormal;
@@ -564,25 +634,84 @@ bool Box_Test::TestBoundaryFlagRecreation()
     VSet<3U>      vset;
     ModelTopology topo;
     test_Create_FracBox( topo, vset );
+    
+    // adding 'node number' as a variable
+    PropertyData node_nums( NODE, SCALAR, 3U );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+
     // renaming the boundaries according to a box-shaped model
-    topo.ChangeDomainName( "BOUNDARY1", "BACK");
-    topo.ChangeDomainName( "BOUNDARY2", "BOTTOM" );
-    topo.ChangeDomainName( "BOUNDARY3", "RIGHT" );
-    topo.ChangeDomainName( "BOUNDARY4", "TOP" );
-    topo.ChangeDomainName( "BOUNDARY5", "LEFT" );
-    topo.ChangeDomainName( "BOUNDARY6", "FRONT" );
+    // (see assignments by normal orientation shown further below
+    topo.ChangeDomainName( "BOUNDARY1", "LEFT");
+    topo.ChangeDomainName( "BOUNDARY2", "RIGHT" );
+    topo.ChangeDomainName( "BOUNDARY3", "FRONT" );
+    topo.ChangeDomainName( "BOUNDARY4", "BACK" );
+    topo.ChangeDomainName( "BOUNDARY5", "TOP" );
+    topo.ChangeDomainName( "BOUNDARY6", "BOTTOM" );
+    topo.AssignBoxShapedModelFlags( vset );
     
     // change the name so that the regions file is not found (and all regions are used)
     topo.ModelName("FracBox_without_regions_file");
     
+    // building model with boundaries, converting surface elements to faces
     const bool create_boundaries_from_surf_elmts{ true };
     Model<3U> model( topo, vset, "CSMP-variables.txt", create_boundaries_from_surf_elmts );
+    _test( model.Mesh().Elements() + model.Mesh().Faces() == vset.Elements() );
+    _test( model.Mesh().Nodes() == vset.Vertices() );
 
+    if ( verbose_ ) {
+         const bool vtk_output{ false };
+         if ( vtk_output ) {
+             VTU_Interface<3U> vtu_output( model );
+             vtu_output.OutputDataToVTU( "BoxTest_BACK_fn",   "face number", model.Boundary("BACK"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_BOTTOM_fn", "face number", model.Boundary("BOTTOM"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_RIGHT_fn",  "face number", model.Boundary("RIGHT"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_TOP_fn",    "face number", model.Boundary("TOP"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_LEFT_fn",   "face number", model.Boundary("LEFT"), 0 );
+             vtu_output.OutputDataToVTU( "BoxTest_FRONT_fn",  "face number", model.Boundary("FRONT"), 0 );
+           }
+         // printing the normal to first Face
+         cout <<"\nBoxTest: boundary flag recreation:\n";
+         cout <<"\nBACK "<< model.Boundary("BACK").E(0)->UnitNormal();
+         cout <<"\nBOTTOM "<< model.Boundary("BOTTOM").E(0)->UnitNormal();
+         cout <<"\nRIGHT "<< model.Boundary("RIGHT").E(0)->UnitNormal();
+         cout <<"\nTOP "<< model.Boundary("TOP").E(0)->UnitNormal();
+         cout <<"\nLEFT "<< model.Boundary("LEFT").E(0)->UnitNormal();
+         cout <<"\nFRONT "<< model.Boundary("FRONT").E(0)->UnitNormal();
+         cout << endl;
+      }
+    
     // testing whether the reflagging works correctly
     recreateBoxBoundaryFlags( model );
+    const Region<3U>& model_domain = model.Region("Model");
+    const csmp::Index nn_key = model.Database().StorageKey("node number");
+    // testing that the boundary flags match
+    for ( size_t i{0U}; i<vset.Vertices(); i++ ) {
+         _test( vset.BFlag(i) == model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
+         if ( vset.BFlag(i) != model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() ) {
+              cout <<"\nnode "<< model_domain.N(i)->Idx() <<": "<< parseBoundary( model_domain.N( static_cast<size_t>(model_domain.N(i)->Read(nn_key)) )->AtBoundary() );
+              cout <<" vs. "<< parseBoundary( intToBOX_BOUNDARY(vset.BFlag(i)) ) << endl;
+           }
+      }
 
     return isStrictlyBoxShaped( model );
  }
+
+/* does not work because element numbers are affected by face creation
+
+    // numbering the faces that were newly created
+    const csmp::Index fn_key = model.Database().StorageKey("face number");
+    size_t fcount{ model.Mesh().Elements() };
+    for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit )
+      (*fit).Store( fn_key, makeScalar(PLAIN, static_cast<double>(fcount++) ) );
+      
+    // creating VSet for testing
+    VSet<3U>  vset2;
+    const bool preserve_original_numbering{ true };
+    model.OutputMeshTo( vset2, preserve_original_numbering );
+*/
+
 
 
 

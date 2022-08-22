@@ -142,6 +142,9 @@ bool isFRONT( BOX_BOUNDARY );
 /// returns whether boundary flag belongs to boundary BACK (3D only)
 bool isBACK( BOX_BOUNDARY );
 
+/// returns true also for edges and corners
+bool canBeIRREGULAR( BOX_BOUNDARY bd );
+
 /// infers from node flags, and cell types, which boundary the element face lies on including INTERNAL ones
 template<uint32_t dim, template<uint32_t> class CELL>
 BOX_BOUNDARY atBoundary( const CELL<dim>* const, uint32_t boundary_face );

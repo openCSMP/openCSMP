@@ -679,7 +679,7 @@ uint32_t spatialDimensionOfModel( const char* csmp_binary )
 template<uint32_t dim>
 void  Model<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stored_variables )
  {
-    this->IndexByPropertyValues();
+    if ( get_indices_from_stored_variables ) this->IndexByPropertyValues();
     mesh_manager_.OutputMeshTo( vset,  get_indices_from_stored_variables );
  }
 

@@ -160,6 +160,19 @@ bool isBACK( BOX_BOUNDARY bd )
 
 
 /**
+     For irregular shaped boundaries that were created from surfaces
+     @todo figure out whether edges and corners should be included?
+*/
+bool canBeIRREGULAR( BOX_BOUNDARY bd )
+{
+  if ( bd == IRREGULAR ) return true;
+  if ( isEdge( bd ) )  return true;
+  if ( isCorner( bd ) )  return true;
+  return false;
+}
+
+
+/**
    Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
 */
 BOX_BOUNDARY intToBOX_BOUNDARY( int8_t i )
