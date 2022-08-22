@@ -3363,7 +3363,7 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
       }
    
     // smoothing
-    Region<dim> ref = model.Region(region);
+    Region<dim>& ref = model.Region(region);
    
     for ( auto i{0U}; i<n_smoothing_cycles; i++ ) {
          ref.ExtrapolateCellToNodeProperty( element_var, temp_node_var );

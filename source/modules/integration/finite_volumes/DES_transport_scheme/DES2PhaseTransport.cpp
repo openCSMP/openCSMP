@@ -163,7 +163,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
          "The 'sector pore volume' variable must be SCALAR and placed on SECTOR_INTEGRATION_POINT"  );
 
   // model-wide initialisation
-    Region<dim> region(sg_.Region("Model"));
+    Region<dim>&  region(sg_.Region("Model"));
     region.InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE );

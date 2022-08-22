@@ -311,7 +311,7 @@ void TextInterface::OutputDataAsTextColumns( const char* region,
                                              const Model<dim>& sg,
                                              const char* fname, const char* s ) const
  {
-     const Region<dim>  model_domain(sg.Region(region));
+     const Region<dim>&  model_domain(sg.Region(region));
      char  file_name[200];
      strcpy( file_name, fname );
      strcat( file_name, ".txt");
@@ -678,7 +678,7 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
          return;
       }
 
-     const Region<dim> output_region(model.Region(region));
+     const Region<dim>& output_region(model.Region(region));
 
      // 2. Getting the output file ready
      string  outfile_prefix(file_name);
@@ -876,8 +876,8 @@ template<uint32_t dim>
 void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const Model<dim>& sg,
                                                      const char* fname, const char* s ) const
  {
-     const Region<dim>  model_domain(sg.Region(region));
-     csmp::Index                prop_key = sg.Database().StorageKey(s);
+     const Region<dim>&  model_domain(sg.Region(region));
+     const csmp::Index   prop_key = sg.Database().StorageKey(s);
      char  file_name[200];
      strcpy( file_name, fname );
      strcat( file_name, ".txt");

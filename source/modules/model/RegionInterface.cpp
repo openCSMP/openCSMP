@@ -1130,7 +1130,7 @@ template<template<uint32_t> class ElementComp>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegionName, ElementComp<dim> const& elementComp, const char* hostRegion )
   {
     static_cast<REGION_COMPLEX<dim>*>(this)->UpdateIndices();
-    csmp::Region<dim> const& rref( this->Region( hostRegion ) );
+    csmp::Region<dim>& rref( this->Region( hostRegion ) );
     rref.UpdateMemberIndexes();
     vector<uint32_t> elementIds;
     elementIds.reserve( rref.Elements() );

@@ -3312,8 +3312,8 @@ template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea(
         Model<dim>& model,BOX_BOUNDARY boundary, const char* property )
 {
-    csmp::Index  prop_key = pref_.StorageKey(property);
-    Region<dim>  rref(model.Region(parseBoundary(boundary).c_str()));
+    const csmp::Index  prop_key = pref_.StorageKey(property);
+    Region<dim>&       rref(model.Region(parseBoundary(boundary).c_str()));
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::ConvertScalarBoundaryValues",

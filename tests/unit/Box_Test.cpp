@@ -625,6 +625,8 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
 
 /**
    tests method which recreates boundary flags
+   
+   TODO: still fails because of discrepancy in boundary flags
 */
 bool Box_Test::TestBoundaryFlagRecreation()
  {

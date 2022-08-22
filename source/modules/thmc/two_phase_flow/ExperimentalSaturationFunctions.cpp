@@ -611,7 +611,7 @@ double ExperimentalSaturationFunctions<dim,USER>::sw_from_pc_at( Element<dim>* c
 template<uint32_t dim, template<uint32_t> class USER>
 void ExperimentalSaturationFunctions<dim,USER>::initialiseResidualSaturations( Model<dim>& model )
 {
-    Region<dim> mref = model.Region("Model");
+    Region<dim>& mref = model.Region("Model");
     for ( auto eit = mref.CellsBegin(); eit!= mref.CellsEnd(); eit++ ) {
       double swr = swr_.find( RockType(*eit) )->second;
       double snr = snr_.find( RockType(*eit) )->second;
