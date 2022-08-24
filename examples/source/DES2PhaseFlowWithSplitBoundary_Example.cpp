@@ -74,11 +74,12 @@ void DES2PhaseFlowWithSplitBoundary_Example::Run()
 
     const string variables_file("DES_2phase_variables.txt");
 
-    if (dimension == 2U) {
-      ANSYS_Model2D model(input_file.c_str(), variables_file.c_str());
+    // SKM: changed to operate with regions file because we do not automatically want to include all regions from ANSYS
+    if (dimension == 2U) { // model            regions-file prefix 
+      ANSYS_Model2D model( input_file.c_str(), input_file.c_str(), variables_file.c_str() );
       RunSimulation(model);
     } else if (dimension == 3U) {
-      ANSYS_Model3D model(input_file.c_str(), variables_file.c_str());
+      ANSYS_Model3D model(input_file.c_str(), input_file.c_str(), variables_file.c_str() );
       RunSimulation(model);
     }
 
@@ -132,8 +133,19 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     if(with_tensor_permeability) cout<<"\ntensor permeability is in use"<<endl;
     else  cout<<"\nscalar permeability is in use"<<endl;
 
+    // 2. PROVISIONS FOR LOWER-DIMENSIONAL REPRESENTATION OF SAND HORIZONS
+    // -------------------------------------------------------------------
+    if ( with_split_boundaries ) {
+         computeGravityDipVectors( model );
+         if ( model.ContainsRegion("sand") ) {
+              const string dim_minus1_region("sand");
+              computeFV_Diameter_Normal_VerticalExtent( model, dim_minus1_region );
+              lowerDimensionalLayerDiagnostics( model, dim_minus1_region );
+           }
+         else cout <<"\nRunSimulation: no provisions made for lower-dimensional sandbodies."<< endl;
+      }
 
-    // 2. RELATIVE PERMEABILITY & CAPILLARY PRESSURE MODEL
+    // 3. RELATIVE PERMEABILITY & CAPILLARY PRESSURE MODEL
     // ---------------------------------------------------
     // flow functions (Brooks Corey)
     FlowFunctionsModule1<dim> flowfunctions(model.Database(), model.Read( model.Database().StorageKey("acceleration gravity") ));
@@ -232,9 +244,14 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     input_properties.emplace_back( "saturation aqueous phase" );
     input_properties.emplace_back( "thickness" );
     input_properties.emplace_back( "entry pressure" );
-    if(with_split_boundaries) {
+    if ( with_split_boundaries ) {
       input_properties.emplace_back("pressure continuity status");
       input_properties.emplace_back("breakthrough status");
+      // for model with lower dimensional representation of the sand horizons inside the split boundaries
+      input_properties.emplace_back("finite volume diameter");
+      input_properties.emplace_back("finite volume normal");
+      input_properties.emplace_back("finite volume vertical extent");
+      input_properties.emplace_back("finite volume diagnostics");
     }
 
     //defining output properties
@@ -629,6 +646,247 @@ template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowPropertie
 
   template void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<2U>&, bool, bool);
   template void DES2PhaseFlowWithSplitBoundary_Example::ComputeSteadyStatePressure(Model<3U>&, bool, bool);
+
+
+
+
+/**
+      loops over the finite volumes of the supplied lower-dimensional supplied region, computing the diameters of the finite volumes and their normals
+      @todo the "dip vector" variables and thickness attributes need to be computed elsewhere
+*/
+template<uint32_t dim>
+void computeFV_Diameter_Normal_VerticalExtent( Model<dim>& model, const std::string& region_name )
+ {
+    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    if ( !model.ContainsRegion( region_name ) )
+      csmp_error.Note( ERROR, "computeFV_Diameter_Normal_VerticalExtent",
+                      "target region does not exist");
+                      
+    Region<dim>& subdomain = model.Region( region_name );
+    // checking that the region is indeed lower dimensional
+    if ( subdomain.SpatialDimensions().second != dim - 1 )
+      csmp_error.Note( ERROR, "computeFV_Diameter_Normal_VerticalExtent",
+                      "target region is not lower dimensional (dim region != dim-1)");
+                      
+    // computing FV diameter and FV-averaged normals to lower-dimensional finite volumes
+    const csmp::Index diam_key = model.Database().StorageKey("finite volume diameter");
+    const csmp::Index nrml_key = model.Database().StorageKey("finite volume normal");
+    const csmp::Index vext_key = model.Database().StorageKey("finite volume vertical extent");
+    
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+         // FV diameter/vertical extent
+         const auto FV_props = diameterAndVerticalExtentOfLowerDimensional_FV( (*nit) );
+         assert( FV_props.first > 0. ); // diameter must be greater than zero
+         (*nit)->Store( diam_key, makeScalar(PLAIN,FV_props.first) );
+         (*nit)->Store( vext_key, makeScalar(PLAIN,FV_props.second) );
+         // FV normal
+         Point<dim> nrml;
+         bool was_able_to_compute_normal = (*nit)->UnitNormal( nrml );
+         assert( was_able_to_compute_normal );
+         // if this normal is not upward pointing, it is flipped
+         if constexpr ( dim == 3U ) if ( dotProduct( nrml, Point<3U>(0.,1.,0.) ) < 0. ) nrml *= -1.;
+         if constexpr ( dim == 2U ) if ( dotProduct( nrml, Point<2U>(0.,1.) ) < 0. )    nrml *= -1.;
+         (*nit)->Store( nrml_key, move( VectorVariable<dim>(nrml) ) );
+      }
+ 
+ } // end computeFV_Diameter_Normal_VerticalExtent
+
+
+template void computeFV_Diameter_Normal_VerticalExtent( Model<3U>&, const string& );
+template void computeFV_Diameter_Normal_VerticalExtent( Model<2U>&, const string& );
+
+
+
+
+/**
+    compute gravity dip vectors borrowed from ACGS
+*/
+template<uint32_t dim>
+void computeGravityDipVectors( Model<dim>& model )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  // 1. volumetric model region
+  // --------------------------
+  csmp::Region<dim>&   sgref = model.Region( "Model" );
+  VectorVariable<dim>  gvt;
+  Point<dim>           gravity_direction;
+  if constexpr ( dim == 3U ) gravity_direction = { 0., -1., 0. };
+  else                       gravity_direction = { 0., -1. };
+
+  const csmp::Index key_dip  = model.Database().StorageKey("dip vector");
+  const csmp::Index key_dipf = model.Database().StorageKey("face dip vector");
+
+  for ( auto it = sgref.CellsBegin(); it != sgref.CellsEnd(); it++ )
+  {
+    // computing gravity direction vectors for lower dimensional elements
+    // line elements
+    if ( (*it)->IsLine() ) {
+      Point<dim> line_vector( (*it)->N( 0 )->Coordinate() - (*it)->N( 1 )->Coordinate() );
+      line_vector.NormalizeLengthTo( 1. );
+      if ( line_vector[1] > 0. ) line_vector *= -1.;
+      gvt( 0 ) = line_vector[0];
+      gvt( 1 ) = line_vector[1];
+      if constexpr (dim == 3U ) gvt( 2 ) = line_vector[2];
+    }
+    // surface elements
+    else if ( (*it)->IsSurface() ) {
+      Point<dim> line_vector1( (*it)->N( 0 )->Coordinate() - (*it)->N( 1 )->Coordinate() );
+      Point<dim> line_vector2( (*it)->N( 1 )->Coordinate() - (*it)->N( 2 )->Coordinate() );
+
+      // finding the normal to the surface element
+      Point<dim> surface_normal( crossProduct( line_vector1, line_vector2 ) );
+
+      // finding the gravity direction from the cross-product of the horizontal surface vector and the gravity direction
+      Point<dim> gravity_projection_on_surface( crossProduct( surface_normal, crossProduct( surface_normal, gravity_direction ) ) );
+      gravity_projection_on_surface.NormalizeLengthTo( 1. );
+
+      if ( gravity_projection_on_surface[1] > 0. ) gravity_projection_on_surface *= -1.;
+
+      gvt( 0 ) = gravity_projection_on_surface[0];
+      gvt( 1 ) = gravity_projection_on_surface[1];
+      if constexpr (dim == 3U ) gvt( 2 ) = gravity_projection_on_surface[2];
+    }
+    // volume elements
+    else {
+      gvt( 0 ) = 0.;
+      gvt( 1 ) = -1.;
+      if constexpr (dim == 3U ) gvt( 2 ) = 0.;
+    }
+    if(isnan(gvt( 0 )) || isnan(gvt( 1 )) || isnan(gvt( 2 ))) {
+        gvt( 0 ) = 0.;
+        gvt( 1 ) = -1.;
+        if constexpr (dim == 3U ) gvt( 2 ) = 0.;
+        cerr<<"gvt rest to [0, -1, 0]"<<endl;
+    }
+    (*it)->Store( key_dip, gvt );
+  }
+
+  // 2. for all model boundaries
+  // ---------------------------
+  for ( auto git = model.BoundariesBegin(); git != model.BoundariesEnd(); git++ )
+  {
+    //          cout <<"\n\tBoundary: "<< (*git).first.first << (*git).first.second;
+    //          cout.flush();
+    assert( (*git).second.Cells() > 0 );
+    for ( auto it = (*git).second.CellsBegin(); it != (*git).second.CellsEnd(); it++ )
+    {
+      if ( (*it) != nullptr and (*it)->IsSurface() ) {
+        // finding the normal to the surface element
+        Point<dim> line_vector1( (*it)->N( 0 )->Coordinate() - (*it)->N( 1 )->Coordinate() );
+        Point<dim> line_vector2( (*it)->N( 1 )->Coordinate() - (*it)->N( 2 )->Coordinate() );
+        Point<dim> surface_normal( crossProduct( line_vector1, line_vector2 ) );
+
+        // finding the gravity direction from the cross-product of the hor izontal surface vector and the gravity direction
+        Point<dim> gravity_projection_on_surface( crossProduct( surface_normal, crossProduct( surface_normal, gravity_direction ) ) );
+        gravity_projection_on_surface.NormalizeLengthTo( 1. );
+
+        if ( gravity_projection_on_surface[1] > 0. ) gravity_projection_on_surface *= -1.;
+
+        gvt( 0 ) = gravity_projection_on_surface[0];
+        gvt( 1 ) = gravity_projection_on_surface[1];
+        if constexpr (dim == 3U ) gvt( 2 ) = gravity_projection_on_surface[2];
+
+        (*it)->Store( key_dipf, gvt );
+      }
+      // line elements
+      else if ( (*it) != nullptr and (*it)->IsLine() ) {
+        Point<dim> gravity_projection_on_line( (*it)->N( 0 )->Coordinate() - (*it)->N( 1 )->Coordinate() );
+        // flip gravity vector if it is upward pointing
+        if ( (*it)->N( 0 )->y() > (*it)->N( 1 )->y() ) gravity_projection_on_line *= -1.;
+        gravity_projection_on_line.NormalizeLengthTo( 1. );
+
+        gvt( 0 ) = gravity_projection_on_line[0];
+        gvt( 1 ) = gravity_projection_on_line[1];
+        if constexpr (dim == 3U ) gvt( 2 ) = gravity_projection_on_line[2];
+
+        (*it)->Store( key_dipf, gvt );
+      }
+      else {
+        if ( (*it) != nullptr ) (*it)->Out();
+        csmp_error.Note( WARNING, "CO2_GeoSequestrationSimulator::ComputeGravityDipVectors:",
+                        "could not compute boundary normal for (?line?) element." );
+      }
+    }
+  }
+  
+ } // end gravityDipVectors
+
+template void computeGravityDipVectors( Model<3U>& );
+template void computeGravityDipVectors( Model<2U>& );
+
+
+
+/**
+      Checks whether thickness is large enough to permit spillage.
+      Checks whether:
+      - the 'thickness' of the FV large enough to allow for spillage to occur
+      - the FV diameter less than the thickness calling into question a lower-dimensional representation  (else a lower-dim representation may not be warranted
+      
+      The results are written to the "finite volume diagnostics" parameter.
+*/
+template<uint32_t dim>
+void lowerDimensionalLayerDiagnostics( Model<dim>& model, const string& region_name )
+  {
+    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    if ( !model.ContainsRegion( region_name ) )
+      csmp_error.Note( ERROR, "lowerDimensionalLayerDiagnostics",
+                      "target region does not exist");
+                      
+    Region<dim>& subdomain = model.Region( region_name );
+    // checking that the region is indeed lower dimensional
+    if ( subdomain.SpatialDimensions().second != dim - 1 )
+      csmp_error.Note( ERROR, "lowerDimensionalLayerDiagnostics",
+                      "target region is not lower dimensional (dim region != dim-1)");
+                      
+    // computing FV diameter and FV-averaged normals to lower-dimensional finite volumes
+    // input variables
+    const csmp::Index thi_key  = model.Database().StorageKey("thickness");
+    const csmp::Index diam_key = model.Database().StorageKey("finite volume diameter");
+    const csmp::Index nrml_key = model.Database().StorageKey("finite volume normal");
+    const csmp::Index vext_key = model.Database().StorageKey("finite volume vertical extent");
+    // output variables
+    const csmp::Index fvdi_key = model.Database().StorageKey("finite volume diagnostics");
+    
+    // obtaining the diagnostics (options are mutually exclusive)
+    enum FV_DIAGNOSTICS { OK, NOT_THICK_ENOUGH, THICKNESS_GREATER_THAN_DIAMETER };
+    VectorVariable<dim> nrml;
+
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+         (*nit)->Read( nrml_key );
+         const double FV_diameter        = (*nit)->Read( diam_key );
+         const double FV_vertical_extent = (*nit)->Read( vext_key );
+         (*nit)->Read( nrml_key );
+
+         // Test 1: Is thickness' of the FV large enough to allow spillage to occur
+         // -----------------------------------------------------------------------
+         // computing the mininum thickness of the surface elements connected to FV
+         double minimum_thickness{ 1.0e+30 }; // crazy high value
+         for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
+             if constexpr ( dim == 3U ) {
+                 if ( (*nit)->Parent(i)->IsSurface() )
+                   minimum_thickness = min( minimum_thickness, (*nit)->Parent(i)->Read( thi_key ) );
+               }
+             if constexpr ( dim == 2U ) {
+                 if ( (*nit)->Parent(i)->IsLine() )
+                   minimum_thickness = min( minimum_thickness, (*nit)->Parent(i)->Read( thi_key ) );
+               }
+             static_assert( dim != 1U, "lowerDimensionalLayerDiagnostics: method cannot be applied in 1D" );
+           }
+         // is 'minimum_thickness' >= vertical extent
+         if ( minimum_thickness < FV_vertical_extent )
+           (*nit)->Store( fvdi_key, makeScalar(ANY,NOT_THICK_ENOUGH) );
+
+         // Test 2: Is thickness greater than the diameter of the FV
+         // --------------------------------------------------------
+         if ( minimum_thickness > FV_diameter )
+           (*nit)->Store( fvdi_key, makeScalar(ANY,THICKNESS_GREATER_THAN_DIAMETER) );
+      }
+
+  } // end lowerDimensionalLayerDiagnostics
+
+template void lowerDimensionalLayerDiagnostics( Model<2U>&, const string& );
+template void lowerDimensionalLayerDiagnostics( Model<3U>&, const string& );
 
 
 

@@ -900,15 +900,15 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
      switch( prop_key.place ) 
       {
         case NODE: { 
-            if      ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
-            else if ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
-            else if ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
+            if constexpr      ( dim == 1U ) fprintf( fp, "Node\tX\t %s\n", s );
+            else if constexpr ( dim == 2U ) fprintf( fp, "Node\tX\tY\t %s\n", s );
+            else if constexpr ( dim == 3U ) fprintf( fp, "Node\tX\tY\tZ\t %s\n", s );
             for ( auto nit=model_domain.NodesBegin(); nit!=model_domain.NodesEnd(); nit++ )
               {
                 fprintf( fp, "%6.0lu\t",  (*nit)->Idx() );
                 fprintf( fp, "%E\t", (*nit)->x() );
-                if ( dim != 1U ) fprintf( fp, "%E\t", (*nit)->y() );
-                if ( dim == 3U ) fprintf( fp, "%E\t", (*nit)->z() );
+                if constexpr ( dim != 1U ) fprintf( fp, "%E\t", (*nit)->y() );
+                if constexpr ( dim == 3U ) fprintf( fp, "%E\t", (*nit)->z() );
                 switch (prop_key.type)
                   {
                      case SCALAR: 
@@ -933,9 +933,9 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
             break;
           }
         case ELEMENT_INTEGRATION_POINT: { 
-            if ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
-            else if ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
-            else if ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
+            if constexpr ( dim == 1U ) fprintf( fp, "Element ID, IntegrationPoint\tX\t %s \n", s );
+            else if constexpr ( dim == 2U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\t %s \n", s );
+            else if constexpr ( dim == 3U ) fprintf( fp, "Element ID, IntegrationPoint\tX\tY\tZ\t %s \n", s );
             for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
               {
@@ -973,16 +973,16 @@ void TextInterface::OutputDataAsTextColumnsNumbered( const char* region, const M
              break; 
           }
         case ELEMENT: { 
-             if      ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
-             else if ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
-             else if ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
+             if constexpr      ( dim == 1U ) fprintf( fp, "Element\tX\t %s \n", s );
+             else if constexpr ( dim == 2U ) fprintf( fp, "Element\tX\tY\t %s \n", s );
+             else if constexpr ( dim == 3U ) fprintf( fp, "Element\tX\tY\tZ\t %s \n", s );
              for ( auto eit=model_domain.CellsBegin(); eit!=model_domain.CellsEnd(); eit++ )
               {
                  fprintf( fp, "%u\t", static_cast<uint32_t>((*eit)->Idx()) );
                  xyz = ((*eit)->BaryCenter()).Coordinates();
                  fprintf( fp, "%E\t", xyz[0] );
-                 if ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
-                 if ( dim == 3U ) fprintf( fp, "%E\t", xyz[2] );
+                 if constexpr ( dim != 1U ) fprintf( fp, "%E\t", xyz[1] );
+                 if constexpr ( dim == 3U ) fprintf( fp, "%E\t", xyz[2] );
 
                  switch (prop_key.type)
                    {

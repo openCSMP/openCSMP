@@ -441,7 +441,7 @@ VectorVariable<3U> VectorVariable<3U>::CrossProduct( const VectorVariable& v ) c
 
 double  VectorVariable<3U>::Length() const
 {
-  return std::sqrt( data[0] * data[0] + data[1] * data[1] + data[2] * data[2] );
+  return std::hypot( data[0], data[1], data[2] );
 }
 
 
