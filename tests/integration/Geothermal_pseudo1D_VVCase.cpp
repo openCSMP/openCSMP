@@ -22,19 +22,19 @@ Criterion:  comparison with TOUGH
 =================================
 */
 
-  void Geothermal_pseudo1D_VVCase::outputToVTU( Model<3U>& model,string model_name, const list<string>& props, size_t timestep )
+  void Geothermal_pseudo1D_VVCase::outputToVTU( Model<2U>& model,string model_name, const list<string>& props, size_t timestep )
   {
-      static VTU_Interface<3U> vtu(model);
+      static VTU_Interface<2U> vtu(model);
       vtu.OutputDataToVTU( (model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
   }
 
-  void Geothermal_pseudo1D_VVCase::ComputeMassConductivity (Model<3U>& model)
+  void Geothermal_pseudo1D_VVCase::ComputeMassConductivity (Model<2U>& model)
   {
-      PropertyHandle<3U> rho_ph ( model, "density liquid", SCALAR, NODE );
-      PropertyHandle<3U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
-      PropertyHandle<3U> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
+      PropertyHandle<2U> rho_ph ( model, "density liquid", SCALAR, NODE );
+      PropertyHandle<2U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
+      PropertyHandle<2U> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
       
-      ConductivityVisitor<3U> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
+      ConductivityVisitor<2U> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
       model.Accept(conductivity_visitor);
 
       lambda_ph = 0.;
@@ -43,7 +43,7 @@ Criterion:  comparison with TOUGH
   }
 
 
-  bool Geothermal_pseudo1D_VVCase::Compare (Model<3U>& model, string file)
+  bool Geothermal_pseudo1D_VVCase::Compare (Model<2U>& model, string file)
   {
     FILE* fin;
     double x, y, val, res, tol;
@@ -77,7 +77,7 @@ Criterion:  comparison with TOUGH
     nPoints = points.size();
 
     // finds CSMP computed temperature values at given points
-    PropertyAtPointVisitor<3U> pAt(model, points, "temperature");
+    PropertyAtPointVisitor<2U> pAt(model, points, "temperature");
     model.Accept(pAt);
 
     res = 0.;
@@ -105,7 +105,7 @@ Criterion:  comparison with TOUGH
   void Geothermal_pseudo1D_VVCase::run()
   {
     bool& globalVerbose( GlobalVerbose::Instance().globalVerbose );
-    const  size_t DIM(3U);
+    const  size_t DIM(2U);
 
     globalVerbose=true;
 
@@ -116,7 +116,7 @@ Criterion:  comparison with TOUGH
 	std::string config_name (this->getName()); 
 	std::string vars_name (this->getName()+".txt");
     
-	ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , true, true );
+    ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true );
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );
@@ -181,7 +181,7 @@ Criterion:  comparison with TOUGH
     #endif
     
     //! steady state pressure
-    PDE_Integrator<3U, Region>  steady_state_pressure( solver );
+    PDE_Integrator<DIM, Region>  steady_state_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> >    zero_fluid_src( pd_ref, "fluid pressure" );
@@ -193,7 +193,7 @@ Criterion:  comparison with TOUGH
 	steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<3U, Region>  transient_pressure( solver );
+    PDE_Integrator<DIM, Region>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);

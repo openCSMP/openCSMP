@@ -594,7 +594,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
-    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != ULONG_MAX ) {
+    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != UNSPECIFIED ) {
         string  msg ="The 'diffusivity' variable '";
         msg       += pref_.Name( diff_key_ );
         msg       +="' must be a scalar-type element variable";

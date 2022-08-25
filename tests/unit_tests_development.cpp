@@ -101,6 +101,15 @@
 //#include "Placement_Test_2D.h"
 //#include "Placement_Test_3D.h"
 
+//pressure diffusion
+#include "DirichletPressureBoxModel_VVCase.h"
+
+//finite volumes
+#include "GenericFiniteVolumeTransport_Test.h"
+#include "ExplicitAdvection2D_VVCase.h"
+#include "Geothermal_pseudo1D_VVCase.h"
+
+
 
 using namespace std;
 using namespace csmp;
@@ -117,10 +126,23 @@ TEST_CASE("Development tests", "[Dev]") {
     //Placement_Test_2D test; 
     //Placement_Test_3D test;
 
-  //InterFace_Test test;
-  SplitBoundary_Test test2;
+  InterFace_Test test00;
+  SplitBoundary_Test test01;
+  //test00.run();
+  //test01.run();
+
+  GenericFiniteVolumeTransport_Test test0;     //broken - no Finite volume defined
   //test.run();
-  test2.run();
+
+  DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
+  //test1.run();
+
+  ExplicitAdvection2D_VVCase test2;         //missing input files
+  //test2.run();
+
+  Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
+  test3.run();
+
 
  //   ANSYS_Model2D_Test test;
  //   test.run();
