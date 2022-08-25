@@ -1823,7 +1823,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     const csmp::Index region_key = dbase.StorageKey( "region identifier");
 
     if (n_original_elmts == 0U ) {
-         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceFacesByInterFaces", "supplied iterator range is empty; nothing was done.");
+         csmp_error.Note( WARNING, "MeshManager<dim>::ReplaceElementsByInterFaces", "supplied iterator range is empty; nothing was done.");
          return iface_ptrs;
       }
     else iface_ptrs.reserve( n_original_elmts );
@@ -1878,7 +1878,14 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
                }
              // if the necessary new node was already created earlier it was retrieved and is assigned here
              else in_out_nodes.insert( make_pair( inside_node, (*nit).second ));
-           } else in_out_nodes.insert(make_pair( inside_node, inside_node ));            //take inside node when node is at perimeter of model
+           } else {
+             //we are on the perimeter
+             in_out_nodes.insert(make_pair( inside_node, inside_node ));            //take inside node when node is at perimeter of model
+             //assign perimeter topo flag (needed if we have to split a perimeter later)
+             if (lower_dim_elmt->IsSurface()) inside_node->Attribute( PERIMETER_LINE  );
+             if (lower_dim_elmt->IsLine() )   inside_node->Attribute( PERIMETER_POINT );
+
+           }
 
            // add Inside and outside node INTERNAL flag if not at boundary
            if ( inside_node->AtBoundary() == NOT ) {
@@ -1950,7 +1957,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
      // TODO: these are global changes! - do this only for nodes that are affected
     UpdateConnectivity();
 
-    cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceFacesByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
+    cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceElementsByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
     cout << new_nodes.size() <<" new nodes."<< endl;
 
     return iface_ptrs;

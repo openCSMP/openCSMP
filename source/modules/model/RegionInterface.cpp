@@ -2467,6 +2467,26 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const c
 
 
 
+template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
+bool RegionInterface<dim, REGION_COMPLEX>::CheckRegionIdentifierIsUpToDate( const char* region_identifier )
+{
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  REGION_COMPLEX<dim>& regionComplex( static_cast<REGION_COMPLEX<dim>& >(*this) );
+
+  //if region_identifier not yet defined
+  if (regionComplex.Database().IsDefined( region_identifier ) == false )
+    return false;
+
+  //if region_identifier is defined, we need to check its values are up to date with the number of regions in the model
+  ScalarVariable highest_material_id;
+  (*(uniqueRegionMap_.rbegin()->second.CellsBegin()))->Read( regionComplex.Database().StorageKey( region_identifier), highest_material_id );
+
+  //Highest material id should be smaller than the number of regions by 1
+  bool approximatelyEqual = std::fabs(  static_cast<double>(this->UniqueRegions()) -  highest_material_id() - 1 ) < 0.1 ;
+
+  return  approximatelyEqual;
+}
 
 
 
@@ -2581,9 +2601,11 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
      // 3. unique regions: only get modified if they have been ScheduledForRebuilt()
      // ----------------------------------------------------------------------------
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit )
-       if ( (*rit).second.NeedsRebuilt() )
+       if ( (*rit).second.NeedsRebuilt() ){
          // assuming the the element neighbor connectivity was updated before by the MeshManager
          (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
+        std::cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;
+       }
        
  } // end UpdateRegions
 
