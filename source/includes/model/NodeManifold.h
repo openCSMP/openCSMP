@@ -10,6 +10,8 @@ namespace csmp {
 template<uint32_t dim> class Node;
 class Index;
 
+template<uint32_t dim> class InterFace;
+
 // TODO: shall we include specific InterFace parent connectivity to NodeManifolds?
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
   
@@ -75,8 +77,11 @@ class NodeManifold {
       void Out() const;
 
     private:
-      manifold      branches_;         ///< vector of Node - classifier pairs
-      ManifoldType  parent_geometry_;  ///< classifier for the manifold as a whole
+      manifold                         branches_;                        ///< vector of Node - classifier pairs
+      ManifoldType                     parent_geometry_;                 ///< classifier for the manifold as a whole
+
+      std::vector<InterFace<dim>*>     parent_interfaces_;               ///< all interfaces of branch
+      std::vector<std::pair<std::vector<InterFace<dim>*>, std::vector<uint32_t> > >      parent_interface_index_;     ///index of interface for each node on manifold
 };
 
 

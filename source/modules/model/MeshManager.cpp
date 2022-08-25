@@ -1843,6 +1843,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     // tracking already duplicated nodes to avoid duplicates
     //  original,  duplicate
     map<Node<dim>*,Node<dim>*>  new_nodes;
+    std::map<Node<dim>*,Node<dim>*> new_nodes_with_existing_manifold;
 
     // 1. converting interior Face objects into InterFace ones, duplicating their nodes
     // --------------------------------------------------------------------------------
@@ -1869,12 +1870,16 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          for ( uint32_t i{0U}; i<inside_fnids.size(); ++i ) {
            Node<dim>* inside_node = inside_elmt->N(inside_fnids[i]);
            //If we are at not at perimeter, or if we are at intersection (manifold)
-           if ( std::find( perim_first, perim_last, inside_node ) == perim_last || inside_node->IsManifold()  ){
+           bool inside_is_manifold = inside_node->IsManifold();
+           if ( std::find( perim_first, perim_last, inside_node ) == perim_last || inside_is_manifold  ){
              if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
                   //duplicating outside node if not already duplicated
                   Node<dim>* out_node = Duplicate( inside_node, lvsNode );
                   in_out_nodes.insert( make_pair( inside_node, out_node ));
                   new_nodes.insert( make_pair( inside_node, out_node ) );
+                  if (inside_is_manifold){
+                    new_nodes_with_existing_manifold.insert(make_pair(inside_node, out_node));
+                  }
                }
              // if the necessary new node was already created earlier it was retrieved and is assigned here
              else in_out_nodes.insert( make_pair( inside_node, (*nit).second ));
@@ -1954,7 +1959,31 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
 
      }//search continues untill all inside nodes are updated
 
-     // TODO: these are global changes! - do this only for nodes that are affected
+
+     //3.0 Update existing Interfaces which were intersected
+     // ---------------------------------------------------------
+     //for each duplicated node that was already a manifold (intersection)
+     for ( auto nit : new_nodes_with_existing_manifold){
+       Node<dim>* old_node = nit.first;
+       const auto interfaces = old_node->InterFaces();
+       //iterate over all interfaces of the node
+       uint32_t found{0U};
+       for ( uint32_t i{0U}; i < interfaces; i++ ){
+         INTERFACE_SIDE side = old_node->parent_interface_index(i).second
+         std::set<Node<dim>*> nds_of_parent = old_node->InterFace(i)->Parent(side)->CornerNodesOfFace(ParentFaceID(side));
+         // if Parent was updated with new node
+         if (nds_of_parent.find( old_node ) == nds_of_parent.end() ){
+           assert(nds_of_parent.find(nit.second) != nds_of_parent.end()); //check the parent element has the new duplicate node
+           //update interface with new node
+           old_node->InterFace(i)->Assign(old_node->parent_interface_index(i).first, nit.second, old_node->parent_interface_index(i).second );
+           found++;
+         }
+       }
+       //should only update one interface per node
+       assert(found == 1);
+     }
+
+     // TODO: these are global changes! - do this only for nodes that are affected - this also updates node parent interface connectivity
     UpdateConnectivity();
 
     cout <<"\n"<<"MeshManager<"<< dim <<">::ReplaceElementsByInterFaces: created "<< iface_ptrs.size() <<" new interfaces and ";
@@ -3647,6 +3676,40 @@ void MeshManager<dim>::UpdateConnectivity()
     
     // 4. Update node manifolds
     // ------------------------
+    // 4.1 (Re)-creating node connectivity to parent interfaces
+    // -----------------------------------------------------
+    // counting the parent elements of each node
+    map<NodeManifold<dim>*,set<InterFace<dim>*> >  parent_ifaces_per_manifold;
+    for ( auto& it : interfaces_ ) {
+        assert( it.FE() );
+        const auto nodes{ it.FE()->Nodes() };
+        for ( uint32_t n{0U}; n < nodes; ++n ) {
+          if( it.N(n,INSIDE)->IsManifold() ){
+            auto mit = parent_ifaces_per_manifold.insert( make_pair( it.N(n,INSIDE)->Manifold, std::set<InterFace<dim>*>(&it) )) ; //inserting NodeManifold - InterFace pair if it doesnt exist
+            if (mit.second == false) //if insertion didnt happen because manifold already exists
+              mit.first->second.insert(&it); //add new interface to already existing set of InterFaces for existing NodeManifold
+          } //end of found manifold
+        }//end of node iteration of interface
+    }//end of interface calibration
+
+
+    // 2. re-assigning the parent elements to nodes
+    // --------------------------------------------
+    for ( auto& nm : parent_ifaces_per_manifold ) {
+         const auto n_parents = static_cast<uint32_t>( nm.second.size() );
+         // looping over the future parents
+         for ( const auto& it : nm.second ) {
+           const auto n_nodes{it->Nodes()};
+           // assigning them to the node
+           for ( auto j{0U}; j<n_nodes; ++j )
+             if ( n.first == it->N(j) ) {
+                 it->N(j)->Assign( j, it );
+                 break;
+              }
+           }
+         assert( n.first->Parents() >= 1 );
+      }
+
     // this is expected to have been done during interface creation
     
  } // end UpdateConnectivity

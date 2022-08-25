@@ -652,7 +652,7 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_Intersection_3D( const char* me
 
   //Region -> SplitBoundary
   std::set<string> sb_names    = (model1.CreateSplitBoundaryFrom( "FRACTURE_PLANAR" ) ).first ;
-  //std::set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
+  std::set<string> sb_names_2  = (model1.CreateSplitBoundaryFrom( "FRACTURE_DIAGONAL" ) ).first ;
 
 
   std::string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
@@ -702,7 +702,7 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_Intersection_3D( const char* me
       _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
       //Outside coordinates must match with Inside and middle
       _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
-      _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+      //_test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
 
       //Testing nodes are duplicated in interior and the same on perimeter
       //if node is not on perimeter
@@ -719,12 +719,16 @@ bool SplitBoundary_Test::Test_NodeCorrespondance_Intersection_3D( const char* me
 
         //Testing inside parents assignmnet by checking they are part of BottomUnit region
         for (uint32_t p{0U} ; p < ifp->N(n,INSIDE)->Parents() ; ++p){
-          _test( left_back_bottom.Contains( ifp->N(n,INSIDE)->Parent(p)) || right_front_bottom.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
-          _test( !left_back_top.Contains( ifp->N(n,INSIDE)->Parent(p)) && !right_front_top.Contains( ifp->N(n,INSIDE)->Parent(p)) );    //top unit doenst have parent of inside node
+          if ( ifp->N(n,INSIDE)->Parent(p)->IsEquidimensional()){
+            _test( left_back_bottom.Contains( ifp->N(n,INSIDE)->Parent(p)) || right_front_bottom.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+            _test( !left_back_top.Contains( ifp->N(n,INSIDE)->Parent(p)) && !right_front_top.Contains( ifp->N(n,INSIDE)->Parent(p)) );    //top unit doenst have parent of inside node
+          }
         }
         for (uint32_t p{0U} ; p < ifp->MatchingN(n,OUTSIDE)->Parents() ; ++p){
-          _test( !left_back_bottom.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) ) && !right_front_bottom.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
-          _test( left_back_top.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)) || right_front_top.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+          if ( ifp->MatchingN(n,OUTSIDE)->Parent(p)->IsEquidimensional()){
+            _test( !left_back_bottom.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) ) && !right_front_bottom.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit Does Not have parent of matching outside node
+            _test( left_back_top.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)) || right_front_top.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p)));    //top unit does have parent of matching outside node
+          }
         }
 
       }  else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ) ; //test nodes match if on perimeter
