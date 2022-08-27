@@ -6,6 +6,7 @@
 
 // FV algorithms
 #include "DES2PhaseSlightlyCompressibleTransport.h"
+#include "SandPropertiesFor_VE_Model.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -135,15 +136,20 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     // 2. PROVISIONS FOR LOWER-DIMENSIONAL REPRESENTATION OF SAND HORIZONS
     // -------------------------------------------------------------------
-    if ( with_split_boundaries ) {
+      {
          computeGravityDipVectors( model );
-         if ( model.ContainsRegion("sand") ) {
-              const string dim_minus1_region("sand");
-              computeFV_Diameter_Normal_VerticalExtent( model, dim_minus1_region );
-              lowerDimensionalLayerDiagnostics( model, dim_minus1_region );
+         if ( model.ContainsRegion("SAND") ) {
+              const string dim_minus1_region("SAND");
+              // not needed in current approach: 27/8/22
+              //computeFV_Diameter_Normal_VerticalExtent( model, dim_minus1_region );
+              //computeSpillPointSaturation( model, dim_minus1_region );
+              //lowerDimensionalLayerDiagnostics( model, dim_minus1_region );
            }
          else cout <<"\nRunSimulation: no provisions made for lower-dimensional sandbodies."<< endl;
       }
+    const double bcp{2.}, swr{0.15}, snr{0.};
+    SandPropertiesFor_VE_Model  sandProperties( model, "SAND", bcp, swr, snr );
+
 
     // 3. RELATIVE PERMEABILITY & CAPILLARY PRESSURE MODEL
     // ---------------------------------------------------
@@ -152,6 +158,9 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     // solve static pressure before split boundaries are created
     Compute2PhaseFlowProperties(model, flowfunctions, with_gravity_forces, with_tensor_permeability);
+    if constexpr (dim == 2U )
+      if ( sandProperties.HasLineElementRepresentation() )
+         sandProperties.Compute2PhaseFlowPropertiesForSandLayer(model);
     ComputeSteadyStatePressure(model, with_gravity_forces, with_tensor_permeability);
     printRangeOfVariable( model, stdio, "fluid pressure" );
     vtu.OutputDataToVTU( "steady_state_pressure", "fluid pressure", "Model", 0 );
@@ -290,11 +299,11 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     monitor2.ScalarPropertyIntegrals( model, model_time );
     monitor2.Out( (model_name + "-monitored_pressure").c_str() );
 
-    // setting up time parameters
-    const double    day(86400.0);
-    double max_time (50.0*day); //run for 50 days
-    double time_increment(0.5*day); //timestep 0.5 day
-    double save_interval = 2.0*day; //save every 2 days
+    // setting up time parameters (HARDWIRED PRESSURE STEPS!)
+    const double day{86400.}, year{ 86400. * 365. };
+    double max_time (5. * year);      // run for # years
+    double time_increment(3600.); // timestep 
+    double save_interval = 5. * day;  // save every # days
 
     size_t time;
     double end_time = model_time + max_time;
@@ -310,8 +319,12 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     long output_count(1);
     while ( model_time < end_time )
     {
-      // solve pressure
       Compute2PhaseFlowProperties( model, flowfunctions, with_gravity_forces, with_tensor_permeability );
+      // setting multiphase flow properties for dim-1 elements representing sand
+      if constexpr ( dim == 2U )
+        if ( sandProperties.HasLineElementRepresentation() )
+          sandProperties.Compute2PhaseFlowPropertiesForSandLayer( model );
+      // solve pressure
       ComputeSteadyStatePressure(model, with_gravity_forces, with_tensor_permeability);
 
       //transport steps
@@ -341,6 +354,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
         if (DES) {
           std::string runtime_file_name(model_name + "-DES_runtime_output");
           vtu.OutputDataToVTU(runtime_file_name, output_properties, "Model", time);
+          vtu.OutputDataToVTU(runtime_file_name, output_properties, "SAND", time);
         } else {
           std::string runtime_file_name(model_name + "-TDS_runtime_output");
           vtu.OutputDataToVTU(runtime_file_name, output_properties, "Model", output_count);
@@ -757,7 +771,7 @@ void computeGravityDipVectors( Model<dim>& model )
         gvt( 0 ) = 0.;
         gvt( 1 ) = -1.;
         if constexpr (dim == 3U ) gvt( 2 ) = 0.;
-        cerr<<"gvt rest to [0, -1, 0]"<<endl;
+        cerr<<"gvt reset to [0, -1, 0]"<<endl;
     }
     (*it)->Store( key_dip, gvt );
   }
@@ -814,6 +828,97 @@ void computeGravityDipVectors( Model<dim>& model )
 
 template void computeGravityDipVectors( Model<3U>& );
 template void computeGravityDipVectors( Model<2U>& );
+
+
+
+/**
+    Computes the CO2 saturation value above which there a wedge of CO2  reaches from the lowest point of the FV to the highest point.
+    Method uses 'vertical extent' and 'finite volume diameter' in this calculation.
+    
+    The scalar node variable 'spill-point saturation' is computed from the ratio of the (approximate) volume of CO2 required to create CO2 pool
+    that spans its diameter in the dip direction and its pre-computed (exact total) 'finite volume'.
+*/
+template<uint32_t dim>
+void computeSpillPointSaturation( Model<dim>& model, const std::string& region_name )
+ {
+    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    if ( !model.ContainsRegion( region_name ) )
+      csmp_error.Note( ERROR, "computeSpillPointSaturation",
+                      "target region does not exist");
+                      
+    Region<dim>& subdomain = model.Region( region_name );
+    // checking that the region is indeed lower dimensional
+    if ( subdomain.SpatialDimensions().second != dim - 1 )
+      csmp_error.Note( ERROR, "computeSpillPointSaturation",
+                      "target region is not lower dimensional (dim region != dim-1)");
+                      
+    // computing FV diameter and FV-averaged normals to lower-dimensional finite volumes
+    // input variables
+    const csmp::Index fvol_key = model.Database().StorageKey("finite volume");
+    const csmp::Index thi_key  = model.Database().StorageKey("thickness");
+    const csmp::Index diam_key = model.Database().StorageKey("finite volume diameter");
+    const csmp::Index vext_key = model.Database().StorageKey("finite volume vertical extent");
+    const csmp::Index dip_key  = model.Database().StorageKey("dip vector");
+    // output variables
+    const csmp::Index spill_key = model.Database().StorageKey("spill-point saturation");
+    
+    // computation: finding the ratio between the approximate spill-point volume and the actual finite volume
+    // (porosity is ignored in this geometric analysis)
+    // (the approximate diameter of the finite volume is used 2R), see notes in MS Word.
+    // ---------------------------------------------------------------------------------
+    // V_wedge = 1/2 Pi r^2 (h1 + h2) -> h1=0, h2 = 'vertical extent'
+    VectorVariable<dim> dip_vec, flat_vec;
+    
+    for ( auto nit=subdomain.NodesBegin(); nit!=subdomain.NodesEnd(); ++nit ) {
+         const double h2 = (*nit)->Read( vext_key );
+         // if the FV lies in the horizontal plane
+         if ( fabs(h2) <= numeric_limits<double>::epsilon() * 100. ) {
+              (*nit)->Store( spill_key, makeScalar(ANY,0.) );
+              continue;
+           }
+         // if the FV is tilted
+         const double r          = (*nit)->Read( diam_key ) / 2.;
+         const double V_wedge    = 0.5 * PI * (r*r) * h2;
+         const double sCO2_spill = V_wedge / (*nit)->Read( fvol_key );
+         if ( sCO2_spill > 1. ) {
+              cerr <<"\nNode "<< (*nit)->Idx() <<": sCO2_spill: "<< sCO2_spill <<", location: "<< (*nit)->Coordinate();
+              cerr <<", dip of FV: ";
+              // computing average dip of the lower-dim elmts making up the FV sectors
+              double   avg_dip{ 0. };
+              uint32_t n_surf_elmts{ 0u };
+              for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
+                   if constexpr ( dim == 3U ) {
+                        if ( (*nit)->Parent(i)->IsSurface() ) {
+                             (*nit)->Parent(i)->Read( dip_key, dip_vec );
+                             // calculating dip
+                             flat_vec    = dip_vec;
+                             flat_vec(1) = 0.;
+                             double dip = dip_vec.AngleTo( flat_vec );
+                             avg_dip += dip;
+                             n_surf_elmts++;
+                          }
+                     }
+                   else if constexpr ( dim == 2U ) {
+                        if ( (*nit)->Parent(i)->IsLine() ) {
+                             (*nit)->Parent(i)->Read( dip_key, dip_vec );
+                             // calculating dip
+                             flat_vec    = dip_vec;
+                             flat_vec(1) = 0.;
+                             double dip = dip_vec.AngleTo( flat_vec );
+                             avg_dip += dip;
+                             n_surf_elmts++;
+                          }
+                     }
+                   static_assert( dim != 1U, "computeSpillPointSaturation: method does not work in 1D." );
+                   avg_dip /= static_cast<double>(n_surf_elmts);
+                }
+              cerr << avg_dip;
+              csmp_error.Note( WARNING, "computeSpillPointSaturation:", "computed value greater than 1.");
+           }
+         else (*nit)->Store( spill_key, makeScalar(ANY,sCO2_spill) );
+      }
+ 
+  } // end computeSpillPointSaturation
 
 
 
