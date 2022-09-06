@@ -448,40 +448,44 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
     cout << "\nPlease type in a threshold value of cell volume (m3) below which the cells will be output to VTU"<<endl;
     cin >> cell_volume_threshold;
     model.FormRegionFrom("cells_with_small_volumes", "cell volume", 0., cell_volume_threshold, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", "cells_with_small_volumes", 0.);
+    vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", "cell volume", 0.);
     //Jacobian_determinant
     const double jacobian_determinant_threshold(0.);
     model.FormRegionFrom("cells_with_negative_Jacobian_determinant", "Jacobian determinant", -1.0e30, 0., false);
-    vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", "cells_with_negative_Jacobian_determinant", 0.);
+    vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", "Jacobian determinant", 0.);
     //aspect ratio
     double aspect_ratio_threshold;
     cout << "\nPlease type in a threshold value of aspect ratio above which the cells will be output to VTU"<<endl;
     cin >> aspect_ratio_threshold;
     model.FormRegionFrom("cells_with_large_aspect_ratios", "aspect ratio", aspect_ratio_threshold, 1.0e30, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_large_aspect_ratios", "cells_with_large_aspect_ratios", 0.);
+    vtk_output.OutputDataToVTK(model, "cells_with_large_aspect_ratios", "aspect ratio", 0.);
     
     //shortest distance to node
     double shortest_distance_to_node_threshold;
     cout << "\nPlease type in a threshold value of the shortest distance between nodes, below which the cells will be output to VTU"<<endl;
     cin >> shortest_distance_to_node_threshold;
     model.FormRegionFrom("cells_with_close_neighboring_nodes", "shortest distance to node", 0., shortest_distance_to_node_threshold, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_close_neighboring_nodes", "cells_with_close_neighboring_nodes", 0.);
+    vtk_output.OutputDataToVTK(model, "cells_with_close_neighboring_nodes", "shortest distance to node", 0.);
 
     
     //create property constraints for "fit for computation" cells
-    PropertyConstraints prop_constrants("cell volume", cell_volume_threshold, 1.0e30);
-    prop_constrants.AddConstraint("Jacobian determinant", 0., 1.0e30);
-    prop_constrants.AddConstraint("aspect ratio", 0., aspect_ratio_threshold);
-    prop_constrants.AddConstraint("shortest distance to node", shortest_distance_to_node_threshold, 1.0e30);
+    PropertyConstraints prop_constraints("cell volume", cell_volume_threshold, 1.0e30);
+    prop_constraints.AddConstraint("Jacobian determinant", 0., 1.0e30);
+    prop_constraints.AddConstraint("aspect ratio", 0., aspect_ratio_threshold);
+    prop_constraints.AddConstraint("shortest distance to node", shortest_distance_to_node_threshold, 1.0e30);
     //form a region with defined property constraints
-    model.FormRegionFrom("region_with_high_quality_cells", prop_constrants);
-    VTU_Interface<dim>  vtu_output(model);
-    list<string> output_properties;
-    output_properties.emplace_back( "cell volume" );
-    output_properties.emplace_back( "Jacobian determinant" );
-    output_properties.emplace_back( "aspect ratio" );
-    output_properties.emplace_back( "shortest distance to node" );
-    vtu_output.OutputDataToVTU( "region_with_high_quality_cells", output_properties, "region_with_high_quality_cells", 0 );
+    model.FormRegionFrom("region_with_high_quality_cells", prop_constraints);
+    // RegionInterface::FormRegionFrom PRopertyConstraints erases region if it
+    // is empty
+    if( model.ContainsRegion( "region_with_high_quality_cells" ) ) {
+        VTU_Interface<dim>  vtu_output(model);
+        list<string> output_properties;
+        output_properties.emplace_back( "cell volume" );
+        output_properties.emplace_back( "Jacobian determinant" );
+        output_properties.emplace_back( "aspect ratio" );
+        output_properties.emplace_back( "shortest distance to node" );
+        vtu_output.OutputDataToVTU( "region_with_high_quality_cells", output_properties, "region_with_high_quality_cells", 0 );
+    }
 
     return mesh_suitable_for_computation;
     

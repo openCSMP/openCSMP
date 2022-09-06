@@ -169,7 +169,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
     if ( !this->ContainsRegion("Model") ) return false;
     
     // is it contiguous?
-    if ( !this->Region("Model").IsContiguous() ) return false;
+    //if ( !this->Region("Model").IsContiguous() ) return false;
     
     return true;
  }
