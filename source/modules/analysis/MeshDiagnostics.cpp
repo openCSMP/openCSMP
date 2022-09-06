@@ -448,24 +448,24 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
     cout << "\nPlease type in a threshold value of cell volume (m3) below which the cells will be output to VTU"<<endl;
     cin >> cell_volume_threshold;
     model.FormRegionFrom("cells_with_small_volumes", "cell volume", 0., cell_volume_threshold, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", model.Name(), "cell volume", 0., true);
+    vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", "", "cell volume", 0., true);
     //Jacobian_determinant
     const double jacobian_determinant_threshold(0.);
     model.FormRegionFrom("cells_with_negative_Jacobian_determinant", "Jacobian determinant", -1.0e30, 0., false);
-    vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", model.Name(), "Jacobian determinant", 0., true);
+    vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", "", "Jacobian determinant", 0., true);
     //aspect ratio
     double aspect_ratio_threshold;
     cout << "\nPlease type in a threshold value of aspect ratio above which the cells will be output to VTU"<<endl;
     cin >> aspect_ratio_threshold;
     model.FormRegionFrom("cells_with_large_aspect_ratios", "aspect ratio", aspect_ratio_threshold, 1.0e30, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_large_aspect_ratios", model.Name(), "aspect ratio", 0., true);
+    vtk_output.OutputDataToVTK(model, "cells_with_large_aspect_ratios", "", "aspect ratio", 0., true);
     
     //shortest distance to node
     double shortest_distance_to_node_threshold;
     cout << "\nPlease type in a threshold value of the shortest distance between nodes, below which the cells will be output to VTU"<<endl;
     cin >> shortest_distance_to_node_threshold;
     model.FormRegionFrom("cells_with_close_neighboring_nodes", "shortest distance to node", 0., shortest_distance_to_node_threshold, false);
-    vtk_output.OutputDataToVTK(model, "cells_with_close_neighboring_nodes", model.Name(), "shortest distance to node", 0., true);
+    vtk_output.OutputDataToVTK(model, "cells_with_close_neighboring_nodes", "", "shortest distance to node", 0., true);
 
     
     //create property constraints for "fit for computation" cells
