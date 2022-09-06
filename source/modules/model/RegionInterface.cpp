@@ -114,6 +114,7 @@ Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const string& region
   if ( iter != uniqueRegionMap_.end() )
     return (*iter).second;
 
+  // see whether this is perhaps a non-unique region
   iter = regionMap_.find( region_name );
 
   if ( iter != regionMap_.end() )

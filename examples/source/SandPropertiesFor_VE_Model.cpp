@@ -134,11 +134,13 @@ void SandPropertiesFor_VE_Model::Compute2PhaseFlowPropertiesForSandLayer( Model<
          // else, the facet is tilted and the relative permeabilities need to be scaled
          const double H    = (*it)->Read( thi_key_ );
          const double hCO2 = CO2LevelAtFacet( (*it) ); // returns 'h'
+         // TODO: mob_co2 must be the mobility at the end-point saturation
          const double mob_co2 = (hCO2 / H) * (*it)->Read( mobn_key_ );
          // saving the new mobility of the carbonic phase & relperm
          (*it)->Store( mobn_key_, makeScalar( (*it)->Status(mobn_key_), mob_co2 ) );
          //(*it)->Store( krn_key_, makeScalar( (*it)->Status(krn_key_), mob_co2 * mun_ ) );
          // water mobility & relperm
+         // TODO: mob_h2o must be the mobility at the end-point saturation
          const double mob_h2o = ((H - hCO2) / H) * (*it)->Read( mobw_key_ );
          (*it)->Store( mobw_key_, makeScalar( (*it)->Status(mobw_key_), mob_h2o ) );
          //(*it)->Store( krw_key_, makeScalar( (*it)->Status(krw_key_), mob_h2o * muw_ ) );
