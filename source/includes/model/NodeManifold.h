@@ -12,6 +12,8 @@ class Index;
 
 template<uint32_t dim> class InterFace;
 
+
+
 // TODO: shall we include specific InterFace parent connectivity to NodeManifolds?
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
   
@@ -57,14 +59,38 @@ class NodeManifold {
       /// asscending sort (scalar on Node or Element only) - default is sorted by pointer in sequence entered
       void SortByVariableValue( const Index& scalar_node_variable );
 
+      ///Assign ------------------------------------------------------
+      void Assign(Node<dim>*, std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes);
+
+
+      ///Access -------------------------------------------------------
+
       /// number of entries
       size_t Branches() const;
 
       /// access to node
       Node<dim>* const N( size_t branch ) const;
+
+      /// Gives size of node interface parent map - should correspond with number of nodes(branches) when configured correctly
+      uint32_t NodeMapSize() const;
       
+      ///number of interfaces connected to a node
+      uint32_t InterFaces(Node<dim>*) const;
+
+      ///Access of single interface of node
+      InterFace<dim>* I(Node<dim>*, uint32_t i) ;
+
+      ///Pair with interface, and corresponding position of node in nodeconnector of interface.
+      std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex(Node<dim>* n, uint32_t i);
+
+      /// InterFace vector of node
+      std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector(Node<dim>* n);
+
       /// reports manifold classifier that indicates the topologic position of the manifold
       ManifoldType GeometricClassifier() const;
+
+      ///Query -----------------------------------------------------------
+
       void GeometricClassifier( ManifoldType );
       
       /// checks whether all nodes in the  manifold have the same location using operator< of point
@@ -80,8 +106,7 @@ class NodeManifold {
       manifold                         branches_;                        ///< vector of Node - classifier pairs
       ManifoldType                     parent_geometry_;                 ///< classifier for the manifold as a whole
 
-      std::vector<InterFace<dim>*>     parent_interfaces_;               ///< all interfaces of branch
-      std::vector<std::pair<std::vector<InterFace<dim>*>, std::vector<uint32_t> > >      parent_interface_index_;     ///index of interface for each node on manifold
+      std::map< Node<dim>*,std::vector<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE> >> >   node_parent_interface_map_;     ///interfaces and index for each node on manifold
 };
 
 
