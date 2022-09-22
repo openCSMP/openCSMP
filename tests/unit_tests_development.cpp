@@ -94,8 +94,12 @@
 
 #include "VSet_TestCase.h"
 
+//E.P Unit Tests Working
 #include "InterFace_Test.h"
 #include "SplitBoundary_Test.h"
+
+//E.P Integration Tests Working
+#include "LinearElasticFractureAperture2D_VVCase.h"
 
 //variable placement tests
 //#include "Placement_Test_2D.h"
@@ -121,6 +125,9 @@ TEST_CASE("Development tests", "[Dev]") {
   SplitBoundary_Test test2;
   test.run();
   test2.run();
+
+  LinearElasticFractureAperture2D_VVCase i_test;
+  i_test.run();
 
  //   ANSYS_Model2D_Test test;
  //   test.run();
