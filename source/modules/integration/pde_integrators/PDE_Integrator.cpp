@@ -548,7 +548,7 @@ template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
  {
    // -------------------------------------------------------------------
-   // 0. If the algorithm is just re-used, (and has not been reset by
+   // 0. PDE_Integrator re-use: (and has not been reset by
    //    the user), the righthand vector and
    //    the solution vector are zeroed and nothing else is done.
    // -------------------------------------------------------------------
@@ -556,13 +556,18 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         target_.nodes == gref.Nodes() &&
        !basic_operands_.empty() && !test_operands_.empty() )
      {
-        if ( rh_.size() > 0 ) fill( rh_.begin(), rh_.end(), 0. );
-        if ( G_.Rows()  > 0 && retain_matrix_ == false ) {
+        if ( rh_.size() > 0 ) {
+             fill( rh_.begin(), rh_.end(), 0. );
+             fill( pivotVector_.begin(), pivotVector_.end(), 0. );
+          }
+        // provisions for the SparseMatrix class
+        if ( G_.Rows() > 0 && retain_matrix_ == false ) {
             G_.Erase();
             G_.Resize( rh_.size() );
           }
         return;
      }
+
 
    // -------------------------------------------
    // 1. determine basic sizes for G, x, rh
@@ -750,20 +755,13 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                                  rhs_it.first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
-
-   // ----------------------------------------------------------------------
-   // 5. Resizing 'G' and righthand vector 'rh' which is initialised to zero
-   // ----------------------------------------------------------------------
-   G_.Erase();
-   G_.Resize( offset );
-   rh_.resize( offset );
-   x_.resize( offset );
-   fill( rh_.begin(), rh_.end(), 0. );
-   if ( trim_vectors_ ) {
-       rh_.shrink_to_fit();
-       x_.shrink_to_fit();
-     }
    setup_established_ = true;
+
+   // ------------------------------------------------------------------------------
+   // 5. Resizing 'G' and righthand vector 'rh' eliminating the Dirichlet conditions
+   // ------------------------------------------------------------------------------
+   // Luat's code (will resize matrix and vectors)
+   ReduceSystemSizeEliminatingEssentialConditions( gref );
 
  } // end EstablishMatrixSetup
 
@@ -1501,13 +1499,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
 
 
 
-
-
-
-
-
 /**
-    Solution of the system of linear algebraic equations:
+    Assembly and solution of the system of linear algebraic equations, but without consideration of boundary integrals:
     
     1. Dimensionsing of the solution matrix (n-variables, scalar or vector etc.)
     
@@ -1519,9 +1512,13 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
     
     5. Essential conditions (either with or without elimination of the Dirichlet constraints from the matrix).
     
-    6. Solution
+    6. Output matrix and vectors to get diagnostics
     
-    7. Postprocessing (if respective pde operators were added to the PDE_Integrator).
+    7. Solution
+    
+    8. Output results back to moel
+    
+    9. Postprocessing (if respective pde operators were added to the PDE_Integrator) and writing related results to model.
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain, bool debug )
@@ -1532,12 +1529,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
       throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
                             "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
    
-    // setting up 0..n contiguous node numbering for index mapping
-    domain.RenumberNodes();
-
-    ReduceSystemSizeEliminatingEssentialConditions( domain );
- 
-    // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
+    // 2. Accumulation of finite element integrals
     Accumulate( domain );
 
     // 3. If the computation is transient initial conditions must be input into the righthand vector
@@ -1546,25 +1538,22 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
     // 4. If the computation is transient initial conditions must be input into the righthand vector
     if ( Transient() == true ) LateAccumulate( domain );    
 
-    // 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
+    // 5. Assign conditions like Dirichlet or Neumann boundary conditions etc.
     AssignEssentialConditions( domain );
 
-    // 6. couple pressures across split boundaries if pressure is continuous
-    CoupleDomainsAcrossSplitBoundary( domain );
-    
-    // 7. diagnostics
+    // 6. Diagnostics
     if ( debug ) {
          Out();
          OutputGlobals();
       }
  
-    // 8. invert global matrix
+    // 7. Solve linear algebraic system of equations
     Solve();
 
-    // 9. write results back into Model
+    // 8. Write results from the solution vector back to Model
     OutputResults( domain );
                            
-    // 10. Calculation of result-dependent properties
+    // 9. Calculation of result-dependent properties
     PostProcess( domain );
 
  } // end IntegrateOver
@@ -1582,22 +1571,19 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
     simultaneously considering potential Boundary objects associated with the simplicial complex.
     The domain is the computational domain to which the PDE_Integrator is applied.
     
+    @attention costly element search; use only if there are boundary integrals on other domains present
+    
     @author SKM 7/7/2015
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
-                                                                        COMPUTATION_DOMAIN<dim>& domain,
-                                                                        bool debug )
+                                                            COMPUTATION_DOMAIN<dim>& domain,
+                                                            bool debug )
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
 
-    // setting up 0..n contiguous node numbering for index mapping
-    domain.RenumberNodes();
-
-    ReduceSystemSizeEliminatingEssentialConditions( domain );
-
-    // 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
+    // 2. Accumulation: Note that the conditions that pertain to the group must be input !
     Accumulate( domain );
    
     // 3. Accumulation: potential boundary integrals from Boundary objects that share nodes with the simplicial
@@ -1606,10 +1592,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
     // enlist all boundaries: split- and regular ones
     IdentifySharedBoundaries( model, domain, shared_boundaries );
    
-    // TODO: distinguish between split boundaries and boundaries  
     if ( !shared_boundaries.empty() ) {
-         for ( list<string>::const_iterator
-               it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
+         for ( auto it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
               // handling the split boundaries
               if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
                    const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
@@ -1634,8 +1618,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
     if ( Transient() == true ) {
          LateAccumulate( domain );
          if ( !shared_boundaries.empty() ) {
-              for ( list<string>::const_iterator
-                    it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
+              for ( auto it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
                   if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
                         const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
                         LateAccumulateSplitBoundaryIntegrals( domain, domain_boundary );
@@ -1647,10 +1630,14 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
                 }
            }
       }
-   
+
     // 6. assign conditions like Dirichlet or Neumann boundary conditions etc.
     AssignEssentialConditions( domain );
     
+    // Couple domains across split boundaries if continuity of the solution variable(s) is desired
+    // TODO: check whether this diagnostic is the correct one?
+    if ( !shared_boundaries.empty() ) CoupleDomainsAcrossSplitBoundary( domain );
+
     // 7. diagnostics
     if ( debug ) {
          Out();
@@ -1698,8 +1685,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Model<dim>& model,
-                                                                                   const COMPUTATION_DOMAIN<dim>& subdomain,
-                                                                                   list<string>& shared_boundaries )
+                                                                       const COMPUTATION_DOMAIN<dim>& subdomain,
+                                                                       list<string>& shared_boundaries )
  {
     shared_boundaries.clear();
 
@@ -1760,16 +1747,20 @@ bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Mod
     of only assembling one of their components. To do this just set the
     components that you do not want to assemble to DBL_MAX.
  
+    @attention G matrix is erased by this method
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
  
     @author Luat Khoa Tran
+    
+    @attention SKM - some refactoring 31/8/22
 
 */
 template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
 void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
  {
-    const uint32_t dim2(dim * dim);
-    DOF_indexes_.resize(this->rh_.size());
+    // SKM_FIX of size error
+    // DOF_indexes_.resize(this->rh_.size());
+    DOF_indexes_.resize( gref.Nodes() );
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
     if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 
@@ -1781,7 +1772,8 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
       throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
         "No (basic) operands have been specified...");
 
-
+    // unique node-numbers from 0..n-1 are required for this condensation
+    gref.RenumberNodes();
     size_t DOF{0U};
 
     for ( auto& it : test_operands_ )
@@ -1794,11 +1786,12 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
           throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
             "So far no conditions are assigned to elements, faces, segments");
 
-        size_t  position(0);
+        size_t  position{0U};
         switch (prop_key.type) {
             case SCALAR:
               while (niter != gref.NodesEnd()) {
                   position = (*niter)->Idx() + offset;
+                  assert( position < DOF_indexes_.size() );
                   if ((*niter)->Status(prop_key) == DIRICH) DOF_indexes_[position] = NULL_IDX;
                   else {
                       DOF_indexes_[position] = DOF;
@@ -1811,6 +1804,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
               while ( niter != gref.NodesEnd()) {
                      for ( auto i{0U}; i < dim; ++i ) {
                           position = (*niter)->Idx() * dim + i + offset;
+                          assert( position < DOF_indexes_.size() );
                           if ( (*niter)->Status(prop_key,i) == DIRICH ) DOF_indexes_[position] = NULL_IDX;
                           else {
                                DOF_indexes_[position] = DOF;
@@ -1820,24 +1814,28 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
                     niter++;
                  }
               break;
-            case TENSOR:
-              // tensors have flags only for their diagonal elements
-              while ( niter != gref.NodesEnd() )
-                {
-                   for (auto i{0U}; i < dim; i++) {
-                      if ( (*niter)->Status(prop_key,i) == DIRICH )
-                        for ( auto j{0U}; j < dim; j++ ) {
-                             position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                             DOF_indexes_[position] = NULL_IDX;
-                          }
-                      else for ( auto j{0U}; j < dim; j++) {
-                                position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                                DOF_indexes_[position] = DOF;
-                                DOF = DOF + 1U;
-                             }
+            case TENSOR: {
+                constexpr uint32_t dim2(dim * dim);
+                // tensors have flags only for their diagonal elements
+                while ( niter != gref.NodesEnd() )
+                  {
+                     for (auto i{0U}; i < dim; i++) {
+                        if ( (*niter)->Status(prop_key,i) == DIRICH )
+                          for ( auto j{0U}; j < dim; j++ ) {
+                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                               assert( position < DOF_indexes_.size() );
+                               DOF_indexes_[position] = NULL_IDX;
+                            }
+                        else for ( auto j{0U}; j < dim; j++) {
+                                  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                                  assert( position < DOF_indexes_.size() );
+                                  DOF_indexes_[position] = DOF;
+                                  DOF = DOF + 1U;
+                               }
 
-                     }
-                  niter++;
+                       }
+                    niter++;
+                  }
                 }
               break;
             case ARRAY:
@@ -1847,12 +1845,14 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
                     {
                       for (auto i{0U}; i < prop_key.dataDepth; i++) {
                         position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                        assert( position < DOF_indexes_.size() );
                         DOF_indexes_[position] = NULL_IDX;
                       }
                     }
                   else {
                       for (auto i{0U}; i < prop_key.dataDepth; i++) {
                         position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                        assert( position < DOF_indexes_.size() );
                         DOF_indexes_[position] = DOF;
                         DOF = DOF + 1U;
                       }
@@ -1866,10 +1866,12 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
                    for (auto i{0U}; i < prop_key.dataDepth; i++ )
                       if ( (*niter)->Status(prop_key,i) == DIRICH ) {
                            position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                           assert( position < DOF_indexes_.size() );
                            DOF_indexes_[position] = NULL_IDX;
                         }
                       else {
                            position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                           assert( position < DOF_indexes_.size() );
                            DOF_indexes_[position] = DOF;
                            DOF = DOF + 1U;
                         }
@@ -1884,6 +1886,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
           
       } // end for (all Dirichlet flagged variables)
 
+    this->G_.Erase();
     this->G_.Resize(DOF);
     this->rh_.resize(DOF);
     fill(this->rh_.begin(), this->rh_.end(), 0.);
