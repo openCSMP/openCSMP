@@ -430,7 +430,7 @@ void  LinearTetrahedron::UnitNormalToFace( uint32_t face, std::vector<double>& u
           return;
        }
 
-     if ( face == 2 ) { // OK
+     if ( face == 2 ) { // OK 0-1-3
           Point<3> nrml = normalOfTriangle( Point<3>(XY(0,0),XY(0,1),XY(0,2)),
                                             Point<3>(XY(1,0),XY(1,1),XY(1,2)),
                                             Point<3>(XY(3,0),XY(3,1),XY(3,2)) );
@@ -440,7 +440,7 @@ void  LinearTetrahedron::UnitNormalToFace( uint32_t face, std::vector<double>& u
           return;
        }
 
-     if ( face == 3 ) { // OK
+     if ( face == 3 ) { // OK 0-2-1
           Point<3> nrml = normalOfTriangle( Point<3>(XY(0,0),XY(0,1),XY(0,2)),
                                             Point<3>(XY(2,0),XY(2,1),XY(2,2)),
                                             Point<3>(XY(1,0),XY(1,1),XY(1,2)) );

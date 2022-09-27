@@ -49,8 +49,8 @@ namespace csmp {
 
       bool Test_NodeCorrespondance_3D(const char* mesh_file );
 
-
-
+      bool Test_NodeCorrespondance_Intersection_3D( const char* mesh_file);
+      bool Test_NodeCorrespondance_Intersection_2D( const char* mesh_file);
 
       // TODO - ALl tests below are still to be done
 

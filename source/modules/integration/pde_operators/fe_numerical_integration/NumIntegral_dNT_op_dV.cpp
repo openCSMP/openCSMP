@@ -44,12 +44,12 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
     // if the finite element is a linear simplex element, its Jacobian and element-interpolation derivative matrix
     // are constant throughout it
+    /* TODO: DOES NOT WORK YET
     const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1 );
     const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT ||
                                             this->MaterialOperandPlacement() == FACE    ||
                                             this->MaterialOperandPlacement() == REGION );
     const uint32_t n_nodes{ e.Nodes() };
- /*
     if ( is_simplex_element_type && piecewise_constant_material ) {
          const double detJ = e.dN_AtBaryCenter( B_ );
          // transposing B -> BT  O.K.
@@ -66,13 +66,14 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
              MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
          return;
       }
-*/
-
+    */
+    
     //  When this is not a simplex element but the material property is an element property
     // ------------------------------------------------------------------------------------
+    const uint32_t n_nodes{ e.Nodes() };
     if ( this->MaterialOperandPlacement() == ELEMENT || this->MaterialOperandPlacement() == FACE )
       {
-        for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ ) 
+        for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
           {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
@@ -88,7 +89,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
              BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
 
              // row sum diagonalisation of matrix into right-hand vector
-             for ( auto k=0; k < dim; k++ )
+             for ( auto k{0U}; k < dim; k++ )
                for ( auto j{0U}; j<n_nodes; j++ )
                  MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
           }
@@ -97,13 +98,13 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
       
     if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
-         for ( auto i{0}; i<e.FE()->IntegrationPoints(); i++ )
+         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
            {
               double detJ = e.dN_AtIntegrationPoint( B_, i, 1 );
               B_.Transposed( BT_ );
               BT_ *= MathOperatorRHS<dim>::MTRL[i];
               BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
-              for ( auto k=0; k < dim; k++ )
+              for ( auto k{0U}; k < dim; k++ )
                 for ( auto j{0U}; j<n_nodes; j++ )
                   MathOperatorRHS<dim>::RHS[j] += BT_(j,k);
            }

@@ -349,7 +349,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
     Node<dim>* nd = event->getNode();
     assert( nd  != nullptr );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-    const uint32_t  v( (dim==1u) ? 0u : 1u );
+    constexpr uint32_t  v( (dim==1u) ? 0u : 1u );
   
     //check if node is truncated by domain boundary
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
@@ -491,7 +491,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
               VectorVariable<dim> e_vt(ANY, 0.);
               eptr->Read(this->key_vt, e_vt);
 
-              double inflow(0.), carb_inflow(0.);
+              double carb_inflow(0.);
               const auto pnid(nd->ParentNodeNumber(t));
               const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
               for ( auto i{0U}; i<sector_facets; i++ )
@@ -1067,7 +1067,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
 
     if (divergence_free_correction && fabs(flux_balance) > numeric_limits<double>::epsilon()) {
       // compute average fractional flow for the current finite volume
-      double fw_avg(0), fn_avg(0.);
+      double fn_avg(0.);
       uint32_t count(0U);
       for(auto nd : input_nodes) {
         double n_sn = nd->Read(this->key_sCO2);
@@ -2348,13 +2348,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
 
 //determine node manifold status
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
-bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateContactStatus(Node<dim>* masterNode,Node<dim>* slaveNode)
+bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateContactStatus( Node<dim>* masterNode,Node<dim>* slaveNode )
 {
 
     double master_sn = masterNode->Read(this->key_sCO2);
     double slave_sn = slaveNode->Read(this->key_sCO2);
 
-    Element<dim>* master_e = ParentElementOfManifoldNode(masterNode, this->key_pd);
+//    Element<dim>* master_e = ParentElementOfManifoldNode(masterNode, this->key_pd);
     Element<dim>* slave_e = ParentElementOfManifoldNode(slaveNode, this->key_pd);
 
     bool pressureChanged(false);
@@ -2383,7 +2383,7 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateContactSt
     }
 
     // 3. oil dams up at slave side then it breakthroughs
-    double master_sw = masterNode->Read(this->key_sH2O);
+//    double master_sw = masterNode->Read(this->key_sH2O);
 //    double master_pc = this->flowfunctions_.pc_at(master_e, master_sw);
     double slave_pe = slave_e->Read(this->key_pd);
     double master_pf = masterNode->Read(this->key_pf);
@@ -2446,9 +2446,9 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeFlowPo
     double accumulatedGravityTerm = 0;
     size_t neighborNodes = 0;
 
-    for (auto i(0); i < node->Parents(); ++i) {
+    for ( auto i{0U}; i < node->Parents(); ++i) {
         auto const& elem = node->Parent(i);
-        for (size_t j(0); j < elem->Nodes(); ++j) {
+        for ( auto j{0U}; j < elem->Nodes(); ++j) {
             // accumulate pressure, node can be accumulated multiple times
             auto const& nd = elem->N(j);
             accumulatedPressure += nd->Read(this->key_pf);
@@ -2810,7 +2810,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
       {
         const auto iFacet( eptr->FV()->FacetSurroundingSector(pnid,i) );
         const auto inside_node(eptr->FV()->InsideNode(iFacet));
-        const auto outside_node(eptr->FV()->OutsideNode(iFacet));
+//        const auto outside_node(eptr->FV()->OutsideNode(iFacet));
         eptr->Read( iFacet, 0U,  this->key_fn, facetNrml );
         const double facetArea = eptr->Read( iFacet, 0U,  this->key_fA );
         const double sign = ( pnid == inside_node ) ? 1. : -1.;
@@ -2894,7 +2894,7 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Compensator::
       VectorVariable<dim> e_vt(ANY, 0.);
       eptr->Read(this->key_vt, e_vt);
 
-      double inflow(0.), carb_inflow(0.);
+      double carb_inflow(0.);
       const auto pnid(nd->ParentNodeNumber(t));
       const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
       for ( auto i{0U}; i<sector_facets; i++ )
@@ -3099,7 +3099,8 @@ double brent_solve(Function& func, const double x1, const double x2, const doubl
     bool verbose(false);
     size_t iteration(0);
 	  constexpr double  EPS = std::numeric_limits<double>::epsilon();
-	  double  a = x1, b = x2, c = x2, d, e{0.}, fa = func(a), fb = func(b), fc, p, q, r, s, tol1, xm;
+	  double  a = x1, b = x2, c = x2, d{ std::numeric_limits<double>::quiet_NaN() },
+            e{0.}, fa = func(a), fb = func(b), fc, p, q, r, s, tol1, xm;
 	  if (abs(fa) < EPS) return a;
 	  if (abs(fb) < EPS) return b;
 
@@ -3736,7 +3737,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
             nd->Store(  this->key_rate, makeScalar( nd->Status( this->key_rate), nd->Read( this->key_rate) + 1 ) );
 
             //some variables to use
-            double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.), dsdn;
+            double flux_balance(0.), outflow(0.), tot_inflow(0.), tot_outflow(0.), carb_accumulation(0.), aq_accumulation(0.);
             const uint32_t v( (dim==1u) ? 0u : 1u );
             VectorVariable<dim> facetNrml, gravity, gradP;
             vector<double> IPOL, NRST;
@@ -3787,7 +3788,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeRateofCh
                 VectorVariable<dim> e_vt(ANY, 0.);
                 eptr->Read(this->key_vt, e_vt);
 
-                double inflow(0.), carb_inflow(0.);
+                double carb_inflow(0.);
                 const auto pnid(nd->ParentNodeNumber(t));
                 const auto sector_facets(eptr->FV()->FacetsPerSector(pnid));
                 for ( auto i{0U}; i<sector_facets; i++ )
@@ -4465,10 +4466,10 @@ double DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateSlop
         }
         
         // sitting at a node, loop over parent el's
-        for(  uint32_t p = 0; p< nd->Parents(); p++ ){
+        for(  uint32_t p{0U}; p< nd->Parents(); p++ ){
             Element<dim>* current_el = nd->Parent(p);  
-            size_t global_el_id = current_el->Idx(); // get the global parent id:
-            size_t nloc_id = nd->ParentNodeNumber( p ); // get local node number
+            size_t   global_el_id = current_el->Idx(); // get the global parent id:
+            uint32_t nloc_id = nd->ParentNodeNumber( p ); // get local node number
             // at that parent element, loop over all facets that belong to the current node/fv
             for ( uint32_t i=0U; i < current_el->FV()->FacetsPerSector(nloc_id); i++ ) {
                 uint32_t local_facet_id = current_el->FV()->FacetSurroundingSector( nloc_id,i ); //get local facet_id
@@ -4566,10 +4567,9 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::CalculateCenter
                   e.CoordinateMatrix();
                   current_bc.assign( dim, 0.0);
                   // transform local c's to global c's
-                  for ( uint32_t i = 0U; i<e.Nodes(); i++)
-                      for ( uint32_t j = 0U; j<dim; j++)
-                          current_bc[j] += e.FE()->XY(i,j) * temp[i];
- 
+                  for ( uint32_t k{0U}; k<e.Nodes(); k++ )
+                      for ( uint32_t j{0U}; j<dim; j++ )
+                          current_bc[j] += e.FE()->XY(k,j) * temp[k];
  
                   //get volume of current sector
                   volume_ = e.SectorVolume( i );

@@ -276,7 +276,8 @@ string BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateBoundaryNameFrom( const F
      boundary_name += "_BOUNDARY";
      boundary_name += to_string(fdata.PatchNumber());
      boundary_name += '_';
-     pair<long,long> materials(fdata.Materials());
+     // inside/outside
+     pair<long,long> materials{ fdata.Materials() };
      assert( materials.first  < region_names.size() );
      assert( materials.second < region_names.size() );
      boundary_name += region_names[ materials.first ];
@@ -338,19 +339,20 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
   cout << "\nBoundaryInterface::FormBoundariesFrom: Forming the boundaries: ";
 
   size_t new_boundaries{0};
-  for ( auto lit = boundaries.begin(); lit != boundaries.end(); lit++ )
+  for ( const auto& lit : boundaries )
     {
-      string domain_name( *lit );
-      auto boundary_flag = parseBoundary( domain_name );
-      auto it = boundaryMap_.insert( make_pair( domain_name, csmp::Boundary<dim>( domain_name, static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Database(), boundary_flag ) ) );
+      string domain_name( lit );
+      const auto boundary_flag = parseBoundary( domain_name );
+      auto it = boundaryMap_.insert( make_pair( domain_name, csmp::Boundary<dim>( domain_name,
+                                                static_cast<BOUNDARY_COMPLEX<dim>*>(this)->Database(), boundary_flag ) ) );
       // if the region was successfully inserted
       if ( it.second )
         {
           // making a list of the element numbers
           vector<size_t>  cell_ids;
-          cell_ids.reserve( topo.CellsWithinDomain( (*lit).c_str() ) );
-          copy( topo.CellsOfDomainBegin( (*lit).c_str() ),
-                topo.CellsOfDomainEnd( (*lit).c_str() ),
+          cell_ids.reserve( topo.CellsWithinDomain( lit.c_str() ) );
+          copy( topo.CellsOfDomainBegin( lit.c_str() ),
+                topo.CellsOfDomainEnd( lit.c_str() ),
                 back_inserter( cell_ids ) );
 
           // retrieving the elements by their IDs and assigning them  to the region
@@ -361,7 +363,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
           if ( (*it.first).second.Cells() == 0U ) {
               boundaryMap_.erase( it.first );
               csmp_error.Note( WARNING, "BoundaryInterface::FormBoundariesFrom",
-                                 "Boundary could not be formed", (*lit).c_str() );
+                                 "Boundary could not be formed", lit.c_str() );
             }
           else {
                // reporting the name of the newly generated region
@@ -371,7 +373,7 @@ size_t BoundaryInterface<dim,BOUNDARY_COMPLEX>::FormBoundariesFrom( const ModelT
         }
       else
         throw csmp::Exception( ERROR, "BoundaryInterface::FormBoundariesFrom",
-                               "Boundary could not be formed. Does this region already exist?", (*lit).c_str() );
+                               "Boundary could not be formed. Does this region already exist?", lit.c_str() );
     }
   cout << endl;
 
@@ -428,8 +430,8 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary( const char* boundary_
 
 
 /** 
-     Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches; 
-     region is moved from "Model" to non-unique regions, connectivity is updated.
+     Converts lower-dimensional region into Boundarie(s) of faces, decomposed into patches. The MeshManager updates the connectivity.
+     The original region is removed (including removal from "Model") to non-unique regions.
      
      Uses node-to-parent relationship to find the higher dimensional elements that will 
      share a face with the Face:  usng    higherDimensionalNeighbors()
@@ -538,17 +540,17 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
          model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
-         const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
-         if ( model_regions == 1 )
-           ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
-                                                "is single valued; so there is only one patch." );
-      }
-    else { // assigning region names
-         region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
-         for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
-           region_names.push_back( (*rit).first );
       }
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
+    // needs to be done everytime because the number of unique regions may have changed
+    const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
+    if ( model_regions == 1 )
+      ErrorHandler::Instance().Note( INFO, "BoundaryInterface::CreateInternalBoundaryFrom:", region_tag.c_str(),
+                                           "is single valued; so there is only one patch." );
+    // assigning region names
+    region_names.reserve( distance( model.UniqueRegionsBegin(),model.UniqueRegionsEnd()) );
+    for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
+      region_names.push_back( (*rit).first );
  
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 2. Determine number of boundary segments (sub-boundaries) that the new boundary will consist of.
@@ -1909,10 +1911,10 @@ for ( auto& it : elmts_to_become_faces ) {
 
 
 /**
-    Tries to partition and replace general boundary 'Model' with more computationally useful model patches
-    such as TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc.
+    Tries to replace bondary surface elements with Faces and assign these to Box boundaries.
+    TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc. Edge boundaries are not created.
     
-    @attention this method expects that there is already a Boundary 'Model' around the model domain.
+    @attention this method ignores potential surface elements that might be present on the outer boundaries of the Model.
     @attention method assumes that model perimeter correctly captures the outside faces of the model.
     @attention this method was designed primarily for three-dimensional models.
     
@@ -2013,7 +2015,9 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundariesFromOrientat
     // 4. checking whether faces remain that could not be assigned
     // -------------------------------------------------------------------------------------------------
     size_t n_faces_assigned = Boundary("BOTTOM").Cells() + Boundary("RIGHT").Cells() +
-                              Boundary("TOP").Cells() + Boundary("LEFT").Cells() + Boundary("IRREGULAR").Cells() ;
+                              Boundary("TOP").Cells() + Boundary("LEFT").Cells();
+    if ( !irregular_faces.empty() ) n_faces_assigned += Boundary("IRREGULAR").Cells() ;
+    
     if constexpr ( dim == 3 )
       n_faces_assigned += Boundary("FRONT").Cells() + Boundary("BACK").Cells();
       

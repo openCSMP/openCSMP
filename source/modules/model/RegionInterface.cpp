@@ -114,6 +114,7 @@ Region<dim>&  RegionInterface<dim, REGION_COMPLEX>::Region( const string& region
   if ( iter != uniqueRegionMap_.end() )
     return (*iter).second;
 
+  // see whether this is perhaps a non-unique region
   iter = regionMap_.find( region_name );
 
   if ( iter != regionMap_.end() )
@@ -168,7 +169,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::HasValidModelRegion() const
     if ( !this->ContainsRegion("Model") ) return false;
     
     // is it contiguous?
-    if ( !this->Region("Model").IsContiguous() ) return false;
+    //if ( !this->Region("Model").IsContiguous() ) return false;
     
     return true;
  }
@@ -345,7 +346,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
     
   if ( erase_elmts_and_update_connectivity && !IsUnique(regionName) ) {
        csmp_error.Note( ERROR, "RegionsInterface<dim,Model>::RemoveRegion",
-                          regionName, "is potentially overlapping other regions; case not handled yet" );
+                          regionName, "is potentially overlapping other regions; this case is not handled yet" );
        return;
     }
 
@@ -1130,7 +1131,7 @@ template<template<uint32_t> class ElementComp>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegionName, ElementComp<dim> const& elementComp, const char* hostRegion )
   {
     static_cast<REGION_COMPLEX<dim>*>(this)->UpdateIndices();
-    csmp::Region<dim> const& rref( this->Region( hostRegion ) );
+    csmp::Region<dim>& rref( this->Region( hostRegion ) );
     rref.UpdateMemberIndexes();
     vector<uint32_t> elementIds;
     elementIds.reserve( rref.Elements() );
@@ -2424,7 +2425,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToNonUniqueRegions( const char* u
 
 /**
 Numbers the unique regions of the models, labeling their elements with the region number
-as "region identifier".
+as "region identifier". If the supplied variable does not exist, it is created by this method.
 
 @param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
 @param region_names vector of region names to retrieve them from the integer keys
@@ -2448,6 +2449,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const c
     regionComplex.CreateProperty( region_identifier, "none", SCALAR, ELEMENT );
 
   // counting the regions and initialising them with the unique identifiers
+  region_names.clear();
   region_names.resize( UniqueRegions() );
   size_t regions{ 0U };
   for ( auto it = UniqueRegionsBegin(); it != UniqueRegionsEnd(); it++ ) {

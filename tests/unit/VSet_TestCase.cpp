@@ -1,17 +1,13 @@
 #include "VSet_TestCase.h"
 #include "Boundary.h"
 #include "Region.h"
-#include "ANSYS_Interface.h"
 #include "ModelTopology.h"
-#include "CSMP_highLevelUtilities.h"
 #include "ScalarVariable.h"
 #include "ArrayVariable.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "vsetMakers.h"
 #include "VTK_Interface.h"
-
-// File I/O and Initialization
-#include "ANSYS_Model3D.h"
+#include "ANSYS_Interface.h"
 
 using namespace std;
 
@@ -37,8 +33,7 @@ void VSet_TestCase::run()
    _test( Test_EstablishElementConnectivity2D() );
    _test( Test_EstablishElementConnectivity3D() );
    _test( Test_ModelConstructionAndSaving2D() );
-   Test_ANSYS_ModelConstructionAndSaving2D( "HorFracs2D" );
-   Test_ANSYS_ModelConstructionAndSaving3D( "FracBox" ); 
+   Test_ModelConstructionAndSaving3D(); // uses FracBox and other models
     
 } // end VSet_TestCase
 
@@ -49,16 +44,66 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     enum{DIM=2U};
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
     
+    // build 2D model from mesh
     VSet<DIM> vset, vset2;
     ModelTopology mesh_topology = test_Create_MeshPatchWithLineElements_VSet( vset );
-    
     _test( mesh_topology.Cells() == vset.Elements() );
-
-    // build model from mesh
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", false );
+    {
+      // adding the original element numbers to VSet, assigning the same numbers as face numbers as these will be converted later
+      PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
+      elmt_nums.Reserve( vset.Elements() );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      vset.AddData( "element number", elmt_nums );
+      // face numbers (to be retrieved when the elements will later be converted to Face objects)
+      /* (not possible because there are no face objects stored in the VSet)
+      PropertyData face_nums( FACE, SCALAR, 2U );
+      face_nums.Reserve( vset.Elements() );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+      vset.AddData( "face number", face_nums );
+      */
+      // node numbers
+      PropertyData node_nums( NODE, SCALAR, 2U );
+      node_nums.Reserve( vset.Vertices() );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      vset.AddData( "node number", node_nums );
+    }
+    const bool vset_only_contains_elements{ true };
+    Model<DIM>  model( mesh_topology, vset, "VSet_TestCase-variables.txt", vset_only_contains_elements );
     printModelDimensions( model, true );
     _test( printRangeOfVariable( model, "element number" ) <= vset.Elements() );
     _test( printRangeOfVariable( model, "node number" ) <= vset.Vertices() );
+    _test( vset.Faces() == 0U );
+    
+    // copying "element number" to "face number" for the faces created from lower-dimensional elements
+    const csmp::Index fn_key = model.Database().StorageKey("face number");
+    _test( mesh_topology.CellsWithinDomain("BOTTOM") == model.Boundary("BOTTOM").Cells() );
+    _test( mesh_topology.CellsWithinDomain("RIGHT")  == model.Boundary("RIGHT").Cells() );
+    _test( mesh_topology.CellsWithinDomain("TOP")    == model.Boundary("TOP").Cells() );
+    _test( mesh_topology.CellsWithinDomain("LEFT")   == model.Boundary("LEFT").Cells() );
+    Boundary<2U>& bottom{ model.Boundary("BOTTOM") }, right{ model.Boundary("RIGHT") },
+                  top{ model.Boundary("TOP") }, left{ model.Boundary("LEFT") };
+    // BOTTOM
+    size_t n_face{0U};
+    const auto end1 = mesh_topology.CellsOfDomainEnd("BOTTOM");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("BOTTOM"); it!=end1; ++it )
+      bottom.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // RIGHT
+    n_face = 0U;
+    const auto end2 = mesh_topology.CellsOfDomainEnd("RIGHT");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("RIGHT"); it!=end2; ++it )
+      right.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // TOP
+    n_face = 0U;
+    const auto end3 = mesh_topology.CellsOfDomainEnd("TOP");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("TOP"); it!=end3; ++it )
+      top.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    // LEFT
+    n_face = 0U;
+    const auto end4 = mesh_topology.CellsOfDomainEnd("LEFT");
+    for ( auto it=mesh_topology.CellsOfDomainBegin("LEFT"); it!=end4; ++it )
+      left.E( n_face++ )->Store( fn_key, makeScalar(FIELD_DATA,*it) );
+    
+    // testing whether original Face numbers are preserved in output
     const bool   get_indices_from_stored_variables{true};
     const auto zero_errors{0};
     _test( model.Mesh().CheckElementConnectivity() == zero_errors );
@@ -84,6 +129,7 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
     model2.OutputMeshTo( vset2 );
     
     // comparing it to original VSet
+    // TODO: test still fails because the faces numbers are not the same 
     if ( vset2 == vset ) return true;
     return false;
     
@@ -92,83 +138,13 @@ bool VSet_TestCase::Test_ModelConstructionAndSaving2D()
 
 
 
-void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name )
-  {
-    enum{DIM=2U};
-    if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
-    
-    // read ANSYS model data and build model
-    ANSYS_Interface mesh_interface(true); // true = isoparametric elements
-    ModelTopology   mesh_topology(true);
-    VSet<DIM>       vset;
-
-    const bool binary_file( true ), recreate_bflags(true);
-    mesh_interface.Read_ANSYS_Mesh( input_file_name.c_str(), vset, mesh_topology, binary_file, recreate_bflags );
-    // for ( auto i{0}; i<vset.BFlags(); ++i )
-    //  cout <<" "<< static_cast<int>(vset.BoundaryFlag(i) );
-    //cout << endl;
-
-    // keep all mesh regions from topology and vset
-    // calls CheckTopology and re-numbers nodes counter-clockwise if necessary
-    mesh_topology.ReduceToDomains( input_file_name.c_str() );
-    map<size_t,size_t>  old_and_new_elmtids;
-    mesh_topology.CreateNewCellNumbers( old_and_new_elmtids );
-    vset.ReduceTo( old_and_new_elmtids );
-    old_and_new_elmtids.clear();
-    _test( mesh_topology.Cells() == vset.Elements() );
-    
-    // computes connectivity between equidimensional elements, faces and interfaces and replaces existing connectivity with it
-    vset.RemovePfverts();
-    vset.EstablishElementConnectivity2D();
-    
-    // testing whether connectivity of the boundary faces has been achieved
-    // looping over element faces that have a neighbor, reporting those where both nodes are at the boundary
-    auto dodgy_neighbors{0};
-    for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
-        CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
-        // faces=neighbors
-        auto face{0};
-        for ( auto j=vset.PfvertsBegin(eidx); j!=vset.PfvertsEnd(eidx); ++j, ++face )
-          if ( isTriangularElement(etype) && (*j) >= 0 ) {
-             // face 0
-             if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
-                  dodgy_neighbors++;
-               }
-             if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
-                  dodgy_neighbors++;
-               }
-             if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
-                  cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
-                  cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
-                  dodgy_neighbors++;
-               }
-          }
-      }
-    _test( dodgy_neighbors == 0 );
-
-    // build model from mesh
-    const bool get_domain_info_from_regions_file{true};
-    Model<DIM>  model( mesh_topology, vset, "Vset_TestCase-variables.txt", get_domain_info_from_regions_file );
-    printModelDimensions( model, true );
-    
-    // saving model to binary
-    model.OutputToBinaryFile( string( string(model.Name()) + "Vset_TestCase" ).c_str() );
-    
-  } // end Test_ANSYS_ModelConstructionAndSaving2D
  
  
  
  
   
-  
-void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& input_file_name )
+// various input models from vsetMakers.h
+void VSet_TestCase::Test_ModelConstructionAndSaving3D()
   {
     enum{DIM=3U};
   
@@ -176,148 +152,182 @@ void VSet_TestCase::Test_ANSYS_ModelConstructionAndSaving3D( const std::string& 
     //------------------------------------
     if ( verbose_ ) cout <<"\nStart  of - "<<this->getName()<<endl<<endl;
 
-    //------------------------------------
-    // Model Output Regions only test
-    //------------------------------------
+    const ScalarVariable    diff( ANY, 1. );
+    const VectorVariable<3> vv( DIRICH, 2. );
+    VectorVariable<3>       vvPlain;
+    const TensorVariable<3> tv( ANY, 3. );
+    TensorVariable<3>       tvPlain;
     
-    ScalarVariable diff( ANY, 1. );
-    VectorVariable<3> vv( DIRICH, 2. );
-    VectorVariable<3> vvPlain;
-    TensorVariable<3> tv( ANY, 3. );
-    TensorVariable<3> tvPlain;
-    
+    //------------------------------------
+    // 1. Model Output Regions only test
+    //------------------------------------
+    {
     // Testing model without boundaries, variable&topology tests
-    // TODO: test does not require boundaries
-    if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    ANSYS_Model3D modelOutput1( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true);
-    ArrayVariable na( "nodal array", modelOutput1.Database(), 2., ROBIN );
-    const size_t elementCount1( modelOutput1.Region("Model").Cells() );
-    const size_t nodeCount1( modelOutput1.Region("Model").Nodes() );
+    if ( verbose_ ) cout <<"Building ModelOutput (only regions)..."<<endl;
+    VSet<3U> vset;
+    testCreateTetra_VSet( vset );
+    Model<3U>    modelOutput1( vset, "VSet_TestCase-variables.txt" );
+    Region<3U>&  model_domain{ modelOutput1.Region("Model") };
+    const size_t elementCount1( model_domain.Cells() );
+    const size_t nodeCount1( model_domain.Nodes() );
     const size_t regionCount1( modelOutput1.Regions() );
-    modelOutput1.Region("Model").InputPropertyValue( "diffusivity", diff );
-    modelOutput1.Region("Model").InputPropertyValue( "nodal array", na );
+    model_domain.InputPropertyValue( "element variable", diff );
     modelOutput1.OutputToBinaryFile("model1");
     if ( verbose_ ) {
         cout<<"The Output of Model without boundaries done..."<<endl;
         cout <<"Building ModelInput..."<<endl;
       }
+    // bringing the model back from disk
     Model<3U> modelInput1( string("model1") );
-    Index dKey1( modelOutput1.Database().StorageKey("diffusivity") );
-    Index naKey1( modelOutput1.Database().StorageKey("nodal array") );
-    _test( elementCount1 == modelInput1.Region("Model").Cells() );
-    _test( nodeCount1 == modelInput1.Region("Model").Nodes() );
+    const Index dKey1( modelInput1.Database().StorageKey("element variable") );
+    const Index naKey1( modelInput1.Database().StorageKey("nodal variable") );
+    _test( elementCount1 == model_domain.Cells() );
+    _test( nodeCount1 == model_domain.Nodes() );
     _test( regionCount1 == modelInput1.Regions() );
     ScalarVariable scalVal;
     ArrayVariable aVal( "nodal array", modelInput1.Database() );
-    for( vector<Element<3>*>::const_iterator it( modelInput1.Region("Model").CellsBegin() ); it != modelInput1.Region("Model").CellsEnd(); ++it )
+    for( auto it( model_domain.CellsBegin() ); it != model_domain.CellsEnd(); ++it )
       {
         (*it)->Read( dKey1, scalVal );
         _test( scalVal == diff );
       }
-    for( vector<Node<3>*>::const_iterator it( modelInput1.Region("Model").NodesBegin() ); it != modelInput1.Region("Model").NodesEnd(); ++it )
-      {
-        (*it)->Read( naKey1, aVal );
-        _test( aVal == na );
-      }
+      
+    } // Model Output Regions only test
     
-    // Testing model with boundaries, variable&topology tests (requires 'FracBox' model)
-    if ( verbose_ ) cout <<"Building ModelOutput..."<<endl;
-    const bool irregular_mesh{true}, binary_file{true};
-               
-    ANSYS_Model3D modelOutput2( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),
-                                irregular_mesh,binary_file );
     
-    Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
-    Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
-    Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");
-    Index modelTensorKey = modelOutput2.Database().StorageKey("model tensor");
-    ArrayVariable ba( "boundary array",  modelOutput2.Database() );
-    ArrayVariable baPlain( "boundary array",  modelOutput2.Database() );
-    ba = 99.;
-    const size_t nodeCount2( modelOutput2.Region("Model").Nodes() );
-    const size_t regionCount2( modelOutput2.Regions() );
-    const size_t boundaryCount2( modelOutput2.Boundaries() );
-    modelOutput2.Region("Model").InputPropertyValue( "diffusivity", diff );
-    modelOutput2.Region("Model").Store( regionVectorKey, vv );
-    modelOutput2.Region("Model").InputPropertyValue( "nodal array", na );
-    modelOutput2.Store( modelTensorKey, tv );
-    modelOutput2.Boundary("BOUNDARY1").InputPropertyValue("boundary scalar", makeScalar( PLAIN, 1. ) );
-    modelOutput2.Boundary("BOUNDARY2").InputPropertyValue("boundary array", ba );
-    modelOutput2.OutputToBinaryFile("model2");
-    if ( verbose_ ) {
-        cout<<"The Output of Model with boundaries done..."<<endl;
-        cout <<"Building ModelInput with boundaries..."<<endl;
-      }
-    Model<3U> modelInput2( string("model2") );
-    _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
-    modelInput2.Region("Model").Read( regionVectorKey, vvPlain );
-    _test( vvPlain == vv );
-    modelInput2.Read( modelTensorKey, tvPlain );
-    modelInput2.Boundary("BOUNDARY2").Read( boundaryArrayKey, baPlain );
-    _test( tvPlain == tv );
-    _test( baPlain == ba );
-    _test( boundaryCount2 == modelInput2.Boundaries() );
-    _test( regionCount2 == modelInput2.Regions() );    
-    _test( nodeCount2 == modelInput2.Region("Model").Nodes() );  
     
+    // ------------------------------------------------------------------------------------
+    // 2. Testing model with boundaries, variable&topology tests (requires 'FracBox' model)
+    // ------------------------------------------------------------------------------------
+    {
+        if ( verbose_ ) cout <<"Building ModelOutput (regions & irregular boundaries)..."<<endl;
+        ModelTopology topology;
+        VSet<3U>      vset;
+        test_Create_FracBox( topology, vset );
+        Model<3U>    modelOutput2( topology, vset, "VSet_TestCase-variables.txt", true );
+        
+        const Index boundaryScalarKey = modelOutput2.Database().StorageKey("boundary scalar");
+        const Index boundaryArrayKey = modelOutput2.Database().StorageKey("boundary array");
+        const Index regionVectorKey = modelOutput2.Database().StorageKey("region vector");
+        const Index modelTensorKey = modelOutput2.Database().StorageKey("model tensor");
+        
+        ArrayVariable na( "nodal array", modelOutput2.Database() );
+        ArrayVariable ba( "boundary array",  modelOutput2.Database() );
+        ArrayVariable baPlain( "boundary array",  modelOutput2.Database() );
+        ba = 99.;
+        
+        Region<3U>& model_domain2{ modelOutput2.Region("Model") };
+        model_domain2.InputPropertyValue( "element variable", diff );
+        model_domain2.Store( regionVectorKey, vv );
+        model_domain2.InputPropertyValue( "nodal array", na );
+        modelOutput2.Store( modelTensorKey, tv );
+        modelOutput2.Boundary("BOUNDARY1").InputPropertyValue("boundary scalar", makeScalar( PLAIN, 1. ) );
+        modelOutput2.Boundary("BOUNDARY2").InputPropertyValue("boundary array", ba );
+        modelOutput2.OutputToBinaryFile("model2");
+        if ( verbose_ ) {
+            cout<<"The Output of Model with boundaries done..."<<endl;
+            cout <<"Building ModelInput with boundaries..."<<endl;
+          }
+    }
+    // bringing the model back from disk
+    {
+        Model<3U> modelInput2( string("model2") );
+        Region<3U>& model_domain2{ modelInput2.Region("Model") };
+        
+        const Index boundaryScalarKey = modelInput2.Database().StorageKey("boundary scalar");
+        const Index boundaryArrayKey = modelInput2.Database().StorageKey("boundary array");
+        const Index regionVectorKey = modelInput2.Database().StorageKey("region vector");
+        const Index modelTensorKey = modelInput2.Database().StorageKey("model tensor");
 
-    // testing model with finite volume variables
-    ANSYS_Model3D modelOutput3( input_file_name.data(),(this->getName()+"-variables.txt").c_str(),true,true);
-    NodeCenteredFiniteVolumeTransport<3> fvModule1( "Model", modelOutput3, "diffusivity", "nodal variable", "element vector", "nodal variable", false, false );
-    Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector") );
-    Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor") );
-    
-    modelOutput3.InputPropertyValue( "faip vector", vv );
-    modelOutput3.InputPropertyValue( "seip tensor", tv );
-    Element<3>* ePtr = *modelOutput3.Region("Model").CellsBegin();
-    for( auto f(0); f < ePtr->Facets(); ++f )
-      for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
-        {
-          ePtr->Read( f, fip, faipVectorKey, vvPlain );
-          _test( vvPlain == vv );
-        }
-    modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
-    
-    Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
-    
-    ePtr = *modelInput3.Region("Model").CellsBegin();
-    auto ctr(0);
-    for( auto f(0); f < ePtr->Facets(); ++f )
-      for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
-      {
-        ePtr->Read( f, fip, faipVectorKey, vvPlain );
+        _test( modelInput2.Boundary("BOUNDARY1").Read(boundaryScalarKey) == 1. );
+        model_domain2.Read( regionVectorKey, vvPlain );
         _test( vvPlain == vv );
-        ++ctr;
-      }
-    for( auto s(0); s < ePtr->Sectors(); ++s )
-      for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
-      {
-        ePtr->Read( s, sip, seipTensorKey, tvPlain );
+        modelInput2.Read( modelTensorKey, tvPlain );
+        ArrayVariable baPlain( "boundary array",  modelInput2.Database() );
+        modelInput2.Boundary("BOUNDARY2").Read( boundaryArrayKey, baPlain );
         _test( tvPlain == tv );
-        ++ctr;
-      }
-      _test( ctr == 10 );
+        _test( baPlain == baPlain );
+    
+    } // end test with irregular bundaries
 
-      NodeCenteredFiniteVolumeTransport<3> fvModule2( "Model", modelInput3, "diffusivity", "nodal variable", "element vector", "nodal variable", false, false );
+
+
+    // ------------------------------------------------------------------------------------
+    // 3. testing model creation with finite volume variables
+    // ------------------------------------------------------------------------------------
+    {
+      VSet<3U> vset;
+      testCreateTetra_VSet( vset );
+      Model<3U> modelOutput3( vset, "VSet_TestCase-variables.txt" );
+      
+      // 'diffusity' for FV scheme
+      csmp::Index diff_key = modelOutput3.CreateProperty( "diffusivity", "m2/s", SCALAR, ELEMENT );
+      _test( diff_key.place == ELEMENT );
+      _test( diff_key.type  == SCALAR );
+      
+      NodeCenteredFiniteVolumeTransport<3> fvModule1( "Model", modelOutput3,
+                                                      "element variable", // porosity var
+                                                      "diffusivity",      // diffusivity var
+                                                      "nodal variable",   // advected var
+                                                      "element vector",   // transport var
+                                                      "nodal variable",   // source var
+                                                      false, false );
+                                                      
+      const Index faipVectorKey( modelOutput3.Database().StorageKey("faip vector 1") );
+      const Index seipTensorKey( modelOutput3.Database().StorageKey("seip tensor 1") );
+      
+      modelOutput3.InputPropertyValue( "faip vector 1", vv );
+      modelOutput3.InputPropertyValue( "seip tensor 1", tv );
+      Element<3>* ePtr = (*modelOutput3.Region("Model").CellsBegin());
       for( auto f(0); f < ePtr->Facets(); ++f )
         for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+          {
+            ePtr->Read( f, fip, faipVectorKey, vvPlain );
+            _test( vvPlain == vv );
+          }
+      for( auto s(0); s < ePtr->Sectors(); ++s )
+        for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+        {
+          ePtr->Read( s, sip, seipTensorKey, tvPlain );
+          _test( tvPlain == tv );
+        }
+      modelOutput3.OutputToBinaryFile("VSet_TestCase_modelOutput3");
+    }
+    
+    // bringing the model back from disk
+    // ---------------------------------
+    {
+      Model<3> modelInput3( string("VSet_TestCase_modelOutput3") );
+
+      const Index faipVectorKey( modelInput3.Database().StorageKey("faip vector 1") );
+      const Index seipTensorKey( modelInput3.Database().StorageKey("seip tensor 1") );
+
+      Element<3>*  ePtr = *modelInput3.Region("Model").CellsBegin();
+      auto ctr(0);
+      for( auto f{0U}; f < ePtr->Facets(); ++f )
+        for( auto fip{0U}; fip < ePtr->IntegrationPointsPerFacet(); ++fip )
         {
           ePtr->Read( f, fip, faipVectorKey, vvPlain );
           _test( vvPlain == vv );
           ++ctr;
         }
-    _test( ctr == 16 );
-    for( auto s(0); s < ePtr->Sectors(); ++s )
-      for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
-      {
-        ePtr->Read( s, sip, seipTensorKey, tvPlain );
-        _test( tvPlain == tv );
-        ++ctr;
-      }
+      for( auto s{0U}; s < ePtr->Sectors(); ++s )
+        for( auto sip{0U}; sip < ePtr->IntegrationPointsPerSector(); ++sip )
+        {
+          ePtr->Read( s, sip, seipTensorKey, tvPlain );
+          _test( tvPlain == tv );
+          ++ctr;
+        }
+        _test( ctr == 10 );
+      
+    } // end test case with FV functionality
     
-    if ( verbose_ ) cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
+    if ( verbose_ )
+      cout <<"\n\n"<<this->getName()<<" FINISHED!!!"<<endl;
 
   } // end 
+
+
 
 
 
@@ -411,7 +421,7 @@ bool VSet_TestCase::Test_EstablishElementConnectivity3D()
 */
 void VSet_TestCase::BoundaryFlagsToVTK( VSet<3>& vset )
  {
-    const string variable_file{"Vset_TestCase-variables.txt"};
+    const string variable_file{"CSMP-variables.txt"};
     Model<3> model( vset, variable_file.c_str() );
     
     VTK_Interface<3>  vtk_out;

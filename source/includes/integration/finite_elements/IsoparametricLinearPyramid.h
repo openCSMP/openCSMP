@@ -15,12 +15,15 @@ class IsoparametricLinearPyramid : public FiniteElement {
     virtual double    Volume();
     virtual double    AspectRatio();
     virtual double    InnerRadius();
-    virtual void        EdgeLengths( std::vector<double>& vec );
-    virtual void        CornerNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      CornerNodes() const  { return 5; }
-    virtual void        MidSideNodes( std::vector<uint32_t>& ids ) const;
-    virtual void        CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
-    virtual uint32_t      MidSideNodes() const { return 0; }
+    virtual void      EdgeLengths( std::vector<double>& vec );
+    virtual void      CornerNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  CornerNodes() const  { return 5; }
+    virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
+    virtual void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
+    virtual uint32_t  MidSideNodes() const { return 0; }
+    virtual uint32_t  NodesPerFace( uint32_t face ) const;
+
+
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_LINEAR_BAR; };
 

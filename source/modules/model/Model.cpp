@@ -121,13 +121,15 @@ can be assigned to regions inside the the calculation.
 @param vset A VSet is supplied as constructor argument and should contain a
 finite-element mesh and associated properties with names which must correspond
 to the properties specified in the Property input file
-(default: CSMP_variables.txt).
+(default: CSMP_variables.txt).  Note that VSet is not const because it may be shrunk in construction process).
 
 @section application Application
 
 Constructor is used when an ANSYS Model is built from topology and VData.
 
-@attention VSet is mutable because it may be shrunk in construction process.
+@attention No boundaries or regions can be created here because there is no way to store corresponding
+ information in the VSet. Use a constructor with Model topology to achieve this.
+ 
 */
 template<uint32_t dim>
 Model<dim>::Model( VSet<dim>& vset, const char* var_file )
@@ -141,7 +143,13 @@ Model<dim>::Model( VSet<dim>& vset, const char* var_file )
 
 
 
+/**
+   Build model without variable storage.
 
+   @attention No boundaries or regions are created either because there is no way to store corresponding
+     information in the VSet. Use a constructor with Model topology to achieve this.
+
+*/
 template<uint32_t dim>
 Model<dim>::Model( VSet<dim>& vset )
   : model_name_( "to be named" ),
@@ -191,6 +199,9 @@ carried out since all basic variables are initialized to NAN (not a number)
 by default.
 
 @attention per default this constructor will not create any boundaries
+
+@attention the regions file is used only if there is one
+
 */
 template<uint32_t dim>
 Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset,
@@ -598,16 +609,18 @@ Model<dim>::~Model()
 template<uint32_t dim>
 void Model<dim>::Verbose( bool verbose )
 {
-  this->verbose_ = verbose;
+  verbose_ = verbose;
 }
 
 
 
 template<uint32_t dim>
-bool Model<dim>::Verbose()
+bool Model<dim>::Verbose() const
 {
-  return this->verbose_;
+  return verbose_;
 }
+
+
 
 template<uint32_t dim>
 string Model<dim>::BinaryVsetFileName( const char* base_file_name )
@@ -666,7 +679,7 @@ uint32_t spatialDimensionOfModel( const char* csmp_binary )
 template<uint32_t dim>
 void  Model<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stored_variables )
  {
-    this->IndexByPropertyValues();
+    if ( get_indices_from_stored_variables ) this->IndexByPropertyValues();
     mesh_manager_.OutputMeshTo( vset,  get_indices_from_stored_variables );
  }
 
@@ -940,7 +953,11 @@ void Model<dim>::IndexByPropertyValues()
              const size_t n_faces{mesh.Faces()};
              const typename plf::colony<csmp::Face<dim>>::iterator faces_end(mesh.FacesEnd());
              for ( auto it=mesh.FacesBegin(); it!=faces_end; ++it ) {
-                  const size_t face_number = static_cast<uint32_t>((*it).Read(key));
+                  const double fp_val = (*it).Read(key);
+                  if ( isnan( fp_val) )
+                    csmp_error.Note( ERROR, "Model::IndexByPropertyValues:",
+                                  "'face number' value is NaN, replacing with 'uint32_' max." );
+                  const size_t face_number = ( isnan(fp_val) ) ? numeric_limits<uint32_t>::max() : static_cast<uint32_t>(fp_val);
                   if ( face_number >= n_faces + mesh.Elements() )
                     csmp_error.Note( WARNING, "Model::IndexByPropertyValues:",
                                       "'face number' exceeds range of available faces:",
@@ -3346,7 +3363,7 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
       }
    
     // smoothing
-    Region<dim> ref = model.Region(region);
+    Region<dim>& ref = model.Region(region);
    
     for ( auto i{0U}; i<n_smoothing_cycles; i++ ) {
          ref.ExtrapolateCellToNodeProperty( element_var, temp_node_var );

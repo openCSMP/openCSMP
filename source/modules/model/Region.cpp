@@ -1442,7 +1442,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
   
-  this->IdentifyPerimeter();
+  if( !this->cell_vec_.empty() ) {
+      this->IdentifyPerimeter();
+  }
 
   this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();

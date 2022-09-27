@@ -281,6 +281,19 @@ IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t
 */
 
 
+uint32_t IsoparametricQuadraticPrism::NodesPerFace( uint32_t face_id ) const
+ {
+		switch (face_id) {
+        case 0: return 6U;
+        case 1: return 8U;
+        case 2: return 8U;
+        case 3: return 8U;
+        case 4: return 6U;
+      }
+    cerr <<"\nIsoparametricQuadraticPrism::NodesPerFace: face "<< face_id <<" does not exist.";
+    return npf;
+ }
+
 
 
 vector<uint32_t>  IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id ) const

@@ -25,6 +25,9 @@ class MeshDiagnostics {
   
     /// summary: diagnostics including checks/reports negative element orientations, flat elements, zero volumes etc.
     bool ScrutinizeMesh( Model<3U>& ) const;
+    
+    /// creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose
+    bool ComputeQualityMetricsAndOutputToVTU( Model<dim>&, const std::string& region );
 
     /// tests for negative element volumes
     bool DetectPotentiallyMisnumberedElements( const Model<dim>& ) const;
@@ -37,6 +40,9 @@ class MeshDiagnostics {
   
     /// checks whether the any value of a computed node variable (P,T,C) lies outside of the range of the values in its neighborhood
     bool DetectNonMonotonicity( const Model<dim>&, const char* variable_of_interest ) const;
+    
+    /// nodes that are not connected to any cells
+    bool DetectOrphanNodes( const Model<dim>& ) const;
 
   private:
     /// recomputes a consistent node-numbering for all surfaces in the mesh

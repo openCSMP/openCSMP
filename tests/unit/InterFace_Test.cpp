@@ -439,8 +439,9 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
   vector<double> N{0,0}, xyz{2.25,1.5};
 
 
-  ///Starting test to check that node coordinate matrix is consistent with node-numbering of the face, and therefore uses
-  /// the correct finite element interpolation functions N = [N1,N2] with each node
+  // Starting test to check that node coordinate matrix is consistent with node-numbering of the face, and therefore uses
+  // the correct finite element interpolation functions N = [N1,N2] with each node
+  face_FE.CurrentID( 5 );
 
   //Inside
   if_obj0.CurrentSide(INSIDE);
@@ -448,7 +449,7 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
   _test( shape_function_N0 == N[0] );
   _test( shape_function_N1 == N[1] );
 
-
+  
   N[0]=0; N[1]=0;
   face_FE.CurrentID( face_FE.CurrentID() + 1 );
   if_obj1.CurrentSide(INSIDE);
@@ -594,12 +595,13 @@ void InterFace_Test::Assign_Geometry_quadratic_test(){
 
   //Area test - done for all automatic assign methods
   //ONLY 2D Tested!
-  _equal(if_obj0.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj1.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj2.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj0.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj1.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj2.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
+  const double max_model_dimension{200.};
+  _equal(if_obj0.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj1.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj2.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj0.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj1.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj2.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
 
 
   //Unit Normal Test
@@ -738,12 +740,13 @@ void InterFace_Test::Assign_Geometry_quadratic2_test(){
 
   //Area test - done for all automatic assign methods
   //ONLY 2D Tested!
-  _equal(if_obj0.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj1.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj2.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj0.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj1.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
-  _equal(if_obj2.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() );
+  const double max_model_dimension{200.};
+  _equal(if_obj0.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj1.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj2.Area(INSIDE)  , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj0.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj1.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
+  _equal(if_obj2.Area(OUTSIDE) , std::sqrt(5), numeric_limits<double>::epsilon() * max_model_dimension );
 
 
   //Unit Normal Test

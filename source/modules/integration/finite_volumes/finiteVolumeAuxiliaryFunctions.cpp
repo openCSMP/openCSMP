@@ -3,6 +3,7 @@
 #include "Element.h"
 #include "Region.h"
 #include "Model.h"
+#include "ErrorHandler.h"
 
 
 using namespace std;
@@ -538,16 +539,16 @@ template void limitProperty_LSMGRAD( const Element<3U>&,
                                      double&, double&);
 
 template double limitProperty_LSMGRAD( const Element<1U>&,
-                                const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                uint32_t, uint32_t, const double);
+                                        const csmp::Index&, const csmp::Index&, const csmp::Index&,
+                                        uint32_t, uint32_t, const double);
 
 template double limitProperty_LSMGRAD( const Element<2U>&,
-                                const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                uint32_t, uint32_t, const double);
+                                      const csmp::Index&, const csmp::Index&, const csmp::Index&,
+                                      uint32_t, uint32_t, const double);
 
 template double limitProperty_LSMGRAD( const Element<3U>&,
-                                const csmp::Index&, const csmp::Index&, const csmp::Index&,
-                                uint32_t, uint32_t, const double);
+                                      const csmp::Index&, const csmp::Index&, const csmp::Index&,
+                                      uint32_t, uint32_t, const double);
 
 
 
@@ -684,10 +685,10 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
    // --------------------------------------------------------
    if ( initialize_flux ) {
         // loop over FV stencils, computing the relevant variable values
-        const typename vector<Node<dim>*>::const_iterator nit_end(gref.NodesEnd());
+        const typename vector<Node<dim>*>::const_iterator nitEnd(gref.NodesEnd());
         double bmin(1e30), bmax(-1e30);
      
-        for ( typename vector<Node<dim>*>::const_iterator nit=gref.NodesBegin(); nit!=nit_end; ++nit )
+        for ( typename vector<Node<dim>*>::const_iterator nit=gref.NodesBegin(); nit!=nitEnd; ++nit )
           if ( (*nit)->AtBoundary() == NOT )
             {
                const auto parent_elements((*nit)->Parents());
@@ -715,6 +716,75 @@ void initializeFiniteVolumeProperties( Model<dim>& model, Region<dim>& gref, boo
 // explicit instantiation of function template in 2 and 3D
 template void initializeFiniteVolumeProperties( Model<2U>&, Region<2U>&, bool );
 template void initializeFiniteVolumeProperties( Model<3U>&, Region<3U>&, bool );
+
+
+
+
+/**
+   Computes the approximate diameter of a node-centered surface finite volume as 1/2 of the average of distances to the connected nodes / lower-dim FVs on the same surface.
+   The vertical extent of the FV is calculated as well using the midpoints of the FV to FV connections
+   
+   @return value pair 'diameter' and 'vertical extent' of FV centered on the Node
+   
+   @attention method fails and returns meaningless values if applied to a Node that is not located on a surface (3D) / or line element (2D)
+*/
+template<uint32_t dim>
+pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<dim>* const nptr )
+ {
+     assert( nptr != nullptr );
+     assert( nptr->Parents() > 0 );
+     
+     // 1. getting unique set of surface nodes surrounding the node
+     size_t lower_dim_elmt_count{ 0U };
+     set<Node<dim>*> ptrs_unique_nodes;
+     for ( auto i{0U}; i<nptr->Parents(); i++ ) {
+          assert( nptr->Parent(i) != nullptr );
+          if constexpr ( dim == 3U ) {
+              if ( nptr->Parent(i)->IsSurface() ) {
+                   const auto n_nodes{ nptr->Parent(i)->Nodes() };
+                   for ( auto j{0u}; j<n_nodes; j++ )
+                     // for the nodes surrounding the current node
+                     if ( nptr->Parent(i)->N(j) != nptr  )
+                       ptrs_unique_nodes.insert( nptr->Parent(i)->N(j) );
+                   lower_dim_elmt_count++;
+                }
+            }
+          else if constexpr ( dim == 2U ) {
+              if ( nptr->Parent(i)->IsLine() ) {
+                   const auto n_nodes{ nptr->Parent(i)->Nodes() };
+                   for ( auto j{0u}; j<n_nodes; j++ )
+                     // for the nodes surrounding the current node
+                     if ( nptr->Parent(i)->N(j) != nptr  )
+                       ptrs_unique_nodes.insert( nptr->Parent(i)->N(j) );
+                   lower_dim_elmt_count++;
+                }
+            }
+          else static_assert( dim == 1U, "diameterAndVerticalExtentOfLowerDimensional_FV: method not applicable in 1 dimensions" );
+       }
+
+     if ( !lower_dim_elmt_count ) {
+          csmp::ErrorHandler::Instance().Note( ERROR, "diameterAndVerticalExtentOfLowerDimensional_FV",
+                                              "the FV does not seem to be lower-dimensional");
+          return make_pair( numeric_limits<double>::quiet_NaN(), numeric_limits<double>::quiet_NaN() );
+       }
+
+     // 2. computing the distances and averaging them
+     double distance{ 0. }, min_y{ 1e+30 }, max_y{ -1e+30 };
+     for ( const auto& sit : ptrs_unique_nodes ) {
+          // computing values at the segment midpoints
+          distance += nptr->Coordinate().DistanceTo( sit->Coordinate() ) / 2.;
+          min_y = min( min_y, (nptr->y() + sit->y()) / 2. );
+          max_y = max( max_y, (nptr->y() + sit->y()) / 2. );
+       }
+     
+     //                          diameter                                             vertical extent
+     return make_pair( 2. * distance / static_cast<double>(ptrs_unique_nodes.size()), max_y - min_y );
+ 
+ } // end diameterAndHeightOfLowerDimensional_FV
+
+
+template pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<3U>* const );
+template pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<2U>* const );
 
 
 

@@ -171,8 +171,11 @@ class ModelTopology {
     template<uint32_t dim>
     void        RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset );
 
-	  /// region names
+	  /// region, boundary or split boundary names
 	  void		    DomainNames( std::vector<std::string>& ) const;
+   
+    /// changes the name of a domain in the most efficient way; reports whether operation was successful
+    bool        ChangeDomainName( const std::string& old_name, const std::string& new_name );
 
     /// properties of regions
     void        PropertiesOfDomains( const char* regions_file,

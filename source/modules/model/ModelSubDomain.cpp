@@ -333,7 +333,8 @@ bool  ModelSubDomain<dim,CELL>::IsContiguous() const
 
 /**
     Detects of how many spatial dimensions cell types are contained in model.
-    It returns a pair: first value gives number of different spatial dimensions contained,
+    
+    @return method returns a pair: first value gives number of different spatial dimensions contained,
     second value returns the highest spatial dimension contained.
 
     @author SKM 1/11/2013
@@ -1144,12 +1145,13 @@ Returns a vector<double> with the ID numbers of the Elements which belong
 to the Region.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-void  ModelSubDomain<dim,CELL>::MemberCellIndexes( vector<size_t>& ids ) const
+vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const
  {
-    ids.clear();
+    vector<size_t> ids;
     ids.reserve( cell_vec_.size() );
-
     for ( const auto& it : cell_vec_ ) ids.push_back( it->Idx() );
+    
+    return ids;
  }
 
 
@@ -1193,14 +1195,6 @@ void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
     RenumberCells();
    
  } // end UpdateRegionMemberIndexes
-
-
-    /// setting all cell indices to a specific value
-template<uint32_t dim, template<uint32_t> class CELL>
-void ModelSubDomain<dim,CELL>::SetCellIndexes( size_t new_idx )
- {
-    for( auto& it : cell_vec_ ) it->Idx(new_idx);
- }
 
 
 
@@ -1264,6 +1258,7 @@ bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( const CELL<dim>* const e_ptr ) 
  }
 
 
+// still used by legacy NodeCenteredFiniteVolumeTransport
 template<uint32_t dim, template<uint32_t> class CELL>
 bool  ModelSubDomain<dim,CELL>::IsPerimeterNode( size_t i ) const
  {
@@ -5324,6 +5319,21 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
          csmp_error.Note( ERROR, "sharedPerimeterCells:", "input subdomains have been flagged for rebuilt; nothing was done.");
          return 0U;
       }
+    const auto cell_dim1 = subdomain1.SpatialDimensions();
+    const auto cell_dim2 = subdomain2.SpatialDimensions();
+    if ( cell_dim1.second != cell_dim2.second ) {
+         cerr <<"\n\t'"<< subdomain1.Name() <<"': spatial dimension: "<< cell_dim1.second <<" vs. '";
+         cerr << subdomain2.Name() <<"': spatial dimension: "<< cell_dim2.second;
+         csmp_error.Note( WARNING, "sharedPerimeterCells:", "for successful processing input domains must have the same spatial dimension.");
+         return 0U;
+      }
+    if ( cell_dim1.first > 1 ||  cell_dim2.first > 1 ) {
+         cerr <<"\n\t'"<< subdomain1.Name() <<"': number of spatial dimensions: "<< cell_dim1.first <<" vs. '";
+         cerr << subdomain2.Name() <<"': number of spatial dimensions: "<< cell_dim2.first;
+         csmp_error.Note( WARNING, "sharedPerimeterCells:", "function can only process domains with elements of a single spatial dimension.");
+         return 0U;
+      }
+
 
     // 1. is there a shared interface? - looping over the perimeter faces of the adjacent regions
     // ------------------------------------------------------------------------------------------

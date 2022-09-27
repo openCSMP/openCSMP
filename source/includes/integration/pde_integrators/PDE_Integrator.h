@@ -309,10 +309,10 @@ class PDE_Integrator {
     /// returns whether a finite-difference time increment has been set
     bool          Transient() const;
   
-    /// accumulates, assembles and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
+    /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
     void          IntegrateOver( COMPUTATION_DOMAIN<dim>&, bool debug=false );
   
-    /// simultaneously considers potential Boundary objects sharing nodes with the model subdomain on which the solution is obtained; uses node numbering
+    /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
     void          IntegrateOver( Model<dim>&, COMPUTATION_DOMAIN<dim>&, bool debug=false );
 
     /// switch to another solver deleting any dynamically allocated solver that was associated with integrator

@@ -129,6 +129,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
   {
      std::string file_name( this->OutputFileAndSubFolderName( initial_file_name ) );
 
+     if( !sg.ContainsRegion( region ) ) return;
      const Region<dim>&  gref(sg.Region(region));
      gref.UpdateMemberIndexes();
 
@@ -450,6 +451,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
        throw Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
                       "Thus far variables placed on REGION or BOUNDARY cannot be visualised with VTK (this could however be done with the VTK primitive POLYGONAL)");
 
+     if( !sg.ContainsRegion( group_name ) ) return;
      const Region<dim>&  gref(sg.Region(group_name));
      gref.UpdateMemberIndexes();  // renumber nodes and elements
      
@@ -460,8 +462,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
      //    target Region object.
      // ------------------------------------------------------------
      // finding the group in the group list
-     vector<size_t>  elmt_ids;
-     gref.MemberCellIndexes( elmt_ids );
+     vector<size_t>  elmt_ids = gref.MemberCellIndexes();
 
      if ( elmt_ids.empty() )     
        throw csmp::Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region)",

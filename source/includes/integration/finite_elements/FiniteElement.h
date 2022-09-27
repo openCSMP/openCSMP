@@ -172,8 +172,8 @@ class FiniteElement {
     /// neighbor elements that may be connected to this FE in its characteristic space
     uint32_t       Neighbors() const;
   
-    /// returns how many nodes make up a particular face
-    uint32_t       NodesPerFace( uint32_t face ) const;
+    /// returns how many nodes make up a particular face; some elements have different numbers
+    virtual uint32_t NodesPerFace( uint32_t face ) const;
   
     /// returns number of quadrature points used by current integration scheme
     uint32_t       IntegrationPoints() const;

@@ -5,8 +5,11 @@
 #include "Model.h"
 #include "Region.h"
 #include "PropertyHandle.h"
+#include "PropertyConstraints.h"
 #include "VTK_Interface.h"
+#include "VTU_Interface.h"
 #include "Standard_IO_Handler.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -49,8 +52,8 @@ template<uint32_t dim>
 void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( Model<dim>& sg ) const
   {
     std::vector<Point<dim> > bc_vec(0);
-    std::vector<uint32_t>     id_vec(0);
-    double                 sign;
+    std::vector<uint32_t>    id_vec(0);
+    double                   sign;
     size_t                   id, cntr(0);
     
     cout <<"\nMeshDiagnostics::FixFiniteElementNeighborOrientationOfSurfaceMeshes: Checking for any clockwise ordered element neighbor IDs..." << endl;
@@ -84,7 +87,7 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
                 if ( (*eit)->Neighbor(i) != NULL ) id_vec[id-i] = (*eit)->Neighbor(i)->Idx();
                 else                               id_vec[id-i] = 0;
               }
-            for ( size_t i{0U}; i<id_vec.size(); i++ ) {
+            for ( auto i{0U}; i<id_vec.size(); i++ ) {
                 if ( id_vec[i] > 0 ) (*eit)->Assign( i, sgref.E(id_vec[i]-1) );
                 else                 (*eit)->Assign( i, static_cast<Element<dim>*>(nullptr) );
               }
@@ -269,6 +272,226 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     return problems;
  
  } // end scrutinize mesh
+
+
+
+
+/** Creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose.
+ 
+    Diagnostics obtained: cells:
+         
+         1.  "cell volume" - cells that are smaller than 1e-5 of average cell size are reported in region "small cells"
+           (a special treatment is applied to lower dimensional elements)
+         2.  "Jacobian determinant" - a negative value indicates a problem with the node-numbering of the cell or twistedness
+         3.  "aspect ratio" - longest over shortest segment length
+         4. "minimum inter-segment angle" - indicating splinter elements
+         5. "width over height ratio" - suitable for the detection of non-manifold vertices (where all nodes lie in the same plane)
+
+    Diagnostics obtained: nodes:
+    
+         1. "node connections" - number of nodes the node is connected to. A highly variable number indicates a poor quality mesh
+         2. "shortest distance to node" - any of the other nodes surrounding the node
+
+         
+    Cells that do not suffer from any of the checked criteria are stored in a new region that fullfil the criterion "fit for computation" = 1.
+*/
+/*
+template<uint32_t dim>
+bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& model, const std::string& region )
+ {
+    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+    
+    if ( !model.ContainsRegion(region) ) {
+         csmp_error.Note( ERROR, "MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU",
+                         "Region to diagnose not found; no diagnostics obtained");
+         return false;
+      }
+    Region<dim>& subdomain = model.Region( region );
+    bool         mesh_suitable_for_computation{ true };
+    
+    // 0. creating the properties needed to store the diagnostic values
+    const csmp::Index  evol_key = model.CreateProperty( "cell volume", "m3", SCALAR, ELEMENT );
+    const csmp::Index  mJac_key = model.CreateProperty( "Jacobian determinant", "none", SCALAR, ELEMENT );
+    const csmp::Index  los_key = model.CreateProperty( "aspect ratio", "X", SCALAR, ELEMENT );
+    
+    // 1. obtaining and storing diagnostic values
+    for ( auto& it : subdomain.CellVector() )
+      {
+         // cell volume
+         const double cell_volume = it->Volume();
+         it->Store( evol_key, makeScalar(ANY,cell_volume) );
+         // determinant of Jacobian matrix (gets minimum value)
+         double min_determinant = it->det_JINV_AtIntegrationPoint(0U);
+         for ( auto i{1u}; i<it->IntegrationPoints(); i++ )
+           min_determinant = min( min_determinant, it->det_JINV_AtIntegrationPoint(i) );
+         it->Store( mJac_key, makeScalar(ANY,min_determinant) );
+         // aspect ratio = longest over shortest segment length
+         it->Store( los_key, makeScalar(ANY, it->AspectRatio() ) );
+           
+
+      }
+      
+    // 2. creating regions from value ranges of particular diagnostic values
+     
+    // 3. diagnostics applied to nodes
+    const csmp::Index  conn_key  = model.CreateProperty( "node connections", "none", SCALAR, NODE );
+    const csmp::Index  ndist_key = model.CreateProperty( "shortest distance to node", "m", SCALAR, NODE );
+        
+    // obtaining and storing diagnostic values
+    for ( auto& nit : subdomain.NodeVector() )
+      {
+         // node connections
+         const auto n_nbors{ nit->Neighbors() };
+         nit->Store( conn_key, makeScalar(ANY,static_cast<double>(n_nbors)) );
+         // shortest distance to node
+         const Point<dim> ncoord{ nit->Coordinate() };
+         double           min_distance{ 1.0e30 };
+         for ( auto i{0u}; i< n_nbors; i++ )
+           min_distance = min( min_distance, ncoord.DistanceTo( nit->Neighbor(i)->Coordinate() ) );
+         nit->Store( ndist_key, makeScalar(ANY,min_distance) );
+      }
+
+
+    return mesh_suitable_for_computation;
+     
+ } // end ComputeQualityMetricsAndOutputToVTU
+*/
+
+
+
+/** Creates a range of quality variables, computes them and outputs them from the target region to VTU; creates diagnostic regions for this purpose.
+
+    Diagnostics obtained: cells:
+
+         1.  "cell volume" - cells that are smaller than 1e-5 of average cell size are reported in region "small cells"
+           (a special treatment is applied to lower dimensional elements)
+
+         2.  "Jacobian determinant" - a negative value indicates a problem with the node-numbering of the cell or twistedness
+
+         3.  "aspect ratio" - longest over shortest segment length
+
+         4. "minimum inter-segment angle" - indicating splinter elements
+
+         5. "width over height ratio" - suitable for the detection of non-manifold vertices (where all nodes lie in the same plane)
+
+    Diagnostics obtained: nodes:
+
+         1. "node connections" - number of nodes the node is connected to. A highly variable number indicates a poor quality mesh
+
+         2. "shortest distance to node" - any of the other nodes surrounding the node
+
+    Cells that do not suffer from any of the checked criteria are stored in a new region that fullfil the criterion "fit for computation" = 1.
+
+*/
+
+template<uint32_t dim>
+bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& model, const std::string& region )
+  {
+    csmp::ErrorHandler& csmp_error( csmp::ErrorHandler::Instance() );
+
+    if ( !model.ContainsRegion(region) ) {
+      csmp_error.Note( ERROR, "MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU",
+                       "Region to diagnose not found; no diagnostics obtained");
+      return false;
+    }
+
+    Region<dim>& subdomain = model.Region( region );
+    bool         mesh_suitable_for_computation{ true };
+
+    // 0. creating the properties needed to store the diagnostic values
+    const csmp::Index  evol_key = model.CreateProperty( "cell volume", "m3", SCALAR, ELEMENT );
+    const csmp::Index  mJac_key = model.CreateProperty( "Jacobian determinant", "none", SCALAR, ELEMENT );
+    const csmp::Index  los_key = model.CreateProperty( "aspect ratio", "X", SCALAR, ELEMENT );
+
+    // 1. obtaining and storing diagnostic values
+    for ( auto& it : subdomain.CellVector() )
+    {
+      // cell volume
+      const double cell_volume = it->Volume();
+      it->Store( evol_key, makeScalar(ANY,cell_volume) );
+
+      // determinant of Jacobian matrix (gets minimum value)
+      double min_determinant = it->det_JINV_AtIntegrationPoint(0U);
+      for ( auto i{1u}; i<it->IntegrationPoints(); i++ )
+        min_determinant = min( min_determinant, it->det_JINV_AtIntegrationPoint(i) );
+      it->Store( mJac_key, makeScalar(ANY,min_determinant) );
+
+      // aspect ratio = longest over shortest segment length
+      it->Store( los_key, makeScalar(ANY, it->AspectRatio() ) );
+    }
+
+
+    // 2. diagnostics applied to nodes
+    const csmp::Index  conn_key  = model.CreateProperty( "node connections", "none", SCALAR, NODE );
+    const csmp::Index  ndist_key = model.CreateProperty( "shortest distance to node", "m", SCALAR, NODE );
+
+    // obtaining and storing diagnostic values
+    for ( auto& nit : subdomain.NodeVector() )
+    {
+      // node connections
+      const auto n_nbors{ nit->Neighbors() };
+      nit->Store( conn_key, makeScalar(ANY,static_cast<double>(n_nbors)) );
+
+      // shortest distance to node
+      const Point<dim> ncoord{ nit->Coordinate() };
+      double           min_distance{ 1.0e30 };
+      for ( auto i{0u}; i< n_nbors; i++ )
+        min_distance = min( min_distance, ncoord.DistanceTo( nit->Neighbor(i)->Coordinate() ) );
+      nit->Store( ndist_key, makeScalar(ANY,min_distance) );
+
+    }
+
+    // 3. creating regions from value ranges of particular diagnostic values
+    VTK_Interface<dim> vtk_output;
+    //cell volume
+    double cell_volume_threshold;
+    cout << "\nPlease type in a threshold value of cell volume (m3) below which the cells will be output to VTU"<<endl;
+    cin >> cell_volume_threshold;
+    model.FormRegionFrom("cells_with_small_volumes", "cell volume", 0., cell_volume_threshold, false);
+    vtk_output.OutputDataToVTK(model, "cells_with_small_volumes", "", "cell volume", 0., true);
+    //Jacobian_determinant
+    const double jacobian_determinant_threshold(0.);
+    model.FormRegionFrom("cells_with_negative_Jacobian_determinant", "Jacobian determinant", -1.0e30, 0., false);
+    vtk_output.OutputDataToVTK(model, "cells_with_negative_Jacobian_determinant", "", "Jacobian determinant", 0., true);
+    //aspect ratio
+    double aspect_ratio_threshold;
+    cout << "\nPlease type in a threshold value of aspect ratio above which the cells will be output to VTU"<<endl;
+    cin >> aspect_ratio_threshold;
+    model.FormRegionFrom("cells_with_large_aspect_ratios", "aspect ratio", aspect_ratio_threshold, 1.0e30, false);
+    vtk_output.OutputDataToVTK(model, "cells_with_large_aspect_ratios", "", "aspect ratio", 0., true);
+    
+    //shortest distance to node
+    double shortest_distance_to_node_threshold;
+    cout << "\nPlease type in a threshold value of the shortest distance between nodes, below which the cells will be output to VTU"<<endl;
+    cin >> shortest_distance_to_node_threshold;
+    model.FormRegionFrom("cells_with_close_neighboring_nodes", "shortest distance to node", 0., shortest_distance_to_node_threshold, false);
+    vtk_output.OutputDataToVTK(model, "cells_with_close_neighboring_nodes", "", "shortest distance to node", 0., true);
+
+    
+    //create property constraints for "fit for computation" cells
+    PropertyConstraints prop_constraints("cell volume", cell_volume_threshold, 1.0e30);
+    prop_constraints.AddConstraint("Jacobian determinant", 0., 1.0e30);
+    prop_constraints.AddConstraint("aspect ratio", 0., aspect_ratio_threshold);
+    prop_constraints.AddConstraint("shortest distance to node", shortest_distance_to_node_threshold, 1.0e30);
+    //form a region with defined property constraints
+    model.FormRegionFrom("region_with_high_quality_cells", prop_constraints);
+    // RegionInterface::FormRegionFrom PRopertyConstraints erases region if it
+    // is empty
+    if( model.ContainsRegion( "region_with_high_quality_cells" ) ) {
+        VTU_Interface<dim>  vtu_output(model);
+        list<string> output_properties;
+        output_properties.emplace_back( "cell volume" );
+        output_properties.emplace_back( "Jacobian determinant" );
+        output_properties.emplace_back( "aspect ratio" );
+        output_properties.emplace_back( "shortest distance to node" );
+        vtu_output.OutputDataToVTU( model.Name(), output_properties, "region_with_high_quality_cells", 0 );
+    }
+
+    return mesh_suitable_for_computation;
+    
+  } // end ComputeQualityMetricsAndOutputToVTU
+
+
 
 
 
