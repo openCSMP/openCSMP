@@ -25,7 +25,7 @@ Criterion:  comparison with TOUGH
   void Geothermal_pseudo1D_VVCase::outputToVTU( Model<2U>& model,string model_name, const list<string>& props, size_t timestep )
   {
       static VTU_Interface<2U> vtu(model);
-      vtu.OutputDataToVTU( (model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
+      vtu.OutputDataToVTU( ( "../" +  model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
   }
 
   void Geothermal_pseudo1D_VVCase::ComputeMassConductivity (Model<2U>& model)
@@ -117,6 +117,7 @@ Criterion:  comparison with TOUGH
 	std::string vars_name (this->getName()+".txt");
     
     ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true );
+    model.InstantiateFiniteVolumes();
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );
@@ -133,6 +134,8 @@ Criterion:  comparison with TOUGH
     output_props.push_back("volumetric enthalpy liquid");
     output_props.push_back("enthalpy content liquid");
     output_props.push_back("nodal fluid volume source");
+    output_props.push_back("conductivity");
+    output_props.push_back("mass conductivity");
 
     region_names.push_back("Model");
 
@@ -174,8 +177,11 @@ Criterion:  comparison with TOUGH
 
     //! to quickly replace SAMG with LU solver when necessary, uncomment
     #ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
     //LUdcmp_Solver solver;
-    SAMG_Solver solver;
+    SAMG_Solver solver(&settings);
+    settings.Set_levelx(1);
+
     #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
     #endif
@@ -285,13 +291,19 @@ Criterion:  comparison with TOUGH
     //! set mt and hCl (advected properties) to Dirich at the boundaries where p, t are dirichlet
     model.Boundary("LEFT").ChangePropertyStatus("fluid density", DIRICH);
     model.Boundary("RIGHT").ChangePropertyStatus("fluid density", DIRICH);
+    //model.Boundary("LEFT").ChangePropertyStatus("density liquid", DIRICH);
+    //model.Boundary("RIGHT").ChangePropertyStatus("density liquid", DIRICH);
     model.Boundary("LEFT").ChangePropertyStatus("enthalpy content liquid", DIRICH);
     model.Boundary("RIGHT").ChangePropertyStatus("enthalpy content liquid", DIRICH);
+
+    //model.Boundary("RIGHT").InputPropertyValue("fluid density", ScalarVariable(DIRICH,988.0));
+    //model.Boundary("RIGHT").InputPropertyValue("enthalpy content liquid", ScalarVariable(DIRICH,2.0698e8));
+
   
       
     //! output initial equilibrated state
     // uncomment for an initial output
-    //outputToVTU( model, config_name, output_props, time_step );
+    outputToVTU( model, config_name, output_props, time_step );
     time_step++;
   
     while ( global_time <= max_time )
@@ -328,7 +340,7 @@ Criterion:  comparison with TOUGH
 
       // uncomment for an output
 	  //if (time_step % 100 == 0)
-	  //	outputToVTU( model, config_name, output_props, time_step );
+        outputToVTU( model, config_name, output_props, time_step );
 
       if (time_step == (size_t)1600)
       {
