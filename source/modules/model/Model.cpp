@@ -81,12 +81,37 @@ Model<dim>::Model( const char* varTextFile )
     
 */
 template<uint32_t dim>
-Model<dim>::Model( const std::string& binaryFileName )
+Model<dim>::Model( const string& binaryFileName )
   : model_name_( binaryFileName ),
     database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), set<string>() )
 {
   InitializeLocalVariableStorage();
-  set<string> empty_set; // will read all the variables contained in the binary
+  set<string> empty_set; // prompts model to read all the variables contained in the binary
+  InputFromBinaryFile( binaryFileName.c_str(), empty_set );
+}
+
+
+
+/**
+     Reconstructor:  reads model from CSMP's native binary files, but ignoring the binary variable file that comes with the file set.
+     Only the variable whose values are actually stored in the VSet are created.
+     Extra (additional) storage is created for the variables in the supplied variable file if these are not already contained in
+     the VSet.
+     
+     @param binaryFileName prefix (model name) used in all the binary files relating to the model.
+     @param variable_txt_file '-variables.txt' with the specifications of the variables that are desired in addition
+     to those that are contained in the VSet.
+     
+     @author SKM
+     @date 26/9/2022
+ */
+template<uint32_t dim>
+Model<dim>::Model( const string& binaryFileName, const string& variable_txt_file )
+  : model_name_( binaryFileName ),
+    database_( BinaryVariablesFileName( variable_txt_file.c_str() ).c_str(), set<string>() )
+{
+  InitializeLocalVariableStorage();
+  set<string> empty_set; // prompts model to read all the variables contained in the binary
   InputFromBinaryFile( binaryFileName.c_str(), empty_set );
 }
 
@@ -94,13 +119,17 @@ Model<dim>::Model( const std::string& binaryFileName )
 /**
     Re-constructor: builds model from binary file set, using only the variables specified in the subset, but with the definitions
     that these variables have in the binary.
+    
+    @param binaryFileName  '_variables.dat' file with the same name as the model that is stored in the binary file set
+    @param subset_variables subset of variables that must be defined by name in the  '_variables.dat' file supplied with the model
 
 @author Junchul Kim
+@author SKM refactored 2022
 @date 2019
 
 */
 template<uint32_t dim>
-Model<dim>::Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables )
+Model<dim>::Model( const string& binaryFileName, const set<string>& subset_variables )
   : model_name_( binaryFileName ),
     database_( BinaryVariablesFileName( binaryFileName.c_str() ).c_str(), subset_variables )
 {
@@ -1009,10 +1038,11 @@ Add a property at runtime
 */
 template<uint32_t dim>
 csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
+                                         const char* notation,
                                          const char* unit,
                                          VARIABLE_TYPE vtype,
                                          PLACEMENT vplace,
-                                         size_t vsize,
+                                         uint32_t vsize,
                                          double vmin,
                                          double vmax,
                                          string usage )
@@ -1024,8 +1054,8 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
     return database_.StorageKey( new_prop );
   }
 
-  size_t  prop_index = Database().VariableCount( vplace, vtype );
-  csmp::Index  prop_key = database_.AddProperty( new_prop, unit, prop_index, vtype, vplace, vsize, vmin, vmax, usage );
+  const uint32_t  prop_index = database_.VariableCount( vplace, vtype );
+  csmp::Index     prop_key   = database_.AddProperty( new_prop, notation, unit, prop_index, vtype, vplace, vsize, vmin, vmax, usage );
 
   if ( vplace == NODE ) {
     csmp::Region<dim>&  gref( this->Region( "Model" ) );
@@ -1059,10 +1089,10 @@ csmp::Index  Model<dim>::CreateProperty( const char* new_prop,
       (*git).second.AddProperty( prop_key );
   }
   else if ( vplace == BOUNDARY ) {
-    for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+    for ( typename map<string, csmp::Boundary<dim> >::iterator
           git = this->BoundariesBegin(); git != this->BoundariesEnd(); git++ )
       (*git).second.AddProperty( prop_key );
-    for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+    for ( typename map<string, csmp::SplitBoundary<dim> >::iterator
           git = this->SplitBoundariesBegin(); git != this->SplitBoundariesEnd(); git++ )
       (*git).second.AddProperty( prop_key );
   }
@@ -1339,7 +1369,7 @@ void Model<dim>::Accept( csmp::Visitor<dim>& v )
     }
                 return;
     case REGION: { // processing all unique regions except for the "Model"
-      typename std::map<std::string, csmp::Region<dim> >::iterator  rit = this->UniqueRegionsBegin();
+      typename map<string, csmp::Region<dim> >::iterator  rit = this->UniqueRegionsBegin();
       // if there is only the region "Model"
       if ( this->Regions() == 1U and (*rit).first == "Model" ) {
         (*rit).second.Accept( v );
@@ -1597,7 +1627,7 @@ template void Model<3U>::InputBoundaryValue<VectorVariable<3U> >( BOX_BOUNDARY, 
 
 
 template<uint32_t dim>
-void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property, const std::vector<VARIABLE_FLAG>& flags )
+void Model<dim>::InputBoundaryFlags( BOX_BOUNDARY boundary, const char* property, const vector<VARIABLE_FLAG>& flags )
 {
   const csmp::Index  prop_key = database_.StorageKey( property );
 
@@ -2407,7 +2437,7 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, bool debug )
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, bool debug )
 {
-  for ( typename map<std::string, csmp::Boundary<dim> >::iterator it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
+  for ( typename map<string, csmp::Boundary<dim> >::iterator it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
     problem.IntegrateOver( (*it).second, debug );
 }
 
@@ -2426,7 +2456,7 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, const char* 
 
 /// PDE solution applied to a specific boundary
 template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, const std::string& boundary_name, bool debug )
+void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, const string& boundary_name, bool debug )
 {
   problem.IntegrateOver( this->Boundary( boundary_name ), debug );
 
@@ -2605,19 +2635,19 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
 
   // unique and non-unique regions 
   if ( prop_key.place == REGION ) {
-    typename std::map<std::string, csmp::Region<dim> >::const_iterator  git( this->UniqueRegionsBegin() );
+    typename map<string, csmp::Region<dim> >::const_iterator  git( this->UniqueRegionsBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->UniqueRegionsEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = std::min( gmin, vmin );
-      gmax = std::max( gmax, vmax );
+      gmin = min( gmin, vmin );
+      gmax = max( gmax, vmax );
       git++;
     }
     for ( auto ngit = this->RegionsBegin(); ngit != this->RegionsEnd(); ngit++ ) {
       (*ngit).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = std::min( gmin, vmin );
-      gmax = std::max( gmax, vmax );
+      gmin = min( gmin, vmin );
+      gmax = max( gmax, vmax );
     }
     vmin = gmin;
     vmax = gmax;
@@ -2628,13 +2658,13 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   // boundaries
   if ( prop_key.place == BOUNDARY || prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
        prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
-    typename map<std::string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
+    typename map<string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->BoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = std::min( gmin, vmin );
-      gmax = std::max( gmax, vmax );
+      gmin = min( gmin, vmin );
+      gmax = max( gmax, vmax );
       git++;
     }
     vmin = gmin;
@@ -2646,13 +2676,13 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   // split boundaries
   if ( prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
        prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-    typename map<std::string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
+    typename map<string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
     (*git).second.MinMaxOf( prop_key, vmin, vmax );
     double  gmin( vmin ), gmax( vmax );
     while ( git != this->SplitBoundariesEnd() ) {
       (*git).second.MinMaxOf( prop_key, vmin, vmax );
-      gmin = std::min( gmin, vmin );
-      gmax = std::max( gmax, vmax );
+      gmin = min( gmin, vmin );
+      gmax = max( gmax, vmax );
       git++;
     }
     vmin = gmin;
@@ -2725,14 +2755,14 @@ bool Model<dim>::UpdateSubdomainPropertyStorage()
 
   // 2. Boundaries
   if ( this->Database().VariableCount( BOUNDARY ) > 0 ) {
-    for ( typename map<std::string, csmp::Boundary<dim> >::iterator
+    for ( typename map<string, csmp::Boundary<dim> >::iterator
           git = this->BoundariesBegin(); git != this->BoundariesEnd(); git++ )
       (*git).second.ResizePropertyStorage( this->Database().LocalVariablesAt( BOUNDARY ) );
   }
 
   // 3. SplitBoundaries
   if ( this->Database().VariableCount( SPLIT_BOUNDARY ) > 0 ) {
-    for ( typename map<std::string, csmp::SplitBoundary<dim> >::iterator
+    for ( typename map<string, csmp::SplitBoundary<dim> >::iterator
           git = this->SplitBoundariesBegin(); git != this->SplitBoundariesEnd(); git++ )
       (*git).second.ResizePropertyStorage( this->Database().LocalVariablesAt( SPLIT_BOUNDARY ) );
   }
@@ -2812,7 +2842,7 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
 
   // adding properties stored on "Model"
   map<string, Index>  properties;
-  Database().ListProperties( MODEL, properties );
+  Database().ListVariables( MODEL, properties );
 
   // for all model properties
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -2890,10 +2920,18 @@ void Model<dim>::OutputToBinaryFile( const char* file_string )
 
 
 /**
-reads model written by OutputToBinaryFile() including all associated properties or a subset of variables
+     Reads model written by OutputToBinaryFile() including all associated properties or a subset of variables
+     
+     @param model_name of the saved model that is to be retrieved from the binary file
+     @param subset_variables selected variables that shall be read from the binary file; if empty, all variables are read
+     
+     @attention If the variable subset is empty and variables are encoutered in the VSet which are not yet contained in the current database,
+     extra storage is created for these.
+     
+     @attention if any of the variables in the subset is not known to the database an error is reported.
 */
 template<uint32_t dim>
-void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std::string>& subset_variables )
+void Model<dim>::InputFromBinaryFile( const char* model_name, const set<string>& subset_variables )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2905,7 +2943,25 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   cout << "' from VSet... " << endl;
   vset.InputFrom( BinaryVsetFileName( model_name ).c_str(), model_time, subset_variables );
 
-  // 2. rebuilds finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
+  // 2.1 If there are variables with meaningful values stored in the VSet which are not contained in the database
+  //     new entries are created for these (this option applies only if the subset is empty).
+  if ( subset_variables.empty() ) {
+       int counter{0};
+       for ( auto pit = vset.PropertyValuesBegin(); pit != vset.PropertyValuesEnd(); ++pit )
+         if ( Database().IsDefined( (*pit).first.c_str() ) == false ) {
+              double vmin, vmax;
+              string notation{"abbrev"}; notation += counter++;
+              (*pit).second.MinMaxOf( vmin, vmax );
+              // if we are dealing with a range of real numbers
+              if ( !isnan(vmin) && !isnan(vmax) && vmin < vmax )
+                // prop name, prop unit, VARIABLE_TYPE, PLACEMENT, vsize, vmin, vmax, usage
+                Database().AddProperty( (*pit).first.c_str(), notation.c_str(), "SI",
+                                        (*pit).second.Type(), (*pit).second.Placement(), (*pit).second.Components(),
+                                         vmin, vmax, "property read from VSet" );
+           }
+    }
+
+  // 2.2 build finite element mesh and associated property storage, initialising 'mtrl' identifiers and boundary flags
   const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
   mesh_manager_.Initialize( database_, vset, with_FV_variables );
 
@@ -2918,7 +2974,9 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
   {
     // apart from the name string key in the map, PropertyData contains the most important variable specifications
     if ( (*pit).second.Placement() != MODEL ) continue;
-    // some checks
+    // if we are only considering variables in the supplied subset
+    if ( !subset_variables.empty() && subset_variables.find( (*pit).first ) == subset_variables.end() ) continue;
+    // more checks
     assert( Database().IsDefined( (*pit).first.c_str() ) );
     const csmp::Index key( Database().StorageKey( (*pit).first.c_str() ) );
     assert( key.place == MODEL );
@@ -3001,7 +3059,7 @@ void Model<dim>::InputFromBinaryFile( const char* model_name, const std::set<std
 Calculates the x, y, z extent of the model and returns these lengths into its arguments.
 The return value is a string that contains the dimensions with explanations.
 */
-std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z )
+string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z )
 {
   Point<3U>  xyz_min, xyz_max;
   sg.MinMaxCoordinates( xyz_min, xyz_max );
@@ -3118,7 +3176,7 @@ double printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double>::signaling_NaN();
+          return numeric_limits<double>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"' in subdomain of model '"<< group <<"': "<< pmin <<" to "<< pmax << endl;
@@ -3147,7 +3205,7 @@ double printRangeOfVariable( const Model<dim>& sg,
      else if ( sg.ContainsSplitBoundary(group) ) sg.SplitBoundary( group ).MinMaxOf( var, pmin, pmax );
      else {
           cerr <<"\nprintRangeOfVariable: '"<< group <<"' does not exist."<< endl;
-          return std::numeric_limits<double>::signaling_NaN();
+          return numeric_limits<double>::signaling_NaN();
        }
      cout << scientific << setprecision(5) <<"\nRange of variable ["<< p_ref.Unit(var) <<"]: '";
      cout << var <<"': "<< pmin <<" to "<< pmax <<" in subdomain of model '"<< group <<"'"<< endl;
@@ -3417,24 +3475,24 @@ void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_v
     ScalarVariable  sc;
     sgroup.MinMaxOf( prop, dmin, dmax );
     
-    std::random_device rd;
+    random_device rd;
     // seed value is designed specifically to make initialization
-    // parameters of std::mt19937 (instance of std::mersenne_twister_engine<>)
+    // parameters of mt19937 (instance of mersenne_twister_engine<>)
     // different across executions of application
-    std::mt19937::result_type seed = rd() ^ (
-            (std::mt19937::result_type)
-            std::chrono::duration_cast<std::chrono::seconds>(
-                std::chrono::system_clock::now().time_since_epoch()
+    mt19937::result_type seed = rd() ^ (
+            (mt19937::result_type)
+            chrono::duration_cast<chrono::seconds>(
+                chrono::system_clock::now().time_since_epoch()
                 ).count() +
-            (std::mt19937::result_type)
-            std::chrono::duration_cast<std::chrono::microseconds>(
-                std::chrono::high_resolution_clock::now().time_since_epoch()
+            (mt19937::result_type)
+            chrono::duration_cast<chrono::microseconds>(
+                chrono::high_resolution_clock::now().time_since_epoch()
                 ).count() );
 
-    std::mt19937 gen(seed);
+    mt19937 gen(seed);
 
     // generating floating point values
-    std::uniform_real_distribution<double> rngen(0, by_percent_of_max_value * dmax * 0.01);
+    uniform_real_distribution<double> rngen(0, by_percent_of_max_value * dmax * 0.01);
 
     switch( prop_key.place )
       {

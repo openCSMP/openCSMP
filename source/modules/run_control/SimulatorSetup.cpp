@@ -81,8 +81,8 @@ void SimulatorSetup<dim>::LoadControlSimulatorSetupParameters()
 }
 
 template<uint32_t dim>
-void SimulatorSetup<dim>::CreateAllProperties(){
-
+void SimulatorSetup<dim>::CreateAllProperties()
+  {
     // This function creates properties in the model assuming that, if restart is not an active option, the model is completely empty.
     // NEVERTHELESS, for safety, IsDefined and other precautions are left in place with our without restart.
 
@@ -108,18 +108,19 @@ void SimulatorSetup<dim>::CreateAllProperties(){
     }
 
     //Go through all existing variables in the model, and load the sizes of arrays and flagged arrays.
-    for (auto lit = this->GetParameterList().begin(); lit!= this->GetParameterList().end(); lit++){
+    for (auto lit = this->GetParameterList().begin(); lit!= this->GetParameterList().end(); lit++)
+      {
         SimulatorSetupParameter& p(*lit);
 
         if (!this->Database().IsDefined(p.name.c_str())) {
             if (this->Verbose()) cout<<" creating property for :"<<p.name<<" vmin:"<<p.min<<" vmax:"<<p.max<<endl;
-            this->GetModel()->CreateProperty(p.name.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
+            this->GetModel()->CreateProperty(p.name.c_str(),p.notation.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
             p.key=this->Database().StorageKey(p.name.c_str());
         }
         else{
             if (p.usage=="computed" && !this->Restart()) {
                 this->GetModel()->Database().DeleteProperty(p.name.c_str());
-                this->GetModel()->CreateProperty(p.name.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
+                this->GetModel()->CreateProperty(p.name.c_str(),p.notation.c_str(),p.unit.c_str(),p.type,p.placement,p.vsize,p.min,p.max,p.usage);
                 p.key=this->Database().StorageKey(p.name.c_str());
             }
             else {
@@ -178,7 +179,7 @@ template<uint32_t dim>
 void SimulatorSetup<dim>::AddPreExistingModelVariables()
 {
     map<string,csmp::Index> pre_existing_props_in_model;
-    this->GetModel()->Database().ListProperties(pre_existing_props_in_model);
+    this->GetModel()->Database().ListVariables(pre_existing_props_in_model);
     for (map<string,csmp::Index>::iterator peim_it = pre_existing_props_in_model.begin(); peim_it != pre_existing_props_in_model.end();peim_it++){
         SimulatorSetupParameter p;
         double min,max;

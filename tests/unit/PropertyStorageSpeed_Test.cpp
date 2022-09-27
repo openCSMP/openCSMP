@@ -33,7 +33,7 @@ void PropertyStorageSpeed_Test::run()
 
    // 2. read write operations for all variables in the model using the CopyReplace function
    map<string,csmp::Index>  properties;
-   model.Database().ListProperties( properties );
+   model.Database().ListVariables( properties );
    
    BE_Time  stop_watch;
    // random numbers

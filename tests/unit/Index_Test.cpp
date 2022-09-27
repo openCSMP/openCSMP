@@ -27,7 +27,7 @@ namespace csmp
 
         csmp::Index idx_tmp;
         PropertyDatabase<3> pdb;
-        idx_tmp=pdb.AddProperty("test variable 2","m s",VECTOR,ELEMENT);
+        idx_tmp=pdb.AddProperty("test variable 2", "tv2", "m s",VECTOR,ELEMENT);
         _test((new_index==idx_tmp)==1); //test == operator
         _test((new_index!=idx_tmp)==0); //test != operator
 
@@ -42,7 +42,7 @@ namespace csmp
         PropertyDatabase<3> pdb;
         csmp::Index idx;
         _test(idx.IsDefined()==0);
-        idx=pdb.AddProperty("test variable","m s-1",VECTOR,ELEMENT);
+        idx=pdb.AddProperty("test variable", "tv", "m s-1",VECTOR,ELEMENT);
         _test(idx.IsDefined()==1);
         this->IndexOperatorsTest(idx);
     }

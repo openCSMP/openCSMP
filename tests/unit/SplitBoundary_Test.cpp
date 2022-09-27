@@ -133,12 +133,12 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model()
         _test( vset.NodeManifolds() == manifold_count/2 ); // since there are 2 distinct 1nodes connected to each manifold
         
         // Creating property values
-        model.CreateProperty( "compressibility", "Pa-1", SCALAR, ELEMENT );
+        model.CreateProperty( "compressibility", "c", "Pa-1", SCALAR, ELEMENT );
         model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
         
         // Adding required properties which are not read from SKUA exported file
-        model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-        model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+        model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+        model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
         
         // Using 'node variable' to see whether perimeter nodes are discovered correctly
         model.InputPropertyValue( "node variable",  makeScalar(PLAIN,0.) );
@@ -231,12 +231,12 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model()
         _test( vset.NodeManifolds() == manifold_count/2 ); // since there are 2 distinct 1nodes connected to each manifold
         
         // Creating property values
-        model.CreateProperty( "compressibility", "Pa-1", SCALAR, ELEMENT );
+        model.CreateProperty( "compressibility", "c", "Pa-1", SCALAR, ELEMENT );
         model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
         
         // Adding required properties which are not read from SKUA exported file
-        model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-        model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+        model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+        model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
         
         // Using 'node variable' to see whether perimeter nodes are discovered correctly
         model.InputPropertyValue( "node variable",  makeScalar(PLAIN,0.) );
@@ -296,9 +296,9 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
 
     int32_t material_id = 1;
     model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
-    model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
-    model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
-    model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty( "inside", "is",  "none",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty( "outside", "os", "none",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty( "middle", "mid", "none",  SCALAR, NODE, 1, 0.0, 100);
 
     // SKM fix - please check all the patches that were created
     SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
@@ -345,9 +345,9 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
 
     model.Database().Out();
     //property construction
-    model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
-    model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
-    model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty("inside", "IN", "SI",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty("outside", "OUT", "SI",  SCALAR, NODE, 1, 0.0, 100);
+    model.CreateProperty("middle", "MID", "SI",  SCALAR, NODE, 1, 0.0, 100);
 
     SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
 

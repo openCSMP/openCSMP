@@ -90,7 +90,7 @@ struct SimulatorSetupParameter : Parameter {
     ~SimulatorSetupParameter(){}
 
     VARIABLE_TYPE    type;
-    size_t           vsize;
+    uint32_t         vsize;
     PLACEMENT        placement;
 };
 

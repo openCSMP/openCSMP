@@ -38,22 +38,22 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::InitializeVariablsAndKeys()
 {
     //creating new variables if not defined yet 
-    if(!db_.IsDefined("event index")) sg_.CreateProperty( "event index", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);  
-    if(!db_.IsDefined("update count")) sg_.CreateProperty( "update count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);  
-    if(!db_.IsDefined("rate count")) sg_.CreateProperty( "rate count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("schedule count")) sg_.CreateProperty( "schedule count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("synchronize count")) sg_.CreateProperty( "synchronize count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "none", ARRAY, NODE, 6, -1.00E+10 ,1.00E+10);
-    if(!db_.IsDefined("porosity")) sg_.CreateProperty( "porosity", "none", SCALAR, ELEMENT, 1, 1.00E-05, 1.00E+01); 
-    if(!db_.IsDefined("thickness")) sg_.CreateProperty( "thickness", "m", SCALAR, ELEMENT, 1, 0.0E+0, 1.00E+10); 
-    if(!db_.IsDefined("facet area")) sg_.CreateProperty( "facet area", "m2", SCALAR, FACET_INTEGRATION_POINT, 1, -1.00E+10, 1.00E+10); 
-    if(!db_.IsDefined("facet normal")) sg_.CreateProperty( "facet normal", "m2 s-1", VECTOR, FACET_INTEGRATION_POINT, 3, 0., 1.);    
-    if(!db_.IsDefined("concentration")) sg_.CreateProperty( "concentration", "kg m-3", SCALAR, NODE, 1, -5.00E-01, 1.00E+03); 
-    if(!db_.IsDefined("new concentration")) sg_.CreateProperty( "new concentration", "kg m-3", SCALAR, NODE, 1, -5.00E-01, 1.00E+03); 
-    if(!db_.IsDefined("flux balance")) sg_.CreateProperty( "flux balance", "m3 s-1", SCALAR, NODE, 1, -1.00E+10, 1.00E+10); 
-    if(!db_.IsDefined("nodal concentration source")) sg_.CreateProperty( "nodal concentration source", "kg/m3 s", SCALAR, NODE, 1, -1.00E+04, 1.00E+04); 
-    if(!db_.IsDefined("velocity")) sg_.CreateProperty( "velocity", "m s-1", VECTOR, ELEMENT, 3, -1.00E+02, 1.00E+02); 
-    if(!db_.IsDefined("FV pore volume")) sg_.CreateProperty( "FV pore volume", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
+    if(!db_.IsDefined("event index")) sg_.CreateProperty( "event index", "EI", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("update count")) sg_.CreateProperty( "update count", "UC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("rate count")) sg_.CreateProperty( "rate count", "RC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("schedule count")) sg_.CreateProperty( "schedule count", "SDC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("synchronize count")) sg_.CreateProperty( "synchronize count", "SC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "DESa", "none", ARRAY, NODE, 6, -1.00E+10 ,1.00E+10);
+    if(!db_.IsDefined("porosity")) sg_.CreateProperty( "porosity", "phi", "none", SCALAR, ELEMENT, 1, 1.00E-05, 1.00E+01);
+    if(!db_.IsDefined("thickness")) sg_.CreateProperty( "thickness", "thi", "m", SCALAR, ELEMENT, 1, 0.0E+0, 1.00E+10);
+    if(!db_.IsDefined("facet area")) sg_.CreateProperty( "facet area", "fA", "m2", SCALAR, FACET_INTEGRATION_POINT, 1, -1.00E+10, 1.00E+10);
+    if(!db_.IsDefined("facet normal")) sg_.CreateProperty( "facet normal", "fN", "m2 s-1", VECTOR, FACET_INTEGRATION_POINT, 3, 0., 1.);
+    if(!db_.IsDefined("concentration")) sg_.CreateProperty( "concentration", "C", "kg m-3", SCALAR, NODE, 1, -5.00E-01, 1.00E+03);
+    if(!db_.IsDefined("new concentration")) sg_.CreateProperty( "new concentration", "Cn", "kg m-3", SCALAR, NODE, 1, -5.00E-01, 1.00E+03);
+    if(!db_.IsDefined("flux balance")) sg_.CreateProperty( "flux balance", "fb", "m3 s-1", SCALAR, NODE, 1, -1.00E+10, 1.00E+10);
+    if(!db_.IsDefined("nodal concentration source")) sg_.CreateProperty( "nodal concentration source", "nCq", "kg/m3 s", SCALAR, NODE, 1, -1.00E+04, 1.00E+04);
+    if(!db_.IsDefined("velocity")) sg_.CreateProperty( "velocity", "v", "m s-1", VECTOR, ELEMENT, 3, -1.00E+02, 1.00E+02);
+    if(!db_.IsDefined("FV pore volume")) sg_.CreateProperty( "FV pore volume", "fvpV", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
     
     //assigning keys  
     key_EventIndex = INDEX<SCALAR,NODE>( db_.StorageKey("event index") );

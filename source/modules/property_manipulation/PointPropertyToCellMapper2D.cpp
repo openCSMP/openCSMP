@@ -358,7 +358,7 @@ void PointPropertyToCellMapper2D::MapPointDataToElements( Model<2>& model, strin
    else {
         // for the elements that have data, these are extrapolated to the nodes
         const string target_variable_node = target_variable + " node";
-        model.CreateProperty( target_variable_node.c_str(), "extrapolated", SCALAR, NODE );
+        model.CreateProperty( target_variable_node.c_str(), "tvnd", "extrapolated", SCALAR, NODE );
         const csmp::Index prop_key_node = model.Database().StorageKey( target_variable_node.c_str() );
         // assigning Dirichlet constraints to the nearest nodes
         for ( size_t elmt{0U}; elmt < cells_with_points_.size(); ++elmt )

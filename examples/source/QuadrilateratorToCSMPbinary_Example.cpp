@@ -74,8 +74,8 @@ void QuadrilateratorToCSMPbinary_Example::Run()
     // creating a region of all elements 'sediments'
     topology.AddDomain( "sediments",fem_types, elements );
     // constructing the rectangular model              
-    const bool create_boundary_objects(false /* since there are no line elements */), box_shaped(true);
-    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", true );
+    const bool box_shaped(true);
+    Model<2U>  model( topology, mesh_container, "IMPES-variables.txt", box_shaped );
     recreateBoxBoundaryFlags( model );
     model.Name( "permMatrix50x25" ); 
     // give the model dimensions
@@ -160,9 +160,9 @@ void QuadrilateratorToCSMPbinary_Example::Run()
 // AUXILIARY FUNCTIONS
 
 /**
-    Robust detection of NO_DATA vales
+    Detection of NO_DATA values set to either -9999 or -99999
 */
-inline bool is_NO_DATA_Value( double value )
+bool is_NO_DATA_Value( double value )
  {
     // checking the value range, including no-data values
     assert( !isnan(value) );

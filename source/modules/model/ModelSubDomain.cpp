@@ -3563,21 +3563,20 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const
      switch( c_key.type )
        {
            case SCALAR: {
-                ScalarVariable sc;
                 for ( auto& eit : cell_vec_ )
-                  for ( auto i=0U; i<eit->IntegrationPoints(); i++ )
+                  for ( auto i{0U}; i<eit->IntegrationPoints(); i++ )
                     {
                        eit->N_AtIntegrationPoint( i, IPOL );
-                       eit->N(0)->Read( n_key, sc ); // pick up the flag
-                       for ( auto j=1; j<eit->Nodes(); j++ ) sc += IPOL[j] * eit->N(j)->Read( n_key );
-                       eit->Store( i, c_key, sc );
+                       double sc = IPOL[0] * eit->N(0)->Read( n_key );
+                       for ( auto j{1U}; j<eit->Nodes(); j++ ) sc += IPOL[j] * eit->N(j)->Read( n_key );
+                       eit->Store( i, c_key, makeScalar(eit->Status(i,c_key),sc) );
                     }
                 }
              break;
            case VECTOR: {
                 VectorVariable<dim>  vce, vce2;
                 for ( auto& eit : cell_vec_ )
-                  for ( auto i=0U; i<eit->IntegrationPoints(); i++ )
+                  for ( auto i{0U}; i<eit->IntegrationPoints(); i++ )
                     {
                        eit->N_AtIntegrationPoint( i, IPOL );
                        vce=0.;

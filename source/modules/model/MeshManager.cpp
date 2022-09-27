@@ -4190,7 +4190,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // 'PropertyData'
   // =========================================
 
-  database.ListProperties( NODE, properties );
+  database.ListVariables( NODE, properties );
   const size_t n_nodes( nodes_.size() );
   // for all node properties
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -4259,7 +4259,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // element properties (including integration points)
   // -------------------------------------------------
   // -------------------------------------------------
-  database.ListProperties( ELEMENT, properties );
+  database.ListVariables( ELEMENT, properties );
   const size_t elements( elements_.size() );
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
   {
@@ -4322,7 +4322,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // element integration point properties
   // ------------------------------------
-  if ( database.ListProperties( ELEMENT_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( ELEMENT_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_ips( (*elements_.begin()).IntegrationPoints() ); // just an estimate
 
@@ -4404,7 +4404,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // element sector integration point properties
   // -------------------------------------------
-  if ( database.ListProperties( SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_sector_ips( (*elements_.begin()).IntegrationPointsPerSector() );
     const size_t sectors_per_element( (*elements_.begin()).Sectors() );
@@ -4500,7 +4500,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // element facet integration point properties
   // ------------------------------------------
-  if ( database.ListProperties( FACET_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( FACET_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_facet_ips( (*elements_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_element( (*elements_.begin()).Facets() );
@@ -4599,7 +4599,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // face properties (including integration points)
   // ----------------------------------------------
   // ----------------------------------------------
-  database.ListProperties( FACE, properties );
+  database.ListVariables( FACE, properties );
   const size_t n_faces( Faces() );
 
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -4662,7 +4662,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // face integration point properties
   // ---------------------------------
-  if ( database.ListProperties( FACE_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_ips( (*faces_.begin()).IntegrationPoints() );
 
@@ -4743,7 +4743,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // face sector integration point properties
   // ----------------------------------------
-  if ( database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_sector_ips( (*faces_.begin()).IntegrationPointsPerSector() );
     const size_t sectors_per_face( (*faces_.begin()).Sectors() );
@@ -4840,7 +4840,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // face facet integration point properties
   // ---------------------------------------
-  if ( database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_FACET_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_facet_ips( (*faces_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_face( (*faces_.begin()).Facets() );
@@ -4940,7 +4940,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // interface properties (including integration points)
   // ---------------------------------------------------
   // ---------------------------------------------------
-  database.ListProperties( INTER_FACE, properties );
+  database.ListVariables( INTER_FACE, properties );
   const size_t n_interfaces( InterFaces() );
 
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -5002,7 +5002,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface integration point properties
   // --------------------------------------
-  if ( database.ListProperties( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     const size_t interface_ips{ (*interfaces_.begin()).IntegrationPoints() };
 
     for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -5080,7 +5080,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface sector integration point properties
   // ---------------------------------------------
-  if ( database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     assert( InterFaces() > 0 );
     const size_t interface_sector_ips{ (*interfaces_.begin()).IntegrationPointsPerSector() };
     const size_t sectors_per_interface{ (*interfaces_.begin()).Sectors() };
@@ -5175,7 +5175,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
 
   // interface facet integration point properties
   // --------------------------------------------
-  if ( database.ListProperties( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     assert( InterFaces() > 0 );
     const size_t interface_facet_ips( (*interfaces_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_interface( (*interfaces_.begin()).Facets() );

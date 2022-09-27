@@ -34,7 +34,7 @@ void Tutorial3_Example::Specifications()
 {
   SetTitle( "Tutorial 3: Incompressible 2-phase flow" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A CSMP main file that uses an ANSYS-ICEM FE mesh to build the Model and simulate" );
   AddDescription( "incompressible two-phase flow using an IMPES (Implicit Pressure Explicit Saturation) or" );

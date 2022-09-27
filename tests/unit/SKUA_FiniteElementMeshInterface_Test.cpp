@@ -132,7 +132,7 @@ void SKUA_FiniteElementMeshInterface_Test::run()
 
         // creating 'permeability' variable if it does not already exist
         if ( !model.Database().IsDefined("permeability") ) {
-             model.CreateProperty( "permeability", "m2", SCALAR, ELEMENT );
+             model.CreateProperty( "permeability", "k", "m2", SCALAR, ELEMENT );
           }
         OutputRegionsToVTK( model, "permeability" );
       }

@@ -969,11 +969,11 @@ void SimulatorControl<dim>::SyncOutputAntMonitoringTimesToModel()
 
     SimulatorSetupParameter sp;
     sp.name="output times";        sp.notation="OT";   sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=nout;
-    this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
+    this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.notation.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
     sp.key=this->GetSS()->GetModel()->Database().StorageKey(sp.name.c_str());
     this->GetSS()->GetParameterList().push_back(sp);
     sp.name="monitor times";       sp.notation="MONT"; sp.unit="s";    sp.type=ARRAY; sp.min= 0.00E00; sp.max=1.00E+50; sp.placement=MODEL;   sp.usage="computed";sp.vsize=nmon;
-    this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
+    this->GetSS()->GetModel()->CreateProperty(sp.name.c_str(),sp.notation.c_str(),sp.unit.c_str(),sp.type,sp.placement,sp.vsize,sp.min,sp.max,sp.usage);
     sp.key=this->GetSS()->GetModel()->Database().StorageKey(sp.name.c_str());
     this->GetSS()->GetParameterList().push_back(sp);
 

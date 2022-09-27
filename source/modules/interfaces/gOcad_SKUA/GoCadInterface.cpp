@@ -2318,7 +2318,7 @@ void  GoCadInterface<dim>::OutputVariablesToTSurface( const Model<dim>& sgroup,
    // 1. Property Access in the Model
    // ------------------------------------
    map<string,Index>  prop_list;
-   sgroup.Database().ListProperties( prop_list );
+   sgroup.Database().ListVariables( prop_list );
 
    if ( prop_list.empty() )
      {

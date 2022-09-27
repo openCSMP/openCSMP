@@ -204,7 +204,7 @@ bool ANSYS_SplitBoundaryMatch_Test::TestForContiguousModel()
     // creating region labels and tagging the regions with unique integer indentifiers
     const string region_tag("region identifier");
     if ( !model.Database().IsDefined(region_tag.c_str()) )
-      model.CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+      model.CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     vector<string>  region_names;
     const size_t model_regions = model.CountAndLabelUniqueRegions( region_tag.c_str(), region_names );

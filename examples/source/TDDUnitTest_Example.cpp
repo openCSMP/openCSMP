@@ -8,16 +8,17 @@ using namespace std;
 
 namespace csmp {
 
-  // class to test
-  class Unit_c
+// class to test
+class Unit_c
   {
   public:
     int foo1( int a ) { return a/a; }
     int foo2( int a ) { return a*a; }
   };
 
-  // this comes first(failing)
-  struct UnitTest_c
+
+// this comes first(failing)
+struct UnitTest_c
   {
       // system under test
       Unit_c sut;
@@ -25,6 +26,28 @@ namespace csmp {
       void test1() { CHECK(sut.foo1( 5 ) == 1); }
       void test2() { CHECK(sut.foo1( 5 ) > 5); }
   };
+
+
+void TDDUnitTest_Example::Specifications()
+  {
+    SetTitle( "TDD - (unit) Test-Driven Development of software" );
+    SetDifficulty( 1 );
+    SetCategory( "C++" );
+    AddAuthor( "P. Lang" );
+    AddDescription( "source in: TDDUnitTest_Example.cpp" );
+    AddDescription( "how to use a unit test for test driven development" );
+  }
+  
+
+void TDDUnitTest_Example::Run()
+  {
+      // If you don't use CATCH_CONFIG_MAIN, this is the minimal
+      // infrastructure required to run a test.
+
+      Catch::Session session;
+      session.run();
+  }
+  
 
 // Basic test
 TEST_CASE("Test 1", "") {
@@ -40,24 +63,5 @@ TEST_CASE_METHOD(UnitTest_c, "Test 2", "[create]") {
 TEST_CASE("Test 3", "[!shouldfail]") {
     REQUIRE_NOTHROW(UnitTest_c().test2());
 }
-
-void TDDUnitTest_Example::Specifications()
-{
-  SetTitle( "TDD - (unit) Test-Driven Development of software" );
-  SetDifficulty( 1 );
-  SetCategory( "C++" );
-  AddAuthor( "P. Lang" );
-  AddDescription( "source in: TDDUnitTest_Example.cpp" );
-  AddDescription( "how to use a unit test for test driven development" );
-}
-
-void TDDUnitTest_Example::Run()
-{
-    // If you don't use CATCH_CONFIG_MAIN, this is the minimal
-    // infrastructure required to run a test.
-
-    Catch::Session session;
-    session.run();
-} // Run()
 
 } // csmp

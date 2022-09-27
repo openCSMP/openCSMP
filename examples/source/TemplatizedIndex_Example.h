@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-/// shows how Index can be extended to permit static polymorphism
+/// illustrates how Index has been extended to permit static polymorphism
 class TemplatizedIndex_Example : public Example {
   public:
     virtual void Specifications();
