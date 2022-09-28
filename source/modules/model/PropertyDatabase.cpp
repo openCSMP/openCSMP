@@ -8,6 +8,7 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include <sstream>
+#include <chrono>
 
 using namespace std;
 

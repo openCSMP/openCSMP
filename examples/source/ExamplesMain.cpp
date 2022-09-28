@@ -29,7 +29,10 @@ int main()
     try {
       // instantiating suite
       ExampleSuite examplesSuite( "CSMP EXAMPLES", &cout );
-      
+
+      // example to generate csmp native format models from various interfaces
+      examplesSuite.RegisterExample( new CSMPInterfaces_Example() );
+
       // write your own
       examplesSuite.RegisterExample( new Experimental_Example() );
 
