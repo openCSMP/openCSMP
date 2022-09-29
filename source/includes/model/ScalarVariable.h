@@ -111,6 +111,9 @@ public:
 
   /// tests whether the variable value lies within the given bounds
   bool             IsWithinRange( double vmin, double vmax ) const;
+  
+  /// tests whether variable contains NaN value(s)
+  bool             Has_NaN_Values() const { return std::isnan(data_); }
 
   /// universal way of assigning values to all CSMP variable types
   void             Component( uint32_t, double val ) { data_ = val; }

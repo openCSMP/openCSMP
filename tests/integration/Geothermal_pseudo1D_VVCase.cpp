@@ -51,7 +51,7 @@ Criterion:  comparison with TOUGH
     size_t flag(0);
     size_t nPoints;
     ScalarVariable result( PLAIN, 0.0 );
-    map<size_t, std::vector<double> > points;
+    map<size_t, vector<double> > points;
     vector<double>  values;
     
     fin = fopen(file.c_str(), "r");
@@ -102,6 +102,12 @@ Criterion:  comparison with TOUGH
       return false;
   }
   
+  
+  
+  
+  
+  
+  
   void Geothermal_pseudo1D_VVCase::run()
   {
     bool& globalVerbose( GlobalVerbose::Instance().globalVerbose );
@@ -111,12 +117,13 @@ Criterion:  comparison with TOUGH
 
     // ---------------------------------
     // Finite Element Mesh Construction
-    std::string geometry_name ("2000x1000_mesh"); 
-	std::string regions_name (this->getName()); 
-	std::string config_name (this->getName()); 
-	std::string vars_name (this->getName()+".txt");
-    
-	ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , true, true );
+    string geometry_name ("2000x1000_mesh");
+    string regions_name (this->getName());
+    string config_name (this->getName());
+    string vars_name (this->getName()+".txt");
+      
+    // box-shaped binary model
+    ANSYS_Model3D model( geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() );
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );
@@ -126,7 +133,7 @@ Criterion:  comparison with TOUGH
     list<string> region_names;
 
     output_props.push_back("fluid pressure");
-	output_props.push_back("velocity");
+	  output_props.push_back("velocity");
     output_props.push_back("temperature");
     output_props.push_back("fluid density");
     output_props.push_back("density liquid");
@@ -145,20 +152,21 @@ Criterion:  comparison with TOUGH
     
     // boolean flags set reading to: 2) default prop.values, 3) group prop.values, 4) essential conditions for box-shaped model
     
-    model_configuration.ConfigureFromFile( model, config_name.c_str(), false,    // groupname from parameter range
-                                                               true,    // default property values
-                                                               true,    // regional property values
-                                                               false,    // boundary conditions for box-shaped model
-                                                               true,    // essential conditions for groups
-                                                               true,    // csmp::Boundary properties
-                                                               run_settings );
+    model_configuration.ConfigureFromFile( model, config_name.c_str(),
+                                           false, // groupname from parameter range
+                                           true,  // default property values
+                                           true,  // regional property values
+                                           false, // boundary conditions for box-shaped model
+                                           true,  // essential conditions for groups
+                                           true,  // csmp::Boundary properties
+                                           run_settings );
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //! Visitors ////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //! Thermal Visitor
     ThermalVisitor<DIM>   thermal_equilibrator( model);
-	SourceVisitor<DIM>    source_calculator(model);
+	  SourceVisitor<DIM>    source_calculator(model);
 
     //! get nodal rock properties
     model.ExtrapolateCellToNodeProperty("porosity", "nodal porosity");
@@ -173,18 +181,16 @@ Criterion:  comparison with TOUGH
 
 
     //! to quickly replace SAMG with LU solver when necessary, uncomment
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    //LUdcmp_Solver solver;
+#ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver solver;
-    #else
+#else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    #endif
-    
+#endif
     //! steady state pressure
     PDE_Integrator<3U, Region>  steady_state_pressure( solver );
     
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
-    NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> >    zero_fluid_src( pd_ref, "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >   p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> > zero_fluid_src( pd_ref, "fluid pressure" );
 
     VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
@@ -260,8 +266,8 @@ Criterion:  comparison with TOUGH
     double global_time        = 0.;
     double max_time           = 3.15e9*30; //3000 years  
     double time_increment     = 3.15e7; //1 year
-	double time_increment_advection, time_advection;
-	size_t time_step            = 0;
+    double time_increment_advection, time_advection;
+    size_t time_step            = 0;
       
 
     
@@ -269,7 +275,7 @@ Criterion:  comparison with TOUGH
     thermal_equilibrator.SetInitialProperties(&model );
     model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
     model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
-	model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
+	  model.InterpolateNodeToCellProperty("density liquid", "density liquid element");
 	
 	   
     ComputeMassConductivity(model);

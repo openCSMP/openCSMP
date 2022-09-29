@@ -3261,13 +3261,13 @@ double  printModelDimensions( const Model<dim>& sg, bool intermed_or_max )
     sg.MinMaxCoordinates( xyz_min, xyz_max );
     cout <<"\nprintModelDimensions: Dimensions of model (meters): "<< endl;
     cout <<"xmin, xmax (horizontal right):    "<< xyz_min[0] <<" "<< xyz_max[0] << endl;
-    if ( dim != 1U ) cout <<"ymin, ymax (vertical upward):     "<< xyz_min[1] <<" "<< xyz_max[1] << endl;
-    if ( dim == 3U ) cout <<"zmin, zmax (horizontal to front): "<< xyz_min[2] <<" "<< xyz_max[2] << endl << endl;
+    if constexpr ( dim != 1U ) cout <<"ymin, ymax (vertical upward):     "<< xyz_min[1] <<" "<< xyz_max[1] << endl;
+    if constexpr ( dim == 3U ) cout <<"zmin, zmax (horizontal to front): "<< xyz_min[2] <<" "<< xyz_max[2] << endl << endl;
 
     set<double,greater<double> >  axis;
     axis.insert( xyz_max[0] - xyz_min[0] );
-    if ( dim != 1U ) axis.insert( xyz_max[1] - xyz_min[1] );
-    if ( dim == 3U ) axis.insert( xyz_max[2] - xyz_min[2] );
+    if constexpr ( dim != 1U ) axis.insert( xyz_max[1] - xyz_min[1] );
+    if constexpr ( dim == 3U ) axis.insert( xyz_max[2] - xyz_min[2] );
     
     set<double,greater<double> >::const_iterator  it = axis.begin();
     

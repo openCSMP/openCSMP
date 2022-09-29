@@ -1294,10 +1294,14 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );
          xyz_max[0] = std::max( p[0], xyz_max[0] );
-         xyz_min[1] = std::min( p[1], xyz_min[1] );
-         xyz_max[1] = std::max( p[1], xyz_max[1] );
-         xyz_min[2] = std::min( p[2], xyz_min[2] );
-         xyz_max[2] = std::max( p[2], xyz_max[2] );
+         if constexpr( dim != 1U ) {
+             xyz_min[1] = std::min( p[1], xyz_min[1] );
+             xyz_max[1] = std::max( p[1], xyz_max[1] );
+           }
+         if constexpr( dim == 3U ) {
+             xyz_min[2] = std::min( p[2], xyz_min[2] );
+             xyz_max[2] = std::max( p[2], xyz_max[2] );
+           }
       }
 
  } // end MinMaxCoordinates

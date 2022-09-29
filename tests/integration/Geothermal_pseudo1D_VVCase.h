@@ -56,12 +56,13 @@ namespace csmp
   class Geothermal_pseudo1D_VVCase : public Test
     {
       public:
-        Geothermal_pseudo1D_VVCase(const char* prefix);
+        explicit Geothermal_pseudo1D_VVCase(const char* prefix);
         virtual void run();
+        
       private:
         void outputToVTU( Model<3U>& model,string model_name, const list<string>& props, size_t timestep );
         void ComputeMassConductivity (Model<3U>& model);
-		bool Compare (Model<3U>& model, string file);
+		    bool Compare (Model<3U>& model, string file);
     };
 
   } // csmp

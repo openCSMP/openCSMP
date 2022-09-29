@@ -4394,7 +4394,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
      break;
         default:
           csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
-                             (*pit).first, "type of element integration point variable not recognized." );
+                          (*pit).first, "type of element integration point variable not recognized." );
       }
       // storing the data in the VSet
       vset.AddData( (*pit).first.c_str(), data );
