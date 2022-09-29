@@ -182,6 +182,7 @@ void Geothermal_1D_VVCase::run()
     t_capacitance_lhs.MultiplyWithTimeIncrement(true);
     
     NumIntegral_NT_op_N_dV<DIM>  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" );
+    t_capacitance_rhs.LumpedFormulation(true);
     t_capacitance_rhs.MultiplyWithTimeIncrement(true);
     
     temperature_diffusion.Add( &t_conductance );
@@ -286,22 +287,19 @@ void Geothermal_1D_VVCase::run()
         if (time_step == 1600UL ) {
             text_output.OutputDataAsTextColumns( model, "pressure1600", "fluid pressure" );
             text_output.OutputDataAsTextColumns( model, "temperature1600", "temperature" );
-            if (Compare(model, this->getName()+"_Comparison_TOUGH_data_1600yr.txt"))
-              _succeed();
+            _test( Compare(model, this->getName()+"_Comparison_TOUGH_data_1600yr.txt") );
           }
         
         if (time_step == 1900UL ) {
             text_output.OutputDataAsTextColumns( model, "pressure1900", "fluid pressure" );
             text_output.OutputDataAsTextColumns( model, "temperature1900", "temperature" );
-            if (Compare(model, this->getName()+"_Comparison_TOUGH_data_1900yr.txt"))
-              _succeed();
+            _test( Compare(model, this->getName()+"_Comparison_TOUGH_data_1900yr.txt") );
           }
         
         if (time_step == 3000UL ) {
             text_output.OutputDataAsTextColumns( model, "pressure3000", "fluid pressure" );
             text_output.OutputDataAsTextColumns( model, "temperature3000", "temperature" );
-            if (Compare(model, this->getName()+"_Comparison_TOUGH_data_3000yr.txt"))
-              _succeed();
+            _test( Compare(model, this->getName()+"_Comparison_TOUGH_data_3000yr.txt") );
           }
             
         global_time += time_increment;
@@ -334,15 +332,17 @@ void Geothermal_1D_VVCase::ComputeMassConductivity (Model<1U>& model)
   }
 
 
-
+/**
+        Reader for TOUGH2 outputs (here edited to contain only X-coordinates
+*/
 bool Geothermal_1D_VVCase::Compare( Model<1U>& model, string file )
   {
     FILE* fin;
-    double x, y, val, res, tol;
+    double x, val, res, tol;
     size_t ind(0);
     size_t flag(0);
     size_t nPoints;
-    ScalarVariable result( PLAIN, 0.0 );
+    ScalarVariable result( PLAIN, 0. );
     map<size_t, vector<double> > points;
     vector<double>  values;
     
@@ -354,14 +354,13 @@ bool Geothermal_1D_VVCase::Compare( Model<1U>& model, string file )
     }
 
     // TOUGH simulation results
-    // reads (x_coord, y_coord, temperature) data from a text file
+    // reads (x_coord, temperature) data from a text file
     while (flag != EOF)
     {
-      flag = fscanf( fin, "%lf\t%lf\t%lf\n", &x, &y, &val);
+      flag = fscanf( fin, "%lf\t%lf\n", &x, &val );
       points[ind].push_back(x);
-      points[ind].push_back(y);
       values.push_back(val);
-      ind ++;
+      ind++;
     }
 
     fclose(fin);
@@ -376,11 +375,10 @@ bool Geothermal_1D_VVCase::Compare( Model<1U>& model, string file )
     tol = 1.;
 
     // computes C-norm of the difference (sum of the absolute values)
-    for (size_t ind2=0; ind2<nPoints; ind2++ )
-    {
-      pAt.PropertyValueAt(ind2, result);
-      res += fabs(result() - values[ind]);
-    }
+    for ( size_t ind2{0U}; ind2<nPoints; ind2++ ) {
+        pAt.PropertyValueAt(ind2, result);
+        res += fabs(result() - values[ind2]);
+      }
 
     // divided by the number of points
     res /= nPoints;
