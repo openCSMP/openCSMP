@@ -10,30 +10,26 @@ fluid density				1000.0
 density liquid				1000.0
 fluid viscosity				0.001
 gravity term				0.0	0.0	0.0
-fluid volume source			0.0
 nodal fluid volume source		0.0
 temperature				50.
 thermal conductivity			2.
-face thermal conductivity		2.
 fluid heat capacity			4182.
 heat capacity rock			1000.
 density rock				2650.0
-heat source				0.0
-face heat source			0.0
 nodal heat source			0.0
 thickness				1.
 
 # (block3) local material properties (of the fractures)
 
-# essential conditions on regions
+# (block4) csmp box shaped boundaries
+LEFT	Dirichlet	fluid pressure		202650.		202650.
+RIGHT	Dirichlet	fluid pressure		101325.		101325.
+LEFT	Dirichlet	temperature		80.		80.
+RIGHT	Dirichlet	temperature		50.		50.
 
-# csmp irregular boundaries
-LEFT	complete	DIRICH	fluid pressure		202650.
-RIGHT	complete	DIRICH	fluid pressure		101325.
-LEFT	complete	DIRICH	temperature		80.
-RIGHT	complete	DIRICH	temperature		50.
+# (block 5) essential conditions on regions
 
-# (block5) run settings
+# (block6) run settings
 duration	1.0E+10
 output time	0.
 
