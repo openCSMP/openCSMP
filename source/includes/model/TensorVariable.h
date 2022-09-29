@@ -191,7 +191,10 @@ public:
   bool             operator<( const TensorVariable& ) const;
 
   /// compares the individual elements of the tensor with the ranges specified in PropertyDatabase file
-  bool              IsWithinRange( double vmin, double vmax ) const;
+  bool             IsWithinRange( double vmin, double vmax ) const;
+  
+  bool             Has_NaN_Values() const;
+
 
   /// returns the flag of the diagonal tensor element of choice
   VARIABLE_FLAG     Flag( uint32_t i = 0 ) const;

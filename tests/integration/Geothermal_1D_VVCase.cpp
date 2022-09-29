@@ -73,7 +73,7 @@ void Geothermal_1D_VVCase::run()
      string geometry_name("2000_mesh");
      string regions_name( this->getName());
      string config_name( this->getName());
-     string vars_name( this->getName()+".txt");
+     string vars_name( this->getName()+"-variables.txt");
 
      Model<DIM>  model( mesh_topology, mesh_container, vars_name.c_str(), true );
      const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the model's property database.
@@ -192,25 +192,27 @@ void Geothermal_1D_VVCase::run()
     // -----------------------------------------------------------------------
     // 2. Thermal advection / diffusion
     // -----------------------------------------------------------------------
+    model.InstantiateFiniteVolumes(); // since there are no variables here with a FV indicative placement
+    
     ExplicitMassBasedTransport<DIM, MassBasedStencilProcessor> mass_advection ("Model", model,
-                                            "porosity",          //porosity
-                                            "fluid density",     //advected property lhs
-                                            "density liquid",    //advected property rhs
-                                            "velocity",          //transport velocity
-                                            "nodal heat source", //nodal source
-                                            false);              //second order in space
+                                                                                "porosity",          //porosity
+                                                                                "fluid density",     //advected property lhs
+                                                                                "density liquid",    //advected property rhs
+                                                                                "velocity",          //transport velocity
+                                                                                "nodal heat source", //nodal source
+                                                                                false);              //second order in space
 
     ExplicitMassBasedTransport<DIM, MassBasedStencilProcessor> enthalpy_advection ("Model", model,
-                                                    "porosity",                    //porosity
-                                                    "enthalpy content liquid",     //advected property lhs
-                                                    "volumetric enthalpy liquid",  //advected property  rhs
-                                                    "velocity",                    //transport velocity
-                                                    "nodal heat source",           //nodal source
-                                                    false);                        //second order in space
+                                                                                    "porosity",                    //porosity
+                                                                                    "enthalpy content liquid",     //advected property lhs
+                                                                                    "volumetric enthalpy liquid",  //advected property  rhs
+                                                                                    "velocity",                    //transport velocity
+                                                                                    "nodal heat source",           //nodal source
+                                                                                    false);                        //second order in space
     //! time
     double global_time        = 0.;
-    double max_time           = 3.15e9*30; //3000 years
-    double time_increment     = 3.15e7; //1 year
+    double max_time           = 3.1536e9*30; //3000 years
+    double time_increment     = 3.1536e7; //1 year
     double time_increment_advection, time_advection;
     size_t time_step            = 0;
       
@@ -233,11 +235,12 @@ void Geothermal_1D_VVCase::run()
   
     //!important
     //! set mt and hCl (advected properties) to Dirich at the boundaries where p, t are dirichlet
-    model.Boundary("LEFT").ChangePropertyStatus("fluid density", DIRICH);
-    model.Boundary("RIGHT").ChangePropertyStatus("fluid density", DIRICH);
-    model.Boundary("LEFT").ChangePropertyStatus("enthalpy content liquid", DIRICH);
-    model.Boundary("RIGHT").ChangePropertyStatus("enthalpy content liquid", DIRICH);
-  
+    const csmp::Index rhof_key = model.Database().StorageKey("fluid density");
+    const csmp::Index Hl_key   = model.Database().StorageKey("enthalpy content liquid");
+    cnr1->Status( rhof_key, DIRICH );
+    cnr2->Status( rhof_key, DIRICH );
+    cnr1->Status( Hl_key, DIRICH );
+    cnr2->Status( Hl_key, DIRICH );  
       
     //! output initial equilibrated state
     // uncomment for an initial output

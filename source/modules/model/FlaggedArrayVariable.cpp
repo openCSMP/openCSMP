@@ -354,6 +354,18 @@ bool FlaggedArrayVariable::IsWithinRange( double min, double max ) const
   }
 
 
+
+
+bool FlaggedArrayVariable::Has_NaN_Values() const
+ {
+    for( const auto& i : data_ )
+      if( isnan(i) ) return false;
+    return false;
+ }
+
+
+
+
 /// returns the minimum and maximum of the values stored in the array variable 
 void  FlaggedArrayVariable::MinMax( double& min, double& max ) const
   {

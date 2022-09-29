@@ -145,6 +145,7 @@ template<uint32_t> class PropertyDatabase;
       VARIABLE_FLAG& Flag(  );
       void           Flag( VARIABLE_FLAG flag );
       bool           IsWithinRange( double min, double max ) const;
+      bool           Has_NaN_Values() const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();
 

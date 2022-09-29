@@ -163,6 +163,8 @@ class VectorVariable<3U> {
   
     /// checks vector length against the value range supplied as arguments
     bool            IsWithinRange( double vmin, double vmax ) const;
+    bool            Has_NaN_Values() const;
+
     VARIABLE_FLAG   Flag( uint32_t i=0 ) const;
     VARIABLE_FLAG&  Flag( uint32_t i=0 );
   

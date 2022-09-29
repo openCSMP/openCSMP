@@ -73,6 +73,7 @@ class VectorVariable<2U> {
     double           AngleTo( const VectorVariable& v ) const;
     Point<2U>        P() const;
     bool             IsWithinRange( double vmin, double vmax ) const;
+    bool             Has_NaN_Values() const;
     VectorVariable   Flip();
     VectorVariable   ProjectOnto( const std::vector<double>& v ) const;
     VectorVariable   ProjectOnto( const VectorVariable& v ) const;
