@@ -8,6 +8,9 @@
 
 #include "Example.h"
 
+#include <filesystem>
+namespace fs = std::filesystem;
+
 using namespace std;
 
 namespace csmp{
@@ -128,6 +131,81 @@ list<string>::const_iterator Example::GetAuthorsEnd() const
   return authors_.end();
 }
 
+
+void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
+                                                           std::string& variable_file, std::string config_file)
+{
+  //create of directory with current example name and go into this directory
+  if(fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+  fs::create_directory(example_name);
+  fs::current_path(example_name);
+
+  //copy input files into working directory
+  string file_name_pre = "../";
+  file_name_pre += model_name;
+  string file_name = file_name_pre + ".vset";
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    file_name.erase(0,3);
+    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
+    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
+    return;
+  }
+  file_name = file_name_pre + "_boundaries.dat";
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    file_name.erase(0,3);
+    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
+    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
+    return;
+  }
+  file_name = file_name_pre + "_regions.dat";
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    file_name.erase(0,3);
+    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
+    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
+    return;
+  }
+  file_name = file_name_pre + "_variables.dat";
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    file_name.erase(0,3);
+    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
+    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
+    return;
+  }
+  file_name = file_name_pre + "_splitboundaries.dat";
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+
+  //copy variable file
+  file_name = "../variable_and_config_files/";
+  if(!fs::is_directory(file_name)) fs::create_directory(file_name);
+  file_name += variable_file;
+  if(fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    string path = fs::current_path().parent_path();
+    path += "/variable_and_config_files/";
+    cerr<<"\n\nError: variable file '"<<variable_file<<"' does not exist in directory "<<path;
+    cerr<<", example cannot run, please copy this variable file into this directory"<<endl;
+    return;
+  }
+
+  //copy configuration file if required
+  if(!config_file.empty()) {
+    file_name = "../variable_and_config_files/";
+    if(!fs::is_directory(file_name)) fs::create_directory(file_name);
+    file_name += config_file;
+    if(fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string path = fs::current_path().parent_path();
+      path += "/variable_and_config_files/";
+      cerr<<"\n\nError: configuration file '"<<config_file<<"' does not exist in directory "<<path;
+      cerr<<", example cannot run, please copy this configuration file into this directory"<<endl;
+      return;
+    }
+  }
+}
 
 
 } // csmp

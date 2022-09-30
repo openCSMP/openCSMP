@@ -42,6 +42,8 @@ protected:
   // Stream interface
   std::ostream *GetStream() { return ostream_; }
   void SetStream( std::ostream *ostream ) { ostream_ = ostream; }
+  void CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
+                                                    std::string& variable_file, std::string config_file = "");
 public:
   // DB
   std::list<std::string>::const_iterator GetDescriptionsBegin();
@@ -92,7 +94,7 @@ public:
 // DEFINITION
 #include "YourExampleClass.h"
 
-#include "CSMP_definitions.h”
+#include "CSMP_definitions.hï¿½
 ...
 
 using namespace std;
