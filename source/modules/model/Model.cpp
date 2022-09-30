@@ -346,7 +346,17 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 	
     // 6. forming Boundaries
     //    if the model is box-shaped (albeit perhaps with an irregular top surface)
-    if (  mesh_topology.BoxShapedModel() ) {
+    bool box_or_rectangle_shaped = false;
+    if constexpr ( dim == 2U ) {     //Calling model topology function based on 2d or 3d
+        box_or_rectangle_shaped = mesh_topology.RectangleShapedModel();
+    } else if constexpr ( dim == 3U ) {
+        box_or_rectangle_shaped = mesh_topology.BoxShapedModel();
+    } else if constexpr( dim == 1U ){
+        csmp_error.Note( WARNING, "Model::initialise(regionfile, ModelTopology,Vset)", "Model Topology does not find Boxboundaries for 1D"); //make this a warning if you know what you are doing
+    }
+
+    //Now assigning Boundaries of model
+    if ( box_or_rectangle_shaped ) {
          this->EstablishBoxBoundaries();
          // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
          cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";

@@ -594,15 +594,12 @@ void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
-/* only in 2nd-order accurate calculations
-
-    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != ULONG_MAX ) {
+    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != UNSPECIFIED ) {
         string  msg ="The 'diffusivity' variable '";
         msg       += pref_.Name( diff_key_ );
         msg       +="' must be a scalar-type element variable";
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
-*/
 
     if ( adv1_key_.place != NODE ){
         string  msg ="The advected variable '";

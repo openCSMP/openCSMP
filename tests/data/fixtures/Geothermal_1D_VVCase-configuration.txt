@@ -22,10 +22,10 @@ thickness				1.
 # (block3) local material properties (of the fractures)
 
 # (block4) csmp box shaped boundaries
-LEFT	Dirichlet	fluid pressure		202650.		202650.
-RIGHT	Dirichlet	fluid pressure		101325.		101325.
-LEFT	Dirichlet	temperature		80.		80.
-RIGHT	Dirichlet	temperature		50.		50.
+# LEFT	Dirichlet	fluid pressure		202650.		202650.
+# RIGHT	Dirichlet	fluid pressure		101325.		101325.
+# LEFT	Dirichlet	temperature		80.		80.
+# RIGHT	Dirichlet	temperature		50.		50.
 
 # (block 5) essential conditions on regions
 

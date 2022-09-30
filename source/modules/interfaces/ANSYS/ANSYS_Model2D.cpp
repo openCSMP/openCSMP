@@ -171,9 +171,12 @@ void ANSYS_Model2D::InitializeANSYS( const char* mesh_file_set,
       Model<2U>::Initialize( regions_file_prefix,
                              mesh_topology,
                              vset );
-    else
-      Model<2U>::Initialize( mesh_topology,
-                             vset );
+    else {
+        //E.P Code should break here because it assumes model topology is configured with Regions, Boundaries and Splitboundaries, could this ever be the case from an ANSYS model??
+        throw csmp::Exception( ERROR, "ANSYS_Model2D::InitializeANSYS()",
+                        "You must include a regions file to build an ANSYS_Model, since boundaries and splitboundaries in model_topology are not configured.");
+        //Model<2U>::Initialize( mesh_topology, vset ); E.P: TODO Check this line is really not needed and delete it .
+    }
   } // end try
 
 
