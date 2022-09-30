@@ -4,6 +4,8 @@
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
 #include "TRIANGLE_Interface.h"
+#include "Triangulator.h"
+#include "Quadrilaterator.h"
 #include "VSetConverter.h"
 #include "ModelTopology.h"
 #include "EclipseModel.h"
@@ -12,6 +14,8 @@
 
 #include "Standard_IO_Handler.h"
 #include "VTU_Interface.h"
+#include "TextInterface.h"
+#include "convertColorToPermeability.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -49,11 +53,13 @@ void CSMPInterfaces_Example::Run()
     cerr << "    1.) ANSYS 2D model" << endl;
     cerr << "    2.) ANSYS 3D model" << endl;
     cerr << "    3.) TRIANGLE" << endl;
-    cerr << "    4.) gOcad_SKUA" << endl;
-    cerr << "    5.) Eclipse" << endl;
-    cerr << "    6.) GeoModeller" << endl;
-    cerr << "    7.) Rhinoceros" << endl;
-    cerr << "    8.) Build all models" << endl;
+    cerr << "    4.) Triangulator" << endl;
+    cerr << "    5.) Quadrilaterator" << endl;
+    cerr << "    6.) gOcad_SKUA" << endl;
+    cerr << "    7.) Eclipse" << endl;
+    cerr << "    8.) GeoModeller" << endl;
+    cerr << "    9.) Rhinoceros" << endl;
+    cerr << "    10.) Build all models" << endl;
 
     uint32_t option(0U);
     cin >> option;
@@ -104,8 +110,9 @@ void CSMPInterfaces_Example::Run()
         cerr << "      3.) fracs4" << endl;
         cerr << "      4.) one_sphere_0.45_tetra" << endl;
         cerr << "      5.) FracBox" << endl;
-        cerr << "      6.) build all above models" << endl;
-        cerr << "      7.) specify another model name" << endl;
+        cerr << "      6.) 3D_box" << endl;
+        cerr << "      7.) build all above models" << endl;
+        cerr << "      8.) specify another model name" << endl;
         uint32_t sub_option(0U);
         cin >> sub_option;
         if (sub_option == 1) BuildFromANSYS3DModel("hex2_3");
@@ -113,13 +120,15 @@ void CSMPInterfaces_Example::Run()
         else if (sub_option == 3) BuildFromANSYS3DModel("fracs4");
         else if (sub_option == 4) BuildFromANSYS3DModel("one_sphere_0.45_tetra");
         else if (sub_option == 5) BuildFromANSYS3DModel("FracBox");
-        else if (sub_option == 6) {
+        else if (sub_option == 6) BuildFromANSYS3DModel("3D_box");
+        else if (sub_option == 7) {
           BuildFromANSYS3DModel("hex2_3");
           BuildFromANSYS3DModel("prism_test");
           BuildFromANSYS3DModel("fracs4");
           BuildFromANSYS3DModel("one_sphere_0.45_tetra");
           BuildFromANSYS3DModel("FracBox");
-        } else if (sub_option == 7) {
+          BuildFromANSYS3DModel("3D_box");
+        } else if (sub_option == 8) {
           cerr << "\n        Please type in a model name" << endl;
           string model_name;
           cin >> model_name;
@@ -172,8 +181,67 @@ void CSMPInterfaces_Example::Run()
       } while(true);
       continue;
     }
-      //gOcad_SKUA models
+    //Triangulator models
     else if (option == 4) {
+      do {
+        cerr << "\nPlease choose from the following Triangulator models (-1 to get back)" << endl;
+        cerr << "      1.) tutorial1_input" << endl;
+        cerr << "      2.) specify another model name" << endl;
+        uint32_t sub_option(0U);
+        cin >> sub_option;
+        if (sub_option == 1) BuildFromTriangulatorModel("tutorial1_input", 100., 80.);
+        else if (sub_option == 2) {
+          cerr << "\n        Please type in a model name" << endl;
+          string model_name;
+          cin >> model_name;
+          double x, y;
+          cout << "\n        Please type in the x- and y-dimensions of your model (in m): " << endl;
+          cin >> x;
+          cin >> y;
+          BuildFromTriangulatorModel(model_name, x, y);
+        } else if (sub_option == -1) break;
+        else {
+          cerr << "Wrong number, please type in a right number from the following options" << endl;
+          continue;
+        }
+      } while(true);
+      continue;
+    }
+    //Quadrilaterator models
+    else if (option == 5) {
+      do {
+        cerr << "\nPlease choose from the following Quadrilaterator models (-1 to get back)" << endl;
+        cerr << "      1.) tutorial2_input" << endl;
+        cerr << "      2.) tutorial2_input_20x20" << endl;
+        cerr << "      3.) build all above models" << endl;
+        cerr << "      4.) specify another model name" << endl;
+        uint32_t sub_option(0U);
+        cin >> sub_option;
+        if (sub_option == 1) BuildFromQuadrilateratorModel("tutorial2_input", 10., 10.);
+        else if (sub_option == 2) BuildFromQuadrilateratorModel("tutorial2_input_20x20", 20., 20.);
+        else if (sub_option == 3) {
+          BuildFromQuadrilateratorModel("tutorial2_input", 10., 10.);
+          BuildFromQuadrilateratorModel("tutorial2_input_20x20", 20., 20.);
+        }
+        else if (sub_option == 4) {
+          cerr << "\n        Please type in a model name" << endl;
+          string model_name;
+          cin >> model_name;
+          double x, y;
+          cout << "\n        Please type in the x- and y-dimensions of your model (in m): " << endl;
+          cin >> x;
+          cin >> y;
+          BuildFromQuadrilateratorModel(model_name, x, y);
+        } else if (sub_option == -1) break;
+        else {
+          cerr << "Wrong number, please type in a right number from the following options" << endl;
+          continue;
+        }
+      } while(true);
+      continue;
+    }
+    //gOcad_SKUA models
+    else if (option == 6) {
       do {
         cerr << "\nPlease choose from the following SKUA models (-1 to get back)" << endl;
         cerr << "      1.) SKUA_boundary_and_split_boundary" << endl;
@@ -225,7 +293,7 @@ void CSMPInterfaces_Example::Run()
       continue;
     }
       //Eclipse model
-    else if (option == 5) {
+    else if (option == 7) {
       do {
         cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
         cerr << "      1.) create CSMP native model from Eclipse model 'NPD5.grdecl'" << endl;
@@ -247,7 +315,7 @@ void CSMPInterfaces_Example::Run()
       continue;
     }
       //GeoModeller
-    else if (option == 6) {
+    else if (option == 8) {
       do {
         cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
         cerr << "      1.) create CSMP native model from GeoModeller model 'Mansfield_H8_NoOrphans.mesh'" << endl;
@@ -269,7 +337,7 @@ void CSMPInterfaces_Example::Run()
       continue;
     }
       //Rhino model
-    else if (option == 7) {
+    else if (option == 9) {
       do {
         cerr << "\nPlease choose from the following options (-1 to get back)" << endl;
         cerr << "      1.) create CSMP native model from Rhino model 'example20.raw'" << endl;
@@ -291,7 +359,7 @@ void CSMPInterfaces_Example::Run()
       continue;
     }
       //Build all models
-    else if (option == 8) {
+    else if (option == 10) {
       BuildFromANSYS2DModel("box2d_fault");
       BuildFromANSYS2DModel("pores");
       BuildFromANSYS2DModel("2000x1000_mesh");
@@ -303,6 +371,7 @@ void CSMPInterfaces_Example::Run()
       BuildFromANSYS3DModel("fracs4");
       BuildFromANSYS3DModel("one_sphere_0.45_tetra");
       BuildFromANSYS3DModel("FracBox");
+      BuildFromANSYS3DModel("3D_box");
 
       BuildFromTRIANGLEModel("well.1");
       BuildFromTRIANGLEModel("veins_20k.1");
@@ -310,6 +379,11 @@ void CSMPInterfaces_Example::Run()
       BuildFromTRIANGLEModel("blunt30deg.1");
       BuildFromTRIANGLEModel("topo.1");
       BuildFromTRIANGLEModel("example21.1");
+
+      BuildFromTriangulatorModel("tutorial1_input", 100., 80.);
+
+      BuildFromQuadrilateratorModel("tutorial2_input", 10., 10.);
+      BuildFromQuadrilateratorModel("tutorial2_input_20x20", 20., 20.);
 
       BuildFromSKUAModel<3U>("SKUA_boundary_and_split_boundary");
       BuildFromSKUAModel<3U>("SKUA_box_shaped_with_boundary");
@@ -345,7 +419,7 @@ void CSMPInterfaces_Example::Run()
 
 void CSMPInterfaces_Example::BuildFromANSYS2DModel(const string& model_name) {
   cout<<"\nStart building ANSYS 2D model '"<<model_name<<"'..."<<endl;
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   ANSYS_Model2D model( model_name.c_str(), variables_file.c_str() );
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
@@ -358,7 +432,7 @@ void CSMPInterfaces_Example::BuildFromANSYS2DModel(const string& model_name) {
 
 void CSMPInterfaces_Example::BuildFromANSYS3DModel(const string& model_name) {
   cout<<"\nStart building ANSYS 3D model '"<<model_name<<"'..."<<endl;
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   ANSYS_Model3D model( model_name.c_str(), variables_file.c_str() );
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
@@ -376,7 +450,7 @@ void CSMPInterfaces_Example::BuildFromTRIANGLEModel(const string& model_name) {
   VSetConverter<2U>   mesh_converter;
   mesh_interface.ReadTriangle2DMesh( model_name.c_str(), mesh_container );
   mesh_converter.ConvertLinearToQuadraticTriangles( mesh_container );
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   Model<2U>   model( mesh_container, variables_file.c_str() );
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
@@ -384,6 +458,67 @@ void CSMPInterfaces_Example::BuildFromTRIANGLEModel(const string& model_name) {
   model.Name(model_name.c_str());
   if(output_vtu_) OutputRegionIDToVTU(model);
   cout<<"\nTRIANGLE model '"<<model_name<<"' saved to disk"<<endl;
+  fs::current_path("../");
+}
+
+
+void CSMPInterfaces_Example::BuildFromTriangulatorModel(const string& model_name, double extent1, double extent2) {
+  cout << "\nStart building Triangulator model '" << model_name << "'..." << endl;
+
+  // 0.1 Reading a pixelated permeability image ASCII file into the new Matrix 'pixelcolors'
+  size_t m, n;
+  TextInterface().SizeofPixelTextImage256( model_name.c_str(), m, n );
+  cout <<"\nreadTextPixelData: The size (in pixels) of the input image is: "<< n <<"h x "<< m;
+  cout <<"v"<< endl;
+  Matrix  pixelcolors(m,n);
+  TextInterface().ReadPixelTextImage256( model_name.c_str(), pixelcolors );
+
+  // 0.2 Converting the 256-color values into permeabilities
+  convertColorToPermeability( 1., pixelcolors );
+
+  // 0.3 Building a 2d mesh of triangular elements, incorporating the
+  //    permeability data and the boundary conditions. The mesh is
+  //    stored in the VSet object 'vset'
+  VSet<2U>  vset;
+  Triangulator().TrianglesFromRegularGrid( pixelcolors, vset );
+
+  // 0.4 Scaling the geometrical input object that will become the Region
+  //    The origin of the object is assumed to be zero.
+  double zero(0.);
+  vset.ScaleCoordinateToRange( 'x', zero, extent1 );
+  vset.CoordinateRange( 'x', zero, extent1 );
+  cout <<"\nAssigned X range: "<< zero <<" to "<< extent1 << " meter." << endl;
+  vset.ScaleCoordinateToRange( 'y', zero, extent2 );
+  vset.CoordinateRange( 'y', zero, extent2 );
+  cout <<"\nAssigned Y range: "<< zero <<" to "<< extent2 << " meter." << endl;
+
+  const string variables_file = "initial-variables.txt";
+  Model<2U> model( vset, variables_file.c_str() );
+  fs::create_directory("csmp_native_format_models");
+  fs::current_path("csmp_native_format_models");
+  model.OutputToBinaryFile( model_name.c_str() );
+  model.Name(model_name.c_str());
+  if(output_vtu_) OutputRegionIDToVTU(model);
+  cout<<"\nTriangulator model '"<<model_name<<"' saved to disk"<<endl;
+  fs::current_path("../");
+}
+
+
+void CSMPInterfaces_Example::BuildFromQuadrilateratorModel(const string& model_name, double x, double y) {
+  cout << "\nStart building Quadrilaterator model '" << model_name << "'..." << endl;
+  Quadrilaterator    quadrilaterator; // simple FE mesher
+  VSet<2U>           mesh_container;  // container to store the input mesh
+
+  // read in file and generate mesh
+  quadrilaterator.QuadrilateralsFromRegularGrid( mesh_container, model_name.c_str(), x, y );
+  const string variables_file = "initial-variables.txt";
+  Model<2U> model( mesh_container, variables_file.c_str() ); // Quadrilaterator makes isoparametric FEs
+  fs::create_directory("csmp_native_format_models");
+  fs::current_path("csmp_native_format_models");
+  model.OutputToBinaryFile( model_name.c_str() );
+  model.Name(model_name.c_str());
+  if(output_vtu_) OutputRegionIDToVTU(model);
+  cout<<"\nQuadrilaterator model '"<<model_name<<"' saved to disk"<<endl;
   fs::current_path("../");
 }
 
@@ -400,7 +535,7 @@ void CSMPInterfaces_Example::BuildFromSKUAModel(const string& model_name) {
   model_topology.InputFromTextFile( model_name.c_str() );
 
   // Build Model using variables file generated by SKUA
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   Model<dim>  model( model_topology, vset, variables_file.c_str(), false );
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
@@ -446,7 +581,7 @@ void CSMPInterfaces_Example::BuildFromEclipseModel(const string& model_name) {
   PLACEMENT     rocktype_place(ELEMENT);
   settings.RockNumPropertySetup(rocktype_name,rocktype_type,rocktype_place);
 
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   EclipseModel modelOut(settings, model_name, variables_file);
 
   // Get Fault Regions
@@ -518,7 +653,7 @@ void CSMPInterfaces_Example::BuildFromGeoModellerModel(const string& model_name)
   ModelTopology      model_topology(true);
   geomodel.Read( model_name.c_str(), vset, model_topology );
 
-  const string variables_file = model_name + "-variables.txt";
+  const string variables_file = "initial-variables.txt";
   Model<3U>  model(model_topology, vset, variables_file.c_str(), false );
 
   fs::create_directory("csmp_native_format_models");
@@ -546,7 +681,8 @@ void CSMPInterfaces_Example::BuildFromRhinoModel(const string& model_name) {
     pushBack( permdata, makeScalar( PLAIN, 1.0e-12 ) );
   mesh_container.AddData( "permeability", permdata );
 
-  Model<3U>  model3D( mesh_container, "example20.txt" );
+  const string variables_file = "initial-variables.txt";
+  Model<3U>  model3D( mesh_container, variables_file.c_str() );
   fs::create_directory("csmp_native_format_models");
   fs::current_path("csmp_native_format_models");
   model3D.OutputToBinaryFile( model_name.c_str() );

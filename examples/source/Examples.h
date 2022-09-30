@@ -62,6 +62,7 @@
 #include "QuadrilateratorToCSMPbinary_Example.h" // demonstrating the Quadrilaterator 2D mesher
 #include "VariableManagement_Example.h" // reading and writing variables to CSMP binary files
 #include "CSMPInterfaces_Example.h"
+#include "ThermalConvectionETHZ_Example.h"
 
 
 #endif

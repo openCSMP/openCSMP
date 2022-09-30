@@ -91,7 +91,7 @@ int main()
             examplesSuite.RegisterExample( new QuadraticPressure_parallelPlatePermeability_Example() );
             examplesSuite.RegisterExample( new EffectiveStressDilatation2D_Example() ); // TODO: refactor
             examplesSuite.RegisterExample( new SlopeMechanics_Example() );
-            
+            examplesSuite.RegisterExample( new ThermalConvectionETHZ_Example() );
     // TUTORIALS
             examplesSuite.RegisterExample( new Triangulator_Example() );
             examplesSuite.RegisterExample( new Tutorial1_Example() );

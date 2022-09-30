@@ -18,6 +18,8 @@ private:
     void BuildFromANSYS2DModel(const std::string& model_name);
     void BuildFromANSYS3DModel(const std::string& model_name);
     void BuildFromTRIANGLEModel(const std::string& model_name);
+    void BuildFromTriangulatorModel(const std::string& model_name, double extent1, double extent2);
+    void BuildFromQuadrilateratorModel(const std::string& model_name, double x, double y);
     template<uint32_t dim> void BuildFromSKUAModel(const std::string& model_name);
     void BuildFromEclipseModel(const std::string& model_name);
     void BuildFromGeoModellerModel(const std::string& model_name);
