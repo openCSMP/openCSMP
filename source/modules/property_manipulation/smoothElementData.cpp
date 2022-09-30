@@ -89,8 +89,10 @@ void smoothElementData( Model<dim>& model,
      // ---------------------------------------------
      Region<dim>&  domain(model.Region(region_to_be_smoothed));
      csmp::Index   key = model.Database().StorageKey(variable_name.c_str());
-     double      min_val_database, max_val_database;
+     double        min_val_database, max_val_database;
      model.Database().RangeOf( variable_name.c_str(), min_val_database, max_val_database );
+     string        notation = model.Database().Parameter(variable_name.c_str()).notation;
+     string        unit     = model.Database().Parameter(variable_name.c_str()).unit;
      bool interpolation_problem(false);
 
      if ( key.type != SCALAR ) {
@@ -120,7 +122,8 @@ void smoothElementData( Model<dim>& model,
            created_log_prop = !model.Database().IsDefined( log_prop_name.c_str() );
            min_val_database = log10(min_val_database);
            max_val_database = log10(max_val_database);
-           const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), "SI", key.type, key.place, key.dataDepth,
+           const csmp::Index log_key = model.CreateProperty( log_prop_name.c_str(), notation.c_str(), unit.c_str(),
+                                                             key.type, key.place, key.dataDepth,
                                                              log10(min_val_database), log10(max_val_database) );
            // taking the decadic logarithm of values
         for ( auto it=domain.CellsBegin(); it!=domain.PerimeterCellsBegin(); ++it ) {
@@ -154,7 +157,8 @@ void smoothElementData( Model<dim>& model,
         {
            const string node_prop_name( string("nodal ") + variable_name );
            const bool   node_prop_created( !model.Database().IsDefined( node_prop_name.c_str() ) );
-           const csmp::Index log_key = model.CreateProperty( node_prop_name.c_str(), "SI", key.type, NODE, key.dataDepth,
+           const csmp::Index log_key = model.CreateProperty( node_prop_name.c_str(), notation.c_str(), unit.c_str(),
+                                                             key.type, NODE, key.dataDepth,
                                                              min_val_database, max_val_database );
            // smoothing by extrapolation and interpolation
            for ( int cycle=1U; cycle <= number_of_smoothing_cycles; cycle++ ) {

@@ -77,9 +77,10 @@ void EclipseModel::Initialize()
 			{
 				if (!this->Database().IsDefined(prop.name.c_str()))
 					// SKM FIX 
-					this->Database().AddProperty(prop.name.c_str(), prop.unit.c_str(),
-						prop.key.type, prop.key.place, this->Database().VariableCount(prop.key.place, prop.key.type), prop.min, prop.max,
-						prop.usage.c_str());
+					this->Database().AddProperty( prop.name.c_str(), prop.notation.c_str(), prop.unit.c_str(),
+						                            prop.key.type, prop.key.place,
+                                        this->Database().VariableCount(prop.key.place, prop.key.type), prop.min, prop.max,
+						                            prop.usage.c_str());
 				vset_props.erase(prop_it);
 			}
 		}

@@ -136,6 +136,7 @@ class FlaggedArrayVariable
       VARIABLE_FLAG& Flag( const size_t&);
       void           Flag( const size_t&, VARIABLE_FLAG);
       bool           IsWithinRange( double min, double max ) const;
+      bool           Has_NaN_Values() const;
       void           MinMax( double& min, double& max ) const;
       void           Sort();
 

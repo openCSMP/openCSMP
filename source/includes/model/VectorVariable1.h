@@ -71,6 +71,8 @@ class VectorVariable<1U> {
     double           Length() const;
     Point<1U>        P() const;
     bool             IsWithinRange( double vmin, double vmax ) const;
+    bool             Has_NaN_Values() const { return std::isnan(data); }
+
     VectorVariable   Flip();
     void             Invert();
 

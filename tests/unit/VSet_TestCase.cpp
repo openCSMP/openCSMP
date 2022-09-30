@@ -261,7 +261,7 @@ void VSet_TestCase::Test_ModelConstructionAndSaving3D()
       Model<3U> modelOutput3( vset, "VSet_TestCase-variables.txt" );
       
       // 'diffusity' for FV scheme
-      csmp::Index diff_key = modelOutput3.CreateProperty( "diffusivity", "m2/s", SCALAR, ELEMENT );
+      csmp::Index diff_key = modelOutput3.CreateProperty( "diffusivity", "D", "m2/s", SCALAR, ELEMENT );
       _test( diff_key.place == ELEMENT );
       _test( diff_key.type  == SCALAR );
       

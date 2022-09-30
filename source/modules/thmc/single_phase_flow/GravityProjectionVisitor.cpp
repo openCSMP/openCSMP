@@ -6,11 +6,10 @@ using namespace std;
 namespace csmp{
 
 template<uint32_t dim>
-GravityProjectionVisitor<dim>::GravityProjectionVisitor(
-                                                        Model<dim>& m,
-                                                        const Index& prop_idx,
-                                                        const Index& result_idx,
-                                                        VectorVariable<dim> vec )
+GravityProjectionVisitor<dim>::GravityProjectionVisitor( Model<dim>& m,
+                                                         const Index& prop_idx,
+                                                         const Index& result_idx,
+                                                         VectorVariable<dim>& vec )
     : Visitor<dim>( MODEL, ELEMENT ),
       prop_idx_   ( prop_idx),
       result_idx_ ( result_idx),
@@ -30,7 +29,7 @@ GravityProjectionVisitor<dim>::GravityProjectionVisitor(
         result_name +=" low dimensional projection";
 
         if ( !m.Database().IsDefined( result_name.c_str() ) )
-            m.CreateProperty( result_name.c_str(),  "SI", VECTOR, ELEMENT );
+            m.CreateProperty( result_name.c_str(), "gpv", "SI", VECTOR, ELEMENT );
 
         result_idx_  = m.Database().StorageKey( result_name.c_str() );
     }

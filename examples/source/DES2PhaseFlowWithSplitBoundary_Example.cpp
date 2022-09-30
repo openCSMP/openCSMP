@@ -175,7 +175,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
       // using 'nodal variable' to visualise which nodes are manifolds
       Region<dim>  model_domain = model.Region("Model");
       if(!model.Database().IsDefined("number of collocated nodes"))
-        model.CreateProperty( "number of collocated nodes", "none", SCALAR, NODE, 1, 0, 100);;
+        model.CreateProperty( "number of collocated nodes", "n_nd", "uint", SCALAR, NODE, 1, 0, 100);;
 
       model.Region("Model").InputPropertyValue( "number of collocated nodes", makeScalar(PLAIN,1), COMPLETE);
       const csmp::Index nodes_key = model.Database().StorageKey("number of collocated nodes");
@@ -197,7 +197,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
       //check parent elements of duplicated nodes
       if(!model.Database().IsDefined("parent element id")) {
-        model.CreateProperty( "parent element id", "none", SCALAR, ELEMENT, 1, 0 ,1.00E+08);
+        model.CreateProperty( "parent element id", "eID", "uint", SCALAR, ELEMENT, 1, 0 ,1.00E+08);
         model.Region("Model").InputPropertyValue( "parent element id", makeScalar(PLAIN,0), COMPLETE);
       }
       const csmp::INDEX<SCALAR,ELEMENT> key_parent = csmp::INDEX<SCALAR,ELEMENT>( model.Database().StorageKey("parent element id") );
@@ -272,7 +272,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     output_properties.emplace_back( "saturation carbonic phase" );
     output_properties.emplace_back( "update count" );
     if(!model.Database().IsDefined("out range value count"))
-      model.CreateProperty( "out range value count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+      model.CreateProperty( "out range value count", "orvc", "uint", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
     model.Region("Model").InputPropertyValue( "out range value count", makeScalar(PLAIN,0), COMPLETE);
     output_properties.emplace_back( "out range value count" );
     if(with_split_boundaries) {

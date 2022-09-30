@@ -160,7 +160,7 @@ bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim
   size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
   fp.write( (char*)&vcount, sizeof( size_t ) );
   std::set<std::string> propList;
-  pref.ListProperties( domain.Placement(), vtype, propList );
+  pref.ListVariables( domain.Placement(), vtype, propList );
   for ( std::set<std::string>::const_iterator it( propList.begin() ); it != propList.end(); ++it )
   {
     V var;

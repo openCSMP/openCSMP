@@ -57,43 +57,43 @@ template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVariablsAndKeys()
 {
     //creating new variables if not defined yet
-    if(!this->db_.IsDefined("variation rate nonwetting phase")) this->sg_.CreateProperty( "variation rate nonwetting phase", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
+    if(!this->db_.IsDefined("variation rate nonwetting phase")) this->sg_.CreateProperty( "variation rate nonwetting phase", "vrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
     this->sg_.Region("Model").InputPropertyValue( "variation rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("compenastion flux rate nonwetting phase")) this->sg_.CreateProperty( "compenastion flux rate nonwetting phase", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
+    if(!this->db_.IsDefined("compenastion flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
     this->sg_.Region("Model").InputPropertyValue( "compenastion flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("old saturation carbonic phase")) this->sg_.CreateProperty( "old saturation carbonic phase", "m3/m3", SCALAR, NODE, 1, 0 ,1);
+    if(!this->db_.IsDefined("old saturation carbonic phase")) this->sg_.CreateProperty( "old saturation carbonic phase", "sCO2_0", "m3/m3", SCALAR, NODE, 1, 0 ,1);
     this->sg_.CopyReplace( "saturation carbonic phase", "old saturation carbonic phase" );
-    if(!this->db_.IsDefined("tensor permeability")) this->sg_.CreateProperty( "tensor permeability", "m2", TENSOR, ELEMENT, 3, 1E-21, 1.0e-5);
+    if(!this->db_.IsDefined("tensor permeability")) this->sg_.CreateProperty( "tensor permeability", "kk", "m2", TENSOR, ELEMENT, 3, 1E-21, 1.0e-5);
     if(!this->db_.IsDefined("nodal fluid volume source")) {
-        this->sg_.CreateProperty( "nodal fluid volume source", "m3", SCALAR, NODE, 1, -1.00E+01, 1.00E+01);
+        this->sg_.CreateProperty( "nodal fluid volume source", "nfvq", "m3", SCALAR, NODE, 1, -1.00E+01, 1.00E+01);
         this->sg_.Region("Model").InputPropertyValue( "nodal fluid volume source", makeScalar(PLAIN,0), COMPLETE);
     }
-    if(!this->db_.IsDefined("residual saturation carbonic phase")) this->sg_.CreateProperty( "residual saturation carbonic phase", "m3/m3", SCALAR, ELEMENT, 1, 0., 1.); 
-    if(!this->db_.IsDefined("residual saturation aqueous phase")) this->sg_.CreateProperty( "residual saturation aqueous phase", "m3/m3", SCALAR, ELEMENT, 1, 0., 1.); 
-    if(!this->db_.IsDefined("breakthrough status")) this->sg_.CreateProperty( "breakthrough status", "none", SCALAR, NODE, 1, 0, 1);
+    if(!this->db_.IsDefined("residual saturation carbonic phase")) this->sg_.CreateProperty( "residual saturation carbonic phase", "sCO2r", "m3/m3", SCALAR, ELEMENT, 1, 0., 1.);
+    if(!this->db_.IsDefined("residual saturation aqueous phase")) this->sg_.CreateProperty( "residual saturation aqueous phase", "swr", "m3/m3", SCALAR, ELEMENT, 1, 0., 1.);
+    if(!this->db_.IsDefined("breakthrough status")) this->sg_.CreateProperty( "breakthrough status", "bs", "none", SCALAR, NODE, 1, 0, 1);
     this->sg_.Region("Model").InputPropertyValue( "breakthrough status", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("pressure continuity status")) this->sg_.CreateProperty( "pressure continuity status", "none", SCALAR, NODE, 1, 0, 1);
+    if(!this->db_.IsDefined("pressure continuity status")) this->sg_.CreateProperty( "pressure continuity status", "pfcs", "none", SCALAR, NODE, 1, 0, 1);
     this->sg_.Region("Model").InputPropertyValue( "pressure continuity status", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("entry pressure")) this->sg_.CreateProperty( "entry pressure", "Pa", SCALAR, ELEMENT, 1, 0., 50000000.);
+    if(!this->db_.IsDefined("entry pressure")) this->sg_.CreateProperty( "entry pressure", "pd", "Pa", SCALAR, ELEMENT, 1, 0., 50000000.);
     if(!this->db_.IsDefined("acceleration gravity")) {
-        this->sg_.CreateProperty( "acceleration gravity", "m/s2", SCALAR, MODEL, 1, 9.76, 9.83);
+        this->sg_.CreateProperty( "acceleration gravity", "acc", "m/s2", SCALAR, MODEL, 1, 9.76, 9.83);
         this->sg_.Region("Model").InputPropertyValue( "acceleration gravity", makeScalar(PLAIN,9.8061), COMPLETE);
     }    
-    if(!this->db_.IsDefined("density carbonic phase")) this->sg_.CreateProperty( "density carbonic phase", "kg/m3", SCALAR, NODE, 1, 50., 1000.);
-    if(!this->db_.IsDefined("density aqueous phase")) this->sg_.CreateProperty( "density aqueous phase", "kg/m3", SCALAR, NODE, 1, 500., 1500.); 
-    if(!this->db_.IsDefined("dip vector")) this->sg_.CreateProperty( "dip vector", "none", VECTOR, ELEMENT, 3, -1., 1.);   
-    if(!this->db_.IsDefined("total velocity")) this->sg_.CreateProperty( "total velocity", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
-    if(!this->db_.IsDefined("viscosity carbonic phase")) this->sg_.CreateProperty( "viscosity carbonic phase", "Pa.s", SCALAR, NODE, 1, 1E-05, 0.1);
-    if(!this->db_.IsDefined("viscosity aqueous phase")) this->sg_.CreateProperty( "viscosity aqueous phase", "Pa.s", SCALAR, NODE, 1, 1E-05, 0.0016);	
-    if(!this->db_.IsDefined("velocity carbonic phase")) this->sg_.CreateProperty( "velocity carbonic phase", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
-    if(!this->db_.IsDefined("velocity aqueous phase")) this->sg_.CreateProperty( "velocity aqueous phase", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
-    if(!this->db_.IsDefined("fluid pressure status")) this->sg_.CreateProperty( "fluid pressure status", "none", SCALAR, NODE, 1, 0 ,8);
-    if(!this->db_.IsDefined("local pressure solving count")) this->sg_.CreateProperty( "local pressure solving count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!this->db_.IsDefined("density carbonic phase")) this->sg_.CreateProperty( "density carbonic phase", "rhoCO2", "kg/m3", SCALAR, NODE, 1, 50., 1000.);
+    if(!this->db_.IsDefined("density aqueous phase")) this->sg_.CreateProperty( "density aqueous phase", "rhow", "kg/m3", SCALAR, NODE, 1, 500., 1500.);
+    if(!this->db_.IsDefined("dip vector")) this->sg_.CreateProperty( "dip vector", "dip", "none", VECTOR, ELEMENT, 3, -1., 1.);
+    if(!this->db_.IsDefined("total velocity")) this->sg_.CreateProperty( "total velocity", "vt", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
+    if(!this->db_.IsDefined("viscosity carbonic phase")) this->sg_.CreateProperty( "viscosity carbonic phase", "muCO2", "Pa.s", SCALAR, NODE, 1, 1E-05, 0.1);
+    if(!this->db_.IsDefined("viscosity aqueous phase")) this->sg_.CreateProperty( "viscosity aqueous phase", "muw", "Pa.s", SCALAR, NODE, 1, 1E-05, 0.0016);
+    if(!this->db_.IsDefined("velocity carbonic phase")) this->sg_.CreateProperty( "velocity carbonic phase", "vCO2", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
+    if(!this->db_.IsDefined("velocity aqueous phase")) this->sg_.CreateProperty( "velocity aqueous phase", "vw", "m/s", VECTOR, ELEMENT, 3, -1.0e8, 1.0e8);
+    if(!this->db_.IsDefined("fluid pressure status")) this->sg_.CreateProperty( "fluid pressure status", "pfs", "none", SCALAR, NODE, 1, 0 ,8);
+    if(!this->db_.IsDefined("local pressure solving count")) this->sg_.CreateProperty( "local pressure solving count", "lpfsc", "uint", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
     this->sg_.Region("Model").InputPropertyValue( "local pressure solving count", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("mass center")) this->sg_.CreateProperty( "mass center", "none", VECTOR, NODE, 3, -1.00E+10 ,1.00E+10);
-    if(!this->db_.IsDefined("out range value count")) this->sg_.CreateProperty( "out range value count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!this->db_.IsDefined("mass center")) this->sg_.CreateProperty( "mass center", "", "none", VECTOR, NODE, 3, -1.00E+10 ,1.00E+10);
+    if(!this->db_.IsDefined("out range value count")) this->sg_.CreateProperty( "out range value count", "orvc", "uint", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
     this->sg_.Region("Model").InputPropertyValue( "out range value count", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("initial saturation carbonic phase")) this->sg_.CreateProperty( "initial saturation carbonic phase", "m3/m3", SCALAR, NODE, 1, 0 ,1);
+    if(!this->db_.IsDefined("initial saturation carbonic phase")) this->sg_.CreateProperty( "initial saturation carbonic phase", "sCO2i", "m3/m3", SCALAR, NODE, 1, 0 ,1);
     this->sg_.CopyReplace( "saturation carbonic phase", "initial saturation carbonic phase" );
 
     //assigning keys 

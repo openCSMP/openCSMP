@@ -459,6 +459,9 @@ void test_Create_TrianglePatch_VSet( VSet<2U>& vset )
                 
         Also returns corresponding model topology and property data in the form of "element number" and "node number" for testing.
         
+        @attention VSet does not contain any Face objects. It therefore needs to be used in conjunction with Element to Face conversion
+        to create Boundary objects.
+        
         @author SKM
         @date 1/10/2021
 */

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-  class  Variables_Example : public Example{
+  class  Variables_Example : public Example {
   public:
     virtual void Run();
     virtual void Specifications();

@@ -464,6 +464,15 @@ bool  VectorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
 
 
 
+  /// tests whether variable contains NaN value(s)
+bool  VectorVariable<3U>::Has_NaN_Values() const {
+   if ( isnan(data[0]) ) return true;
+   if ( isnan(data[1]) ) return true;
+   if ( isnan(data[2]) ) return true;
+   return false;
+}
+
+
 
 bool VectorVariable<3U>::Out( std::fstream& fp ) const
 {

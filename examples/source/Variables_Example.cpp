@@ -141,7 +141,7 @@ void Variables_Example::Run()
       }
 
     // adding a property at runtime
-    model.CreateProperty( "new element scalar", "X", SCALAR, ELEMENT );
+    model.CreateProperty( "new element scalar", "nes", "X", SCALAR, ELEMENT );
     model.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 1. ) );
     fracture.InputPropertyValue( "new element scalar",  makeScalar( PLAIN, 2. ) );
 

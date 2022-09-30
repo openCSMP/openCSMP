@@ -78,7 +78,7 @@ void TransientPressure_Example::Run()
   // 2.0 Building the Region named "model"
   // set boolean for isoparametric elements to true
   // -----------------------------------------------
-  Model<2U>   model( mesh_container, "example4.txt" );
+  Model<2U>   model( mesh_container, "TransientPressure_Example-variables.txt" );
 
   // 3.0 Input the initial Conditions
   // --------------------------------
@@ -115,31 +115,31 @@ void TransientPressure_Example::Run()
    }
 
 
-  // 5.0 Calculating hydraulic conductivity from permeability using Interrelation subclass
+  // 5. Calculating hydraulic conductivity from permeability using Interrelation subclass
   // ------------------------------------------------------------------------------------
   const double fluid_viscosity(1.0e-03);
   ConstantFactor<2U,divides>  conductivity( model.Database(),
-                                                    "conductivity", "permeability",
-                                                     fluid_viscosity );
+                                           "conductivity", "permeability",
+                                            fluid_viscosity );
   model.Apply( conductivity );
   printRangeOfVariable( model, "conductivity" );
 
 
-  // 6.0 Assign farfield Dirichlet boundary conditions for the fluid pressure
+  // 6. Assign farfield Dirichlet boundary conditions for the fluid pressure
   // ------------------------------------------------------------------------
   model.InputBoundaryValue( LEFT,  "fluid pressure", makeScalar(DIRICH,1.0e+7) );
   model.InputBoundaryValue( RIGHT, "fluid pressure", makeScalar(DIRICH,1.0e+7) );
 
 
-  // 7.0 Let the user specify a drawdown rate and change the source/sink term in the well area
+  // 7. Let the user specify a drawdown rate and change the source/sink term in the well area
   // -----------------------------------------------------------------------------------------
   ScalarVariable  pumping_rate;
-  cout << "\nEnter the pumping rate (Units: m3 m-2 s-1, try 1.0e-05 to start with. Positve rate: injection, negative rate: extraction) " << endl;
+  cout << "\nEnter the pumping rate (Units: m3 m-2 s-1, try 1.0e-05 to start with. Positive rate: injection, negative rate: extraction) " << endl;
   cin  >> pumping_rate();
   model.Region("well").InputPropertyValue( "fluid volume source", pumping_rate );
 
 
-  // 8.0 Variables for transient loop
+  // 8. Variables for transient loop
   // --------------------------------
   VTK_Interface<2U>  vtk_output;
   vtk_output.OutputDataToVTK( model, "hydraulic-condunctivity", "conductivity",  0 );
@@ -152,7 +152,8 @@ void TransientPressure_Example::Run()
   cout << "\nEnter after how many steps you would like to save the results (1 = every step) " << endl;
   cin  >> save_frequency;
 
-  // 9.0 Opening a file for writing the fluid pressure in the well to a txt file
+
+  // 9. Opening a file for writing the fluid pressure in the well to a txt file
   // ---------------------------------------------------------------------------
   char  outfile[200];
   strcpy( outfile, "well-pressure" );
@@ -164,9 +165,7 @@ void TransientPressure_Example::Run()
   ofs << "0\t1.0e+07 " << endl; // initial condition
 
 
-
-
-  // 10.0 Build a transient fluid pressure algorithm using Backward-Euler time-stepping
+  // 10. Build a transient fluid pressure algorithm using Backward-Euler time-stepping
   // ----------------------------------------------------------------------------------
   // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
   PDE_Integrator<2U,Region>  transient_pressure;
@@ -178,21 +177,21 @@ void TransientPressure_Example::Run()
   transient_pressure.SetSolver( linear_solver );
 #endif
 
-  NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
-                                         conductance.MultiplyWithTimeIncrement(true);
+  NumIntegral_dNT_op_dN_dV<2U,Element<2U> > conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+                                            conductance.MultiplyWithTimeIncrement(true);
 
   NumIntegral_NT_lhsop_N_dV<2U,Element<2U> > capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
-                                         capacitance_lhs.LumpedFormulation(true);
+                                             capacitance_lhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U,Element<2U> >    capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
-                                         capacitance_rhs.LumpedFormulation(true);
+  NumIntegral_NT_op_N_dV<2U,Element<2U> > capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+                                          capacitance_rhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U,Element<2U> >    source( model.Database(), "fluid volume source",  "fluid pressure" );
-                                         source.MultiplyWithTimeIncrement(true);
-                                         source.AddAccumulateLater();
-                                         source.LumpedFormulation(true);
+  NumIntegral_NT_op_N_dV<2U,Element<2U> > source( model.Database(), "fluid volume source",  "fluid pressure" );
+                                          source.MultiplyWithTimeIncrement(true);
+                                          source.AddAccumulateLater();
+                                          source.LumpedFormulation(true);
 
-  VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
+  VelocityAndVolumeFlux<2U,Element<2U> >  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 
   transient_pressure.Add( &conductance );
   transient_pressure.Add( &capacitance_lhs );
@@ -247,7 +246,6 @@ void TransientPressure_Example::Run()
       ofs << model_time << "\t" << well_pressure << endl;
 
       cout << "\nmain: ELAPSED TIME " << model_time / day << " days " << endl;
-
     }
 
   cout <<"\nmain: That's it..."<< endl;

@@ -172,6 +172,33 @@ bool canBeIRREGULAR( BOX_BOUNDARY bd )
 }
 
 
+
+/**
+    Finds the corner nodes of a boxed shaped model so that boundary conditions can be assigned.
+    Function uses domain 'Model'  to avoid linear search.
+    
+     @return returns nodes that are either flagged  CNR1, CNR2 or INTERNAL from one-dimensional model
+ */
+Node<1U>* const cornerFlaggedNode( Model<1U>& model, BOX_BOUNDARY corner_flag )
+ {
+    // the corner nodes are the perimeter nodes of the model domain
+    Region<1U>& model_domain = model.Region("Model");
+    assert( model_domain.PerimeterNodes() >= 2 ); // at least the corners must be there
+    
+    auto nit = model_domain.PerimeterNodesBegin();
+    while ( nit != model_domain.NodesEnd() ) {
+         if ( (*nit)->AtBoundary() == corner_flag )
+           return (*nit);
+         nit++;
+      }
+      
+    cerr <<"\n"<<"cornerFlaggedNode: corner node flagged "<< parseBoundary(corner_flag);
+    cerr <<" was not found."<< endl;
+    return nullptr;
+ }
+
+
+
 /**
    Parses the BOX_BOUNDARY identifier (see Box.h). If the boundary flag cannot be resolved a value of NOT is returned if it is positive and IRREGULAR if negative.
 */

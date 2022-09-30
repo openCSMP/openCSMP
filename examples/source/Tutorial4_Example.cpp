@@ -32,7 +32,7 @@ void Tutorial4_Example::Specifications()
 {
   SetTitle( "Tutorial 4: Stokes lubrication equation" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A CSMP main file that uses an solves the coupled Stokes equation in a 2D geometry representing" );
   AddDescription( "pores and grains in a carbonate rock. The solution of the Stokes equation provides the pressure" );
@@ -245,8 +245,8 @@ void Tutorial4_Example::assignFluxToPointSource( Model<2U>& mdl, const char* flu
   // backup the fluxes that are orginally assigned in a temporary variable
   std::string         temp_flux("flux");
 
-  if( !mdl.Database().IsDefined(temp_flux.c_str()) )
-      mdl.CreateProperty( temp_flux.c_str(), "X",SCALAR, NODE );
+  if ( !mdl.Database().IsDefined(temp_flux.c_str()) )
+    mdl.CreateProperty( temp_flux.c_str(), "Q", "m3/s", SCALAR, NODE );
   mdl.CopyReplace( flux, temp_flux.c_str() );
 
   // define variables needed to compute the length of the FE edges that lie at the boundary

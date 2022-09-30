@@ -1294,10 +1294,14 @@ void ModelSubDomain<dim,CELL>::MinMaxCoordinates( Point<dim>& xyz_min, Point<dim
          csmp::Point<dim> p = (*bit)->Coordinate();
          xyz_min[0] = std::min( p[0], xyz_min[0] );
          xyz_max[0] = std::max( p[0], xyz_max[0] );
-         xyz_min[1] = std::min( p[1], xyz_min[1] );
-         xyz_max[1] = std::max( p[1], xyz_max[1] );
-         xyz_min[2] = std::min( p[2], xyz_min[2] );
-         xyz_max[2] = std::max( p[2], xyz_max[2] );
+         if constexpr( dim != 1U ) {
+             xyz_min[1] = std::min( p[1], xyz_min[1] );
+             xyz_max[1] = std::max( p[1], xyz_max[1] );
+           }
+         if constexpr( dim == 3U ) {
+             xyz_min[2] = std::min( p[2], xyz_min[2] );
+             xyz_max[2] = std::max( p[2], xyz_max[2] );
+           }
       }
 
  } // end MinMaxCoordinates
@@ -3563,21 +3567,20 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToIntegrationPointProperty( const
      switch( c_key.type )
        {
            case SCALAR: {
-                ScalarVariable sc;
                 for ( auto& eit : cell_vec_ )
-                  for ( auto i=0U; i<eit->IntegrationPoints(); i++ )
+                  for ( auto i{0U}; i<eit->IntegrationPoints(); i++ )
                     {
                        eit->N_AtIntegrationPoint( i, IPOL );
-                       eit->N(0)->Read( n_key, sc ); // pick up the flag
-                       for ( auto j=1; j<eit->Nodes(); j++ ) sc += IPOL[j] * eit->N(j)->Read( n_key );
-                       eit->Store( i, c_key, sc );
+                       double sc = IPOL[0] * eit->N(0)->Read( n_key );
+                       for ( auto j{1U}; j<eit->Nodes(); j++ ) sc += IPOL[j] * eit->N(j)->Read( n_key );
+                       eit->Store( i, c_key, makeScalar(eit->Status(i,c_key),sc) );
                     }
                 }
              break;
            case VECTOR: {
                 VectorVariable<dim>  vce, vce2;
                 for ( auto& eit : cell_vec_ )
-                  for ( auto i=0U; i<eit->IntegrationPoints(); i++ )
+                  for ( auto i{0U}; i<eit->IntegrationPoints(); i++ )
                     {
                        eit->N_AtIntegrationPoint( i, IPOL );
                        vce=0.;

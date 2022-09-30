@@ -143,7 +143,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      string       variable;
      set<string>  node_props;
 
-     sg.Database().ListProperties( NODE, node_props );
+     sg.Database().ListVariables( NODE, node_props );
      csmp::Index  prop_key(sg.Database().StorageKey((*node_props.begin()).c_str())); 
      
 
@@ -2627,7 +2627,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      string       variable;
      set<string>  node_props;
 
-     model.Database().ListProperties( NODE, node_props );
+     model.Database().ListVariables( NODE, node_props );
 
      // 2. opening data output file in ascii format
      // -------------------------------------------

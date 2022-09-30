@@ -399,9 +399,9 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
     bool         mesh_suitable_for_computation{ true };
 
     // 0. creating the properties needed to store the diagnostic values
-    const csmp::Index  evol_key = model.CreateProperty( "cell volume", "m3", SCALAR, ELEMENT );
-    const csmp::Index  mJac_key = model.CreateProperty( "Jacobian determinant", "none", SCALAR, ELEMENT );
-    const csmp::Index  los_key = model.CreateProperty( "aspect ratio", "X", SCALAR, ELEMENT );
+    const csmp::Index  evol_key = model.CreateProperty( "cell volume", "Ve", "m3", SCALAR, ELEMENT );
+    const csmp::Index  mJac_key = model.CreateProperty( "Jacobian determinant", "Jinv", "none", SCALAR, ELEMENT );
+    const csmp::Index  los_key = model.CreateProperty( "aspect ratio", "AR", "X", SCALAR, ELEMENT );
 
     // 1. obtaining and storing diagnostic values
     for ( auto& it : subdomain.CellVector() )
@@ -422,8 +422,8 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
 
 
     // 2. diagnostics applied to nodes
-    const csmp::Index  conn_key  = model.CreateProperty( "node connections", "none", SCALAR, NODE );
-    const csmp::Index  ndist_key = model.CreateProperty( "shortest distance to node", "m", SCALAR, NODE );
+    const csmp::Index  conn_key  = model.CreateProperty( "node connections", "NC", "none", SCALAR, NODE );
+    const csmp::Index  ndist_key = model.CreateProperty( "shortest distance to node", "dist-nd", "m", SCALAR, NODE );
 
     // obtaining and storing diagnostic values
     for ( auto& nit : subdomain.NodeVector() )

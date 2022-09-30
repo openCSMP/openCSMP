@@ -35,7 +35,7 @@ void Tutorial2_Example::Specifications()
 {
   SetTitle( "Tutorial 2: Diffusion - advection" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A steady state pressure diffusion equation solved using a fully" );
   AddDescription( "implicit FE discretisation and computes the velocity field averwards. This velocity field is" );

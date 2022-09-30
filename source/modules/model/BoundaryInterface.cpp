@@ -539,7 +539,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const string region_tag("region identifier");
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
-         model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
+         model.CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
       }
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     // needs to be done everytime because the number of unique regions may have changed
