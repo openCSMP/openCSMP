@@ -568,7 +568,12 @@ bool  VSet<dim>::InputFrom( const char* bin_file, double& time )
 
 
 /**
-Key method for recovery of a model from binary file. It can load only a subset of variables if neccesary.
+    Key method for recovery of a model from binary file, which can load only a subset of the stored variables if neccesary.
+    If the supplied subset of variables is empty, all the variables stored in the file are read.
+    
+    @param bin_file set of binary files which contain the discretised properties (VSet), mesh (VData), the model, its regions, boudaries and split boundaries
+    @param time snapshot in time which the current model represents
+    @param subset_variables of the overall number of variables that are stored in the VSet
 */
 template<uint32_t dim>
 bool  VSet<dim>::InputFrom( const char* bin_file, double& time, const set<string>& subset_variables )

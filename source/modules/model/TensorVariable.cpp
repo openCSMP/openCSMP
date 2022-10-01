@@ -919,8 +919,11 @@ double  TensorVariable<3U>::MaxElement() const
 
 
 
-/// @test re-tested: SKM 29-9-2001
-
+/**
+    Assumes that tensor is diagonal, checking its Eigen values.
+    
+    @test re-tested: SKM 29-9-2001
+*/
 bool  TensorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
@@ -934,6 +937,17 @@ bool  TensorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
   if ( data[2][2] < vmin || data[2][2] > vmax ) return false;
 
   return true;
+}
+
+
+/**
+    Checks only the diagonal.
+*/
+bool  TensorVariable<3U>::Has_NaN_Values() const {
+   if ( isnan(data[0][0]) ) return true;
+   if ( isnan(data[1][1]) ) return true;
+   if ( isnan(data[2][2]) ) return true;
+   return false;
 }
 
 

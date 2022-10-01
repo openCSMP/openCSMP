@@ -4283,27 +4283,25 @@ cout << endl;
 
 
 /**
-Writes VSet data from MeshManager to VSet, including 'pmtrl' material property information
 
-Storing distributed variables associated with the mesh in the VSet
+Writes scalar, vector, tensor, array and flagged array property data from MeshManager to VSet, including 'pmtrl' material property information.
 
-For all finite volumes and elements, their integration points and nodes,
-but not for any of the variables stored on the model, region, boundaries or splitboundaries
-this method stores the current values in the VSet.
+Process is applied to all finite volumes and elements, their integration points and nodes,
+but not for any of the variables stored on the model, region, boundaries or splitboundaries.
+A method for these entities is provided separately.
 
 To store the properties in the VSet, they are first written to PropertyData objects.
 These are then added to the VSet property storage.
 
 @attention  a continuous numbering of elements, faces, interfaces and nodes has to be
-established, for instance with AssignUniqueNumbers() before this method is called.
+established before this method is called, for instance, using AssignUniqueNumbers().
 
-@note region properties are stored together with the regions in respective binary files
+@attention property values are output if the corresponding dataset does not contain any NAN values.
 
-@note this method is anything, but nice. Yet it will be quite a challenge to come up with a better
-design; hopefully there will be no more extra variable placements or types in the future.
+@note the values of region, boundary or splitboundary properties are stored together with the these in respective binary files
 
-@attention in the VSet, the variables are identified only by their (unique) names. The property
-database is therefore essential to retrieve all other variable related information.
+@attention in the VSet,  variables are identified only by their (unique) names. Very litlle extra information is contained in the
+PropertyData class. The property database is therefore essential to retrieve all other variable related information.
 
 @author SKM 5/5/2016
 
@@ -4328,7 +4326,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // 'PropertyData'
   // =========================================
 
-  database.ListProperties( NODE, properties );
+  database.ListVariables( NODE, properties );
   const size_t n_nodes( nodes_.size() );
   // for all node properties
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -4340,14 +4338,18 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     const size_t data_capacity( n_nodes * (*pit).second.dataDepth );
     // allocating memory to store the property flags and values
     data.Reserve( flag_capacity, data_capacity );
+    bool variable_contains_NaN_values{ false };
 
     switch ( (*pit).second.type )
       {
         case SCALAR: {
-          // estimating the storage required
           ScalarVariable value;
           for ( const auto& it : nodes_ ) {
                 it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4356,6 +4358,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           VectorVariable<dim> value;
           for ( const auto& it : nodes_ ) {
                 it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4364,6 +4370,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           TensorVariable<dim> value;
           for ( const auto& it : nodes_ ) {
                 it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4372,6 +4382,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           ArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : nodes_ ) {
                 it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4380,6 +4394,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
           FlaggedArrayVariable value( (*pit).second.dataDepth );
           for ( const auto& it : nodes_ ) {
                 it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4389,7 +4407,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of node variable not recognized." );
       }
     // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
+    if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
   }
 
   // -------------------------------------------------
@@ -4397,7 +4415,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // element properties (including integration points)
   // -------------------------------------------------
   // -------------------------------------------------
-  database.ListProperties( ELEMENT, properties );
+  database.ListVariables( ELEMENT, properties );
   const size_t elements( elements_.size() );
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
   {
@@ -4407,6 +4425,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     const size_t flag_capacity( elements * (*pit).second.flagDepth );
     const size_t data_capacity( elements * (*pit).second.dataDepth );
     data.Reserve( flag_capacity, data_capacity );
+    bool variable_contains_NaN_values{ false };
 
     switch ( (*pit).second.type )
     {
@@ -4414,6 +4433,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ScalarVariable value;
         for ( const auto& it : elements_ ) {
               it.Read( (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
               pushBack( data, value );
             }
           }
@@ -4422,6 +4445,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         VectorVariable<dim> value;
         for ( const auto& it : elements_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4430,6 +4457,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         TensorVariable<dim> value;
         for ( const auto& it : elements_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4438,6 +4469,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : elements_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4446,6 +4481,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : elements_ ) {
               it.Read( (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4455,12 +4494,12 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                            (*pit).first, "type of element variable not recognized." );
     }
     // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
+    if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
   }
 
   // element integration point properties
   // ------------------------------------
-  if ( database.ListProperties( ELEMENT_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( ELEMENT_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_ips( (*elements_.begin()).IntegrationPoints() ); // just an estimate
 
@@ -4472,6 +4511,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( elements * elmt_ips * (*pit).second.flagDepth );
       const size_t data_capacity( elements * elmt_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -4481,6 +4521,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4492,6 +4536,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4503,6 +4551,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4514,6 +4566,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4525,6 +4581,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4532,17 +4592,17 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
      break;
         default:
           csmp_error.Note( ERROR, "Region<dim>::OutputVariableTo:",
-                             (*pit).first, "type of element integration point variable not recognized." );
+                          (*pit).first, "type of element integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
 
   // element sector integration point properties
   // -------------------------------------------
-  if ( database.ListProperties( SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( SECTOR_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_sector_ips( (*elements_.begin()).IntegrationPointsPerSector() );
     const size_t sectors_per_element( (*elements_.begin()).Sectors() );
@@ -4553,6 +4613,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.flagDepth );
       const size_t data_capacity( elements * sectors_per_element * elmt_sector_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -4564,6 +4625,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4578,6 +4643,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4592,6 +4661,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4606,6 +4679,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4620,6 +4697,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                   const auto ips_per_sector( it.IntegrationPointsPerSector() );
                   for ( auto j{0U}; j<ips_per_sector; ++j ) {
                     it.Read( i, j, (*pit).second, value );
+                    if ( value.Has_NaN_Values() ) {
+                         variable_contains_NaN_values = true;
+                         break;
+                      }
                     pushBack( data, value );
                   }
                 }
@@ -4631,14 +4712,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of element sector integraton point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
 
   // element facet integration point properties
   // ------------------------------------------
-  if ( database.ListProperties( FACET_INTEGRATION_POINT, properties ) > 0 ) {
+  if ( database.ListVariables( FACET_INTEGRATION_POINT, properties ) > 0 ) {
     assert( Elements() > 0 );
     const size_t elmt_facet_ips( (*elements_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_element( (*elements_.begin()).Facets() );
@@ -4649,6 +4730,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.flagDepth );
       const size_t data_capacity( elements * facets_per_element * elmt_facet_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -4660,6 +4742,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4674,6 +4760,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4688,6 +4778,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4702,6 +4796,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4716,6 +4814,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4727,7 +4829,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of facet integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
@@ -4737,7 +4839,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // face properties (including integration points)
   // ----------------------------------------------
   // ----------------------------------------------
-  database.ListProperties( FACE, properties );
+  database.ListVariables( FACE, properties );
   const size_t n_faces( Faces() );
 
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -4746,6 +4848,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     const size_t flag_capacity( n_faces * (*pit).second.flagDepth );
     const size_t data_capacity( n_faces  * (*pit).second.dataDepth );
     data.Reserve( flag_capacity, data_capacity );
+    bool variable_contains_NaN_values{ false };
 
     switch ( (*pit).second.type )
     {
@@ -4753,6 +4856,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ScalarVariable value;
         for ( const auto& it : faces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4761,6 +4868,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         VectorVariable<dim> value;
         for ( const auto& it : faces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4769,6 +4880,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         TensorVariable<dim> value;
         for ( const auto& it : faces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4777,6 +4892,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : faces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -4785,6 +4904,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : faces_ ) {
               it.Read( (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4794,13 +4917,13 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                            (*pit).first, "type of face variable not recognized." );
     }
     // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
+    if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
   }
 
 
   // face integration point properties
   // ---------------------------------
-  if ( database.ListProperties( FACE_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_ips( (*faces_.begin()).IntegrationPoints() );
 
@@ -4811,6 +4934,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_faces * face_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_faces * face_ips  * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -4820,6 +4944,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4831,6 +4959,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4842,6 +4974,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4853,6 +4989,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4864,6 +5004,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -4874,14 +5018,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of face integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
 
   // face sector integration point properties
   // ----------------------------------------
-  if ( database.ListProperties( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_sector_ips( (*faces_.begin()).IntegrationPointsPerSector() );
     const size_t sectors_per_face( (*faces_.begin()).Sectors() );
@@ -4893,6 +5037,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_faces * sectors_per_face * face_sector_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_faces * sectors_per_face * face_sector_ips  * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -4904,6 +5049,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4918,6 +5067,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4932,6 +5085,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4946,6 +5103,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4960,6 +5121,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -4971,14 +5136,14 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of face-sector integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
 
   // face facet integration point properties
   // ---------------------------------------
-  if ( database.ListProperties( FACE_FACET_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
+  if ( database.ListVariables( FACE_FACET_INTEGRATION_POINT, properties ) > 0 && Faces() > 0 ) {
     assert( Faces() > 0U );
     const size_t face_facet_ips( (*faces_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_face( (*faces_.begin()).Facets() );
@@ -4990,6 +5155,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_faces * facets_per_face * face_facet_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_faces * facets_per_face * face_facet_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -5001,6 +5167,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5015,6 +5185,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5029,6 +5203,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5043,6 +5221,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5057,6 +5239,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_facet( it.IntegrationPointsPerFacet() );
               for ( auto j{0U}; j<ips_per_facet; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5068,7 +5254,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of face facet integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
@@ -5078,7 +5264,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
   // interface properties (including integration points)
   // ---------------------------------------------------
   // ---------------------------------------------------
-  database.ListProperties( INTER_FACE, properties );
+  database.ListVariables( INTER_FACE, properties );
   const size_t n_interfaces( InterFaces() );
 
   for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -5087,6 +5273,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
     const size_t flag_capacity( n_interfaces * (*pit).second.flagDepth );
     const size_t data_capacity( n_interfaces  * (*pit).second.dataDepth );
     data.Reserve( flag_capacity, data_capacity );
+    bool variable_contains_NaN_values{ false };
 
     switch ( (*pit).second.type )
     {
@@ -5094,6 +5281,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ScalarVariable value;
         for ( const auto& it : interfaces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -5102,6 +5293,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         VectorVariable<dim> value;
         for ( const auto& it : interfaces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -5110,6 +5305,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         TensorVariable<dim> value;
         for ( const auto& it : interfaces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -5118,6 +5317,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         ArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : interfaces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -5126,6 +5329,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
         FlaggedArrayVariable value( (*pit).second.dataDepth );
         for ( const auto& it : interfaces_ ) {
           it.Read( (*pit).second, value );
+          if ( value.Has_NaN_Values() ) {
+               variable_contains_NaN_values = true;
+               break;
+            }
           pushBack( data, value );
         }
       }
@@ -5135,12 +5342,12 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                            (*pit).first, "type of interface variable not recognized." );
     }
     // storing the data in the VSet
-    vset.AddData( (*pit).first.c_str(), data );
+    if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
   }
 
   // interface integration point properties
   // --------------------------------------
-  if ( database.ListProperties( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     const size_t interface_ips{ (*interfaces_.begin()).IntegrationPoints() };
 
     for ( auto pit = properties.begin(); pit != properties.end(); ++pit )
@@ -5149,6 +5356,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_interfaces * interface_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_interfaces * interface_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -5158,6 +5366,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -5169,6 +5381,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -5180,6 +5396,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -5191,6 +5411,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -5202,6 +5426,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
             const size_t integration_points( it.IntegrationPoints() );
             for ( auto i{0U}; i<integration_points; ++i ) {
               it.Read( i, (*pit).second, value );
+              if ( value.Has_NaN_Values() ) {
+                   variable_contains_NaN_values = true;
+                   break;
+                }
               pushBack( data, value );
             }
           }
@@ -5212,13 +5440,13 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of interface integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
   // interface sector integration point properties
   // ---------------------------------------------
-  if ( database.ListProperties( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_SECTOR_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     assert( InterFaces() > 0 );
     const size_t interface_sector_ips{ (*interfaces_.begin()).IntegrationPointsPerSector() };
     const size_t sectors_per_interface{ (*interfaces_.begin()).Sectors() };
@@ -5229,6 +5457,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_interfaces * sectors_per_interface * interface_sector_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_interfaces * sectors_per_interface * interface_sector_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
       {
@@ -5240,6 +5469,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5254,6 +5487,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5268,6 +5505,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5282,6 +5523,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5296,6 +5541,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
               const auto ips_per_sector( it.IntegrationPointsPerSector() );
               for ( auto j{0U}; j<ips_per_sector; ++j ) {
                 it.Read( i, j, (*pit).second, value );
+                if ( value.Has_NaN_Values() ) {
+                     variable_contains_NaN_values = true;
+                     break;
+                  }
                 pushBack( data, value );
               }
             }
@@ -5307,13 +5556,13 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of interface sector integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 
   // interface facet integration point properties
   // --------------------------------------------
-  if ( database.ListProperties( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
+  if ( database.ListVariables( INTER_FACE_FACET_INTEGRATION_POINT, properties ) > 0 && InterFaces() > 0 ) {
     assert( InterFaces() > 0 );
     const size_t interface_facet_ips( (*interfaces_.begin()).IntegrationPointsPerFacet() );
     const size_t facets_per_interface( (*interfaces_.begin()).Facets() );
@@ -5324,6 +5573,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
       const size_t flag_capacity( n_interfaces * facets_per_interface * interface_facet_ips * (*pit).second.flagDepth );
       const size_t data_capacity( n_interfaces * facets_per_interface * interface_facet_ips * (*pit).second.dataDepth );
       data.Reserve( flag_capacity, data_capacity );
+      bool variable_contains_NaN_values{ false };
 
       switch ( (*pit).second.type )
         {
@@ -5335,6 +5585,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                     const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                     for ( auto j{0U}; j<ips_per_facet; ++j ) {
                       it.Read( i, j, (*pit).second, value );
+                      if ( value.Has_NaN_Values() ) {
+                           variable_contains_NaN_values = true;
+                           break;
+                        }
                       pushBack( data, value );
                     }
                   }
@@ -5349,6 +5603,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
+                    if ( value.Has_NaN_Values() ) {
+                         variable_contains_NaN_values = true;
+                         break;
+                      }
                     pushBack( data, value );
                   }
                 }
@@ -5363,6 +5621,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
+                    if ( value.Has_NaN_Values() ) {
+                         variable_contains_NaN_values = true;
+                         break;
+                      }
                     pushBack( data, value );
                   }
                 }
@@ -5377,6 +5639,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
+                    if ( value.Has_NaN_Values() ) {
+                         variable_contains_NaN_values = true;
+                         break;
+                      }
                     pushBack( data, value );
                   }
                 }
@@ -5391,6 +5657,10 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                   const auto ips_per_facet( it.IntegrationPointsPerFacet() );
                   for ( auto j{0U}; j<ips_per_facet; ++j ) {
                     it.Read( i, j, (*pit).second, value );
+                    if ( value.Has_NaN_Values() ) {
+                         variable_contains_NaN_values = true;
+                         break;
+                      }
                     pushBack( data, value );
                   }
                 }
@@ -5402,7 +5672,7 @@ void MeshManager<dim>::OutputStoredVariablesTo( const PropertyDatabase<dim>& dat
                              (*pit).first, "type of interface facet integration point variable not recognized." );
       }
       // storing the data in the VSet
-      vset.AddData( (*pit).first.c_str(), data );
+      if ( !variable_contains_NaN_values ) vset.AddData( (*pit).first.c_str(), data );
     }
   }
 

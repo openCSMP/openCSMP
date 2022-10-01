@@ -270,9 +270,9 @@ bool Box_Test::TestBoundaryFlagging()
     Model<3U> model( vset, "CSMP-variables.txt" );
    
     string node_variable("nodal box flag"), elmt_variable("element box flag");
-    model.CreateProperty( node_variable.c_str(), "flag", SCALAR, NODE );
+    model.CreateProperty( node_variable.c_str(), "nbf", "flag", SCALAR, NODE );
 //    model.UpdateIndices();
-    model.CreateProperty( elmt_variable.c_str(), "flag", SCALAR, ELEMENT );
+    model.CreateProperty( elmt_variable.c_str(), "ebf", "flag", SCALAR, ELEMENT );
 //    model.UpdateIndices();
    
     boxFlagsToVariable( model, node_variable.c_str(), elmt_variable.c_str() );
@@ -625,6 +625,8 @@ bool Box_Test::TestWhetherAllBoxFlagsArePresent()
 
 /**
    tests method which recreates boundary flags
+   
+   TODO: still fails because of discrepancy in boundary flags
 */
 bool Box_Test::TestBoundaryFlagRecreation()
  {

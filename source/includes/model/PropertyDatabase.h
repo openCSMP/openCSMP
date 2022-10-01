@@ -231,11 +231,11 @@ class PropertyDatabase  {
    /// adding a property at runtime from the command line (NB: you should call method CreateProperty() of model to do this)
    csmp::Index    AddProperty();    
 
-   csmp::Index    AddProperty( const char* property_name, const char* unit, uint32_t last_max_index,
+   csmp::Index    AddProperty( const char* property_name, const char* notation, const char* unit, uint32_t last_max_index,
                                VARIABLE_TYPE, PLACEMENT, uint32_t vsize = 1,
                                double vmin=-1.0e+30 , double vmax=1.0e+30 , std::string usage="???" );
 
-   csmp::Index    AddProperty( const char* property_name, const char* unit,
+   csmp::Index    AddProperty( const char* property_name, const char* notation, const char* unit,
                                VARIABLE_TYPE, PLACEMENT, uint32_t vsize = 1,
                                double vmin=-1.0e+30 , double vmax=1.0e+30, std::string usage="???" );
                                    
@@ -249,14 +249,14 @@ class PropertyDatabase  {
 
    void   FlushToScreen() const;
    void   FlushToScreen( const char* propname ) const;
-   void   ListVariables() const;
    void   ListVariableNames() const;
    void   ListKeys( std::list<csmp::Index>& keys ) const;
-   void   ListProperties( std::map<std::string,csmp::Index>& props ) const;
-   void   ListProperties( const std::set<std::string>&, std::set<PLACEMENT>& props ) const;
-   uint32_t ListProperties( PLACEMENT place, std::map<std::string,csmp::Index>& props ) const;
-   uint32_t ListProperties( PLACEMENT place, std::set<std::string>& props ) const;
-   uint32_t ListProperties( PLACEMENT, VARIABLE_TYPE, std::set<std::string>& props ) const;
+   void   ListVariables() const;
+   void   ListVariables( std::map<std::string,csmp::Index>& props ) const;
+   void   ListVariables( const std::set<std::string>&, std::set<PLACEMENT>& props ) const;
+   uint32_t ListVariables( PLACEMENT place, std::map<std::string,csmp::Index>& props ) const;
+   uint32_t ListVariables( PLACEMENT place, std::set<std::string>& props ) const;
+   uint32_t ListVariables( PLACEMENT, VARIABLE_TYPE, std::set<std::string>& props ) const;
 
    uint32_t VariableCount( PLACEMENT )                  const;
    uint32_t VariableCount( VARIABLE_TYPE )              const;
@@ -270,6 +270,9 @@ class PropertyDatabase  {
    void   FlaggedArrayLengths( PLACEMENT place, std::vector<uint32_t>& arrayLengths ) const;
    
    bool   WriteVariablesFile( const char* fileName ) const;
+   
+   /// writes  templatized INDEX variable definitions of the current variables  into header file and instantiates their keys
+   void   WriteVariableSetToHeaderFile( const char* header_file, const char* variable_set_name ) const;
 
    void   Out() const;
 
@@ -282,12 +285,6 @@ class PropertyDatabase  {
    bool   Verbose() { return this->verbose_; }
 
  private:
-   const uint32_t vectorFlags, tensorFlags;
-   bool verbose_;
-   std::string  physvarsFile;
-   std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> > variableCount_; ///< all placements and variable types in here
-   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
-   IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
   
    void   Initialize( const char* variables_file );
    void   InitializeCount();
@@ -318,6 +315,15 @@ class PropertyDatabase  {
    IntegrationPointVariables  ElementIntegrationPointVariables() const;
    IntegrationPointVariables  FaceIntegrationPointVariables() const;
    IntegrationPointVariables  InterFaceIntegrationPointVariables() const;
+
+ private:
+ 
+   const uint32_t vectorFlags, tensorFlags;
+   bool verbose_;
+   std::string  physvarsFile;
+   std::map<PLACEMENT,std::map<VARIABLE_TYPE,uint32_t> > variableCount_; ///< all placements and variable types in here
+   std::map<std::string,csmp::Parameter>  propList_; ///< all parameters (and with those the indices)
+   IndexTracker indexTracker_; ///< used to keep track of all index references and update indices after runtime changes
 };
 
 

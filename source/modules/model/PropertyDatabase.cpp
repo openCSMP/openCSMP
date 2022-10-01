@@ -8,6 +8,7 @@
 #include "TensorVariable.h"
 #include "ArrayVariable.h"
 #include <sstream>
+#include <chrono>
 
 using namespace std;
 
@@ -15,10 +16,10 @@ namespace csmp {
 
 
 #define PHYSVARS_BFILE "CSMP_variables.dat"
-#define MEMBERS 10 // entries in one line of property description
+#define MEMBERS 10 // maximum entries in one line of property description
 
 
-/** initializes from text variables file
+/** Initializes variables database from text variables file
  */
 template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
@@ -33,8 +34,11 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName )
     Initialize(variablesFileName);
  }
 
+
 /**
-      Reader of binary variables file which also permits restriction to a subset of variables
+      Reader of binary variables file which also permits restriction to a subset of variables.
+      
+      @attention if the variablesFileName is empty, the variables file name is initialised to 'EmptyVariablesFile.'
 */
 template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
@@ -49,6 +53,7 @@ PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const se
     if ( !BinaryIn( variablesFileName, subset_variables ) )
       throw csmp::Exception( ERROR, "PropertyDatabase", "Not able to load from binary file" );
  }
+
 
 
 /// default constructor: all variable counters are set to zero
@@ -920,11 +925,11 @@ database.
 @return The Index reflecting the new state ov LocalVariables and IntegrationPointVariables, including added property.
 */
 template<uint32_t dim>
-csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char *unit,
+csmp::Index PropertyDatabase<dim>::AddProperty( const char *property_name, const char* notation, const char *unit,
                                                 VARIABLE_TYPE vtype, PLACEMENT vplace, uint32_t vsize,
                                                 double vmin, double vmax, string usage )
 {
-    return AddProperty( property_name, unit, VariableCount( vplace, vtype) , vtype, vplace, vsize, vmin, vmax, usage );
+    return AddProperty( property_name, notation, unit, VariableCount( vplace, vtype) , vtype, vplace, vsize, vmin, vmax, usage );
 }
 
 
@@ -934,7 +939,7 @@ Adds a new physical variable at runtime to the property database. The
 new variable is temporary in the sense that it will not be added to the
 binary variable database file. 
 
-@warning Any runtime change in variables invalidates existing Index objects! The need to be refreshed.
+@warning Any runtime change in variables invalidates existing Index objects! They need to be refreshed.
 
 @section arguments Input Arguments
 
@@ -970,55 +975,67 @@ database.
 
 */
 template<uint32_t dim>
-csmp::Index  PropertyDatabase<dim>::AddProperty( const char* s, const char* unit, uint32_t index,
+csmp::Index  PropertyDatabase<dim>::AddProperty( const char* name, const char* notation, const char* unit, uint32_t index,
                                                  VARIABLE_TYPE vtype, PLACEMENT place, uint32_t vsize,
                                                  double vmin, double vmax, string usage )
  {
-    auto iter(propList_.find(string(s)));
+    auto iter(propList_.find(string(name)));
 
+    // checking for uniqueness of name
     if ( iter != propList_.end() ) {
-         cout <<"\nWARNING, PropertyDatabase<dim>::AddProperty: '"<< s <<"' already exists. Nothing was done."<< endl;
+         ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                        name, "property already exists. Nothing was done.");
          (*iter).second.Out();
-         return StorageKey(s);
-      }
-    else {
-         csmp::Parameter  added_prop;
-         assert( s != NULL );
-         added_prop.name = s;
-         // first two letters of variable name is used as notation
-         // (this is safe when the string is valid because it has at least one char plus terminating
-         //  null character)
-         string notation; 
-         for ( int i=0; i<2; i++ ) notation += s[i]; 
-         added_prop.notation  = notation;
-         added_prop.key.place = place;
-         added_prop.key.type  = vtype;
-         added_prop.key.index = index;  
-         added_prop.unit      = unit;
-         added_prop.min       = vmin;
-         added_prop.max       = vmax;
-         added_prop.usage =usage;
-         added_prop.reference ="not specified";
-         added_prop.explanation ="new property defined at runtime";
-         if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< s <<"'\n";
-
-         /// Roman,2013: Added explicit way of reading the size of variable
-         EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
-         EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
-
-         propList_[ added_prop.name ] = added_prop;
-
-         // update indices and binary database
-         UpdateParametersAndDatabase();
-
-         // update existing index references
-         UpdateIndexReferences();
+         return StorageKey(name);
       }
 
-    // returning the up-to-date storage key for the newly created variable
-    return StorageKey(s);
+    // checking for uniqueness of notation
+    {
+      set<string>  variable_abbreviations;
+      for ( const auto& it : propList_ ) variable_abbreviations.insert( it.second.notation );
+      if ( variable_abbreviations.size() < propList_.size() )
+           ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                         "notation of stored variables in not unique");
+                                         
+      if ( variable_abbreviations.find(notation) != variable_abbreviations.end() ) {
+           ErrorHandler::Instance().Note( WARNING, "PropertyDatabase<dim>::AddProperty:",
+                                          notation, "notation for new variable is not unique; aborting operation");
+           (*iter).second.Out();
+           return csmp::Index();
+        }
+    }
+   csmp::Parameter  added_prop;
+   assert( strlen(name) > 0 );
+   added_prop.name      = name;
+   assert( strlen(notation) > 0 );
+   added_prop.notation  = notation;
+   added_prop.key.place = place;
+   added_prop.key.type  = vtype;
+   added_prop.key.index = index;
+   added_prop.unit      = unit;
+   added_prop.min       = vmin;
+   added_prop.max       = vmax;
+   added_prop.usage =usage;
+   added_prop.reference ="not specified";
+   added_prop.explanation ="new property defined at runtime";
+   if (this->Verbose()) cout <<"\nINFO, PropertyDatabase<dim>::AddProperty adding new property: '"<< name <<"'\n";
 
- } // end AddProperty
+   /// Roman,2013: Added explicit way of reading the size of variable
+   EstablishVariableTypeDependentProperties( static_cast<int>(vtype), vsize, added_prop.key );
+   EstablishPlacementDependentProperties(  added_prop.key.place, added_prop.key );
+
+   propList_[ added_prop.name ] = added_prop;
+
+   // update indices and binary database
+   UpdateParametersAndDatabase();
+
+   // update existing index references
+   UpdateIndexReferences();
+
+  // returning the up-to-date storage key for the newly created variable
+  return StorageKey(name);
+
+} // end AddProperty
 
 
 /** Deletes the target property from the property database.
@@ -1064,6 +1081,8 @@ void PropertyDatabase<dim>::DeleteProperty( const char* s )
  } // end DeleteProperty
 
 
+
+
 /** Creates a list of Index class objects corresponding to the current
 set of physical variables stored in the property database.
 
@@ -1090,7 +1109,7 @@ erased before the new physical variable data are entered.
 
 */
 template<uint32_t dim>
-void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) const
+void PropertyDatabase<dim>::ListVariables( map<string,csmp::Index>& props ) const
  {
     props.erase( props.begin(), props.end() );
 
@@ -1100,7 +1119,7 @@ void PropertyDatabase<dim>::ListProperties( map<string,csmp::Index>& props ) con
 
 /// enlists properties with a specific placement
 template<uint32_t dim>
-uint32_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::Index>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT pl, map<string,csmp::Index>& props ) const
  {
     props.clear();
 
@@ -1115,7 +1134,7 @@ uint32_t PropertyDatabase<dim>::ListProperties( PLACEMENT pl, map<string,csmp::I
 
 /// reports properties with the target placement as a set
 template<uint32_t dim>
-uint32_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT place, set<string>& props ) const
  {
     props.clear();
 
@@ -1128,7 +1147,7 @@ uint32_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, set<string>& pr
 
 /// reports properties with a specific placement and type as a set
 template<uint32_t dim>
-uint32_t PropertyDatabase<dim>::ListProperties( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT place, VARIABLE_TYPE vtype, set<string>& props ) const
   {
   props.clear();
 
@@ -1567,6 +1586,99 @@ bool PropertyDatabase<dim>::WriteVariablesFile( const char* fileName ) const
     variablesFile.close();
     return true;
   }
+
+
+
+
+/**
+   Writes templatized INDEX variable definitions of the current variables  into header file and instantiates their keys.
+   If the variable set name is empty, the variables are inserted into the global namespace.
+*/
+template<uint32_t dim>
+void PropertyDatabase<dim>::WriteVariableSetToHeaderFile( const char* header_file, const char* variable_set_name ) const
+ {
+    ErrorHandler& csmp_error{ ErrorHandler::Instance() };
+ 
+    ofstream ofs( header_file );
+    if ( !ofs.is_open() ) {
+         csmp_error.Note( ERROR, "PropertyDatabase<dim>::WriteVariableSetToHeaderFile",
+                          header_file, "input file could not be opened");
+         return;
+      }
+
+    // 1. writing the file header and time when this file was created
+    // --------------------------------------------------------------
+    time_t now_time = chrono::system_clock::to_time_t(chrono::system_clock::now());
+
+    if ( !variable_set_name )
+      ofs <<"\\"<< header_file <<": written by PropertyDatabase<dim>::WriteVariableSetToHeaderFile: "<< ctime(&now_time) <<"\n";
+    else {
+         ofs <<"\\"<< header_file <<": variable set: "<< variable_set_name;
+         ofs <<"written by PropertyDatabase<dim>::WriteVariableSetToHeaderFile: " << ctime(&now_time) <<"\n";
+      }
+    ofs << endl;
+      
+    // 2. Instantiating the variables, either globally or locally, creating names from their notation which must be unique
+    // -------------------------------------------------------------------------------------------------------------------
+    if ( variable_set_name ) {
+         ofs <<"struct "<< variable_set_name <<" {";
+      }
+    // testing whether notation is unique
+    size_t      n_variables{ propList_.size() };
+    set<string> unique_variable_identifiers;
+    for ( const auto& it : propList_ )
+      unique_variable_identifiers.insert( it.second.notation );
+        
+    if ( unique_variable_identifiers.size() < n_variables ) {
+         csmp_error.Note( ERROR, "PropertyDatabase<dim>::WriteVariableSetToHeaderFile",
+                          header_file, "contained variable notation is non unique; keys could not be created");
+         return;
+      }
+
+    // writing the variable keys
+    for ( const auto& it : propList_ ) {
+         ofs <<"csmp::INDEX<"<< parseType(it.second.key.type) <<","<< parsePlacement(it.second.key.place);
+         ofs <<"> key_"<< it.second.notation <<"; \\ '"<< it.first << endl;
+      }
+
+
+    // 3. Providing a function or method to register the variables with the PropertyDatabase
+    // -------------------------------------------------------------------------------------
+    // function
+    if ( !variable_set_name ) {
+         ofs <<"\n"<<"template<uint32_t dim>"<< endl;
+         ofs <<"void registerGlobalVariableINDEX_KeysWithPropertyDatabase( PropertyDatabase<dim>& db ) {"<< endl;
+         ofs <<"double vmin, vmax;"<< endl;
+         ofs <<"for ( const auto& it : propList_ ) {"<< endl;
+         ofs <<"     it.second.Range( vmin, vmax );"<< endl;
+         ofs <<"     db.AddProperty( it.first.c_str(), /* it.second.notation */ it.second.unit,"<< endl;
+         ofs <<"                     it.second.key.type, it.second.key.place, it.second.key.dataDepth, vmin, vmax );"<< endl;
+         ofs <<"  }"<< endl << endl;
+         ofs <<"}"<< endl;
+      }
+    // member constructor of the variable set that registers it with the PropertyDatabase
+    ofs <<"\n"<<"template<uint32_t dim>"<< endl;
+    ofs <<"explicit "<< variable_set_name <<"( const PropertyDatabase<dim>& db )\n :"<< endl;
+    // instantiating the variable keys
+    for ( const auto& it : propList_ ) {
+         ofs <<" key_"<< it.second.notation;
+         ofs <<"( INDEX<"<< parseType(it.second.key.type) <<","<< parsePlacement(it.second.key.place) <<">( ";
+         ofs <<"db.StorageKey\""<< it.first <<"\") ))"<< endl;
+      }
+   // finishing the in-class definition of the constructor
+   ofs <<"  {"<< endl <<"  }"<< endl;
+
+    // end of struct definition
+    if ( variable_set_name ) {
+         ofs <<"\n };"<< endl;
+      }
+
+ } // end WriteVariableSetToHeaderFile
+
+
+
+
+
 
 
 /// Clears arrayLengths and inserts depth of ARRAY variables for place in order of index
@@ -2126,36 +2238,37 @@ void PropertyDatabase<dim>::VariableCount( PLACEMENT within, uint32_t& scalars, 
     scalars             = VariableCount     ( within, SCALAR );
     vectors             = VariableCount     ( within, VECTOR );
     tensors             = VariableCount     ( within, TENSOR );
-
     arrayCount          = VariableCount     ( within, ARRAY  );
     arrayLength         = ArrayLengthTotal  ( within );
     flaggedArrayCount   = VariableCount     ( within, FLAGGEDARRAY  );
     flaggedArrayLength  = FlaggedArrayLengthTotal   ( within );
-
   }
+
+
 
 template<uint32_t dim>
 uint32_t PropertyDatabase<dim>::VariableCount() const
   {
     uint32_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,uint32_t> >::const_iterator it( variableCount_.begin() );
-      it != variableCount_.end(); ++it )
-      for( map<VARIABLE_TYPE,uint32_t>::const_iterator iit( it->second.begin() );  iit != it->second.end(); ++iit )
+    for( auto it( variableCount_.begin() );  it != variableCount_.end(); ++it )
+      for( auto iit( it->second.begin() );  iit != it->second.end(); ++iit )
         variableCount += iit->second;
+        
     return variableCount;
   }
+
+
 
 template<uint32_t dim>
 uint32_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement, VARIABLE_TYPE variableType ) const
   {
     uint32_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,uint32_t> >::const_iterator it( variableCount_.begin() );
-      it != variableCount_.end(); ++it )
+    for( auto it( variableCount_.begin() );  it != variableCount_.end(); ++it )
       if( it->first == variablePlacement )
-        for( map<VARIABLE_TYPE,uint32_t>::const_iterator iit( it->second.begin() );
-             iit != it->second.end(); ++iit )
+        for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
           if( iit->first == variableType )
-          variableCount += iit->second;
+            variableCount += iit->second;
+            
     return variableCount;
   }
 
@@ -2164,12 +2277,11 @@ template<uint32_t dim>
 uint32_t PropertyDatabase<dim>::VariableCount( VARIABLE_TYPE variableType ) const
   {
     uint32_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,uint32_t> >::const_iterator it( variableCount_.begin() );
-         it != variableCount_.end(); ++it )
-         for( map<VARIABLE_TYPE,uint32_t>::const_iterator iit( it->second.begin() );
-              iit != it->second.end(); ++iit )
+    for( auto it( variableCount_.begin() ); it != variableCount_.end(); ++it )
+         for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
            if( iit->first == variableType )
              variableCount += iit->second;
+             
     return variableCount;
   }
 
@@ -2178,19 +2290,18 @@ template<uint32_t dim>
 uint32_t PropertyDatabase<dim>::VariableCount( PLACEMENT variablePlacement ) const
   {
     uint32_t variableCount(0);
-    for( map<PLACEMENT,map<VARIABLE_TYPE,uint32_t> >::const_iterator it( variableCount_.begin() );
-         it != variableCount_.end(); ++it )
+    for( auto it( variableCount_.begin() ); it != variableCount_.end(); ++it )
       if( it->first == variablePlacement )
-        for( map<VARIABLE_TYPE,uint32_t>::const_iterator iit( it->second.begin() );
-             iit != it->second.end(); ++iit )
+        for( auto iit( it->second.begin() ); iit != it->second.end(); ++iit )
           variableCount += iit->second;
+          
     return variableCount;
   }
 
 
 /// Clears propertyPlacements and inserts all PLACEMENT for all propertyNames
 template<uint32_t dim>
-void PropertyDatabase<dim>::ListProperties( const set<string>& propertyNames, set<PLACEMENT>& propertyPlacments ) const
+void PropertyDatabase<dim>::ListVariables( const set<string>& propertyNames, set<PLACEMENT>& propertyPlacments ) const
 {
   propertyPlacments.clear();
   for( set<string>::const_iterator it( propertyNames.begin() ); it != propertyNames.end(); ++it )

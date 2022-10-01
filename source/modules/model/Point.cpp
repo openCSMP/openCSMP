@@ -769,7 +769,7 @@ bool Point<3U>::operator>( const Point<3U>& p )  const
 
 double  Point<3U>::Length() const
  {
-    return sqrt( x_ * x_ + y_ * y_ + z_ * z_ );
+    return hypot( x_ , y_, z_ );
  }
 
 double  Point<3U>::SquaredLength() const

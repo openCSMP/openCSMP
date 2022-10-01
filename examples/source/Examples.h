@@ -9,7 +9,7 @@
 // this is where you declare your examples
 // =======================================
 
-#include "SteadyStatePressure_Example.h"       // steady state calculation 2D
+#include "Triangulator_Example.h"              // Triangulator mesher and steady state pressure calculation in 2D
 #include "TransientPressure_Example.h"         // transient calculation 2D with well
 #include "PassiveAdvectionOfTracer_Example.h"  // single phase advection in 3D
 #include "VariablesBasic_Example.h"         // variable operations EXTEND!
@@ -60,5 +60,9 @@
 #include "Variables_Example.h"
 #include "SlopeMechanics_Example.h" // developed for UoM SMD course, pore-pressure and gravitational loading
 #include "QuadrilateratorToCSMPbinary_Example.h" // demonstrating the Quadrilaterator 2D mesher
+#include "VariableManagement_Example.h" // reading and writing variables to CSMP binary files
+#include "CSMPInterfaces_Example.h"
+#include "ThermalConvectionETHZ_Example.h"
+
 
 #endif

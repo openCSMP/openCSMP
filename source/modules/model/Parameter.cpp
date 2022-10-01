@@ -107,8 +107,11 @@ void  Parameter::Range( double& vmin, double& vmax ) const
 
 ostream&  operator<<( ostream& stream, const Parameter& p )
  {
-    stream << endl << setiosflags( ios::left ); 
-    stream << setw(40) << p.name;
+    stream << endl << setiosflags( ios::left );
+    if ( p.name.size() > 20 )
+      stream << setw(static_cast<int>(p.name.size()+2)) << p.name;
+    else
+      stream << setw(20) << p.name;
     stream << setw(6) << p.notation;
     string  str("[");
     str += p.unit;

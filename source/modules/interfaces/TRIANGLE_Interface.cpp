@@ -272,11 +272,11 @@ void TRIANGLE_Interface::ReadTriangle2DMeshAndCreateDiscreteFractures( const cha
 
 
 void TRIANGLE_Interface::CheckTriangleOutput( const char*  file, 
-                                         size_t&   nodes_per_element,
-                                         size_t&  nodes, 
-                                         size_t&  elements,
-                                         int&   node_attributes,
-                                         int&   elmt_attributes )
+                                              size_t&   nodes_per_element,
+                                              size_t&  nodes,
+                                              size_t&  elements,
+                                              int&   node_attributes,
+                                              int&   elmt_attributes )
  {
     char fnode[200], fele[200], fedge[200];
     strcpy( fnode, file );

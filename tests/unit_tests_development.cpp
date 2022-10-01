@@ -105,6 +105,15 @@
 //#include "Placement_Test_2D.h"
 //#include "Placement_Test_3D.h"
 
+//pressure diffusion
+#include "DirichletPressureBoxModel_VVCase.h"
+
+//finite volumes
+#include "GenericFiniteVolumeTransport_Test.h"
+#include "ExplicitAdvection2D_VVCase.h"
+#include "Geothermal_pseudo1D_VVCase.h"
+
+
 
 using namespace std;
 using namespace csmp;
@@ -126,7 +135,13 @@ TEST_CASE("Development tests", "[Dev]") {
   test.run();
   test2.run();
 
-  LinearElasticFractureAperture2D_VVCase i_test;
+  DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
+  //test1.run();
+
+  Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
+  //test3.run();
+
+  LinearElasticFractureAperture2D_VVCase i_test("InternalBoundary_test");
   i_test.run();
 
  //   ANSYS_Model2D_Test test;

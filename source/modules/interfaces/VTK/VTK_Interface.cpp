@@ -129,6 +129,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
   {
      std::string file_name( this->OutputFileAndSubFolderName( initial_file_name ) );
 
+     if( !sg.ContainsRegion( region ) ) return;
      const Region<dim>&  gref(sg.Region(region));
      gref.UpdateMemberIndexes();
 
@@ -142,7 +143,7 @@ void VTK_Interface<dim>::OutputNodeDataToVTK( const Model<dim>&  sg,
      string       variable;
      set<string>  node_props;
 
-     sg.Database().ListProperties( NODE, node_props );
+     sg.Database().ListVariables( NODE, node_props );
      csmp::Index  prop_key(sg.Database().StorageKey((*node_props.begin()).c_str())); 
      
 
@@ -450,6 +451,7 @@ void VTK_Interface<dim>::OutputDataToVTK( const Model<dim>&  sg,
        throw Exception( ERROR, "VTK_Interface<dim>::OutputDataToVTK(region):",
                       "Thus far variables placed on REGION or BOUNDARY cannot be visualised with VTK (this could however be done with the VTK primitive POLYGONAL)");
 
+     if( !sg.ContainsRegion( group_name ) ) return;
      const Region<dim>&  gref(sg.Region(group_name));
      gref.UpdateMemberIndexes();  // renumber nodes and elements
      
@@ -2625,7 +2627,7 @@ void outputRegionBoundaryToVTK( const Model<3U>& model, const char* region, cons
      string       variable;
      set<string>  node_props;
 
-     model.Database().ListProperties( NODE, node_props );
+     model.Database().ListVariables( NODE, node_props );
 
      // 2. opening data output file in ascii format
      // -------------------------------------------

@@ -200,6 +200,9 @@ public:
   /// Reconstructor:  reads model from set of CSMP's native binary files
   explicit Model( const std::string& binaryFiles );
 
+  /// Reconstructor:  reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model( const std::string& binaryFiles, const std::string& variable_txt_file );
+
   /// Reconstructor: reads model from set of CSMP's native binary file, but only reading the specified subset of variables
   Model( const std::string& binaryFileName, const std::set<std::string>& subset_variables );
 
@@ -262,9 +265,9 @@ public:
   // ------------------------------------------------------------------------
 
   /// inserts (if new) variable into the database and creates storage for it on the entities where it shall be discretized
-  csmp::Index  CreateProperty( const char* new_prop, const char* unit,
+  csmp::Index  CreateProperty( const char* new_prop, const char* notation, const char* unit,
                                VARIABLE_TYPE type = SCALAR, PLACEMENT place = NODE,
-                               size_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
+                               uint32_t vsize = 1, double vmin = -1.0e+30, double vmax = 1.0e+30,
                                std::string usage = "???" );
 
   /// deletes property from the database and the distributed containers all across the model

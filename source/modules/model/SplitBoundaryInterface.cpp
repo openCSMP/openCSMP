@@ -629,7 +629,7 @@ pair<set<string>,bool> SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Detec
   // ----------------------------------------------------------------------------------
   const string region_tag("region identifier");
   if ( !splitboundaryComplex->Database().IsDefined(region_tag.c_str()) )
-    splitboundaryComplex->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+    splitboundaryComplex->CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
   const csmp::Index reg_key = splitboundaryComplex->Database().StorageKey(region_tag.c_str());
   vector<string>  region_names;
   const size_t model_regions = splitboundaryComplex->CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
@@ -735,7 +735,7 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::SeparateUniqueRegionsB
     const string    region_tag("region identifier");
     vector<string>  region_names;
     if ( !model->Database().IsDefined(region_tag.c_str()) ) {
-          model->CreateProperty( region_tag.c_str(), "X", SCALAR, ELEMENT );
+          model->CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
          model->CountAndLabelUniqueRegions( region_tag.c_str(), region_names );
       }
     else { // assigning region names

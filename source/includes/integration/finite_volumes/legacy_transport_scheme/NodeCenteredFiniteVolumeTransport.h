@@ -97,13 +97,12 @@ class NodeCenteredFiniteVolumeTransport {
 
     /// returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged with exclude_flag
     double BoundaryFluxes( double& inflow,
-                             double& out_flow,
-                             bool box_shaped_model                      = true,
-                             bool use_advected_variable                 = false,
-                             const char* advected_variable              = "no advected variable",
-                             const char* variable_to_determine_no_flow  = "fluid pressure",
-                             VARIABLE_FLAG exclude_flag                 = ANY
-                           ) const;
+                           double& out_flow,
+                           bool box_shaped_model                      = true,
+                           bool use_advected_variable                 = false,
+                           const char* advected_variable              = "no advected variable",
+                           const char* variable_to_determine_no_flow  = "fluid pressure",
+                           VARIABLE_FLAG exclude_flag                 = ANY ) const;
   
     /// for each finite volume it sums up incoming and outgoing fluxes reporting the extrema
     void FluxBalance( double& fmin, double& fmax ) const;
@@ -120,7 +119,7 @@ class NodeCenteredFiniteVolumeTransport {
 
     /// integrates target property over a region of interest, result can be scaled by porosity
     double VolumeIntegrateScalarFiniteVolumeVariable( const char* group, const Model<dim>&,
-                                                        const char* property, bool consider_porosity ) const;
+                                                      const char* property, bool consider_porosity ) const;
     /// integrals for finite-element computations
     void     VolumeIntegrate( const char* integrand_property, const char* result_prop ) const;
     void     VolumeIntegrate( const char* integrand_property, const char* integrand_multiplier, const char* result_prop ) const;
@@ -206,7 +205,7 @@ protected:
     bool                         verbose_;
 
     std::vector<FV_Parameter>           STENCIL_DATA;  ///< finite-volume data for fast calculations
-    std::vector<double>               FVPOREVOL,     ///< pore volumes of finite-volume cells for theta calculation etc.
+    std::vector<double>                 FVPOREVOL,     ///< pore volumes of finite-volume cells for theta calculation etc.
                                         SAT0,          ///< advected variable at t0
                                         FLUX_BALANCE;  ///< for each FV, but excluding truncated FV at global model boundaries
 
@@ -226,7 +225,7 @@ protected:
     csmp::Index                         grad_advprop_key_;			///< gradient of the advacted property
     csmp::Index                         grad_advprop_limiter_key_;	///< limiter for the gradient of the advected property
     std::string                         advected_variable_;
-    double                            cfl_multiplier_;
+    double                              cfl_multiplier_;
     size_t                              var_ncomponents_; /// default size is 1 if only a scalar is being advected. (Julian)
 
     StencilProcessor<dim>               stencil_;

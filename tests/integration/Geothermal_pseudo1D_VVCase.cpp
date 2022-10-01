@@ -22,19 +22,19 @@ Criterion:  comparison with TOUGH
 =================================
 */
 
-  void Geothermal_pseudo1D_VVCase::outputToVTU( Model<3U>& model,string model_name, const list<string>& props, size_t timestep )
+  void Geothermal_pseudo1D_VVCase::outputToVTU( Model<2U>& model,string model_name, const list<string>& props, size_t timestep )
   {
-      static VTU_Interface<3U> vtu(model);
-      vtu.OutputDataToVTU( (model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
+      static VTU_Interface<2U> vtu(model);
+      vtu.OutputDataToVTU( ( model_name + "_Properties" ).c_str(), props, model.Region("Model"), timestep);
   }
 
-  void Geothermal_pseudo1D_VVCase::ComputeMassConductivity (Model<3U>& model)
+  void Geothermal_pseudo1D_VVCase::ComputeMassConductivity (Model<2U>& model)
   {
-      PropertyHandle<3U> rho_ph ( model, "density liquid", SCALAR, NODE );
-      PropertyHandle<3U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
-      PropertyHandle<3U> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
+      PropertyHandle<2U> rho_ph ( model, "density liquid", SCALAR, NODE );
+      PropertyHandle<2U> kappa_ph ( model, "conductivity", SCALAR, ELEMENT );
+      PropertyHandle<2U> lambda_ph ( model, "mass conductivity", SCALAR, ELEMENT );
       
-      ConductivityVisitor<3U> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
+      ConductivityVisitor<2U> conductivity_visitor( model, "conductivity", "permeability", "fluid viscosity" );
       model.Accept(conductivity_visitor);
 
       lambda_ph = 0.;
@@ -43,8 +43,9 @@ Criterion:  comparison with TOUGH
   }
 
 
-  bool Geothermal_pseudo1D_VVCase::Compare (Model<3U>& model, string file)
+  bool Geothermal_pseudo1D_VVCase::Compare (Model<2U>& model, string file)
   {
+
     FILE* fin;
     double x, y, val, res, tol;
     size_t ind(0);
@@ -77,7 +78,7 @@ Criterion:  comparison with TOUGH
     nPoints = points.size();
 
     // finds CSMP computed temperature values at given points
-    PropertyAtPointVisitor<3U> pAt(model, points, "temperature");
+    PropertyAtPointVisitor<2U> pAt(model, points, "temperature");
     model.Accept(pAt);
 
     res = 0.;
@@ -87,7 +88,7 @@ Criterion:  comparison with TOUGH
     for (size_t ind2=0; ind2<nPoints; ind2++ )
     {
       pAt.PropertyValueAt(ind2, result);
-      res += fabs(result() - values[ind]);
+      res += fabs(result() - values[ind2]);
     }
 
     // divided by the number of points
@@ -105,7 +106,7 @@ Criterion:  comparison with TOUGH
   void Geothermal_pseudo1D_VVCase::run()
   {
     bool& globalVerbose( GlobalVerbose::Instance().globalVerbose );
-    const  size_t DIM(3U);
+    const  size_t DIM(2U);
 
     globalVerbose=true;
 
@@ -116,7 +117,8 @@ Criterion:  comparison with TOUGH
 	std::string config_name (this->getName()); 
 	std::string vars_name (this->getName()+".txt");
     
-	ANSYS_Model3D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , true, true );
+    ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true );
+    model.InstantiateFiniteVolumes();
     const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
     
     printModelDimensions<DIM>(model, true );
@@ -133,8 +135,16 @@ Criterion:  comparison with TOUGH
     output_props.push_back("volumetric enthalpy liquid");
     output_props.push_back("enthalpy content liquid");
     output_props.push_back("nodal fluid volume source");
+    //output_props.push_back("conductivity");
+    //output_props.push_back("mass conductivity");
+    //output_props.push_back("permeability");
+    //output_props.push_back("total compressibility");
+    //output_props.push_back("porosity");
+    //output_props.push_back("total heat capacity");
+    //output_props.push_back("thermal conductivity");
 
     region_names.push_back("Model");
+
 
     // -----------------------------------------------------------------------
     // 1. Assigning material properties, initial conditions, and boundary
@@ -148,9 +158,9 @@ Criterion:  comparison with TOUGH
     model_configuration.ConfigureFromFile( model, config_name.c_str(), false,    // groupname from parameter range
                                                                true,    // default property values
                                                                true,    // regional property values
-                                                               false,    // boundary conditions for box-shaped model
+                                                               true,    // boundary conditions for box-shaped model
                                                                true,    // essential conditions for groups
-                                                               true,    // csmp::Boundary properties
+                                                               false,    // csmp::Boundary properties
                                                                run_settings );
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //! Visitors ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,13 +185,16 @@ Criterion:  comparison with TOUGH
     //! to quickly replace SAMG with LU solver when necessary, uncomment
     #ifdef CSMP_WITH_SAMG_SOLVER
     //LUdcmp_Solver solver;
+    //SAMG_Settings settings;
+    //SAMG_Solver solver(&settings);
     SAMG_Solver solver;
+
     #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
     #endif
     
     //! steady state pressure
-    PDE_Integrator<3U, Region>  steady_state_pressure( solver );
+    PDE_Integrator<DIM, Region>  steady_state_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> >    zero_fluid_src( pd_ref, "fluid pressure" );
@@ -193,7 +206,7 @@ Criterion:  comparison with TOUGH
 	steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<3U, Region>  transient_pressure( solver );
+    PDE_Integrator<DIM, Region>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
@@ -229,7 +242,8 @@ Criterion:  comparison with TOUGH
     
     NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" ); 
     t_capacitance_rhs.MultiplyWithTimeIncrement(true);
-    
+    t_capacitance_rhs.LumpedFormulation(true);
+
     temperature_diffusion.Add( &t_conductance );
     temperature_diffusion.Add( &t_capacitance_lhs );
     temperature_diffusion.Add( &t_capacitance_rhs );
@@ -275,7 +289,7 @@ Criterion:  comparison with TOUGH
     ComputeMassConductivity(model);
     model.Apply (steady_state_pressure);
 
-	   
+
     thermal_equilibrator.SetInitialProperties(&model );
     model.InterpolateNodeToCellProperty("nodal total heat capacity", "total heat capacity");
     model.InterpolateNodeToCellProperty("nodal total compressibility", "total compressibility");
@@ -290,16 +304,13 @@ Criterion:  comparison with TOUGH
   
       
     //! output initial equilibrated state
-    // uncomment for an initial output
-    //outputToVTU( model, config_name, output_props, time_step );
     time_step++;
-  
     while ( global_time <= max_time )
     {
       
-	  temperature_diffusion.TimeIncrement(1./time_increment);
+      temperature_diffusion.TimeIncrement(1./time_increment);
       model.Apply (temperature_diffusion);
-      
+
 	  time_advection = 0.;
 	  while(time_advection < time_increment)
 	  {
@@ -328,32 +339,34 @@ Criterion:  comparison with TOUGH
 
       // uncomment for an output
 	  //if (time_step % 100 == 0)
-	  //	outputToVTU( model, config_name, output_props, time_step );
 
       if (time_step == (size_t)1600)
       {
         if (Compare(model, this->getName()+"_Comparison_TOUGH_data_1600yr.txt"))
-          _succeed();
+            _succeed();
+        outputToVTU( model, config_name, output_props, time_step );
       }
       
       if (time_step == (size_t)1900)
       {
         if (Compare(model, this->getName()+"_Comparison_TOUGH_data_1900yr.txt"))
           _succeed();
+        outputToVTU( model, config_name, output_props, time_step );
       }
       
       if (time_step == (size_t)3000)
       {
         if (Compare(model, this->getName()+"_Comparison_TOUGH_data_3000yr.txt"))
-          _succeed();
+            _succeed();
+        outputToVTU( model, config_name, output_props, time_step );
       }
       
-	  
       global_time += time_increment;
       time_step ++;
 	  	  
     }
 
+    std::cout << "Geothermal_Pseudo1D_VVCase Completed" << std::endl;
     
     return;
   }

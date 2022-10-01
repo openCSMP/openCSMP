@@ -47,28 +47,28 @@ template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
 void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
 {
     //creating new variables if not defined yet from input file   
-    if(!db_.IsDefined("event index")) sg_.CreateProperty( "event index", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);  
-    if(!db_.IsDefined("update count")) sg_.CreateProperty( "update count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);  
-    if(!db_.IsDefined("rate count")) sg_.CreateProperty( "rate count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("schedule count")) sg_.CreateProperty( "schedule count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("synchronize count")) sg_.CreateProperty( "synchronize count", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "none", ARRAY, NODE, 8, -1.00E+10 ,1.00E+10);
-    if(!db_.IsDefined("porosity")) sg_.CreateProperty( "porosity", "none", SCALAR, ELEMENT, 1, 1.00E-05, 1.00E+01); 
-    if(!db_.IsDefined("thickness")) sg_.CreateProperty( "thickness", "m", SCALAR, ELEMENT, 1, 0.0E+0, 1.00E+10); 
-    if(!db_.IsDefined("facet area")) sg_.CreateProperty( "facet area", "m2", SCALAR, FACET_INTEGRATION_POINT, 1, -1.00E+10, 1.00E+10); 
-    if(!db_.IsDefined("facet normal")) sg_.CreateProperty( "facet normal", "m2 s-1", VECTOR, FACET_INTEGRATION_POINT, 3, 0., 1.);
-    if(!db_.IsDefined("FV pore volume")) sg_.CreateProperty( "FV pore volume", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8); 
-    if(!db_.IsDefined("saturation carbonic phase")) sg_.CreateProperty( "saturation carbonic phase", "m3/m3", SCALAR, NODE, 1, 0 ,1);
-    if(!db_.IsDefined("saturation aqueous phase")) sg_.CreateProperty( "saturation aqueous phase", "m3/m3", SCALAR, NODE, 1, 0 ,1);
-    if(!db_.IsDefined("shock saturation aqueous phase")) sg_.CreateProperty( "shock saturation aqueous phase", "none", SCALAR, ELEMENT, 1, -5.00E-02 ,1.05E+00); 
-    if(!db_.IsDefined("truncated FV")) sg_.CreateProperty( "truncated FV", "none", SCALAR, NODE, 1, 0 ,1);
-    if(!db_.IsDefined("cfl multiplier")) sg_.CreateProperty( "cfl multiplier", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10); 
-    if(!db_.IsDefined("saturation gradient")) sg_.CreateProperty( "saturation gradient", "none", VECTOR, ELEMENT, 3, -1.00E+08 ,1.00E+08);
-    if(!db_.IsDefined("pressure gradient")) sg_.CreateProperty( "pressure gradient", "none", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
-    if(!db_.IsDefined("fluid pressure")) sg_.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE, 1, 0 ,1.00E+10);
-    if(!db_.IsDefined("permeability")) sg_.CreateProperty( "permeability", "m2", SCALAR, ELEMENT, 1, 1E-21, 1.0e-7);
-    if(!db_.IsDefined("sector pore volume")) sg_.CreateProperty( "sector pore volume", "m3", SCALAR, SECTOR_INTEGRATION_POINT, 1, 1.00E-08, 1.00E+08);
-    if(!db_.IsDefined("FV volume")) sg_.CreateProperty( "FV volume", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
+    if(!db_.IsDefined("event index")) sg_.CreateProperty( "event index", "EI", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("update count")) sg_.CreateProperty( "update count", "UC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("rate count")) sg_.CreateProperty( "rate count", "RC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("schedule count")) sg_.CreateProperty( "schedule count", "SDC","none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("synchronize count")) sg_.CreateProperty( "synchronize count", "SC", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("DES array")) sg_.CreateProperty( "DES array", "DESa", "none", ARRAY, NODE, 8, -1.00E+10 ,1.00E+10);
+    if(!db_.IsDefined("porosity")) sg_.CreateProperty( "porosity", "phi", "none", SCALAR, ELEMENT, 1, 1.00E-05, 1.00E+01);
+    if(!db_.IsDefined("thickness")) sg_.CreateProperty( "thickness", "thi","m", SCALAR, ELEMENT, 1, 0.0E+0, 1.00E+10);
+    if(!db_.IsDefined("facet area")) sg_.CreateProperty( "facet area", "fA", "m2", SCALAR, FACET_INTEGRATION_POINT, 1, -1.00E+10, 1.00E+10);
+    if(!db_.IsDefined("facet normal")) sg_.CreateProperty( "facet normal", "fN", "m2 s-1", VECTOR, FACET_INTEGRATION_POINT, 3, 0., 1.);
+    if(!db_.IsDefined("FV pore volume")) sg_.CreateProperty( "FV pore volume", "fpV", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
+    if(!db_.IsDefined("saturation carbonic phase")) sg_.CreateProperty( "saturation carbonic phase", "sCO2", "m3/m3", SCALAR, NODE, 1, 0 ,1);
+    if(!db_.IsDefined("saturation aqueous phase")) sg_.CreateProperty( "saturation aqueous phase", "sH2O", "m3/m3", SCALAR, NODE, 1, 0 ,1);
+    if(!db_.IsDefined("shock saturation aqueous phase")) sg_.CreateProperty( "shock saturation aqueous phase", "sw_shock", "none", SCALAR, ELEMENT, 1, -5.00E-02 ,1.05E+00);
+    if(!db_.IsDefined("truncated FV")) sg_.CreateProperty( "truncated FV", "tfV", "none", SCALAR, NODE, 1, 0 ,1);
+    if(!db_.IsDefined("cfl multiplier")) sg_.CreateProperty( "cfl multiplier", "cfl", "none", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
+    if(!db_.IsDefined("saturation gradient")) sg_.CreateProperty( "saturation gradient", "grad_s", "m-1", VECTOR, ELEMENT, 3, -1.00E+08 ,1.00E+08);
+    if(!db_.IsDefined("pressure gradient")) sg_.CreateProperty( "pressure gradient", "grad_p", "Pa/m", VECTOR, ELEMENT, 3, -1.00E+10 ,1.00E+10);
+    if(!db_.IsDefined("fluid pressure")) sg_.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE, 1, 0 ,1.00E+10);
+    if(!db_.IsDefined("permeability")) sg_.CreateProperty( "permeability", "k", "m2", SCALAR, ELEMENT, 1, 1E-21, 1.0e-7);
+    if(!db_.IsDefined("sector pore volume")) sg_.CreateProperty( "sector pore volume", "spV", "m3", SCALAR, SECTOR_INTEGRATION_POINT, 1, 1.00E-08, 1.00E+08);
+    if(!db_.IsDefined("FV volume")) sg_.CreateProperty( "FV volume", "fvV", "m3", SCALAR, NODE, 1, 0.00E+00 ,1.00E+8);
     
     //assigning keys 
     key_EventIndex = INDEX<SCALAR,NODE>( db_.StorageKey("event index") );
@@ -163,7 +163,7 @@ void DES2PhaseTransport<dim,FLOW_FUNCTIONS>::InitializeBasicVariablsAndKeys()
          "The 'sector pore volume' variable must be SCALAR and placed on SECTOR_INTEGRATION_POINT"  );
 
   // model-wide initialisation
-    Region<dim> region(sg_.Region("Model"));
+    Region<dim>&  region(sg_.Region("Model"));
     region.InputPropertyValue( "update count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "rate count", makeScalar(PLAIN,0.), COMPLETE );
     region.InputPropertyValue( "schedule count", makeScalar(PLAIN,0.), COMPLETE );

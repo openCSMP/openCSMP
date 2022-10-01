@@ -130,6 +130,8 @@ template size_t detectElementsWithAllNodesOnBoundary( const MeshManager<3U>&, se
 
 
 
+
+
 /// finds cells that have the same nodes and reports their numbers
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t detectDuplicateCells( typename vector<CELL<dim>*>::const_iterator first,
@@ -181,6 +183,54 @@ template size_t detectDuplicateCells<1,Face>( vector<Face<1>*>::const_iterator, 
 template size_t detectDuplicateCells<3,InterFace>( vector<InterFace<3>*>::const_iterator, vector<InterFace<3>*>::const_iterator, bool );
 template size_t detectDuplicateCells<2,InterFace>( vector<InterFace<2>*>::const_iterator, vector<InterFace<2>*>::const_iterator, bool );
 template size_t detectDuplicateCells<1,InterFace>( vector<InterFace<1>*>::const_iterator, vector<InterFace<1>*>::const_iterator, bool );
+
+
+
+
+
+/// finds nodes that are not connected to any elements, faces or interfaces. If there are any, it returns their number and pointers to them into the argument set
+template<uint32_t dim>
+size_t detectOrphanNodes( MeshManager<dim>& mesh, set<Node<dim>*>& orphan_nodes )
+ {
+    set<Node<dim>*> node_ptrs;
+    
+    // loop over elements, faces and interfaces, returning storing pointers to their nodes in a vector
+    for ( auto it=mesh.ElementsBegin(); it!=mesh.ElementsEnd(); ++it ) {
+         const auto n_nodes{ (*it).Nodes() };
+         for ( auto i{0U}; i<n_nodes; i++ )
+           node_ptrs.insert( (*it).N(i) );
+      }
+    if ( mesh.Faces() > 0 )
+      for ( auto it=mesh.FacesBegin(); it!=mesh.FacesEnd(); ++it ) {
+           const auto n_nodes{ (*it).Nodes() };
+           for ( auto i{0U}; i<n_nodes; i++ )
+             node_ptrs.insert( (*it).N(i) );
+        }
+    if ( mesh.InterFaces() > 0 )
+      for ( auto it=mesh.InterFacesBegin(); it!=mesh.InterFacesEnd(); ++it ) {
+           const auto n_nodes{ (*it).Nodes() };
+           for ( auto i{0U}; i<n_nodes; i++ )
+             node_ptrs.insert( (*it).N(i) );
+        }
+    
+    if ( node_ptrs.size() < mesh.Nodes() ) {
+         orphan_nodes.clear();
+         // aua! - checking which of the nodes in the node vector have no connections to elements, faces or interfaces
+         for ( auto nit=mesh.NodesBegin(); nit!=mesh.NodesEnd(); ++nit )
+           if ( node_ptrs.find( &(*nit) ) == node_ptrs.end() )
+             orphan_nodes.insert( &(*nit) );
+    
+         return orphan_nodes.size();
+      }
+    
+    return 0U;
+    
+ } // end detectOrphanNodes
+
+template size_t detectOrphanNodes( MeshManager<3U>&, set<Node<3U>*>& );
+template size_t detectOrphanNodes( MeshManager<2U>&, set<Node<2U>*>& );
+template size_t detectOrphanNodes( MeshManager<1U>&, set<Node<1U>*>& );
+
 
 
 

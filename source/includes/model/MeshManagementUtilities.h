@@ -74,7 +74,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 size_t detectDuplicateCells( typename std::vector<CELL<dim>*>::const_iterator begin,
                              typename std::vector<CELL<dim>*>::const_iterator end,
                              bool verbose );
-
+    
+/// finds nodes that are not connected to any elements, faces or interfaces. If there are any, it returns their number and pointers to them into the argument set
+template<uint32_t dim>
+size_t detectOrphanNodes( MeshManager<dim>&, std::set<Node<dim>*>& orphan_nodes );
+  
 /// Computes parent element barycentre-to-node distances for range of nodes;  returns them into vector [e1,e2...e_n,e_sum] with a length of parent elements+1
 template<uint32_t dim>
 void distancesAndWeights( typename std::vector<Node<dim>*>::const_iterator nodes_begin,

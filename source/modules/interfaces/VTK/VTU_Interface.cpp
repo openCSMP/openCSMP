@@ -578,6 +578,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& fileName,
                                           const string& regionName,
                                           T timestep )
 {
+  if( !model_.ContainsRegion( regionName ) ) return true;
   const Region<dim>& rref( model_.Region( regionName ) );
   return OutputDataToVTU( fileName, propertyNames, rref, timestep );
 }
@@ -606,6 +607,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& fileName,
                                           const string& regionName,
                                           T timestep )
 {
+  if( !model_.ContainsRegion( regionName ) ) return true;
   const Region<dim>& rref( model_.Region( regionName ) );
   return OutputDataToVTU( fileName, propertyNames, rref, timestep );
 }
@@ -634,6 +636,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& fileName,
                                           const string& regionName,
                                           T timestep )
 {
+  if( !model_.ContainsRegion( regionName ) ) return true;
   const Region<dim>& rref( model_.Region( regionName ) );
   return OutputDataToVTU( fileName, propertyNames, rref, timestep );
 }

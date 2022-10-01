@@ -488,11 +488,11 @@ template<uint32_t dim>
 void Region<dim>::OutputDataTo( VSet<dim>& vset ) const
 {
   map<string, Index>  properties;
-  this->pref_.ListProperties( NODE, properties );
+  this->pref_.ListVariables( NODE, properties );
   map<string, Index>  propertiesElement;
-  this->pref_.ListProperties( ELEMENT, propertiesElement );
+  this->pref_.ListVariables( ELEMENT, propertiesElement );
   map<string, Index>  propertiesElementIP;
-  this->pref_.ListProperties( ELEMENT_INTEGRATION_POINT, propertiesElementIP );
+  this->pref_.ListVariables( ELEMENT_INTEGRATION_POINT, propertiesElementIP );
   properties.insert( propertiesElement.begin(), propertiesElement.end() );
   properties.insert( propertiesElementIP.begin(), propertiesElementIP.end() );
 
@@ -509,9 +509,9 @@ void Region<dim>::OutputFvDataTo( VSet<dim>& vset ) const
   map<string, Index>  properties;
   map<string, Index>  propertiesElementSEIP;
   map<string, Index>  propertiesElementFAIP;
-  this->pref_.ListProperties( SECTOR_INTEGRATION_POINT, propertiesElementSEIP );
+  this->pref_.ListVariables( SECTOR_INTEGRATION_POINT, propertiesElementSEIP );
   properties.insert( propertiesElementSEIP.begin(), propertiesElementSEIP.end() );
-  this->pref_.ListProperties( FACET_INTEGRATION_POINT, propertiesElementFAIP );
+  this->pref_.ListVariables( FACET_INTEGRATION_POINT, propertiesElementFAIP );
   properties.insert( propertiesElementFAIP.begin(), propertiesElementFAIP.end() );
 
   OutputTo( vset, properties );
@@ -1442,7 +1442,9 @@ size_t Region<dim>::AccumulateWithinRange( MeshManager<dim>& mesh, const char* f
   sort( this->node_vec_.begin(), this->node_vec_.end() );
   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
   
-  this->IdentifyPerimeter();
+  if( !this->cell_vec_.empty() ) {
+      this->IdentifyPerimeter();
+  }
 
   this->cell_vec_.shrink_to_fit();
   this->node_vec_.shrink_to_fit();

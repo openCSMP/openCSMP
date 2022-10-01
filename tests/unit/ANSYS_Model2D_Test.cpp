@@ -248,26 +248,29 @@ void ANSYS_Model2D_Test::Test_ANSYS_ModelConstructionAndSaving2D( const std::str
     for ( size_t eidx{0}; eidx < vset.Elements(); ++eidx ) {
         CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( vset.ElementType(eidx) );
         // faces=neighbors
-        auto face{0};
-        for ( auto j=vset.PfvertsBegin(eidx); j!=vset.PfvertsEnd(eidx); ++j, ++face )
-          if ( isTriangularElement(etype) && (*j) >= 0 ) {
+        uint32_t face{0U};
+        for ( auto nbor=vset.PfvertsBegin(eidx); nbor!=vset.PfvertsEnd(eidx); ++nbor, ++face )
+          if ( isTriangularElement(etype) && (*nbor) >= 0 ) {
              // face 0
              if ( face == 0 && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
                   cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
                   cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
+                  cerr << endl;
                   dodgy_neighbors++;
                }
              if ( face == 1 && vset.BoundaryFlag(vset.Plist(eidx,2)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
                   cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,2))));
                   cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
+                  cerr << endl;
                   dodgy_neighbors++;
                }
              if ( face == 2 && vset.BoundaryFlag(vset.Plist(eidx,0)) != NOT && vset.BoundaryFlag(vset.Plist(eidx,1)) != NOT ) {
-                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *j;
+                  cerr <<"\nelement "<< eidx <<": face "<< face << " is at boundary but has neighbor: "<< *nbor;
                   cerr <<", node flags: "<< parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,0))));
                   cerr <<" "<<              parseBoundary(intToBOX_BOUNDARY(vset.BoundaryFlag(vset.Plist(eidx,1))));
+                  cerr << endl;
                   dodgy_neighbors++;
                }
           }

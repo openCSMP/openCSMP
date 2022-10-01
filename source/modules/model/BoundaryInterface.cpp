@@ -539,7 +539,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     const string region_tag("region identifier");
     vector<string>  region_names;
     if ( !model.Database().IsDefined(region_tag.c_str()) ) {
-         model.CreateProperty( region_tag.c_str(), "none", SCALAR, ELEMENT );
+         model.CreateProperty( region_tag.c_str(), "rid", "uint", SCALAR, ELEMENT );
       }
     const csmp::Index mtrl_key = model.Database().StorageKey(region_tag.c_str());
     // needs to be done everytime because the number of unique regions may have changed
@@ -1911,10 +1911,10 @@ for ( auto& it : elmts_to_become_faces ) {
 
 
 /**
-    Tries to partition and replace general boundary 'Model' with more computationally useful model patches
-    such as TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc.
+    Tries to replace bondary surface elements with Faces and assign these to Box boundaries.
+    TOP, BOTTOM, INTERNAL, IRREGULAR, VERTICAL_SIDE etc. Edge boundaries are not created.
     
-    @attention this method expects that there is already a Boundary 'Model' around the model domain.
+    @attention this method ignores potential surface elements that might be present on the outer boundaries of the Model.
     @attention method assumes that model perimeter correctly captures the outside faces of the model.
     @attention this method was designed primarily for three-dimensional models.
     

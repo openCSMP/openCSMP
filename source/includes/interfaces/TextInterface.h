@@ -24,12 +24,12 @@ class TextInterface {
     /// single variable text column output
     template<uint32_t dim>
     void OutputDataAsTextColumns( const Model<dim>&,
-                                  const char* file_name, const char* s ) const;
+                                  const char* file_name, const char* var ) const;
     
     /// single variable text column output for a user specified region
     template<uint32_t dim>
     void OutputDataAsTextColumns( const char* region, const Model<dim>&, 
-                                  const char* file_name, const char* s ) const;
+                                  const char* file_name, const char* var ) const;
 
     /// output of a suite of variables with same placement for a specific region; user can transform coordinates
     template<uint32_t dim>
@@ -41,17 +41,17 @@ class TextInterface {
     /// (row numbered) single variable output
     template<uint32_t dim>
     void OutputDataAsTextColumnsNumbered( const Model<dim>&,
-                                          const char* file_name, const char* s ) const;
+                                          const char* file_name, const char* var ) const;
 
     /// (row numbered) single variable output for a user specifed region
     template<uint32_t dim>
     void OutputDataAsTextColumnsNumbered( const char* region, const Model<dim>&,
-                                          const char* file_name, const char* s ) const;
+                                          const char* file_name, const char* var ) const;
   
     /// (row numbered) single variable output to files uniquely identified by timestep
     template<uint32_t dim>
     void OutputDataAsTextColumns( const Model<dim>&,
-                                  const char* file_name, const char* s, long timestep, bool numbered=false ) const;
+                                  const char* file_name, const char* var, long timestep, bool numbered=false ) const;
 
     template<uint32_t dim>
     void OutputRegionsToTextFiles( const Model<dim>& sg, const char* property ) const;

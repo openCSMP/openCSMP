@@ -51,12 +51,6 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
     std::vector<ScalarVariable >  oper_nprop;
 };
 
-
-
-/**
-copyright (c) 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts */
-
-
 } // csmp
 
 #endif

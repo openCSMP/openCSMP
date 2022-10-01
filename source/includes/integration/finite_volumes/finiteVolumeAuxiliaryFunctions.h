@@ -102,6 +102,10 @@ double thetaLimiter( double hf_t0, double hf_t1,
 /// gradient limiter for the solution of diffusion equations with the FVM method
 double diffusionLimiter( double grad_psi_O1, double grad_psi_O2 );
 
+/// computes the diameter  and vertical of a surface finite volume using midpoints to connected nodes on the same surface
+template<uint32_t dim>
+std::pair<double,double>  diameterAndVerticalExtentOfLowerDimensional_FV( const Node<dim>* const );
+
 /**
 @}
 */

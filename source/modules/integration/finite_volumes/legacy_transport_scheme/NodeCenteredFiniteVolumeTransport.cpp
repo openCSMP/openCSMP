@@ -594,7 +594,7 @@ void NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables() const
         throw csmp::Exception( FATAL_ERROR, "NodeCenteredFiniteVolumeTransport<dim>::CheckTransportVariables", msg.c_str() );
     }
 
-    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != ULONG_MAX ) {
+    if ( (diff_key_.place != ELEMENT || diff_key_.type != SCALAR) and diff_key_.index != UNSPECIFIED ) {
         string  msg ="The 'diffusivity' variable '";
         msg       += pref_.Name( diff_key_ );
         msg       +="' must be a scalar-type element variable";
@@ -3312,8 +3312,8 @@ template<uint32_t dim>
 void NodeCenteredFiniteVolumeTransport<dim>::MultiplyScalarBoundaryValuesByFiniteVolumeCrossSectionalArea(
         Model<dim>& model,BOX_BOUNDARY boundary, const char* property )
 {
-    csmp::Index  prop_key = pref_.StorageKey(property);
-    Region<dim>  rref(model.Region(parseBoundary(boundary).c_str()));
+    const csmp::Index  prop_key = pref_.StorageKey(property);
+    Region<dim>&       rref(model.Region(parseBoundary(boundary).c_str()));
 
     if ( prop_key.type != SCALAR || prop_key.place != NODE )
         throw csmp::Exception( ERROR, "FiniteVolumeTransport::ConvertScalarBoundaryValues",

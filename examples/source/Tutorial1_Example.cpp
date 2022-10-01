@@ -32,7 +32,7 @@ void Tutorial1_Example::Specifications()
 {
   SetTitle( "Tutorial 1: Transient fluid-pressure diffusion" );
   SetDifficulty( 3 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Tutorials (composite functionality)" );
   AddAuthor( "Sebastian Geiger" );
   AddDescription( "A transient pressure diffusion equation solved using a fully" );
   AddDescription( "implicit FE discretisation. A simple triangular FE mesh is generated automatically in CSMP" );

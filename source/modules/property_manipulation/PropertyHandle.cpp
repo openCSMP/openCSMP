@@ -45,7 +45,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      const char*   var_name, 
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
-                                     size_t        psize )
+                                     uint32_t      psize )
  : model_domain(sg),
    group(sg.Region("Model")),
    group_name("Model"),
@@ -73,7 +73,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
          new_variable_created = false;
       }
     else { // a new variable is created 
-         sg.CreateProperty( var_name, "SI", ptype, place, psize );
+         sg.CreateProperty( var_name, var_name, "SI", ptype, place, psize );
          new_variable_created = true;
       }
       
@@ -93,7 +93,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
                                      const char*   var_name, 
                                      VARIABLE_TYPE ptype, 
                                      PLACEMENT     place,
-                                     size_t        psize )
+                                     uint32_t      psize )
  : model_domain(sg),
    group(sg.Region(group)),
    group_name(group),
@@ -121,7 +121,7 @@ PropertyHandle<dim>::PropertyHandle( Model<dim>& sg,
          new_variable_created = false;
       }
     else { // a new variable is created 
-         sg.CreateProperty( var_name, "SI", ptype, place, psize );
+         sg.CreateProperty( var_name, var_name, "SI", ptype, place, psize );
          new_variable_created = true;
       }
 
@@ -1412,9 +1412,9 @@ PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>
          return *this;
       }
 
-    ScalarVariable                          sc1, sc2;
-    VectorVariable<dim>                     vc1, vc2;
-    TensorVariable<dim>                     ts1, ts2;
+    ScalarVariable       sc1, sc2;
+    VectorVariable<dim>  vc1, vc2;
+    TensorVariable<dim>  ts1, ts2;
 
     if (key.place == opkey.place)
       switch( opkey.type )

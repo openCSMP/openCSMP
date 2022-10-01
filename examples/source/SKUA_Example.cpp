@@ -195,7 +195,7 @@ void RunTutorial1OnSetUpModel( Model<3U>& model ) {
     //     to compute the hydraulic conductivity K = k/mu (k = permeability, mu = viscosity) at each
     //     finite element
     // ----------------------------------------------------------------------------------------------
-    model.CreateProperty( "conductivity", "m2 Pa-1 s-1", SCALAR, ELEMENT );
+    model.CreateProperty( "conductivity", "K", "m2 Pa-1 s-1", SCALAR, ELEMENT );
     ConstantFactor<3U,divides>  conductivity( p_ref, "conductivity", "permeability", 0.001 ); // viscosity 1 cp = 0.001 Pa s
 
     // the Model applies the object "conductivity", which is instantiated from class ConstantFactor
@@ -206,12 +206,12 @@ void RunTutorial1OnSetUpModel( Model<3U>& model ) {
     printRangeOfVariable( model, "conductivity" );
 
     // Create additional required variables
-    model.CreateProperty( "velocity", "m s-1", VECTOR, ELEMENT );
-    model.CreateProperty( "pore velocity", "m s-1", VECTOR, ELEMENT );
-    model.CreateProperty( "volume flux", "m3 s-1", SCALAR, ELEMENT );
-    model.CreateProperty( "nodal velocity", "m s-1", VECTOR, NODE );
-    model.CreateProperty( "nodal pore velocity", "m s-1", VECTOR, NODE );
-    model.CreateProperty( "nodal volume flux", "m3 s-1", SCALAR, NODE );
+    model.CreateProperty( "velocity", "v", "m s-1", VECTOR, ELEMENT );
+    model.CreateProperty( "pore velocity", "vp", "m s-1", VECTOR, ELEMENT );
+    model.CreateProperty( "volume flux", "vf", "m3 s-1", SCALAR, ELEMENT );
+    model.CreateProperty( "nodal velocity", "vn", "m s-1", VECTOR, NODE );
+    model.CreateProperty( "nodal pore velocity", "nvp", "m s-1", VECTOR, NODE );
+    model.CreateProperty( "nodal volume flux", "nvf", "m3 s-1", SCALAR, NODE );
 
     // ------------------------------------------------------------------------------------------
     // 4.0 Setting up an FE algorithm to solve the diffusion equation c dp/dt = div(K grad p) + S
@@ -365,9 +365,9 @@ void SKUA_Example::RunSKUA_model() {
   ExportSKUAProperties( model );
 
   // assigning initial conditions
-  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
-  model.InputPropertyValue( "fluid pressure",      makeScalar(PLAIN,1.0e+07) ); // always in Pascal
-  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
+  model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN,1.0e+07) ); // always in Pascal
+  model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
   model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.0) ); // no sources/sinks (units m3 m-2 s-1)
 
   // assigning boundary conditions for fluid pressure at the LEFT and RIGHT model boundaries
@@ -412,8 +412,8 @@ void SKUA_Example::RunSKUA_box_shaped_with_boundary()
   
   // Adapting Tutorial1, but using a configuration file.
   // Adding required properties which are not read from SKUA exported file
-  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+  model.CreateProperty( "fluid volume source","Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
 
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
@@ -462,8 +462,8 @@ void SKUA_Example::RunSKUA_split_boundary_layer() {
   
   // Adapting Tutorial1, but using a configuration file.
   // Adding required properties which are not read from SKUA exported file
-  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+  model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
 
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
@@ -516,8 +516,8 @@ void SKUA_Example::RunSKUA_cross_bedded_xsmall()
   
   // Adapting Tutorial1, but using a configuration file.
   // Adding required properties which are not read from SKUA exported file
-  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+  model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
 
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
@@ -564,14 +564,14 @@ void SKUA_Example::RunSKUA_cross_bedded_small()
 
   // Checks...
   printModelDimensions( model, true );
-  model.CreateProperty( "compressibility", "Pa-1", SCALAR, ELEMENT );
+  model.CreateProperty( "compressibility", "c", "Pa-1", SCALAR, ELEMENT );
   model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
   ExportSKUAProperties( model );
   
   // Adapting Tutorial1, but using a configuration file.
   // Adding required properties which are not read from SKUA exported file
-  model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
-  model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+  model.CreateProperty( "fluid volume source", "Qv", "m3 m-2 s-1", SCALAR, ELEMENT );
+  model.CreateProperty( "fluid pressure", "pf", "Pa", SCALAR, NODE );
 
     // --------------------------------------------
     // 3.0 Configure the simulation from a file
