@@ -2,8 +2,7 @@
 #include "ANSYS_Model2D.h"
 #include "VTU_Interface.h"
 #include "LinearSolver.h"
-#include "PDE_IntegratorExperimental.h"
-#include "NumIntegral_BT_C_B_dV.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_BT_D_B_dV.h"
 #include "ExtractTensorVariableComponent.h"
 #include "NumIntegral_PT_op_dS.h"
@@ -101,12 +100,13 @@ void LinearElasticFractureAperture2D_VVCase::run()
     output_file              += prefix_;
 
 
-    ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(),
-                         false, true, true, true, false);    // Constractor for empty variables
+    bool irregular = false, binary = true, regions = true; //should not be changed
+    ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(), irregular, binary, regions);    // Constractor for empty variables
 
-    model.CreateInternalBoundaryFrom("FRACTURE", true);
-    model.CreateSplitBoundaryFrom( model.Boundary("FRACTURE_BOUNDARY0_MATRIX_INTERSECTION")); //relies on split boundary naming convention
-    model.RegionsFromSplitBoundaries();
+    model.CreateSplitBoundaryFrom("FRACTURE");
+
+    //std::set<string> sp_reg_names = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0);
+    //model.RegionsFromSplitBoundaries();
 
     /// -------------------------------
     /// Setting up Fracture Configuration
@@ -114,7 +114,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     Fracture<dim> myFracture (model, model.SplitBoundary("FRACTURE_SPLIT_BOUNDARY"), quarterpoint, DC_TIP );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
 
     // Model Variables:
-    model.CreateProperty( "Neumann stress",   "SI", VECTOR, FACE);
+    model.CreateProperty( "Neumann stress", "tau",  "SI",  VECTOR, FACE);
 
     model.InputPropertyValue("Young's modulus", ScalarVariable( PLAIN, ym ) );
     model.InputPropertyValue("Poisson's ratio", ScalarVariable( PLAIN, pr ) );
@@ -163,8 +163,9 @@ void LinearElasticFractureAperture2D_VVCase::run()
     myFracture.SetSolverSettings(settings);
     //settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
     //settings.Set_nxtyp(2);
-    SAMG_Solver samgSolver(&settings);
-    PDE_IntegratorExperimental<dim,Region> deformation (samgSolver);
+    EigenSolver eigenSolver;
+    //SAMG_Solver samgSolver(settings);
+    PDE_Integrator<dim,Region> deformation (eigenSolver);
 
     // Adding stiffness to the LHS list:
     NumIntegral_BT_D_B_dV<dim,Element<dim> > stiffnessMatrix( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
@@ -200,18 +201,18 @@ void LinearElasticFractureAperture2D_VVCase::run()
 
     ///ANALYTICAL SOLUTION
     /// Aperture Profile of crack
-    double64 a = 0.5 * myFracture.FractureLength(MIDDLE), max_percent_error(0.), avg_percent_error (0.0) ;        // fracture half length
-    auto     F_strain = [ s1, ym, pr, a ](double64 x){return (4.0*s1*(1.0-pr*pr)/(ym))*sqrt(a*a - x*x) ;};
-    auto     F_stress = [ s1, ym, a ](double64 x){return (4.0*s1/ym)*sqrt(a*a - x*x) ;};
+    double a = 0.5 * myFracture.FractureLength(MIDDLE), max_percent_error(0.), avg_percent_error (0.0) ;        // fracture half length
+    auto     F_strain = [ s1, ym, pr, a ](double x){return (4.0*s1*(1.0-pr*pr)/(ym))*sqrt(a*a - x*x) ;};
+    auto     F_stress = [ s1, ym, a ](double x){return (4.0*s1/ym)*sqrt(a*a - x*x) ;};
 
     std::map<Point<dim>,Node<dim>* > NodeMapAfter = myFracture.NodeMap(MIDDLE);
     size_t ends = 0;
-    std::vector<std::vector<double64>> data(4);
+    std::vector<std::vector<double>> data(4);
     for (typename std::map<Point<dim>,Node<dim>*>::iterator it = NodeMapAfter.begin(); it != NodeMapAfter.end(); it++){
         assert( myFracture.DistanceFromTip( NodeMapAfter, it->second, RIGHT) <= 2.01*a);
-        double64 percent_error(0), Sol;
-        double64 x        =  a  -  myFracture.DistanceFromTip(NodeMapAfter, it->second, RIGHT) ;
-        double64 w_num    = it->second->Read(model.Database().StorageKey("aperture"));
+        double percent_error(0), Sol;
+        double x        =  a  -  myFracture.DistanceFromTip(NodeMapAfter, it->second, RIGHT) ;
+        double w_num    = it->second->Read(model.Database().StorageKey("aperture"));
         if (plane_strain)
           Sol = F_strain(x);
         else
@@ -249,7 +250,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     assert(ends == 2);
 
     //average percent error
-    avg_percent_error = avg_percent_error / ( static_cast<double64>(NodeMapAfter.size()) - static_cast<double64>(ends) );
+    avg_percent_error = avg_percent_error / ( static_cast<double>(NodeMapAfter.size()) - static_cast<double>(ends) );
     std::cout << "Average Percent error found for single node is: " << avg_percent_error << std::endl;
     std::cout << "Maximum Percent error found for single node is: " << max_percent_error << std::endl;
 
