@@ -761,7 +761,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
    // 5. Resizing 'G' and righthand vector 'rh' eliminating the Dirichlet conditions
    // ------------------------------------------------------------------------------
    // Luat's code (will resize matrix and vectors)
-   ReduceSystemSizeEliminatingEssentialConditions( gref );
+   ReduceSystemSizeEliminatingEssentialConditions( gref, offset );
 
  } // end EstablishMatrixSetup
 
@@ -1043,6 +1043,7 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<
     
     TODO: include boundary conditions applied to LHS
     TODO: adopt method to handle InterFace objects (in split boundaries) as well
+    @attention: Only first dimension of vector values is checked to see if classified as NEUMANN!
 */
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
@@ -1055,9 +1056,9 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const
        if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Neumann, an accumulation will be performed
-           // @attention it is assumed that the material operand has the same status at all integration points
+           // @attention it is assumed that the material operand has the same status at all integration points, and that Vector values are classified as NEUMANN in all dimensions!
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && (*git)->Status( (*it_rhs).second->MaterialOperandKey() , 0U ) == NEUMANN ) ||
                 ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
                (*it_rhs).second->GetOperands( *(*git) );
@@ -1756,11 +1757,11 @@ bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Mod
 
 */
 template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref, size_t total_degrees_of_freedom )
  {
-    // SKM_FIX of size error
-    // DOF_indexes_.resize(this->rh_.size());
-    DOF_indexes_.resize( gref.Nodes() );
+    // EP Fix: DOF size error if we have VECTORS since nodes != dof 's. Need to use offset from establish matrix setup
+    DOF_indexes_.resize(total_degrees_of_freedom);
+    //DOF_indexes_.resize( gref.Nodes() ); This is wrong for VECTOR
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
     if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 

@@ -4320,7 +4320,7 @@ double  ModelSubDomain<dim,CELL>::Average( const char* prop ) const
                         counter++;
                         avg += sc();
                      }
-                 return avg / static_cast<double>(cell_vec_.size());
+                 return avg / static_cast<double>(counter);
               }
             if ( idx.type == VECTOR ) {
                  VectorVariable<dim>  vc;

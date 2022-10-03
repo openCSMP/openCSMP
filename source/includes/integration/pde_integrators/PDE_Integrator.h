@@ -361,7 +361,7 @@ class PDE_Integrator {
     virtual void  EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& );
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& );
+    void  ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& , size_t total_degrees_of_freedom);
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& );
