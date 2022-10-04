@@ -23,7 +23,7 @@ namespace csmp
       void SetSettings( SAMG_Settings& settings);
 
   private:
-      double min_avg_error_ = 1.0;
+      double min_avg_error_ = 10.0;
 
     };
 

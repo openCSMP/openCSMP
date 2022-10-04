@@ -1,4 +1,4 @@
-#include "Fracture.h"
+﻿#include "Fracture.h"
 #include "Exception.h"
 
 
@@ -8,22 +8,21 @@
 
 namespace csmp{
 
-
-
 /**
  * @brief Initialize
  * @param quarterPointsAtTip
  */
 
 template<uint32_t dim>
-Fracture<dim>::Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary, bool quarterPointAtTips, TIP_TYPE tip_type ):
+Fracture<dim>::Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary, TIP_TYPE tip_type ):
   model_(&model),
   sb_ref_(splitboundary),
-  midregion_(model.Region(splitboundary.Name() + "_REGION")),
   tiptype_(tip_type),
-  configured_(false),
-  quarterpoint_(quarterPointAtTips)
+  configured_(false)
 {
+
+  if ( (*(splitboundary.CellsBegin()))->HasInterveningElement() )
+      midregion_ = &model.Region(splitboundary.Name() + "_REGION");
 
   //0) defining default keys
   disp_key_ = model.Database().StorageKey("displacement");
@@ -38,18 +37,10 @@ Fracture<dim>::Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitbounda
 
 
   //1) Configuring Initial Length
-  SetOldFractureLengthToCurrent();      //needed for old fracture tip construction (not based on dx)
+  //SetOldFractureLengthToCurrent();  EP TODO BRING BACK FRACTURE TIP   //needed for old fracture tip construction (not based on dx)
 
   //2)Creating Fracture tips container
-  CreateFractureTips();
-
-  // Making quarter point elements
-  if (dim == 2 && quarterPointAtTips){
-    InitializeQuarterPointElements();
-  } else if (quarterPointAtTips) {
-    throw csmp::Exception(ERROR,"Fracture::(constructor)",
-                          "QuarterPoints not configured for this dimension");
-  }
+  //CreateFractureTips(); TODO FRACTURE TIP FT
 
 } // end of construction of Fracture
 
@@ -60,11 +51,16 @@ Fracture<dim>::Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitbounda
  */
 template<uint32_t dim>
 Fracture<dim>::~Fracture(){
+
+  /* TODO FRACTURE TIP FT
   //Deleting memory allocated in fracture tip
   for (typename std::vector<FractureTip<dim>*>::iterator it = fracturetips_.begin(); it != fracturetips_.end(); ++it){
     delete *it;
   }
   std::cout << "Fracture::Destructor() -- Deleting dynamic memory allocated to fracture tips" << std::endl;
+
+  */
+
 }
 
 
@@ -87,6 +83,7 @@ Fracture<dim>::~Fracture(){
     Note: FractureTips are created thinking there is not a situation where they are created and have already propagated! Therefore they do not need old tip coord!
 
  */
+/* TODO FRACTURE TIP FT
 template<uint32_t dim>
 void Fracture<dim>::CreateFractureTips(){
 
@@ -95,8 +92,8 @@ void Fracture<dim>::CreateFractureTips(){
   std::vector<Node<dim>*> tipnodes;
   boxboundaryNodes_.clear();
   std::cout << "Fracture::CreateFractureTips()... " << std::endl;
-  for ( typename std::vector< InterFace<dim>* >::iterator it = sb_ref_.PerimeterElementsBegin();
-        it != sb_ref_.ElementsEnd(); it++){
+  for ( typename std::vector< InterFace<dim>* >::const_iterator it = sb_ref_.PerimeterCellsBegin();
+        it != sb_ref_.CellsEnd(); it++){
       size_t nds_on_face = (*it)->FE()->Nodes();
       for (size_t i = 0; i < nds_on_face; i++ ){
         if ( (*it)->N(i,INSIDE) == (*it)->N(i,OUTSIDE)){
@@ -181,7 +178,7 @@ void Fracture<dim>::CreateFractureTips(){
 
 } //end of Create fracture tips
 
-
+*/
 
 
 
@@ -192,6 +189,7 @@ void Fracture<dim>::CreateFractureTips(){
 /**
  Method to call when advancing time steps and need to tell Fracture tips their current tip is now the tip at old time step
  */
+/* TODO FRACTURE TIP FT
 template<uint32_t dim>
 void Fracture<dim>::SetOldTipCoordinatesAsCurrent(){
 
@@ -200,7 +198,7 @@ void Fracture<dim>::SetOldTipCoordinatesAsCurrent(){
   }
 
 }
-
+*/
 
 
 /*
@@ -402,16 +400,16 @@ std::map<Point<dim>, Element<dim>*> Fracture<dim>::ElementMap(INTERFACE_SIDE sid
 }
 
 
+/*
 template<uint32_t dim>
 std::vector<Node<dim>*> Fracture<dim>::TipNodes(){
   std::vector<Node<dim>*> node_vec;
   for (size_t i = 0; i < fracturetips_.size(); ++i){
     node_vec.push_back(fracturetips_[i]->TipNode());
   }
-
   return node_vec;
-
 }
+*/
 
 
 
@@ -457,14 +455,14 @@ template<uint32_t dim>
 void Fracture<dim>::PullNodesApartBy(Node<dim>* n_ptr, double aperture){
   Index d_key = model_->Database().StorageKey("displacement");
   Index a_key = model_->Database().StorageKey("aperture");
-  for (typename std::vector<InterFace<dim>*>::iterator it = sb_ref_.ElementsBegin(); it != sb_ref_.ElementsEnd(); ++it){
+  for (typename std::vector<InterFace<dim>*>::const_iterator it = sb_ref_.CellsBegin(); it != sb_ref_.CellsEnd(); ++it){
     for (size_t i = 0; i < (*it)->Nodes() ; ++i){
       if ((*it)->N(i,MIDDLE) == n_ptr){
         VectorVariable<dim> disp_out, disp_in;
         (*it)->N(i,OUTSIDE)->Read(d_key, disp_out); //grabbing flags
         (*it)->N(i,INSIDE)->Read(d_key, disp_in); //grabbing flags
-        (*it)->UnitNormal(disp_out, MIDDLE);  //Initialising with unit normal pointing in to out
-        (*it)->UnitNormal(disp_in, MIDDLE);
+        disp_out = (*it)->UnitNormal(MIDDLE);  //Initialising with unit normal pointing in to out
+        disp_in  = (*it)->UnitNormal( MIDDLE);
         disp_out *=   aperture/2.0;
         disp_in  *= - aperture/2.0;
         (*it)->N(i,INSIDE)->Store(d_key, disp_in);
@@ -555,6 +553,7 @@ void Fracture<dim>::SetToHydraulicAsymptoteTips(){
 
 
 //Iterates over all tips and return the evaluated value measured at the tip
+/*
 template<uint32_t dim>
 std::vector<double> Fracture<dim>::EvaluateTips(){
 
@@ -624,11 +623,6 @@ bool Fracture<dim>::PropagationAlgorithm(Boundary<dim>& b_ref, double& dt, bool 
        assert( continue_iteration_and_propagate_mesh.first == true );
 
 
-       if (quarterpoint_){
-         //resetting tips before splitting (ensures a normal interface object is created)
-         RestoreQuarterPointElementsToMidPoint();
-       }
-
        //Multiple propagation of tip
        for (size_t prop = 0; prop < prop_times; prop++ ){
          std::cout << "\n------------------------------------------------------"
@@ -643,12 +637,6 @@ bool Fracture<dim>::PropagationAlgorithm(Boundary<dim>& b_ref, double& dt, bool 
    } //end of fracture tip loop
 
    std::cout << "\nFracture: Tips propagated " << propagated_tips << std::endl;
-
-   if (propagated_tips != 0)
-   {
-     if (quarterpoint_ == true )
-       InitializeQuarterPointElements();
-   }
 
    //Minimun time step is chosen as the governing time step
    std::vector<double>::iterator vit = std::min_element(dt_tips.begin(), dt_tips.end());
@@ -683,7 +671,7 @@ bool Fracture<dim>::PropagationAlgorithm(Boundary<dim>& b_ref, double& dt, bool 
 
 
 } //end of propagation algorithm
-
+*/
 
 
 
@@ -896,19 +884,21 @@ void Fracture<dim>::AveragePropertyToMiddle( Index property, std::vector<InterFa
 //Calculated the diffence in displacement between opposite nodes and stores it as the aperture
 //This is correct if no existing aperture is already present.
 template<uint32_t dim>
-void Fracture<dim>::StoreDisplacementDifferenceAsAperture(const std::string displacement, const std::string aperture){
-  assert( !sb_ref_.CellVector().empty());
-  assert( !midregion_.NodeVector().empty());
+void Fracture<dim>::StoreDisplacementDifferenceAsAperture(const std::string displacement, const std::string aperture, INTERFACE_SIDE side ){
+  if ( !sb_ref_.CellVector().empty());
+  if (side == MIDDLE and midregion_->NodeVector().empty() )
+      throw csmp::Exception(ERROR, "Fracture<dim>::StoreDisplacementDifferenceAsAperture",
+                            "Middle Region doesn not exist, Therefore cannot store aperture on MIDDLE" );
 
   csmp::Index d_key = model_->Database().StorageKey(displacement.c_str());
   csmp::Index a_key = model_->Database().StorageKey(aperture.c_str());
 
   std::vector<Node<dim>*> counted_nodes;
-  counted_nodes.reserve( midregion_.NodeVector().size());
+  counted_nodes.reserve( sb_ref_.Cells() );
 
   for ( InterFace<dim>* IF : sb_ref_.CellVector()  )
       for (size_t i_n = 0; i_n < IF->FE()->Nodes(); i_n++){
-          if ( std::find(counted_nodes.begin(), counted_nodes.end(), IF->N(i_n,MIDDLE) ) == counted_nodes.end() ){
+          if ( std::find(counted_nodes.begin(), counted_nodes.end(), IF->N(i_n,side) ) == counted_nodes.end() ){
 
               //taking node on either side
               Node<dim>* node_plus (IF->N(i_n,OUTSIDE));
@@ -919,10 +909,10 @@ void Fracture<dim>::StoreDisplacementDifferenceAsAperture(const std::string disp
               node_plus->Read(  d_key, d_plus);
               node_minus->Read( d_key, d_minus);
 
-              IF->UnitNormal(normal, MIDDLE);
+              normal = IF->UnitNormal(INSIDE);
               double implicit_aperture = normal.DotProduct( d_plus - d_minus );           //Calculating Implicit aperture without using node coordinates!
-              IF->N(i_n, MIDDLE )->Store( a_key, ScalarVariable(PLAIN,   implicit_aperture));   // updates the aperture property for latest apertures
-              counted_nodes.push_back(IF->N(i_n,MIDDLE));
+              IF->N(i_n, side )->Store( a_key, ScalarVariable(PLAIN,   implicit_aperture));   // updates the aperture property for latest apertures
+              counted_nodes.push_back(IF->N(i_n,side));
         }
       }
 } // end of StoreDisplacementDifferenceAsAperture
@@ -969,15 +959,15 @@ double Fracture<dim>::MaxAperture(const char* aperture, INTERFACE_SIDE side){
 
   double mx_aperture(0.0);
   if (side != MIDDLE){
-    for (typename std::vector<InterFace<dim>*>::const_iterator if_it = sb_ref_.ElementsBegin();
-         if_it != sb_ref_.ElementsEnd(); if_it++){
+    for (typename std::vector<InterFace<dim>*>::const_iterator if_it = sb_ref_.CellsBegin();
+         if_it != sb_ref_.CellsEnd(); if_it++){
       for (size_t i = 0; i < (*if_it)->FE()->Nodes(); i++){
         mx_aperture = std::max(mx_aperture, (*if_it)->N(i,side)->Read(ap_key)); //taking maximum found
       }
     }
   } else  //quicker process for middle region as no nodes are counted twice
-    for (typename std::vector<Node<dim>*>::const_iterator n_it = midregion_.NodesBegin();
-         n_it != midregion_.NodesEnd(); n_it++){
+    for (typename std::vector<Node<dim>*>::const_iterator n_it = midregion_->NodesBegin();
+         n_it != midregion_->NodesEnd(); n_it++){
       mx_aperture = std::max(mx_aperture, (*n_it)->Read(ap_key) );
     }
 
@@ -2252,14 +2242,14 @@ void Fracture<dim>::SolOut(INTERFACE_SIDE side, const char* aperture, const char
 		-) Perimiter elements correctly configured by ModelSubdomain
 		-) Nodes before split are the same as after (apart from the old tip node) ( including middle elements)
 
-*/
+*//*
 template<uint32_t dim>
 void Fracture<dim>::TestKGDMeshPropagation2D( Boundary<dim>& b_path, bool propagate_anyway){
 
   std::vector<InterFace<dim>*> Interfaces_before = sb_ref_.CellVector();
 
   if (dim == 2){
-    assert( sb_ref_.PerimeterElements() == 2) ;
+    assert( sb_ref_.PerimeterCells() == 2) ;
   }
 
   this->TestSplitNodeAssignment(true);
@@ -2302,7 +2292,7 @@ void Fracture<dim>::TestKGDMeshPropagation2D( Boundary<dim>& b_path, bool propag
 
 
   std::vector<InterFace<dim>*> Interfaces_after = sb_ref_.CellVector();
-  assert( sb_ref_.PerimeterElements() == 2 );
+  assert( sb_ref_.PerimeterCells() == 2 );
 
   //Getting ordered IF post splitting
   std::map<Point<dim>, InterFace<dim>*> ordered_post;
@@ -2355,6 +2345,7 @@ void Fracture<dim>::TestKGDMeshPropagation2D( Boundary<dim>& b_path, bool propag
 
 }
 
+*/
 
 
 
@@ -2711,6 +2702,7 @@ void Fracture<dim>::TestPropertyInitialization(){
 template class Fracture<1U>;
 template class Fracture<2U>;
 template class Fracture<3U>;
+
 
 
 } //csmp

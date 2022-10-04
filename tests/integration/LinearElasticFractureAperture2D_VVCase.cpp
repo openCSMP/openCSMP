@@ -10,6 +10,7 @@
 #include "Fracture.h"
 #include <stdio.h>
 #include <cmath>
+#include "StressesAndStrains.h"
 
 
 using namespace std;
@@ -27,40 +28,45 @@ LinearElasticFractureAperture2D_VVCase::LinearElasticFractureAperture2D_VVCase(c
 /**
 
     Author:  E. Pezzulli & M. Nejati
-    Linear Elasticity: Plane stress/strain problem with central crack under uniform tension; testing the aperture profile of the crack
+    Linear Elasticity: Plane strain problem with central crack under uniform tension; testing the aperture profile of the crack compared to Sneddon Analytical solution
     =================================
     Domain:     Omega: w x h Rectangle (Provided meshes is for a 10x10 square plane)
-    Mesh:       Linear/Quadratic Triangles tested OK; Quadrilaterials have to be tested
+    Mesh:       InternalBoundary_test
+                InternalCrack_tri_lin_02
+                InternalCrack_tri_lin_01
+                InternalCrack_tri_lin_005
+                InternalBoundary_Test_quadratic
+    Var File:   LinearElasticFractureAperture2D-variables.txt
+    Reg File:   LinearElasticFractureAperture2D
     Material:   Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio;
-    Loading:    Uniaxial/Biaxial Tension/Compression on RIGHT and TOP Boundaries
-    BC:         Zero x and y displacements on LEFT and BOTTOM Edges, rexpectively
-    ConfigFiles:Square_20x20_WithCentralCrack_a=1_betha=0_LinearTriangles (.asc, .dat
+    Loading:    Uniaxial Tension on TOP Boundary
+    BC:         Zero y displacements on Bottom boundary, and fixing x,y displacements in CRN1 (bottom left).
+    ConfigFiles:see meshes, var file and regions file above
     =================================
 
     Assume a rectangular plane of width and height of w, and h, with a horizontal crack at its center. The body is subjected to a uniform tensile stress S1
-    in both the x and y directions. Let Uy(x) be the solution for the displacement of the fracture boundaries in the vertical direction y.
-    BC: The Neumann conditions SHOULD be Sx=S1, Sy = S1 on the LEFT,TOP,RIGHT,BOTTOM boundaries.
-        However what is implemenetd is the displacement boundary conditions Ux=0 on LEFT and Uy=0 on BOTTOM; and the Neumann conditions: Sx=S1 on RIGHT and Sy=S1 on TOP.
-        The solution for the vertical displacement Uy(x) for an fracture of half length a is:
+    in both the y direction. Let Uy(x) be the solution for the displacement of the fracture in the vertical direction y.
+    BC: The Neumann conditions SHOULD be Sy = S1 on the TOP boundary.
 
     Plane Strain:
     Uy(x)=4*S1/E * (a^2-x^2)^(1/2)
 
     The following implementation is testing the creation of the Fracture Class, its initialisation and creation of InterFace Objects, constructed from
-    opposite face pairs of the master and slave Boundaries of a 2D fracture. The calculation and calibration of a Unit Normal and the creation of midPoint
-    Elements within the fracture, which are however not used/tested to work.
+    opposite face pairs of the master and slave Boundaries of a 2D fracture. The calculation and calibration of a Unit Normal.
 
     The following implemetation, together with the other elastic tests by MN, uses the capability to assign faces over the boundaries
     of the domain. In this case, all the 2D elements building the regions TOP, BOTTOM, LEFT and RIGHT are deleted, and equivalent
     faces are created instead. Using this functionality, one can apply boundary integrals only on the boundaries with known faces.
-    An alternative method is to keep the elements, and apply the boundary interals as rhs terms. One can easily switch between these
-    two methodologies below. However, the use of boundary faces has the following advantages:
+    An alternative method is to keep the elements, and apply the boundary interals as rhs terms. However, the use of boundary faces has the following advantages:
     1) The lower dimension elements are deleted, and therefore they can not have any contribution to the LHS of the system. In the case of
     the presence of boundary elements, one has to make sure that they do not contribute to the stiffness matrix. This can be done, for example,
     by making Young's modulus zero on these boundary elements.
     2) When using RHS operators to add a boundary integral, an iteration happens over all the elements, including the domain higher dimension
     elements, to accumulate the boundary integrals. Although the contribution of domain elements can be forced to be zero (by making the operand
     zero for all domain elements), this iteration is very expensive compared to the one that just iterates over the boundary faces.
+
+
+
 
     */
 
@@ -76,17 +82,16 @@ void LinearElasticFractureAperture2D_VVCase::run()
     enum{dim=2};
     bool plane_strain = true;
     const double s1(1.0e6) , ym (1.0e9), pr(0.3), Kc(1.0e6);
-    bool quarterpoint = false;
 
     // Model configuration:
     //Input file directory locations
-    string input_dir         = "ConfigFiles/InternalCrack/";
-    string output_file       = "Results/";
+    string input_dir         = "";
+    string output_file       = "../Output/";
     //Variable inputs
-    string vars_file         = input_dir + "SneddonConvergenceTest-variables.txt";
-    string regions_file      = input_dir + "SneddonConvergenceTest";
-    //string config_file            = input_dir +...;
-    //Possible meshes
+    string vars_file         = input_dir + "LinearElasticFractureAperture2D-variables.txt";
+    string regions_file      = input_dir + "LinearElasticFractureAperture2D";
+
+    //Possible meshe files to test
     string coarse_mesh       = "InternalBoundary_test";
     string coarse_mesh_quad  = "InternalBoundary_Test_quadratic";
     string fine_mesh_x       = "InternalCrack_tri_lin_02";
@@ -103,7 +108,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     bool irregular = false, binary = true, regions = true; //should not be changed
     ANSYS_Model2D model( mesh_file.c_str() , regions_file.c_str(), vars_file.c_str(), irregular, binary, regions);    // Constractor for empty variables
 
-    model.CreateSplitBoundaryFrom("FRACTURE");
+    string sb_name = *(model.CreateSplitBoundaryFrom("FRACTURE").first.begin());
 
     //std::set<string> sp_reg_names = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(0);
     //model.RegionsFromSplitBoundaries();
@@ -111,7 +116,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     /// -------------------------------
     /// Setting up Fracture Configuration
     /// -------------------------------
-    Fracture<dim> myFracture (model, model.SplitBoundary("FRACTURE_SPLIT_BOUNDARY"), quarterpoint, DC_TIP );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
+    Fracture<dim> myFracture (model, model.SplitBoundary(sb_name), DC_TIP );            //Creates interface objects in Fracture, and initialises & configures Lubrication region
 
     // Model Variables:
     model.CreateProperty( "Neumann stress", "tau",  "SI",  VECTOR, FACE);
@@ -128,7 +133,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
 
 
     // Model Boundary Conditions:
-    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom, *n_mid_left, *n_mid_right;
+    Node<dim> *cornerNodeLeftBottom, *cornerNodeRightBottom;
     for (vector<Node<dim>*>::const_iterator node (model.Region("Model").NodesBegin()); node != model.Region("Model").NodesEnd(); ++node )
     {
         if ( (*node)->AtBoundary() == CNR1 ) cornerNodeLeftBottom  = (*node);
@@ -139,10 +144,10 @@ void LinearElasticFractureAperture2D_VVCase::run()
     model.Boundary("RIGHT").InputPropertyValue("Neumann stress", VectorVariable<dim> (NEUMANN, NEUMANN, 0.0, 0.) );
     model.Boundary("TOP").InputPropertyValue(  "Neumann stress", VectorVariable<dim> (NEUMANN, NEUMANN, 0., s1) );
     model.Boundary("LEFT").InputPropertyValue( "Neumann stress", VectorVariable<dim> (NEUMANN, NEUMANN, -0.0, 0.0));
-    model.Boundary("BOTTOM").InputPropertyValue("Neumann stress",VectorVariable<dim> (NEUMANN, NEUMANN, 0.0, -s1));
-    //model.Boundary("BOTTOM").InputPropertyValue("displacement",VectorVariable<dim> (PLAIN, DIRICH, 0.0, 0.0));
+    //model.Boundary("BOTTOM").InputPropertyValue("Neumann stress",VectorVariable<dim> (NEUMANN, NEUMANN, 0.0, -s1));
+    model.Boundary("BOTTOM").InputPropertyValue("displacement",VectorVariable<dim> (PLAIN, DIRICH, 0.0, 0.0));
 
-    //cornerNodeLeftBottom->Store(model.Database().StorageKey("displacement"),VectorVariable<dim> (DIRICH, DIRICH , 0., 0.));
+    cornerNodeLeftBottom->Store(model.Database().StorageKey("displacement"),VectorVariable<dim> (DIRICH, DIRICH , 0., 0.));
     //cornerNodeRightBottom->Store(model.Database().StorageKey("displacement"), VectorVariable<dim> (PLAIN, DIRICH, 0.0, 0.0));
 
 
@@ -160,7 +165,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
     ///==================================================================
     // setting up integrator
     SAMG_Settings settings;
-    myFracture.SetSolverSettings(settings);
+    //myFracture.SetSolverSettings(settings);
     //settings.Set_ncycle(1000); // Depending on the type of problem, it may take many iterations to converge for anisotropic cases.
     //settings.Set_nxtyp(2);
     EigenSolver eigenSolver;
@@ -176,6 +181,9 @@ void LinearElasticFractureAperture2D_VVCase::run()
     NumIntegral_PT_op_dS<dim> nodalTractions( model.Database(), "Neumann stress", "displacement" );
     deformation.AddBoundaryIntegral( &nodalTractions );
 
+    //StressesAndStrains<dim>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", plane_strain, true );
+    //deformation.AddPostProcess( &postpro );
+
 
     ///==================================================================
     /// Displacement Solution & Verification
@@ -184,8 +192,8 @@ void LinearElasticFractureAperture2D_VVCase::run()
     deformation.IntegrateOver( model, model.Region("Model"), false);
 
     //Moving Nodes
-    myFracture.StoreDisplacementDifferenceAsAperture("displacement" , "aperture");        // assumes no previous existing displacement
-    model.MoveNodeCoordinatesBy("displacement");
+    myFracture.StoreDisplacementDifferenceAsAperture("displacement" , "aperture", INSIDE);        // assumes no previous existing displacement
+    //model.MoveNodeCoordinatesBy("displacement");
 
     //Setting vtu file:
     VTU_Interface<dim> vtu( model );
@@ -195,17 +203,17 @@ void LinearElasticFractureAperture2D_VVCase::run()
     //Output variables:
     list<string> outputProps;
     outputProps.push_back( "displacement");
+    outputProps.push_back( "aperture");
     vtu.OutputDataToVTU( output_file, outputProps, "Model", static_cast<int>(1) );
-
 
 
     ///ANALYTICAL SOLUTION
     /// Aperture Profile of crack
-    double a = 0.5 * myFracture.FractureLength(MIDDLE), max_percent_error(0.), avg_percent_error (0.0) ;        // fracture half length
+    double a = 0.5 * myFracture.FractureLength(INSIDE), max_percent_error(0.), avg_percent_error (0.0) ;        // fracture half length
     auto     F_strain = [ s1, ym, pr, a ](double x){return (4.0*s1*(1.0-pr*pr)/(ym))*sqrt(a*a - x*x) ;};
     auto     F_stress = [ s1, ym, a ](double x){return (4.0*s1/ym)*sqrt(a*a - x*x) ;};
 
-    std::map<Point<dim>,Node<dim>* > NodeMapAfter = myFracture.NodeMap(MIDDLE);
+    std::map<Point<dim>,Node<dim>* > NodeMapAfter = myFracture.NodeMap(INSIDE);
     size_t ends = 0;
     std::vector<std::vector<double>> data(4);
     for (typename std::map<Point<dim>,Node<dim>*>::iterator it = NodeMapAfter.begin(); it != NodeMapAfter.end(); it++){
@@ -229,15 +237,15 @@ void LinearElasticFractureAperture2D_VVCase::run()
 
 
         //Calculating percent error
-        if (w_num == 0.0){
+        if (Sol == 0.0){
             ends++;
             percent_error = 0.0;
             data[3].push_back(percent_error);
           }
         else{
-            percent_error  = std::fabs( w_num  - Sol ) / Sol * 100.0;
+            percent_error  = std::fabs( w_num  - Sol ) / Sol*100.0;
             data[3].push_back(percent_error);
-            _equal(percent_error, 0.0, 10.0 );
+            _equal(w_num, Sol, 0.5 );
             avg_percent_error += percent_error;
             if (max_percent_error < percent_error )
               max_percent_error   = percent_error ;
@@ -246,7 +254,7 @@ void LinearElasticFractureAperture2D_VVCase::run()
         std::cout << "Percent Error e = " << percent_error << std::endl;
       }
 
-    //safety first
+    //safety firstSol
     assert(ends == 2);
 
     //average percent error

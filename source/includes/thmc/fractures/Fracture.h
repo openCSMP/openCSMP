@@ -16,17 +16,18 @@
 //#include "J_IntegralViscousTip.h"
 
 
-#include "FractureTip.h"
-//template <uint32_t> class FractureTip;
+//#include "FractureTip.h"
 
+template <uint32_t> class FractureTip;
 template <uint32_t> class CohesiveTip;
 template <uint32_t> class J_IntegralTip;
 template <uint32_t> class HydraulicFractureTip;
 template <uint32_t> class J_IntegralViscousTip;
 template <uint32_t> class DisplacementCorrelationTip;
 
+
 //Return to Fracture tip once code is fully ported
-//enum TIP_TYPE { DC_TIP = 0, COHESIVE_TIP = 1, HF_TIP = 2, J_DRY_TIP = 3, J_WET_TIP = 4 , JA_HFM_TIP = 5, J_HFM_TIP};
+enum TIP_TYPE { DC_TIP = 0, COHESIVE_TIP = 1, HF_TIP = 2, J_DRY_TIP = 3, J_WET_TIP = 4 , JA_HFM_TIP = 5, J_HFM_TIP};
 
 //Special library for analytical solutions of pressure
 //#include "gsl/gsl_sf_hyperg.h"
@@ -70,15 +71,14 @@ class Fracture
 {
 public:
     Fracture();
-    Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary,
-             bool quarterPointAtTips = false, TIP_TYPE tip_type = DC_TIP);
+    Fracture(Model<dim>& model, csmp::SplitBoundary<dim>& splitboundary, TIP_TYPE=DC_TIP);
 
     ~Fracture();
 
 
     //Fracture Names
     SplitBoundary<dim>&             SplitBoundaryRef(){return sb_ref_;}
-    std::string                     MidRegionName(){ return midregion_.Name(); }
+    std::string                     MidRegionName(){ return midregion_->Name(); }
     std::string                     SplitBoundaryName(){return sb_ref_.Name(); }
 
     //data manipulation
@@ -86,9 +86,9 @@ public:
     void                            InputPropertyValue(const char* prop, ScalarVariable Sval, BOX_BOUNDARY bound_side);
 
     //Propagation
-    bool                            PropagationAlgorithm(Boundary<dim>& b_ref, double& dt, bool propagate_anyway = false);
-    void                            PropagateTip(FractureTip<dim>* f_tip, Boundary<dim>& b_ref);
-    std::vector<double>           EvaluateTips();
+    //bool                            PropagationAlgorithm(Boundary<dim>& b_ref, double& dt, bool propagate_anyway = false);
+    //void                            PropagateTip(FractureTip<dim>* f_tip, Boundary<dim>& b_ref);
+    //std::vector<double>           EvaluateTips();
     std::vector<FractureTip<dim>*>  FractureTips() {return fracturetips_;}
     void                            SetToCohesiveTips();
     void                            SetToDC_Tips();
@@ -100,7 +100,7 @@ public:
     //void UpdateFractureTips();
 
     //Access
-    std::vector<Node<dim>*>             TipNodes();
+    //std::vector<Node<dim>*>             TipNodes();
     std::vector<Node<dim>*>             BoxBoundaryNodes(){return boxboundaryNodes_;}         // Nodes of fluid region which intersect with boundary
     std::vector<Element<dim>*>          BoxBoundaryElements();
     std::vector<Element<dim>*>          BoxBoundaryElements( BOX_BOUNDARY side);
@@ -129,7 +129,7 @@ public:
 
     //Updating Middle Mesh
     void                                MoveMidPointCoordinatesBy(const char* displacement);
-    void                                StoreDisplacementDifferenceAsAperture(const std::string displacement, const std::string aperture);
+    void                                StoreDisplacementDifferenceAsAperture(const std::string displacement, const std::string aperture, INTERFACE_SIDE side=MIDDLE);
 
 
     //Coupled HF Specific configurations
@@ -160,7 +160,7 @@ protected:
     //Subdomains
     Model<dim>*                     model_;
     csmp::SplitBoundary<dim>&       sb_ref_;                 // name of split boundary
-    Region<dim>&                    midregion_;
+    Region<dim>*                    midregion_;
 
 
     //Type of propagation algorithm
@@ -180,14 +180,13 @@ protected:
     Index           nu_key_;
 
     bool            configured_, plane_strain_;
-    double        Q_, mu_, Kc_, ym_, nu_;
-    double        K_dominant, M_dominant, K_small, M_small;
+    double          Q_, mu_, Kc_, ym_, nu_;
+    double          K_dominant, M_dominant, K_small, M_small;
 
-    double        old_fracture_length_;
-    double        accumulated_time_;
+    double          old_fracture_length_;
+    double          accumulated_time_;
 
     //Bools
-    bool            quarterpoint_;  ///< uses quarter point elements if true (See Nejati et al. EFM, 2015)
     bool            two_tips_;
 
 

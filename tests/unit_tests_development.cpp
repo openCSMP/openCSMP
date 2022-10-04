@@ -100,6 +100,7 @@
 
 //E.P Integration Tests Working
 #include "LinearElasticFractureAperture2D_VVCase.h"
+#include "LinearElasticIsotropicDeformation2D_VVCase.h"
 
 //variable placement tests
 //#include "Placement_Test_2D.h"
@@ -132,17 +133,36 @@ TEST_CASE("Development tests", "[Dev]") {
 
   InterFace_Test test;
   SplitBoundary_Test test2;
-  test.run();
-  test2.run();
+  //test.run();
+  //test2.run();
 
   DirichletPressureBoxModel_VVCase test1;     //need files DirichletPressureBoxModel_VVCase
   //test1.run();
 
-  Geothermal_pseudo1D_VVCase test3("2000x1000_mesh");
+
+  ///Flow Benchmarks
+  Geothermal_pseudo1D_VVCase test3("2000x1000_mesh"); // working
   //test3.run();
 
+
+  ///Elasticity Benchmarks
+  LinearElasticIsotropicDeformation2D_VVCase elasticity("");
+  //elasticity.run();
+
   LinearElasticFractureAperture2D_VVCase i_test("InternalBoundary_test");
-  i_test.run();
+  //i_test.run();
+
+  LinearElasticFractureAperture2D_VVCase ii_test("InternalCrack_tri_lin_02");
+  //ii_test.run();
+
+  LinearElasticFractureAperture2D_VVCase iii_test("InternalCrack_tri_lin_01");
+  iii_test.run();
+
+  LinearElasticFractureAperture2D_VVCase iv_test("InternalCrack_tri_lin_005");
+  //iv_test.run();
+
+
+
 
  //   ANSYS_Model2D_Test test;
  //   test.run();

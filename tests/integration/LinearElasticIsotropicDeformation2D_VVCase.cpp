@@ -31,10 +31,14 @@ namespace csmp
     Linear Elastic: Plane stress/Strain problem under uniform traction
     =================================
     Domain:     Omega: w x h Rectangle (Provided meshes is for a 10x10 square plane)
-    Mesh:       Linear/Quadratic Triangles tested OK; Quadrilaterials have to be tested
+    Mesh:       Square_10x10_LinearTrianglesCoarse                  (Quadrilaterials dont work bcause of incorrect Ansys mesh)
+                Square_10x10_QuadraticTrianglesCoarse
+    Var File:   LinearElasticIsotropicDeformation2D_VVCase-variables.txt
+    Reg File:   LinearElasticIsotropicDeformation2D_VVCase-regions.txt
     Material:   Linear ELastic Isotropic Material: E=Young's Modulus, nu= Poisson's Ratio;
     Loading:    Uniaxial/Biaxial Tension/Compression on RIGHT and TOP Boundaries
     BC:         Zero x and y displacements on LEFT and BOTTOM Edges, rexpectively
+
     =================================
 
     Assume a rectangular plane of width and height of w, and h, subjected to uniform stresses S1 and S2 in x and y directions, respectively.
