@@ -64,7 +64,7 @@ void EffectiveStressDilatation2D_Example::Specifications()
   AddDescription( "Quadratic finite element interpolation, Dirichlet essential conditions" );
   AddDescription( "Region saved to a binary vset, then a second Region is built from it" );
   AddDescription( "source in: EffectiveStressDilatation2D_Example.cpp" );
-  AddRequirement( "file set: 'fractured_slate'");
+  AddRequirement( "file set: 'fractured_slate', EffectiveStressDilatation2D_Example_variables.txt");
 }
 
 
@@ -104,7 +104,8 @@ void EffectiveStressDilatation2D_Example::Run()
   
   // name of input file set
   const char* bin_file="fractured_slate";
-  
+
+  /*
   // 1.0 create an input interface for ANSYS 2D meshes
   // ---------------------------------------------------------------------------
   ANSYS_Interface    mesh_interface(true); // true = isoparametric elements
@@ -132,6 +133,24 @@ void EffectiveStressDilatation2D_Example::Run()
   Model<DIM>  model( mesh_topology, mesh_container, "EffectiveStressDilatation2D_Example_variables.txt", true );
   mesh_container.Erase();
   mesh_topology.Erase();
+  */
+
+  // ------------------------------------------------------------
+  // 1. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fractured_slate':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "fractured_slate";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "EffectiveStressDilatation2D_Example_variables.txt";
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<DIM>  model(model_name, variable_file);
   
   // 2.1 create Boundaries and convert them into SplitBoundary objects
   model.CreateSplitBoundaryFrom("SET1");
@@ -236,6 +255,8 @@ void EffectiveStressDilatation2D_Example::Run()
       }
   
     cout <<"\nRun: a total of "<< cumulative_production <<" (m3), was produced after "<< model_time/86400. <<" days\n";
+
+    fs::current_path("../../example_inputs/");
   
 } // end Run
 

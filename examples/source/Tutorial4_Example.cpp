@@ -68,6 +68,7 @@ void Tutorial4_Example::Run()
     // ----------------------------------------------------------------------------------
     clock_t start(clock()); // record the CPU time
 
+    /*
     string input_file;
     cout<< "\nTutorial4_Example: Please enter the name of input mesh ( default: pores ): ";
     cin >> input_file;
@@ -76,6 +77,25 @@ void Tutorial4_Example::Run()
     // 1.0 Build the CSMP Model
     // ------------------------------
     ANSYS_Model2D model( input_file.c_str(), "stokes_variables.txt" );
+    */
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string input_file;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'pores':"<<endl;
+    cin.ignore();
+    getline(cin, input_file);
+    if (input_file.length() == 0) input_file = "pores";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "stokes_variables.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, input_file, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(input_file, variable_file);
+
     const PropertyDatabase<2U>&  p_ref = model.Database();
     Region<2U>&                  r_ref = model.Region("PORES"); // reference to PORE region where calculations are performed
     scaleRegion(model, 20000.0); // scale the model size by 1/value
@@ -229,6 +249,8 @@ void Tutorial4_Example::Run()
 
     // terminate
     cerr <<"\n\nmain: That's it, run completed successfully..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run()
 

@@ -15,6 +15,7 @@
 #include "VTK_Interface.h"
 
 
+
 using namespace std;
 
 namespace csmp {
@@ -27,7 +28,6 @@ void RegionProperties_Example::Specifications()
    AddAuthor( "SKM" );
    AddDescription( "source in: RegionProperties_Example.cpp" );
    AddDescription( "application of interrelations that use REGION variables etc." );
-   AddRequirement( "'b25' .dat, .asc, -regions & -configuration .txt");
    AddRequirement( "example1.txt" );
 } 
 
@@ -38,6 +38,30 @@ void RegionProperties_Example::Run()
   //ostream &cout = *GetStream();
 
     enum {DIM=2};
+
+    //find the name of current example source file
+    string example_name = GetExampleFileName(__FILE__);
+    //create a working directory with the name of this example and go into it
+    fs::create_directory("../example_outputs");
+    fs::current_path("../example_outputs");
+    if (fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+    fs::create_directory(example_name);
+    fs::current_path(example_name);
+
+    //copy variable file into working directory
+    string variable_file ("example1.txt" );
+    string path = "../../example_inputs/variables_and_configuration_files/";
+    string file_name = path + variable_file;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      string input_directory = fs::current_path().parent_path().parent_path();
+      input_directory += "/example_inputs/variables_and_configuration_files/";
+      error_message += (variable_file + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+
     // ---------------------------------------------------------------------------------------------
     // 1. making a Model of squares to examine interpolations to element barycentres more readily
     // ---------------------------------------------------------------------------------------------
@@ -64,7 +88,8 @@ void RegionProperties_Example::Run()
  
     // constructing the model with the constructor for ANSYS meshes 
     Model<DIM>  model( mesh_topology, mesh_container, "example1.txt", true );
-    
+
+
     // assigning material properties 
     // -----------------------------------------------------  
     model.InputPropertyValue( "porosity", makeScalar(PLAIN,0.) );
@@ -110,9 +135,11 @@ void RegionProperties_Example::Run()
     PropertyHandle<DIM>  kavg( model, "average permeability", SCALAR, REGION );
     ArithmeticMean<DIM,ScalarVariable>  ravg( model.Database(), "average permeability", "permeability" );
     model.Apply( ravg );
-    printRangeOfVariable( model, "average permeability", true );
+    //printRangeOfVariable( model, "average permeability", true );
    
    cout <<"\nRegionProperties_Example: That's it..."<< endl;
+
+   fs::current_path("../../example_inputs/");
   
 } // end RegionProperties_Example::run
 

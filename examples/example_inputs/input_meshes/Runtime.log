@@ -1,0 +1,150 @@
+ErrorHandler (Destructor): logfile: Runtime messages in chronological sequence 
+(if this starts with an info or a warning, there were no errors):
+Sat Oct  1 00:36:23 2022
+: atBoundary(2D): Error: did not succeed in finding a unique box boundary flag for cell.
+
+ErrorHandler (Destructor): logfile: CSMP ERROR messages in sequence of occurrence:
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+VData::EstablishNodeNeighborConnectivity: connectivity of midside nodes not tested yet; check!
+atBoundary(2D):: did not succeed in finding a unique box boundary flag for cell.
+atBoundary(2D):: did not succeed in finding a unique box boundary flag for cell.
+atBoundary(2D):: did not succeed in finding a unique box boundary flag for cell.
+
+ErrorHandler (Destructor): logfile: CSMP WARNING messages in sequence of occurrence:
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+ANSYS_Interface::ReadPfvertsBinary: neighbor element ('pfvert') record in binary file is corrupt and needs to be replaced
+BoundaryInterface::EstablishBoundariesFromRegions: unable to find eligible lower-dimensional regions to create Boundary objects from
+BoundaryInterface::EstablishBoundariesFromRegions: unable to find eligible lower-dimensional regions to create Boundary objects from
+BoundaryInterface::EstablishBoundariesFromRegions: unable to find eligible lower-dimensional regions to create Boundary objects from
+ModelTopology::EstablishTopology:: although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established.
+ModelTopology::EstablishTopology:: although this claims to be a box-shaped model, a correct BOX_BOUNDARY flagging could not be established.
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::EstablishElementConnectivity2D:: triangular element with  2 faces on boundary 
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VData::ResizeNodes: erasing node coordinates in 'vdata'
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::FlagCornerNodes (2D case): Less than 4 corner nodes could be flagged
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+VSetConverter<dim>::TestForBoundaryFlags:: Unable to parse boundary flags.
+
+ErrorHandler (Destructor): logfile: CSMP INFO messages in sequence of occurrence:
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+ANSYS_Interface::ReadBoundaryFlagsAndConditionsBinary: 'pbflag' value out of range, setting to IRREGULAR.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.
+Model<dim>::InputVariablesFrom:: No properties found in VSet.

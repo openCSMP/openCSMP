@@ -75,8 +75,7 @@ int main()
             examplesSuite.RegisterExample( new Geothermal_Example() );
             examplesSuite.RegisterExample( new DESAdvectionDiffusion2D_Example() );
             examplesSuite.RegisterExample( new DESAdvectionDiffusion3D_Example() );
-            examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow2D_Example() );
-            examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow3D_Example() );
+            examplesSuite.RegisterExample( new DES2PhaseSlightlyCompressibleFlow_Example() );
             examplesSuite.RegisterExample( new DES2PhaseFlowWithSplitBoundary_Example() );
             examplesSuite.RegisterExample( new PassiveAdvectionOfTracer_Example() );
             examplesSuite.RegisterExample( new TransientPressure_Example() );

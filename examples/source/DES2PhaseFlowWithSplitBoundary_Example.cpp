@@ -47,8 +47,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
   AddDescription( "Two phase slightly compressible flow simulation with splitboundaries, using discrete event simulation (DES) or time-driven simulation (TDS).");
   AddDescription( "Output is written to to VTK files");
   AddRequirement( "source files: 'DES2PhaseFlowWithSplitBoundary_Example.cpp' and '*.h'" );
-  AddRequirement( "box2d_fault: files .dat, .asc, -regions.txt, -configuration.txt.");  
-  AddRequirement( "variables(DES_2phase_variables.txt)" );
+  AddRequirement( "box2d_fault (CSMP native binary files), box2d_fault-configuration.txt, DES_2phase_variables.txt");
 } 
 
 
@@ -56,34 +55,40 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
     Two phase slightly compressible flow simulation with splitboundaries via CSMP's DES transport method
     combining finite elements (for pressure) with finite volumes (for advection of non-wetting phase)
 
-    Use models 'box2d_fault' (.dat, .asc, -regions.txt, -configuration.txt) as input file suites.
+    Use models 'box2d_fault' (CSMP native binary files, -configuration.txt) as input file suites.
 */
 
 void DES2PhaseFlowWithSplitBoundary_Example::Run()
   {
-    // reading in an ANSYS model, first determining whether it will be 2 or 3 dimensional.
+    // reading in a csmp native format model, first determining whether it will be 2 or 3 dimensional.
     uint32_t dimension;
-    cerr << "\nPlease enter the dimension of the model (2 for 2D, 3 for 3D):" << endl;
+    cout << "\nPlease enter the dimension of the model (2 for 2D (default), 3 for 3D):" << endl;
     cin >> dimension;
     if (dimension != 2U and dimension != 3U)
       throw csmp::Exception(ERROR, "input dimension of model", "must be 2 or 3");
 
-    // create model directly from ANSYS-ICEM mesh
-    string input_file;
-    cerr << "\nPlease enter the name of input mesh (default: box2d_fault):" << endl;
-    cin >> input_file;
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'box2d_fault':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "box2d_fault";
 
-    const string variables_file("DES_2phase_variables.txt");
-
-    // SKM: changed to operate with regions file because we do not automatically want to include all regions from ANSYS
-    if (dimension == 2U) { // model            regions-file prefix 
-      ANSYS_Model2D model( input_file.c_str(), input_file.c_str(), variables_file.c_str() );
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "DES_2phase_variables.txt";
+    string config_file = model_name + "(DES_2phase_splitbdy)";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    if (dimension == 2U) {
+      Model<2U>  model(model_name, variable_file);
       RunSimulation(model);
     } else if (dimension == 3U) {
-      ANSYS_Model3D model(input_file.c_str(), input_file.c_str(), variables_file.c_str() );
+      Model<3U>  model(model_name, variable_file);
       RunSimulation(model);
     }
 
+    fs::current_path("../../example_inputs/");
   } // end run
   
   
@@ -102,7 +107,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     bool  DES = stdio.YesNo("Do you want to solve the transport equation with DES? (y=DES, n=TDS)"); 
     double Courant_multiplier, PEP_parameter;
-    cerr <<"\nEnter CFL multiplier (suggested value: 0.3 for TDS, 0.1 for DES) and PEP parameter (suggested value: 0.1)" << endl;
+    cout <<"\nEnter CFL multiplier (suggested value: 0.3 for TDS, 0.1 for DES) and PEP parameter (suggested value: 0.1)" << endl;
     cin >> Courant_multiplier >> PEP_parameter;  
      
     const bool  with_gravity_forces = stdio.YesNo("Do you want to include gravity effect (y/n)?");
@@ -115,7 +120,9 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     // Configure the simulation from a file
     InputDataManager<dim>  model_configuration;
-    model_configuration.ConfigureFromFile( model, model.Name(),
+    string config_file = model.Name();
+    config_file += "(DES_2phase_splitbdy)";
+    model_configuration.ConfigureFromFile( model, config_file.c_str(),
                                            false,  ///< region name from parameter range
                                            true,   ///< default property values
                                            true,   ///< regional property values
@@ -134,6 +141,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     if(with_tensor_permeability) cout<<"\ntensor permeability is in use"<<endl;
     else  cout<<"\nscalar permeability is in use"<<endl;
 
+    /*
     // 2. PROVISIONS FOR LOWER-DIMENSIONAL REPRESENTATION OF SAND HORIZONS
     // -------------------------------------------------------------------
       {
@@ -149,7 +157,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
       }
     const double bcp{2.}, swr{0.15}, snr{0.};
     SandPropertiesFor_VE_Model  sandProperties( model, "SAND", bcp, swr, snr );
-
+    */
 
     // 3. RELATIVE PERMEABILITY & CAPILLARY PRESSURE MODEL
     // ---------------------------------------------------
@@ -158,9 +166,11 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     // solve static pressure before split boundaries are created
     Compute2PhaseFlowProperties(model, flowfunctions, with_gravity_forces, with_tensor_permeability);
+    /*
     if constexpr (dim == 2U )
       if ( sandProperties.HasLineElementRepresentation() )
          sandProperties.Compute2PhaseFlowPropertiesForSandLayer(model);
+    */
     ComputeSteadyStatePressure(model, with_gravity_forces, with_tensor_permeability);
     printRangeOfVariable( model, stdio, "fluid pressure" );
     vtu.OutputDataToVTU( "steady_state_pressure", "fluid pressure", "Model", 0 );
@@ -256,11 +266,13 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     if ( with_split_boundaries ) {
       input_properties.emplace_back("pressure continuity status");
       input_properties.emplace_back("breakthrough status");
+      /*
       // for model with lower dimensional representation of the sand horizons inside the split boundaries
       input_properties.emplace_back("finite volume diameter");
       input_properties.emplace_back("finite volume normal");
       input_properties.emplace_back("finite volume vertical extent");
       input_properties.emplace_back("finite volume diagnostics");
+       */
     }
 
     //defining output properties
@@ -320,10 +332,12 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
     while ( model_time < end_time )
     {
       Compute2PhaseFlowProperties( model, flowfunctions, with_gravity_forces, with_tensor_permeability );
+      /*
       // setting multiphase flow properties for dim-1 elements representing sand
       if constexpr ( dim == 2U )
         if ( sandProperties.HasLineElementRepresentation() )
           sandProperties.Compute2PhaseFlowPropertiesForSandLayer( model );
+      */
       // solve pressure
       ComputeSteadyStatePressure(model, with_gravity_forces, with_tensor_permeability);
 
@@ -611,7 +625,7 @@ template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowPropertie
     if(!with_tensor_k) conductance_operator = "total mobility permeability product";
     else conductance_operator = "tensor total mobility permeability product";
 
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Settings settings;
     // iout
     settings.ExplicitSecondary(true);
@@ -622,7 +636,7 @@ template void DES2PhaseFlowWithSplitBoundary_Example::Compute2PhaseFlowPropertie
     SAMG_Solver                 samg_solver( &settings );
     PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+    EigenSolver linear_solver;
     PDE_Integrator<dim,Region>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );

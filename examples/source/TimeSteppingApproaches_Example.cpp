@@ -56,6 +56,14 @@ void TimeSteppingApproaches_Example::Run()
   //ostream &cout = *GetStream();
 
   enum{ DIM=1 };
+
+  string file_name = GetExampleFileName(__FILE__);
+  //create of directory with current example name and go into this directory
+  string variable_file = "example22.txt";
+  string model_name; //empty- no model files will be copied
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+
   // 1. 1D mesh with 100 elements
    // --------------------------------------------
    VSet<DIM>  mesh_container;
@@ -349,6 +357,9 @@ void TimeSteppingApproaches_Example::Run()
      }
 
    cout <<"\nmain: That's it..."<< endl;
+
+   fs::current_path("../../example_inputs/");
+
 } // Run()
 
 } // csmp

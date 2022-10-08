@@ -105,6 +105,7 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FL
 
     bool second_order_in_space_ = false;
 
+
     //helper class for computing residual flux at contact pairs when interface is breakthrough
     class Compensator {
 	  private:

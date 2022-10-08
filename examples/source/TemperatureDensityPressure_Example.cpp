@@ -38,6 +38,7 @@ void TemperatureDensityPressure_Example::Specifications()
   AddDescription( "vertical (1D) temperature - fluid density - fluid pressure distribution" );
   AddDescription( "this example also illustrates the output of text files and Maple plots to paste into worksheets" );
   AddDescription( "source in: 'TemperatureDensityPressure_Example.cpp'" );
+  AddRequirement( "variable file (example17.txt)");
 
 }
 
@@ -70,6 +71,14 @@ void TemperatureDensityPressure_Example::Run()
 {
     // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
     //ostream &cout = *GetStream();
+
+  //0. Create of directory with current example name, go into this directory, and copy input files into it.
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string model_name; //empty - no copy required
+    string variable_file = "example17.txt";
+
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
 
   // 1. builds 4km-tall 1D model
     // -------------------------------------------
@@ -113,11 +122,11 @@ void TemperatureDensityPressure_Example::Run()
 
     // 4. compute vertical temperature profile
     // -------------------------------------------------------------
-    #ifdef CSMP_WITH_SAMG_SOLVER
+    #ifdef USE_SAMG_SOLVER
     SAMG_Solver solver;
     PDE_Integrator<1U,Region>  temperature( solver );
     #else
-    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    EigenSolver solver;
     PDE_Integrator<1U,Region>  temperature( solver );
     #endif
 
@@ -153,7 +162,7 @@ void TemperatureDensityPressure_Example::Run()
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
     // --------------------------------------------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
     PDE_Integrator<1U,Region>  hydrostatic_pressure(samg_solver);
@@ -162,7 +171,7 @@ void TemperatureDensityPressure_Example::Run()
     settings.Set_iout2( 0 );
     settings.Set_idmp( -1 );
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<1U,Region>  hydrostatic_pressure(linear_solver);
 #endif
 
@@ -224,6 +233,8 @@ void TemperatureDensityPressure_Example::Run()
     writeVariablesToMapleTextFile( model, "temperature", "fluid density", 0, 0. );
 
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
   
 } // end Run
 

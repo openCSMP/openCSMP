@@ -10,6 +10,7 @@
 #include "ModelTopology.h"
 #include "Model.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -22,8 +23,8 @@ void VariableManagement_Example::Specifications()
     AddAuthor( "SKM" );
     AddDescription( "How to selectively read and store variables in existing CSMP binary" );
     AddDescription( "source in: VariableManagement_Example.cpp" );
-    AddRequirement( "file set: 'LeftRight'");
-    AddRequirement( "CSMP-1phase-variables.txt");
+    //AddRequirement( "file set: 'LeftRight'");
+    AddRequirement( "Minimum-variables.txt, CSMP-1phase-variables.txt");
   }
 
 // TODO: also use to demonstrate how to create header file
@@ -31,6 +32,26 @@ void VariableManagement_Example::Specifications()
 
 void VariableManagement_Example::Run()
  {
+   // 0. Create of directory with current example name, go into this directory, and copy input files into it.
+   // find the name of current example source file
+   string file_name = GetExampleFileName(__FILE__);
+   string model_name; //empty - no copying required
+   string variable_file = "Minimum-variables.txt";
+   CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+
+   string path = "../../example_inputs/variables_and_configuration_files/";
+   string name = "CSMP-1phase-variables.txt";
+   file_name = path + name;
+   if (fs::exists(file_name)) fs::copy(file_name, "./");
+   else {
+     string error_message = "\n\nError: file '";
+     string input_directory = fs::current_path().parent_path().parent_path();
+     input_directory += "/example_inputs/variables_and_configuration_files/";
+     error_message += (name + "' does not exist in directory "  + input_directory);
+     error_message += (", example cannot run, please copy this file into this directory\n");
+     throw std::runtime_error(error_message);
+   }
+
     // 1. building a complete model with boundaries and the variables 'node number' and 'element number'
     //   (NOTE: only those variables for which there is a previous definition in the PropertyDatabase
     //    can be read because the specification of variables in the VSet is incomplete)
@@ -86,6 +107,8 @@ void VariableManagement_Example::Run()
    }
 
   // 6. TODO: show how to write a subset of variables back to CSMP binary file
+
+  fs::current_path("../../example_inputs/");
 
  } // end run
 

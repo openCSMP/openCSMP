@@ -73,6 +73,7 @@ void Tutorial2_Example::Specifications()
 
 void Tutorial2_Example::Run()
 {
+    /*
     // -----------------------------------------------------------------------
     // 1.0 Generate a simple quadrilateral FE mesh from color-coded input file
     // -----------------------------------------------------------------------
@@ -99,6 +100,25 @@ void Tutorial2_Example::Run()
     // 2.0 Create Model with isoparametric FEs
     // --------------------------------------------
     Model<2U> model( mesh_container, "tutorial2_variables.txt" ); // Quadrilaterator makes isoparametric FEs
+    */
+
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'tutorial2_input':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "tutorial2_input";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "tutorial2_variables.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
 
     // give the model dimensions
     printModelDimensions( model, true );
@@ -164,11 +184,11 @@ void Tutorial2_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create the CSMP FE Algorithm with SAMG solver
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
     PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
 #endif
 
@@ -224,6 +244,7 @@ void Tutorial2_Example::Run()
     Standard_IO_Handler  stdio;
     double cfl_multiplier(0.5); // for explicit transport, CFL should be mulitplied by 0.5
 
+    model.InstantiateFiniteVolumes();
     // query user if implicit or explicit FV scheme should be used
     cerr << "\nHit enter to continue..." << endl;
     bool  implicit = stdio.YesNo("Do you want to solve the advection equation implicitly (n=explicitly)");
@@ -312,6 +333,8 @@ void Tutorial2_Example::Run()
 
     // terminate
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run()
 

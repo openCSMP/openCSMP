@@ -36,7 +36,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Specifications()
   AddAuthor( "SKM" );
   AddDescription( "source in: StokeDiscrepancyMeasureQuadratic_Example.cpp" );
   AddDescription( "calculates the difference between taking the laplacian" );
-  AddRequirement( "one_sphere_0.45_tetra" );
+  AddRequirement( "one_sphere_0.45_tetra(csmp binary files, -configuration.txt), pore_flow_quadratic-variables.txt" );
 } // Initialize()
 
 
@@ -54,6 +54,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
   //ostream &cout = *GetStream();
 
     const size_t   dim(3U);
+    /*
     const string   model_name("one_sphere_0.45_tetra");
 
     // read ANSYS model data and build model
@@ -79,6 +80,22 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
     VSetConverter<3U>().ConvertLinearToQuadraticTetrahedra( vset );
 
     Model<3U>  model( mesh_topology, vset, "pore_flow_quadratic-variables", true );
+    */
+
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model one_sphere_0.45_tetra':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "one_sphere_0.45_tetra";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "pore_flow_quadratic-variables.txt";
+    string config_file = model_name;
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<3U>  model(model_name, variable_file);
 
     printModelDimensions( model, true );
 
@@ -271,6 +288,8 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       printRangeOfVariable( model, channel_region.c_str(), "Stokes Discrepancy Measure" );
       vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-vector", "Stokes Discrepancy vector", 1 );
       vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-measure", "Stokes Discrepancy Measure", 1 );
+
+      fs::current_path("../../example_inputs/");
 
 } // Run()
 

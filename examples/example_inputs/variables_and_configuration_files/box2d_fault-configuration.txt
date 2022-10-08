@@ -1,0 +1,29 @@
+'box2d_well-configuration.txt' for testing automated time stepping
+
+# (1) global material properties
+permeability							1.0e-12
+porosity								0.25
+fluid volume source						0.0
+fluid pressure							0.0
+saturation oil							0.9
+saturation water						0.1
+viscosity oil							0.5e-03
+viscosity water							1.0e-03
+density oil								1000.
+density water							1000.
+residual saturation wetting phase		0.0
+residual saturation non-wetting phase	0.0
+brooks corey parameter					3.0
+entry pressure							1.0e-20 
+
+# (2) local material properties 
+FAULT	complete	permeability			1.0e-17
+FAULT	complete	porosity				0.02
+
+# (3) boundary conditions on model boundaries
+LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6
+RIGHT	Dirichlet	fluid pressure		0.		0.
+LEFT	Dirichlet	saturation water	1.0		1.0
+LEFT	Dirichlet	saturation oil		0.0		0.0
+RIGHT	Dirichlet	saturation water	0.1		0.1
+RIGHT	Dirichlet	saturation oil		0.9		0.9

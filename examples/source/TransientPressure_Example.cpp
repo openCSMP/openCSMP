@@ -38,7 +38,7 @@ void TransientPressure_Example::Specifications()
   AddDescription( "source in: TransientPressure_Example.cpp" );
   AddDescription( "transient calculation constant rate draw down, 2D" );
   AddDescription( "source in: TransientPressure_Example.cpp" );
-  AddRequirement( "file set well.1, configuration(example4.txt)" );
+  AddRequirement( "file set well.1, variable_file(TransientPressure_Example-variables.txt)" );
 }
 
 
@@ -62,6 +62,7 @@ void TransientPressure_Example::Run()
   double& model_time( ModelTime::Instance().modelTime );
   model_time = 0.;
 
+  /*
   // 1.0 Building quadratic triangular FE mesh
   // -----------------------------------------
   TRIANGLE_Interface  mesh_interface;
@@ -79,6 +80,24 @@ void TransientPressure_Example::Run()
   // set boolean for isoparametric elements to true
   // -----------------------------------------------
   Model<2U>   model( mesh_container, "TransientPressure_Example-variables.txt" );
+  */
+
+  // ------------------------------------------------------------
+  // 1. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'well.1':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "well.1";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "TransientPressure_Example-variables.txt";
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  model(model_name, variable_file);
 
   // 3.0 Input the initial Conditions
   // --------------------------------
@@ -249,6 +268,9 @@ void TransientPressure_Example::Run()
     }
 
   cout <<"\nmain: That's it..."<< endl;
+
+  fs::current_path("../../example_inputs/");
+
 } // Run()
 
 } // csmp

@@ -36,7 +36,7 @@ void PressureDiffusion_Example::Specifications()
    AddDescription( "2D transient calculation of fluid pressure distribution" );
    AddDescription( "isoparametric quadratic finite element formulation" );
    AddDescription( "source in: PresureDiffusion_Example.cpp" );
-   AddRequirement( "file set: 'frac30.1'");
+   AddRequirement( "file set: 'frac30.1', example3.txt(variable file)");
 }
 
 
@@ -57,6 +57,7 @@ void PressureDiffusion_Example::Specifications()
 void PressureDiffusion_Example::Run()
 {
     double& model_time( ModelTime::Instance().modelTime );
+    /*
     // 1. Set up interface and mesh container needed to read in a 'Triangle' FE mesh
     // -----------------------------------------------------------------------------
     TRIANGLE_Interface  mesh_interface;
@@ -92,6 +93,23 @@ void PressureDiffusion_Example::Run()
     VSetConverter<2U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
     Model<2U>  model( mesh_container, "example3.txt" );
     mesh_container.Erase();
+    */
+
+    // 1. Load CSMP native format model
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'frac30.1':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "frac30.1";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "example3.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
     printModelDimensions( model, true );
 
 
@@ -136,13 +154,13 @@ void PressureDiffusion_Example::Run()
 
     // 7.  Building the steady-state FE Algorithm "fluid_pressure"
     // -----------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Settings  settings;
     settings.Set_eps(0.);
     SAMG_Solver  samg_solver(&settings);
     PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
 #endif
 
@@ -263,7 +281,7 @@ void PressureDiffusion_Example::Run()
     // 14. Transient loop: Compute fluid pressure during each time-step and output the results for each time step
     // -----------------------------------------------------------------------------------------------------------
     // iout: for the transient loop, the screen output from SAMG solver is reduced
-    #ifdef CSMP_WITH_SAMG_SOLVER
+    #ifdef USE_SAMG_SOLVER
     settings.Set_iout1( 0 );
     settings.Set_iout2( 0 );
     settings.Set_idmp( -1 );
@@ -295,6 +313,8 @@ void PressureDiffusion_Example::Run()
      }
 
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
     
 } // end Run
 

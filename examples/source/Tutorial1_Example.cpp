@@ -76,6 +76,7 @@ void Tutorial1_Example::Run()
     double& model_time( ModelTime::Instance().modelTime );
     model_time =  0.; // time
 
+    /*
     // -----------------------------------------------------------------------
     // 1.0 Build the CSMP Model from a simple color-coded text input file
     //     that generates a uniform triangular FE mesh. The function
@@ -86,6 +87,25 @@ void Tutorial1_Example::Run()
     // txt file defines the physical variables to be used in the simulation
     VSet<2U>   vset=readTextPixelData();
     Model<2U>  model( vset, "tutorial1_variables.txt" );
+    */
+
+    // ------------------------------------------------------------
+    // 1.0 Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'tutorial1_input':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "tutorial1_input";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "tutorial1_variables.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    Model<2U>  model(model_name, variable_file);
+
     const PropertyDatabase<2>& p_ref(model.Database());  // constant reference to the property database
 
     // give the model dimensions
@@ -146,11 +166,11 @@ void Tutorial1_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create the CSMP FE Algorithm with SAMG solver to invert linear system
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
     PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
 #endif
 
@@ -255,6 +275,8 @@ void Tutorial1_Example::Run()
 
     // terminate
     cout <<"\nmain: That's it..."<< endl;
+
+    fs::current_path("../../example_inputs/");
 
 } // Run
 

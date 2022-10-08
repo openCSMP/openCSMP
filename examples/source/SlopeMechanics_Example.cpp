@@ -54,7 +54,7 @@ void SlopeMechanics_Example::Specifications()
      AddAuthor( "Stephan Matthai" );
      AddDescription( "source in: SlopeMechanics_Example.cpp" );
      AddDescription( "Empty example for the user to experiment with" );
-     AddRequirement( "Input file suite: Jura-slope1" );
+     AddRequirement( "Input file suite: Jura-slope1, CSMP_field_scale_mechanics_variables.txt" );
 //     AddRequirement( "no predefined model or variables file" );
   }
 
@@ -74,11 +74,33 @@ void SlopeMechanics_Example::Specifications()
 */
 void SlopeMechanics_Example::Run()
 {
+  /*
   // ----------------------------------------------------------
   // 1. building and configering model from ANSYS - csp dataset
   // ----------------------------------------------------------
    string input_file("Jura-slope1");
    ANSYS_Model2D   model( input_file.c_str(), "CSMP_field_scale_mechanics_variables.txt" );
+   */
+
+   // ------------------------------------------------------------
+   // 1. Load CSMP native format model
+   // ------------------------------------------------------------
+   string model_name;
+   cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'Jura-slope1':"<<endl;
+   cin.ignore();
+   getline(cin, model_name);
+   if (model_name.length() == 0) model_name = "Jura-slope1";
+
+   //find the name of current example source file
+   string file_name = GetExampleFileName(__FILE__);
+   string variable_file = "CSMP_field_scale_mechanics_variables.txt";
+   string config_file = model_name;
+   //create of directory with current example name, go into this directory, and copy input files into it.
+   CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+   //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+   Model<DIM>  model(model_name, variable_file);
+
+
    Region<DIM>& model_domain(model.Region("Model"));
 
    printModelDimensions( model, true );
@@ -86,7 +108,7 @@ void SlopeMechanics_Example::Run()
    InputDataManager<DIM>  model_configuration;
    ComputationalSettings settings;
 
-   model_configuration.ConfigureFromFile( model, input_file.c_str(),
+   model_configuration.ConfigureFromFile( model, config_file.c_str(),
                                           false,           ///< region name from parameter range
                                           true,            ///< default property values
                                           true,            ///< regional property values
@@ -305,6 +327,8 @@ void SlopeMechanics_Example::Run()
    model.MoveNodeCoordinatesBy("displacement");
   
    cout <<"\nSlopeMechanics_Example: That's it!\n";
+
+   fs::current_path("../../example_inputs/");
   
 } // end Run
 

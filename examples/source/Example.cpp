@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <cstdlib>
 #include <typeinfo>
@@ -8,8 +9,6 @@
 
 #include "Example.h"
 
-#include <filesystem>
-namespace fs = std::filesystem;
 
 using namespace std;
 
@@ -132,77 +131,109 @@ list<string>::const_iterator Example::GetAuthorsEnd() const
 }
 
 
+string Example::GetExampleFileName(const char* path)
+{
+  const char* file = path;
+  while (*path)
+    if (*path++ == '/') file = path;
+  //get rid of the file extension
+  size_t lastindex = string(file).find_last_of(".");
+  string file_name = string(file).substr(0, lastindex);
+  return file_name;
+}
+
+
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                            std::string& variable_file, std::string config_file)
 {
   //create of directory with current example name and go into this directory
+  fs::create_directory("../example_outputs");
+  fs::current_path("../example_outputs");
   if(fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
   fs::create_directory(example_name);
   fs::current_path(example_name);
 
   //copy input files into working directory
-  string file_name_pre = "../";
-  file_name_pre += model_name;
-  string file_name = file_name_pre + ".vset";
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
-  else {
-    file_name.erase(0,3);
-    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
-    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
-    return;
+  if(!model_name.empty()) {
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/csmp_native_format_models/";
+    //.vset
+    string path = "../../example_inputs/csmp_native_format_models/";
+    string name = model_name + ".vset";
+    string file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
+    }
+    //boundaries.dat
+    name = model_name + "_boundaries.dat";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
+    }
+    //regions.dat
+    name = model_name +  "_regions.dat";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
+    }
+    //variables.dat
+    name = model_name  + "_variables.dat";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
+    }
+    //splitboundaries.dat - optional
+    name = model_name  + "_splitboundaries.dat";
+    file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
   }
-  file_name = file_name_pre + "_boundaries.dat";
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
-  else {
-    file_name.erase(0,3);
-    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
-    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
-    return;
-  }
-  file_name = file_name_pre + "_regions.dat";
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
-  else {
-    file_name.erase(0,3);
-    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
-    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
-    return;
-  }
-  file_name = file_name_pre + "_variables.dat";
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
-  else {
-    file_name.erase(0,3);
-    cerr<<"\n\nError: file '"<<file_name<<"' does not exist in directory "<<fs::current_path().parent_path();
-    cerr<<", example cannot run, please check. Did you run the CSMPInterfaces_example first?"<<endl;
-    return;
-  }
-  file_name = file_name_pre + "_splitboundaries.dat";
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
 
   //copy variable file
-  file_name = "../variable_and_config_files/";
-  if(!fs::is_directory(file_name)) fs::create_directory(file_name);
-  file_name += variable_file;
-  if(fs::exists(file_name)) fs::copy(file_name, "./");
-  else {
-    string path = fs::current_path().parent_path();
-    path += "/variable_and_config_files/";
-    cerr<<"\n\nError: variable file '"<<variable_file<<"' does not exist in directory "<<path;
-    cerr<<", example cannot run, please copy this variable file into this directory"<<endl;
-    return;
+  if(!variable_file.empty()) {
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+
+    string path = "../../example_inputs/variables_and_configuration_files/";
+    string file_name = path + variable_file;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (variable_file + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
+    }
   }
 
   //copy configuration file if required
   if(!config_file.empty()) {
-    file_name = "../variable_and_config_files/";
-    if(!fs::is_directory(file_name)) fs::create_directory(file_name);
-    file_name += config_file;
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+
+    string path = "../../example_inputs/variables_and_configuration_files/";
+    config_file += "-configuration.txt";
+    string file_name = path + config_file;
     if(fs::exists(file_name)) fs::copy(file_name, "./");
     else {
-      string path = fs::current_path().parent_path();
-      path += "/variable_and_config_files/";
-      cerr<<"\n\nError: configuration file '"<<config_file<<"' does not exist in directory "<<path;
-      cerr<<", example cannot run, please copy this configuration file into this directory"<<endl;
-      return;
+      string error_message = "\n\nError: file '";
+      error_message += (config_file + "' does not exist in directory "  + input_directory);
+      error_message += (", example cannot run, please check.\n");
+      throw std::runtime_error(error_message);
     }
   }
 }

@@ -33,6 +33,7 @@
 // utilities and monitoring
 #include "InputDataManager.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -48,9 +49,9 @@ energy storage: Effects of injection temperature, well placement and groundwater
 Energy, 76, 1011-1018." );
   AddDescription( "Comparison with TOUGH" );
   AddDescription( "source in: Geothermal_Example.cpp" );
-  AddRequirement( "input file set: 2000x1000_mesh" );
-  AddRequirement( "Geothermal_Example-variables.txt" );
-  AddRequirement( "Geothermal_Example-configuration.txt" );
+  AddRequirement( "input file set: 2000x1000_mesh(csmp binary files)" );
+  AddRequirement( "variable file (Geothermal_pseudo1D_VVCase.txt), Geothermal_Example-configuration.txt" );
+  AddRequirement( "H2OPropertiesLookupTableSinglePhase.bin");
 }
 
 
@@ -66,6 +67,7 @@ void Geothermal_Example::Run()
   //! set as desired
   globalVerbose = true;
 
+  /*
   //! -------------------------------------------------------
   //! 1. Model construction - modify to use alternative model
   //! -------------------------------------------------------
@@ -75,10 +77,60 @@ void Geothermal_Example::Run()
   const std::string vars_name( "Geothermal_Example-variables.txt" );
 
   ANSYS_Model2D model( geometry_name.c_str(), regions_name.c_str(), vars_name.c_str(), false, true, true );
-  const PropertyDatabase<DIM>&  pd_ref( model.Database() ); //reference to the models property database.
+   */
 
+
+  // ------------------------------------------------------------
+  // 1. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model '2000x1000_mesh':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "2000x1000_mesh";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "Geothermal_pseudo1D_VVCase.txt";
+  string config_name ="Geothermal_pseudo1D_VVCase";
+  //create a working directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_name);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  model(model_name, variable_file);
+  model.InstantiateFiniteVolumes();
+
+  const PropertyDatabase<DIM>&  pd_ref( model.Database() ); //reference to the models property database.
   printModelDimensions<DIM>( model, true );
 
+  //copy in H2O Properties Lookup Table (H2OPropertiesLookupTableSinglePhase.bin) as it takes too long to compute
+  string path = "../../example_inputs/variables_and_configuration_files/";
+  string name = "H2OPropertiesLookupTableSinglePhase.bin";
+  file_name = path + name;
+  if (fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    string error_message = "\n\nError: file '";
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+    error_message += (name + "' does not exist in directory "  + input_directory);
+    error_message += (", example cannot run, please copy this file into this directory\n");
+    throw std::runtime_error(error_message);
+  }
+
+
+  /*
+  // Finite Element Mesh Construction
+  string name = "Geothermal_pseudo1D_VVCase";
+  std::string geometry_name ("2000x1000_mesh");
+  std::string regions_name (name);
+  std::string config_name (name);
+  std::string vars_name (name +".txt");
+
+  ANSYS_Model2D model(geometry_name.c_str(), regions_name.c_str(), vars_name.c_str() , false, true );
+  model.InstantiateFiniteVolumes();
+  const PropertyDatabase<DIM>&  pd_ref(model.Database()); //reference to the models property database.
+
+  printModelDimensions<DIM>(model, true );
+  */
 
   //! Assignment of material properties, initial conditions, and boundary
   InputDataManager<DIM>  model_configuration;
@@ -88,9 +140,9 @@ void Geothermal_Example::Run()
   model_configuration.ConfigureFromFile( model, config_name.c_str(), false,    // groupname from parameter range
                                          true,    // default property values
                                          true,    // regional property values
-                                         false,    // boundary conditions for box-shaped model
+                                         true,    // boundary conditions for box-shaped model
                                          true,    // essential conditions for groups
-                                         true,    // csmp::Boundary properties
+                                         false,    // csmp::Boundary properties
                                          run_settings );
 
   //! node visitor for computation of equation of state and transport properties
@@ -108,7 +160,7 @@ void Geothermal_Example::Run()
 #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Solver solver;
 #else
-  CSMP_DEFAULT_LINEAR_SOLVER solver;
+  EigenSolver solver;
 #endif
 
   //! --------------------------------------------------------
@@ -121,7 +173,8 @@ void Geothermal_Example::Run()
   // replace if you want to work with fluid sources and sinks
   NumIntegral_SetRHS_to_Zero<DIM>  zero_fluid_src( pd_ref, "fluid pressure" );
 
-  VelocityAndVolumeFlux<DIM>  velocity( model, "conductivity", "porosity", "fluid pressure", false );
+  //VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", "density liquid", false );
+  VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
   steady_state_pressure.Add( &p_conductance );
   steady_state_pressure.Add( &zero_fluid_src );
@@ -146,6 +199,8 @@ void Geothermal_Example::Run()
   fluid_src.LumpedFormulation( true );
   fluid_src.AddAccumulateLater();
 
+  //VelocityAndVolumeFlux<DIM>  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
+  //VelocityAndVolumeFlux<DIM,Element<DIM> >  t_velocity( model, "conductivity", "porosity", "fluid pressure", "density liquid", false );
   VelocityAndVolumeFlux<DIM>  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
   transient_pressure.Add( &pt_conductance );
@@ -164,6 +219,7 @@ void Geothermal_Example::Run()
   t_capacitance_lhs.MultiplyWithTimeIncrement( true );
 
   NumIntegral_NT_op_N_dV<DIM>  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" );
+  t_capacitance_rhs.LumpedFormulation(true); //added
   t_capacitance_rhs.MultiplyWithTimeIncrement( true );
 
   temperature_diffusion.Add( &t_conductance );
@@ -227,8 +283,14 @@ void Geothermal_Example::Run()
   //! computation of the hydraulic conductivity K=rho k / mu
   ComputeMassConductivity( model );
 
+  printRangeOfVariable( model, "conductivity" );
+  printRangeOfVariable( model, "mass conductivity" );
+  printRangeOfVariable( model, "porosity" );
+  printRangeOfVariable( model, "fluid pressure" );
+
   //! initializing pressure in the model followed by a repeated fluid and rock property calculation
   model.Apply( steady_state_pressure );
+
   thermal_equilibrator.SetInitialProperties( &model );
   model.InterpolateNodeToCellProperty( "nodal total heat capacity", "total heat capacity" );
   model.InterpolateNodeToCellProperty( "nodal total compressibility", "total compressibility" );
@@ -302,6 +364,8 @@ void Geothermal_Example::Run()
     global_time += time_increment;
     time_step++;
   }
+
+  fs::current_path("../../example_inputs/");
 
 } // end run
 

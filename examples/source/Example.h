@@ -1,9 +1,14 @@
 #ifndef EXAMPLE_H
 #define EXAMPLE_H
 
+//#define USE_SAMG_SOLVER
+
 #include <string>
 #include <list>
 #include "CSMP_definitions.h"
+
+#include <filesystem>
+namespace fs = std::filesystem;
 
 namespace csmp{
 
@@ -42,6 +47,7 @@ protected:
   // Stream interface
   std::ostream *GetStream() { return ostream_; }
   void SetStream( std::ostream *ostream ) { ostream_ = ostream; }
+  std::string GetExampleFileName(const char* path);
   void CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
                                                     std::string& variable_file, std::string config_file = "");
 public:

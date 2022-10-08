@@ -15,6 +15,7 @@ public:
 private:
   void SideBoundaryConditions( Model<3U>& );
   void ConcentrationRectangle( Model<3U>&, double );
+  void CopyInputFiles(std::string& model_name, std::string& variable_file);
 };
 
 } // csmp

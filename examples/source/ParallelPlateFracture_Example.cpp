@@ -37,7 +37,7 @@ void ParallelPlateFracture_Example::Specifications()
   AddDescription( "Quadratic finite element interpolation, Dirichlet essential conditions" );
   AddDescription( "Model then gets saved to a binary file, and then rebuilt from it" );
   AddDescription( "source in: ParallelPlateFracture_Example.cpp" );
-  AddRequirement( "file set: 'veins_20k.1'");
+  AddRequirement( "file set: 'veins_20k.1', example2.txt(variable_file)");
 }
 
 
@@ -63,6 +63,7 @@ void ParallelPlateFracture_Example::Specifications()
 void ParallelPlateFracture_Example::Run()
 {
     cout<< "\nParallelPlateFracture_Example::Run: 2D Steady-state fluid pressure distribution in a fractured rock."<< endl;
+    /*
     cout<< "\n\tUse input mesh from Triangle (1)='veins_20k.1' or ANSYS (2)=any model with a region called 'fractures'?  ";
     int option1(1);
     cin >> option1;
@@ -111,7 +112,25 @@ void ParallelPlateFracture_Example::Run()
          model = new Model<2U>( mesh_topology, mesh_container, "example2.txt", true );
       }
     mesh_container.Erase();
-  
+    */
+
+    // ------------------------------------------------------------
+    // 1. Load CSMP native format model
+    // ------------------------------------------------------------
+    string model_name;
+    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'veins_20k.1':"<<endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "veins_20k.1";
+
+    //find the name of current example source file
+    string file_name = GetExampleFileName(__FILE__);
+    string variable_file = "example2.txt";
+    //create of directory with current example name, go into this directory, and copy input files into it.
+    CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file);
+    //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+    auto  model = new Model<2U>(model_name, variable_file);
+
     printModelDimensions( *model );
   
 
@@ -127,13 +146,13 @@ void ParallelPlateFracture_Example::Run()
     //    finite elements in permeability range 1.0e-12 to
     //     1.0e-08 m2
     // -----------------------------------------------------
-    if ( option1 == 1 ) {
+    //if ( option1 == 1 ) {
          printRangeOfVariable( *model, "permeability", true );
          cout << "\nFORMING THE REGION 'fractures': " << endl; // unique region = true
          model->FormRegionFrom( "fractures", "permeability", 1.0e-12, 1.0e-08, true );
          cout << "\nFORMING THE REGION 'matrix': " << endl;
          model->FormRegionFrom( "matrix", "permeability", 1.0e-16, 1.0e-14, true );
-      }
+      //}
 
     // Changing porosity to 1.0 in region "fractures" and 0.25 in "matrix"
     model->Region("fractures").InputPropertyValue( "porosity",  makeScalar(PLAIN,1.0) );
@@ -182,11 +201,11 @@ void ParallelPlateFracture_Example::Run()
     //     fluxes (by setting the boolean variable in the constructor of the post-
     //     processor to true, the element velocities are averaged to the nodes)
     // --------------------------------------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver                samg_solver;
     PDE_Integrator<2U,Region>  total_pressure_quadratic(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<2U,Region>  total_pressure_quadratic(linear_solver);
 #endif
 
@@ -290,6 +309,8 @@ void ParallelPlateFracture_Example::Run()
                                                          results, take_log10_of_data );
     cout <<"\nExample: That's it..."<< endl;
     delete model;
+
+    fs::current_path("../../example_inputs/");
 
 } // end Run
 

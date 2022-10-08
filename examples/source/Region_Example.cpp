@@ -34,7 +34,7 @@ void Region_Example::Specifications()
   AddDescription( "exercise: step through this example using the debugger to see what is happening" );
   AddDescription( "source in: Region_Example.cpp" );
   AddDescription( "application and features of csmp::Regions" );
-  AddRequirement( "'fracs4' .asc, .dat, -regions. & -configuration.txt" );
+  AddRequirement( "'fracs4' (csmp binary input files) & -configuration.txt" );
   AddRequirement( "CSMP-1phase-variables.txt" );
 }
 
@@ -42,9 +42,27 @@ void Region_Example::Specifications()
 
 void Region_Example::Run()
 {
+   /*
   //  Create a model from ANSYS mesh and configure it from file
    const char* model_name="fracs4";
    ANSYS_Model3D  model( model_name, "CSMP-1phase-variables.txt");
+   */
+
+   string model_name;
+   cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'fracs4':"<<endl;
+   cin.ignore();
+   getline(cin, model_name);
+   if (model_name.length() == 0) model_name = "fracs4";
+
+   //find the name of current example source file
+   string file_name = GetExampleFileName(__FILE__);
+   string variable_file = "CSMP-1phase-variables.txt";
+   string config_file = model_name;
+   //create of directory with current example name, go into this directory, and copy input files into it.
+   CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+   //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+   Model<3U>  model(model_name, variable_file);
+
    printModelDimensions( model, true );
 
    // testing whether model contains the desired regions
@@ -55,7 +73,7 @@ void Region_Example::Run()
    cout << model.IsUnique("FRACS") <<" "<< model.IsUnique("MATRIX") << endl;
 
    // configure model / regions from file 'fracs4-configuration.txt'
-   InputDataManager<DIM>().ConfigureFromFile( model, model_name,
+   InputDataManager<DIM>().ConfigureFromFile( model, config_file.c_str(),
                                               false, true, true, true, false );
 
    // creation and destruction of a variable at runtime (to visualise permeability)
@@ -406,6 +424,9 @@ void Region_Example::Run()
    sc_data.Out();
    gref.OutputVariableTo( "velocity", vc_data ); // test: O.K.
    vc_data.Out();
+
+   fs::current_path("../../example_inputs/");
+
 } // Run()
 
 } // csmp

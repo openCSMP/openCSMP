@@ -8,6 +8,7 @@
 #include "EclipseModel.h"
 #include "VTK_Interface.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -27,12 +28,17 @@ namespace csmp {
 	void EclipseMeshInterface_Example::Run()
 	{
 		// Model name
-		std::string model_name;
-		cout << "\nPlease input model (mesh file prefix) name: ";
-		cin >> model_name;
+    string model_name;
+    cout << "\nPlease enter the name of input model, or press ENTER to use the default model 'NPD5':" << endl;
+    cin.ignore();
+    getline(cin, model_name);
+    if (model_name.length() == 0) model_name = "NPD5";
 
 		// Load Model
 		std::string variables_file("CSMP_Eclipse_example-variables.txt");
+
+    // create a working directory with current example name, go into this directory, and copy input files into it.
+    CopyInputFiles(model_name, variables_file);
 
 		// Setup mesh
 		std::string regions_file(model_name);
@@ -128,6 +134,49 @@ namespace csmp {
 		vtk_output.OutputNodeDataToVTK(modelOut, "EclipseInterfaceExample", 0);
 
 		cout << "\nEclipseMeshInterface_Example: That's it!\n";
+
+    fs::current_path("../../example_inputs/");
 	}
+
+
+  void EclipseMeshInterface_Example::CopyInputFiles(std::string& model_name, std::string& variable_file) {
+    //find the name of current example source file
+    string example_name = GetExampleFileName(__FILE__);
+    //create a working directory with the name of this example and go into it
+    fs::create_directory("../example_outputs");
+    fs::current_path("../example_outputs");
+    if (fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+    fs::create_directory(example_name);
+    fs::current_path(example_name);
+
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/input_meshes/";
+
+    //copy Eclipse model files into working directory
+    string path = "../../example_inputs/input_meshes/";
+    string name = model_name + ".grdecl";
+    string file_name = path + name;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (name + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+
+    //copy variable file into working directory
+    input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+
+    path = "../../example_inputs/variables_and_configuration_files/";
+    file_name = path + variable_file;
+    if (fs::exists(file_name)) fs::copy(file_name, "./");
+    else {
+      string error_message = "\n\nError: file '";
+      error_message += (variable_file + "' does not exist in directory " + input_directory);
+      error_message += (", example cannot run, please copy this file into this directory\n");
+      throw std::runtime_error(error_message);
+    }
+  }
 
 } // csmp

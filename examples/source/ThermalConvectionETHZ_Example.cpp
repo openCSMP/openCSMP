@@ -15,7 +15,6 @@
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
 
-//#define USE_SAMG_SOLVER
 #ifdef USE_SAMG_SOLVER
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
@@ -217,6 +216,7 @@ namespace csmp {
     PDE_Integrator<DIM,Region>  transient_pressure(eigen_solver);
     #endif
     NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
+
     NumIntegral_dNT_op_dV<DIM>     gravity( model->Database(), "gravity term times density", "fluid pressure" );
     gravity.AddAccumulateLater();
     gravity.MultiplyWithTimeIncrement(true);
@@ -224,11 +224,14 @@ namespace csmp {
     //element_fluid_source.AddAccumulateLater();
     // to account for absolute nodal fluid contributions due to PVT property effects
     PointSource_rhsop<DIM>         node_total_source( model->Database(), "nodal fluid volume source", "fluid pressure" );
-    //node_total_source.MultiplyWithTimeIncrement(true);
+    node_total_source.MultiplyWithTimeIncrement(false);
+    node_total_source.LumpedFormulation( true );
     node_total_source.AddAccumulateLater();
+
     NumIntegral_NT_op_N_dV<DIM>    storage_rhs( model->Database(), "total compressibility", "fluid pressure" );
     storage_rhs.LumpedFormulation(true);
     storage_rhs.MultiplyWithTimeIncrement(true);
+
     NumIntegral_NT_lhsop_N_dV<DIM> storage_lhs( model->Database(), "total compressibility", "fluid pressure", "fluid pressure" );
     storage_lhs.LumpedFormulation(true);
     storage_lhs.MultiplyWithTimeIncrement(true);
@@ -255,10 +258,13 @@ namespace csmp {
 
     PointSource_rhsop<DIM>         node_heat_source( model->Database(), "nodal heat source", "temperature" );
     node_heat_source.AddAccumulateLater();
+    node_heat_source.MultiplyWithTimeIncrement(false);
+    node_heat_source.LumpedFormulation( true );
     
     NumIntegral_NT_op_N_dV<DIM>    thermal_capacitance_rhs( model->Database(), "total heat capacity", "temperature" );
     thermal_capacitance_rhs.LumpedFormulation(true);
     thermal_capacitance_rhs.MultiplyWithTimeIncrement(true);
+
     NumIntegral_NT_lhsop_N_dV<DIM> thermal_capacitance_lhs( model->Database(), "total heat capacity", "temperature", "temperature" );
     thermal_capacitance_lhs.LumpedFormulation(true);
     thermal_capacitance_lhs.MultiplyWithTimeIncrement(true);

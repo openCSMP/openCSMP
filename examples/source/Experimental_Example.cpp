@@ -48,6 +48,7 @@
 #include "SinglePhaseVelocityVisitor.h"
 #include "ExtractTensorVariableComponent.h"
 
+
 using namespace std;
 
 namespace csmp {
@@ -69,15 +70,24 @@ void Experimental_Example::Specifications()
 /**
      Put CSMP code that you would like to test here and run it as part of the 
      example suite.
-     
-     Systems Modelling and Design model that calculates the effective stress in a dam, 
-     using the gravitational loading and the plane stress assumption.
-     
-     input models:
-     - slope_model1
+
 */
 void Experimental_Example::Run()
 {
+
+   //create of directory with current example name and go into this directory
+   string example_name = GetExampleFileName(__FILE__);
+   fs::create_directory("../example_outputs");
+   fs::current_path("../example_outputs");
+   if(fs::is_directory(example_name)) fs::remove_all(example_name); //if directory already exists, delete it
+   fs::create_directory(example_name);
+   fs::current_path(example_name);
+
+   //add your code here
+
+
+
+/*
     cout <<"\nHello World and size of uint_fast32_t: "<< sizeof(uint_fast32_t) << endl;
     cout <<"\nauto i{0}: "<< sizeof(uint_fast32_t) << endl;
     vector<double> doubs(2,2e-4);
@@ -143,6 +153,10 @@ void Experimental_Example::Run()
                                            true );          // essential conditions for regions
                                            // default: boundary conditions for arbitrary-shaped model
 #endif
+*/
+
+
+    fs::current_path("../../example_inputs/");
 
 } // end Run
 

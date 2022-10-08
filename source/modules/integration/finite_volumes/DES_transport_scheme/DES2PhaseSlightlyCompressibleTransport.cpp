@@ -59,8 +59,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     //creating new variables if not defined yet
     if(!this->db_.IsDefined("variation rate nonwetting phase")) this->sg_.CreateProperty( "variation rate nonwetting phase", "vrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
     this->sg_.Region("Model").InputPropertyValue( "variation rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("compenastion flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
-    this->sg_.Region("Model").InputPropertyValue( "compenastion flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
+    if(!this->db_.IsDefined("compensation flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
+    this->sg_.Region("Model").InputPropertyValue( "compensation flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
     if(!this->db_.IsDefined("old saturation carbonic phase")) this->sg_.CreateProperty( "old saturation carbonic phase", "sCO2_0", "m3/m3", SCALAR, NODE, 1, 0 ,1);
     this->sg_.CopyReplace( "saturation carbonic phase", "old saturation carbonic phase" );
     if(!this->db_.IsDefined("tensor permeability")) this->sg_.CreateProperty( "tensor permeability", "kk", "m2", TENSOR, ELEMENT, 3, 1E-21, 1.0e-5);
@@ -108,7 +108,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     key_g = INDEX<SCALAR,MODEL>( this->db_.StorageKey("acceleration gravity") ); 
     key_rhoH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("density aqueous phase") );
     key_rhoCO2 = INDEX<SCALAR,NODE>( this->db_.StorageKey("density carbonic phase") );
-    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compenastion flux rate nonwetting phase") );
+    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compensation flux rate nonwetting phase") );
     key_dip = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("dip vector") );
     key_vt = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("total velocity") );
     key_muH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("viscosity aqueous phase") );
@@ -157,7 +157,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
         "The 'density carbonic phase' variable must be SCALAR and placed on NODE"  );     
     if ( key_compensate.place != NODE || key_compensate.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
-        "The 'compenastion flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );    
+        "The 'compensation flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );
     if ( key_dip.place != ELEMENT || key_dip.type != VECTOR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
         "The 'dip vector' variable must be VECTOR and placed on ELEMENT"  );                                
@@ -377,13 +377,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
             if(!this->tensor_k_) { //scalar permeability
                 static Index  mobt_key(this->db_.StorageKey("total mobility permeability product"));
                 double e_lt = eptr->Read(mobt_key); //total mobility permeability product
-                if(isnan(e_lt)) 
+                if(isnan(e_lt))
                     throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressureGradientAndFlowVelocities:",
                     "total mobility permeability product has not been computed yet" );
 
                 e_vt(0) = e_lt * p_gradient(0); //(krn/mun+krw/muw)*k*thi * gradP
                 if ( dim != 1U ) e_vt(1) = e_lt * p_gradient(1);
-                if ( dim == 3U ) e_vt(2) = e_lt * p_gradient(2); 
+                if ( dim == 3U ) e_vt(2) = e_lt * p_gradient(2);
 
                 if( this->with_gravity_forces_ ) {
                     static Index  gt_key(this->db_.StorageKey("gravity term"));
@@ -393,11 +393,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
                         throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressureGradientAndFlowVelocities:", "gravity term has not been computed yet" );
                     }
                     e_vt += gravity;
-                }  
+                }
                 eptr->Store( this->key_vt, e_vt );
-          
+
             } else { //tensor k
-                static Index  LT_key(this->db_.StorageKey("tensor total mobility permeability product")); 
+                static Index  LT_key(this->db_.StorageKey("tensor total mobility permeability product"));
                 TensorVariable<dim> LT;
                 eptr->Read( LT_key, LT );
                 if(isnan(LT(0,0)))

@@ -34,6 +34,7 @@
 #include "StatisticalAnalyzer.h"
 #include "RegionMonitor.h"
 
+
 using namespace std;
 
 namespace csmp{
@@ -47,7 +48,8 @@ void StreamFunction_Example::Specifications()
   AddDescription( "post-processing of the velocity field using the streamfunction that can be contoured" );
   AddDescription( "steady-state analysis of flow and fluid pressure in heterogeneous medium" );
   AddDescription( "source in StreamFunction_Example.cpp" );
-  AddRequirement( "file set: 'example21.1'");
+  AddRequirement( "file set: 'example21.1', example21.1-configuration.txt");
+  AddRequirement( "variable file (example21.txt), 'example21_histogram.bin'");
 }
 
 
@@ -67,6 +69,7 @@ void StreamFunction_Example::Specifications()
 ***************************************************************************************** */
 void StreamFunction_Example::Run()
 {
+   /*
    TRIANGLE_Interface  mesh_interface;
    VSet<2U>            mesh_container;
 
@@ -90,6 +93,41 @@ void StreamFunction_Example::Run()
    VSetConverter<2U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
    Model<2U>  model( mesh_container, "example21.txt" );
    mesh_container.Erase();
+   */
+
+  // ------------------------------------------------------------
+  // 0. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'example21.1':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "example21.1";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "example21.txt";
+  string config_file = model_name;
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<2U>  model(model_name, variable_file);
+
+  //copy in 'example21_histogram.bins' file to be used by StatisticalAnalyzer
+  string path = "../../example_inputs/variables_and_configuration_files/";
+  string name = "example21_histogram.bins";
+  file_name = path + name;
+  if (fs::exists(file_name)) fs::copy(file_name, "./");
+  else {
+    string error_message = "\n\nError: file '";
+    string input_directory = fs::current_path().parent_path().parent_path();
+    input_directory += "/example_inputs/variables_and_configuration_files/";
+    error_message += (name + "' does not exist in directory "  + input_directory);
+    error_message += (", example cannot run, please copy this file into this directory\n");
+    throw std::runtime_error(error_message);
+  }
+
+  Standard_IO_Handler  stdio( model_name.c_str() );
 
 
  // ------------------------------------------------------------------------------------
@@ -97,7 +135,7 @@ void StreamFunction_Example::Run()
  //    interrelations
  // ------------------------------------------------------------------------------------
    InputDataManager<2U>  model_configuration;
-   model_configuration.ConfigureFromFile( model, file_name );
+   model_configuration.ConfigureFromFile( model, config_file.c_str() );
 
    printModelDimensions( model );
 
@@ -116,11 +154,11 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 3. Steady-state fluid pressure computation [K]{p} = {Q}
  // ------------------------------------------------------------------------------------
-   #ifdef CSMP_WITH_SAMG_SOLVER
+   #ifdef USE_SAMG_SOLVER
    SAMG_Solver solver;
    PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #else
-   CSMP_DEFAULT_LINEAR_SOLVER solver;
+   EigenSolver solver;
    PDE_Integrator<2U,Region>  fluid_pressure(solver);
    #endif
 
@@ -267,6 +305,8 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
      }
 
    cout <<"\nmain: That's it..."<< endl;
+
+   fs::current_path("../../example_inputs/");
 
 
 } // Run()
@@ -498,11 +538,11 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     sg.InputBoundaryValue( boundary0, stream_func_var, makeScalar(DIRICH, 0.) );
     sg.InputBoundaryValue( boundary1, stream_func_var, makeScalar(DIRICH, total_flux) );
 
-#ifdef CSMP_WITH_SAMG_SOLVER
+#ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
     PDE_Integrator<2U,Region>  stream_function(samg_solver);
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    EigenSolver  linear_solver;
     PDE_Integrator<2U,Region>  stream_function(linear_solver);
 #endif
 

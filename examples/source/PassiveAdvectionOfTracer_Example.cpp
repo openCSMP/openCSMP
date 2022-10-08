@@ -43,8 +43,7 @@ void PassiveAdvectionOfTracer_Example::Specifications()
     AddAuthor( "SKM" );
     AddDescription( "3D passive tracer advection, choice of different advection schemes" );
     AddRequirement( "source files: 'PassiveAdvectionOfTracer_Example.cpp' and '*.h'" );
-    AddRequirement( "prism_test: files .dat, .asc, -regions.txt, -configuration.txt.");
-    AddRequirement( "variables(example25.txt)" );
+    AddRequirement( "prism_test (csmp binary files), -configuration.txt, variables(example25.txt)");
   }
 
 
@@ -58,11 +57,12 @@ void PassiveAdvectionOfTracer_Example::Specifications()
     User can test degree of CFL overstepping that the model can cope with
     and what the consequences are for the shape of the advection front.
 
-    Use models 'hex2_3', 'prism_test' or 'fracs2000' (.dat, .asc, -regions.txt, -configuration.txt)
+    Use models 'hex2_3', 'prism_test' or 'fracs2000' (csmp binary files, -configuration.txt)
     as input file suites.
 */
 void PassiveAdvectionOfTracer_Example::Run()
 {
+  /*
  // ------------------------------------------------------------
  // 1. building model from ANSYS data files
  // ------------------------------------------------------------
@@ -71,6 +71,26 @@ void PassiveAdvectionOfTracer_Example::Run()
   cin >> model_name;
 
   ANSYS_Model3D  model3D( model_name.c_str(), "example25.txt");
+  */
+
+
+  // ------------------------------------------------------------
+  // 1. Load CSMP native format model
+  // ------------------------------------------------------------
+  string model_name;
+  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'prism_test':"<<endl;
+  cin.ignore();
+  getline(cin, model_name);
+  if (model_name.length() == 0) model_name = "prism_test";
+
+  //find the name of current example source file
+  string file_name = GetExampleFileName(__FILE__);
+  string variable_file = "example25.txt";
+  string config_file = model_name;
+  //create of directory with current example name, go into this directory, and copy input files into it.
+  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
+  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
+  Model<3U>  model3D(model_name, variable_file);
 
 
  // ------------------------------------------------------------
@@ -160,6 +180,8 @@ void PassiveAdvectionOfTracer_Example::Run()
  // -----------------------------------------------------------------------
   printModelDimensions( model3D, true );
 
+  model3D.InstantiateFiniteVolumes();
+
   cout <<"\nmain: Choose method of transport (1=explicit, 2=explicit, O(2), ";
   cout <<"3=implicit, 4=implicit O(2), 5=4+bijective mapping, 6,7=tests of volume integration. ";
   cout <<"8=TestNodeCenteredFiniteVolumeStencil ";
@@ -239,6 +261,8 @@ void PassiveAdvectionOfTracer_Example::Run()
   vtk_output.OutputDataToVTK( model3D, "concentration", "concentration", 99 );
 
   cout <<"\nmain: That's it."<< endl;
+
+  fs::current_path("../../example_inputs/");
 
 } // end Run
 
