@@ -36,7 +36,7 @@ void DESAdvectionDiffusion2D_Example::Specifications()
 {
   SetTitle( "2D Passive advection of concentration using DES (discrete event simulation)" );
   SetDifficulty( 3 );
-  SetCategory( "Numerical Methods" );
+  SetCategory( "Simulation of Physical Processes" );
   AddAuthor( "Qi Shao" );
   AddDescription( "A steady state pressure diffusion equation solved using a fully" );
   AddDescription( "implicit FE discretisation and computes the velocity field averwards. This velocity field is" );

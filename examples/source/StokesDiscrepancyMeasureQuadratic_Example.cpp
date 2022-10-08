@@ -32,10 +32,10 @@ void StokesDiscrepancyMeasureQuadratic_Example::Specifications()
 {
   SetTitle( "Stokes discrepancy measure quadratic" );
   SetDifficulty( 2 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Numerical Methods" );
   AddAuthor( "SKM" );
   AddDescription( "source in: StokeDiscrepancyMeasureQuadratic_Example.cpp" );
-  AddDescription( "calculates the difference between taking the laplacian" );
+  AddDescription( "calculates the difference between taking the laplacian of the Darcy velocity when taking a parabolic scalar field as an operator and the Stokes flow approximation." );
   AddRequirement( "one_sphere_0.45_tetra(csmp binary files, -configuration.txt), pore_flow_quadratic-variables.txt" );
 } // Initialize()
 

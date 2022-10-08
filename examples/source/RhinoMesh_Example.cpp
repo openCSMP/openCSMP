@@ -35,7 +35,7 @@ void RhinoMesh_Example::Specifications()
 {
   SetTitle( "RhinoSurfaceReader: Input of triangulated surfaces from Rhinoceros (McNeel&Assocs.) as mesh." );
   SetDifficulty( 2 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "source in: RhinoMesh_Example.cpp" );
   AddDescription( "3D fracture-only flow & transport simulation using Rhino meshes as input" );

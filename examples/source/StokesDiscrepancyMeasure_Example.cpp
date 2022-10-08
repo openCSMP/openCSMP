@@ -27,10 +27,10 @@ void StokesDiscrepancyMeasure_Example::Specifications()
 {
   SetTitle( "Stokes discrepancy measure" );
   SetDifficulty( 2 );
-  SetCategory( "Simulation of Physical Processes" );
+  SetCategory( "Numerical Methods" );
   AddAuthor( "SKM" );
   AddDescription( "source in: StokesDiscrepancyMeasure_Example.cpp" );
-  AddDescription( "calculates error metric" );
+  AddDescription( "calculates the difference between taking the laplacian of the Darcy velocity when taking a parabolic scalar field as an operator and the Stokes flow approximation." );
   AddRequirement( "one_sphere_0.45_tetra(csmp binary files, -configuration.txt), example25.txt(variable file)" );
 } 
 

@@ -35,7 +35,7 @@ void DESAdvectionDiffusion3D_Example::Specifications()
   {
     SetTitle( "3D Passive advection of concentration using DES (discrete event simulation)");
     SetDifficulty( 3 );
-    SetCategory( "Numerical Methods" );
+    SetCategory( "Simulation of Physical Processes" );
     AddAuthor( "Qi Shao" );
     AddDescription( "3D passive tracer advection by both discrete event simulation (DES) and time-driven simulation (TDS)." );
     AddDescription( "Their outputs are written to VTK files and and their efficiency are compared." );

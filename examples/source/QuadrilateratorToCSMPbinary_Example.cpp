@@ -26,7 +26,7 @@ void QuadrilateratorToCSMPbinary_Example::Specifications()
 {
   SetTitle( "Creation of a regular quadrilateral grid and export of model to CSMP native binary file" );
   SetDifficulty( 1 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Quadrilaterator class is used to construct the grid" );
   AddDescription( "Some grid-smoothing is illustrated" );

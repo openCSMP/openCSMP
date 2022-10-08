@@ -39,7 +39,7 @@ void PassiveAdvectionOfTracer_Example::Specifications()
   {
     SetTitle( "FVM passive advection of concentration in FEM velocity field" );
     SetDifficulty( 3 );
-    SetCategory( "Numerical Methods" );
+    SetCategory( "Simulation of Physical Processes" );
     AddAuthor( "SKM" );
     AddDescription( "3D passive tracer advection, choice of different advection schemes" );
     AddRequirement( "source files: 'PassiveAdvectionOfTracer_Example.cpp' and '*.h'" );

@@ -42,7 +42,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::Specifications()
 {
   SetTitle( "Two phase slightly compressible flow simulation with splitboundaries, using DES (discrete event simulation)");
   SetDifficulty( 3 );
-  SetCategory( "Numerical Methods" );
+  SetCategory( "Simulation of Physical Processes" );
   AddAuthor( "Qi Shao" );
   AddDescription( "Two phase slightly compressible flow simulation with splitboundaries, using discrete event simulation (DES) or time-driven simulation (TDS).");
   AddDescription( "Output is written to to VTK files");

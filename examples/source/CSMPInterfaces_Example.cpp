@@ -26,7 +26,7 @@ void CSMPInterfaces_Example::Specifications()
 {
   SetTitle( "Build CSMP native format models using various interfaces");
   SetDifficulty( 1 );
-  SetCategory( "Software Functionality" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "Qi Shao" );
   AddDescription( "Build CSMP native format models (binary files) using various interfaces, including ANSYS, SKUA, ECLIPSE, RHINO, TRIANGLE, etc.");
   AddDescription( "These CSMP native format models are to be used in other examples");

@@ -43,7 +43,7 @@ void Triangulator_Example::Specifications()
 {
   SetTitle( "Triangulator based meshing of image files" );
   SetDifficulty( 1 );
-  SetCategory( "Tutorials (composite functionality)" );
+  SetCategory( "Software Interfaces" );
   AddAuthor( "SKM" );
   AddDescription( "Uses Triangular to make 2D triangular FE mesh from color-coded image in text file");
   AddDescription( "Perform steady-state fluid pressure computation on mesh" );
