@@ -1760,7 +1760,8 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
  {
     // SKM_FIX of size error
     // DOF_indexes_.resize(this->rh_.size());
-    DOF_indexes_.resize( gref.Nodes() );
+    //DOF_indexes_.resize( gref.Nodes() );
+    DOF_indexes_.resize( gref.Nodes()*dof_per_node_ );
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
     if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 
