@@ -450,8 +450,11 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf )
                   }
                 break;
               case INTERSECTION_LINE: {
-                   if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
-                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
+                   if (
+                       nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING &&
+                       nmf.GeometricClassifier() != ManifoldType::MULTI_SB_CROSSING
+                   ) {
+                        cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING' or 'MULTI_SB_CROSSING'";
                         csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
                      }
                   }

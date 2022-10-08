@@ -16,6 +16,8 @@ private:
   static void RunSKUA_split_boundary_layer();
   static void RunSKUA_cross_bedded_xsmall();
   static void RunSKUA_cross_bedded_small();
+  static void RunSKUA_cross_bedded();
+  static void RunSnowFlake();
 };
 
 } // csmp
