@@ -18,9 +18,11 @@
 #include "NumIntegral_NT_op_N_dS.h"
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
+#else
+#include "LinearSolver.h"
 #endif
 #ifdef CSMP_WITH_MESCHACH
-#include "Gauss_Solver.h"
+#include "LinearSolver.h"
 #endif
 
 #include "InputDataManager.h"
@@ -93,11 +95,10 @@ void Intrepid_Example::Run()
   
 #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Solver solver;
-  PDE_Integrator<3U,Region>  heat_conductor(solver);
 #else
   CSMP_DEFAULT_LINEAR_SOLVER solver;
-  PDE_Integrator<3U,Region>  heat_conductor(solver);
 #endif
+  PDE_Integrator<3U,Element>  heat_conductor(solver);
 
   NumIntegral_dNT_op_dN_dV<3U> conductance (model.Database(), "thermal conductivity", "temperature", "temperature");
   

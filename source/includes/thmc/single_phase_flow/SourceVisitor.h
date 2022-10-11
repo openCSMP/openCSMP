@@ -10,7 +10,15 @@ namespace csmp {
 struct Index;
 template<uint32_t> class Model;
 
-template<uint32_t dim> 
+
+/**
+@class SourceVisitor SourceVisitor.h
+
+@author Thomas Driesner, ETH Zuerich
+@c thomas.driesner@erdw.ethz.ch
+
+*/
+template<uint32_t dim>
 class SourceVisitor : public Visitor<dim>
 {
 public:
@@ -36,26 +44,6 @@ private:
 
 }// csmp
 
-/**
-@class SourceVisitor SourceVisitor.h
-
-@author Thomas Driesner, ETH Zuerich
-@section contact Contact
-thomas.driesner@erdw.ethz.ch
-
-@section motivation Motivation
-
-@section usage Usage
-
-@code
-@endcode
-
-@section dependencies Dependencies
-
-@section issues Known issues 
-
-@section testing Testing
-*/
 
 #endif //SOURCE_VISITOR_H
 

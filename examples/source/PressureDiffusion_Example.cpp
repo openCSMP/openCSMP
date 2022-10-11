@@ -17,6 +17,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "LinearSolver.h"
 
 // utilities
 #include "CSMP_definitions.h"
@@ -158,10 +159,10 @@ void PressureDiffusion_Example::Run()
     SAMG_Settings  settings;
     settings.Set_eps(0.);
     SAMG_Solver  samg_solver(&settings);
-    PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
+    PDE_Integrator<2U,Element> fluid_pressure(samg_solver);
 #else
-    EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
+    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+    PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
     NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
@@ -251,16 +252,16 @@ void PressureDiffusion_Example::Run()
     // conductance matrix dt * [K] at pressure t+dt is already there
 
     // left-hand side capacitance matrix [C] at pressure d+dt
-    NumIntegral_NT_lhsop_N_dV<2U,Element<2U> > capacitance_lhs( model.Database(),
-                                               "storativity",  "fluid pressure", "fluid pressure" );
-                                               capacitance_lhs.LumpedFormulation(true);
-                                               capacitance_lhs.MultiplyWithTimeIncrement(true);
+    NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(),
+                                                   "storativity",  "fluid pressure", "fluid pressure" );
+                                                   capacitance_lhs.LumpedFormulation(true);
+                                                   capacitance_lhs.MultiplyWithTimeIncrement(true);
 
     // right-hand side capacitance matrix [C] at current pressure
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >    capacitance_rhs( model.Database(),
-                                               "storativity",  "fluid pressure" );
-                                               capacitance_rhs.LumpedFormulation(true);
-                                               capacitance_rhs.MultiplyWithTimeIncrement(true);
+    NumIntegral_NT_op_N_dV<2U>    capacitance_rhs( model.Database(),
+                                                   "storativity",  "fluid pressure" );
+                                                   capacitance_rhs.LumpedFormulation(true);
+                                                   capacitance_rhs.MultiplyWithTimeIncrement(true);
 
     // source term at dt * {Q} at current pressure needs to be accumulated later
     source.AddAccumulateLater();

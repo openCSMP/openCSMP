@@ -1,4 +1,5 @@
 #include "DES2PhaseSlightlyCompressibleTransport.h"
+#include "NimbleRegion.h"
 #include "Region.h"
 #include "Model.h"
 #include "CSMP_mathUtilities.h"
@@ -59,8 +60,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     //creating new variables if not defined yet
     if(!this->db_.IsDefined("variation rate nonwetting phase")) this->sg_.CreateProperty( "variation rate nonwetting phase", "vrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
     this->sg_.Region("Model").InputPropertyValue( "variation rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("compensation flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
-    this->sg_.Region("Model").InputPropertyValue( "compensation flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
+    if(!this->db_.IsDefined("compenastion flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
+    this->sg_.Region("Model").InputPropertyValue( "compenastion flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
     if(!this->db_.IsDefined("old saturation carbonic phase")) this->sg_.CreateProperty( "old saturation carbonic phase", "sCO2_0", "m3/m3", SCALAR, NODE, 1, 0 ,1);
     this->sg_.CopyReplace( "saturation carbonic phase", "old saturation carbonic phase" );
     if(!this->db_.IsDefined("tensor permeability")) this->sg_.CreateProperty( "tensor permeability", "kk", "m2", TENSOR, ELEMENT, 3, 1E-21, 1.0e-5);
@@ -108,7 +109,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     key_g = INDEX<SCALAR,MODEL>( this->db_.StorageKey("acceleration gravity") ); 
     key_rhoH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("density aqueous phase") );
     key_rhoCO2 = INDEX<SCALAR,NODE>( this->db_.StorageKey("density carbonic phase") );
-    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compensation flux rate nonwetting phase") );
+    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compenastion flux rate nonwetting phase") );
     key_dip = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("dip vector") );
     key_vt = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("total velocity") );
     key_muH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("viscosity aqueous phase") );
@@ -157,7 +158,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
         "The 'density carbonic phase' variable must be SCALAR and placed on NODE"  );     
     if ( key_compensate.place != NODE || key_compensate.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
-        "The 'compensation flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );
+        "The 'compenastion flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );    
     if ( key_dip.place != ELEMENT || key_dip.type != VECTOR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
         "The 'dip vector' variable must be VECTOR and placed on ELEMENT"  );                                
@@ -349,7 +350,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
     Node<dim>* nd = event->getNode();
     assert( nd  != nullptr );
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
-    constexpr uint32_t  v( (dim==1u) ? 0u : 1u );
+// NOT USED    constexpr uint32_t  v( (dim==1u) ? 0u : 1u );
   
     //check if node is truncated by domain boundary
     int truncated_node = static_cast<int>(nd->Read(this->key_cut));
@@ -377,13 +378,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
             if(!this->tensor_k_) { //scalar permeability
                 static Index  mobt_key(this->db_.StorageKey("total mobility permeability product"));
                 double e_lt = eptr->Read(mobt_key); //total mobility permeability product
-                if(isnan(e_lt))
+                if(isnan(e_lt)) 
                     throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressureGradientAndFlowVelocities:",
                     "total mobility permeability product has not been computed yet" );
 
                 e_vt(0) = e_lt * p_gradient(0); //(krn/mun+krw/muw)*k*thi * gradP
                 if ( dim != 1U ) e_vt(1) = e_lt * p_gradient(1);
-                if ( dim == 3U ) e_vt(2) = e_lt * p_gradient(2);
+                if ( dim == 3U ) e_vt(2) = e_lt * p_gradient(2); 
 
                 if( this->with_gravity_forces_ ) {
                     static Index  gt_key(this->db_.StorageKey("gravity term"));
@@ -393,11 +394,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressure
                         throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputePressureGradientAndFlowVelocities:", "gravity term has not been computed yet" );
                     }
                     e_vt += gravity;
-                }
+                }  
                 eptr->Store( this->key_vt, e_vt );
-
+          
             } else { //tensor k
-                static Index  LT_key(this->db_.StorageKey("tensor total mobility permeability product"));
+                static Index  LT_key(this->db_.StorageKey("tensor total mobility permeability product")); 
                 TensorVariable<dim> LT;
                 eptr->Read( LT_key, LT );
                 if(isnan(LT(0,0)))
@@ -3186,7 +3187,7 @@ double brent_solve(Function& func, const double x1, const double x2, const doubl
 
 
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeLocalFluidPressure( double time, double dt, bool transient)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeLocalFluidPressure( double time, double dt, bool transient )
 {
     bool verbose (false);
 
@@ -3225,7 +3226,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeLocalFlu
     if(missing_nodes > 0) cout<<"    added "<<missing_nodes<<" missingg nodes to NimbleRegion"<<endl; //added
  
     //create an active nimble region from NodeList_
-    auto* active_region = new NimbleRegion<dim>(NodeList_.begin(), NodeList_.end());
+    auto active_region = new NimbleRegion<dim>( this->db_, NodeList_.begin(), NodeList_.end() );
     //compute flow properties in nimble region
     for ( auto eit = active_region->CellsBegin(); eit != active_region->CellsEnd(); ++eit )
         ComputeFlowPropertiesAtBaryCenter(*(*eit));
@@ -3467,11 +3468,11 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSteadySt
     settings.Set_iout2( -1 );
     settings.Set_idmp( -1 );
     settings.Set_mode_mess( -2 );
-    SAMG_Solver                 samg_solver( &settings );
-    PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
+    SAMG_Solver                  samg_solver( &settings );
+    PDE_Integrator<dim,Element>  steady_pressure(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
-    PDE_Integrator<dim,Region>  steady_pressure(linear_solver);
+    PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>  conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
@@ -3506,7 +3507,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSteadySt
 
 //solve steady state pressure on nimble region
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
-void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegionSteadyStatePressure(NimbleRegion<dim>& computation_domain)
+void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegionSteadyStatePressure( NimbleRegion<dim>& computation_domain)
 {
     bool verbose(false);
 
@@ -3534,10 +3535,12 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
     settings.Set_idmp( -1 );
     settings.Set_mode_mess( -2 );
     SAMG_Solver                       samg_solver( &settings );
-    PDE_Integrator<dim,NimbleRegion>  steady_pressure(samg_solver);
+    // PDE_Integrator<dim,NimbleRegion>  steady_pressure(samg_solver);
+    PDE_Integrator<dim,Element>  steady_pressure(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER        linear_solver;
-    PDE_Integrator<dim,NimbleRegion>  steady_pressure(linear_solver);
+    // PDE_Integrator<dim,NimbleRegion>  steady_pressure(linear_solver);
+    PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>   conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_op_N_dV<dim>     elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
@@ -3605,12 +3608,13 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
     PDE_Integrator<dim,NimbleRegion>  transient_pressure(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER        linear_solver;
-    PDE_Integrator<dim,NimbleRegion>  transient_pressure(linear_solver);
+//    PDE_Integrator<dim,NimbleRegion>  transient_pressure(linear_solver);
+    PDE_Integrator<dim,Element>  transient_pressure(linear_solver);
 #endif
-    NumIntegral_dNT_op_dN_dV<dim, Element<dim> > conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_lhsop_N_dV<dim, Element<dim> > capacitance_lhs( this->sg_.Database(), "total system compressibility", "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim, Element<dim> > capacitance_rhs( this->sg_.Database(), "total system compressibility", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim, Element<dim> > elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<dim> conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_lhsop_N_dV<dim> capacitance_lhs( this->sg_.Database(), "total system compressibility", "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<dim> capacitance_rhs( this->sg_.Database(), "total system compressibility", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<dim> elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim> nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
 
     capacitance_lhs.MultiplyWithTimeIncrement( true );

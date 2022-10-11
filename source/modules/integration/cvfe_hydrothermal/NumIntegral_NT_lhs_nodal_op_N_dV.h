@@ -6,27 +6,28 @@
 	 - initial port to CSMP++.
 */
 
-#include "CSMP_definitions.h"
 #include "MathOperatorLHS.h"
 
 namespace csmp {
 
 /// Capacitance matrix (LHS) with the operand values applied strictly to the node
 
-template<uint32_t dim, class CELL>
-class NumIntegral_NT_lhs_nodal_op_N_dV : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_lhs_nodal_op_N_dV : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_NT_lhs_nodal_op_N_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_NT_lhs_nodal_op_N_dV( const PropertyDatabase<dim>&, 
                                       const char* oper, const char* basic, const char* test );
     
-    ~NumIntegral_NT_lhs_nodal_op_N_dV();
+    virtual ~NumIntegral_NT_lhs_nodal_op_N_dV();
 
-    virtual void GetOperands( CELL& e );
-    virtual void ComputeContribution( CELL& e );
-    virtual NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL >* clone() const { return new NumIntegral_NT_lhs_nodal_op_N_dV<dim,Element<dim> >(*this); }
+    virtual void GetOperands( const CELL<dim>& ) override;
+    virtual void ComputeContribution( const CELL<dim>& ) override;
+    
+    virtual NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>* clone() const { return new NumIntegral_NT_lhs_nodal_op_N_dV<dim,CELL>(*this); }
+
   private:
 
-    NumIntegral_NT_lhs_nodal_op_N_dV();    
+    NumIntegral_NT_lhs_nodal_op_N_dV() = delete;
     std::vector<ScalarVariable> VAR;    
     double volume;
 

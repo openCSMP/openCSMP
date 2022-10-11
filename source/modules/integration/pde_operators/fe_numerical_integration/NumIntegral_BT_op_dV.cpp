@@ -7,19 +7,19 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_BT_op_dV<dim,CELL>::NumIntegral_BT_op_dV( const PropertyDatabase<dim>& pref,
                                                       const char*  oper, // pore pressure
                                                       const char*  test )
-  : MathOperatorRHS<dim>(pref,oper,test), 
+  : MathOperatorRHS<dim,CELL>(pref,oper,test), 
     B(2,6),  
     BT(6,2),
     STR(3,1) 
 {
-    MathOperatorRHS<dim>::Name("NumIntegral_BT_op_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_BT_op_dV", oper, test );
     
     // verify here that the operands have the correct placement and type 
-   if ( MathOperatorRHS<dim>::MaterialOperandType() == TENSOR ) 
+   if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == TENSOR ) 
      throw csmp::Exception( WARNING, "NumIntegral_BT_op_dV::(constructor)", 
                      oper, "Only diagonal part of tensor property will be used.");
      
@@ -57,25 +57,25 @@ member Vec {V}.
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
     // initialize output vector
-    MathOperatorRHS<dim>::RHS.resize( dim * e.Nodes() );
+    MathOperatorRHS<dim,CELL>::RHS.resize( dim * e.Nodes() );
     
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), static_cast<double>(0.) );
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), static_cast<double>(0.) );
 
     // mapping element-placed operand from material matrix into 1-column matrix
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
-         for ( auto i{0U}; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
-         if ( dim == 2U ) STR(2,0) = MathOperatorRHS<dim>::MTRL[0](0,1);
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
+         for ( auto i{0U}; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim,CELL>::MTRL[0](i,i);
+         if ( dim == 2U ) STR(2,0) = MathOperatorRHS<dim,CELL>::MTRL[0](0,1);
          else { // 3D, upper diagonal elements of symmetric tensor
-              STR(3,0) = MathOperatorRHS<dim>::MTRL[0](0,1); // xy 
-              STR(4,0) = MathOperatorRHS<dim>::MTRL[0](1,2); // yz
-              STR(5,0) = MathOperatorRHS<dim>::MTRL[0](0,2); // zx
+              STR(3,0) = MathOperatorRHS<dim,CELL>::MTRL[0](0,1); // xy 
+              STR(4,0) = MathOperatorRHS<dim,CELL>::MTRL[0](1,2); // yz
+              STR(5,0) = MathOperatorRHS<dim,CELL>::MTRL[0](0,2); // zx
            }
       }
 
@@ -96,23 +96,23 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          B.Transposed( BT );
 
          // mapping node or cpoint-placed operand from material matrix into 1-column matrix
-         if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE or 
-              MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) { 
+         if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE or 
+              MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) { 
              if ( dim == 1U ) {
-	                STR(0,0) = MathOperatorRHS<dim>::MTRL[i](0,0);
+	                STR(0,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,0);
                }
 	           else if ( dim == 2U ) {
-	                STR(0,0) = MathOperatorRHS<dim>::MTRL[i](0,0);
-	                STR(1,0) = MathOperatorRHS<dim>::MTRL[i](1,1);
-	                STR(2,0) = MathOperatorRHS<dim>::MTRL[i](0,1);
+	                STR(0,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,0);
+	                STR(1,0) = MathOperatorRHS<dim,CELL>::MTRL[i](1,1);
+	                STR(2,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,1);
 	             }
 	           else { // 3D, upper diagonal elements of symmetric tensor
-	                STR(0,0) = MathOperatorRHS<dim>::MTRL[i](0,0); // diagonal terms
-	                STR(1,0) = MathOperatorRHS<dim>::MTRL[i](1,1);
-	                STR(2,0) = MathOperatorRHS<dim>::MTRL[i](2,2);
-	                STR(3,0) = MathOperatorRHS<dim>::MTRL[i](0,1); // xy 
-	                STR(4,0) = MathOperatorRHS<dim>::MTRL[i](1,2); // yz
-	                STR(5,0) = MathOperatorRHS<dim>::MTRL[i](0,2); // zx
+	                STR(0,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,0); // diagonal terms
+	                STR(1,0) = MathOperatorRHS<dim,CELL>::MTRL[i](1,1);
+	                STR(2,0) = MathOperatorRHS<dim,CELL>::MTRL[i](2,2);
+	                STR(3,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,1); // xy 
+	                STR(4,0) = MathOperatorRHS<dim,CELL>::MTRL[i](1,2); // yz
+	                STR(5,0) = MathOperatorRHS<dim,CELL>::MTRL[i](0,2); // zx
 	             }
            }
            
@@ -125,24 +125,24 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          
          // adding to result vector
          for ( auto n=0; n<BT.Rows(); n++ ) 
-           MathOperatorRHS<dim>::RHS[n] += BT(n,0);
+           MathOperatorRHS<dim,CELL>::RHS[n] += BT(n,0);
       }
 
 //  cout <<"\nodal forces due to pore pressure, element: "<< e.Idx() << endl;
-//  MathOperatorRHS<dim>::RHS.out();
+//  MathOperatorRHS<dim,CELL>::RHS.out();
 //  cout << endl;
 
 } // end ComputeContribution
 
 
 
-template class NumIntegral_BT_op_dV<1U,Element<1> >;
-template class NumIntegral_BT_op_dV<2U,Element<2> >;
-template class NumIntegral_BT_op_dV<3U,Element<3> >;
+template class NumIntegral_BT_op_dV<1U,Element>;
+template class NumIntegral_BT_op_dV<2U,Element>;
+template class NumIntegral_BT_op_dV<3U,Element>;
 
-template class NumIntegral_BT_op_dV<1U,Face<1> >;
-template class NumIntegral_BT_op_dV<2U,Face<2> >;
-template class NumIntegral_BT_op_dV<3U,Face<3> >;
+template class NumIntegral_BT_op_dV<1U,Face>;
+template class NumIntegral_BT_op_dV<2U,Face>;
+template class NumIntegral_BT_op_dV<3U,Face>;
 
 } // end namespace csmp
 

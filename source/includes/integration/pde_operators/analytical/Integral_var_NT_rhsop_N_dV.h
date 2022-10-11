@@ -1,43 +1,15 @@
-#ifndef Integral_var_NT_rhsop_N_dV_h
-#define Integral_var_NT_rhsop_N_dV_h
+#ifndef CSMP_INTEGRAL_VAR_NT_RHSOP_N_DV_H
+#define CSMP_INTEGRAL_VAR_NT_RHSOP_N_DV_H
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {
 
-template<uint32_t dim,class CELL=Element<dim> >
-class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim> {
-  public:
-    Integral_var_NT_rhsop_N_dV( const PropertyDatabase<dim>& p,
-                                const char* oper,
-                                const char* basic,
-                                const char* test,
-                                const char* var,
-                                const double prefactor = 1.);
-    
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
-    
-    virtual Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
-  private:
-
-    void ComputeIntegral( const CELL& );
-    
-    ScalarVariable op_;
-    
-    Parameter basic_;
-    Parameter var_;
-    
-    std::vector<ScalarVariable > basic_var_;
-    std::vector<ScalarVariable > vvar_;
-    const double prefactor_;
-};
-
-
+template<uint32_t> class Element;
 
 /**
-@class Integral_var_NT_rhsop_N_dV Integral_var_NT_rhsop_N_dV "pde_operators/Integral_var_NT_rhsop_N_dV.h"
+
+@brief Integral_var_NT_rhsop_N_dV Integral_var_NT_rhsop_N_dV "pde_operators/Integral_var_NT_rhsop_N_dV.h"
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999
@@ -66,17 +38,45 @@ animal here...
  
 @section applicability Applicability
  
-Only in transient problems 
- 
+Only in transient problems
  
 @section structure Structure
  
 Additional variable "basic" compared to other classes derived from
 MathOperatorRHS. Corresponds to the u1 variable mentioned in the example
-above. The variable "test" is needed to specify where the entry is 
+above. The variable "test" is needed to specify where the entry is
 assembled in the global rhs vector. Additional variables "upwind" and
 "trigger" for upwinding
 */
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim,CELL> {
+  public:
+    Integral_var_NT_rhsop_N_dV( const PropertyDatabase<dim>&,
+                                const char* oper,
+                                const char* basic,
+                                const char* test,
+                                const char* var,
+                                const double prefactor = 1.);
+                                
+    virtual ~Integral_var_NT_rhsop_N_dV() {}
+    
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
+    
+    virtual Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
+  private:
+
+    void ComputeIntegral( const CELL<dim>& );
+    
+    ScalarVariable op_;
+    
+    Parameter basic_;
+    Parameter var_;
+    
+    std::vector<ScalarVariable > basic_var_;
+    std::vector<ScalarVariable > vvar_;
+    const double prefactor_;
+};
 
 
 } // csmp

@@ -72,9 +72,9 @@ int flux_mismatch( bool bPrescribedVelocity )
    // -----------------------------------------------------------------------
    // 2. steady-state fluid pressure 
    // -----------------------------------------------------------------------
-    SteadyStateDiffusor<3U,Region> steady_state_pressure( sg, "conductivity", "fluid pressure", "fluid volume source" );
+    SteadyStateDiffusor<3U,Element> steady_state_pressure( sg, "conductivity", "fluid pressure", "fluid volume source" );
 
-    VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( sg, "conductivity", "porosity", "fluid pressure" );
+    VelocityAndVolumeFlux<3U>  postpro0( sg, "conductivity", "porosity", "fluid pressure" );
     
     steady_state_pressure.AddPostProcess( &postpro0 );
     steady_state_pressure.ComputeSteadyState( sg.Region("Model") );

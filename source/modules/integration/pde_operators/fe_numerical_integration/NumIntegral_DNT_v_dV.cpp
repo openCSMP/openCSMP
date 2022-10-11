@@ -8,20 +8,19 @@ using namespace std;
 
 namespace csmp {
 
-
 /**
  
 The operand defines the fluid density, and the mtrl variable would for 
 instance be the hydraulic conductivity.  
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_DNT_v_dV<dim,CELL>::NumIntegral_DNT_v_dV( const PropertyDatabase<dim>& pref,
-                                                    const char* oper,       // e.g., Darcy velocity
-                                                    const char* r_factor,
-                                                    const char* dens,       // e.g., fluid density
-                                                    const char* test )      // streaming potential
+                                                      const char* oper,       // e.g., Darcy velocity
+                                                      const char* r_factor,
+                                                      const char* dens,       // e.g., fluid density
+                                                      const char* test )      // streaming potential
                           
-  : MathOperatorRHS<dim>(pref,oper,test),    
+  : MathOperatorRHS<dim,CELL>(pref,oper,test),
     rfac_key(pref.StorageKey(r_factor)),
     rho_key(pref.StorageKey(dens)),
     IPOL(3),
@@ -31,10 +30,10 @@ NumIntegral_DNT_v_dV<dim,CELL>::NumIntegral_DNT_v_dV( const PropertyDatabase<dim
     oper_nprop(3), 
     dens_nprop(3)
  {
-    MathOperatorRHS<dim>::Name("NumIntegral_DNT_v_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_DNT_v_dV", oper, test );
     
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != ELEMENT || 
-         MathOperatorRHS<dim>::MaterialOperandType() != VECTOR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT || 
+         MathOperatorRHS<dim,CELL>::MaterialOperandType() != VECTOR )
     throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    oper, "Dependent variable must be a vector property placed on the elements." );
 
@@ -46,8 +45,8 @@ NumIntegral_DNT_v_dV<dim,CELL>::NumIntegral_DNT_v_dV( const PropertyDatabase<dim
     throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    dens, " operand must be a scalar placed on the nodes." );
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
+         MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "NumIntegral_DNT_v_dV<dim>::(constructor)", 
                    test, "Dependent variable must be a scalar property placed on the nodes." );
  }
@@ -69,13 +68,13 @@ is used to compute the hydrostatic pressure contribution to a transient
 system. Do not use MultiplyWithTimeIncrement() in this case, since
 the acceleration of gravity must not be multiplied with delta t.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_DNT_v_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_DNT_v_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
-   if ( MathOperatorRHS<dim>::MultiplyWithTimeIncrement() ) {
+   if ( MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement() ) {
         throw csmp::Exception( FATAL_ERROR, "NumIntegral_DNT_v_dV<dim>::GetOperands", 
            "Do not multiply this operator with time increment since it uses the acceleration of gravity");
         throw invalid_argument("NumIntegral_DNT_v_dV<dim>::GetOperands");
@@ -87,10 +86,10 @@ void NumIntegral_DNT_v_dV<dim,CELL>::GetOperands( const CELL& e )
    e.Read( rfac_key, rfac );
 
    // 1. reading Operand (velocity)
-   if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
-     e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), oper_eprop );
+   if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) 
+     e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), oper_eprop );
    else 
-     e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), oper_nprop );
+     e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), oper_nprop );
    
    OPMAT(0,0) = oper_eprop[0];
    if ( dim != 1U ) OPMAT(1,0) = oper_eprop[1];
@@ -120,10 +119,10 @@ property which is used as material multiplier.
 A reference to the finite-element from which the contribution is 
 computed.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
+    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
     double detJ, fdensity;
     
     for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
@@ -133,7 +132,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
          DN.Transposed( DNT );
          fdensity = 0.;
          
-         if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
+         if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
                // interpolating density multiplier to integration point
                for ( auto j{0U}; j<e.Nodes(); j++ ) 
                  fdensity += IPOL[j] * dens_nprop[j]();
@@ -153,7 +152,7 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
 
          // assembling contribution to right-hand vector
          for ( auto j{0U}; j<e.Nodes(); j++ )
-           MathOperatorRHS<dim>::RHS[j] = rfac() * DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ;
+           MathOperatorRHS<dim,CELL>::RHS[j] = rfac() * DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ;
       }
 
 // cout <<"\nNumIntegral_DNT_v_dV<dim>::ComputeContribution: Element "<< e.Idx() <<":"<< endl; 
@@ -162,12 +161,12 @@ void NumIntegral_DNT_v_dV<dim,CELL>::ComputeContribution( const CELL& e )
 } // end ComputeContribution
 
 
-template class NumIntegral_DNT_v_dV<1U,Element<1U> >;
-template class NumIntegral_DNT_v_dV<2U,Element<2U> >;
-template class NumIntegral_DNT_v_dV<3U,Element<3U> >;
+template class NumIntegral_DNT_v_dV<1U,Element>;
+template class NumIntegral_DNT_v_dV<2U,Element>;
+template class NumIntegral_DNT_v_dV<3U,Element>;
 
-template class NumIntegral_DNT_v_dV<1U,Face<1U> >;
-template class NumIntegral_DNT_v_dV<2U,Face<2U> >;
-template class NumIntegral_DNT_v_dV<3U,Face<3U> >;
+template class NumIntegral_DNT_v_dV<1U,Face>;
+template class NumIntegral_DNT_v_dV<2U,Face>;
+template class NumIntegral_DNT_v_dV<3U,Face>;
 
 } // csmp

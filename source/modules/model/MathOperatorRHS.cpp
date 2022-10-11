@@ -9,8 +9,8 @@ using namespace std;
 
 namespace csmp {
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>::MathOperatorRHS()
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>::MathOperatorRHS()
     : name_("unspecified RHS-operator"),
     IDT(3),
     MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
@@ -29,20 +29,17 @@ namespace csmp {
   }
 
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>::MathOperatorRHS(const PropertyDatabase<dim>& pref,
-    const char* test)
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>::MathOperatorRHS( const PropertyDatabase<dim>& pref,
+                                              const char* test)
     : name_("unspecified RHS-operator"),
     top(make_pair(pref.Parameter(test), 0)),
     IDT(3),
     MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
     DERIV(2, 3),
     IPOL(3),
-    SC(3),
-    VC(3),
-    TS(3),
-    AR(3),
-    FR(3),
     factor_(1.),
     add_accumulate_(true),
     subtract_accumulate_(false),
@@ -58,10 +55,12 @@ namespace csmp {
   }
 
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>::MathOperatorRHS(const PropertyDatabase<dim>& pref,
-    const char* oper,
-    const char* test)
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>::MathOperatorRHS( const PropertyDatabase<dim>& pref,
+                                              const char* oper,
+                                              const char* test )
     : name_("unspecified RHS-operator"),
     op(pref.Parameter(oper)),
     top(make_pair(pref.Parameter(test), 0)),
@@ -69,11 +68,6 @@ namespace csmp {
     MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
     DERIV(2, 3),
     IPOL(3),
-    SC(3),
-    VC(3),
-    TS(3),
-    AR(3),
-    FR(3),
     factor_(1.),
     add_accumulate_(true),
     subtract_accumulate_(false),
@@ -91,8 +85,8 @@ namespace csmp {
 
 
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>::MathOperatorRHS(const MathOperatorRHS<dim>& mo)
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>::MathOperatorRHS(const MathOperatorRHS<dim,CELL>& mo)
     : name_(mo.name_),
     op(mo.op),    // basic operand
     top(mo.top),   // testfunction operand
@@ -101,11 +95,6 @@ namespace csmp {
     MTRL(mo.MTRL),  // basic Operand storage
     DERIV(mo.DERIV),
     IPOL(mo.IPOL),
-    SC(mo.SC),
-    VC(mo.VC),
-    TS(mo.TS),
-    AR(mo.AR),
-    FR(mo.FR),
     factor_(mo.factor_),
     add_accumulate_(mo.add_accumulate_),
     subtract_accumulate_(mo.subtract_accumulate_),
@@ -122,8 +111,8 @@ namespace csmp {
 
 
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>& MathOperatorRHS<dim>::operator=(const MathOperatorRHS<dim>& mo)
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>& MathOperatorRHS<dim,CELL>::operator=(const MathOperatorRHS<dim,CELL>& mo)
   {
     if (this != &mo) {
       name_ = mo.name_;
@@ -134,11 +123,6 @@ namespace csmp {
       MTRL = mo.MTRL;      // basic Operand storage
       DERIV = mo.DERIV;
       IPOL = mo.IPOL;
-      SC = mo.SC;
-      VC = mo.VC;
-      TS = mo.TS;
-      AR = mo.AR;
-      FR = mo.FR;
       add_accumulate_ = mo.add_accumulate_;
       subtract_accumulate_ = mo.subtract_accumulate_;
       add_accumulate_later_ = mo.add_accumulate_later_;
@@ -154,16 +138,18 @@ namespace csmp {
     return *this;
   }
 
-  template<uint32_t dim>
-  MathOperatorRHS<dim>::~MathOperatorRHS()
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  MathOperatorRHS<dim,CELL>::~MathOperatorRHS()
   {
   }
 
 
   /// ===================================  Operand Functions ========================================================================
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::Name(const char* s, const char* topname)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* topname)
   {
     name_ = s;
     name_ += ": Operand: '";
@@ -172,8 +158,8 @@ namespace csmp {
 
 
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::Name(const char* s, const char* operand_name, const char* topname)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* operand_name, const char* topname)
   {
     name_ = s;
     name_ += ": Operand: '";
@@ -182,15 +168,22 @@ namespace csmp {
     name_ += topname;
   }
 
-  template<uint32_t dim>
-  string  MathOperatorRHS<dim>::Name() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  string  MathOperatorRHS<dim,CELL>::Name() const
   {
     return name_;
   }
 
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::Out() const
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::Out() const
   {
     op.Out();
     top.first.Out();
@@ -201,38 +194,51 @@ namespace csmp {
 
   // MATERIAL PROPERTY OPERAND
 
-  template<uint32_t dim>
-  const csmp::Parameter&   MathOperatorRHS<dim>::MaterialOperand() const
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::MaterialOperand() const
   {
     return op;
   }
 
-  template<uint32_t dim>
-  const csmp::Index&   MathOperatorRHS<dim>::MaterialOperandKey() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::MaterialOperandKey() const
   {
     return op.key;
   }
 
-  template<uint32_t dim>
-  string  MathOperatorRHS<dim>::MaterialOperandName() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  string  MathOperatorRHS<dim,CELL>::MaterialOperandName() const
   {
     return op.name;
   }
 
-  template<uint32_t dim>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::MaterialOperandType() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::MaterialOperandType() const
   {
     return op.key.type;
   }
 
-  template<uint32_t dim>
-  csmp::PLACEMENT   MathOperatorRHS<dim>::MaterialOperandPlacement() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() const
   {
     return op.key.place;
   }
 
-  template<uint32_t dim>
-  uint32_t   MathOperatorRHS<dim>::MaterialOperandDataDepth() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  uint32_t   MathOperatorRHS<dim,CELL>::MaterialOperandDataDepth() const
   {
     return op.key.dataDepth;
   }
@@ -240,100 +246,144 @@ namespace csmp {
 
   // BASIC FUNCTION OPERAND
 
-  template<uint32_t dim>
-  const csmp::Parameter&  MathOperatorRHS<dim>::BasicOperand() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Parameter&  MathOperatorRHS<dim,CELL>::BasicOperand() const
   {
     return top.first;
   }
 
-  template<uint32_t dim>
-  const csmp::Index&   MathOperatorRHS<dim>::BasicOperandKey() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::BasicOperandKey() const
   {
     return top.first.key;
   }
 
-  template<uint32_t dim>
-  string  MathOperatorRHS<dim>::BasicOperandName() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  string  MathOperatorRHS<dim,CELL>::BasicOperandName() const
   {
     return top.first.name;
   }
 
-  template<uint32_t dim>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::BasicOperandType() const
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::BasicOperandType() const
   {
     return top.first.key.type;
   }
 
-  template<uint32_t dim>
-  csmp::PLACEMENT   MathOperatorRHS<dim>::BasicOperandPlacement() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::BasicOperandPlacement() const
   {
     return top.first.key.place;
   }
 
-  template<uint32_t dim>
-  uint32_t   MathOperatorRHS<dim>::BasicOperandDataDepth() const
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  uint32_t   MathOperatorRHS<dim,CELL>::BasicOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::BasicOperandOffset(size_t os)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::BasicOperandOffset(size_t os)
   {
     top.second = os;
   }
 
-  template<uint32_t dim>
-  uint32_t MathOperatorRHS<dim>::BasicOperandOffset() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+size_t MathOperatorRHS<dim,CELL>::BasicOperandOffset() const
   {
     return top.second;
   }
 
   // TEST FUNCTION OPERAND
 
-  template<uint32_t dim>
-  const csmp::Parameter&   MathOperatorRHS<dim>::TestOperand() const
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::TestOperand() const
   {
     return top.first;
   }
 
-  template<uint32_t dim>
-  const csmp::Index&   MathOperatorRHS<dim>::TestOperandKey() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::TestOperandKey() const
   {
     return top.first.key;
   }
 
-  template<uint32_t dim>
-  string  MathOperatorRHS<dim>::TestOperandName() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  string  MathOperatorRHS<dim,CELL>::TestOperandName() const
   {
     return top.first.name;
   }
 
-  template<uint32_t dim>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim>::TestOperandType() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::TestOperandType() const
   {
     return top.first.key.type;
   }
 
-  template<uint32_t dim>
-  csmp::PLACEMENT   MathOperatorRHS<dim>::TestOperandPlacement() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::TestOperandPlacement() const
   {
     return top.first.key.place;
   }
 
-  template<uint32_t dim>
-  uint32_t   MathOperatorRHS<dim>::TestOperandDataDepth() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  uint32_t   MathOperatorRHS<dim,CELL>::TestOperandDataDepth() const
   {
     return top.first.key.dataDepth;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::TestOperandOffset(size_t os)
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::TestOperandOffset(size_t os)
   {
     top.second = os;
   }
 
-  template<uint32_t dim>
-  uint32_t MathOperatorRHS<dim>::TestOperandOffset() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const
   {
     return top.second;
   }
@@ -346,8 +396,8 @@ namespace csmp {
 
 
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::AddAccumulate()
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::AddAccumulate()
   {
     add_accumulate_ = true;
     subtract_accumulate_ = false;
@@ -357,8 +407,11 @@ namespace csmp {
 
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::SubtractAccumulate()
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::SubtractAccumulate()
   {
     add_accumulate_ = false;
     subtract_accumulate_ = true;
@@ -368,8 +421,11 @@ namespace csmp {
 
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::AddAccumulateLater()
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::AddAccumulateLater()
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -379,8 +435,11 @@ namespace csmp {
 
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::SubtractAccumulateLater()
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::SubtractAccumulateLater()
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -390,8 +449,11 @@ namespace csmp {
 
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::MultiplyAccumulate()
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::MultiplyAccumulate()
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -400,104 +462,146 @@ namespace csmp {
     multiply_accumulate_ = true;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::LumpedFormulation(bool lumped)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::LumpedFormulation(bool lumped)
   {
     lump_matrices_ = lumped;
   }
 
-  template<uint32_t dim>
-  void  MathOperatorRHS<dim>::ApplicationCycles(size_t c)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void  MathOperatorRHS<dim,CELL>::ApplicationCycles(uint32_t c)
   {
     application_cycles_ = c;
   }
 
-  template<uint32_t dim>
-  void  MathOperatorRHS<dim>::ApplicationCycle(size_t c)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void  MathOperatorRHS<dim,CELL>::ApplicationCycle(uint32_t c)
   {
     application_cycle_ = c;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::MultiplyBy(double integral_mult_factor)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::MultiplyBy(double integral_mult_factor)
   {
     factor_ = integral_mult_factor;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::MultiplyWithTimeIncrement(bool multiply)
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement(bool multiply)
   {
     time_multiply_ = multiply;
   }
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::DivideByTimeIncrement(bool divide)
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::DivideByTimeIncrement(bool divide)
   {
     time_divide_ = divide;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::Add() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::Add() const
   {
     return add_accumulate_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::Subtract() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::Subtract() const
   {
     return subtract_accumulate_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::AddLater() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::AddLater() const
   {
     return add_accumulate_later_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::SubtractLater() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::SubtractLater() const
   {
     return subtract_accumulate_later_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::Multiply() const
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::Multiply() const
   {
     return multiply_accumulate_;
   }
 
-  template<uint32_t dim>
-  size_t  MathOperatorRHS<dim>::ApplicationCycles() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycles() const
   {
     return application_cycles_;
   }
 
-  template<uint32_t dim>
-  size_t  MathOperatorRHS<dim>::ApplicationCycle() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycle() const
   {
     return application_cycle_;
   }
 
-  template<uint32_t dim>
-  bool  MathOperatorRHS<dim>::LumpedFormulation() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool  MathOperatorRHS<dim,CELL>::LumpedFormulation() const
   {
     return lump_matrices_;
   }
 
-  template<uint32_t dim>
-  double   MathOperatorRHS<dim>::MultiplyBy() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  double   MathOperatorRHS<dim,CELL>::MultiplyBy() const
   {
     return factor_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::MultiplyWithTimeIncrement() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement() const
   {
     return time_multiply_;
   }
 
-  template<uint32_t dim>
-  bool MathOperatorRHS<dim>::DivideByTimeIncrement() const
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  bool MathOperatorRHS<dim,CELL>::DivideByTimeIncrement() const
   {
     return time_divide_;
   }
@@ -507,15 +611,15 @@ namespace csmp {
 
 
   // interpolation of property if isoparametric elements are used
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::PropertyAtIntegrationPoint(const Element<dim>& e_ref,
-                                                        const csmp::Index& idx,
-                                                        uint32_t ip,
-                                                        DenseMatrix<DM_MIN>& M)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_ref,
+                                                              const csmp::Index& idx,
+                                                              uint32_t ip,
+                                                              DenseMatrix<DM_MIN>& M)
   {
     if (!e_ref.UsesLocalCoordinates())
       throw csmp::Exception(FATAL_ERROR,
-        "MathOperatorRHS<dim>::PropertyValueAtIntegrationPoint",
+        "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
         "Current element does not support numerical integration.");
 
     // 0. If the property is a constraint point variable a one-to-one mapping
@@ -610,119 +714,10 @@ namespace csmp {
     }
 
     throw csmp::Exception(FATAL_ERROR,
-      "MathOperatorRHS<dim>::PropertyValueAtIntegrationPoint",
+      "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
       "This method cannot interpolate IntegrationPoint variables.");
 
-  } // end PropertyValueAtIntegrationPoint( Element )
-
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::PropertyAtIntegrationPoint(const Face<dim>& e_ref,
-                                                        const csmp::Index& idx,
-                                                        uint32_t ip,
-                                                        DenseMatrix<DM_MIN>& M)
-  {
-    if (!e_ref.UsesLocalCoordinates())
-      throw csmp::Exception(FATAL_ERROR,
-        "MathOperatorRHS<dim>::PropertyValueAtIntegrationPoint",
-        "Current element does not support numerical integration.");
-
-    // 0. If the property is a constraint point variable a one-to-one mapping
-    //    can be performed; no interpolation is needed
-    if (idx.place == FACE_INTEGRATION_POINT) {
-      if (idx.type == SCALAR) {
-        M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(ip, idx));
-      }
-      else if (idx.type == VECTOR) {
-        e_ref.Read(ip, idx, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
-      else if (idx.type == TENSOR) {
-        e_ref.Read(ip, idx, TS[0]);
-        M = TS[0];
-      }
-      else if (idx.type == ARRAY)
-      {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.Read(ip, idx, AR[0]);
-        M.AssignToDiagonal(AR[0]);
-      }
-      else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.Read(ip, idx, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
-      return;
-    }
-
-    // 1. If the property is an element variable it is constant over the
-    //    element, such that no interpolation is needed
-    if (idx.place == FACE || idx.place == BOUNDARY)
-    {
-      if (idx.type == SCALAR) {
-        M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
-      }
-      else if (idx.type == VECTOR) {
-        e_ref.Read(idx, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
-      else if (idx.type == TENSOR) {
-        e_ref.Read(idx, TS[0]);
-        M = TS[0];
-      }
-      else if (idx.type == ARRAY)
-      {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.Read(idx, AR[0]);
-        M.AssignToDiagonal(AR[0]);
-      }
-      else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.Read(idx, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
-      return;
-    }
-
-    // 2. If the property is a node property, it must be interpolated to the
-    //    integration point
-    if (idx.place == NODE)
-    {
-      // interpolating properties
-      if (idx.type == SCALAR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, SC[0]);
-        M.AssignToDiagonal(dim, SC[0]);
-      }
-      else if (idx.type == VECTOR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, VC[0]);
-        M.AssignToDiagonal(VC[0]);
-      }
-      else if (idx.type == TENSOR) {
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, TS[0]);
-        M = TS[0];
-      }
-      else if (idx.type == ARRAY)
-      {
-        AR[0].Resize(idx.dataDepth);
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, AR[0]);
-        M.AssignToDiagonal(AR[0]);
-      }
-      else if (idx.type == FLAGGEDARRAY)
-      {
-        FR[0].Resize(idx.dataDepth);
-        e_ref.PropertyValueAtIntegrationPoint(idx, ip, FR[0]);
-        M.AssignToDiagonal(FR[0]);
-      }
-      return;
-    }
-
-    throw csmp::Exception(FATAL_ERROR,
-      "MathOperatorRHS<dim>::PropertyValueAtIntegrationPoint",
-      "This method cannot interpolate IntegrationPoint variables.");
-
-  } // end PropertyValueAtIntegrationPoint( Face )
-
+  } // end PropertyValueAtIntegrationPoint( CELL )
 
 
 
@@ -737,8 +732,8 @@ namespace csmp {
 
  When the property is an element property, it will be put into the
  first vector entry MTRL[0].*/
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::GetOperands( const Element<dim>& e_ref)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
   {
     // if operand property is an element property
     if (MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == REGION)
@@ -811,154 +806,38 @@ namespace csmp {
       }
       else
         throw csmp::Exception(FATAL_ERROR,
-          "MathOperatorRHS<dim>::GetOperands(Element):",
+          "MathOperatorRHS<dim,CELL>::GetOperands(Element):",
           "Face based operands cannot be accumulated with this method");
     }
 
   } // end GetOperands(Element)
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::GetOperands( const Face<dim>&  e_ref)
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::WriteOperands(CELL<dim>& e)
   {
-    // if operand property is an element property
-    if (MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == BOUNDARY)
-    {
-      MTRL.resize(1U);
-      if (MaterialOperandType() == SCALAR)
-        MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
-      else if (MaterialOperandType() == VECTOR) {
-        VectorVariable<dim>  vc;
-        e_ref.Read(MaterialOperandKey(), vc);
-        MTRL[0].AssignToDiagonal(vc);
-      }
-      else if (MaterialOperandType() == TENSOR) {
-        TensorVariable<dim>  ts;
-        e_ref.Read(MaterialOperandKey(), ts);
-        MTRL[0] = ts;
-      }
-      else if (MaterialOperandType() == ARRAY)
-      {
-        ArrayVariable ar(MaterialOperandDataDepth());
-        e_ref.Read(MaterialOperandKey(), ar);
-        MTRL[0].AssignToDiagonal(ar);
-      }
-      else if (MaterialOperandType() == FLAGGEDARRAY)
-      {
-        FlaggedArrayVariable fr(MaterialOperandDataDepth());
-        e_ref.Read(MaterialOperandKey(), fr);
-        MTRL[0].AssignToDiagonal(fr);
-      }
-    }
-    else // if the operand is placed on the constraint-points
-    {
-      if (MaterialOperandPlacement() == FACE_INTEGRATION_POINT) {
-        MTRL.resize(e_ref.FE()->IntegrationPoints());
-        const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i{0U}; i < n_integration_points; i++)
-        {
-          if (MaterialOperandType() == SCALAR)
-            MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
-          else if (MaterialOperandType() == VECTOR) {
-            VectorVariable<dim>  vc;
-            e_ref.Read(i, MaterialOperandKey(), vc);
-            MTRL[i].AssignToDiagonal(vc);
-          }
-          else if (MaterialOperandType() == TENSOR) {
-            TensorVariable<dim>  ts;
-            e_ref.Read(i, MaterialOperandKey(), ts);
-            MTRL[i] = ts;
-          }
-          else if (MaterialOperandType() == ARRAY)
-          {
-            ArrayVariable ar(MaterialOperandDataDepth());
-            e_ref.Read(i, MaterialOperandKey(), ar);
-            MTRL[0].AssignToDiagonal(ar);
-          }
-          else if (MaterialOperandType() == FLAGGEDARRAY)
-          {
-            FlaggedArrayVariable fr(MaterialOperandDataDepth());
-            e_ref.Read(i, MaterialOperandKey(), fr);
-            MTRL[0].AssignToDiagonal(fr);
-          }
-        }
-      }
-
-      // if the operand is placed on the node
-      else if (MaterialOperandPlacement() == NODE) {
-        const size_t n_integration_points(e_ref.FE()->IntegrationPoints());
-        for (auto i{0U}; i < n_integration_points; i++)
-          PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
-      }
-      else
-        throw csmp::Exception(FATAL_ERROR,
-          "MathOperatorRHS<dim>::GetOperands(Face):",
-          "Element based operands cannot be accumulated with this method");
-    }
-
-  } // end GetOperands(Face)
-
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::GetOperands(const InterFace<dim>& f)
-  {
-    cerr << "\nMathOperatorRHS<dim>::GetOperands(InterFace): ";
-    cerr << " Overload to get LHS operands from interface: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::GetOperands(InterFace)");
-  } // end GetOperands(InterFace)
-
-
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::WriteOperands(Element<dim>& e)
-  {
-    cerr << "\nMathOperatorRHS<dim>::WriteOperands(Element): ";
+    cerr << "\nMathOperatorRHS<dim,CELL>::WriteOperands(CELL): ";
     cerr << " Overload to write LHS operands from element: " << e.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::WriteOperands(Element)");
+    throw invalid_argument("MathOperatorRHS<dim,CELL>::WriteOperands(Element)");
   } // end WriteOperands(Element)
 
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::WriteOperands(Face<dim>& f)
-  {
-    cerr << "\nMathOperatorRHS<dim>::WriteOperands(Face): ";
-    cerr << " Overload to write LHS operands from face: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::WriteOperands(Face)");
-  } // end WriteOperands(Face)
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::WriteOperands(InterFace<dim>& f)
-  {
-    cerr << "\nMathOperatorRHS<dim>::WriteOperands(InterFace): ";
-    cerr << " Overload to write LHS operands from interface: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::WriteOperands(InterFace)");
-  } // end WriteOperands(InterFace)
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution( const Element<dim>& e)
+
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::ComputeContribution( const CELL<dim>& e )
   {
-    cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Element): ";
-    cerr << " Overload to calculate LHS contribution from Element: " << e.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::ComputeContribution(Element)");
+    cerr << "\nMathOperatorRHS<dim,CELL>::ComputeContribution(CELL): ";
+    cerr << " Overload to calculate LHS contribution from CELL: " << e.Idx() << endl;
+    throw invalid_argument("MathOperatorRHS<dim,CELL>::ComputeContribution(CELL)");
   }// end ComputeContribution(Element)
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution( const Face<dim>& f)
-  {
-    cerr << "\nMathOperatorRHS<dim>::ComputeContribution(Face): ";
-    cerr << " Overload to calculate LHS constribution from face: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::ComputeContribution(Face)");
-  }// end ComputeContribution(Face)
-
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::ComputeContribution( const InterFace<dim>& f)
-  {
-    cerr << "\nMathOperatorRHS<dim>::ComputeContribution(InterFace): ";
-    cerr << " Overload to calculate LHS constribution from interface: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::ComputeContribution(InterFace)");
-  }// end ComputeContribution(InterFace)
 
 
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::MultiplyWithTimeFactor(double dt)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
   {
     for (auto i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
@@ -967,8 +846,8 @@ namespace csmp {
 
   /// AssignToGlobal matrix functions
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, vector<double>& rhs)
+template<uint32_t dim, template<uint32_t> class CELL>
+  void MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs )
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
@@ -998,12 +877,13 @@ namespace csmp {
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
-        "MathOperatorRHS<dim>::AssignToGlobal(Element)",
+        "MathOperatorRHS<dim,CELL>::AssignToGlobal(Element)",
         "accumulation instructions could not be parsed.");
   }
 
+/*
   template<uint32_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs)
+  void MathOperatorRHS<dim,CELL>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs)
   {
     // map local to global indexes for test(basic) operands
     const size_t nodes(e.Nodes());
@@ -1035,17 +915,11 @@ namespace csmp {
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
-        "MathOperatorRHS<dim>::AssignToGlobal(Face)",
+        "MathOperatorRHS<dim,CELL>::AssignToGlobal(Face)",
         "accumulation instructions could not be parsed.");
   }
+*/
 
-  template<uint32_t dim>
-  void MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, vector<double>& rhs)
-  {
-    cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
-    cerr << " Overload to assign RHS  local entries to global matrix: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::AssignToGlobal(InterFace)");
-  }
 
 
   /// Transform Node Index Vector
@@ -1053,8 +927,10 @@ namespace csmp {
   /// Roman, 2013: Added Array Variable and Falgged Array Variable Index Accessor
 
 
-  template<uint32_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const Element<dim>& e, vector<double>& rhs, const vector<size_t>& DOF_indexes) {
+template<uint32_t dim, template<uint32_t> class CELL>
+void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double>& rhs, const vector<size_t>& DOF_indexes ) {
+// TODO: get static assert to pass by moving functionality for SplitBoundaries to subclasses
+//    static_assert( is_same<CELL<dim>,InterFace<dim>>::value, "Override this method for InterFace is subclass");
     // map local to global indexes for test and basic operands
     const size_t nodes(e.Nodes());
     IDT.resize(nodes);
@@ -1092,70 +968,11 @@ namespace csmp {
     }
     else {
       throw csmp::Exception(ERROR,
-        "MathOperatorRHS<dim>::AssignToGlobal(Element)",
+        "MathOperatorRHS<dim,CELL>::AssignToGlobal(CELL)",
         "accumulation instructions could not be parsed.");
     }
   }
   
-  
-
-  template<uint32_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs, const vector<size_t>& DOF_indexes) {
-    // map local to global indexes for test(basic) operands
-    const size_t nodes(e.Nodes());
-
-    IDT.resize(nodes);
-    for (auto i{0U}; i < nodes; i++)
-      IDT[i] = e.N(i)->Idx();
-
-    if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
-
-    const size_t dof(IDT.size());
-
-    for (auto i{0U}; i < dof; i++) {
-      IDT[i] += this->TestOperandOffset();
-      IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
-    }
-
-    // perform assignment from local matrix to global matrix
-
-    if (multiply_accumulate_) {
-      for (auto i{0U}; i < dof; i++) {
-        if (IDT[i] != NULL_IDX) {
-          rhs[IDT[i]] *= RHS[i] * factor_;
-        }
-      }
-    }
-    else if (add_accumulate_ || add_accumulate_later_) {
-      for (auto i{0U}; i < dof; i++) {
-        if (IDT[i] != NULL_IDX) {
-          rhs[IDT[i]] += RHS[i] * factor_;
-        }
-      }
-    }
-    else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (auto i{0U}; i < dof; i++) {
-        if (IDT[i] != NULL_IDX) {
-          rhs[IDT[i]] -= RHS[i] * factor_;
-        }
-      }
-    }
-    else {
-      throw csmp::Exception(ERROR,
-        "MathOperatorRHS<dim>::AssignToGlobal(Face)",
-        "accumulation instructions could not be parsed.");
-
-    }
-
-  }
-
-  template<uint32_t dim>
-  void  MathOperatorRHS<dim>::AssignToGlobal(const InterFace<dim>& f, vector<double>& rhs, const vector<size_t>& DOF_indexes) {
-    cerr << "\nMathOperatorRHS<dim>::AssignToGlobal(InterFace): ";
-    cerr << " Overload to assign RHS  local entries to global matrix: " << f.Idx() << endl;
-    throw invalid_argument("MathOperatorRHS<dim>::AssignToGlobal(InterFace)");
-  }
 
 
 
@@ -1228,9 +1045,20 @@ namespace csmp {
 
   } // end transformNodeIndexVector
 
-  template class MathOperatorRHS<1U>;
-  template class MathOperatorRHS<2U>;
-  template class MathOperatorRHS<3U>;
+
+template class MathOperatorRHS<1U>;
+template class MathOperatorRHS<2U>;
+template class MathOperatorRHS<3U>;
+
+template class MathOperatorRHS<1U,Face>;
+template class MathOperatorRHS<2U,Face>;
+template class MathOperatorRHS<3U,Face>;
+
+// TODO: this instantiation should not be necessary
+template class MathOperatorRHS<1U,InterFace>;
+template class MathOperatorRHS<2U,InterFace>;
+template class MathOperatorRHS<3U,InterFace>;
+
 
 } // end namespace csp
 

@@ -6,10 +6,13 @@
 	 - initial port to CSMP++.
 */
 
-#include "ExplicitFiniteVolumeTransportPHX.h"
-#include "UpwindControlVisitor.h"
+#include "ScalarVariable.h"
 
 namespace csmp {
+
+template<uint32_t> class Model;
+template<uint32_t> class UpwindControlVisitor;
+template<uint32_t> class ExplicitFiniteVolumeTransportPHX;
 
 /// class to handle two-phase flow caclulations of FV part within the CVFEM scheme (Weis et al., Geofluids, 2014).
 
@@ -22,7 +25,7 @@ class TwoPhaseTransportPHX {
                           ExplicitFiniteVolumeTransportPHX<dim>& fv_vapor, // class for transport with vapor phase
                           ExplicitFiniteVolumeTransportPHX<dim>& fv_liquid); // class for transport with liquid phase
 
-    ~TwoPhaseTransportPHX( );
+    virtual ~TwoPhaseTransportPHX();
     
     double  AdvectMassConserved( const double& time_increment); // main function to coordinate two-phase flow
     void SetLargestTimeStep( const double& max_time_step ); // modify maximum size of time step
@@ -33,7 +36,7 @@ class TwoPhaseTransportPHX {
 
   private:
   
-    Model<dim>& model_ref;
+    Model<dim>& model_ref; // TODO: don't store
     UpwindControlVisitor<dim>& UpwindVisitor;
     ExplicitFiniteVolumeTransportPHX<dim>& fv_transport_vapor;
     ExplicitFiniteVolumeTransportPHX<dim>& fv_transport_liquid;
@@ -47,16 +50,15 @@ class TwoPhaseTransportPHX {
     double    upper_shell_T, lower_shell_T;
 
     // tracking fluxes
-    csmp::Index          tffi_key, tffo_key,
+    csmp::Index         tffi_key, tffo_key,
                         mlfi_key, mlfo_key,
                         mvfi_key, mvfo_key,
                         slfi_key, slfo_key,
                         svfi_key, svfo_key,
                         T_key;
 
-	ScalarVariable  tffi, tffo, mlfi, mlfo, mvfi, mvfo;
+	  ScalarVariable  tffi, tffo, mlfi, mlfo, mvfi, mvfo;
     ScalarVariable  slfi, slfo, svfi, svfo, temperature;
-
 };
 
 /**

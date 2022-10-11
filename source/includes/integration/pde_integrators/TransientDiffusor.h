@@ -1,24 +1,25 @@
 #ifndef TRANSIENT_DIFFUSOR_H
 #define TRANSIENT_DIFFUSOR_H
 
-#include "CSMP_definitions.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "PointSource_rhsop.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
-#include "PDE_Integrator.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
 #endif
 
 namespace csmp {
 
 template<uint32_t> class Model;
-
+template<uint32_t> class Element;
 
 /** transient diffusion solver with Backward-Euler time-stepping
 
@@ -32,56 +33,54 @@ template<uint32_t> class Model;
    @attention gradient_multiplier currently is not used.
    
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
+template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
+class TransientDiffusor : public PDE_Integrator<dim,CELLTYPE> {
   public:
-    typedef typename COMPUTATION_DOMAIN<dim>::CellType  ComputationCell;
-
     TransientDiffusor( Model<dim>&,
-                              const char* diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* element_source_variable );
+                        const char* diffusivity,
+                        const char* diffusing_variable,
+                        const char* storage_variable,
+                        const char* element_source_variable );
                                      
     TransientDiffusor( Model<dim>&,
-                              const char* diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* element_source_variable,
-                              const char* point_source_variable );
+                        const char* diffusivity,
+                        const char* diffusing_variable,
+                        const char* storage_variable,
+                        const char* element_source_variable,
+                        const char* point_source_variable );
                               
     TransientDiffusor( Model<dim>&, 
-                              const char* lhs_diffusivity,
-                              const char* rhs_diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* spatial_source_variable,
-                              const char* point_source_variable );                               
+                       const char* lhs_diffusivity,
+                       const char* rhs_diffusivity,
+                       const char* diffusing_variable,
+                       const char* storage_variable,
+                       const char* spatial_source_variable,
+                       const char* point_source_variable );
     
     // including gravity
     TransientDiffusor( Model<dim>&, 
-                              const char* diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* spatial_source_variable,
-                              const char* gradient_variable, double gradient_multiplier );
+                        const char* diffusivity,
+                        const char* diffusing_variable,
+                        const char* storage_variable,
+                        const char* spatial_source_variable,
+                        const char* gradient_variable, double gradient_multiplier );
 
     TransientDiffusor( Model<dim>&, 
-                              const char* lhs_diffusivity,
-                              const char* rhs_diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* spatial_source_variable,
-                              const char* gradient_variable, double gradient_multiplier );
+                        const char* lhs_diffusivity,
+                        const char* rhs_diffusivity,
+                        const char* diffusing_variable,
+                        const char* storage_variable,
+                        const char* spatial_source_variable,
+                        const char* gradient_variable, double gradient_multiplier );
                               
     TransientDiffusor( Model<dim>&, 
-                              const char* lhs_diffusivity,
-                              const char* rhs_diffusivity,
-                              const char* diffusing_variable,
-                              const char* storage_variable,
-                              const char* spatial_source_variable,
-                              const char* point_source_variable,
-                              const char* gradient_variable, double gradient_multiplier );                              
+                      const char* lhs_diffusivity,
+                      const char* rhs_diffusivity,
+                      const char* diffusing_variable,
+                      const char* storage_variable,
+                      const char* spatial_source_variable,
+                      const char* point_source_variable,
+                      const char* gradient_variable, double gradient_multiplier );
 
     virtual ~TransientDiffusor();
   
@@ -98,12 +97,12 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
 
   protected:
 
-    NumIntegral_dNT_op_dN_dV<dim,ComputationCell>   conductance_;
-    NumIntegral_NT_op_N_dV<dim,ComputationCell>*    source_;
-    NumIntegral_NT_lhsop_N_dV<dim,ComputationCell>  capacitance_lhs_;
-    NumIntegral_NT_op_N_dV<dim,ComputationCell>     capacitance_rhs_;
-    PointSource_rhsop<dim,ComputationCell>*         nodal_source_;
-    NumIntegral_dNT_op_dV<dim,ComputationCell>*     gravity_;
+    NumIntegral_dNT_op_dN_dV<dim,CELLTYPE>   conductance_;
+    NumIntegral_NT_op_N_dV<dim,CELLTYPE>*    source_;
+    NumIntegral_NT_lhsop_N_dV<dim,CELLTYPE>  capacitance_lhs_;
+    NumIntegral_NT_op_N_dV<dim,CELLTYPE>     capacitance_rhs_;
+    PointSource_rhsop<dim,CELLTYPE>*         nodal_source_;
+    NumIntegral_dNT_op_dV<dim,CELLTYPE>*     gravity_;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings_;
@@ -111,7 +110,6 @@ class TransientDiffusor : public PDE_Integrator<dim,COMPUTATION_DOMAIN> {
 #else
     CSMP_DEFAULT_LINEAR_SOLVER solver_;
 #endif
-
     const double  grad_multiplier_;
     std::string   dep_var_name_;
     

@@ -44,7 +44,7 @@ template<uint32_t dim>
 PropertyDatabase<dim>::PropertyDatabase( const char* variablesFileName, const set<string>& subset_variables )
     : vectorFlags(dim),
       tensorFlags(dim),
-      physvarsFile((variablesFileName==NULL) ? "EmptyVariablesFile" : variablesFileName),
+      physvarsFile((variablesFileName==nullptr) ? "EmptyVariablesFile" : variablesFileName),
       variableCount_(),
       propList_(),
       indexTracker_(),

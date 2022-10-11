@@ -92,10 +92,10 @@ void ErrorMetric_Example::Run()
    // -----------------------------------------------------------------------
    // 2. steady-state fluid pressure
    // -----------------------------------------------------------------------
-    SteadyStateDiffusor<3U,Region> steady_state_pressure( model, "conductivity", "fluid pressure",
+    SteadyStateDiffusor<3U,Element> steady_state_pressure( model, "conductivity", "fluid pressure",
                                                                         "fluid volume source" );
 
-    VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model, "conductivity", "porosity", "fluid pressure" );
+    VelocityAndVolumeFlux<3U>  postpro0( model, "conductivity", "porosity", "fluid pressure" );
 
     steady_state_pressure.AddPostProcess( &postpro0 );
     steady_state_pressure.ComputeSteadyState( model.Region("Model") );

@@ -9,6 +9,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
+#include "LinearSolver.h"
 
 #include "PropertyHandle.h"
 
@@ -114,18 +115,18 @@ void TopographyDrivenFlow_Example::Run()
   // -----------------------------------------------------------------------------
 #ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  steady_state_pressure(samg_solver);
+    PDE_Integrator<2U,Element>  steady_state_pressure(samg_solver);
 #else
     EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  steady_state_pressure(linear_solver);
+    PDE_Integrator<2U,Element>  steady_state_pressure(linear_solver);
 #endif
 
     // conductance matrix [K] on the lefthand side
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U>    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
     // source vector {Q} on the righthand side
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >      source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>      source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
     // gravity term on righthand side
-    NumIntegral_NT_op_dNi_dV<2U,Element<2U> >    gravity( model.Database(),  "fluid density",  "conductivity", "absolute fluid pressure" );
+    NumIntegral_NT_op_dNi_dV<2U>    gravity( model.Database(),  "fluid density",  "conductivity", "absolute fluid pressure" );
 
     // add PDE_Operators to the FE Algorithm
     steady_state_pressure.Add( &conductance );

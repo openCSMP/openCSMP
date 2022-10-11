@@ -1824,7 +1824,6 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
   ScalarVariable      sc1, sc2, sc3, sc4;
   VectorVariable<dim> vc1, vc2, vc3, vc4;
   TensorVariable<dim> ts1, ts2, ts3, ts4;
-  std::vector<std::string> properties_not_found;
   double            val;
 
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
@@ -2028,22 +2027,10 @@ bool readBoxBoundaryPropertyValuesAndConditions( Model<dim>& model,
         throw csmp::Exception( FATAL_ERROR, "readBoxBoundaryPropertyValuesAndConditions",
                                "Flagged Array box-boundary condition assignment not implemented yet" );
         return false;
-      } else {
-          properties_not_found.push_back(prop_name);
       }
     }
     ifs.getline( text_line, line_length );
   } while ( !isBlankLine( text_line ) && !ifs.eof() );
-
-  if (!properties_not_found.empty()){
-      std::cout << "FATAL ERROR, readBoxBoundaryPropertyValuesAndConditions: The following properties were not found a Placement" << std::endl;
-      for (std::string s : properties_not_found ) {
-          std::cout << s << "\t" ;
-      }
-      throw csmp::Exception( FATAL_ERROR, "readBoxBoundaryPropertyValuesAndConditions",
-                             "Property placements (and probably types) not recognised. Check your configuration file (block 4)");
-      return false;
-  }
 
   return true;
 

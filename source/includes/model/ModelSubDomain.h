@@ -52,9 +52,7 @@ struct SubDomainInfo {
 */
 template<uint32_t dim,template<uint32_t> class CELL>
 class ModelSubDomain {
-  public:
-    typedef CELL<dim> CellType; // used by SteadyStateDiffusor and others
-    
+  public:    
     /// constructs incomplete subdomain for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
     ModelSubDomain( const ModelSubDomain& );
@@ -226,7 +224,8 @@ class ModelSubDomain {
 
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
     template<typename Var>
-    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+    void InputPropertyValue( const char* input_prop, const Var& new_value,
+                             VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// changes the flag of the scalar variable 'property' to new value; applied either in the entire subdomain or its interior or perimeter
     void ChangePropertyStatus( const char* property,

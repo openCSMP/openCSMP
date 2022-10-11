@@ -5,6 +5,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /** 
  
 @brief Algorithm implementing a Newton iteration scheme for non-linear processes.
@@ -20,15 +22,12 @@ Models, Visitors and Interrelations. Calculations on single Region
 objects is not supported.  
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-class NewtonIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
+template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
+class NewtonIntegrator : public IterativeIntegrator<dim,CELLTYPE> {
 public:
   NewtonIntegrator();
   
   virtual double Residual();
-  
-private:
-  
 };
 
 

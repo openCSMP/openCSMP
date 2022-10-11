@@ -16,6 +16,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "LinearSolver.h"
 
 // interrelation
 #include "ConstantFactor.h"
@@ -187,7 +188,7 @@ void TransientPressure_Example::Run()
   // 10. Build a transient fluid pressure algorithm using Backward-Euler time-stepping
   // ----------------------------------------------------------------------------------
   // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
-  PDE_Integrator<2U,Region>  transient_pressure;
+  PDE_Integrator<2U,Element>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Solver  samg_solver;
   transient_pressure.SetSolver( samg_solver );
@@ -196,21 +197,21 @@ void TransientPressure_Example::Run()
   transient_pressure.SetSolver( linear_solver );
 #endif
 
-  NumIntegral_dNT_op_dN_dV<2U,Element<2U> > conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                             conductance.MultiplyWithTimeIncrement(true);
 
-  NumIntegral_NT_lhsop_N_dV<2U,Element<2U> > capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+  NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                              capacitance_lhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U,Element<2U> > capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+  NumIntegral_NT_op_N_dV<2U> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                           capacitance_rhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U,Element<2U> > source( model.Database(), "fluid volume source",  "fluid pressure" );
+  NumIntegral_NT_op_N_dV<2U> source( model.Database(), "fluid volume source",  "fluid pressure" );
                                           source.MultiplyWithTimeIncrement(true);
                                           source.AddAccumulateLater();
                                           source.LumpedFormulation(true);
 
-  VelocityAndVolumeFlux<2U,Element<2U> >  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
+  VelocityAndVolumeFlux<2U>  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 
   transient_pressure.Add( &conductance );
   transient_pressure.Add( &capacitance_lhs );

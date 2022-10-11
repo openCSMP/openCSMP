@@ -1,10 +1,11 @@
 #ifndef INTEGRAL_DNT_DN_DV_H
 #define INTEGRAL_DNT_DN_DV_H
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {
+
+template<uint32_t> class Element;
 
 /**
     Interpolation function derivatives squared.
@@ -18,14 +19,14 @@ namespace csmp {
     variable.
 
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class Integral_dNT_dN_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Integral_dNT_dN_dV : public MathOperatorRHS<dim,CELL> {
   public:
     Integral_dNT_dN_dV( const PropertyDatabase<dim>&, const char* test );
                         
     virtual ~Integral_dNT_dN_dV() {}
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
     virtual Integral_dNT_dN_dV<dim,CELL>* clone() const { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
 

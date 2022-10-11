@@ -81,10 +81,6 @@ class Region : public ModelSubDomain<dim, Element>,
                public LocalVariableStorage<dim, Region> {
   public:
 
-    // ---------------------------------------------
-    // construction of regions in a new model
-    // ---------------------------------------------
-
     /// construction of named empty region with appropriately sized property storage
     Region( std::string regionname, const PropertyDatabase<dim>& );
 

@@ -203,7 +203,7 @@ void  ImplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf 
 #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
-    PDE_Integrator<3U,Region>  fluid_pressure( solver );
+    PDE_Integrator<3U,Element>  fluid_pressure( solver );
 
     NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
     NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );

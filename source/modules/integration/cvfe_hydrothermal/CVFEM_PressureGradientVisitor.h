@@ -12,8 +12,42 @@
 
 namespace csmp {
 
-/// Calculating the pressure gradient within the CVFEM scheme (Weis et al., Geofluids, 2014).
 
+/**
+   @class CVFEM_PressureGradientVisitor
+
+   Calculating the pressure gradient within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+   @author Philipp Weis, ETH Zuerich
+   @section contact Contact
+   philipp.weis@erdw.ethz.ch
+
+   @changes changes Latest Changes
+
+   @section motivation Motivation
+    For the fully-upwinded scheme including fluid viscosity and relative permeability,
+  the CVFEM scheme needs the varibale KgradP instead of velcotities to perform the finite volume calculations.
+
+   @section usage Usage
+    Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+   @code
+ The visitor calculates the pressure gradient at the elements barycenter from the nodal variable "fluid pressure".
+ This vector variable is multiplied with the element permeability k.
+ k * grad( P )
+        
+   @endcode
+   
+   @section dependencies Dependencies
+   
+   @section issues Known issues
+ The variable gradp_scaling is not well documented and only needed in combination with the permeability vistor.
+ The bool gradient_scaling can't be changed from outside.
+   
+   @section testing Testing
+   testing was done in the period before publication in 2014.
+
+*/
 template<uint32_t dim>
 class CVFEM_PressureGradientVisitor : public Visitor<dim> {
   public:
@@ -29,12 +63,12 @@ class CVFEM_PressureGradientVisitor : public Visitor<dim> {
 
     ~CVFEM_PressureGradientVisitor();
 
-    virtual void Visit(Element<dim>* n);   
-	virtual void Visit(Region<dim>* n);
+    virtual void Visit( Element<dim>* );
+	virtual void Visit( Region<dim>* );
 
   private:
-    void ComputeGradient( Element<dim>& e );
-    void ComputeGradient2( Element<dim>& e );
+    void ComputeGradient( Element<dim>& );
+    void ComputeGradient2( Element<dim>& );
 
     bool gradient_scaling;
 
@@ -48,39 +82,6 @@ class CVFEM_PressureGradientVisitor : public Visitor<dim> {
     DenseMatrix<DM_MIN> DERIV_;
 
   };
-  /**
-     @class CVFEM_PressureGradientVisitor
-
-     @author Philipp Weis, ETH Zuerich
-     @section contact Contact
-     philipp.weis@erdw.ethz.ch
-
-     @changes changes Latest Changes                                                                                  
-  
-     @section motivation Motivation
-      For the fully-upwinded scheme including fluid viscosity and relative permeability,
-	  the CVFEM scheme needs the varibale KgradP instead of velcotities to perform the finite volume calculations.
-
-     @section usage Usage
-      Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
-
-     @code
-	 The visitor calculates the pressure gradient at the elements barycenter from the nodal variable "fluid pressure".
-	 This vector variable is multiplied with the element permeability k.
-	 k * grad( P )
-          
-     @endcode
-     
-     @section dependencies Dependencies
-     
-     @section issues Known issues
-	 The variable gradp_scaling is not well documented and only needed in combination with the permeability vistor.
-	 The bool gradient_scaling can't be changed from outside.
-     
-     @section testing Testing
-     testing was done in the period before publication in 2014.
-
-  */
 
  } // csmp
 

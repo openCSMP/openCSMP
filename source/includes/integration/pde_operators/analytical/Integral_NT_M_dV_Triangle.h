@@ -6,19 +6,21 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
 @author S.K. Matthaei
 @author S. Roberts
 @date 1999 */
 
 /// to map FV solution to FEM framework (Bijective Mapping)
-template<uint32_t dim,class CELL=Element<dim> >
-class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim,CELL> {
   public:
-    Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>& p, const char* mapped_property );
+    Integral_NT_M_dV_Triangle( const PropertyDatabase<dim>&, const char* mapped_property );
     
-    virtual void GetOperands( const CELL& e );
-    virtual void ComputeContribution( const CELL& e );
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
   private:
     std::vector<ScalarVariable > NPROP;

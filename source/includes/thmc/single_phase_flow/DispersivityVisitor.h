@@ -1,5 +1,5 @@
-#ifndef SG_DISPERSIVITY_VISITOR_H
-#define SG_DISPERSIVITY_VISITOR_H
+#ifndef CSMP_DISPERSIVITY_VISITOR_H
+#define CSMP_DISPERSIVITY_VISITOR_H
 
 #include "Visitor.h"
 #include "Model.h"
@@ -43,4 +43,4 @@ class DispersivityVisitor : public Visitor< dim> {
 
 
 
-#endif
+#endif // CSMP_DISPERSIVITY_VISITOR_H

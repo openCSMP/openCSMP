@@ -83,18 +83,18 @@ void StreamingPotential<dim>::EvaluatePotential( Model<dim>& sg,
 //    sg.Pass( potential_source );
     
     // 3. computation of the streamling potential
-    PDE_Integrator<dim,Region>  streaming_potential;
+    PDE_Integrator<dim,Element>  streaming_potential;
     //streaming_potential.IncreaseMultiGridVectorStorage( 10 );
   
-    NumIntegral_dNT_op_dN_dV<dim,Element<dim> >     lap2( sg.Database(),
-                                                          "one coefficient",
-                                                          potential,
-                                                          potential );
+    NumIntegral_dNT_op_dN_dV<dim>     lap2( sg.Database(),
+                                            "one coefficient",
+                                            potential,
+                                            potential );
                                             
-    NumIntegral_DNT_rhsop_DN_dV<dim,Element<dim> >  c_lap2p( sg.Database(),
-                                                          "coupling coefficient",
-                                                          "fluid pressure",
-                                                          potential );
+    NumIntegral_DNT_rhsop_DN_dV<dim>  c_lap2p( sg.Database(),
+                                              "coupling coefficient",
+                                              "fluid pressure",
+                                               potential );
     
     streaming_potential.Add( &lap2 );
     streaming_potential.Add( &c_lap2p );

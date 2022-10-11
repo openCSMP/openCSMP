@@ -20,8 +20,8 @@ class Limiter : public Interrelation<dim> {
   public:
     Limiter( const PropertyDatabase<dim>& p,
              const char* prop,              // variable name of property
-			 double min_value,            // minimum value of specified range
-			 double max_value );          // maximum value of specified range
+             double min_value,            // minimum value of specified range
+             double max_value );          // maximum value of specified range
                          
     ~Limiter() {};
     void Calculate();

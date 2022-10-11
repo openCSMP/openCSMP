@@ -11,14 +11,14 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>& pref,
-                                                        const char*             oper,      // strain
-                                                        const char*             youngs, 
-                                                        const char*             poissons, 
-                                                        const char*             test,
-                                                        bool plane_strain )
-  : MathOperatorRHS<dim>(pref,oper,test), 
+                                                          const char*             oper,      // strain
+                                                          const char*             youngs,
+                                                          const char*             poissons,
+                                                          const char*             test,
+                                                          bool plane_strain )
+    : MathOperatorRHS<dim,CELL>(pref,oper,test),
     Y_key_(pref.StorageKey( youngs )),
     nu_key_(pref.StorageKey( poissons )),
     B(3U,dim),                   // stiffness matrix
@@ -29,7 +29,7 @@ NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase
     E_(1U), nu_(1U),             // vectors of dense matrices
     plane_strain_(plane_strain)
 {
-    MathOperatorRHS<dim>::Name("NumIntegral_BT_D_op_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_BT_D_op_dV", oper, test );
 
     // verify here that the operands have the correct placement and type 
     if ( Y_key_.place != nu_key_.place ) 
@@ -54,7 +54,7 @@ NumIntegral_BT_D_op_dV<dim,CELL>::NumIntegral_BT_D_op_dV( const PropertyDatabase
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_BT_D_op_dV<dim,CELL>::PlaneStress() { plane_strain_ = false; }
 
 
@@ -82,8 +82,8 @@ E_OP vector of dimension  nodes-per-element x dim.
 A reference to element, the contribution of which is to be aquired and
 the time-increment over which the deformation shall occur. 
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -99,40 +99,40 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL& e )
          E_.resize(e.FE()->IntegrationPoints());
          nu_.resize(e.FE()->IntegrationPoints());
          for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
-              MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, Y_key_, i, E_[i] );
-              MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e, nu_key_, i, nu_[i] );
+              MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e, Y_key_, i, E_[i] );
+              MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e, nu_key_, i, nu_[i] );
            }
       }
  
     // input strain / dilatation
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
          // strain
-         if ( MathOperatorRHS<dim>::MaterialOperandType() == SCALAR ) {
-              e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), sc_ );
-              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonal( dim, sc_ );
+         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), sc_ );
+              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( dim, sc_ );
            }
-         else if ( MathOperatorRHS<dim>::MaterialOperandType() == VECTOR ) {
-              e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), vc_ );
-              MathOperatorRHS<dim>::MTRL[0].AssignToDiagonal( vc_ );
+         else if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
+              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc_ );
+              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc_ );
            }
-         else if ( MathOperatorRHS<dim>::MaterialOperandType() == TENSOR ) {
-              e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), ts_ );
-              MathOperatorRHS<dim>::MTRL[0] = ts_;
+         else if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
+              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts_ );
+              MathOperatorRHS<dim,CELL>::MTRL[0] = ts_;
            }
       }
-    else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
+    else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
-         MathOperatorRHS<dim>::MTRL.resize(e.IntegrationPoints());
+         MathOperatorRHS<dim,CELL>::MTRL.resize(e.IntegrationPoints());
          for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
-           for ( size_t j{0U}; j<dim; ++j )
-             MathOperatorRHS<dim>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim>::MaterialOperandKey() );
+           for ( auto j{0U}; j<dim; ++j )
+             MathOperatorRHS<dim,CELL>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
       }
     else // if a nodal variable is dealt with
       {
          for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
-          MathOperatorRHS<dim>::PropertyAtIntegrationPoint( e,
-                                         MathOperatorRHS<dim>::MaterialOperandKey(), 
-                                         i, MathOperatorRHS<dim>::MTRL[i] );
+          MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e,
+                                         MathOperatorRHS<dim,CELL>::MaterialOperandKey(), 
+                                         i, MathOperatorRHS<dim,CELL>::MTRL[i] );
       }
   
 } // end GetOperands
@@ -161,8 +161,8 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // compute the material property matrix
     // compute the material property matrix based on element properties
@@ -178,14 +178,14 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
       }
 
     // initialize output vector
-    MathOperatorRHS<dim>::RHS.resize( dim*e.Nodes() );
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+    MathOperatorRHS<dim,CELL>::RHS.resize( dim*e.Nodes() );
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
 
     // mapping isostatic components of strain vector into 3x1 matrix STR
     STR.Zero();
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
       for ( auto i{0U}; i<dim; i++ )
-        STR(i,0) = MathOperatorRHS<dim>::MTRL[0](i,i);
+        STR(i,0) = MathOperatorRHS<dim,CELL>::MTRL[0](i,i);
 
     // numerical integration: 
     // ----------------------
@@ -219,11 +219,11 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          B.Transposed( BT );
 
          // computing isometric volume strain term TEMP(3x3) STR(3x1) -> TEMP(3x1)
-         if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT or 
-              MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ) {
+         if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT or 
+              MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE ) {
               STR.Zero();
               for ( auto j{0U}; j<dim; j++ ) 
-                STR(j,0U) = MathOperatorRHS<dim>::MTRL[i](j,j);
+                STR(j,0U) = MathOperatorRHS<dim,CELL>::MTRL[i](j,j);
            }
 
          TEMP  = D; 
@@ -237,20 +237,20 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
          
          // adding to result vector
          for ( auto n=0U; n<BT.Rows(); n++ ) 
-           MathOperatorRHS<dim>::RHS[n] += BT(n,0U);
+           MathOperatorRHS<dim,CELL>::RHS[n] += BT(n,0U);
       }
 
 } // end ComputeContribution
 
 
 
-template class NumIntegral_BT_D_op_dV<1U,Element<1U> >;
-template class NumIntegral_BT_D_op_dV<2U,Element<2U> >;
-template class NumIntegral_BT_D_op_dV<3U,Element<3U> >;
+template class NumIntegral_BT_D_op_dV<1U,Element>;
+template class NumIntegral_BT_D_op_dV<2U,Element>;
+template class NumIntegral_BT_D_op_dV<3U,Element>;
 
-template class NumIntegral_BT_D_op_dV<1U,Face<1U> >;
-template class NumIntegral_BT_D_op_dV<2U,Face<2U> >;
-template class NumIntegral_BT_D_op_dV<3U,Face<3U> >;
+template class NumIntegral_BT_D_op_dV<1U,Face>;
+template class NumIntegral_BT_D_op_dV<2U,Face>;
+template class NumIntegral_BT_D_op_dV<3U,Face>;
 
 } // csmp
 

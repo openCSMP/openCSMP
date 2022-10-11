@@ -7,19 +7,26 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
+
+Vector solution variable: equivalent of mass matrix
+
 @author S.K. Matthaei
 @author S. Geiger
-@date 2000 */
+@date 2000
 
-/// vector solution variable: equivalent of mass matrix
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_PT_op_P_dV : public MathOperatorRHS<dim> {
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_PT_op_P_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
+                            
+    virtual ~NumIntegral_PT_op_P_dV() {}
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
 
   private:
     uint32_t  nodal_degrees_of_freedom;

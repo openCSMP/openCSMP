@@ -128,11 +128,11 @@ void DESAdvectionDiffusion3D_Example::Run()
  // -----------------------------------------------------------------------
  // 5. computing a steady-state fluid pressure distribution in the model
  // -----------------------------------------------------------------------
-  SteadyStateDiffusor<3U,Region> steady_state_pressure( model3D,
+  SteadyStateDiffusor<3U,Element> steady_state_pressure( model3D,
                                                         "conductivity", "fluid pressure",
                                                         "fluid volume source" );
   // postprocessing of pressure gradients and flow velocities
-  VelocityAndVolumeFlux<3U,Element<3U> >  postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
+  VelocityAndVolumeFlux<3U>  postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
   steady_state_pressure.AddPostProcess( &postpro0 );
 
   // the calculation of fluid pressure

@@ -170,15 +170,15 @@ void LinearElasticity_Example::Run()
     settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
                                // which is needed for deformation simulations
     SAMG_Solver  solver(&settings);
-    PDE_Integrator<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Element>  deformation( solver );
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  solver;
-    PDE_Integrator<2U,Region>  deformation( solver );
+    PDE_Integrator<2U,Element>  deformation( solver );
 #endif
 
-    PT_op<2U,Element<2U> >     bforces( model.Database(), "force", "displacement" );
+    PT_op<2U>                  bforces( model.Database(), "force", "displacement" );
     NumIntegral_BT_D_B_dV<2U>  stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement");
-    if ( with_plane_stress ) stiffness.PlaneStress();
+    if ( with_plane_stress )   stiffness.PlaneStress();
     NumIntegral_PT_op_dS<2U>   bstresses( model.Database(), "Neumann stress", "displacement" );
     NumIntegral_PT_op_dV<2U>   bodyforce( model.Database(), "gravity force", "displacement");
     NumIntegral_BT_D_op_dV<2U> volstrain( model.Database(), "dilatation", "Young's modulus", "Poisson's ratio", "displacement");
@@ -285,9 +285,9 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
    //ostream &cout = *GetStream();
    
-   SteadyStateDiffusor<2U,Region>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+   SteadyStateDiffusor<2U,Element>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
 
-   VelocityAndVolumeFlux<2U,Element<2U> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
+   VelocityAndVolumeFlux<2U>  postpro( model, "conductivity", "porosity", "fluid pressure" );
 
    pressure.AddPostProcess( &postpro );
    

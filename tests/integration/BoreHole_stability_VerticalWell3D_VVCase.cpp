@@ -141,34 +141,25 @@ vtu.OutputDataToVTU( "borehole_Neumann stress", "Neumann stress",    "Model", 0 
 SAMG_Settings settings;
 settings.Set_napproach(2);
 SAMG_Solver solver(&settings);
-PDE_Integrator<3U,Region> deformation( solver  );
+PDE_Integrator<3U,Element> deformation( solver  );
 #else
 CSMP_DEFAULT_LINEAR_SOLVER solver;
-PDE_Integrator<3U,Region> deformation( solver );
+PDE_Integrator<3U,Element> deformation( solver );
 #endif
 
-PT_op<3U,Element<3U> > bforces( model.Database(), "force", "displacement" );
-
-NumIntegral_BT_D_B_dV<3U,Element<3U> > stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
-
-NumIntegral_PT_op_dV<3U,Element<3U> >     bodyforce(  model.Database(), "gravity force", "displacement");
-
-NumIntegral_PT_op_dV<3U,Element<3U> >     AppliedStress( model.Database(), "Neumann stress", "displacement");
-
-NumIntegral_BT_op_dV<3U,Element<3U> >     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+PT_op<3U> bforces( model.Database(), "force", "displacement" );
+NumIntegral_BT_D_B_dV<3U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+NumIntegral_PT_op_dV<3U>     bodyforce(  model.Database(), "gravity force", "displacement");
+NumIntegral_PT_op_dV<3U>     AppliedStress( model.Database(), "Neumann stress", "displacement");
+NumIntegral_BT_op_dV<3U>     WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
 deformation.Add( &stiffness );
-
 deformation.Add( &bforces );
-
 deformation.Add( &bodyforce );
-
 deformation.Add( &AppliedStress );
-
 deformation.Add( &WellBorePressure );
 
 StressesAndStrains<3U>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", true,true);
-
 deformation.AddPostProcess( &postpro );
 
 model.Apply( deformation );

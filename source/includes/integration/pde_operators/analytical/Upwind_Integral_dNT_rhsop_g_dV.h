@@ -1,14 +1,15 @@
 #ifndef Upwind_Integral_dNT_rhsop_g_dV_h
 #define Upwind_Integral_dNT_rhsop_g_dV_h
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /// buoyancy for instance
-template<uint32_t dim,class CELL=Element<dim> >
-class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim,CELL> {
   public:
     Upwind_Integral_dNT_rhsop_g_dV(const PropertyDatabase<dim>& p, 
                                    const char* oper,
@@ -17,9 +18,9 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim> {
                                    const char* trigger,
                                    const double prefactor = 1. );
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
     /// integration etc.
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t xyz=2 );
   

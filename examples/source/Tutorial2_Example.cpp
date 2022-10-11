@@ -186,10 +186,10 @@ void Tutorial2_Example::Run()
     // create the CSMP FE Algorithm with SAMG solver
 #ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
+    PDE_Integrator<2U,Element>  fluid_pressure(samg_solver);
 #else
     EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
+    PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
     // LHS stiffness matrix                                            operand         basis function    test function

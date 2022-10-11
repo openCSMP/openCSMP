@@ -2,24 +2,23 @@
 #include "Node.h"
 #include "Element.h"
 #include "Face.h"
+#include "Exception.h"
 
 using namespace std;
 
 namespace csmp {
 
-
-
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NT_op<dim,CELL>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
-  : MathOperatorRHS<dim>(pref,oper,test)
+  : MathOperatorRHS<dim,CELL>(pref,oper,test)
  {
-    MathOperatorRHS<dim>::Name("NT_op", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NT_op", oper, test );
  
-     if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR || 
-          MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE ) 
+     if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR || 
+          MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != NODE ) 
      {
         throw csmp::Exception( FATAL_ERROR, "MathOperatorRHS->NT_op<dim>::(constructor)", 
-                        oper, "Operand must be a scalar variable placed on the nodes." );
+                               oper, "Operand must be a scalar variable placed on the nodes." );
      }
  }
 
@@ -30,10 +29,10 @@ NT_op<dim,CELL>::NT_op( const PropertyDatabase<dim>& pref, const char* oper, con
 /** Reads scalar node data for further processing
 by the ComputeContribution() method.  
 */
-template<uint32_t dim,class CELL>
-void NT_op<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NT_op<dim,CELL>::GetOperands( const CELL<dim>& e )
    { 
-      e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), M_ );
+      e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), M_ );
    }
 
 
@@ -59,27 +58,27 @@ To compute nodal forces acting on the boundary of a model.
 @todo (1) Not tested yet, maybe, the loads must be on the midside nodes 
 
 */
-template<uint32_t dim,class CELL>
-void NT_op<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NT_op<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-   MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
-   fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+   MathOperatorRHS<dim,CELL>::RHS.resize( e.Nodes() * dim );
+   fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
   
    for ( auto i{0}; i<e.Nodes(); i++ )
      if ( M_[i].Flag() == NEUMANN )
        // contributions must be divided by number of elements which share the node
        // to avoid multiple accumulation
-       MathOperatorRHS<dim>::RHS[i] = M_[i]() / static_cast<double>(e.N(i)->Parents());
+       MathOperatorRHS<dim,CELL>::RHS[i] = M_[i]() / static_cast<double>(e.N(i)->Parents());
      
 } // end ComputeContribution
 
 
-template class NT_op<1U,Element<1U> >;
-template class NT_op<2U,Element<2U> >;
-template class NT_op<3U,Element<3U> >;
+template class NT_op<1U>;
+template class NT_op<2U>;
+template class NT_op<3U>;
 
-template class NT_op<1U,Face<1U> >;
-template class NT_op<2U,Face<2U> >;
-template class NT_op<3U,Face<3U> >;
+template class NT_op<1U,Face>;
+template class NT_op<2U,Face>;
+template class NT_op<3U,Face>;
 
 } // csmp

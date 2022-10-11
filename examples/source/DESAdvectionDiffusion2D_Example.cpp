@@ -142,23 +142,23 @@ void DESAdvectionDiffusion2D_Example::Run()
     // create the CSMP FE Algorithm with SAMG solver
 #ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(samg_solver);
+    PDE_Integrator<2U,Element>  fluid_pressure(samg_solver);
 #else
     EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  fluid_pressure(linear_solver);
+    PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
     // LHS stiffness matrix                                                         operand         basis function    test function
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U>  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
 
     // RHS mass matrix for integrating source term
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >    source_term( model.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>    source_term( model.Database(), "fluid volume source", "fluid pressure" );
 
     // use lumped formulation for all mass matrices (i.e., diagonalise matrices)
     source_term.LumpedFormulation(true);
 
     // define a post-processing step that computes the velocity in each finite element by solving Darcy's law
-    VelocityAndVolumeFlux<2U,Element<2U> >     velo( model, "conductivity", "porosity", "fluid pressure", true );
+    VelocityAndVolumeFlux<2U>     velo( model, "conductivity", "porosity", "fluid pressure", true );
 
     // now add each FE operation (i.e., PDE Operator) to the FE algorithm
     fluid_pressure.Add( &stiffness_matrix );

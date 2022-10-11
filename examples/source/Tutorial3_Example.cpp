@@ -155,12 +155,12 @@ void Tutorial3_Example::Run()
     // ------------------------------------------------------------------------------------------
 
     // create a steady-state CSMP FE Algorithm using a high-level class
-    SteadyStateDiffusor<2U,Region> fluid_pressure( model, "total mobility",
+    SteadyStateDiffusor<2U,Element> fluid_pressure( model, "total mobility",
                                                           "fluid pressure",
                                                           "fluid volume source" );
 
     // operation to compute velocity
-    VelocityAndVolumeFlux<2U,Element<2U> >  velo( model,
+    VelocityAndVolumeFlux<2U>  velo( model,
                                                  "total mobility",
                                                  "porosity",
                                                  "fluid pressure", true );

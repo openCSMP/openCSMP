@@ -7,13 +7,12 @@ using namespace std;
 
 namespace csmp {
 
-
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::NumIntegral_op_NT_dN_orthogonal_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  oper,  // fluid pressure
                                                           const char*  test ) // stream-function
-  : MathOperatorRHS<dim>(pref,oper,test),
+  : MathOperatorRHS<dim,CELL>(pref,oper,test),
     M(dim,3), 
     DNORTHO(3,dim),
     NPROP(3),
@@ -22,18 +21,18 @@ NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::NumIntegral_op_NT_dN_orthogonal_dV
     UNITY(3),
     RES(3)
 {
-    MathOperatorRHS<dim>::Name("NumIntegral_op_NT_dN_orthogonal_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_op_NT_dN_orthogonal_dV", oper, test );
     
     // only 2D is possible at the moment
-    if ( dim == 3 )
+    if constexpr ( dim == 3U )
       throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       "At the moment this RHS operator works only in 2D" );
 
-    if ( MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE || MathOperatorRHS<dim>::MaterialOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != NODE || MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR )
       throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       oper, "must be an node-based scalar variable." );
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR,  "NumIntegral_op_NT_dN_orthogonal_dV<dim>::(constructor)", 
                       test, "must be an node-based scalar variable." );
 }
@@ -54,8 +53,8 @@ nodal and element variables, respectively.
 
 The operand is read
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -64,7 +63,7 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
     // --------------------------------------------
     NPROP.resize( e.Nodes() );
     for ( auto i{0U}; i<e.Nodes(); ++i )
-      NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim>::MaterialOperandKey() );
+      NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
     
 } // end GetOperands
 
@@ -79,14 +78,14 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL& e )
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     double  detJ;
 
     // resizing and initializing RHS vector to zero
-    MathOperatorRHS<dim>::RHS.resize( e.Nodes() );
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+    MathOperatorRHS<dim,CELL>::RHS.resize( e.Nodes() );
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
 
     // if the number of Nodes has changed since the last element
     if ( DNORTHO.Cols() != e.Nodes() ) {
@@ -131,7 +130,7 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CE
          
          for ( auto j{0U}; j<e.Nodes(); j++ ) 
            // minus since flow is always down pressure
-           MathOperatorRHS<dim>::RHS[j] += -RES[j] * e.WeightAtIntegrationPoint(i);
+           MathOperatorRHS<dim,CELL>::RHS[j] += -RES[j] * e.WeightAtIntegrationPoint(i);
       }
 
 // cout <<"\nRHS for element: "<< e.Idx() << endl;
@@ -142,13 +141,13 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CE
 
 
 
-template class NumIntegral_op_NT_dN_orthogonal_dV<1U,Element<1U> >;
-template class NumIntegral_op_NT_dN_orthogonal_dV<2U,Element<2U> >;
-template class NumIntegral_op_NT_dN_orthogonal_dV<3U,Element<3U> >;
+template class NumIntegral_op_NT_dN_orthogonal_dV<1U,Element>;
+template class NumIntegral_op_NT_dN_orthogonal_dV<2U,Element>;
+template class NumIntegral_op_NT_dN_orthogonal_dV<3U,Element>;
 
-template class NumIntegral_op_NT_dN_orthogonal_dV<1U,Face<1U> >;
-template class NumIntegral_op_NT_dN_orthogonal_dV<2U,Face<2U> >;
-template class NumIntegral_op_NT_dN_orthogonal_dV<3U,Face<3U> >;
+template class NumIntegral_op_NT_dN_orthogonal_dV<1U,Face>;
+template class NumIntegral_op_NT_dN_orthogonal_dV<2U,Face>;
+template class NumIntegral_op_NT_dN_orthogonal_dV<3U,Face>;
 
 } // csmp
 

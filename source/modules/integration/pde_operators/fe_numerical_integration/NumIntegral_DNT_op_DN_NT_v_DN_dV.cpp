@@ -9,13 +9,13 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref,
                                                                          const char* diffusion_oper,   // element prop, for instance thermal conductivity
                                                                          const char* advection_oper,   // element prop, for instance heat transport velocity
                                                                          const char* basic,            // e.g., fluid pressure
                                                                          const char* test ) 
-  : MathOperatorLHS<dim>(pref,diffusion_oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,diffusion_oper,basic,test),
     adv_key(pref.StorageKey(advection_oper)),
     DN(dim,3), 
     DNT(3,dim),
@@ -23,14 +23,14 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
     VIP(dim,dim),
     NT3(3,dim)
 {
-    MathOperatorLHS<dim>::Name("NumIntegral_DNT_op_DN_NT_v_DN_dV", diffusion_oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_DNT_op_DN_NT_v_DN_dV", diffusion_oper, basic, test );
     
-    for ( typename vector<DenseMatrix<DM_MIN> >::iterator
-          it=MathOperatorLHS<dim>::MTRL.begin(); 
-          it!=MathOperatorLHS<dim>::MTRL.end(); it++ ) 
+    for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
+          it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ )
       (*it).Resize(dim,dim);
       
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT and MathOperatorLHS<dim>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT and
+         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
       throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       diffusion_oper, "must be an element-based variable." );
 
@@ -38,11 +38,11 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
       throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       advection_oper, "must be an element-based vector variable." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
@@ -60,39 +60,39 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
 The diffusion (op) and advection (adv) coefficients are read from the storage in the model. 
 
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
     // 1. read diffusion Operand
     // -------------------------
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
       {
-         if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-              double sc = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+              double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
               for ( auto i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim>::MTRL[0](i,i) = sc;
+                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc;
            }
-         else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+         else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
-              e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
+              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
               for ( auto i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
+                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
            }
-         else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+         else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
-              e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
+              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
               for ( auto i{0U}; i<dim; i++ ) 
                 for ( auto j{0U}; j<dim; j++ ) 
-                  MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
+                  MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
            }
       }
     else { // or an integration point variable
          for ( auto i{0}; i<e.IntegrationPoints(); i++ )
-           MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
-                                                             i, MathOperatorLHS<dim>::MTRL[i] );
+           MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
+                                                                  i, MathOperatorLHS<dim,CELL>::MTRL[i] );
       }
    
     // 2. read element advection variable
@@ -113,12 +113,12 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
     
     NT3.Resize(e.Nodes(),dim);
 
@@ -138,10 +138,10 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
         DN.Transposed( DNT );
 
         // multiply  DNT . MTRL
-        if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT )
-          DNT *= MathOperatorLHS<dim>::MTRL[0];
+        if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
+          DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
         else // integration point variable
-          DNT *= MathOperatorLHS<dim>::MTRL[i];
+          DNT *= MathOperatorLHS<dim,CELL>::MTRL[i];
 
         // multiplying DNT . DN
         DNT *= DN;
@@ -151,17 +151,17 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
 
         // accumulating ME Gauss point integral contributions into element
         // contribution to global conductance matrix
-        MathOperatorLHS<dim>::LHS += DNT;
+        MathOperatorLHS<dim,CELL>::LHS += DNT;
 
         // 2. Compute "velocity" 'VIP' matrix NT3 NTNTNT_V at integration point
         // --------------------------------------------------------------------
         VIP.Zero();
-        for ( size_t j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
+        for ( auto j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
 
         e.N_AtIntegrationPoint( i, IPOL );
 
         NT3.Resize(e.Nodes(),dim);
-        for ( size_t j{0U}; j<e.Nodes(); j++ ) {
+        for ( auto j{0U}; j<e.Nodes(); j++ ) {
              NT3(j,0) = IPOL[j];
              if ( dim == 2U ) NT3(j,1) = IPOL[j];
              if ( dim == 3U ) NT3(j,2) = IPOL[j];
@@ -174,7 +174,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
         NT3 *= DN;
         NT3 *= e.WeightAtIntegrationPoint(i) * detJ;
 
-        MathOperatorLHS<dim>::LHS += NT3;
+        MathOperatorLHS<dim,CELL>::LHS += NT3;
 
       }
 
@@ -183,14 +183,14 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
 
 
 
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Element<1U> >;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Element<2U> >;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Element<3U> >;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Element>;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Element>;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Element>;
 
 
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Face<1U> >;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Face<2U> >;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Face<3U> >;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Face>;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Face>;
+template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Face>;
 
 } // csmp
 

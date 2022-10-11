@@ -8,17 +8,17 @@ namespace csmp {
 
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
-template<uint32_t dim, class CELL=Element<dim> >
-class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_dNi_dV_sc : public MathOperatorLHS<dim,CELL> {
   public:
     NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
-                        const char* oper, 
-                        const char* basic, 
-                        const char* test );
+                              const char* oper, 
+                              const char* basic, 
+                              const char* test );
     
     virtual ~NumIntegral_NT_dNi_dV_sc();
     
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
   
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );

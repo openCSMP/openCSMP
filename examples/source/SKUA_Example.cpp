@@ -358,19 +358,19 @@ void RunTutorial1OnSetUpModel( Model<3U>& model ) {
 
     // create the CSMP FE Algorithm with Eigen solver to invert linear system
     EigenSolver solver;
-    PDE_Integrator<3U,Region>  fluid_pressure(solver);
+    PDE_Integrator<3U,Element>  fluid_pressure(solver);
 
     // LHS stiffness matrix                              operand         basis function    test function
-    NumIntegral_dNT_op_dN_dV<3U,Element<3U> >  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<3U>  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
 
     // LHS mass matrix
-    NumIntegral_NT_lhsop_N_dV<3U,Element<3U> > mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_lhsop_N_dV<3U> mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
 
     // RHS mass vector
-    NumIntegral_NT_op_N_dV<3U,Element<3U> >    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<3U>    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
 
     // RHS mass vector for integrating source term
-    NumIntegral_NT_op_N_dV<3U,Element<3U> >    source_term( p_ref, "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<3U>    source_term( p_ref, "fluid volume source", "fluid pressure" );
 
     // mass matrices for dp/dt term must be divided by time increment
     mass_matrix_lhs.MultiplyWithTimeIncrement(true);
@@ -385,7 +385,7 @@ void RunTutorial1OnSetUpModel( Model<3U>& model ) {
     source_term.AddAccumulateLater();
 
     // define a post-processing step that computes the velocity in each finite element by solving Darcy's law
-    VelocityAndVolumeFlux<3U,Element<3U> >     velo( model, "conductivity", "porosity", "fluid pressure", true ); // true = extrapolate element velocities to nodes
+    VelocityAndVolumeFlux<3U>  velo( model, "conductivity", "porosity", "fluid pressure", true ); // true = extrapolate element velocities to nodes
 
     // now add each FE operation (i.e., PDE Operator) to the FE algorithm
     fluid_pressure.Add( &stiffness_matrix );

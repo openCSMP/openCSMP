@@ -9,19 +9,19 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_BT_D_B_dV<dim,CELL>::NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>& pref,
                                                         const char*             oper,  // Young's modulus
                                                         const char*             oper2, // Poisson's ratio
                                                         const char*             basic,
                                                         const char*             test,
                                                         bool plane_strain )
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     nu_key_(pref.StorageKey( oper2 )),
     D(3,3), B(2,3), BT(3,2), nu_(1U), E_(1U),
     plane_strain_(plane_strain)
 {
-    MathOperatorLHS<dim>::Name("NumIntegral_BT_D_B_dV", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_BT_D_B_dV", oper, basic, test );
     // get other csmp::Index keys
     
     // Poisson's ratio
@@ -30,21 +30,21 @@ NumIntegral_BT_D_B_dV<dim,CELL>::NumIntegral_BT_D_B_dV( const PropertyDatabase<d
                       oper2, "must be a scalar property placed on the constraint points or elements.");
       
     // Young's modulus
-    if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )                  
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       oper, "Currently the Operand must be a scalar property.");
     // displacement
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::BasicOperandType() != VECTOR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       basic, "Operand (basic) must be a vector property placed on the nodes.");
     // displacement
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::TestOperandType() != VECTOR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                       test, "Operand (test) must be a vector property placed on the nodes.");
 
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() != nu_key_.place )                  
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != nu_key_.place )
       throw csmp::Exception( ERROR, "NumIntegral_BT_D_B_dV::(constructor)", 
                      "Both Operands must have the same placement.");
 }
@@ -68,7 +68,7 @@ used shall be initialized for plane strain or plane stress.
 If the method is called in a 3D calculation, the user is warned that
 it will have no effect.  
  */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::PlaneStress( bool yes_no )
  { 
      plane_strain_ = yes_no; 
@@ -88,41 +88,41 @@ While Poisson's ratio must be an element variable, this method allows for
 Young's modulus to be a node variable. Thus, a continuous loss of strength
 can be modeled.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
     // only if the property is an element property  something is done here
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
          // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
-         E_[0]  = e.Read( MathOperatorLHS<dim>::MaterialOperandKey() );
+         E_[0]  = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
          nu_[0] = e.Read( nu_key_ );
       }
-    else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
+    else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
         const size_t ipoints(e.IntegrationPoints());
         E_.resize(ipoints);
         nu_.resize(ipoints);
         for ( auto i{0U}; i<ipoints; ++i )
           {
              // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
-             E_[i]  = e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() );
+             E_[i]  = e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
              nu_[i] = e.Read( i, nu_key_ );
           }
        }
-    else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == NODE )
+    else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )
       {
          ScalarVariable sc;
          for ( auto i{0}; i<e.IntegrationPoints(); i++ ) {
-             e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim>::MaterialOperandKey(), i, sc );
+             e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i, sc );
              E_[i] = sc();
              e.PropertyValueAtIntegrationPoint( nu_key_, i, sc );
              nu_[i] = sc();
           }
       }
      else throw csmp::Exception( WARNING, "umIntegral_BT_D_B_dV<dim,CELL>::GetOperands",
-                                 MathOperatorLHS<dim>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
+                                 MathOperatorLHS<dim,CELL>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
       
 } // end GetOperands
 
@@ -152,14 +152,14 @@ member matrix [C].
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( dim*e.Nodes(), dim*e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Resize( dim*e.Nodes(), dim*e.Nodes() );
 
     // compute the material property matrix based on element properties
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) {
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
          if ( dim == 2 ) {
               // assuming isotropic Young's modulus 
               if ( plane_strain_ ) 
@@ -172,7 +172,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
          else if( dim == 1 )
            {
               stiffnessMatrix( E_[0],  D, e.Volume() );
-              MathOperatorLHS<dim>::LHS = D;
+              MathOperatorLHS<dim,CELL>::LHS = D;
               return;
            }
 
@@ -184,9 +184,9 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
       {
          const double volume(e.Volume());
          // setting C to 1 and its diagonal to 2
-         MathOperatorLHS<dim>::LHS = volume / 12.;
-         for ( size_t f=0; f<(e.Nodes()*dim); f++ ) 
-           MathOperatorLHS<dim>::LHS(f,f) = volume / 6.;
+         MathOperatorLHS<dim,CELL>::LHS = volume / 12.;
+         for ( auto f{0U}; f<(e.Nodes()*dim); f++ )
+           MathOperatorLHS<dim,CELL>::LHS(f,f) = volume / 6.;
       
          e.dN( B );
          dN_To2DOF( e.Nodes(), B );
@@ -199,7 +199,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
          BT  *= B;
          
          // creating the integrated output matrix
-         MathOperatorLHS<dim>::LHS *= BT; 
+         MathOperatorLHS<dim,CELL>::LHS *= BT;
           
          return;
       } 
@@ -209,12 +209,12 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // looping over the 3 Gauss points calculating matrix products
     // and applying uniform weights (1/3) before adding integrated 
     // matrices to element - contribution matrix
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
 
     for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // the material property matrix is constructed at each integration point
-         if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
               if ( dim == 2 ) {
                    // assuming isotropic Young's modulus 
                    if ( plane_strain_ ) 
@@ -249,18 +249,18 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL& e )
          
          // accumulating ME Gauss point integral contributions into element 
          // contribution to global conductance matrix
-         MathOperatorLHS<dim>::LHS += BT;
+         MathOperatorLHS<dim,CELL>::LHS += BT;
       }
 
 } // end ComputeContribution
 
 
-template class NumIntegral_BT_D_B_dV<1U,Element<1U> >;
-template class NumIntegral_BT_D_B_dV<2U,Element<2U> >;
-template class NumIntegral_BT_D_B_dV<3U,Element<3U> >;
+template class NumIntegral_BT_D_B_dV<1U,Element>;
+template class NumIntegral_BT_D_B_dV<2U,Element>;
+template class NumIntegral_BT_D_B_dV<3U,Element>;
 
-template class NumIntegral_BT_D_B_dV<1U,Face<1U> >;
-template class NumIntegral_BT_D_B_dV<2U,Face<2U> >;
-template class NumIntegral_BT_D_B_dV<3U,Face<3U> >;
+template class NumIntegral_BT_D_B_dV<1U,Face>;
+template class NumIntegral_BT_D_B_dV<2U,Face>;
+template class NumIntegral_BT_D_B_dV<3U,Face>;
 
 } // csmp

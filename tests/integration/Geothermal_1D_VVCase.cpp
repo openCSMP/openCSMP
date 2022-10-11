@@ -140,18 +140,18 @@ void Geothermal_1D_VVCase::run()
     // -----------------------------------------------------------------------
     //! steady state pressure
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    PDE_Integrator<DIM,Region> steady_state_pressure( solver );
+    PDE_Integrator<DIM,Element> steady_state_pressure( solver );
     
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >   p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
-    NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> > zero_fluid_src( pd_ref, "fluid pressure" );
-    VelocityAndVolumeFlux<DIM,Element<DIM> >      velocity( model, "conductivity", "porosity", "fluid pressure", false );
+    NumIntegral_dNT_op_dN_dV<DIM>   p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_SetRHS_to_Zero<DIM> zero_fluid_src( pd_ref, "fluid pressure" );
+    VelocityAndVolumeFlux<DIM>      velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
     steady_state_pressure.Add( &p_conductance );
     steady_state_pressure.Add(&zero_fluid_src);
 	  steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<DIM,Region>  transient_pressure( solver );
+    PDE_Integrator<DIM,Element>  transient_pressure( solver );
     
     NumIntegral_dNT_op_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
@@ -175,7 +175,7 @@ void Geothermal_1D_VVCase::run()
     transient_pressure.AddPostProcess( &t_velocity );
     
     //! temperature diffusion
-    PDE_Integrator<DIM, Region>     temperature_diffusion( solver );
+    PDE_Integrator<DIM,Element>     temperature_diffusion( solver );
     NumIntegral_dNT_op_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
     NumIntegral_NT_lhsop_N_dV<DIM>  t_capacitance_lhs( pd_ref, "total heat capacity", "temperature", "temperature" );
     t_capacitance_lhs.LumpedFormulation(true);

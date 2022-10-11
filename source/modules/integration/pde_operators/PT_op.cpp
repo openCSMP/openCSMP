@@ -8,14 +8,14 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 PT_op<dim,CELL>::PT_op( const PropertyDatabase<dim>& pref, const char* oper, const char* test )
-  : MathOperatorRHS<dim>(pref,oper,test)
+  : MathOperatorRHS<dim,CELL>(pref,oper,test)
  {
-    MathOperatorRHS<dim>::Name("PT_op", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("PT_op", oper, test );
  
-     if ( MathOperatorRHS<dim>::MaterialOperandType() != VECTOR || 
-          MathOperatorRHS<dim>::MaterialOperandPlacement() != NODE ) 
+     if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != VECTOR || 
+          MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != NODE ) 
        throw csmp::Exception( FATAL_ERROR, "MathOperatorRHS->PT_op<dim>::(constructor):",
                               oper, "Operand must be a vector variable placed on the nodes." );
  }
@@ -29,10 +29,10 @@ PT_op<dim,CELL>::PT_op( const PropertyDatabase<dim>& pref, const char* oper, con
 Reads node data (=vector properties) for further processing
 by the ComputeContribution() method.  
 */
-template<uint32_t dim,class CELL>
-void PT_op<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void PT_op<dim,CELL>::GetOperands( const CELL<dim>& e )
    { 
-      e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), NODAL_FORCE );
+      e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), NODAL_FORCE );
    }
 
 
@@ -55,11 +55,11 @@ The result gets stored into the MathOperator right-hand vector.
 To compute nodal forces acting on the boundary of a model.
  
 */
-template<uint32_t dim,class CELL>
-void PT_op<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void PT_op<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-   MathOperatorRHS<dim>::RHS.resize( e.Nodes() * dim );
-   fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+   MathOperatorRHS<dim,CELL>::RHS.resize( e.Nodes() * dim );
+   fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
   
    const size_t nodes(e.Nodes());
   
@@ -67,17 +67,17 @@ void PT_op<dim,CELL>::ComputeContribution( const CELL& e )
      for ( size_t j{0U}; j<dim; j++ )
          // forces must be divided by number of elements they will be accumulated from
          // to avoid multiple accumulation
-         MathOperatorRHS<dim>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double>(e.N(i)->Parents());
+         MathOperatorRHS<dim,CELL>::RHS[ i * dim + j ] = NODAL_FORCE[i][j] / static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
      
 
-template class PT_op<1U,Element<1U> >;
-template class PT_op<2U,Element<2U> >;
-template class PT_op<3U,Element<3U> >;
+template class PT_op<1U>;
+template class PT_op<2U>;
+template class PT_op<3U>;
 
-template class PT_op<1U,Face<1U> >;
-template class PT_op<2U,Face<2U> >;
-template class PT_op<3U,Face<3U> >;
+template class PT_op<1U,Face>;
+template class PT_op<2U,Face>;
+template class PT_op<3U,Face>;
 
 } // csmp

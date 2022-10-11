@@ -108,7 +108,7 @@ Model<dim>::Model( const string& binaryFileName )
 template<uint32_t dim>
 Model<dim>::Model( const string& binaryFileName, const string& variable_txt_file )
   : model_name_( binaryFileName ),
-    database_( variable_txt_file.c_str() )
+    database_( variable_txt_file.c_str(), set<string>() )
 {
   InitializeLocalVariableStorage();
   set<string> empty_set; // prompts model to read all the variables contained in the binary
@@ -346,17 +346,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
 	
     // 6. forming Boundaries
     //    if the model is box-shaped (albeit perhaps with an irregular top surface)
-    bool box_or_rectangle_shaped = false;
-    if constexpr ( dim == 2U ) {     //Calling model topology function based on 2d or 3d
-        box_or_rectangle_shaped = mesh_topology.RectangleShapedModel();
-    } else if constexpr ( dim == 3U ) {
-        box_or_rectangle_shaped = mesh_topology.BoxShapedModel();
-    } else if constexpr( dim == 1U ){
-        csmp_error.Note( WARNING, "Model::initialise(regionfile, ModelTopology,Vset)", "Model Topology does not find Boxboundaries for 1D"); //make this a warning if you know what you are doing
-    }
-
-    //Now assigning Boundaries of model
-    if ( box_or_rectangle_shaped ) {
+    if (  mesh_topology.BoxShapedModel() ) {
          this->EstablishBoxBoundaries();
          // (re)creating the box-boundary flags (needs respective Boundary objects: see Box.h")
          cout << "\nModel<dim>::Initialize: Since this is a box-shaped model, also, corresponding AT_BOUNDARY flags were created...\n";
@@ -2436,7 +2426,7 @@ refer to the documentation of the Algorithm interface and the Solver to
 learn more about this specific output.
 */
 template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, bool debug )
+void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, bool debug )
 {
   problem.IntegrateOver( this->Region( "Model" ), debug );
 
@@ -2445,7 +2435,7 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, bool debug )
 
 /// application to all boundaries
 template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, bool debug )
+void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 {
   for ( typename map<string, csmp::Boundary<dim> >::iterator it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
     problem.IntegrateOver( (*it).second, debug );
@@ -2457,7 +2447,7 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, bool debug
 specific regions
 */
 template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, const char* region_name, bool debug )
+void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, const char* region_name, bool debug )
 {
   problem.IntegrateOver( this->Region( region_name ), debug );
 
@@ -2466,7 +2456,7 @@ void Model<dim>::Apply( PDE_Integrator<dim, csmp::Region>& problem, const char* 
 
 /// PDE solution applied to a specific boundary
 template<uint32_t dim>
-void Model<dim>::Apply( PDE_Integrator<dim, csmp::Boundary>& problem, const string& boundary_name, bool debug )
+void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, const string& boundary_name, bool debug )
 {
   problem.IntegrateOver( this->Boundary( boundary_name ), debug );
 

@@ -1,5 +1,6 @@
 #include "StencilProcessorPHX.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
+#include "Element.h"
 
 using namespace std;
 
@@ -29,13 +30,13 @@ StencilProcessorPHX<dim>::~StencilProcessorPHX()
 /** Calculating fluxes out of the control volumes, including gravity */
 template<uint32_t dim>
 void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& param,
-                                              const Element<dim>& e,
-                                              DenseMatrix<DM_MIN>& upwind,
-                                              std::vector<std::vector<double> >& facet_flux,
-                                              std::vector<double>& flux_out,
-                                              csmp::Index rhs_key,
-                                              csmp::Index rho_key,
-                                              csmp::Index k_key)
+                                                            const Element<dim>& e,
+                                                            DenseMatrix<DM_MIN>& upwind,
+                                                            std::vector<std::vector<double> >& facet_flux,
+                                                            std::vector<double>& flux_out,
+                                                            csmp::Index rhs_key,
+                                                            csmp::Index rho_key,
+                                                            csmp::Index k_key)
   {
 
    eidx_ = e.Idx();

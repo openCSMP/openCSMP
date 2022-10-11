@@ -1,16 +1,17 @@
 #include "PoreVolumeVisitor.h"
 #include "Exception.h"
+#include "Model.h"
 
 using namespace std;
 
 namespace csmp {
 
   /** custom constructor */
-  template<uint32_t dim>
-  PoreVolumeVisitor<dim>::PoreVolumeVisitor( Model<dim>& model, 
-                                             const char* porosity,
-                                             const char* volume,
-                                             const char* pore_volume )
+template<uint32_t dim>
+PoreVolumeVisitor<dim>::PoreVolumeVisitor( Model<dim>& model,
+                                           const char* porosity,
+                                           const char* volume,
+                                           const char* pore_volume )
   { 
 
     this->ApplicationLevel(REGION);

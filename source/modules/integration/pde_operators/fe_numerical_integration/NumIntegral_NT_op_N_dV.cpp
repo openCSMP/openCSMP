@@ -1,35 +1,34 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "Element.h"
 #include "Face.h"
-#include "InterFace.h"
+// #include "InterFace.h"
 
 using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_op_N_dV<dim,CELL>::NumIntegral_NT_op_N_dV( const PropertyDatabase<dim>& pref,
                                                           const char* oper, const char* test )
-  : MathOperatorRHS<dim>(pref,oper,test),
+  : MathOperatorRHS<dim,CELL>(pref,oper,test),
     nodal_degrees_of_freedom(1)
  {
-    MathOperatorRHS<dim>::Name("NumIntegral_NT_op_N_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_NT_op_N_dV", oper, test );
 
     // anisotropy can only be considered if there are multiple degrees of freedom per node
-    if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
-    if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR && 
-         MathOperatorRHS<dim>::TestOperandType() == SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR && 
+         MathOperatorRHS<dim,CELL>::TestOperandType() == SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_NT_op_N_dV<dim>::(constructor)", 
                              test, "Non-scalar Operands require multiple degrees of freedom per node." );
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE ||
-         MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_NT_op_N_dV<dim>::(constructor)", 
                              test, "Operand (test) must be a scalar property placed on the nodes." );
 
     // resize material property matrix 
-    for ( typename vector<DenseMatrix<DM_MIN> >::iterator
-          it=MathOperatorRHS<dim>::MTRL.begin(); it!=MathOperatorRHS<dim>::MTRL.end(); it++ ) 
+    for ( auto it=MathOperatorRHS<dim,CELL>::MTRL.begin(); it!=MathOperatorRHS<dim,CELL>::MTRL.end(); it++ )
       (*it).Resize(dim,dim);
 }
 
@@ -43,14 +42,14 @@ Computes the volume integral over the element interpolation functions
 times the Operand. If the Operand is 1 over the element, then the volume
 integral is naturally 1 as well.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.UsesLocalCoordinates() == true );
 
-    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
 
     const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT ||
                                             this->MaterialOperandPlacement() == FACE    ||
@@ -59,22 +58,22 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
     const uint32_t n_nodes{ e.Nodes() }, n_ipoints{ e.IntegrationPoints() };
 
     // lumped formulation: only the midside nodes are used in the lumped approach
-    if ( MathOperatorRHS<dim>::LumpedFormulation() ) 
+    if ( MathOperatorRHS<dim,CELL>::LumpedFormulation() ) 
       {
          const double volume(e.Volume()); // NT . N
          
          if ( piecewise_constant_material )
            {
              for ( auto j{0U}; j<n_nodes; j++ )
-               MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
+               MathOperatorRHS<dim,CELL>::RHS[j] = 
+                 (MathOperatorRHS<dim,CELL>::MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
-         else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE ||  
-                   MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
+         else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE ||  
+                   MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
            {
              for ( auto j{0U}; j<n_nodes; j++ )
-               MathOperatorRHS<dim>::RHS[j] = 
-                 (MathOperatorRHS<dim>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
+               MathOperatorRHS<dim,CELL>::RHS[j] = 
+                 (MathOperatorRHS<dim,CELL>::MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  
 
@@ -132,30 +131,26 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL& e )
            }
 
          // row-sum diagonalisation of matrix RHS_TEMP and addition to righthand vector
-         fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0. );
+         fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
          for ( auto j{0U}; j<n_nodes; j++ )
            for ( auto k=0; k<n_nodes; k++ )
-             MathOperatorRHS<dim>::RHS[j] += RHS_TEMP_(j,k);
+             MathOperatorRHS<dim,CELL>::RHS[j] += RHS_TEMP_(j,k);
       }
    
 } // end ComputeContribution
 
 
 //cout <<"\nElement "<< e.Idx() <<": NumIntegral_NT_op_N_dV="<< endl;
-//out( MathOperatorRHS<dim>::RHS );
+//out( MathOperatorRHS<dim,CELL>::RHS );
 
     
 
-template class NumIntegral_NT_op_N_dV<1U,Element<1U> >;
-template class NumIntegral_NT_op_N_dV<2U,Element<2U> >;
-template class NumIntegral_NT_op_N_dV<3U,Element<3U> >;
+template class NumIntegral_NT_op_N_dV<1U,Element>;
+template class NumIntegral_NT_op_N_dV<2U,Element>;
+template class NumIntegral_NT_op_N_dV<3U,Element>;
 
-template class NumIntegral_NT_op_N_dV<1U,Face<1U> >;
-template class NumIntegral_NT_op_N_dV<2U,Face<2U> >;
-template class NumIntegral_NT_op_N_dV<3U,Face<3U> >;
-
-template class NumIntegral_NT_op_N_dV<1U,InterFace<1U> >;
-template class NumIntegral_NT_op_N_dV<2U,InterFace<2U> >;
-template class NumIntegral_NT_op_N_dV<3U,InterFace<3U> >;
+template class NumIntegral_NT_op_N_dV<1U,Face>;
+template class NumIntegral_NT_op_N_dV<2U,Face>;
+template class NumIntegral_NT_op_N_dV<3U,Face>;
 
 } // csmp

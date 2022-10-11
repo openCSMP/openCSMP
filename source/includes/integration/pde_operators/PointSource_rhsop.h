@@ -7,6 +7,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /** @brief Assignment of scalar nodal (Neumann) source or sink terms.
 
     This operator applies (absolute) nodal source terms to the RHS vector as is. 
@@ -33,12 +35,15 @@ namespace csmp {
 @author Stephan K. Matthaei
 
 */      
-template<uint32_t dim,class CELL=Element<dim> >
-class PointSource_rhsop : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class PointSource_rhsop : public MathOperatorRHS<dim,CELL> {
   public:
     PointSource_rhsop( const PropertyDatabase<dim>&, const char* nodal_src, const char* test );
-    virtual void GetOperands( const CELL& );
-    virtual void ComputeContribution( const CELL& );
+    virtual ~PointSource_rhsop() {}
+    
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void ComputeContribution( const CELL<dim>& );
+    
     virtual PointSource_rhsop<dim,CELL>* clone() const { return new PointSource_rhsop<dim,CELL> (*this); }
   private:
     std::vector<ScalarVariable>  SRC_;

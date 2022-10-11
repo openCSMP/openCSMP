@@ -353,12 +353,12 @@ public:
   void Accept( csmp::Visitor<dim>& );
 
   /// application of integration scheme to model, subregions thereof or boundary or split-boundary objects
-  void Apply( PDE_Integrator<dim, csmp::Region>&, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::Boundary>&, bool debug = false );
+  void Apply( PDE_Integrator<dim,Element>&, bool debug = false );
+  void Apply( PDE_Integrator<dim,Face>&, bool debug = false );
 
   /// application of integration scheme to a particular region, boundary of split-boundary identified by name
-  void Apply( PDE_Integrator<dim, csmp::Region>&, const char* region_name, bool debug = false );
-  void Apply( PDE_Integrator<dim, csmp::Boundary>&, const std::string& boundary_name, bool debug = false );
+  void Apply( PDE_Integrator<dim,Element>&, const char* region_name, bool debug = false );
+  void Apply( PDE_Integrator<dim,Face>&, const std::string& boundary_name, bool debug = false );
 
   // ----------------------------------------
   // Screen output

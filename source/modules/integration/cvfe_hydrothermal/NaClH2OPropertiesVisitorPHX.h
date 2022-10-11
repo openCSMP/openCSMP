@@ -1,7 +1,6 @@
-#ifndef NACLH2OPROPERTIESVISITORPHX_H
-#define NACLH2OPROPERTIESVISITORPHX_H
+#ifndef NACL_H2O_PROPERTIES_VISITOR_PHX_H
+#define NACL_H2O_PROPERTIES_VISITOR_PHX_H
 
-#include "CSMP_definitions.h"
 #include "Visitor.h"
 #include "H2ONaClFluidProperties.h"
 #include "H2ONaClThermalEquilibrator.h"
@@ -14,6 +13,66 @@ namespace csmp
 {
   template<uint32_t> class Model;
 
+  /*!
+    <!-- ================================================================== -->
+    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ================================= -->
+    <!-- ================================================================== -->
+
+    <!-- ================================================================== -->
+    <H3>MOTIVATION</H3>
+    <!-- ================================================================== -->
+    In simulations of multiphase fluid flow involving heat and mass transport,
+    fluid properties are typically stored at nodes, and heat and mass transport
+    via diffusion and advection is done in a decoupled manner. This ultimately
+    means that after the diffusion and advection steps, the fluid phase state
+    may have changed and, even worse, very likely means that fluid and rock
+    are not in thermal equilibrium. NaClH2OPropertiesVisitorPHX will
+    perform a thermal equilibration between fluid and rock (using class
+    H2ONaClThermalEquilibrator) at a given pressure, total
+    enthalpy and salinity and update fluid properties for the equilibrated
+    state.
+
+    <p>
+    <!-- ================================================================== -->
+    <H3>DESIGN INTENT</H3>
+    <!-- ================================================================== -->
+    NaClH2OPropertiesVisitorPHX is an FEM_Visitor within the CSMP framework,
+    see also documentation there. It applies to nodes only.
+
+    <p>
+    <!-- ================================================================== -->
+    <H3>APPLICABILITY</H3>
+    <!-- ================================================================== -->
+    NaClH2OPropertiesVisitorPHX can be applied in simulations with pure H2O
+    fluids in combination with heat and mass transport. Simpler simulations
+    should use other tools in the CSMP++ package. A fundamental assumption is
+    that of thermal equilibrium between fluid and rock is requested, otherwise
+    using NaClH2OPropertiesVisitorPHX makes no sense at all.
+
+    NaClH2OPropertiesVisitorPHX also assumes that fluid properties are stored
+    on the nodes (i.e., it relates to a node-centered finite volume schemes for
+    solving the advection equations) and that rock properties discretized on the
+    element are uniquely defined such that their interpolated nodal values can
+    meaningfully be used (*** is that fully correct? ***).
+
+    <p>
+    <!-- ================================================================== -->
+    <H3>STRUCTURE</H3>
+    <!-- ================================================================== -->
+    <p>
+    <!-- ================================================================== -->
+    <H3>PARTICIPANTS</H3>
+    <!-- ================================================================== -->
+
+    NaClH2OPropertiesVisitorPHX uses H2ONaClThermalEquilibrator,
+    which itself calls a number of classes related to fluid properties, in
+    particular FluidLookup and the specialized classes for phases in the H2O
+    system (see documentation for FluidLookup etc.).
+
+    During
+
+    @copyright (c) 2004-2009 by Drs. Thomas Driesner, Sebastian Geiger, Dim Coumou
+  */
   template<uint32_t dim> 
     class NaClH2OPropertiesVisitorPHX : public Visitor<dim> 
     {
@@ -398,85 +457,6 @@ namespace csmp
     };
   
   
-  /*!
-    <!-- ================================================================== -->
-    <H1>NaClH2OPropertiesVisitorPHX</H1> <!-- ================================= -->
-    <!-- ================================================================== -->
-
-    <!-- ================================================================== -->
-    <H3>MOTIVATION</H3>
-    <!-- ================================================================== -->
-    In simulations of multiphase fluid flow involving heat and mass transport,
-    fluid properties are typically stored at nodes, and heat and mass transport
-    via diffusion and advection is done in a decoupled manner. This ultimately
-    means that after the diffusion and advection steps, the fluid phase state
-    may have changed and, even worse, very likely means that fluid and rock
-    are not in thermal equilibrium. NaClH2OPropertiesVisitorPHX will
-    perform a thermal equilibration between fluid and rock (using class
-    H2ONaClThermalEquilibrator) at a given pressure, total
-    enthalpy and salinity and update fluid properties for the equilibrated 
-    state.
-
-    <p>
-    <!-- ================================================================== -->
-    <H3>DESIGN INTENT</H3>
-    <!-- ================================================================== -->
-    NaClH2OPropertiesVisitorPHX is an FEM_Visitor within the CSMP framework,
-    see also documentation there. It applies to nodes only.
-
-    <p>
-    <!-- ================================================================== -->
-    <H3>APPLICABILITY</H3>
-    <!-- ================================================================== -->
-    NaClH2OPropertiesVisitorPHX can be applied in simulations with pure H2O
-    fluids in combination with heat and mass transport. Simpler simulations 
-    should use other tools in the CSMP++ package. A fundamental assumption is
-    that of thermal equilibrium between fluid and rock is requested, otherwise
-    using NaClH2OPropertiesVisitorPHX makes no sense at all.
-
-    NaClH2OPropertiesVisitorPHX also assumes that fluid properties are stored
-    on the nodes (i.e., it relates to a node-centered finite volume schemes for
-    solving the advection equations) and that rock properties discretized on the
-    element are uniquely defined such that their interpolated nodal values can 
-    meaningfully be used (*** is that fully correct? ***). 
-
-    <p>
-    <!-- ================================================================== -->
-    <H3>STRUCTURE</H3>
-    <!-- ================================================================== -->
-    <p>
-    <!-- ================================================================== -->
-    <H3>PARTICIPANTS</H3>
-    <!-- ================================================================== -->
-
-    NaClH2OPropertiesVisitorPHX uses H2ONaClThermalEquilibrator,
-    which itself calls a number of classes related to fluid properties, in
-    particular FluidLookup and the specialized classes for phases in the H2O
-    system (see documentation for FluidLookup etc.). 
-
-    <p>
-    <!-- ================================================================== -->
-    <H3>COLLABORATIONS</H3>
-    <!-- ================================================================== -->
-
-    <p>
-    <!-- ================================================================== -->
-    <H3>CONSEQUENCES</H3>
-    <!-- ================================================================== -->
-
-    During 
-    <p>
-    <!-- ================================================================== -->
-    <H3>IMPLEMENTATION</H3>
-    <!-- ================================================================== -->
-    <p>
-    <!-- ================================================================== -->
-    <H3>APPLICATION EXAMPLES</H3>
-    <!-- ================================================================== -->
-    <p>
-    <!-- ================================================================== -->
-    copyright (c) 2004-2009 by Drs. Thomas Driesner, Sebastian Geiger, Dim Coumou 
-  */
 
   // NaClH2OPropertiesVisitorPHX Methods ====================
 

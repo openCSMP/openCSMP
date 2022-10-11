@@ -2,36 +2,51 @@
 #include "Exception.h"
 #include "Model.h"
 #include "Region.h"
+#include "Element.h"
+#include "Face.h"
 #include "Boundary.h"
 #include "MeshManagementUtilities.h"
 #include "PL_Utilities.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_op_dV.h"
+#include "PointSource_rhsop.h"
+#include "PDE_Integrator.h"
 
 using namespace std;
 
 namespace csmp {
 
-	template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-	SteadyStateDiffusor<dim, COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
-                                                                     const char* diffusivity,
-                                                                     const char* diffusing_variable,
-                                                                     const char* spatial_source_variable,
-                                                                     bool LumpedRHS )
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim, CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
+                                                         const char* diffusivity,
+                                                         const char* diffusing_variable,
+                                                         const char* spatial_source_variable,
+                                                         bool LumpedRHS )
 		:
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
 		conductance_(sg.Database(), diffusivity, diffusing_variable, diffusing_variable),
-		source_(new NumIntegral_NT_op_N_dV<dim, ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable)),
+		source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable)),
 		nodal_source_(0),
 		gravity_(0),
 		grad_multiplier_(1.),
 		dep_var_name_(diffusing_variable),
 		firstCall_(true)
 	{
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
 		if (!isoparametricElementMesh(sg))
 			throw csmp::Exception(FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
 				"elements are not isoparametric; use other Algorithm");
@@ -66,27 +81,36 @@ namespace csmp {
 
 	} // end constructor
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
                                                                   const char* diffusivity,
                                                                   const char* diffusing_variable,
                                                                   const char* spatial_source_variable )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_( new NumIntegral_NT_op_N_dV<dim,ComputationCell>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
+   source_( new NumIntegral_NT_op_N_dV<dim,CELLTYPE>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
    nodal_source_(0),
    gravity_(0),
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
         throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
@@ -125,28 +149,37 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg, 
-                                                                                const char* diffusivity,
-                                                                                const char* diffusing_variable,
-                                                                                const char* spatial_source_variable,  
-                                                                                const char* point_source_variable ) 
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
+                                                        const char* diffusivity,
+                                                        const char* diffusing_variable,
+                                                        const char* spatial_source_variable,
+                                                        const char* point_source_variable )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
-   nodal_source_(new PointSource_rhsop<dim,ComputationCell>(sg.Database(), point_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   nodal_source_(new PointSource_rhsop<dim,CELLTYPE>(sg.Database(), point_source_variable, diffusing_variable) ),
    gravity_(0),
    grad_multiplier_(1.),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
         throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
@@ -190,8 +223,8 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* gradient_variable, 
@@ -199,19 +232,28 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
    source_(0),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
         throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
@@ -245,8 +287,8 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
                                                                                 const char* diffusivity,
                                                                                 const char* diffusing_variable,
                                                                                 const char* spatial_source_variable,                    
@@ -255,19 +297,28 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
         throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
@@ -315,30 +366,39 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 // discerning lhs and rhs diffusivity terms
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg,
-                                                                                const char* lhs_diffusivity,
-                                                                                const char* rhs_diffusivity,
-                                                                                const char* diffusing_variable,
-                                                                                const char* spatial_source_variable,                    
-                                                                                const char* gradient_variable, 
-                                                                                double gradient_multiplier )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
+                                                        const char* lhs_diffusivity,
+                                                        const char* rhs_diffusivity,
+                                                        const char* diffusing_variable,
+                                                        const char* spatial_source_variable,
+                                                        const char* gradient_variable,
+                                                        double gradient_multiplier )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #else
    /// add extra functionality for alternative solver if needed
-   PDE_Integrator<dim,COMPUTATION_DOMAIN>( solver_ ),
+   PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,ComputationCell>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
-   gravity_(new NumIntegral_dNT_op_dV<dim,ComputationCell>(sg.Database(), gradient_variable, diffusing_variable) ),
+   gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
    dep_var_name_(diffusing_variable),
    firstCall_(true)
  {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "SteadyStateDiffusor: template template parameter must be Element or Face");
+
     if ( !isoparametricElementMesh( sg ) )
         throw csmp::Exception( FATAL_ERROR, "SteadyStateDiffusor<dim>::(constructor):",
                                             "elements are not isoparametric; use other Algorithm" );
@@ -391,8 +451,8 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::SteadyStateDiffusor( Model<dim>& sg
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::~SteadyStateDiffusor()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SteadyStateDiffusor<dim,CELLTYPE>::~SteadyStateDiffusor()
  {
     delete source_;
     delete nodal_source_;
@@ -411,8 +471,8 @@ SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::~SteadyStateDiffusor()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// From the SAMG solver profile brought here because many users have no clue that profile exists
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void SteadyStateDiffusor<dim,CELLTYPE>::Adjust_SAMG_ForSubsequentSolves()
  {
     assert ( firstCall_ );
 
@@ -451,14 +511,14 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolve
 
               /// Use solution of previous timestep as an initial guess - for IMPES without SAMG Multiple Instances only
               settings_.Set_itypu(0);
-              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,CELLTYPE>::Adjust_SAMG_ForSubsequentSolves: ";
               cout <<" first call, setting SAMG input parameter itypu = 0' ***\n";
               cout.flush();
 
               /// Reuse SAMG solver setup - for IMPES without SAMG Multiple Instances only - this step is only necessary if initial setting was iswit(4)
               #ifdef NO_PRIMARY_SOLVER_CONTROL
                   settings_.Set_iswit(3); // re-use solver setup from previous timestep
-                  cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: first call: ";
+                  cout << "\n\n*** SteadyStateDiffusor<dim,CELLTYPE>::Adjust_SAMG_ForSubsequentSolves: first call: ";
                   cout <<" setting SAMG input parameter iswit = 3' ***\n";
                   cout.flush();
               #endif
@@ -468,13 +528,13 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolve
           #ifdef RELATIVE_CONVERGENCE
               /// Relative convergence is used as stopping criterion "res <= eps.res0" (res0 = starting residual) - for IMPES without SAMG Multiple Instances only
               settings_.Set_eps( this->Solver().GetSolverSettings().Get_rel_eps() );
-              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves: first call: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,CELLTYPE>::Adjust_SAMG_ForSubsequentSolves: first call: ";
               cout <<" setting SAMG relative solution criterion eps = " << settings_.Get_eps() << "' ***\n\n";
               cout.flush();
           #else
               /// Absolute convergence is used as stopping criterion "res <= eps" (res0 = starting residual)
               settings_.Set_eps( 1.E-14 );
-              cout << "\n\n*** SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolves first call: ";
+              cout << "\n\n*** SteadyStateDiffusor<dim,CELLTYPE>::Adjust_SAMG_ForSubsequentSolves first call: ";
               cout <<" setting SAMG absolute solution criterion eps = " << -settings_.Get_eps() << "' ***\n\n";
               cout.flush();
           #endif
@@ -489,8 +549,8 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::Adjust_SAMG_ForSubsequentSolve
 
 /// Apply PDE integrator to entire model
 /* does not work with the explicit template instantiations
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( Model<dim>& sg, bool verbose )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void SteadyStateDiffusor<dim,CELLTYPE>::ComputeSteadyState( Model<dim>& sg, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     if ( verbose ) {
@@ -520,8 +580,8 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( Model<dim>
 
 
 /// Apply PDE integrator to Region / Boundary / SplitBoundary
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( COMPUTATION_DOMAIN<dim>& sd, bool verbose )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void SteadyStateDiffusor<dim,CELLTYPE>::ComputeSteadyState( ModelSubDomain<dim,CELLTYPE>& sd, bool verbose )
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     if ( verbose ) {
@@ -552,8 +612,8 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::ComputeSteadyState( COMPUTATIO
 
 
 /// empirically established best settings for fluid pressure diffusion
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void SteadyStateDiffusor<dim,CELLTYPE>::AdjustSolverSettings()
  {
 #ifdef CSMP_WITH_SAMG_SOLVER
     cout <<"\n\n*** SteadyStateDiffusor::AdjustSolverSettings() to best settings for 'fluid pressure diffusion' ***\n\n";
@@ -581,19 +641,19 @@ void SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::AdjustSolverSettings()
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 /// returns a reference to the current settings of the SAMG Solver used by the SteadyStateDiffusor
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-SAMG_Settings& SteadyStateDiffusor<dim,COMPUTATION_DOMAIN>::GetSolverSettings()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+SAMG_Settings& SteadyStateDiffusor<dim,CELLTYPE>::GetSolverSettings()
  { return settings_; }
 #else
    /// add extra functionality for alternative solver if needed
 #endif
 
-template class SteadyStateDiffusor<1U,Region>;
-template class SteadyStateDiffusor<2U,Region>;
-template class SteadyStateDiffusor<3U,Region>;
+template class SteadyStateDiffusor<1U>;
+template class SteadyStateDiffusor<2U>;
+template class SteadyStateDiffusor<3U>;
 
-//template class SteadyStateDiffusor<1U,Boundary>;
-//template class SteadyStateDiffusor<2U,Boundary>;
-//template class SteadyStateDiffusor<3U,Boundary>;
+template class SteadyStateDiffusor<1U,Face>;
+template class SteadyStateDiffusor<2U,Face>;
+template class SteadyStateDiffusor<3U,Face>;
 
 } // end csmp

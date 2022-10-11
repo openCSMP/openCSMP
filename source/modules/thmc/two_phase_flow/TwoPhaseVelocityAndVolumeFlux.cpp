@@ -31,7 +31,7 @@ have the wrong placement or type.
 tested:  */
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Model<dim>& sg,
                                                                    TwoPhaseModel<dim>& satfunc,
                                                                    const char* oper,           // conductivity
@@ -58,7 +58,7 @@ TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Mod
                                                                    const char* nodal_velocity_nw,
                                                                    const char* nodal_velocity_w )
 
-    : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
+    : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
       satFunc_ ( satfunc ),
       PF_(3),
       VELOFLUX_(dim+1),
@@ -84,7 +84,7 @@ TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Mod
       multiply_with_cell_thickness_( ((thickness==NULL) ? false : true) ),
       verbose_(false)
 {
-    MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("VelocityAndVolumeFlux", oper, basic, test );
 
     // getting the necessary csmp::Index keys
 
@@ -114,15 +114,15 @@ TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Mod
     sg.Database().RangeOf(volume_flux, minmaxF_.first, minmaxF_.second );
     
     // testing the Operands
-    if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() != SCALAR )
         throw csmp::Exception( ERROR, "TwoPhaseVelocityAndVolumeFlux::(constructor)",
                                oper, "Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
         throw csmp::Exception( ERROR, "TwoPhaseVelocityAndVolumeFlux::(constructor)",
                                basic, "Basic Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
         throw csmp::Exception( ERROR, "TwoPhaseVelocityAndVolumeFlux::(constructor)",
                                test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
@@ -208,7 +208,7 @@ TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TwoPhaseVelocityAndVolumeFlux(const Mod
         }
 
         // if values are to be averagded on the nodes, the operator needs to be applied twice
-        MathOperatorLHS<dim>::ApplicationCycles(2);
+        MathOperatorLHS<dim,CELL>::ApplicationCycles(2);
     }
     
 } // end constructor
@@ -226,7 +226,7 @@ in the same range as the Darcy velocity.
 
 If the range constraint is violated, a message is printed to 'cout'.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
 {
     // velocity, interstitial velocity
@@ -252,32 +252,36 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
     }
 }
 
+
+
+
 /** Switch to verbose mode (results are reported to stdout).
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
 
-template<uint32_t dim,class CELL>
+
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
-                                                                  uint32_t        col,
-                                                                  VectorVariable<dim>& vc )
+                                                              uint32_t        col,
+                                                              VectorVariable<dim>& vc )
 {
     for ( auto i{0U}; i<dim; i++ ) vc(i) = INP(i,col);
 }
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
-                                                                    uint32_t    col,
-                                                                    ScalarVariable& sc )
+                                                                uint32_t    col,
+                                                                ScalarVariable& sc )
 {
     sc() = INP(dim,col);
 }
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
                                                                               uint32_t         col,
                                                                               VectorVariable<dim>& vc )
@@ -299,10 +303,10 @@ of the Operands.
 A reference to the property memory manager and the Element for which the
 variables are output.
 */
-template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL<dim>& e )
 {
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 )
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 )
     {
         // 1. outputting element properties first
         // --------------------------------------
@@ -317,7 +321,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
             e.Store(  velo_w_key_, velo_w_ );
         }
     }
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 )
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2 )
     {
         if ( nodal_averaging_ )
             for ( auto i{0U}; i<e.Nodes(); i++ )
@@ -342,8 +346,12 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
 } // end WriteOperands
 
 
-template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL& e )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensityAndGravityTerm( CELL<dim>& e )
 {
 
     // Saturation Functions
@@ -352,7 +360,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensit
     satFunc_.EffectiveSaturation();
 
     // storing the total mobility value
-    e.Store(  MathOperatorLHS<dim>::MaterialOperandKey(), makeScalar( PLAIN, satFunc_.TotalMobility() ) );
+    e.Store(  MathOperatorLHS<dim,CELL>::MaterialOperandKey(), makeScalar( PLAIN, satFunc_.TotalMobility() ) );
 
     if (with_gravity_){
 
@@ -395,58 +403,59 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeTotalMobilityRelativeDensit
 
 
 
-template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 ) {
 
         // relative density, total mobility and gravity term
-        ComputeTotalMobilityRelativeDensityAndGravityTerm( const_cast<CELL&>(e) );
+        ComputeTotalMobilityRelativeDensityAndGravityTerm( const_cast<CELL<dim>&>(e) );
 
         // fluid pressure
-        e.NodePropertyVector( MathOperatorLHS<dim>::TestOperandKey(), PF_ );
+        e.NodePropertyVector( MathOperatorLHS<dim,CELL>::TestOperandKey(), PF_ );
 
         // porosity
-        e.Read( MathOperatorLHS<dim>::BasicOperandKey(), phi_ );
+        e.Read( MathOperatorLHS<dim,CELL>::BasicOperandKey(), phi_ );
 
         // nodal multipliers
         if ( with_multiplier_ ) e.NodePropertyVector( mult_key_, mult_vec_ );
         cell_thickness_ = ( multiply_with_cell_thickness_ ? e.Read(thi_key_): 1.0);
 
         // conductivity
-        if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ){
+        if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ){
 
-            if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-
-                MathOperatorLHS<dim>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim,  e.Read( MathOperatorLHS<dim>::MaterialOperandKey() ) );
+            if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+                MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim,  e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) );
             }
-            else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+            else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
                 VectorVariable<dim>  vc;
-                e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-                MathOperatorLHS<dim>::MTRL[0].AssignToDiagonal( vc );
+                e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
+                MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc );
             }
-            else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+            else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
                 TensorVariable<dim>  ts;
-                e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-                MathOperatorLHS<dim>::MTRL[0] = ts;
+                e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
+                MathOperatorLHS<dim,CELL>::MTRL[0] = ts;
             }
 
-        }else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ){
+        }else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ){
 
             for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
-                if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-                    MathOperatorLHS<dim>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
-                                                                    e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() ) );
+                if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+                    MathOperatorLHS<dim,CELL>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
+                                                                    e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) );
                 }
-                else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+                else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
                     VectorVariable<dim>  vc;
-                    e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-                    MathOperatorLHS<dim>::MTRL[i].AssignToDiagonal( vc );
+                    e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
+                    MathOperatorLHS<dim,CELL>::MTRL[i].AssignToDiagonal( vc );
                 }
-                else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+                else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
                     TensorVariable<dim>  ts;
-                    e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-                    MathOperatorLHS<dim>::MTRL[i] = ts;
+                    e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
+                    MathOperatorLHS<dim,CELL>::MTRL[i] = ts;
                 }
             }
         }
@@ -459,9 +468,9 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 
             for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
             {
-                MathOperatorLHS<dim>::MTRL[i].Resize(dim,dim);
-                MathOperatorLHS<dim>::MTRL[i].Zero();
-                MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), i, MathOperatorLHS<dim>::MTRL[i] );
+                MathOperatorLHS<dim,CELL>::MTRL[i].Resize(dim,dim);
+                MathOperatorLHS<dim,CELL>::MTRL[i].Zero();
+                MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i, MathOperatorLHS<dim,CELL>::MTRL[i] );
             }
         }
 
@@ -476,14 +485,14 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 
 @section arguments Input Arguments 
 
-A reference to the Element for which the post-processing is done.  
+@param e A reference to the Element for which the post-processing is done.
 */
-template<uint32_t dim,class CELL>
-void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
     typename list<vector<double> >::const_iterator  lit;
 
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 ) {
 
         if ( verbose_ )
             cout <<"\n\nVelocityAndVolumeFlux::ComputeContribution: Element: "<< e.Idx() << endl;
@@ -508,12 +517,12 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e
 
             for ( auto i{0U}; i<e.Nodes(); i++ )
                 for ( auto j{0U}; j<dim; j++ )
-                    vt_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim>::MTRL[0](j,j);
+                  vt_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim,CELL>::MTRL[0](j,j);
 
             if ( with_gravity_ ){
 
                 for( uint32_t xyz = 0; xyz < dim; ++xyz )
-                    vt_( xyz ) += rhot_() * ac_gravity_ * gproj_[xyz];
+                  vt_( xyz ) += rhot_() * ac_gravity_ * gproj_[xyz];
             }
 
             if( with_capillary_ ){
@@ -523,7 +532,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e
                     satFunc_.EffectiveSaturation();
                     const double pc ( satFunc_.pc_Phase( ));
                     for ( auto j{0U}; j<dim; j++ )
-                        vt_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
+                      vt_( j ) += pc  * -DERIV_(j,i) * satFunc_.Permeability() * satFunc_.MobilityPhase( non_wet_phase );
                 }
 
             }
@@ -676,14 +685,14 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e
                         satFunc_.EffectiveSaturation();
                         const double pc ( satFunc_.pc_Phase( ));
                         for ( auto j{0U}; j<dim; j++ )
-                            VELOFLUX_[j] += ( PF_[n]() + pc ) * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
+                            VELOFLUX_[j] += ( PF_[n]() + pc ) * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[i](j,j);
                     }
 
                 }else{
 
                     for ( auto n=0; n<e.Nodes(); n++ )
                         for ( auto j{0U}; j<dim; j++ )
-                            VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
+                            VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[i](j,j);
 
                 }
 
@@ -829,7 +838,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e
     // 2. During the second visitation, the nodal velocities and fluxes computed for each element
     //    node are averaged and stored in a vector for output.
     //    -------------------------------------------
-    if ( (MathOperatorLHS<dim>::ApplicationCycle() == 2) && nodal_averaging_ ) {
+    if ( (MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2) && nodal_averaging_ ) {
 
         RESULT_.Resize(components_,e.Nodes());
 
@@ -862,19 +871,20 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e
 
 } // end ComputeContribution
 
+
+
 //////////////////////////////////////////////////
 // For node-centered calculations
 //////////////////////////////////////////////////
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<dim>& n_ref )
 {
     // initialize output value
     double value = 0.0;
 
-    uint32_t inside_node,outside_node;
-    double vtn(0.0),facetArea(1.0);
-    size_t advected_phase_n(2U), advected_phase_w(1U);
+    uint32_t inside_node, outside_node, advected_phase_n(2U), advected_phase_w(1U);
+    double   vtn(0.0),facetArea(1.0);
     const double zero(0.0); //can be num_epsilon or so
     //const double zero( std::numeric_limits<double>::min()); //can be num_epsilon or so
     //const double zero(1.0e-15); //can be num_epsilon or so
@@ -893,7 +903,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
             eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
             auto pnid(n_ref.ParentNodeNumber(t));
-            cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1.0);
+            cell_thickness_ = ( multiply_with_cell_thickness_ ? eptr->Read(this->thi_key_): 1. );
             eptr->Read(this->velo_key_,vt_);
 
             satFunc_.Initialize(*eptr);
@@ -1113,7 +1123,7 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
         double vn_gravity_component_of_velocity (1.0), vw_gravity_component_of_velocity (1.0);
         double vn_at_facet_int_point (1.0), vw_at_facet_int_point (1.0);
 
-        for ( auto t=0U; t<n_ref.Parents(); t++ )
+        for ( auto t{0U}; t<n_ref.Parents(); t++ )
         {
             eptr = n_ref.Parent(t);
             this->GetOperands(*eptr);
@@ -1289,15 +1299,17 @@ void TwoPhaseVelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const Node<di
 } // end ComputeContribution
 
 
-template class TwoPhaseVelocityAndVolumeFlux<1U,Element<1U> >;
-template class TwoPhaseVelocityAndVolumeFlux<2U,Element<2U> >;
-template class TwoPhaseVelocityAndVolumeFlux<3U,Element<3U> >;
+template class TwoPhaseVelocityAndVolumeFlux<1U,Element>;
+template class TwoPhaseVelocityAndVolumeFlux<2U,Element>;
+template class TwoPhaseVelocityAndVolumeFlux<3U,Element>;
 
-//template class TwoPhaseVelocityAndVolumeFlux<1U,Face<1U> >;
-//template class TwoPhaseVelocityAndVolumeFlux<2U,Face<2U> >;
-//template class TwoPhaseVelocityAndVolumeFlux<3U,Face<3U> >;
+/* TwoPhaseFlowModel needs to be ported to Face first
+template class TwoPhaseVelocityAndVolumeFlux<1U,Face>;
+template class TwoPhaseVelocityAndVolumeFlux<2U,Face>;
+template class TwoPhaseVelocityAndVolumeFlux<3U,Face>;
+*/
 
-} 
+} // end csmp
 
 
 

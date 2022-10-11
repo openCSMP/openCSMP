@@ -16,10 +16,10 @@ SourceVisitor<dim>::SourceVisitor( Model<dim>& model, std::vector<std::string>* 
     thicknessKey_(csmp::Index())
 {
     if (!this->to_initialize_keys_){
-        porosityKey_    =           model.Database().StorageKey( "porosity"                            ) ;
-        densityDiffKey_ =           model.Database().StorageKey( "density difference"                  ) ;
-        nfvsKey_        =           model.Database().StorageKey( "nodal fluid volume source"           ) ;
-        thicknessKey_   =           model.Database().StorageKey( "thickness"                           ) ;
+        porosityKey_    =           model.Database().StorageKey( "porosity" );
+        densityDiffKey_ =           model.Database().StorageKey( "density difference");
+        nfvsKey_        =           model.Database().StorageKey( "nodal fluid volume source");
+        thicknessKey_   =           model.Database().StorageKey( "thickness");
     }
     else if (this->to_initialize_keys_->size()==5)
     {

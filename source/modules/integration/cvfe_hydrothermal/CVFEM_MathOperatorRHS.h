@@ -1,7 +1,6 @@
-#ifndef CVFEM_MATHOPERATORRHS_h
-#define CVFEM_MATHOPERATORRHS_h
+#ifndef CVFEM_MATHOPERATOR_RHS_H
+#define CVFEM_MATHOPERATOR_RHS_H
 
-#include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
 
 /*   Changelog
@@ -11,36 +10,18 @@
 
 namespace csmp {
 
-/// Base class for CVFEM Math Operators (RHS) that enable the use for control volume calculations as a post-processing step.
+template<uint32_t> class Element;
 
-template<uint32_t dim>
-class CVFEM_MathOperatorRHS : public MathOperatorRHS<dim> {
-  public:
+/**
+    Base class for CVFEM Math Operators (RHS) that enable the use for control volume calculations as a post-processing step.
 
-    CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& p, const char* test );
-
-    CVFEM_MathOperatorRHS( const PropertyDatabase<dim>& p, const char* oper, const char* test );
-    
-    ~CVFEM_MathOperatorRHS();
-    
-    virtual void GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key );
-    virtual std::vector<double> GetContribution();
-
-    virtual CVFEM_MathOperatorRHS<dim>* clone() const { return new CVFEM_MathOperatorRHS<dim> (*this); }
-
-  private:
-    CVFEM_MathOperatorRHS();
-    
-};
-
-  /**
      @class CVFEM_MathOperatorRHS CVFEM_MathOperatorRHS.h
 
      @author Philipp Weis, ETH Zuerich
      @section contact Contact
      philipp.weis@erdw.ethz.ch
 
-     @changes changes Latest Changes                                                                                  
+     @changes changes Latest Changes
   
      @section motivation Motivation
       In the development for the CVFEM scheme, we tested the consistency of the pressure equation and mass advection.
@@ -63,7 +44,23 @@ class CVFEM_MathOperatorRHS : public MathOperatorRHS<dim> {
      @section testing Testing
      testing was done in the period before publication in 2014.
 
-  */
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class CVFEM_MathOperatorRHS : public MathOperatorRHS<dim,CELL> {
+  public:
+    CVFEM_MathOperatorRHS() = delete;
+    CVFEM_MathOperatorRHS( const PropertyDatabase<dim>&, const char* test );
+    CVFEM_MathOperatorRHS( const PropertyDatabase<dim>&, const char* oper, const char* test );
+    
+    virtual ~CVFEM_MathOperatorRHS();
+    
+    virtual void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key );
+    
+    virtual std::vector<double> GetContribution();
+
+    virtual CVFEM_MathOperatorRHS<dim,CELL>* clone() const { return new CVFEM_MathOperatorRHS<dim,CELL>(*this); }
+};
+
 } // csmp
 
 #endif

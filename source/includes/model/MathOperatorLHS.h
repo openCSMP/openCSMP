@@ -34,7 +34,7 @@ To be able to write PDE equations in finite element form, using the
 PDE_Integrator class. 
 
 */
-template<uint32_t dim>
+template<uint32_t dim, template<uint32_t> class CELL=Element>
 class MathOperatorLHS {
   public:
 
@@ -57,8 +57,8 @@ class MathOperatorLHS {
     /// Operand Functions
 
     std::string   Name() const;
-    void          Name( const char* s, const char* bopname, const char* topname );
-    void          Name( const char* s, const char* opname,  const char* bopname, const char* topname );
+    void          Name( const char* mathoperator_name, const char* bopname, const char* topname );
+    void          Name( const char* mathoperator_name, const char* opname,  const char* bopname, const char* topname );
 
     virtual void  Out() const;
 
@@ -67,14 +67,14 @@ class MathOperatorLHS {
     std::string   MaterialOperandName()         const;
     VARIABLE_TYPE MaterialOperandType()         const;
     PLACEMENT     MaterialOperandPlacement()    const;
-    size_t        MaterialOperandDataDepth()    const;
+    uint32_t      MaterialOperandDataDepth()    const;
 
     const Parameter& BasicOperand()             const;
     const Index&  BasicOperandKey()             const;
     std::string   BasicOperandName()            const;
     VARIABLE_TYPE BasicOperandType()            const;
     PLACEMENT     BasicOperandPlacement()       const;
-    size_t        BasicOperandDataDepth()       const;
+    uint32_t      BasicOperandDataDepth()       const;
     size_t        BasicOperandOffset()          const;
     void          BasicOperandOffset( size_t );
 
@@ -83,7 +83,7 @@ class MathOperatorLHS {
     std::string   TestOperandName()             const;
     VARIABLE_TYPE TestOperandType()             const;
     PLACEMENT     TestOperandPlacement()        const;
-    size_t        TestOperandDataDepth()        const;
+    uint32_t      TestOperandDataDepth()        const;
     size_t        TestOperandOffset()           const;
     void          TestOperandOffset( size_t );
 
@@ -96,8 +96,8 @@ class MathOperatorLHS {
     bool          SubtractLater()               const;
     bool          Multiply()                    const;
     bool          LumpedFormulation()           const;
-    size_t        ApplicationCycle()            const;
-    size_t        ApplicationCycles()           const;
+    uint32_t      ApplicationCycle()            const;
+    uint32_t      ApplicationCycles()           const;
     double        MultiplyBy()                  const;
     bool          MultiplyWithTimeIncrement()   const;
     bool          DivideByTimeIncrement()       const;
@@ -109,52 +109,37 @@ class MathOperatorLHS {
     void          SubtractAccumulateLater();
     void          MultiplyAccumulate();
     void          LumpedFormulation ( bool );
-    void          ApplicationCycle  ( size_t );
-    void          ApplicationCycles ( size_t );
+    void          ApplicationCycle  ( uint32_t );
+    void          ApplicationCycles ( uint32_t );
     void          MultiplyBy( double factor );
     void          MultiplyWithTimeIncrement( bool multiply );
     void          DivideByTimeIncrement( bool divide );
 
     /// interpolation of property if isoparametric elements are used
-    void          PropertyAtIntegrationPoint( const Element<dim>&,
+    void          PropertyAtIntegrationPoint( const CELL<dim>&,
                                               const csmp::Index&,
                                               uint32_t ip,
                                               DenseMatrix<DM_MIN>& );
                                               
-    void          PropertyAtIntegrationPoint( const Face<dim>&,
-                                              const csmp::Index&,
-                                              uint32_t ip,
-                                              DenseMatrix<DM_MIN>& );
-
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands( const Element<dim>&  );
-    virtual void  GetOperands( const Face<dim>&  );
-    virtual void  GetOperands( const InterFace<dim>&  );
+    virtual void  GetOperands( const CELL<dim>&  );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( const Element<dim>&  );
-    virtual void  ComputeContribution( const Face<dim>&  );
-    virtual void  ComputeContribution( const InterFace<dim>& );
+    virtual void  ComputeContribution( const CELL<dim>&  );
 
     /// writing data to the Element, Face, InterFace
-    virtual void  WriteOperands( Element<dim>& );
-    virtual void  WriteOperands( Face<dim>&  );
-    virtual void  WriteOperands( InterFace<dim>& );
+    virtual void  WriteOperands( CELL<dim>& );
 
     /// multiply with time increment if this is desired
     virtual void  MultiplyWithTimeFactor( double dt );
 
     /// assigment to the left hand side global matrix (after everything was calculated )
-    virtual void  AssignToGlobal( const Element<dim>&, SparseMatrix& );
-    virtual void  AssignToGlobal( const Face<dim>&, SparseMatrix & );
-    virtual void  AssignToGlobal( const InterFace<dim>&, SparseMatrix& );
+    virtual void  AssignToGlobal( const CELL<dim>&, SparseMatrix& );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void AssignToGlobal( const Element<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
-    virtual void AssignToGlobal( const Face<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
-    virtual void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    virtual void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
-    virtual MathOperatorLHS<dim>* clone() const = 0;
+    virtual MathOperatorLHS<dim,CELL>* clone() const = 0;
 
   protected:
 
@@ -180,7 +165,7 @@ class MathOperatorLHS {
     std::vector<ArrayVariable >         AR;      ///< arrays
     std::vector<FlaggedArrayVariable >  FR;      ///< flagged arrays
 
-    double                            factor_; ///< constant scaling factor
+    double                              factor_; ///< constant scaling factor
 
     // constraints on the accumulation procedure
     bool                                add_accumulate_;
@@ -189,8 +174,8 @@ class MathOperatorLHS {
     bool                                subtract_accumulate_later_;
     bool                                multiply_accumulate_;
     bool                                lump_matrices_;
-    size_t                              application_cycles_;
-    size_t                              application_cycle_;
+    uint32_t                            application_cycles_;
+    uint32_t                            application_cycle_;
     // time-dependent multipliers
     bool                                time_multiply_;
     bool                                time_divide_;

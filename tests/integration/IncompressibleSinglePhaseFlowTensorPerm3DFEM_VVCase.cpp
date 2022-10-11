@@ -94,13 +94,13 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
     CSMP_DEFAULT_LINEAR_SOLVER solver;
     #endif
 
-    PDE_Integrator<DIM,Region> pressure_diffusion( solver );
+    PDE_Integrator<DIM,Element> pressure_diffusion( solver );
 
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> > stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
+    NumIntegral_dNT_op_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
     printRangeOfVariable(model,"fluid pressure");
     printRangeOfVariable(model,"fluid volume source");
     printRangeOfVariable(model,"mobility");
-    NumIntegral_NT_op_N_dV<DIM,Element<DIM> > fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
 
     //Assemble the integrator
     pressure_diffusion.Add( &stiffness );

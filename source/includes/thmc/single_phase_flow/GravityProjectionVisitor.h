@@ -2,17 +2,11 @@
 #define GRAVITY_PROJECTION_VISITOR_H
 
 #include "Visitor.h"
-
-#include <iostream>
-#include "CSMP_definitions.h"
-
-#include "Model.h"
-
-#include "ScalarVariable.h"
 #include "VectorVariable.h"
-#include "TensorVariable.h"
 
 namespace csmp {
+
+template<uint32_t> class Model;
 
 /**
        TODO: Who? - What for?

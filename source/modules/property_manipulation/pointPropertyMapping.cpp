@@ -29,8 +29,11 @@ ToDo: List:
 #include "VTU_Interface.h"
 
 #include "PDE_Integrator.h"
+#include "LinearSolver.h"
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
 #include "SAMG_Settings.h"
+#endif
 #include "GaussJordan_Solver.h"
 #include "LUdcmp_Solver.h"
 
@@ -1340,9 +1343,9 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
   // 2. property mapping
   // ---------------------------------------------------------
   // LHS matrix for Laplacian interpolation
-  NumIntegral_dNT_dN_dV<3U,Element<3U> >  stiffness_matrix(model.Database(),scalar_node,scalar_node);
+  NumIntegral_dNT_dN_dV<3U>  stiffness_matrix(model.Database(),scalar_node,scalar_node);
   // RHS vector integral for RHS = 0 (homogeneous boundary conditions)
-  NumIntegral_SetRHS_to_Zero<3U,Element<3U> >  source(model.Database(),scalar_node);
+  NumIntegral_SetRHS_to_Zero<3U>  source(model.Database(),scalar_node);
 
   const size_t MIN_DOF_TO_INVOKE_SOLVER(100);
   
@@ -1424,7 +1427,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
           if ( dof >= MIN_DOF_TO_INVOKE_SOLVER )
             {
                cout << "\n\tUsing SAMG solver for Laplace interpolation in volumetric domain..." << endl;
-               PDE_Integrator<3U,Region> property_int_samg( solver );
+               PDE_Integrator<3U,Element> property_int_samg( solver );
                property_int_samg.Add(&stiffness_matrix);
                property_int_samg.Add(&source);            
                // Laplace interpolatation of unknown values
@@ -1494,7 +1497,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
             if ( dof >= MIN_DOF_TO_INVOKE_SOLVER )
               {
                 cout << "\n\tUsing SAMG solver for Laplace interpolation of property values in surface domain..." << endl;
-                PDE_Integrator<3U,Region> property_int_samg( solver );
+                PDE_Integrator<3U,Element> property_int_samg( solver );
                 property_int_samg.Add(&stiffness_matrix);
                 property_int_samg.Add(&source);
                 property_int_samg.IntegrateOver(gref);

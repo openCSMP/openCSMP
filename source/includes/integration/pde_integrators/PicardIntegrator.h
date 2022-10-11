@@ -5,8 +5,20 @@
 
 namespace csmp {
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-class PicardIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
+template<uint32_t> class Element;
+
+/**
+ 
+@class PicardIntegrator
+@author Adrian Burri
+@date 2004
+
+Algorithm implementing a Picard iteration scheme for non-linear processes.
+Derived from the IterativeAlgorithm base class.
+ 
+*/
+template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
+class PicardIntegrator : public IterativeIntegrator<dim,CELLTYPE> {
   public:
     PicardIntegrator();
     
@@ -15,20 +27,6 @@ class PicardIntegrator : public IterativeIntegrator<dim,COMPUTATION_DOMAIN> {
   private:
     std::vector<double> resid_;
 };
-
-
-
-
-/** 
- 
-@class PicardIntegrator
-@author Adrian Burri
-@date 2004
-
-Algorithm implementing a Picard iteration scheme for non-linear processes. 
-Derived from the IterativeAlgorithm base class. 
- 
-*/
 
 } // end namespace csmp
 #endif

@@ -1,7 +1,6 @@
 #ifndef CONDUCTIVITY_VISITOR_H
 #define CONDUCTIVITY_VISITOR_H
 
-
 #include "Visitor.h"
 #include "ScalarVariable.h"
 #if defined(_OPENMP )

@@ -127,15 +127,15 @@ void RhinoMesh_Example::Run()
      // -----------------------------------------------------------------------
       #ifdef CSMP_WITH_SAMG_SOLVER
       SAMG_Solver solver;
-      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
+      PDE_Integrator<3U,Element>  steady_state_pressure(solver);
       #else
       CSMP_DEFAULT_LINEAR_SOLVER solver;
-      PDE_Integrator<3U,Region>  steady_state_pressure(solver);
+      PDE_Integrator<3U,Element>  steady_state_pressure(solver);
       #endif
 
-      NumIntegral_dNT_op_dN_dV<3U,Element<3U> >  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-      NumIntegral_NT_op_N_dV<3U,Element<3U> >    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
-      VelocityAndVolumeFlux<3U,Element<3U> >     postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
+      NumIntegral_dNT_op_dN_dV<3U>  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+      NumIntegral_NT_op_N_dV<3U>    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
+      VelocityAndVolumeFlux<3U>     postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
 
       steady_state_pressure.Add( &conductance0 );
       steady_state_pressure.Add( &source0 );

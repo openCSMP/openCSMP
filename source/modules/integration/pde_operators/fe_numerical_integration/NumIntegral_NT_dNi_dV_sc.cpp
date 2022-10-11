@@ -7,54 +7,63 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_dNi_dV_sc<dim,CELL>::~NumIntegral_NT_dNi_dV_sc() {}
 
 //constructor
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_dNi_dV_sc<dim,CELL>::NumIntegral_NT_dNi_dV_sc( const PropertyDatabase<dim>& pref,
-                                                                 const char*                  oper,
-                                                                 const char*                  basic,
-                                                                 const char*                  test )
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+                                                              const char*                  oper,
+                                                              const char*                  basic,
+                                                              const char*                  test )
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     DN(3,3), TEMP(3,3), IPOL(3), xyz_(Y_DIRECTION), transp_(false)
 {
-    MathOperatorLHS<dim>::Name("NumIntegral_NT_dNi_dV_sc",oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_NT_dNi_dV_sc",oper, basic, test );
     
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE ||
-         MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_NT_dNi_dV_sc<dim>::(constructor)",
-                      basic, "Operand (basic) must be a scalar property placed on the nodes." );
+                             basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE ||
-         MathOperatorLHS<dim>::TestOperandType() != SCALAR)
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR)
       throw csmp::Exception( ERROR, "NumIntegral_NT_dNi_dV_sc<dim>::(constructor)",
-                      test, "Operand (test) must be a scalar property placed on the nodes." );
+                             test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
-template<uint32_t dim,class CELL>
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_dNi_dV_sc<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
  
-template<uint32_t dim,class CELL>
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_dNi_dV_sc<dim,CELL>::Transposed()
  {
     transp_ = true;
  }
  
+
+
+
+
 //element contribution
-template<uint32_t dim,class CELL>
-void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
     double det;
     IPOL.resize( e.Nodes() );
     TEMP.Resize( e.Nodes(), e.Nodes() );
@@ -67,17 +76,17 @@ void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL& e )
             for ( auto k=0; k<e.Nodes(); k++ )
               transp_ ? TEMP(j,k) = IPOL[j] * DN(xyz_,k) : TEMP(j,k) = IPOL[k] * DN(xyz_,j);
          TEMP *= (det * e.WeightAtIntegrationPoint(i));
-         MathOperatorLHS<dim>::LHS += TEMP;
+         MathOperatorLHS<dim,CELL>::LHS += TEMP;
       }
 
 } // end ComputeContribution
 
-template class NumIntegral_NT_dNi_dV_sc<1U,Element<1U> >;
-template class NumIntegral_NT_dNi_dV_sc<2U,Element<2U> >;
-template class NumIntegral_NT_dNi_dV_sc<3U,Element<3U> >;
+template class NumIntegral_NT_dNi_dV_sc<1U,Element>;
+template class NumIntegral_NT_dNi_dV_sc<2U,Element>;
+template class NumIntegral_NT_dNi_dV_sc<3U,Element>;
 
-template class NumIntegral_NT_dNi_dV_sc<1U,Face<1U> >;
-template class NumIntegral_NT_dNi_dV_sc<2U,Face<2U> >;
-template class NumIntegral_NT_dNi_dV_sc<3U,Face<3U> >;
+template class NumIntegral_NT_dNi_dV_sc<1U,Face>;
+template class NumIntegral_NT_dNi_dV_sc<2U,Face>;
+template class NumIntegral_NT_dNi_dV_sc<3U,Face>;
 
 } //namespace csp

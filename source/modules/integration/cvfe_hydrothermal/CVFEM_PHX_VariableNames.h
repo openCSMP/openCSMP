@@ -12,10 +12,39 @@ using namespace std;
 
 namespace csmp {
 
+  /**
+     @class CVFEM_PHX_VariableNames CVFEM_PHX_VariableNames.h
+
+     @author Philipp Weis, ETH Zuerich
+     @section contact Contact
+     philipp.weis@erdw.ethz.ch
+
+     @changes changes Latest Changes
+  
+     @section motivation Motivation
+      Class to bundle all variable names needed for CVFEM scheme.
+
+     @section usage Usage
+      Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+     @code
+	 Applies source term at the node.
+          
+     @endcode
+     
+     @section dependencies Dependencies
+	 Tailored for CVFEM_PHX_Schem
+     
+     @section issues Known issues
+     
+     @section testing Testing
+     testing was done in the period before publication in 2014.
+
+  */
 class CVFEM_PHX_VariableNames {
   public:
 
-    CVFEM_PHX_VariableNames( );
+    CVFEM_PHX_VariableNames();
     
    std::vector<std::string> pres_grad_variables;
    std::vector<std::string> pore_visitor_variables;
@@ -296,35 +325,6 @@ inline void CVFEM_PHX_VariableNames::AddAdvectionVariable( std::string balanced_
 
  };
 
-  /**
-     @class CVFEM_PHX_VariableNames CVFEM_PHX_VariableNames.h
-
-     @author Philipp Weis, ETH Zuerich
-     @section contact Contact
-     philipp.weis@erdw.ethz.ch
-
-     @changes changes Latest Changes                                                                                  
-  
-     @section motivation Motivation
-      Class to bundle all variable names needed for CVFEM scheme.
-
-     @section usage Usage
-      Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
-
-     @code
-	 Applies source term at the node.
-          
-     @endcode
-     
-     @section dependencies Dependencies
-	 Tailored for CVFEM_PHX_Schem
-     
-     @section issues Known issues
-     
-     @section testing Testing
-     testing was done in the period before publication in 2014.
-
-  */
 
 } // end namespace csmp
 

@@ -6,6 +6,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /** 
 
 @brief classical stiffness matrix, i.e., interpolation function derivative matrix
@@ -16,13 +18,13 @@ for a vector solution variable like displacement which has u, v, w components.
 @date 1999 
 
 */
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_BT_op_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_BT_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_BT_op_dV( const PropertyDatabase<dim>&,
                           const char* oper, const char* test );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     virtual NumIntegral_BT_op_dV<dim,CELL>* clone() const { return new NumIntegral_BT_op_dV<dim,CELL> (*this); }
     

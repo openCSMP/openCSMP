@@ -1,21 +1,23 @@
 #include "CVFEM_Visitor.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
-
+#include "Model.h"
+#include "CVFEM_MathOperatorLHS.h"
+#include "CVFEM_MathOperatorRHS.h"
 
 using namespace std;
 
 namespace csmp {
 
 /** custom constructor */
-template<uint32_t dim>
-    CVFEM_Visitor<dim>::CVFEM_Visitor( Model<dim>& model, const char* variable)
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::CVFEM_Visitor( Model<dim>& model, const char* variable )
   : with_operand( false ),
   dt(0.0)
  { 
      
 	this->ApplicationLevel(REGION);
-    this->ApplicationTarget(ELEMENT);
+  this->ApplicationTarget(ELEMENT);
 
 	variable_key = model.Database().StorageKey(variable);
     
@@ -25,18 +27,19 @@ template<uint32_t dim>
 
   }
 
+
+
 /** custom constructor */
-template<uint32_t dim>
-    CVFEM_Visitor<dim>::CVFEM_Visitor( Model<dim>& model, const char* operand, const char* variable)
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::CVFEM_Visitor( Model<dim>& model, const char* operand, const char* variable )
   : with_operand( true ),
   dt(0.0)
- { 
+ {
+	 this->ApplicationLevel(REGION);
+   this->ApplicationTarget(ELEMENT);
 
-	this->ApplicationLevel(REGION);
-    this->ApplicationTarget(ELEMENT);
-
-	variable_key = model.Database().StorageKey(variable);
-    operand_key = model.Database().StorageKey(operand);
+	 variable_key = model.Database().StorageKey(variable);
+   operand_key = model.Database().StorageKey(operand);
 
     if ( variable_key.place != NODE || variable_key.type != SCALAR )
       throw Exception( ERROR, "CVFEM_Visitor::(constructor)", 
@@ -50,26 +53,30 @@ template<uint32_t dim>
 
 
 /** default destructor */
-template<uint32_t dim>
-CVFEM_Visitor<dim>::~CVFEM_Visitor() 
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::~CVFEM_Visitor()
  {}
 
-/** visit function for elem */
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::Visit(Element<dim>* n)   
-  {
 
+
+
+/** visit function for elem */
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::Visit( Element<dim>* n )
+  {
       GetOperands( *n );
       ComputeContribution( *n );
-      WriteOperands( *n ); 
-
+      WriteOperands( *n );
   }
-     
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
+ 
+ 
+ 
+ 
+ 
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
-
-    e.NodePropertyVector( variable_key, variable );
+  e.NodePropertyVector( variable_key, variable );
   if (with_operand) {
       if (operand_key.place == NODE)
 	  {
@@ -113,8 +120,13 @@ void CVFEM_Visitor<dim>::GetOperands( Element<dim>& e )
 } // end GetOperands
 
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
 
    for (lhs_it = lhs_operators.begin(); lhs_it < lhs_operators.end(); lhs_it++)
@@ -123,8 +135,8 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
        if (lhs_it->lhs_operator->MultiplyWithTimeIncrement())
           lhs_it->lhs_operator->MultiplyWithTimeFactor( dt );
        LHS = lhs_it->lhs_operator->GetContribution();
-       for (size_t m = 0; m < e.Nodes(); m++)
-          for (size_t n = 0; n < e.Nodes(); n++)
+       for ( uint32_t m = 0; m < e.Nodes(); m++)
+          for ( uint32_t n = 0; n < e.Nodes(); n++)
              {
              LHS(m,n) *= lhs_it->basic_operands[n]();
              if (with_operand && operand_key.place == NODE
@@ -143,8 +155,8 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
        if (lhs_it_up->lhs_operator->MultiplyWithTimeIncrement())
           lhs_it_up->lhs_operator->MultiplyWithTimeFactor( dt );
        LHS = lhs_it_up->lhs_operator->GetContribution();
-       for (size_t m = 0; m < e.Nodes(); m++)
-          for (size_t n = 0; n < e.Nodes(); n++)
+       for ( uint32_t m = 0; m < e.Nodes(); m++)
+          for ( uint32_t n = 0; n < e.Nodes(); n++)
              {
              LHS(m,n) *= lhs_it_up->basic_operands[n]();
              if (with_operand && operand_key.place == NODE
@@ -197,8 +209,12 @@ void CVFEM_Visitor<dim>::ComputeContribution( Element<dim>& e )
 
 
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::WriteOperands( Element<dim>& e )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::WriteOperands( CELL<dim>& e )
  {
 
    for (auto i = 0; i < e.Nodes(); i++)
@@ -209,16 +225,24 @@ void CVFEM_Visitor<dim>::WriteOperands( Element<dim>& e )
 
  } // end WriteOperands
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::Add( const PropertyDatabase<dim>& pref,
+                                   CVFEM_MathOperatorLHS<dim,CELL>* lhs_op )
  {
 
    lhs_operators.push_back( Operator_LHS(pref,lhs_op) );
 
  } // Add
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::Add( CVFEM_MathOperatorRHS<dim,CELL>* rhs_op )
  {
 
    if ( rhs_op->AddLater() )
@@ -229,16 +253,26 @@ void CVFEM_Visitor<dim>::Add( CVFEM_MathOperatorRHS<dim>* rhs_op )
    
  } // Add
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op, const char* upwind_variable )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::Add( const PropertyDatabase<dim>& pref,
+                                   CVFEM_MathOperatorLHS<dim,CELL>* lhs_op, const char* upwind_variable )
  {
 
    lhs_operators_upwind.push_back( Operator_LHS_Upwind(pref,lhs_op,upwind_variable) );
 
  } // Add
 
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorRHS<dim>* rhs_op, const char* upwind_variable )
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::Add( const PropertyDatabase<dim>& pref,
+                                   CVFEM_MathOperatorRHS<dim,CELL>* rhs_op,
+                                   const char* upwind_variable )
  {
 
    if ( rhs_op->AddLater() )
@@ -249,47 +283,72 @@ void CVFEM_Visitor<dim>::Add( const PropertyDatabase<dim>& pref, CVFEM_MathOpera
    
  } // Add
  
-template<uint32_t dim>
-void CVFEM_Visitor<dim>::SetTimeIncrement( double time_increment )
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+void CVFEM_Visitor<dim,CELL>::SetTimeIncrement( double time_increment )
  {
    dt = time_increment;
  } // SetTimeIncrement( double time_increment )
 
-template<uint32_t dim>
-CVFEM_Visitor<dim>::Operator_LHS::Operator_LHS( const PropertyDatabase<dim>& pref, CVFEM_MathOperatorLHS<dim>* lhs_op )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::Operator_LHS::Operator_LHS( const PropertyDatabase<dim>& pref,
+                                                     CVFEM_MathOperatorLHS<dim,CELL>* lhs_op )
  : lhs_operator( lhs_op )
  {
     basic_operand_key = pref.StorageKey(lhs_op->BasicOperandName().c_str());
  } // Operator_LHS( constructor )
 
-template<uint32_t dim>
-CVFEM_Visitor<dim>::Operator_RHS::Operator_RHS( CVFEM_MathOperatorRHS<dim>* rhs_op )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::Operator_RHS::Operator_RHS( CVFEM_MathOperatorRHS<dim,CELL>* rhs_op )
  : rhs_operator( rhs_op )
  {} // Operator_RHS( constructor )
 
-template<uint32_t dim>
-CVFEM_Visitor<dim>::Operator_LHS_Upwind::Operator_LHS_Upwind( const PropertyDatabase<dim>& pref,
-                                                                CVFEM_MathOperatorLHS<dim>* lhs_op,
-                                                                const char* upwind_variable )
- : lhs_operator( lhs_op )
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::Operator_LHS_Upwind::Operator_LHS_Upwind( const PropertyDatabase<dim>& pref,
+                                                                   CVFEM_MathOperatorLHS<dim,CELL>* lhs_op,
+                                                                   const char* upwind_variable )
+ : lhs_operator(lhs_op),
+   basic_operand_key( pref.StorageKey(lhs_op->BasicOperandName().c_str()) ),
+   upwind_operand_key( pref.StorageKey(upwind_variable) )
  {
-    basic_operand_key  = pref.StorageKey(lhs_op->BasicOperandName().c_str());
-    upwind_operand_key = pref.StorageKey(upwind_variable);
+    //basic_operand_key  = pref.StorageKey(lhs_op->BasicOperandName().c_str());
+    //upwind_operand_key = pref.StorageKey(upwind_variable);
  } // Operator_LHS( constructor )
 
-template<uint32_t dim>
-CVFEM_Visitor<dim>::Operator_RHS_Upwind::Operator_RHS_Upwind( const PropertyDatabase<dim>& pref,
-                                                                CVFEM_MathOperatorRHS<dim>* rhs_op,
-                                                                const char* upwind_variable  )
- : rhs_operator( rhs_op )
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+CVFEM_Visitor<dim,CELL>::Operator_RHS_Upwind::Operator_RHS_Upwind( const PropertyDatabase<dim>& pref,
+                                                                    CVFEM_MathOperatorRHS<dim,CELL>* rhs_op,
+                                                                    const char* upwind_variable  )
+ : rhs_operator( rhs_op ), upwind_operand_key( pref.StorageKey(upwind_variable) )
  {
-     upwind_operand_key = pref.StorageKey(upwind_variable);
+     //upwind_operand_key = pref.StorageKey(upwind_variable);
  } // Operator_RHS( constructor )
 
 
-template class CVFEM_Visitor<1U>;
-template class CVFEM_Visitor<2U>;
-template class CVFEM_Visitor<3U>;
+template class CVFEM_Visitor<1U,Element>;
+template class CVFEM_Visitor<2U,Element>;
+template class CVFEM_Visitor<3U,Element>;
 
 } // csmp
 

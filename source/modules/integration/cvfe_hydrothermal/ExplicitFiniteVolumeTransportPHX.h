@@ -6,14 +6,45 @@
 	 - initial port to CSMP++.
 */
 
-#include "finiteVolumeAuxiliaryFunctions.h"
 #include "NodeCenteredFiniteVolumeTransport.h"
 #include "StencilProcessorPHX.h"
 
 namespace csmp {
 
-/// finitive volume calculations for one phase within the CVFEM scheme (Weis et al., Geofluids, 2014).
+template<uint32_t> class Model;
 
+  /**
+     @class ExplicitFiniteVolumeTransportPHX ExplicitFiniteVolumeTransportPHX.h
+
+     Finitive volume calculations for one phase within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+     @author Philipp Weis, ETH Zuerich
+     @section contact Contact
+     philipp.weis@erdw.ethz.ch
+
+     @changes changes Latest Changes
+  
+     @section motivation Motivation
+      Specialized version of explicit finite volume transport class for PHX scheme.
+
+     @section usage Usage
+      To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+     @code
+	 Performs mass balanced finite volume tansport
+          
+     @endcode
+     
+     @section dependencies Dependencies
+	 The functions are tailored for use in TwoPhaseTransportPHX.
+	 Needs StencilProcessorPHX
+     
+     @section issues Known issues
+     
+     @section testing Testing
+     testing was done in the period before publication in 2014.
+
+  */
 template<uint32_t dim>
 class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTransport<dim> {
 
@@ -27,9 +58,9 @@ class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTranspor
                                       const char* density); // density of the fluid phase
 
                                        
-    ~ExplicitFiniteVolumeTransportPHX();
+    virtual ~ExplicitFiniteVolumeTransportPHX();
 
-    double  AdvectMassConservedSinglePhase( const double& time_increment); // For use with single-phase fluid
+    double  AdvectMassConservedSinglePhase( const double& time_increment ); // For use with single-phase fluid
 	                                                                           // the function takes a time step suggestions
 	                                                                           // performs transport with this time step
 	                                                                           // if flux with this time step violates mass-based time step criterium, flux is performed with a smaller time step
@@ -66,7 +97,8 @@ class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTranspor
 // TODO: Why store these in here?
     Model<dim>& model_ref;
     Region<dim>& region_ref;
-    StencilProcessorPHX<dim> stencilPHX;
+    
+    StencilProcessorPHX<dim>  stencilPHX;
 
     void  ComposeAdvection( );
     void  WriteResults( );
@@ -86,41 +118,11 @@ class ExplicitFiniteVolumeTransportPHX : public NodeCenteredFiniteVolumeTranspor
 
     // flux vectors
     std::vector<std::vector<double> > flux_in_vectors, flux_out_vectors,
-                                        property_vectors, mass_balance_vectors;
+                                      property_vectors, mass_balance_vectors;
+                                        
     std::vector<std::vector<std::vector<double> > > facet_flux_vectors;
-
 };
 
-  /**
-     @class ExplicitFiniteVolumeTransportPHX ExplicitFiniteVolumeTransportPHX.h
-
-     @author Philipp Weis, ETH Zuerich
-     @section contact Contact
-     philipp.weis@erdw.ethz.ch
-
-     @changes changes Latest Changes                                                                                  
-  
-     @section motivation Motivation
-      Specialized version of explicit finite volume transport class for PHX scheme.
-
-     @section usage Usage
-      To be used within the CVFEM scheme (Weis et al., Geofluids, 2014).
-
-     @code
-	 Performs mass balanced finite volume tansport
-          
-     @endcode
-     
-     @section dependencies Dependencies
-	 The functions are tailored for use in TwoPhaseTransportPHX.
-	 Needs StencilProcessorPHX
-     
-     @section issues Known issues
-     
-     @section testing Testing
-     testing was done in the period before publication in 2014.
-
-  */
 } // end namespace csmp
 
 #endif

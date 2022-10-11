@@ -99,8 +99,8 @@ void Region_Example::Run()
    vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
 
    // compute steady-state fluid pressure and Darcy velocity
-   SteadyStateDiffusor<DIM,Region>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
-   VelocityAndVolumeFlux<DIM,Element<DIM> >  postpro( model, "conductivity", "porosity", "fluid pressure" );
+   SteadyStateDiffusor<DIM,Element>  steady_state_pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
+   VelocityAndVolumeFlux<DIM>  postpro( model, "conductivity", "porosity", "fluid pressure" );
    steady_state_pressure.AddPostProcess( &postpro );
    steady_state_pressure.IntegrateOver( model.Region("Model") );
 

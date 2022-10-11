@@ -10,6 +10,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
+#include "LinearSolver.h"
 
 // H2O properties
 #include "IAPWS_H2OPropertiesVisitor.h"
@@ -85,7 +86,7 @@ void TemperatureDensityPressure_Example::Run()
     VSet<1U>       mesh_container;
     const size_t   N_ELEMENTS(4000);  // 4,000 meter tall model
     LineElementMesher<1U>   mesher;
-    mesher.BuildUniformMesh( mesh_container, 1., N_ELEMENTS+1 );
+    mesher.BuildUniformMesh( mesh_container, 4000., N_ELEMENTS );
 
     // creating a model topological region
     set<string>    fem_types; fem_types.insert("ISOPARAMETRIC_LINEAR_BAR");
@@ -124,14 +125,14 @@ void TemperatureDensityPressure_Example::Run()
     // -------------------------------------------------------------
     #ifdef USE_SAMG_SOLVER
     SAMG_Solver solver;
-    PDE_Integrator<1U,Region>  temperature( solver );
+    PDE_Integrator<1U,Element>  temperature( solver );
     #else
     EigenSolver solver;
-    PDE_Integrator<1U,Region>  temperature( solver );
+    PDE_Integrator<1U,Element>  temperature( solver );
     #endif
 
-    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );
-    NumIntegral_NT_op_N_dV<1U,Element<1U> >    energy_source( model.Database(), "energy source", "temperature" );
+    NumIntegral_dNT_op_dN_dV<1U>  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );
+    NumIntegral_NT_op_N_dV<1U>    energy_source( model.Database(), "energy source", "temperature" );
 
     temperature.Add( &temperature_conductance );
     temperature.Add( &energy_source );
@@ -155,9 +156,8 @@ void TemperatureDensityPressure_Example::Run()
     csmp::Index     pfa_key  = model.Database().StorageKey("fluid pressure analytic");
     ScalarVariable  pf_top(DIRICH,101325.); // 1 bar
     // the last node (id=n_nodes) is located at the top of the model (by anology with the Y-axis)
-    Region<1U>& mref(model.Region("Model"));
-    mref.N(mref.Nodes()-1U)->Store( model.Database().StorageKey("fluid pressure"), pf_top );
-    mref.N(mref.Nodes()-1U)->Store( model.Database().StorageKey("fluid pressure analytic"), pf_top );
+    model.InputBoundaryValue( CNR1, "fluid pressure", pf_top );
+    model.InputBoundaryValue( CNR2, "fluid pressure analytic", pf_top );
   
 
     // 7. Set up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
@@ -165,25 +165,25 @@ void TemperatureDensityPressure_Example::Run()
 #ifdef USE_SAMG_SOLVER
     SAMG_Settings  settings;
     SAMG_Solver    samg_solver(&settings);
-    PDE_Integrator<1U,Region>  hydrostatic_pressure(samg_solver);
+    PDE_Integrator<1U,Element>  hydrostatic_pressure(samg_solver);
     // minimizing screen output
     settings.Set_iout1( 0 );
     settings.Set_iout2( 0 );
     settings.Set_idmp( -1 );
 #else
     EigenSolver  linear_solver;
-    PDE_Integrator<1U,Region>  hydrostatic_pressure(linear_solver);
+    PDE_Integrator<1U,Element>  hydrostatic_pressure(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<1U,Element<1U> >  hydrostatic_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
 
     cout <<"\nmain: enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
     double acc_gravity(9.81);
     cin >> acc_gravity;
     // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
-    NumIntegral_NT_op_dNi_dV<1U,Element<1U> >  hydrostatic_gravity( model.Database(), "element fluid density",
-                                                                   "conductivity", "fluid pressure", acc_gravity );
-
+    NumIntegral_NT_op_dNi_dV<1U>  hydrostatic_gravity( model.Database(), "element fluid density",
+                                                      "conductivity", "fluid pressure", acc_gravity );
+                                                      
     hydrostatic_pressure.Add( &hydrostatic_conductance );
     hydrostatic_pressure.Add( &hydrostatic_gravity );
 
@@ -193,7 +193,7 @@ void TemperatureDensityPressure_Example::Run()
     // --------------------------------------------------------------------------------------------------------------------
     // fluid salinity is accounted for in the crudest fashion: the weight of the
     // total dissolved solids is simply added to the fluid density
-    cout <<"\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t): ";
+    cout <<"\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=35000 g/t): ";
     double total_dissolved_solids(12000./1000.); // g->kg (157500-ppm = 157kg salt)
     cin >> total_dissolved_solids;
     total_dissolved_solids /= 1000.; // gets kg/m3

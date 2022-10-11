@@ -7,24 +7,26 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_PT_op_dV<dim,CELL>::NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref,
-                                                    const char* oper, const char* test ) 
-  : MathOperatorRHS<dim>(pref,oper,test),
+                                                      const char* oper, const char* test )
+  : MathOperatorRHS<dim,CELL>(pref,oper,test),
     BFORCE(6) 
 {
-    MathOperatorRHS<dim>::Name("NumIntegral_PT_op_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_PT_op_dV", oper, test );
     
     // testing the specified Operands 
-    if ( MathOperatorRHS<dim>::MaterialOperandType() != VECTOR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
                              oper,  "Operand must be a vector variable.");
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorRHS<dim>::TestOperandType() != VECTOR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
+         MathOperatorRHS<dim,CELL>::TestOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_op_dV<dim>::(constructor", 
                              test,  "Test function Operand must be a vector variable placed on the nodes");
 }
+
+
 
 
 
@@ -40,8 +42,8 @@ be the best procedure available (see Cook et al.).
 A reference to the variable storage inside of the Model<dim>  and a 
 reference to the Element from which the Operand shall be read.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -49,10 +51,10 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
    BFORCE.resize( e.Nodes() * dim );
 
    // reading the nodal "body" forces
-   if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE )
+   if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE )
      {
         vector<VectorVariable<dim> >  forces;
-        e.NodePropertyVector( MathOperatorRHS<dim>::MaterialOperandKey(), forces );
+        e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), forces );
    
         // remapping the forces into the vector E_OP
         size_t k(0);
@@ -61,9 +63,10 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL& e )
      }
    else // Element property
      {
-        assert( MathOperatorRHS<dim>::MaterialOperandKey().place == ELEMENT );
+        const PLACEMENT place = MathOperatorRHS<dim,CELL>::MaterialOperandKey().place;
+        assert( place == ELEMENT );
         VectorVariable<dim>  vc;
-        e.Read( MathOperatorRHS<dim>::MaterialOperandKey(), vc );
+        e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
    
         // remapping the forces into the vector E_OP
         size_t k(0);
@@ -111,10 +114,10 @@ member vector {V}.
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
-    MathOperatorRHS<dim>::RHS.resize( BFORCE.size() );
+    MathOperatorRHS<dim,CELL>::RHS.resize( BFORCE.size() );
     // if a quadratic triangle element is used, the body forces are assigned only 
     // to the midside nodes
    if ( e.FE_Type() == QUADRATIC_TRIANGLE ||
@@ -122,27 +125,27 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL& e )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
          const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
-         for ( auto i{0U}; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
-           MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
+         for ( auto i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ ) 
+           MathOperatorRHS<dim,CELL>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
          const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
-         for ( auto i{0U}; i<MathOperatorRHS<dim>::RHS.size(); i++ ) 
-           MathOperatorRHS<dim>::RHS[i] = BFORCE[i] * volume_div_n;
+         for ( auto i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ ) 
+           MathOperatorRHS<dim,CELL>::RHS[i] = BFORCE[i] * volume_div_n;
      }
     
 } // end ComputeContribution
 
 
 
-template class NumIntegral_PT_op_dV<1U,Element<1U> >;
-template class NumIntegral_PT_op_dV<2U,Element<2U> >;
-template class NumIntegral_PT_op_dV<3U,Element<3U> >;
+template class NumIntegral_PT_op_dV<1U,Element>;
+template class NumIntegral_PT_op_dV<2U,Element>;
+template class NumIntegral_PT_op_dV<3U,Element>;
 
-template class NumIntegral_PT_op_dV<1U,Face<1U> >;
-template class NumIntegral_PT_op_dV<2U,Face<2U> >;
-template class NumIntegral_PT_op_dV<3U,Face<3U> >;
+template class NumIntegral_PT_op_dV<1U,Face>;
+template class NumIntegral_PT_op_dV<2U,Face>;
+template class NumIntegral_PT_op_dV<3U,Face>;
 
 } // csmp
 

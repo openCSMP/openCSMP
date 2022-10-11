@@ -23,7 +23,7 @@ template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
 class RegionBoundaryFluxVisitor : public Visitor<dim> {
   public:
     /// choice between Region, Boundary and SplitBoundary is desired
-    RegionBoundaryFluxVisitor( Model<dim>& model,
+    RegionBoundaryFluxVisitor( Model<dim>&,
                                const char*  target_region,
                                const char*  Darcy_velocity );
   
@@ -38,10 +38,10 @@ class RegionBoundaryFluxVisitor : public Visitor<dim> {
     void TimeIncrement( double );
  
   protected:
-    ModelSubDomain<dim,Element>*  domain_ptr_; // either of:
-    csmp::Index                   flux_key_;   // for the user-defined flux variable
-    double                      FVinflux_,   // flux summation variable
-                                  delta_t_;    // time increment used in the flux integration
+    ModelSubDomain<dim,Element>*  domain_ptr_; ///< either of:
+    csmp::Index                   flux_key_;   ///< for the user-defined flux variable
+    double                        FVinflux_,   ///< flux summation variable
+                                  delta_t_;    ///< time increment used in the flux integration
     VectorVariable<dim>           vt_;
 };
 

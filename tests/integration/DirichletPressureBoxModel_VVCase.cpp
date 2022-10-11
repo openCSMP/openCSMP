@@ -21,6 +21,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "LHS_Integral_dNT_dN_dV.h"
 #include "Integral_NT_op_N_dV.h"
+#include "LinearSolver.h"
 
 #include "VTK_Interface.h"
 
@@ -117,7 +118,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
 //      settings.Set_w_avrge(2);
 #else
       CSMP_DEFAULT_LINEAR_SOLVER  solver;
-      PDE_Integrator<3U,Region>   pde_integrator( solver );
+      PDE_Integrator<3U,Element>  pde_integrator( solver );
 #endif
 
 #ifdef SAMG_OUTPUT_TO_FILE
@@ -129,8 +130,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
       settings.Set_filnam_dump( "DirichletPressureBoxModel_VVCase" );
 #endif
 
-      const PropertyDatabase<DIM>&  p_ref = model.Database();
-//      NumIntegral_dNT_dN_dV<DIM>   laplacian( p_ref, "fluid pressure", "fluid pressure" );
+      const PropertyDatabase<DIM>&   p_ref = model.Database();
       NumIntegral_dNT_op_dN_dV<DIM>  laplacian( p_ref, "conductivity",  "fluid pressure", "fluid pressure" );
       NumIntegral_NT_op_N_dV<DIM>    rhs( p_ref, "fluid volume source", "fluid pressure" );
 
@@ -192,7 +192,7 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS_AnalyticallyIntegrated
 #else
    CSMP_DEFAULT_LINEAR_SOLVER solver;
 #endif
-   PDE_Integrator<DIM,Region>  pde_integrator(solver);
+   PDE_Integrator<DIM,Element>  pde_integrator(solver);
 //      pde_integrator.ScaleEssentialConditions( 1.0e-15 ); // because the model is so small
 
    const PropertyDatabase<DIM>&  p_ref = model.Database();

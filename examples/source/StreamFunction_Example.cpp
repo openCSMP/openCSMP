@@ -19,6 +19,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "NumIntegral_op_NT_dN_orthogonal_dV.h"
+#include "LinearSolver.h"
 
 // Interrelations
 #include "ConstantFactor.h"
@@ -156,15 +157,15 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
    #ifdef USE_SAMG_SOLVER
    SAMG_Solver solver;
-   PDE_Integrator<2U,Region>  fluid_pressure(solver);
+   PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #else
    EigenSolver solver;
-   PDE_Integrator<2U,Region>  fluid_pressure(solver);
+   PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #endif
 
-   NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-   NumIntegral_NT_op_N_dV<2U,Element<2U> >    source( model.Database(), "fluid volume source", "fluid pressure" );
-   VelocityAndVolumeFlux<2U,Element<2U> >     velo( model, "conductivity", "porosity", "fluid pressure" );
+   NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_op_N_dV<2U>    source( model.Database(), "fluid volume source", "fluid pressure" );
+   VelocityAndVolumeFlux<2U>     velo( model, "conductivity", "porosity", "fluid pressure" );
 
    fluid_pressure.Add( &conductance );
    fluid_pressure.Add( &source );
@@ -175,7 +176,7 @@ void StreamFunction_Example::Run()
  // ------------------------------------------------------------------------------------
  // 3.1 Analysis of results
  // ------------------------------------------------------------------------------------
-   StatisticalAnalyzer<2U>                                     flux_histogram( model );
+   StatisticalAnalyzer<2U>                                 flux_histogram( model );
    vector<pair<double,double> >                            bins;
    map<string,pair<vector<pair<double,double> >,size_t> >  results;
 
@@ -295,7 +296,7 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
         printRangeOfVariable( model, stdio, group_name.c_str(), "velocity" );
         printRangeOfVariable( model, stdio, group_name.c_str(), "volume flux" );
 
-        analyze_sensitivity( model, group_name.c_str(), stdio, conductivity, fluid_pressure );
+        AnalyseSensitivity( model, group_name.c_str(), stdio, conductivity, fluid_pressure );
 
         if ( stdio.RecordLogicalChoice("Output last result from sensitivity analysis ?") ) {
              vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure",    0 );
@@ -319,8 +320,8 @@ rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
 // auxiliary methods
 
 // this method assumes that permeability is a scalar
-void  StreamFunction_Example::analyze_sensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
-                                                   Interrelation<2U>& itr, PDE_Integrator<2U,Region>& algo )
+void  StreamFunction_Example::AnalyseSensitivity( Model<2U>& sg, const char* group, Standard_IO_Handler& io,
+                                                  Interrelation<2U>& itr, PDE_Integrator<2U,Element>& algo )
  {
     assert( sg.Database().Type("permeability") == SCALAR );
     for ( ;; ) {
@@ -540,17 +541,17 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
 
 #ifdef USE_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<2U,Region>  stream_function(samg_solver);
+    PDE_Integrator<2U,Element>  stream_function(samg_solver);
 #else
     EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  stream_function(linear_solver);
+    PDE_Integrator<2U,Element>  stream_function(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> >  conductance( sg.Database(),
+    NumIntegral_dNT_op_dN_dV<2U>  conductance( sg.Database(),
                                                         "resistivity", stream_func_var, stream_func_var );
 
 // RENAME THIS OPERATOR into NumIntegral_NT_op_dN_orthogonal_dV
-    NumIntegral_op_NT_dN_orthogonal_dV<2U,Element<2U> >  rhs( sg.Database(), "fluid pressure", stream_func_var );
+    NumIntegral_op_NT_dN_orthogonal_dV<2U>  rhs( sg.Database(), "fluid pressure", stream_func_var );
 
     stream_function.Add( &conductance );
     stream_function.Add( &rhs );

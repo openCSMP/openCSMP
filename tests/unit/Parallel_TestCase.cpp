@@ -71,7 +71,7 @@ namespace csmp
       boundary2.InputPropertyValue( "fluid pressure", makeScalar( DIRICH, 10.0E+5 ) );
 
       // pressure solver
-      SteadyStateDiffusor<3,csmp::Region>  SSPS( model, "total mobility", "fluid pressure",
+      SteadyStateDiffusor<3,csmp::Element>  SSPS( model, "total mobility", "fluid pressure",
                                                                        "fluid volume source" );
 
       // transport algorithm

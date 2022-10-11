@@ -1,4 +1,7 @@
 #include "CVFEM_PHX_Scheme.h"
+#include "PDE_Integrator.h"
+#include "Brine.h"
+#include "ConvertConcentrationUnitsNaCl.h"
 
 using namespace std;
 

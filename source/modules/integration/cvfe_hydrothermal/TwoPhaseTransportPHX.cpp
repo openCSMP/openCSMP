@@ -1,5 +1,8 @@
 #include "TwoPhaseTransportPHX.h"
+#include "Model.h"
 #include "Region.h"
+#include "ExplicitFiniteVolumeTransportPHX.h"
+#include "UpwindControlVisitor.h"
 
 using namespace std;
 
@@ -9,9 +12,9 @@ namespace csmp {
 /** custom constructor */
 template<uint32_t dim>
 TwoPhaseTransportPHX<dim>::TwoPhaseTransportPHX( Model<dim>& model,
-                          UpwindControlVisitor<dim>& upwind_visitor,
-                          ExplicitFiniteVolumeTransportPHX<dim>& fv_vapor,
-                          ExplicitFiniteVolumeTransportPHX<dim>& fv_liquid)
+                                                  UpwindControlVisitor<dim>& upwind_visitor,
+                                                  ExplicitFiniteVolumeTransportPHX<dim>& fv_vapor,
+                                                  ExplicitFiniteVolumeTransportPHX<dim>& fv_liquid)
    : model_ref(model),
    fv_transport_vapor( fv_vapor ),
    fv_transport_liquid( fv_liquid ),

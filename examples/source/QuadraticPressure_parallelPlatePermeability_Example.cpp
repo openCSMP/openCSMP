@@ -14,6 +14,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "LinearSolver.h"
 
 // utilities
 #include "CSMP_definitions.h"
@@ -154,18 +155,18 @@ void QuadraticPressure_parallelPlatePermeability_Example::Run()
     settings.Set_ndefault(40);
     SAMG_Solver  samg_solver(&settings);
 
-    PDE_Integrator<2U,Region>  total_pressure_quadratic(samg_solver);
+    PDE_Integrator<2U,Element>  total_pressure_quadratic(samg_solver);
 #else
-    EigenSolver  linear_solver;
-    PDE_Integrator<2U,Region>  total_pressure_quadratic(linear_solver);
+    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    PDE_Integrator<2U,Element>  total_pressure_quadratic(linear_solver);
 #endif
 
     // conductance matrix [K] on the left-hand side
-    NumIntegral_dNT_op_dN_dV<2U,Element<2U> > conductance( model.Database(),"conductivity","fluid pressure","fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(),"conductivity","fluid pressure","fluid pressure" );
     // source vector {Q} on the right-hand side
-    NumIntegral_NT_op_N_dV<2U,Element<2U> >   source( model.Database(),"fluid volume source","fluid pressure" );
+    NumIntegral_NT_op_N_dV<2U>   source( model.Database(),"fluid volume source","fluid pressure" );
     // post-processing operation to compute flow velocities
-    VelocityAndVolumeFlux<2U,Element<2U> >    velocity( model, "conductivity","porosity","fluid pressure", true );
+    VelocityAndVolumeFlux<2U>    velocity( model, "conductivity","porosity","fluid pressure", true );
 
     // add PDE_Operators to the FE Algorithm
     total_pressure_quadratic.Add( &conductance );

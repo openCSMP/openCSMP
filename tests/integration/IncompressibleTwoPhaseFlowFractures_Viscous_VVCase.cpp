@@ -509,7 +509,7 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
     if(lu_solver_){
 
-         steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>;
+         steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>;
 
     }else{
 
@@ -557,19 +557,19 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
 
       #else
         CSMP_DEFAULT_LINEAR_SOLVER solver;
-        steady_state_pressure_solver_ = new PDE_Integrator<dim,Region>  ( solver );
+        steady_state_pressure_solver_ = new PDE_Integrator<dim,Element>( solver );
       #endif
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //LHS:
-    NumIntegral_dNT_op_dN_dV<dim,Element<dim> >  conductance( model_->Database(), total_mobility_.c_str(), fluid_pressure_.c_str(),fluid_pressure_.c_str() );
+    NumIntegral_dNT_op_dN_dV<dim>  conductance( model_->Database(), total_mobility_.c_str(), fluid_pressure_.c_str(),fluid_pressure_.c_str() );
     //RHS:
-    NumIntegral_NT_op_N_dV<dim,Element<dim> >    src( model_->Database(),  fluid_volume_source_.c_str(), fluid_pressure_.c_str() );
+    NumIntegral_NT_op_N_dV<dim>    src( model_->Database(),  fluid_volume_source_.c_str(), fluid_pressure_.c_str() );
 
 	// operation to compute velocity
-    VelocityAndVolumeFlux<dim,Element<dim> >  velo( *model_,
+    VelocityAndVolumeFlux<dim>  velo( *model_,
                                       total_mobility_.c_str(),
                                       porosity_.c_str(),
                                       fluid_pressure_.c_str(), false,

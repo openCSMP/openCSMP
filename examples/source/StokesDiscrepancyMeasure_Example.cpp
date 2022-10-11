@@ -8,6 +8,7 @@
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
+#include "LinearSolver.h"
 #include "CSMP_highLevelUtilities.h"
 
 // Interrelations
@@ -91,17 +92,17 @@ void StokesDiscrepancyMeasure_Example::Run()
     settings.Set_ncgtyp(5);
     settings.Set_ndefault(40);
     SAMG_Solver solver(&settings);
-    PDE_Integrator<dim,Region>  parabolic_profile( solver );
+    PDE_Integrator<dim,Element>  parabolic_profile( solver );
     #else
     CSMP_DEFAULT_LINEAR_SOLVER solver;
-    PDE_Integrator<dim,Region>  parabolic_profile(solver);
+    PDE_Integrator<dim,Element>  parabolic_profile(solver);
     #endif
 
     // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
     // laplacian matrix [L] on the left-hand side
-    NumIntegral_dNT_dN_dV<dim,Element<dim> >   laplacian( model.Database(), "parabolic function", "parabolic function" );
+    NumIntegral_dNT_dN_dV<dim>   laplacian( model.Database(), "parabolic function", "parabolic function" );
     // source vector {q} on the right-hand side = 1
-    NumIntegral_NT_op_N_dV<dim,Element<dim> >  rhs( model.Database(), "source term", "parabolic function" );
+    NumIntegral_NT_op_N_dV<dim>  rhs( model.Database(), "source term", "parabolic function" );
     parabolic_profile.Add( &laplacian );
     parabolic_profile.Add( &rhs );
 
@@ -150,15 +151,15 @@ void StokesDiscrepancyMeasure_Example::Run()
  // -----------------------------------------------------------------------
     #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Solver  samg_solver;
-    PDE_Integrator<dim,Region>  steady_state_pressure(samg_solver);
+    PDE_Integrator<dim,Element>  steady_state_pressure(samg_solver);
     #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<dim,Region>  steady_state_pressure(linear_solver);
+    PDE_Integrator<dim,Element>  steady_state_pressure(linear_solver);
     #endif
 
-    NumIntegral_dNT_op_dN_dV<dim,Element<dim> >  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<dim>  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
     // source vector {q} on the right-hand side = 0
-    NumIntegral_NT_op_N_dV<dim,Element<dim> >    fsrc( model.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_op_N_dV<dim>    fsrc( model.Database(), "fluid volume source", "fluid pressure" );
     steady_state_pressure.Add( &flow_resistance );
     steady_state_pressure.Add( &fsrc );
 

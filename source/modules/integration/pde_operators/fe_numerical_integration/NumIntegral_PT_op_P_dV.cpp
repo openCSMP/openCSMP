@@ -6,32 +6,30 @@ using namespace std;
 
 namespace csmp {
 
-
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_PT_op_P_dV<dim,CELL>::NumIntegral_PT_op_P_dV( const PropertyDatabase<dim>& pref,
-                                                     const char* oper, const char* test )
-  : MathOperatorRHS<dim>(pref,oper,test),
+                                                          const char* oper, const char* test )
+  : MathOperatorRHS<dim,CELL>(pref,oper,test),
     nodal_degrees_of_freedom(1)
  {
-    MathOperatorRHS<dim>::Name("NumIntegral_PT_op_P_dV", oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_PT_op_P_dV", oper, test );
 
     // resize material property matrix 
-    if ( dim == 3 ) 
+    if constexpr ( dim == 3U )
       {
-         typename vector<DenseMatrix<DM_MIN> >::iterator  it;
-         for ( it=MathOperatorRHS<dim>::MTRL.begin(); 
-               it!=MathOperatorRHS<dim>::MTRL.end(); it++ ) (*it).Resize(3,3);
+         for ( auto it=MathOperatorRHS<dim,CELL>::MTRL.begin();
+               it!=MathOperatorRHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
       }
 
     // anisotropy can only be considered if there are multiple degrees of freedom per node
-    if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
-    if ( MathOperatorRHS<dim>::MaterialOperandType() != SCALAR && 
-         MathOperatorRHS<dim>::TestOperandType() == SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR && 
+         MathOperatorRHS<dim,CELL>::TestOperandType() == SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
                       test, "Non-scalar Operands require multiple degrees of freedom per node." );
 
-    if ( MathOperatorRHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorRHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
+         MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_PT_op_P_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
@@ -53,14 +51,14 @@ in the special case, the integral of the testfunction products must be used
 
 Use this operator to compute capacitance, storage capacity etc. matrices.
  */
-template<uint32_t dim,class CELL>
-void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
-    MathOperatorRHS<dim>::RHS.resize(e.Nodes());
-    fill( MathOperatorRHS<dim>::RHS.begin(), MathOperatorRHS<dim>::RHS.end(), 0.0 );
+    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
+    fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0.0 );
     
     DenseMatrix<DM_MIN> RHS_TEMP(e.Nodes(), e.Nodes()), UNITY(e.Nodes(), 1);
     
@@ -75,16 +73,16 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
     // the element contribution which is uniform over the entire element is just distributed
     // equally over all the nodes.
        // lumped formulation
-       if ( MathOperatorRHS<dim>::LumpedFormulation() )
+       if ( MathOperatorRHS<dim,CELL>::LumpedFormulation() )
          {  
-             volume = e.Volume();
+           volume = e.Volume();
              
            int k{0};
-             if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
+             if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
                {   
                  for ( auto n=0; n<e.Nodes(); n++ ) 
                    for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
-                     MathOperatorRHS<dim>::RHS[k++] = (MathOperatorRHS<dim>::MTRL[0](i,i) * volume) / e.Nodes();
+                     MathOperatorRHS<dim,CELL>::RHS[k++] = (MathOperatorRHS<dim,CELL>::MTRL[0](i,i) * volume) / e.Nodes();
                }
              else
                {
@@ -105,10 +103,10 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
                 for ( auto j = 0; j < e.Nodes(); j++ )
                   for ( auto k = 0; k < e.Nodes(); k++ )
                     {
-                      if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == ELEMENT )
-                        RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim>::MTRL[0](0,0) * N[k] * det;
-                      else if ( MathOperatorRHS<dim>::MaterialOperandPlacement() == NODE )
-                        RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim>::MTRL[i](0,0) * N[k] * det;
+                      if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
+                        RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim,CELL>::MTRL[0](0,0) * N[k] * det;
+                      else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE )
+                        RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim,CELL>::MTRL[i](0,0) * N[k] * det;
                     }
                 for ( auto j = 0; j < e.Nodes(); j++ )   
                   RHS_TEMP(j,i) *= e.WeightAtIntegrationPoint(i);
@@ -116,7 +114,7 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
                 RHS_TEMP *= UNITY; 
                  
                 for ( auto l = 0; l < e.Nodes(); l++ )
-                   MathOperatorRHS<dim>::RHS[l] += RHS_TEMP(l,1);
+                   MathOperatorRHS<dim,CELL>::RHS[l] += RHS_TEMP(l,1);
                 
                 RHS_TEMP.Resize( e.Nodes(), e.Nodes() );
               }
@@ -125,12 +123,12 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL& e )
 } // end ComputeContribution
 
 
-template class NumIntegral_PT_op_P_dV<1U,Element<1U> >;
-template class NumIntegral_PT_op_P_dV<2U,Element<2U> >;
-template class NumIntegral_PT_op_P_dV<3U,Element<3U> >;
+template class NumIntegral_PT_op_P_dV<1U,Element>;
+template class NumIntegral_PT_op_P_dV<2U,Element>;
+template class NumIntegral_PT_op_P_dV<3U,Element>;
 
-template class NumIntegral_PT_op_P_dV<1U,Face<1U> >;
-template class NumIntegral_PT_op_P_dV<2U,Face<2U> >;
-template class NumIntegral_PT_op_P_dV<3U,Face<3U> >;
+template class NumIntegral_PT_op_P_dV<1U,Face>;
+template class NumIntegral_PT_op_P_dV<2U,Face>;
+template class NumIntegral_PT_op_P_dV<3U,Face>;
 
 } // csmp

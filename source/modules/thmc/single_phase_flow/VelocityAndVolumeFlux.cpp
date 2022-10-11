@@ -29,7 +29,7 @@ variable database and errors are reported if they don't or if they
 have the wrong placement or type.  
  
 tested:  */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
                                                             const char* oper,   // conductivity
                                                             const char* basic,  // porosity
@@ -42,7 +42,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
                                                             const char* nodal_pore_velocity,
                                                             const char* nodal_volume_flux)
 
-  : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     // getting the necessary csmp::Index keys
     velo_key_(sg.Database().StorageKey(velocity)),
     ivelo_key_(sg.Database().StorageKey(pore_velocity)),
@@ -64,7 +64,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
     ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
-    MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("VelocityAndVolumeFlux", oper, basic, test );
 
     // getting ranges for output variables
     sg.Database().RangeOf(velocity, minmaxV_.first, minmaxV_.second );
@@ -75,11 +75,12 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    oper, " must be either an element or a constraint-point property." );
 
-     if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+     if ( MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
@@ -114,7 +115,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
-         MathOperatorLHS<dim>::ApplicationCycles(2);
+         MathOperatorLHS<dim,CELL>::ApplicationCycles(2);
       }
    
    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
@@ -134,21 +135,21 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux(  const Model<dim>& sg,
     
     @param relative_density 'relative density' is the fluid density - a reference density, for instance 1000 kg/m3
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
-                                                          const char* oper,   // conductivity
-                                                          const char* basic,  // porosity
-                                                          const char* test,   // fluid pressure 
-                                                          const char* relative_density, // relative fluid density
-                                                          bool  node_averaging,
-                                                          const char* velocity,
-                                                          const char* pore_velocity,
-                                                          const char* volume_flux,
-                                                          const char* nodal_velocity,
-                                                          const char* nodal_pore_velocity,
-                                                          const char* nodal_volume_flux)
+                                                        const char* oper,   // conductivity
+                                                        const char* basic,  // porosity
+                                                        const char* test,   // fluid pressure
+                                                        const char* relative_density, // relative fluid density
+                                                        bool  node_averaging,
+                                                        const char* velocity,
+                                                        const char* pore_velocity,
+                                                        const char* volume_flux,
+                                                        const char* nodal_velocity,
+                                                        const char* nodal_pore_velocity,
+                                                        const char* nodal_volume_flux)
 
-  : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     PF_(3),
     VELOFLUX_(dim+1),
     IVELOFLUX_(dim),
@@ -166,7 +167,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
     ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
-    MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("VelocityAndVolumeFlux", oper, basic, test );
 
     // getting the necessary csmp::Index keys
     velo_key_   = sg.Database().StorageKey( velocity );
@@ -183,11 +184,12 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    oper, " must be either an element or a constraint-point property." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
@@ -226,7 +228,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
-         MathOperatorLHS<dim>::ApplicationCycles(2);
+         MathOperatorLHS<dim,CELL>::ApplicationCycles(2);
       }
    
    if ( WithLowerDimensionalElements(sg) )
@@ -239,7 +241,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                                                         const char* oper,   // conductivity
                                                         const char* basic,  // porosity
@@ -253,7 +255,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                                                         const char* nodal_velocity,
                                                         const char* nodal_pore_velocity,
                                                         const char* nodal_volume_flux)
-  : MathOperatorLHS<dim>(sg.Database(),oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     PF_(3),
     VELOFLUX_(dim+1),
     IVELOFLUX_(dim),
@@ -274,7 +276,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
     ac_gravity_(ACC_GRAVITY),  // m s-2
     VERTICAL_AXIS_( (dim==1u) ? 0u : 1u )
  {
-    MathOperatorLHS<dim>::Name("VelocityAndVolumeFlux", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("VelocityAndVolumeFlux", oper, basic, test );
 
     // getting the necessary csmp::Index keys
     velo_key_   = sg.Database().StorageKey( velocity );
@@ -288,15 +290,16 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
     sg.Database().RangeOf(volume_flux, minmaxF_.first, minmaxF_.second );
     
     // testing the Operands 
-    if ( MathOperatorLHS<dim>::MaterialOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                      oper, "Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    basic, "Basic Operand must be a scalar property." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::(constructor)", 
                    test, "Operand 'fluid pressure' must be a scalar property placed on the nodes." );
 
@@ -339,7 +342,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                    "Operand 'nodal volume flux' must be a scalar property placed on the node." );
 
          // if values are to be averagded on the nodes, the operator needs to be applied twice
-         MathOperatorLHS<dim>::ApplicationCycles(2);
+         MathOperatorLHS<dim,CELL>::ApplicationCycles(2);
       }                                  
 
    if ( WithLowerDimensionalElements(sg) )
@@ -351,9 +354,17 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
 
 
 
+template<uint32_t dim, template<uint32_t> class CELL>
+VelocityAndVolumeFlux<dim,CELL>::~VelocityAndVolumeFlux()
+ {
+    // no dynamically allocated variables
+ }
+
+
+
 /** Switch to verbose mode (results are reported to stdout).
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::Verbose( bool stdoutput ) { verbose_=stdoutput; }
 
 
@@ -368,7 +379,7 @@ in the same range as the Darcy velocity.
 
 If the range constraint is violated, a message is printed to 'cout'.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
   {
      // velocity, interstitial velocity
@@ -390,10 +401,12 @@ void VelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
 
 
 
+
+
 /**
     If there are elements from more than one spatial dimension in the model, we have a problem.
 */
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 bool VelocityAndVolumeFlux<dim,CELL>::WithLowerDimensionalElements( const Model<dim>& m ) const
  {
     std::pair<int32_t,int32_t>  dimensionality = m.Region("Model").ElementSpatialDimensions();
@@ -406,13 +419,13 @@ bool VelocityAndVolumeFlux<dim,CELL>::WithLowerDimensionalElements( const Model<
 
 
 
-template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 ) {
     
     // fluid pressure
-    e.NodePropertyVector( MathOperatorLHS<dim>::TestOperandKey(), PF_ );
+    e.NodePropertyVector( MathOperatorLHS<dim,CELL>::TestOperandKey(), PF_ );
  
     // relative density
     if ( with_gravity_ ) {
@@ -431,39 +444,39 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
     if ( with_multiplier_ ) e.NodePropertyVector( mult_key_, mult_vec_ );
     
     // conductivity
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
       {
-          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-               MathOperatorLHS<dim>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim,
-                                                 e.Read( MathOperatorLHS<dim>::MaterialOperandKey() ) );
+          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+               MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim,
+                                                 e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) );
             }
-          else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
                VectorVariable<dim>  vc;
-               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-               MathOperatorLHS<dim>::MTRL[0].AssignToDiagonal( vc );
+               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
+               MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc );
             }
-          else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
                TensorVariable<dim>  ts;
-               e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-               MathOperatorLHS<dim>::MTRL[0] = ts;
+               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
+               MathOperatorLHS<dim,CELL>::MTRL[0] = ts;
            }
       }
-    else if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) 
+    else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
          for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
-	          if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-	               MathOperatorLHS<dim>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
-	                                                    e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey() ) );
+	          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+	               MathOperatorLHS<dim,CELL>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
+	                                                    e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) );
 	            }
-	          else if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+	          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
 	               VectorVariable<dim>  vc;
-	               e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey(), vc );
-	               MathOperatorLHS<dim>::MTRL[i].AssignToDiagonal( vc );
+	               e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
+	               MathOperatorLHS<dim,CELL>::MTRL[i].AssignToDiagonal( vc );
 	            }
-	          else if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+	          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
 	               TensorVariable<dim>  ts;
-	               e.Read( i, MathOperatorLHS<dim>::MaterialOperandKey(), ts );
-	               MathOperatorLHS<dim>::MTRL[i] = ts;
+	               e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
+	               MathOperatorLHS<dim,CELL>::MTRL[i] = ts;
 	           }
           }
       }
@@ -476,14 +489,14 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
       
          for ( auto i=0U; i<e.FE()->IntegrationPoints(); i++ )
            {   
-              MathOperatorLHS<dim>::MTRL[i].Resize(dim,dim);
-              MathOperatorLHS<dim>::MTRL[i].Zero();
-              MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, 
-                                  MathOperatorLHS<dim>::MaterialOperandKey(), i, MathOperatorLHS<dim>::MTRL[i] );
+              MathOperatorLHS<dim,CELL>::MTRL[i].Resize(dim,dim);
+              MathOperatorLHS<dim,CELL>::MTRL[i].Zero();
+              MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e,
+                                  MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i, MathOperatorLHS<dim,CELL>::MTRL[i] );
            }
       }
          // porosity
-         e.PropertyValueAtBaryCenter( MathOperatorLHS<dim>::BasicOperandKey(), phi_ );
+         e.PropertyValueAtBaryCenter( MathOperatorLHS<dim,CELL>::BasicOperandKey(), phi_ );
      } 
     
 } // end GetOperands
@@ -499,10 +512,10 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL& e )
 
 A reference to the Element for which the post-processing is done.  
 */
-template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 {
-   if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 ) {
+   if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 ) {
         if ( verbose_ )
           cout <<"\n\nVelocityAndVolumeFlux::ComputeContribution: Element: "<< e.Idx() << endl; 
       
@@ -516,10 +529,10 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
               velo_ = 0.;
               for ( auto i{0U}; i<e.Nodes(); i++ )
                 for ( auto j{0U}; j<dim; j++ )
-                  velo_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim>::MTRL[0](j,j);
+                  velo_(j) += PF_[i]() * -DERIV_(j,i) * MathOperatorLHS<dim,CELL>::MTRL[0](j,j);
               
               if ( with_gravity_ )
-                velo_(VERTICAL_AXIS_) -= ac_gravity_ * rhor_() * MathOperatorLHS<dim>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_);
+                velo_(VERTICAL_AXIS_) -= ac_gravity_ * rhor_() * MathOperatorLHS<dim,CELL>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_);
 
               // interstitial velocity    
               ivelo_  = velo_;
@@ -586,18 +599,18 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
                   // compute velocity and flux VELOFLUX
                   fill( VELOFLUX_.begin(), VELOFLUX_.end(), 0.0 );
                   
-                  if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT )
+                  if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
                     for ( auto n=0; n<e.Nodes(); n++ )
                       for ( auto j{0U}; j<dim; j++ )
                         // -DERIV because fluid flows down pressure
-                        VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[0](j,j);
+                        VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[0](j,j);
                   else
                      for ( auto n=0; n<e.Nodes(); n++ )
                       for ( auto j{0U}; j<dim; j++ )
-                        VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim>::MTRL[i](j,j);
+                        VELOFLUX_[j] += PF_[n]() * -DERIV_(j,n) * MathOperatorLHS<dim,CELL>::MTRL[i](j,j);
             
                   if ( with_gravity_ ) VELOFLUX_[VERTICAL_AXIS_] -= ac_gravity_ *
-                                                                 rho_fac_ * MathOperatorLHS<dim>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_) *
+                                                                 rho_fac_ * MathOperatorLHS<dim,CELL>::MTRL[0](VERTICAL_AXIS_,VERTICAL_AXIS_) *
                                                                  mult_fac_;
 
                   // interstitial velocity & volume flux
@@ -673,7 +686,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL& e )
    // 2. During the second visitation, the nodal velocities and fluxes computed for each element
    //    node are averaged and stored in a vector for output.
    //    -------------------------------------------
-   if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 && nodal_averaging_ ) {
+   if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2 && nodal_averaging_ ) {
         RESULT_.Resize(components_,static_cast<uint32_t>(e.Nodes()));
         for ( auto i{0U}; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
@@ -719,10 +732,10 @@ of the Operands.
 A reference to the property memory manager and the Element for which the
 variables are output.
 */
-template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL<dim>& e )
  {
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 1 )
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 1 )
       {
          // 1. outputting element properties first
          // --------------------------------------
@@ -731,7 +744,7 @@ void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
          e.Store( ivelo_key_, ivelo_ );
          e.Store(  flux_key_, flux_ );
       }
-    if ( MathOperatorLHS<dim>::ApplicationCycle() == 2 )
+    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2 )
       {
          if ( nodal_averaging_ )
            for ( auto i{0U}; i<e.Nodes(); i++ )
@@ -763,17 +776,21 @@ void VelocityAndVolumeFlux<dim,CELL>::WriteOperands( CELL& e )
 
 
 
-template<uint32_t dim,class CELL>
-void VelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>&      INP,
-                                                          uint32_t        col,
-                                                          VectorVariable<dim>& vc )
+template<uint32_t dim, template<uint32_t> class CELL>
+void VelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>& INP,
+                                                       uint32_t        col,
+                                                       VectorVariable<dim>& vc )
  {
     for ( auto i{0U}; i<dim; i++ ) vc(i) = INP(i,col);
  }
 
 
 
-template<uint32_t dim,class CELL>
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MIN>&   INP,
                                                             uint32_t    col,
                                                             ScalarVariable& sc )
@@ -783,7 +800,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ExtractVolumeFlux( const DenseMatrix<DM_MI
 
  
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMatrix<DM_MIN>& INP,
                                                                    uint32_t col,
                                                                    VectorVariable<dim>& vc )
@@ -797,9 +814,9 @@ template class VelocityAndVolumeFlux<1U>;
 template class VelocityAndVolumeFlux<2U>;
 template class VelocityAndVolumeFlux<3U>;
 
-template class VelocityAndVolumeFlux<1U,Face<1U> >;
-template class VelocityAndVolumeFlux<2U,Face<2U> >;
-template class VelocityAndVolumeFlux<3U,Face<3U> >;
+template class VelocityAndVolumeFlux<1U,Face>;
+template class VelocityAndVolumeFlux<2U,Face>;
+template class VelocityAndVolumeFlux<3U,Face>;
 
 }
  

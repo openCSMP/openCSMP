@@ -12,6 +12,10 @@
 
 namespace csmp {
 
+template<uint32_t> class Model;
+template<uint32_t> class ExplicitFiniteVolumeTransportPHX;
+
+
 template<uint32_t dim>
 class UpwindControlVisitor : public Visitor<dim> {
   public:
@@ -20,18 +24,18 @@ class UpwindControlVisitor : public Visitor<dim> {
                           ExplicitFiniteVolumeTransportPHX<dim>& fv_liquid, // specialized FV transport class for liquid phase
                           const char* permeability, // element permeability
                           const char* porosity, // element porosity for pore velocity calculations
-	                      std::vector<std::string>& densities, // vapor and liquid densities
-	                      std::vector<std::string>& relperm_vis, // relative permeabilities for vapor and liquid
+                          std::vector<std::string>& densities, // vapor and liquid densities
+                          std::vector<std::string>& relperm_vis, // relative permeabilities for vapor and liquid
                           std::vector<std::string>& saturations, // vapor and liquid saturations
                           std::vector<std::string>& cfl_variables, // vapor and lquid cfl values
-	                      std::vector<std::string>& velocities, // vapor and liquid velocities
-	                      std::vector<std::string>& pore_velocities); // vapor and liquid pore velocities
+                          std::vector<std::string>& velocities, // vapor and liquid velocities
+                          std::vector<std::string>& pore_velocities); // vapor and liquid pore velocities
 
-    ~UpwindControlVisitor();
+    virtual ~UpwindControlVisitor();
     void Verbose();
     
-    virtual void Visit(Element<dim>* n);   
-	virtual void Visit(Region<dim>* n);
+    virtual void Visit(Element<dim>* );
+	  virtual void Visit(Region<dim>* );
 
     void Reset(); // reset all bopleans
     bool Recalculate(); // get boolean recalculate

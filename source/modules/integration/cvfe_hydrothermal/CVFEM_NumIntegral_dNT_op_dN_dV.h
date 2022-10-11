@@ -1,7 +1,6 @@
 #ifndef CVFEM_NUM_INTEGRAL_DNT_OP_DN_DV_H
 #define CVFEM_NUM_INTEGRAL_DNT_OP_DN_DV_H
 
-#include "CSMP_definitions.h"
 #include "CVFEM_MathOperatorLHS.h"
 
 /**   
@@ -12,18 +11,21 @@
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
-class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> {
+template<uint32_t> class Element;
+
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class CVFEM_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim,CELL> {
   public:
-    CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
+    CVFEM_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>&,
                         const char* oper, 
                         const char* basic, 
                         const char* test );
     
     virtual ~CVFEM_NumIntegral_dNT_op_dN_dV();
     
-    virtual void ComputeContribution( Element<dim>& e );
-    virtual CVFEM_NumIntegral_dNT_op_dN_dV <dim,CELL >* clone() const { return new CVFEM_NumIntegral_dNT_op_dN_dV <dim,CELL >(*this); }
+    virtual void ComputeContribution( const CELL<dim>& ) override;
+    
+    virtual CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const { return new CVFEM_NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
   private:
     DenseMatrix<DM_MIN>  B, BT; 
 

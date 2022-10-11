@@ -6,6 +6,8 @@
 
 namespace csmp {
 
+template<uint32_t> class Element;
+
 /**
 
 @brief For the calculation of directional integrals in direction xyz;
@@ -18,8 +20,8 @@ basic operands can be node or element variables.
 */
 enum SPATIAL_DERIVATIVE { X_DIRECTION=0, Y_DIRECTION=1, Z_DIRECTION=2 };
 
-template<uint32_t dim,class CELL=Element<dim> >
-class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>&,
                               const char* oper,    // e.g., fluid density
@@ -32,9 +34,9 @@ class NumIntegral_NT_op_dNi_dV : public MathOperatorRHS<dim> {
                               const char* test,    // e.g., fluid pressure
                               double acc_gravity=9.8601 );
     
-    virtual void GetOperands( const CELL& );
+    virtual void GetOperands( const CELL<dim>& );
 
-    virtual void ComputeContribution( const CELL& );
+    virtual void ComputeContribution( const CELL<dim>& );
     
     void SpatialDerivative( uint32_t xyz );
     

@@ -1,7 +1,6 @@
 #ifndef CVFEM_POINTSOURCE_RHSOP_H
 #define CVFEM_POINTSOURCE_RHSOP_H
 
-#include "CSMP_definitions.h"
 #include "CVFEM_MathOperatorRHS.h"
 
 /*   Changelog
@@ -11,23 +10,7 @@
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
-class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
-  public:
-    CVFEM_PointSource_rhsop( const PropertyDatabase<dim>& p, const char* nodal_src, const char* test );
-
-    ~CVFEM_PointSource_rhsop();
-    
-    virtual void GetOperands( CELL& e );
-    virtual void GetOperandsCVFEM( CELL& e, csmp::Index upwind_var_key );
-    virtual void ComputeContribution( CELL& e );
-    virtual CVFEM_PointSource_rhsop<dim,CELL>* clone() const { return new CVFEM_PointSource_rhsop<dim,CELL> (*this); }
-  private:
-  
-    std::vector<ScalarVariable> SRC_;
-    std::vector<ScalarVariable> upwind_var_;
-
-};
+template<uint32_t> class Element;
 
   /**
      @class CVFEM_PointSource_rhsop CVFEM_PointSource_rhsop.h
@@ -36,7 +19,7 @@ class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
      @section contact Contact
      philipp.weis@erdw.ethz.ch
 
-     @changes changes Latest Changes                                                                                  
+     @changes changes Latest Changes
   
      @section motivation Motivation
       Equal to PointSource_rhsop, but can be applied as CVFEM_Visitor.
@@ -58,6 +41,26 @@ class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
      testing was done in the period before publication in 2014.
 
   */
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class CVFEM_PointSource_rhsop : public CVFEM_MathOperatorRHS<dim> {
+  public:
+    CVFEM_PointSource_rhsop( const PropertyDatabase<dim>& p, const char* nodal_src, const char* test );
+
+    ~CVFEM_PointSource_rhsop();
+    
+    virtual void GetOperands( const CELL<dim>& );
+    virtual void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key );
+    virtual void ComputeContribution( const CELL<dim>& );
+    
+    virtual CVFEM_PointSource_rhsop<dim,CELL>* clone() const { return new CVFEM_PointSource_rhsop<dim,CELL>(*this); }
+    
+  private:
+  
+    std::vector<ScalarVariable> SRC_;
+    std::vector<ScalarVariable> upwind_var_;
+
+};
+
 
 } // csmp
 

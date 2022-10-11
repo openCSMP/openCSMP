@@ -18,6 +18,7 @@
 
 // algebraic multigrid solvers
 #include "PDE_Integrator.h"
+#include "LinearSolver.h"
 #include "Matrix.h"
 
 // interrelations library
@@ -169,10 +170,10 @@ void Triangulator_Example::Run()
   SAMG_Settings  settings;  settings.Set_iout1(2);
   SAMG_Solver    samg_solver(&settings);
 
-  PDE_Integrator<2U,Region>  total_pressure(samg_solver);
+  PDE_Integrator<2U,Element>  total_pressure(samg_solver);
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-  PDE_Integrator<2U,Region>  total_pressure(linear_solver);
+  PDE_Integrator<2U,Element>  total_pressure(linear_solver);
 #endif
 
   // conductance matrix [K] on the left-hand side

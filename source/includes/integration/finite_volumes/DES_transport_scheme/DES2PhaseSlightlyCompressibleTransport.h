@@ -1,19 +1,17 @@
 #ifndef CSMP_DES_2PHASE_SLIGHTLY_COMPRESSIBLE_TRANSPORT_H
 #define CSMP_DES_2PHASE_SLIGHTLY_COMPRESSIBLE_TRANSPORT_H
 
-#include "FibonacciHeap.h"
 #include "DES2PhaseTransport.h"
-#include "NimbleRegion.h"
-
 
 namespace csmp {
 
+template<uint32_t> class NimbleRegion;
 
 template<uint32_t dim, template<uint32_t> class FLOW_FUNCTIONS>
-class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FLOW_FUNCTIONS> {
+class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim,FLOW_FUNCTIONS> {
 
   public:                           
-    DES2PhaseSlightlyCompressibleTransport ( Model<dim>& m, 
+    DES2PhaseSlightlyCompressibleTransport ( Model<dim>&,
                                              const char* target_region,
                                              bool with_gravity_forces,
                                              bool with_capillary_spreading, 
@@ -22,7 +20,7 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FL
                                              double relaxing_factor,
                                              bool tensor_k,
                                              bool second_order_in_space,
-                                             FLOW_FUNCTIONS<dim>& ff);
+                                             FLOW_FUNCTIONS<dim>& );
   
     virtual ~DES2PhaseSlightlyCompressibleTransport() = default;
 
@@ -68,7 +66,7 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FL
     void ComputeLocalFluidPressure( double time, double dt, bool transient);
     void SolveNimbleRegionPressureFullyImplicit( NimbleRegion<dim>& computation_domain, double time_increment, double time );
     void ComputeSteadyStatePressure();
-    void SolveNimbleRegionSteadyStatePressure(NimbleRegion<dim>& computation_domain);
+    void SolveNimbleRegionSteadyStatePressure( NimbleRegion<dim>& computation_domain);
     double TimeLevel();
 
 
@@ -104,7 +102,6 @@ class DES2PhaseSlightlyCompressibleTransport : public DES2PhaseTransport<dim, FL
     std::vector<Node<dim>*> NodeList_;
 
     bool second_order_in_space_ = false;
-
 
     //helper class for computing residual flux at contact pairs when interface is breakthrough
     class Compensator {

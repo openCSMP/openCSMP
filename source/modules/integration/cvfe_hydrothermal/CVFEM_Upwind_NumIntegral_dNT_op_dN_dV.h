@@ -1,9 +1,7 @@
 #ifndef CVFEM_UPWIND_NUMINTEGRAL_DNT_OP_DN_DV_H
 #define CVFEM_UPWIND_NUMINTEGRAL_DNT_OP_DN_DV_H
 
-#include "CSMP_definitions.h"
 #include "CVFEM_MathOperatorLHS.h"
-#include "UpwindControlVisitor.h"
 
 /*   Changelog
      February 2015, Philipp Weis:
@@ -12,29 +10,66 @@
 
 namespace csmp {
 
-template<uint32_t dim>
-class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> {
+template<uint32_t> class Element;
+template<uint32_t> class UpwindControlVisitor;
+template<uint32_t> class ExplicitFiniteVolumeTransportPHX;
+
+/**
+   @class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h
+
+   @author Philipp Weis, ETH Zuerich
+   @section contact Contact
+   philipp.weis@erdw.ethz.ch
+
+   @changes changes Latest Changes
+
+   @section motivation Motivation
+    Conductance matrix for fluid pressure calculations using pre-defined upwind nodes.
+
+   @section usage Usage
+    Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
+
+   @code
+ Calculates conductance matrix with pre-defined upwind nodes.
+ All fluid properties are used at the upstream nodes.
+        
+   @endcode
+   
+   @section dependencies Dependencies
+ CVFEM_MathOperatorLHS
+ UpwindControlVisitor
+ ExplicitFiniteVolumeTransportPHX
+   
+   @section issues Known issues
+   
+   @section testing Testing
+   testing was done in the period before publication in 2014.
+
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim,CELL> {
   public:
-    CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>& pref, 
-                                            UpwindControlVisitor<dim>& upwind_visitor,
-                                            ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
-                                          const char* oper,
-                                          const char* basic,
-                                          const char* test,
-                                          const char* upwind,
-                                          const char* grav_trigger);
+    CVFEM_Upwind_NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>&, 
+                                           UpwindControlVisitor<dim>& upwind_visitor,
+                                           ExplicitFiniteVolumeTransportPHX<dim>& fv_transport,
+                                           const char* oper,
+                                           const char* basic,
+                                           const char* test,
+                                           const char* upwind,
+                                           const char* grav_trigger );
 
-    ~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV();
+    virtual ~CVFEM_Upwind_NumIntegral_dNT_op_dN_dV();
     
-    void ComputeContribution( Element<dim>& e );
-    void GetOperands( Element<dim>& e );
-    void GetOperandsCVFEM( Element<dim>& e, csmp::Index upwind_var_key );
+    void ComputeContribution( const CELL<dim>& );
+    void GetOperands( const CELL<dim>& );
+    void GetOperandsCVFEM( const CELL<dim>&, csmp::Index upwind_var_key );
 
-    void GetUpwindMatrix( Element<dim>& e );
-    virtual CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim>* clone() const { return new CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim>(*this); }
+    void GetUpwindMatrix( const CELL<dim>& );
+    
+    virtual CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim,CELL>* clone() const
+        { return new CVFEM_Upwind_NumIntegral_dNT_op_dN_dV <dim,CELL>(*this); }
 
   private:
-
     UpwindControlVisitor<dim>& UpwindVisitor;
     ExplicitFiniteVolumeTransportPHX<dim>& finite_volume;
     
@@ -49,41 +84,8 @@ class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV : public CVFEM_MathOperatorLHS<dim> 
     
     csmp::Index uvar_;
     csmp::Index gtvar_;
-    
 };
 
-  /**
-     @class CVFEM_Upwind_NumIntegral_dNT_op_dN_dV CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h
-
-     @author Philipp Weis, ETH Zuerich
-     @section contact Contact
-     philipp.weis@erdw.ethz.ch
-
-     @changes changes Latest Changes                                                                                  
-  
-     @section motivation Motivation
-      Conductance matrix for fluid pressure calculations using pre-defined upwind nodes.
-
-     @section usage Usage
-      Used within the CVFEM scheme (Weis et al., Geofluids, 2014).
-
-     @code
-	 Calculates conductance matrix with pre-defined upwind nodes.
-	 All fluid properties are used at the upstream nodes.
-          
-     @endcode
-     
-     @section dependencies Dependencies
-	 CVFEM_MathOperatorLHS
-	 UpwindControlVisitor
-	 ExplicitFiniteVolumeTransportPHX
-     
-     @section issues Known issues
-     
-     @section testing Testing
-     testing was done in the period before publication in 2014.
-
-  */
 
 } // csmp
 

@@ -122,7 +122,7 @@ void SlopeMechanics_Example::Run()
   // 2. computing initial steady state temperature distribution
   // ----------------------------------------------------------
     {
-      SteadyStateDiffusor<DIM,Region>  temperature( model, "thermal conductivity", "temperature", "energy source");
+      SteadyStateDiffusor<DIM,Element>  temperature( model, "thermal conductivity", "temperature", "energy source");
       printRangeOfVariable( model, "thermal conductivity" );
       printRangeOfVariable( model, "energy source");
       // TODO: consider potential stress changes due to insolation of slope etc.
@@ -174,7 +174,7 @@ void SlopeMechanics_Example::Run()
   CSMP_DEFAULT_LINEAR_SOLVER  solver;
 #endif
 
-  PDE_Integrator<DIM,Region>  hydrostatic_pressure( solver );
+  PDE_Integrator<DIM,Element>  hydrostatic_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
@@ -236,7 +236,7 @@ void SlopeMechanics_Example::Run()
 #else
     CSMP_DEFAULT_LINEAR_SOLVER  solver2;
 #endif
-    PDE_Integrator<DIM,Region>  deformation(solver2);
+    PDE_Integrator<DIM,Element>  deformation(solver2);
 
     // this will also include boundary stresses translated into nodal forces
     const bool principal_vectors(true), plane_strain(false);

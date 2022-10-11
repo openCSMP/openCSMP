@@ -1,9 +1,12 @@
 #include "PDE_Integrator.h"
+#include "LinearSolver.h"
 #include "Model.h"
 #include "Region.h"
 #include "Boundary.h"
 #include "Node.h"
 #include "NimbleRegion.h"
+#include "ErrorHandler.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -20,11 +23,11 @@ The default computation is a steady-state computation. Thus, if you
 want to carry out a transient calculation you have to use the method
 Transient().
 
-@attention COMPUTATION_DOMAIN is used here because DOMAIN caused a clash
+@attention CELLTYPE is used here because DOMAIN caused a clash
 with DOMAIN defined in <cmath>
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+PDE_Integrator<dim,CELLTYPE>::PDE_Integrator()
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(new SAMG_Solver()),
@@ -40,6 +43,15 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
    time_increment_(0.),
    verbose_(true)
 {
+   static_assert( !is_same<CELLTYPE<dim>,Region<dim>>::value,
+                  "PDE_Integrator: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,Boundary<dim>>::value,
+                  "PDE_Integrator: template template parameter must be Element or Face");
+
+   static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim>>::value,
+                  "PDE_Integrator: template template parameter must be Element or Face");
+
    target_.nodes = target_.elements = 0U;
 }
 
@@ -47,8 +59,8 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator()
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver& solver )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+PDE_Integrator<dim,CELLTYPE>::PDE_Integrator( Solver& solver )
  : solver_(&solver),
    newed_Solver_object_(false),
    dof_per_node_(0),
@@ -63,36 +75,36 @@ PDE_Integrator<dim,COMPUTATION_DOMAIN>::PDE_Integrator( Solver& solver )
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-PDE_Integrator<dim,COMPUTATION_DOMAIN>::~PDE_Integrator()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+PDE_Integrator<dim,CELLTYPE>::~PDE_Integrator()
  {
     if ( newed_Solver_object_ ) delete solver_;
  }
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Verbose( bool verbose )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Verbose( bool verbose )
 { verbose_=verbose; }
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::Verbose() const
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+bool PDE_Integrator<dim,CELLTYPE>::Verbose() const
 { return verbose_; }
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::RetainGlobalSolutionMatrix( bool retain )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::RetainGlobalSolutionMatrix( bool retain )
  { retain_matrix_=retain; }
 
 
 /**
     Default = false, switch on if size matters more than speed.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVectors( bool trim )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::TrimExcessCapacityOfVectors( bool trim )
  {
      trim_vectors_ = trim;
  }
@@ -103,8 +115,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::TrimExcessCapacityOfVectors( bool t
     If a solver was allocated earlier it is deleted before the new_solver is 
     connected to the Integrator.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver& new_solver ) {
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::SetSolver( Solver& new_solver ) {
    if ( solver_ != &new_solver and newed_Solver_object_ ) delete solver_;
    newed_Solver_object_ = false;
    solver_ = &new_solver;
@@ -112,8 +124,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::SetSolver( Solver& new_solver ) {
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-Solver& PDE_Integrator<dim,COMPUTATION_DOMAIN>::GetSolver() const {
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+Solver& PDE_Integrator<dim,CELLTYPE>::GetSolver() const {
   return *solver_;
 }
 
@@ -134,8 +146,8 @@ rhs. You should therefore always limit the number of A. to those essential.
 Use this method if you want to re-use a previously defined steady-state
 PDE_Integrator.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-bool  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Transient() const
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+bool  PDE_Integrator<dim,CELLTYPE>::Transient() const
  { return !(time_increment_ < numeric_limits<double>::epsilon()); }
 
 
@@ -151,8 +163,8 @@ the PDE_Integrator to transient, this is done as well.
 Set the time-increment of an PDE_Integrator before you Apply() it to the
 Model or target Region objects.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void   PDE_Integrator<dim,COMPUTATION_DOMAIN>::TimeIncrement( double dt )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void   PDE_Integrator<dim,CELLTYPE>::TimeIncrement( double dt )
  {
     time_increment_ = dt;
  }
@@ -171,8 +183,8 @@ Solver object.
 To test the accumulation process by visual examination of the matrices,
 you must call it directly after executing Accumulate(), see below.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputGlobals( int32_t precision )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::OutputGlobals( int32_t precision )
  {
    cout <<"\nGlobal solution matrix: "<< G_.Rows() <<" x "<< G_.Cols() << endl;
    G_.Out( precision );
@@ -230,8 +242,8 @@ name are added.
 Each PDE_Integrator needs at least one left and one righthand math operator.
 Define these before you pass the PDE_Integrator to the Model.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Add( MathOperatorLHS<dim,CELLTYPE>* op )
  {
     // The name for the algorithm is combined out of its operands
     lhs_operators_[ op->Name() ] = op;
@@ -239,8 +251,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorLHS<dim>* op )
     setup_established_ = false;
  }
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Add( MathOperatorRHS<dim,CELLTYPE>* op )
  {
     rhs_operators_[ op->Name() ] = op;
     // force update during next application
@@ -248,8 +260,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Add( MathOperatorRHS<dim>* op )
  }
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( MathOperatorRHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::AddBoundaryIntegral( MathOperatorRHS<dim,Face>* op )
  {
     rhs_boundary_operators_[ op->Name() ] = op;
     // force update during next application
@@ -258,8 +270,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddBoundaryIntegral( MathOperatorRH
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorRHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::AddSplitBoundaryIntegral( MathOperatorRHS<dim,InterFace>* op )
  {
     rhs_split_boundary_operators_[ op->Name() ] = op;
     // force update during next application
@@ -268,8 +280,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOpera
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOperatorLHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::AddSplitBoundaryIntegral( MathOperatorLHS<dim,InterFace>* op )
  {
     lhs_split_boundary_operators_[ op->Name() ] = op;
     // force update during next application
@@ -277,8 +289,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddSplitBoundaryIntegral( MathOpera
  }
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AddPostProcess( MathOperatorLHS<dim>* op )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::AddPostProcess( MathOperatorLHS<dim,CELLTYPE>* op )
  {
     postpro_operators_[ op->Name() ] = op;
     // force update during next application
@@ -296,28 +308,24 @@ MathOperator interface method Out() is used. Thus, you influence the
 information that is output when you define your own PDE operator
 subclasses.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ListMathOperatorsLHS() const
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::ListMathOperatorsLHS() const
  {
-    typename map<string,MathOperatorLHS<dim>*>::const_iterator it;
-
-    for ( it=lhs_operators_.begin(); it!=lhs_operators_.end(); it++ )
+    for ( const auto& it : lhs_operators_ )
       {
-         cout << (*it).first <<":  ";
-         (*it).second->Out();
+         cout << it.first <<":  ";
+         it.second->Out();
       }
  }
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::ListMathOperatorsRHS() const
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::ListMathOperatorsRHS() const
  {
-    typename map<string,MathOperatorRHS<dim>*>::const_iterator it;
-
-    for ( it=rhs_operators_.begin(); it!=rhs_operators_.end(); it++ )
+    for ( const auto& it : rhs_operators_ )
       {
-         cout << (*it).first <<":  ";
-         (*it).second->Out();
+         cout << it.first <<":  ";
+         it.second->Out();
       }
  }
 
@@ -334,8 +342,8 @@ Use this method to extract the solution vector from the algorithm, for
 instance to use it as initial guess in another time step. (Use method
 FirstGuess)
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::SolutionVector( vector<double>& sol ) const {
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::SolutionVector( vector<double>& sol ) const {
   sol.resize(x_.size());
   vector<double>( sol ).swap( sol );
   copy(x_.begin(), x_.end(), sol.begin());
@@ -357,8 +365,8 @@ solution obtained with this algorithm.
 NOTE: Make sure that you actually use an algebraic multigrid solver object and that the
 parameter ifirst in its SAMG_Settings object is set to 0.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::FirstGuess( const vector<double>& guess ) {
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::FirstGuess( const vector<double>& guess ) {
   assert(guess.size() == x_.size());
   copy(guess.begin(), guess.end(), x_.begin());
 }
@@ -386,8 +394,8 @@ of the already initialized solution matrix, because the memory of it
 (owing to the Meschach implementation) is not
 de-allocated before the programme terminates.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::Reset( bool delete_math_operators )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::Reset( bool delete_math_operators )
  {
     if ( delete_math_operators ) {
          lhs_operators_.erase(  lhs_operators_.begin(),  lhs_operators_.end() );
@@ -433,8 +441,8 @@ the final residue of the solution (which could be compared to a
 signal-to-noise ratio) is several orders of magnitude lower than the
 initial residue. Otherwise the obtained solution is useless.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Solve()
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Solve()
  {
     solver_->Solve( G_, rh_, x_, dof_per_node_ );
  } // end Solve
@@ -544,8 +552,8 @@ other computation, just ignore this warning.
 TODO: consider case where one might want to retain the right-hand vector, but not the matrix
 TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
    // -------------------------------------------------------------------
    // 0. PDE_Integrator re-use: (and has not been reset by
@@ -598,7 +606,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
             if ( pkey != unspecified ) basic_operands_[ lhs_it.second->BasicOperand() ] = 0U;
             else
                 throw csmp::Exception( WARNING,
-                                       "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                                       "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup:",
                                        "lefthand basic operand not found.");
             // test function operands are picked up when the righthandside is accumulated
             // since they must also be present in there
@@ -613,7 +621,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
             if (verbose_) cout <<"\nFor: '"<< rhs_it.first <<"' PDE operator is added to righthand term list."<< endl;
             if ( pkey != unspecified ) test_operands_[ rhs_it.second->TestOperand() ] = 0;
             else
-              throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+              throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup:",
                                              "righthand test operand not found.");
          }
        // including pde operators on the model boundary
@@ -625,7 +633,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                 if (verbose_) cout <<"\nFor: '"<< rhs_it.first <<"' PDE boundary operator is added to righthand term list."<< endl;
                 if ( pkey != unspecified ) test_operands_[ rhs_it.second->TestOperand() ] = 0;
                 else
-                  throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup:",
+                  throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup:",
                                                  "righthand test operand not found.");
              }
          }
@@ -641,7 +649,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
               cout <<"\nThe system of equations is undefined. ";
               cout <<"\nCreate corresponding LHS basic or test Operand for: ";
               cout << lhs_it.first << endl;
-              throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+              throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                                              "lefthand basic or test operand missing");
            }
 
@@ -703,7 +711,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                 }
                break;
             default:
-              throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+              throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                                            "Test operand placement unresolved");
          }
       }
@@ -725,13 +733,13 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
                (*iter).second = lhs_it.second->BasicOperandOffset();
           }
         else
-          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                                        "LHS basic operand matrix placement i unresolved");
 
         if ( (iter=test_operands_.find(lhs_it.second->TestOperand())) != test_operands_.end() )
           lhs_it.second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+          throw csmp::Exception( FATAL_ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                                        "LHS test function operand matrix placement j unresolved");
      }
    
@@ -741,7 +749,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         if ( (iter=test_operands_.find(rhs_it.second->TestOperand())) != test_operands_.end() )
           rhs_it.second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+          throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                           rhs_it.first.c_str(), "RHS operand vector^T placement i unresolved...");
      }
 
@@ -751,7 +759,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup( const COMPUTA
         if ( (iter=test_operands_.find(rhs_it.second->TestOperand())) != test_operands_.end() )
           rhs_it.second->TestOperandOffset( (*iter).second );
         else
-          throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::EstablishMatrixSetup",
+          throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::EstablishMatrixSetup",
                                  rhs_it.first.c_str(), "RHS boundary-integral operand vector^T placement i unresolved...");
      }
 
@@ -818,26 +826,26 @@ The dependent variable must be placed on the nodes:
 TODO: write alternative method that deals with the case when a boundary is only partially overlapping with the model domain.
 
  */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
     if ( !setup_established_ )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+      throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions",
                              "please call EstablishMatrixSetup() prior to this method.");
 
     if ( basic_operands_.empty() )
-      throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+      throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions",
                              "No basic operands have been specified...");
 
     size_t position(NULL_IDX);
 
-     for ( operandsConstIterator it=test_operands_.begin(); it!=test_operands_.end(); it++ )
+     for ( const auto& it : test_operands_ )
        {
-          Index prop_key = (*it).first.key;
+          Index prop_key = it.first.key;
           if ( prop_key.place != NODE )
-            throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+            throw csmp::Exception( WARNING, "PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions",
                                             "So far no conditions are assigned to elements, faces, segments");
-          size_t offset = (*it).second;
+          size_t offset = it.second;
           auto   niter(gref.NodesBegin());
 
           switch (prop_key.type)
@@ -908,7 +916,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
                  }
                break;
              default:
-                 throw csmp::Exception( WARNING, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions",
+                 throw csmp::Exception( WARNING, "PDE_Integrator<dim,CELLTYPE>::AssignInitialConditions",
                                                  "Variable placement not recognised; nothing was done.");
         } // end switch
         
@@ -929,8 +937,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::AssignInitialConditions( const COMP
 
     @author Luat Khoa Tran
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim, COMPUTATION_DOMAIN>::AssignEssentialConditions(const COMPUTATION_DOMAIN<dim>& domain)
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim, CELLTYPE>::AssignEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& domain )
  {
     const size_t rh_size(this->rh_.size());
     for ( size_t i{0U}; i < rh_size; ++i ) {
@@ -975,37 +983,35 @@ Accumulate() is executed internally when the PDE_Integrator is passed to the
 Model.
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Accumulate( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
     // accumulating into the sparse matrix 'G'
     // ---------------------------------------
-     for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-           it_lhs=lhs_operators_.begin(); it_lhs!=lhs_operators_.end(); it_lhs++ )
-       if ( !(*it_lhs).second->AddLater() && !(*it_lhs).second->SubtractLater() )
-         for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
+     for ( const auto& it_lhs : lhs_operators_ )
+       if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
+         for ( auto git = gref.CellsBegin(); git!=gref.CellsEnd(); ++git  )
            {
-             (*it_lhs).second->GetOperands( *(*git) );
-             (*it_lhs).second->ComputeContribution( *(*git) );
-             if ( (*it_lhs).second->MultiplyWithTimeIncrement() )
-               (*it_lhs).second->MultiplyWithTimeFactor( time_increment_ );
+             it_lhs.second->GetOperands( *(*git) );
+             it_lhs.second->ComputeContribution( *(*git) );
+             if ( it_lhs.second->MultiplyWithTimeIncrement() )
+               it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
              // LUAT KHOA TRAN - (*it_lhs).second->AssignToGlobal( *(*git), G_ );
-             (*it_lhs).second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
+             it_lhs.second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
            }
 
     // accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-           it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
-       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+     for ( const auto& it_rhs : rhs_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
          for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
-             (*it_rhs).second->GetOperands( *(*git) );
-             (*it_rhs).second->ComputeContribution( *(*git) );
-             if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-               (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+             it_rhs.second->GetOperands( *(*git) );
+             it_rhs.second->ComputeContribution( *(*git) );
+             if ( it_rhs.second->MultiplyWithTimeIncrement() )
+               it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
              // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
-             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_);
+             it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_);
            }
 
  } // end Accumulate
@@ -1017,8 +1023,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Accumulate( const COMPUTATION_DOMAI
 /**
     determining whether the nodes of the supplied element are contained in the computational domain
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>& face )
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+bool isContainedIn( const ModelSubDomain<dim,CELLTYPE>& comp_domain, const Face<dim>& face )
  {
     const size_t nodes(face.Nodes());
     for ( auto i{0U}; i<nodes; ++i )
@@ -1027,8 +1033,8 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const Face<dim>&
  }
 
 // same but for SplitBoundary objects
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<dim>& interface )
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+bool isContainedIn( const ModelSubDomain<dim,CELLTYPE>& comp_domain, const InterFace<dim>& interface )
  {
     const size_t nodes(interface.Nodes());
     for ( auto i{0U}; i<nodes; ++i )
@@ -1037,34 +1043,34 @@ bool isContainedIn( const COMPUTATION_DOMAIN<dim>& comp_domain, const InterFace<
  }
 
 
-
 /**
     for the accumulation of Neumann-flagged element integrals evaluated on Face objects
     
     TODO: include boundary conditions applied to LHS
     TODO: adopt method to handle InterFace objects (in split boundaries) as well
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
-                                                                                       const Boundary<dim>& boundary )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                 const Boundary<dim>& boundary )
  {
     // accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
-       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+     for ( const auto& it_rhs : rhs_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Neumann, an accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+                ( it_rhs.second->MaterialOperandPlacement() == FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
-               (*it_rhs).second->GetOperands( *(*git) );
-               (*it_rhs).second->ComputeContribution( *(*git) );
-               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateBoundaryIntegrals
@@ -1074,31 +1080,30 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateBoundaryIntegrals( const
 /**
     Coupling conditions / surface integrals applied to SplitBoundary objects
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::AccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
-                                                                                const SplitBoundary<dim>& boundary )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                      const SplitBoundary<dim>& boundary )
  {
     // TODO: include accumulation for LHS operators
     
     // accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::iterator
-           it_rhs=rhs_split_boundary_operators_.begin(); it_rhs!=rhs_split_boundary_operators_.end(); it_rhs++ )
-       if ( !(*it_rhs).second->AddLater() && !(*it_rhs).second->SubtractLater() )
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // if the material operand is flagged Robin, the accumulation will be performed
            // @attention it is assumed that the material operand has the same status at all integration points
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
-                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
-                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT && 
-                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ) )
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) ) )
              {
-               (*it_rhs).second->GetOperands( *(*git) );
-               (*it_rhs).second->ComputeContribution( *(*git) );
-               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
              }
    
  } // AccumulateSplitBoundaryIntegrals
@@ -1136,22 +1141,21 @@ Model.
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::LateAccumulate( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
     // accumulating as late addition into the righhand vector 'rhs'
     // ------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
-           it_rhs=rhs_operators_.begin(); it_rhs!=rhs_operators_.end(); it_rhs++ )
-       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+     for ( const auto& it_rhs : rhs_operators_ )
+       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
          for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
            {
-             (*it_rhs).second->GetOperands( *(*git) );
-             (*it_rhs).second->ComputeContribution( *(*git) );
-             if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-               (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+             it_rhs.second->GetOperands( *(*git) );
+             it_rhs.second->ComputeContribution( *(*git) );
+             if ( it_rhs.second->MultiplyWithTimeIncrement() )
+               it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
              // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
-             (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+             it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
            }
 
  } // end Late Accumulate
@@ -1167,56 +1171,55 @@ void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulate( const COMPUTATION_
     @attention Method relies on a 0..n contiguous numbering of the finite element nodes.
  
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulateBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
-                                                                                           const Boundary<dim>& boundary )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                     const Boundary<dim>& boundary )
  {
     // accumulating as late addition into the righhand vector 'rhs'
     // ------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
-           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
-       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+     for ( const auto&  it_rhs : rhs_boundary_operators_ )
+       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE && 
-                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( (*it_rhs).second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT && (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+                ( it_rhs.second->MaterialOperandPlacement() == FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
-               (*it_rhs).second->GetOperands( *(*git) );
-               (*it_rhs).second->ComputeContribution( *(*git) );
-               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
                // LUAT KHOA TRAN - (*it_rhs).second->AssignToGlobal( *(*git), rh_ );
-               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+               it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
              }
 
  } // end LateAccumulateBoundaryIntegrals
 
 
 // same but for SplitBoundary objects
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::LateAccumulateSplitBoundaryIntegrals( const COMPUTATION_DOMAIN<dim>& comp_domain,
-                                                                                                const SplitBoundary<dim>& boundary )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                          const SplitBoundary<dim>& boundary )
  {
     // accumulating as late addition into the righhand vector 'rhs'
     // ------------------------------------------------------------
-     for ( typename map<string,MathOperatorRHS<dim>*>::const_iterator
-           it_rhs=rhs_boundary_operators_.begin(); it_rhs!=rhs_boundary_operators_.end(); it_rhs++ )
-       if ( (*it_rhs).second->AddLater() || (*it_rhs).second->SubtractLater() )
+     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
+       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
          for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
            // accumulations need to be performed only where material operands are flagged Neumann
            if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE && 
-                  (*git)->Status( (*it_rhs).second->MaterialOperandKey() ) == ROBIN ) ||
-                ( (*it_rhs).second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&  
-                  (*git)->Status( 0U, (*it_rhs).second->MaterialOperandKey() ) == NEUMANN ) ) )
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
+                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
+                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
+                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
              {
-               (*it_rhs).second->GetOperands( *(*git) );
-               (*it_rhs).second->ComputeContribution( *(*git) );
-               if ( (*it_rhs).second->MultiplyWithTimeIncrement() )
-                 (*it_rhs).second->MultiplyWithTimeFactor( time_increment_ );
-               (*it_rhs).second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
+               it_rhs.second->GetOperands( *(*git) );
+               it_rhs.second->ComputeContribution( *(*git) );
+               if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+               it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
              }
 
  } // end LateAccumulateBoundaryIntegrals
@@ -1234,10 +1237,10 @@ If it is flagged ANY or PLAIN, lke at any no-flow boundary, no coupling is creat
 @todo perhaps introduce new flag called VARIABLE_FLAG : COUPLED to express the state of the variable at the internal SplitBoundary.
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::CoupleDomainsAcrossSplitBoundary( COMPUTATION_DOMAIN<dim>& subdomain )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::CoupleDomainsAcrossSplitBoundary( ModelSubDomain<dim,CELLTYPE>& subdomain )
 {
-  static_assert( !is_same<COMPUTATION_DOMAIN<dim>,SplitBoundary<dim> >::value,
+  static_assert( !is_same<CELLTYPE<dim>,SplitBoundary<dim> >::value,
                  "PDE_Integrator::CoupleDomainsAcrossSplitBoundary: only works for Region or Boundary objects" );
    
   if ( test_operands_.size() > 1U )
@@ -1348,27 +1351,24 @@ do not define PostProcess(), you will get the info message:
 
 "no post-processing operations for REGION were defined in derived PDE_Integrator"
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void  PDE_Integrator<dim,COMPUTATION_DOMAIN>::PostProcess( COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void  PDE_Integrator<dim,CELLTYPE>::PostProcess( ModelSubDomain<dim,CELLTYPE>& gref )
  {
     if ( postpro_operators_.empty() ) return;
 
-    for ( typename map<string,MathOperatorLHS<dim>*>::iterator
-          it=postpro_operators_.begin(); it!=postpro_operators_.end(); it++ )
+    for ( const auto& it : postpro_operators_ )
       {
-         for ( size_t i=1; i<=(*it).second->ApplicationCycles(); i++ )
+         for ( auto i{1}; i<=it.second->ApplicationCycles(); i++ )
            {
               // setting application cylce such that it can be used by PDE operator
-              (*it).second->ApplicationCycle(i);
+              it.second->ApplicationCycle(i);
               if (verbose_) cout <<"\nPDE_Integrator<"<<  dim;
-//              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<" in region'"<< gref.Name() <<"'\n";
-              if (verbose_) cout <<">::PostProcess: Computing: "<< (*it).first <<"\n";
-              for ( typename vector<typename COMPUTATION_DOMAIN<dim>::CellType*>::const_iterator
-                    git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
+              if (verbose_) cout <<">::PostProcess: Computing: "<< it.first <<" in region'"<< gref.Name() <<"'\n";
+              for ( auto git=gref.CellsBegin(); git!=gref.CellsEnd(); git++ )
                 {
-                   (*it).second->GetOperands( *(*git) );
-                   (*it).second->ComputeContribution( *(*git) );
-                   (*it).second->WriteOperands( *(*git) );
+                   it.second->GetOperands( *(*git) );
+                   it.second->ComputeContribution( *(*git) );
+                   it.second->WriteOperands( *(*git) );
                 }
           }
       }
@@ -1397,20 +1397,20 @@ to the Model.
 @attention Method relies on an 0..n contiguous node numbering in the region (computational domain).
 
  */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::OutputResults( ModelSubDomain<dim,CELLTYPE>& gref )
  {
    size_t       position;
    const uint32_t dim2(dim * dim);
 
-    for ( operandsIterator it=basic_operands_.begin(); it!=basic_operands_.end(); it++ )
+    for ( const auto& it : basic_operands_ )
      {
         auto         gfirst(gref.NodesBegin());
-        const Index  prop_key = (*it).first.key;
+        const Index  prop_key = it.first.key;
         if ( prop_key.place != NODE )
-            throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
+            throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::OutputResults(Model)",
                                            "only nodal properties can be output by this method.");
-        size_t  offset = (*it).second;
+        size_t  offset = it.second;
        
         switch ( prop_key.type  )
          {
@@ -1483,7 +1483,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
             }
           break;
           default:
-              throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults(Model)",
+              throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::OutputResults(Model)",
                                             "Output to ARRAY type variables is not supported by this method yet.");
              
          } // end switch(type)
@@ -1520,8 +1520,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::OutputResults( COMPUTATION_DOMAIN<d
     
     9. Postprocessing (if respective pde operators were added to the PDE_Integrator) and writing related results to model.
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<dim>& domain, bool debug )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& domain, bool debug )
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
@@ -1566,6 +1566,8 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
 
 
 
+
+
 /** 
     Accumulates element integrals, but
     simultaneously considering potential Boundary objects associated with the simplicial complex.
@@ -1575,10 +1577,10 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( COMPUTATION_DOMAIN<d
     
     @author SKM 7/7/2015
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
-                                                            COMPUTATION_DOMAIN<dim>& domain,
-                                                            bool debug )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::IntegrateOver( Model<dim>& model,
+                                                  ModelSubDomain<dim,CELLTYPE>& domain,
+                                                  bool debug )
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain );
@@ -1593,19 +1595,19 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
     IdentifySharedBoundaries( model, domain, shared_boundaries );
    
     if ( !shared_boundaries.empty() ) {
-         for ( auto it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
+         for ( const auto& it : shared_boundaries ) {
               // handling the split boundaries
-              if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
-                   const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
-                   cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
-                   cout <<" accumulating split boundary: "<< (*it) <<"\n";
+              if ( it.find("SPLITBOUNDARY") != std::string::npos ) {
+                   const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( it.c_str() );
+                   cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+                   cout <<" accumulating split boundary: "<< it <<"\n";
                    AccumulateSplitBoundaryIntegrals( domain, domain_boundary );
                 }
               // handing the normal boundaries
               else {
-                   const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
-                   cout <<"\nPDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver: ";
-                   cout <<" accumulating boundary: "<< (*it) <<"\n";
+                   const Boundary<dim>& domain_boundary = model.Boundary( it.c_str() );
+                   cout <<"\nPDE_Integrator<dim,CELLTYPE>::IntegrateOver: ";
+                   cout <<" accumulating boundary: "<< it <<"\n";
                    AccumulateBoundaryIntegrals( domain, domain_boundary );
                 }
            }
@@ -1618,13 +1620,13 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
     if ( Transient() == true ) {
          LateAccumulate( domain );
          if ( !shared_boundaries.empty() ) {
-              for ( auto it=shared_boundaries.begin(); it!=shared_boundaries.end(); it++ ) {
-                  if ( (*it).find("SPLITBOUNDARY") != std::string::npos ) {
-                        const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( (*it).c_str() );
+              for ( const auto& it : shared_boundaries ) {
+                  if ( it.find("SPLITBOUNDARY") != std::string::npos ) {
+                        const SplitBoundary<dim>& domain_boundary = model.SplitBoundary( it.c_str() );
                         LateAccumulateSplitBoundaryIntegrals( domain, domain_boundary );
                      }
                    else {
-                        const Boundary<dim>& domain_boundary = model.Boundary( (*it).c_str() );
+                        const Boundary<dim>& domain_boundary = model.Boundary( it.c_str() );
                         LateAccumulateBoundaryIntegrals( domain, domain_boundary );
                      }
                 }
@@ -1683,10 +1685,10 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::IntegrateOver( Model<dim>& model,
     TODO: think about meaningful PDE operators for internal model boundaries
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Model<dim>& model,
-                                                                       const COMPUTATION_DOMAIN<dim>& subdomain,
-                                                                       list<string>& shared_boundaries )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+bool PDE_Integrator<dim,CELLTYPE>::IdentifySharedBoundaries( const Model<dim>& model,
+                                                             const ModelSubDomain<dim,CELLTYPE>& subdomain,
+                                                             list<string>& shared_boundaries )
  {
     shared_boundaries.clear();
 
@@ -1720,8 +1722,7 @@ bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Mod
     // 3. for an entire irregularly shaped model find boundaries which touch each other
     model.Region("Model").UpdateMemberIndexes();
    
-    for ( typename BoundaryInterface<dim,Boundary>::boundaryConstIterator
-          it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
+    for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); it++ )
       for ( auto fit=(*it).second.CellsBegin(); fit!=(*it).second.CellsEnd(); fit++ )
         if ( subdomain.IsPerimeterCell( (*fit)->InnerParent()->Idx() ) ) {
              shared_boundaries.push_back( (*it).first );
@@ -1755,22 +1756,21 @@ bool PDE_Integrator<dim,COMPUTATION_DOMAIN>::IdentifySharedBoundaries( const Mod
     @attention SKM - some refactoring 31/8/22
 
 */
-template<uint32_t dim, template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions( const COMPUTATION_DOMAIN<dim>& gref )
+template<uint32_t dim, template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim, CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& gref )
  {
     // SKM_FIX of size error
     // DOF_indexes_.resize(this->rh_.size());
-    //DOF_indexes_.resize( gref.Nodes() );
-    DOF_indexes_.resize( gref.Nodes()*dof_per_node_ );
+    DOF_indexes_.resize( gref.Nodes() );
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), 0U );
     if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
 
     if (!this->setup_established_)
-      throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+      throw csmp::Exception(ERROR, "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
         "please call EstablishMatrixSetup() prior to this method.");
 
     if (this->basic_operands_.empty())
-      throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+      throw csmp::Exception(ERROR, "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
         "No (basic) operands have been specified...");
 
     // unique node-numbers from 0..n-1 are required for this condensation
@@ -1784,7 +1784,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
         size_t      offset = it.second;
 
         if (prop_key.place != NODE)
-          throw csmp::Exception(ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+          throw csmp::Exception(ERROR, "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
             "So far no conditions are assigned to elements, faces, segments");
 
         size_t  position{0U};
@@ -1881,7 +1881,7 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
            break;
             default:
               throw csmp::Exception(FATAL_ERROR,
-                "PDE_Integrator<dim,COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssentialConditions",
+                "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
                 "Variable type not recognised by this method");
             }
           
@@ -1910,8 +1910,8 @@ void PDE_Integrator<dim, COMPUTATION_DOMAIN>::ReduceSystemSizeEliminatingEssenti
 
 
 
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( const char* file )
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::WriteGlobalMatrixBitMapToText( const char* file )
  {
     char  outfile[INFO_STRING];
     strcpy( outfile, file );
@@ -1921,7 +1921,7 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
      ofstream ofs;
      ofs.open( outfile, ios::out|ios::trunc );
      if ( !ofs )
-       throw csmp::Exception( ERROR, "PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText",
+       throw csmp::Exception( ERROR, "PDE_Integrator<dim,CELLTYPE>::WriteGlobalMatrixBitMapToText",
                                       "Output file could not be opened" );
 
      // 2. writing G matrix to file
@@ -1975,10 +1975,10 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::WriteGlobalMatrixBitMapToText( cons
     bool                    verbose_;
 
 */
-template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Out() const
+template<uint32_t dim,template<uint32_t> class CELLTYPE>
+void PDE_Integrator<dim,CELLTYPE>::Out() const
  {
-     cout <<"\n\n"<<"PDE_Integrator<"<< dim <<",COMPUTATION_DOMAIN>::Out:\n";
+     cout <<"\n\n"<<"PDE_Integrator<"<< dim <<",CELLTYPE>::Out:\n";
    
      if ( basic_operands_.empty() || test_operands_.empty() ) {
           cout <<"\n\t"<<"integrator has not been initialized yet.\n";
@@ -2027,22 +2027,12 @@ void PDE_Integrator<dim,COMPUTATION_DOMAIN>::Out() const
 
 
 
+template class PDE_Integrator<1U>;
+template class PDE_Integrator<2U>;
+template class PDE_Integrator<3U>;
 
-
-template class PDE_Integrator<1U,Region>;
-template class PDE_Integrator<2U,Region>;
-template class PDE_Integrator<3U,Region>;
-
-template class PDE_Integrator<1U,Boundary>;
-template class PDE_Integrator<2U,Boundary>;
-template class PDE_Integrator<3U,Boundary>;
-
-//template class PDE_Integrator<1U,SplitBoundary>;
-//template class PDE_Integrator<2U,SplitBoundary>;
-//template class PDE_Integrator<3U,SplitBoundary>;
-
-template class PDE_Integrator<1U,NimbleRegion>;
-template class PDE_Integrator<2U,NimbleRegion>;
-template class PDE_Integrator<3U,NimbleRegion>;
+template class PDE_Integrator<1U,Face>;
+template class PDE_Integrator<2U,Face>;
+template class PDE_Integrator<3U,Face>;
 
 } // end namespace csmp

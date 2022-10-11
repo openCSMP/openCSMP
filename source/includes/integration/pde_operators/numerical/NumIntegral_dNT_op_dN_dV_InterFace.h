@@ -25,8 +25,8 @@ template<uint32_t> class Model;
        @author SKN
        @date 18/8/22
 */
-template<uint32_t dim, template<uint32_t> class CELL>
-class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim> {
+template<uint32_t dim, template<uint32_t> class CELL=InterFace>
+class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim,CELL> {
   public:
     NumIntegral_dNT_op_dN_dV_InterFace( const Model<dim>&,
                                         const char* oper,

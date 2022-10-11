@@ -7,9 +7,16 @@
 */
 
 #include "CVFEM_PHX_VariableNames.h"
+#include "CVFEM_PHX_VariableNames.h"
 #include "TwoPhaseTransportPHX.h"
 #include "CVFEM_PressureGradientVisitor.h"
 #include "PoreVolumeVisitor.h"
+#include "NaClH2OPropertiesVisitorPHX.h"
+#include "CVFEM_Visitor.h"
+#include "UpwindControlVisitor.h"
+
+#include "PropertyHandle.h"
+
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "CVFEM_NumIntegral_dNT_op_dN_dV.h"
@@ -18,20 +25,66 @@
 #include "NumIntegral_NT_rhs_nodal_op_N_dV.h"
 #include "CVFEM_Upwind_NumIntegral_dNT_op_dN_dV.h"
 #include "CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV.h"
-#include "NaClH2OPropertiesVisitorPHX.h"
-#include "CVFEM_Visitor.h"
+
+#include "ExplicitFiniteVolumeTransportPHX.h"
 #include "Limiter.h"
-#include "PDE_Integrator.h"
-#include "Brine.h"
-#include "ConvertConcentrationUnitsNaCl.h"
 
 namespace csmp {
 
+template<uint32_t> class Model;
+template<uint32_t> class Element;
+template<uint32_t> class PropertyDatabase;
+
+  /**
+     @class CVFEM_PHX_Scheme CVFEM_PHX_Scheme.h
+
+     @author Philipp Weis, ETH Zuerich
+     @section contact Contact
+     philipp.weis@erdw.ethz.ch
+
+     @changes changes Latest Changes
+  
+     @section motivation Motivation
+      Class to perform calculations of CVFEM PHX scheme.
+
+     @section usage Usage
+      Uses CVFEM scheme (Weis et al., Geofluids, 2014).
+
+     @code
+          
+     @endcode
+     
+     @section dependencies Dependencies
+      CVFEM_PHX_VariableNames
+      TwoPhaseTransportPHX
+      CVFEM_PressureGradientVisitor
+      PoreVolumeVisitor
+      NumIntegral_NT_lhsop_N_dV
+      NumIntegral_NT_op_N_dV
+      CVFEM_NumIntegral_dNT_op_dN_dV
+      CVFEM_PointSource_rhsop
+      NumIntegral_NT_lhs_nodal_op_N_dV
+      NumIntegral_NT_rhs_nodal_op_N_dV
+      CVFEM_Upwind_NumIntegral_dNT_op_dN_dV
+      CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV
+      NaClH2OPropertiesVisitorPHX
+      CVFEM_Visitor
+      Limiter
+      PDE_Integrator
+      Brine
+      ConvertConcentrationUnitsNaCl
+     
+     @section issues Known issues
+     
+     @section testing Testing
+     testing was done in the period before publication in 2014.
+
+  */
 template<uint32_t dim>
 class CVFEM_PHX_Scheme {
   public:
 
-    explicit CVFEM_PHX_Scheme( Model<dim>& model_ref, bool with_gravity = true);
+    explicit CVFEM_PHX_Scheme( Model<dim>&, bool with_gravity = true );
     ~CVFEM_PHX_Scheme( );
     
     void SetLargestTimeStep( double timestep ); // modifying maximum size of time step
@@ -70,11 +123,11 @@ private:
 
     CVFEM_PHX_VariableNames names;
 
-    CVFEM_PressureGradientVisitor<dim> pres_grad;
-    PoreVolumeVisitor<dim> pore_visitor;
+    CVFEM_PressureGradientVisitor<dim>    pres_grad;
+    PoreVolumeVisitor<dim>                pore_visitor;
     ExplicitFiniteVolumeTransportPHX<dim> fv_transport_vapor, fv_transport_liquid;
-    UpwindControlVisitor<dim> upwind_control;
-    TwoPhaseTransportPHX<dim> transport;
+    UpwindControlVisitor<dim>             upwind_control;
+    TwoPhaseTransportPHX<dim>             transport;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings p_settings, T_settings;
@@ -83,20 +136,20 @@ private:
     /// add extra functionality for alternative solver if needed
     CSMP_DEFAULT_LINEAR_SOLVER p_LINEAR_solver, T_LINEAR_solver;
 #endif
-    PDE_Integrator<dim,Region> p_FE_SAMG, T_FE_SAMG, p_FE_Gauss;
+    PDE_Integrator<dim,Element> p_FE_SAMG, T_FE_SAMG, p_FE_Gauss;
 
-    NumIntegral_NT_lhs_nodal_op_N_dV<dim,Element<dim> > capacitance_lhs;
-    CVFEM_NumIntegral_dNT_op_dN_dV<dim,Element<dim> > conductance;
-    NumIntegral_NT_rhs_nodal_op_N_dV<dim,Element<dim> > capacitance_rhs;
-    CVFEM_PointSource_rhsop<dim,Element<dim> > heat_bottom;    
+    NumIntegral_NT_lhs_nodal_op_N_dV<dim> capacitance_lhs;
+    CVFEM_NumIntegral_dNT_op_dN_dV<dim>   conductance;
+    NumIntegral_NT_rhs_nodal_op_N_dV<dim> capacitance_rhs;
+    CVFEM_PointSource_rhsop<dim>          heat_bottom;
 
-    NumIntegral_NT_lhs_nodal_op_N_dV<dim,Element<dim> > capacitance_lhs_p;
-    CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim> conductance_p_upwind_liquid,conductance_p_upwind_vapor;
-    NumIntegral_NT_rhs_nodal_op_N_dV<dim,Element<dim> > capacitance_rhs_p;
+    NumIntegral_NT_lhs_nodal_op_N_dV<dim>        capacitance_lhs_p;
+    CVFEM_Upwind_NumIntegral_dNT_op_dN_dV<dim>   conductance_p_upwind_liquid,conductance_p_upwind_vapor;
+    NumIntegral_NT_rhs_nodal_op_N_dV<dim>        capacitance_rhs_p;
     CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim> grav_liq, grav_vap;
-    CVFEM_PointSource_rhsop<dim,Element<dim> > source_p, source_p2;
+    CVFEM_PointSource_rhsop<dim>                 source_p, source_p2;
 
-    NaClH2OPropertiesVisitorPHX<dim> equilibrator_properties;
+    NaClH2OPropertiesVisitorPHX<dim>  equilibrator_properties;
 
     PropertyHandle<dim> diff_mass, mass, fluid_density,
                            diff_enthalpy, enthalpy, total_enthalpy,
@@ -106,7 +159,7 @@ private:
 
 //    CVFEM_Visitor<dim> mass_visitor, enthalpy_visitor, conduction_visitor;
 
-    Limiter<dim> pressure_limiter_transport, pressure_limiter_fluid;
+    Limiter<dim>  pressure_limiter_transport, pressure_limiter_fluid;
 
     double dt, cfl_dt, largest_timestep;
     double current_dt, control_dt, old_dt;
@@ -126,52 +179,6 @@ private:
 //    void CheckForConsistency(); // performing consistency check between CVFEM_visitors and FV calculations - currently not in use
 
 };
-
-  /**
-     @class CVFEM_PHX_Scheme CVFEM_PHX_Scheme.h
-
-     @author Philipp Weis, ETH Zuerich
-     @section contact Contact
-     philipp.weis@erdw.ethz.ch
-
-     @changes changes Latest Changes                                                                                  
-  
-     @section motivation Motivation
-      Class to perform calculations of CVFEM PHX scheme.
-
-     @section usage Usage
-      Uses CVFEM scheme (Weis et al., Geofluids, 2014).
-
-     @code
-          
-     @endcode
-     
-     @section dependencies Dependencies
-      CVFEM_PHX_VariableNames
-      TwoPhaseTransportPHX
-      CVFEM_PressureGradientVisitor
-      PoreVolumeVisitor
-      NumIntegral_NT_lhsop_N_dV
-      NumIntegral_NT_op_N_dV
-      CVFEM_NumIntegral_dNT_op_dN_dV
-      CVFEM_PointSource_rhsop
-      NumIntegral_NT_lhs_nodal_op_N_dV
-      NumIntegral_NT_rhs_nodal_op_N_dV
-      CVFEM_Upwind_NumIntegral_dNT_op_dN_dV
-      CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV
-      NaClH2OPropertiesVisitorPHX
-      CVFEM_Visitor
-      Limiter
-      PDE_Integrator
-      Brine
-      ConvertConcentrationUnitsNaCl
-     
-     @section issues Known issues
-     
-     @section testing Testing
-     testing was done in the period before publication in 2014.
-
-  */
 
 } // end namespace csmp
 

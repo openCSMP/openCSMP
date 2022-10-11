@@ -89,8 +89,8 @@ void InflowOutflowCalculation_VVCase<dim>::run()
 
     model->InputBoundaryValue( LEFT,  "concentration", concentration );
 
-    SteadyStateDiffusor<dim, Region> ssds( *model, "conductivity", "fluid pressure", "fluid volume source");
-    VelocityAndVolumeFlux<dim,Element<dim> > veloandvflux( *model,
+    SteadyStateDiffusor<dim,Element> ssds( *model, "conductivity", "fluid pressure", "fluid volume source");
+    VelocityAndVolumeFlux<dim> veloandvflux( *model,
                                              "conductivity",               // conductivity (abs. perm./visc. for single phase)
                                              "porosity",                   // porosity
                                              "fluid pressure",             // fluid pressure

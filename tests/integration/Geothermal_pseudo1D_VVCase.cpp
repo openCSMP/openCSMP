@@ -194,36 +194,36 @@ Criterion:  comparison with TOUGH
     #endif
     
     //! steady state pressure
-    PDE_Integrator<DIM, Region>  steady_state_pressure( solver );
+    PDE_Integrator<DIM,Element>  steady_state_pressure( solver );
     
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
-    NumIntegral_SetRHS_to_Zero<DIM,Element<DIM> >    zero_fluid_src( pd_ref, "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_SetRHS_to_Zero<DIM>    zero_fluid_src( pd_ref, "fluid pressure" );
 
-    VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<DIM>  velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
     steady_state_pressure.Add( &p_conductance );                           
     steady_state_pressure.Add(&zero_fluid_src);
 	steady_state_pressure.AddPostProcess( &velocity );
                                                                            
     //! transient pressure
-    PDE_Integrator<DIM, Region>  transient_pressure( solver );
+    PDE_Integrator<DIM,Element>  transient_pressure( solver );
     
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_op_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
     pt_conductance.MultiplyWithTimeIncrement(true);
     
-    NumIntegral_NT_lhsop_N_dV<DIM,Element<DIM> > pt_capacitance_lhs( pd_ref, "total compressibility", "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_lhsop_N_dV<DIM> pt_capacitance_lhs( pd_ref, "total compressibility", "fluid pressure", "fluid pressure" );
     pt_capacitance_lhs.LumpedFormulation(true);
     
-    NumIntegral_NT_op_N_dV<DIM,Element<DIM> >    pt_capacitance_rhs( pd_ref, "total compressibility",  "fluid pressure" );
+    NumIntegral_NT_op_N_dV<DIM>    pt_capacitance_rhs( pd_ref, "total compressibility",  "fluid pressure" );
     pt_capacitance_rhs.LumpedFormulation(true);
   
     // nodal fluid volume source for mass correction term
-    PointSource_rhsop <DIM,Element<DIM> > fluid_src( pd_ref, "nodal fluid volume source", "fluid pressure" );
+    PointSource_rhsop <DIM> fluid_src( pd_ref, "nodal fluid volume source", "fluid pressure" );
     fluid_src.MultiplyWithTimeIncrement(false);
     fluid_src.LumpedFormulation(true);
     fluid_src.AddAccumulateLater();
     
-    VelocityAndVolumeFlux<DIM,Element<DIM> >  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<DIM>  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
     
     transient_pressure.Add( &pt_conductance );
     transient_pressure.Add( &pt_capacitance_lhs );
@@ -232,15 +232,15 @@ Criterion:  comparison with TOUGH
     transient_pressure.AddPostProcess( &t_velocity );
     
     //! temperature diffusion
-    PDE_Integrator<DIM, Region>  temperature_diffusion( solver );
+    PDE_Integrator<DIM,Element>  temperature_diffusion( solver );
     
-    NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
+    NumIntegral_dNT_op_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
     
-    NumIntegral_NT_lhsop_N_dV<DIM,Element<DIM> >  t_capacitance_lhs( pd_ref, "total heat capacity", "temperature", "temperature" );
+    NumIntegral_NT_lhsop_N_dV<DIM>  t_capacitance_lhs( pd_ref, "total heat capacity", "temperature", "temperature" );
     t_capacitance_lhs.LumpedFormulation(true);
     t_capacitance_lhs.MultiplyWithTimeIncrement(true);
     
-    NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" ); 
+    NumIntegral_NT_op_N_dV<DIM>  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" );
     t_capacitance_rhs.MultiplyWithTimeIncrement(true);
     t_capacitance_rhs.LumpedFormulation(true);
 

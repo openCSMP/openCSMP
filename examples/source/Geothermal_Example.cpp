@@ -167,14 +167,13 @@ void Geothermal_Example::Run()
   //! 2. Setting up finite element algorithms for PT diffusion
   //! --------------------------------------------------------
   //! computation of initial steady-state fluid pressure
-  PDE_Integrator<DIM, Region>  steady_state_pressure( solver );
+  PDE_Integrator<DIM,Element>  steady_state_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>    p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
   // replace if you want to work with fluid sources and sinks
   NumIntegral_SetRHS_to_Zero<DIM>  zero_fluid_src( pd_ref, "fluid pressure" );
 
-  //VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", "density liquid", false );
-  VelocityAndVolumeFlux<DIM,Element<DIM> >  velocity( model, "conductivity", "porosity", "fluid pressure", false );
+  VelocityAndVolumeFlux<DIM>  velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
   steady_state_pressure.Add( &p_conductance );
   steady_state_pressure.Add( &zero_fluid_src );
@@ -182,7 +181,7 @@ void Geothermal_Example::Run()
 
 
   //! finite element computation of transient pressure
-  PDE_Integrator<DIM, Region>  transient_pressure( solver );
+  PDE_Integrator<DIM,Element>  transient_pressure( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
   pt_conductance.MultiplyWithTimeIncrement( true );
@@ -199,8 +198,6 @@ void Geothermal_Example::Run()
   fluid_src.LumpedFormulation( true );
   fluid_src.AddAccumulateLater();
 
-  //VelocityAndVolumeFlux<DIM>  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
-  //VelocityAndVolumeFlux<DIM,Element<DIM> >  t_velocity( model, "conductivity", "porosity", "fluid pressure", "density liquid", false );
   VelocityAndVolumeFlux<DIM>  t_velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
   transient_pressure.Add( &pt_conductance );
@@ -210,7 +207,7 @@ void Geothermal_Example::Run()
   transient_pressure.AddPostProcess( &t_velocity );
 
   //! transient thermal diffusion
-  PDE_Integrator<DIM, Region>  temperature_diffusion( solver );
+  PDE_Integrator<DIM,Element>  temperature_diffusion( solver );
 
   NumIntegral_dNT_op_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
 

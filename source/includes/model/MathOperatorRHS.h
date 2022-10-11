@@ -13,8 +13,6 @@ namespace csmp {
 
 class Parameter;
 template<uint32_t> class Element;
-template<uint32_t> class Face;
-template<uint32_t> class InterFace;
 template<uint32_t> class PropertyDatabase;
 
 /**
@@ -44,12 +42,8 @@ RULES for using righthand Mathoperators
       order as given above.
 
 */
-template<uint32_t dim>
+template<uint32_t dim, template<uint32_t> class CELL=Element>
 class MathOperatorRHS {
-
-  protected:
-
-    // prevent default construction
     MathOperatorRHS();
 
   public:
@@ -89,7 +83,7 @@ class MathOperatorRHS {
     VARIABLE_TYPE BasicOperandType()            const;
     PLACEMENT     BasicOperandPlacement()       const;
     uint32_t      BasicOperandDataDepth()       const;
-    uint32_t      BasicOperandOffset()          const;
+    size_t        BasicOperandOffset()          const;
     void          BasicOperandOffset( size_t );
 
     /// top
@@ -111,8 +105,8 @@ class MathOperatorRHS {
     bool          SubtractLater()               const;
     bool          Multiply()                    const;
     bool          LumpedFormulation()           const;
-    size_t        ApplicationCycle()            const;
-    size_t        ApplicationCycles()           const;
+    uint32_t      ApplicationCycle()            const;
+    uint32_t      ApplicationCycles()           const;
     double        MultiplyBy()                  const;
     bool          MultiplyWithTimeIncrement()   const;
     bool          DivideByTimeIncrement()       const;
@@ -124,49 +118,37 @@ class MathOperatorRHS {
     void          SubtractAccumulateLater();
     void          MultiplyAccumulate();
     void          LumpedFormulation ( bool );
-    void          ApplicationCycle  ( size_t );
-    void          ApplicationCycles ( size_t );
+    void          ApplicationCycle  ( uint32_t );
+    void          ApplicationCycles ( uint32_t );
     void          MultiplyBy( double integral_mult_factor );
     void          MultiplyWithTimeIncrement( bool multiply );
     void          DivideByTimeIncrement( bool divide );
 
     /// interpolation of property if isoparametric elements are used
-    void          PropertyAtIntegrationPoint( const Element<dim>&,
-                                              const csmp::Index&,
-                                              uint32_t ip, DenseMatrix<DM_MIN>& );
-    void          PropertyAtIntegrationPoint( const Face<dim>&,
+    void          PropertyAtIntegrationPoint( const CELL<dim>&,
                                               const csmp::Index&,
                                               uint32_t ip, DenseMatrix<DM_MIN>& );
 
     /// getting data from the Element, Face, InterFace
-    virtual void  GetOperands( const Element<dim>& );
-    virtual void  GetOperands( const Face<dim>& );
-    virtual void  GetOperands( const InterFace<dim>& );
+    virtual void  GetOperands( const CELL<dim>& );
 
     /// integration performed on Element, Face, InterFace
-    virtual void  ComputeContribution( const Element<dim>& );
-    virtual void  ComputeContribution( const Face<dim>& );
-    virtual void  ComputeContribution( const InterFace<dim>& );
+    virtual void  ComputeContribution( const CELL<dim>& );
   
     /// writing data to the Element, Face, InterFace
-    virtual void  WriteOperands( Element<dim>& );
-    virtual void  WriteOperands( Face<dim>&  );
-    virtual void  WriteOperands( InterFace<dim>& );
+    virtual void  WriteOperands( CELL<dim>& );
 
     /// if so specified multiply with time increment
     virtual void  MultiplyWithTimeFactor( double dt );
 
     /// assigment to the right hand side global vector (after everything was calculated )
-    virtual void  AssignToGlobal( const Element<dim>&,   std::vector<double>& rhs );
-    virtual void  AssignToGlobal( const Face<dim>&,      std::vector<double>& rhs );
-    virtual void  AssignToGlobal( const InterFace<dim>&, std::vector<double>& rhs );
+    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void  AssignToGlobal(const Element<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
-    virtual void  AssignToGlobal(const Face<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
-    virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
+    virtual void  AssignToGlobal(const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>&  );
+    // virtual void  AssignToGlobal(const InterFace<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
 
-    virtual MathOperatorRHS<dim>* clone() const = 0;
+    virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
 
   protected:
     std::string                         name_;               ///< name of operator
@@ -180,6 +162,7 @@ class MathOperatorRHS {
     std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
     DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
     std::vector<double>                 IPOL;                ///< shape function vector
+
     std::vector<ScalarVariable >        SC;                  ///< node property vector<double> of scalars
     std::vector<VectorVariable<dim> >   VC;                  ///< vectors
     std::vector<TensorVariable<dim> >   TS;                  ///< tensors
@@ -196,8 +179,8 @@ class MathOperatorRHS {
     bool        multiply_accumulate_;
     bool        lump_matrices_;
 
-    size_t      application_cycles_;
-    size_t      application_cycle_;
+    uint32_t    application_cycles_;
+    uint32_t    application_cycle_;
 
     /// time-dependent multipliers
     bool        time_multiply_;

@@ -489,7 +489,7 @@ void DES2PhaseSlightlyCompressibleFlow_Example::ComputeSteadyStatePressure( Mode
     PDE_Integrator<dim,Region>  steady_pressure(samg_solver);
 #else
     EigenSolver linear_solver;
-    PDE_Integrator<dim,Region>  steady_pressure(linear_solver);
+    PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
     NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );

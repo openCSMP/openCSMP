@@ -9,7 +9,7 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
@@ -18,7 +18,7 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
                                                           const char*  oper, 
                                                           const char*  basic, 
                                                           const char*  test ) 
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     emulti_key(pref.StorageKey(emultiplier)),
     nmulti_key(pref.StorageKey(nmultiplier)),
     grad_key(pref.StorageKey(grad_prop)),
@@ -33,14 +33,13 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
     gravity(ACC_GRAVITY),
     xyz(2)
 {
-    MathOperatorLHS<dim>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
     
     // resize material property matrix 
-    if ( dim == 3 ) 
+    if constexpr ( dim == 3U )
       {
-         typename vector<DenseMatrix<DM_MIN> >::iterator  it;
-         for ( it=MathOperatorLHS<dim>::MTRL.begin(); 
-               it!=MathOperatorLHS<dim>::MTRL.end(); it++ ) (*it).Resize(3,3);
+         for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
+               it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
       }
       
     if ( emulti_key.place != ELEMENT and emulti_key.place != REGION )
@@ -56,11 +55,11 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
                       grad_prop, "Operand to calculate 'v' from must be a scalar property placed on the nodes." );
 
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
@@ -69,7 +68,7 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_dV(
                                                           const PropertyDatabase<dim>& pref,
                                                           const char*  emultiplier, 
@@ -79,7 +78,7 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
                                                           const char*  oper, 
                                                           const char*  basic, 
                                                           const char*  test ) 
-  : MathOperatorLHS<dim>(pref,oper,basic,test),
+  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
     emulti_key(pref.StorageKey(emultiplier)),
     nmulti_key(pref.StorageKey(nmultiplier)),
     grad_key(pref.StorageKey(grad_prop)),
@@ -95,14 +94,13 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
     gravity(ACC_GRAVITY),
     xyz(2)
 {
-    MathOperatorLHS<dim>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
     
     // resize material property matrix 
-    if ( dim == 3 ) 
+    if constexpr ( dim == 3U )
       {
-         typename vector<DenseMatrix<DM_MIN> >::iterator  it;
-         for ( it=MathOperatorLHS<dim>::MTRL.begin(); 
-               it!=MathOperatorLHS<dim>::MTRL.end(); it++ ) (*it).Resize(3,3);
+         for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
+               it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
       }
 
     if ( emulti_key.place != ELEMENT )
@@ -115,21 +113,21 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
 
     if ( grad_key.place != NODE || grad_key.type != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
-                      grad_prop, "Operand to calculate 'v' from must be a scalar property placed on the nodes." );
+                             grad_prop, "Operand to calculate 'v' from must be a scalar property placed on the nodes." );
 
     if ( rrho_key.place != NODE || rrho_key.type != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
-                      rrho_prop, "Operand to calculate 'rho g' term from must be a scalar property placed on the nodes." );
+                             rrho_prop, "Operand to calculate 'rho g' term from must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::BasicOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
-                      basic, "Operand (basic) must be a scalar property placed on the nodes." );
+                             basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim>::TestOperandPlacement() != NODE || 
-         MathOperatorLHS<dim>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
-                      test, "Operand (test) must be a scalar property placed on the nodes." );
+                             test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
 
@@ -142,37 +140,36 @@ The gradients of the dependent variable are computed at the integration
 points and multiplied with the n- and e-multipliers. These must be 
 nodal and element variables, respectively.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
     // 1. read Operand
     // ---------------
-    if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
       {
-         MathOperatorLHS<dim>::MTRL[0].Resize(dim,dim);
-         MathOperatorLHS<dim>::MTRL[0].Zero();
+         MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
+         MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
       
-         if ( MathOperatorLHS<dim>::MaterialOperandType() == SCALAR ) {
-              ScalarVariable  sc;
-              e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), sc );
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
+              const double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
               for ( auto i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim>::MTRL[0](i,i) = sc();
+                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc;
            }
-         if ( MathOperatorLHS<dim>::MaterialOperandType() == VECTOR ) {
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
-              e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), vc );
+              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
               for ( auto i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim>::MTRL[0](i,i) = vc[i];
+                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
            }
-         if ( MathOperatorLHS<dim>::MaterialOperandType() == TENSOR ) {
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
-              e.Read( MathOperatorLHS<dim>::MaterialOperandKey(), ts );
+              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
               for ( auto i{0U}; i<dim; i++ ) 
                 for ( auto j{0U}; j<dim; j++ ) 
-                  MathOperatorLHS<dim>::MTRL[0](i,j) = ts(i,j);
+                  MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
            }
       }
     else // if a nodal variable is dealt with
@@ -183,8 +180,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
                                         "Therefore nodal properties cannot be integrated.");
       
          for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
-           MathOperatorLHS<dim>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim>::MaterialOperandKey(), 
-                                                                i, MathOperatorLHS<dim>::MTRL[i] );
+           MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
+                                                                  i, MathOperatorLHS<dim,CELL>::MTRL[i] );
       }
    
     // 2. read element multiplier variable
@@ -239,12 +236,12 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL& e )
 
 In linear elasticity computations.  
 */
-template<uint32_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL& e )
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // initialize output matrix
-    MathOperatorLHS<dim>::LHS.Resize( e.Nodes(), e.Nodes() );
-    MathOperatorLHS<dim>::LHS.Zero();
+    MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
+    MathOperatorLHS<dim,CELL>::LHS.Zero();
 
     // 1. Two cases exist: The first is when the material property is an
     //    element property. In this case the material property matrix can
@@ -262,10 +259,10 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
          DN.Transposed( DNT );
 
          // multiply  DNT . MTRL
-         if ( MathOperatorLHS<dim>::MaterialOperandPlacement() == ELEMENT ) 
-           DNT *= MathOperatorLHS<dim>::MTRL[0];
+         if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
+           DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
          else                             
-           DNT *= MathOperatorLHS<dim>::MTRL[i];
+           DNT *= MathOperatorLHS<dim,CELL>::MTRL[i];
 
          // multiplying DNT . DN 
          DNT *= DN;
@@ -275,14 +272,14 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
          
          // accumulating ME Gauss point integral contributions into element 
          // contribution to global conductance matrix
-         MathOperatorLHS<dim>::LHS += DNT;
+         MathOperatorLHS<dim,CELL>::LHS += DNT;
 
          // 2. Compute "velocity" 'v' matrix NT3 NTNTNT_V at integration point
          // ------------------------------------------------------------------
          VIP.Zero();
          for ( auto j{0U}; j<dim; j++ ) {
               //                                x,y,z-component  d/dx,y,z  grad_prop at node
-              for ( auto k=0; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
+              for ( auto k{0U}; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
               // adjusting vertical flow component if gravity is acting
               if ( with_gravity && j == xyz-1 )       VIP(j,j) -=  gravity * RDENS[i]; 
 
@@ -300,7 +297,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
          NT3[i] *= DN;
          NT3[i] *= e.WeightAtIntegrationPoint(i) * detJ;
 
-         MathOperatorLHS<dim>::LHS += NT3[i];
+         MathOperatorLHS<dim,CELL>::LHS += NT3[i];
       }
 
 } // end ComputeContribution
@@ -312,8 +309,8 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
 
 
 
-template<uint32_t dim,class CELL>
-void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const CELL& e,
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const CELL<dim>& e,
                                                                            DenseMatrix<DM_MIN>& MULT )
  {
     MULT.Resize(dim,dim);
@@ -343,7 +340,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const
 
 
 
-template<uint32_t dim,class CELL>
+template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::SpatialDerivative( uint32_t num_xyz )
  {
     assert( num_xyz > 0 && num_xyz <=3 );
@@ -351,13 +348,13 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::SpatialDerivative( uint32_t 
  }
 
 
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<1U,Element<1U> >;
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<2U,Element<2U> >;
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<3U,Element<3U> >;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<1U,Element>;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<2U,Element>;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<3U,Element>;
 
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<1U,Face<1U> >;
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<2U,Face<2U> >;
-template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<3U,Face<3U> >;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<1U,Face>;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<2U,Face>;
+template class NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<3U,Face>;
 
 } // csmp
 

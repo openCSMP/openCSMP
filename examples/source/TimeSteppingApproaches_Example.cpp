@@ -13,7 +13,13 @@
 #include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#else
+#include "LinearSolver.h"
+#endif
 
 #include "ConstantFactor.h"
 
@@ -136,7 +142,7 @@ void TimeSteppingApproaches_Example::Run()
    //  Vs.1:   ([C] + dt/2 [K]){p}t+dt = ([C] - dt/2 [K]){p}t + dt/2 ({Q}t + {Q}t+dt)
    //
    // ------------------------------------------------------------------------------------
-   PDE_Integrator<DIM,Region>  CrankNicholson1_pf;
+   PDE_Integrator<DIM,Element>  CrankNicholson1_pf;
    #ifdef CSMP_WITH_SAMG_SOLVER
    SAMG_Solver solver;
    CrankNicholson1_pf.SetSolver( solver );
@@ -146,36 +152,36 @@ void TimeSteppingApproaches_Example::Run()
    #endif
 
    // conductance matrix dt/2 * [K] at pressure t+dt
-   NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  CN1_conductance1( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_dNT_op_dN_dV<DIM>  CN1_conductance1( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                             CN1_conductance1.MultiplyWithTimeIncrement(true);
                                             CN1_conductance1.LumpedFormulation(true);
 
    // conductance matrix dt/2 * [K] at pressure t
-   NumIntegral_DNT_rhsop_DN_dV<DIM,Element<DIM> >  CN1_conductance2( model.Database(), "conductivity", "fluid pressure" );
+   NumIntegral_DNT_rhsop_DN_dV<DIM>  CN1_conductance2( model.Database(), "conductivity", "fluid pressure" );
                                                CN1_conductance2.MultiplyWithTimeIncrement(true);
                                                CN1_conductance2.SubtractAccumulate();
 
    // left-hand side capacitance matrix [C]
-   NumIntegral_NT_lhsop_N_dV<DIM,Element<DIM> > CN1_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_lhsop_N_dV<DIM> CN1_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                             CN1_capacitance_lhs.LumpedFormulation(true);
 
    // right-hand side capacitance matrix [C]
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN1_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN1_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                           CN1_capacitance_rhs.LumpedFormulation(true);
 
    // source vector at dt * {Q} at current pressure
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN1_source1( model.Database(), "previous fluid volume source",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN1_source1( model.Database(), "previous fluid volume source",  "fluid pressure" );
                                           CN1_source1.MultiplyWithTimeIncrement(true);
                                           CN1_source1.AddAccumulateLater();
                                           CN1_source1.LumpedFormulation(true);
 
    // source vector at dt * {Q} at current pressure
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN1_source2( model.Database(), "fluid volume source",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN1_source2( model.Database(), "fluid volume source",  "fluid pressure" );
                                           CN1_source2.MultiplyWithTimeIncrement(true);
                                           CN1_source2.AddAccumulateLater();
                                           CN1_source2.LumpedFormulation(true);
 
-   VelocityAndVolumeFlux<DIM,Element<DIM> >   velocity( model, "conductivity", "porosity", "fluid pressure", false );
+   VelocityAndVolumeFlux<DIM>   velocity( model, "conductivity", "porosity", "fluid pressure", false );
 
    // add PDE_Operators and post-processor to the FE Algorithm
    // and multiply with time-increment
@@ -198,7 +204,7 @@ void TimeSteppingApproaches_Example::Run()
    // Vs. 2    ([C]/dt + 1/2 [K]){p}t+dt = ([C]/dt - 1/2 [K]){p}t + 1/2 ({Q}t + {Q}t+dt)
    //
    // ------------------------------------------------------------------------------------
-   PDE_Integrator<DIM,Region>  CrankNicholson2_pf;
+   PDE_Integrator<DIM,Element>  CrankNicholson2_pf;
 #ifdef CSMP_WITH_SAMG_SOLVER
    SAMG_Solver  samg_solver;
    CrankNicholson2_pf.SetSolver(samg_solver);
@@ -208,32 +214,32 @@ void TimeSteppingApproaches_Example::Run()
 #endif
 
    // conductance matrix dt/2 * [K] at pressure t+dt
-   NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  CN2_conductance1( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_dNT_op_dN_dV<DIM>  CN2_conductance1( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                             CN2_conductance1.MultiplyBy( 1./2. );
 
    // conductance matrix dt/2 * [K] at pressure t
-   NumIntegral_DNT_rhsop_DN_dV<DIM,Element<DIM> >  CN2_conductance2( model.Database(), "conductivity", "fluid pressure" );
+   NumIntegral_DNT_rhsop_DN_dV<DIM>  CN2_conductance2( model.Database(), "conductivity", "fluid pressure" );
                                                CN2_conductance2.MultiplyBy( 1./2. );
                                                CN2_conductance2.SubtractAccumulate();
 
    // left-hand side capacitance matrix [C]
-   NumIntegral_NT_lhsop_N_dV<DIM,Element<DIM> >  CN2_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_lhsop_N_dV<DIM>  CN2_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                              CN2_capacitance_lhs.MultiplyWithTimeIncrement(true);
                                              CN2_capacitance_lhs.LumpedFormulation(true);
 
    // right-hand side capacitance matrix [C]
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN2_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN2_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                           CN2_capacitance_rhs.MultiplyWithTimeIncrement(true);
                                           CN2_capacitance_rhs.LumpedFormulation(true);
 
    // source vector at dt * {Q} at current pressure
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN2_source1( model.Database(), "previous fluid volume source",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN2_source1( model.Database(), "previous fluid volume source",  "fluid pressure" );
                                           CN2_source1.MultiplyBy( 1./2. );
                                           CN2_source1.AddAccumulateLater();
                                           CN2_source1.LumpedFormulation(true);
 
    // source vector at dt * {Q} at current pressure
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  CN2_source2( model.Database(), "fluid volume source",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  CN2_source2( model.Database(), "fluid volume source",  "fluid pressure" );
                                           CN2_source2.MultiplyBy( 1./2. );
                                           CN2_source2.AddAccumulateLater();
                                           CN2_source2.LumpedFormulation(true);
@@ -262,7 +268,7 @@ void TimeSteppingApproaches_Example::Run()
    // NB: It is not a good idea to lump the conductance matrix
    //
    // ------------------------------------------------------------------------------------
-   PDE_Integrator<DIM,Region>  BackwardEuler_pf;
+   PDE_Integrator<DIM,Element>  BackwardEuler_pf;
    #ifdef CSMP_WITH_SAMG_SOLVER
    BackwardEuler_pf.SetSolver( solver );
    #else
@@ -270,20 +276,20 @@ void TimeSteppingApproaches_Example::Run()
    #endif
 
    // conductance matrix dt * [K] at pressure t+dt
-   NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  BE_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_dNT_op_dN_dV<DIM>  BE_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
 
    // left-hand side capacitance matrix [C]
-   NumIntegral_NT_lhsop_N_dV<DIM,Element<DIM> > BE_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_lhsop_N_dV<DIM> BE_capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                             BE_capacitance_lhs.MultiplyWithTimeIncrement(true);
                                             BE_capacitance_lhs.LumpedFormulation(true);
 
    // right-hand side capacitance matrix [C]
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  BE_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  BE_capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                           BE_capacitance_rhs.MultiplyWithTimeIncrement(true);
                                           BE_capacitance_rhs.LumpedFormulation(true);
 
    // source vector at dt * {Q} at current pressure
-   NumIntegral_NT_op_N_dV<DIM,Element<DIM> >  BE_source( model.Database(), "fluid volume source",  "fluid pressure" );
+   NumIntegral_NT_op_N_dV<DIM>  BE_source( model.Database(), "fluid volume source",  "fluid pressure" );
                                           BE_source.AddAccumulateLater();
                                           BE_source.LumpedFormulation(true);
 
