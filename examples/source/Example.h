@@ -10,6 +10,8 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
+#include "EigenSolver.h"
+
 namespace csmp{
 
 class ExampleSuite;

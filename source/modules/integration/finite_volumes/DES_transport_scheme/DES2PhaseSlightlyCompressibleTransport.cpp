@@ -60,8 +60,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     //creating new variables if not defined yet
     if(!this->db_.IsDefined("variation rate nonwetting phase")) this->sg_.CreateProperty( "variation rate nonwetting phase", "vrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
     this->sg_.Region("Model").InputPropertyValue( "variation rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("compenastion flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
-    this->sg_.Region("Model").InputPropertyValue( "compenastion flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
+    if(!this->db_.IsDefined("compensation flux rate nonwetting phase")) this->sg_.CreateProperty( "compensation flux rate nonwetting phase", "cfrnwp", "m3/(m3.s)", SCALAR, NODE, 1, -1.00E+08 ,1.00E+08);
+    this->sg_.Region("Model").InputPropertyValue( "compensation flux rate nonwetting phase", makeScalar(PLAIN,0), COMPLETE);
     if(!this->db_.IsDefined("old saturation carbonic phase")) this->sg_.CreateProperty( "old saturation carbonic phase", "sCO2_0", "m3/m3", SCALAR, NODE, 1, 0 ,1);
     this->sg_.CopyReplace( "saturation carbonic phase", "old saturation carbonic phase" );
     if(!this->db_.IsDefined("tensor permeability")) this->sg_.CreateProperty( "tensor permeability", "kk", "m2", TENSOR, ELEMENT, 3, 1E-21, 1.0e-5);
@@ -109,7 +109,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     key_g = INDEX<SCALAR,MODEL>( this->db_.StorageKey("acceleration gravity") ); 
     key_rhoH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("density aqueous phase") );
     key_rhoCO2 = INDEX<SCALAR,NODE>( this->db_.StorageKey("density carbonic phase") );
-    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compenastion flux rate nonwetting phase") );
+    key_compensate = INDEX<SCALAR,NODE> ( this->db_.StorageKey("compensation flux rate nonwetting phase") );
     key_dip = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("dip vector") );
     key_vt = INDEX<VECTOR,ELEMENT>( this->db_.StorageKey("total velocity") );
     key_muH2O = INDEX<SCALAR,NODE>( this->db_.StorageKey("viscosity aqueous phase") );
@@ -158,7 +158,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
         "The 'density carbonic phase' variable must be SCALAR and placed on NODE"  );     
     if ( key_compensate.place != NODE || key_compensate.type != SCALAR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
-        "The 'compenastion flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );    
+        "The 'compensation flux rate nonwetting phase' variable must be SCALAR and placed on NODE"  );
     if ( key_dip.place != ELEMENT || key_dip.type != VECTOR )
       throw csmp::Exception( FATAL_ERROR, "DES2PhaseSlightlyCompressibleTransport::InitializeVariablesAndKeys:",
         "The 'dip vector' variable must be VECTOR and placed on ELEMENT"  );                                
@@ -3605,7 +3605,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
     settings.Set_idmp( -1 );
     settings.Set_mode_mess( -2 );
     SAMG_Solver                       samg_solver( &settings );
-    PDE_Integrator<dim,NimbleRegion>  transient_pressure(samg_solver);
+    PDE_Integrator<dim,Element>  transient_pressure(samg_solver);
 #else
     CSMP_DEFAULT_LINEAR_SOLVER        linear_solver;
 //    PDE_Integrator<dim,NimbleRegion>  transient_pressure(linear_solver);

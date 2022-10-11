@@ -342,14 +342,14 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<D
     if ( first_call )  {
         #ifdef CSMP_WITH_SAMG_SOLVER
          // suppress verbose output
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout1(-1);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iout2(-1);
          // absolute tolerance set to 1e-14
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_eps( 1.E-14 );
          // use solution from last step as an initial guess
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_itypu(0);
          // reuse solver setup from last call
-         dynamic_cast<TransientDiffusor<DIM,Region>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
+         dynamic_cast<TransientDiffusor<DIM,Element>*>(fluid_pressure_)->GetSolverSettings().Set_iswit(3);
         #else
         /// add extra functionality for alternative solver if needed
         #endif

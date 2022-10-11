@@ -108,7 +108,7 @@ Model<dim>::Model( const string& binaryFileName )
 template<uint32_t dim>
 Model<dim>::Model( const string& binaryFileName, const string& variable_txt_file )
   : model_name_( binaryFileName ),
-    database_( variable_txt_file.c_str(), set<string>() )
+    database_( variable_txt_file.c_str() )
 {
   InitializeLocalVariableStorage();
   set<string> empty_set; // prompts model to read all the variables contained in the binary
