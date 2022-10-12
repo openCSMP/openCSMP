@@ -102,17 +102,16 @@ void  TwoPhaseTransportPHX<dim>::CheckDryFiniteVolumesAndAdjustTimestep()
   
   time_step_factor = 1.0;
 
-  unsigned int idx;
+  size_t idx;
   double LHS, Outflow, temp_factor;
      
   // time step is only cut if the primary variable (liquid + vapor mass) is running dry
-  for ( typename vector<Node<dim>*>::const_iterator 
-       fvit=model_ref.Region("Model").NodesBegin(); 
-       fvit!=model_ref.Region("Model").NodesEnd(); fvit++ )
+  Region<dim>& domain = model_ref.Region("Model");
+  for ( auto fvit=domain.NodesBegin(); fvit!=domain.NodesEnd(); fvit++ )
        { 
          idx = (*fvit)->Idx();
 
-		 LHS      = fv_transport_vapor.GetMainPropertyLHS(idx);
+		     LHS      = fv_transport_vapor.GetMainPropertyLHS(idx);
          Outflow  = fv_transport_vapor.GetFluxOut(idx);
          if (Outflow != 0.) temp_factor = LHS / Outflow;
          else temp_factor = 1.;
@@ -170,26 +169,26 @@ void TwoPhaseTransportPHX<dim>::TrackFluxes( )
   unsigned int idx_magmatic_mass(3);
 //  unsigned int idx_magmatic_mass(0);
 
-  unsigned int idx;
-  for ( typename vector<Node<dim>*>::const_iterator
-       fvit=model_ref.Region("Model").NodesBegin();
-       fvit!=model_ref.Region("Model").NodesEnd(); fvit++ )
+  size_t idx;
+  auto       nodeIt   = model_ref.Region("Model").NodesBegin();
+  auto const nodesEnd = model_ref.Region("Model").NodesEnd();
+  for ( ; nodeIt != nodesEnd; nodeIt++ )
        {
 
-       if ( (*fvit)->Status(  tffi_key ) != DIRICH )
+       if ( (*nodeIt)->Status(  tffi_key ) != DIRICH )
        {
-         idx = (*fvit)->Idx();
-         (*fvit)->Read(tffi_key, tffi );
-         (*fvit)->Read(tffo_key, tffo );
-         (*fvit)->Read(mlfi_key, mlfi );
-         (*fvit)->Read(mlfo_key, mlfo );
-         (*fvit)->Read(mvfi_key, mvfi );
-         (*fvit)->Read(mvfo_key, mvfo );
-         (*fvit)->Read(slfi_key, slfi );
-         (*fvit)->Read(slfo_key, slfo );
-         (*fvit)->Read(svfi_key, svfi );
-         (*fvit)->Read(svfo_key, svfo );
-         (*fvit)->Read(T_key, temperature );
+         idx = (*nodeIt)->Idx();
+         (*nodeIt)->Read(tffi_key, tffi );
+         (*nodeIt)->Read(tffo_key, tffo );
+         (*nodeIt)->Read(mlfi_key, mlfi );
+         (*nodeIt)->Read(mlfo_key, mlfo );
+         (*nodeIt)->Read(mvfi_key, mvfi );
+         (*nodeIt)->Read(mvfo_key, mvfo );
+         (*nodeIt)->Read(slfi_key, slfi );
+         (*nodeIt)->Read(slfo_key, slfo );
+         (*nodeIt)->Read(svfi_key, svfi );
+         (*nodeIt)->Read(svfo_key, svfo );
+         (*nodeIt)->Read(T_key, temperature );
 
          tffi += fv_transport_liquid.GetFluxIn(idx);
          tffi += fv_transport_vapor.GetFluxIn(idx);
@@ -209,16 +208,16 @@ void TwoPhaseTransportPHX<dim>::TrackFluxes( )
          svfo += fv_transport_vapor.GetFluxOut(idx,idx_magmatic_mass);
          }
 
-         (*fvit)->Store(tffi_key, tffi );
-         (*fvit)->Store(tffo_key, tffo );
-         (*fvit)->Store(mlfi_key, mlfi );
-         (*fvit)->Store(mlfo_key, mlfo );
-         (*fvit)->Store(mvfi_key, mvfi );
-         (*fvit)->Store(mvfo_key, mvfo );
-         (*fvit)->Store(slfi_key, slfi );
-         (*fvit)->Store(slfo_key, slfo );
-         (*fvit)->Store(svfi_key, svfi );
-         (*fvit)->Store(svfo_key, svfo );
+         (*nodeIt)->Store(tffi_key, tffi );
+         (*nodeIt)->Store(tffo_key, tffo );
+         (*nodeIt)->Store(mlfi_key, mlfi );
+         (*nodeIt)->Store(mlfo_key, mlfo );
+         (*nodeIt)->Store(mvfi_key, mvfi );
+         (*nodeIt)->Store(mvfo_key, mvfo );
+         (*nodeIt)->Store(slfi_key, slfi );
+         (*nodeIt)->Store(slfo_key, slfo );
+         (*nodeIt)->Store(svfi_key, svfi );
+         (*nodeIt)->Store(svfo_key, svfo );
        }
 
        }

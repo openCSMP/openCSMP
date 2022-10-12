@@ -378,6 +378,8 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
   InterFace<2>  if_obj0( &face_FE, &line_stencil, lvars, ivars ),
                 if_obj1( &face_FE, &line_stencil, lvars, ivars ),
                 if_obj2( &face_FE, &line_stencil, lvars, ivars );
+                
+  if_obj2.FE()->CurrentID(3);
 
   //Assign 0
   if_obj0.AssignElementsAndNodes( &e1, &e2 );
@@ -432,7 +434,6 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
   ///Beginning NodeCoordinateMatrix_Tests and Finite ELement shape functions
   /// -------------------------------------------------------------------------------------------------
 
-
   double l0 = std::sqrt(0.75*0.75 + 1.5*1.5);
   double shape_function_N0 =  l0 / std::sqrt(5);
   double shape_function_N1 =  1.0-shape_function_N0;
@@ -449,16 +450,15 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
   _test( shape_function_N0 == N[0] );
   _test( shape_function_N1 == N[1] );
 
-  
   N[0]=0; N[1]=0;
-  face_FE.CurrentID( face_FE.CurrentID() + 1 );
+  face_FE.CurrentID( face_FE.CurrentID()-1 );
   if_obj1.CurrentSide(INSIDE);
   if_obj1.N_AtGlobalPoint(N, xyz );
   _test( shape_function_N0 == N[0] );
   _test( shape_function_N1 == N[1] );
 
   N[0]=0; N[1]=0;
-  face_FE.CurrentID( face_FE.CurrentID() + 1 );
+  face_FE.CurrentID( face_FE.CurrentID()-1 );
   if_obj2.CurrentSide(INSIDE);
   if_obj2.N_AtGlobalPoint(N, xyz );
   _test( shape_function_N0 == N[0] );
@@ -469,21 +469,21 @@ void InterFace_Test::NodeCoordinateMatrix_linear_test( ) {
 
   //Outside - NOW THE SHAPE FUNCTIONS HAVE SWITCHED SINCE NODE 0 is now at the top
   N[0]=0; N[1]=0;
-  face_FE.CurrentID( face_FE.CurrentID() + 1 );
+  face_FE.CurrentID( face_FE.CurrentID()-1 );
   if_obj0.CurrentSide(OUTSIDE);
   if_obj0.N_AtGlobalPoint(N, xyz );
   _test( shape_function_N1 == N[0] );
   _test( shape_function_N0 == N[1] );
 
   N[0]=0; N[1]=0;
-  face_FE.CurrentID( face_FE.CurrentID() + 1 );
+  face_FE.CurrentID( face_FE.CurrentID()-1 );
   if_obj1.CurrentSide(OUTSIDE);
   if_obj1.N_AtGlobalPoint(N, xyz );
   _test( shape_function_N1 == N[0] );
   _test( shape_function_N0 == N[1] );
 
   N[0]=0; N[1]=0;
-  face_FE.CurrentID( face_FE.CurrentID() + 1 );
+  face_FE.CurrentID( face_FE.CurrentID()-1 );
   if_obj2.CurrentSide(OUTSIDE);
   if_obj2.N_AtGlobalPoint(N, xyz );
   _test( shape_function_N1 == N[0] );

@@ -206,9 +206,9 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
 
 
 template<uint32_t dim>
-size_t NodeManifold<dim>::Branches() const
+uint32_t NodeManifold<dim>::Branches() const
 {
-  return branches_.size();
+  return static_cast<uint32_t>(branches_.size());
 }
 
 

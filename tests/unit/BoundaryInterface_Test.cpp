@@ -615,6 +615,4 @@ for ( auto it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it) {
 
 
 
-
-
 } // end csmp

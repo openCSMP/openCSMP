@@ -56,7 +56,7 @@ class NodeManifold {
       void SortByVariableValue( const Index& scalar_node_variable );
 
       /// number of entries
-      size_t Branches() const;
+      uint32_t Branches() const;
 
       /// access to node
       Node<dim>* const N( size_t branch ) const;

@@ -306,7 +306,10 @@ void SKUA_Example::ListModels() {
     }
 }
 
-void RunTutorial1OnSetUpModel( Model<3U>& model ) {
+
+
+
+static void RunTutorial1OnSetUpModel( Model<3U>& model ) {
 
   double model_time = 0.0;
   PropertyDatabase<3U>& p_ref(model.Database());  // reference to the property database
@@ -449,12 +452,21 @@ void RunTutorial1OnSetUpModel( Model<3U>& model ) {
 
 } // RunTutorial1OnSetUpModel
 
-void ExportSKUAProperties( Model<3U>& model ) {
+
+
+
+
+
+static void ExportSKUAProperties( Model<3U>& model ) {
   VTK_Interface<3U>  vtk_output;
   vtk_output.OutputDataToVTK( model, "SKUA_porosity", "porosity", 0 );
   vtk_output.OutputDataToVTK( model, "SKUA_permeability", "permeability", 0 );
   vtk_output.OutputDataToVTK( model, "SKUA_compressibility", "compressibility", 0 );
 }
+
+
+
+
 
 void SKUA_Example::RunSKUA_model() {
 
