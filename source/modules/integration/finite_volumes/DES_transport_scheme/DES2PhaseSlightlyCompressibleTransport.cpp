@@ -2384,13 +2384,14 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateContactSt
     }
 
     // 3. oil dams up at slave side then it breakthroughs
-//    double master_sw = masterNode->Read(this->key_sH2O);
-//    double master_pc = this->flowfunctions_.pc_at(master_e, master_sw);
+    double master_sw = masterNode->Read(this->key_sH2O);
+    Element<dim>* master_e = ParentElementOfManifoldNode(masterNode, this->key_pd);
+    double master_pc = this->flowfunctions_.pc_at(master_e, master_sw);
     double slave_pe = slave_e->Read(this->key_pd);
-    double master_pf = masterNode->Read(this->key_pf);
-    double slave_pf = slaveNode->Read(this->key_pf);
-    //if (master_pc > slave_pe + numEpsilon) {
-    if (master_pf - slave_pf > slave_pe + numEpsilon) {
+    //double master_pf = masterNode->Read(this->key_pf);
+    //double slave_pf = slaveNode->Read(this->key_pf);
+    if (master_pc > slave_pe + numEpsilon) {
+    //if (master_pf - slave_pf > slave_pe + numEpsilon) {
         slaveNode->Store( this->key_breakthrough, makeScalar( slaveNode->Status( this->key_breakthrough), 1 ) );
         VARIABLE_FLAG old_p_statues = slaveNode->Status(this->key_pf);
         if(slaveNode->Status(this->key_pf) != DIRICH) slaveNode->Status(this->key_pf, ROBIN);

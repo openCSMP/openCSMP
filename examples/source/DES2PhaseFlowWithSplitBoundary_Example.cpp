@@ -316,9 +316,12 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
 
     // setting up time parameters (HARDWIRED PRESSURE STEPS!)
     const double day{86400.}, year{ 86400. * 365. };
-    double max_time (5. * year);      // run for # years
-    double time_increment(3600.); // timestep 
-    double save_interval = 5. * day;  // save every # days
+    //double max_time (5. * year);      // run for # years
+    double max_time (60. * day);      // run for 60 days
+    //double time_increment(3600.); // timestep
+    double time_increment(0.5 * day); // timestep
+    //double save_interval = 5. * day;  // save every # days
+     double save_interval = 3. * day;  // save every # days
 
     size_t time;
     double end_time = model_time + max_time;

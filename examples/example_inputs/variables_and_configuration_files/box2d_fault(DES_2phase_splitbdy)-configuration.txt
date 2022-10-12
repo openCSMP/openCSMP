@@ -23,8 +23,8 @@ rocktype							0
 
 # (2) local material properties 
 FAULT	complete	rocktype				1
-FAULT	complete	permeability				1.0e-17
-FAULT	complete	vertical permeability			1.0e-17
+FAULT	complete	permeability				1.0e-15
+FAULT	complete	vertical permeability			1.0e-15
 FAULT	complete	porosity				0.02
 FAULT	complete	entry pressure				500.
 
