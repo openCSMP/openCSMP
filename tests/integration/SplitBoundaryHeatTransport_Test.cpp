@@ -43,7 +43,6 @@ SplitBoundaryHeatTransport_Test::~SplitBoundaryHeatTransport_Test()
    delete model_ptr_;
 }
 
-
 /*
 
 Model<3U>*  SplitBoundaryHeatTransport_Test::CreateModel( const char* ansys_input_data )

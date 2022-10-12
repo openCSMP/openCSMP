@@ -1123,7 +1123,7 @@ void SimulatorSetup<dim>::AddLegacy_FE_Integrator(std::string name)
         SAMG_Solver* sol = new SAMG_Solver();
         name_samgsolver_[name]=sol;
         solver_settings_[name]=dynamic_cast<SAMG_Settings*>(sol->GetSolverSettings());
-        PDE_Integrator<dim,Region>* pint=new PDE_Integrator<dim,Region>(*sol);
+        PDE_Integrator<dim,Element>* pint=new PDE_Integrator<dim,Element>(*sol);
         legacy_FE_integrators_[sol]=pint;
     }
 }
@@ -1134,7 +1134,7 @@ void SimulatorSetup<dim>::DeleteLegacy_FE_Integrator(std::string name)
     if (solver_settings_.find(name)!=solver_settings_.end())
     {
         SAMG_Solver* sol = name_samgsolver_[name];
-        PDE_Integrator<dim,Region>* pint=GetLegacy_FE_Integrator(name);
+        PDE_Integrator<dim,Element>* pint=GetLegacy_FE_Integrator(name);
         //auto isol=name_samgsolver_.find(name);
         auto iset=solver_settings_.find(name);
         //auto iint=legacy_FE_integrators_.find(name_samgsolver_[name]);
@@ -1256,7 +1256,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(SAMG_Solver
 */
 
 template<uint32_t dim>
-PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_Solver* samg)
+PDE_Integrator<dim,Element>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(SAMG_Solver* samg)
 {
     if (legacy_FE_integrators_.find(samg)==legacy_FE_integrators_.end()){
         cout<<"SimulatorSetup<dim>::GetLegacy_FE_Integrator. Did not find a solver integrator for this SAMG Solver entry."<<endl;
@@ -1300,7 +1300,7 @@ FEFV_Algorithm<dim>* SimulatorSetup<dim>::GetDESCompatibleIntegrator(string name
 */
 
 template<uint32_t dim>
-PDE_Integrator<dim,Region>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string name)
+PDE_Integrator<dim,Element>* SimulatorSetup<dim>::GetLegacy_FE_Integrator(string name)
 {
     if (name_samgsolver_.find(name)==name_samgsolver_.end())
     {
