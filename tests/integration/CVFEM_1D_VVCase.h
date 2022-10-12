@@ -81,10 +81,10 @@ class CVFEM_1D_VVCase : public Test
           CVFEM_PHX_Scheme<1U> *CVFEM_PHX;
 
           //! Chemical diffusion operators and variables
-          std::vector<PDE_Integrator<1U, Region>*>                  diffusion;
-          std::vector<NumIntegral_NT_lhsop_N_dV<1U,Element<1U>>*>  diff_cap_lhs;
-          std::vector<NumIntegral_NT_op_N_dV<1U,Element<1U>>*>     diff_cap_rhs;
-          std::vector<NumIntegral_dNT_op_dN_dV<1U, Element<1U>>*>  diffusivity;
+          std::vector<PDE_Integrator<1U, Element>*>                diffusion;
+          std::vector<NumIntegral_NT_lhsop_N_dV<1U>*>  diff_cap_lhs;
+          std::vector<NumIntegral_NT_op_N_dV<1U>*>     diff_cap_rhs;
+          std::vector<NumIntegral_dNT_op_dN_dV<1U>*>  diffusivity;
           Index pore_diff_key, eff_diff_key, porosity_key;
           ScalarVariable diff_coeff, porosity;
 

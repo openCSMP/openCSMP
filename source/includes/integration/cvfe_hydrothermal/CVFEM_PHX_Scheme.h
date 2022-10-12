@@ -28,12 +28,14 @@
 
 #include "ExplicitFiniteVolumeTransportPHX.h"
 #include "Limiter.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
 template<uint32_t> class Model;
 template<uint32_t> class Element;
 template<uint32_t> class PropertyDatabase;
+//template<uint32_t, template> class PDE_Integrator;
 
   /**
      @class CVFEM_PHX_Scheme CVFEM_PHX_Scheme.h
@@ -136,7 +138,9 @@ private:
     /// add extra functionality for alternative solver if needed
     CSMP_DEFAULT_LINEAR_SOLVER p_LINEAR_solver, T_LINEAR_solver;
 #endif
-    PDE_Integrator<dim,Element> p_FE_SAMG, T_FE_SAMG, p_FE_Gauss;
+    PDE_Integrator<dim,Element> p_FE_SAMG;
+    PDE_Integrator<dim,Element> T_FE_SAMG;
+    PDE_Integrator<dim,Element> p_FE_Gauss;
 
     NumIntegral_NT_lhs_nodal_op_N_dV<dim> capacitance_lhs;
     CVFEM_NumIntegral_dNT_op_dN_dV<dim>   conductance;

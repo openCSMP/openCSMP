@@ -156,12 +156,12 @@ int CVFEM_1D_VVCase::CalculateSteadyStatePressure ()
   //p_solver = new SAMG_Solver();
   LUdcmp_Solver p_solver;
 
-  PDE_Integrator<dim, Region>  steady_state_pressure( p_solver );
+  PDE_Integrator<dim, Element>  steady_state_pressure( p_solver );
 
-  NumIntegral_dNT_op_dN_dV <dim, Element<dim>>  p_conductance( *pd_ref, "mass conductivity",
+  NumIntegral_dNT_op_dN_dV <dim>  p_conductance( *pd_ref, "mass conductivity",
                                                                         "fluid pressure", "fluid pressure" );
-  NumIntegral_dNT_op_dV <dim, Element<dim>> p_gravity( *pd_ref, "mass gravity term", "fluid pressure" );
-  VelocityAndVolumeFlux<dim, Element<dim>>  velocity( *model, "conductivity", "nodal porosity",
+  NumIntegral_dNT_op_dV <dim> p_gravity( *pd_ref, "mass gravity term", "fluid pressure" );
+  VelocityAndVolumeFlux<dim>  velocity( *model, "conductivity", "nodal porosity",
                                                               "fluid pressure", "fluid density", false );
 
   steady_state_pressure.Add( &p_conductance );
@@ -178,8 +178,8 @@ int CVFEM_1D_VVCase::CalculateSteadyStateTemperature()
 
   LUdcmp_Solver t_solver;
 
-  PDE_Integrator<dim, Region>  steady_state_temperature( t_solver );
-  NumIntegral_dNT_op_dN_dV<dim, Element<dim> >   t_conductance( *pd_ref,
+  PDE_Integrator<dim, Element>  steady_state_temperature( t_solver );
+  NumIntegral_dNT_op_dN_dV<dim>   t_conductance( *pd_ref,
                   "thermal conductivity",
                   "temperature",
                   "temperature" );

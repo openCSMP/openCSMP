@@ -18,7 +18,7 @@
 #endif
 
 #include <tuple>
-#include "BoundaryInterface_Test.h"
+//#include "BoundaryInterface_Test.h"
 #include "Boundary.h"
 #include "Region.h"
 #include "ErrorHandler.h"
@@ -229,9 +229,10 @@ void Experimental_Example::Run()
 
       // testing whether boundary segments can be found by combined search criteria
       const set<string> intersected_regions{ "BOUNDARY", "LAYER_BOTTOM", "LAYER_TOP" };
-      string patch_name = findBoundary( model, intersected_regions );
+  /*    string patch_name = findBoundary( model, intersected_regions );
       const set<string> search_strings{ "BOUNDARY", "NORMAL", "FAULT" };
       set<string> region_patches_found;
+    */
 
 } // end
 
