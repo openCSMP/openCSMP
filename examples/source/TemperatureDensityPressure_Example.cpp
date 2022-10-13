@@ -215,7 +215,24 @@ void TemperatureDensityPressure_Example::Run()
       }
 
 
-    // 9. Output of variables to screen and files
+    // 9. top down integration over density
+    // -------------------------------------------
+    Region<1U>& model_domain = model.Region("ROCK");
+    Element<1U>* eptr = (*model_domain.CellVector().rbegin()); // top-most element
+    const csmp::Index rhon_key  = model.Database().StorageKey("fluid density");
+    ScalarVariable pf_analytic = pf_top;
+    while(eptr->Neighbor(1))
+      {
+          pf_analytic += eptr->Volume()*eptr->Read(rhon_key) * 9.8;
+          eptr->N(0)->Store(pfa_key, pf_analytic);
+          eptr=eptr->Neighbor(1);
+      }
+    // first node of first element
+    pf_analytic += eptr->Volume()*eptr->Read(rhon_key)*9.8;
+    eptr->N(0)->Store(pfa_key, pf_analytic);
+
+
+    // 10. Output of variables to screen and files
     // -------------------------------------------
     TextInterface  text_output;
 

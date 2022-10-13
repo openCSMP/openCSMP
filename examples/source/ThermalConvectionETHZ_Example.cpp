@@ -370,7 +370,7 @@ namespace csmp {
     //return 0;
   
     //=================================================================================================
-  } // end main
+  } // end example
   //=================================================================================================
 
 
@@ -450,7 +450,7 @@ namespace csmp {
       {
         const double phi = (*it)->Read( phi_key );
         
-        for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+        for ( uint32_t i=0U; i<(*it)->Sectors(); ++i ) {
           // sector volume
           const double sec_vol = (*it)->SectorVolume(i);
           (*it)->Store( i, 0U, sv_key, makeScalar(PLAIN,sec_vol) );
@@ -469,9 +469,9 @@ namespace csmp {
     for ( auto nit=ref.NodesBegin(); nit!=ref.NodesEnd(); ++nit )
       {
         const double pore_volume( (*nit)->Read( fvphi_key ) );
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
           Element<3U>* const eptr((*nit)->Parent(i));
-          const size_t sector = (*nit)->ParentNodeNumber(i);
+          const uint32_t sector = (*nit)->ParentNodeNumber(i);
           const double weight = (eptr->Read( sector, 0U, sv_key ) * eptr->Read( phi_key )) / pore_volume;
           //              const double weight = (eptr->SectorVolume(sector) * eptr->Read( phi_key )) / pore_volume;
           eptr->Store( sector, 0U, swt_key, makeScalar(PLAIN,weight) );
@@ -484,7 +484,7 @@ namespace csmp {
       {
         const double phi = (*it)->Read( phi_key );
         double evolume(0.);
-        for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+        for ( uint32_t i=0U; i<(*it)->Sectors(); ++i ) {
           evolume           += (*it)->Read( i, 0U, sv_key ); // (*it)->SectorVolume(i);
           total_volume      += (*it)->Read( i, 0U, sv_key );
           total_pore_volume += phi * (*it)->Read( i, 0U, sv_key );
@@ -501,9 +501,9 @@ namespace csmp {
     for ( auto nit=ref.NodesBegin(); nit!=ref.NodesEnd(); ++nit )
       {
         double total_weight(0.);
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
           const Element<3U>* eptr((*nit)->Parent(i));
-          const size_t sector = (*nit)->ParentNodeNumber(i);
+          const uint32_t sector = (*nit)->ParentNodeNumber(i);
           const double weight = eptr->Read( sector, 0U, swt_key );
           total_weight += weight;
         }
@@ -516,7 +516,7 @@ namespace csmp {
     const csmp::Index tv_key   = model.Database().StorageKey("test variable");
     ref.InputPropertyValue( "test variable", makeScalar( ANY, 0. ) );
     for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); ++it )
-      for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+      for ( uint32_t i=0U; i<(*it)->Sectors(); ++i ) {
         double test = (*it)->N(i)->Read( tv_key );
         test += (*it)->Read( i, 0U, swt_key );
         (*it)->N(i)->Store( tv_key, makeScalar(PLAIN,test) );
@@ -608,7 +608,7 @@ namespace csmp {
 
     // FV sector (specific=not integrated) enthalpy content computed at the sector integration points
     for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); ++it )
-      for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+      for ( uint32_t i=0U; i<(*it)->Sectors(); ++i ) {
         const double p  = (*it)->PropertyValueAtSectorIntegrationPoint( i, 0U, p_key );
         const double T  = (*it)->PropertyValueAtSectorIntegrationPoint( i, 0U, T_key );
         const double h_content = water.Density( T, p ) * water.Enthalpy( T, p );
@@ -682,7 +682,7 @@ namespace csmp {
       {
         const double k = (*it)->Read( k_key );
                 
-        for ( size_t i=0; i<(*it)->IntegrationPoints(); ++i ) {
+        for ( uint32_t i=0U; i<(*it)->IntegrationPoints(); ++i ) {
           (*it)->Read( gv_key, gv ); // read here to get original value, not overwritten one          
           // compute fluid properties at integration point from interpolated T and p
           const double T = (*it)->PropertyValueAtIntegrationPoint( T_key, i );
@@ -744,7 +744,7 @@ namespace csmp {
         const double rhr   = (*it)->Read( rhr_key ); // rock density
         const double cpr   = (*it)->Read( cpr_key ); // rock heat capacity
         
-        for ( size_t i=0; i<(*it)->IntegrationPoints(); ++i ) {
+        for ( uint32_t i=0U; i<(*it)->IntegrationPoints(); ++i ) {
           (*it)->Read( gv_key, gv );
                     
           // Compute fluid properties from T and p at integration point
@@ -841,7 +841,7 @@ namespace csmp {
         const double rhr = (*it)->Read( rho_rock_key );
         
         // sector by sector calculations
-        for ( size_t i=0U; i<(*it)->Sectors(); ++i )
+        for ( uint32_t i=0U; i<(*it)->Sectors(); ++i )
           {
             // 1. interpolating old variable values p, T to sector integration points
             // ----------------------------------------------------------------------
@@ -892,14 +892,14 @@ namespace csmp {
       {
         double  FV_mass(0.);
           // determing FV mass
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
-            const size_t sector = (*nit)->ParentNodeNumber( i );
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
+            const uint32_t sector = (*nit)->ParentNodeNumber( i );
             const Element<3U>* const eptr((*nit)->Parent(i));
             const double sector_mass = eptr->Read( sector, 0U, sm_key )*eptr->Read( sector, 0U, sv_key );
             FV_mass += sector_mass;
           }
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
-            const size_t sector = (*nit)->ParentNodeNumber( i );
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
+            const uint32_t sector = (*nit)->ParentNodeNumber( i );
             Element<3U>* const eptr((*nit)->Parent(i));
             const double sector_mass = eptr->Read( sector, 0U, sm_key )*eptr->Read( sector, 0U, sv_key );
             eptr->Store( sector, 0U, smW_key, makeScalar( PLAIN, sector_mass/FV_mass ) );
@@ -932,8 +932,8 @@ namespace csmp {
           
           // drawing together the contributions of the sectors that make up the finite volume
           // the sector weight is sector pore volume divided by finite volume pore volume
-          for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
-            const size_t sector = (*nit)->ParentNodeNumber( i );
+          for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
+            const uint32_t sector = (*nit)->ParentNodeNumber( i );
             const Element<3U>* const eptr((*nit)->Parent(i));
             const double weight = eptr->Read( sector, 0U, sW_key );
             hCl += weight * eptr->Read( sector, 0U, hCSlp_key );
@@ -953,8 +953,8 @@ namespace csmp {
         (*nit)->Store( rln_key, makeScalar(PLAIN,0.) );
         double  rhol_node(0.);
         // looping over the sectors of the current FV
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
-          const size_t sector = (*nit)->ParentNodeNumber(i);
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
+          const uint32_t sector = (*nit)->ParentNodeNumber(i);
           const Element<3U>* const eptr((*nit)->Parent(i));
           // weighting the sector contributions taking their porosity into account
           const double weight = eptr->Read( sector, 0U, sW_key );
@@ -973,10 +973,9 @@ namespace csmp {
         
         double  FV_CPT(0.);
         double  FV_dH(0.);
-        double  dFVT(0.);
         // looping over the sectors of the current FV
-        for ( size_t i=0U; i<(*nit)->Parents(); ++i ) {
-          const size_t sector = (*nit)->ParentNodeNumber(i);
+        for ( uint32_t i=0U; i<(*nit)->Parents(); ++i ) {
+          const uint32_t sector = (*nit)->ParentNodeNumber(i);
           const Element<3U>* const eptr((*nit)->Parent(i));
           // weighting the sector contributions taking their porosity into account
           const double mweight = eptr->Read( sector, 0U, smW_key );
@@ -1041,7 +1040,7 @@ namespace csmp {
     for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); ++it )
       // 'nodal heat source' term for temperature equation
       // -------------------------------------------------
-      for ( size_t i=0U; i<(*it)->Sectors(); ++i ) {
+      for ( uint32_t i=0U; i<(*it)->Sectors(); ++i ) {
         // integration of specific term by multiplication with sector weight
         const double sQHn = (*it)->Read( i, 0U, dH_key ) * (*it)->Read( i, 0U, sW_key );//(*it)->Read( i, 0U, sV_key );
         double hcontribution = (*it)->N(i)->Read( QHn_key );
@@ -1076,7 +1075,7 @@ namespace csmp {
     for ( auto it=ref.CellsBegin(); it!=ref.CellsEnd(); ++it )
       {
         avg_flux = 0.;
-        for ( size_t i=0; i<(*it)->IntegrationPoints(); ++i )
+        for ( uint32_t i=0U; i<(*it)->IntegrationPoints(); ++i )
           {
             // computing pressure gradient term
             // --------------------------------
@@ -1085,8 +1084,8 @@ namespace csmp {
            
             vflux = 0.;
             (*it)->dN_AtIntegrationPoint( DN, i );
-            for ( size_t j=0U; j<(*it)->Nodes(); ++j )
-              for ( size_t k=0U; k<3U; ++k )
+            for ( uint32_t j=0U; j<(*it)->Nodes(); ++j )
+              for ( uint32_t k=0U; k<3U; ++k )
                 vflux(k) += K * -DN(k,j) * (*it)->N(j)->Read( p_key );
          
             // gravity-related component of the flux

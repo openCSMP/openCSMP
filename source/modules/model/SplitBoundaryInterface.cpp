@@ -526,12 +526,12 @@ bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::AddSplitBoundary( const 
                                                                                                   splitBoundaryComplex->Database() ) ) );
     if ( it.second ) {
          (*it.first).second.CreateFrom( ifacesBegin, ifacesEnd );
-         cout << "\nBoundaryInterface<"<< dim <<">::AddBoundary: successfully created boundary '";
+         cout << "\nSplitBoundaryInterface<"<< dim <<">::AddSplitBoundary: successfully created boundary '";
          cout << split_boundary_name <<"' from input faces.";
       }
     else {
          ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-         csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddBoundary:",
+         csmp_error.Note( ERROR, "SplitBoundaryInterface<dim,BOUNDARY_COMPLEX>::AddSplitBoundary:",
                             split_boundary_name, "SplitBoundary already exists or other problem arose. Nothing was done.");
          return false;
       }

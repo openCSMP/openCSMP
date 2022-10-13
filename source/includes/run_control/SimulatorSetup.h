@@ -139,16 +139,16 @@ public:
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     //FEFV_Algorithm<dim>* GetDESCompatibleIntegrator(SAMG_Solver* samg) ;
-    PDE_Integrator<dim,Region>* GetLegacy_FE_Integrator(SAMG_Solver* samg);
+    PDE_Integrator<dim,Element>* GetLegacy_FE_Integrator(SAMG_Solver* samg);
     NodeCenteredFiniteVolumeTransport<dim>* GetLegacy_FEFV_Integrator(SAMG_Solver* samg);
 
     //FEFV_Algorithm<dim>* GetDESCompatibleIntegrator(std::string name);
-    PDE_Integrator<dim,Region>* GetLegacy_FE_Integrator(std::string name);
+    PDE_Integrator<dim,Element>* GetLegacy_FE_Integrator(std::string name);
     NodeCenteredFiniteVolumeTransport<dim>* GetLegacy_FEFV_Integrator(std::string name);
     void QuietIntegrators();
 
     //std::map< SAMG_Solver*,FEFV_Algorithm<dim>*  >&  GetDESCompatibleIntegrators(){return  des_compatible_integrators_;}
-    std::map< SAMG_Solver*,PDE_Integrator<dim,Region>* >&  GetLegacy_FE_Integrators(){return legacy_FE_integrators_;}
+    std::map< SAMG_Solver*,PDE_Integrator<dim,Element>* >&  GetLegacy_FE_Integrators(){return legacy_FE_integrators_;}
     std::map< SAMG_Solver*,NodeCenteredFiniteVolumeTransport<dim>* >& GetLegacy_FEFV_Integrators() {return legacy_FEFV_integrators_;}
 
     SAMG_Settings* GetIntegratorSolverSettings(std::string name);
@@ -181,7 +181,7 @@ private:
     // -------------------------------------
     // integrators and associated solvers.
     //std::map< SAMG_Solver*,FEFV_Algorithm<dim>* >                    des_compatible_integrators_;
-    std::map< SAMG_Solver*,PDE_Integrator<dim,Region>* >             legacy_FE_integrators_;
+    std::map< SAMG_Solver*,PDE_Integrator<dim,Element>* >             legacy_FE_integrators_;
     std::map< SAMG_Solver*,NodeCenteredFiniteVolumeTransport<dim>* > legacy_FEFV_integrators_;
 
     std::map<std::string,SAMG_Solver*> name_samgsolver_;

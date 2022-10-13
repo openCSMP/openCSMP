@@ -154,7 +154,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
                                               csmp::Index rhs_key )
   {
 
-  const double zero(0.);
+  const double zero{0.};
   ScalarVariable rhs_property;
   eidx_ = e.Idx();
   
@@ -165,9 +165,9 @@ void StencilProcessorPHX<dim>::DetermineFluxOut(const FV_Parameter& param,
 
           if ( param.FacetNormalVelocity(i) != zero ) {
 
-               const double n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
+             const double n_x_A(param.FacetNormalVelocity(i) * param.FacetArea(i));
  	           // identifying the upstream node and initialize variables for it
-               const size_t  nidx( (param.FacetNormalVelocity(i) < zero) ? outside_node_ : inside_node_ );
+             const uint32_t  nidx( (param.FacetNormalVelocity(i) < zero) ? outside_node_ : inside_node_ );
 
              if (rhs_key.place == NODE) e.N(nidx)->Read( rhs_key, rhs_property );
              else if (rhs_key.place == ELEMENT) e.Read( rhs_key, rhs_property );

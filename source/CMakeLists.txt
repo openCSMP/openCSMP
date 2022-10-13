@@ -150,6 +150,7 @@ TARGET_INCLUDE_DIRECTORIES(csmpcore PRIVATE
     ${INCLUDES_DIR}/run_control
     ${INCLUDES_DIR}/thmc
     ${INCLUDES_DIR}/utilities
+    ${INCLUDES_DIR}/integration/cvfe_hydrothermal
     ${MODULES_DIR}/analysis
     ${MODULES_DIR}/eos/h2o
     ${MODULES_DIR}/eos/h2o_nacl
