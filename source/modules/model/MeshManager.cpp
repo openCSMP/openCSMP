@@ -3663,7 +3663,6 @@ void MeshManager<dim>::ConnectNodesToParentsAndNeighbors( typename vector<Elemen
     while ( first != last ) {
         if ( (*first) == nullptr ) continue;
         assert( (*first)->FE() );
-        assert( (*first)->FV() );
         const auto nodes_end{ (*first)->NodesEnd() };
         for ( auto nit = (*first)->NodesBegin(); nit != nodes_end; ++nit ) {
              nodes_to_update.insert( (*nit) );
