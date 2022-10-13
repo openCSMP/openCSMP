@@ -31,7 +31,14 @@ DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* ta
     cout<<"PEP multiplier = "<<PEP_multiplier_<<endl;
     cout<<"tensor permeability = "<<tensor_k<<" (0=false, 1=true)\n"<<endl;
 }
-  
+
+
+  template<uint32_t dim>
+  DESAdvectionDiffusion<dim>::~DESAdvectionDiffusion()
+  {
+    //clean up HeapNodeFullList
+    for (auto heap_node : HeapNodeFullList) delete heap_node;
+  }
 
 
 template<uint32_t dim>
@@ -269,20 +276,22 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
     //create events for all nodes and add them to event lists
     size_t index = 0;
     size_t dirich_count = 0;
-    const typename vector<Node<dim>*>::const_iterator  nodes_end(gref_.NodesEnd());
-    for ( typename vector<Node<dim>*>::const_iterator nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
+    const auto  nodes_end(gref_.NodesEnd());
+    for ( auto nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
     { 
         if((*nit)->Status(  key_C0 ) != DIRICH) {
             (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
-            Event<dim>* event = new Event<dim>(*nit);
-            PEPList.push_back(event);
+            //Event<dim>* event = new Event<dim>(*nit);
+            FullList.push_back( move( Event<dim>(*nit) ) );
+            //PEPList.push_back(&(FullList.back()));
+            auto event = &(FullList.back());
             event->inPEPStack(true);
             ComputeFluxBalanceAndCFL(event);
             Schedule(event, 0.);
             event->valid(false);
-            Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
-            HeapNodeFullList.push_back(heap_node);
-            FullList.push_back(event);
+            //Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
+            HeapNodeFullList.emplace_back( new Heap_Node(event->t_schedule(),index));
+            //FullList.push_back(event);
             event->inQueue(false);
                 
             index++;
@@ -291,6 +300,14 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
             dirich_count++;
         }
     }
+
+    for(auto& event : FullList) PEPList.push_back(&event);
+    //testing:
+    assert(FullList.size() == index);
+    assert(PEPList.size() == index);
+    assert(FullList.front().getNode());
+    assert(PEPList.front()->getNode());
+
     cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
 }  
 
@@ -302,10 +319,10 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
+  assert( nd  != nullptr );
   assert( nd->Status( key_C0 ) != DIRICH);
 
-  if(nd  != NULL && nd->Status( key_C0 ) != DIRICH) {
+  if(nd  != nullptr && nd->Status( key_C0 ) != DIRICH) {
     double flux_balance(0.), outflow(0.);
     
     VectorVariable<dim> vD, facetNrml;
@@ -314,7 +331,7 @@ void DESAdvectionDiffusion<dim>::ComputeFluxBalanceAndCFL( Event<dim>* event )
     for ( auto t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
-        assert( eptr != NULL );
+        assert( eptr != nullptr );
         const auto pnid(nd->ParentNodeNumber(t));
         eptr->Read( key_V, vD);
 
@@ -358,10 +375,10 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
+  assert( nd  != nullptr );
   assert( nd->Status(  key_C0 ) != DIRICH);
     
-  if(nd  != NULL && nd->Status(  key_C0 ) != DIRICH) {
+  if(nd  != nullptr && nd->Status(  key_C0 ) != DIRICH) {
     rate_count_++;//recording
     nd->Store( key_rate, makeScalar( nd->Status(key_rate), nd->Read(key_rate) + 1 ) );
 
@@ -372,7 +389,7 @@ void DESAdvectionDiffusion<dim>::ComputeRateofChange( Event<dim>* event )
     for ( auto t=0U; t<node_parent_elements; t++ )
     {
         Element<dim>* const eptr(nd->Parent(t));
-        assert( eptr != NULL );
+        assert( eptr != nullptr );
         const auto pnid(nd->ParentNodeNumber(t));
         eptr->Read( key_V, vD);
 
@@ -409,10 +426,10 @@ template<uint32_t dim>
 bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double t_end)
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
+  assert( nd  != nullptr );
   assert( nd->Status( key_C0 ) != DIRICH);
     
-  if(nd  != NULL && nd->Status( key_C0 ) != DIRICH) {    
+  if(nd  != nullptr && nd->Status( key_C0 ) != DIRICH) {
     ArrayVariable array;
     nd->Read(key_time, array);
 
@@ -458,10 +475,10 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Update_DES(Event<dim>* event, double t_clock)
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );
+  assert( nd  != nullptr );
   assert( nd->Status( key_C0 ) != DIRICH);
     
-  if(nd  != NULL && nd->Status( key_C0 ) != DIRICH) {  
+  if(nd  != nullptr && nd->Status( key_C0 ) != DIRICH) {
     update_count_++;//recording  
     const VARIABLE_FLAG status(nd->Status( key_C0 ));
     ArrayVariable array;
@@ -507,10 +524,10 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Update_TDS(Event<dim>* event, double delta_t)
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL );    
+  assert( nd  != nullptr );
   assert( nd->Status( key_C0 ) != DIRICH);
     
-  if(nd  != NULL && nd->Status( key_C0 ) != DIRICH) {  
+  if(nd  != nullptr && nd->Status( key_C0 ) != DIRICH) {
     update_count_++;//recording     
     const VARIABLE_FLAG status(nd->Status( key_C0 ));
     
@@ -545,9 +562,9 @@ template<uint32_t dim>
 void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, double& t_remove )
 {
   Node<dim>* nd = event->getNode();
-  assert( nd  != NULL ); 
+  assert( nd  != nullptr );
   assert( nd->Status( key_C0 ) != DIRICH);
-  if(nd  != NULL && nd->Status( key_C0 ) != DIRICH){     
+  if(nd  != nullptr && nd->Status( key_C0 ) != DIRICH){
     nd->Store( key_synchronize, makeScalar( nd->Status(key_synchronize), nd->Read(key_synchronize) + 1 ) );
     event->valid(false);
     ArrayVariable array;
@@ -556,12 +573,15 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
     nd->Store(key_time, array);
     for ( auto n=0U; n<nd->Neighbors(); ++n ) {
         Node<dim>* neighbor_node = nd->Neighbor(n);
-        if( neighbor_node != NULL && neighbor_node->Status( key_C0 ) != DIRICH){
+        assert( neighbor_node  != nullptr );
+        if( neighbor_node != nullptr && neighbor_node->Status( key_C0 ) != DIRICH){
             auto index = neighbor_node->Read(key_EventIndex);
+            assert(index >= 0);
+            assert(index < FullList.size());
             if(index >= 0 && index < FullList.size()){
-                Event<dim>* neighbor_event = FullList[index];  // TODO: deal with implicit type conversion
-                assert( neighbor_event  != NULL ); 
-                if (neighbor_event != NULL && neighbor_event->inPEPStack() == false) {
+                Event<dim>* neighbor_event = &FullList[index];  // TODO: deal with implicit type conversion
+                assert( neighbor_event  != nullptr );
+                if (neighbor_event != nullptr && neighbor_event->inPEPStack() == false) {
                     PEPList.push_back(neighbor_event);
                     neighbor_event->inPEPStack(true);
                     Update_DES(neighbor_event,t_clock);
@@ -576,8 +596,8 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
                         clock_t t_begin = clock();
                         #endif
                         if (neighbor_event->inQueue()){
-                            Heap_Node* neighbor_heap_node = HeapNodeFullList[index]; // TODO: deal with implicit type conversion
-                            EventHeap.remove(neighbor_heap_node);
+                            EventHeap.remove(HeapNodeFullList[index]);
+                            //delete HeapNodeFullList[index];
                             neighbor_event->inQueue(false);
                         }
                         #if defined(_OPENMP)
@@ -606,8 +626,8 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
     double time_increment(time_interval); 
     
     clock_t T_begin= clock();
-    const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
-    for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )   
+    const auto stack_end(PEPList.end());
+    for ( auto it=PEPList.begin(); it!=stack_end; ++it )
     {     
         ComputeRateofChange((*it));  
         ArrayVariable array;
@@ -630,7 +650,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
         cout <<"\n\tadvection (sub)step: "<< substep <<" of total steps "<<max(floor(time_interval/time_increment),one)<< endl;
         T_begin= clock();
         if ( (time_interval - time) < time_increment ) time_increment = time_interval - time;
-        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
+        for ( auto it=PEPList.begin(); it!=stack_end; ++it )
         { 
             Update_TDS((*it),time_increment);
         };
@@ -638,7 +658,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
         
         T_begin= clock();
         double new_time_increment(time_interval); 
-        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )
+        for ( auto it=PEPList.begin(); it!=stack_end; ++it )
         { 
             ComputeRateofChange((*it));
             ArrayVariable array2;
@@ -790,8 +810,8 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
     while (!Finished)
     { 
         clock_t T_begin;
-        const typename vector<Event<dim>*>::iterator stack_end(PEPList.end());
-        for ( typename vector<Event<dim>*>::iterator it=PEPList.begin(); it!=stack_end; ++it )          
+        const auto stack_end(PEPList.end());
+        for ( auto it=PEPList.begin(); it!=stack_end; ++it )
         {   
             Event<dim>* event = *it;
             T_begin= clock();
@@ -805,9 +825,8 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
                     T_begin= clock();
                     double scheduled_time = event->t_schedule();
                     size_t index = event->getNode()->Read(key_EventIndex); // TODO: deal with implicit type conversion
-                    Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
-                    EventHeap.insert(heap_node);
-                    HeapNodeFullList[index] = heap_node;
+                    HeapNodeFullList[index] = new Heap_Node(scheduled_time,index);
+                    EventHeap.insert(HeapNodeFullList[index]);
                     event->inQueue(true);
                     T_InsertToHeap_ += clock() - T_begin; 
                 }
@@ -823,8 +842,8 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
         if (time == model_time) {
             Finished = true;
             
-            const typename vector<Event<dim>*>::iterator End(PEPList.end());
-            for ( typename vector<Event<dim>*>::iterator e=PEPList.begin(); e!=End; ++e )
+            const auto End(PEPList.end());
+            for ( auto e=PEPList.begin(); e!=End; ++e )
                 (*e)->valid(false);        
             break;
         };
@@ -837,7 +856,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
         {
             Heap_Node* root_node = EventHeap.minimum();
             size_t top_index = root_node->getV();
-            Event<dim>* top_event = FullList[top_index];
+            Event<dim>* top_event = &FullList[top_index];
             
             if(top_event->valid() == false) {
                 T_begin= clock();

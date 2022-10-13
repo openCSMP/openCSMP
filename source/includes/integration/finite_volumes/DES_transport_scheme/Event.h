@@ -13,6 +13,7 @@ class Event {
   public:
     //constructor
     explicit Event(Node<dim>* nd);
+    Event(Event&&);
     Event() = delete;
     //getting node
     csmp::Node<dim>* getNode() const {return node_;}
@@ -29,10 +30,10 @@ class Event {
 
   private:
     csmp::Node<dim>*	node_;
+    double t_schedule_; //scheduled time stamp used for sorting event queue
     bool valid_; //validity
     bool inPEPStack_; //whether in PEPStack  
-    bool  inQueue_; //whether in event queue      
-    double t_schedule_; //scheduled time stamp used for sorting event queue
+    bool  inQueue_; //whether in event queue
 };
 
 } // csmp

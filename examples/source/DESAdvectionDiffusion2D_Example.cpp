@@ -220,12 +220,12 @@ void DESAdvectionDiffusion2D_Example::Run()
     // ----------------------------------------
     cerr <<"\n\nmain: Starting DES simulation: "<<endl;
     clock_t T_begin= clock();    
-    DESAdvectionDiffusion<2U>* DES_transport = new DESAdvectionDiffusion<2U>(model, "Model", cfl_multiplier, PEP_factor, false);   
+    DESAdvectionDiffusion<2U> DES_transport(model, "Model", cfl_multiplier, PEP_factor, false);
    
     while ( model_time < max_time )
     {
          // compute advection of solute with DES
-         DES_transport->AdvectVariable_DES( model_time+time_increment, n_threads);   
+         DES_transport.AdvectVariable_DES( model_time+time_increment, n_threads);
          //DES_transport->AdvectVariable_TDS( time_increment, model_time+time_increment, cfl_multiplier, PEP_factor);
                  
          // increment time
@@ -258,12 +258,12 @@ void DESAdvectionDiffusion2D_Example::Run()
     // ----------------------------------------
     cerr <<"\n\nmain: Starting TDS simulation: "<<endl;
     clock_t	T_begin= clock();   
-    DESAdvectionDiffusion<2U>* TDS_transport = new DESAdvectionDiffusion<2U>(model, "Model", cfl_multiplier, PEP_factor, false);     
+    DESAdvectionDiffusion<2U> TDS_transport(model, "Model", cfl_multiplier, PEP_factor, false);
     
     while ( model_time < max_time )
     {
          // compute advection of solute with DES
-         TDS_transport->AdvectVariable_TDS( time_increment, n_threads);
+         TDS_transport.AdvectVariable_TDS( time_increment, n_threads);
                  
          // increment time
          model_time += time_increment;

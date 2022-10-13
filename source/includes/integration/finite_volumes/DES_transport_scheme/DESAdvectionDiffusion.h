@@ -27,7 +27,7 @@ class DESAdvectionDiffusion {
     void AdvectVariable_TDS_serial( double time_interval );
     void AdvectVariable_TDS_parallel ( double time_interval, size_t num_threads );     
     
-    virtual ~DESAdvectionDiffusion() {}
+    ~DESAdvectionDiffusion();
     
     typedef ajb::detail::FibonacciHeap_Node<double,size_t> Heap_Node;
 
@@ -48,7 +48,8 @@ class DESAdvectionDiffusion {
     double upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
     double CFL_multiplier_, PEP_multiplier_;
     bool tensor_k_= false;
-    std::vector<Event<dim>*> PEPList, FullList;
+    std::vector<Event<dim>> FullList;
+    std::vector<Event<dim>*> PEPList;
     std::vector<Heap_Node*> HeapNodeFullList; 
     ajb::FibonacciHeap<double,size_t> EventHeap;
     size_t	rate_count_;

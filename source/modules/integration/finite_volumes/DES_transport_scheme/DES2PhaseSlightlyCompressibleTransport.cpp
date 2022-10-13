@@ -91,7 +91,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeVaria
     if(!this->db_.IsDefined("fluid pressure status")) this->sg_.CreateProperty( "fluid pressure status", "pfs", "none", SCALAR, NODE, 1, 0 ,8);
     if(!this->db_.IsDefined("local pressure solving count")) this->sg_.CreateProperty( "local pressure solving count", "lpfsc", "uint", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
     this->sg_.Region("Model").InputPropertyValue( "local pressure solving count", makeScalar(PLAIN,0), COMPLETE);
-    if(!this->db_.IsDefined("mass center")) this->sg_.CreateProperty( "mass center", "", "none", VECTOR, NODE, 3, -1.00E+10 ,1.00E+10);
+    if(!this->db_.IsDefined("mass center")) this->sg_.CreateProperty( "mass center", "msc", "none", VECTOR, NODE, 3, -1.00E+10 ,1.00E+10);
     if(!this->db_.IsDefined("out range value count")) this->sg_.CreateProperty( "out range value count", "orvc", "uint", SCALAR, NODE, 1, 0.00E+00 ,1.00E+10);
     this->sg_.Region("Model").InputPropertyValue( "out range value count", makeScalar(PLAIN,0), COMPLETE);
     if(!this->db_.IsDefined("initial saturation carbonic phase")) this->sg_.CreateProperty( "initial saturation carbonic phase", "sCO2i", "m3/m3", SCALAR, NODE, 1, 0 ,1);
