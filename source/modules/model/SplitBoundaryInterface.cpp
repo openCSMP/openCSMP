@@ -1371,8 +1371,10 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      if constexpr ( dim == 3U )
        mesh.template BuildSurfaceConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
 
+     // 4. establish node to parent connectivity
+     mesh.ConnectNodesToParentsAndNeighbors( elmt_pointers.begin(), elmt_pointers.end() );
 
-     // 4. construct the new unique region between the interface elements in the model
+     // 5. construct the new unique region between the interface elements in the model
      //    given it the same name as the split boundary but calling it region instead
      // -----------------------------------------------------------------------------
      string       region_name( splitBoundary.Name() );
