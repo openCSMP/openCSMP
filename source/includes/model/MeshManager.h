@@ -285,23 +285,23 @@ InterFace<dim>* const ReplaceElementByInterFace( csmp::Element<dim>* eptr,
   void ConnectNodesToParentsAndNeighbors( typename std::vector<Element<dim>*>::iterator first,
                                           typename std::vector<Element<dim>*>::iterator last );
 
-  /// disconnects nodes from potential manifolds and deletes them
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
-                                       typename std::vector<Node<dim>*>::iterator last );
-
   /// deletes elements and potentially orphaned nodes if any;  parent element storage of the nodes is rebuild and connectivity repaired;  input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
-                                       typename std::vector<Element<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Element<dim>*>::iterator first,
+                                            typename std::vector<Element<dim>*>::iterator last );
 
   /// disconnects face patch from potential adjacent faces before deleting faces; input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
-                                       typename std::vector<Face<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Face<dim>*>::iterator first,
+                                            typename std::vector<Face<dim>*>::iterator last );
 
   /// disconnectes interfaces from not-targeted neighbors before deleting them;  does not remove multiplicated nodes or manifolds;  input pointers are nulled
-  size_t DeleteAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
-                                       typename std::vector<InterFace<dim>*>::iterator last );
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<InterFace<dim>*>::iterator first,
+                                            typename std::vector<InterFace<dim>*>::iterator last );
 
-  /// JCK's method to test the connectivity of a mesh after it had been read from binary file
+  /// disconnects nodes from potential manifolds and deletes the latter
+  size_t DeleteCellsAndRepairConnnectivity( typename std::vector<Node<dim>*>::iterator first,
+                                            typename std::vector<Node<dim>*>::iterator last );
+
+  /// method to test the connectivity of a mesh
   size_t CheckElementConnectivity() const;
 
   /// prints stored objects and their connectivity to screen

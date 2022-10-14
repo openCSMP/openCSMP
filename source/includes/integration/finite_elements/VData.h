@@ -42,6 +42,20 @@ The VData object contains coordinate objects, deques of
 vectors to store the connectivity and maps to hold the boundary flags
 and boundary values.
 
+Detailed content:
+
+(double) px, py, pz[0..n-1]  = coordinates of n nodes (= FE vertices)
+
+(int8_t) bflags[0..n-1] = negative numbers for nodes at boundary, see later
+
+(enum int8_t) pelmt[0..e-1] = CSMP_FEM_TYPE of e finite elements  (1 entry only for single element-type mesh)
+
+(size_t) plist[0..e *[sum npe[e]]] = nodes making up each element
+
+(int64_t) pfverts[0..e *[sum fpe[e]]] = neighbor elements adjacent to the faces of each element
+
+For Face and InterFace objects, 'pfverts' also contains the indices of the higher-dimensional neighbor element.
+
 */
 class VData {
   public:

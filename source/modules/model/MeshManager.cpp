@@ -1849,12 +1849,10 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
     // (original Face objects are removed)
     while( first != last )
       {
-
          // collecting neighbors of outer parent that dont include inner parent
          //Getting Inside Element
-        Element<dim>* inside_elmt    = first->InnerElement(),
-                    * outside_elmt   = first->OuterElement(),
-                    * lower_dim_elmt = first->LowerDimElement();
+         Element<dim>* inside_elmt    = first->InnerElement();
+         Element<dim>* outside_elmt   = first->OuterElement();
 
          outside_neighbors_to_search.insert( outside_elmt );
          inside_parents.insert( inside_elmt );
@@ -2602,8 +2600,8 @@ cerr << it.second.first->N(outside_fnids[n_face_nodes-i-1U])->Coordinate();
     Any potential node manifolds are updated.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Node<dim>*>::iterator first,
-                                                       typename vector<Node<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Node<dim>*>::iterator first,
+                                                    typename vector<Node<dim>*>::iterator last )
  {
     size_t deleted_nodes( distance(first,last) );
  
@@ -2673,8 +2671,8 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Node<dim>
     
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
-                                                       typename vector<Element<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Element<dim>*>::iterator first,
+                                                            typename vector<Element<dim>*>::iterator last )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -2752,7 +2750,7 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Element<d
             }
           
           // 1.3 deleting the interior nodes, updating neighbor connectivity with perimeter ones
-          DeleteAndRepairConnnectivity( interior_nodes.begin(), interior_nodes.end() );
+          DeleteCellsAndRepairConnnectivity( interior_nodes.begin(), interior_nodes.end() );
           
           // 1.4 updating the perimeter nodes
           ConnectNodesToParentsAndNeighbors( adjacent_elmts.begin(), adjacent_elmts.end() );
@@ -2812,8 +2810,8 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Element<d
       Deletes range of Faces after detecting and disconnecting potential neighbor faces around the perimeter of the face patch.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
-                                                       typename vector<Face<dim>*>::iterator last )
+size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<Face<dim>*>::iterator first,
+                                                            typename vector<Face<dim>*>::iterator last )
  {
      size_t faces_to_delete( distance(first,last) );
  
@@ -2872,7 +2870,7 @@ size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<Face<dim>
     @attention method does not reconnect the mesh where interfaces are removed.
 */
 template<uint32_t dim>
-size_t MeshManager<dim>::DeleteAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
+size_t MeshManager<dim>::DeleteCellsAndRepairConnnectivity( typename vector<InterFace<dim>*>::iterator first,
                                                        typename vector<InterFace<dim>*>::iterator last )
  {
      size_t interfaces_to_delete( distance(first,last) );

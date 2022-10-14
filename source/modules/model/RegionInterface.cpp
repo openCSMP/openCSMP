@@ -355,7 +355,7 @@ void RegionInterface<dim, REGION_COMPLEX>::RemoveRegion( const char* regionName,
 
   if ( erase_elmts_and_update_connectivity )
     // getting the mesh manager to delete elements and nodes and fix up the connectivity
-    regionComplex.Mesh().DeleteAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
+    regionComplex.Mesh().DeleteCellsAndRepairConnnectivity( region.CellVector().begin(), region.CellVector().end() );
 
   // finding the region in the corresponding map
   typename map<string, csmp::Region<dim> >::iterator

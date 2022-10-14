@@ -632,7 +632,7 @@ bool MeshManager_Test::TestElementDeletionAndInsertion()
 	_test( mesh.Elements() == n_original_elmts );
 
 	// 2. deleting these nodes again
-	mesh.DeleteAndRepairConnnectivity( nodes.begin(), nodes.end() );
+	mesh.DeleteCellsAndRepairConnnectivity( nodes.begin(), nodes.end() );
 	_test( mesh.Nodes() == n_original_nodes );
 
 // TODO: test insertion / deletion / connection of Face and InterFace objects
@@ -719,7 +719,7 @@ bool MeshManager_Test::TestFaceDeletionAndInsertion(/* "PyramidHexaPatch" */)
   ptrs_to_faces_created.pop_back();
 	
 	// delete the new face(s) again
-	mesh.DeleteAndRepairConnnectivity( ptrs_to_faces_created.begin(), ptrs_to_faces_created.end() );
+	mesh.DeleteCellsAndRepairConnnectivity( ptrs_to_faces_created.begin(), ptrs_to_faces_created.end() );
 	cout << "\nMeshManager_Test::TestFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of faces):\n";
 	cout << "\nFaces: " << mesh.Faces() << "\n";
 
@@ -799,7 +799,7 @@ bool MeshManager_Test::TestInterFaceDeletionAndInsertion(/* "PyramidHexaPatch" *
 	_test( mesh.Faces() == n_original_ifaces + interface_constructed );
  
 	// delete the new interface(s) again
-	mesh.DeleteAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
+	mesh.DeleteCellsAndRepairConnnectivity( iface_ptrs.begin(), iface_ptrs.end() );
 	cout << "\nMeshManager_Test::TestInterFaceDeletionAndInsertion: model '" << model.Name() << "' (after deletion of interfaces):\n";
 	cout << "\nFaces: " << mesh.InterFaces() << "\n";
 

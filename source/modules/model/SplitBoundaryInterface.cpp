@@ -127,7 +127,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
      // erasing the faces
      if ( erase_interfaces ) {
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         splitBoundaryComplex.Mesh().DeleteAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
+         splitBoundaryComplex.Mesh().DeleteCellsAndRepairConnnectivity( split_boundary.CellVector().begin(), split_boundary.CellVector().end() );
        }
 
      // deleting the split boundary
@@ -166,7 +166,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( cs
      if ( erase_interfaces ) {
          SPLITBOUNDARY_COMPLEX<dim>&  splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
          // getting the mesh manager to delete faces and nodes and fix up the connectivity
-         splitBoundaryComplex.Mesh().DeleteAndRepairConnnectivity( splitboundary.CellVector().begin(), splitboundary.CellVector().end() );
+         splitBoundaryComplex.Mesh().DeleteCellsAndRepairConnnectivity( splitboundary.CellVector().begin(), splitboundary.CellVector().end() );
        }
 
      splitBoundaryMap_.erase( splitboundary.Name() );
@@ -526,7 +526,7 @@ bool SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::AddSplitBoundary( const 
                                                                                                   splitBoundaryComplex->Database() ) ) );
     if ( it.second ) {
          (*it.first).second.CreateFrom( ifacesBegin, ifacesEnd );
-         cout << "\nSplitBoundaryInterface<"<< dim <<">::AddSplitBoundary: successfully created boundary '";
+         cout << "\nSplitBoundaryInterface<"<< dim <<">::AddSplitBoundary: successfully created split boundary '";
          cout << split_boundary_name <<"' from input faces.";
       }
     else {
