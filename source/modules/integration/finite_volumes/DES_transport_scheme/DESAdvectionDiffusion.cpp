@@ -36,8 +36,7 @@ DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* ta
   template<uint32_t dim>
   DESAdvectionDiffusion<dim>::~DESAdvectionDiffusion()
   {
-    //clean up HeapNodeFullList
-    for (auto heap_node : HeapNodeFullList) delete heap_node;
+
   }
 
 
@@ -278,20 +277,17 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
     size_t dirich_count = 0;
     const auto  nodes_end(gref_.NodesEnd());
     for ( auto nit=gref_.NodesBegin(); nit!=nodes_end; ++nit )
-    { 
+    {
+        assert(*nit);
         if((*nit)->Status(  key_C0 ) != DIRICH) {
-            (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index 
-            //Event<dim>* event = new Event<dim>(*nit);
+            (*nit)->Store( key_EventIndex, makeScalar( (*nit)->Status(key_EventIndex), index) );//event index
             FullList.push_back( move( Event<dim>(*nit) ) );
-            //PEPList.push_back(&(FullList.back()));
             auto event = &(FullList.back());
             event->inPEPStack(true);
             ComputeFluxBalanceAndCFL(event);
             Schedule(event, 0.);
             event->valid(false);
-            //Heap_Node* heap_node = new Heap_Node(event->t_schedule(),index);
-            HeapNodeFullList.emplace_back( new Heap_Node(event->t_schedule(),index));
-            //FullList.push_back(event);
+            //HeapNodeFullList.emplace_back( new Heap_Node(event->t_schedule(),index));
             event->inQueue(false);
                 
             index++;
@@ -301,12 +297,8 @@ void DESAdvectionDiffusion<dim>::InitializeEvents()
         }
     }
 
+    //add all events (pointers) to PEPList
     for(auto& event : FullList) PEPList.push_back(&event);
-    //testing:
-    assert(FullList.size() == index);
-    assert(PEPList.size() == index);
-    assert(FullList.front().getNode());
-    assert(PEPList.front()->getNode());
 
     cout<<FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
 }  
@@ -442,7 +434,7 @@ bool DESAdvectionDiffusion<dim>::Schedule(Event<dim>* event, double t_end)
     double C0 = nd->Read( key_C0);//concentration
     double flux_balance = nd->Read( key_FB);//flux balance
 
-    double dC_CFL = -CFL*CFL_multiplier_/PV*(ChangeRate-C0*flux_balance);//targe change
+    double dC_CFL = -CFL*CFL_multiplier_/PV*(ChangeRate-C0*flux_balance);//target change
 
     if (fabs(dC_CFL) < numeric_limits<double>::epsilon()){//idle node/FV
         array.Component(5, numeric_limits<double>::epsilon());//target change of solution
@@ -596,8 +588,8 @@ void DESAdvectionDiffusion<dim>::Synchronize(Event<dim>* event, double t_clock, 
                         clock_t t_begin = clock();
                         #endif
                         if (neighbor_event->inQueue()){
-                            EventHeap.remove(HeapNodeFullList[index]);
-                            //delete HeapNodeFullList[index];
+                            //EventHeap.remove(HeapNodeFullList[index]);
+                            EventHeap.remove(neighbor_event->getHeapNode());
                             neighbor_event->inQueue(false);
                         }
                         #if defined(_OPENMP)
@@ -623,8 +615,8 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
     cout<<"Start DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial "<<endl;
 
     double begin=clock();
-    double time_increment(time_interval); 
-    
+    double time_increment(time_interval);
+
     clock_t T_begin= clock();
     const auto stack_end(PEPList.end());
     for ( auto it=PEPList.begin(); it!=stack_end; ++it )
@@ -635,7 +627,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
         double dt_CFL = array[2];//CFL time increment
         time_increment=min(time_increment, dt_CFL*CFL_multiplier_);
     }
-    T_RateOfChange_ += clock() - T_begin; 
+    T_RateOfChange_ += clock() - T_begin;
 
     const double one(1.);
     cout <<"\n\tTime interval         = "<< time_interval;
@@ -676,13 +668,13 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial( double time_interval
 
     cout <<"Finish DESAdvectionDiffusion<dim>::AdvectVariable_TDS_serial "<<endl;
     cout <<"rate_count_ = "<<rate_count_<<endl;
-    cout <<"update_count_ = "<<update_count_<<endl; 
+    cout <<"update_count_ = "<<update_count_<<endl;
     cout <<"T_Schedule_ = "<< T_Schedule_ /double(CLOCKS_PER_SEC) << endl;
     cout <<"T_Update_  = "<< T_Update_  /double(CLOCKS_PER_SEC) << endl;
     cout <<"T_Synchronize_ = "<< T_Synchronize_/double(CLOCKS_PER_SEC) << endl;
     cout <<"T_RateOfChange_ = "<< T_RateOfChange_ /double(CLOCKS_PER_SEC) << endl;
-    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl; 
-    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl; 
+    cout <<"T_InsertToHeap_ = "<< T_InsertToHeap_ /double(CLOCKS_PER_SEC) << endl;
+    cout <<"T_RemoveFromHeap_ = "<< T_RemoveFromHeap_ /double(CLOCKS_PER_SEC) << endl;
     cout <<"T_AdvectVariable_ = "<< T_AdvectVariable_ /double(CLOCKS_PER_SEC) << endl;
 }
 
@@ -810,32 +802,37 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
     while (!Finished)
     { 
         clock_t T_begin;
+        //ComputeRateofChange() performs for all events in PEPList
         const auto stack_end(PEPList.end());
         for ( auto it=PEPList.begin(); it!=stack_end; ++it )
         {   
             Event<dim>* event = *it;
             T_begin= clock();
             ComputeRateofChange(event);  
-            T_RateOfChange_ += clock() - T_begin;          
+            T_RateOfChange_ += clock() - T_begin;
+            //Only those executed events (valid==false) are re-scheduled.
             if (event->valid() == false) {
                 T_begin= clock();
                 bool isactive = Schedule(event, model_time );
-                T_Schedule_ += clock() - T_begin; 
+                T_Schedule_ += clock() - T_begin;
+                //only events with scheduled time smaller than end time (isactive==true) are inserted to EventHeap
                 if (isactive) {
                     T_begin= clock();
                     double scheduled_time = event->t_schedule();
                     size_t index = event->getNode()->Read(key_EventIndex); // TODO: deal with implicit type conversion
-                    HeapNodeFullList[index] = new Heap_Node(scheduled_time,index);
-                    EventHeap.insert(HeapNodeFullList[index]);
+                    //HeapNodeFullList[index] = new Heap_Node(scheduled_time,index);
+                    //EventHeap.insert(HeapNodeFullList[index]);
+                    event->setHeapNode( EventHeap.insert(scheduled_time,index) );
                     event->inQueue(true);
                     T_InsertToHeap_ += clock() - T_begin; 
                 }
             }
+            //inPEPStack is set to false because the event will be removed from PEPList after computations performed
             event->inPEPStack(false);          
-        };   
+        };
 
-        if (EventHeap.empty()) time=model_time;
-        else time = EventHeap.minimum()->getK();
+        if (EventHeap.empty()) time=model_time; //no event in queue, set to end time
+        else time = EventHeap.minimum()->getK(); //time stamp of top eve
         
         cout<<"  time = "<<time<<" model_time = "<<model_time<<" PEPList size = "<< PEPList.size() <<" Queue size = "<< EventHeap.size()<<endl;
 
@@ -854,8 +851,10 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
         size_t count = 0U;
         while (!EventHeap.empty())
         {
+            //1st heap node in EventHeap
             Heap_Node* root_node = EventHeap.minimum();
             size_t top_index = root_node->getV();
+            //corresponding event in FullList
             Event<dim>* top_event = &FullList[top_index];
             
             if(top_event->valid() == false) {
@@ -869,7 +868,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
             count++;            
             ArrayVariable array;
             top_event->getNode()->Read(key_time, array);
-            double dt_target = array[3];//target time stamp
+            double dt_target = array[3];//target time stamp (CFL*cfl_multiplier)
             dt_PEP = min(dt_PEP, PEP_multiplier_*dt_target);
             double t_schedule = array[1];//scheduled time stamp
             if (t_schedule > (time+dt_PEP)) break;            
@@ -882,7 +881,7 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_serial( double model_time )
             }; 
 
             T_begin= clock();
-            EventHeap.remove(root_node); 
+            EventHeap.remove(root_node);
             top_event->inQueue(false);
             T_RemoveFromHeap_ += clock() - T_begin;
             
@@ -965,9 +964,10 @@ void DESAdvectionDiffusion<dim>::AdvectVariable_DES_parallel( double model_time,
             Event<dim>* event = *it;                 
             double scheduled_time = event->t_schedule();
             size_t index = event->getNode()->Read(key_EventIndex);
-            Heap_Node* heap_node = new Heap_Node(scheduled_time,index);                    
-            EventHeap.insert(heap_node);
-            HeapNodeFullList[index] = heap_node;
+            //Heap_Node* heap_node = new Heap_Node(scheduled_time,index);
+            //EventHeap.insert(heap_node);
+            //HeapNodeFullList[index] = heap_node;
+            event->setHeapNode( EventHeap.insert(scheduled_time,index) );
             event->inQueue(true);
         }
         tempList.clear();
