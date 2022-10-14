@@ -56,8 +56,9 @@ class DES2PhaseTransport {
     double upper_limit_, lower_limit_; ///< range in which the result is allowed to vary
     double CFL_multiplier_, PEP_multiplier_;
     bool tensor_k_= false;
-    std::vector<Event<dim>*> PEPList, FullList;
-    std::vector<Heap_Node*> HeapNodeFullList; 
+    std::vector<Event<dim>> FullList;
+    std::vector<Event<dim>*> PEPList;
+    //std::vector<Heap_Node*> HeapNodeFullList;
     ajb::FibonacciHeap<double,size_t> EventHeap;
     size_t	rate_count_;
     size_t	update_count_;

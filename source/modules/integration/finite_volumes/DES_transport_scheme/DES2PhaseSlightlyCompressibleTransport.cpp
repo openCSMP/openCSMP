@@ -215,24 +215,25 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::InitializeEvent
     { 
         if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
             (*nit)->Store( this->key_EventIndex, makeScalar( (*nit)->Status(this->key_EventIndex), index) );//event index 
-            auto* event = new Event<dim>(*nit);
-            this->PEPList.push_back(event);
-            event->inPEPStack(true);
+            this->FullList.push_back( move( Event<dim>(*nit) ) );
+            auto event = &(this->FullList.back());
             ComputePressureGradientAndFlowVelocities(event);
             if(this->with_capillary_spreading_) ComputeSaturationGradient (event);
             if(second_order_in_space_) ComputeRateofChange_2nd_order(event);
             else ComputeRateofChange(event);
             Schedule(event, 0.);
             event->valid(false);
-            auto* heap_node = new Heap_Node(event->t_schedule(),index);
-            this->HeapNodeFullList.push_back(heap_node);
-            this->FullList.push_back(event);
+            //auto* heap_node = new Heap_Node(event->t_schedule(),index);
+            //this->HeapNodeFullList.push_back(heap_node);
             event->inQueue(false);
             index++;
         } else {
             dirich_count++;
         }
     }
+
+    //add all events (pointers) to PEPList
+    for(auto& event : this->FullList) {event.inPEPStack(true); this->PEPList.push_back(&event);}
 
     cout<<this->FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
 
@@ -259,7 +260,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ReinitializeEve
 
     //clean up all containers
     this->PEPList.clear();
-    this->HeapNodeFullList.clear();
+    //this->HeapNodeFullList.clear();
     this->FullList.clear();
     this->EventHeap.clear();
 
@@ -272,24 +273,23 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ReinitializeEve
     { 
         if((*nit)->Status(  this->key_sCO2 ) != DIRICH) {
             (*nit)->Store( this->key_EventIndex, makeScalar( (*nit)->Status(this->key_EventIndex), index) );//event index 
-            auto* event = new Event<dim>(*nit);
-            this->PEPList.push_back(event);
-            event->inPEPStack(true);
+            this->FullList.push_back( move( Event<dim>(*nit) ) );
+            auto event = &(this->FullList.back());
             ComputePressureGradientAndFlowVelocities(event);
             if(this->with_capillary_spreading_) ComputeSaturationGradient (event);
             if(second_order_in_space_) ComputeRateofChange_2nd_order(event);
             else ComputeRateofChange(event);
             Schedule(event, 0.);
             event->valid(false);
-            auto* heap_node = new Heap_Node(event->t_schedule(),index);
-            this->HeapNodeFullList.push_back(heap_node);
-            this->FullList.push_back(event);
             event->inQueue(false);
             index++;
         } else {
             dirich_count++;
         }
     }
+
+    //add all events (pointers) to PEPList
+    for(auto& event : this->FullList) {event.inPEPStack(true); this->PEPList.push_back(&event);}
 
     cout<<this->FullList.size()<<" events created for all nodes, excluding "<<dirich_count<<" DIRICH nodes"<<endl;
 
@@ -317,7 +317,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSaturati
     assert( nd->Status(  this->key_sCO2 ) != DIRICH);
   
     //check if node is truncated by domain boundary
-    int64_t truncated_node = static_cast<int64_t>(nd->Read(this->key_cut));
+    auto truncated_node = static_cast<int64_t>(nd->Read(this->key_cut));
   
     const auto parent_elements(nd->Parents());
     for ( auto i{0U}; i<parent_elements; ++i )
@@ -1379,7 +1379,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
           if( neighbor_node != nullptr && neighbor_node->Status(  this->key_sCO2 ) != DIRICH) {
               size_t index = neighbor_node->Read(this->key_EventIndex);
               if(index >= 0 && index < this->FullList.size()){
-                  Event<dim>* neighbor_event = this->FullList[index];
+                  Event<dim>* neighbor_event = &this->FullList[index];
                   assert( neighbor_event  != nullptr );
                   if (neighbor_event != nullptr && neighbor_event->inPEPStack() == false) {
                       this->PEPList.push_back(neighbor_event);
@@ -1396,8 +1396,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::Synchronize(Eve
                           clock_t t_begin = clock();
                           #endif
                           if (neighbor_event->inQueue()){
-                              Heap_Node* neighbor_heap_node = this->HeapNodeFullList[index];
-                              this->EventHeap.remove(neighbor_heap_node);
+                              //Heap_Node* neighbor_heap_node = this->HeapNodeFullList[index];
+                              this->EventHeap.remove(neighbor_event->getHeapNode());
                               neighbor_event->inQueue(false);
                           }
                           #if defined(OPENMP)
@@ -1463,8 +1463,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
     const auto stack_end(this->FullList.end());
     for ( auto it=this->FullList.begin(); it!=stack_end; ++it )
     {            
-        ComputePressureGradientAndFlowVelocities ((*it));    
-        if(this->with_capillary_spreading_) ComputeSaturationGradient ((*it));
+        ComputePressureGradientAndFlowVelocities ((&(*it)));
+        if(this->with_capillary_spreading_) ComputeSaturationGradient (&(*it));
     }
 
 #if defined(OPENMP)
@@ -1893,9 +1893,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
                     T_begin= clock();
                     double scheduled_time = event->t_schedule();
                     int index = static_cast<int>(event->getNode()->Read(this->key_EventIndex));
-                    auto* heap_node = new Heap_Node(scheduled_time,index);
-                    this->EventHeap.insert(heap_node);
-                    this->HeapNodeFullList[index] = heap_node;
+                    //auto* heap_node = new Heap_Node(scheduled_time,index);
+                    //this->EventHeap.insert(heap_node);
+                    //this->HeapNodeFullList[index] = heap_node;
+                    event->setHeapNode( this->EventHeap.insert(scheduled_time,index) );
                     event->inQueue(true);
                     this->T_InsertToHeap_ += clock() - T_begin; 
                 }  
@@ -1927,7 +1928,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::AdvectVariable_
         {           
             Heap_Node* root_node = this->EventHeap.minimum();
             size_t top_index = root_node->getV();
-            Event<dim>* top_event = this->FullList[top_index];
+            Event<dim>* top_event = &this->FullList[top_index];
 
             if(top_event->valid() == false) {
                 T_begin= clock();
@@ -2593,7 +2594,7 @@ bool DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::UpdateManifold(
     if (nodes_to_update.size() > 0) {
       for (auto nd: nodes_to_update) {
         size_t index = nd->Read(this->key_EventIndex);
-        auto event = this->FullList[index];
+        auto event = &this->FullList[index];
         Update_TDS(event, dt);
       }
     }
@@ -2641,7 +2642,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SynchronizeMani
             size_t nd_index = nd->Read(this->key_EventIndex);
             assert((nd_index >= 0 && nd_index < this->FullList.size()));
             if(nd_index >= 0 && nd_index < this->FullList.size()){
-                Event<dim>* event = this->FullList[nd_index];
+                Event<dim>* event = &this->FullList[nd_index];
                 assert( event  != nullptr );
                 if (event != nullptr && event->inPEPStack() == false) {
                     this->PEPList.push_back(event);
@@ -2652,8 +2653,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SynchronizeMani
                     double dC_target = array[5];//target change of solution
                     if (fabs(dC_cumulative) >= fabs(dC_target)) {
                         if (event->inQueue()){
-                            Heap_Node* heap_node = this->HeapNodeFullList[nd_index];
-                            this->EventHeap.remove(heap_node);
+                            //Heap_Node* heap_node = this->HeapNodeFullList[nd_index];
+                            this->EventHeap.remove(event->getHeapNode());
                             event->inQueue(false);
                         }                
                         clock_t T_begin= clock();

@@ -36,7 +36,6 @@ DESAdvectionDiffusion<dim>::DESAdvectionDiffusion( Model<dim>& m, const char* ta
   template<uint32_t dim>
   DESAdvectionDiffusion<dim>::~DESAdvectionDiffusion()
   {
-
   }
 
 
