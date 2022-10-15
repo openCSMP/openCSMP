@@ -291,7 +291,7 @@ void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
 
    pressure.AddPostProcess( &postpro );
    
-#ifdef SAMG_MULTIPLE_INSTANCES
+#ifdef CSMP_WITH_SAMG_SOLVER && SAMG_MULTIPLE_INSTANCES
    pressure.GetSolverSettings().SetSolverInstance(2);
 #endif
    pressure.ComputeSteadyState( model.Region("Model") );
