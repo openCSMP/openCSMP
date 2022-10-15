@@ -996,12 +996,12 @@ Element<dim>*	const MeshManager<dim>::AddElement( CSMP_FEM_TYPE etype,
 
 
 /**
-     puts a lower-dimensional element inside of an InterFace, connecting it to its base pointer
+     Puts a lower-dimensional element inside of an InterFace, connecting it to its base pointer
      
      @attention the nodes need to be provided because they are shared among the lower-dimensional elements and collocated
           so that they cannot be told apart.
           
-          @attention no neighbor connectivity is provided here because it is not known yet
+          @attention no neighbor connectivity is provided here because it is not necessarily known when this metho gets called
 */
 template<uint32_t dim>
 Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim>* const ifptr,

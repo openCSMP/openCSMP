@@ -1323,6 +1323,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      
      // 1. creating unique set of nodes matching those on the inside of the SplitBoundary in position
      // ---------------------------------------------------------------------------------------------
+     // TODO: this method should be in the mesh manager
      vector<Node<dim>*>    node_pointers; // to the new nodes
      vector<Element<dim>*> elmt_pointers; // new elements
      
@@ -1334,21 +1335,11 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      for ( auto& nit : inside_nodes.first )
        nit->Idx( counter++ );
      
-     // 1.3 now the nodes are duplicated except for the ones on the perimeter of the SplitBoundary
-     //     away from model boundaries. Without duplication, the original node is stored
-     // interior nodes
-     for ( size_t i{0U}; i<inside_nodes.second; i++ )
+     // 1.3 now all nodes are duplicated AND inserted into the corresponding manifolds
+     //     (NB: even the tip nodes now become manifolds)
+     for ( size_t i{0U}; i<inside_nodes.first.size(); i++ )
        node_pointers.push_back( mesh.Duplicate( inside_nodes.first[i], nlvars ) );
-     // perimeter nodes
-      for ( size_t i{ inside_nodes.second }; i<inside_nodes.first.size(); i++ ) {
-           // duplicating the nodes only if they are not free-standing in a volume
-           if ( inside_nodes.first[i]->AtBoundary() != NOT )
-             // NODE GENERATION
-             node_pointers.push_back( mesh.Duplicate( inside_nodes.first[i], nlvars ) );
-           else // pointers to the existing nodes are inserted
-             node_pointers.push_back( inside_nodes.first[i] );
-        }
-     assert( node_pointers.size() == inside_nodes.first.size() );
+       
       
      // 2. creating elements within InterFace objects with node-numbering matching that of corresponding INNER parent element face
      // --------------------------------------------------------------------------------------------------------------------------

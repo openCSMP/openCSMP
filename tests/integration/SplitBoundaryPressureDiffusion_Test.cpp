@@ -91,8 +91,9 @@ void SplitBoundaryPressureDiffusion_Test::run()
     csmp::Index pf_key  = model_ptr_->Database().StorageKey("fluid pressure");
     Region<3U> fracture = model_ptr_->Region( fracture_name_ );
     for ( auto& nit : fracture.NodeVector() )
-      if ( nit->AtBoundary() == LEFT && nit->IsManifold() ) {
-           assert( nit->Manifold()->Branches() == 3 );
+      if ( nit->AtBoundary() == LEFT ) {
+           assert( nit->IsManifold() );
+           assert( nit->Manifold()->Branches() >= 2 );
            nit->Store( pf_key, makeScalar(DIRICH,initial_fluid_pressure - pressure_change) );
         }
         

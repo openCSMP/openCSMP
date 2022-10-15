@@ -507,6 +507,8 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
  } // end InsideNodes
 
 
+
+
 template<uint32_t dim>
 pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
  {
