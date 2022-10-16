@@ -22,23 +22,23 @@ template<uint32_t> class Model;
        The separation of the nodes creates prism or hexahedral elements, from triangular and quadrilateral InterFace objects.
        The InterFace normal is used in the construction of the edges of these elements.
        
-       @author SKN
+       @author SKM
        @date 18/8/22
 */
-template<uint32_t dim, template<uint32_t> class CELL=InterFace>
-class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim,CELL> {
+template<uint32_t dim>
+class NumIntegral_dNT_op_dN_dV_InterFace : public MathOperatorLHS<dim,InterFace> {
   public:
     NumIntegral_dNT_op_dN_dV_InterFace( const Model<dim>&,
                                         const char* oper,
                                         const char* basic,
                                         const char* test );
     
-    virtual void GetOperands( const CELL<dim>& );
-    virtual void ComputeContribution( CELL<dim>& );
+    virtual void GetOperands( const InterFace<dim>& );
+    virtual void ComputeContribution( InterFace<dim>& );
     
   protected:
       /// separates opposing nodes and writes new coordinates to XY matrix of corresponding finite element type
-      void InitialiseCoordinateMatrix( const CELL<dim>&, DenseMatrix<DM_MIN>& ) const;
+      void InitialiseCoordinateMatrix( const InterFace<dim>&, DenseMatrix<DM_MIN>& ) const;
   
   private:
       csmp::INDEX<SCALAR,INTER_FACE> thi_key_;            ///< 'thickness' parameter for the interface

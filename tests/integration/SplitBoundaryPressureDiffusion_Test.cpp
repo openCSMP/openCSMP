@@ -15,6 +15,7 @@
 #include "NumIntegral_NT_op_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -151,6 +152,15 @@ void SplitBoundaryPressureDiffusion_Test::run()
     // source term at dt * {Q} at current pressure needs to be accumulated later
     source.AddAccumulateLater();
     source.LumpedFormulation(true);
+    
+    
+    // interface transfer
+    // ------------------
+    NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U> iface_transfer( *model_ptr_,
+                                                                          "conductivity",
+                                                                          "fluid pressure", "fluid pressure",
+                                                                           60. ); // seconds initial timestep
+
 
     // coupling across the sides of the splitboundary
     // (via MathOperatorLHS)
@@ -163,6 +173,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     fluid_pressure.Add( &capacitance_lhs );
     fluid_pressure.Add( &capacitance_rhs );
     fluid_pressure.Add( &source );
+    fluid_pressure.AddSplitBoundaryIntegral( &iface_transfer );
     fluid_pressure.AddPostProcess( &velocity );
     fluid_pressure.TimeIncrement( 1. / time_increment ); // see equation above
 
@@ -182,6 +193,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     while ( model_time <= maxtime )
       {
         cout << "\n\nmain: COMPUTING TIMESTEP " << timestep << endl;
+        iface_transfer.UpdateTimeIncrement( time_increment );
 
         // transient pressure
         model_ptr_->Apply( fluid_pressure );
@@ -228,7 +240,7 @@ void  SplitBoundaryPressureDiffusion_Test::ConfigureModel()
     model_ptr_->InputPropertyValue( "fluid volume source", makeScalar(ANY,0.) );
     model_ptr_->InputPropertyValue( "storativity", makeScalar(ANY,1.0e-11) );
     
-    SplitBoundary<3U>& fracture_slit = model_ptr_->SplitBoundary("fracture_SPLITBOUNDARY");
+    // SplitBoundary<3U>& fracture_slit = model_ptr_->SplitBoundary("fracture_SPLITBOUNDARY");
     //fracture_slit.InputPropertyValue( "interface thickness", makeScalar(ANY,1.0e-3) ); // 1mm
     
     // creating a splitboundary in the fracture
@@ -243,7 +255,21 @@ void  SplitBoundaryPressureDiffusion_Test::ConfigureModel()
     fracture.InputPropertyValue( "storativity",  makeScalar(ANY,1.0e-8) ); // Pa-1 (greater than matrix)
     fracture.InputPropertyValue( "storativity",  makeScalar(ANY,1.0e-9) );
     
-    printRangeOfVariable( *model_ptr_, "permeability" );
+    // computing the hydraulic diffusivity, kappa_p = k / (phi * storativity * viscosity), storativity is equivalent to total systems compressibility
+    const csmp::Index k_key   = model_ptr_->Database().StorageKey("permeability");
+    const csmp::Index phi_key = model_ptr_->Database().StorageKey("porosity");
+    const csmp::Index Ss_key   = model_ptr_->Database().StorageKey("storativity");
+    const csmp::Index hd_key = model_ptr_->Database().StorageKey("hydraulic diffusivity");
+    const double viscosity{ 1.0e-3 };
+    Region<3U>& model_domain = model_ptr_->Region("Model");
+    
+    for ( auto& it : model_domain.CellVector() ) {
+         double hdiffusivity = it->Read( k_key );
+         hdiffusivity /= it->Read(phi_key) * it->Read(Ss_key) * viscosity;
+         it->Store( hd_key, makeScalar(PLAIN,hdiffusivity) );
+      }
+    
+    printRangeOfVariable( *model_ptr_, "hydraulic diffusivity" );
     
 } // end configure
 

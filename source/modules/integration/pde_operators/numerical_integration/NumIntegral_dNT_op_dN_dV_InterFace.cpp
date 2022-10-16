@@ -15,25 +15,25 @@ namespace csmp {
     
     @attention the variable 'thickness' needs to be defined on the InterFace, else the pde operator will not work.
 */
-template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::NumIntegral_dNT_op_dN_dV_InterFace( const Model<dim>& model,
-                                                                                  const char*       oper,
-                                                                                  const char*       basic,
-                                                                                  const char*       test )
-  : MathOperatorLHS<dim,CELL>(model.Database(),oper,basic,test),
+template<uint32_t dim>
+NumIntegral_dNT_op_dN_dV_InterFace<dim>::NumIntegral_dNT_op_dN_dV_InterFace( const Model<dim>& model,
+                                                                              const char*       oper,
+                                                                              const char*       basic,
+                                                                              const char*       test )
+  : MathOperatorLHS<dim,InterFace>(model.Database(),oper,basic,test),
     thi_key_(model.Database().StorageKey("thickness")),
     pris_ptr_(model.Mesh().FiniteElements().E( ISOPARAMETRIC_LINEAR_PRISM ) ),
     hexa_ptr_(model.Mesh().FiniteElements().E( ISOPARAMETRIC_LINEAR_HEXAHEDRON ) )
 {
-    MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_dV_InterFace", oper, basic, test );
+    MathOperatorLHS<dim,InterFace>::Name("NumIntegral_dNT_op_dN_dV_InterFace", oper, basic, test );
     
-    if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
-         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,InterFace>::BasicOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,InterFace>::BasicOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_InterFace<dim>::(constructor)",
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
-    if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
-         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
+    if ( MathOperatorLHS<dim,InterFace>::TestOperandPlacement() != NODE ||
+         MathOperatorLHS<dim,InterFace>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_InterFace<dim>::(constructor)",
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
@@ -50,30 +50,30 @@ NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::NumIntegral_dNT_op_dN_dV_InterFace
     @todo use harmonic mean of the permeabilities of the parent elements on the inside and outside.
     @todo implement for integration point variables
 */
-template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::GetOperands( const CELL<dim>& e )
+template<uint32_t dim>
+void NumIntegral_dNT_op_dN_dV_InterFace<dim>::GetOperands( const InterFace<dim>& e )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
 
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT or
-         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != INTER_FACE )
+    if ( MathOperatorLHS<dim,InterFace>::MaterialOperandPlacement() != ELEMENT or
+         MathOperatorLHS<dim,InterFace>::MaterialOperandPlacement() != INTER_FACE )
     throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::GetOperands",
                                   "material operand placements other than on the CELL are not handled yet. " );
 
     // only if the property is an InterFace property something is done here
-     MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-     MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
+     MathOperatorLHS<dim,InterFace>::MTRL[0].Resize(dim,dim);
+     MathOperatorLHS<dim,InterFace>::MTRL[0].Zero();
      // identity matrix scaled with the element thickness
-     MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( (thickness_ = e.Read( thi_key_ )) );
+     MathOperatorLHS<dim,InterFace>::MTRL[0].AssignToDiagonal( (thickness_ = e.Read( thi_key_ )) );
   
      // the operand variables are taken as the mean of the variables on the adjacent higher dim elements
      // (note that higher-dim parents are guaranteed to exist on inside and outside of InterFace)
-     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-          MathOperatorLHS<dim,CELL>::MTRL[0](0,0) = (e.InnerParent()->Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) +
-                                                     e.OuterParent()->Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) ) / 2. ;
-          if constexpr ( dim != 1U ) MathOperatorLHS<dim,CELL>::MTRL[0](1,1) = MathOperatorLHS<dim,CELL>::MTRL[0](0,0);
-          if constexpr ( dim == 3U ) MathOperatorLHS<dim,CELL>::MTRL[0](2,2) = MathOperatorLHS<dim,CELL>::MTRL[0](0,0);
+     if ( MathOperatorLHS<dim,InterFace>::MaterialOperandType() == SCALAR ) {
+          MathOperatorLHS<dim,InterFace>::MTRL[0](0,0) = (e.InnerParent()->Read( MathOperatorLHS<dim,InterFace>::MaterialOperandKey() ) +
+                                                     e.OuterParent()->Read( MathOperatorLHS<dim,InterFace>::MaterialOperandKey() ) ) / 2. ;
+          if constexpr ( dim != 1U ) MathOperatorLHS<dim,InterFace>::MTRL[0](1,1) = MathOperatorLHS<dim,InterFace>::MTRL[0](0,0);
+          if constexpr ( dim == 3U ) MathOperatorLHS<dim,InterFace>::MTRL[0](2,2) = MathOperatorLHS<dim,InterFace>::MTRL[0](0,0);
        }
      else throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::GetOperands",
                                 "'vector' or 'tensor' material operands are not handled yet. " );
@@ -106,9 +106,9 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::GetOperands( const CELL<dim>&
     
     @todo Before using this in computations test that the finite element swap works and that the node numbering of the contribution matches that of the prism or hexa.
  */
-template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::InitialiseCoordinateMatrix( const CELL<dim>& iface,
-                                                                               DenseMatrix<DM_MIN>& XYX ) const
+template<uint32_t dim>
+void NumIntegral_dNT_op_dN_dV_InterFace<dim>::InitialiseCoordinateMatrix( const InterFace<dim>& iface,
+                                                                          DenseMatrix<DM_MIN>& XYX ) const
  {
      // retrieving the Interface normal for the extrusion of the interface from the INSIDE to the outside
      Point<dim> unrml = iface.UnitNormal();
@@ -155,16 +155,16 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::InitialiseCoordinateMatrix( c
     
     @todo in GetOperands implement the collection of material operands from integration points otherwise second part of method will not work
 */
-template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::ComputeContribution( CELL<dim>& iface )
+template<uint32_t dim>
+void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( InterFace<dim>& iface )
  {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( iface.UsesLocalCoordinates() == true );
     InitialiseCoordinateMatrix( iface, iface.FE()->XY );
 
     // initialize output matrix, InterFace already has the right number of nodes to match prism or hexa
-    MathOperatorLHS<dim,CELL>::LHS.Resize( iface.Nodes(), iface.Nodes() );
-    MathOperatorLHS<dim,CELL>::LHS.Zero();
+    MathOperatorLHS<dim,InterFace>::LHS.Resize( iface.Nodes(), iface.Nodes() );
+    MathOperatorLHS<dim,InterFace>::LHS.Zero();
 
     // thus far this only works for constant element or interface properties
     const bool piecewise_constant_material( this->MaterialOperandPlacement() == ELEMENT or
@@ -178,9 +178,9 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::ComputeContribution( CELL<dim
     FiniteElement* fptr = iface.FE();
     if ( isTriangular( iface.FE_Type() ) )
       // ugly way to get to the base class!
-      static_cast<FiniteElementPolicy<dim,CELL>&>(iface).Assign( pris_ptr_ );
+      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( pris_ptr_ );
     else
-      static_cast<FiniteElementPolicy<dim,CELL>&>(iface).Assign( hexa_ptr_ );
+      static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( hexa_ptr_ );
    
     // 1. Two cases exist: The first is when the material property is an
     //    element property. In this case the material property matrix can
@@ -196,14 +196,14 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::ComputeContribution( CELL<dim
              // transposing B -> BT
              DN_.Transposed( DNT_ );
              // multiply  BT . MTRL
-             DNT_ *= MathOperatorLHS<dim,CELL>::MTRL[0];
+             DNT_ *= MathOperatorLHS<dim,InterFace>::MTRL[0];
              // multiplying BT . B
              DNT_ *= DN_;
              // multiplying with determinant and weights
              DNT_ *= iface.WeightAtIntegrationPoint(i) * detJ;
              // accumulating ME Gauss point integral contributions into element
              // contribution to global conductance matrix
-             MathOperatorLHS<dim,CELL>::LHS += DNT_;
+             MathOperatorLHS<dim,InterFace>::LHS += DNT_;
           }
         return;
       }
@@ -212,14 +212,14 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::ComputeContribution( CELL<dim
     for ( auto i{0U}; i<iface.FE()->IntegrationPoints(); i++ ) {
          const double detJ = iface.dN_AtIntegrationPoint( DN_, i, SCALAR );
          DN_.Transposed( DNT_ );
-         DNT_ *= MathOperatorLHS<dim,CELL>::MTRL[i];
+         DNT_ *= MathOperatorLHS<dim,InterFace>::MTRL[i];
          DNT_ *= DN_;
          DNT_ *= iface.WeightAtIntegrationPoint(i) * detJ;
-         MathOperatorLHS<dim,CELL>::LHS += DNT_;
+         MathOperatorLHS<dim,InterFace>::LHS += DNT_;
       }
 
    // 3. reassigning the FE pointer
-   static_cast<FiniteElementPolicy<dim,CELL>&>(iface).Assign( fptr );
+   static_cast<FiniteElementPolicy<dim,InterFace>&>(iface).Assign( fptr );
 
 } // end ComputeContribution
 
@@ -233,9 +233,9 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim,CELL>::ComputeContribution( CELL<dim
 //     cout <<"\nNumIntegral_dNT_op_dN_dV_InterFace: zero element in diagonal of element matrix.";
 
 
-template class NumIntegral_dNT_op_dN_dV_InterFace<1U,InterFace>;
-template class NumIntegral_dNT_op_dN_dV_InterFace<2U,InterFace>;
-template class NumIntegral_dNT_op_dN_dV_InterFace<3U,InterFace>;
+template class NumIntegral_dNT_op_dN_dV_InterFace<1U>;
+template class NumIntegral_dNT_op_dN_dV_InterFace<2U>;
+template class NumIntegral_dNT_op_dN_dV_InterFace<3U>;
 
 } // csmp
 
