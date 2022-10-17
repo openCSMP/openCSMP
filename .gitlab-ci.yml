@@ -36,7 +36,8 @@ build:
      - git pull origin 
      # 2) Clone third party software (eigen)
      - cd thirdparty/eigen/
-     - git clone https://gitlab.com/libeigen/eigen.git
+     - rm -rf * 
+     - git clone https://gitlab.com/libeigen/eigen.git.  ##RECLONES EIGEN EVERY TIME (NOT NEEDED)
      - cd ../../
       # 3) Remove existing build files and move into it 
      - rm -rf ../builds_debug
@@ -51,9 +52,12 @@ build:
 test:
   stage: test
   script:
+     - pwd
      - cd ../builds_debug
      - cp -r ../open-csmp/tests/dataset . 
      - cd dataset
+     - pwd 
+     - ls ../tests/*
      - ../tests/csmptest_development #CHECK THIS WORKS
      # - .tests/csmptests_main. #Replace with SKM test 
     #- ./runmytests.sh
