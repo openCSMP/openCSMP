@@ -34,11 +34,15 @@ build:
      - git fetch
      - git switch development 
      - git pull origin 
-      # 2) Remove existing build files and move into it 
+     # 2) Clone third party software (eigen)
+     - cd thirdparty/eigen/
+     - git clone https://gitlab.com/libeigen/eigen.git
+     - cd ../../
+      # 3) Remove existing build files and move into it 
      - rm -rf ../builds_debug
      - mkdir ../builds_debug
      - cd ../builds_debug
-      # 3) Run CMake and Make: generate build files 
+      # 4) Run CMake and Make: generate build files 
      - cmake -S ../open-csmp/ -B .
      - export NPROC=$(echo | nproc)
      - cmake --build . --target all -j ${NPROC} #TODO Change 4 to nproc
